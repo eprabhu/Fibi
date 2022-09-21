@@ -1,0 +1,110 @@
+<div class="tool-kit-body" *ngIf="isToolkitVisible" [@enterAnimation]>
+    <div class="row m-0 border-bottom">
+        <div class="col-12 p-0">
+            <ul class="subTabs tool-tab mb-0">
+                <li [ngClass]="{'active':isCurrentReviewTab == 'SECTION'}" class="w-50">
+                    <a class="subTabLink" (click)='isCurrentReviewTab = "SECTION"' tabindex="0">
+                        <i [ngClass]="isCurrentReviewTab == 'SECTION'? 'text-success': 'text-muted' "
+                            class="fa fa-list-ul text-success ml-2 " aria-hidden="true"></i>
+                        <span class="pl-2">Section </span>
+                    </a>
+                </li>
+                <!-- <ng-container>
+                    <li [ngClass]="{'active':isCurrentReviewTab == 'VERSION'}" class="w-50">
+                        <a (click)='isCurrentReviewTab = "VERSION"' class="subTabLink " tabindex="0">
+                            <i [ngClass]="isCurrentReviewTab == 'VERSION'? 'text-success': 'text-muted' "
+                                class="fa fa-history text-success ml-2" aria-hidden="true"></i>
+                            <span class="pl-2">History
+                                <span class="badge badge-pill badge-info">
+                                    {{proposalVersionsData.length - 1}}
+                                </span> </span>
+                        </a>
+                    </li>
+                </ng-container> -->
+            </ul>
+        </div>
+        <span class="col-1 close-btn" (click)="updateToolkitView()">
+            <i class="fa fa-times-circle f-18" aria-hidden="true"></i>
+        </span>
+    </div>
+    <div class="py-2" *ngIf="isCurrentReviewTab == 'SECTION'">
+        <div class="inner-scroll">
+            <div class="section-body ">
+                <ul class=" p-0 m-0">
+                    <ng-container *ngFor="let section of sections; let i = index">
+                        <li (click)="scrollIntoView(section.documentId)" tabindex="0"
+                            [class.tool-kit-relations]="section.isShowProjectList">
+                            <i class="fa fa-chevron-left pr-2" aria-hidden="true"></i>
+                            {{section.reviewSectionDescription}}
+                            <em *ngIf="section.isExpanded"
+                                class="fa float-right"
+                                [ngClass]="section.isShowProjectList ? 'fa-chevron-up' : 'fa-chevron-down'"
+                                (click)="section.isShowProjectList = !section.isShowProjectList"
+                                aria-hidden="true"></em>
+                            <div *ngIf="section.isShowProjectList" class="ml-5 my-2 tool-kit-relations">
+                                <ng-container *ngIf="projectList?.proposals?.length">
+                                    <div class="alert alert-dark py-1" role="alert">
+                                        Proposals ({{projectList?.proposals?.length}})
+                                    </div>
+                                    <ng-container *ngFor="let project of projectList?.proposals; let i = index; let last = last">
+                                        <li id="proposal-{{project?.moduleItemId}}" [class.tool-kit-relations-active]="activeProject == i"
+                                            (click)="scrollIntoView(section.documentId); openProjectRelationships(project, i)"
+                                            tabindex="0" title="#{{project?.moduleItemId}}: {{project?.title}}">
+                                            #{{project?.moduleItemId}}: {{ project?.title?.length > 40 ? project?.title?.slice(0, 40) + '...' : project?.title}}
+                                        </li>
+                                        <hr *ngIf="!last" class="my-1">
+                                    </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="projectList?.awards?.length">
+                                    <div class="alert alert-dark py-1" role="alert">
+                                        Awards ({{projectList?.awards?.length}})
+                                    </div>
+                                    <ng-container *ngFor="let project of projectList?.awards; let i = index; let last = last">
+                                        <li id="award-{{project?.moduleItemId}}" [class.tool-kit-relations-active]="activeProject == projectList?.proposals.length + i"
+                                            (click)="scrollIntoView(section.documentId); openProjectRelationships(project, projectList?.proposals?.length + i)" tabindex="0">
+                                            #{{project?.moduleItemKey}}: {{ project?.title?.length > 35 ? project?.title?.slice(0, 35) + '...' : project?.title}}
+                                        </li>
+                                        <hr *ngIf="!last" class="my-1">
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div *ngIf="isCurrentReviewTab == 'VERSION'">
+        <div class="inner-scroll">
+            <div class="success-banner p-2 mb-4 d-flex align-items-center">
+                <i aria-hidden="true" class="fa fa-info-circle mr-2 info-icon"></i>
+                <em class="text-secondary">Select any one of the version to view the details.</em>
+            </div>
+            <div class="active-card mx-5 p-4 fw-600 hand-cursor" [ngClass]="{'highlight-active':  true}">
+                <span class="f-14 align-items-center d-flex">
+                    <span class="mr-auto">#1000-0002: Current Disclosure</span>
+                </span>
+            </div>
+            <div class="px-5 mb-4 history-tl-container ">
+                <ul class="tl mb-2 mt-4 pr-1">
+                    <ng-container>
+                        <li class="tl-item hand-cursor" [ngClass]="{'highlight': true}" tabindex="0">
+                            <div class="f-13 fw-600">
+                                <span>
+                                    Version(1) - Annual
+                                </span>
+                            </div>
+                            <div class="item-detail">Annual by
+                                Smith, Will on 20/07/2022 2:35:31 PM
+                            </div>
+                        </li>
+                    </ng-container>
+                    <li class="no-hover-effect" *ngIf="proposalVersionsData.length == 2">
+            <div class="item-detail"> No previous versions available.</div>
+          </li>
+                </ul>
+            </div>
+        </div>
+    </div> -->
+</div>

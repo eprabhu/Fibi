@@ -1,0 +1,74 @@
+<div class="push4slideMenu pageMinHeight" id="scrollToTop">
+  <div class="container-fluid pushFixedHeaderFooter">
+    <div class="headerPush"></div>
+    <section class="sticky-top-nav mt-4 card p-0 mb-3">
+        <div class="d-flex justify-content-between review-header align-items-center px-4 card-header">
+          <div>
+            <span class="fs-16 fw-700">{{entityDetails?.entityName}}</span> - (Country: 
+            <span class="fs-16 fw-700">{{entityDetails?.country}}</span> | Email ID:
+            <span class="fs-16 fw-700">{{entityDetails?.email}}</span>)
+          </div>
+          <div class="align-items-center d-flex mr-2">
+            <div *ngIf="status" class="col mr-3 text-right">
+              <span class="status-badge-success" *ngIf="entityDetails?.status == 'Active'">
+                Active</span>
+              <span class="status-badge-danger" *ngIf="entityDetails?.status == 'InActive'">
+                Inactive</span>
+            </div>
+            <button class="btn more-btn align-items-center d-flex justify-content-center p-0 mr-2"
+              [routerLink]="['/fibi/dashboard/coi-admin-list']">
+              <i class="fa fa-reply" aria-hidden="true"></i>
+            </button>
+            <button class="btn more-btn align-items-center d-flex justify-content-center p-0"
+              (click)="isHeaderExpanded = !isHeaderExpanded">
+              <i class="fa" [ngClass]="isHeaderExpanded ? 'fa-angle-up' : 'fa-angle-down'" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="isHeaderExpanded" class="bg-white p-3 f-14 mb-3 ml-0">
+          <div class="gridSkin">
+            <div class="row">
+              <div class="col-lg-3 col-md-6 col-12 no-hover-effect">
+                <label for="name" class="label-text">Address : </label>
+                <span class="status-text">{{entityDetails?.address}}</span>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12 no-hover-effect">
+                <label for="state" class="label-text">State : </label>
+                <span class="status-text">{{entityDetails?.state}}</span>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12 no-hover-effect">
+                <label for="zipcode" class="label-text">ZIP Code : </label>
+                <span class="status-text">{{entityDetails?.zip}}</span>
+              </div>
+              <div class="col-lg-3 col-md-4 col-12 no-hover-effect">
+                <label class="label-text">Url : </label>
+                <span class="status-text"><a [href]="entityDetails.url">{{entityDetails?.url}}</a></span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-12 no-hover-effect">
+                <label class="label-text">Create Date : </label>
+                <span class="status-text">{{entityDetails?.createDate}}</span>
+              </div>
+              <div class="col-lg-3 col-md-4 col-12 no-hover-effect">
+                <label class="label-text">Created By : </label>
+                <span class="status-text">{{entityDetails?.createdBy}}</span>
+              </div>
+              <div class="col-lg-3 col-md-4 col-12 no-hover-effect">
+                <label class="label-text">Approved By : </label>
+                <span class="status-text">{{entityDetails?.approvedBy}}</span>
+              </div>
+              <div class="col-lg-3 col-md-4 col-12 no-hover-effect">
+                <label class="label-text">Number of SFI : </label>
+                <span class="status-text">{{entityDetails?.noOfSFI}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    <router-outlet></router-outlet>
+    <div class="footerPush"></div>
+
+  </div>
+</div>

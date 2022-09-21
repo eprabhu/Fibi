@@ -1,0 +1,210 @@
+<!-- Last Updated By Ramlekshmy I on 16-01-2020 -->
+<div class="card mb-3" [class.input-field__modified]="hasUnsavedChanges" id="projectTeam">
+    <div class="card-header px-4" [class.pb-0]="hasUnsavedChanges">
+        <h4 class="card-title" id="proposal-project-team-edit">
+            <ng-container i18n="@@AWARD_PROJECT_TEAM">Project Team</ng-container>
+            <span class="d-block d-sm-block float-sm-right font-weight-normal mr-sm-5 fs-14">
+                <i aria-hidden="true" class="fa fa-user-o mr-2"></i>Employee |
+                <i aria-hidden="true" class="fa fa-user-circle text-danger mr-2"></i>Non-Employee
+            </span>
+            <button id="project-expand-btn" class="updown-arrow"
+                (click)="dataVisibilityObj.isPersonData = !dataVisibilityObj.isPersonData">
+                <i [ngClass]="dataVisibilityObj.isPersonData?'fa fa-angle-double-up':'fa fa-angle-double-down'"
+                    aria-hidden="true" class="fa-large"></i>
+            </button>
+        </h4>
+        <app-unsaved-change-warning [hasUnsavedChanges]="hasUnsavedChanges"
+            [buttonName]="isPersonEdit?'Update Project Team':'Add Person'">
+        </app-unsaved-change-warning>
+    </div>
+    <div class="card-body" *ngIf="dataVisibilityObj.isPersonData">
+        <div class="form-row">
+            <div class="col-xl col-lg-6 col-md-8 col-12">
+                <div class="form-check form-check-inline">
+                    <input class="radio-inline" type="radio" name="ptEmployee" id="ptEmployee" [value]="true"
+                        [(ngModel)]="isProjectTeamEmployee" (ngModelChange)="changePersonType()">
+                    <label class="form-check-label pl-2" for="ptEmployee">Employee</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="radio-inline" type="radio" name="ptNonEmployee" id="ptNonEmployee"
+                        [(ngModel)]="isProjectTeamEmployee" [value]="false" (ngModelChange)="changePersonType()">
+                    <label class="form-check-label pl-2" for="ptNonEmployee">Non-Employee</label>
+                </div>
+                <div class="position-relative">
+                    <app-elastic [options]="elasticSearchOptionsPerson"
+                        [placeHolder]="!isProjectTeamEmployee ? 'Type here for an non-employee name': 'Type here for an employee name'"
+                        [isError]="isError" (selectedResult)="selectPerson($event)" [clearField]="clearField">
+                    </app-elastic>
+                    <a id="prop-non-employee-add-btn" class="anchor-link fs-14 ab-left-5"
+                        (click)="isShowAddNonEmployeeModal = true; isShowPersonResultCard = false"
+                        *ngIf="!isProjectTeamEmployee && _commonService.isEnableAddtoAddressBook">
+                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                        <ng-container i18n="@@COMMON_ADD_TO_ADDRESS_BOOK">Add to Address Book</ng-container>
+                    </a>
+
+                    <div *ngIf="(proposalDataBindObj.mandatoryList.get('personfullname'))"
+                        class="invalid-feedback d-block bottom-_18"
+                        [ngClass]="(proposalDataBindObj?.mandatoryList?.get('activeTo')) ? 'is-invalid block-display' : ''">
+                        {{proposalDataBindObj?.mandatoryList?.get('personfullname')}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
+                <label><span class="mandatory">*</span>Role</label>
+                <div class="position-relative">
+                    <input class="form-control" [(ngModel)]="personDetails.projectRole"
+                        (ngModelChange)="setUnsavedChanges(true)"
+                        [ngClass]="(proposalDataBindObj?.mandatoryList?.get('personRole')) ? 'is-invalid block-display' : ''">
+                    <div *ngIf="(proposalDataBindObj?.mandatoryList?.get('personRole'))"
+                        class="invalid-feedback d-block bottom-_18">
+                        {{proposalDataBindObj?.mandatoryList?.get('personRole')}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-6 col-12">
+                <label>% Charged</label>
+                <input class="form-control" type="number" [(ngModel)]="personDetails.percentageCharged"
+                    placeholder="eg: 100, 99.99, 10.22, 25 etc" (ngModelChange)="setUnsavedChanges(true)"
+                    (keyup)="limitKeypress(personDetails.percentageCharged)"
+                    [ngClass]="(proposalDataBindObj?.mandatoryList?.get('projectpercentage')) ? 'is-invalid block-display' : ''">
+                <div *ngIf="(proposalDataBindObj?.mandatoryList?.get('projectpercentage'))"
+                    class="invalid-feedback d-block bottom-_18">
+                    {{proposalDataBindObj?.mandatoryList?.get('projectpercentage')}}
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
+                <label><span class="mandatory">*</span>Active from</label>
+                <span class="dateField d-block position-relative">
+                    <input matInput [matDatepicker]="openingDt" id="start-date" placeholder="Start Date" [(ngModel)]="personDetails.startDate"
+                        class="form-control d-inline-block" (click)="openingDt.open()"
+                        (keypress)="_commonService._keyPress($event, 'date')"
+                        [ngClass]="(proposalDataBindObj.mandatoryList.get('activeFrom')) ? 'is-invalid block-display' : ''"
+                        (ngModelChange)="dateValidationBeforeAction(personDetails.startDate,'activeFrom','Please select start date');
+                            validateDate()" />
+                    <span class="fa fa-calendar fa-large pointer insidePicker position hand-cursor"
+                        title="open calendar" (click)="openingDt.open()"></span>
+                    <mat-datepicker #openingDt (opened)="setFocusToElement('start-date')">
+                    </mat-datepicker>
+                    <div *ngIf="(proposalDataBindObj?.mandatoryList?.get('activeFrom'))"
+                        class="invalid-feedback d-block bottom-_18">
+                        {{proposalDataBindObj?.mandatoryList?.get('activeFrom')}}
+                    </div>
+                </span>
+            </div>
+            <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
+                <label><span class="mandatory">*</span>Active to</label>
+                <span class="dateField d-block position-relative">
+                    <input matInput [matDatepicker]="closingDt" id="end-date" placeholder="End Date" [(ngModel)]="personDetails.endDate"
+                        class="form-control d-inline-block" (click)="closingDt.open()"
+                        (keypress)="_commonService._keyPress($event, 'date')"
+                        [ngClass]="(proposalDataBindObj?.mandatoryList?.get('activeTo')) ? 'is-invalid block-display' : ''"
+                        (ngModelChange)="dateValidationBeforeAction(personDetails.endDate,'activeTo', 'Please select end date');
+                        validateDate()">
+                    <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor" title="open calendar"
+                        (click)="closingDt.open()"></span>
+                    <mat-datepicker #closingDt (opened)="setFocusToElement('end-date')">
+                    </mat-datepicker>
+                    <div *ngIf="(proposalDataBindObj?.mandatoryList?.get('activeTo'))"
+                        class="invalid-feedback d-block bottom-_18">
+                        {{proposalDataBindObj?.mandatoryList?.get('activeTo')}}
+                    </div>
+                </span>
+            </div>
+            <div class="col-md-auto col-12 text-md-left text-center">
+                <button class="btn btn btn-secondary btn-xs btn-aligner-2 mx-2"
+                    *ngIf="hasUnsavedChanges && !isPersonEdit" (click)="resetPersonFields()">Cancel</button>
+                <button *ngIf="!isPersonEdit" class="btn btn-primary-sub btn-xs btn-aligner-2"
+                    (click)="maintainPersondetails('I', null)" [class.input-field__modified]="hasUnsavedChanges">
+                    Add Person
+                </button>
+            </div>
+        </div>
+        <div class="col-12" *ngIf="isShowPersonResultCard">
+            <app-person-rolodex-card (ShowElasticResults)="setShowElasticResults($event)"
+                [personRolodexObject]="selectedMemberObject"></app-person-rolodex-card>
+        </div>
+
+        <div class="form-row">
+            <div *ngIf="isPersonEdit" class="col mb-3">
+                <button class="btn btn-primary-sub float-right ml-1" (click)="maintainPersondetails('U', editIndex)"
+                    [class.input-field__modified]="hasUnsavedChanges">Update
+                    Project Team</button>
+                <button class="btn btn btn-secondary float-right mx-2" (click)="resetPersonFields()">Cancel</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table tableSkin grid2 mt-4" aria-describedby="proposal-project-team-edit"
+                *ngIf="result?.proposalProjectTeams?.length > 0 && dataVisibilityObj.isPersonData">
+                <thead class="thead-light">
+                    <th scope="col">Name</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Designation</th>
+                    <th scope="col">Period of Active</th>
+                    <th scope="col">% Charged</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let person of result?.proposalProjectTeams; let i = index">
+                        <td><i class="mr-2" aria-hidden="true"
+                                [ngClass]="person.nonEmployeeFlag == 'Y'?'fa fa-user-circle text-danger':'fa fa-user-o'"></i>
+                            {{person?.fullName}}</td>
+                        <td>{{person?.projectRole}}</td>
+                        <td>{{person?.designation}}</td>
+                        <td>{{person?.startDate | dateFormatter}} to {{person?.endDate | dateFormatter}}</td>
+                        <td>{{person?.percentageCharged}}</td>
+                        <td>
+                            <ul class="actionButtonGroup text-center">
+                                <li>
+                                    <a id="prop-project-team-view-btn" (click)="fetchProjectTeamMemberDetails(person)"
+                                        data-toggle="modal">
+                                        <i class="fa fa-eye" aria-hidden="true"
+                                            title="Click here to view {{person.fullName}}"></i>
+                                    </a>
+                                </li>
+                                <li><a id="prop-project-team-delete-btn"
+                                        (click)="editProjectTeam(i); editIndex = i;isPersonEdit = true"><i
+                                            class="fa fa-pencil" aria-hidden="true"
+                                            title="Click here to edit {{person?.fullName}}"></i></a></li>
+                                <li *ngIf="!isPersonEdit || (isPersonEdit && editIndex !== i)">
+                                    <a href="#" id="prop-project-team-delete-btn" data-toggle="modal"
+                                        data-target="#deletePersonTeamModal" (click)="deleteindex = i"><i
+                                            class="fa fa-trash-o" aria-hidden="true"
+                                            title="Click here to delete {{person?.fullName}}"></i></a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- DELETE MEMBER WARNING MODAL -->
+<div class="modal fade mySkinDialog modal-opacity" tabindex="-1" id="deletePersonTeamModal" tabindex="-1" role="dialog"
+    aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete</h5>
+                <button id="prop-dlt-member-dismiss" type="button" class="close" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this member?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="prop-project-close-btn" type="button" class="btn btn-secondary" data-dismiss="modal"
+                    data-toggle="modal">No</button>
+                <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary-sub btn-sm"
+                    (click)="  deletePerson(deleteindex)" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<app-address-book *ngIf="isShowAddNonEmployeeModal" [isAddNonEmployeeModal]="isShowAddNonEmployeeModal"
+    (rolodexResult)="setRolodexPersonObject($event)"></app-address-book>
+    <app-person-rolodex-view (personRolodexViewModal)="setPersonRolodexModalView($event)" 
+    *ngIf="isRolodexViewModal" [personRolodexType]="type" [personRolodexId]="id" [personRolodexIsTraining]="isTraining"
+     [personRolodexPersonDescription]="personDescription" ></app-person-rolodex-view>

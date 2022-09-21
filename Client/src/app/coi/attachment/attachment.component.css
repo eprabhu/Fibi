@@ -1,0 +1,8 @@
+.highlight-node {
+    background-color: #e9ffff;
+    color: #202c2e;
+    font-size: 16px;
+    font-weight: 400;
+    border: 1px solid #ded8d8;
+    /* cursor: pointer; */
+}

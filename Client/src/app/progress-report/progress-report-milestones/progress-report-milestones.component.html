@@ -1,0 +1,207 @@
+<ng-container *ngIf="_commonData.progressReportSectionConfig['1604']?.isActive">
+    <div class="card mt-2 mb-2">
+        <div class="card-header">
+            <h4 class="card-title justify-content-between d-flex align-items-center">
+                Research Milestones
+            </h4>
+        </div>
+        <div class="card-content">
+            <div class="card-body">
+                <div *ngIf="milestoneObject?.awardProgressReportMilestones?.length"
+                     class="table-responsive">
+                    <table aria-describedby="research-milestones"
+                           class="table table-inner mb-0 tableSkin grid2 table-vertical-align">
+                        <thead>
+                        <tr>
+                            <th scope="col">S/N</th>
+                            <th scope="col" style="width: 38%" (click)="isDesc = !isDesc; sortBy('awardMileStone.milestone')">Research Milestone
+                                <i aria-hidden="true"
+                                   [ngClass]="((column == 'awardMileStone.milestone')  ? (!isDesc ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"></i>
+                            </th>
+                            <th scope="col" (click)="isDesc = !isDesc; sortBy('awardMileStone.startDate')" style="width: 10%">Start Date
+                                <i aria-hidden="true"
+                                   [ngClass]="((column == 'awardMileStone.startDate')  ? (!isDesc ? 'fa fa-sort-numeric-desc sortIcon' : 'fa fa-sort-numeric-asc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"></i>
+                            </th>
+                            <th scope="col" (click)="isDesc = !isDesc; sortBy('awardMileStone.endDate')" style="width: 10%">End Date
+                                <i aria-hidden="true"
+                                   [ngClass]="((column == 'awardMileStone.endDate')  ? (!isDesc ? 'fa fa-sort-numeric-desc sortIcon' : 'fa fa-sort-numeric-asc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"></i>
+                            </th>
+                            <th scope="col" (click)="isDesc = !isDesc; sortBy('actualStartMonth')" style="width: 12%">Actual Start Date
+                                <i aria-hidden="true"
+                                   [ngClass]="((column == 'actualStartMonth')  ? (!isDesc ? 'fa fa-sort-numeric-desc sortIcon' : 'fa fa-sort-numeric-asc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"></i></th>
+                            <th scope="col" (click)="isDesc = !isDesc; sortBy('actualEndMonth')" style="width: 12%">Actual End Date
+                                <i aria-hidden="true"
+                                   [ngClass]="((column == 'actualEndMonth')  ? (!isDesc ? 'fa fa-sort-numeric-desc sortIcon' : 'fa fa-sort-numeric-asc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"></i></th>
+                            <th scope="col" (click)="isDesc = !isDesc; sortBy('milestoneStatus.description')" style="width: 12%">Status
+                                <i aria-hidden="true"
+                                   [ngClass]="((column == 'milestoneStatus.description')  ? (!isDesc ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"></i></th>
+                            <th scope="col" style="width: 10%">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ng-container
+                                *ngFor="let milestone of milestoneObject.awardProgressReportMilestones | orderBy: {property: column, direction: direction}; let index = index">
+                            <tr>
+                                <td>{{index + 1}}</td>
+                                <td style="width: 38%" class="text-break text-justify"> {{ milestone.awardMileStone.milestone}}
+                                </td>
+                                <td style="width: 10%">{{milestone?.awardMileStone?.startDate | dateFormatter}}</td>
+                                <td style="width: 10%" >{{milestone?.awardMileStone?.endDate | dateFormatter}}</td>
+                                <td style="width: 12%">
+                                    <ng-container
+                                            *ngIf="!isLineItemEdit[index]">{{milestone?.actualStartMonth | dateFormatter}}</ng-container>
+                                    <ng-container *ngIf="isLineItemEdit[index]">
+                                    <span class="dateField">
+                                        <input matInput [matDatepicker]="actualStrtDt" (keypress)="_commonService._keyPress($event, 'date');" [(ngModel)]="actualStartMonth"
+                                               (ngModelChange)="dateValidation(); _commonData.isDataChange = true"
+                                               [ngClass]="mandatoryList.has('actualStartMonth') ? 'is-invalid d-block' : ''"
+                                               (click)="actualStrtDt.open()"
+                                               class="d-inline-block form-control "
+                                               id="actualStart-date"
+                                               placeholder="{{datePlaceHolder}}">
+                                        <span (click)="actualStrtDt.open()" class="fa fa-calendar fa-large pointer insidePicker"
+                                              title="open calendar"></span>
+                                        <mat-datepicker #actualStrtDt (closed)="dateValidation()"
+                                                       [startView]="'year'"
+                                                       (opened)="setFocusToElement('actualStart-date')">
+                                        </mat-datepicker>
+                                         <div *ngIf="mandatoryList.has('actualStartMonth')" class="table-validation-msg">
+                                            <span class="mandatory">{{mandatoryList.get('actualStartMonth')}}</span>
+                                        </div>
+                                    </span>
+                                    </ng-container>
+                                </td>
+                                <td style="width: 12%">
+                                    <ng-container
+                                            *ngIf="!isLineItemEdit[index]">{{milestone?.actualEndMonth | dateFormatter}}</ng-container>
+                                    <ng-container *ngIf="isLineItemEdit[index]">
+                                    <span class="dateField position-relative">
+                                        <input  matInput [matDatepicker]="actualEndDt" (keypress)="_commonService._keyPress($event, 'date');" [(ngModel)]="actualEndMonth"
+                                               [ngClass]="mandatoryList.has('actualEndMonth') ? 'is-invalid d-block' : ''"
+                                               (ngModelChange)="dateValidation(); _commonData.isDataChange = true"
+                                               (click)="actualEndDt.open()"
+                                               class="d-inline-block form-control "
+                                               id="actualEnd-date"
+                                               placeholder="{{datePlaceHolder}}">
+                                        <span (click)="actualEndDt.open()" class="fa fa-calendar fa-large pointer insidePicker"
+                                              title="open calendar"></span>
+                                        <mat-datepicker #actualEndDt (closed)="dateValidation()"
+                                                       [startView]="'year'"
+                                                       (opened)="setFocusToElement('actualEnd-date')">
+                                        </mat-datepicker>
+                                        <div *ngIf="mandatoryList.has('actualEndMonth')" class="table-validation-msg">
+                                            <span class="mandatory">{{mandatoryList.get('actualEndMonth')}}</span>
+                                        </div>
+                                    </span>
+                                    </ng-container>
+                                </td>
+                                <td style="width: 12%">
+                                    <ng-container *ngIf="!isLineItemEdit[index]">{{milestone?.milestoneStatus?.description}}</ng-container>
+                                    <ng-container *ngIf="isLineItemEdit[index]">
+                                        <div class="position-relative">
+                                            <select aria-label="milestone status" class="form-control" [(ngModel)]="milestoneStatusCode"
+                                                    (ngModelChange)="_commonData.isDataChange = true"
+                                                    [ngClass]="mandatoryList.has('status') ? 'is-invalid d-block' : ''">
+                                                <option value=null>--Select--</option>
+                                                <ng-container *ngFor="let statuses of milestoneObject.progressReportMilestoneStatuses">
+                                                    <option *ngIf="statuses.isActive" [value]="statuses.milestoneStatusCode">{{statuses.description}}</option>
+                                                </ng-container>
+                                            </select>
+                                            <div *ngIf="mandatoryList.get('status')" class="table-validation-msg">
+                                                <span class="mandatory">{{mandatoryList.get('status')}}</span>
+                                            </div>
+                                        </div>
+                                </ng-container>
+                            </td>
+                            <td style="width: 10%">
+                                <ul class="actionButtonGroup icon">
+                                    <li *ngIf="!isLineItemEdit[index]" title="Show remarks">
+                                        <a>
+                                            <i (click)="commentAction(index);"
+                                               aria-hidden="true"
+                                               class="fa fa-commenting-o hand-cursor"></i>
+                                        </a>
+                                    </li>
+                                    <li *ngIf="isEditMode">
+                                        <ul class="actionButtonGroup icon">
+                                            <li>
+                                                <a *ngIf="!isLineItemEdit[index]" title="Edit milestone" class="hand-cursor"><i
+                                                        (click)="editMilestone(milestone, index)"
+                                                        aria-hidden="true" class="fa fa-pencil"></i></a>
+                                                <a (click)="updateMilestone(milestone)" title="Save milestone"
+                                                   *ngIf="isLineItemEdit[index]"
+                                                   class="hand-cursor">
+                                                    <i aria-hidden="true"
+                                                       class="fa fa-save mr-2"></i></a>
+                                                <a *ngIf="isLineItemEdit[index]" class="hand-cursor" title="Cancel edit">
+                                                    <i (click)="cancelEditMode(index)"
+                                                       aria-hidden="true" class="fa fa-remove"></i></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr *ngIf="isCommentView[index]" class="bg-light">
+                            <td><label>Remarks</label></td>
+                            <td class="no-border" colspan="7">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <textarea [(ngModel)]="milestone.remark" aria-label="milestone-comments"
+                                                  (ngModelChange)="_commonData.isDataChange = true"
+                                                  [disabled]="!isLineItemEdit[index]"
+                                                  [isShowLimiter]="(isEditMode && isCommentView[index])"
+                                                  appLengthValidator
+                                                  class="form-control"
+                                                  limit=2000>
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="!milestoneObject?.awardProgressReportMilestones?.length"
+                     class="card mt-2">
+                    <div class="d-flex align-items-center justify-content-center height-adjust">
+                        <div class="no-data-container">
+                        <span class="no-data-icon-outer">
+                            <div class="no-data-icon">
+                                <i aria-hidden="true" class="fa fa-file-o"></i>
+                                <i aria-hidden="true" class="fa fa-times-circle-o"></i>
+                            </div>
+                        </span>
+                            <h4>There is no information in this section.</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- save Modal -->
+    <div *ngIf="_commonData.isDataChange" class="modal fade mySkinDialog show" id="unSavedChangesModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header ct-footer-padding">
+                    <h4 class="modal-title">Unsaved changes</h4>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>You have unsaved changes. Do you want to save the changes for this milestone?</p>
+                </div>
+                <div class="modal-footer ct-footer-padding">
+                    <button type="button" class="btn btn-secondary" (click)="cancelEditMode(this.currentEditIndex)"
+                            data-dismiss="modal">Don't Save</button>
+                    <button (click)="saveModifiedChanges()" type="button" class="btn btn-primary-sub btn-sm"
+                            data-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

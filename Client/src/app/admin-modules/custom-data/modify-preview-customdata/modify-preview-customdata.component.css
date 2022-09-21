@@ -1,0 +1,20 @@
+label {
+  cursor: move;
+}
+
+.more-actions-menu {
+  list-style-type: none;
+  padding: 0;
+}
+.cus-ele-textarea {
+  overflow: hidden;
+}
+
+.in-active {
+  background-color: rgba(0,0,0,.03);
+}
+
+.preview-container {
+  overflow-y: auto;
+  max-height: 72vh;
+}

@@ -1,0 +1,289 @@
+<div class="push4slideMenu pageMinHeight" id="scrollToTop">
+    <div class="container-fluid pushFixedHeaderFooter">
+        <div class="headerPush"></div>
+        <section class="sticky-top-nav mt-4 mb-3">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="align-items-center d-flex ml-0 row">
+                            <div class="col-9">
+                                <span class="fs-16 fw-700 m-0">
+                                    {{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by {{coiData?.person?.fullName}}
+                                </span>
+                                - (Home Unit: <span class="fs-16 fw-700">{{coiData?.person?.unit?.unitName}}</span> | Email ID: <span
+                                    class="fs-16 fw-700">{{coiData?.person?.emailAddress}}</span>)
+                            </div>
+                            <div class="col-3">
+                                <div class="d-flex justify-content-end mr-3 my-2 no-hover-effect">
+                                    <button *ngIf="coiData?.coiDisclosure?.disclosureStatusCode != '1'" class="btn btn-primary-sub btn-sm add-activity-button mr-2" id="add-activity"
+                                        title="Add Review Comment" type="button" (click)="modifyReviewComment()">
+                                        <p>
+                                            <img alt="add-activity icon" class="activity-icon" src="{{deployMap}}assets/images/playlist (1).svg">
+                                        </p>
+                                    </button>
+                                    <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusTypeCode == '2'" title="Complete Review"
+                                        class="btn btn-sm btn-primary mr-2" data-toggle="modal" data-target="#completeReviewModal">
+                                        Complete Review
+                                    </button>
+                                    <button class="btn more-btn align-items-center d-flex justify-content-center p-0 mr-2"
+                                        title="Back to Dashboard" (click)="navigateToList()">
+                                        <i class="fa fa-reply" aria-hidden="true"></i>
+                                    </button>
+                                    <span #moreOptionsBtn>
+                                        <button title="More Actions" class="btn more-btn mr-2" (click)="isShowMoreOptions = !isShowMoreOptions">
+                                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                        </button>
+                                        <ul id="moreOptions-list shadow-lg" class="more-options-box" *ngIf="isShowMoreOptions">
+                                            <li *ngIf="coiData?.coiDisclosure?.reviewStatusTypeCode == '2'" title="Modify IP">
+                                                <a class="dropdown-item" href="" id="award-edit-btn"
+                                                    (click)="isShowMoreOptions = !isShowMoreOptions"
+                                                    title="Complete Review" data-toggle="modal"
+                                                    data-target="#completeReviewModal" tabindex="0">
+                                                    Complete Review
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white px-3 f-14">
+                        <div class="gridSkin">
+                            <div class="row"
+                            [ngClass]="coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode == '3' ? 'align-items-center' : ''">
+                                <div class="col-9 no-hover-effect">
+                                    <div class="form-row p-0">
+                                        <div class="col-lg-4 col-md-6 col-12 no-hover-effect">
+                                            <label for="joinnig date" class="label-text">Disposition Status : </label>
+                                            <span
+                                                class="badge badge-pill ml-2 badge-{{getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatus?.dispositionStatusTypeCode)}}">
+                                                {{coiData?.coiDisclosure?.coiDispositionStatus?.description}}</span>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-12 no-hover-effect">
+                                            <label for="Email" class="label-text">Review Status : </label>
+                                            <span
+                                                class="badge badge-pill ml-2 badge-{{getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatus?.reviewStatusTypeCode)}}">
+                                                {{coiData?.coiDisclosure?.coiReviewStatus?.description}}</span>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-12 no-hover-effect">
+                                            <label for="name" class="label-text">Disclosure Status : </label>
+                                            <span
+                                                class="badge badge-pill ml-2 badge-{{getDisclosureStatusBadge(coiData?.coiDisclosure?.coiDisclosureStatus?.disclosureStatusCode)}}">
+                                                {{coiData?.coiDisclosure?.coiDisclosureStatus?.description}}</span>
+                                        </div>
+                                        <div class="py-3 col-lg-4 col-md-6 col-12 no-hover-effect">
+                                            <label for="name" class="label-text">Certification Date : </label>
+                                            <span [ngClass]="coiData?.coiDisclosure?.certifiedTimestamp ? 'status-text' : 'noDataExists'">
+                                                {{coiData?.coiDisclosure?.certifiedTimestamp ?
+                                                (coiData?.coiDisclosure?.certifiedTimestamp | dateFormatter) : ''}}</span>
+                                        </div>
+                                        <div class="py-3 col-lg-4 col-md-6 col-12 no-hover-effect">
+                                            <label for="name" class="label-text">Expiration Date : </label>
+                                            <span [ngClass]="coiData?.coiDisclosure?.expirationDate ? 'status-text' : 'noDataExists'">
+                                                {{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
+                                                dateFormatter) : ''}}</span>
+                                        </div>
+                                        <div class="py-3 col-lg-4 col-md-6 col-12 no-hover-effect">
+                                            <label for="name" class="label-text">Create Date : </label>
+                                            <span [ngClass]="coiData?.coiDisclosure?.createTimestamp ? 'status-text' : 'noDataExists'">
+                                                {{coiData?.coiDisclosure?.createTimestamp ? (coiData?.coiDisclosure?.createTimestamp |
+                                                dateFormatterWithTimeZone) : ''}}</span>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6 col-12 no-hover-effect">
+                                            <label for="update time" class="label-texts">Last Update : </label>
+                                            <span  [ngClass]="coiData?.coiDisclosure?.createTimestamp ? 'status-text' : 'noDataExists'">
+                                                {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="shadow bg-white card-border my-2 ml-4"
+                                [ngClass]="coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode == '3' ?  'p-1' : ''">
+                                    <div class="align-items-center d-flex ml-3 mr-3"
+                                    [ngClass]="coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode == '3' ? 'sfi-card-height' : ''">
+                                        <div class="bold-blue-number pointer" *ngIf="coiData?.numberOfSFI" (click)="setSelectedModuleCode('sfi')">{{coiData?.numberOfSFI}}
+                                        </div>
+                                        <div class="bold-blue-number"  *ngIf="!coiData?.numberOfSFI">0
+                                        </div>
+                                        <div class="ml-2 project-text">Significant Financial Interests</div>
+                                    </div>
+                                    <div class="align-items-center d-flex ml-3 mr-3" *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != '3'">
+                                        <div class="bold-blue-number pointer" *ngIf="coiData?.numberOfProposal" (click)="setSelectedModuleCode('proposal')">{{coiData?.numberOfProposal ? coiData?.numberOfProposal : 0}}
+                                        </div>
+                                        <div class="bold-blue-number" *ngIf="!coiData?.numberOfProposal"> 0
+                                        </div>
+                                        <div class="ml-2 project-text">Proposals</div>
+                                    </div>
+                                    <div class="align-items-center d-flex ml-3 mr-3" *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != '3'">
+                                        <div class="bold-blue-number pointer"  *ngIf="coiData?.numberOfAward" (click)="setSelectedModuleCode('award')">{{coiData?.numberOfAward ? coiData?.numberOfAward : 0}}
+                                        </div>
+                                        <div class="bold-blue-number"  *ngIf="!coiData?.numberOfAward">0
+                                        </div>
+                                        <div class="ml-2 project-text">Awards</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="align-items-center bg-white d-flex coi-navigation-tabs  justify-content-between">
+                        <ul class="navigation-links d-flex align-items-center my-0 f-16 cursor-pointer p-0">
+
+                            <li *ngIf="coiData?.coiDisclosure?.disclosureStatusCode !== '1'" routerLinkActive="active"
+                                [routerLink]="['/fibi/coi/summary']" queryParamsHandling='merge'  (click)="_coiService.stepTabName = 'summary'">
+                                Disclosure
+                                <i class="fa" routerLinkActive="fa-caret-down" aria-hidden="true"></i>
+                            </li>
+
+                            <li *ngIf="coiData?.coiDisclosure?.disclosureStatusCode !== '1'" class="divider"></li>
+
+                            <li [routerLink]="['/fibi/coi/screening-questionnaire']" queryParamsHandling='merge'
+                                routerLinkActive="active" (click)="_coiService.stepTabName = 'screening-questionnaire'">
+                                Screening Questions
+                                <i class="fa" routerLinkActive="fa-caret-down" aria-hidden="true"></i>
+                            </li>
+
+                            <li class="divider"></li>
+
+                            <li [routerLink]="['/fibi/coi/sfi']" queryParamsHandling='merge' routerLinkActive="active"  (click)="_coiService.stepTabName = 'sfi'">
+                                Significant Financial Interests
+                                <i class="fa" routerLinkActive="fa-caret-down" aria-hidden="true"></i>
+                            </li>
+
+                            <li class="divider"></li>
+
+                            <li routerLinkActive="active" [routerLink]="['/fibi/coi/relationship']"
+                                queryParamsHandling='merge'  (click)="_coiService.stepTabName = 'relationship'">
+                                Relationships
+                                <i class="fa" routerLinkActive="fa-caret-down" aria-hidden="true"></i>
+                            </li>
+
+                            <li class="divider"></li>
+
+                            <li routerLinkActive="active" [routerLink]="['/fibi/coi/certify']" queryParamsHandling='merge'  (click)="_coiService.stepTabName = 'certify'">
+                                Certify
+                                <i class="fa" routerLinkActive="fa-caret-down" aria-hidden="true"></i>
+                            </li>
+
+                            <li *ngIf="coiData?.coiDisclosure?.disclosureStatusCode !== '1'" class="divider"></li>
+
+                            <li routerLinkActive="active" [routerLink]="['/fibi/coi/attachment']" *ngIf="coiData?.coiDisclosure?.disclosureStatusCode !== '1'"
+                                queryParamsHandling='merge'  (click)="_coiService.stepTabName = 'attachment'">
+                                Conflict Management
+                                <i class="fa" routerLinkActive="fa-caret-down" aria-hidden="true"></i>
+                            </li>
+
+                            <li class="divider" *ngIf="coiData?.coiDisclosure?.disclosureStatusCode !== '1'"></li>
+
+                            <li *ngIf="coiData?.coiDisclosure?.disclosureStatusCode !== '1'" routerLinkActive="active"
+                                [routerLink]="['/fibi/coi/review']" queryParamsHandling='merge'  (click)="_coiService.stepTabName = 'review'">
+                                Reviews
+                                <i class="fa" routerLinkActive="fa-caret-down" aria-hidden="true"></i>
+                            </li>
+
+                            <li class="divider"></li>
+
+                            <li  routerLinkActive="active"
+                                [routerLink]="['/fibi/coi/history']" queryParamsHandling='merge'  (click)="_coiService.stepTabName = 'history'">
+                                History
+                                <i class="fa" routerLinkActive="fa-caret-down" aria-hidden="true"></i>
+                            </li>
+
+                        </ul>
+
+                        <button *ngIf="['sfi', 'relationship', 'certify', 'history', 'attachment'].includes(_coiService.stepTabName)"
+                            class="btn more-btn border-info bg-gradient align-items-center d-flex justify-content-center p-0 mr-2"
+                            [title]="showInfoTooltip() ? 'Hide Information' : 'Show information'"
+                            (click)="showInfo()">
+                            <i class="fa fa-info" aria-hidden="true"></i>
+                        </button>
+
+                    </div>
+                    <div *ngIf="['screening-questionnaire', 'sfi', 'relationship', 'certify'].includes(_coiService.stepTabName)" class="bg-white card border-top-steps shadow-lg">
+                        <div class="row">
+                            <div class="align-items-center col-3 d-flex mx-3" [innerHTML]="getStepName()"></div>
+
+                            <div class="step-container col-5">
+                               <hr class="connecting-line">
+                               <span class="steps">
+                                   <span class="round-tab" [class.active]="_coiService.stepTabName == 'screening-questionnaire'">1</span>
+                                   <span class="round-tab" [class.active]="_coiService.stepTabName == 'sfi'">2</span>
+                                   <span class="round-tab" [class.active]="_coiService.stepTabName == 'relationship'">3</span>
+                                   <span class="round-tab" [class.active]="_coiService.stepTabName == 'certify'">4</span>
+                               </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+        <router-outlet class="mt-4"></router-outlet>
+        <div class="footerPush"></div>
+    </div>
+</div>
+<app-coi-review-comment-modal></app-coi-review-comment-modal>
+
+<app-count-modal
+*ngIf="isShowCountModal"
+[moduleCode]="selectedModuleCode"
+(closeModal) = "closeModal($event)"
+[disclosureId]="coiData?.coiDisclosure?.disclosureId"
+[inputType]="'DISCLOSURE_TAB'"
+[personId]="coiData?.coiDisclosure?.personId"
+[disclosureNumber]="coiData?.coiDisclosure?.disclosureNumber"
+[disclosureSequenceStatusCode]="coiData?.coiDisclosure?.disclosureStatusCode"></app-count-modal>
+
+<!-- Complete review modal -->
+<div class="modal modal-coi fade mySkinDialog" id="completeReviewModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Complete Review
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" id="dissmiss-btn" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mt-2 mb-0">
+                    <div class="col-lg-12">
+                        <p>Are you sure you want to complete the review of this disclosure?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="nego-sumbit-no-btn" type="button" class="btn btn-secondary btn-sm"
+                    data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary-sub btn-sm" (click)="completeDisclosureReview()"
+                    data-dismiss="modal">Complete Review</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Complete review modal -->
+<div class="modal modal-coi fade mySkinDialog" id="completeReviewErrorModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Warning!
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" id="dissmiss-btn" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mt-2 mb-0">
+                    <div class="col-lg-12">
+                        <div class="alert alert-danger fs-12">
+                            <i aria-hidden="true" class="fa fa-exclamation-circle icon text-danger mr-3"></i>
+                            There still are some pending reviews for the reviewers to complete. Please wait until all the reviews are completed.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="nego-sumbit-no-btn" type="button" class="btn btn-secondary btn-sm"
+                    data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

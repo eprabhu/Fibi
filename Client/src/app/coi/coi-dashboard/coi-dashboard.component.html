@@ -1,0 +1,767 @@
+<div class="bold pl-3 f-18">
+    Financial Conflict of Interest Disclosures
+    <span class="ml-2">
+        <i aria-hidden="true" class="fa fa-info-circle fa-med hand-cursor" title="FCOI Help Information" (click)="isShowDisclosureInfo = true;"></i>
+    </span>
+</div>
+<hr class="mb-0 ml-2">
+<div class="row">
+    <div class="col-9 mt-2">
+        <!-- <div class="success-banner p-10 px-3 my-2 d-flex align-items-center">
+        You have no FCOI disclosure right now.
+    </div> -->
+        <div *ngIf="isShowDisclosureInfo" class="success-banner p-10 px-3 my-2 d-flex align-items-center d-flex grey-info">
+            <i class="fa fa-question fa-5x qs-color" aria-hidden="true"></i>
+            <span class="ml-4 px-2 py-3">
+                <button id="disclosure-info-close" type="button" class="close close-btn" (click)="clearDisclosureCard()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                University policy requires that university officers, faculty, and staff and others acting on its behalf avoid,
+                ethical,
+                legal, financial,
+                and other conflicts of interest and ensure that their activities and interests do not conflict with
+                their
+                obligations to university.
+                Disclosure of financial interests enables university to determine if a financial interest creates a conflict of
+                interest or the
+                appearance of a conflict of interest. The existence of a conflict or the appearance of one does not
+                imply
+                wrongdoing and
+                does not necessarily mean that a researcher may not retain his or her financial interest and undertake
+                the
+                affected research.
+                Often university can work with the researcher to manage a conflict or the appearance of a conflict so that the
+                research can continue
+                in a way that minimizes the possibility of bias and preserves the objectivity of the research.
+                <br>Proper management depends on full and prompt disclosure.
+                <br>COI provides the ability to disclose and maintain your Significant Financial Interests;
+                identify potential areas of concern related to your proposals and awards;
+                and, disclose reimbursed travel (for NIH compliance).
+            </span>
+        </div>
+
+        <div class="align-items-center bg-white d-flex coi-navigation-tabs mt-2 justify-content-between">
+            <ul class="navigation-links d-flex align-items-center my-0 f-16 cursor-pointer p-0 current-disclosure-tab">
+                <li role="presentation" [ngClass]="{'active': _dataStore.currentDashboardTab == 'CURRENT_DISCLOSURES'}"
+                    (click)="_dataStore.currentDashboardTab = 'CURRENT_DISCLOSURES';fetchDashboardData();">
+                    <a>Current Disclosure</a>
+                    <i class="fa" aria-hidden="true"
+                        [class.fa-caret-down]="_dataStore.currentDashboardTab === 'CURRENT_DISCLOSURES'"></i>
+
+                </li>
+                <li class="divider"></li>
+                <li role="presentation" [ngClass]="{'active': _dataStore.currentDashboardTab == 'PROPOSAL_DISCLOSURES'}"
+                    (click)="_dataStore.currentDashboardTab = 'PROPOSAL_DISCLOSURES';fetchDashboardData();">
+                    <a>Proposal Disclosures</a>
+                    <i class="fa" aria-hidden="true" [class.fa-caret-down]="_dataStore.currentDashboardTab === 'PROPOSAL_DISCLOSURES'" ></i>
+                </li>
+                <li class="divider"></li>
+                <li role="presentation" [ngClass]="{'active': _dataStore.currentDashboardTab == 'TRAVEL_DISCLOSURES'}"
+                    (click)="_dataStore.currentDashboardTab = 'TRAVEL_DISCLOSURES';fetchDashboardData();">
+                    <a>Travel Disclosures</a>
+                    <i class="fa" aria-hidden="true"
+                        [class.fa-caret-down]="_dataStore.currentDashboardTab === 'TRAVEL_DISCLOSURES'"></i>
+                </li>
+                <li class="divider"></li>
+                <li role="presentation"
+                    [ngClass]="{'active': _dataStore.currentDashboardTab == 'SIGNIFICANT_FINANCIAL_INTERESTS'}"
+                    (click)="_dataStore.currentDashboardTab = 'SIGNIFICANT_FINANCIAL_INTERESTS';fetchDashboardData();">
+                    <a>Significant Financial Interests (SFIs)</a>
+                    <i class="fa" aria-hidden="true"
+                        [class.fa-caret-down]="_dataStore.currentDashboardTab === 'SIGNIFICANT_FINANCIAL_INTERESTS'"></i>
+                </li>
+                <li class="divider"></li>
+                <li role="presentation"
+                    [ngClass]="{'active': _dataStore.currentDashboardTab == 'DIS_HISTORY'}"
+                    (click)="_dataStore.currentDashboardTab = 'DIS_HISTORY'">
+                    <a>Disclosure History</a>
+                    <i class="fa" aria-hidden="true"
+                        [class.fa-caret-down]="_dataStore.currentDashboardTab === 'DIS_HISTORY'"></i>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+            <span *ngIf="disclosureArray?.length && _dataStore.currentDashboardTab != 'CURRENT_DISCLOSURES' && _dataStore.currentDashboardTab != 'DIS_HISTORY'"
+                class="text-center d-flex mr-2">
+                <button *ngIf="_dataStore.currentDashboardTab != 'SIGNIFICANT_FINANCIAL_INTERESTS'"
+                    class="btn btn-primary btn-sm" (click)="createDisclosure()">
+                    {{getButtonLabel()}}
+                </button>
+                <button *ngIf="_dataStore.currentDashboardTab == 'SIGNIFICANT_FINANCIAL_INTERESTS'"
+                    class="btn btn-primary btn-sm" [routerLink]="['/fibi/manage-sfi']"
+                    [queryParams]="{mode:'edit'}" title="Create New Significant Financial Interests">
+                    Create SFI
+                </button>
+            </span>
+            <button class="btn more-btn bg-gradient border-info align-items-center d-flex justify-content-center p-0 mr-2"
+                [title]="isShowTabInfo ? 'Hide Information' : 'Show information'" (click)="isShowTabInfo = !isShowTabInfo">
+                <i class="fa fa-info" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <div *ngIf="isShowTabInfo" class="success-banner p-10 disclosure-content mt-3">
+            <button id="disclosure-tab-info-close" type="button" class="close close-tab-info" (click)="clearDisclosureInfo()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            <span *ngIf="_dataStore.currentDashboardTab == 'CURRENT_DISCLOSURES'">
+                Investigators must disclose their financial conflict of interests annually.
+                FCOI disclosures submission includes FOUR steps.
+                <br> <span class="bold ml-3">Step <span class="step-count-color"> 1 </span>:</span> Answer screening
+                questions.
+                <br> <span class="bold ml-3">Step <span class="step-count-color"> 2 </span>:</span> Review and update
+                all SFIs.
+                <br> <span class="bold ml-3">Step <span class="step-count-color"> 3 </span>:</span> Describe how your
+                projects are related to your SFIs.
+                <br> <span class="d-flex">
+                    <span class="bold ml-3 text-nowrap">Step <span class="step-count-color"> 4 </span>:</span>
+                <span class="ml-1">Certify the information is complete. Since you are a new user coming to the system, please use the option
+                    below to start your Master Disclosure.</span>
+                </span>
+            </span>
+
+            <span *ngIf="_dataStore.currentDashboardTab == 'PROPOSAL_DISCLOSURES'">
+                Prior to submitting a proposal for funding, investigators must answer a few screening questions.
+                If the answers to any of those questions indicate a follow up, investigators are required to
+                create a full proposal specific disclosure.
+            </span>
+            <span *ngIf="_dataStore.currentDashboardTab == 'TRAVEL_DISCLOSURES'">
+                NIH investigators must disclose their travel paid on his/her behalf(either directly or through
+                reimbursement)
+                related to his/her institutional responsibilities within 30 days, unless the travel is reimbursed by :
+                MIT;
+                U.S Federal, state or local governmental agencies; U. S institute of higher education;
+                U.S research institutes affiliated with institute of higher education and U.S academic
+                teaching hospitals and medical centers.
+                <br>Travel paid by for-profit entities , foreign governments, universities and research
+                institutes or non profit organizations that are not U.S institutes of higher education must be
+                disclosed.
+            </span>
+            <span *ngIf="_dataStore.currentDashboardTab == 'SIGNIFICANT_FINANCIAL_INTERESTS'">
+                An Investigator must disclose any new Significant Financial Interest
+                within a reasonable period (generally 90 days) following the date on which the significant financial
+                interest is acquired or arises.
+                In this section, you can disclose new SFI as well as view edit and make “inactive” any existing SFI”
+            </span>
+            <span *ngIf="_dataStore.currentDashboardTab == 'DIS_HISTORY'">
+               This section features the history of all types of disclosures performed by you.
+            </span>
+        </div>
+
+        <div class="viewMode card mt-4 px-4 py-3"
+            *ngIf="_dataStore.currentDashboardTab == 'SIGNIFICANT_FINANCIAL_INTERESTS'">
+            <div class="form-row">
+                <div class="col-4">
+                    <label>Entity</label>
+                    <input class="form-control" placeholder="Entity Name"
+                        [(ngModel)]="sfiDashboardRequestObject.property8" type="text">
+                </div>
+                <div class="col-2 mt-1">
+                    <label class="block-display">Has Award</label>
+                    <select [(ngModel)]="sfiDashboardRequestObject.property19" class="form-control hand-icon">
+                        <option value=null>--Select--</option>
+                        <option [value]=true>Yes</option>
+                        <option [value]=false>No</option>
+                    </select>
+                </div>
+                <div class="col-2 mt-1">
+                    <label class="block-display">Has Proposal</label>
+                    <select [(ngModel)]="sfiDashboardRequestObject.property18" class="form-control hand-icon">
+                        <option value=null>--Select--</option>
+                        <option [value]=true>Yes</option>
+                        <option [value]=false>No</option>
+                    </select>
+                </div>
+                <div class="col-2 mt-1">
+                    <label class="block-display">Has Disclosure</label>
+                    <select [(ngModel)]="sfiDashboardRequestObject.property17" class="form-control hand-icon">
+                        <option value=null>--Select--</option>
+                        <option [value]=true>Yes</option>
+                        <option [value]=false>No</option>
+                    </select>
+                </div>
+                <div class="align-self-end col-2 d-flex">
+                    <button class="btn btn-secondary btn-xs mt-4 mr-4" (click)="clearSearch()">Clear</button>
+                    <button class="btn btn-primary btn-sm mt-4" (click)="performAdvanceSearch()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-4" *ngIf="_dataStore.currentDashboardTab != 'DIS_HISTORY' && disclosureArray?.length == 0">
+            <div class="no-data-container">
+                <span class="no-data-icon-outer">
+                    <div class="no-data-icon">
+                        <i class="fa fa-file-o" aria-hidden="true"></i>
+                        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                    </div>
+                </span>
+                <h4>{{noDataText()}}</h4>
+                <div class="text-center">
+                    <button *ngIf="_dataStore.currentDashboardTab != 'SIGNIFICANT_FINANCIAL_INTERESTS'"
+                        class="btn btn-primary btn-sm mt-4"  (click)="createDisclosure()">
+                        {{getButtonLabel()}}
+                    </button>
+                    <button *ngIf="_dataStore.currentDashboardTab == 'SIGNIFICANT_FINANCIAL_INTERESTS'"
+                        class="btn btn-primary btn-sm mt-4" [routerLink]="['/fibi/manage-sfi']"
+                        [queryParams]="{mode:'edit'}">
+                        Disclose Significant Financial Interest
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ng-container *ngIf="disclosureArray?.length>0 && ['CURRENT_DISCLOSURES','PROPOSAL_DISCLOSURES'].includes(_dataStore.currentDashboardTab)">
+            <div (mouseover)="isHover=true" (mouseout)="isHover = false" [ngClass]="isHover ? 'hover' : ''" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard mb-0 mt-4 p-0
+            border border-{{getDispositionStatusBadge(disclosure?.disclosureStatusCode)}} {{getDispositionStatusBadge(disclosure?.disclosureStatusCode)}}-status-badge"
+                [class.pending-border]="disclosure.disclosureStatusCode === 1"
+                *ngFor="let disclosure of disclosureArray">
+                <div *ngIf="_dataStore.currentDashboardTab == 'PROPOSAL_DISCLOSURES'" class="row pt-3">
+                    <div class="col-12 d-flex align-items-center">
+                        <label>Proposal :</label>
+                        <span class="ml-2 status-text">#{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}</span>
+                    </div>
+                </div>
+                <div class="row" [class.pt-3] = "_dataStore.currentDashboardTab == 'CURRENT_DISCLOSURES'">
+                    <div class="col-2 d-flex align-items-center">
+                        <label>Discl.</label>
+                        <span class="ml-2 status-text">#{{disclosure?.coiDisclosureNumber}}</span>
+                    </div>
+                    <div class="col-3 d-flex align-items-center">
+                        <label>Disposition Status :</label>
+                        <span
+                            class="badge badge-pill ml-2 badge-{{getDispositionStatusBadge(disclosure?.disclosureDispositionCode)}}">{{disclosure?.dispositionStatus}}</span>
+                    </div>
+                    <div class="col-3 d-flex align-items-center">
+                        <label>Review Status :</label>
+                        <span
+                            class="badge badge-pill ml-2 badge-{{getReviewStatusBadge(disclosure?.reviewStatusTypeCode)}}">{{disclosure?.reviewStatus}}</span>
+                    </div>
+                    <div class="col-4 d-flex align-items-center">
+                        <label>Disclosure Status :</label>
+                        <span
+                            class="badge badge-pill ml-2 badge-{{getDisclosureStatusBadge(disclosure?.disclosureStatusCode, true)}}">{{disclosure?.disclosureStatus}}</span>
+                    </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-2 d-flex align-items-center">
+                        <label>Type :</label>
+                        <span class="ml-2 status-text" >{{getEventType(disclosure?.disclosureSequenceStatusCode, disclosure?.disclosureCategoryTypeCode)}}</span>
+                    </div>
+                    <div class="col-3 d-flex align-items-center">
+                        <label>Certification Date :</label>
+                        <span class="ml-2 status-text" *ngIf="disclosure.submittedDate">{{disclosure?.submittedDate |
+                            dateFormatter}}</span>
+                    </div>
+                    <div class="col-3 d-flex align-items-center">
+                        <label>Expiration Date :</label>
+                        <span class="ml-2 status-text">{{disclosure?.expirationDate | dateFormatter}}</span>
+                    </div>
+                    </div>
+                    <div class="row pt-0">
+                    <div class="col-5 d-flex align-items-center">
+                        <label>Create Date :</label>
+                        <span class="ml-2 status-text">{{disclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
+                    </div>
+                    <div class="col-7 d-flex align-items-center mt-2">
+                        <label>Last Update :</label>
+                        <span class="ml-2 status-text">{{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}} by {{disclosure?.updateUser}}</span>
+                    </div>
+                </div>
+                <div class="card-footer row">
+                    <div *ngIf="disclosure?.disclosureStatusCode != '1'" class="col-4 d-flex align-items-center">
+                        <span class="counts align-items-center pointer" *ngIf="disclosure?.noOfSfiInActive != 0"
+                            (click)="setSelectedModuleCode('sfi', disclosure.coiDisclosureId, disclosure.coiDisclosureNumber, disclosure.disclosureStatusCode,'DISCLOSURE_TAB', disclosure.personId);">{{disclosure?.noOfSfiInActive
+                            >= 10 ? disclosure?.noOfSfiInActive : '0' + disclosure?.noOfSfiInActive}}</span>
+                        <span class="zero-count"
+                            *ngIf="disclosure?.noOfSfiInActive == 0">{{disclosure?.noOfSfiInActive}}</span>
+                        <span class="ml-2 mt-1 status-text numbers pointer"
+                        (click)="disclosure?.noOfSfiInActive != 0 && setSelectedModuleCode('sfi', disclosure.coiDisclosureId, disclosure.coiDisclosureNumber, disclosure.disclosureStatusCode,'DISCLOSURE_TAB', disclosure.personId);"
+                        >Significant Financial Interests</span>
+                    </div>
+                    <div *ngIf="disclosure?.disclosureStatusCode == '1'" class="col-4 d-flex align-items-center">
+                        <span class="counts align-items-center pointer" *ngIf="disclosure?.noOfSfiInPending != 0"
+                            (click)="setSelectedModuleCode('sfi', disclosure.coiDisclosureId, disclosure.coiDisclosureNumber, disclosure.disclosureStatusCode,'DISCLOSURE_TAB', disclosure.personId);">{{disclosure?.noOfSfiInPending
+                            >= 10 ? disclosure?.noOfSfiInPending : '0' + disclosure?.noOfSfiInPending}}</span>
+                        <span class="zero-count"
+                            *ngIf="disclosure?.noOfSfiInPending == 0">{{disclosure?.noOfSfiInPending}}</span>
+                        <span class="ml-2 mt-1 status-text numbers pointer" (click)="disclosure?.noOfSfiInPending != 0 && setSelectedModuleCode('sfi', disclosure.coiDisclosureId, disclosure.coiDisclosureNumber, disclosure.disclosureStatusCode,'DISCLOSURE_TAB', disclosure.personId);">Significant Financial Interests</span>
+                    </div>
+                    <ng-container *ngIf="_dataStore.currentDashboardTab == 'CURRENT_DISCLOSURES'">
+                    <div class="col-2 d-flex align-items-center">
+                        <span class="counts pointer" *ngIf="disclosure?.numberOfProposals != 0"
+                            (click)="setSelectedModuleCode('proposal', disclosure.coiDisclosureId, disclosure.coiDisclosureNumber, disclosure.disclosureStatusCode,'DISCLOSURE_TAB', disclosure.personId)">{{disclosure?.numberOfProposals
+                            >= 10 ? disclosure?.numberOfProposals : '0' + disclosure?.numberOfProposals}}</span>
+                        <span class="zero-count"
+                            *ngIf="disclosure?.numberOfProposals == 0">{{disclosure?.numberOfProposals}}</span>
+                        <span class="ml-2 mt-1 status-text numbers pointer" (click)="disclosure?.numberOfProposals != 0 && setSelectedModuleCode('proposal', disclosure.coiDisclosureId, disclosure.coiDisclosureNumber, disclosure.disclosureStatusCode,'DISCLOSURE_TAB', disclosure.personId);">Proposals</span>
+                    </div>
+                    <div class="col-1 d-flex align-items-center justify-content-center">
+                        <span class="counts pointer" *ngIf="disclosure?.numberOfAwards != 0"
+                            (click)="setSelectedModuleCode('award', disclosure.coiDisclosureId, disclosure.coiDisclosureNumber, disclosure.disclosureStatusCode,'DISCLOSURE_TAB', disclosure.personId)">{{disclosure?.numberOfAwards
+                            >= 10 ? disclosure?.numberOfAwards : '0' + disclosure?.numberOfAwards}}</span>
+                        <span class="zero-count"
+                            *ngIf="disclosure?.numberOfAwards == 0">{{disclosure?.numberOfAwards}}</span>
+                        <span class="ml-2 mt-1 status-text numbers pointer" (click)="disclosure?.numberOfAwards != 0 && setSelectedModuleCode('award', disclosure.coiDisclosureId, disclosure.coiDisclosureNumber, disclosure.disclosureStatusCode,'DISCLOSURE_TAB', disclosure.personId)">Awards</span>
+                    </div>
+                </ng-container>
+                    <div class="col d-flex justify-content-end mt-2">
+                            <button class="btn btn-tertiary action-buttons" aria-label="View COI"
+                                [routerLink]="disclosure?.disclosureStatusCode == '1' ? ['/fibi/coi/screening-questionnaire'] : ['/fibi/coi']"
+                                [queryParams]={disclosureId:disclosure.coiDisclosureId}>
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <span class="f-13">View</span>
+                            </button>
+                        <button *ngIf="isActiveDisclosureAvailable" class="btn btn-tertiary action-buttons ml-3"
+                            aria-label="Revise COI" (click)="setReviewMessageFlag(disclosure)">
+                            <i class="fa fa-repeat" aria-hidden="true"></i>
+                            <span class="f-13">Revise</span>
+                        </button>
+                        <button class="btn btn-tertiary action-buttons ml-3" (click)="openHistoryModal(disclosure.coiDisclosureNumber)"
+                            aria-label="Edit Organization">
+                            <i class="fa fa-history" aria-hidden="true"></i>
+                            <span class="f-13">History</span>
+                        </button>
+                </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container
+            *ngIf="disclosureArray?.length>0 && _dataStore.currentDashboardTab == 'SIGNIFICANT_FINANCIAL_INTERESTS'">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard mb-0 mt-4 p-0"
+                *ngFor="let disclosure of disclosureArray">
+                <div class="row py-3">
+                    <div class="col-9 d-flex align-items-center">
+                        <label>Entity:</label>
+                        <span class="ml-2 fw-700" [title]="disclosure?.coiEntityName">
+                            {{disclosure?.coiEntityName}}</span>
+                        <span *ngIf="disclosure?.coiEntityCountry || disclosure?.coiEntityEmail">[
+                            <span *ngIf="disclosure?.coiEntityCountry">Country</span> : {{disclosure?.coiEntityCountry}}
+                            <ng-container *ngIf="disclosure?.coiEntityCountry && disclosure?.coiEntityEmail"> |
+                            </ng-container>
+                            <span *ngIf="disclosure?.coiEntityEmail">Email ID: </span>{{disclosure?.coiEntityEmail}}
+                            ]
+                        </span>
+                    </div>
+                    <div class="col-3 d-flex align-items-center justify-content-end">
+                        <label>Entity Status:</label>
+                        <span class="badge badge-pill ml-2"
+                            [ngClass]="disclosure?.isActive ? 'badge-success' : 'badge-warning white-text'">{{disclosure?.isActive
+                            ? 'Active': 'Inactive'}}</span>
+                    </div>
+                    <div class="col-4 d-flex align-items-center">
+                        <label>Relationship Start Date:</label>
+                        <span class="ml-2">{{disclosure.involvementStartDate | dateFormatter}}</span>
+                    </div>
+                    <div class="col-4 d-flex align-items-center">
+                        <label>Relationship Version Number: </label>
+                        <span class="ml-2">{{disclosure.entityVersionNumber}}</span>
+                    </div>
+                    <div class="col-4 mt-3 d-flex justify-content-end ml-auto">
+                        <button class="btn btn-tertiary action-buttons" aria-label="View SFI"
+                            [routerLink]="['/fibi/manage-sfi']"
+                            [queryParams]="{entityId:disclosure?.coiFinancialEntityId, mode:'view'}">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                            <span class="f-13">View</span>
+                        </button>
+                        <button class="btn btn-tertiary action-buttons ml-3" aria-label="Modify SFI"
+                            [routerLink]="['/fibi/manage-sfi']"
+                            [queryParams]="{entityId:disclosure?.coiFinancialEntityId, mode:'edit'}">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <span class="f-12">Modify</span>
+                        </button>
+                        <button class="btn action-buttons ml-3"
+                            [ngClass]="!disclosure?.isActive ? 'btn-success' : 'btn-warning' "
+                            aria-label="Active Disclosure" (click)="activateDeactivate(disclosure)">
+                            <i class="fa fs-13 p-2"
+                                [ngClass]="!disclosure?.isActive ? 'fa-check-circle-o' : 'fa-clock-o'"
+                                aria-hidden="true"></i>
+                            <span class="f-12 pr-2">{{!disclosure?.isActive ? 'Activate' : 'Inactivate' }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer row">
+                    <div class="col-3 d-flex align-items-center">
+                        <span class="counts pointer" *ngIf="disclosure?.noOfDisclosures != 0"
+                            (click)="setSelectedModuleCode('disclosure', disclosure.coiFinancialEntityId, disclosure.coiEntityName, 0, 'SFI_TAB');">{{disclosure?.noOfDisclosures
+                            >= 10 ? disclosure?.noOfDisclosures : '0' + disclosure?.noOfDisclosures}}</span>
+                        <span class="zero-count"
+                            *ngIf="disclosure?.noOfDisclosures == 0">{{disclosure?.noOfDisclosures}}</span>
+                        <span class="f-13 ml-2 mt-1">Disclosures</span>
+                    </div>
+                    <div class="col-3 d-flex align-items-center">
+                        <span class="counts pointer" *ngIf="disclosure?.noOfProposals != 0"
+                            (click)="setSelectedModuleCode('proposal', disclosure.coiFinancialEntityId, disclosure.coiEntityName, 0, 'SFI_TAB');">{{disclosure?.noOfProposals
+                            >= 10 ? disclosure?.noOfProposals : '0' + disclosure?.noOfProposals}}</span>
+                        <span class="zero-count"
+                            *ngIf="disclosure?.noOfProposals == 0">{{disclosure?.noOfProposals}}</span>
+                        <span class="f-13 ml-2 mt-1">Proposals</span>
+                    </div>
+                    <div class="col-3 d-flex align-items-center justify-content-center"><span class="counts pointer"
+                            *ngIf="disclosure?.noOfAwards != 0"
+                            (click)="setSelectedModuleCode('award', disclosure.coiFinancialEntityId, disclosure.coiEntityName, 0, 'SFI_TAB');">{{disclosure?.noOfAwards
+                            >= 10 ? disclosure?.noOfAwards : '0' + disclosure?.noOfAwards}}</span>
+                        <span class="zero-count" *ngIf="disclosure?.noOfAwards == 0">{{disclosure?.noOfAwards}}</span>
+                        <span class="f-13 ml-2 mt-1">Awards</span>
+                    </div>
+                    <div class="col-3 mt-2 d-flex justify-content-end">
+                        <button class="btn btn-tertiary action-buttons ml-3" data-target="#historyModal"
+                            data-toggle="modal" aria-label="Edit Organization">
+                            <i class="fa fa-history" aria-hidden="true"></i>
+                            <span class="f-13">History</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container
+        *ngIf="historyTabArray?.length>0 && _dataStore.currentDashboardTab == 'DIS_HISTORY'">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard mb-0 mt-4 p-0">
+            <div class="row py-3">
+                <table class="mt-3 table tableSkin">
+                    <caption class="sr-only">List of Awards/Proposal</caption>
+                    <thead>
+                        <tr class="header-border">
+                            <th>Event Type</th>
+                            <th>Revision Reason</th>
+                            <th>Disposition Status</th>
+                            <th>Review Status</th>
+                            <th>Create Date</th>
+                            <th>Certification Date</th>
+                            <th>Last Updated By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let history of historyTabArray">
+                            <td>{{history.eventName}}</td>
+                            <td>{{history.reviseComment}}</td>
+                            <td>{{history.dispositionStatus}}</td>
+                            <td>{{history.reviewStatus}}</td>
+                            <td>{{history.createDate}}</td>
+                            <td>{{history.certificationDate}}</td>
+                            <td>{{history.updateUserFullName}} on {{history.updateTimestamp}}</td>
+                            <td>
+                                <button type="button" class="btn btn-tertiary action-buttons" id="req-attachment-add-btn"
+                                data-dismiss="modal">View COI</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ng-container>
+
+        <!-- <app-fyi></app-fyi> -->
+
+    </div>
+
+    <div class="col-3 mt-3">
+        <app-quick-links></app-quick-links>
+        <app-action-list></app-action-list>
+    </div>
+</div>
+
+
+<app-count-modal *ngIf="isShowCountModal" [moduleCode]="selectedModuleCode" (closeModal)="closeModal($event)"
+    [disclosureId]="currentDisclosureId" [inputType]="inputType" [personId]="personId"
+    [disclosureNumber]="currentDisclosureNumber" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode">
+</app-count-modal>
+
+
+<div class="modal modal-coi fade mySkinDialog" id="historyModal" tabindex="-1" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Disclosure History</h4>
+                <button type="button" class="close" id="req-doc-popup-dismiss-btn" aria-label="Close"
+                    data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="historyArray.length" class="card history-card p-2">
+                    <div class="row">
+                        <div class="col-4">
+                            <label>
+                                Disclosure by :
+                            </label>
+                            <span>
+                                {{disPersonDetails?.fullName}}
+                            </span>
+                        </div>
+                        <div class="col-4">
+                            <label>
+                                Department :
+                            </label>
+                            <span>
+                                {{disPersonDetails?.unit?.unitName}}
+                            </span>
+                        </div>
+                        <div class="col-4">
+                            <label>
+                                Email :
+                            </label>
+                            <span>
+                                {{disPersonDetails?.emailAddress}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <table class="mt-3 table tableSkin" *ngIf="historyArray.length>0">
+                    <caption class="sr-only">List of Awards/Proposal</caption>
+                    <thead>
+                        <tr class="header-border">
+                            <th>Event Type</th>
+                            <th>Revision Reason</th>
+                            <th>Disposition Status</th>
+                            <th>Review Status</th>
+                            <th>Create Date</th>
+                            <th>Certification Date</th>
+                            <th>Last Updated By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let history of historyArray">
+                            <td>{{history.eventName}}</td>
+                            <td>{{history.reviseComment}}</td>
+                            <td>{{history.coiDispositionStatus.description}}</td>
+                            <td>{{history.coiReviewStatus.description}}</td>
+                            <td>{{history.createTimestamp | dateFormatterWithTimeZone}}</td>
+                            <td>{{history.certifiedTimestamp | dateFormatterWithTimeZone}}</td>
+                            <td>{{history.updateUserFullName}} on {{history.updateTimestamp | dateFormatterWithTimeZone:'long'}}</td>
+                            <td>
+                                <button type="button" class="btn btn-tertiary action-buttons" id="req-attachment-add-btn"
+                                data-dismiss="modal" [routerLink]="['/fibi/coi/screening-questionnaire']"
+                                [queryParams]={disclosureId:history.disclosureId}>View COI</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="no-data-container" *ngIf="historyArray.length == 0">
+                    <span class="no-data-icon-outer">
+                        <div class="no-data-icon">
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                        </div>
+                    </span>
+                    <h4>There is no information in this section.</h4>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mr-0" id="req-attachment-close-btn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- COI : Disclosure Revision warning modal -->
+
+<div class="modal fade mySkinDialog" id="reviewModal" tabindex="-1" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" id="req-doc-popup-dismiss-btn" aria-label="Close"
+                    data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger fs-12" *ngIf="!isShowActiveWarning">
+                    <i aria-hidden="true" class="fa fa-exclamation-circle icon text-danger mr-3"></i>
+                    You are attempting to revise a pending version of disclosure.
+                    You can only have one revision at a time.
+                </div>
+                <div class="alert alert-danger fs-12" *ngIf="isShowActiveWarning">
+                    <i aria-hidden="true" class="fa fa-exclamation-circle icon text-danger mr-3"></i>
+                    This disclosure already has a pending version.
+                    You can only have one revision at a time.
+                </div>
+                <p>Do you want to open the pending disclosure instead?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mr-0" id="req-attachment-close-btn"
+                    data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary-sub btn-sm" id="req-attachment-add-btn"
+                    data-dismiss="modal" [routerLink]="['/fibi/coi/screening-questionnaire']"
+                    [queryParams]={disclosureId:disclosureIdForView}>View</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- COI : Disclosure Revision Confirmation modal -->
+
+<div class="modal fade mySkinDialog" id="reviewConfirmationModal" tabindex="-1" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Revision for Disclosure: #{{disclosureNumber}}</h5>
+                <button type="button" class="close" id="req-doc-popup-dismiss-btn" aria-label="Close"
+                    (click)="clearModal();" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="col-12">
+                            <label for="desc-award"><span class="mandatory">*</span>Description</label>
+                            <textarea id="desc-award" class="form-control" [(ngModel)]="reviseObject.reviseComment"
+                                appLengthValidator [isShowLimiter]='true' [limit]=2000></textarea>
+                            <div class="invalid-feedback d-block">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mr-0" id="req-attachment-close-btn" data-dismiss="modal"
+                    (click)="clearModal();">Cancel</button>
+                <button type="button" class="btn btn-primary-sub btn-sm" id="req-attachment-add-btn"
+                    data-dismiss="modal" (click)="reviseDisclosure();">Create Revision</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade mySkinDialog" id="activeConfirmation" tabindex="-1" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" id="req-doc-popup-dismiss-btn" aria-label="Close"
+                    data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to {{currentSFI?.isActive ? 'Inactivate' : 'Activate'}} the SFI
+                    #{{currentSFI?.coiFinancialEntityId}} : {{currentSFI?.coiEntityName}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mr-0" id="req-attachment-close-btn"
+                    data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary-sub btn-sm" id="req-attachment-add-btn"
+                    (click)="currentSFI.isActive = !currentSFI.isActive" data-dismiss="modal">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Proposal Disclosure Modal -->
+
+<div class="modal fade show mySkinDialog" tabindex="-1" id="createProposalDisclosureModal" role="dialog"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-coi" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Proposal Disclosure</h5>
+                <button type="button" class="close" data-dismiss="modal" id="support-dissmiss-btn" aria-label="Close"
+                    (click)="clearDisclosureModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-style pt-2">
+                <div class="my-3 mx-0 row">
+                    <div class="col-12 pt-2 grey-info font ">
+                        <p>Please search your proposal from the list or manually enter the proposal details to continue
+                            with the proposal disclosure.</p>
+                    </div>
+                </div>
+                <div *ngIf="!isSearchExternalProposal">
+                    <label for="proposal-disclosure" class="f-14 mb-3">
+                        Search a proposal from below search bar</label>
+                    <div class="form-row justify-content-center">
+                        <div class="col-12 searchBox mb-0">
+                            <app-endpoint-search id="proposal-search" [httpOptions]="ProposalSearchOptions"
+                                [clearField]="clearProposalField" (onSelect)="selectedProposal($event)"
+                                [isError]="projectDisclosureValidation?.has('proposalSearch')"
+                                [placeHolder]="'Search: Proposal ID, Title, Principal Investigator, Sponsor, Proposal Lead Unit'">
+                            </app-endpoint-search>
+                        </div>
+                    </div>
+                    <div *ngIf="projectDisclosureValidation?.has('proposalSearch')" class="invalid-feedback d-block">
+                        {{projectDisclosureValidation?.get('proposalSearch')}}
+                      </div>
+                    <div *ngIf="isShowResultCard" class="col-lg-12 col-12 mb-4 mt-2 shadow-lg resultCard px-0">
+                        <button class="closeResultCard ontop" (click)="clearSearchFields()">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="f-14 mt-2 mb-2">Proposal Title : </label>
+                                <span class="ml-2">{{proposalDetails?.title}}</span>
+                            </div>
+                            <div class="col-6 mt-2 mb-2">
+                                <label class="f-14">Principal Investigator : </label>
+                                <span class="ml-2">{{proposalDetails?.principalInvestigator}}</span>
+                            </div>
+                            <div class="col-6 mt-2 mb-2">
+                                <label class="f-14">Lead Unit : </label>
+                                <span class="ml-2">{{proposalDetails?.unitName}}</span>
+                            </div>
+                            <div class="col-6 mb-2 mt-2">
+                                <label class="f-14">Period : </label>
+                                <span class="ml-2">{{proposalDetails?.startDate | dateFormatter}} -
+                                    {{proposalDetails?.endDate | dateFormatter}}</span>
+                            </div>
+                            <div class="col-6 mb-2 mt-2">
+                                <label class="f-14">Sponsor : </label>
+                                <span class="ml-2">{{proposalDetails?.sponsor}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="isSearchExternalProposal" class="row">
+                    <div class="col-4">
+                        <label class="f-14">Proposal No</label>
+                        <input type="text" id="proposal-no" placeholder="Proposal No:" autocomplete="off"
+                            [(ngModel)]="proposalDetails.moduleItemId" class="form-control" />
+                    </div>
+                    <div class="col-8">
+                        <label class="f-14">Proposal Title</label>
+                        <input type="text" id="proposal-no" placeholder="Proposal Title" autocomplete="off"
+                            [(ngModel)]="proposalDetails.title" class="form-control" />
+                    </div>
+                    <div class="col-4">
+                        <label class="f-14">Principal Investigator</label>
+                        <app-elastic [options]="piElasticSearchOptions" [clearField]="clearPIField"
+                            [placeHolder]="'Type here for Principal Investigator'">
+                        </app-elastic>
+                    </div>
+                    <div class="col-4">
+                        <label class="f-14">Lead Unit</label>
+                        <app-endpoint-search id="prop-LU" [clearField]="clearLUField" [httpOptions]="unitHttpOptions"
+                            [placeHolder]="'Type here for Lead Unit'">
+                        </app-endpoint-search>
+                    </div>
+                    <div class="col-4">
+                        <label class="f-14">Sponsor</label>
+                        <app-endpoint-search [httpOptions]="sponsorSearchOptions" [clearField]="clearFieldSponsorField"
+                            [placeHolder]="'Sponsor'">
+                        </app-endpoint-search>
+                    </div>
+                </div>
+                <div class="fs-14-nav anchor-link mt-4">
+                    <a *ngIf="!isSearchExternalProposal"
+                        (click)="clearSearchFields(); isSearchExternalProposal = true">Unable to find your proposal from
+                        the list?</a>
+                    <a *ngIf="isSearchExternalProposal"
+                        (click)="clearSearchFields(); isSearchExternalProposal = false">Back to proposal search list</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"
+                    (click)="clearDisclosureModal(); isSearchExternalProposal = false">Cancel</button>
+                <button type="button" class="btn btn-primary-sub btn-sm" (click)="createDisclosureAPI();">
+                    Continue with Proposal Disclosure
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

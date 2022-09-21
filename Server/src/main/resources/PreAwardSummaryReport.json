@@ -1,0 +1,61 @@
+{
+	"reports": [
+		{
+			"columnName": "SPONSOR",
+			"displayName": "Sponsor",
+			"filterType": "freetext",
+			"valueField": "",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable": "N"
+		},
+		{
+			"columnName": "GRANT_CALL_TITLE",
+			"displayName": "Grant Call",
+			"filterType": "freetext",
+			"valueField": "",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable": "N"
+		},
+		{
+			"columnName": "TOTAL_REQUESTED_FUND_AED",
+			"displayName": "Total Requested Cost (AED)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable": "N"
+		},
+		{
+			"columnName": "TOTAL_REQUESTED_COST_USD",
+			"displayName": "Total Requested Cost (USD)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable": "N"
+		},
+		{
+			"columnName": "NUMBER_OF_PROPOSALS",
+			"displayName": "Number of Proposals",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable": "N"
+		},
+		{
+			"columnName": "GRANT_CALL_TYPE",
+			"displayName": "Grant Call Type",
+			"filterType": "lookUp",
+			"valueField": "GRANT_CALL_TYPE#GRANT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable": "N"
+		}
+	],
+	"extraCondition": "1=1",
+	"extraSelection": "",
+	"selectDistinct": "Y"
+}

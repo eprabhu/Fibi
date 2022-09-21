@@ -1,0 +1,1498 @@
+{
+	"reports": [
+	     {
+			"columnName": "PROGRESS_REPORT_ID",
+			"displayName": "Report Id",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORT_STATUS",
+			"displayName": "Report Status",
+			"filterType": "lookUp",
+			"valueField": "progress_report_status#PROGRESS_REPORT_STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORT_TYPE",
+			"displayName": "Report Type (Progress Report/Final)",
+			"filterType": "lookUp",
+			"valueField": "report_class#REPORT_CLASS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORTING_START_DATE",
+			"displayName": "Reporting Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORTING_END_DATE",
+			"displayName": "Reporting End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "DUE_DATE",
+			"displayName": "Due Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FUNDER_APPROVAL_DATE",
+			"displayName": "Funder Approval Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORT_LAST_UPDATED_BY",
+			"displayName": "Report Last Updated by",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORT_CREATED_BY",
+			"displayName": "Report Created by",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORT_CREATED_TIMESTAMP",
+			"displayName": "Report Created Timestamp",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PROJECT_ACHIEVEMENT",
+			"displayName": "Summary Of Progress - Project Achievement",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "KEY_INFORMATION",
+			"displayName": "Summary Of Progress - Key information",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CAPABILITIES_DEVELOPED",
+			"displayName": "Summary Of Progress - Capabilities developed",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MEDIA_EXPOSURE",
+			"displayName": "Summary Of Progress - Media exposure",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FUTURE_ACHIEVEMENT",
+			"displayName": "Future Plans - Achievement",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FUTURE_PLANS_IN_SINGAPORE",
+			"displayName": "Future Plans - Plans in Singapore",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FUTURE_CAPABILITIES_DEVELOPED",
+			"displayName": "Future Plans - Capabilities developed",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FUTURE_FURTHER_DEVELOPMENT",
+			"displayName": "Future Plans - Further development",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACHIEVEMENT_PROJECT_OBJECTIVE",
+			"displayName": "Summary Of Progress - Achievement in relation to project objective",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "KPI_CATEGORY",
+			"displayName": "KPI Category",
+			"filterType": "lookUp",
+			"valueField": "kpi_type#KPI_CATEGORY_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "KPI_CRITERIA",
+			"displayName": "KPI Criteria",
+			"filterType": "lookUp",
+			"valueField": "kpi_criteria_type#KPI_CRITERIA_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TARGET",
+			"displayName": "Target",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_STATUS",
+			"displayName": "Publications-Status",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_AUTHOR_NAMES",
+			"displayName": "Publications-Author Names",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_TITLE_OF_ARTICLE",
+			"displayName": "Publications-Title of Article",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_JOURNAL_NAME",
+			"displayName": "Publications-Journal Name",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_PUBLISHER",
+			"displayName": "Publications-Publisher",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_YEAR_ISSUENO",
+			"displayName": "Publications-Year/Issue/No.",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_PAGE_NO",
+			"displayName": "Publications-Page No.",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_IMPACT_FACTOR",
+			"displayName": "Publications-Impact Factor",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_ACKNOWLEDGEMENT_FUNDING",
+			"displayName": "Publications-Acknowledgement of funding",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_COMMENTS",
+			"displayName": "Publications-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PUBLICATIONS_PUBLICATION_DATE",
+			"displayName": "Publications-Publication Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COLLABORATION_PROJECT_TITLE",
+			"displayName": "Collaboration-Project Title",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COLLABORATION_PROJECT_DESCRIPTION",
+			"displayName": "Collaboration-Project Description",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COLLABORATION_PROJECT_START_DATE",
+			"displayName": "Collaboration-Project Start Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COLLABORATION_PROJECT_END_DATE",
+			"displayName": "Collaboration-Project End Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COLLABORATION_NAME_OF_COLLABORATING_ORGANIZATION",
+			"displayName": "Collaboration-Name of Collaborating Organization",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COLLABORATION_COUNTRY",
+			"displayName": "Collaboration-Country",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COLLABORATION_COMPANY_UEN",
+			"displayName": "Collaboration-Company UEN",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COLLABORATION_COMMENTS",
+			"displayName": "Collaboration-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGY_DISCLOSURES_STATUS",
+			"displayName": "Technology Disclosures-Status",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGY_DISCLOSURES_AUTHOR_NAMES",
+			"displayName": "Technology Disclosures-Author Names",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGY_DISCLOSURES_TITLE_PATENT",
+			"displayName": "Technology Disclosures-Title of Patent",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGY_DISCLOSURES_COVERING_COUNTRIES",
+			"displayName": "Technology Disclosures-Covering Countries",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGY_DISCLOSURES_FILING_OFFICE",
+			"displayName": "Technology Disclosures-Filing Office",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGY_DISCLOSURES_DATE_FILING",
+			"displayName": "Technology Disclosures-Date of Filing",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGY_DISCLOSURES_DATE_AWARD",
+			"displayName": "Technology Disclosures-Date of Award",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGY_DISCLOSURES_COMMENTS",
+			"displayName": "Technology Disclosures-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MANPOWER_NAME_STUDENT",
+			"displayName": "Manpower-Name of Student",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MANPOWER_CITIZENSHIP",
+			"displayName": "Manpower-Citizenship",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MANPOWER_CURRENT_STATUS",
+			"displayName": "Manpower-Current Status",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MANPOWER_DATE_ENROLLED",
+			"displayName": "Manpower-Date Enrolled",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MANPOWER_DATE_GRADUATED_RESIGNED",
+			"displayName": "Manpower-Date Graduated / Resigned",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MANPOWER_DATE_JOINING_PROJECT",
+			"displayName": "Manpower-Date (MM/YY) of Joining this Project",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MANPOWER_DATE_LEAVING_PROJECT",
+			"displayName": "Manpower-Date (MM/YY) of leaving this Project",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MANPOWER_COMMENTS",
+			"displayName": "Manpower-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UG_STUDENTS_NAME_STUDENT",
+			"displayName": "UG Students-Name of Student",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UG_STUDENTS_CITIZENSHIP",
+			"displayName": "UG Students-Citizenship",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UG_STUDENTS_CURRENT_STATUS",
+			"displayName": "UG Students-Current Status",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UG_STUDENTS_DATE_JOINING_PROJECT",
+			"displayName": "UG Students-Date (MM/YY) of Joining This Project",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UG_STUDENTS_DATE_LEAVING_PROJECT",
+			"displayName": "UG Students-Date (MM/YY) of Leaving This Project",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UG_STUDENTS_COMMENTS",
+			"displayName": "UG Students-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CONFERENCE_NAME_PRESENTER_RESEARCHER",
+			"displayName": "Conference-Name of Presenter(s) / Researcher(s)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CONFERENCE_TITLE",
+			"displayName": "Conference-Title",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CONFERENCE_CONFERENCE_TITLE_AWARD_TITLE",
+			"displayName": "Conference-Conference Title / Award Title",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CONFERENCE_ORGANISER",
+			"displayName": "Conference-Organiser",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CONFERENCE_CONFERENCE_LOCATION_COUNTRY_STATE",
+			"displayName": "Conference-Conference Location (Country/State)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CONFERENCE_DATE",
+			"displayName": "Conference-Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CONFERENCE_COMMENTS",
+			"displayName": "Conference-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_NAME_GRANT_RECEIVED",
+			"displayName": "Competitive Grants-Name of Grant Received",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_PROJECT_REFERENCE_NO",
+			"displayName": "Competitive Grants-Project Reference No",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_FUNDING_AGENCY",
+			"displayName": "Competitive Grants-Funding Agency",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_RECIPIENT_GRANT",
+			"displayName": "Competitive Grants-Recipient of Grant",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_HOST_INSTITUTION",
+			"displayName": "Competitive Grants-Host Institution",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_DIRECT_COST",
+			"displayName": "Competitive Grants-Direct Cost",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_INDIRECT_COST",
+			"displayName": "Competitive Grants-Indirect Cost",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_PROJECT_START_DATE",
+			"displayName": "Competitive Grants-Project Start Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_PROJECT_END_DATE",
+			"displayName": "Competitive Grants-Project End Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_PROJECT_TITLE",
+			"displayName": "Competitive Grants-Project Title",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMPETITIVE_GRANTS_COMMENTS",
+			"displayName": "Competitive Grants-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CASH_FUNDING_NAME_COMPANY_CONTRIBUTING",
+			"displayName": "Cash Funding-Name of Company Contributing",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CASH_FUNDING_COUNTRY_COMPANY",
+			"displayName": "Cash Funding-Country of Company",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CASH_FUNDING_COMPANY_UEN",
+			"displayName": "Cash Funding-Company UEN",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CASH_FUNDING_DATE_CONTRIBUTION",
+			"displayName": "Cash Funding-Date of Contribution",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CASH_FUNDING_AMOUNT_CASH_FUNDING",
+			"displayName": "Cash Funding-Amount of Cash Funding",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CASH_FUNDING_COMMENTS",
+			"displayName": "Cash Funding-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "IN_KIND_DATE_CONTRIBUTION",
+			"displayName": "In-Kind-Date of Contribution",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "IN_KIND_NAME_COMPANY_CONTRIBUTING",
+			"displayName": "In-Kind-Name of Company Contributing",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "IN_KIND_COUNTRY_COMPANY",
+			"displayName": "In-Kind-Country of Company",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "IN_KIND_COMPANY_UEN",
+			"displayName": "In-Kind-Company UEN",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "IN_KIND_AMOUNT_KIND_CONTRIBUTIONS",
+			"displayName": "In-Kind-Amount of in kind contributions",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "IN_KIND_COMMENTS",
+			"displayName": "In-Kind-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGIES_DEPLOYED_DATE_DEPLOYING",
+			"displayName": "Technologies Deployed-Date of deploying",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGIES_DEPLOYED_NAME_COMPANY_DEPLOYING",
+			"displayName": "Technologies Deployed-Name of company deploying",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGIES_DEPLOYED_COUNTRY_COMPANY",
+			"displayName": "Technologies Deployed-Country of Company",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGIES_DEPLOYED_COMPANY_UEN",
+			"displayName": "Technologies Deployed-Company UEN",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGIES_DEPLOYED_DETAILS",
+			"displayName": "Technologies Deployed-Details",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TECHNOLOGIES_DEPLOYED_COMMENTS",
+			"displayName": "Technologies Deployed-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PATENTS_DATE_FILED",
+			"displayName": "Patents-Date Filed",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PATENTS_DATE_GRANTED",
+			"displayName": "Patents-Date Granted",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PATENTS_TITLE",
+			"displayName": "Patents-Title",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PATENTS_DESCRIPTION",
+			"displayName": "Patents-Description",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PATENTS_OWNERSHIP",
+			"displayName": "Patents-Ownership",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PATENTS_PATENT_NUMBER",
+			"displayName": "Patents-Patent Number",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PATENTS_COMMENTS",
+			"displayName": "Patents-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LICENSES_START_DATE_LICENSING",
+			"displayName": "Licenses-Start Date Of Licensing",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LICENSES_NAME_LICENSEE_ASSIGNEE",
+			"displayName": "Licenses-Name of Licensee/Assignee",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LICENSES_COMPANY_UEN",
+			"displayName": "Licenses-Company UEN",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LICENSES_LICENSING_PERIOD",
+			"displayName": "Licenses-Licensing Period",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LICENSES_DETAILS_IP_LICENSED",
+			"displayName": "Licenses-Details of the IP Licensed",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LICENSES_COMMENTS",
+			"displayName": "Licenses-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "START_UPS_DATE_ESTABLISHMENT",
+			"displayName": "Start-Ups-Date of Establishment",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "START_UPS_DATE_ESTABLISHED",
+			"displayName": "Start-Ups-Date Established",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "START_UPS_NAME_COMPANY",
+			"displayName": "Start-Ups-Name of Company",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "START_UPS_COMPANY_UEN",
+			"displayName": "Start-Ups-Company UEN",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "START_UPS_EXTERNAL_FUNDING_CRITERIA",
+			"displayName": "Start-Ups-External Funding Criteria",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "START_UPS_VALUATION_CRITERIA",
+			"displayName": "Start-Ups-Valuation Criteria",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "START_UPS_ANNUAL_REVENUE_CRITERIA",
+			"displayName": "Start-Ups-Annual Revenue Criteria",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "START_UPS_COMMENTS",
+			"displayName": "Start-Ups-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "HEALTH_SPECIFIC_DATE",
+			"displayName": "Health Specific-Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "HEALTH_SPECIFIC_NUMBER_YEARS_SAVED",
+			"displayName": "Health Specific-Number of Life years Saved",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "HEALTH_SPECIFIC_DESCRIPTION_TITLE",
+			"displayName": "Health Specific-Description/Title",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "HEALTH_SPECIFIC_REMARKS",
+			"displayName": "Health Specific-Remarks",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "POST_DOCS_EMPLOYMENT_START_DATE",
+			"displayName": "Post Docs-Employment Start Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "POST_DOCS_NAME",
+			"displayName": "Post Docs-Name",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "POST_DOCS_NATIONALITY",
+			"displayName": "Post Docs-Nationality",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "POST_DOCS_PERMANENT_RESIDENCE",
+			"displayName": "Post Docs-Singapore Permanent Residence",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "POST_DOCS_NRIC_FIN",
+			"displayName": "Post Docs-NRIC/FIN",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "POST_DOCS_COMMENTS",
+			"displayName": "Post Docs-Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACCOUNT_NUMBER",
+			"displayName": "Level 1 WBS",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_NUMBER",
+			"displayName": "Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TITLE_AWARD",
+			"displayName": "Award Title",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_STATUS",
+			"displayName": "Award Status",
+			"filterType": "lookUp",
+			"valueField": "AWARD_STATUS#STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACCOUNT_TYPE",
+			"displayName": "Account Type",
+			"filterType": "lookUp",
+			"valueField": "ACCOUNT_TYPE#ACCOUNT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_TYPE",
+			"displayName": "Award Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACTIVITY_TYPE",
+			"displayName": "Activity Type",
+			"filterType": "lookUp",
+			"valueField": "ACTIVITY_TYPE#ACTIVITY_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LEAD_UNIT",
+			"displayName": "Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TITLE_GRANT_CALL",
+			"displayName": "Grant Call Title",
+			"filterType": "endpoint",
+			"valueField": "grantCallName",
+			"index": "grantCallName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR",
+			"displayName": "Sponsor",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PRIME_SPONSOR",
+			"displayName": "Prime Sponsor",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_EFFECTIVEDATE",
+			"displayName": "Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_NOTICEDATE",
+			"displayName": "Notification Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FINAL_EXPIRATIONDATE",
+			"displayName": "End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "KEY_PERSON_EMAIL",
+			"displayName": "Lead PI Email",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LEAD_PRINCIPAL_INVESTIGATOR",
+			"displayName": "Lead Principal Investigator",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ANTICIPATED_TOTAL",
+			"displayName": "Award Total ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN_NUMBER",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "AWARD_WORKFLOW_STATUS",
+			"displayName": "Award Workflow Status",
+			"filterType": "lookUp",
+			"valueField": "AWARD_WORKFLOW_STATUS#WORKFLOW_AWARD_STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_CREATEDATE",
+			"displayName": "Award Create Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "DURATION_PROJECT",
+			"displayName": "Project Duration",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "OBLIGATED_TOTAL",
+			"displayName": "Disbursed Total ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN_NUMBER",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "TOTAL_PROJECT_COST",
+			"displayName": "Total Project Cost ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN_NUMBER",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "ORIGINAL_AMOUNT",
+			"displayName": "Original amount ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN_NUMBER",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "REVISED_AMOUNT",
+			"displayName": "Revised amount ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN_NUMBER",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "STEM_NONSTEM",
+			"displayName": "STEM/Non-STEM",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "RIE_DOMAIN",
+			"displayName": "RIE Domain",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "DISPLAY_AT_ACAD_PROFILE",
+			"displayName": "Display at Acad Profile",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORT_LAST_UPDATED_TIMESTAMP",
+			"displayName": "Report Last Updated Timestamp",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "WORKFLOW_START_DATE",
+			"displayName": "Workflow Start Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "WORKFLOW_END_DATE",
+			"displayName": "Workflow End Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FUNDING_SCHEME",
+			"displayName": "Grant Scheme",
+			"filterType": "lookUp",
+			"valueField": "FUNDING_SCHEME#FUNDING_SCHEME_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SUB_LEAD_UNIT",
+			"displayName": "Sub-Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR_AWARD_NUMBER",
+			"displayName": "Sponsor Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "APPROVAL_COMMENT",
+			"displayName": "Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "OVERALL_COMMENT",
+			"displayName": "Overall Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		}
+		
+	],
+	"extraCondition" :  "(LEAD_UNIT_NUMBER  IN(SELECT DISTINCT UNIT_NUMBER FROM PERSON_ROLE_RT WHERE PERSON_ID = <<PERSON_ID>> AND RIGHT_NAME IN ('CREATE_PROGRESS_REPORT','VIEW_PROGRESS_REPORT','MODIFY_PROGRESS_REPORT'))) ",
+	"extraSelection" : "",
+	"selectDistinct" : "Y"
+}

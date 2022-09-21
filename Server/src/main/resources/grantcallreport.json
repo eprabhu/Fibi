@@ -1,0 +1,115 @@
+{
+	"reports": [
+		{
+			"columnName": "GRANT_HEADER_ID",
+			"displayName": "Grant Call ID",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "NAME",
+			"displayName": "Title",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "HOME_UNIT_NAME",
+			"displayName": "Grant Call Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "GRANT_STATUS",
+			"displayName": "Grant Status",
+			"filterType": "lookUp",
+			"valueField": "GRANT_CALL_STATUS#GRANT_STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "GRANT_TYPE",
+			"displayName": "Type of Grant",
+			"filterType": "lookUp",
+			"valueField": "GRANT_CALL_TYPE#GRANT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "OPENING_DATE",
+			"displayName": "Opening Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CLOSING_DATE",
+			"displayName": "Closing Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CLOSING_TIME",
+			"displayName": "Closing Time",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR",
+			"displayName": "Sponsor/Funding Agency",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR_TYPE",
+			"displayName": "Type of Sponsor/Funding Agency",
+			"filterType": "lookUp",
+			"valueField": "SPONSOR_TYPE#SPONSOR_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FUNDING_SCHEME",
+			"displayName": "Funding Scheme",
+			"filterType": "lookUp",
+			"valueField": "FUNDING_SCHEME#FUNDING_SCHEME_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "RELEVANT_FIELD",
+			"displayName": "Relevant Field",
+			"filterType": "lookUp",
+			"valueField": "RELEVANT_FIELD#RELEVANT_FIELD_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		}
+	],
+	"extraCondition" : "1=1",
+	"extraSelection" : "",
+	"selectDistinct" :"Y"
+}

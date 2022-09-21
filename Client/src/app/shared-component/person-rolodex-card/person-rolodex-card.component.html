@@ -1,0 +1,88 @@
+<div class="col-12 p-0 viewMode resultCard">
+  <button class="closeResultCard ontop" id="poc-close-elastic-result-grantcall" (click)="emitShowElasticResult()">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+  <div class="grid-row shadow-medium bg-light">
+    <div class="grid-item">
+      <div class="grid-item-container">
+        <div class="grid-item-content">
+          <label>Name</label>
+          <span>
+            {{selectedContactMember?.fullName}}
+            <span *ngIf="selectedContactMember.isExternalUser" class="badge badge-warning ml-2">External</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="grid-item">
+      <div class="grid-item-container">
+        <div class="grid-item-content">
+          <label>Designation</label>
+          <span>
+            {{selectedContactMember?.designation}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="grid-item" *ngIf="selectedContactMember.isEmployee">
+      <div class="grid-item-container">
+        <div class="grid-item-content">
+          <label>Home Unit</label>
+          <span>
+            {{selectedContactMember?.unit_name}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="grid-item" *ngIf="!selectedContactMember.isEmployee">
+      <div class="grid-item-container">
+        <div class="grid-item-content">
+          <label>Organization</label>
+          <span>
+            {{selectedContactMember?.organization}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="grid-item">
+      <div class="grid-item-container">
+        <div class="grid-item-content">
+          <label>E-Mail</label>
+          <span>
+            {{selectedContactMember?.email}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="grid-item">
+      <div class="grid-item-container">
+        <div class="grid-item-content">
+          <label>Phone</label>
+          <span>
+            {{selectedContactMember?.phoneNumber}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="grid-item" *ngIf="!selectedContactMember.isEmployee">
+      <div class="grid-item-container">
+        <div class="grid-item-content">
+          <label>Created By</label>
+          <span>
+            {{selectedContactMember?.createUser}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="grid-item" *ngIf="!selectedContactMember.isEmployee">
+      <div class="grid-item-container">
+        <div class="grid-item-content">
+          <label>Address</label>
+          <span>
+            {{selectedContactMember?.address}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

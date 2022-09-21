@@ -1,0 +1,89 @@
+<section *ngIf="manpowerInterface?.length; else noInterfaceData" class="form-row">
+  <ng-container *ngFor="let interface of manpowerInterface">
+    <div class="col-xl-4 col-lg-4 col-ml-6 col-sm-6 col-12 mb-3">
+      <div class="col-12 card h-100 py-3">
+        <div class="media">
+          <div class="media-body card-top-body">
+            <h6 class="media-heading">{{interface?.manpowerInterfaceType?.description}}
+              <p class="mt-1 noDataExists fs-12">
+                <ng-container *ngIf="interface?.noOfRecords">
+                  Number of Records: {{interface?.noOfRecords}} |
+                </ng-container>
+                Last Synced On: {{interface?.lastSyncedOn | dateFormatter}}
+              </p>
+            </h6>
+          </div>
+          <span class="float-right">
+            <button class="btn btn-sm btn-tertiary mt-0" (click)="callSyncAPI(interface?.manpowerInterfaceType)">Sync
+              Now</button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</section>
+<!-- No data container -->
+<ng-template #noInterfaceData>
+  <div class="no-data-container">
+    <span class="no-data-icon-outer">
+      <div class="no-data-icon">
+        <i class="fa fa-file-o" aria-hidden="true"></i>
+        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+      </div>
+    </span>
+    <h4>There is no information in this section.</h4>
+  </div>
+</ng-template>
+<!-- Confirmation modal -->
+<div class="modal fade mySkinDialog" tabindex="-1" id="syncManpowerAPI" tabindex="-1" role="dialog"
+  data-backdrop="static" data-keyboard="false" aria-labelledby="syncManpowerAPI" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{interfaceType?.description}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <div class="mb-4">
+          <p>Enter the date to continue.</p>
+          <div class="row">
+            <div class="col">
+              <label class="d-block">From</label>
+              <span class="dateField">
+                <input type="text" placeholder="From {{datePlaceHolder}}" id="param-start-date"
+                  [owlDateTime]="startDate" class="form-control d-inline-block" autocomplete="off"
+                  [(ngModel)]="apiParams.startDate" (keypress)="_commonService._keyPress($event, 'date');"
+                  [owlDateTimeTrigger]="startDate" />
+                <i aria-hidden="true" id="start-date-icon" class="fa fa-calendar fa-large insidePicker hand-cursor"
+                  [owlDateTimeTrigger]="startDate"></i>
+                <owl-date-time #startDate [pickerType]="'calendar'" (afterPickerOpen)="setFocusToElement('start-date')">
+                </owl-date-time>
+              </span>
+            </div>
+            <label class="d-none d-sm-inline-block p-2 mt-4 pt-3">-</label>
+            <div class="col">
+              <label class="d-block">To</label>
+              <span class="dateField">
+                <input type="text" placeholder="To {{datePlaceHolder}}" id="param-end-date" [owlDateTime]="endDate"
+                  class="form-control d-inline-block" autocomplete="off" [(ngModel)]="apiParams.endDate"
+                  (keypress)="_commonService._keyPress($event, 'date');" [owlDateTimeTrigger]="endDate" />
+                <i aria-hidden="true" id="end-date-icon" class="fa fa-calendar fa-large insidePicker hand-cursor"
+                  [owlDateTimeTrigger]="endDate"></i>
+                <owl-date-time #endDate [pickerType]="'calendar'" (afterPickerOpen)="setFocusToElement('end-date')">
+                </owl-date-time>
+              </span>
+            </div>
+          </div>
+        </div> -->
+        <p>Are you sure you want to sync?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary-sub btn-sm" (click)="syncAPI()" data-dismiss="modal">Sync
+          {{interfaceType?.description}}</button>
+      </div>
+    </div>
+  </div>
+</div>

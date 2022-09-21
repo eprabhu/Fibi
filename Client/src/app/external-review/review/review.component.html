@@ -1,0 +1,136 @@
+<div class="card mb-3">
+    <div class="card-header px-4">
+        <div class="align-items-center d-flex row">
+            <div class="col d-flex align-items-center">
+                <h4 class="card-title word-break" id="review_{{reviewDetails?.extReviewID}}">ID #{{reviewDetails?.extReviewID}} :
+                    {{reviewDetails?.description}}
+                </h4>
+            </div>
+            <span
+                class="d-block fs-13 status-badge-{{getBadgeByStatusCode()}} rounded-icon">
+                {{reviewDetails?.extReviewStatus?.description}}</span>
+            <div class="col-auto text-right">
+                <button *ngIf="!isViewMode" class="btn btn-secondary mr-0" (click)="emitSendForReview()">Send For
+                    Review</button>
+                <button id="reviewExpandBtn" class="updown-arrow"
+                    (click)="collapseReview(_reviewService?.collapseReview[reviewDetails?.extReviewID])">
+                    <i [ngClass]="_reviewService?.collapseReview[reviewDetails?.extReviewID]?'fa fa-angle-double-up':'fa fa-angle-double-down'"
+                        aria-hidden="true" class="fa-large"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="_reviewService?.collapseReview[reviewDetails?.extReviewID]" class="card-content">
+        <div class="card-body">
+            <ng-container *ngIf="!isViewMode; else viewMode">
+                <div class="form-row">
+                    <div class="col-4">
+                        <label> <span class="mandatory">*</span>Review Type</label>
+                        <select class="form-control" id="review-type"
+                            [(ngModel)]="reviewDetails.extReviewServiceTypeCode" (ngModelChange)="setReviewTypeObj()"
+                            [ngClass]="(mandatoryList?.has('type')) ? 'is-invalid d-block' : ''">
+                            <option [value]=null>--Select--</option>
+                            <option *ngFor="let type of reviewTypes" [value]="type.extReviewServiceTypeCode"
+                                [hidden]="type.active != true">
+                                {{type.description}}
+                            </option>
+                        </select>
+                        <div *ngIf="mandatoryList?.has('type')" class="invalid-feedback d-block">
+                            {{mandatoryList?.get('type')}}
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <label for="review-date"> <span class="mandatory">*</span>Review Deadline</label>
+                        <span class="dateField">
+                            <input matInput [matDatepicker]="subDt" id="review-date" style="width: 100% !important" autocomplete="off"
+                                class="d-inline-block form-control" (click)="subDt.open()"
+                                [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''"
+                                [(ngModel)]="reviewDetails.deadlineDate" (ngModelChange)="deadlineDateValidation();" />
+                            <i id="review-date-icon" class="fa fa-calendar fa-large insidePicker hand-cursor"
+                                aria-hidden="true" (click)="subDt.open()"></i>
+                            <mat-datepicker #subDt (opened)="setFocusToElement('review-date')">
+                            </mat-datepicker>
+                        </span>
+                        <div *ngIf="mandatoryList?.has('date')" class="invalid-feedback d-block">
+                            {{mandatoryList?.get('date')}}
+                        </div>
+                        <div *ngIf="deadLineDateValidation" class="invalid-feedback d-block text-danger">
+                            {{deadLineDateValidation}}
+                        </div>
+                    </div>
+                    <div *ngIf="reviewDetails?.extReviewID" class="col-4">
+                        <strong><label class="d-block fs-14">Created by</label></strong>
+                        <span class="content-color d-block mt-3">{{reviewDetails?.person?.fullName}} on
+                            {{reviewDetails?.requestDate | dateFormatterWithTimeZone:'long'}}</span>
+                    </div>
+                    <div class="col-lg-12">
+                        <label for="review-comnt"> <span class="mandatory">*</span>Description</label>
+                        <textarea appAutoGrow id="review-comnt" class="form-control auto-grow-height" appLengthValidator
+                            [isShowLimiter]='true' [limit]=200 [(ngModel)]="reviewDetails.description"
+                            [ngClass]="(mandatoryList?.has('description')) ? 'is-invalid d-block' : ''"></textarea>
+                        <div *ngIf="mandatoryList?.has('description')" class="invalid-feedback d-block">
+                            {{mandatoryList?.get('description')}}
+                        </div>
+                    </div>
+                    <div class="col-xl-12 d-flex justify-content-end">
+                        <button id="cancel-review-btn" type="button" class="btn btn-secondary btn-xs mr-0 mr-sm-2"
+                            data-dismiss="modal" data-toggle="modal" (click)="clearReview()">Cancel</button>
+                        <button id="add-review-btn" type="button" class="btn btn-primary-sub btn-xs"
+                            (click)="updateReview();">Save</button>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #viewMode>
+                <div class="form-row">
+                    <div class="col-4">
+                        <label class="d-block fs-14">Review Type</label>
+                        <span class="content-color">{{reviewDetails?.extReviewServiceType?.description}}</span>
+                    </div>
+                    <div class="col-4">
+                        <label for="review-date" class="d-block fs-14">Review Deadline</label>
+                        <span class="content-color">{{reviewDetails?.deadlineDate |
+                            dateFormatterWithTimeZone:'long'}}</span>
+                    </div>
+                    <div *ngIf="reviewDetails?.extReviewID" class="col-4">
+                        <strong><label class="d-block fs-14">Created by</label></strong>
+                        <span class="content-color">{{reviewDetails?.person?.fullName}} on
+                            {{reviewDetails?.requestDate | dateFormatterWithTimeZone:'long'}}</span>
+                    </div>
+                    <div class="col-lg-12">
+                        <label class="d-block fs-14" for="review-comnt">Description</label>
+                        <span class="content-color">{{reviewDetails?.description}}</span>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <section class="row mt-3">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <ul class="subTabs">
+                    <li *ngIf="_reviewService?.externalSectionConfig['349']?.isActive" class="nav-item hand-cursor fs-14"
+                        [ngClass]="{active:(tabName == 'QUESTIONNAIRE')}">
+                        <a class="nav-link"  title="Questionnaire" (click)="tabName = 'QUESTIONNAIRE'">Questionnaire</a>
+                    </li>
+                    <li *ngIf="_reviewService?.externalSectionConfig['350']?.isActive && tempReviewData?.extReviewServiceType?.isScoringNeeded" class="nav-item hand-cursor fs-14"
+                        [ngClass]="{active:(tabName == 'SCORING')}">
+                        <a class="nav-link"  title="Scoring Criteria" (click)="tabName = 'SCORING'">Scoring Criteria</a>
+                    </li>
+                    <li *ngIf="_reviewService?.externalSectionConfig['351']?.isActive || _reviewService?.externalSectionConfig['352']?.isActive"
+                        class="nav-item hand-cursor fs-14" [ngClass]="{active:(tabName == 'ATTACHMENTS')}">
+                        <a class="nav-link"  title="Attachments" (click)="tabName = 'ATTACHMENTS'">Attachments</a>
+                    </li>
+                </ul>
+                <div>
+                    <app-questionnaire
+                        *ngIf="tabName =='QUESTIONNAIRE' && _reviewService?.externalSectionConfig['349']?.isActive"
+                        [extReviewID]="reviewDetails?.extReviewID" [isViewMode]="isViewMode"></app-questionnaire>
+                    <app-scoring-ext *ngIf="tabName =='SCORING' && _reviewService?.externalSectionConfig['350']?.isActive && tempReviewData?.extReviewServiceType?.isScoringNeeded"
+                        [extReviewID]="reviewDetails?.extReviewID">
+                    </app-scoring-ext>
+                    <app-attachments-ext *ngIf="tabName =='ATTACHMENTS' && (_reviewService?.externalSectionConfig['351']?.isActive || 
+                        _reviewService?.externalSectionConfig['352']?.isActive)"
+                        [extReviewID]="reviewDetails?.extReviewID" [isViewMode]="isViewMode"></app-attachments-ext>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

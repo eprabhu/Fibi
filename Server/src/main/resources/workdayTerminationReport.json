@@ -1,0 +1,197 @@
+{
+	"reports": [
+		{
+			"columnName": "PERSON_ID",
+			"displayName": "Person ID",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "NAME",
+			"displayName": "Person Name",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TERMINATION_EVENT_STATUS",
+			"displayName": "Termination Event Status",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "OVERALL_EVENT_STATUS",
+			"displayName": "OverAll Event Status",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "NTU_DEPARTMENT",
+			"displayName": "NTU Department",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "OVERALL_EVENT_INITIATION_DATE",
+			"displayName": "OverAll Event Initiation Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TERMINATION_APPROVE_DATE",
+			"displayName": "Termination Approve Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AU",
+			"displayName": "AU",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "BUSINESS_TITLE",
+			"displayName": "Business Title",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "JOB_FAMILY_GROUP",
+			"displayName": "Job Family Group",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "BUSINESS_PROCESS_NAME",
+			"displayName": "Business Process Name",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "JOB_PROFILE",
+			"displayName": "Job Profile",
+			"filterType": "lookUp",
+			"valueField": "MANPOWER_JOB_PROFILE_TYPE#JOB_PROFILE_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "RECOMMENDED_SYSTEM_TERMINATION_DATE",
+			"displayName": "Recommended System Termination Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SUPERVISORY_ORGANIZATION",
+			"displayName": "Supervisory Organization",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "WORKER_PROPOSED_TERMINATION_DATE",
+			"displayName": "Worker Proposed Termination Date",
+			"filterType": "date",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "WORKER_RESIGNATION_NOTIFICATION_DATE",
+			"displayName": "Worker Resignation Notification Date",
+			"filterType": "date",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "WORKER_PROPOSED_RESIGNATIONN_DATE",
+			"displayName": "Worker Proposed Resignation Date",
+			"filterType": "date",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "RESIGNATION_APPROVE_DATE",
+			"displayName": "Resignation Approve Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "NOTICE_PERIOD",
+			"displayName": "Notice Period",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "RESIGNATION_EVENT_STATUS",
+			"displayName": "Resignation Event Status",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		
+		{
+			"columnName": "UPDATE_TIMESTAMP",
+			"displayName": "Last Modified Date",
+			"filterType": "date",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		}
+	],
+	"extraCondition" : "(NTU_DEPARTMENT in (select distinct u1.unit_name from unit u1  inner join person_role_rt u2 on u2.UNIT_NUMBER = u1.UNIT_NUMBER where u2.PERSON_ID = <<PERSON_ID>> and u2.RIGHT_NAME = 'MANPOWER_GENERATE_REPORT'))",
+	"extraSelection" : "",
+	"selectDistinct" :"Y"
+}

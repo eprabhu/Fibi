@@ -1,0 +1,8 @@
+node_modules
+.settings
+.vscode
+.metadata
+src/assets/app-config.json
+package-lock.json
+dist
+.angular

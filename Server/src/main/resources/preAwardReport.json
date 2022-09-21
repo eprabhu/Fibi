@@ -1,0 +1,174 @@
+{
+  "reports": [
+    {
+      "columnName": "PROPOSAL_ID",
+      "displayName": "Development Proposal ID",
+      "filterType": "freetext",
+      "valueField": "null",
+      "index": "null",
+      "queryType": "IN",
+      "summable" : "N"
+    },
+    {
+      "columnName": "PROPOSAL_NUMBER",
+      "displayName": "IP Number",
+      "filterType": "freetext",
+      "valueField": "null",
+      "index": "null",
+      "queryType": "IN",
+      "summable" : "N"
+    },
+    {
+      "columnName": "PROPOSAL_STATUS",
+      "displayName": "IP Status",
+      "filterType": "lookUp",
+      "valueField": "EPS_PROPOSAL_STATUS#STATUS_CODE#true#true",
+      "index": "null",
+      "queryType": "IN"
+    },
+    {
+      "columnName": "SPONSOR",
+      "displayName": "Sponsor",
+      "filterType": "freetext",
+      "valueField": "",
+      "index": "null",
+      "queryType": "LIKE",
+      "summable" : "N"
+    },
+    {
+      "columnName": "PI_NAME",
+      "displayName": "Faculty Name",
+      "filterType": "freetext",
+      "valueField": "",
+      "index": "null",
+      "queryType": "LIKE",
+      "summable" : "N"
+    },
+    {
+      "columnName": "FACULTY_TITLE",
+      "displayName": "Faculty Title",
+      "filterType": "freetext",
+      "valueField": "",
+      "index": "null",
+      "queryType": "LIKE",
+      "summable" : "N"
+    },
+    {
+      "columnName": "LEAD_UNIT_NAME",
+      "displayName": "Lead Unit",
+      "filterType": "endpoint",
+      "valueField": "unitName",
+      "index": "unitName",
+      "queryType": "IN"
+    },
+    {
+      "columnName": "TITLE",
+      "displayName": "Proposal Title",
+      "filterType": "freetext",
+      "valueField": "",
+      "index": "null",
+      "queryType": "LIKE",
+      "summable" : "N"
+    },
+    {
+      "columnName": "GRANT_CALL_TITLE",
+      "displayName": "Grant Call",
+      "filterType": "freetext",
+      "valueField": "",
+      "index": "null",
+      "queryType": "LIKE",
+      "summable" : "N"
+    },
+    {
+      "columnName": "GRANT_CALL_TYPE",
+      "displayName": "Grant Call Type",
+      "filterType": "lookUp",
+      "valueField": "GRANT_CALL_TYPE#GRANT_TYPE_CODE#true#true",
+      "index": "null",
+      "queryType": "IN",
+      "summable" : "N"
+    },
+    {
+      "columnName": "SPONSOR_CODE",
+      "displayName": "Sponsor Type",
+      "filterType": "endpoint",
+      "valueField": "sponsorCode",
+      "index": "sponsorName",
+      "queryType": "IN",
+      "summable" : "N"
+    },
+    {
+      "columnName": "START_DATE",
+      "displayName": "Start Date",
+      "filterType": "date",
+      "valueField": "null",
+      "index": "null",
+      "queryType": "BETWEEN",
+      "summable" : "N"
+    },
+    {
+      "columnName": "END_DATE",
+      "displayName": "End Date",
+      "filterType": "date",
+      "valueField": "null",
+      "index": "null",
+      "queryType": "BETWEEN",
+      "summable" : "N"
+    },
+    {
+      "columnName": "TOTAL_COST",
+      "displayName": "Total Cost($)",
+      "filterType": "null",
+      "valueField": "null",
+      "index": "null",
+      "queryType": "null",
+      "summable" : "N"
+    },
+    {
+      "columnName": "IN_KIND_CONTRIBUTION",
+      "displayName": "In Kind Contribution ($)",
+      "filterType": "null",
+      "valueField": "null",
+      "index": "null",
+      "queryType": "null",
+      "summable" : "N"
+    },
+    {
+      "columnName": "TOTAL_REQUESTED_COST",
+      "displayName": "Total Requested Cost ($)",
+      "filterType": "null",
+      "valueField": "null",
+      "index": "null",
+      "queryType": "null",
+      "summable" : "N"
+    },
+    {
+      "columnName": "TOTAL_REQUESTED_COST_USD",
+      "displayName": "Total Requested Cost ($)",
+      "filterType": "null",
+      "valueField": "null",
+      "index": "null",
+      "queryType": "null",
+      "summable" : "N"
+    },
+    {
+      "columnName": "PERSON_ROLE",
+      "displayName": "Key Person Role",
+      "filterType": "lookUp",
+      "valueField": "EPS_PROP_PERSON_ROLE#PROP_PERSON_ROLE_ID#true#true",
+      "index": "null",
+      "queryType": "IN"
+    },
+    {
+      "columnName": "PERSON_NAME",
+      "displayName": "Key Person Name",
+      "filterType": "freetext",
+      "valueField": "",
+      "index": "null",
+      "queryType": "LIKE"
+    }
+  ],
+  "extraCondition" : "1=1",
+  "extraSelection" : "",
+  "selectDistinct" : "Y"
+}

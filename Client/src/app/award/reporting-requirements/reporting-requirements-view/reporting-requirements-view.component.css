@@ -1,0 +1,12 @@
+.action-width {
+    width: 1px;
+    white-space: nowrap;
+}
+
+.vertical-middle {
+    vertical-align: middle;
+}
+
+.top-1 {
+    top: 1px;
+}

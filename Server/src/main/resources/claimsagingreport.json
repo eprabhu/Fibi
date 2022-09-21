@@ -1,0 +1,218 @@
+{
+	"reports": [
+		{
+			"columnName": "CLAIM_DATA.CLAIM_NUMBER",
+			"displayName": "Claim Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CLAIM_DATA.CLAIM_SUBMISSION_DATE",
+			"displayName": "Claim Submission Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CLAIM_DATA.START_DATE",
+			"displayName": "Claim Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CLAIM_DATA.END_DATE",
+			"displayName": "Claim End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CLAIM_DATA.CLAIM_AMOUNT",
+			"displayName": "Claim Amount",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"innerJoin" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "CLAIM_DATA.CLAIM_PREPARER",
+			"displayName": "Claim Preparer",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CLAIM_DATA.BANK_CLEARANCE_DATE",
+			"displayName": "Bank Clearance Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.ACCOUNT_NUMBER",
+			"displayName": "Account Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.SPONSOR_AWARD_NUMBER",
+			"displayName": "Sponsor Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.AWARD_STATUS",
+			"displayName": "Award Status",
+			"filterType": "lookUp",
+			"valueField": "AWARD_STATUS#STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.AWARD_TYPE",
+			"displayName": "Award Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.ACCOUNT_TYPE",
+			"displayName": "Account Type",
+			"filterType": "lookUp",
+			"valueField": "ACCOUNT_TYPE#ACCOUNT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.GRANT_CALL_TITLE",
+			"displayName": "Grant Call Title",
+			"filterType": "endpoint",
+			"valueField": "grantCallName",
+			"index": "grantCallName",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.FUNDING_SCHEME",
+			"displayName": "Funding scheme",
+			"filterType": "lookUp",
+			"valueField": "FUNDING_SCHEME#FUNDING_SCHEME_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.SPONSOR_NAME",
+			"displayName": "Sponsor",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.SPONSOR_TYPE",
+			"displayName": "Sponsor type",
+			"filterType": "lookUp",
+			"valueField": "SPONSOR_TYPE#SPONSOR_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.UNIT_NAME",
+			"displayName": "Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_MASTER_DATA.PI_NAME",
+			"displayName": "Lead Principal Investigator",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CLAIM_DATA.BASIS_OF_CLAIM_SUBMISSION_DATE",
+			"displayName": "No. of Days",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"innerJoin" : "N",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CLAIM_DATA.AGE_CATEGORY",
+			"displayName": "Age Category",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CLAIM_DATA.CLAIM_STATUS",
+			"displayName": "Claim Status",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"innerJoin" : "N",
+			"summable" : "N"
+		}
+	],
+	"extraCondition" : "AWARD_MASTER_DATA.LEAD_UNIT_NUMBER IN(SELECT DISTINCT UNIT_NUMBER FROM PERSON_ROLE_RT WHERE RIGHT_NAME IN ('VIEW_CLAIMS') AND PERSON_ID =<<PERSON_ID>>) ORDER BY CLAIM_DATA.AGE_CATEGORY DESC",
+	"extraSelection" : "",
+	"selectDistinct" :"Y"
+}

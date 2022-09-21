@@ -1,0 +1,48 @@
+.action-list {
+    margin-top: 6px;
+    min-height: 50vh;
+    max-height: 70vh;
+}
+
+.info-width {
+    width: 200px;
+}
+
+.grey-info {
+    background: #e9ffff;
+    color: #202c2e;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.disclosure-content {
+    background-color: #fafafa;
+    color: #202c2e;
+    font-size: 1.6rem;
+    border: 1px solid #8e969f;
+}
+
+.header-color {
+    background-color: #cbd4f4;
+}
+
+.body-scroll {
+    max-height: 55vh;
+    overflow: auto;
+}
+
+::-webkit-scrollbar {
+    width: .4em;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+    background: #eee
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc
+}

@@ -1,0 +1,160 @@
+{
+    "reports": [
+        {
+            "columnName": "AWARD_NUMBER",
+            "displayName": "Project ID",
+            "filterType": "elastic",
+            "valueField": "award_number",
+            "index": "awardfibi",
+            "queryType": "IN"
+        },
+		{
+            "columnName": "TITLE",
+			"displayName": "Title",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE"
+        },
+        {
+            "columnName": "AWARD_STATUS",
+            "displayName": "Project Status",
+            "filterType": "lookUp",
+            "valueField": "AWARD_STATUS#STATUS_CODE#true#true",
+            "index": "null",
+            "queryType": "IN"
+        },
+		{
+            "columnName": "ACCOUNT_TYPE",
+            "displayName": "Account Type",
+            "filterType": "lookUp",
+            "valueField": "ACCOUNT_TYPE#ACCOUNT_TYPE_CODE#true#true",
+            "index": "null",
+            "queryType": "IN"
+        },
+         {
+            "columnName": "AWARD_TYPE",
+            "displayName": "Project Type",
+            "filterType": "lookUp",
+            "valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+            "index": "null",
+            "queryType": "IN"
+        },
+		{
+            "columnName": "ACTIVITY_TYPE",
+            "displayName": "Activity Type",
+            "filterType": "lookUp",
+            "valueField": "ACTIVITY_TYPE#ACTIVITY_TYPE_CODE#true#true",
+            "index": "null",
+            "queryType": "IN"
+        },
+		{
+            "columnName": "LEAD_UNIT",
+            "displayName": "Lead Unit",
+            "filterType": "endpoint",
+            "valueField": "unitName",
+            "index": "unitName",
+            "queryType": "IN"
+        },
+		{
+            "columnName": "SPONSOR_NAME",
+            "displayName": "Funding Agency",
+            "filterType": "endpoint",
+            "valueField": "sponsorName",
+            "index": "sponsorName",
+            "queryType": "IN"
+        },
+		{
+            "columnName": "PRIME_SPONSOR_NAME",
+            "displayName": "Prime Sponsor Name",
+            "filterType": "endpoint",
+            "valueField": "sponsorName",
+            "index": "sponsorName",
+            "queryType": "IN"
+        },
+		{
+            "columnName": "AWARD_EFFECTIVE_DATE",
+            "displayName": "Date of Award",
+            "filterType": "date",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "BETWEEN"
+        },
+		{
+            "columnName": "FINAL_EXPIRATION_DATE",
+            "displayName": "Project End Date",
+            "filterType": "date",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "BETWEEN"
+        },
+		{
+            "columnName": "PI_NAME",
+            "displayName": "Principal Investigator",
+            "filterType": "elastic",
+            "valueField": "full_name",
+            "index": "fibiperson",
+            "queryType": "IN"
+        },
+         {
+            "columnName": "ANTICIPATED_TOTAL_AMOUNT",
+            "displayName": "Anticipated Total Amount",
+            "filterType": "null",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "IN"
+        },
+         {
+            "columnName": "AMOUNT_OBLIGATED_TO_DATE",
+            "displayName": "Amount Obligated Date",
+            "filterType": "null",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "BETWEEN"
+        },
+		{
+            "columnName": "CURRENT_FUND_EFFECTIVE_DATE",
+            "displayName": "Fund Effective Date",
+            "filterType": "null",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "BETWEEN"
+        },
+		{
+            "columnName": "OBLIGATION_EXPIRATION_DATE",
+            "displayName": "Obligation Expiration Date",
+            "filterType": "null",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "BETWEEN"
+        },
+        {
+			"columnName": "BEGIN_DATE",
+			"displayName": "Project Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+            "columnName": "AWARD_EXECUTION_DATE",
+            "displayName": "Project Execution Date",
+            "filterType": "null",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "BETWEEN"
+		},
+		{
+			"columnName": "GRANT_TYPE",
+			"displayName": "Type of Grant",
+			"filterType": "lookUp",
+			"valueField": "GRANT_CALL_TYPE#GRANT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		}
+   ],
+   "extraSelection" : "",
+   "extraCondition" : "1=1",
+   	"selectDistinct" :"Y"
+}

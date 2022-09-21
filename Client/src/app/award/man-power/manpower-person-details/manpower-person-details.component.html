@@ -1,0 +1,250 @@
+<div class="modal fade mySkinDialog" tabindex="-1" id="manpower-person-more-details-modal" tabindex="-1" role="dialog"
+ aria-labelledby="manpowerPersonMoreDetails-" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Manpower Details of
+          <span *ngIf="resourceModalDetails?.resourceDetails?.fullName">
+            #<span
+              *ngIf="resourceModalDetails?.resourceDetails?.personId">{{resourceModalDetails?.resourceDetails?.personId}}</span>
+            <span
+              *ngIf="!resourceModalDetails?.resourceDetails?.personId">{{resourceModalDetails?.resourceDetails?.rolodexId}}</span>:
+            {{resourceModalDetails?.resourceDetails?.fullName}}</span>
+          <span *ngIf="!resourceModalDetails?.resourceDetails?.fullName"><i>Unassigned</i></span>
+          <span class="badge badge-danger">[CONFIDENTIAL]</span>
+        </h5>
+        <button id="manpower-person-more-details-close" type="button" class="close" data-dismiss="modal"
+          aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-height-container">
+        <div class="gridSkin">
+          <div class="row">
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Position ID</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.positionId">{{resourceModalDetails?.resourceDetails?.positionId}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.positionId" class="noDataExists">No Position
+                Id</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Person ID</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.personId">{{resourceModalDetails?.resourceDetails?.personId}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.personId" class="noDataExists">No Person Id</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Manpower Position Status</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.manpowerPositionStatus?.description">
+                {{resourceModalDetails?.resourceDetails?.manpowerPositionStatus?.description}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.manpowerPositionStatus?.description"
+                class="noDataExists">No Manpower
+                Status</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Student'" class="col-3">
+              <label class="d-block">Candidate Title</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.manpowerCandidateTitleType?.candidateTitleTypeCode">
+                {{resourceModalDetails?.resourceDetails?.manpowerCandidateTitleType?.description}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.manpowerCandidateTitleType?.candidateTitleTypeCode"
+                class="noDataExists">No
+                Candidate Title</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category != 'Others'" class="col-3">
+              <label class="d-block">Cost Allocation %</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.costAllocation">{{resourceModalDetails?.resourceDetails?.costAllocation}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.costAllocation" class="noDataExists">No Cost
+                Allocation
+                %</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Plan Start Date</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.planStartDate">{{resourceModalDetails?.resourceDetails?.planStartDate
+                | dateFormatter}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.planStartDate" class="noDataExists">No Plan Start
+                Date</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Plan End Date</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.planEndDate">{{resourceModalDetails?.resourceDetails?.planEndDate
+                | dateFormatter}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.planEndDate" class="noDataExists">No Plan End
+                Date</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Plan Duration</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.planDuration">{{resourceModalDetails?.resourceDetails?.planDuration}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.planDuration" class="noDataExists">No Plan
+                Duration</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Planned Job Profile</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.manpowerPlanJobProfileType">{{resourceModalDetails?.resourceDetails?.manpowerPlanJobProfileType?.description}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.manpowerPlanJobProfileType" class="noDataExists">No Planned Job
+                Profile</span>
+            </div>
+            <div class="col-3">
+              <label *ngIf="resourceModalDetails?.manpowerType?.manpowerTypeCode == '3'" class="d-block">Actual Start
+                Date</label>
+              <label *ngIf="resourceModalDetails?.manpowerType?.manpowerTypeCode != '3'" class="d-block">Charge Start
+                Date</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.chargeStartDate">{{resourceModalDetails?.resourceDetails?.chargeStartDate
+                | dateFormatter}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.chargeStartDate" class="noDataExists">No Charge Start
+                Date</span>
+            </div>
+            <div class="col-3">
+              <label *ngIf="resourceModalDetails?.manpowerType?.manpowerTypeCode == '3'" class="block-display">Actual
+                End Date</label>
+              <label *ngIf="resourceModalDetails?.manpowerType?.manpowerTypeCode != '3'" class="block-display">Charge
+                End Date</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.chargeEndDate">{{resourceModalDetails?.resourceDetails?.chargeEndDate
+                | dateFormatter}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.chargeEndDate" class="noDataExists">No Charge End
+                Date</span>
+            </div>
+            <div class="col-3">
+              <label *ngIf="resourceModalDetails?.manpowerType?.manpowerTypeCode == '3'" class="d-block">Actual
+                Duration</label>
+              <label *ngIf="resourceModalDetails?.manpowerType?.manpowerTypeCode != '3'" class="d-block">Charge
+                Duration</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.chargeDuration">{{resourceModalDetails?.resourceDetails?.chargeDuration}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.chargeDuration" class="noDataExists">No Charge
+                Duration</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Job Profile</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.manpowerJobProfileType">{{resourceModalDetails?.resourceDetails?.manpowerJobProfileType?.description}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.manpowerJobProfileType" class="noDataExists">No Job
+                Profile</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="block-display">Proposed Base Salary</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.plannedBaseSalary">
+                {{resourceModalDetails?.resourceDetails?.plannedBaseSalary | currency:
+                _commonService.currencyFormat}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.plannedBaseSalary" class="noDataExists">No Proposed Base Salary</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="block-display">Proposed Commitment Amount</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.plannedSalary">
+                {{resourceModalDetails?.resourceDetails?.plannedSalary | currency:
+                _commonService.currencyFormat}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.plannedSalary" class="noDataExists">No Proposed Commitment Amount</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="block-display">Committed Amount<span class="invalid-feedback"> ^</span></label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.committedCost">
+                {{resourceModalDetails?.resourceDetails?.committedCost | currency:
+                _commonService.currencyFormat}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.committedCost" class="noDataExists">No Committed Amount</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Student'" class="col-3">
+              <label class="block-display">Committed Amount<span class="invalid-feedback"> ^</span></label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.committedCost">
+                {{resourceModalDetails?.resourceDetails?.committedCost | currency:
+                _commonService.currencyFormat}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.committedCost" class="noDataExists">No Committed Amount</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Home Department</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.department">{{resourceModalDetails?.resourceDetails?.department}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.department" class="noDataExists">No Home
+                Department</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Hire Date</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.manpower?.hireDate">
+                {{resourceModalDetails?.resourceDetails?.manpower?.hireDate | dateFormatter}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.manpower?.hireDate" class="noDataExists">No Hire
+                Date</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="d-block">Contract End Date</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.manpower?.contractEndDate">
+                {{resourceModalDetails?.resourceDetails?.manpower?.contractEndDate | dateFormatter}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.manpower?.contractEndDate" class="noDataExists">No
+                Contract End
+                Date</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Student'" class="col-3">
+              <label class="d-block">Candidature Start Date</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.manpower?.candidatureStartDate">
+                {{resourceModalDetails?.resourceDetails?.manpower?.candidatureStartDate | dateFormatter}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.manpower?.candidatureStartDate"
+                class="noDataExists">No
+                Candidature Start
+                Date</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Student'" class="col-3">
+              <label class="d-block">Candidature End Date</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.manpower?.candidatureEndDate">
+                {{resourceModalDetails?.resourceDetails?.manpower?.candidatureEndDate | dateFormatter}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.manpower?.candidatureEndDate" class="noDataExists">No
+                Candidature End
+                Date</span>
+            </div>
+            <div class="col-3">
+              <label class="d-block">Manpower Type</label>
+              <span *ngIf="resourceModalDetails?.manpowerType?.description">
+                {{resourceModalDetails?.manpowerType?.description}}</span>
+              <span *ngIf="!resourceModalDetails?.manpowerType?.description" class="noDataExists">No
+                Manpower Type</span>
+            </div>
+            <div class="col-3">
+              <label class="d-block">Active Status</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.personStatus">
+                {{resourceModalDetails?.resourceDetails?.personStatus === 'A' ? 'Active' : 'Inactive'}}
+                <span *ngIf="resourceModalDetails?.resourceDetails?.personStatus === 'I' &&
+                resourceModalDetails?.resourceDetails?.dateOfInactive">
+                ({{resourceModalDetails?.resourceDetails?.dateOfInactive | dateFormatterWithTimeZone}})</span>
+              </span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.personStatus" class="noDataExists">No Active
+                Status</span>
+            </div>
+            <div class="col-3">
+              <label class="d-block">Candidate Type</label>
+              <span
+                *ngIf="resourceModalDetails?.resourceDetails?.candidateType">{{resourceModalDetails?.resourceDetails?.candidateType}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.candidateType" class="noDataExists">No Candidate
+                Type</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="block-display">Multiplier Used</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.multiplierValueUsed">
+                {{resourceModalDetails?.resourceDetails?.multiplierValueUsed}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.multiplierValueUsed" class="noDataExists">No Multiplier Used</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff'" class="col-3">
+              <label class="block-display">Request Type</label>
+              <span>{{resourceModalDetails?.resourceDetails?.manpowerUpgradeType?.description}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.manpowerUpgradeType?.description" class="noDataExists">No Request Type Selected</span>
+            </div>
+            <div *ngIf="resourceModalDetails?.category == 'Staff' && resourceModalDetails?.resourceDetails?.costAllocation < 100" class="col-3">
+              <label class="block-display">Remaining Cost Allocation from WBS</label>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.isRemainingCAFromWBS != null">
+                {{resourceModalDetails?.resourceDetails?.isRemainingCAFromWBS ? 'Yes' : 'No'}}</span>
+              <span *ngIf="resourceModalDetails?.resourceDetails?.isRemainingCAFromWBS == null" class="noDataExists">No Remaining Cost Allocation</span>
+            </div>
+            <div class="col-12">
+              <label class="d-block">Comments</label>
+              <span class="new-line-property"
+                *ngIf="resourceModalDetails?.resourceDetails?.description">{{resourceModalDetails?.resourceDetails?.description}}</span>
+              <span *ngIf="!resourceModalDetails?.resourceDetails?.description" class="noDataExists">No Comments</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

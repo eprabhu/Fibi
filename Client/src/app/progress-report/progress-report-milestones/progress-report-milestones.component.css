@@ -1,0 +1,11 @@
+.table-validation-msg {
+    position: absolute;
+    width: 100%;
+    background: #ffeded;
+    border-radius: 4px;
+    left: 0;
+    top: 37px;
+    z-index: 100;
+    padding: 2px 10px;
+    right: 0;
+}

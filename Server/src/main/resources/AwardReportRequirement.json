@@ -1,0 +1,259 @@
+{
+	"reports": [
+		{
+			"columnName": "AWARD_NUMBER",
+			"displayName": "Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACCOUNT_NUMBER",
+			"displayName": "Account Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR_AWARD_NUMBER",
+			"displayName": "Sponsor Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_STATUS",
+			"displayName": "Award Status",
+			"filterType": "lookUp",
+			"valueField": "AWARD_STATUS#STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_TYPE",
+			"displayName": "Award Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACCOUNT_TYPE",
+			"displayName": "Account Type",
+			"filterType": "lookUp",
+			"valueField": "ACCOUNT_TYPE#ACCOUNT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "GRANT_CALL_TITLE",
+			"displayName": "Grant Call Title",
+			"filterType": "endpoint",
+			"valueField": "grantCallName",
+			"index": "grantCallName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FUNDING_SCHEME",
+			"displayName": "Grant Scheme",
+			"filterType": "lookUp",
+			"valueField": "FUNDING_SCHEME#FUNDING_SCHEME_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TITLE",
+			"displayName": "Award Title",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "BEGIN_DATE",
+			"displayName": "Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FINAL_EXPIRATION_DATE",
+			"displayName": "End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "DURATION",
+			"displayName": "Project Duration",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR_NAME",
+			"displayName": "Sponsor",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR_TYPE",
+			"displayName": "Sponsor Type",
+			"filterType": "lookUp",
+			"valueField": "SPONSOR_TYPE#SPONSOR_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UNIT_NAME",
+			"displayName": "Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SUB_LEAD_UNIT",
+			"displayName": "Sub-Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PI_NAME",
+			"displayName": "Lead Principal Investigator",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_REPORT_TERMS_DUE_DATE",
+			"displayName": "Award Report Terms Due Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_REPORT_TERMS_BASE_DATE",
+			"displayName": "Base Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORT_CLASS",
+			"displayName": "Report Class",
+			"filterType": "lookUp",
+			"valueField": "REPORT_CLASS#REPORT_CLASS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FREQUENCY",
+			"displayName": "Frequency",
+			"filterType": "lookUp",
+			"valueField": "FREQUENCY#FREQUENCY_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FREQUENCY_BASE",
+			"displayName": "Frequency Base",
+			"filterType": "lookUp",
+			"valueField": "FREQUENCY_BASE#FREQUENCY_BASE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "DISTRIBUTION",
+			"displayName": "Description",
+			"filterType": "lookUp",
+			"valueField": "DISTRIBUTION#OSP_DISTRIBUTION_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "REPORT_STATUS",
+			"displayName": "Report Status",
+			"filterType": "lookUp",
+			"valueField": "REPORT_STATUS#REPORT_STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "RECIPIENT_NAME",
+			"displayName": "Recipient Name",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACTIVITY_DATE",
+			"displayName": "Activity Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMMENTS",
+			"displayName": "Report Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_REPORT_TRACKING_DUE_DATE",
+			"displayName": "Due Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		}
+	],
+	"extraCondition" : "(LEAD_UNIT_NUMBER IN(SELECT DISTINCT UNIT_NUMBER FROM PERSON_ROLE_RT WHERE RIGHT_NAME IN ('VIEW_AWARD') AND PERSON_ID =<<PERSON_ID>>) OR AWARD_ID IN (SELECT T1.AWARD_ID FROM AWARD_PERSON_ROLES T1 INNER JOIN ROLE_RIGHTS T2 ON T1.ROLE_ID = T2.ROLE_ID INNER JOIN RIGHTS T3 ON T2.RIGHT_ID = T3.RIGHT_ID WHERE T1.PERSON_ID =<<PERSON_ID>> AND T3.RIGHT_NAME IN ('VIEW_AWARD'))) ORDER BY AWARD_NUMBER",
+	"extraSelection" : "",
+	"selectDistinct" :"Y"
+}

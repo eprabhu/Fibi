@@ -1,0 +1,151 @@
+<div class="card card-table-box rounded-0 mt-1">
+  <div class="card-content">
+    <div class="card-body">
+
+      <!-- <div class="mx-0 row">
+        <div class="col-12 p-3 pb-0 highlight-node font">
+          <p><strong>Entity Management : </strong> Includes not-for-profit entities other than
+            governmental entities, institutions of higher education and affiliated organization.</p>
+        </div>
+      </div> -->
+
+      <div class="card-body mx-0 mt-3 p-0">
+        <div class="form-row justify-content-center " *ngIf="entityDetails?.length">
+          <div class="form-group searchBox col-lg">
+            <input type="text" placeholder="Type here." class="ng-pristine ng-valid ng-touched form-control"
+              [(ngModel)]="searchText ">
+            <a class="searchButton">
+              <i aria-hidden="true" class="fa fa-search fa-med pt-2 mr-4"></i>
+            </a>
+          </div>
+          <div class="col-lg-auto">
+            <a id="show-advance-search" href="#collapseExternal" class="btn btn-sm btn-tertiary float-right mt-0 "
+              data-toggle="collapse" role="button" aria-expanded="false"
+              aria-controls="collapseExternal">
+              <i class="fa fa-sliders" aria-hidden="true"></i> Advanced Search
+            </a>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="collapse w-100" id="collapseExternal">
+            <div class=" col-12 p-0">
+              <div class="card">
+                <div class="card-body gridSkin p-2">
+
+                  <div class="form-row">
+                    <div class="form-group col-md-3 col-sm-6 col-12">
+                      <label for="adv-search-person-id">Person Name</label>
+                      <input type="text" id="adv-search-person-id" placeholder="Person Name" class=" form-control">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6 col-12">
+                      <label for="adv-search-Department">Department</label>
+                      <input type="text" id="adv-search-Department" placeholder="Department" maxlength="60"
+                        class=" form-control">
+                    </div>
+
+                    <div class="cform-group col-md-3 col-sm-6 col-12">
+                      <label for="adv-search-Title">Title</label>
+                      <input type="text" id="adv-search-Title" placeholder="Title" maxlength="60"
+                        class=" form-control">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6 col-12">
+                      <label for="adv-search-start-date">Start Date of Involvement</label>
+                      <input type="text" id="adv-search-start-date" placeholder="Start Date of Involvement" maxlength="60"
+                        class=" form-control">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6 col-12">
+                      <label for="adv-search-end-date">End Date of Involvement</label>
+                      <input type="text" id="adv-search-end-date" placeholder="End Date of Involvement" maxlength="60"
+                        class=" form-control">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6 col-12">
+                      <label for="adv-search-status">Status</label>
+                      <select id="adv-search--status" class="hand-icon form-control">
+                        <option value=''>Select Status</option>
+                        <option value='A'>Active</option>
+                        <option value='I'>Inactive</option>
+                      </select>
+
+                    </div>
+
+                    <div class="form-group col d-flex justify-content-end mt-4">
+                      <button id="adv-search-clear-proposal" title="Clear"
+                        class="btn btn-secondary btn-sm btn-xs mr-sm-2 mr-2 mt-3">Clear</button>
+                      <button id="adv-search-proposal" title="Search"
+                        class="btn btn-primary btn-sm btn-xs mt-3">Search</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive" *ngIf="entityDetails?.length">
+        <h4 class="font-weight-bold">Disclosures that reference {{entityInfo?.entityName}}</h4>
+        <table class="table tableSkin mb-0">
+          <thead>
+            <tr class="header-border text-left">
+              <th style="width: 15%" scope="col" id="Person-name">
+                <span class="hand-cursor" title="Person Name">Person Name</span>
+              </th>
+              <th style="width: 10%" scope="col" id="Department">
+                <span class="hand-cursor" title="Department">Department</span>
+              </th>
+              <th style="width: 10%" scope="col" id="Title">
+                <span class="hand-cursor" title="Title">Title</span>
+              </th>
+
+              <th style="width: 10%" scope="col">
+                <span class="hand-cursor" title="Start Date of Involvement">Start Date of Involvement</span>
+              </th>
+              <th style="width: 10%" scope="col">
+                <span class="hand-cursor" title="End Date of Involvement">End Date of Involvement</span>
+              </th>
+              <th style="width: 10%" scope="col" class="text-center">Relationship Status</th>
+              <th style="width: 10%" scope="col" class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of entityDetails; let i =index" class="pull-up text-left mt-1">
+              <td>{{ item?.name }}</td>
+              <td>{{ item?.department }}</td>
+              <td>{{ item?.title }}</td>
+              <td>{{ item?.involvementStartDate}}</td>
+              <td>{{ item?.involvementEndDate}}</td>
+              <td class="text-center">
+                <span class="badge badge-pill" [ngClass]="item.status === 'A' ? 'badge-success' : 'badge-secondary'">
+                  {{item?.status === 'A' ? 'Active' : 'Inactive'}}
+                </span>
+              </td>
+              <td>
+                <ul class="actionButtonGroup text-center">
+                  <li>
+                    <a title="View " class="btn btn-small btn-tertiary button-radius" id="view-entity"
+                      [routerLink]="['/fibi/manage-entity/view-entity']">
+                      <i class="fa fa-eye pointer" aria-hidden="true"></i> View
+                    </a>
+                  </li>
+                </ul>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="entityDetails?.length == 0" class="no-data-container">
+        <span class="no-data-icon-outer">
+          <div class="no-data-icon">
+            <i aria-hidden="true" class="fa fa-file-o"></i>
+            <i aria-hidden="true" class="fa fa-times-circle-o"></i>
+          </div>
+        </span>
+        <h4>There is no Person found.</h4>
+      </div>
+    </div>
+  </div>
+
+</div>

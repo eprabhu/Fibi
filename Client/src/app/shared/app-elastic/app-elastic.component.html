@@ -1,0 +1,24 @@
+<div class="elastic-outer">
+  <label for="" class="d-none">hidden label to mislead chrome autocomplete</label>
+  <input id="searchBox" #searchField type="text" (focusout) ="isActive = false; hideSearchResults()"   placeholder="{{placeHolder}}" 
+    (keydown.arrowdown) = "downArrowEvent($event);" (keydown.esc) = "hideSearchResults();" 
+    (keydown.arrowup) = "upArrowEvent($event);" (keydown.enter) = "enterKeyEvent();" [disabled]="isDisabled"
+    [(ngModel)]="searchText" (keypress)="getElasticResult()" (paste)="getElasticResult()" (keydown.backspace)="backSpaceEvent()"
+    class = "app-elastic-search form-control pr-25" autocomplete="off"/> 
+  <a class="searchButton" >
+    <i aria-hidden="true" *ngIf = "searchText == ''" class="fa fa-search fa-med pt-2"></i>
+    <i aria-hidden="true"  *ngIf="searchText != '' && !isDisabled" class="fa fa-times fa-med pt-2" (click)="emitSelectedObject(null);"></i>
+  </a>
+  <div class="sb-seachresults" *ngIf = "isActive" >
+    <ul id="searchList" class="sb-results-dropdown-menu" [ngStyle]="{
+      'color': options.theme,'width': options.width,'border-left-color': options.theme,'border-right-color': options.theme}" >      
+      <li  class="search-result-item" *ngFor="let result of results"
+        (click)="emitSelectedObject(result.value)"  (mousedown)="isResultSelected= true; 
+        emitSelectedObject(result.value)"
+        [ngStyle]="{'color': options.theme,'font-size': options.fontSize}">
+        <span [innerHTML]="result.label"></span>
+      </li>
+    </ul> 
+  </div>  
+</div>
+<div class="invalid-feedback" *ngIf="isError">{{options.errorMessage}}</div>

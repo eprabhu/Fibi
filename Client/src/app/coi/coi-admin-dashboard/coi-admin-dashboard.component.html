@@ -1,0 +1,730 @@
+<section class="row">
+    <div (click)="changeTab('NEW_SUBMISSIONS')"
+         class="align-items-center col d-flex dash-card justify-content-center pointer py-4 ml-4 flex-column">
+        <div class="align-items-center d-flex justify-content-center" style="height:40px">
+            <p class="f-5 bold">{{dashboardCounts?.newSubmissionsCount}}</p>
+            <p class="f-18 fw-500 mx-4">New Submissions</p>
+        </div>
+        <div class="align-items-center d-flex justify-content-center" style="height:40px">
+            <p class="bold" style="font-size: 2.5rem">{{dashboardCounts?.unassignedCount}}</p>
+            <p class="f-16 fw-500 mx-4">Unassigned</p>
+        </div>
+    </div>
+    <div (click)="searchConflictIdentified()" class="col dash-card pointer">
+        <div class="align-items-center d-flex h-100 justify-content-center">
+            <p class="f-5 bold">{{dashboardCounts?.conflictIdentifiedCount}}</p>
+            <p class="f-18 fw-500 mx-4">Conflicts Identified</p>
+        </div>
+    </div>
+    <div (click)="changeTab('ENTITY')" class="col dash-card pointer">
+        <div class="align-items-center d-flex h-100 justify-content-center">
+            <p class="f-5 bold">{{dashboardCounts?.pendingEntityApproval}}</p>
+            <p class="f-18 fw-500 mx-4">Pending Entity Approval</p>
+        </div>
+    </div>
+    <div (click)="changeTab('COMMENTS')" class="col dash-card mr-4 pointer">
+        <div class="align-items-center d-flex h-100 justify-content-center">
+            <p class="f-5 bold">{{dashboardCounts?.reviewCommentsCount}}</p>
+            <p class="f-18 fw-500 mx-4">Comments</p>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <nav class="coi-admin-dash mb-3 mx-0 row">
+        <div>
+            <ul class="m-0 p-0 bg-white p-3 f-14 admin-main-navigation shadow-sm">
+                <li (click)="changeTab('ALL_DISCLOSURES')"
+                    [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
+                    class="p-3 position-relative text-center ml-3"
+                    style="width: 109.11px">
+                    All Disclosures
+                    <i *ngIf="_coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
+                       class="fa fa-caret-down"></i></li>
+                <li class="separator mx-3"></li>
+                <li (click)="changeTab('NEW_SUBMISSIONS')"
+                    [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
+                    class="p-3 position-relative text-center"
+                    style="width: 130.7px">
+                    New Submissions
+                    <i *ngIf="_coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
+                       class="fa fa-caret-down"></i></li>
+                <li class="separator mx-3"></li>
+                <li (click)="changeTab('PENDING_DISCLOSURES')"
+                    [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='PENDING_DISCLOSURES'"
+                    class="p-3 position-relative text-center"
+                    style="width: 130.7px">Pending Reviews
+                    <i *ngIf="_coiAdminDashboardService.coiRequestObject.tabName=='PENDING_DISCLOSURES'"
+                       class="fa fa-caret-down"></i></li>
+                <li class="separator mx-3"></li>
+                <li (click)="changeTab('COMMENTS')"
+                    [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='COMMENTS'"
+                    class="p-3 position-relative text-center"
+                    style="min-width: 119.16px">Comments <span *ngIf="dashboardCounts?.reviewCommentsCount"
+                                                               class="badge badge-pill badge-danger">{{dashboardCounts?.reviewCommentsCount}}</span>
+                    <i *ngIf="_coiAdminDashboardService.coiRequestObject.tabName=='COMMENTS'"
+                       class="fa fa-caret-down"></i>
+                </li>
+                <li class="separator mx-3"></li>
+                <li (click)="changeTab('ENTITY')"
+                    [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='ENTITY'"
+                    class="p-3 position-relative text-center mr-3"
+                    style="min-width: 149.69px">Entity Management
+                    <i *ngIf="_coiAdminDashboardService.coiRequestObject.tabName=='ENTITY'"
+                       class="fa fa-caret-down"></i></li>
+            </ul>
+        </div>
+    </nav>
+    <div *ngIf="isAdvanceSearchTab(_coiAdminDashboardService.coiRequestObject.tabName)"
+    class="d-flex justify-content-end ml-auto mt-2">
+
+   <button class="btn btn-tertiary mb-2 ml-3" data-toggle="collapse" href="#collapseCOI">
+       <i aria-hidden="true" class="fa fa-sliders"></i>
+       Advanced Search
+   </button>
+    </div>
+
+    <div class="card" *ngIf="['ALL_DISCLOSURES','ENTITY'].includes(_coiAdminDashboardService.coiRequestObject.tabName)">
+        <div class="card-body gridSkin">
+            <div class="form-row justify-content-center">
+                <div class="col-12 searchBox mb-0">
+                    <app-elastic [options]="coiElastic" style="width: 400px"
+                                 [placeHolder]="_coiAdminDashboardService.coiRequestObject.tabName == 'ENTITY' ? 'Search : Name, Country, Email':'Search : Disclosure#, Category, Full Name, Status, person#'"
+                                 (selectedResult)="redirectToDisclosure($event)"></app-elastic>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isAdvanceSearchTab(_coiAdminDashboardService.coiRequestObject.tabName)"
+         class="card mb-3 collapse"
+         id="collapseCOI">
+        <div class="card-body">
+            <ng-container *ngIf="_coiAdminDashboardService.coiRequestObject.tabName !='ENTITY'">
+                <div class="form-row">
+                    <!-- Disclosure # -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Disclosure Number</ng-container>
+                        </label>
+                        <input [(ngModel)]="_coiAdminDashboardService.coiRequestObject.property1" class="form-control"
+                               placeholder="Disclosure Number" type="text"/>
+                    </div>
+                    <!-- Disclosure Status -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Disclosure Status</ng-container>
+                        </label>
+                        <app-look-up (selectedResult)="onLookupSelect($event, 'property4')"
+                                     [options]="disclosureStatusOptions"
+                                     [selectedLookUpList]="lookupValues['property4']">
+                        </app-look-up>
+                    </div>
+                    <!-- Person Name -->
+                    <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
+                        <label class="d-block">Person Name</label>
+                        <app-elastic (selectedResult)="selectPersonName($event)"
+                                     [clearField]="advSearchClearField"
+                                     [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person Name'">
+                        </app-elastic>
+                    </div>
+                    <!-- Department Name -->
+                    <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Department Name</ng-container>
+                        </label>
+                        <app-endpoint-search (onSelect)="leadUnitChangeFunction($event)" [clearField]="advSearchClearField"
+                                             [httpOptions]="leadUnitSearchOptions"
+                                             [placeHolder]="'Type here for Department Name'">
+                        </app-endpoint-search>
+                    </div>
+                    <!-- Start Date -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Start Date</ng-container>
+                        </label>
+                        <span class="dateField">
+                            <input (keypress)="commonService._keyPress($event, 'date');"
+                                   (keyup.enter)="setAdvanceSearchValuesToServiceObject();$coiList.next()"
+                                   [(ngModel)]="advanceSearchDates.startDate" [owlDateTimeTrigger]="advSearchStartDate"
+                                   [owlDateTime]="advSearchStartDate"
+                                   [placeholder]="DEFAULT_DATE_FORMAT" autocomplete="off"
+                                   class="form-control" id="adv-search-start-date"
+                                   maxlength="60" type="text"/>
+                            <i [owlDateTimeTrigger]="advSearchStartDate" aria-hidden="true"
+                               class="fa fa-calendar fa-large insidePicker hand-cursor"
+                               id="award-sub-date-icon"
+                               title="Open Calender"></i>
+                            <owl-date-time #advSearchStartDate
+                                           (afterPickerOpen)="setFocusToElement('adv-search-start-date')"
+                                           [pickerType]="'calendar'">
+                            </owl-date-time>
+                        </span>
+                    </div>
+                    <!-- End Date -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>End Date</ng-container>
+                        </label>
+                        <span class="dateField">
+                            <input (keypress)="commonService._keyPress($event, 'date');"
+                                   (keyup.enter)="setAdvanceSearchValuesToServiceObject();$coiList.next()"
+                                   [(ngModel)]="advanceSearchDates.endDate" [owlDateTimeTrigger]="advSearchEndDate"
+                                   [owlDateTime]="advSearchEndDate" [placeholder]="DEFAULT_DATE_FORMAT"
+                                   autocomplete="off"
+                                   class="form-control" id="adv-search-end-date"
+                                   maxlength="60" type="text"/>
+                            <i [owlDateTimeTrigger]="advSearchEndDate" aria-hidden="true"
+                               class="fa fa-calendar fa-large insidePicker hand-cursor"
+                               id="award-sub-date-icon"
+                               title="Open Calender"></i>
+                            <owl-date-time #advSearchEndDate (afterPickerOpen)="setFocusToElement('adv-search-end-date')"
+                                           [pickerType]="'calendar'">
+                            </owl-date-time>
+                        </span>
+                    </div>
+
+                    <!-- Entity Name -->
+                    <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
+                        <label class="d-block">Entity Name</label>
+                        <input [(ngModel)]="_coiAdminDashboardService.coiRequestObject.property8" class="form-control"
+                               maxlength="60"
+                               placeholder="Entity Name"
+                               type="text"/>
+                    </div>
+                    <!-- Entity Country -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">Entity Country</label>
+                        <app-endpoint-search (onSelect)="selectEntityCountry($event)"
+                                             [clearField]="advSearchClearField"
+                                             [httpOptions]="countrySearchOptions"
+                                             [placeHolder]="'Type here for entity country'">
+                        </app-endpoint-search>
+                    </div>
+                    <!-- Project Type -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Project Type</ng-container>
+                        </label>
+                        <select [(ngModel)]="_coiAdminDashboardService.coiRequestObject.property14"
+                                class="form-control">
+                            <option [ngValue]="null">--Select--</option>
+                            <option [value]="1">Award</option>
+                            <option [value]="3">Proposal</option>
+                        </select>
+                    </div>
+                    <!-- Award ID -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Award ID</ng-container>
+                        </label>
+                        <input [(ngModel)]="_coiAdminDashboardService.coiRequestObject.property12" class="form-control"
+                               maxlength="60"
+                               placeholder="Award ID"
+                               type="number">
+                    </div>
+                    <!-- Proposal ID -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Proposal ID</ng-container>
+                        </label>
+                        <input [(ngModel)]="_coiAdminDashboardService.coiRequestObject.property10" class="form-control"
+                               maxlength="60"
+                               placeholder="Proposal ID"
+                               type="number">
+                    </div>
+                    <!-- Project Title -->
+                    <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
+                        <label class="d-block">Project Title</label>
+                        <input [(ngModel)]="_coiAdminDashboardService.coiRequestObject.property11" class="form-control"
+                               placeholder="Project Title" type="text"/>
+                    </div>
+                    <!-- Disclosure Type -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Disclosure Type</ng-container>
+                        </label>
+                        <app-look-up (selectedResult)="onLookupSelect($event, 'property5')"
+                                     [options]="disclosureTypeOptions"
+                                     [selectedLookUpList]="lookupValues['property5']">
+                        </app-look-up>
+                    </div>
+                    <!-- Project Type -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+
+                        <label class="d-block">
+                            <ng-container>Has SFI</ng-container>
+                        </label>
+                        <span class="mt-2">
+                            <a *ngIf="!_coiAdminDashboardService.coiRequestObject.property15">
+                                <label class="switch">
+                                    <input (click)="_coiAdminDashboardService.coiRequestObject.property15
+                                    = !_coiAdminDashboardService.coiRequestObject.property15"
+                                           type="checkbox">
+                                    <span class="slider round"><small class="deactivate-text">No</small></span>
+                                </label>
+                            </a>
+                            <a *ngIf="_coiAdminDashboardService.coiRequestObject.property15">
+                                <label class="switch">
+                                    <input (click)="_coiAdminDashboardService.coiRequestObject.property15
+                                    = !_coiAdminDashboardService.coiRequestObject.property15" checked type="checkbox">
+                                    <span class="slider round"><small>Yes</small></span>
+                                </label>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button (click)="performAdvanceSearch()" class="btn btn-primary mx-3">Search</button>
+                    <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs mr-2">Clear</button>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="_coiAdminDashboardService.coiRequestObject.tabName =='ENTITY'">
+                <div class="form-row">
+                    <!-- Entity Name -->
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Entity Name</ng-container>
+                        </label>
+                        <input class="form-control" placeholder="Entity Name" type="text"/>
+                    </div>
+                    <!-- Entity Country -->
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">Entity Country</label>
+                        <app-endpoint-search (onSelect)="selectEntityCountry($event)"
+                                             [clearField]="advSearchClearField"
+                                             [httpOptions]="countrySearchOptions"
+                                             [placeHolder]="'Type here for entity country'">
+                        </app-endpoint-search>
+                    </div>
+                    <!-- Status -->
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Status</ng-container>
+                        </label>
+                        <select class="form-control">
+                            <option [ngValue]="null">--Select--</option>
+                            <option [value]="1">Active</option>
+                            <option [value]="3">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-12">
+                        <label class="d-block">
+                            <ng-container>Disclosure Type</ng-container>
+                        </label>
+                        <app-look-up (selectedResult)="onLookupSelect($event, 'property5')"
+                                     [options]="disclosureTypeOptions"
+                                     [selectedLookUpList]="lookupValues['property5']">
+                        </app-look-up>
+                    </div>
+                    <!-- Project Type -->
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+
+                        <label class="d-block">
+                            <ng-container>Has SFI</ng-container>
+                        </label>
+                        <span class="mt-2">
+                            <a *ngIf="!_coiAdminDashboardService.coiRequestObject.property15">
+                                <label class="switch">
+                                    <input (click)="_coiAdminDashboardService.coiRequestObject.property15
+                                    = !_coiAdminDashboardService.coiRequestObject.property15"
+                                           type="checkbox">
+                                    <span class="slider round"><small class="deactivate-text">No</small></span>
+                                </label>
+                            </a>
+                            <a *ngIf="_coiAdminDashboardService.coiRequestObject.property15">
+                                <label class="switch">
+                                    <input (click)="_coiAdminDashboardService.coiRequestObject.property15
+                                    = !_coiAdminDashboardService.coiRequestObject.property15" checked type="checkbox">
+                                    <span class="slider round"><small>Yes</small></span>
+                                </label>
+                            </a>
+                        </span>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12">
+
+                        <label class="d-block">
+                            <ng-container>Has Disclosure</ng-container>
+                        </label>
+                        <span class="mt-2">
+                            <a *ngIf="!_coiAdminDashboardService.coiRequestObject.property15">
+                                <label class="switch">
+                                    <input (click)="_coiAdminDashboardService.coiRequestObject.property15
+                                    = !_coiAdminDashboardService.coiRequestObject.property15"
+                                           type="checkbox">
+                                    <span class="slider round"><small class="deactivate-text">No</small></span>
+                                </label>
+                            </a>
+                            <a *ngIf="_coiAdminDashboardService.coiRequestObject.property15">
+                                <label class="switch">
+                                    <input (click)="_coiAdminDashboardService.coiRequestObject.property15
+                                    = !_coiAdminDashboardService.coiRequestObject.property15" checked type="checkbox">
+                                    <span class="slider round"><small>Yes</small></span>
+                                </label>
+                            </a>
+                        </span>
+                    </div>
+                    <div class="align-items-center col-12 col-lg d-flex justify-content-end">
+                        <button class="btn btn-primary mx-3">Search</button>
+                        <button class="btn btn-secondary btn-xs mr-2">Clear</button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <ng-container
+            *ngIf="['ALL_DISCLOSURES', 'PENDING_DISCLOSURES', 'NEW_SUBMISSIONS'].includes(_coiAdminDashboardService.coiRequestObject.tabName)">
+        <ng-container *ngFor="let coi of coiList;">
+            <section class="mt-3 shadow-sm coi-card">
+                <div class="bg-white f-14 px-4 pt-3">
+                    <div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="id">Disclosure Number:</label>
+                                <span id="id">{{coi?.coiDisclosureNumber}}</span>
+                            </div>
+                            <div class="col">
+                                <label for="person-name">Person Name:</label>
+                                <span id="person-name">{{coi?.disclosurePersonFullName}}</span>
+                            </div>
+                            <div class="col">
+                                <label for="type">Disclosure Type:</label>
+                                <span id="type">{{coi?.disclosureCategoryType}}</span>
+                            </div>
+                            <div class="col">
+                                <label for="status">Disclosure Status:</label>
+                                <div class="badge f-13 badge-pill badge-{{getDisclosureStatusBadge(coi?.disclosureStatusCode)}}" id="status">
+                                    {{coi?.disclosureStatus}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="event-type">Disclosure Event Type:</label>
+                                <span id="event-type">{{getEventType(coi?.disclosureSequenceStatusCode, coi?.disclosureCategoryTypeCode)}}</span>
+                            </div>
+                            <div class="col">
+                                <label for="last-approved-version">Last Approved Version:</label>
+                                <span id="last-approved-version">{{coi?.lastApprovedVersion}}</span>
+                            </div>
+                            <div class="col">
+                                <label for="last-approved-version-date">Last Approved Version Date:</label>
+                                <span id="last-approved-version-date">{{coi?.lastApprovedVersionDate | dateFormatter}}</span>
+                            </div>
+                            <div class="col">
+                                <label for="disp-status">Disposition Status:</label>
+                                <span class="badge f-13 badge-pill badge-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"
+                                      id="disp-status">{{coi?.dispositionStatus}}</span>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6" [ngClass]="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES' ?'col-6':'col-9'">
+                                <label for="revision-reason">Revision Reason:</label>
+                                <span id="revision-reason">{{coi?.reviseComment}}</span>
+                            </div>
+                            <div class="col-3 align-self-center" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
+                                <label class="m-0" for="last-updated"> Review Status for </label>
+                                <span id="last-updated"><i class="bold">{{coi?.reviewerFullName}}</i>
+                                    : <span class="badge f-13 badge-pill badge-{{getReviewStatusBadge(coi?.reviewerStatusCode)}}">{{coi?.reviewerStatus}}</span></span>
+                            </div>
+                            <div class="col-3">
+                                <label for="review-status">Review Status:</label>
+                                <span class="badge f-13 badge-pill badge-{{getReviewStatusBadge(coi?.reviewStatusTypeCode)}}" id="review-status">{{coi?.reviewStatus}}</span>
+                            </div>
+                        </div>
+                        <hr class="m-0">
+                        <div class="row py-2">
+                            <div class="col-3 d-flex align-items-center">
+                                <div (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);"
+                                     *ngIf="coi?.disclosureStatusCode == 1"
+                                     class="bold-blue-number pointer">
+                                    {{coi?.noOfSfiInPending || 0}}
+                                </div>
+                                <div  *ngIf="coi?.disclosureStatusCode != 1" class="bold-blue-number mt-1 pointer"
+                                      (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">
+                                    {{coi?.noOfSfiInActive || 0}}
+                                </div>
+                                <div class="ml-2 mt-1 pointer" (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">Significant Financial Interest</div>
+                            </div>
+                            <div class="col-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);"
+                                         *ngIf="coi?.numberOfProposals"
+                                         class="bold-blue-number pointer">
+                                        {{coi?.numberOfProposals}}
+                                    </div>
+                                    <div *ngIf="!coi?.numberOfProposals" class="bold-blue-number">
+                                        {{coi?.numberOfProposals}}
+                                    </div>
+                                    <div class="ml-2 mt-1 pointer" (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">Proposals</div>
+                                </div>
+                                <div class="d-flex align-items-center ml-5 pl-5">
+                                    <div (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);"
+                                         *ngIf="coi?.numberOfAwards"
+                                         class="bold-blue-number pointer">
+                                        {{coi?.numberOfAwards}}
+                                    </div>
+                                    <div *ngIf="!coi?.numberOfAwards" class="bold-blue-number">
+                                        {{coi?.numberOfAwards}}
+                                    </div>
+                                    <div class="ml-2 mt-1 pointer" (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">Awards</div>
+                                </div>
+                            </div>
+                            <div class="col-3 align-self-center">
+                                <label class="m-0" for="last-updated">Last Updated On:</label>
+                                <span id="last-updated">{{coi?.updateTimeStamp | dateFormatter}}
+                                    by {{coi?.updateUser}}</span>
+                            </div>
+                            <div class="col-auto ml-auto">
+                                <button [routerLink]="coi?.disclosureStatusCode == '1' ? ['/fibi/coi/screening-questionnaire'] : ['/fibi/coi']"
+                                        [queryParams]="{disclosureId:coi?.coiDisclosureId}"
+                                        class="btn btn-tertiary f-13 mt-0 mr-2">
+                                    <i aria-hidden="true" class="fa fa-eye"></i>
+                                    View
+                                </button>
+                                <button *ngIf="coi?.reviewerStatusCode === '1' &&
+                                        _coiAdminDashboardService.coiRequestObject.tabName=='PENDING_DISCLOSURES'"
+                                        [disabled]="isSaving" data-toggle="modal" data-target="#ReviewModal"
+                                        class="btn btn-primary f-13"
+                                        (click)="selectedStartReviewCoiId=coi?.reviewId;selectedReviewStatusCode = coi?.reviewerStatusCode">
+                                    <i aria-hidden="true"
+                                       class="fa fa-file-text-o"></i> Start Review
+                                </button>
+                                <button *ngIf="coi?.reviewerStatusCode === '2' &&
+                                        _coiAdminDashboardService.coiRequestObject.tabName=='PENDING_DISCLOSURES'"
+                                        [disabled]="isSaving" data-toggle="modal" data-target="#ReviewModal"
+                                        class="btn btn-primary f-13"
+                                        (click)="selectedStartReviewCoiId=coi?.reviewId;selectedReviewStatusCode = coi?.reviewerStatusCode">
+                                    <i aria-hidden="true"
+                                       class="fa fa-file-text-o"></i> Complete Review
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </ng-container>
+        <!-- Pagination -->
+        <div *ngIf="coiList.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+            <nav aria-label="pagination section" class="pagination justify-content-end">
+                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="result.disclosureCount">
+                </app-pagination>
+            </nav>
+        </div>
+        <div *ngIf="coiList == null || coiList?.length == 0" class="no-data-container bg-white">
+            <span class="no-data-icon-outer">
+                <div class="no-data-icon">
+                    <i aria-hidden="true" class="fa fa-file-o"></i>
+                    <i aria-hidden="true" class="fa fa-times-circle-o"></i>
+                </div>
+            </span>
+            <h4>There are no {{_coiAdminDashboardService.coiRequestObject.tabName == 'ALL_DISCLOSURES' ?
+                'disclosures' : 'pending reviews'}} available.</h4>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="_coiAdminDashboardService.coiRequestObject.tabName=='COMMENTS'">
+        <section class="bg-white mt-3 p-3 shadow-sm f-14" *ngFor="let comment of comments;let i = index">
+            <div class="align-items-center d-flex mb-2">
+                <i class="fa fa-user-circle fa-2x txt-big mr-1 text-secondary" aria-hidden="true"></i>
+                <b class="ml-2">{{comment?.updateUserFullName}}</b>
+                <span class="txt-medium ml-3">[Section:
+                    {{comment?.coiSectionsType?.description}}]</span>
+                <span *ngIf="comment?.coiSubSectionsId" class="txt-medium">[Sub-section:
+                    {{getSubSectionDescription(comment)}}]</span>
+                <!-- Private? -->
+                <span *ngIf="comment?.isPrivate" class="fw-700 text-primary txt-medium">
+                                                Private</span>
+                <span class="f-13 ml-4 text-secondary">{{comment?.updateTimestamp | dateFormatter:'long'}}</span>
+                <div *ngIf="comment?.coiReviewCommentTag?.length" class="ml-3 d-flex">
+                    <ng-container *ngFor="let tag of comment.coiReviewCommentTag">
+                        <div class="fs-12 rounded-icon status-badge-info d-flex align-items-center ml-2">
+                            <span>
+                                <i class="fa mr-2" [ngClass]="tag.tagPersonId ? 'fa-user' : 'fa-users'" aria-hidden="true"></i>
+                                {{ tag.tagPersonId ? tag.tagPersonFullName : tag.tagGroupName}}
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="bold-600 mb-1 row text-secondary">
+                <div class="col">
+                    <label for="d-type">Disclosure Type: </label>
+                    <span id="d-type">{{comment?.coiDisclosure?.coiDisclosureCategoryType?.description}}</span>
+                </div>
+                <div class="col">
+                    <label for="d-person">Disclosure Person: </label>
+                    <span id="d-person">{{comment?.coiDisclosure?.createUserFullName}}</span>
+                </div>
+                <div class="col">
+                    <label for="submitted-on">Submitted On: </label>
+                    <span id="submitted-on">{{comment?.coiDisclosure?.certifiedTimestamp | dateFormatter}}</span>
+                </div>
+                <div class="col">
+                    <label for="l-u-d">Last Updated Date: </label>
+                    <span id="l-u-d">{{comment?.coiDisclosure?.updateTimestamp | dateFormatter}} by {{comment?.coiDisclosure?.updateUserFullName}}</span>
+                </div>
+                <div class="col-auto text-right">
+                    <span class="link-btn" [routerLink]="comment?.coiDisclosure?.disclosureStatusCode == '1' ?
+                        ['/fibi/coi/screening-questionnaire'] : ['/fibi/coi']"
+                          [queryParams]="{disclosureId:comment?.coiDisclosure?.disclosureId}"
+                    >View Disclosure</span>
+                </div>
+            </div>
+            <div>
+                <p class="text-dark breadcrumb"><i class="fa fa-quote-left comment-icon mr-2"></i> {{comment?.comment}}</p>
+            </div>
+            <div class="f-13 text-secondary mb-3">
+                <span *ngIf="comment.childComments.length"
+                      (click)="comment.isShowReplies = !comment.isShowReplies" class="pointer">
+                    <i aria-hidden="true" class="fa fa-commenting"></i> {{comment.isShowReplies ? 'Hide': 'Show'}} replies</span>
+            </div>
+            <div *ngIf="comment.isShowReplies" class="border ml-3 pt-3 shadow shadow-sm">
+                <div class="col comment-message" *ngFor="let listItem of comment.childComments; let lastElement = last">
+                    <div class="comment-message-body pt-1">
+                        <div class="comment-inner-head d-flex">
+                            <i class="fa fa-user-circle fa-2x txt-big mr-1 text-secondary" aria-hidden="true"></i>
+                            <div class="align-items-center comment-inner-head-left d-flex">
+                                <!-- full name of commenter -->
+                                <b class="ml-2">{{listItem?.updateUserFullName}}</b>
+                                <span class="txt-medium ml-3">[Section:
+                                    {{listItem?.coiSectionsType?.description}}]</span>
+                                <span *ngIf="listItem?.coiSubSectionsId" class="txt-medium">[Sub-section:
+                                    {{getSubSectionDescription(listItem)}}]</span>
+                                <!-- Private? -->
+                                <span *ngIf="listItem?.isPrivate" class="fw-700 text-primary txt-medium">
+                                                Private</span>
+                                <span class="f-13 ml-4 text-secondary">{{listItem?.updateTimestamp | dateFormatter:'long'}}</span>
+                                <div *ngIf="listItem?.coiReviewCommentTag?.length" class="ml-3 d-flex">
+                                    <ng-container *ngFor="let tag of listItem.coiReviewCommentTag">
+                                        <div class="fs-12 rounded-icon status-badge-info d-flex align-items-center ml-2">
+                                            <span>
+                                                <i class="fa mr-2" [ngClass]="tag.tagPersonId ? 'fa-user' : 'fa-users'" aria-hidden="true"></i>
+                                                {{ tag.tagPersonId ? tag.tagPersonFullName : tag.tagGroupName}}
+                                            </span>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-inner-body pt-1">
+                            <!-- display comment -->
+                            <div class="breadcrumb text-dark">
+                                <i *ngIf="listItem?.comment" aria-hidden="true"
+                                   class="comment-icon fa fa-quote-left mr-2"></i>
+                                <div> <span class="f-13  text-content-color new-line-property"
+                                            [innerHTML]="listItem?.comment"></span>
+                                </div>
+                                <hr *ngIf="listItem?.attachment?.length && listItem?.comment"
+                                    class="mb-0">
+                                <div *ngIf="listItem?.attachment?.length" class="fileChips regularFont">
+                                    <ng-container *ngFor="let attachment of listItem?.attachment">
+                                    <span class="px-2">
+                                        {{attachment.fileName}}
+                                        <i aria-hidden="true"
+                                           class="fa fa-download badge-icon ml-1 hand-cursor"
+                                           title="Download {{attachment.fileName}}"></i>
+                                    </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <hr *ngIf="!lastElement">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <textarea [(ngModel)]="replyComment[i]" class="form-control my-3" placeholder="Comment" rows="1" appLengthValidator [maxLength]="2000"></textarea>
+            </div>
+            <button class="btn btn-secondary f-13" (click)="replyComment[i] = ''">Cancel</button>
+            <button class="btn btn-primary-sub f-13" (click)="performReplyComment(comment, i)">Comment</button>
+        </section>
+    </ng-container>
+    <ng-container *ngIf="_coiAdminDashboardService.coiRequestObject.tabName=='ENTITY'">
+        <section class="bg-white shadow-sm">
+            <table class="table tableSkin">
+                <caption class="sr-only">List of all entities</caption>
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone Number</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let entity of dataStoreService.entityDetails; let i = index">
+                        <td>{{entity.entityName}}</td>
+                        <td>{{entity.country}}</td>
+                        <td>{{entity.email}}</td>
+                        <td>{{entity.phNum}}</td>
+                        <td>
+                            <span *ngIf="entity.status === 'Active'" class="badge badge-success badge-pill f-13">ACTIVE</span>
+                            <span *ngIf="entity.status === 'InActive'" class="badge badge-danger badge-pill f-13">INACTIVE</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-tertiary btn-size-override f-13 mt-0"
+                            [routerLink]="['/fibi/manage-entity/entity-list']"
+                            [queryParams]={entityId:entity.entityId}><i aria-hidden="true"
+                                                                                            class="fa fa-eye"></i></button>
+                            <button class="btn btn-success f-13 mx-1" *ngIf="!entity.isShowApproved && entity.status === 'Active'">Approve</button>
+                            <button class="btn btn-danger f-13" *ngIf="!entity.isShowApproved && entity.status === 'Active'">Reject</button>
+                            <span class="bold-600 ml-3 text-success" *ngIf="entity.isShowApproved">
+                                <i aria-hidden="true" class="fa fa-check"></i>
+                                    Approved
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </section>
+    </ng-container>
+
+    <ng-template #noData>
+        <div class="no-data-container bg-white mt-3 shadow-sm">
+            <span class="no-data-icon-outer">
+                <div class="no-data-icon">
+                    <i aria-hidden="true" class="fa fa-file-o"></i>
+                    <i aria-hidden="true" class="fa fa-times-circle-o"></i>
+                </div>
+            </span>
+            <h4>There is no information in this section.</h4>
+        </div>
+    </ng-template>
+
+</section>
+
+<app-count-modal (closeModal)="closeModal($event)" *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId"
+                 [disclosureNumber]="currentDisclosureNumber" [moduleCode]="selectedModuleCode"
+                 [inputType]="inputType"
+                 [personId]="personId"
+                 [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
+></app-count-modal>
+<!-- Confirmation Modal -->
+<div class="modal fade mySkinDialog" id="ReviewModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header ct-footer-padding">
+                <h4 class="modal-title">Confirmation</h4>
+            </div>
+            <div class="modal-body ct-modal-padding">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="m-0 pt-3 pb-4">Are you sure you want to {{selectedReviewStatusCode == '1' ? 'start': 'complete'}} this Review?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer ct-footer-padding">
+                <button class="btn btn-secondary btn-sm" data-dismiss="modal" id="claim-sumbit-no-btn" type="button">No
+                </button>
+                <button (click)="processDisclosureReview()" data-dismiss="modal" class="btn btn-primary-sub btn-sm"
+                        type="button">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
