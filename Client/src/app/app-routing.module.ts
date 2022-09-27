@@ -19,16 +19,6 @@ const routes: Routes = [
                 canActivate: [AuthGuard]
             },
             {
-                path: 'grant', loadChildren: () => import('./grant-call/grant-call.module').then(m => m.GrantCallModule),
-                data: { preload: true },
-                canActivate: [AuthGuard]
-            },
-            {
-                path: 'proposal', loadChildren: () => import('./proposal/proposal.module').then(m => m.ProposalModule),
-                data: { preload: true },
-                canActivate: [AuthGuard]
-            },
-            {
                 path: 'questionnaire',
                 loadChildren: () => import('./admin-modules/questionnaire-create/create.module').then(m => m.CreateModule),
                 data: { preload: false },
@@ -49,11 +39,6 @@ const routes: Routes = [
                 path: 'user-activity',
                 loadChildren: () => import('./admin-modules/user-activity/user-activity.module').then(m => m.UserActivityModule),
                 data: { preload: false },
-                canActivate: [AuthGuard]
-            },
-            {
-                path: 'award', loadChildren: () => import('./award/award.module').then(m => m.AwardModule),
-                data: { preload: true },
                 canActivate: [AuthGuard]
             },
             {
@@ -98,17 +83,6 @@ const routes: Routes = [
                 canActivate: [AuthGuard]
             },
             {
-                path: 'agreement', loadChildren: () => import('./agreement/agreement.module').then(m => m.AgreementModule),
-                data: { preload: false },
-                canActivate: [AuthGuard]
-            },
-            {
-                path: 'instituteproposal',
-                loadChildren: () => import('./institute-proposal/institute-proposal.module').then(m => m.InstituteProposalModule),
-                data: { preload: true },
-                canActivate: [AuthGuard]
-            },
-            {
                 path: 'notification',
                 loadChildren: () => import('./admin-modules/notification-engine/notification-engine.module').then(m => m.NotificationEngineModule),
                 data: { preload: false },
@@ -135,17 +109,6 @@ const routes: Routes = [
             {
                 path: 'expanded-widgets',
                 loadChildren: () => import('./expanded-widgets/expanded-widgets.module').then(m => m.ExpandedWidgetsModule),
-                data: { preload: false },
-                canActivate: [AuthGuard]
-            },
-            {
-                path: 'service-request',
-                loadChildren: () => import('./service-request/service-request.module').then(m => m.ServiceRequestModule),
-                data: { preload: false },
-                canActivate: [AuthGuard]
-            },
-            {
-                path: 'claims', loadChildren: () => import('./claims/claims.module').then(m => m.ClaimsModule),
                 data: { preload: false },
                 canActivate: [AuthGuard]
             },
@@ -190,11 +153,6 @@ const routes: Routes = [
             },
             {
                 path: 'user-authentication', loadChildren: () => import('./admin-modules/user-authentication/user-authentication.module').then(m => m.UserAuthenticationModule),
-                data: { preload: false },
-                canActivate: [AuthGuard]
-            },
-            {
-                path: 'fetchAwardBaseSalary', loadChildren: () => import('./award-basesalary-list/award-basesalary-list.module').then(m => m.AwardBasesalaryListModule),
                 data: { preload: false },
                 canActivate: [AuthGuard]
             },

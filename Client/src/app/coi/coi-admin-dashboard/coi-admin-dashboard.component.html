@@ -155,10 +155,9 @@
                                class="fa fa-calendar fa-large insidePicker hand-cursor"
                                id="award-sub-date-icon"
                                title="Open Calender"></i>
-                            <owl-date-time #advSearchStartDate
-                                           (afterPickerOpen)="setFocusToElement('adv-search-start-date')"
-                                           [pickerType]="'calendar'">
-                            </owl-date-time>
+                            <mat-datepicker #advSearchStartDate
+                                           (opened)="setFocusToElement('adv-search-start-date')">
+                            </mat-datepicker>
                         </span>
                     </div>
                     <!-- End Date -->
@@ -167,20 +166,20 @@
                             <ng-container>End Date</ng-container>
                         </label>
                         <span class="dateField">
-                            <input (keypress)="commonService._keyPress($event, 'date');"
+                            <input matInput [matDatepicker]="advSearchEndDate" (keypress)="commonService._keyPress($event, 'date');"
                                    (keyup.enter)="setAdvanceSearchValuesToServiceObject();$coiList.next()"
-                                   [(ngModel)]="advanceSearchDates.endDate" [owlDateTimeTrigger]="advSearchEndDate"
-                                   [owlDateTime]="advSearchEndDate" [placeholder]="DEFAULT_DATE_FORMAT"
+                                   [(ngModel)]="advanceSearchDates.endDate" (click)="advSearchEndDate.open()"
+                                   [placeholder]="DEFAULT_DATE_FORMAT"
                                    autocomplete="off"
                                    class="form-control" id="adv-search-end-date"
                                    maxlength="60" type="text"/>
-                            <i [owlDateTimeTrigger]="advSearchEndDate" aria-hidden="true"
+                            <i (click)="advSearchEndDate.open()" aria-hidden="true"
                                class="fa fa-calendar fa-large insidePicker hand-cursor"
                                id="award-sub-date-icon"
                                title="Open Calender"></i>
-                            <owl-date-time #advSearchEndDate (afterPickerOpen)="setFocusToElement('adv-search-end-date')"
+                            <mat-datepicker #advSearchEndDate (afterPickerOpen)="setFocusToElement('adv-search-end-date')"
                                            [pickerType]="'calendar'">
-                            </owl-date-time>
+                            </mat-datepicker>
                         </span>
                     </div>
 

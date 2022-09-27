@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { RelationshipComponent } from './relationship.component';
 import { EntityRelationshipService } from './entity-relationship/entity-relationship.service';
 
 
-export const relationshipRoutes = [
+export const relationshipRoutes: Routes = [
     { path: '', component: RelationshipComponent,
       children: [
         { path: '', redirectTo: 'entity-relation', pathMatch: 'full'},

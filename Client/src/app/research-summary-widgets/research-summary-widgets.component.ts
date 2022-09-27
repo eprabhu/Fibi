@@ -47,7 +47,7 @@ import { AwardBySponsorTypesComponent } from './award-by-sponsor-types/award-by-
 import { PendingProposalsAndAwardsBySponsorComponent } from './pending-proposals-and-awards-by-sponsor/pending-proposals-and-awards-by-sponsor.component';
 import { ResearchSummaryCountComponent } from './research-summary-count/research-summary-count.component';
 import { ResearchSummaryDailyCheckComponent } from './research-summary-daily-check/research-summary-daily-check.component';
-import { CompleterOptions } from '../service-request/service-request.interface';
+import { CompleterOptions } from './research-summary.interface';
 import { getCompleterOptionsForCategory } from '../common/services/completer.config';
 
 @Component({

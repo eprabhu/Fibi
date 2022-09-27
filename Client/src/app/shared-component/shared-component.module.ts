@@ -3,11 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ProgressReportCreateModalComponent } from './progress-report-create-modal/progress-report-create-modal.component';
-import { DATE_PICKER_FORMAT } from '../app-constants';
 import { SharedModule } from '../shared/shared.module';
-import {
-    CertificationNotificationLogModalComponent
-} from './certification-notification-log-modal/certification-notification-log-modal.component';
 import { LinkComplianceSpecialReviewComponent } from './link-compliance-special-review-modal/link-compliance-special-review.component';
 import { LinkComplianceViewComponent } from './special-review-view/special-review-view.component';
 import { UnsavedChangeWarningComponent } from './unsaved-change-warning/unsaved-change-warning.component';
@@ -21,7 +17,6 @@ import { SharedCommentComponent } from './shared-comment/shared-comment.componen
 
 @NgModule({
     declarations: [ProgressReportCreateModalComponent,
-        CertificationNotificationLogModalComponent,
         SharedCommentComponent,
         LinkComplianceSpecialReviewComponent,
         LinkComplianceViewComponent,
@@ -39,7 +34,6 @@ import { SharedCommentComponent } from './shared-comment/shared-comment.componen
         RouterModule
     ],
     exports: [ProgressReportCreateModalComponent,
-        CertificationNotificationLogModalComponent,
         SharedCommentComponent,
         LinkComplianceSpecialReviewComponent,
         LinkComplianceViewComponent,

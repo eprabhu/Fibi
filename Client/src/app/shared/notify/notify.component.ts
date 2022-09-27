@@ -12,7 +12,7 @@ import {
     PersonNotificationMailLog,
     PersonNotifyMailRO,
     ProposalPerson
-} from '../../proposal/interface/proposal.interface';
+} from './notify.interface';
 
 @Component({
     selector: 'app-notify',

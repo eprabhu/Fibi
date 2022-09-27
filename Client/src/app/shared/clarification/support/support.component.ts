@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
 import { CommonService } from '../../../common/services/common.service';
 import { fileDownloader } from '../../../common/utilities/custom-utilities';
-import { ProposalService } from '../../../proposal/services/proposal.service';
 
 declare var $: any;
 

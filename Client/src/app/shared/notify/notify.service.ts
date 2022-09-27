@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
-import { CertificationLogRO, PersonNotifyMailRO } from '../../proposal/interface/proposal.interface';
-
+import {
+  CertificationLogRO,
+  PersonNotifyMailRO,
+} from './notify.interface';
 @Injectable()
 export class NotifyService {
 
