@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { InvoiceAdvanceSearch } from './invoice-feed';
 import { CommonService } from '../../../common/services/common.service';
-import { Subject } from 'rxjs/internal/Subject';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs'
 
 @Injectable()
 export class InvoiceFeedService {

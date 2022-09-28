@@ -4,8 +4,7 @@ import { ResearchSummaryConfigService } from '../common/services/research-summar
 import { DashboardService } from './dashboard.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../common/utilities/subscription-handler';
-import { CompleterOptions } from '../service-request/service-request.interface';
-import {getCompleterOptionsForCategory} from '../common/services/completer.config';
+import { CompleterOptions } from './dashboard.interface';
 
 
 

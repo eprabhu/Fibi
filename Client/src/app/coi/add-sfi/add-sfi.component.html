@@ -168,16 +168,16 @@
                       </div>
                       <div class="col-lg-6 mt-3">
                         <span class="dateField w-100">
-                          <input id="review-date" style="width: 100% !important" autocomplete="off" [owlDateTime]="startDate"
+                          <input matInput [matDatepicker]="startDate" id="review-date" style="width: 100% !important" autocomplete="off"
                             [(ngModel)]="entityDetails.involvementStartDate" class="d-inline-block form-control"
                             (keypress)="_commonService._keyPress($event, 'date')"
-                            [owlDateTimeTrigger]="startDate"
+                            (click)="startDate.open()"
                             [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''"
                             [disabled]="isViewMode" />
                           <i id="review-date-icon" class="fa fa-calendar fa-large insidePicker hand-cursor" aria-hidden="true"
-                            [owlDateTimeTrigger]="startDate"></i>
-                          <owl-date-time #startDate [pickerType]="'calendar'">
-                          </owl-date-time>
+                          (click)="startDate.open()"></i>
+                          <mat-datepicker #startDate>
+                          </mat-datepicker>
                         </span>
                         <div *ngIf="mandatoryList?.has('date')" class="invalid-feedback d-block">
                           {{mandatoryList?.get('date')}}
@@ -196,14 +196,14 @@
                       </div>
                       <div class="col-lg-6 mt-3">
                         <span class="dateField w-100">
-                          <input id="review-date" style="width: 100% !important" autocomplete="off"
+                          <input matInput [matDatepicker]="endDate" id="review-date" style="width: 100% !important" autocomplete="off"
                             [(ngModel)]="entityDetails.involvementEndDate"
-                            [owlDateTime]="endDate" class="d-inline-block form-control" [owlDateTimeTrigger]="endDate"
+                            class="d-inline-block form-control" (click)="endDate.open()"
                             [disabled]="isViewMode"/>
                           <i id="review-date-icon" class="fa fa-calendar fa-large insidePicker hand-cursor"
-                            aria-hidden="true" [owlDateTimeTrigger]="endDate"></i>
-                          <owl-date-time #endDate [pickerType]="'calendar'">
-                          </owl-date-time>
+                            aria-hidden="true" (click)="endDate.open()" ></i>
+                          <mat-datepicker #endDate (opened)="setFocusToElement('review-date')">
+                          </mat-datepicker>
                         </span>
                       </div>
                     </div>

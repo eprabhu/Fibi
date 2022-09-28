@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { ManageEntityComponent } from './manage-entity.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
@@ -9,7 +9,7 @@ import { ViewEntityComponent } from './view-entity/view-entity.component';
 import { SharedModule } from '../../shared/shared.module';
 import { DataStoreService } from '../services/data-store.service';
 
-const routes = [
+const routes: Routes = [
   {
     path: '', component: ManageEntityComponent,
     children: [

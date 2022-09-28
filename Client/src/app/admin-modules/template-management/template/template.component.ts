@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { TemplateService } from './template.service';
 import { CommonService } from '../../../common/services/common.service';
 import { HTTP_SUCCESS_STATUS } from '../../../app-constants';
-import { AgreementService } from '../../../agreement/agreement.service';
 
 @Component({
   selector: 'app-template',
@@ -25,8 +24,7 @@ export class TemplateComponent implements OnInit {
   latestVersion: any = {};
   temporaryAgreement: any = {};
 
-  constructor(private _templateService: TemplateService, public _commonService: CommonService,
-    private _agreementService: AgreementService
+  constructor(private _templateService: TemplateService, public _commonService: CommonService
     ) { }
 
   ngOnInit() {
@@ -205,13 +203,14 @@ export class TemplateComponent implements OnInit {
       'agreementTypeCode' : item.agreementTypeCode,
       'versionNumber': item.versionNumber
     };
-    this._agreementService.previewAgreementDocument(previewObject).subscribe((data: any) => {
+    this._templateService.previewAgreementDocument(previewObject).subscribe((data: any) => {
       const blob = new window.Blob([data], { type: 'application/pdf' });
       if (blob) {
         const a = document.createElement('a');
         a.target = '_blank';
         a.href = URL.createObjectURL(blob);
         a.click();
+        a.remove();
       }
     });
   }

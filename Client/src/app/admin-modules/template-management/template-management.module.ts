@@ -11,7 +11,6 @@ import { PlaceholderServiceService } from './placeholder/placeholder-service.ser
 import { ClausesService } from './clauses/clauses.service';
 import { TemplateService } from './template/template.service';
 import { FilterPipe } from './filter.pipe';
-import { AgreementService } from '../../agreement/agreement.service';
 
 const routes: Routes = [{
   path: '', component: TemplateManagementComponent,
@@ -35,6 +34,6 @@ const routes: Routes = [{
      ClausesComponent,
      PlaceholderComponent,
      FilterPipe],
-  providers: [PlaceholderServiceService, ClausesService, TemplateService, AgreementService]
+  providers: [PlaceholderServiceService, ClausesService, TemplateService]
 })
 export class TemplateManagementModule { }

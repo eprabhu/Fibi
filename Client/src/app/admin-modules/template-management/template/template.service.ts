@@ -22,10 +22,15 @@ export class TemplateService {
     formData.append( 'formDataJson', JSON.stringify( {'newAgreementTypeTemplate': newAttachments, 'agreementTypeCode' : typeCode} ) );
     return this._http.post( this._commonService.baseUrl + '/addAgreementTemplate', formData );
   }
+
   downloadAgreementTemplate( attachmentId ) {
     return this._http.get( this._commonService.baseUrl + '/downloadAgreementTemplate', {
         headers: new HttpHeaders().set( 'attachmentId', attachmentId.toString() ),
         responseType: 'blob'
     } );
+  }
+  previewAgreementDocument(previewObject) {
+    return this._http.post(this._commonService.baseUrl + '/previewAgreementDocument', previewObject,
+      { headers: new HttpHeaders(), responseType: 'blob' });
   }
 }
