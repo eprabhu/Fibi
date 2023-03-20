@@ -1,0 +1,167 @@
+<div class="card mb-3">
+  <div class="card-content">
+    <div class="card-body">
+      <div class="form-row">
+        <div class="col">
+          <label class="d-block">From</label>
+          <span class="dateField">
+            <input matInput [matDatepicker]="startDate" placeholder="From {{datePlaceHolder}}" id="position-retrigger-start-date"
+            class="form-control d-inline-block" autocomplete="off"
+            [(ngModel)]="searchObject.startDate" (keypress)="_commonService._keyPress($event, 'date');"
+            (click)="startDate.open()">
+          <i aria-hidden="true" id="start-date-icon" class="fa fa-calendar fa-large insidePicker hand-cursor"
+            (click)="startDate.open()"></i>
+            <mat-datepicker #startDate (opened)="setFocusToElement('position-retrigger-start-date')">
+            </mat-datepicker>
+          </span>
+        </div>
+        <label class="d-none d-sm-inline-block p-2 mt-4 pt-3">-</label>
+        <div class="col">
+          <label class="d-block">To</label>
+          <span class="dateField">
+            <input matInput [matDatepicker]="endDate" placeholder="To {{datePlaceHolder}}" id="position-retrigger-end-date"
+            class="form-control d-inline-block" autocomplete="off"
+           [(ngModel)]="searchObject.endDate" (keypress)="_commonService._keyPress($event, 'date');"
+           (click)="endDate.open()">
+         <i aria-hidden="true" id="end-date-icon" class="fa fa-calendar fa-large insidePicker hand-cursor"
+           (click)="endDate.open()"></i>
+         <mat-datepicker #endDate (opened)="setFocusToElement('position-retrigger-end-date')">
+         </mat-datepicker>
+          </span>
+        </div>
+        <div class="col">
+          <label class="d-block">Award #</label>
+          <input type="text" class="form-control" [(ngModel)]="searchObject.awardNumber"
+            id="position-retrigger-award-number" placeholder="Type here for award"
+            (keyup.enter)="searchObject.advancedSearch = 'A';fetchAwardRetriggerList();">
+        </div>
+        <div class="col-auto align-self-end">
+          <button class="btn btn-secondary" (click)="clearSearch(); fetchAwardRetriggerList()">Clear</button>
+          <button class="btn btn-primary btn-sm btn-xs" (click)="searchObject.advancedSearch = 'A'; fetchAwardRetriggerList()">Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="font-bold px-4 pt-3">
+    <label>List of Manpower Errors in Award</label>
+  </div>
+  <div *ngIf="awardRetriggerList?.workdayInterfaceLogDtos?.length" class="table-responsive p-3">
+    <table class="table tableSkin mb-0">
+      <caption class="sr-only">Award Manpower Retrigger table</caption>
+      <thead class="header-border">
+        <th scope="col" style="width: 10%;" (click)="sortResult('awardNumber')" class="hand-cursor">Award #
+          <i aria-hidden="true" [ngClass]="((searchObject.sortBy == 'awardNumber')  ? (!isDesc ? 'fa fa-sort-numeric-desc sortIcon' :
+                                'fa fa-sort-numeric-asc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')">
+          </i>
+        </th>
+        <th scope="col" style="width: 35%;" (click)="sortResult('title')" class="hand-cursor">Title
+          <i aria-hidden="true" [ngClass]="((searchObject.sortBy == 'title')  ? (!isDesc ? 'fa fa-sort-alpha-desc sortIcon' :
+                                'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')">
+          </i>
+        </th>
+        <th scope="col" style="width: 30%;" (click)="sortResult('error')" class="hand-cursor">Error
+          <i aria-hidden="true" [ngClass]="((searchObject.sortBy == 'error')  ? (!isDesc ? 'fa fa-sort-alpha-desc sortIcon' :
+                                'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')">
+          </i>
+        </th>
+        <th scope="col" style="width: 10%;" (click)="sortResult('errorType')" class="hand-cursor">Error Type
+          <i aria-hidden="true" [ngClass]="((searchObject.sortBy == 'errorType')  ? (!isDesc ? 'fa fa-sort-alpha-desc sortIcon' :
+                                'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')">
+          </i>
+        </th>
+        <th scope="col" style="width: 15%;">Action</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of awardRetriggerList?.workdayInterfaceLogDtos; let logIndex = index">
+          <td>{{log?.awardNumber}}</td>
+          <td>{{log?.awardTitle}}</td>
+          <td>{{log?.errorMessage}}</td>
+          <td>
+            <span *ngIf="log?.messageType == 'FIBI_ERROR'">RISE ERROR</span>
+            <span *ngIf="log?.messageType == 'ERROR'">WORKDAY INTERFACE ERROR</span>
+          </td>
+          <td>
+            <div class="dropdown ml-3 d-inline mr-2" *ngIf="log?.comments">
+              <a class="position-relative" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                <i class="fa fa-commenting-o hand-cursor hoverColor" aria-hidden="true" title="Comments"></i>
+                <div class="dropdown-menu details-comment-patch dropdown-menu-right fs-14"
+                  aria-labelledby="dropdownMenuLink">
+                  <div>
+                    {{log?.comments}}
+                  </div>
+                </div>
+              </a>
+            </div>
+            <button *ngIf="log?.messageType == 'ERROR' && !log?.userActionCode" class="btn btn-outline-primary"
+              data-target="#syncAwardManpowerAPI" data-toggle="modal" (click)="workdayManpowerInterfaceId = log?.workdayManpowerInterfaceId; manualUpdateIndex = logIndex;
+              selectUserAction('2')">Manual Process
+            </button>
+            <button *ngIf="log?.messageType == 'ERROR' && !log?.userActionCode" class="btn btn-outline-success"
+              data-target="#syncAwardManpowerAPI" data-toggle="modal"
+              (click)="workdayManpowerInterfaceId = log?.workdayManpowerInterfaceId; selectUserAction('1')">
+              Re-trigger
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+      <nav class="pagination justify-content-end">
+        <app-pagination [totalCount]="awardRetriggerList?.pageCount"
+          (pageChangeEvent)="fetchAwardRetriggerList($event)">
+        </app-pagination>
+      </nav>
+    </div>
+  </div>
+  <div *ngIf="!awardRetriggerList?.workdayInterfaceLogDtos?.length" class="mt-3 card">
+    <div class="no-data-container">
+      <span class="no-data-icon-outer">
+        <div class="no-data-icon">
+          <i class="fa fa-file-o" aria-hidden="true"></i>
+          <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+        </div>
+      </span>
+      <h4>There is no information in this section.</h4>
+    </div>
+  </div>
+</div>
+<!-- Confirmation modal -->
+<div class="modal fade mySkinDialog" tabindex="-1" id="syncAwardManpowerAPI" tabindex="-1" role="dialog"
+  data-backdrop="static" data-keyboard="false" aria-labelledby="positionRetriggerConfirmation" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{userAction?.manpowerUserAction}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="userAction?.description"
+          class="success-banner px-3d-flex justify-content-between align-items-center ng-star-inserted">
+          <div>
+            <i aria-hidden="true" class="fa fa-info-circle mr-1 info-icon"></i>
+            <em class="ng-star-inserted"> {{userAction?.description}}</em>
+          </div>
+          <button aria-label="Close" class="close close-button" type="button">
+          </button>
+        </div>
+        <ng-container>
+          <label class="d-block"><span class="mandatory">*</span>Comments</label>
+          <textarea class="form-control" [(ngModel)]="actionComment" placeholder="Comments"></textarea>
+          <span class="mandatory" *ngIf="validationMap.has('comment')">*
+            {{validationMap.get('comment')}}</span>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="clearAPIData()">Cancel</button>
+        <button type="button" class="btn btn-primary-sub btn-sm" (click)="userAction?.manpowerUserActionCode == '1' ? retriggerAwardWorkdayPrerequisite() :
+          updateManpowerInterfaceManually()">{{userAction?.manpowerUserAction}}</button>
+      </div>
+    </div>
+  </div>
+</div>
