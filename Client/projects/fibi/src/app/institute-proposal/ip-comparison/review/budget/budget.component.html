@@ -1,0 +1,252 @@
+<div id="Proposal209" *ngIf="ipService.ipSectionConfig['222']?.isActive" class="card mt-3 mb-3">
+	<div class="card-header px-4">
+		<h4 class="card-title">Budget Overview</h4>
+		<button id="costShareExpandBtn" class="updown-arrow" (click)="isOverviewWidgetOpen = !isOverviewWidgetOpen">
+			<i [ngClass]="isOverviewWidgetOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"
+				aria-hidden="true"></i>
+		</button>
+	</div>
+	<div *ngIf="isOverviewWidgetOpen" class="card-content">
+		<div class="card-body pt-0">
+			<div *ngIf="!proposalBudgetHeader" class="no-data-container">
+				<span class="no-data-icon-outer">
+					<div class="no-data-icon">
+						<i class="fa fa-file-o" aria-hidden="true"></i>
+						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+					</div>
+				</span>
+				<h4>There is no information in this section.</h4>
+			</div>
+			<div *ngIf="proposalBudgetHeader" class="row">
+				<div class="col-12 gridSkin">
+					<div class="row px-4">
+						<div class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Start Date</h5>
+							<span class="text-secondary f-13 fw-500"
+								[innerHTML]='(dateFormatter.parseDate(proposalBudgetHeader.startDate)) | customTagRemover: currentMethod'></span>
+						</div>
+						<div class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>End Date</h5>
+							<span class="text-secondary f-13 fw-500"
+								[innerHTML]='dateFormatter.parseDate(proposalBudgetHeader.endDate)'></span>
+						</div>
+						<!-- <div *ngIf="budgetData?.budgetTemplateTypes && budgetData?.budgetTemplateTypes?.length" class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5 class="d-block">Budget Template</h5>
+							<span class="text-secondary f-13 fw-500" [innerHTML]='proposalBudgetHeader?.budgetTemplate?.description ? proposalBudgetHeader?.budgetTemplate?.description
+									: "No data available"'></span>
+						</div> -->
+						<div *ngIf="budgetData?.rateTypes?.length" class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Over Head Rate Type</h5>
+							<span class=" f-13 fw-50 text-secondary"
+								[innerHTML]='proposalBudgetHeader?.rateType?.rateClassDescription? proposalBudgetHeader?.rateType?.rateClassDescription :"No data available"'></span>
+						</div>
+						<div *ngIf=" budgetData?.rateTypes?.length &&( budgetData?.isShowCostShareAndUnderrecovery
+                      		|| budgetData?.isShowInKind)" class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Under Recovery Rate Type</h5>
+							<span class="text-secondary f-13 fw-500"
+								[innerHTML]='proposalBudgetHeader?.underRecoveryRateType?.rateClassDescription?
+                         		 proposalBudgetHeader?.underRecoveryRateType?.rateClassDescription :"No data available"'></span>
+						</div>
+						<div *ngIf="!proposalBudgetHeader?.isApprovedBudget"
+							class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Budget Status</h5>
+							<span class="text-secondary f-13 fw-500" [innerHTML]='proposalBudgetHeader?.budgetStatus?.description ? proposalBudgetHeader?.budgetStatus?.description :
+                        "No data available"'></span>
+						</div>
+					</div>
+					<div class="col-xl col-lg col-md-6 col-sm-6 col-12" *ngIf="proposalBudgetHeader?.isAutoCalculateEnabled">
+						<h5 class="d-block">Auto Calculate</h5>
+						<span class="text-secondary f-13 fw-500"
+							[innerHTML]='proposalBudgetHeader.isAutoCalc ? proposalBudgetHeader.isAutoCalc : "No data available"'></span>
+					</div>
+					<div class="row px-4">
+						<div class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Direct Cost</h5>
+							<span class=" f-13 fw-500 text-secondary"
+								[innerHTML]='proposalBudgetHeader.totalDirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalDirectCost) : currencyFormatter.parseCurrency("0.00")'>
+							</span>
+						</div>
+						<!-- <div *ngIf="budgetData?.isShowModifiedDirectCost"
+							class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Modified Direct Cost</h5>
+							<span class=" f-13 fw-500 text-secondary"
+								[innerHTML]='proposalBudgetHeader.totalModifiedDirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalModifiedDirectCost) : currencyFormatter.parseCurrency("0.00")'>
+							</span>
+						</div> -->
+						<div class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Indirect Cost</h5>
+							<span class=" f-13 fw-500 text-secondary"
+								[innerHTML]='proposalBudgetHeader.totalIndirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalIndirectCost) : currencyFormatter.parseCurrency("0.00")'>
+							</span>
+						</div>
+						<div *ngIf="budgetData?.isShowCostShareAndUnderrecovery"
+							class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Cost Share</h5>
+							<span class=" f-13 fw-500 text-secondary"
+								[innerHTML]='proposalBudgetHeader.costSharingAmount ? currencyFormatter.parseCurrency(proposalBudgetHeader.costSharingAmount) : currencyFormatter.parseCurrency("0.00")'>
+							</span>
+						</div>
+						<div *ngIf="budgetData?.isShowCostShareAndUnderrecovery"
+							class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Under Recovery</h5>
+							<span class="fw-500 f-13 text-secondary"
+								[innerHTML]='proposalBudgetHeader?.underrecoveryAmount ? currencyFormatter.parseCurrency(proposalBudgetHeader.underrecoveryAmount)  : currencyFormatter.parseCurrency("0.00") '></span>
+						</div>
+						<!-- <div *ngIf="budgetData?.isShowInKind" class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Total Requested Cost</h5>
+							<span class="fw-500 f-13 text-secondary"
+								[innerHTML]='proposalBudgetHeader?.totalCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalCost)  : currencyFormatter.parseCurrency("0.00") '></span>
+						</div>
+						<div *ngIf="budgetData?.isShowInKind" class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Total In-Kind</h5>
+							<span class=" f-13 fw-500 text-secondary"
+								[innerHTML]='proposalBudgetHeader.totalInKind ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalInKind) : currencyFormatter.parseCurrency("0.00")'>
+							</span>
+						</div> -->
+						<div class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Total Cost</h5>
+							<span class=" f-13 fw-500 text-secondary"
+								[innerHTML]='proposalBudgetHeader.totalCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalCost) : currencyFormatter.parseCurrency("0.00")'>
+							</span>
+						</div>
+					</div>
+					<div class="row px-4">
+						<div *ngIf="budgetData.isCampusFlagEnabled" class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Campus Flag</h5>
+							<span class="fw-500 f-13 text-secondary"
+								[innerHTML]='proposalBudgetHeader.campusFlag ? proposalBudgetHeader.campusFlag : "No data available"'></span>
+						</div>
+						<div *ngIf="budgetData.enableCostShareStatus" class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Cost Sharing</h5>
+							<span class="fw-500 f-13 text-secondary"
+								[innerHTML]='proposalBudgetHeader?.costSharingTypeCode ? proposalBudgetHeader?.costSharingType?.description : "No data available"'></span>
+						</div>
+						<div *ngIf="budgetData.isShowBudgetOHRatePercentage"
+							class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>On-Campus Rate</h5>
+							<span class="fw-500 f-13 text-secondary"
+								[innerHTML]='proposalBudgetHeader.onCampusRates ? proposalBudgetHeader.onCampusRates : "No data available"'></span>
+						</div>
+						<div *ngIf="budgetData.isShowBudgetOHRatePercentage"
+							class="col-xl col-lg col-md-6 col-sm-6 col-12">
+							<h5>Off-Campus Rate</h5>
+							<span class="fw-500 f-13 text-secondary"
+								[innerHTML]='proposalBudgetHeader.offCampusRates ? proposalBudgetHeader.offCampusRates : "No data available"'></span>
+						</div>
+					</div>
+					<!-- <div class="row px-4">
+					<div class="col">
+						<h5 class="d-block">Description</h5>
+						<span class="text-secondary f-13 fw-500"
+							[innerHTML]='proposalBudgetHeader?.comments ? proposalBudgetHeader?.comments : "No data available"'></span>
+					</div> -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card mb-3" id="Proposal210" *ngIf="ipService.ipSectionConfig['223']?.isActive">
+	<div class="card-header px-4">
+		<h4 class="card-title">
+			<ng-container i18n="@@COMMON_PERIODS_AND_TOTAL"> Budget Periods & Total </ng-container>
+		</h4>
+		<button id="costShareExpandBtn" class="updown-arrow" (click)="isPeriodsWidgetOpen = !isPeriodsWidgetOpen">
+			<i [ngClass]="isPeriodsWidgetOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"
+				aria-hidden="true"></i>
+		</button>
+	</div>
+	<div class="card-content" *ngIf="isPeriodsWidgetOpen">
+		<div class="card-body pt-0">
+			<div *ngIf="budgetPeriods?.length == 0" class="no-data-container">
+				<span class="no-data-icon-outer">
+					<div class="no-data-icon">
+						<i class="fa fa-file-o" aria-hidden="true"></i>
+						<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+					</div>
+				</span>
+				<h4>There is no information in this section.</h4>
+			</div>
+			<div class="table-responsive custom-overflow" *ngIf="budgetPeriods?.length > 0">
+				<table class="table tableSkin table-bordered grid2 mt-4" aria-describedby="proposal-periods-total">
+					<thead class="th-border">
+						<tr>
+							<th scope="col" width="4%">Period#</th>
+							<th scope="col" width="9%">Start Date</th>
+							<th scope="col" width="9%">End Date</th>
+							<th scope="col" width="8.5%">Direct Cost</th>
+							<!-- <th scope="col" width="10%" *ngIf="budgetData?.isShowModifiedDirectCost">Modified Direct Cost</th> -->
+							<th scope="col" width="9.5%">Indirect Cost</th>
+							<th scope="col" width="8%" *ngIf="budgetData?.isShowCostShareAndUnderRecovery">Cost Share
+							</th>
+							<th scope="col" width="8%" *ngIf="budgetData?.isShowCostShareAndUnderRecovery">Under
+								Recovery</th>
+							<!-- <th scope="col" width="11%" *ngIf="budgetData?.isShowInKind">Total Requested Cost</th> -->
+							<!-- <th scope="col" width="8.5%" *ngIf="budgetData?.isShowInKind">Total In-Kind</th> -->
+							<th scope="col" width="11.5%">Total Cost</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr [ngClass]="{'delete-background': period.status == -1,
+              							'add-background': period.status == 1}" *ngFor="let period of budgetPeriods; let index= index">
+							<td [innerHTML]="period.budgetPeriod"></td>
+							<td [innerHTML]='dateFormatter.parseDate(period.startDate)'> </td>
+							<td [innerHTML]='dateFormatter.parseDate(period.endDate)'> </td>
+							<td class="text-right"
+								[innerHTML]='period.totalDirectCost ? currencyFormatter.parseCurrency(period.totalDirectCost) : currencyFormatter.parseCurrency("0.00")'>
+							</td>
+							<!-- <td class="text-right" *ngIf="budgetData?.isShowModifiedDirectCost"
+								[innerHTML]='period.totalModifiedDirectCost ? currencyFormatter.parseCurrency(period.totalModifiedDirectCost) : currencyFormatter.parseCurrency("0.00")'>
+							</td> -->
+							<td class="text-right"
+								[innerHTML]='period.totalIndirectCost ? currencyFormatter.parseCurrency(period.totalIndirectCost): currencyFormatter.parseCurrency("0.00")'>
+							</td>
+							<!-- <td class="text-right" *ngIf="budgetData?.isShowCostShareAndUnderrecovery"
+								[innerHTML]='period.costSharingAmount ?currencyFormatter.parseCurrency(period.costSharingAmount): currencyFormatter.parseCurrency("0.00")'>
+							</td> -->
+							<!-- <td class="text-right" *ngIf="budgetData?.isShowCostShareAndUnderrecovery"
+								[innerHTML]='period.underrecoveryAmount ?currencyFormatter.parseCurrency(period.underrecoveryAmount): currencyFormatter.parseCurrency("0.00")'>
+							</td> -->
+							<!-- <td class="text-right" *ngIf="budgetData?.isShowInKind"
+								[innerHTML]='period.totalCost ?currencyFormatter.parseCurrency(period.totalCost): currencyFormatter.parseCurrency("0.00")'>
+							</td> -->
+							<!-- <td class="text-right" *ngIf="budgetData?.isShowInKind"
+								[innerHTML]='period.totalInKind ?currencyFormatter.parseCurrency(period.totalInKind): currencyFormatter.parseCurrency("0.00")'>
+							</td>  -->
+							<td class="text-right"
+								[innerHTML]='period.totalCost ?currencyFormatter.parseCurrency(period.totalCost): currencyFormatter.parseCurrency("0.00")'>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"></td>
+							<td class="font-weight-bold text-right px-1">Total</td>
+							<td class="text-right"
+								[innerHTML]='proposalBudgetHeader?.totalDirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader?.totalDirectCost): currencyFormatter.parseCurrency("0.00")'>
+							</td>
+							<!-- <td class="text-right" *ngIf="budgetData?.isShowModifiedDirectCost"
+								[innerHTML]='proposalBudgetHeader.totalModifiedDirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalModifiedDirectCost): currencyFormatter.parseCurrency("0.00")'>
+							</td> -->
+							<td class="text-right"
+								[innerHTML]='proposalBudgetHeader.totalIndirectCost ?currencyFormatter.parseCurrency(proposalBudgetHeader.totalIndirectCost): currencyFormatter.parseCurrency("0.00")'>
+							</td>
+							<td class="text-right" *ngIf="budgetData?.isShowCostShareAndUnderRecovery"
+								[innerHTML]='proposalBudgetHeader.costSharingAmount ?currencyFormatter.parseCurrency(proposalBudgetHeader.costSharingAmount): currencyFormatter.parseCurrency("0.00")'>
+							</td>
+							<td class="text-right" *ngIf="budgetData?.isShowCostShareAndUnderRecovery"
+								[innerHTML]='proposalBudgetHeader.underRecoveryAmount ?currencyFormatter.parseCurrency(proposalBudgetHeader.underRecoveryAmount): currencyFormatter.parseCurrency("0.00")'>
+							</td>
+							<!-- <td class="text-right" *ngIf="budgetData?.isShowInKind"
+								[innerHTML]='proposalBudgetHeader.totalCost ?currencyFormatter.parseCurrency(proposalBudgetHeader.totalCost): currencyFormatter.parseCurrency("0.00")'>
+							</td>
+							<td class="text-right" *ngIf="budgetData?.isShowInKind"
+								[innerHTML]='proposalBudgetHeader.totalInKind ?currencyFormatter.parseCurrency(proposalBudgetHeader.totalInKind): currencyFormatter.parseCurrency("0.00")'>
+							</td> -->
+							<td class="text-right"
+								[innerHTML]='proposalBudgetHeader.totalCost ?currencyFormatter.parseCurrency(proposalBudgetHeader.totalCost): currencyFormatter.parseCurrency("0.00")'>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,42 @@
+
+.fixed-header-table {
+    max-height: 400px;
+    height: auto;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.fixed-header-table thead tr:nth-child(1) th {
+    border-bottom: #26a69a;
+    position: sticky;
+    top: -2px;
+    background: white;
+    z-index: 2;
+}
+
+.fixed-header-table::-webkit-scrollbar {
+    width: 0.3em;
+    height: 3em;
+}
+
+.fixed-header-table::-webkit-scrollbar-button {
+    display: none;
+}
+
+.fixed-header-table::-webkit-scrollbar-track-piece {
+    background: #eee;
+}
+
+.fixed-header-table::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+.form-row > div {
+    margin-bottom: 1.4rem;
+}
+
+.min-w-105 {
+    min-width: 105px;
+}
+.top-1 {
+    top: 1px;
+}
