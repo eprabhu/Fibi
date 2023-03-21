@@ -1,0 +1,70 @@
+{
+	"reports": [
+	    {
+			"columnName": "AWARD_NUMBER",
+			"displayName": "Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACCOUNT_NUMBER",
+			"displayName": "Account Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PERSON_ID",
+			"displayName": "Person ID",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FULL_NAME",
+			"displayName": "Name of the Manpower resource",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "POSITION_ID",
+			"displayName": "Position ID",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UNIT_NAME",
+			"displayName": "Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PI_NAME",
+			"displayName": "Principal Investigator",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN",
+			"summable" : "N"
+		}
+	],
+	"extraCondition" : "((SELECT COUNT(DISTINCT R2.RIGHT_NAME) FROM PERSON_ROLES P1 INNER JOIN ROLE_RIGHTS R1 ON P1.ROLE_ID = R1.ROLE_ID INNER JOIN RIGHTS R2 ON R1.RIGHT_ID = R2.RIGHT_ID WHERE P1.PERSON_ID =<<PERSON_ID>> AND R2.RIGHTS_TYPE_CODE = 1 AND R2.RIGHT_NAME = 'MANPOWER_GENERATE_SALARY_DISCREPANCY_REPORT') > 0)",
+	"extraSelection" : "",
+	"selectDistinct" :"Y"
+}

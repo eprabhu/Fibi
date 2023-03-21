@@ -1,0 +1,205 @@
+{
+	"reports": [
+		{
+			"columnName": "AWARD_NUMBER",
+			"displayName": "Project ID",
+			"filterType": "elastic",
+			"valueField": "award_number",
+			"index": "awardfibi",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "FUND_CODE",
+			"displayName": "Fund Code",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "TITLE",
+			"displayName": "Title",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "UNIT_NAME",
+			"displayName": "Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "SPONSOR_NAME",
+			"displayName": "Funding Agency",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "AWARD_STATUS",
+			"displayName": "Project Status",
+			"filterType": "lookUp",
+			"valueField": "AWARD_STATUS#STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "AWARD_TYPE",
+			"displayName": "Project Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "PI_NAME",
+			"displayName": "Principal Investigator",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "BEGIN_DATE",
+			"displayName": "Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "FINAL_EXPIRATION_DATE",
+			"displayName": "End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "SOURCE_AWARD_NUMBER",
+			"displayName": "Source Project",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "DESTINATION_AWARD_NUMBER",
+			"displayName": "Destination Project",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "AMOUNT_OBLIGATED_TO_DATE",
+			"displayName": "Obligated Total ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "ANTICIPATED_TOTAL_AMOUNT",
+			"displayName": "Anticipated Total ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "TOTAL_PROJECT_COST",
+			"displayName": "Total Project Cost ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "TRANSACTION_TYPE",
+			"displayName": "Transaction Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TRANSACTION_TYPE#AWARD_TRANSACTION_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "OBLIGATION_START_DATE",
+			"displayName": "Obligation Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "OBLIGATION_END_DATE",
+			"displayName": "Obligation End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "NOTICE_DATE",
+			"displayName": "Notice Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "TRANSACTION_COMMENT",
+			"displayName": "Transaction Description",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "ANTICIPATED_CHANGE",
+			"displayName": "Anticipated Change ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "OBLIGATED_CHANGE",
+			"displayName": "Obligated Change ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "FUND_CENTRE",
+			"displayName": "Fund Centre",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "GRANT_TYPE",
+			"displayName": "Type of Grant",
+			"filterType": "lookUp",
+			"valueField": "GRANT_CALL_TYPE#GRANT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		}
+	],
+	"extraCondition" : "(LEAD_UNIT_NUMBER IN(SELECT DISTINCT UNIT_NUMBER FROM PERSON_ROLE_RT WHERE RIGHT_NAME IN ('VIEW_AWARD') AND PERSON_ID =<<PERSON_ID>>) OR AWARD_ID IN (SELECT T1.AWARD_ID FROM AWARD_PERSON_ROLES T1 INNER JOIN ROLE_RIGHTS T2 ON T1.ROLE_ID = T2.ROLE_ID INNER JOIN RIGHTS T3 ON T2.RIGHT_ID = T3.RIGHT_ID WHERE T1.PERSON_ID =<<PERSON_ID>> AND T3.RIGHT_NAME IN ('VIEW_AWARD'))) ORDER BY AWARD_NUMBER",
+	"extraSelection" : "",
+	"selectDistinct" :"Y"
+}

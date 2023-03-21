@@ -1,0 +1,483 @@
+{
+	"reports": [
+		{
+			"columnName": "PERSON_ID",
+			"displayName": "Employee ID",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ROLODEX_ID",
+			"displayName": "Rolodex ID",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MANPOWER_CATEGORY_TYPE",
+			"displayName": "Manpower Category Type",
+			"filterType": "lookUp",
+			"valueField": "MANPOWER_TYPE#MANPOWER_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FULL_NAME",
+			"displayName": "Name of the Manpower resource",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "POSITION_ID",
+			"displayName": "Position ID",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "POSITION_STATUS",
+			"displayName": "Status",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PLAN_JOB_PROFILE_TYPE",
+			"displayName": "Plan Job Profile",
+			"filterType": "lookUp",
+			"valueField": "MANPOWER_JOB_PROFILE_TYPE#JOB_PROFILE_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "JOB_PROFILE_TYPE",
+			"displayName": "Job Profile",
+			"filterType": "lookUp",
+			"valueField": "MANPOWER_JOB_PROFILE_TYPE#JOB_PROFILE_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CANDIDATE_TITLE_TYPE",
+			"displayName": "Candidate Title",
+			"filterType": "lookUp",
+			"valueField": "MANPOWER_CANDIDATE_TITLE_TYPE#CANDIDATE_TITLE_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COST_ALLOCATION",
+			"displayName": "Cost Allocation %",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PLAN_START_DATE",
+			"displayName": "Plan Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PLAN_END_DATE",
+			"displayName": "Plan End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PLAN_DURATION",
+			"displayName": "Plan Duration",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "INITIAL_MONTHLY_BASE_SALARY",
+			"displayName": "Proposed Base Salary",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "INITIAL_COMMITTED_AMOUNT",
+			"displayName": "Proposed Committed Amount",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "CHARGE_START_DATE",
+			"displayName": "Charge Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CHARGE_END_DATE",
+			"displayName": "Charge End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CHARGE_DURATION",
+			"displayName": "Charge Duration",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMMITTED_COST",
+			"displayName": "Committed Cost",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "HOME_DEPARTMENT",
+			"displayName": "Home Department",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "HIRE_DATE",
+			"displayName": "Hire Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CONTRACT_END_DATE",
+			"displayName": "Contract End Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CANDIDATURE_START_DATE",
+			"displayName": "Candidature Start Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CANDIDATURE_END_DATE",
+			"displayName": "Candidature End Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "COMMENTS",
+			"displayName": "Comments",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PERSON_STATUS",
+			"displayName": "Manpower Active Status",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "NON_PAID_MANPOWER_TYPE",
+			"displayName": "Non Paid Manpower Type",
+			"filterType": "lookUp",
+			"valueField": "MANPOWER_RESOURCE_TYPE#RESOURCE_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "NATIONALITY",
+			"displayName": "Nationality",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isEncrypted" : "true"
+		},
+		{
+			"columnName": "CITIZENSHIP",
+			"displayName": "Citizenship",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isEncrypted" : "true"
+		},
+		{
+			"columnName": "AWARD_NUMBER",
+			"displayName": "Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACCOUNT_NUMBER",
+			"displayName": "Account Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR_AWARD_NUMBER",
+			"displayName": "Sponsor Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_STATUS",
+			"displayName": "Award Status",
+			"filterType": "lookUp",
+			"valueField": "AWARD_STATUS#STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_TYPE",
+			"displayName": "Award Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ACCOUNT_TYPE",
+			"displayName": "Account Type",
+			"filterType": "lookUp",
+			"valueField": "ACCOUNT_TYPE#ACCOUNT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "GRANT_CALL_TITLE",
+			"displayName": "Title of Grant Call",
+			"filterType": "endpoint",
+			"valueField": "grantCallName",
+			"index": "grantCallName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FUNDING_SCHEME",
+			"displayName": "Funding Scheme",
+			"filterType": "lookUp",
+			"valueField": "FUNDING_SCHEME#FUNDING_SCHEME_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "TITLE",
+			"displayName": "Title of Award",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_EFFECTIVE_DATE",
+			"displayName": "Award Effective Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FINAL_EXPIRATION_DATE",
+			"displayName": "Final Expiration Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "DURATION",
+			"displayName": "Award Duration",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR_NAME",
+			"displayName": "Sponsor",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR_TYPE",
+			"displayName": "Sponsor type",
+			"filterType": "lookUp",
+			"valueField": "SPONSOR_TYPE#SPONSOR_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UNIT_NAME",
+			"displayName": "Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SUB_LEAD_UNIT",
+			"displayName": "Sub-Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PI_NAME",
+			"displayName": "Principal Investigator",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "L2_WBS_NUMBER",
+			"displayName": "Level 2 WBS",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ANTICIPATED_TOTAL_AMOUNT",
+			"displayName": "Anticipated Total",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "AMOUNT_OBLIGATED_TO_DATE",
+			"displayName": "Obligated Total",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "TOTAL_COST",
+			"displayName": "Total Project Cost",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "FEED_STATUS",
+			"displayName": "Feed Status",
+			"filterType": "lookUp",
+			"valueField": "SAP_FEED_STATUS#FEED_STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "PERSON_EMAIL",
+			"displayName": "Person Email",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		}
+	],
+	"extraCondition" : "(LEAD_UNIT_NUMBER IN(SELECT DISTINCT UNIT_NUMBER FROM PERSON_ROLE_RT WHERE ((RIGHT_NAME IN ('MANPOWER_VIEW_STAFF_PLAN') AND MANPOWER_TYPE_CODE = '1') OR (RIGHT_NAME IN ('MANPOWER_VIEW_STUDENT_PLAN') AND MANPOWER_TYPE_CODE = '2') OR (RIGHT_NAME IN ('MANPOWER_VIEW_OTHERS_PLAN') AND MANPOWER_TYPE_CODE = '3')) AND PERSON_ID =<<PERSON_ID>>) OR (AWARD_ID IN (SELECT T1.AWARD_ID FROM AWARD_PERSON_ROLES T1 INNER JOIN ROLE_RIGHTS T2 ON T1.ROLE_ID = T2.ROLE_ID INNER JOIN RIGHTS T3 ON T2.RIGHT_ID = T3.RIGHT_ID WHERE T1.PERSON_ID =<<PERSON_ID>> AND ((T3.RIGHT_NAME IN ('MANPOWER_VIEW_STAFF_PLAN') AND MANPOWER_TYPE_CODE = '1') OR (T3.RIGHT_NAME IN ('MANPOWER_VIEW_STUDENT_PLAN') AND MANPOWER_TYPE_CODE = '2') OR (T3.RIGHT_NAME IN ('MANPOWER_VIEW_OTHERS_PLAN') AND MANPOWER_TYPE_CODE = '3')))))",
+	"extraSelection" : "",
+	"selectDistinct" :"Y"
+}

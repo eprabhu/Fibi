@@ -1,0 +1,160 @@
+{
+	"reports": [
+		{
+			"columnName": "PERSON_ID",
+			"displayName": "Person ID",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "NAME",
+			"displayName": "Person Name",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "JOB_FAMILY",
+			"displayName": "Job Family",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "FIRST_DAY_OF_LEAVE",
+			"displayName": "First Day Of Leave",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "INITIATED",
+			"displayName": "Initiated",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "NTU_DEPARTMENT",
+			"displayName": "NTU Department",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LAST_DAY_OF_LEAVE_ESTIMATED",
+			"displayName": "Last Day of Leave Estimated",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LAST_DAY_OF_LEAVE_ACTUAL",
+			"displayName": "Last Day of Leave Actual",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "APPROVAL_DATE",
+			"displayName": "Approval Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AU",
+			"displayName": "AU",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "BUSINESS_TITLE",
+			"displayName": "Business Title",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "JOB_FAMILY_GROUP",
+			"displayName": "Job Family Group",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "JOB_PROFILE",
+			"displayName": "Job Profile",
+			"filterType": "lookUp",
+			"valueField": "MANPOWER_JOB_PROFILE_TYPE#JOB_PROFILE_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "LEAVE_TYPE_EXCLUDING_FAMILY",
+			"displayName": "Leave Type Excluding Family",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SUPERVISORY_ORGANIZATION",
+			"displayName": "Supervisory Organization",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "STATUS",
+			"displayName": "Status",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "UPDATE_TIMESTAMP",
+			"displayName": "Last Modified Date",
+			"filterType": "date",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		}
+	],
+	"extraCondition" : "(NTU_DEPARTMENT in (select distinct u1.unit_name from unit u1  inner join person_role_rt u2 on u2.UNIT_NUMBER = u1.UNIT_NUMBER where u2.PERSON_ID = <<PERSON_ID>> and u2.RIGHT_NAME = 'MANPOWER_GENERATE_REPORT'))",
+	"extraSelection" : "",
+	"selectDistinct" :"Y"
+}

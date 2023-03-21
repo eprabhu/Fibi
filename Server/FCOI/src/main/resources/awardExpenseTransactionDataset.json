@@ -1,0 +1,718 @@
+{
+	"reports": [
+		{
+			"columnName": "MASTER_DATA.AWARD_NUMBER",
+			"displayName": "Award Number",
+			"filterType": "elastic",
+			"valueField": "award_number",
+			"index": "awardfibi",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+			
+		},
+		{
+			"columnName": "MASTER_DATA.ACCOUNT_NUMBER",
+			"displayName": "Level 1 WBS",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N",
+			"innerJoin" : "N"
+			
+		},
+		{
+			"columnName": "MASTER_DATA.SPONSOR_AWARD_NUMBER",
+			"displayName": "Sponsor Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.AWARD_STATUS",
+			"displayName": "Award Status",
+			"filterType": "lookUp",
+			"valueField": "AWARD_STATUS#STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.AWARD_WORKFLOW_STATUS",
+			"displayName": "Award Workflow Status",
+			"filterType": "lookUp",
+			"valueField": "AWARD_WORKFLOW_STATUS#WORKFLOW_AWARD_STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.AWARD_TYPE",
+			"displayName": "Award Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.ACCOUNT_TYPE",
+			"displayName": "Account Type",
+			"filterType": "lookUp",
+			"valueField": "ACCOUNT_TYPE#ACCOUNT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.ACTIVITY_TYPE",
+			"displayName": "Activity Type",
+			"filterType": "lookUp",
+			"valueField": "ACTIVITY_TYPE#ACTIVITY_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.TITLE",
+			"displayName": "Title of Award",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.GRANT_CALL_TITLE",
+			"displayName": "Title of Grant Call",
+			"filterType": "endpoint",
+			"valueField": "grantCallName",
+			"index": "grantCallName",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.AWRAD_NOTICE_DATE",
+			"displayName": "Award Notice Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.AWARD_EFFECTIVE_DATE",
+			"displayName": "Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.FINAL_EXPIRATION_DATE",
+			"displayName": "End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.AWARD_CREATE_DATE",
+			"displayName": "Award Create Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.PROJECT_DURATION",
+			"displayName": "Project Duration",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.SPONSOR_NAME",
+			"displayName": "Sponsor",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.PRIME_SPONSOR_NAME",
+			"displayName": "Prime Sponsor",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.SUB_LEAD_UNIT",
+			"displayName": "Sub Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.LEAD_UNIT_NAME",
+			"displayName": "Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.PI_NAME",
+			"displayName": "Lead Principal Investigator",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.PERCENTAGE_OF_EFFORT",
+			"displayName": "Effort within own work commitments(%)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.ANTICIPATED_TOTAL_AMOUNT",
+			"displayName": "Award Total ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.AMOUNT_OBLIGATED_TO_DATE",
+			"displayName": "Disbursed Total ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.TOTAL_COST_SHARE",
+			"displayName": "Total Cost Share ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.TOTAL_PROJECT_COST",
+			"displayName": "Total Project Cost ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.TOTAL_COST_IN_CURRENCY",
+			"displayName": "Total Project Cost(In Foreign Currency)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.TOTAL_COST",
+			"displayName": "Total Cost",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.TOTAL_DIRECT_COST",
+			"displayName": "Direct Cost",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.TOTAL_INDIRECT_COST",
+			"displayName": "Indirect Cost",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.F_AND_A_RATE_TYPE",
+			"displayName": "Indirect cost(%)",
+			"filterType": "lookUp",
+			"valueField": "RATE_TYPE#RATE_CLASS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.CUMULATIVE_VIREMENT",
+			"displayName": "Total virement(%)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.BASIS_OF_PAYMENT_DESC",
+			"displayName": "Basis Of Payment",
+			"filterType": "lookUp",
+			"valueField": "AWARD_BASIS_OF_PAYMENT#BASIS_OF_PAYMENT_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.METHOD_OF_PAYMENT_DESC",
+			"displayName": "Method Of Payment",
+			"filterType": "lookUp",
+			"valueField": "AWARD_METHOD_OF_PAYMENT#METHOD_OF_PAYMENT_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.PAYMENT_INVOICE_FREQ_DESC",
+			"displayName": "Payment Invoice Frequency",
+			"filterType": "lookUp",
+			"valueField": "FREQUENCY#FREQUENCY_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.GRANT_PER_MONTH",
+			"displayName": "Grant per Month",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.BUDGET_CATEGORY",
+			"displayName": "Budget Category",
+			"filterType": "lookUp",
+			"valueField": "BUDGET_CATEGORY#BUDGET_CATEGORY_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.L2_WBS_NUMBER",
+			"displayName": "Level 2 WBS",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "MASTER_DATA.COST_ELEMENT",
+			"displayName": "Cost Element",
+			"filterType": "lookUp",
+			"valueField": "COST_ELEMENT#COST_ELEMENT#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.ORIGINAL_AMOUNT",
+			"displayName": "Original amount ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.REVISED_AMOUNT",
+			"displayName": "Revised amount ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.EXPENDITURE_TO_DATE",
+			"displayName": "Actual Expense ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.COMMITTED_AMOUNT",
+			"displayName": "Committed Expense ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.BALANCE",
+			"displayName": "Balance ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.BALANCELESS_COMMITTED_AMOUNT",
+			"displayName": "Balance Less Committed Amount ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "Y",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.UTILIZATION_RATE",
+			"displayName": "Utilization Rate",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.FM_POSTING_DATE",
+			"displayName": "Posting Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.DOCUMENT_DATE",
+			"displayName": "Document Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.VENDOR_NAME",
+			"displayName": "Vendor Name",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "CHILD.VENDOR_CODE",
+			"displayName": "Vendor Code",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.FISCAL_YEAR",
+			"displayName": "Fiscal Year",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.BANK_CLEARING_DATE",
+			"displayName": "Bank Clearing Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.FI_POSTING_DATE",
+			"displayName": "FI Posting Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.FI_GL_ACCOUNT",
+			"displayName": "FI GL Account",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.FI_GL_DESCRIPTION",
+			"displayName": "FI GL Description",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.PR_DATE",
+			"displayName": "PR Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.PO_DATE",
+			"displayName": "PO Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.REQUESTOR_NAME",
+			"displayName": "Requestor Name",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.TRANSACTION_REFERENCE_NUMBER",
+			"displayName": "Transaction Reference Number",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.ITEM_NUMBER",
+			"displayName": "Item Number",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.REFERENCE_DOC_CATEGORY",
+			"displayName": "Reference Doc Category",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.REFERENCE_ORG_UNIT",
+			"displayName": "Reference Organization Unit",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.ACCT_ASSIGNMENT_NUMBER",
+			"displayName": "Acct Assignment Number",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.SCHEDULE_LINE_NUMBER",
+			"displayName": "Schedule Line Number",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.CONDITION_COUNTER",
+			"displayName": "Condition Counter",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.REFERENCE_PROCEDURE",
+			"displayName": "Reference Procedure",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.DOCUMENT_NUMBER_FM_LINE_ITEM",
+			"displayName": "Document Number FM Line Item",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.NUMBER_OF_POST_FM_LINE_ITEM",
+			"displayName": "Number of Post FM Line Item",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.COMPANY_CODE",
+			"displayName": "Company Code",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.VALUE_TYPE",
+			"displayName": "Value Type",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.AMOUNT_TYPE",
+			"displayName": "Amount Type",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		},
+		{
+			"columnName": "CHILD.TRANSACTION_NUMBER",
+			"displayName": "Transaction Number",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N",
+			"innerJoin" : "N"
+		}
+		
+	],
+	"extraCondition" : "(AWARD_ID IN (SELECT AWARD_ID FROM AWARD_PERSON_ROLES WHERE PERSON_ID=<<PERSON_ID>>) OR LEAD_UNIT_NUMBER IN(SELECT DISTINCT UNIT_NUMBER FROM PERSON_ROLE_RT WHERE RIGHT_NAME IN ('VIEW_AWARD', 'CREATE _AWARD', 'MODIFY_AWARD') AND PERSON_ID =<<PERSON_ID>>))",
+	"extraSelection" : "",
+	"innerJoinPlaceHolder" : "<FILTER_CONDITION>"
+}

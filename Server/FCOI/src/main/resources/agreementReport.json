@@ -1,0 +1,192 @@
+{
+    "reports": [
+        {
+            "columnName": "AGREEMENT_REQUEST_ID",
+            "displayName": "Agreement ID",
+            "filterType": "elastic",
+            "valueField": "agreement_request_id",
+            "index": "fibiagreement",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "AGREEMENT_START_DATE",
+            "displayName": "Start Date",
+            "filterType": "date",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "BETWEEN"
+        },
+        {
+            "columnName": "STO_PERSON_FULL_NAME",
+            "displayName": "Strategic Transactions Officer",
+            "filterType": "elastic",
+            "valueField": "full_name",
+            "index": "fibiperson",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "TITLE",
+            "displayName": "Title of Agreement",
+            "filterType": "freetext",
+            "valueField": "title",
+            "index": "null",
+            "queryType": "LIKE"
+        },
+        {
+            "columnName": "AGREEMENT_END_DATE",
+            "displayName": "End Date",
+            "filterType": "date",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "BETWEEN"
+        },
+        {
+            "columnName": "CA_PERSON_FULL_NAME",
+            "displayName": "Contract Administrator",
+            "filterType": "elastic",
+            "valueField": "full_name",
+            "index": "fibiperson",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "AGREEMENT_TYPE",
+            "displayName": "Type of Agreement",
+            "filterType": "lookUp",
+            "valueField": "AGREEMENT_TYPE#AGREEMENT_TYPE_CODE#true#true",
+            "index": "null",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "SUBMISSION_DATE",
+            "displayName": "Submission Date",
+            "filterType": "date",
+            "valueField": "null",
+            "index": "null",
+            "queryType": "BETWEEN"
+        },
+        {
+            "columnName": "NEGOTIATOR_PERSON_FULL_NAME",
+            "displayName": "Negotiator",
+            "filterType": "freetext",
+            "valueField": "Negotiator",
+            "index": "null",
+            "queryType": "LIKE"
+        },
+        {
+            "columnName": "CATEGORY",
+            "displayName": "Agreement Category",
+            "filterType": "lookUp",
+            "valueField": "AGREEMENT_CATEGORY#CATEGORY_CODE#true#true",
+            "index": "null",
+            "queryType": "IN"
+        },        
+        {
+            "columnName": "CONTRACT_VALUE",
+            "displayName": "Contract Value ($)",
+            "filterType": "freetext",
+            "valueField": "Contract Value",
+            "index": "null",
+            "queryType": "LIKE",
+            "isCurrency": "true"
+        },
+        {
+            "columnName": "CATALYST_PERSON_FULL_NAME",
+            "displayName": "Catalyst",
+            "filterType": "elastic",
+            "valueField": "full_name",
+            "index": "fibiperson",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "UNIT_NAME",
+            "displayName": "Lead Unit",
+            "filterType": "endpoint",
+            "valueField": "unitName",
+            "index": "unitName",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "COUNTRY_NAME",
+            "displayName": "Country of Organization",
+            "filterType": "freetext",
+           "valueField": "Country of Organization",
+            "index": "null",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "TLO_PERSON_FULL_NAME",
+            "displayName": "Technology Licensing Officer",
+            "filterType": "elastic",
+            "valueField": "full_name",
+            "index": "fibiperson",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "SPONSOR_NAME",
+            "displayName": "Organization",
+            "filterType": "freetext",
+            "valueField": "Organization",
+            "index": "null",
+            "queryType": "LIKE"
+        },
+        {
+            "columnName": "REQUESTOR_FULL_NAME",
+            "displayName": "Requestor",
+            "filterType": "freetext",
+            "valueField": "Requestor",
+            "index": "null",
+            "queryType": "LIKE"
+        },
+        {
+            "columnName": "SPONSOR_TYPE_NAME",
+            "displayName": "Organization Type",
+            "filterType": "lookUp",
+            "valueField": "SPONSOR_TYPE#SPONSOR_TYPE_CODE#true#true",
+            "index": "null",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "SPONSOR_LOCATION",
+            "displayName": "Review Location",
+            "filterType": "freetext",
+            "valueField": "Location",
+            "index": "null",
+            "queryType": "LIKE"
+        },
+        {
+            "columnName": "AGREEMENT_STATUS",
+            "displayName": "Agreement Status",
+            "filterType": "lookUp",
+            "valueField": "AGREEMENT_STATUS#AGREEMENT_STATUS_CODE#true#true",
+            "index": "null",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "PI_PERSON_FULL_NAME",
+            "displayName": "Principal Investigator",
+            "filterType": "elastic",
+            "valueField": "full_name",
+            "index": "fibiperson",
+            "queryType": "IN"
+        },
+        {
+            "columnName": "REVIEW_STATUS",
+            "displayName": "Review Status",
+            "filterType": "lookUp",
+            "valueField": "AGREEMENT_WORKFLOW_STATUS#WORKFLOW_STATUS_CODE#true#true",
+            "index": "null",
+            "queryType": "LIKE"
+        },
+        {
+            "columnName": "AA_PERSON_FULL_NAME",
+            "displayName": "Administrator",
+            "filterType": "lookUp",
+            "valueField": "TEMP#TEMP_ADMIN_NAME#true#true",
+            "index": "null",
+            "queryType": "IN"
+        }
+    ],
+    "extraCondition" : " (UNIT_NUMBER IN(SELECT DISTINCT UNIT_NUMBER FROM PERSON_ROLE_RT WHERE RIGHT_NAME IN ('AGREEMENT_ADMINISTRATOR') AND PERSON_ID =<<PERSON_ID>>) OR UNIT_NUMBER is null) AND AGREEMENT_SEQUENCE_STATUS <> 'TEMPLATE'",
+	"extraSelection" : ",AGREEMENT_REQUEST_ID AS ID, UNIT_NUMBER",
+	"selectDistinct" : "Y"
+}
