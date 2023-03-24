@@ -1,0 +1,496 @@
+{
+	"reports": [
+		{
+			"columnName": "PROPOSAL_ID",
+			"displayName": "Proposal #",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "PROPOSAL_STATUS",
+			"displayName": "Proposal Status",
+			"filterType": "lookUp",
+			"valueField": "EPS_PROPOSAL_STATUS#STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "TITLE",
+			"displayName": "Title",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "PROPOSAL_TYPE",
+			"displayName": "Proposal Type",
+			"filterType": "lookUp",
+			"valueField": "EPS_PROPOSAL_TYPE#TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "GRANT_CALL_TYPE",
+			"displayName": "Grant Call Type",
+			"filterType": "lookUp",
+			"valueField": "GRANT_CALL_TYPE#GRANT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "ACTIVITY_TYPE",
+			"displayName": "Activity Type",
+			"filterType": "lookUp",
+			"valueField": "ACTIVITY_TYPE#ACTIVITY_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "ANTICIPATED_AWARD_TYPE",
+			"displayName": "Anticipated Award Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "SPONSOR_NAME",
+			"displayName": "Sponsor",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "START_DATE",
+			"displayName": "Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "END_DATE",
+			"displayName": "End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "DURATION",
+			"displayName": "Duration",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "PRIME_SPONSOR_NAME",
+			"displayName": "Prime Sponsor",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "SPONSOR_PROPOSAL_NUMBER",
+			"displayName": "Sponsor Proposal ID",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "SPONSOR_DEADLINE_DATE",
+			"displayName": "Sponsor Deadline Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "INTERNAL_DEADLINE_DATE",
+			"displayName": "Internal Deadline Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "PROGRAM_ANNOUNCEMENT_NUMBER",
+			"displayName": "Funding Opportunity Number",
+			"filterType": "freetext",
+			"valueField": "",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "CFDA_NUMBER",
+			"displayName": "CFDA Number",
+			"filterType": "freetext",
+			"valueField": "",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "PERSON_NAME",
+			"displayName": "Key Person Name",
+			"filterType": "freetext",
+			"valueField": "",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "PERSON_ROLE",
+			"displayName": "Key Person Role",
+			"filterType": "lookUp",
+			"valueField": "EPS_PROP_PERSON_ROLE#PROP_PERSON_ROLE_ID#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "PERSON_DEPARTMENT",
+			"displayName": "Key Person Department",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "PERSON_EMAIL",
+			"displayName": "Key Person Email",
+			"filterType": "freetext",
+			"valueField": "",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "SPECIAL_REVIEW",
+			"displayName": "Special Review Type",
+			"filterType": "lookUp",
+			"valueField": "SPECIAL_REVIEW#SPECIAL_REVIEW_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "SPECIAL_REVIEW_APPROVAL_STATUS",
+			"displayName": "Approval Status",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "SPR_PROTOCOL_NUMBER",
+			"displayName": "Protocol Number",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "SPR_APPLICATION_DATE",
+			"displayName": "Application Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "SPR_APPROVAL_DATE",
+			"displayName": "Approval Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "SPR_EXPIRATION_DATE",
+			"displayName": "Expiration Date",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "BUDGET_VERSION_NUMBER",
+			"displayName": "Budget Version",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "FINAL_VERSION_FLAG",
+			"displayName": "Is Final",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "TOTAL_COST",
+			"displayName": "Total Cost ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "TOTAL_DIRECT_COST",
+			"displayName": "Direct Cost ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "TOTAL_INDIRECT_COST",
+			"displayName": "Indirect Cost ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "BUDGET_CATEGORY",
+			"displayName": "Budget Category",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "COST_ELEMENT",
+			"displayName": "Cost Element",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "LINE_ITEM_COST",
+			"displayName": "Line Item Cost ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null"
+		},
+		{
+			"columnName": "GRANT_CALL_TITLE",
+			"displayName": "Title of Grant Call",
+			"filterType": "elastic",
+			"valueField": "title",
+			"index": "grantcall",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "GRANT_CALL_ABBREVIATION",
+			"displayName": "Abbreviation",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "GRANT_CALL_HOME_UNIT_NAME",
+			"displayName": "Grant Call Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "FUNDING_SCHEME",
+			"displayName": "Funding Scheme",
+			"filterType": "lookUp",
+			"valueField": "FUNDING_SCHEME#FUNDING_SCHEME_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "AWARD_SPONSOR_NAME",
+			"displayName": "Funding Agency",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "TYPE_OF_FUNDING_AGENCY",
+			"displayName": "Type of Funding Agency",
+			"filterType": "lookUp",
+			"valueField": "SPONSOR_TYPE#SPONSOR_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "GRANT_CALL_OPENING_DATE",
+			"displayName": "Grant Call Opening Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "GRANT_CALL_CLOSING_DATE",
+			"displayName": "Grant Call Closing Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_TITLE",
+			"displayName": "Title of Award",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_KEY_PERSON_NAME",
+			"displayName": "Key Person Name",
+			"filterType": "freetext",
+			"valueField": "",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "AWARD_PI_NAME",
+			"displayName": "Principal Investigator",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "AWARD_TYPE",
+			"displayName": "Award Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "AWARD_ACCOUNT_TYPE",
+			"displayName": "Account Type",
+			"filterType": "lookUp",
+			"valueField": "ACCOUNT_TYPE#ACCOUNT_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_STATUS",
+			"displayName": "Award Status",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_SPONSOR_TYPE",
+			"displayName": "Award Sponsor Type",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "AWARD_SPONSOR_AWARD_NUMBER",
+			"displayName": "Sponsor Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_LEAD_UNIT_NAME",
+			"displayName": "Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "AWARD_EFFECTIVE_DATE",
+			"displayName": "Award Effective Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_FINAL_EXPIRATION_DATE",
+			"displayName": "Final Expiration Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_DURATION",
+			"displayName": "Award Duration",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_NUMBER",
+			"displayName": "Award Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "AWARD_ACCOUNT_NUMBER",
+			"displayName": "Account Number",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"summable" : "N"
+		},
+		{
+			"columnName": "ANTICIPATED_TOTAL_AMOUNT",
+			"displayName": "Anticipated Total ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isCurrency": "true"
+		},
+		{
+			"columnName": "AMOUNT_OBLIGATED_TO_DATE",
+			"displayName": "Obligated Total ($)",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "null",
+			"summable" : "N",
+			"isCurrency": "true"
+		}
+	],
+	"extraCondition" : "(PROPOSAL_ID IN (SELECT PROPOSAL_ID FROM EPS_PROPOSAL_PERSON_ROLES WHERE PERSON_ID = <<PERSON_ID>>) OR LEAD_UNIT_NUMBER IN(SELECT DISTINCT UNIT_NUMBER FROM PERSON_ROLE_RT WHERE RIGHT_NAME IN ('VIEW_PROPOSAL' 'CREATE_PROPOSAL', 'MODIFY_PROPOSAL') AND PERSON_ID = <<PERSON_ID>>))",
+	"extraSelection" : "",
+	"selectDistinct" : "Y"
+}

@@ -1,0 +1,208 @@
+{
+	"reports": [
+		{
+			"columnName": "CHILD.AWARD_NUMBER",
+			"displayName": "Project ID",
+			"filterType": "freetext",
+			"valueField": "award_number",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "CHILD.ACCOUNT_NUMBER",
+			"displayName": "Project Fund Code",
+			"filterType": "freetext",
+			"valueField": "account_number",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "MASTER_DATA.TITLE",
+			"displayName": "Title",
+			"filterType": "freetext",
+			"valueField": "title",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "MASTER_DATA.AWARD_STATUS",
+			"displayName": "Project Status",
+			"filterType": "lookUp",
+			"valueField": "AWARD_STATUS#STATUS_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "MASTER_DATA.AWARD_TYPE",
+			"displayName": "Project Type",
+			"filterType": "lookUp",
+			"valueField": "AWARD_TYPE#AWARD_TYPE_CODE#true#true",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "MASTER_DATA.LEAD_UNIT",
+			"displayName": "Lead Unit",
+			"filterType": "endpoint",
+			"valueField": "unitName",
+			"index": "unitName",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "MASTER_DATA.BEGIN_DATE",
+			"displayName": "Project Start Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "MASTER_DATA.FINAL_EXPIRATION_DATE",
+			"displayName": "Project End Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "MASTER_DATA.PI_NAME",
+			"displayName": "Principal Investigator",
+			"filterType": "elastic",
+			"valueField": "full_name",
+			"index": "fibiperson",
+			"queryType": "IN"
+		},
+		{
+			"columnName": "CHILD.FI_GL_ACCOUNT",
+			"displayName": "FI GL Account",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "CHILD.FI_GL_DESCRIPTION",
+			"displayName": "FI GL Description",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "CHILD.FM_POSTING_DATE",
+			"displayName": "FM Posting Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "CHILD.REFERENCE_DOC_NUMBER",
+			"displayName": "Reference Doc Number",
+			"filterType": "freetext",
+			"valueField": "referenceDocNumber",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "CHILD.DOCUMENT_DATE",
+			"displayName": "Document Date",
+			"filterType": "date",
+			"valueField": "documentDate",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "CHILD.PREDECESSOR_DOC_NUMBER",
+			"displayName": "Predecessor Doc Number",
+			"filterType": "freetext",
+			"valueField": "predecessorDocNumber",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "CHILD.FI_POSTING_DATE",
+			"displayName": "FI Posting Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+			"columnName": "CHILD.VENDOR_NAME",
+			"displayName": "Vendor Name",
+			"filterType": "freetext",
+			"valueField": "vendorName",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "CHILD.REMARKS",
+			"displayName": "Remarks",
+			"filterType": "freetext",
+			"valueField": "remarks",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "CHILD.AMOUNT_IN_FMA_CURRENCY",
+			"displayName": "Amount In FMA Currency (S$)",
+			"filterType": "freetext",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "LIKE",
+			"isCurrency": "true" 
+		},
+		{
+			"columnName": "CHILD.INTERNAL_ORDER_CODE",
+			"displayName": "IO Code",
+			"filterType": "freetext",
+			"valueField": "internalOrderCode",
+			"index": "null",
+			"queryType": "LIKE"
+		},
+		{
+			"columnName": "MASTER_DATA.SPONSOR_NAME",
+			"displayName": "Funding Agency",
+			"filterType": "endpoint",
+			"valueField": "sponsorName",
+			"index": "sponsorName",
+			"queryType": "IN"
+		},	
+		{
+			"columnName": "MASTER_DATA.AWARD_EFFECTIVE_DATE",
+			"displayName": "Date of Award",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+		    "columnName": "CHILD.BANK_CLEARING_DATE",
+			"displayName": "Bank Clearance Date",
+			"filterType": "date",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "BETWEEN"
+		},
+		{
+		     "columnName": "CHILD.ASSET_LOCATION",
+			"displayName": "Asset Location",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN"
+		},
+		{
+		     "columnName": "CHILD.VENDOR_CODE",
+			"displayName": "Vendor Code",
+			"filterType": "null",
+			"valueField": "null",
+			"index": "null",
+			"queryType": "IN"
+		}
+		
+	],
+	"extraCondition" : "CHILD.AWARD_NUMBER is not null and(( MASTER_DATA.AWARD_ID IN (SELECT AWARD_ID FROM AWARD_PERSON_ROLES WHERE PERSON_ID=<<PERSON_ID>>) OR MASTER_DATA.LEAD_UNIT_NUMBER IN(SELECT DISTINCT UNIT_NUMBER FROM PERSON_ROLE_RT WHERE RIGHT_NAME IN ('VIEW_AWARD', 'CREATE_AWARD', 'MODIFY_AWARD') AND PERSON_ID =<<PERSON_ID>>)))",
+	"extraSelection" : ""
+}
