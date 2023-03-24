@@ -1,0 +1,13 @@
+<div class="border mb-3 mx-3">
+    <p>disclosure works!</p>
+    <ul>
+        <li [routerLink]="['screening']">screening questionnaire</li>
+        <li [routerLink]="['sfi']">SFI</li>
+        <li [routerLink]="['relationship']">relationships</li>
+        <li [routerLink]="['certification']">Certifications</li>
+    </ul>
+</div>
+
+<div class="mx-3">
+    <router-outlet></router-outlet>
+</div>

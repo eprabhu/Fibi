@@ -1,0 +1,31 @@
+.vertical-middle {
+    vertical-align: middle;
+}
+
+.date-width {
+    width: 135px;
+}
+
+td {
+    white-space: nowrap;
+}
+
+.action-width {
+    width: 1px;
+    white-space: nowrap;
+}
+
+.cursor-normal {
+    cursor: default;
+}
+
+.table-validation-msg {
+    position: absolute;
+    width: 100%;
+    box-sizing: content-box;
+    background: #ffeded;
+    border-radius: 4px;
+    left: -10px;
+    z-index: 100;
+    padding: 2px 10px;
+}

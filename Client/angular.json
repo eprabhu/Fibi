@@ -4,130 +4,97 @@
   "newProjectRoot": "projects",
   "projects": {
     "fibi": {
-      "root": "",
-      "sourceRoot": "src",
       "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/fibi",
+      "sourceRoot": "projects/fibi/src",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
-            "index": "src/index.html",
-            "main": "src/boot.ts",
-            "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
-            "crossOrigin": "use-credentials",
+            "outputPath": "dist/fibi",
+            "index": "projects/fibi/src/index.html",
+            "main": "projects/fibi/src/boot.ts",
+            "polyfills": "projects/fibi/src/polyfills.ts",
+            "tsConfig": "projects/fibi/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
-              "src/assets",
-              "src/favicon.ico"
+              "projects/fibi/src/favicon.ico",
+              "projects/fibi/src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "src/assets/css/bootstrap.min.css",
-              "src/assets/css/font-awesome.min.css",
-              "src/assets/css/style.css",
-              "src/assets/css/search.css",
-              "src/assets/css/fibi-questionnaire-style.css",
-              "src/assets/css/fibi-codetable-style.css",
-              "src/assets/css/workflow-style.css",
-              "src/assets/css/date-picker.css",
-              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+              "projects/fibi/src/styles.scss",
+              "projects/fibi/src/assets/css/bootstrap.min.css",
+              "projects/fibi/src/assets/css/font-awesome.min.css",
+              "projects/fibi/src/assets/css/style.css",
+              "projects/fibi/src/assets/css/search.css",
+              "projects/fibi/src/assets/css/fibi-questionnaire-style.css",
+              "projects/fibi/src/assets/css/fibi-codetable-style.css",
+              "projects/fibi/src/assets/css/workflow-style.css"
             ],
             "scripts": [
-              "src/assets/js/jquery-3.2.1.slim.min.js",
-              "src/assets/js/popper.min.js",
-              "src/assets/js/bootstrap.min.js",
-              "src/assets/js/design.js",
-              "src/assets/js/loader.js"
-            ],
-            "aot": false,
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
+              "projects/fibi/src/assets/js/jquery-3.2.1.slim.min.js",
+              "projects/fibi/src/assets/js/popper.min.js",
+              "projects/fibi/src/assets/js/bootstrap.min.js",
+              "projects/fibi/src/assets/js/design.js"
+            ]
           },
           "configurations": {
-            "dev": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.ts"
-                }
-              ]
-            },
             "production": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
+              "budgets": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "/src/environments/environment.prod.ts"
-                }
-              ]
-            },
-            "label": {
-              "aot": true,
-              "i18nMissingTranslation": "error",
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ],
-              "localize": [
-                "en-US"
-              ]
+              "fileReplacements": [
+                {
+                  "replace": "projects/fibi/src/environments/environment.ts",
+                  "with": "projects/fibi/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
-          "defaultConfiguration": ""
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "fibi:build"
-          },
           "configurations": {
-            "dev": {
-              "browserTarget": "fibi:build:dev"
-            },
             "production": {
-              "browserTarget": "fibi:build:production"
+              "browserTarget": "fibi:build:production",
             },
-            "sso": {
-              "browserTarget": "fibi:build:sso"
-            },
-            "es5": {
-              "browserTarget": "fibi:build:es5"
-            },
-            "label": {
-              "browserTarget": "fibi:build:label"
+            "development": {
+              "browserTarget": "fibi:build:development",
+              "host": "0.0.0.0",
+              "proxyConfig": "projects/fibi/proxy.config.json",
+              "disableHostCheck": true,
+              "port": 1111
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -138,91 +105,392 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [
-              "src/assets/js/jquery-3.2.1.slim.min.js",
-              "src/assets/js/popper.min.js",
-              "src/assets/js/bootstrap.min.js",
-              "src/assets/js/design.js"
+            "main": "projects/fibi/src/test.ts",
+            "polyfills": "projects/fibi/src/polyfills.ts",
+            "tsConfig": "projects/fibi/tsconfig.spec.json",
+            "karmaConfig": "projects/fibi/karma.conf.js",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/fibi/src/favicon.ico",
+              "projects/fibi/src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "src/assets/css/bootstrap.min.css",
-              "src/assets/css/font-awesome.min.css",
-              "src/assets/css/style.css",
-              "src/assets/css/search.css",
-              "src/assets/css/fibi-questionnaire-style.css",
-              "src/assets/css/fibi-codetable-style.css",
-              "src/assets/css/workflow-style.css"
+              "projects/fibi/src/styles.scss"
             ],
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ]
+            "scripts": []
           }
+        }
+      }
+    },
+    "coi": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
+        "@schematics/angular:application": {
+          "strict": true
         }
       },
-      "i18n": {
-        "sourceLocale": "en-US",
-        "locales": {
-          "fr": {
-            "translation": "src/labels/labels.xlf",
-            "baseHref": ""
-          }
-        }
-      }
-    },
-    "fibi-e2e": {
-      "root": "e2e",
-      "sourceRoot": "e2e",
-      "projectType": "application",
+      "root": "projects/coi",
+      "sourceRoot": "projects/coi/src",
+      "prefix": "app",
       "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "fibi:serve"
+            "outputPath": "dist/coi",
+            "index": "projects/coi/src/index.html",
+            "main": "projects/coi/src/main.ts",
+            "polyfills": "projects/coi/src/polyfills.ts",
+            "tsConfig": "projects/coi/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/coi/src/favicon.ico",
+              "projects/coi/src/assets"
+            ],
+            "styles": [
+              "projects/coi/src/styles.scss",
+              "projects/coi/src/assets/css/bootstrap.min.css",
+              "node_modules/material-icons/iconfont/material-icons.scss"N
+            ],
+            "scripts": [
+              "projects/coi/src/assets/js/bootstrap.bundle.min.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/coi/src/environments/environment.ts",
+                  "with": "projects/coi/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "coi:build:production",
+            },
+            "development": {
+              "browserTarget": "coi:build:development",
+              "host": "0.0.0.0",
+              "proxyConfig": "projects/coi/proxy.config.json",
+              "disableHostCheck": true,
+              "port": 2222
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "coi:build"
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
+            "main": "projects/coi/src/test.ts",
+            "polyfills": "projects/coi/src/polyfills.ts",
+            "tsConfig": "projects/coi/tsconfig.spec.json",
+            "karmaConfig": "projects/coi/karma.conf.js",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/coi/src/favicon.ico",
+              "projects/coi/src/assets"
             ],
-            "exclude": [
-              "**/node_modules/**"
+            "styles": [
+              "projects/coi/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    },
+    "admin-dashboard": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/admin-dashboard",
+      "sourceRoot": "projects/admin-dashboard/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/admin-dashboard",
+            "index": "projects/admin-dashboard/src/index.html",
+            "main": "projects/admin-dashboard/src/main.ts",
+            "polyfills": "projects/admin-dashboard/src/polyfills.ts",
+            "tsConfig": "projects/admin-dashboard/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/admin-dashboard/src/favicon.ico",
+              "projects/admin-dashboard/src/assets"
+            ],
+            "styles": [
+              "projects/admin-dashboard/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/admin-dashboard/src/environments/environment.ts",
+                  "with": "projects/admin-dashboard/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "admin-dashboard:build:production",
+            },
+            "development": {
+              "browserTarget": "admin-dashboard:build:development",
+              "host": "0.0.0.0",
+              "proxyConfig": "projects/admin-dashboard/proxy.config.json",
+              "disableHostCheck": true,
+              "port": 3333
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "admin-dashboard:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/admin-dashboard/src/test.ts",
+            "polyfills": "projects/admin-dashboard/src/polyfills.ts",
+            "tsConfig": "projects/admin-dashboard/tsconfig.spec.json",
+            "karmaConfig": "projects/admin-dashboard/karma.conf.js",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/admin-dashboard/src/favicon.ico",
+              "projects/admin-dashboard/src/assets"
+            ],
+            "styles": [
+              "projects/admin-dashboard/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    },
+    "home": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/home",
+      "sourceRoot": "projects/home/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/home",
+            "index": "projects/home/src/index.html",
+            "main": "projects/home/src/main.ts",
+            "polyfills": "projects/home/src/polyfills.ts",
+            "tsConfig": "projects/home/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/home/src/favicon.ico",
+              "projects/home/src/assets"
+            ],
+            "styles": [
+              "projects/home/src/styles.scss",
+              "projects/fibi/src/styles.scss",
+              "projects/fibi/src/assets/css/bootstrap.min.css",
+              "projects/fibi/src/assets/css/font-awesome.min.css",
+              "projects/fibi/src/assets/css/style.css",
+              "projects/fibi/src/assets/css/search.css",
+              "projects/fibi/src/assets/css/fibi-questionnaire-style.css",
+              "projects/fibi/src/assets/css/fibi-codetable-style.css",
+              "projects/fibi/src/assets/css/workflow-style.css"
+            ],
+            "scripts": [
+              "projects/fibi/src/assets/js/jquery-3.2.1.slim.min.js",
+              "projects/fibi/src/assets/js/popper.min.js",
+              "projects/fibi/src/assets/js/bootstrap.min.js",
+              "projects/fibi/src/assets/js/design.js"
             ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/home/src/environments/environment.ts",
+                  "with": "projects/home/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "home:build:production",
+            },
+            "development": {
+              "browserTarget": "home:build:development",
+              "host": "0.0.0.0",
+              "proxyConfig": "projects/home/proxy.config.json",
+              "disableHostCheck": true,
+              "port": 4444
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "home:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/home/src/test.ts",
+            "polyfills": "projects/home/src/polyfills.ts",
+            "tsConfig": "projects/home/tsconfig.spec.json",
+            "karmaConfig": "projects/home/karma.conf.js",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/home/src/favicon.ico",
+              "projects/home/src/assets"
+            ],
+            "styles": [
+              "projects/home/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    },
+    "shared": {
+      "projectType": "library",
+      "root": "projects/shared",
+      "sourceRoot": "projects/shared/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/shared/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/shared/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/shared/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/shared/src/test.ts",
+            "tsConfig": "projects/shared/tsconfig.spec.json",
+            "karmaConfig": "projects/shared/karma.conf.js"
           }
         }
       }
     }
   },
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "app",
-      "styleext": "css"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "app"
-    }
-  },
-  "cli": {
-    "analytics": false
-  }
+  "defaultProject": "fibi"
 }

@@ -1,0 +1,61 @@
+<header class="align-items-center bg-white d-flex justify-content-between shadow-sm h-45 px-5">
+    <div class="d-flex align-items-center">
+        <a class="logo" href="#/fibi/dashboard">
+            <img [src]="logo" alt="Logo" class="w-75">
+        </a>
+        <ul class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0">
+            <li *ngIf="loginPerson.reviewerRightId == 3" [routerLink]="['/fibi/dashboard']" class="mr-2"
+                routerLinkActive="active">My Dashboard
+            </li>
+        </ul>
+    </div>
+    <div>
+        <div class="d-flex align-items-center">
+            <div class="align-items-center d-flex mx-4">
+                <mat-icon [attr.title]="'Help'"
+                          class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
+                    help
+                </mat-icon>
+                <mat-icon [attr.title]="'Notifications'"
+                          class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
+                    notifications
+                </mat-icon>
+                <mat-icon [attr.title]="'Sign out'"
+                          [routerLink]="['/login']"
+                          class="halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
+                    power_settings_new
+                </mat-icon>
+            </div>
+            <div class="align-items-center d-flex ml-5 profile">
+                <div class="d-flex mx-4 cursor-pointer" data-toggle="dropdown">
+                    <img alt="" src="assets/images/{{isMaleUser ?'user.svg':'user-female.svg'}}">
+                </div>
+                <div class="d-flex flex-column cursor-pointer" data-toggle="dropdown">
+                    <b class="f-18">{{fullName}}</b>
+                    <small class="f-16">{{loginPerson?.reviewerRights?.description}}</small>
+                </div>
+                <div class="d-flex ml-3 cursor-pointer" data-toggle="dropdown">
+                    <mat-icon class="material-symbols-outlined">arrow_drop_down</mat-icon>
+                </div>
+                <div aria-labelledby="dropdownMenuButton" class="dropdown-menu p-0">
+                    <a *ngIf="loginPerson?.reviewerRightId == '3'" [routerLink]="['/fibi/admin-dashboard']"
+                       class="dropdown-item p-0 px-4">
+                        <mat-icon>dashboard</mat-icon>
+                        <span class="ml-3">Admin Dashboard</span></a>
+                    <a [routerLink]="['/fibi/faq']" class="dropdown-item p-0 px-4">
+                        <mat-icon>quiz</mat-icon>
+                        <span class="ml-3">FAQ</span></a>
+                    <a class="dropdown-item p-0 px-4" data-target="#new-password-modal" data-toggle="modal"
+                       id="reset-pass-btn">
+                        <mat-icon>lock_reset</mat-icon>
+                        <span class="ml-3">Change Password</span></a>
+                    <a [routerLink]="['/logout']" class="dropdown-item p-0 px-4">
+                        <mat-icon>logout</mat-icon>
+                        <span class="ml-3">Log out</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
