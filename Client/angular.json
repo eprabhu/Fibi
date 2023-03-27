@@ -152,7 +152,7 @@
             "styles": [
               "projects/coi/src/styles.scss",
               "projects/coi/src/assets/css/bootstrap.min.css",
-              "node_modules/material-icons/iconfont/material-icons.scss"N
+              "node_modules/material-icons/iconfont/material-icons.scss"
             ],
             "scripts": [
               "projects/coi/src/assets/js/bootstrap.bundle.min.js"
@@ -492,5 +492,5 @@
       }
     }
   },
-  "defaultProject": "fibi"
+  "defaultProject": "coi"
 }

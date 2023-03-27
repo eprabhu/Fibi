@@ -1,0 +1,52 @@
+.disclosure-card-heading-blue {
+  background-color: #E8FFFD;
+}
+
+.disclosure-card-body-blue {
+  background-color: #F0FFFE;
+  min-height: 100px;
+  max-height: 100px;
+}
+
+.disclosure-card-heading-green {
+  background-color: #E7F9E8;
+}
+
+.disclosure-card-body-green {
+  background-color: #F0FFF1;
+  min-height: 100px;
+  max-height: 100px;
+}
+
+.disclosure-active-pill {
+  background-color: #4CB57D;
+  color: white;
+  padding: 3px 12px;
+  border-radius: 15px;
+}
+
+.span-data-color {
+  color: #728B9E;
+}
+
+.navigation-icons {
+  .active {
+    border-bottom: 2px solid #007DEC;
+    color: #007DEC;
+  }
+}
+.advance-search-area {
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  &:hover {
+    background-color: white;
+  }
+}
+.filter-active {
+  border: 2px solid #54BF5B !important;
+}
+
+.chin {
+  min-height: 46px;
+}

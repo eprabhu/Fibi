@@ -1,11 +1,12 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AppRouterComponent} from "./common/app-router/app-router.component";
+import {DashboardGuardService} from "./common/services/dashboard-guard.service";
 
 const routes: Routes = [
     {path: '', redirectTo: 'coi/disclosure', pathMatch: 'full'},
     {
-        path: 'coi', component: AppRouterComponent, children: [
+        path: 'coi', component: AppRouterComponent, canActivate: [DashboardGuardService], children: [
             {
                 path: 'disclosure',
                 loadChildren: () => import('./disclosure/disclosure.module').then(m => m.DisclosureModule)

@@ -11,3 +11,28 @@ body { position:absolute; top:0; bottom:0; right:0; left:0; }
 .fs-12 {
   font-size: 12px !important;
 }
+
+.fs-14 {
+  font-size: 14px !important;
+}
+
+.fs-15 {
+  font-size: 15px !important;
+}
+
+.fs-18 {
+  font-size: 18px !important;
+}
+
+.fs-20 {
+  font-size: 20px !important;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

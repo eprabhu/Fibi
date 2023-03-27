@@ -2,9 +2,11 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DisclosureComponent} from './disclosure.component';
 import {RouterModule, Routes} from "@angular/router";
+import {MatButtonModule} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
 
-const routes: Routes = [{
-    path: '', component: DisclosureComponent,
+const routes: Routes = [
+    {path: '', component: DisclosureComponent,
     children: [
         {path: 'screening', loadChildren: () => import('./screening/screening.module').then(m => m.ScreeningModule)},
         {path: 'sfi', loadChildren: () => import('./sfi/sfi.module').then(m => m.SfiModule)},
@@ -25,7 +27,9 @@ const routes: Routes = [{
     ],
     imports: [
         CommonModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
+        MatIconModule,
+        MatButtonModule,
     ]
 })
 export class DisclosureModule {
