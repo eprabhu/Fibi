@@ -64,11 +64,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                         this.commonService.getRequiredParameters().then(systemParameters => {
                             this.commonService.assignSystemParameters(systemParameters);
                         });
-                        if(data.body.externalReviewerRight.reviewerRightId == 3) {
-                            this._router.navigate(['fibi/dashboard']);
-                        } else {
-                            this._router.navigate(['fibi/external-review-list']);
-                        }
+                        this._router.navigate(['coi/user-dashboard']);
                     } else {
                         // this.commonService.showToast(HTTP_ERROR_STATUS, 'The username or password that you have entered is incorrect', 5000);
                     }

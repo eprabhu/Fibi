@@ -1,11 +1,158 @@
-<div class="border mb-3 mx-3">
-    <p>disclosure works!</p>
-    <ul>
-        <li [routerLink]="['screening']">screening questionnaire</li>
-        <li [routerLink]="['sfi']">SFI</li>
-        <li [routerLink]="['relationship']">relationships</li>
-        <li [routerLink]="['certification']">Certifications</li>
-    </ul>
+<div class="border border-top-0 mb-3 mx-3 row shadow-sm">
+    <div class="col-9 p-0 border-end">
+        <div class="disclosure-heading px-3 d-flex">
+            <div class="align-self-center flex-fill">
+                <p class="m-0"><strong>FCOI by <span class="text-primary"><u>Griffiths, Danielle</u></span></strong> -
+                    (Home Unit: <strong>External Organizations</strong>)</p>
+            </div>
+            <div class="d-flex">
+                <div class="align-items-center d-flex">
+                    <mat-icon class="green-label fs-3">bookmark</mat-icon>
+                </div>
+                <div class="flex-fill ps-3">
+                    <div class="three-pixel-padding-top">
+                        <p class="m-0 fs-14">COI Training: <strong>Completed</strong></p>
+                    </div>
+                    <div>
+                        <p class="mb-0 fs-14 negative-three-pixel-margin">Expiration Date: 23/02/2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex p-3 triple-card bg-white">
+            <div class="col">
+                <div class="border h-100 rounded-1">
+                    <span class="status-pill">Status</span>
+                    <div class="ps-4 table-negative-margin">
+                        <table class="fs-14 fw-medium spaced-table">
+                            <tr>
+                                <td>Disposition:</td>
+                                <td class="ps-4"><span class="bg-warning px-2 py-1 rounded-4 text-black">Pending</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Review:</td>
+                                <td class="ps-4"><span class="bg-warning px-2 py-1 rounded-4 text-black">Pending</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Disclosure:</td>
+                                <td class="ps-4"><span class="bg-warning px-2 py-1 rounded-4 text-black">Pending</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border h-100 mx-3 rounded-1">
+                    <span class="status-pill">Date</span>
+                    <div class="ps-4 table-negative-margin">
+                        <table class="fs-14 fw-medium spaced-table">
+                            <tr>
+                                <td>Create:</td>
+                                <td class="ps-4">13/02/2023</td>
+                            </tr>
+                            <tr>
+                                <td>Certification:</td>
+                                <td class="ps-4"></td>
+                            </tr>
+                            <tr>
+                                <td>Expiration:</td>
+                                <td class="ps-4">13/02/2023</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border h-100 rounded-1">
+                    <span class="status-pill">Relationship with</span>
+                    <div class="ps-4 table-negative-margin">
+                        <table class="fs-14 fw-medium">
+                            <tr>
+                                <td><span class="bold-blue-color">03</span></td>
+                                <td class="ps-2">Significant Financial Interest</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bold-blue-color">02</span></td>
+                                <td class="ps-2">Proposals</td>
+                            </tr>
+                            <tr>
+                                <td><span class="bold-blue-color">02</span></td>
+                                <td class="ps-2">Awards</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nav-progress navigation-tabs row" title="Goto step Screening Questionnaire">
+            <div [routerLink]="['screening']"
+                 class="col complete h-100">
+                Screening Questionnaire
+                <div class="arrow-wrapper">
+                    <div class="arrow-cover">
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+            </div>
+            <div [routerLink]="['sfi']" class="active col ps-5 text-nowrap"
+                 title="Goto step Significant Financial Interest(SFIs)">
+                Significant Financial Interest(SFIs)
+                <div class="arrow-wrapper">
+                    <div class="arrow-cover">
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+            </div>
+            <div [routerLink]="['relationship']" class="col" title="Goto step Relationships">
+                <span class="align-self-center">Relationships</span>
+                <div class="arrow-wrapper">
+                    <div class="arrow-cover">
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+            </div>
+            <div [routerLink]="['certification']" class="col" title="Goto step Certification">
+                <span class="align-self-center">Certification</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 d-flex flex-column p-0 bg-white">
+        <div class="flex-fill h-100">
+            <div class="d-flex justify-content-between p-3">
+                <button class="btn btn-outline-secondary pb-0 fs-14 col-2">
+                    <mat-icon>home</mat-icon>
+                </button>
+                <button class="mx-3 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
+                    <mat-icon class="me-2">undo</mat-icon>
+                    Previous
+                </button>
+                <button class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
+                    <mat-icon class="me-2">redo</mat-icon>
+                    Next
+                </button>
+            </div>
+            <div class="d-flex justify-content-around px-3 pb-3">
+                <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                    <mat-icon class="me-2">save</mat-icon>
+                    Save
+                </button>
+            </div>
+            <div class="d-flex justify-content-around px-3">
+                <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                    <mat-icon class="me-2">add</mat-icon>
+                    Add Significant Financial Interest
+                </button>
+            </div>
+        </div>
+        <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes">
+            Notes & Attachments
+        </div>
+    </div>
+
 </div>
 
 <div class="mx-3">

@@ -5,13 +5,15 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {CommonService} from "./common/services/common.service";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {SharedModule} from "../../../fibi/src/app/shared/shared.module";
 import {HeaderComponent} from "./common/header/header.component";
 import {MatIconModule} from "@angular/material/icon";
 import {AppRouterComponent} from "./common/app-router/app-router.component";
 import {FooterComponent} from "./common/footer/footer.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {AppHttpInterceptor} from './common/services/http-interceptor';
+import {DashboardGuardService} from "./common/services/dashboard-guard.service";
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -33,10 +35,16 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         MatIconModule
     ],
     providers: [CommonService,
+        DashboardGuardService,
         {
             provide: APP_INITIALIZER,
             useFactory: getappConfiguration,
             deps: [CommonService],
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AppHttpInterceptor,
             multi: true
         }, {provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]

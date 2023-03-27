@@ -22,7 +22,7 @@ export class CommonService {
     enableSSO = false;
     rightsArray: any = [];
     isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
-    isValidUser = true;
+    isValidUser = false;
     extension: any = [];
     currentUserDetails: any = {};
     isWafEnabled: boolean;

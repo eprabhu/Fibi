@@ -3,9 +3,18 @@
         <a class="logo" href="#/fibi/dashboard">
             <img [src]="logo" alt="Logo" class="w-75">
         </a>
-        <ul class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0">
-            <li *ngIf="loginPerson.reviewerRightId == 3" [routerLink]="['/fibi/dashboard']" class="mr-2"
-                routerLinkActive="active">My Dashboard
+        <ul class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
+            <li [routerLink]="['/coi/user-dashboard']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active">Home
+                <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+            </li>
+            <li [routerLink]="['/coi/admin-dashboard']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active">Admin Dashboard
+                <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+            </li>
+            <li [routerLink]="['/coi/entity-management']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active">Entity Management
+                <span *ngIf="_router.url.includes('/coi/entity-management')" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
             </li>
         </ul>
     </div>
