@@ -1,0 +1,114 @@
+<div class="row fixed-tree">
+  <div class="show-chat" (click)="minimizeTree()"><span class="show-chat-icon"> X </span></div>
+    <div class="qst-tree-content">
+      <div class="col-12 d-flex">
+        <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
+        <p class="entity-title">
+            <strong>#2222: Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur</strong>
+        </p>
+      </div>
+        <div class="card outer-card">
+              <div class="row m-2">
+              <div class="col-6">
+                <label class="label-text">PI :</label>
+                <span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
+              </div>
+              <div class="col-6">
+                <label class="label-text">Sponsor :</label>
+                <span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
+              </div>
+              <div class="col-6">
+                <label class="label-text">Period :</label>
+                <span class="ml-2 grey-text">{{selectedProject?.startDate}} - {{selectedProject?.endDate}}</span>
+              </div>
+              <div class="col-6">
+                <label class="label-text">Prime Sponsor :</label>
+              <span class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
+              </div>
+              <div class="col-6">
+                <label class="label-text">Proposal Status : </label>
+                <span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
+              </div>
+              <div class="col-6">
+                <label class="label-text">Lead Unit :</label>
+              <span class="ml-2 grey-text">{{selectedProject?.leadUnit}}</span>
+              </div>
+              </div>
+              <div class="inner-card card m-2">
+                <div class="row m-2" *ngIf="isEditMode">
+                  <div class="col-2">
+                    <label class="fw-500">COI Status
+                    </label>
+                    <div>
+                      <select [(ngModel)]="coiStatusCode"
+                      class="form-control select-default">
+                      <option value=null>--Select--</option>
+                      <option [value]="status.discDetStatusCode" *ngFor="let status of coiStatusList">
+                          {{status?.description}}</option>
+                    </select>
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <label class="fw-500">Define relationship between SFIs and Projects</label>
+                    <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt"
+                    [(ngModel)]="coiDescription" appAutoGrow rows="1"
+                    placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
+                  </div>
+                  <div class="col-3 mt-4">
+                <button type="button" class="btn btn-outline-secondary mr-10 btn-sm" id="req-attachment-close-btn" data-toggle="modal"
+                data-target="#clearConfirmationModal">Clear All</button>
+                <button type="button" class="btn btn-primary btn-sm" id="req-attachment-add-btn" (click)="applyToAll()">Apply & Save</button>
+                  </div>
+                </div>
+              </div>
+              <div class="fixed-header">
+                <table class="table m-2 fs-14 fw-medium" *ngIf="newArray.length > 0">
+                  <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
+                  <thead class="fixed-th">
+                      <tr class="header-border table-secondary">
+                        <th style="width: 20%;">Significant Financial Interest</th>
+                        <th style="width: 20%;">COI Status</th>
+                        <th style="width: 40%;">Define relationship between SFIs and Projects</th>
+                        <th style="width: 20%;">Actions</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let test of newArray; let i = index">
+                      <!-- <td class="table-data fw-600">{{test?.coiFinancialEntity?.coiEntity?.coiEntityName}}</td> -->
+                      <td class="table-data border-end fw-600">{{test?.coiEntityName}}</td>
+                      <td class="border-end">
+                        <select [(ngModel)]="test.discDetStatusCode"
+                        class="form-control select-default" [disabled]="!isEditMode">
+                        <option value=null>--Select--</option>
+                        <option [value]="status.discDetStatusCode" *ngFor="let status of coiStatusList">
+                            {{status?.description}}</option>
+                        </select>
+                      </td>
+                      <td class="border-end">
+                        <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt"
+                        [(ngModel)]="test.comment.comments" appAutoGrow
+                        [disabled]="!isEditMode" rows="1"
+                        placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
+                      </td>
+                      <td class="border-end">
+                        <button type="button" class="btn btn-outline-secondary btn-sm mr-10" data-dismiss="modal" id="award-doc-popup-close-btn"
+                        >Cancel</button>
+                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" id="award-doc-popup-close-btn"
+                        >Save</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="no-data-container w-100" *ngIf="newArray.length == 0">
+                <span class="no-data-icon-outer">
+                    <div class="no-data-icon">
+                        <i class="fa fa-file-o" aria-hidden="true"></i>
+                        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                    </div>
+                </span>
+                <h4>There is no information in this section.</h4>
+            </div>
+        </div>
+        </div>
+  </div>

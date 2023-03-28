@@ -1,0 +1,119 @@
+
+.card-body {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border-radius: 5px;
+  padding-bottom: 8px;
+}
+.leftCard {
+  background-color: rgb(255, 255, 255);
+}
+.outer-card{
+  box-shadow: 0 0px 8px rgba(53, 49, 80, 0.2);
+  margin-top: 0.5rem;
+}
+.rightCard {
+  background-color: #f2f6fe;
+  border-radius: 5px;
+  padding-left: 41px;
+  padding-bottom: 15px;
+  border-color: #dbdbdb;
+}
+.right-Card-Heading {
+  position: relative;
+  top: -30px;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  color: black;
+  font-weight: 600;
+}
+.right-Card-Heading {
+  opacity: 1;
+  background-color: #fafafa;
+  font-size: 11px;
+  padding: 3px 3px 3px 3px;
+  border-color: #dbdbdb;
+
+}
+.btn-relationship {
+  /* color: #fff; */
+  border-radius: 4px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 30px;
+  /* background-color: #2c77f4;
+  border-color: #2c77f4;  */
+}
+.btn-relationship:hover {
+  opacity: 0.8;
+}
+.btn-relationship-inactive {
+  /* color:#48647f ; */
+  border-radius: 4px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 30px;
+}
+label {
+  color: #48647f;
+  font-weight: 500;
+}
+.left-Box-heading {
+  padding-left: 113px;
+}
+.Conflict-badge{
+  background-color: #ffe6e7;
+  border-radius: 10px;
+  color: #ca4e4f;
+}
+.potentialConflict-badge {
+  border-radius: 10px;
+  background-color: #fff5e6;
+  color: #c59c59;
+}
+.noConflict-badge{
+  border-radius: 10px;
+  background-color: #e3ffe5;
+  color: #6cc974;
+}
+
+.label-text {
+  font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.grey-text {
+  font-size: 0.8rem;
+    color: #7c7c7c;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.active-ribbon {
+  color: black;
+  width: 80px;
+  height: 27px;
+  background: #DBDBDB;
+  position: relative;
+  left: -12px;
+  top: -11px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 0 50px 50px 0;
+
+  &:before {
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-bottom: 6px solid #DBDBDB;
+    border-left: 6px solid transparent;
+    top: -6px;
+    left: 0;
+  }
+}

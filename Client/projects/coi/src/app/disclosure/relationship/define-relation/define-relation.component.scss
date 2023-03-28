@@ -1,0 +1,120 @@
+.fixed-tree {
+  z-index: 1002;
+  position: absolute;
+  right: 27px;
+  top: 7px;
+}
+
+.qst-tree-content {
+	// height: 90vh;
+	width: 1200px;
+	z-index: 5;
+	position: relative;
+	background: #fff;
+	padding: 10px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 2px 0 #0000001a, 0 3px 1px -2px #0000001a, 0 1px 5px 0 #0003;
+	overflow: auto;
+  transform: translateX(-2px);
+	transition: width 2s, transform 2s;
+}
+
+.round-button {
+  border-radius: 50%;
+  padding: 7px;
+  width: 28px;
+  height: 31px;
+  border: 1px solid;
+  position: relative;
+}
+
+.show-chat {
+  position: fixed;
+  left: 188px;
+  top: 64px;
+  z-index: 999;
+}
+
+.show-chat-icon {
+  background: #fff;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  border-radius: 50%;
+  line-height: 54px;
+  box-shadow: 0 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%), 0 1px 18px 0 rgb(0 0 0 / 12%);
+  color: #7c7c7c;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.label-text {
+  font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.grey-text {
+  font-size: 0.8rem;
+    color: #7c7c7c;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.table {
+  width: 99%;
+}
+
+.btn-outline-secondary {
+  margin-right: 6px;
+}
+
+.inner-card {
+  box-shadow: 0 0px 4px rgba(62,57,107,.2);
+}
+
+.outer-card {
+	// height: 90vh;
+  box-shadow: 0 0px 8px rgba(53,49,80,.2);
+}
+
+.select-default {
+  appearance: auto;
+}
+
+.active-ribbon {
+  color: black;
+  width: 80px;
+  height: 27px;
+  background: #DBDBDB;
+  position: relative;
+  left: -11px;
+  top: -4px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 0 50px 50px 0;
+
+  &:before {
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-bottom: 6px solid #DBDBDB;
+    border-left: 6px solid transparent;
+    top: -6px;
+    left: 0;
+  }
+}
+
+.fixed-header {
+  max-height: 500px;
+  height: auto;
+  overflow-x: hidden;
+}
+
+.fixed-th {
+  position: sticky;
+  top:0;
+}
