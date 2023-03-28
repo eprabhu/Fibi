@@ -58,6 +58,7 @@ import { CustomTagRemoverPipe } from './pipes/customTagRemover.pipe';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatIconModule } from '@angular/material/icon';
 
 @ NgModule({
   imports: [
@@ -67,6 +68,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
     CKEditorModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatIconModule
   ],
   declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent,
     MedusaComponent, KeyboardListenerDirective, AddReviewComponent, AppEndpointSearchComponent,
@@ -120,8 +122,9 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
     DragNDragDirective,
     CustomTagRemoverPipe,
     MatDatepickerModule,
-    MatNativeDateModule
-    ],
+    MatNativeDateModule,
+    MatIconModule
+  ],
 
   providers: [
     {
@@ -144,7 +147,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
     SafeHtmlPipe,
     DecimalPipe,
     CustomNumberPipe,
-    CustomTagRemoverPipe
+    CustomTagRemoverPipe,
   ],
 
 })

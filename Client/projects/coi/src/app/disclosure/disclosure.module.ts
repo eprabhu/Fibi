@@ -4,6 +4,9 @@ import {DisclosureComponent} from './disclosure.component';
 import {RouterModule, Routes} from "@angular/router";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
+import { AddSfiComponent } from './sfi/add-sfi/add-sfi.component';
+import { SfiService } from './sfi/sfi.service';
+import { SearchFieldComponent } from './sfi/search-field/search-field.component';
 
 const routes: Routes = [
     {path: '', component: DisclosureComponent,
@@ -23,14 +26,17 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
-        DisclosureComponent
+        DisclosureComponent,
+        AddSfiComponent,
+        SearchFieldComponent
     ],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
         MatIconModule,
         MatButtonModule,
-    ]
+    ],
+    providers: [SfiService]
 })
 export class DisclosureModule {
 }
