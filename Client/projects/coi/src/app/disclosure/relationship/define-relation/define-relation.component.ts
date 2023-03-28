@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { easeIn } from '../../../../../../fibi/src/app/common/utilities/animations';
-import { RelationshipService } from '../relationship.service';
 
 @Component({
   selector: 'app-define-relation',
@@ -35,7 +34,7 @@ export class DefineRelationComponent implements OnInit {
   isShowInfo = true;
   coiDisclosure: any;
 
-  constructor(private _relationShipService: RelationshipService) { }
+  constructor() { }
 
   ngOnInit() {
     // this.loadProjectRelations();
@@ -101,11 +100,11 @@ export class DefineRelationComponent implements OnInit {
       });
     }
 
-    loadProjectRelations() {
-      this._relationShipService.getProjectRelations().subscribe((data: any) => {
-        this.coiStatusList = data.coiDisclosureDetailStatuses;
-      });
-    }
+    // loadProjectRelations() {
+    //   this._relationShipService.getProjectRelations().subscribe((data: any) => {
+    //     this.coiStatusList = data.coiDisclosureDetailStatuses;
+    //   });
+    // }
 
 }
 
