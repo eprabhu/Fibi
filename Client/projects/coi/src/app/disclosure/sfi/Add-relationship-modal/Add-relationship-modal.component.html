@@ -1,0 +1,60 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg ">
+      <div class="modal-content">
+          <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add Relations</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ">
+              <!-- Paragraph -->
+              <div class="row ">
+                  <p style="font-size: 13px;"><b>Significant Financial interest details</b>: Now includes
+                      not-for-profit
+                      entities other than government entities,institution of higher education and affiliated
+                      organizations</p>
+              </div>
+              <!-- Radio -->
+              <div class="relation d-flex justify-content-center  " style="margin-top: 26px;margin-bottom: 16px;">
+                  <div class=" border " style="padding: 18px;">
+                      <div style="display: flex; flex-direction: row; ">
+                          <div class="form-check form-check-inline">
+                              <label style="font-size: 13px; color: rgb(138, 133, 133);" class="form-check-label"
+                                  for="inlineRadio1"><b>Select Relation: </b></label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                  value="option1">
+                              <label style="font-size: 14px;color:rgb(46 42 42 / 94%);font-weight: 400;"
+                                  class="form-check-label" for="inlineRadio1">SELF</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                                  value="option2">
+                              <label style="font-size: 14px;color:rgb(46 42 42 / 94%);font-weight: 400;"
+                                  class="form-check-label" for="inlineRadio2">SPOUSE</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                                  value="option2">
+                              <label style="font-size: 14px;color:rgb(46 42 42 / 94%);font-weight: 400;"
+                                  class="form-check-label" for="inlineRadio2">DEPENDENT</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">cancel</button>
+              <button type="button" class="btn btn-outline-secondary">continue without selecting relation</button>
+              <button type="button" class="btn btn-primary">Add relation</button>
+
+          </div>
+      </div>
+  </div>
+</div>
