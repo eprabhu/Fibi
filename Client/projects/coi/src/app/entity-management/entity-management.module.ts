@@ -4,7 +4,10 @@ import {EntityManagementComponent} from './entity-management.component';
 import {RouterModule, Routes} from "@angular/router";
 import { EntityListComponent } from './entity-list/entity-list.component';
 
-const routes: Routes = [{path: '', component: EntityManagementComponent}];
+const routes: Routes = [
+  { path: '', component: EntityManagementComponent },
+  { path: 'entity-details', loadChildren: () => import('./entity-details/entity-details.module').then(m => m.EntityDetailsModule) }
+];
 
 @NgModule({
     declarations: [
@@ -14,6 +17,8 @@ const routes: Routes = [{path: '', component: EntityManagementComponent}];
     imports: [
         CommonModule,
         RouterModule.forChild(routes)
+    ],
+    exports:[
     ]
 })
 export class EntityManagementModule {

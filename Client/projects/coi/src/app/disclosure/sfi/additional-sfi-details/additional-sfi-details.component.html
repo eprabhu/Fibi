@@ -1,0 +1,92 @@
+<div class="container-fluid">
+  <div class="card" tabindex="-1">
+    <h5 class="card-header">Additional Details</h5>
+    <div class="card-body form-group">
+      <div class="">
+        <div class="row">
+          <div class="col-12 d-flex">
+            <div class="col-6  d-flex">
+              <span class="col-4">
+                <label class="col-5 fw-bold">Start date of involvement </label><label class="mandatory">*</label>
+              </span>
+              <div class="col-7">
+                <input class="form-control ">
+                <p class="">Select a date</p>
+              </div>
+            </div>
+            <div class="col-6 d-flex">
+              <span class="col-4">
+                <label class="col-5 fw-bold">End date of involvement </label><label class="mandatory">*</label>
+              </span>
+              <div class="col-7">
+                <input class="form-control ">
+                <p>Select a date</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 d-flex mb-3">
+          <span class="col-4">
+            <label class="col-5 fw-bold">Sponsors Research </label><label class="mandatory">*</label>
+          </span>
+          <div class="col-7">
+            <div *ngIf="sponsorsResearch === 'N'" class="d-inline-block float-right">
+              <a>
+                <label class="switch">
+                  <input type="checkbox" (click)="sponsorsResearch = 'Y'">
+                  <span class="slider round"><small class="deactivate-text">No</small></span>
+                </label>
+              </a>
+            </div>
+            <div *ngIf="sponsorsResearch === 'Y'" class="d-inline-block float-right">
+              <a>
+                <label class="switch">
+                  <input type="checkbox" (click)="sponsorsResearch = 'N'">
+                  <span class="slider round"><small>Yes</small></span>
+                </label>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 d-flex">
+          <span class="col-2">
+            <label class="col-7 fw-bold">Relationship with Entity</label><label class="mandatory">*</label>
+          </span>
+          <div class="col-10">
+            <textarea class="form-control" placeholder="Type here" id="releationship-entity">
+            </textarea>
+            <p>This description is presented in the Relationship section to help you relate this entity to your research
+              projects.
+              Please enter an adequate description of the organization, and of your role with them,to aid both you, and a
+              reviewers' understanding of the association between the entity and work.
+            </p>
+          </div>
+        </div>
+        <div class="col-12 d-flex">
+          <span class="col-2">
+            <label class="col-7 fw-bold">Principle Business Area of Entity</label><label class="mandatory">*</label>
+          </span>
+          <div class="col-10">
+            <textarea class="form-control" placeholder="Type here">
+            </textarea>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+            </p>
+          </div>
+        </div>
+        <div class="col-12 d-flex">
+          <span class="col-2">
+            <label class="col-7 fw-bold">Relationship of Entity to your University responsibilities</label><label class="mandatory">*</label>
+          </span>
+          <div class="col-10 ">
+            <textarea class="form-control" placeholder="Type here">
+            </textarea>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
