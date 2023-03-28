@@ -1,1 +1,56 @@
-<p>relationship works!</p>
+<ng-container *ngFor="let test of proposalArray; let i = index">
+  <div class="card outer-card">
+    <div class="card-body p-2">
+      <div class="row">
+        <div class="col-md-4  order-md-2">
+          <div class="card">
+            <div class="card-body rightCard">
+              <span class="right-Card-Heading">Project/SFI Relationship</span>
+                <div>
+                  <div>
+                    <label>Conflict : <span class="badge badge-pill badge-primary Conflict-badge"><span>1</span></span></label>
+                 </div>
+                 <div>
+                    <label>Potential Conflict: <span class="badge badge-pill badge-primary potentialConflict-badge"><span>0</span></span></label>
+                 </div>
+                 <div>
+                    <label>No Conflict: <span class="badge badge-pill badge-primary noConflict-badge"><span>0</span></span></label>
+                 </div>
+                  <button class="btn btn-primary btn-sm btn-relationship" *ngIf="i%2 == 0" (click)="isShowRelation = true" type="submit">Define Relationship</button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm btn-relationship-inactive"  *ngIf="i%2 != 0" (click)="isShowRelation = true">Define Relationship</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 order-md-1 col-12 leftCard ">
+          <div class="col-12 d-flex align-items-center">
+            <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
+            <p class="entity-title">
+                <strong>{{test?.title}} </strong>
+            </p>
+          </div>
+           <div class="row">
+              <div class=" col-4">
+                 <label class="label-text">Proposal Status:</label>
+                 <span class="grey-text">{{test?.moduleStatus}} </span>
+             </div>
+             <div class=" col-4">
+                 <label class="label-text">PI Name:</label>
+                 <span class="grey-text">{{test?.principalInvestigator}} </span>
+          </div>
+          </div>
+          <div>
+              <label class="label-text">Sponsor:</label>
+              <span class="grey-text">{{test?.sponsor}} </span>
+          </div>
+          <div>
+              <label class="label-text">Prime sponsor:</label>
+              <span class="grey-text">{{test?.primeSponsor}} </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<app-define-relation *ngIf="isShowRelation" (closePage)="closePage()"></app-define-relation>
