@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 const route: Routes = [{path: '', component: LoginComponent}];
 

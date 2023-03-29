@@ -104,6 +104,14 @@ export function getEndPointOptionsForCongressionalDistrict() {
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));
 }
+export function getEndPointOptionsForEntity() {
+    endPointOptions.contextField = 'coiEntityName';
+    endPointOptions.formatString = 'coiEntityName';
+    endPointOptions.path = 'searchEntity';
+    endPointOptions.defaultValue = '';
+    endPointOptions.params = null;
+    return JSON.parse(JSON.stringify(endPointOptions));
+}
 export function getEndPointOptionsForRolodexSearch() {
     endPointOptions.contextField = 'fullName';
     endPointOptions.formatString = 'fullName';

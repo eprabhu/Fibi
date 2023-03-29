@@ -1,0 +1,31 @@
+.navigation-to-tabs {
+  background-color: #F8F8F8;
+  color: #606060;
+
+  &:hover {
+    background-color: #48647F;
+    color: white;
+  }
+}
+
+.sub-navigation-to-tabs {
+  color: #606060;
+  .bg-sub-goto {
+    background-color: #F2F6FE;
+  }
+  .sub-goto {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    &:hover {
+      background-color: #48647F !important;
+      color: white;
+      cursor: pointer;
+    }
+  }
+}
+
+.side-bar-title {
+  min-height: 55px;
+  background-color: #E8E8E8;
+}

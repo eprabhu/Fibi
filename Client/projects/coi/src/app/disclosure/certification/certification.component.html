@@ -1,1 +1,25 @@
-<p>certification works!</p>
+<div class="mt-3 mx-0 row" *ngIf="_coiService.isShowCertifyInfo">
+    <div class="col-12 p-2 highlight-node font">
+    <button id="disclosure-info-close" type="button" class="close close-btn" (click)="closeCertifyInfo()" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+      <p>To complete the disclosure process you must certify the information you disclosed is true and complete to the best of your knowledge. Before certifying you must make sure you have added all of your Significant Financial Interests, to add more select Significant Financial Interest from the left navigation.</p>
+    </div>
+  </div>
+
+<div class="card my-3">
+
+    <div class="card-body">
+
+        <div class="gridSkin p-15 text-center">
+            <h3 class="mb-4">Certification</h3>
+            <p *ngIf="coiDisclosure?.certificationText">{{coiDisclosure.certificationText}}</p>
+            <p *ngIf="!coiDisclosure.certificationText">{{certificationText}}</p>
+
+        </div>
+        <div class="row justify-content-center">
+            <button class="btn btn-tertiary mt-0 mr-3" title="Return to Dashboard" [routerLink]="['/fibi/dashboard/coi-list']">Return to Dashboard</button>
+            <button class="btn  btn-primary mt-0 " *ngIf="isEditMode" title="Certify" (click)="certifyDisclosure()">Certify</button>
+        </div>
+    </div>
+</div>

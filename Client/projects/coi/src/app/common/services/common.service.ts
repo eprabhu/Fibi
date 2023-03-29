@@ -35,6 +35,13 @@ export class CommonService {
     isCreateAgreement = false;
     isShowAgreementSupport = false;
     isShowAgreementNotifyAction = false;
+    isElasticAuthentiaction = false;
+    elasticUserName = '';
+    elasticAuthScheme = '';
+    elasticDelimiter = '';
+    elasticPassword = '';
+    generalFileType = '';
+    appLoaderContent = '';
     isEnableLock = false;
     isDevelopment = false;
     timer: any
@@ -50,6 +57,7 @@ export class CommonService {
         return new Promise(async (resolve, reject) => {
             const CONFIG_DATA: any = await this.readConfigFile();
             this.assignConfigurationValues(CONFIG_DATA);
+            setIntoLocalStorage(JSON.parse('{"personID":"900002465","firstName":"Abhinav","lastName":"Adu-Djan","fullName":"Adu-Djan, Abhinav K","email":"","roleNumber":null,"userName":"jennie","unitNumber":"061000","jwtRoles":[],"unitAdmin":false,"login":true,"superUser":false,"externalUser":false}'));
             if (this.enableSSO) {
                 const USER_DATA = await this.loginWithCurrentUser();
                 this.isValidUser = USER_DATA.body['login'];

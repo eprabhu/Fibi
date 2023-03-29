@@ -1,0 +1,25 @@
+<div class="modal fade mySkinDialog" tabindex="-1" id="incompleteWarning" tabindex="-1" role="dialog"
+  data-backdrop="static" data-keyboard="false" aria-labelledby="incompleteWarning" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Warning</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeEmitModal('no')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Dear <b>{{commonService.getCurrentUserDetail('fullName')}},</b>
+        you have unfinished relationships in the current project <b>#{{currentProject.projectNumber}}:{{currentProject.projectName}}.</b></p>
+        <p>Do you want to continue to {{nextProjectPosition === 'P' ? 'previous' : nextProjectPosition === 'N' ? 'next' : 'another'}} project <b>
+          #{{nextProject.projectNumber}}:{{nextProject.projectName}}
+        </b>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cancel-clear" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="closeEmitModal('no')">No</button>
+      <button type="button" id="confirm-clear" class="btn btn-primary-sub btn-sm"
+      (click)="setPreviousNext()" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

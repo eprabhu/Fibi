@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-relationship',
   templateUrl: './relationship.component.html',
-  styleUrls: ['./relationship.component.scss']
+  styleUrls: ['./relationship.component.css']
 })
+
 export class RelationshipComponent {
   isShowRelation = false;
   proposalArray = [];

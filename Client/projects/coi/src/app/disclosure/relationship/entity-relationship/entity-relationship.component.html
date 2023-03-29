@@ -1,0 +1,32 @@
+
+<!-- <div class="success-banner p-10 px-3 my-2 d-flex align-items-center d-flex grey-info">
+  <span class="ml-4 px-2">
+      MIT policy requires that MIT officers, faculty, and staff and others acting on its behalf avoid, ethical,
+      legal, financial,
+      and other conflicts of interest and ensure that their activities and interests do not conflict with their
+      obligations to MIT.
+  </span>
+</div> -->
+
+<div>
+  <div class=""
+  [ngClass] ="_entityService.linkedProposalId && coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode == 3 ? '' : 'left-div mr-2'" id="project-list">
+   <app-entity-list (openModal)="openModal($event)"></app-entity-list>
+   </div>
+   <div class="right-div" id="ip_toolkit" *ngIf="!_entityService.linkedProposalId && coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != 3">
+   <app-project-list (openModal)="openModal($event)"></app-project-list>
+   </div>
+</div>
+
+<app-incomplete-warning
+*ngIf="isOpenModal"
+[currentProject]="_entityService.currentProject"
+[nextProject]="_entityService.nextProject"
+[nextProjectPosition]="_entityService.nextProjectPosition"
+[nextProjectModuleItemKey] ="_entityService.nextProjectModuleItemKey"
+(closeModal)="closeModal($event)"
+(notClose)="notClose($event)">
+</app-incomplete-warning>
+
+
+

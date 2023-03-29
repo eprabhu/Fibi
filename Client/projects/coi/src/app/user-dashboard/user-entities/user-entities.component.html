@@ -2,12 +2,12 @@
     <div class="border-end fs-14 px-3 py-2">
         <span class="fs-14 fw-medium me-2 text-secondary">Filter by Status:</span>
         <span (click)="currentSelected.filter='ALL'" [class.filter-active]="currentSelected.filter=='ALL'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-4 bg-white filter-active"
+              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active"
               role="button">All</span>
         <span (click)="currentSelected.filter='Active'" [class.filter-active]="currentSelected.filter=='Active'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-4 bg-white mx-1" role="button">Active</span>
+              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">Active</span>
         <span (click)="currentSelected.filter='Inactive'" [class.filter-active]="currentSelected.filter=='Inactive'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-4 bg-white" role="button">Inactive</span>
+              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Inactive</span>
     </div>
 </div>
 

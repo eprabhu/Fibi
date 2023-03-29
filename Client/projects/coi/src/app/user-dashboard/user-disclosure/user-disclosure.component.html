@@ -84,22 +84,22 @@
     </div>
 </div>
 
-<nav class="shadow-sm border bg-white d-flex fs-14 fw-bold mt-3 py-1">
+<nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
     <div (click)="currentSelected.tab='IN_PROGRESS'"
          class="border-end navigation-icons px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab=='IN_PROGRESS'" class="pb-2 active">In Progress Disclosures (3)</span>
+        <span [class.active]="currentSelected.tab=='IN_PROGRESS'" class="pb-3 active">In Progress Disclosures (3)</span>
     </div>
     <div (click)="currentSelected.tab='APPROVED'"
          class="border-end navigation-icons px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab=='APPROVED'" class="pb-2">Approved Disclosures(1)</span>
+        <span [class.active]="currentSelected.tab=='APPROVED'" class="pb-3">Approved Disclosures(1)</span>
     </div>
     <div (click)="currentSelected.tab='TRAVEL'"
          class="border-end navigation-icons px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab=='TRAVEL'" class="pb-2">Travel Disclosures(2)</span>
+        <span [class.active]="currentSelected.tab=='TRAVEL'" class="pb-3">Travel Disclosures(2)</span>
     </div>
     <div (click)="currentSelected.tab='HISTORY'" class="navigation-icons px-3 py-1"
          role="button">
-        <span [class.active]="currentSelected.tab=='HISTORY'" class="pb-2">Disclosure History</span>
+        <span [class.active]="currentSelected.tab=='HISTORY'" class="pb-3">Disclosure History</span>
     </div>
 </nav>
 
@@ -107,80 +107,89 @@
     <div class="border-end fs-14 px-3 py-2">
         <span class="fs-14 fw-medium me-2 text-secondary">Filter by:</span>
         <span (click)="currentSelected.filter='ALL'" [class.filter-active]="currentSelected.filter=='ALL'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-4 bg-white filter-active"
+              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active"
               role="button">All</span>
         <span (click)="currentSelected.filter='OPA'" [class.filter-active]="currentSelected.filter=='OPA'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-4 bg-white mx-1" role="button">OPA</span>
+              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>
         <span (click)="currentSelected.filter='FCOI'" [class.filter-active]="currentSelected.filter=='FCOI'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-4 bg-white" role="button">FCOI</span>
+              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">FCOI</span>
+    </div>
+    <div class="d-flex flex-fill">
+        <input type="text" class="advance-search-input">
     </div>
 </div>
 
-<div class="bg-white border mt-2 rounded-1 shadow-sm">
-    <div class="border-bottom fs-14 p-3 text-secondary">
-        <div><span class="fw-bold me-2">Proposal:</span> #25968 - Deficiency in Atomic Synthesis</div>
-        <div class="d-flex my-2">
-            <div class="col">
-                <span class="fw-bold me-2">Discl.:</span> #1000-0022
+<ng-container *ngFor="let disclosure of disclosureArray">
+    <div class="bg-white border mt-2 rounded-1 shadow-sm">
+        <div class="border-bottom fs-14 p-3 text-secondary">
+            <div><span class="fw-bold me-2">Proposal:</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}</div>
+            <div class="d-flex my-2">
+                <div class="col">
+                    <span class="fw-bold me-2">Discl.:</span> #{{disclosure?.coiDisclosureNumber}}
+                </div>
+                <div class="col">
+                    <span class="fw-bold me-2">Disposition Status:</span> <span
+                        class="badge bg-{{getDispositionStatusBadge(disclosure?.disclosureDispositionCode)}} fs-14 pending-status-pill rounded-pill text-black">{{disclosure?.dispositionStatus}}</span>
+                </div>
+                <div class="col">
+                    <span class="fw-bold me-2">Review Status:</span> <span
+                        class="badge bg-{{getReviewStatusBadge(disclosure?.reviewStatusTypeCode)}} fs-14 pending-status-pill rounded-pill text-black">{{disclosure?.reviewStatus}}</span>
+                </div>
+                <div class="col">
+                    <span class="fw-bold me-2">Disclosure Status:</span> <span
+                        class="badge bg-{{getDisclosureStatusBadge(disclosure?.disclosureStatusCode)}} fs-14 pending-status-pill rounded-pill text-black">{{disclosure?.disclosureStatus}}</span>
+                </div>
             </div>
-            <div class="col">
-                <span class="fw-bold me-2">Disposition Status:</span> <span
-                    class="badge bg-warning fs-14 pending-status-pill rounded-pill text-black">Pending</span>
-            </div>
-            <div class="col">
-                <span class="fw-bold me-2">Review Status:</span> <span
-                    class="badge bg-warning fs-14 pending-status-pill rounded-pill text-black">Pending</span>
-            </div>
-            <div class="col">
-                <span class="fw-bold me-2">Disclosure Status:</span> <span
-                    class="badge bg-warning fs-14 pending-status-pill rounded-pill text-black">Pending</span>
+            <div class="d-flex">
+                <div class="col">
+                    <span class="fw-bold me-2">Type:</span> {{getEventType(disclosure?.disclosureSequenceStatusCode, disclosure?.disclosureCategoryTypeCode)}}
+                </div>
+                <div class="col">
+                    <span class="fw-bold me-2">Certification Date:</span> <span *ngIf="disclosure.submittedDate">{{disclosure?.submittedDate |
+                    dateFormatter}} </span>
+                </div>
+                <div class="col">
+                    <span class="fw-bold me-2">Expiration Date:</span> {{disclosure?.expirationDate | dateFormatter}}
+                </div>
+                <div class="col">
+                    <span class="fw-bold me-2">Create Date:</span> {{disclosure?.createTimestamp | dateFormatterWithTimeZone}}
+                </div>
             </div>
         </div>
-        <div class="d-flex">
-            <div class="col">
-                <span class="fw-bold me-2">Type:</span> Proposal
+        <div class="align-items-center chin d-flex fs-14 mx-3 text-secondary">
+            <div class="align-items-center col d-flex fs-14 text-secondary">
+                <strong class="fs-18 me-2 text-primary">{{disclosure?.noOfSfiInPending}}</strong>
+                <strong>Significant Financial Interest</strong>
+            </div>
+            <div class="col text-secondary fs-14 d-flex">
+                <div class="align-items-center col d-flex fs-14 text-secondary">
+                    <strong class="fs-18 me-2 text-primary">{{disclosure?.numberOfProposals}}</strong>
+                    <strong>Proposals</strong>
+                </div>
+                <div class="align-items-center col d-flex fs-14 text-secondary">
+                    <strong class="fs-18 me-2 text-primary">{{disclosure?.numberOfAwards}}</strong>
+                    <strong>Awards</strong>
+                </div>
             </div>
             <div class="col">
-                <span class="fw-bold me-2">Certification Date:</span> -NIL-
+                <div>Last Updated:</div>
+                <div>{{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}} by {{disclosure?.updateUser}}</div>
             </div>
-            <div class="col">
-                <span class="fw-bold me-2">Expiration Date:</span> 18/08/2023
-            </div>
-            <div class="col">
-                <span class="fw-bold me-2">Create Date:</span> 18/08/2023
+            <div class="col d-flex justify-content-end">
+                <button class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
+                    <mat-icon class="me-1">edit</mat-icon>
+                    Modify
+                </button>
+                <button [routerLink]="['/coi/disclosure/summary']"
+                        [queryParams]={disclosureId:disclosure.coiDisclosureId}
+                        class="align-items-center btn btn-outline-primary d-flex fs-14">
+                    <mat-icon class="me-1">visibility</mat-icon>
+                    View
+                </button>
             </div>
         </div>
     </div>
-    <div class="align-items-center chin d-flex fs-14 mx-3 text-secondary">
-        <div class="align-items-center col d-flex fs-14 text-secondary">
-            <strong class="fs-18 me-2 text-primary">04</strong>
-            <strong>Significant Financial Interest</strong>
-        </div>
-        <div class="col text-secondary fs-14 d-flex">
-            <div class="align-items-center col d-flex fs-14 text-secondary">
-                <strong class="fs-18 me-2 text-primary">02</strong>
-                <strong>Proposals</strong>
-            </div>
-            <div class="align-items-center col d-flex fs-14 text-secondary">
-                <strong class="fs-18 me-2 text-primary">02</strong>
-                <strong>Awards</strong>
-            </div>
-        </div>
-        <div class="col">
-            <div>Last Updated:</div>
-            <div>05/09/2022 11:53:08 AM by Daniel Griffith</div>
-        </div>
-        <div class="col d-flex justify-content-end">
-            <button class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
-                <mat-icon class="me-1">edit</mat-icon>
-                Modify
-            </button>
-            <button class="align-items-center btn btn-outline-primary d-flex fs-14">
-                <mat-icon class="me-1">visibility</mat-icon>
-                View
-            </button>
-        </div>
-    </div>
-</div>
+</ng-container>
+
 
 
