@@ -18,6 +18,7 @@ const routes: Routes = [{path: '', component: SfiComponent}];
         FormsModule,
         RouterModule.forChild(routes),
     ],
+    exports: [AdditionalSfiDetailsComponent]
 })
-export class SfiModule {
+export class SfiModule  {
 }

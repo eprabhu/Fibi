@@ -1,15 +1,12 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<button id="btn-add-relationships" class="hidden" data-bs-toggle="modal" data-bs-target="#addRelationshipModal"></button>
+<div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-mdb-backdrop="true">
   <div class="modal-dialog modal-lg ">
       <div class="modal-content">
           <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
               <h1 class="modal-title fs-5" id="exampleModalLabel">Add Relations</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
           </div>
           <div class="modal-body ">
               <!-- Paragraph -->
@@ -50,7 +47,7 @@
               </div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">cancel</button>
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="closeModal()">cancel</button>
               <button type="button" class="btn btn-outline-secondary">continue without selecting relation</button>
               <button type="button" class="btn btn-primary">Add relation</button>
 

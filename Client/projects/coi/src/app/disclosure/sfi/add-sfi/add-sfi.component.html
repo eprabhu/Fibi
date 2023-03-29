@@ -4,16 +4,16 @@
         <div class="close shadow-medium" (click)="hideSfiNavBar()">
             <img src="{{deployMap}}assets/images/close.svg" alt="close button">
         </div>
-        <div class="tool-kit-body card-height">
+        <div class="tool-kit-body card-height scrollable-table">
             <div class="card mb-3 card-height">
                 <div class="card-header px-4 card-border">
                     <h5 class="card-title review-title">
                         <div class="justify-content-between d-flex align-items-center">
-                            <div class="fs-6">Significant Financial Interest </div>
-                            <button class=" align-items-center d-flex btn btn-primary mt-0 py-1 px-3 h-100 p-0 pt-1"
-                                title="Create SFI">
-                                <mat-icon class="fs-6 me-2 material-icons align-items-center d-flex">save</mat-icon>
-                                Create SFI
+                            <div class="fs-16">Significant Financial Interest </div>
+                            <button class=" align-items-center d-flex btn btn-primary mt-0 py-1 px-3 h-100 fs-16 pt-1"
+                                title="Create SFI" (click)="showRelationshipModal= true">
+                                <mat-icon class="fs-4 me-2 material-icons align-items-center d-flex">save</mat-icon>
+                                Create SFI {{showRelationshipModal}}
                             </button>
                         </div>
                     </h5>
@@ -21,7 +21,7 @@
 
                 <div class="row">
                     <div class="col-2 fs-14 mt-3 px-3">
-                        <label class="d-block px-3" for="Entity-Name">Entity Name<span class="mandatory">*</span>
+                        <label class="d-block px-3 fw-bold" for="Entity-Name">Entity Name<span class="mandatory">*</span>
                         </label>
                     </div>
                     <div class="col-lg-8 mt-3">
@@ -37,7 +37,7 @@
                 </div>
                 <div class="row">
                     <div class="col-2 fs-14 mt-3 px-3">
-                        <label class="d-block px-3" for="Country">Country<span class="mandatory">*</span>
+                        <label class="d-block px-3 fw-bold" for="Country">Country<span class="mandatory">*</span>
                         </label>
                     </div>
                     <div class="col-lg-4 mt-3">
@@ -47,7 +47,7 @@
                         </span>
                     </div>
                     <div class="col-1 fs-14 mt-3">
-                        <label class="d-block px-3" for="City">City<span class="mandatory">*</span>
+                        <label class="d-block px-3 fw-bold" for="City">City<span class="mandatory">*</span>
                         </label>
                     </div>
                     <div class="col-lg-4 mt-3">
@@ -60,7 +60,7 @@
                 </div>
                 <div class="row">
                     <div class="col-2 fs-14 mt-3 px-3">
-                        <label class="d-block px-3" for="Address">Address<span class="mandatory">*</span>
+                        <label class="d-block px-3 fw-bold" for="Address">Address<span class="mandatory">*</span>
                         </label>
                     </div>
                     <div class="col-lg-8 mt-3">
@@ -76,23 +76,26 @@
                 </div>
                 <div class="row">
                     <div class="col-2 fs-14 mt-3 px-3">
-                        <label class="d-block px-3" for="Country">Phone<span class="mandatory">*</span>
+                        <label class="d-block px-3 fw-bold" for="Country">Phone<span class="mandatory">*</span>
                         </label>
                     </div>
                     <div class="col-lg-4 mt-3">
-                        <app-search-field></app-search-field>
+                        <div class="col-7">
+                            <input class="form-control">
+                          </div>
                         <span class="col fs-12">
-                            <p class="new-line-property text-secondary fs-14-nav">Type in the official name of the
-                                business or organization
-                                you need to report.</p>
+                            <p class="new-line-property text-secondary fs-14-nav">Type phone number.</p>
                         </span>
                     </div>
-                    <div class="col-1 fs-14 mt-3">
-                        <label class="d-block px-3" for="City">Zip Code<span class="mandatory">*</span>
+
+                    <div class="col-2 fs-14 mt-3">
+                        <label class="d-block px-3 fw-bold" for="City">Zip Code<span class="mandatory">*</span>
                         </label>
                     </div>
                     <div class="col-lg-4 mt-3">
-                        <app-search-field></app-search-field>
+                        <div class="col-7">
+                            <input class="form-control">
+                          </div>
                         <span class="col fs-12">
                             <p class="new-line-property text-secondary fs-14-nav">Type in the official name of the
                                 business or organization
@@ -101,24 +104,28 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-2 fs-14 mt-3 px-0">
-                        <label class="d-block px-3" for="Country">Website<span class="mandatory">*</span>
+                    <div class="col-2 fs-14 mt-3">
+                        <label class="d-block px-3 fw-bold" for="Country">Website
                         </label>
                     </div>
                     <div class="col-lg-4 mt-3">
-                        <app-search-field></app-search-field>
+                        <div class="col-7">
+                            <input class="form-control">
+                          </div>
                         <span class="col fs-12">
                             <p class="new-line-property text-secondary fs-14-nav">Type the website name of the business
                                 or organization
                                 you need to report.</p>
                         </span>
                     </div>
-                    <div class="col-2 fs-14 mt-3 px-0">
-                        <label class="d-block px-3" for="City">Email Address<span class="mandatory">*</span>
+                    <div class="col-2 fs-14 mt-3">
+                        <label class="d-block px-3 fw-bold" for="City">Email Address<span class="mandatory">*</span>
                         </label>
                     </div>
                     <div class="col-lg-4 mt-3">
-                        <app-search-field></app-search-field>
+                        <div class="col-7">
+                            <input class="form-control">
+                          </div>
                         <span class="col fs-12">
                             <p class="new-line-property text-secondary fs-14-nav">Type the email address of the business
                                 or organization
@@ -127,12 +134,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-2 fs-14 mt-3 px-0">
-                        <label class="d-block px-3" for="Country">Entity Type<span class="mandatory">*</span>
+                    <div class="col-2 fs-14 mt-3">
+                        <label class="d-block px-3 fw-bold" for="Country">Entity Type<span class="mandatory">*</span>
                         </label>
                     </div>
                     <div class="col-lg-4 mt-3">
-                        <app-search-field></app-search-field>
+                        <div class="col-7">
+                            <input class="form-control">
+                          </div>
                         <span class="col fs-12">
                             <p class="new-line-property text-secondary fs-14-nav">Select type from the available
                                 options.</p>
@@ -140,4 +149,9 @@
                     </div>
                 </div>
             </div>
+            <app-additional-sfi-details></app-additional-sfi-details>
         </div>
+    </div>
+
+    <app-Add-relationship-modal *ngIf="showRelationshipModal" (relationshipResult)="addEntityToggle($event)">
+    </app-Add-relationship-modal>

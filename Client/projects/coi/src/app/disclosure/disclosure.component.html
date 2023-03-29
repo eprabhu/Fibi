@@ -197,7 +197,7 @@
                 Notes & Attachments
 
             </div>
-            <div class="task-nav-div" id="task-navigation-bar">
+            <div *ngIf="sfiService.isShowSfiNavBar" class="task-nav-div" id="task-navigation-bar">
                 <app-add-sfi></app-add-sfi>
             </div>
         </div>

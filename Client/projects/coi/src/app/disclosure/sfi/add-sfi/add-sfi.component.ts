@@ -22,6 +22,7 @@ export class AddSfiComponent implements OnInit {
     isAddAssignee = false;
     dateTime: string;
     isReadMore: false;
+    showRelationshipModal = false;
 
     constructor(public sfiService: SfiService, public _commonService: CommonService) { }
 
@@ -38,10 +39,19 @@ export class AddSfiComponent implements OnInit {
 
     showSfiNavBar() {
         if (this.sfiService.isShowSfiNavBar) {
+            this.sfiNavOverlay.nativeElement.style.display = 'block';
             this.scrollHeight = document.documentElement.scrollTop;
-            document.documentElement.classList.add('cdk-global-scrollblock');
+            document.body.style.overflow = 'hidden';
             document.documentElement.style.top = - this.scrollHeight + 'px';
-        }
+        } else {
+            this.sfiNavOverlay.nativeElement.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.documentElement.scrollTop = this.scrollHeight;
+          }
+    }
+
+    addEntityToggle(event) {
+        this.showRelationshipModal = event;
     }
 
 }

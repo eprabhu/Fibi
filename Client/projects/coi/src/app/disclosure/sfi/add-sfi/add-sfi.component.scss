@@ -68,6 +68,7 @@ select option {
   bottom: 0;
   background: rgb(128 128 128 / 16%);
   z-index: 9999; /* Specify a stack order in case you're using a different order for other elements */
+  overflow: hidden;
 }
 
 .task-list-scroll {
@@ -232,3 +233,37 @@ select option {
 .searchInput {
     padding-left: 40px !important;
 }
+
+.scrollable-table {
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+    overscroll-behavior: contain;
+}
+
+.scrollable-table thead {
+    position: sticky !important;
+    top: 0;
+    z-index: 1;
+}
+
+::-webkit-scrollbar {
+    width: .4em;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+    background: #eee
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc
+}
+
+  .disable-scroll{
+    overflow-y: hidden !important;
+  }

@@ -14,6 +14,8 @@ import {CoiService} from "./services/coi.service";
 import {DataStoreService} from "./services/data-store.service";
 import {RouterGuardService} from "./services/router-guard.service";
 import {SharedModule} from "../shared/shared.module";
+import { SfiModule } from './sfi/sfi.module';
+import { AddRelationshipModalComponent } from './sfi/Add-relationship-modal/Add-relationship-modal.component';
 
 const routes: Routes = [
     {
@@ -54,14 +56,15 @@ const routes: Routes = [
     declarations: [
         DisclosureComponent,
         AddSfiComponent,
-        SearchFieldComponent
+        SearchFieldComponent,
+        AddRelationshipModalComponent
     ],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
         MatIconModule,
         MatButtonModule,
-        SharedModule,
+        SharedModule, SfiModule
     ],
     providers: [
         SfiService,
