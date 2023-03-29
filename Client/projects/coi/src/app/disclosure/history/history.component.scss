@@ -1,0 +1,73 @@
+.history-border {
+  box-shadow: 0px 0px 3px #00000029;
+}
+
+.time-line::before {
+  content: '';
+  position: absolute;
+  height: 165%;
+  border-left: 2px dashed #258CC7;
+  left: -22px;
+}
+
+.first-item::before {
+  height: 103%;
+  top: 0px;
+}
+
+.time-line::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: -31px;
+  top: 43%;
+  border-radius: 50%;
+  border: 8px solid rgba(255, 255, 255, 0.74);
+  background: #258CC7;
+}
+
+.last-item::before {
+  height: 25%;
+}
+
+.time-line {
+  max-width: 98%;
+}
+
+.relative-position {
+  position: relative;
+  left: -123px;
+}
+
+.highlight-node {
+  background-color: #e9ffff;
+  color: #202c2e;
+  font-size: 16px;
+  font-weight: 400;
+  border: 1px solid #ded8d8;
+  /* cursor: pointer; */
+}
+
+.top-card {
+  background-color:rgba(210, 228, 248, 0.57);
+}
+
+.border {
+  border-radius: 15px;
+}
+.card {
+  background-color: none;
+}
+
+.badge-warning {
+  color: black;
+}
+
+.badge-pill {
+  font-size: 1.28rem;
+}
+
+article {
+  overflow-x: hidden;
+}

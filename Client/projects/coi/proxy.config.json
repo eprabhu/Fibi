@@ -1,14 +1,47 @@
 {
   "/login": {
-    "target": "http://192.168.1.208:8070/fibi4",
+    "target": "https://stage.fibiweb.com/fibiCOI/",
     "secure": false
   },
   "/fetchRequiredParams": {
     "secure": false,
-    "target": "http://192.168.1.208:8070/fibi4"
+    "target": "https://stage.fibiweb.com/fibiCOI/"
   },
   "/getAllSystemRights": {
-    "target": "http://192.168.1.208:8070/fibi4",
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getCOIDashboard": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/loadDisclosure": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getSFIOfDisclosure": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getEntityProjectRelations": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getCoiReview": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/loadCoiReviewComments": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getApplicableQuestionnaire": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getQuestionnaire": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
     "secure": false
   }
+
 }

@@ -1,0 +1,16 @@
+.activity-icon {
+    width: 20px !important;
+    cursor: pointer;
+}
+
+.add-activity-button {
+    min-width: 4rem !important;
+    position: relative;
+    top: 4.3rem;
+    z-index: 50;
+    left: 95%;
+}
+
+.adjust-margin-top {
+    margin-top: -2.3rem;
+}

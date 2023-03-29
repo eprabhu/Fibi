@@ -148,3 +148,48 @@ table {
 .green-label {
   color: #54BF5B;
 }
+
+.navigation-box {
+  padding: 0 1rem;
+  font-size: 15px;
+  font-weight: bold;
+  color: #606060;
+}
+
+.navigation-box-content {
+  padding: 9px 0;
+  border-bottom: 2px solid transparent;
+  &.active {
+    color: #007DEC;
+    border-bottom: 2px solid #007DEC;
+  }
+}
+
+.toggle-header-btn {
+  width: 30px;
+  color: #A64040;
+  height: 30px;
+  mat-icon {
+    transform: scale(1.2);
+  }
+}
+
+.min-height-189 {
+  min-height: 220px;
+  max-height: 232px;
+}
+
+.btn-outline-grey {
+  color: #48647F;
+  border: 1px solid #48647F;
+  background-color: white;
+  &:hover {
+    background-color: #007DEC;
+    color: white;
+    border: 1px solid #007DEC;
+  }
+}
+
+.ash-text {
+  color: #48647F !important;
+}

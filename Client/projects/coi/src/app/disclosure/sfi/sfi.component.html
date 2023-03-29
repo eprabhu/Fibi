@@ -1,3 +1,128 @@
-<p>sfi works!</p>
-<app-additional-sfi-details></app-additional-sfi-details>
+<div class="mt-3 mx-0 row" *ngIf="_coiService.isShowSFIInfo">
+    <div class="col-12 p-3 highlight-node font">
+        <button id="disclosure-info-close" type="button" class="close close-btn" (click)="closeSFIInfo()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p>Enter any new Significant Financial Interests (SFIs) and/or
+            edit your existing Significant Financial Interests. You will be asked to describe the entity’s area of business
+            and your involvement with that entity through a series of questions. You will also need to disclose details of
+            your SFI including income, stock and equity.</p>
+    </div>
+</div>
 
+<div class="card-body bg-white mt-1">
+    <div class="form-row justify-content-center " *ngIf="coiFinancialEntityDetails?.length">
+        <div class="form-group searchBox col-lg">
+            <input type="text" placeholder="Search by SFI" class="ng-pristine ng-valid ng-touched form-control"
+                   [(ngModel)]="searchText ">
+            <a class="searchButton">
+                <i aria-hidden="true" class="fa fa-search fa-med pt-2 mr-4"></i>
+            </a>
+        </div>
+        <div class="col-lg-auto" *ngIf="isEditMode">
+            <button class="btn btn-tertiary mt-0 " title="Add Significant Financial Interest"
+                    [routerLink]="['/fibi/manage-sfi']"
+                    [queryParams]="{mode:'edit', isSFINotAvailable: isSFINotAvailable, dId: disclosureId}">
+                Add New Significant Financial Interest</button>
+            <button class="btn btn-primary mt-0 float-end" title="Proceed to Relationships"
+                    [routerLink]="['/fibi/coi/relationship']" (click)="_coiService.stepTabName = 'relationship'">Proceed to Relationships
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="card card-table-box rounded-0 mt-1">
+    <div class="card-content">
+        <div class="card-body">
+            <div class="table-responsive" *ngIf="coiFinancialEntityDetails?.length">
+                <table class="table tableSkin mb-0">
+                    <thead>
+                    <tr class="header-border text-left">
+                        <th style="width: 15%" scope="col" id="entity-name">
+                            <span class="hand-cursor" title="Entity Name">Entity Name</span>
+                        </th>
+                        <th style="width: 10%" scope="col" id="relation">
+                            <span class="hand-cursor" title="Relation">Relation</span>
+                        </th>
+                        <th style="width: 10%" scope="col" id="Date-of-Creation">
+                            <span class="hand-cursor" title="Date of Creation">Date of Creation</span>
+                        </th>
+
+                        <th style="width: 10%" scope="col">
+                            <span class="hand-cursor" title="Start Date of Involvement">Start Date of Involvement</span>
+                        </th>
+                        <th scope="col"  style="width: 5%"  class="text-center">Status</th>
+                        <th style="width: 10%" scope="col" class="text-center">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of coiFinancialEntityDetails
+            | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index" class="pull-up text-left mt-1">
+                        <td [routerLink]="['/fibi/manage-sfi']"
+                            [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}">
+                            {{ item?.coiEntity?.coiEntityName }}</td>
+                        <td [routerLink]="['/fibi/manage-sfi']"
+                            [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}">
+                <span *ngFor="let relationship of item?.coiFinancialEntityDetails; let last = last">
+                  <ng-container *ngIf="!last">{{relationship?.coiFinancialEntityRelType?.description}},</ng-container>
+                  <ng-container *ngIf="last">{{relationship?.coiFinancialEntityRelType?.description}}</ng-container>
+                </span>
+                        </td>
+
+                        <td [routerLink]="['/fibi/manage-sfi']"
+                            [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}">
+                            {{ item?.coiEntity?.createTimestamp |dateFormatter }}</td>
+
+                        <td [routerLink]="['/fibi/manage-sfi']"
+                            [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}">
+                            {{ item?.involvementStartDate |dateFormatter }}</td>
+
+                        <td class="text-center" [routerLink]="['/fibi/manage-sfi']"
+                            [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}">
+                    <span class="badge badge-pill" [ngClass]="item.isActive ? 'badge-success' : 'badge-secondary'">
+                        {{item?.isActive ? 'Active' : 'Inactive'}}
+                    </span>
+                        </td>
+
+                        <td class="p-0">
+
+                            <ul class="actionButtonGroup text-center">
+                                <li>
+                                    <a title="View " class="btn btn-small btn-tertiary button-radius" id="view-sfi"
+                                       [routerLink]="['/fibi/manage-sfi']"
+                                       [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}">
+                                        <i class="fa fa-eye pointer" aria-hidden="true"></i> View
+                                    </a>
+                                </li>
+                                <li *ngIf="isEditMode">
+                                    <a title="Edit" id="edit-sfi" class="btn btn-small btn-tertiary button-radius"
+                                       [routerLink]="['/fibi/manage-sfi']"
+                                       [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'edit'}">
+                                        <i class="fa fa-edit pointer fa-bold" aria-hidden="true"></i> Edit
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="coiFinancialEntityDetails?.length == 0" class="no-data-container">
+        <span class="no-data-icon-outer">
+          <div class="no-data-icon">
+            <i aria-hidden="true" class="fa fa-file-o"></i>
+            <i aria-hidden="true" class="fa fa-times-circle-o"></i>
+          </div>
+        </span>
+                <h4>There is no Entity found.</h4>
+                <button class="btn btn-tertiary mt-0 w-110 mt-3" title="Add Significant Financial Interest"
+                        [routerLink]="['/fibi/manage-sfi']"
+                        [queryParams]="{mode:'edit', isSFINotAvailable: isSFINotAvailable, dId: disclosureId}" *ngIf="isEditMode">
+                    Add New Significant Financial Interest
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

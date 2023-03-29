@@ -1,0 +1,30 @@
+<div class="card mb-3">
+    <div class="card-header px-4 py-2 ">
+        <h4 class="card-title review-title">
+            <div class="justify-content-between row">
+                <div class="col-auto">Comments
+                    <!-- <span class="badge badge-pill badge-danger notverified">{{negotiationActivityArray?.length}}</span> -->
+                </div>
+                <!-- <div class="col-auto d-flex">
+                    <label class="mt-2 text-nowrap">Review Location</label>
+                    <select class="form-control select" [(ngModel)]="negotiationLocationId"
+                        (ngModelChange)="getActivities();">
+                        <option value="">All</option>
+                        <option value="general">General</option>
+                        <option [value]="location.negotiationLocationId"
+                            *ngFor="let location of negotiationLookUp.negotiationsLocations">
+                            {{location?.negotiationsLocationType.description}}<span
+                                *ngIf="location?.description">({{location?.description}})</span></option>
+                    </select>
+                </div> -->
+                <button class="updown-arrow mt-2" (click)="isShow = !isShow">
+                    <i [ngClass]="!isShow?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
+                        class="fa-large" aria-hidden="true"></i>
+                </button>
+            </div>
+        </h4>
+    </div>
+    <div class="card-body p-0" *ngIf="isShow">
+        <app-coi-review-comments *ngIf="coiDisclosure?.disclosureId" [disclosureId]="coiDisclosure.disclosureId" [isShowFilters]="true"></app-coi-review-comments>
+    </div>
+</div>

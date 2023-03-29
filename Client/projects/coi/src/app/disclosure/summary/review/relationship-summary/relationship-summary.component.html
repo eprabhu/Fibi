@@ -1,0 +1,234 @@
+<div id="COI803" class="card mt-3">
+    <div class="card-header px-4 d-flex align-items-center justify-content-between">
+        <h1 class="f-14 font-weight-bold m-0">Step Three : Relationships</h1>
+        <button class="btn btn-primary-sub btn-sm add-activity-button" id="add-activity" title="Add Review Comment"
+            type="button" (click)="modifyReviewComment()">
+            <p>
+                <img alt="add-activity icon" class="activity-icon" src="{{deployMap}}assets/images/playlist (1).svg">
+            </p>
+        </button>
+    </div>
+
+    <div *ngIf="selectedProject?.moduleCode" class="card card-flex px-4 py-2">
+        <div class="row">
+            <div class="col-12">
+                <label class="label-text">{{selectedProject?.moduleCode === 1 ? 'Award : ' : 'Proposal : '}}</label>
+                <span class="ml-2 grey-text fw-700" *ngIf="selectedProject?.moduleCode === 1">#{{selectedProject?.moduleItemKey}}&nbsp;{{selectedProject?.title}}</span>
+                <span class="ml-2 grey-text fw-700" *ngIf="selectedProject?.moduleCode === 3 ">#{{selectedProject?.moduleItemId}}&nbsp;{{selectedProject?.title}}</span>
+            </div>
+            <div class="col-4">
+                <label class="label-text">PI Name :</label>
+                <span class="fs-14 ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
+            </div>
+            <div class="col-4">
+                <label class="label-text">Period :</label>
+                <span class="fs-14 ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} -
+                    {{selectedProject?.endDate | dateFormatter}}</span>
+            </div>
+            <div class="col-4">
+                <label class="label-text">{{selectedProject?.moduleCode === 1 ? 'Award ' : 'Proposal '}}Status :</label>
+                <span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
+            </div>
+            <div class="col-7">
+                <label class="label-text">Sponsor :</label>
+                <span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
+            </div>
+            <div *ngIf="selectedProject?.proposalIdlinkedInDisclosure" class="col-5 text-right">
+                <div class="fw-700 grey-text">{{ selectedProject?.INDEX ? selectedProject?.INDEX + 1 : 0 }} of {{_dataStoreAndEventsService.concatenatedProjectList.length}} Projects</div>
+            </div>
+        </div>
+        <!-- <div class="left-div">
+        </div> -->
+        <!-- <div class="align-items-center d-flex justify-content-end right-div">
+            <label class="fs-14">{{selectedProject?.INDEX + 1}} of
+                {{_dataStoreAndEventsService.concatenatedProjectList.length}} Projects</label>
+            <div class="col-lg-auto col-12 text-right">
+                <div class="text-right btn-budget-container">
+                    <a class="btn btn-sm btn-tertiary btn-budget-transparent mt-0 ng-tns-c13-3" id="create-award-btn"
+                        tabindex="0" (click)="setPreviousNext('P')" title="Previous">
+                        <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                        Previous
+                    </a>
+                    <a class="btn btn-sm btn-tertiary mt-0 btn-budget-transparent ng-tns-c13-3" id="create-award-btn"
+                        tabindex="0" (click)="setPreviousNext('N')" title="Next">
+                        Next
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div> -->
+    </div>
+
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 card mb-0 p-0">
+        <div class="card-body">
+            <div class="row p-4">
+                <table class="tableSkin" *ngIf="projectRelations?.length">
+                    <caption class="sr-only">List of Awards/Proposal</caption>
+                    <thead>
+                        <tr class="header-border">
+                            <th style="width: 25%;">Significant Financial Interest</th>
+                            <th style="width: 20%;">COI Status</th>
+                            <th style="width: 20%;">Reviewer Status</th>
+                            <th>Define relationship between SFIs and Projects</th>
+                            <th style="width: 12%;" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let project of projectRelations; let i = index">
+                            <td>{{project?.coiFinancialEntity?.coiEntity?.coiEntityName}}</td>
+                            <td>
+                                {{project?.coiDisclosureDetailsStatus?.description}}
+                            </td>
+                            <td>
+                                {{project?.coiReviewerStatus?.description}}
+                            </td>
+                            <td>
+                                {{project?.comment?.comments}}
+                            </td>
+                            <td>
+                                <ul class="actionButtonGroup text-center">
+                                    <li>
+                                        <a (click)="modifyReviewComment(true, project?.disclosureDetailsId)">
+                                            <img alt="add-activity icon" class="activity-icon"
+                                                title="Click here to Add Review Comment"
+                                                src="{{deployMap}}assets/images/playlist (2).svg">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a title="Add Reviewer Conflict" data-toggle="modal"
+                                            data-target="#reviewer-conflict-modal"
+                                            (click)="conflictIndex = i;projectDetails = project">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a title="Reviewer Conflict History"
+                                            (click)="loadProjectConflictHistory(project?.disclosureDetailsId)">
+                                            <i class="fa fa-history" aria-hidden="true"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="no-data-container w-100" *ngIf="!projectRelations?.length">
+                    <span class="no-data-icon-outer">
+                        <div class="no-data-icon">
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                        </div>
+                    </span>
+                    <h4>There is no information in this section.</h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Reviewer Conflict Modal -->
+<div class="modal modal-coi fade mySkinDialog" id="reviewer-conflict-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Project Conflict Review
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" id="dissmiss-btn" aria-label="Close" (click)="clearConflictModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <div class="my-3 mx-0 row">
+                    <div class="col-12 p-3 highlight-node font">
+                      <p>Reviewers can update the conflict status of each project’s relationship with the SFIs. Please note that the system will overwrite the latest conflict status captured in the disclosure. Use the History button next to the conflict status to track the conflict data changes.</p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-12">
+                        <label for="Conflict Status"><span class="mandatory">*</span> Conflict Status</label>
+                        <select [(ngModel)]="reviewerConflict.coiReviewerStatusCode" class="form-control"
+                            [ngClass]="projectConflictValidationMap?.has('coiReviewerStatusCode') ? 'is-invalid d-block' : ''">
+                            <option value=undefined>--Select--</option>
+                            <option *ngFor="let status of _dataStoreAndEventsService.conflictStatusList"
+                                [value]="status.discDetStatusCode">
+                                {{status?.description}}
+                            </option>
+                        </select>
+                        <div *ngIf="projectConflictValidationMap?.has('coiReviewerStatusCode')" class="invalid-feedback d-block">
+                            {{projectConflictValidationMap?.get('coiReviewerStatusCode')}}
+                        </div>
+                    </div>
+                    <div class="col-12 my-0">
+                        <label><span class="mandatory">*</span> Comments</label>
+                        <textarea class="form-control" appLengthValidator [isShowLimiter]="true"
+                            [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
+                            [limit]="4000" [(ngModel)]="reviewerConflict.comment.comments"></textarea>
+                        <div *ngIf="projectConflictValidationMap?.has('comment')" class="invalid-feedback d-block">
+                            {{projectConflictValidationMap?.get('comment')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="nego-sumbit-no-btn" type="button" class="btn btn-secondary btn-sm"
+                    data-dismiss="modal" (click)="clearConflictModal()">Cancel</button>
+                <button type="button" class="btn btn-primary-sub btn-sm" (click)="updateProjectConflictStatus()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reviewer Conflict History Modal -->
+<div class="modal modal-coi fade mySkinDialog" id="conflict-history-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Reviewer Conflict History
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" id="dissmiss-btn" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="conflictHistory?.length; else noHistory" class="p-0 w-100 widget-container">
+                    <table class="tableSkin">
+                        <caption class="sr-only">List of Reviewer Conflict History</caption>
+                        <thead class="sticky-top">
+                            <tr class="header-border">
+                                <th>Name</th>
+                                <th>Conflict Status</th>
+                                <th style="width: 30%">Comment</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let conflict of conflictHistory">
+                                <td>{{conflict?.updateUserFullName}}</td>
+                                <td>{{conflict?.coiDisclosureDetailsStatus?.description}}</td>
+                                <td>{{conflict?.comment}}</td>
+                                <td>{{conflict?.updateTimestamp | dateFormatterWithTimeZone: 'long' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ng-template #noHistory>
+                    <div class="no-data-container">
+                        <span class="no-data-icon-outer">
+                            <div class="no-data-icon">
+                                <i class="fa fa-file-o" aria-hidden="true"></i>
+                                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                            </div>
+                        </span>
+                        <h4>There are no reviewer conflicts.</h4>
+                    </div>
+                </ng-template>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm"
+                    data-dismiss="modal">close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,18 +1,16 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {CertificationComponent} from './certification.component';
-import {RouterModule, Routes} from "@angular/router";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import {CertificationComponent} from "./certification.component";
+import {SharedModule} from "../../shared/shared.module";
 
-const routes: Routes = [{path: '', component: CertificationComponent}];
 
 @NgModule({
-    declarations: [
-        CertificationComponent
-    ],
     imports: [
         CommonModule,
-        RouterModule.forChild(routes)
-    ]
+        SharedModule,
+        RouterModule.forChild([{ path: '', component: CertificationComponent }])
+    ],
+    declarations: [CertificationComponent]
 })
-export class CertificationModule {
-}
+export class CertificationModule { }

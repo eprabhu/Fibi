@@ -1,0 +1,118 @@
+<div class="card" *ngIf="!definedRelationships?.length">
+    <div class="card-header">
+        <h4 class="card-title">
+            Relation with Significant Financial Interest
+        </h4>
+    </div>
+    <div class="card-content p-0">
+        <div class="card-body">
+            <div class="no-data-container">
+                <span class="no-data-icon-outer">
+                    <div class="no-data-icon">
+                        <i class="fa fa-file-o" aria-hidden="true"></i>
+                        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                    </div>
+                </span>
+                <h4>There is no relations added.</h4>
+                <button *ngIf="isEditMode" class="btn btn-primary mt-3" title="Add Relationship" data-toggle="modal"
+                    data-target="#relation-selection">Add Relationship
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="definedRelationships?.length">
+    <div class="align-items-center bg-white d-flex justify-content-between coi-navigation-tabs mt-2 mb-4">
+        <ul class="navigation-links d-flex align-items-center my-0 f-16 cursor-pointer p-0">
+            <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships; let last = last">
+                <li class="mx-4"
+                    [class.active]="activeRelationship == coiFinancialEntityDetail?.financialEntityRelTypeCode"
+                    (click)="getQuestionnaire(coiFinancialEntityDetail)">
+                    {{coiFinancialEntityDetail?.coiFinancialEntityRelType?.description}}
+                    <i class="fa"
+                        [class.fa-caret-down]="activeRelationship == coiFinancialEntityDetail?.financialEntityRelTypeCode"
+                        aria-hidden="true"></i>
+                </li>
+
+                <li *ngIf="!last" class="divider"></li>
+            </ng-container>
+
+        </ul>
+        <span class="mr-4">
+            <button title="Back to Dashboard" class="btn more-btn" (click)="navigateBack()">
+                <i class="fa fa-reply" aria-hidden="true"></i>
+            </button>
+            <button *ngIf="isEditMode" class="btn btn-primary mt-0 ml-2"
+                title="Add Relationship" (click)="addRelations(true)">Add
+                Relationship
+            </button>
+        </span>
+    </div>
+    <app-view-questionnaire-list [configuration]="configuration"
+        [questionnaireHeader]="'Relation with Significant Financial Interest'"
+        [externalSaveEvent]="$externalSaveEvent" [isShowSave]="false">
+    </app-view-questionnaire-list>
+    <div *ngIf="isEditMode" class="float-right mt-3">
+        <button class="btn btn-primary btn-sm" title="Save and Continue" type="button" (click)="getSaveEvent();">Save and
+            Continue
+        </button>
+        <!-- <button *ngIf="isShowProceedButton()" class="btn btn-primary btn-sm" title="Save and Continue" type="button"
+            (click)="navigateBack();">Proceed
+        </button> -->
+    </div>
+</div>
+<div class="modal modal-coi fade mySkinDialog modal-opacity" tabindex="-1" id="relation-selection" tabindex="-1"
+    role="dialog" aria-labelledby="relation-selection" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Relations</h5>
+                <button id="special-review-dlt" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col p-2 help-text font">
+                    <p>
+                        <strong>
+                            Significant Financial Interest Details :
+                        </strong>
+                        Now includes not-for-profit entities other than governmental entities, institutions of higher education and affiliated organizations.
+                    </p>
+                </div>
+                <div class="text-center mt-4" *ngIf="relationLookup.length; else noData">
+                    <h5>Select Relation</h5>
+                    <label *ngFor="let relation of relationLookup" class="checkbox-inline mx-4">
+                        <input type="radio" name="relationship-options" class="mr-2"
+                            [value]="relation?.financialEntityRelTypeCode"
+                            [(ngModel)]="coiFinancialEntityDetail.financialEntityRelTypeCode"
+                            (ngModelChange)="setRelationship()">
+                        {{relation?.description}}
+                    </label>
+                </div>
+                <ng-template #noData>
+                    <div class="no-data-container">
+                        <span class="no-data-icon-outer">
+                            <div class="no-data-icon">
+                                <i class="fa fa-file-o" aria-hidden="true"></i>
+                                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                            </div>
+                        </span>
+                        <h4>There are no relations.</h4>
+                    </div>
+                </ng-template>
+            </div>
+            <div class="modal-footer">
+                <button *ngIf="isAddRelationButtonToggled" type="button" class="btnSkin btn-secondary" data-dismiss="modal"
+                    data-toggle="modal">Cancel
+                </button>
+                <button *ngIf="definedRelationships?.length" type="button" class="btnSkin btn-secondary" data-dismiss="modal"
+                    data-toggle="modal" (click)="navigateBack()">Continue without selecting Relation
+                </button>
+                <button id="add-review-btn" type="button" class="btn btn-primary btn-sm" data-dismiss="modal"
+                    (click)="saveOrUpdateCoiFinancialEntityDetails()">Add Relation
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

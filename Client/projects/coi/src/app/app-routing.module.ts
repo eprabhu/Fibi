@@ -12,6 +12,10 @@ const routes: Routes = [
                 loadChildren: () => import('./disclosure/disclosure.module').then(m => m.DisclosureModule)
             },
             {
+                path: 'create-disclosure',
+                loadChildren: () => import('./disclosure/disclosure.module').then(m => m.DisclosureModule)
+            },
+            {
                 path: 'user-dashboard',
                 loadChildren: () => import('./user-dashboard/user-dashboard.module').then(m => m.UserDashboardModule)
             },

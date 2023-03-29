@@ -152,7 +152,12 @@
             "styles": [
               "projects/coi/src/styles.scss",
               "projects/coi/src/assets/css/bootstrap.min.css",
-              "node_modules/material-icons/iconfont/material-icons.scss"
+              "node_modules/material-icons/iconfont/material-icons.scss",
+              "projects/fibi/src/assets/css/font-awesome.min.css",
+              "projects/fibi/src/assets/css/style.css",
+              "projects/fibi/src/assets/css/fibi-questionnaire-style.css",
+              "projects/fibi/src/assets/css/fibi-codetable-style.css",
+              "projects/fibi/src/assets/css/workflow-style.css"
             ],
             "scripts": [
               "projects/coi/src/assets/js/bootstrap.bundle.min.js"

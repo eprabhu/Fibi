@@ -1,0 +1,22 @@
+
+.grey-info {
+    background-color: #dee2e6;
+    border: #caced2 1px solid;
+    text-align: justify;
+    color: #202c2e;
+}
+
+.left-div{
+    width: 75%;
+    display: inline-block;
+    transition: width 1.2s ease-in-out;
+}
+.right-div{
+    width: 23%;
+    display: inline-block;
+    position: fixed;
+    margin-left: 5px;
+    overflow: auto;
+    right: 14px;
+    /* box-shadow: 0px 0px 8px -4px black; */
+}

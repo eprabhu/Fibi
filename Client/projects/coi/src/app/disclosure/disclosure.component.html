@@ -1,163 +1,254 @@
-<div class="border border-top-0 mb-3 mx-3 row shadow-sm">
-    <div class="col-9 p-0 border-end">
-        <div class="disclosure-heading px-3 d-flex">
-            <div class="align-self-center flex-fill">
-                <p class="m-0"><strong>FCOI by <span class="text-primary"><u>Griffiths, Danielle</u></span></strong> -
-                    (Home Unit: <strong>External Organizations</strong>)</p>
-            </div>
-            <div class="d-flex">
-                <div class="align-items-center d-flex">
-                    <mat-icon class="green-label fs-3">bookmark</mat-icon>
+<div class="border-top-0 mb-3 mx-3 row">
+    <div class="col-9 p-0">
+        <div class="border shadow-sm">
+            <div class="disclosure-heading px-3 d-flex">
+                <div class="align-self-center flex-fill">
+                    <p class="m-0"><strong>FCOI by <span class="text-primary"><u>Griffiths, Danielle</u></span></strong>
+                        -
+                        (Home Unit: <strong>External Organizations</strong>)</p>
                 </div>
-                <div class="flex-fill ps-3">
-                    <div class="three-pixel-padding-top">
-                        <p class="m-0 fs-14">COI Training: <strong>Completed</strong></p>
-                    </div>
-                    <div>
-                        <p class="mb-0 fs-14 negative-three-pixel-margin">Expiration Date: 23/02/2024</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex p-3 triple-card bg-white">
-            <div class="col">
-                <div class="border h-100 rounded-1">
-                    <span class="status-pill">Status</span>
-                    <div class="ps-4 table-negative-margin">
-                        <table class="fs-14 fw-medium spaced-table">
-                            <tr>
-                                <td>Disposition:</td>
-                                <td class="ps-4"><span class="bg-warning px-2 py-1 rounded-4 text-black">Pending</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Review:</td>
-                                <td class="ps-4"><span class="bg-warning px-2 py-1 rounded-4 text-black">Pending</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Disclosure:</td>
-                                <td class="ps-4"><span class="bg-warning px-2 py-1 rounded-4 text-black">Pending</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border h-100 mx-3 rounded-1">
-                    <span class="status-pill">Date</span>
-                    <div class="ps-4 table-negative-margin">
-                        <table class="fs-14 fw-medium spaced-table">
-                            <tr>
-                                <td>Create:</td>
-                                <td class="ps-4">13/02/2023</td>
-                            </tr>
-                            <tr>
-                                <td>Certification:</td>
-                                <td class="ps-4"></td>
-                            </tr>
-                            <tr>
-                                <td>Expiration:</td>
-                                <td class="ps-4">13/02/2023</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border h-100 rounded-1">
-                    <span class="status-pill">Relationship with</span>
-                    <div class="ps-4 table-negative-margin">
-                        <table class="fs-14 fw-medium">
-                            <tr>
-                                <td><span class="bold-blue-color">03</span></td>
-                                <td class="ps-2">Significant Financial Interest</td>
-                            </tr>
-                            <tr>
-                                <td><span class="bold-blue-color">02</span></td>
-                                <td class="ps-2">Proposals</td>
-                            </tr>
-                            <tr>
-                                <td><span class="bold-blue-color">02</span></td>
-                                <td class="ps-2">Awards</td>
-                            </tr>
+                <div class="d-flex">
+                    <ng-container *ngIf="isCreateMode">
+                        <div class="align-items-center d-flex">
+                            <mat-icon class="green-label fs-3">bookmark</mat-icon>
+                        </div>
+                        <div class="flex-fill ps-3">
+                            <div class="three-pixel-padding-top">
+                                <p class="m-0 fs-14">COI Training: <strong>Completed</strong></p>
+                            </div>
+                            <div>
+                                <p class="mb-0 fs-14 negative-three-pixel-margin">Expiration Date: 23/02/2024</p>
+                            </div>
+                        </div>
+                    </ng-container>
 
-                        </table>
+                    <ng-container *ngIf="!isCreateMode">
+                        <div class="align-items-center d-flex">
+                            <button (click)="isCardExpanded=!isCardExpanded"
+                                    class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                                <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div *ngIf="isCardExpanded" class="d-flex p-3 triple-card bg-white">
+                <div class="col">
+                    <div class="border h-100 rounded-1">
+                        <span class="status-pill">Status</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium spaced-table">
+                                <tr>
+                                    <td>Disposition:</td>
+                                    <td class="ps-4"><span
+                                            class="bg-{{getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatus?.dispositionStatusTypeCode)}} px-2 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDispositionStatus?.description}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Review:</td>
+                                    <td class="ps-4"><span
+                                            class="bg-{{getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatus?.reviewStatusTypeCode)}} px-2 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiReviewStatus?.description}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Disclosure:</td>
+                                    <td class="ps-4"><span
+                                            class="bg-{{getDisclosureStatusBadge(coiData?.coiDisclosure?.coiDisclosureStatus?.disclosureStatusCode)}} px-2 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDisclosureStatus?.description}}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border h-100 mx-3 rounded-1">
+                        <span class="status-pill">Date</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium spaced-table">
+                                <tr>
+                                    <td>Create:</td>
+                                    <td class="ps-4">{{coiData?.coiDisclosure?.createTimestamp ? (coiData?.coiDisclosure?.createTimestamp |
+                                        dateFormatterWithTimeZone) : ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Certification:</td>
+                                    <td class="ps-4">{{coiData?.coiDisclosure?.certifiedTimestamp ?
+                                        (coiData?.coiDisclosure?.certifiedTimestamp | dateFormatter) : ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Expiration:</td>
+                                    <td class="ps-4">{{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
+                                        dateFormatter) : ''}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border h-100 rounded-1">
+                        <span class="status-pill">Relationship with</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium">
+                                <tr>
+                                    <td><span class="bold-blue-color">{{coiData?.numberOfSFI ? coiData?.numberOfSFI : 0}}</span></td>
+                                    <td class="ps-2">Significant Financial Interest</td>
+                                </tr>
+                                <tr *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != '3'">
+                                    <td><span class="bold-blue-color">{{coiData?.numberOfProposal ? coiData?.numberOfProposal : 0}}</span></td>
+                                    <td class="ps-2">Proposals</td>
+                                </tr>
+                                <tr *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != '3'">
+                                    <td><span class="bold-blue-color">{{coiData?.numberOfAward ? coiData?.numberOfAward : 0}}</span></td>
+                                    <td class="ps-2">Awards</td>
+                                </tr>
+
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="nav-progress navigation-tabs row" title="Goto step Screening Questionnaire">
-            <div [routerLink]="['screening']"
-                 class="col complete h-100">
-                Screening Questionnaire
-                <div class="arrow-wrapper">
-                    <div class="arrow-cover">
-                        <div class="arrow"></div>
+
+            <ng-container *ngIf="isCreateMode">
+                <div class="nav-progress navigation-tabs row">
+                    <div [routerLink]="['screening']" queryParamsHandling='merge' class="col complete h-100 m-0"
+                         title="Goto step Screening Questionnaire">
+                        Screening Questionnaire
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div [routerLink]="['sfi']" queryParamsHandling='merge' class="active col ps-5 text-nowrap"
+                         title="Goto step Significant Financial Interest(SFIs)">
+                        Significant Financial Interest(SFIs)
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div [routerLink]="['relationship']" queryParamsHandling='merge' class="col" title="Goto step Relationships">
+                        <span class="align-self-center">Relationships</span>
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div [routerLink]="['certification']" queryParamsHandling='merge' class="col" title="Goto step Certification">
+                        <span class="align-self-center">Certification</span>
                     </div>
                 </div>
-            </div>
-            <div [routerLink]="['sfi']" class="active col ps-5 text-nowrap"
-                 title="Goto step Significant Financial Interest(SFIs)">
-                Significant Financial Interest(SFIs)
-                <div class="arrow-wrapper">
-                    <div class="arrow-cover">
-                        <div class="arrow"></div>
+            </ng-container>
+
+            <ng-container *ngIf="!isCreateMode">
+                <div class="navigation-tabs d-flex align-items-center">
+                    <div [routerLink]="['summary']" queryParamsHandling='merge' class="navigation-box border-end" role="button">
+                        <div class="navigation-box-content" routerLinkActive="active">Disclosure</div>
+                    </div>
+                    <div [routerLink]="['relationship']" queryParamsHandling='merge' class="navigation-box border-end" role="button">
+                        <div class="navigation-box-content" routerLinkActive="active">Relationships</div>
+                    </div>
+                    <div [routerLink]="['conflict-management']" queryParamsHandling='merge' class="navigation-box border-end" role="button">
+                        <div class="navigation-box-content" routerLinkActive="active">Conflict Management</div>
+                    </div>
+                    <div [routerLink]="['review']" queryParamsHandling='merge' class="navigation-box border-end" role="button">
+                        <div class="navigation-box-content" routerLinkActive="active">Reviews</div>
+                    </div>
+                    <div [routerLink]="['history']" queryParamsHandling='merge' class="navigation-box" role="button">
+                        <div class="navigation-box-content" routerLinkActive="active">History</div>
                     </div>
                 </div>
-            </div>
-            <div [routerLink]="['relationship']" class="col" title="Goto step Relationships">
-                <span class="align-self-center">Relationships</span>
-                <div class="arrow-wrapper">
-                    <div class="arrow-cover">
-                        <div class="arrow"></div>
-                    </div>
-                </div>
-            </div>
-            <div [routerLink]="['certification']" class="col" title="Goto step Certification">
-                <span class="align-self-center">Certification</span>
-            </div>
+            </ng-container>
         </div>
     </div>
-    <div class="col-3 d-flex flex-column p-0 bg-white">
-        <div class="flex-fill h-100">
-            <div class="d-flex justify-content-between p-3">
-                <button class="btn btn-outline-secondary pb-0 fs-14 col-2">
-                    <mat-icon>home</mat-icon>
-                </button>
-                <button class="mx-3 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
-                    <mat-icon class="me-2">undo</mat-icon>
-                    Previous
-                </button>
-                <button class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
-                    <mat-icon class="me-2">redo</mat-icon>
-                    Next
-                </button>
+    <div [class.p-0]="isCreateMode" class="col-3 pe-0">
+        <div *ngIf="isCreateMode" class="d-flex flex-column p-0 bg-white min-height-189 border-end shadow-sm">
+            <div class="flex-fill h-100">
+                <div class="d-flex justify-content-between p-3">
+                    <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-grey pb-0 fs-14 col-2">
+                        <mat-icon>home</mat-icon>
+                    </button>
+                    <button class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
+                        <mat-icon class="me-2">undo</mat-icon>
+                        Previous
+                    </button>
+                    <button class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
+                        <mat-icon class="me-2">redo</mat-icon>
+                        Next
+                    </button>
+                </div>
+                <div class="d-flex justify-content-around px-3 pb-3">
+                    <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">save</mat-icon>
+                        Save
+                    </button>
+                </div>
+                <div class="d-flex justify-content-around px-3">
+                    <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
+                            (click)="sfiService.isShowSfiNavBar = !sfiService.isShowSfiNavBar">
+                        <mat-icon class="me-2">add</mat-icon>
+                        Add Significant Financial Interest
+                    </button>
+                </div>
             </div>
-            <div class="d-flex justify-content-around px-3 pb-3">
-                <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                    <mat-icon class="me-2">save</mat-icon>
-                    Save
-                </button>
-            </div>
-            <div class="d-flex justify-content-around px-3">
-                <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center" 
-                (click)="sfiService.isShowSfiNavBar = !sfiService.isShowSfiNavBar">
-                    <mat-icon class="me-2">add</mat-icon>
-                    Add Significant Financial Interest
-                </button>
+            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes">
+                Notes & Attachments
+
             </div>
             <div class="task-nav-div" id="task-navigation-bar">
                 <app-add-sfi></app-add-sfi>
             </div>
         </div>
-        <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes">
-            Notes & Attachments
+        <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
+            <div class="flex-fill h-100 border-end bg-white shadow-sm">
+                <div class="d-flex justify-content-between p-3">
+                    <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-secondary pb-0 fs-14 col-2">
+                        <mat-icon>home</mat-icon>
+                    </button>
+                    <button class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
+                        <mat-icon class="me-2">undo</mat-icon>
+                        Previous
+                    </button>
+                    <button class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
+                        <mat-icon class="me-2">rate_review</mat-icon>
+                        Comments
+                    </button>
+                </div>
+                <div class="d-flex justify-content-around px-3 pb-3">
+                    <button class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">person_add</mat-icon>
+                        Assign Reviewer
+                    </button>
+                </div>
+                <div class="d-flex justify-content-around px-3">
+                    <button class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">done</mat-icon>
+                        Complete Review
+                    </button>
+                    <button aria-expanded="false" class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center ms-2 p-0 w-100"
+                            data-bs-toggle="dropdown">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <ul class="border dropdown-menu p-0 rounded-0" style="">
+                        <li class="ash-text border-bottom"><span class="dropdown-item fs-15 fw-medium">
+                            <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
+                        </li>
+                        <li class="ash-text"><span class="dropdown-item fs-15 fw-medium">
+                            <mat-icon class="me-2 ash-text">print</mat-icon> Print</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated by:</span> Griffiths,
+                    Danielle on 02/16/2023
+                </div>
+            </div>
+            <ng-container *ngIf="_router.url.includes('/coi/disclosure/summary')">
+            </ng-container>
         </div>
     </div>
 </div>
-
 <div class="mx-3">
     <router-outlet></router-outlet>
 </div>

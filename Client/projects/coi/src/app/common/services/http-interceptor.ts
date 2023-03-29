@@ -33,7 +33,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
      * creates new header with auth-key
     */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        this.AuthToken = this._commonService.getCurrentUserDetail('Authorization');
+        // this.AuthToken = this._commonService.getCurrentUserDetail('Authorization');
+        this.AuthToken = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqZW5uaWUiLCJwZXJzb25JZCI6IjkwMDAwMjQ2NSIsInVuaXROdW1iZXIiOiIwNjEwMDAiLCJmdWxsTmFtZSI6IkFkdS1EamFuLCBBYmhpbmF2IEsiLCJpc0V4dGVybmFsVXNlciI6ZmFsc2UsImlhdCI6MTY4MDA2NTIyNSwiZXhwIjoxNjgwMTA4NDI1fQ.eDOo2YBzBbMH_jsQUiFk7k5BX4rw96BAAS4Zed3slGKbjVuciqYcC6IeuwlAy7zXNK-t_KdcBb_w1k_pdAkHKw';
         if (this.AuthToken) {
             req = req.clone({ headers: req.headers.set('Authorization', this.AuthToken) });
         }

@@ -1,0 +1,140 @@
+.tab-sticky {
+    position: sticky;
+    width: 100%;
+    z-index: 2;
+    background: #eef7ff;
+    box-shadow: 0px 3px 6px -5px #000000;
+    padding-top: 5px;
+    padding-bottom: 5px;}
+
+.nav-style {
+    background: #deeeff;
+    padding: 5px;
+    box-shadow: 0 0 50px 0 rgb(82 63 105 / 26%);
+    border-radius: 3px;
+    color: #518aec;
+  }
+  .nav-style:hover {
+    border-radius: 3px !important;
+    outline: none;
+    color: white;
+    background: #2a6fe7;
+  }
+  .right-arrow{
+    color: #1e847b;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+  }
+  .base-variant-text-color{
+    color: #48647f;
+    font-weight: 500;
+  }
+
+  .btn-budget-container {
+    border: 1px solid #7b7373;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.btn-budget-transparent {
+    background: transparent;
+    color: #404040 !important;
+    border-left: 1px solid #7b7373;
+}
+
+.btn-budget-transparent:hover {
+    background-color: #e4eeff;
+}
+
+.btn-budget-transparent:first-of-type {
+    border-left: none;
+}
+
+.btn-align-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.resultCard::before {
+  border-left: none;
+}
+
+.blue-row {
+  background-color: #deeef1;
+}
+
+.data-card {
+  margin: 0;
+  padding: 5px;
+  background-color: #e4eaf3;
+}
+
+.btn {
+  width:100px;
+}
+
+.left-div{
+  width: 65%;
+}
+.right-div{
+  width: 35%;
+}
+
+.card-flex {
+  display: flex;
+  flex-direction: row;
+  background-color: #eaf3fb;
+  border-bottom: 2px solid #c5e2fb;
+}
+
+.btn-primary {
+  width: fit-content;
+}
+
+.textarea-height {
+  height: 36px;
+}
+
+.button-container {
+  border: 2px solid #c5e2fb;
+}
+
+.grey-text {
+  color: #3f4449;
+  font-size: 1.52rem;
+}
+
+.table-data {
+  font-size: 1.52rem;
+}
+
+.grey-info {
+    color: #202c2e;
+    font-size: 1.6rem;
+    background-color: #fafafa;
+}
+
+.highlight-node {
+  background-color: #e9ffff;
+  color: #202c2e;
+  font-size: 16px;
+  font-weight: 400;
+  border: 1px solid #ded8d8;
+  /* cursor: pointer; */
+}
+
+.label-text {
+  font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.close-btn {
+    right: 5px;
+    top: -4px;
+}
+
+.new-card {
+  box-shadow: 0px 0px 8px -4px black;
+}

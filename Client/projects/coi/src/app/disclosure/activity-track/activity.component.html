@@ -1,0 +1,137 @@
+<div class="modal modal-coi  fade mySkinDialog" id="coi-activity-modal" tabindex="-1" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="skippedSchedulesLongTitle">Review Comments</h5>
+                <button type="button" id="agreement-approve-dismiss-btn" (click)="clearModal()" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-3">
+                <div class="mb-4">
+                    <ul class="subTabs mb-0">
+                      <li [ngClass]="{active:(commentTab == 'MODIFY')}" (click)="commentTab = 'MODIFY'" tabindex="0">
+                        <a class="subTabLink">{{editIndex != -1 ? 'Update Comment':'Add Comment'}}</a>
+                      </li>
+                      <li [ngClass]="{active:(commentTab == 'VIEW')}" (click)="commentTab = 'VIEW'" tabindex="0">
+                        <a class="subTabLink">View Comments</a>
+                      </li>
+                    </ul>
+                  </div>
+
+                <div *ngIf="commentTab == 'MODIFY'" class="form-row">
+                    <div [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
+                        <label class="block-display">
+                            <span class="mandatory">*</span>
+                            Section
+                        </label>
+                        <span>
+                            <div>
+                                <select class="form-control" [(ngModel)]="reviewCommentObject.coiSectionsTypeCode"
+                                    [ngClass]="validationMap.has('coiSectionsTypeCode') ? 'is-invalid d-block' : ''">
+                                    <option value="null">--Select--</option>
+                                    <option *ngFor="let section of coiSection"
+                                        [hidden]="section.isActive != true" [value]="section.coiSectionsTypeCode">
+                                        {{section?.description}}
+                                    </option>
+                                </select>
+                            </div>
+                        </span>
+                        <div *ngIf="validationMap.has('coiSectionsTypeCode')">
+                            <span class="mandatory">{{validationMap.get('coiSectionsTypeCode')}}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="modalConfiguration.isSubSectionComment" [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
+                        <label class="block-display">Sub Section</label>
+                        <span>
+                            <div>
+                                <select class="form-control" [(ngModel)]="reviewCommentObject.coiSubSectionsId">
+                                    <option value="null">--Select--</option>
+                                    <option *ngFor="let subSection of subSectionList"
+                                        [value]="subSection.coiSubSectionsCode">
+                                        {{subSection.description}}
+                                    </option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                    <div [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
+                        <label class="d-block">Person</label>
+                        <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField" [placeHolder]="'Search Assignee'"
+                            (selectedResult)="selectPerson($event)">
+                        </app-elastic>
+                        <ng-container *ngIf="reviewCommentObject?.coiReviewCommentTag?.length">
+                            <ng-container *ngFor="let tag of reviewCommentObject.coiReviewCommentTag; let groupIndex = index">
+                                <div *ngIf="tag.tagPersonId" class="fileChips regularFont">
+                                    <span class="px-2">
+                                        {{ tag.tagPersonFullName }}
+                                        <i aria-hidden="true" class="fa fa-times badge-icon ml-1 hand-cursor" title="Delete {{tag.tagPersonFullName}}"
+                                            (click)="removeReviewer(groupIndex)">
+                                        </i>
+                                    </span>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                    <div [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
+                        <label class="d-block">Admin Groups</label>
+                        <app-autocompleter [completerOptions]="adminGroupsCompleterOptions"
+                            [clearField]="categoryClearFiled" [placeHolder]="'Search for Admin Groups'"
+                            (onSelect)="adminGroupSelect($event)">
+                        </app-autocompleter>
+                        <ng-container *ngIf="reviewCommentObject?.coiReviewCommentTag?.length">
+                            <ng-container *ngFor="let tag of reviewCommentObject.coiReviewCommentTag; let groupIndex = index">
+                                <div *ngIf="tag.tagGroupId" class="fileChips regularFont">
+                                    <span class="px-2">
+                                        {{ tag.tagGroupName }}
+                                        <i aria-hidden="true" class="fa fa-times badge-icon ml-1 hand-cursor" title="Delete {{tag.tagGroupName}}"
+                                            (click)="removeReviewer(groupIndex)">
+                                        </i>
+                                    </span>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                    <div class="col-12 mb-0">
+                        <label class="block-display">
+                            <span class="mandatory">*</span>Comment</label>
+                        <textarea [(ngModel)]="reviewCommentObject.comment" appLengthValidator [isShowLimiter]="true"
+                            [limit]="2000" [ngClass]="validationMap.has('comment') ? 'is-invalid d-block' : ''"
+                            class="form-control">
+                        </textarea>
+                        <div *ngIf="validationMap.has('comment')">
+                            <span class="mandatory">{{validationMap.get('comment')}}</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-7 col-12">
+                        <label class="block-display">Attachments</label>
+                        <app-file-drop [multiple]="true" (filesDropEvent)="addAttachments($event)">
+                        </app-file-drop>
+                        <div *ngIf="uploadedFile?.length > 0">
+                            <div *ngFor="let item of uploadedFile; let index =index">
+                                <div class="fileChips">
+                                    <span>{{ item?.name }}
+                                        <i class="fa fa-close pointer" title="Remove Attachment"
+                                            (click)="uploadedFile.splice(index, 1)" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="commentTab == 'VIEW'" class="modal-scroll">
+                    <app-coi-review-comments [disclosureId]="modalConfiguration.disclosureId"
+                        [sectionCode]="modalConfiguration?.coiSectionsTypeCode"
+                        [subSectionId]="modalConfiguration?.coiSubSectionsId">
+                    </app-coi-review-comments>
+                </div>
+            </div>
+            <div *ngIf="commentTab != 'VIEW'" class="modal-footer">
+                <button (click)="clearModal()" class="btn btn-secondary btn-sm  btn-xs">Cancel</button>
+                <button class="btn btn-primary-sub btn-sm  btn-xs" (click)="addComments()">
+                    {{editIndex != -1 ? 'Update Comment':'Add Comment'}}</button>
+            </div>
+        </div>
+    </div>
+</div>
