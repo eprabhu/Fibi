@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {UserDisclosureService} from "./user-disclosure.service";
+import {UserDashboardService} from "../user-dashboard.service";
 
 @Component({
     selector: 'app-user-disclosure',
@@ -22,11 +23,11 @@ export class UserDisclosureComponent {
     disclosureArray: any[] = [];
     isActiveDisclosureAvailable = false;
 
-    constructor(private _service: UserDisclosureService) {
+    constructor(public userDisclosureService: UserDisclosureService, public userDashboardService: UserDashboardService) {
     }
 
     ngOnInit() {
-        this._service.getCOIDashboard(this.dashboardRequestObject).subscribe((res: any) => {
+        this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject).subscribe((res: any) => {
             this.disclosureArray = res.disclosureViews ? res.disclosureViews : [];
             console.log(this.disclosureArray);
         })

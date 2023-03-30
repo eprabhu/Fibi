@@ -3,3 +3,20 @@
 <router-outlet></router-outlet>
 </div>
 <app-footer></app-footer>
+
+<div [ngClass]="{'overlay':isShowLoader}" *ngIf="isShowLoader">
+    <div class="grid">
+        <div class="loader">
+            <div id="ld2">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="loading-text"><span>{{commonService.appLoaderContent}}</span></div>
+    </div>
+</div>

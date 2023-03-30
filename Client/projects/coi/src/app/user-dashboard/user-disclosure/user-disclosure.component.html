@@ -1,49 +1,57 @@
 <div class="row">
-    <div class="col pe-0">
-        <div class="shadow-sm disclosure-card border rounded">
-            <div class="border-bottom d-flex disclosure-card-heading-blue px-3 py-2 rounded-top-2">
-                <div class="col"><strong class="fs-15">FCOI Disclosure</strong></div>
-                <div class="col d-flex fs-14 justify-content-between align-items-center">
-                    <div><span class="fw-bold text-secondary">Discl. Status:</span> <span
-                            class="disclosure-active-pill ms-2">Active</span></div>
-                    <div class="align-items-center d-flex fs-14 text-secondary" role="button">
-                        <span class="fw-medium">VIEW</span>
-                        <mat-icon>chevron_right</mat-icon>
+    <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
+        <div class="col pe-0">
+            <div class="shadow-sm disclosure-card border rounded">
+                <div class="border-bottom d-flex disclosure-card-heading-blue px-3 py-2 rounded-top-2">
+                    <div class="col"><strong class="fs-15">FCOI Disclosure</strong></div>
+                    <div class="col d-flex fs-14 justify-content-between align-items-center">
+                        <div><span class="fw-bold text-secondary">Discl. Status:</span> <span
+                                class="disclosure-active-pill ms-2">{{disclosure?.coiDisclosureStatus?.description}}</span>
+                        </div>
+                        <div [queryParams]={disclosureId:disclosure.disclosureId}
+                             [routerLink]="['/coi/disclosure/summary']"
+                             class="align-items-center d-flex fs-14 text-secondary" role="button">
+                            <span class="fw-medium">VIEW</span>
+                            <mat-icon>chevron_right</mat-icon>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="d-flex disclosure-card-body-blue fs-14 p-3 rounded-bottom-2">
-                <div class="col">
-                    <div>
-                        <span class="fw-bold text-secondary">Discl. ID:</span>
-                        <span class="ps-2 span-data-color">#1000-0013</span>
+
+                <div class="d-flex disclosure-card-body-blue fs-14 p-3 rounded-bottom-2">
+
+                    <div class="col">
+                        <div>
+                            <span class="fw-bold text-secondary">Discl. ID:</span>
+                            <span class="ps-2 span-data-color">#{{disclosure?.disclosureId}}</span>
+                        </div>
+                        <div class="my-1">
+                            <span class="fw-bold text-secondary">Cert Date:</span>
+                            <span class="ps-2 span-data-color">{{disclosure?.certifiedTimestamp | dateFormatter}}</span>
+                        </div>
+                        <div>
+                            <span class="fw-bold text-secondary"># of SFI:</span>
+                            <span class="ps-2 fw-bold text-primary">04</span>
+                        </div>
                     </div>
-                    <div class="my-1">
-                        <span class="fw-bold text-secondary">Cert Date:</span>
-                        <span class="ps-2 span-data-color">01/15/2023</span>
-                    </div>
-                    <div>
-                        <span class="fw-bold text-secondary"># of SFI:</span>
-                        <span class="ps-2 fw-bold text-primary">04</span>
-                    </div>
-                </div>
-                <div class="col">
-                    <div>
-                        <span class="fw-bold text-secondary">Disposition Status:</span>
-                        <span class="ms-2 disclosure-active-pill">Approved</span>
-                    </div>
-                    <div class="my-1">
-                        <span class="fw-bold text-secondary">Expiration Date:</span>
-                        <span class="ps-2 span-data-color">01/15/2023</span>
-                    </div>
-                    <div>
-                        <span class="fw-bold text-secondary">Last Update:</span>
-                        <span class="ps-2 span-data-color">01/18/2023</span>
+
+                    <div class="col">
+                        <div>
+                            <span class="fw-bold text-secondary">Disposition Status:</span>
+                            <span class="ms-2 disclosure-active-pill">{{disclosure?.coiDispositionStatus?.description}}</span>
+                        </div>
+                        <div class="my-1">
+                            <span class="fw-bold text-secondary">Expiration Date:</span>
+                            <span class="ps-2 span-data-color">{{disclosure?.expirationDate | dateFormatter}}</span>
+                        </div>
+                        <div>
+                            <span class="fw-bold text-secondary">Last Update:</span>
+                            <span class="ps-2 span-data-color">{{disclosure?.updateTimestamp | dateFormatter}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </ng-container>
     <div class="col">
         <div class="shadow-sm disclosure-card border rounded">
             <div class="border-bottom d-flex disclosure-card-heading-green rounded-top-2 px-3 py-2">
@@ -115,14 +123,15 @@
               class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">FCOI</span>
     </div>
     <div class="d-flex flex-fill">
-        <input type="text" class="advance-search-input">
+        <input class="advance-search-input border-0" type="text">
     </div>
 </div>
 
 <ng-container *ngFor="let disclosure of disclosureArray">
     <div class="bg-white border mt-2 rounded-1 shadow-sm">
         <div class="border-bottom fs-14 p-3 text-secondary">
-            <div><span class="fw-bold me-2">Proposal:</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}</div>
+            <div><span class="fw-bold me-2">Proposal:</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
+            </div>
             <div class="d-flex my-2">
                 <div class="col">
                     <span class="fw-bold me-2">Discl.:</span> #{{disclosure?.coiDisclosureNumber}}
@@ -145,7 +154,8 @@
                     <span class="fw-bold me-2">Type:</span> {{getEventType(disclosure?.disclosureSequenceStatusCode, disclosure?.disclosureCategoryTypeCode)}}
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Certification Date:</span> <span *ngIf="disclosure.submittedDate">{{disclosure?.submittedDate |
+                    <span class="fw-bold me-2">Certification Date:</span> <span
+                        *ngIf="disclosure.submittedDate">{{disclosure?.submittedDate |
                     dateFormatter}} </span>
                 </div>
                 <div class="col">
@@ -173,15 +183,16 @@
             </div>
             <div class="col">
                 <div>Last Updated:</div>
-                <div>{{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}} by {{disclosure?.updateUser}}</div>
+                <div>{{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}
+                    by {{disclosure?.updateUser}}</div>
             </div>
             <div class="col d-flex justify-content-end">
                 <button class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
-                    <mat-icon class="me-1">edit</mat-icon>
-                    Modify
+                    <mat-icon class="me-1">restart_alt</mat-icon>
+                    Revise
                 </button>
-                <button [routerLink]="['/coi/disclosure/summary']"
-                        [queryParams]={disclosureId:disclosure.coiDisclosureId}
+                <button [queryParams]={disclosureId:disclosure.coiDisclosureId}
+                        [routerLink]="['/coi/disclosure/summary']"
                         class="align-items-center btn btn-outline-primary d-flex fs-14">
                     <mat-icon class="me-1">visibility</mat-icon>
                     View

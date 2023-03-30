@@ -16,6 +16,7 @@ export class CoiService {
     isShowHistoryInfo = true;
     isShowAttachmentInfo = true;
     stepTabName = '';
+    isCertified = false;
 
     constructor(
         private _http: HttpClient,
@@ -45,5 +46,6 @@ export class CoiService {
     triggerCommentModal(data: any) {
         this.triggerAddReviewComment$.next(data);
     }
+
 
 }

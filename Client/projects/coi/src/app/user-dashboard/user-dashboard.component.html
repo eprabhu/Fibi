@@ -16,10 +16,15 @@
         </div>
         <div class="col-sm-3 col-xxl-2">
             <div class="border pi-quick-links py-2 px-3 shadow-sm fs-15 h-100">
-                <p [routerLink]="['/coi/create-disclosure/screening']" class="m-0 cursor-pointer" role="button" title="Click to Revise FCOI"><u>Revise FCOI</u></p>
-                <p [routerLink]="['/coi/create-disclosure/screening']" class="m-0 cursor-pointer" role="button" title="Click to Create Project Disclosure"><u>Create Project Disclosure</u></p>
-                <p class="m-0 cursor-pointer" role="button" title="Click to Create Travel Disclosure"><u>Create Travel Disclosure</u></p>
-                <p class="m-0 cursor-pointer" role="button" title="Click to Create Significant Financial Interest"><u>Create Significant Financial Interest</u></p>
+                <p [queryParams]="{tabName: 1}"
+                   [routerLink]="['/coi/create-disclosure/screening']"
+                   class="m-0 cursor-pointer" role="button" title="Click to Revise FCOI"><u>Revise FCOI</u></p>
+                <p class="m-0 cursor-pointer" role="button" title="Click to Create Project Disclosure"><u>Create Project
+                    Disclosure</u></p>
+                <p class="m-0 cursor-pointer" role="button" title="Click to Create Travel Disclosure"><u>Create Travel
+                    Disclosure</u></p>
+                <p class="m-0 cursor-pointer" role="button" title="Click to Create Significant Financial Interest"><u>Create
+                    Significant Financial Interest</u></p>
             </div>
         </div>
     </div>
@@ -37,53 +42,57 @@
                 </div>
             </div>
         </div>
-<!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">-->
-<!--            <div class="col d-flex fw-medium">-->
-<!--                <div class="message flex-fill">-->
-<!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
-<!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
-<!--                </div>-->
-<!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
-<!--                    <span>VIEW</span>-->
-<!--                    <mat-icon>chevron_right</mat-icon>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">-->
-<!--            <div class="col d-flex fw-medium">-->
-<!--                <div class="message flex-fill">-->
-<!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
-<!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
-<!--                </div>-->
-<!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
-<!--                    <span>VIEW</span>-->
-<!--                    <mat-icon>chevron_right</mat-icon>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">-->
-<!--            <div class="col d-flex fw-medium">-->
-<!--                <div class="message flex-fill">-->
-<!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
-<!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
-<!--                </div>-->
-<!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
-<!--                    <span>VIEW</span>-->
-<!--                    <mat-icon>chevron_right</mat-icon>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">-->
+        <!--            <div class="col d-flex fw-medium">-->
+        <!--                <div class="message flex-fill">-->
+        <!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
+        <!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
+        <!--                </div>-->
+        <!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
+        <!--                    <span>VIEW</span>-->
+        <!--                    <mat-icon>chevron_right</mat-icon>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">-->
+        <!--            <div class="col d-flex fw-medium">-->
+        <!--                <div class="message flex-fill">-->
+        <!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
+        <!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
+        <!--                </div>-->
+        <!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
+        <!--                    <span>VIEW</span>-->
+        <!--                    <mat-icon>chevron_right</mat-icon>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">-->
+        <!--            <div class="col d-flex fw-medium">-->
+        <!--                <div class="message flex-fill">-->
+        <!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
+        <!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
+        <!--                </div>-->
+        <!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
+        <!--                    <span>VIEW</span>-->
+        <!--                    <mat-icon>chevron_right</mat-icon>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
     </div>
 
     <div class="navigation border text-center shadow-sm mb-3">
         <div class="row m-0 text-secondary">
-            <div [routerLink]="['disclosures']" class="cursor-pointer align-items-center border-end col d-flex justify-content-around p-0" role="button" routerLinkActive="active"
+            <div [routerLink]="['disclosures']"
+                 class="cursor-pointer align-items-center border-end col d-flex justify-content-around p-0"
+                 role="button" routerLinkActive="active"
                  title="Goto My Disclosures">
                 <strong class="fs-18">My Disclosures</strong>
             </div>
-            <div [routerLink]="['entities']" class="cursor-pointer align-items-center col d-flex justify-content-center p-0" role="button" routerLinkActive="active"
+            <div [routerLink]="['entities']"
+                 class="cursor-pointer align-items-center col d-flex justify-content-center p-0" role="button"
+                 routerLinkActive="active"
                  title="Goto My Entities">
-                <strong class="fs-18"   >My Entities</strong>
+                <strong class="fs-18">My Entities</strong>
             </div>
         </div>
     </div>

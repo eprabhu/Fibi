@@ -42,7 +42,8 @@ export class ToolKitComponent implements OnInit, OnDestroy {
 
     getProjectRelationshipList() {
         const RELATION_SECTION = this.sections.find(section => section.reviewSectionCode === 803);
-        if (this.coiDetails.coiDisclosureCategoryType.disclosureCategoryTypeCode === '3' && this.proposalIdLinkedInDisclosure) {
+        if (this.coiDetails.
+            coiDisclosureCategoryType.disclosureCategoryTypeCode === '3' && this.proposalIdLinkedInDisclosure) {
             RELATION_SECTION.isShowProjectList = false;
             RELATION_SECTION.isExpanded = false;
             this.openProjectRelationships({

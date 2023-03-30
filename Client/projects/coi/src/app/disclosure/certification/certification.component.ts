@@ -7,19 +7,18 @@ import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/
 @Component({
     selector: 'app-certification',
     templateUrl: './certification.component.html',
-    styleUrls: ['./certification.component.css']
+    styleUrls: ['./certification.component.scss']
 })
 export class CertificationComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
     certificationText = 'I certify that the information provided for the Financial conflict of interest, including, responses to screening questions, list of my pertinent Significant Financial interests and possible relationship to my sponsored activity is an accurate and current statement of my reportable outside interests and activities.';
     dependencies = ['coiDisclosure'];
-    isEditMode = false;
+    isEditMode = true;
     isSaving = false;
     coiDisclosure: any;
 
-    constructor(private _dataStore: DataStoreService,
-        public _coiService: CoiService) { }
+    constructor(private _dataStore: DataStoreService, public _coiService: CoiService) { }
 
     ngOnInit() {
         this._coiService.isShowCertifyInfo = true;
@@ -33,7 +32,11 @@ export class CertificationComponent implements OnInit, OnDestroy {
     private getDataFromStore() {
         const DATA = this._dataStore.getData(this.dependencies);
         this.coiDisclosure = DATA.coiDisclosure;
-        this.isEditMode = this._dataStore.getEditModeForCOI();
+        if (this.coiDisclosure.certifiedBy) {
+            this.isEditMode = false;
+            this._coiService.isCertified = true;
+        }
+        // this.isEditMode = this._dataStore.getEditModeForCOI();
     }
 
     private listenDataChangeFromStore() {

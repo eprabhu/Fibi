@@ -1,18 +1,20 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RouterModule} from '@angular/router';
 
-import { SummaryComponent } from './summary.component';
-import { ReviewComponent } from './review/review.component';
-import { ToolKitComponent } from './tool-kit/tool-kit.component';
-import { CoiSummaryEventsAndStoreService } from './coi-summary-events-and-store.service';
-import { CertifySummaryComponent } from './review/certify-summary/certify-summary.component';
-import { RelationshipSummaryComponent } from './review/relationship-summary/relationship-summary.component';
-import { ScreeningQuestionnaireSummaryComponent } from './review/screening-questionnaire-summary/screening-questionnaire-summary.component';
-import { SfiSummaryComponent } from './review/sfi-summary/sfi-summary.component';
-import { CoiSummaryService } from './coi-summary.service';
-import { FormsModule } from '@angular/forms';
+import {SummaryComponent} from './summary.component';
+import {ReviewComponent} from './review/review.component';
+import {ToolKitComponent} from './tool-kit/tool-kit.component';
+import {CoiSummaryEventsAndStoreService} from './coi-summary-events-and-store.service';
+import {CertifySummaryComponent} from './review/certify-summary/certify-summary.component';
+import {RelationshipSummaryComponent} from './review/relationship-summary/relationship-summary.component';
+import {ScreeningQuestionnaireSummaryComponent} from './review/screening-questionnaire-summary/screening-questionnaire-summary.component';
+import {SfiSummaryComponent} from './review/sfi-summary/sfi-summary.component';
+import {CoiSummaryService} from './coi-summary.service';
+import {FormsModule} from '@angular/forms';
 import {SharedModule} from "../../shared/shared.module";
+import { ConflictManagementSummaryComponent } from './review/conflict-management-summary/conflict-management-summary.component';
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
     imports: [
@@ -20,6 +22,7 @@ import {SharedModule} from "../../shared/shared.module";
         FormsModule,
         RouterModule.forChild([{path: '', component: SummaryComponent}]),
         SharedModule,
+        MatIconModule
     ],
     declarations: [
         SummaryComponent,
@@ -28,11 +31,13 @@ import {SharedModule} from "../../shared/shared.module";
         SfiSummaryComponent,
         ScreeningQuestionnaireSummaryComponent,
         RelationshipSummaryComponent,
-        CertifySummaryComponent
+        CertifySummaryComponent,
+        ConflictManagementSummaryComponent
     ],
     providers: [
         CoiSummaryEventsAndStoreService,
         CoiSummaryService
     ]
 })
-export class SummaryModule { }
+export class SummaryModule {
+}

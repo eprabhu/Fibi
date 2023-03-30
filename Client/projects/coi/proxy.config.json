@@ -42,6 +42,25 @@
   "/getQuestionnaire": {
     "target": "https://stage.fibiweb.com/fibiCOI/",
     "secure": false
+  },
+  "/createDisclosure": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getSFIDashboard": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getDisclosureRelations": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/certifyDisclosure": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getActiveDisclosure": {
+    "target": "http://192.168.1.189:9090/fibi4/",
+    "secure": false
   }
-
 }

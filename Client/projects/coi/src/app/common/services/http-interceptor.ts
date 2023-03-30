@@ -34,12 +34,20 @@ export class AppHttpInterceptor implements HttpInterceptor {
     */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // this.AuthToken = this._commonService.getCurrentUserDetail('Authorization');
-        this.AuthToken = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqZW5uaWUiLCJwZXJzb25JZCI6IjkwMDAwMjQ2NSIsInVuaXROdW1iZXIiOiIwNjEwMDAiLCJmdWxsTmFtZSI6IkFkdS1EamFuLCBBYmhpbmF2IEsiLCJpc0V4dGVybmFsVXNlciI6ZmFsc2UsImlhdCI6MTY4MDA2NTIyNSwiZXhwIjoxNjgwMTA4NDI1fQ.eDOo2YBzBbMH_jsQUiFk7k5BX4rw96BAAS4Zed3slGKbjVuciqYcC6IeuwlAy7zXNK-t_KdcBb_w1k_pdAkHKw';
+        this.AuthToken = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqZW5uaWUiLCJwZXJzb25JZCI6IjkwMDAwMjQ2NSIsInVuaXROdW1iZXIiOiIwNjEwMDAiLCJmdWxsTmFtZSI6IkFkdS1EamFuLCBBYmhpbmF2IEsiLCJpc0V4dGVybmFsVXNlciI6ZmFsc2UsImlhdCI6MTY4MDE1NzA2MiwiZXhwIjoxNjgwMjAwMjYyfQ.lP4NW5kJaXvETzp4Krx5AKeT7YO8aEN6-jcm_a9jWEwT-KIRshULhlhzqp2RG-7hu-g4o1P_qDuStnhnl2rUCg';
         if (this.AuthToken) {
             req = req.clone({ headers: req.headers.set('Authorization', this.AuthToken) });
         }
+        if (!this._commonService.isPreventDefaultLoader) {
+            this._commonService.isShowLoader.next(true);
+        }
         return next.handle(req).pipe(
             catchError((error) => {
+                if (!this._commonService.isManualLoaderOn) {
+                    this._commonService.isShowLoader.next(true);
+                    this._commonService.appLoaderContent = 'Loading...';
+                    this._commonService.isShowOverlay = false;
+                }
                 if (error.status === 401) {
                     this._commonService.enableSSO ? localStorage.clear() :
                     ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
@@ -59,6 +67,11 @@ export class AppHttpInterceptor implements HttpInterceptor {
             }),
 
             finalize(() => {
+                if (!this._commonService.isManualLoaderOn) {
+                    this._commonService.isShowLoader.next(false);
+                    this._commonService.appLoaderContent = 'Loading...';
+                    this._commonService.isShowOverlay = false;
+                }
             })) as any;
     }
 }
