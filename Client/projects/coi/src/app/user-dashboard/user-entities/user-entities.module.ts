@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {UserEntitiesComponent} from './user-entities.component';
 import {RouterModule, Routes} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
+import {SharedModule} from "../../shared/shared.module";
 
 const routes: Routes = [{path: '', component: UserEntitiesComponent}];
 
@@ -14,6 +15,7 @@ const routes: Routes = [{path: '', component: UserEntitiesComponent}];
         CommonModule,
         RouterModule.forChild(routes),
         MatIconModule,
+        SharedModule,
     ]
 })
 export class UserEntitiesModule {

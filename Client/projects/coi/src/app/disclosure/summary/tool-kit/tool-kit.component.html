@@ -3,11 +3,11 @@
         <div class="align-items-center d-flex f-15 fw-bold px-3 side-bar-title">
             Navigation to
         </div>
-        <div class="bg-white p-3">
-            <div class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Screening
+        <div class="bg-white p-3 scrollable-section">
+            <div (click)="scrollIntoView('COI801', 'start');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Screening
                 Questionnaire
             </div>
-            <div class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Significant Financial
+            <div (click)="scrollIntoView('COI802', 'start');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Significant Financial
                 Interest
             </div>
             <div class="fs-15 mb-2 p-3 sub-navigation-to-tabs">
@@ -15,8 +15,9 @@
                 <div>
                     <div class="fw-medium py-1">Proposals</div>
                     <div class="bg-sub-goto border fw-medium p-2 rounded-1">
-                        <ng-container *ngFor="let proposals of projectList?.proposals">
-                            <div class="sub-goto bg-white border mb-1 p-1">25853 The Engineering of Sustainable
+                        <ng-container *ngFor="let proposals of projectList?.proposals; let i = index">
+                            <div (click)="scrollIntoView('COI803', 'start'); openProjectRelationships(proposals, i)" title="{{proposals?.title}}" class="sub-goto bg-white border mb-1 p-1">
+                                {{proposals?.moduleItemId}} {{proposals?.title}}
                             </div>
                         </ng-container>
                         <ng-container *ngIf="!projectList?.proposals?.length">
@@ -39,9 +40,9 @@
                     </div>
                 </div>
             </div>
-            <div class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Conflict Management
+            <div (click)="scrollIntoView('COI805', 'start');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Conflict Management
             </div>
-            <div class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Certify</div>
+            <div (click)="scrollIntoView('COI804', 'start');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Certify</div>
         </div>
     </div>
 </div>

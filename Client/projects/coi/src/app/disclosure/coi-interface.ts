@@ -252,3 +252,15 @@ export class CommentRequest {
     coiReviewCommentTag: any = [];
     coiReviewCommentAttachment: any = [];
 }
+
+export class SFIDashboardRequestObject {
+    advancedSearch = 'L';
+    pageNumber = 30;
+    sort = {};
+    isDownload = false;
+    property16 = '';
+    property8 = '';
+    property17 = null;
+    property18 = null;
+    property19 = null;
+}

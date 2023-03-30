@@ -10,7 +10,7 @@
                 <div class="d-flex">
                     <ng-container *ngIf="isCreateMode">
                         <div class="align-items-center d-flex">
-                            <mat-icon class="green-label fs-3">bookmark</mat-icon>
+                            <mat-icon class="green-label">bookmark</mat-icon>
                         </div>
                         <div class="flex-fill ps-3">
                             <div class="three-pixel-padding-top">
@@ -90,15 +90,21 @@
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium">
                                 <tr>
-                                    <td><span class="bold-blue-color">{{coiData?.numberOfSFI ? coiData?.numberOfSFI : 0}}</span></td>
+                                    <td><span
+                                            class="bold-blue-color">{{coiData?.numberOfSFI ? coiData?.numberOfSFI : 0}}</span>
+                                    </td>
                                     <td class="ps-2">Significant Financial Interest</td>
                                 </tr>
                                 <tr *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != '3'">
-                                    <td><span class="bold-blue-color">{{coiData?.numberOfProposal ? coiData?.numberOfProposal : 0}}</span></td>
+                                    <td><span
+                                            class="bold-blue-color">{{coiData?.numberOfProposal ? coiData?.numberOfProposal : 0}}</span>
+                                    </td>
                                     <td class="ps-2">Proposals</td>
                                 </tr>
                                 <tr *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != '3'">
-                                    <td><span class="bold-blue-color">{{coiData?.numberOfAward ? coiData?.numberOfAward : 0}}</span></td>
+                                    <td><span
+                                            class="bold-blue-color">{{coiData?.numberOfAward ? coiData?.numberOfAward : 0}}</span>
+                                    </td>
                                     <td class="ps-2">Awards</td>
                                 </tr>
 
@@ -110,7 +116,8 @@
 
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress navigation-tabs row">
-                    <div [routerLink]="['screening']" queryParamsHandling='merge' class="col complete h-100 m-0"
+                    <div (click)="goToStep(1)" [class.complete]="currentStepNumber > 0" [routerLink]="['screening']"
+                         class="col h-100 m-0" queryParamsHandling='merge'
                          title="Goto step Screening Questionnaire">
                         Screening Questionnaire
                         <div class="arrow-wrapper">
@@ -119,7 +126,8 @@
                             </div>
                         </div>
                     </div>
-                    <div [routerLink]="['sfi']" queryParamsHandling='merge' class="active col ps-5 text-nowrap"
+                    <div (click)="goToStep(2)" [class.complete]="currentStepNumber > 1" [routerLink]="['sfi']"
+                         class="col ps-5 text-nowrap" queryParamsHandling='merge'
                          title="Goto step Significant Financial Interest(SFIs)">
                         Significant Financial Interest(SFIs)
                         <div class="arrow-wrapper">
@@ -128,7 +136,8 @@
                             </div>
                         </div>
                     </div>
-                    <div [routerLink]="['relationship']" queryParamsHandling='merge' class="col" title="Goto step Relationships">
+                    <div (click)="goToStep(3)" [class.complete]="currentStepNumber > 2" [routerLink]="['relationship']"
+                         class="col" queryParamsHandling='merge' title="Goto step Relationships">
                         <span class="align-self-center">Relationships</span>
                         <div class="arrow-wrapper">
                             <div class="arrow-cover">
@@ -136,7 +145,8 @@
                             </div>
                         </div>
                     </div>
-                    <div [routerLink]="['certification']" queryParamsHandling='merge' class="col" title="Goto step Certification">
+                    <div (click)="goToStep(4)" [class.complete]="currentStepNumber > 3" [routerLink]="['certification']"
+                         class="col" queryParamsHandling='merge' title="Goto step Certification">
                         <span class="align-self-center">Certification</span>
                     </div>
                 </div>
@@ -144,19 +154,23 @@
 
             <ng-container *ngIf="!isCreateMode">
                 <div class="navigation-tabs d-flex align-items-center">
-                    <div [routerLink]="['summary']" queryParamsHandling='merge' class="navigation-box border-end" role="button">
+                    <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge'
+                         role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Disclosure</div>
                     </div>
-                    <div [routerLink]="['relationship']" queryParamsHandling='merge' class="navigation-box border-end" role="button">
+                    <div [routerLink]="['relationship']" class="navigation-box border-end" queryParamsHandling='merge'
+                         role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Relationships</div>
                     </div>
-                    <div [routerLink]="['conflict-management']" queryParamsHandling='merge' class="navigation-box border-end" role="button">
+                    <div [routerLink]="['conflict-management']" class="navigation-box border-end"
+                         queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Conflict Management</div>
                     </div>
-                    <div [routerLink]="['review']" queryParamsHandling='merge' class="navigation-box border-end" role="button">
+                    <div [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
+                         role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Reviews</div>
                     </div>
-                    <div [routerLink]="['history']" queryParamsHandling='merge' class="navigation-box" role="button">
+                    <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active">History</div>
                     </div>
                 </div>
@@ -170,26 +184,36 @@
                     <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-grey pb-0 fs-14 col-2">
                         <mat-icon>home</mat-icon>
                     </button>
-                    <button class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
+                    <button (click)="goBackStep()" [disabled]="currentStepNumber==1"
+                            class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
                     </button>
-                    <button class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
+                    <button (click)="goToStep()" [disabled]="currentStepNumber==4"
+                            class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">redo</mat-icon>
                         Next
                     </button>
                 </div>
                 <div class="d-flex justify-content-around px-3 pb-3">
+                    <button (click)="sfiService.isShowSfiNavBar = !sfiService.isShowSfiNavBar"
+                            class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">add</mat-icon>
+                        Add Significant Financial Interest
+                    </button>
+                </div>
+                <div class="d-flex justify-content-around px-3 pb-3"
+                     *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()">
                     <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">save</mat-icon>
                         Save
                     </button>
                 </div>
-                <div class="d-flex justify-content-around px-3">
-                    <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
-                            (click)="sfiService.isShowSfiNavBar = !sfiService.isShowSfiNavBar">
-                        <mat-icon class="me-2">add</mat-icon>
-                        Add Significant Financial Interest
+                <div class="d-flex justify-content-around px-3" *ngIf="router.url.includes('create-disclosure/certification') && !coiData.coiDisclosure.certifiedBy">
+                    <button [disabled]="!coiService.isCertified" (click)="certifyDisclosure()"
+                            class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">done</mat-icon>
+                        Submit
                     </button>
                 </div>
             </div>
@@ -207,7 +231,7 @@
                     <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-secondary pb-0 fs-14 col-2">
                         <mat-icon>home</mat-icon>
                     </button>
-                    <button class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
+                    <button [disabled]="router.url.includes('coi/disclosure/summary')" (click)="location.back()" class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
                     </button>
@@ -227,7 +251,8 @@
                         <mat-icon class="me-2">done</mat-icon>
                         Complete Review
                     </button>
-                    <button aria-expanded="false" class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center ms-2 p-0 w-100"
+                    <button aria-expanded="false"
+                            class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center ms-2 p-0 w-100"
                             data-bs-toggle="dropdown">
                         <mat-icon>more_vert</mat-icon>
                     </button>
@@ -240,11 +265,12 @@
                         </li>
                     </ul>
                 </div>
-                <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated by:</span> Griffiths,
-                    Danielle on 02/16/2023
+                <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated by:</span>
+                    {{coiData?.coiDisclosure?.updateUser}}
+                    on {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}
                 </div>
             </div>
-            <ng-container *ngIf="_router.url.includes('/coi/disclosure/summary')">
+            <ng-container *ngIf="router.url.includes('/coi/disclosure/summary')">
             </ng-container>
         </div>
     </div>

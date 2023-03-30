@@ -40,7 +40,7 @@ export class CertificationComponent implements OnInit, OnDestroy {
     bellIconHover: boolean[] = [];
     notifications: PersonNotificationMailLog[] = [];
     loggedInPersonId = this._commonService.getCurrentUserDetail('personID');
-    dataDependencies = ['proposal', 'dataVisibilityObj', 'availableRights', 'proposalPersons'];
+    dataDependencies:any[] = ['proposal', 'dataVisibilityObj', 'availableRights', 'proposalPersons'];
     dataVisibilityObj: any;
     result: any = {};
     currentMode = '';

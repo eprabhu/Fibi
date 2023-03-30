@@ -29,3 +29,25 @@
   min-height: 55px;
   background-color: #E8E8E8;
 }
+.scrollable-section {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 75vh;
+}
+
+::-webkit-scrollbar {
+  width: .4em;
+  height: 4em;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: #eee
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc
+}

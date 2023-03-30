@@ -44,6 +44,7 @@ export class CommonService {
     appLoaderContent = '';
     isEnableLock = false;
     isDevelopment = false;
+    isPreventDefaultLoader = false;
     timer: any
     dashboardModules: any = {};
 
