@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { EntityDetailsService } from './entity-details.service';
 
 @Component({
   selector: 'app-entity-details',
@@ -7,9 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EntityDetailsComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private _entityDetails:EntityDetailsService,private _route:ActivatedRoute) { }
+  entityDetails = {};
   ngOnInit() {
+
   }
 
 }

@@ -1,0 +1,82 @@
+.entity-status {
+  color: white;
+  width: 80px;
+  height: 27px;
+  background: #54BF5B;
+  position: relative;
+  left: -22px;
+  top: -7px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 0 50px 50px 0;
+
+  &:before {
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-bottom: 6px solid #01830A;
+    border-left: 6px solid transparent;
+    top: -6px;
+    left: 0;
+  }
+}
+.card-header,.card-footer {
+  background-color: #ebf3fb;
+}
+.relationship {
+    color: #7e8b8f;
+    padding: 2px 12px;
+    background-color: #fafaeb;
+    border-end-end-radius: 15px;
+    border-start-end-radius: 15px;
+    position: relative;
+    left: -17px;
+    top: -21px;
+    font-weight: 500 !important;
+    border: 1px solid #dee2e6 !important;
+    font-size: 14px;
+}
+.card-header{
+height: 44px;
+}
+
+.action-bar{
+  position: relative;
+  top: -11px;
+  left: -5px;
+}
+
+.action-btn {
+    background-color: white;
+    border-color: #d3cccc;
+    border-radius: 3px;
+    width: 5cm;
+}
+
+.icon-size {
+  height: 14px;
+}
+
+
+.back-ward {
+  position: relative;
+  right: -10px;
+  top: -2px;
+}
+
+.fs-3{
+  position: relative;
+  right: 10px;
+}
+.inactive {
+  background-color :#5f6462
+}
+.toggle-header-btn {
+  width: 30px;
+  color: #A64040;
+  height: 30px;
+  mat-icon {
+    transform: scale(1.2);
+  }
+}

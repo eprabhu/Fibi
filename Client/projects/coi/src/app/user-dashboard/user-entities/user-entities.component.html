@@ -38,7 +38,7 @@
                     <span class="fw-bold me-2"> Relationship Start Date:</span> {{entities?.involvementStartDate | dateFormatter}}
                 </div>
                 <div>
-                    <button class="align-items-center btn btn-outline-primary d-flex fs-14">
+                    <button (click)="viewEntityDetails(entities)" class="align-items-center btn btn-outline-primary d-flex fs-14">
                         <mat-icon class="me-1">visibility</mat-icon>
                         View
                     </button>

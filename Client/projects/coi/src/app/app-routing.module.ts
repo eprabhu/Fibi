@@ -27,6 +27,9 @@ const routes: Routes = [
                 path: 'entity-management',
                 loadChildren: () => import('./entity-management/entity-management.module').then(m => m.EntityManagementModule)
             },
+            {
+              path:'entity-details', loadChildren:() => import ('../app/disclosure/entity-details/entity-details.module').then(m =>m.EntityDetailsModule)
+            }
         ]
     },
     {path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule)}

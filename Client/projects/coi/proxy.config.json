@@ -64,11 +64,23 @@
     "secure": false
   },
     "/saveEntityProjectRelation": {
-    "target": "http://stage.fibiweb.com/fibiCOI/",
+    "target": "https://stage.fibiweb.com/fibiCOI/",
     "secure": false
    },
     "/singleEntityProjectRelation": {
-    "target": "http://stage.fibiweb.com/fibiCOI/",
+    "target": "https://stage.fibiweb.com/fibiCOI/",
     "secure": false
+    },
+    "/getSFIDetails": {
+      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "secure": false
+    },
+    "/searchEntity": {
+      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "secure": false
+    },
+    "/findCountry": {
+      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "secure": false
     }
-}
+  }

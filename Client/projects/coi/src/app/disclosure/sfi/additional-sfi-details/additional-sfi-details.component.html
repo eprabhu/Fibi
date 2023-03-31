@@ -1,7 +1,17 @@
 <div class="container-fluid">
   <div class="card" tabindex="-1">
-    <h5 class="card-header fs-16">Additional Details</h5>
-    <div class="card-body form-group">
+    <!-- <h5 class="card-header fs-16">Additional Details</h5> -->
+    <div class="m-2">
+      <div class="row d-flex">
+        <span class="col-4">
+          <h5 class="fs-16">Additional Details</h5>
+        </span>
+        <span class="col-8 align-items-center d-flex justify-content-end material-icons-outlined"
+          (click)="isExpanded = !isExpanded;alert()">{{isExpanded?'expand_more' :'expand_less'}}</span>
+      </div>
+      <hr>
+    </div>
+    <div *ngIf="isExpanded" class="card-body form-group">
       <div class="">
         <div class="row">
           <div class="col-12 d-flex">
@@ -10,8 +20,15 @@
                 <label class="col-5 fw-bold fs-14">Start date of involvement </label><label class="mandatory">*</label>
               </span>
               <div class="col-7">
-                <input class="form-control ">
                 <p class="fs-14 new-line-property text-secondary">Select a date</p>
+                <span class="dateField">
+                  <input matInput [matDatepicker]="startDate" id="start-date-involvement" (click)="startDate.open()"
+                    class="form-control d-inline-block" placeholder="dd/MM/yyyy">
+                  <!-- <i class="material-icons-outlined">calendar_month</i> -->
+                  <mat-datepicker #startDate>
+                  </mat-datepicker>
+                </span>
+                <p class="new-line-property text-secondary fs-14-nav">Select a date</p>
               </div>
             </div>
             <div class="col-6 d-flex">
@@ -19,8 +36,14 @@
                 <label class="col-5 fw-bold fs-14">End date of involvement </label><label class="mandatory">*</label>
               </span>
               <div class="col-7">
-                <input class="form-control ">
                 <p class="fs-14 new-line-property text-secondary">Select a date</p>
+                <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
+                  class="form-control" placeholder="dd/MM/yyyy">
+                <!-- <mat-icon class="material-icons">date-picker</mat-icon> -->
+                <!-- <mat-datepicker-toggle matIconSuffix [for]="endDate"></mat-datepicker-toggle> -->
+                <mat-datepicker #endDate>
+                </mat-datepicker>
+                <p class="new-line-property text-secondary fs-14-nav">Select a date</p>
               </div>
             </div>
           </div>
@@ -56,33 +79,41 @@
           <div class="col-10">
             <textarea class="form-control" placeholder="Type here" id="releationship-entity">
             </textarea>
-            <p class="fs-14 new-line-property text-secondary">This description is presented in the Relationship section to help you relate this entity to your research
+            <p class="new-line-property text-secondary fs-14-nav">This description is presented in the Relationship
+              section to help you relate this entity to your research
               projects.
-              Please enter an adequate description of the organization, and of your role with them,to aid both you, and a
+              Please enter an adequate description of the organization, and of your role with them,to aid both you, and
+              a
               reviewers' understanding of the association between the entity and work.
             </p>
           </div>
         </div>
         <div class="col-12 d-flex">
           <span class="col-2">
-            <label class="col-7 fw-bold fs-14">Principle Business Area of Entity</label><label class="mandatory">*</label>
+            <label class="col-7 fw-bold fs-14">Principle Business Area of Entity</label><label
+              class="mandatory">*</label>
           </span>
           <div class="col-10">
             <textarea class="form-control" placeholder="Type here">
             </textarea>
-            <p class="fs-14 new-line-property text-secondary">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <p class="new-line-property text-secondary fs-14-nav">Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua.
 
             </p>
           </div>
         </div>
         <div class="col-12 d-flex">
           <span class="col-2">
-            <label class="col-7 fw-bold fs-14">Relationship of Entity to your University responsibilities</label><label class="mandatory">*</label>
+            <label class="col-7 fw-bold">Relationship of Entity to your University responsibilities</label><label
+              class="mandatory">*</label>
           </span>
           <div class="col-10 ">
             <textarea class="form-control" placeholder="Type here">
             </textarea>
-            <p class="fs-14 new-line-property text-secondary">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <p class="new-line-property text-secondary fs-14-nav">Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua.
             </p>
           </div>
         </div>

@@ -21,18 +21,9 @@
     left: 0;
   }
 }
-.card-header,.card-footer {
+.card-header {
   background-color: #ebf3fb;
-}
-.relationship {
-  color: #7e8b8f;
-  padding: 2px 12px;
-  background-color: #fafaeb;
-  border-end-end-radius: 15px;
-  border-start-end-radius: 15px;
-}
-.card-header{
-height: 44px;
+  height: 44px;
 }
 
 .action-bar{
@@ -40,6 +31,34 @@ height: 44px;
   top: -11px;
   left: -5px;
 }
-.edit-pen {
 
+.action-btn {
+    background-color: white;
+    border-color: #d3cccc;
+    border-radius: 3px;
+    width: 3cm;
 }
+
+.icon-size {
+  height: 14px;
+}
+
+
+.back-ward {
+  position: relative;
+  right: -10px;
+  top: -2px;
+}
+
+.fs-3{
+  position: relative;
+  right: -4px;
+  color: #7c868f;
+}
+
+.invalid{
+  position: relative;
+  top: 6px;
+  color: red;
+}
+

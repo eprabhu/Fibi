@@ -54,6 +54,8 @@ export class SfiComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this._sfiService.getSfiDetails(this.disclosureId, this.disclosureStatusCode, this.personId).subscribe((data: any) => {
             if (data) {
                 this.coiFinancialEntityDetails = data;
+                console.log('coiFinancialEntityDetails',this.coiFinancialEntityDetails);
+
             }
         }));
     }
