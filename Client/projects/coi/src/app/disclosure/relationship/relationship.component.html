@@ -1,37 +1,31 @@
-<ng-container *ngFor="let test of proposalArray; let i = index">
+<div class="form-group col-lg-12 col-md-12 col-12 d-flex mx-auto">
+  <input type="text" placeholder="Search by Module Id, Module Name, PI, Status, Sponsor, Prime Sponsor  "
+      class="searchInput form-control" [(ngModel)]="searchText">
+      <a class="searchButton">
+        <mat-icon class="mat-icon material-icons" aria-hidden="true" data-mat-icon-type="font">search</mat-icon></a>
+</div>
+  <ng-container *ngIf="(proposalArray| SearchFilter : searchText:
+['title', 'moduleItemId', 'moduleItemKey', 'moduleStatus', 'principalInvestigator', 'sponsor', 'primeSponsor']) as searchResult; let i = index">
+<ng-container *ngFor="let test of searchResult;let i = index">
   <div class="card outer-card">
     <div class="card-body p-2">
       <div class="row">
-        <div class="col-md-4  order-md-2">
-          <div class="card">
-            <div class="card-body rightCard">
-              <span class="right-Card-Heading">Project/SFI Relationship</span>
-                <div>
-                  <div>
-                    <label>Conflict : <span class="badge badge-pill badge-primary Conflict-badge"><span>1</span></span></label>
-                 </div>
-                 <div>
-                    <label>Potential Conflict: <span class="badge badge-pill badge-primary potentialConflict-badge"><span>0</span></span></label>
-                 </div>
-                 <div>
-                    <label>No Conflict: <span class="badge badge-pill badge-primary noConflict-badge"><span>0</span></span></label>
-                 </div>
-                  <button class="btn btn-primary btn-sm btn-relationship" *ngIf="i%2 == 0" (click)="isShowRelation = true" type="submit">Define Relationship</button>
-                  <button type="button" class="btn btn-outline-secondary btn-sm btn-relationship-inactive"  *ngIf="i%2 != 0" (click)="isShowRelation = true">Define Relationship</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-8 order-md-1 col-12 leftCard ">
-          <div class="col-12 d-flex align-items-center">
+        <div class="col-md-8 col-12 leftCard ">
+          <div class="col-12 d-flex" *ngIf="test.moduleCode == 3">
             <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
-            <p class="entity-title">
-                <strong>{{test?.title}} </strong>
+            <p class="entity-title" (click)="selectedProjectForView=test" data-bs-toggle="modal" data-bs-target="#moduleViewModal">
+            <strong>#{{test?.moduleItemId}} - {{test?.title}} </strong>
+            </p>
+          </div>
+          <div class="col-12 d-flex" *ngIf="test.moduleCode == 1">
+            <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
+            <p class="entity-title" (click)="selectedProjectForView=test" data-bs-toggle="modal" data-bs-target="#moduleViewModal">
+                <strong>#{{test?.moduleItemKey}} - {{test?.title}} </strong>
             </p>
           </div>
            <div class="row">
               <div class=" col-4">
-                 <label class="label-text">Proposal Status:</label>
+                 <label class="label-text">{{test?.moduleCode == 1 ? 'Award Status:' : 'Proposal Status:'}}</label>
                  <span class="grey-text">{{test?.moduleStatus}} </span>
              </div>
              <div class=" col-4">
@@ -45,12 +39,131 @@
           </div>
           <div>
               <label class="label-text">Prime sponsor:</label>
-              <span class="grey-text">{{test?.primeSponsor}} </span>
+              <span *ngIf="test.primeSponsor" class="grey-text">{{test?.primeSponsor}} </span>
+              <span *ngIf="!test.primeSponsor" class="noDataExists">No Prime Sponsor exist</span>
           </div>
+        </div>
+        <div class="col-4">
+          <div class="border h-100 rounded-1 table-bg-color">
+            <span class="status-pill">Project/SFI Relationship</span>
+            <div class="row fs-14" style="text-align: right;">
+              <div class="col-6 mt-3">
+                <div class="row">
+                  <div class="col-6">
+                    <label class="count-label">Conflict :</label>
+                  </div>
+                  <div class="col-6" style="text-align: center;">
+                    <span *ngIf="test.sfiCompleted !== null" class="badge badge-pill badge-primary Conflict-badge">
+                      <span>{{getDisclosureCount(1, test.disclosureStatusCount)}}</span>
+                      </span>
+                      <span *ngIf="test.sfiCompleted == null">--</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <label class="count-label">No Conflict : </label>
+                  </div>
+                  <div class="col-6" style="text-align: center;">
+                      <span *ngIf="test.sfiCompleted !== null" class="badge badge-pill badge-primary noConflict-badge">
+                      <span>{{getDisclosureCount(2, test.disclosureStatusCount)}}</span>
+                    </span>
+                    <span *ngIf="test.sfiCompleted == null">--</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <label  class="count-label">Potential Conflict :
+                    </label>
+                  </div>
+                  <div class="col-6"  style="text-align: center;">
+                    <span *ngIf="test.sfiCompleted !== null" class="badge badge-pill badge-primary potentialConflict-badge">
+                      <span>{{getDisclosureCount(3, test.disclosureStatusCount)}}</span>
+                    </span>
+                    <span *ngIf="test.sfiCompleted == null">--</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 mt-3" style="text-align: center;">
+                <div class="row mt-2">
+                  <div class="col-12">
+                    <button class="btn btn-primary btn-sm d-flex" *ngIf="!test.sfiCompleted" (click)="openDefineRelationship(test)" type="submit">
+                      <mat-icon class="mr-10">rate_review</mat-icon>Define Relationship</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm d-flex" *ngIf="test.sfiCompleted" (click)="openDefineRelationship(test)">
+                      <mat-icon class="mr-10">rate_review</mat-icon>Define Relationship</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                  <div class="col-12">
+                    <div class="disclosure-status-complete ml-15" *ngIf="test.sfiCompleted == true"><mat-icon class="complete-icon">done</mat-icon><span class="complete">Completed</span></div>
+                    <div class="disclosure-status-incomplete ml-15" *ngIf="test.sfiCompleted == false"><mat-icon class="in-complete-icon">not_interested</mat-icon><span class="notComplete">Not Completed</span></div>                  </div>
+                  </div>
+              </div>
+            </div>
+            </div>
+            <div>
+          </div>
+        </div>
         </div>
       </div>
     </div>
-  </div>
 </ng-container>
+<div *ngIf="searchResult.length == 0">
+  <app-no-information> </app-no-information>
+</div>
+</ng-container>
+<app-define-relation *ngIf="isShowRelation" [coiStatusList]="coiStatusList" [moduleCode]="moduleCode" [moduleItemId]="moduleId" [module]="selectedProject" (closePage)="closePage()"></app-define-relation>
 
-<app-define-relation *ngIf="isShowRelation" (closePage)="closePage()"></app-define-relation>
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="module-view-modal-button" data-bs-toggle="modal" data-bs-target="#moduleViewModal"></button>
+<div class="modal fade" id="moduleViewModal" tabindex="-1" aria-labelledby="moduleViewModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+            Details of
+            <strong>
+              #{{selectedProjectForView?.moduleCode == 3 ? selectedProjectForView?.moduleItemId : selectedProjectForView?.moduleItemKey}} - {{selectedProjectForView?.title}}
+            </strong>
+        </h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mx-0 mt-3">
+          <div class="col-lg-4 col-sm-6 col-6 mb-3">
+            <label class="d-block label-text">PI</label>
+            <span [ngClass]="selectedProjectForView?.principalInvestigator ? 'grey-text' : 'noDataExists'">
+              {{selectedProjectForView?.principalInvestigator ? selectedProjectForView?.principalInvestigator : 'No Data'}}</span>
+          </div>
+          <div class="col-lg-4 col-sm-6 col-6 mb-3">
+            <label class="d-block label-text">Period</label>
+            <span class="grey-text">
+              {{selectedProjectForView?.startDate | dateFormatter}} - {{selectedProjectForView?.endDate | dateFormatter}}</span>
+          </div>
+          <div class="col-lg-4 col-sm-6 col-6 mb-3">
+            <label class="d-block label-text">{{selectedProjectForView?.moduleCode == 3 ? 'Proposal' : 'Award'}}  Status</label>
+            <span [ngClass]="selectedProjectForView?.moduleStatus ? 'grey-text' : 'noDataExists'">
+             {{selectedProjectForView?.moduleStatus ? selectedProjectForView?.moduleStatus : 'No Data'}}</span>
+          </div>
+          <div class="col-lg-4 col-sm-6 col-12 mb-3">
+            <label class="d-block label-text">Lead Unit</label>
+            <span class="grey-text">
+              {{selectedProjectForView?.unitName}} - {{selectedProjectForView?.unitNumber}}</span>
+          </div>
+          <div class="col-lg-4 col-sm-6 col-6 mb-3">
+            <label class="d-block label-text">Sponsor</label>
+            <span [ngClass]="selectedProjectForView?.sponsor ? 'grey-text' : 'noDataExists'">
+              {{selectedProjectForView?.sponsor ? selectedProjectForView?.sponsor : 'No Data'}}</span>
+          </div>
+          <div class="col-lg-4 col-sm-6 col-6 mb-3">
+            <label class="d-block label-text">Prime Sponsor</label>
+            <span [ngClass]="selectedProjectForView?.primeSponsor ? 'grey-text' : 'noDataExists'">
+              {{selectedProjectForView?.primeSponsor ? selectedProjectForView?.primeSponsor : 'No Data'}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer mx-2">
+        <button type="button" (click)="selectedProjectForView= null" class="btn btn-primary" data-bs-dismiss="modal">More Details</button>
+        <button type="button" (click)="selectedProjectForView= null" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+    </div>
+  </div>
+</div>

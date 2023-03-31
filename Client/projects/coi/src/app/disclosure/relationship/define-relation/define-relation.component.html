@@ -1,10 +1,28 @@
-<div class="row fixed-tree">
-  <div class="show-chat" (click)="minimizeTree()"><span class="show-chat-icon"> X </span></div>
-    <div class="qst-tree-content">
-      <div class="col-12 d-flex">
+<div #myToast id="success-toast"class="toast align-items-center text-white success-toast border-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+
+<div class="card" #relationShipOverlay [class.overlay]="isShowDetails">
+  <div @enterAnimation *ngIf="isShowDetails" class="row fixed-tree">
+    <div class="close shadow-medium" (click)="hideSfiNavBar()">
+      <img src="{{deployMap}}assets/images/close.svg" alt="close button">
+    </div>
+    <div class="relationship-content">
+      <div class="col-12 d-flex align-items-center" *ngIf="selectedProject?.moduleCode == 3">
         <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
         <p class="entity-title">
-            <strong>#2222: Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur</strong>
+            <strong>{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
+        </p>
+      </div>
+      <div class="col-12 d-flex align-items-center" *ngIf="selectedProject?.moduleCode == 1">
+        <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
+        <p class="entity-title">
+            <strong>#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
         </p>
       </div>
         <div class="card outer-card">
@@ -19,11 +37,12 @@
               </div>
               <div class="col-6">
                 <label class="label-text">Period :</label>
-                <span class="ml-2 grey-text">{{selectedProject?.startDate}} - {{selectedProject?.endDate}}</span>
+                <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
               </div>
               <div class="col-6">
                 <label class="label-text">Prime Sponsor :</label>
-              <span class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
+              <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
+              <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">No Prime Sponsor exist</span>
               </div>
               <div class="col-6">
                 <label class="label-text">Proposal Status : </label>
@@ -31,33 +50,45 @@
               </div>
               <div class="col-6">
                 <label class="label-text">Lead Unit :</label>
-              <span class="ml-2 grey-text">{{selectedProject?.leadUnit}}</span>
+              <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+              <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
               </div>
               </div>
               <div class="inner-card card m-2">
                 <div class="row m-2" *ngIf="isEditMode">
+                  <br>
                   <div class="col-2">
+                    <span class="mandatory">*</span>
                     <label class="fw-500">COI Status
+                      <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Update your conflict status." data-bs-placement="top">
+                        <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
+                      </span>
                     </label>
                     <div>
                       <select [(ngModel)]="coiStatusCode"
                       class="form-control select-default">
-                      <option value=null>--Select--</option>
+                      <option [value]=null>--Select--</option>
                       <option [value]="status.discDetStatusCode" *ngFor="let status of coiStatusList">
                           {{status?.description}}</option>
-                    </select>
+                      </select>
                     </div>
+                    <span class="invalid-feedback" *ngIf="coiValidationMap.get('coiStatus')">
+                      {{coiValidationMap.get('coiStatus')}}
+                    </span>
                   </div>
                   <div class="col-7">
-                    <label class="fw-500">Define relationship between SFIs and Projects</label>
+                    <label class="fw-500">Define relationship between SFIs and Projects
+                      <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Briefly describe the relationship between the project and SFI." data-bs-placement="top">
+                        <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon></span>
+                    </label>
                     <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt"
                     [(ngModel)]="coiDescription" appAutoGrow rows="1"
                     placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
                   </div>
-                  <div class="col-3 mt-4">
-                <button type="button" class="btn btn-outline-secondary mr-10 btn-sm" id="req-attachment-close-btn" data-toggle="modal"
-                data-target="#clearConfirmationModal">Clear All</button>
-                <button type="button" class="btn btn-primary btn-sm" id="req-attachment-add-btn" (click)="applyToAll()">Apply & Save</button>
+                  <div class="col-3 button-align" *ngIf="newArray.length > 0">
+                    <!-- data-bs-toggle="modal" data-bs-target="#applyToAllConfirmationModal" -->
+                <button type="button" class="btn btn-outline-secondary mr-10 btn-sm" id="clear all entities coi status and description" (click)="openClearConfirmationModal()">Clear All</button>
+                <button type="button" class="btn btn-primary btn-sm" id="apply common coi status and description and save"(click)="openSaveAllConfirmationModal()">Apply & Save</button>
                   </div>
                 </div>
               </div>
@@ -67,22 +98,29 @@
                   <thead class="fixed-th">
                       <tr class="header-border table-secondary">
                         <th style="width: 20%;">Significant Financial Interest</th>
-                        <th style="width: 20%;">COI Status</th>
+                        <th style="width: 20%;"> <span class="mandatory">*</span>COI Status</th>
                         <th style="width: 40%;">Define relationship between SFIs and Projects</th>
                         <th style="width: 20%;">Actions</th>
                       </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let test of newArray; let i = index">
-                      <!-- <td class="table-data fw-600">{{test?.coiFinancialEntity?.coiEntity?.coiEntityName}}</td> -->
-                      <td class="table-data border-end fw-600">{{test?.coiEntityName}}</td>
+                      <td class="table-data border-end fw-600">{{test?.coiFinancialEntity?.coiEntity?.coiEntityName}}</td>
                       <td class="border-end">
                         <select [(ngModel)]="test.discDetStatusCode"
                         class="form-control select-default" [disabled]="!isEditMode">
                         <option value=null>--Select--</option>
-                        <option [value]="status.discDetStatusCode" *ngFor="let status of coiStatusList">
+                        <option [value]="status.discDetStatusCode" *ngFor="let status of coiStatusList; let i = index">
                             {{status?.description}}</option>
                         </select>
+                        <!-- <span class="invalid-feedback" *ngIf="coiTableValidation.get('clear'+i)">
+                          {{coiTableValidation.get('clear'+i)}}
+                        </span> -->
+                        <div>
+                          <span class="invalid-feedback" *ngIf="coiTableValidation.get('save'+i)">
+                            {{coiTableValidation.get('save'+i)}}
+                          </span>
+                        </div>
                       </td>
                       <td class="border-end">
                         <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt"
@@ -90,25 +128,77 @@
                         [disabled]="!isEditMode" rows="1"
                         placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
                       </td>
-                      <td class="border-end">
-                        <button type="button" class="btn btn-outline-secondary btn-sm mr-10" data-dismiss="modal" id="award-doc-popup-close-btn"
-                        >Cancel</button>
-                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" id="award-doc-popup-close-btn"
+                      <td>
+                        <button type="button" class="btn btn-outline-secondary btn-sm mr-10" id="clear {{test?.coiFinancialEntity?.coiEntity?.coiEntityName}} coi status and description" (click)="openClearModal(i)"
+                        >Clear</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="save {{test?.coiFinancialEntity?.coiEntity?.coiEntityName}} coi status and description" (click)="saveSingleEntity(i, test)"
                         >Save</button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <div class="no-data-container w-100" *ngIf="newArray.length == 0">
-                <span class="no-data-icon-outer">
-                    <div class="no-data-icon">
-                        <i class="fa fa-file-o" aria-hidden="true"></i>
-                        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                    </div>
-                </span>
-                <h4>There is no information in this section.</h4>
-            </div>
+                <div *ngIf="newArray.length == 0">
+                  <app-no-information> </app-no-information>
+                </div>
         </div>
-        </div>
+    </div>
   </div>
+</div>
+
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-clear-all-button" data-bs-toggle="modal" data-bs-target="#clearConfirmationModal"></button>
+<div class="modal fade" id="clearConfirmationModal" tabindex="-1" aria-labelledby="clearConfirmationModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Do you want to clear all the data entered?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="clearAll()" data-bs-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-save-all-button" data-bs-toggle="modal" data-bs-target="#applyToAllConfirmationModal"></button>
+<div class="modal fade" id="applyToAllConfirmationModal" tabindex="-1" aria-labelledby="applyToAllConfirmationModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Do want to update all your Project - SFI relations?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="applyToAll()" data-bs-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-single-clear-button" data-bs-toggle="modal" data-bs-target="#singleClearConfirmationModal"></button>
+<div class="modal fade" id="singleClearConfirmationModal" tabindex="-1" aria-labelledby="singleClearConfirmationModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Do you want to clear the data of <strong> {{newArray[clearIndex]?.coiFinancialEntity?.coiEntity?.coiEntityName}} </strong> values?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="clearSingleEntity()" data-bs-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
