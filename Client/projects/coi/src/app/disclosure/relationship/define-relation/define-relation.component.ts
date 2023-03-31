@@ -1,30 +1,39 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { easeIn } from '../../../../../../fibi/src/app/common/utilities/animations';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { Toast } from 'bootstrap';
+import { slideHorizontal } from '../../../../../../fibi/src/app/common/utilities/animations';
+import { environment } from '../../../../environments/environment';
+import { DataStoreService } from '../../services/data-store.service';
+import { RelationshipService } from '../relationship.service';
+declare var $: any;
 
 @Component({
   selector: 'app-define-relation',
   templateUrl: './define-relation.component.html',
   styleUrls: ['./define-relation.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [easeIn],
+  animations: [slideHorizontal]
 })
 export class DefineRelationComponent implements OnInit {
 
-  @Input() ruleIndex: number;
+  @Input() coiStatusList = [];
+  @Input() moduleItemId: any;
+  @Input() moduleCode: any;
+  @Input() module: any;
   @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
 
   isMaximized: boolean = false;
-
+  deployMap = environment.deployUrl;
   isProjectListVisible = true;
-  coiStatusList: any = [];
   selectedProject: any;
   // $subscriptions: Subscription[] = [];
-  coiStatusCode: any;
+  coiStatusCode: any = null;
   coiDescription: any;
   sfiDetails: any;
   dependencies = ['coiDisclosure'];
   currentProjectId: any;
 	isOpenModal = false;
+  coiValidationMap: Map<string, string> = new Map();
+  coiTableValidation: Map<string, string> = new Map();
 
   newArray: Array<any> = [];
   disclosureNumber: any;
@@ -33,64 +42,59 @@ export class DefineRelationComponent implements OnInit {
   personId: any;
   isShowInfo = true;
   coiDisclosure: any;
+  isShowDetails = false;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  coiData: any;
+  toast:any;
+  clearIndex: any;
 
-  constructor() { }
+  @ViewChild('relationShipOverlay', { static: true }) relationShipOverlay: ElementRef;
+  @ViewChild('myToast',{static:true}) toastEl: ElementRef
+
+  constructor(private _relationShipService: RelationshipService, public snackBar: MatSnackBar, private _dataStore: DataStoreService) { }
 
   ngOnInit() {
-    // this.loadProjectRelations();
-    this.createNewArray();
-    // this.maximizeTree();
+    this.toast=new Toast(this.toastEl.nativeElement,{})
+    this.getDataFromStore();
+    this.getEntityList();
   }
 
-  createNewArray() {
-    this.newArray.push({'coiEntityName': 'Google', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Alexon Pharmaceuticals', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Daliki Sankiyo', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Elisa', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Google', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Alexon Pharmaceuticals', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Daliki Sankiyo', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Elisa', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Google', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Alexon Pharmaceuticals', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Daliki Sankiyo', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.newArray.push({'coiEntityName': 'Elisa', 'discDetStatusCode': 1, 'comment': {'comments': 'test comment'}});
-    this.selectedProject = {
-      principalInvestigator: 'Smith, Will',
-      sponsor: 'Air Force',
-      startDate: '27/02/2012',
-      endDate: '27/02/2022',
-      primeSponsor: 'Aerospace Nation',
-      moduleStatus: 'In Progress',
-      leadUnit: '100000 - RMIT',
-    }
-    this.coiStatusList = [{'description':'No Conflict', 'discDetStatusCode': '1'},
-    {'description':'Potential Conflict', 'discDetStatusCode': '2'},
-    {'description':'Conflict Identified', 'discDetStatusCode': '3'}]
+  private getDataFromStore() {
+    this.coiData = this._dataStore.getData();
+    console.log(this.coiData)
   }
 
-    /**
-   * updates the width of the tree to maximum according to the size of the current screen
-  // */
-  //   maximizeTree() {
-  //     this.isMaximized = true;
-  //     setTimeout(() => {
-  //       (document.getElementsByClassName('qst-tree-content')[0] as HTMLElement).style.width = window.innerWidth - 240 + 'px';
-  //       (document.getElementsByClassName('show-chat')[0] as HTMLElement).style.width = window.innerWidth - 240 + 'px';
-  //     });
-  //   }
-  //   /** updates the width of the tree to 192px which fits into the left size of the screen
-  //   */
-    minimizeTree() {
-      // this.isMaximized = false;
-      // (document.getElementsByClassName('qst-tree-content')[0] as HTMLElement).style.width = '0';
-      // (document.getElementsByClassName('show-chat')[0] as HTMLElement).style.width = '0';
-      // setTimeout(() => {
-        this.closePage.emit(false);
-      // });
+  showTaskNavBar() {
+    if (this.isShowDetails) {
+      this.relationShipOverlay.nativeElement.style.display = 'block';
+      document.documentElement.classList.add('cdk-global-scrollblock');
+    } else {
+      this.relationShipOverlay.nativeElement.style.display = 'none';
+      document.documentElement.classList.remove('cdk-global-scrollblock');
     }
+  }
+
+  hideSfiNavBar() {
+        this.relationShipOverlay.nativeElement.style.display = 'block';
+        document.documentElement.classList.add('cdk-global-scrollblock');
+        this.isShowDetails = false;
+        setTimeout(() => {
+          this.closePage.emit(false);
+        }, 1000)
+    }
+
+    openSnackBar(message: string, action: string) {
+      this.snackBar.open(message, action, {
+        duration:5000,
+          verticalPosition: 'top',
+          horizontalPosition: 'right',
+      });
+   }
 
     applyToAll() {
+      this.coiValidationMap.clear();
+      this.coiTableValidation.clear();
       this.newArray.forEach((ele: any) => {
         if (!ele.discDetStatusCode) {
           ele.discDetStatusCode = this.coiStatusCode;
@@ -98,13 +102,130 @@ export class DefineRelationComponent implements OnInit {
           ele.comment.comments = this.coiDescription;
         }
       });
+      this.saveClick();
     }
 
-    // loadProjectRelations() {
-    //   this._relationShipService.getProjectRelations().subscribe((data: any) => {
-    //     this.coiStatusList = data.coiDisclosureDetailStatuses;
-    //   });
-    // }
+    getEntityList() {
+      this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
+        this.newArray = data.coiDisclosureDetails;
+        this.selectedProject = this.module;
+        this.isShowDetails = true;
+        this.showTaskNavBar();
+      }, err => {
+        this.isShowDetails = true;
+        this.showTaskNavBar();
+      });
+    }
+
+    openClearConfirmationModal() {
+      this.coiValidationMap.clear();
+      if (this.coiStatusCode || this.coiDescription || this.isAnyOneEntityAnswered()) {
+        document.getElementById('hidden-clear-all-button').click();
+      }
+    }
+
+    isAnyOneEntityAnswered() {
+       return !!this.newArray.find(ele => ele.discDetStatusCode || ele.comment.comments);
+    }
+
+    openSaveAllConfirmationModal() {
+      this.coiValidationMap.clear();
+      if (this.coiStatusCode) {
+        document.getElementById('hidden-save-all-button').click();
+      } else {
+        this.coiValidationMap.set('coiStatus', '* Please select COI Status');
+      }
+    }
+
+    clearAll() {
+      this.newArray.forEach((ele: any) => {
+        ele.discDetStatusCode = null;
+        ele.comment.comments = null;
+      });
+      this.coiStatusCode = null;
+      this.coiDescription = '';
+      this.saveClick();
+    }
+
+    clearSingleEntity() {
+      this.coiTableValidation.delete('save'+this.clearIndex );
+      // if (!this.newArray[index].discDetStatusCode && !this.newArray[index].comment.comments) {
+      //   this.coiTableValidation.set('clear'+index , 'No data to clear');
+      // } else {
+        this.newArray[this.clearIndex ].discDetStatusCode = null;
+        this.newArray[this.clearIndex ].comment.comments = null;
+        this.newArray[this.clearIndex ].coiFinancialEntityId = this.newArray[this.clearIndex ].coiFinancialEntity.coiFinancialEntityId;
+        this.newArray[this.clearIndex ].disclosureId = this.coiData.coiDisclosure.disclosureId;
+        this.newArray[this.clearIndex ].disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
+        this.newArray[this.clearIndex ].moduleCode = this.selectedProject.moduleCode;
+        this.newArray[this.clearIndex ].moduleItemKey = this.selectedProject.moduleItemId;
+        this.getCommentObject(this.newArray[this.clearIndex ].comment);
+        this.newArray[this.clearIndex ].coiDisclosureDetailsStatus = this.getStatusObject(this.newArray[this.clearIndex ].discDetStatusCode);
+        this.singleSaveClick(this.newArray[this.clearIndex], this.clearIndex);
+    }
+
+    openClearModal(index) {
+      this.coiTableValidation.clear();
+      this.clearIndex = index;
+      if (this.newArray[index].discDetStatusCode || this.newArray[index].comment.comments) {
+        document.getElementById('hidden-single-clear-button').click();
+      }
+    }
+
+    saveSingleEntity(index, test) {
+      this.coiTableValidation.delete('save'+index );
+      if ([null, 'null'].includes(this.newArray[index].discDetStatusCode)) {
+        this.coiTableValidation.set('save'+index , 'Please select COI Status');
+      } else {
+        test.coiFinancialEntityId = test.coiFinancialEntity.coiFinancialEntityId;
+        test.disclosureId = this.coiData.coiDisclosure.disclosureId;
+        test.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
+        test.moduleCode = this.selectedProject.moduleCode;
+        test.moduleItemKey = this.selectedProject.moduleItemId;
+        this.getCommentObject(test.comment);
+        test.coiDisclosureDetailsStatus = this.getStatusObject(test.discDetStatusCode);
+        this.singleSaveClick(test, index);
+      }
+    }
+
+    prepareSaveObject() {
+      this.newArray.forEach((ele: any) => {
+        ele.coiFinancialEntityId = ele.coiFinancialEntity.coiFinancialEntityId;
+        ele.disclosureId = this.coiData.coiDisclosure.disclosureId;
+        ele.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
+        ele.moduleCode = this.selectedProject.moduleCode;
+        ele.moduleItemKey = this.selectedProject.moduleItemId;
+        this.getCommentObject(ele.comment);
+        ele.coiDisclosureDetailsStatus = this.getStatusObject(ele.discDetStatusCode);
+      });
+    }
+
+    getStatusObject(code) {
+      return this.coiStatusList.find(ele => ele.discDetStatusCode === code);
+    }
+
+    getCommentObject(comment: any) {
+        comment.disclosureNumber = '1000-0037';
+        comment.commentTypeCode = 1;
+        comment.comments = comment.comments ? comment.comments : null;
+    }
+
+    saveClick() {
+      this.prepareSaveObject();
+        this._relationShipService.saveEntityProjectRelation(this.newArray, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+          this.newArray = data.coiDisclosureDetails;
+        }, err => {
+      });
+    }
+
+    singleSaveClick(element, index) {
+        this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+          this.newArray[index] = data.coiDisclosureDetail;
+          this.toast.show();
+          this.clearIndex = null;
+      }, err => {
+      });
+    }
 
 }
 

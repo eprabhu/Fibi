@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --host 192.168.1.12 --port 4900",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -25,7 +25,9 @@
     "@angular/router": "^15.2.2",
     "@ckeditor/ckeditor5-angular": "^1.2.3",
     "@ckeditor/ckeditor5-build-decoupled-document": "26.0.0",
+    "@types/bootstrap": "^5.2.6",
     "@types/lodash-es": "^4.17.1",
+    "bootstrap": "^5.2.3",
     "core-js": "^2.4.1",
     "element-remove": "^1.0.4",
     "install": "^0.13.0",
