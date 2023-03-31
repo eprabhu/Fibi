@@ -336,7 +336,7 @@ public class AwardProjectOutcomeDaoImpl implements AwardProjectOutcomeDao {
 		Root<Proposal> rootProposal = query.from(Proposal.class);
 		Predicate predicateOne = rootProposal.get(PROPOSAL_ID).in(proposalIds);
 		Predicate predicateFour =  builder.notEqual(rootProposal.get("documentStatusCode"), Constants.PROPOSAL_DOCUMENT_STATUS_ARCHIVE);
-		Predicate predicateTwo = null;
+		Predicate predicateTwo;
 		Predicate predicateThree = builder.like(rootProposal.get(TITLE), "%" + searchString + "%");
 		if (searchString != null) {
 			predicateTwo = builder.not(rootProposal.get("statusCode").in(proposalStatuses));

@@ -245,4 +245,11 @@ public interface ConflictOfInterestService {
 	 */
 	public String loadDisclosureHistory(ConflictOfInterestVO vo);
 
+	/**
+	 * This method is ued to save a single entity project relation
+	 *
+	 * @param vo
+	 * @return
+	 */
+	ConflictOfInterestVO saveSingleEntityProjectRelation(ConflictOfInterestVO vo);
 }

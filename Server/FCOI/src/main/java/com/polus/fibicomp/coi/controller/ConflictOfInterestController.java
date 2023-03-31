@@ -45,6 +45,7 @@ public class ConflictOfInterestController {
 	@PostMapping("/getDisclosureRelations")
 	public String getDisclosureRelations(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for getDisclosureRelations");
+		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
 		return conflictOfInterestService.getDisclosureRelations(vo);
 	}
 
@@ -93,6 +94,7 @@ public class ConflictOfInterestController {
 	@PostMapping("/getEntityProjectRelations")
 	public String getEntityProjectRelations(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for getEntityProjectRelations");
+		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
 		return conflictOfInterestService.getEntityProjectRelations(vo);
 	}
 
@@ -231,4 +233,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.loadDisclosureHistory(vo);
 	}
 
+	@PostMapping("/singleEntityProjectRelation")
+	public String saveSingleEntityProjectRelation(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for saveEntityProjectRelation");
+		vo = conflictOfInterestService.saveSingleEntityProjectRelation(vo);
+		return conflictOfInterestService.checkSFICompleted(vo);
+	}
 }
