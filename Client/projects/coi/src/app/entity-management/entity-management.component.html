@@ -1,4 +1,121 @@
-<div class="container-fluid px-3 py-2">
-</div>
+<div class="container-fluid px-3 py-2" [@slideInOut]>
+  <div *ngIf="!viewDetails" class="row">
+    <div class="col-12 d-flex">
+      <div class="col-8">
+        <ul class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
+          <li class="mr-2 cursor-pointer" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}" role="presentation"
+            (click)="entityTabName('ALL_ENTITIES')">All Entities
+            <span *ngIf="activeTabName === 'ALL_ENTITIES'"
+              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
 
-<app-entity-list></app-entity-list>
+          </li>
+          <li class="mr-2 cursor-pointer" [ngClass]="{'active': activeTabName === 'UNVERIFIED'}" role="presentation"
+            (click)="entityTabName('UNVERIFIED')">Unverified Entities
+            <span *ngIf="activeTabName === 'UNVERIFIED'"
+              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+
+          </li>
+          <li class="mr-2 cursor-pointer" [ngClass]="{'active': activeTabName === 'HIGH_RISK'}" role="presentation"
+            (click)="entityTabName('HIGH_RISK')">High Risk Entities
+            <span *ngIf="activeTabName === 'HIGH_RISK'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 justify-content-end d-flex">
+        <button class="btn btn-primary d-flex"><mat-icon class="add-icon">add</mat-icon> Add New Entity</button>
+      </div>
+    </div>
+  </div>
+  <app-view-entity-details  *ngIf="viewDetails" (hideEntityDetails)="hideEntityDetails($event)"></app-view-entity-details>
+  <div class="row mt-4">
+    <div class="col-10 mt-1">
+      <input class="form-control w-100">
+    </div>
+    <div class="col-2 mt-1 justify-content-end d-flex">
+      <button class="btn btn-primary d-flex"
+        (click)="isViewAdvanceSearch=!isViewAdvanceSearch"><mat-icon>tune</mat-icon> Advanced Search</button>
+    </div>
+  </div>
+  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-4">
+    <div class="row m-2">
+      <div class="col-12 d-flex">
+        <div class="col-3 d-grid">
+          <label class="fw-bold">Entity Name</label>
+          <input type="text" class="form-control text-secondary" placeholder="Ex:">
+        </div>
+        <div class="col-3 d-grid">
+          <label class="fw-bold">Country</label>
+          <input type="text" class="form-control text-secondary" placeholder="Ex:">
+        </div>
+        <div class="col-3 d-grid">
+          <label class="fw-bold">Status</label>
+          <select class="form-select text-secondary">
+            <option value="1">Active</option>
+            <option value="2">In Active</option>
+          </select>
+        </div>
+        <div class="col-3 d-grid">
+          <label class="fw-bold">Entity Type</label>
+          <select class="form-select text-secondary">
+            <option value="1">For Profit</option>
+            <option value="2">Non-Profit</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-12 d-flex">
+        <div class="col-3 d-grid">
+          <label class="fw-bold">Has SFI</label>
+          <div class="activate-btn align-items-center d-flex pt-1">
+            <span class="pt-1">
+              <a *ngIf="isHasSfiOn" class="pl-2">
+                <label class="switch" (click)="isHasSfiOn = !isHasSfiOn">
+                  <input type="checkbox"checked>
+                  <span class="slider round"><small>On</small></span>
+                </label>
+              </a>
+              <a  *ngIf="!isHasSfiOn" class="pl-2">
+                <label class="switch" (click)="isHasSfiOn= !isHasSfiOn">
+                  <input type="checkbox">
+                  <span class="slider round"><small class="deactivate-text">Off</small></span>
+                </label>
+              </a>
+            </span>
+          </div>
+        </div>
+        <div class="col-3 d-grid">
+          <label class="fw-bold">Has Disclosure</label>
+          <div class="activate-btn align-items-center d-flex pt-1">
+            <span class="pt-1">
+              <a *ngIf="isHasDisclosureOn" class="pl-2">
+                <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn">
+                  <input type="checkbox"checked>
+                  <span class="slider round"><small>On</small></span>
+                </label>
+              </a>
+              <a  *ngIf="!isHasDisclosureOn" class="pl-2">
+                <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn">
+                  <input type="checkbox">
+                  <span class="slider round"><small class="deactivate-text">Off</small></span>
+                </label>
+              </a>
+            </span>
+          </div>
+        </div>
+        <div class="col-3 d-grid">
+          <label class="fw-bold">Risk Level</label>
+          <select class="form-select text-secondary">
+            <option value="1">High</option>
+            <option value="2">Medium</option>
+            <option value="3">Low</option>
+          </select>
+        </div>
+        <div class="col-3 d-flex justify-content-end align-items-end">
+          <button class="btn btn-outline-secondary">Clear</button>
+          <button class="btn btn-primary">Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-entity-list (viewEntityDetails)="selectedEntity($event);isViewAdvanceSearch = false"></app-entity-list>
+</div>

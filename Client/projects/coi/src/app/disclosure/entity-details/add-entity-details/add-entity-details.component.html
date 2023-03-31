@@ -1,0 +1,128 @@
+<div class="container-fluid m-2">
+  <div class="card">
+    <div class="card-header">
+      <div class=" row d-flex">
+        <div class="col-6 d-flex">
+          <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"
+            [ngClass]="!entityDetails?.isActive?'inactive':''">{{!entityDetails?.isActive?'Inactive':'Active'}}</span>
+          <h5 class="m-1"> {{entityDetails?.coiEntity?.coiEntityName}}</h5>
+        </div>
+        <div class="col-6 align-items-center justify-content-end action-bar mt-1 d-flex">
+          <button class="m-1 new-line-property text-secondary fs-14-nav shadow action-btn">
+            <mat-icon class="justify-content-center align-items-center fs-4 icon-size">
+              mode
+            </mat-icon>
+            Modify</button>
+          <button class="m-1 action-btn new-line-property text-secondary fs-14-nav shadow">
+            <mat-icon class="justify-content-center align-items-center fs-4 icon-size">schedule</mat-icon>
+            Inactivate
+          </button>
+          <button class="m-1 action-btn new-line-property text-secondary fs-14-nav shadow">
+            <mat-icon class="justify-content-center align-items-center fs-4 icon-size">history </mat-icon>
+            History</button>
+          <span (click)="navigateBack()">
+            <mat-icon class="justify-content-center align-items-center fs-3"> reply</mat-icon>
+            <label class="back-ward">Back</label>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row d-flex">
+        <div class="col-12 d-flex">
+          <div class="col-2 d-grid">
+            <strong>Entity Type</strong>
+            <label>{{entityDetails?.coiEntity?.entityType?.description}}</label>
+          </div>
+          <div class="col-2 d-grid">
+            <strong>Country</strong>
+            <label>{{entityDetails?.coiEntity?.country?.countryName}}</label>
+          </div>
+          <div class="col-2 d-grid">
+            <strong>City</strong>
+            <label>Boston</label>
+          </div>
+          <div class="col-2 d-grid">
+            <strong>Website</strong>
+            <label>{{entityDetails?.coiEntity?.webUrl}}</label>
+          </div>
+          <div class="col-2 d-grid">
+            <strong>Email Address </strong>
+            <label>{{entityDetails?.coiEntity?.emailAddress}}</label>
+          </div>
+          <div class="col-1 d-grid">
+            <strong>Phone Number</strong>
+            <label>1-475-230-2596</label>
+          </div>
+          <div *ngIf="!isExpanded" class="col-1 justify-content-end d-flex align-items-center">
+            <mat-icon (click)="isExpanded=!isExpanded">expand_more</mat-icon>
+          </div>
+        </div>
+        <div *ngIf="isExpanded" class="col-12 d-flex">
+          <div class="col-8 d-grid">
+            <strong>Address</strong>
+            <label>{{entityDetails?.coiEntity?.addressLine1}}</label>
+          </div>
+          <div class="col-4 mt-3">
+            <label>Last Updated by:</label>
+            <label>{{entityDetails?.updateUser}} on {{entityDetails?.updateTimestamp | dateFormatterWithTimeZone:
+              'long'}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isExpanded" class="card-footer">
+      <div class="relationship fw-bold col-1 shadow-lg">Relationship</div>
+      <div class="row">
+        <div class="col-12 d-flex">
+          <div class="col-2 d-grid">
+            <strong>Sponsors Research</strong>
+            <label>Yes</label>
+          </div>
+          <div class="col-2 d-grid">
+            <strong>Start Date of Involvement</strong>
+            <label>12/22/2022</label>
+          </div>
+          <div class="col-4 d-grid">
+            <strong>Relationship Type</strong>
+            <label>Yes</label>
+          </div>
+          <div class="col-2 d-grid">
+            <strong>Relationship with</strong>
+            <label>Self/Spouse/Domestic Partner</label>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col-12 d-grid mt-3">
+            <strong>Relationship with Entity</strong>
+            <label>Serving on Advisory Board</label>
+          </div>
+          <div class="col-12 d-grid mt-3">
+            <strong>Principal Business Area of Entity</strong>
+            <label>Serving on Advisory Board</label>
+          </div>
+          <div class="col-4 d-grid mt-3">
+            <strong>Relationship with Entity</strong>
+            <label>Alexion is focused on developing and delivering life-transforming therapies for patients with ra...
+              <a href="">Read More</a></label>
+          </div>
+          <div class="col-12 d-flex">
+            <div class="col-4 d-grid mt-3">
+              <strong>Relationship of Entity to your University responsibilities</strong>
+              <label>Entity sponsoring Funded Research</label>
+            </div>
+            <!-- <button (click)="isCardExpanded=!isCardExpanded"
+              class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+              <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+            </button> -->
+            <div
+              class="col-8 align-items-center justify-content-end d-flex toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm">
+              <mat-icon (click)="isExpanded=!isExpanded">expand_less</mat-icon>
+              <!-- col-8 r  justify-content-end d-flex align-items-center -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

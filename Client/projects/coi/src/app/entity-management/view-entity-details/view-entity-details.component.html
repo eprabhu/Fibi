@@ -1,0 +1,76 @@
+  <div class="card" [@slowSlideInOut]>
+    <div class="card-header">
+      <div class="form-row d-flex">
+        <div class="col-6 d-flex">
+          <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"> Active</span>
+          <h5 class="m-1"> Alexion Pharmaceuticals</h5>
+        </div>
+        <div class="col-6 align-items-center justify-content-end action-bar mt-1 d-flex">
+          <button class="m-1 new-line-property text-secondary fs-14-nav shadow action-btn">
+            <mat-icon class="justify-content-center align-items-center fs-6 icon-size">
+              mode
+            </mat-icon>
+            Modify</button>
+          <button class="m-1 action-btn new-line-property text-secondary fs-14-nav shadow">
+            <mat-icon class="justify-content-center align-items-center fs-6 icon-size">schedule</mat-icon>
+            Inactivate
+          </button>
+          <button class="m-1 action-btn new-line-property text-secondary fs-14-nav shadow">
+            <mat-icon class="justify-content-center align-items-center fs-6 icon-size">history </mat-icon>
+            History</button>
+          <span (click)="backToList()">
+            <mat-icon class="justify-content-center align-items-center fs-3"> reply</mat-icon>
+            <label class="back-ward">Back</label>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row d-flex">
+        <div class="col-12 d-flex">
+          <div class="col-2 d-grid">
+            <span class="fw-bold">Entity Type</span>
+            <label class="text-secondary">Publicly Owned for Profit</label>
+          </div>
+          <div class="col-2 d-grid">
+            <span class="fw-bold">Country</span>
+            <label class="text-secondary">United States of America</label>
+          </div>
+          <div class="col-2 d-grid">
+            <span class="fw-bold">City</span>
+            <label class="text-secondary">Boston</label>
+          </div>
+          <div class="col-2 d-grid">
+            <span class="fw-bold">Website</span>
+            <label class="text-secondary">www.alexionpharma.com</label>
+          </div>
+          <div class="col-2 d-grid">
+            <span class="fw-bold">Email Address </span>
+            <label class="text-secondary">contact@alexionpharma.com</label>
+          </div>
+          <div class="col-1 d-grid">
+            <span class="fw-bold">Phone Number</span>
+            <label class="text-secondary">1-475-230-2596</label>
+          </div>
+        </div>
+        <div class="col-12 d-flex">
+          <div class="col-6 d-grid">
+            <span class="fw-bold">Address</span>
+            <label class="text-secondary">ALEXION GLOBALHEADQUARTERES121 Seaport Blvd, Boston,</label>
+          </div>
+          <div class="col-2 d-grid">
+            <span class="fw-bold">Risk Level</span>
+            <label class="text-secondary"><mat-icon class="invalid material-icons-round">warning</mat-icon>High</label>
+          </div>
+          <div class="col-2 d-grid">
+            <span class="fw-bold">Verified By</span>
+            <label class="text-secondary">Will Smith on 02/12/2022</label>
+          </div>
+          <div class="col-2 d-grid">
+            <span class="fw-bold">Last Updated by</span>
+            <label class="text-secondary">Erick MS,02/16/2023 2:23 AM</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

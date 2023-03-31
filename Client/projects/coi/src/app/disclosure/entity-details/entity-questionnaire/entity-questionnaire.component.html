@@ -1,0 +1,38 @@
+<div class="container-fluid">
+  <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
+    <div (click)="currentSelected.tab = 'Financial'" class="border-end navigation-icons px-3 py-1" role="button">
+      <span [class.active]="currentSelected.tab === 'Financial'?'active':''" class="pb-3 active">Financial</span>
+    </div>
+    <div (click)="currentSelected.tab = 'Commitment'" class="navigation-icons px-3 py-1" role="button">
+      <span [class.active]="currentSelected.tab === 'Commitment'?'active':''">Commitment</span>
+    </div>
+    <div (click)="currentSelected.tab = 'Travel'" class="navigation-icons px-3 py-1" role="button">
+      <span [class.active]="currentSelected.tab === 'Travel'?'active':''">Travel</span>
+    </div>
+  </nav>
+</div>
+<div class="mt-4">
+  <app-add-relationship *ngIf="!definedRelationships?.length"></app-add-relationship>
+  <div *ngIf="definedRelationships?.length" class="container-fluid">
+    <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
+      <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;">
+        <div (click)="getQuestionnaire(coiFinancialEntityDetail)" class="border-end navigation-icons px-3 py-1"
+          role="button">
+          <span [class.active]="activeRelationship === coiFinancialEntityDetail?.financialEntityRelTypeCode?'active':''"
+            class="pb-3 active">
+            {{coiFinancialEntityDetail?.coiFinancialEntityRelType?.description}}</span>
+        </div>
+      </ng-container>
+      <div (click)="activeRelationship = 'add_relationship' " class="navigation-icons px-3 py-1" role="button">
+        <span [class.active]="activeRelationship === 'add_relationship'?'active':''">
+          <mat-icon class="material-icons-outlined">add_circle_outline</mat-icon>
+          Add Relationship
+        </span>
+      </div>
+    </nav>
+    <app-view-questionnaire-list [configuration]="configuration"
+      [questionnaireHeader]="'Relation with Significant Financial Interest'" [externalSaveEvent]="$externalSaveEvent"
+      [isShowSave]="false">
+    </app-view-questionnaire-list>
+  </div>
+</div>

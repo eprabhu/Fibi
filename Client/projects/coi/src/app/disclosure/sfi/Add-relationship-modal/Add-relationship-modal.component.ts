@@ -1,4 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import bootstrap from "../../../../assets/js/bootstrap.bundle.min.js";
 
 declare var $: any;
 @Component({
@@ -11,15 +13,23 @@ export class AddRelationshipModalComponent implements OnInit {
   @Output() relationshipResult: EventEmitter<any> = new EventEmitter<any>();
 
   isAddRelationshipModal: any;
-  
-  constructor() { }
+
+  constructor(private _router:Router) { }
 
   ngOnInit() {
-    const modal = document.getElementById('btn-add-relationships');
-    modal.click();
+    let myModal = new bootstrap.Modal(document.getElementById('addRelationshipModal'));
+    myModal.show();
+
   }
 
   closeModal() {
     this.relationshipResult.emit(false);
+  }
+
+  withoutRelation(){
+
+    let myModal = new bootstrap.Modal(document.getElementById('addRelationshipModal'));
+    myModal.hide();
+    this._router.navigate(['/coi/entity-details']);
   }
 }

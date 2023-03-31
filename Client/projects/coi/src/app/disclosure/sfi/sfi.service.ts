@@ -14,4 +14,8 @@ export class SfiService {
             {'disclosureId': id, 'disclosureStatusCode': disclosureStatusCode, 'personId': personId});
     }
 
+  saveOrUpdateCOIEntity(prams) {
+    return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCOIEntity', prams)
+  }
+
 }

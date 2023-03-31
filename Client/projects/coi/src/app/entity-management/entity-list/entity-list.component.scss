@@ -6,3 +6,22 @@
     align-items: center;
 
 }
+.invalid{
+  position: relative;
+  top: 6px;
+  color: red;
+}
+
+ .status-active-pill {
+  background-color: #4CB57D;
+  color: white;
+  padding: 3px 12px;
+  border-radius: 15px;
+
+}
+.status-inactive-pill {
+  background-color: #5f6462;
+  color: white;
+  padding: 3px 12px;
+  border-radius: 15px;
+}
