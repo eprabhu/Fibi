@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Collections;
+import java.util.HashMap;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -266,17 +269,24 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		StringBuilder hqlQuery = new StringBuilder();
-		hqlQuery.append("SELECT (SELECT COUNT(*) FROM COI_FINANCIAL_ENTITY WHERE PERSON_ID = :personId) = ");
+		hqlQuery.append("SELECT (SELECT COUNT(*) FROM COI_FINANCIAL_ENTITY WHERE PERSON_ID = :personId) as entityCount, ");
 		hqlQuery.append("(SELECT COUNT(*) FROM COI_DISCLOSURE C1 INNER JOIN COI_DISCLOSURE_DETAILS C2 ON C2.DISCLOSURE_ID=C1.DISCLOSURE_ID ");
 		hqlQuery.append("INNER JOIN COI_FINANCIAL_ENTITY C3 ON C3.COI_FINANCIAL_ENTITY_ID=C2.COI_FINANCIAL_ENTITY_ID ");
 		hqlQuery.append("INNER JOIN COI_DISC_DETAILS_COMMENTS C4 ON C4.DISCLOSURE_DETAILS_ID=C2.DISCLOSURE_DETAILS_ID ");
-		hqlQuery.append("WHERE C2.DISC_DET_STATUS_CODE IS NOT NULL AND C4.COMMENT IS NOT NULL AND C1.PERSON_ID = :personId and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId) as completedFlag");
+		hqlQuery.append("WHERE C2.DISC_DET_STATUS_CODE IS NOT NULL AND C1.PERSON_ID = :personId ");
+		hqlQuery.append("and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId) as disDetCount");
 		Query query = session.createNativeQuery(hqlQuery.toString());
 		query.setParameter("personId", personId);
 		query.setParameter("disclosureId", disclosureId);
 		query.setParameter("moduleCode", moduleCode);
 		query.setParameter("moduleItemId", moduleItemId);
-		return Integer.parseInt(query.getSingleResult().toString()) > 0 ? Boolean.TRUE : Boolean.FALSE;
+		List<Object[]> countData = query.getResultList();
+		if (countData != null && !countData.isEmpty()) {
+			Integer entityCount = Integer.parseInt(countData.get(0)[0].toString());
+			Integer disDetCount = Integer.parseInt(countData.get(0)[1].toString());
+			return  entityCount == 0 || disDetCount == 0 ? null : entityCount > disDetCount ? Boolean.FALSE : Boolean.TRUE;
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -286,24 +296,31 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		if (disclosureId != null && Constants.DEV_PROPOSAL_MODULE_CODE.equals(moduleCode)) {
-			hqlQuery.append("SELECT DISTINCT T1.MODULE_ITEM_KEY FROM COI_DISCLOSURE_DETAILS T1 INNER JOIN EPS_PROPOSAL T2 ON T2.PROPOSAL_ID=T1.MODULE_ITEM_KEY WHERE T1.MODULE_CODE = 3 AND T2.DOCUMENT_STATUS_CODE <> 3 AND T2.STATUS_CODE not IN (:statuses) AND T1.DISCLOSURE_ID= :disclosureId");
+			hqlQuery.append("SELECT DISTINCT T1.MODULE_ITEM_KEY FROM COI_DISCLOSURE_DETAILS T1 INNER JOIN EPS_PROPOSAL T2 ");
+			hqlQuery.append("ON T2.PROPOSAL_ID=T1.MODULE_ITEM_KEY WHERE T1.MODULE_CODE = 3 AND T2.DOCUMENT_STATUS_CODE <> 3 AND ");
+			hqlQuery.append("T2.STATUS_CODE not IN (:statuses) AND T1.DISCLOSURE_ID= :disclosureId");
 			Query  query = session.createNativeQuery(hqlQuery.toString());
 			query.setParameter("statuses", statuses);
 			query.setParameter("disclosureId", disclosureId);
 			ids = query.getResultList();
 		} else if (disclosureId != null && Constants.AWARD_MODULE_CODE.equals(moduleCode)) {
-			hqlQuery.append("SELECT DISTINCT T1.MODULE_ITEM_KEY FROM COI_DISCLOSURE_DETAILS T1 INNER JOIN AWARD T2 ON T2.AWARD_ID=T1.MODULE_ITEM_KEY WHERE T1.MODULE_CODE = 1 AND (T2.AWARD_SEQUENCE_STATUS ='ACTIVE' OR (T2.AWARD_SEQUENCE_STATUS='PENDING' AND AWARD_DOCUMENT_TYPE_CODE=1)) AND T1.DISCLOSURE_ID= :disclosureId");
+			hqlQuery.append("SELECT DISTINCT T1.MODULE_ITEM_KEY FROM COI_DISCLOSURE_DETAILS T1 INNER JOIN AWARD T2 ON ");
+			hqlQuery.append("T2.AWARD_ID=T1.MODULE_ITEM_KEY WHERE T1.MODULE_CODE = 1 AND (T2.AWARD_SEQUENCE_STATUS ='ACTIVE' OR ");
+			hqlQuery.append("(T2.AWARD_SEQUENCE_STATUS='PENDING' AND AWARD_DOCUMENT_TYPE_CODE=1)) AND T1.DISCLOSURE_ID= :disclosureId");
 			Query  query = session.createNativeQuery(hqlQuery.toString());
 			query.setParameter("disclosureId", disclosureId);
 			ids = query.getResultList();
 		} else if (Constants.DEV_PROPOSAL_MODULE_CODE.equals(moduleCode)) {
-			hqlQuery.append("SELECT T2.PROPOSAL_ID FROM EPS_PROPOSAL T1 INNER JOIN EPS_PROPOSAL_PERSONS T2 ON T2.PROPOSAL_ID=T1.PROPOSAL_ID WHERE T1.DOCUMENT_STATUS_CODE <> 3 AND T1.STATUS_CODE not IN (:statuses) and T2.PERSON_ID = :personId");
+			hqlQuery.append("SELECT T2.PROPOSAL_ID FROM EPS_PROPOSAL T1 INNER JOIN EPS_PROPOSAL_PERSONS T2 ON ");
+			hqlQuery.append("T2.PROPOSAL_ID=T1.PROPOSAL_ID WHERE T1.DOCUMENT_STATUS_CODE <> 3 AND T1.STATUS_CODE not IN (:statuses) ");
+			hqlQuery.append("and T2.PERSON_ID = :personId");
 			Query  query = session.createNativeQuery(hqlQuery.toString());
 			query.setParameter("statuses", statuses);
 			query.setParameter("personId", personId);
 			ids = query.getResultList();
 		} else if (Constants.AWARD_MODULE_CODE.equals(moduleCode)) {
-			hqlQuery.append("SELECT T2.AWARD_ID FROM AWARD T1 INNER JOIN AWARD_PERSONS T2 ON T2.AWARD_ID=T1.AWARD_ID WHERE (T1.AWARD_SEQUENCE_STATUS ='ACTIVE' OR (T1.AWARD_SEQUENCE_STATUS='PENDING' AND AWARD_DOCUMENT_TYPE_CODE=1)) and T2.PERSON_ID = :personId");
+			hqlQuery.append("SELECT T2.AWARD_ID FROM AWARD T1 INNER JOIN AWARD_PERSONS T2 ON T2.AWARD_ID=T1.AWARD_ID WHERE ");
+			hqlQuery.append("(T1.AWARD_SEQUENCE_STATUS ='ACTIVE' OR (T1.AWARD_SEQUENCE_STATUS='PENDING' AND AWARD_DOCUMENT_TYPE_CODE=1)) and T2.PERSON_ID = :personId");
 			Query awardQuery = session.createNativeQuery(hqlQuery.toString());
 			awardQuery.setParameter("personId", personId);
 			ids = awardQuery.getResultList();
@@ -900,6 +917,35 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		criteriaUpdate.set("updateTimestamp", commonDao.getCurrentTimestamp());
 		criteriaUpdate.where(cb.equal(root.get("disclosureId"), disclosureId));
 		session.createQuery(criteriaUpdate).executeUpdate();
+	}
+
+
+	@Override
+	public List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		StringBuilder hqlQuery = new StringBuilder();
+		hqlQuery.append("SELECT  C2.DISC_DET_STATUS_CODE, COUNT(*) FROM COI_DISCLOSURE C1 INNER JOIN COI_DISCLOSURE_DETAILS C2 ON C2.DISCLOSURE_ID=C1.DISCLOSURE_ID ");
+		hqlQuery.append("INNER JOIN COI_FINANCIAL_ENTITY C3 ON C3.COI_FINANCIAL_ENTITY_ID=C2.COI_FINANCIAL_ENTITY_ID ");
+		hqlQuery.append("INNER JOIN COI_DISC_DETAILS_COMMENTS C4 ON C4.DISCLOSURE_DETAILS_ID=C2.DISCLOSURE_DETAILS_ID ");
+		hqlQuery.append("WHERE C2.DISC_DET_STATUS_CODE IS NOT NULL AND C1.PERSON_ID = :personId ");
+		hqlQuery.append("and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId GROUP BY C2.DISC_DET_STATUS_CODE ");
+		hqlQuery.append("ORDER BY C2.DISC_DET_STATUS_CODE ASC");
+		Query query = session.createNativeQuery(hqlQuery.toString());
+		query.setParameter("personId", personId);
+		query.setParameter("disclosureId", disclosureId);
+		query.setParameter("moduleCode", moduleCode);
+		query.setParameter("moduleItemId", moduleItemId);
+		List<Object[]> countData = query.getResultList();
+		if (countData != null && !countData.isEmpty()) {
+			List<Map<Object, Object>> countList = new ArrayList<>();
+			for (Object[] obj : countData) {
+				Map<Object, Object> countObj = new HashMap<>();
+				countObj.put(obj[0], obj[1]);
+				countList.add(countObj);
+			}
+			return countList;
+		}
+		return Collections.emptyList();
 	}
 
 }

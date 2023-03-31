@@ -1,6 +1,8 @@
 package com.polus.fibicomp.coi.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
 
 public class DisclosureDetailDto {
 
@@ -25,6 +27,12 @@ public class DisclosureDetailDto {
 	private String moduleStatus;
 
 	private String unitName;
+
+	private String unitNumber;
+
+	private String primeSponsor;
+
+	private List<Map<Object, Object>> disclosureStatusCount;
 
 	public Integer getModuleCode() {
 		return moduleCode;
@@ -114,4 +122,27 @@ public class DisclosureDetailDto {
 		this.unitName = unitName;
 	}
 
+	public String getPrimeSponsor() {
+		return primeSponsor;
+	}
+
+	public void setPrimeSponsor(String primeSponsor) {
+		this.primeSponsor = primeSponsor;
+	}
+
+	public String getUnitNumber() {
+		return unitNumber;
+	}
+
+	public void setUnitNumber(String unitNumber) {
+		this.unitNumber = unitNumber;
+	}
+
+	public List<Map<Object, Object>> getDisclosureStatusCount() {
+		return disclosureStatusCount;
+	}
+
+	public void setDisclosureStatusCount(List<Map<Object, Object>> disclosureStatusCount) {
+		this.disclosureStatusCount = disclosureStatusCount;
+	}
 }

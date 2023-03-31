@@ -1,6 +1,7 @@
 package com.polus.fibicomp.coi.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -546,4 +547,14 @@ public interface ConflictOfInterestDao {
 	 */
 	public void updateFinacialEntityInDisclosureRelation(Integer disclosureId, Integer coiFinancialEntityId);
 
+	/**
+	 *This method is used to get the count based on conflict status
+	 *
+	 * @param moduleCode module code
+	 * @param moduleItemId module item key
+	 * @param disclosureId disclosure id
+	 * @param personId login person id
+	 * @return list of count objects
+	 */
+	List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId);
 }
