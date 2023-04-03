@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-entity-details-list',
@@ -20,7 +21,7 @@ export class EntityDetailsListComponent implements OnInit {
   isviewDetails :true;
   currentSelected = 'Person';
 
-  constructor() { }
+  constructor(private _router:Router) { }
 
 
   ngOnInit() {
@@ -28,6 +29,6 @@ export class EntityDetailsListComponent implements OnInit {
 
 
   viewDetails(data){
-
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' } })
   }
 }

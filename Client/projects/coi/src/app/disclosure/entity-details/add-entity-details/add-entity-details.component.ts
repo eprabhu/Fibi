@@ -25,6 +25,7 @@ export class AddEntityDetailsComponent implements OnInit {
 
 
   navigateBack() {
-    this._router.navigateByUrl(this._entityDetailsServices.previousURL);
+    this._router.navigate(['/coi/user-dashboard/list/entities'])
+    // this._router.navigateByUrl(this._entityDetailsServices.previousURL);
   }
 }
