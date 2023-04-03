@@ -17,7 +17,7 @@
     </div>
   </nav>
 </div>
-<table class="table mt-3">
+<table class="table tableSkin mt-3">
   <thead class="border bg-light">
     <tr>
       <th scope="col">Name</th>
@@ -29,25 +29,23 @@
       <th scope="col">Actions</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="bg-white">
     <tr class="border" *ngFor="let entityListData of entityDetails;let i=index">
       <td>{{entityListData?.name}}</td>
       <td>{{entityListData?.department}}</td>
       <td>{{entityListData?.title}}</td>
       <td>{{entityListData?.involvementStartDate}}</td>
       <td>{{entityListData?.involvementStartDate}}</td>
-      <td><span [ngClass]="entityListData.status ==='Active'?'status-active-pill':'status-inactive-pill'">
-       {{entityListData?.status}}
+      <td><span [ngClass]="entityListData.status ==='A'?'status-active-pill':'status-inactive-pill'">
+       {{entityListData?.status === 'A'?'Active':'Inactive'}}
       </span>
       </td>
       <td>
-        <button style=" padding: 3px 18px;font-size: 13px; " class="btn btn-outline-secondary"
+        <button style="padding: 3px 18px;font-size: 13px; " class="btn btn-outline-secondary"
           (click)="isViewEntityDetails =!isViewEntityDetails;viewDetails(isViewEntityDetails)"><span><i
               class="fa fa-eye" aria-hidden="true"></i></span> View</button>
       </td>
     </tr>
   </tbody>
 </table>
-
-
 </div>

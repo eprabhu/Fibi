@@ -20,7 +20,7 @@ export class EntityManagementComponent implements OnInit {
   constructor(private _entityManagementService: EntityManagementService) {
   }
   ngOnInit() {
-    this.getCOIAdminDashboard()
+    // this.getCOIAdminDashboard()
   }
 
   selectedEntity(event) {

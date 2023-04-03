@@ -15,6 +15,9 @@ export class EntityManagementService {
     return this._http.post(this._commonService.baseUrl + '/getCOIAdminDashboard', prams)
   }
 
+  getAllSystemEntityList(){
+    return this._http.get(`${this._commonService.baseUrl}/getAllSystemEntityList`);
+  }
 }
 export class CoiDashboardRequest {
   isDownload = false;

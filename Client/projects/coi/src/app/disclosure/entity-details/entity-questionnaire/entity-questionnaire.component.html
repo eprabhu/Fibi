@@ -24,7 +24,7 @@
         </div>
       </ng-container>
       <div (click)="activeRelationship = 'add_relationship' " class="navigation-icons px-3 py-1 text-primary" role="button">
-        <span>
+        <span (click)="addRelationship()">
           <mat-icon class="material-icons-outlined">add_circle_outline</mat-icon>
           <label class="btn-position">Add Relationship</label>
         </span>
@@ -38,3 +38,5 @@
   </app-view-questionnaire-list>
   </div>
 </div>
+<app-add-relationship-modal *ngIf="isShowRelationshipModal" [isWithOutRelationship]="false" (relationshipResult)="addEntityToggle($event)" (hideModal)="hideRelationshipModal($event)">
+</app-add-relationship-modal>

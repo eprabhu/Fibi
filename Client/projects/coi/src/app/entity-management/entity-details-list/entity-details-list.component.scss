@@ -8,3 +8,16 @@
 .user-dashboard-nav {
   min-height: 42px;
 }
+.status-active-pill {
+  background-color: #4CB57D;
+  color: white;
+  padding: 3px 12px;
+  border-radius: 15px;
+
+}
+.status-inactive-pill {
+  background-color: #5f6462;
+  color: white;
+  padding: 3px 12px;
+  border-radius: 15px;
+}

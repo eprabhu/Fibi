@@ -18,7 +18,8 @@ export class ViewEntityDetailsComponent implements OnInit {
   }
 
   backToList(){
-    this.hideEntityDetails.emit(false);
+    // this.hideEntityDetails.emit(false);
+    this._router.navigate(['/coi/entity-management'])
   }
 
   modifyEntity() {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
 import { EntityDetailsService } from '../entity-details.service';
+import { hideModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-entity-questionnaire',
@@ -30,6 +31,7 @@ export class EntityQuestionnaireComponent implements OnInit {
   currentSelected = {
     tab: 'Financial'
   }
+  isShowRelationshipModal = false;
 
   constructor(private _commonService: CommonService, private _router: Router, private _entityDetailsServices: EntityDetailsService) { }
 
@@ -40,7 +42,7 @@ export class EntityQuestionnaireComponent implements OnInit {
 
   getDataFromService() {
     this.getDefinedRelationships()
-    if(this.definedRelationships.length > 0) {
+    if (this.definedRelationships.length > 0) {
       this.getQuestionnaire(this.definedRelationships[0])
     }
   }
@@ -66,5 +68,14 @@ export class EntityQuestionnaireComponent implements OnInit {
     this.activeRelationship = data.financialEntityRelTypeCode;
     this.configuration.moduleSubItemKey = data.financialEntityRelTypeCode;
     this.configuration = Object.assign({}, this.configuration);
+  }
+  addRelationship() {
+    this.isShowRelationshipModal = true;
+  }
+  hideRelationshipModal(event){
+    this.isShowRelationshipModal = event
+  }
+  addEntityToggle(event){
+    hideModal(event)
   }
 }
