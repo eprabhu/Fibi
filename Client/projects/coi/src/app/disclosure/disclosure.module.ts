@@ -15,7 +15,6 @@ import {DataStoreService} from "./services/data-store.service";
 import {RouterGuardService} from "./services/router-guard.service";
 import {SharedModule} from "../shared/shared.module";
 import { SfiModule } from './sfi/sfi.module';
-import { AddRelationshipModalComponent } from './sfi/Add-relationship-modal/Add-relationship-modal.component';
 
 const routes: Routes = [
     {
@@ -57,7 +56,6 @@ const routes: Routes = [
         DisclosureComponent,
         AddSfiComponent,
         SearchFieldComponent,
-        AddRelationshipModalComponent
     ],
     imports: [
         CommonModule,

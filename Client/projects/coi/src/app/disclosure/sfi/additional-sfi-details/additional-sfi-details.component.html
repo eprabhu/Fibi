@@ -54,22 +54,20 @@
             <label class="col-5 fw-bold fs-14">Sponsors Research </label><label class="mandatory">*</label>
           </span>
           <div class="col-7">
-            <div *ngIf="sponsorsResearch === 'N'" class="d-inline-block float-right">
-              <a>
-                <label class="switch">
-                  <input type="checkbox" (click)="sponsorsResearch = 'Y'">
-                  <span class="slider round"><small class="deactivate-text">No</small></span>
-                </label>
-              </a>
-            </div>
-            <div *ngIf="sponsorsResearch === 'Y'" class="d-inline-block float-right">
-              <a>
-                <label class="switch">
-                  <input type="checkbox" (click)="sponsorsResearch = 'N'">
+            <span class="pt-1">
+              <a *ngIf="sponsorsResearch === 'Y'" class="pl-2">
+                <label class="switch" (click)="sponsorsResearch = 'N'">
+                  <input type="checkbox"checked>
                   <span class="slider round"><small>Yes</small></span>
                 </label>
               </a>
-            </div>
+              <a  *ngIf="sponsorsResearch === 'N'" class="pl-2">
+                <label class="switch" (click)="sponsorsResearch = 'Y'">
+                  <input type="checkbox">
+                  <span class="slider round"><small class="deactivate-text">No</small></span>
+                </label>
+              </a>
+            </span>
           </div>
         </div>
         <div class="col-12 d-flex">

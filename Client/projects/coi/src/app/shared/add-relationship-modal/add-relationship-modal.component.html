@@ -1,6 +1,5 @@
 
 <!-- Modal -->
-<button id="btn-add-relationships" class="hidden" data-bs-toggle="modal" data-bs-target="#addRelationshipModal"></button>
 <div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-mdb-backdrop="true">
   <div class="modal-dialog modal-lg ">
       <div class="modal-content">
@@ -47,8 +46,8 @@
               </div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="closeModal()">cancel</button>
-              <button type="button" class="btn btn-outline-secondary" (click)="withoutRelation()">continue without selecting relation</button>
+              <button type="button" class="btn btn-outline-secondary fs-13 py-2" data-bs-dismiss="modal" (click)="closeModal()">cancel</button>
+              <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-13 py-2"  (click)="withoutRelation()">continue without selecting relation</button>
               <button type="button" class="btn btn-primary">Add relation</button>
 
           </div>

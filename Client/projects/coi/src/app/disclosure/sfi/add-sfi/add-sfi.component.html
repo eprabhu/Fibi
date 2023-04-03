@@ -59,7 +59,8 @@
             </label>
           </div>
           <div class="col-lg-4 mt-3">
-            <app-search-field></app-search-field>
+            <!-- <app-search-field></app-search-field> -->
+            <input class="form-control" placeholder="type city">
             <span class="col fs-12">
               <p class="new-line-property text-secondary fs-14-nav">Select a city from the available
                 options.</p>
@@ -161,5 +162,5 @@
     </div>
   </div>
 </div>
-<app-Add-relationship-modal *ngIf="showRelationshipModal" (relationshipResult)="addEntityToggle($event)">
-</app-Add-relationship-modal>
+<app-add-relationship-modal *ngIf="showRelationshipModal" [isWithOutRelationship]="true" (relationshipResult)="addEntityToggle($event)" (hideModal)="hideRelationshipModal($event)">
+</app-add-relationship-modal>

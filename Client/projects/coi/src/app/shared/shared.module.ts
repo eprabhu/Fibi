@@ -44,6 +44,7 @@ import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/mater
 import {MatIconModule} from '@angular/material/icon';
 import {DATE_PICKER_FORMAT_MATERIAL} from "../../../../fibi/src/app/app-constants";
 import {CommonService} from "../common/services/common.service";
+import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
 
 @NgModule({
     imports: [
@@ -61,7 +62,7 @@ import {CommonService} from "../common/services/common.service";
         LengthValidatorDirective, CurrencyFormatDirective, CustomCurrencyPipe, QuestionnaireListCompareComponent,
         AutoGrowDirective, QuestionnaireCompareComponent, CustomElementCompareComponent, GrantDetailsViewComponent, AppTimePickerComponent,
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
-        DragNDragDirective, CustomTagRemoverPipe],
+        DragNDragDirective, CustomTagRemoverPipe,AddRelationshipModalComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -97,7 +98,8 @@ import {CommonService} from "../common/services/common.service";
         CustomTagRemoverPipe,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatIconModule
+        MatIconModule,
+        AddRelationshipModalComponent
     ],
 
     providers: [

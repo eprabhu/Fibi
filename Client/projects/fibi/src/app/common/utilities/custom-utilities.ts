@@ -1,3 +1,4 @@
+import * as bootstrap from 'bootstrap';
 import { ENDPOINT_SPONSOR_OUTPUT_FORMAT } from '../../app-constants';
 import { LEAD_UNIT_OUTPUT_FORMAT } from '../../app-constants';
 
@@ -24,9 +25,9 @@ export const scrollIntoView = (elementId: string, position: scrollPositions  = '
 export const setFocusToElement = (id: string) => {
     setTimeout(() => {
         const ELEMENT: HTMLElement = document.getElementById(id);
-        return ELEMENT ? ELEMENT.focus() : false; 
+        return ELEMENT ? ELEMENT.focus() : false;
     },300);
-    
+
 };
 
 export function pageScroll(elementId) {
@@ -323,3 +324,19 @@ function fallbackCopyTextToClipboard(textToCopy: string) {
     document.execCommand('copy');
     document.body.removeChild(textArea);
 }
+
+export function openModal(elementId: string, options = null) {
+  options = options || {
+    backdrop: 'static',
+    keyboard: false,
+    focus: true
+  }
+  let myModal = new bootstrap.Modal(document.getElementById(elementId), options);
+  myModal.show();
+}
+
+export function hideModal(elementId: string) {
+  let myModal = new bootstrap.Modal(document.getElementById(elementId));
+  myModal.hide();
+}
+
