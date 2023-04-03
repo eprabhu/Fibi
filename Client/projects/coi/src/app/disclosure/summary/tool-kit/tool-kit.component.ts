@@ -42,20 +42,20 @@ export class ToolKitComponent implements OnInit, OnDestroy {
 
     getProjectRelationshipList() {
         const RELATION_SECTION = this.sections.find(section => section.reviewSectionCode === 803);
-        if (this.coiDetails.
-            coiDisclosureCategoryType.disclosureCategoryTypeCode === '3' && this.proposalIdLinkedInDisclosure) {
-            RELATION_SECTION.isShowProjectList = false;
-            RELATION_SECTION.isExpanded = false;
-            this.openProjectRelationships({
-                moduleCode: 3,
-                moduleItemId: this.proposalIdLinkedInDisclosure,
-                proposalIdlinkedInDisclosure: this.proposalIdLinkedInDisclosure
-            }, 0);
-        } else {
+        // if (this.coiDetails.
+        //     coiDisclosureCategoryType.disclosureCategoryTypeCode === '3' && this.proposalIdLinkedInDisclosure) {
+        //     RELATION_SECTION.isShowProjectList = false;
+        //     RELATION_SECTION.isExpanded = false;
+        //     this.openProjectRelationships({
+        //         moduleCode: 3,
+        //         moduleItemId: this.proposalIdLinkedInDisclosure,
+        //         proposalIdlinkedInDisclosure: this.proposalIdLinkedInDisclosure
+        //     }, 0);
+        // } else {
             RELATION_SECTION.isShowProjectList = true;
             RELATION_SECTION.isExpanded = true;
             this.getProjectRelationships();
-        }
+        // }
     }
 
     ngOnDestroy() {
@@ -96,8 +96,8 @@ export class ToolKitComponent implements OnInit, OnDestroy {
             this._dataStoreAndEventsService.conflictStatusList = data.coiDisclosureDetailStatuses;
             this._dataStoreAndEventsService.concatenatedProjectList = [...data.proposals, ...data.awards];
             if (this.projectList.proposals.length || this.projectList.awards.length) {
-                this.openProjectRelationships(this.projectList.proposals[0] ?
-                    this.projectList.proposals[0] : this.projectList.awards[0], 0);
+                this.openProjectRelationships(this.projectList.awards[0] ?
+                  this.projectList.awards[0] : this.projectList.proposals[0], 0);
             }
         }, _err => {
             // this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project list');

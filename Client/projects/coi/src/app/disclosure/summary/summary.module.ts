@@ -15,6 +15,9 @@ import {FormsModule} from '@angular/forms';
 import {SharedModule} from "../../shared/shared.module";
 import { ConflictManagementSummaryComponent } from './review/conflict-management-summary/conflict-management-summary.component';
 import {MatIconModule} from "@angular/material/icon";
+import { SharedComponentModule } from '../../../../../fibi/src/app/shared-component/shared-component.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
     imports: [
@@ -22,7 +25,10 @@ import {MatIconModule} from "@angular/material/icon";
         FormsModule,
         RouterModule.forChild([{path: '', component: SummaryComponent}]),
         SharedModule,
-        MatIconModule
+        MatIconModule,
+        MatInputModule,
+        MatFormFieldModule,
+        SharedComponentModule
     ],
     declarations: [
         SummaryComponent,
@@ -32,7 +38,7 @@ import {MatIconModule} from "@angular/material/icon";
         ScreeningQuestionnaireSummaryComponent,
         RelationshipSummaryComponent,
         CertifySummaryComponent,
-        ConflictManagementSummaryComponent
+        ConflictManagementSummaryComponent,
     ],
     providers: [
         CoiSummaryEventsAndStoreService,
