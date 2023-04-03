@@ -138,15 +138,15 @@
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disposition Status:</span> <span
-                        class="badge bg-{{getDispositionStatusBadge(disclosure?.disclosureDispositionCode)}} fs-14 pending-status-pill rounded-pill text-black">{{disclosure?.dispositionStatus}}</span>
+                        class="badge bg-{{getDispositionStatusBadge(disclosure?.disclosureDispositionCode)}} text-{{ getDispositinTextColor(disclosure?.disclosureDispositionCode)}} fs-14 pending-status-pill rounded-pill">{{disclosure?.dispositionStatus}}</span>
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Review Status:</span> <span
-                        class="badge bg-{{getReviewStatusBadge(disclosure?.reviewStatusTypeCode)}} fs-14 pending-status-pill rounded-pill text-black">{{disclosure?.reviewStatus}}</span>
+                        class="badge bg-{{getReviewStatusBadge(disclosure?.reviewStatusTypeCode)}} text-{{ getReviewStatusTextColor(disclosure?.reviewStatusTypeCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.reviewStatus}}</span>
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disclosure Status:</span> <span
-                        class="badge bg-{{getDisclosureStatusBadge(disclosure?.disclosureStatusCode)}} fs-14 pending-status-pill rounded-pill text-black">{{disclosure?.disclosureStatus}}</span>
+                        class="badge bg-{{getDisclosureStatusBadge(disclosure?.disclosureStatusCode)}} text-{{getDisclosureStatusText(disclosure?.disclosureStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.disclosureStatus}}</span>
                 </div>
             </div>
             <div class="d-flex">

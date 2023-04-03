@@ -76,3 +76,6 @@
     border: none;
     background: #fffbf1;
 }
+.questionaire-status {
+    flex:1 1 auto ; 
+}

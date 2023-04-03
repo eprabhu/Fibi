@@ -93,48 +93,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.router.navigate([nextStepUrl], {queryParamsHandling: 'preserve'})
     }
 
-    getDispositionStatusBadge(statusCode) {
-        switch (statusCode) {
-            case '1':
-                return 'warning';
-            case 2:
-                return 'success';
-            case 3:
-                return 'danger';
-            default:
-                return 'info';
-        }
-    }
-
-    getReviewStatusBadge(statusCode) {
-        switch (statusCode) {
-            case '1':
-                return 'warning';
-            case '2':
-                return 'info';
-            case '3':
-                return 'success';
-            default:
-                return 'danger';
-        }
-    }
-
-    getDisclosureStatusBadge(statusCode) {
-        switch (statusCode) {
-            case '1':
-                return 'warning';
-            case '2':
-            case '4':
-            case '5':
-                return 'info';
-            case '3':
-            case '6':
-                return 'success';
-            default:
-                return 'danger';
-        }
-    }
-
     certifyDisclosure() {
         if (!this.isSaving && this.coiService.isCertified) {
             this.isSaving = true;
@@ -166,4 +124,63 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+
+    getDispositionStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1': return 'warning';
+            case 2: return 'success';
+            case 3: return 'danger';
+            default: return 'info';
+        }
+    }
+    getDispositionStatusTextColor(statusCode) {
+        switch (statusCode) {
+            case '1': return 'black';
+            case 2: return 'white';
+            case 3: return 'white';
+            default: return 'white';
+        }
+    }
+    
+    getReviewStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1': return 'warning';
+            case '2': return 'info';
+            case '3': return 'success';
+            default: return 'danger';
+        }
+    }
+    getReviewStatusBadgeTextColor(statusCode) {
+        switch (statusCode) {
+            case '1': return 'black';
+            case '2': return 'white';
+            case '3': return 'white';
+            default: return 'white';
+        }
+    }
+
+    getDisclosureStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1': return 'warning';
+            case '2':
+            case '4':
+            case '5':
+                return 'info';
+            case '3': case '6': return 'success';
+            default: return 'danger';
+        }
+    }
+    getDisclosureStatusBadgeTextColor(statusCode) {
+        switch (statusCode) {
+            case '1': return 'black';
+            case '2':
+            case '4':
+            case '5':
+                return 'white';
+            case '3': case '6': return 'white';
+            default: return 'white';
+        }
+    }
+
 }
