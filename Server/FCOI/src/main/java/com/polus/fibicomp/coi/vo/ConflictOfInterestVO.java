@@ -125,6 +125,22 @@ public class ConflictOfInterestVO {
 	private String disclosureNumber;
 
 	private Boolean proposalDisclosureWithNoSfi;
+	
+	private Integer coiEntityId;
+	
+	private String entityStatusCode;
+	
+	private Integer inProgressDisclosureCount;
+	
+	private Integer approvedDisclosureCount;
+	
+	private Integer travelDisclosureCount;
+	
+	private Integer disclosureHistoryCount;
+	
+	private String filterType;
+	
+	private List<COIEntity> coiEntityList;
 
 	public CoiDisclosure getCoiDisclosure() {
 		return coiDisclosure;
@@ -539,6 +555,70 @@ public class ConflictOfInterestVO {
 
 	public void setProposalDisclosureWithNoSfi(Boolean proposalDisclosureWithNoSfi) {
 		this.proposalDisclosureWithNoSfi = proposalDisclosureWithNoSfi;
+	}
+
+	public Integer getCoiEntityId() {
+		return coiEntityId;
+	}
+
+	public void setCoiEntityId(Integer coiEntityId) {
+		this.coiEntityId = coiEntityId;
+	}
+
+	public String getEntityStatusCode() {
+		return entityStatusCode;
+	}
+
+	public void setEntityStatusCode(String entityStatusCode) {
+		this.entityStatusCode = entityStatusCode;
+	}
+
+	public Integer getInProgressDisclosureCount() {
+		return inProgressDisclosureCount;
+	}
+
+	public void setInProgressDisclosureCount(Integer inProgressDisclosureCount) {
+		this.inProgressDisclosureCount = inProgressDisclosureCount;
+	}
+
+	public Integer getApprovedDisclosureCount() {
+		return approvedDisclosureCount;
+	}
+
+	public void setApprovedDisclosureCount(Integer approvedDisclosureCount) {
+		this.approvedDisclosureCount = approvedDisclosureCount;
+	}
+
+	public Integer getTravelDisclosureCount() {
+		return travelDisclosureCount;
+	}
+
+	public void setTravelDisclosureCount(Integer travelDisclosureCount) {
+		this.travelDisclosureCount = travelDisclosureCount;
+	}
+
+	public Integer getDisclosureHistoryCount() {
+		return disclosureHistoryCount;
+	}
+
+	public void setDisclosureHistoryCount(Integer disclosureHistoryCount) {
+		this.disclosureHistoryCount = disclosureHistoryCount;
+	}
+
+	public String getFilterType() {
+		return filterType;
+	}
+
+	public void setFilterType(String filterType) {
+		this.filterType = filterType;
+	}
+
+	public List<COIEntity> getCoiEntityList() {
+		return coiEntityList;
+	}
+
+	public void setCoiEntityList(List<COIEntity> coiEntityList) {
+		this.coiEntityList = coiEntityList;
 	}
 
 }

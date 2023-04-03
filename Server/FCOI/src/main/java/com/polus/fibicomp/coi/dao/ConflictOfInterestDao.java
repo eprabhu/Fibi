@@ -22,6 +22,8 @@ import com.polus.fibicomp.coi.pojo.CoiDisclosureDetails;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
+import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.proposal.pojo.Proposal;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureDetailsStatus;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
@@ -557,4 +559,41 @@ public interface ConflictOfInterestDao {
 	 * @return list of count objects
 	 */
 	List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId);
+	
+	/**
+	 * This method is used to get Entity Details by Entity Id
+	 * @return COIEntity
+	 */
+	public COIEntity getCoiEntityDetailsById(Integer coiEntityId);
+
+	public List<CoiDisclosure> getActiveDisclosure(String personId);
+
+	public Integer getNumberOfSFIBasedOnDisclosureId(Integer disclosureId);
+	
+	/**
+	 * @param vo
+	 * @return list of coi
+	 */
+	public DashBoardProfile getCOIDashboard(CoiDashboardVO vo);
+	
+	public Integer getCOIDashboardCount(CoiDashboardVO vo);
+
+	/**
+	 * This method is used to get list of coi for admin
+	 * @param vo
+	 * @return list of coi
+	 */
+	public DashBoardProfile getCOIAdminDashboard(CoiDashboardVO vo);
+
+	/**
+	 * This method is used to get list of sfi
+	 * @param vo
+	 * @return list of sfi
+	 */
+	public DashBoardProfile getSFIDashboard(CoiDashboardVO vo);
+
+	public List<COIEntity> getAllEntityList(ConflictOfInterestVO vo);
+
+	public void setEntityStatus(ConflictOfInterestVO vo);
+	
 }

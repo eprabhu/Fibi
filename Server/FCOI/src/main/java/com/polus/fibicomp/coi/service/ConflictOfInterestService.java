@@ -3,6 +3,8 @@ package com.polus.fibicomp.coi.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
+import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 
 @Transactional
 @Service(value = "conflictOfInterestService")
@@ -252,4 +255,48 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ConflictOfInterestVO saveSingleEntityProjectRelation(ConflictOfInterestVO vo);
+	
+	/**
+	 * This method is used to create Entity
+	 * @param vo
+	 * @return vo
+	 */
+	public ResponseEntity<Object> saveOrUpdateCOIEntity(ConflictOfInterestVO vo);
+
+	/**
+	 * This method is used to get entity details based on coiEntityId
+	 * @param coiEntityId
+	 * @return A list of entity details
+	 */
+	public ResponseEntity<Object> getEntityDetails(Integer coiEntityId);
+
+	public ResponseEntity<Object> getActiveDisclosure();
+	
+	/**
+	 * This method is used to get COI dasboard data .
+	 * @param vo - 
+	 * @return A list of dashboard COI data.
+	 */
+	public String getCOIDashboard(CoiDashboardVO vo);
+
+	/**
+	 * This method is used to get COI Admin dasboard data .
+	 * @param vo - 
+	 * @return A list of dashboard COI data.
+	 */
+	public String getCOIAdminDashboard(@Valid CoiDashboardVO vo);
+
+	/**
+	 * This method is used to get SFI dasboard data .
+	 * @param vo - 
+	 * @return A list of dashboard SFI data.
+	 */
+	public String getSFIDashboard(CoiDashboardVO vo);
+
+	public String getCOIDashboardCount(CoiDashboardVO vo);
+
+	public ResponseEntity<Object> getAllEntityList(ConflictOfInterestVO vo);
+
+	public ResponseEntity<Object> setEntityStatus(ConflictOfInterestVO vo);
+	
 }
