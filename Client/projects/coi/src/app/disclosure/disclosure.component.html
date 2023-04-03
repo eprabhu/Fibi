@@ -41,19 +41,19 @@
                                 <tr>
                                     <td>Disposition:</td>
                                     <td class="ps-4"><span
-                                            class="bg-{{getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatus?.dispositionStatusTypeCode)}} px-2 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDispositionStatus?.description}}</span>
+                                            class="bg-{{getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatus?.dispositionStatusTypeCode)}} text-{{ getDispositionStatusTextColor(coiData?.coiDisclosure?.coiDispositionStatus?.dispositionStatusTypeCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiDispositionStatus?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Review:</td>
                                     <td class="ps-4"><span
-                                            class="bg-{{getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatus?.reviewStatusTypeCode)}} px-2 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiReviewStatus?.description}}</span>
+                                            class="bg-{{getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatus?.reviewStatusTypeCode)}} text-{{getReviewStatusBadgeTextColor(coiData?.coiDisclosure?.coiReviewStatus?.reviewStatusTypeCode)}} px-3 py-1 rounded-5">{{coiData?.coiDisclosure?.coiReviewStatus?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Disclosure:</td>
                                     <td class="ps-4"><span
-                                            class="bg-{{getDisclosureStatusBadge(coiData?.coiDisclosure?.coiDisclosureStatus?.disclosureStatusCode)}} px-2 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDisclosureStatus?.description}}</span>
+                                            class="bg-{{getDisclosureStatusBadge(coiData?.coiDisclosure?.coiDisclosureStatus?.disclosureStatusCode)}} text-{{getDisclosureStatusBadgeTextColor(coiData?.coiDisclosure?.coiDisclosureStatus?.disclosureStatusCode)}} px-3 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDisclosureStatus?.description}}</span>
                                     </td>
                                 </tr>
                             </table>

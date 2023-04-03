@@ -50,7 +50,9 @@
 .chin {
   min-height: 46px;
 }
-
+// .approved-status-pill{
+//   background-color: #4CB57D;
+// }
 .advance-search-input {
   width: 100%;
   height: 43px;
@@ -58,4 +60,13 @@
 
 .user-dashboard-nav {
   min-height: 42px;
+}
+.badge {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  padding-top: 6px;
+  border-radius: 15px;
+}
+.bg-success{
+  background-color: #4CB57D !important; 
 }

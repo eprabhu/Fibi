@@ -41,6 +41,14 @@ export class UserDisclosureComponent {
             default: return 'info';
         }
     }
+    getDispositinTextColor(statusCode) {
+        switch (statusCode) {
+            case 1: return 'black';
+            case 2:
+            case 3: return 'white';
+            default: return 'white';
+        }
+    }
 
     getReviewStatusBadge(statusCode) {
         switch (statusCode) {
@@ -50,6 +58,17 @@ export class UserDisclosureComponent {
             default: return 'danger';
         }
     }
+    getReviewStatusTextColor(statusCode) {
+        switch (statusCode) {
+            case '1': return 'black';
+            case '2': return 'white';
+            case '3': return 'white';
+            default: return 'white ';
+        }
+    }
+
+ 
+
 
     getDisclosureStatusBadge(statusCode) {
         switch (statusCode) {
@@ -60,6 +79,15 @@ export class UserDisclosureComponent {
                 return 'info';
             case 3: case 6: return 'success';
             default: return 'danger';
+        }
+    }
+    getDisclosureStatusText(statusCode) {
+        switch (statusCode) {
+            case 1: return 'black';
+            case 2:
+            case 4:
+            case 5: case 3: case 6: return 'white';
+            default: return 'black';
         }
     }
 

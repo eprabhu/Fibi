@@ -8,9 +8,19 @@
     position: relative;
     top: 4.3rem;
     z-index: 50;
-    left: 95%;
+    left: 90%;
 }
 
 .adjust-margin-top {
     margin-top: -2.3rem;
+}
+.comment-button {
+    padding: 5px 5px 5px 5px;
+    height: 31px;
+    width: 36px;
+    border: 1px solid #505050;
+    background-color: rgb(240, 242, 243);
+}
+.comment-button:hover {
+    background-color: #3b83ff !important;
 }
