@@ -2,7 +2,9 @@ package com.polus.fibicomp.coi.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +21,7 @@ import com.polus.fibicomp.coi.pojo.CoiDisclosureDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
+import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 @RestController
@@ -239,4 +242,63 @@ public class ConflictOfInterestController {
 		vo = conflictOfInterestService.saveSingleEntityProjectRelation(vo);
 		return conflictOfInterestService.checkSFICompleted(vo);
 	}
+	
+	@PostMapping(value = "/saveOrUpdateCOIEntity")
+	public ResponseEntity<Object> saveOrUpdateCOIEntity(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for createEntity");
+		return conflictOfInterestService.saveOrUpdateCOIEntity(vo);
+	}
+	
+	@GetMapping("/getEntityDetails/{coiEntityId}")
+	public ResponseEntity<Object> getEntityDetails(@PathVariable("coiEntityId") Integer coiEntityId) {
+		logger.info("Requesting for getEntityDetails");
+		return conflictOfInterestService.getEntityDetails(coiEntityId);
+	}
+	
+	@GetMapping("/getActiveDisclosures")
+	public ResponseEntity<Object> getActiveDisclosure() {
+		logger.info("Requesting for getActiveDisclosure");
+		return conflictOfInterestService.getActiveDisclosure();
+	}
+	
+	@PostMapping(value = "/getCOIDashboard")
+	public String getCOIDashboard(@Valid @RequestBody CoiDashboardVO vo, HttpServletRequest request) {
+		logger.info("Requesting for getCOIDashboard");
+		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
+		return conflictOfInterestService.getCOIDashboard(vo);
+	}
+
+	@PostMapping(value = "/getCOIAdminDashboard")
+	public String getCOIAdminDashboard(@Valid @RequestBody CoiDashboardVO vo, HttpServletRequest request) {
+		logger.info("Requesting for getCOIAdminDashboard");
+		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
+		return conflictOfInterestService.getCOIAdminDashboard(vo);
+	}
+
+	@PostMapping(value = "/getSFIDashboard")
+	public String getSFIDashboard(@Valid @RequestBody CoiDashboardVO vo, HttpServletRequest request) {
+		logger.info("Requesting for getSFIDashboard");
+		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
+		return conflictOfInterestService.getSFIDashboard(vo);
+	}
+	
+	@PostMapping(value = "/getTabCount")
+	public String getCOIDashboardCount(@Valid @RequestBody CoiDashboardVO vo, HttpServletRequest request) {
+		logger.info("Requesting for getCOIDashboard");
+		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
+		return conflictOfInterestService.getCOIDashboardCount(vo);
+	}
+	
+	@PostMapping(value = "/getAllEntityList")
+	public ResponseEntity<Object> getAllEntityList(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for getAllEntityList");
+		return conflictOfInterestService.getAllEntityList(vo);
+	}
+	
+	@PostMapping(value = "/setEntityStatus")
+	public ResponseEntity<Object> setEntityStatus(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for setEntityStatus");
+		return conflictOfInterestService.setEntityStatus(vo);
+	}
+	
 }

@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -49,8 +51,10 @@ import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.person.pojo.Person;
+import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.proposal.dao.ProposalDao;
 import com.polus.fibicomp.proposal.pojo.Proposal;
 import com.polus.fibicomp.proposal.pojo.ProposalPerson;
@@ -961,4 +965,93 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		return vo;
 	}
+	
+	@Override
+	public ResponseEntity<Object> saveOrUpdateCOIEntity(ConflictOfInterestVO vo) {
+		COIFinancialEntity coiFinancialEntity = vo.getCoiFinancialEntity();
+		COIEntity coiEntity = coiFinancialEntity.getCoiEntity();
+		conflictOfInterestDao.saveOrUpdateCOIEntity(coiEntity);
+		return new ResponseEntity<>(vo, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> getEntityDetails(Integer coiEntityId) {
+		ConflictOfInterestVO vo = new ConflictOfInterestVO();
+		vo.setCoiEntity(conflictOfInterestDao.getCoiEntityDetailsById(coiEntityId));
+		return new ResponseEntity<>(vo, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> getActiveDisclosure() {
+		String personId = AuthenticatedUser.getLoginPersonId();
+		ConflictOfInterestVO conflictOfInterestVO = new ConflictOfInterestVO();
+		conflictOfInterestVO.setCoiDisclosures(conflictOfInterestDao.getActiveDisclosure(personId));
+		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
+	}
+
+	@Override
+	public String getCOIDashboard(CoiDashboardVO vo) {
+		DashBoardProfile dashBoardProfile = new DashBoardProfile();
+		try {
+			dashBoardProfile = conflictOfInterestDao.getCOIDashboard(vo);
+		} catch (Exception e) {
+			logger.error("Error in method getCOIDashboard", e);
+		}
+		return commonDao.convertObjectToJSON(dashBoardProfile);
+	}
+
+	@Override
+	public String getCOIAdminDashboard(@Valid CoiDashboardVO vo) {
+		DashBoardProfile dashBoardProfile = new DashBoardProfile();
+		try {
+			dashBoardProfile = conflictOfInterestDao.getCOIAdminDashboard(vo);
+		} catch (Exception e) {
+			logger.error("Error in method getCOIAdminDashboard", e);
+		}
+		return commonDao.convertObjectToJSON(dashBoardProfile);
+	}
+
+	@Override
+	public String getSFIDashboard(CoiDashboardVO vo) {
+		DashBoardProfile dashBoardProfile = new DashBoardProfile();
+		try {
+			dashBoardProfile = conflictOfInterestDao.getSFIDashboard(vo);
+		} catch (Exception e) {
+			logger.error("Error in method getSFIDashboard", e);
+		}
+		return commonDao.convertObjectToJSON(dashBoardProfile);
+	}
+	
+	@Override
+	public String getCOIDashboardCount(CoiDashboardVO vo) {
+		ConflictOfInterestVO conflictOfInterestVO = new ConflictOfInterestVO();
+		vo.setTabName("IN_PROGRESS_DISCLOSURES");
+		Integer inProgressDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
+		conflictOfInterestVO.setInProgressDisclosureCount(inProgressDisclosureCount);
+		vo.setTabName("APPROVED_DISCLOSURES");
+		Integer approvedDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
+		conflictOfInterestVO.setApprovedDisclosureCount(approvedDisclosureCount);
+		vo.setTabName("TRAVEL_DISCLOSURES");
+		Integer travelDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
+		conflictOfInterestVO.setTravelDisclosureCount(travelDisclosureCount);
+		vo.setTabName("DISCLOSURE_HISTORY");
+		Integer disclosureHistoryCount = conflictOfInterestDao.getCOIDashboardCount(vo);
+		conflictOfInterestVO.setDisclosureHistoryCount(disclosureHistoryCount);
+		return commonDao.convertObjectToJSON(conflictOfInterestVO);
+	}
+
+	@Override
+	public ResponseEntity<Object> getAllEntityList(ConflictOfInterestVO vo) {
+		String personId = AuthenticatedUser.getLoginPersonId();
+		vo.setPersonId(personId);
+		vo.setCoiEntityList(conflictOfInterestDao.getAllEntityList(vo));
+		return new ResponseEntity<>(vo, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> setEntityStatus(ConflictOfInterestVO vo) {
+		conflictOfInterestDao.setEntityStatus(vo);
+		return new ResponseEntity<>(vo, HttpStatus.OK);	
+	}
+	
 }

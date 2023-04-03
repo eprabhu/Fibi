@@ -122,6 +122,9 @@ public class CoiDisclosure implements Serializable {
 	
 	@Transient
 	private String createUserFullName;
+	
+	@Transient
+	private Integer numberOfSFI;
 
 	public Integer getDisclosureId() {
 		return disclosureId;
@@ -329,6 +332,14 @@ public class CoiDisclosure implements Serializable {
 
 	public void setCreateUserFullName(String createUserFullName) {
 		this.createUserFullName = createUserFullName;
+	}
+
+	public Integer getNumberOfSFI() {
+		return numberOfSFI;
+	}
+
+	public void setNumberOfSFI(Integer numberOfSFI) {
+		this.numberOfSFI = numberOfSFI;
 	}
 
 }
