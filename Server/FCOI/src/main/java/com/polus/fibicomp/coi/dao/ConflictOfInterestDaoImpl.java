@@ -4,7 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -292,45 +292,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			return  entityCount == 0 || disDetCount == 0 ? null : entityCount > disDetCount ? Boolean.FALSE : Boolean.TRUE;
 		}
 		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Integer> getProjectIdsBasedOnParams(Integer moduleCode, String personId, List<Integer> statuses, Integer disclosureId) {
-		List<Integer> ids = new ArrayList<>();
-		StringBuilder hqlQuery = new StringBuilder();
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		if (disclosureId != null && Constants.DEV_PROPOSAL_MODULE_CODE.equals(moduleCode)) {
-			hqlQuery.append("SELECT DISTINCT T1.MODULE_ITEM_KEY FROM COI_DISCLOSURE_DETAILS T1 INNER JOIN EPS_PROPOSAL T2 ");
-			hqlQuery.append("ON T2.PROPOSAL_ID=T1.MODULE_ITEM_KEY WHERE T1.MODULE_CODE = 3 AND T2.DOCUMENT_STATUS_CODE <> 3 AND ");
-			hqlQuery.append("T2.STATUS_CODE not IN (:statuses) AND T1.DISCLOSURE_ID= :disclosureId");
-			Query  query = session.createNativeQuery(hqlQuery.toString());
-			query.setParameter("statuses", statuses);
-			query.setParameter("disclosureId", disclosureId);
-			ids = query.getResultList();
-		} else if (disclosureId != null && Constants.AWARD_MODULE_CODE.equals(moduleCode)) {
-			hqlQuery.append("SELECT DISTINCT T1.MODULE_ITEM_KEY FROM COI_DISCLOSURE_DETAILS T1 INNER JOIN AWARD T2 ON ");
-			hqlQuery.append("T2.AWARD_ID=T1.MODULE_ITEM_KEY WHERE T1.MODULE_CODE = 1 AND (T2.AWARD_SEQUENCE_STATUS ='ACTIVE' OR ");
-			hqlQuery.append("(T2.AWARD_SEQUENCE_STATUS='PENDING' AND AWARD_DOCUMENT_TYPE_CODE=1)) AND T1.DISCLOSURE_ID= :disclosureId");
-			Query  query = session.createNativeQuery(hqlQuery.toString());
-			query.setParameter("disclosureId", disclosureId);
-			ids = query.getResultList();
-		} else if (Constants.DEV_PROPOSAL_MODULE_CODE.equals(moduleCode)) {
-			hqlQuery.append("SELECT T2.PROPOSAL_ID FROM EPS_PROPOSAL T1 INNER JOIN EPS_PROPOSAL_PERSONS T2 ON ");
-			hqlQuery.append("T2.PROPOSAL_ID=T1.PROPOSAL_ID WHERE T1.DOCUMENT_STATUS_CODE <> 3 AND T1.STATUS_CODE not IN (:statuses) ");
-			hqlQuery.append("and T2.PERSON_ID = :personId");
-			Query  query = session.createNativeQuery(hqlQuery.toString());
-			query.setParameter("statuses", statuses);
-			query.setParameter("personId", personId);
-			ids = query.getResultList();
-		} else if (Constants.AWARD_MODULE_CODE.equals(moduleCode)) {
-			hqlQuery.append("SELECT T2.AWARD_ID FROM AWARD T1 INNER JOIN AWARD_PERSONS T2 ON T2.AWARD_ID=T1.AWARD_ID WHERE ");
-			hqlQuery.append("(T1.AWARD_SEQUENCE_STATUS ='ACTIVE' OR (T1.AWARD_SEQUENCE_STATUS='PENDING' AND AWARD_DOCUMENT_TYPE_CODE=1)) and T2.PERSON_ID = :personId");
-			Query awardQuery = session.createNativeQuery(hqlQuery.toString());
-			awardQuery.setParameter("personId", personId);
-			ids = awardQuery.getResultList();
-		}
-		return ids;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -822,56 +783,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		return session.createQuery(query).getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<DisclosureDetailDto> getProposalsBasedOnParams(List<Integer> proposalIds, List<Integer> proposalStatuses, String searchString) {
-		StringBuilder hqlQuery = new StringBuilder();
-		String likeCriteria = "%" + searchString.toUpperCase() + "%";
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("select t1.proposalId,t1.title,t3.sponsorCode,t3.sponsorName,t3.acronym,t2.fullName,t1.startDate,t1.endDate,t4.unitNumber,t4.unitName from Proposal t1 left join ProposalPerson t2 on t2.proposalId = t1.proposalId and t2.isPi='Y' ");
-		hqlQuery.append(" left join Sponsor t3 on t3.sponsorCode = t1.sponsorCode left join Unit t4 on t4.unitNumber= t1.homeUnitNumber");
-		hqlQuery.append(" where t1.documentStatusCode <> 3 and t1.proposalId in (:proposalIds)");
-		hqlQuery.append(" and (UPPER(cast(t1.proposalId as string)) like :likeCriteria or UPPER(t1.sponsorCode) like :likeCriteria or UPPER(t3.sponsorName) like :likeCriteria");
-		hqlQuery.append(" or UPPER(t1.homeUnitNumber) like :likeCriteria OR UPPER(t4.unitName) like :likeCriteria  OR UPPER(t2.fullName) like :likeCriteria");
-		hqlQuery.append(" or UPPER(t1.title) like :likeCriteria )");
-		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("proposalIds", proposalIds);
-		query.setParameter("likeCriteria", likeCriteria);
-		List<Object[]> entities = query.getResultList();
-		List<DisclosureDetailDto> proposals = new ArrayList<>();
-		for (Object[] entity : entities) {
-			DisclosureDetailDto proposal = new DisclosureDetailDto();
-			proposal.setModuleItemId(entity[0] != null ? Integer.parseInt(entity[0].toString()): null);
-			proposal.setTitle(entity[1].toString());
-			String sponsorCode = null;
-			String sponsorName = null;
-			String sponsorAcronym = null;
-			String unitNumber = null;
-			String unitName = null;
-			if (entity[2] != null) {
-				sponsorCode = entity[2].toString();
-			}
-			if (entity[3] != null) {
-				sponsorName = entity[3].toString();
-			}
-			if (entity[4] != null) {
-				sponsorAcronym = entity[4].toString();
-			}
-			proposal.setSponsor(commonService.getSponsorFormatBySponsorDetail(sponsorCode, sponsorName, sponsorAcronym));
-			proposal.setPrincipalInvestigator(entity[5] !=null ? entity[5].toString() : null);
-			proposal.setStartDate(entity[6] != null ? Timestamp.valueOf(entity[6].toString()) : null);
-			proposal.setEndDate(entity[7] != null ? Timestamp.valueOf(entity[7].toString()) : null);
-			if (entity[8] != null) {
-				unitNumber = entity[8].toString();
-			}
-			if (entity[9] != null) {
-				unitName = entity[9].toString();
-			}
-			proposal.setUnitName(commonService.getUnitFormatByUnitDetail(unitNumber, unitName));
-			proposals.add(proposal);
-		}
-		return proposals;
-	}
 
 	@Override
 	public String getProposalIdLinkedInDisclosure(Integer disclosureId) {
@@ -1522,6 +1433,77 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		criteriaUpdate.set("updateTimestamp", commonDao.getCurrentTimestamp());
 		criteriaUpdate.where(cb.equal(root.get("coiEntityId"), vo.getCoiEntityId()));
 		session.createQuery(criteriaUpdate).executeUpdate();
+	}
+
+	@Override
+	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String disclosureStatusCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		List<DisclosureDetailDto> awardDetails = new ArrayList<>();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		ResultSet rset = null;
+		try {
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call GET_DISCLOSURE_RELATIONS(?,?,?)}");
+				statement.setInt(1, moduleCode);
+				statement.setString(2, personId);
+				statement.setInt(3, disclosureId);
+				statement.execute();
+				rset = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String procedureName = "GET_DISCLOSURE_RELATIONS";
+				String functionCall = "{call " + procedureName + "(?,?,?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				statement.setInt(2, moduleCode);
+				statement.setString(3, personId);
+				statement.setInt(4, disclosureId);
+				statement.execute();
+				rset = (ResultSet) statement.getObject(1);
+			}
+			while (rset != null && rset.next()) {
+				DisclosureDetailDto detail = new DisclosureDetailDto();
+				if (moduleCode == Constants.AWARD_MODULE_CODE) {
+					detail.setModuleCode(Constants.AWARD_MODULE_CODE);
+					detail.setModuleItemId(rset.getInt("AWARD_ID"));
+					detail.setModuleItemKey(rset.getString("AWARD_NUMBER"));
+					detail.setTitle(rset.getString("TITLE"));
+					detail.setStartDate(rset.getTimestamp("BEGIN_DATE"));
+					detail.setEndDate(rset.getTimestamp("FINAL_EXPIRATION_DATE"));
+					detail.setUnitNumber(rset.getString("LEAD_UNIT_NUMBER"));
+					detail.setUnitName(rset.getString("UNIT_NAME"));
+					detail.setSponsor(rset.getString("SPONSOR_NAME"));
+					detail.setPrincipalInvestigator(rset.getString("PI"));
+					detail.setModuleStatus(rset.getString("STATUS"));
+					detail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode) ?
+							checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId, personId) : Boolean.TRUE);
+					detail.setDisclosureStatusCount(disclosureStatusCount(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId, personId));
+				}
+				else if (moduleCode == Constants.DEV_PROPOSAL_MODULE_CODE) {
+					detail.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
+					detail.setModuleItemId(rset.getInt("PROPOSAL_ID"));
+					detail.setTitle(rset.getString("TITLE"));
+					detail.setStartDate(rset.getTimestamp("START_DATE"));
+					detail.setEndDate(rset.getTimestamp("END_DATE"));
+					detail.setUnitNumber(rset.getString("HOME_UNIT_NUMBER"));
+					detail.setUnitName(rset.getString("HOME_UNIT_NAME"));
+					detail.setSponsor(rset.getString("SPONSOR_NAME"));
+					detail.setPrimeSponsor(rset.getString("PRIME_SPONSOR_NAME"));
+					detail.setPrincipalInvestigator(rset.getString("PI"));
+					detail.setModuleStatus(rset.getString("STATUS"));
+					detail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode) ?
+							checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId, personId) : Boolean.TRUE);
+					detail.setDisclosureStatusCount(disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId, personId));
+				}
+				awardDetails.add(detail);
+
+			}
+
+		} catch (SQLException e) {
+			logger.error("Exception in getProjectsBasedOnParams: {} ", e.getMessage());
+		}
+		return awardDetails;
 	}
 
 }

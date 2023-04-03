@@ -206,39 +206,27 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	private Integer getNumberOfAwardInDisclosure (String disclosureStatusCode, String personId, Integer disclosureId) {
-		List<Integer> awardIds = new ArrayList<>();
-		List<Award> awards = new ArrayList<>();
+		List<DisclosureDetailDto> disclosureDetails;
 		if (Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode)) {
-			awardIds = conflictOfInterestDao.getProjectIdsBasedOnParams(Constants.AWARD_MODULE_CODE, personId, null, null);
-			if (!awardIds.isEmpty()) {
-				awards = awardProjectOutcomeDao.getAwardsBasedOnParams(awardIds, null, null, null);
-			}
+			disclosureDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE, personId,
+					null, disclosureStatusCode);
 		} else {
-			awardIds = conflictOfInterestDao.getProjectIdsBasedOnParams(Constants.AWARD_MODULE_CODE, personId, null, disclosureId);
-			if (!awardIds.isEmpty()) {
-				awards = awardProjectOutcomeDao.getAwardsBasedOnParams(awardIds, null, null, null);
-			}
+			disclosureDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE, personId,
+					disclosureId, disclosureStatusCode);
 		}
-		return awards.size();
+		return disclosureDetails.size();
 	}
 
 	private Integer getNumberOfProposalInDisclosure(String disclosureStatusCode, String personId, Integer disclosureId) {
-		List<Proposal> proposals = new ArrayList<>();
-		List<Integer> proposalIds = new ArrayList<>();
-		List<Integer> proposalStatuses = new ArrayList<>();
-		getProposalStatus(proposalStatuses);
+		List<DisclosureDetailDto> proposalDetails;
 		if (Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode)) {
-			proposalIds = conflictOfInterestDao.getProjectIdsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, personId, proposalStatuses, null);
-			if (!proposalIds.isEmpty()) {
-				proposals = awardProjectOutcomeDao.getProposalsBasedOnParams(proposalIds, proposalStatuses, null);
-			}
+			proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, personId,
+					null, disclosureStatusCode);
 		} else {
-			proposalIds = conflictOfInterestDao.getProjectIdsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, personId, proposalStatuses, disclosureId);
-			if (!proposalIds.isEmpty()) {
-				proposals = awardProjectOutcomeDao.getProposalsBasedOnParams(proposalIds, proposalStatuses, null);
-			}
+			proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, personId,
+					disclosureId, disclosureStatusCode);
 		}
-		return proposals.size();
+		return proposalDetails.size();
 	}
 
 	@Override
@@ -249,89 +237,26 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return commonDao.convertObjectToJSON(vo);
 	}
 
-	private void getProposalStatus(List<Integer> proposalStatuses) {
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_IN_PROGRESS);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_UNSUCCESSFUL);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_INACTIVE);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_REVISION_REQUESTED);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_HOD_RETURNED);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_GRANT_ADMIN_RETURNED);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_GRANT_MANAGER_RETURNED);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_NOT_SUBMITTED);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_RETURNED);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_WITHDRAW);
-		proposalStatuses.add(Constants.PROPOSAL_STATUS_CODE_AWARDED);
-	}
-
 	private void prepareAwardDisclosureDetails(ConflictOfInterestVO vo) {
-		List<Integer> awardIds;
-		List<DisclosureDetailDto> awardDetails = new ArrayList<>();
-		List<Award> awards;
+		List<DisclosureDetailDto> disclosureDetails;
 		if (Constants.DISCLOSURE_STATUS_PENDING.equals(vo.getDisclosureStatusCode())) {
-			awardIds = conflictOfInterestDao.getProjectIdsBasedOnParams(Constants.AWARD_MODULE_CODE, vo.getPersonId(), null, null);
-			if (!awardIds.isEmpty()) {
-				awards = awardProjectOutcomeDao.getAwardsBasedOnParams(awardIds, null, null, null);
-				awards.forEach(award -> {
-					prepareAwardDetail(award, awardDetails, vo.getPersonId(), vo.getDisclosureId(), vo.getDisclosureStatusCode());
-				});
-			}
+			disclosureDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE, vo.getPersonId(),
+					null, vo.getDisclosureStatusCode());
 		} else {
-			awardIds = conflictOfInterestDao.getProjectIdsBasedOnParams(Constants.AWARD_MODULE_CODE, vo.getPersonId(), null, vo.getDisclosureId());
-			if (!awardIds.isEmpty()) {
-				awards = awardProjectOutcomeDao.getAwardsBasedOnParams(awardIds, null, null, null);
-				awards.forEach(award -> {
-					prepareAwardDetail(award, awardDetails, vo.getPersonId(), vo.getDisclosureId(), vo.getDisclosureStatusCode());
-				});
-			}
+			disclosureDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE, vo.getPersonId(),
+					vo.getDisclosureId(), vo.getDisclosureStatusCode());
 		}
-		vo.setAwards(awardDetails);
-	}
-
-	private void prepareAwardDetail(Award award, List<DisclosureDetailDto> awardDetails, String personId, Integer disclosureId, String disclosureStatusCode) {
-		DisclosureDetailDto detail = new DisclosureDetailDto();
-		detail.setModuleCode(Constants.AWARD_MODULE_CODE);
-		detail.setModuleItemId(award.getAwardId());
-		detail.setModuleItemKey(award.getAwardNumber());
-		detail.setTitle(award.getTitle());
-		detail.setStartDate(award.getBeginDate());
-		detail.setEndDate(award.getFinalExpirationDate());
-		detail.setUnitNumber(award.getLeadUnit().getUnitName());
-		detail.setUnitName(award.getLeadUnitNumber());
-		if (award.getSponsorCode() != null) {
-			detail.setSponsor(commonService.getSponsorFormatBySponsorDetail(award.getSponsor().getSponsorCode(), award.getSponsor().getSponsorName(), award.getSponsor().getAcronym()));
-		}
-		AwardPerson awardPerson = awardProjectOutcomeDao.getAwardPiDetails(award.getAwardId());
-		detail.setPrincipalInvestigator(awardPerson.getFullName());
-		detail.setModuleStatus(award.getAwardStatus().getDescription());
-		detail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode) ?
-				conflictOfInterestDao.checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, award.getAwardId(), disclosureId, personId) : Boolean.TRUE);
-		detail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.AWARD_MODULE_CODE, award.getAwardId(), disclosureId, personId));
-		awardDetails.add(detail);
+		vo.setAwards(disclosureDetails);
 	}
 
 	private void prepareProposalDisclosureDetails(ConflictOfInterestVO vo) {
-		List<DisclosureDetailDto> proposalDetails = new ArrayList<>();
-		List<Proposal> proposals;
-		List<Integer> proposalIds;
-		List<Integer> proposalStatuses = new ArrayList<>();
-		getProposalStatus(proposalStatuses);
+		List<DisclosureDetailDto> proposalDetails;
 		if (Constants.DISCLOSURE_STATUS_PENDING.equals(vo.getDisclosureStatusCode())) {
-			proposalIds = conflictOfInterestDao.getProjectIdsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getPersonId(), proposalStatuses, null);
-			if (!proposalIds.isEmpty()) {
-				proposals = awardProjectOutcomeDao.getProposalsBasedOnParams(proposalIds, proposalStatuses, null);
-				proposals.forEach(proposal -> {
-					prepareProposalDetails(proposal, proposalDetails, vo.getPersonId(), vo.getDisclosureId(), vo.getDisclosureStatusCode());
-				});
-			}
+			proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getPersonId(),
+					null, vo.getDisclosureStatusCode());
 		} else {
-			proposalIds = conflictOfInterestDao.getProjectIdsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getPersonId(),
-					proposalStatuses, vo.getDisclosureId());
-			if (!proposalIds.isEmpty()) {
-				proposals = awardProjectOutcomeDao.getProposalsBasedOnParams(proposalIds, proposalStatuses, null);
-				proposals.forEach(proposal -> {
-					prepareProposalDetails(proposal, proposalDetails, vo.getPersonId(), vo.getDisclosureId(), vo.getDisclosureStatusCode());
-				});
-			}
+			proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getPersonId(),
+					 vo.getDisclosureId(), vo.getDisclosureStatusCode());
 		}
 		vo.setProposals(proposalDetails);
 	}
@@ -362,7 +287,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		detail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode) ?
 				conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, proposal.getProposalId(),
 						disclosureId, personId) : Boolean.TRUE);
-		detail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.AWARD_MODULE_CODE, proposal.getProposalId(), disclosureId, personId));
+		detail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, proposal.getProposalId(), disclosureId, personId));
 		proposalDetails.add(detail);
 	}
 
@@ -922,13 +847,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public String loadProposalsForDisclosure(ConflictOfInterestVO vo) {
-		List<Integer> proposalStatuses = new ArrayList<>();
-		List<DisclosureDetailDto> proposalDetails = new ArrayList<>();
-		getProposalStatus(proposalStatuses);
-		List<Integer> proposalIds = conflictOfInterestDao.getProjectIdsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, AuthenticatedUser.getLoginPersonId(), proposalStatuses, null);
-		if (!proposalIds.isEmpty()) {
-			proposalDetails = conflictOfInterestDao.getProposalsBasedOnParams(proposalIds, proposalStatuses, vo.getSearchString());
-		}
+		List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE,
+				AuthenticatedUser.getLoginPersonId(), null, null);
 		return commonDao.convertObjectToJSON(proposalDetails);
 	}
 
