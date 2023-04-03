@@ -15,8 +15,25 @@ export class CoiSummaryService {
         return this._http.post(`${this._commonService.baseUrl}/getDisclosureRelations`, params);
     }
 
-    getEntityProjectRelations(params: any) {
-        return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', params);
+    getEntityProjectRelations(moduleCode, moduleId, id, status) {
+      if (moduleCode == 3) {
+        return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
+          'disclosureId': id,
+          'proposalIdlinkedInDisclosure': moduleId,
+          'disclosureStatusCode': status,
+          'moduleCode': moduleCode,
+          'moduleItemId': moduleId,
+          'personId': "10000000001",
+        });
+      } else {
+        return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
+          'disclosureId': id,
+          'disclosureStatusCode': status,
+          'moduleCode': moduleCode,
+          'moduleItemId': moduleId,
+          'personId': "10000000001"
+        });
+      }
     }
 
     getSfiDetails(params: any) {

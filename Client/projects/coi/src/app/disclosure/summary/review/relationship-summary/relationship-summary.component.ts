@@ -72,34 +72,18 @@ export class RelationshipSummaryComponent implements OnInit {
 
     getEntityProjectRelations() {
         this.$subscriptions.push(
-            this._coiSummaryService.getEntityProjectRelations({
-                moduleCode: this.selectedProject.moduleCode,
-                moduleItemId: this.selectedProject.moduleItemId,
-                disclosureId: Number(this.coiDetails.disclosureId),
-                disclosureStatusCode: this.coiDetails.disclosureStatusCode,
-                personId: this.coiDetails.personId,
-                proposalIdlinkedInDisclosure: this.selectedProject.proposalIdlinkedInDisclosure
-            }).subscribe((data: any) => {
+            this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
+               Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode).subscribe((data: any) => {
                 if (data && data.coiDisclosureDetails.length > 0) {
                     this.projectRelations = data.coiDisclosureDetails;
                 }
-                if (data && this.selectedProject.proposalIdlinkedInDisclosure && data.proposals.length) {
-                    this.selectedProject = data.proposals[0];
-                }
+                // if (data && this.selectedProject.proposalIdlinkedInDisclosure && data.proposals.length) {
+                //     this.selectedProject = data.proposals[0];
+                // }
             this.setSubSectionList();
         }, _err => {
             //this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project details. Please try again.');
         }));
-    }
-
-    setPreviousNext(type: string) {
-        const NEXT_PROJECT = this._dataStoreAndEventsService.concatenatedProjectList[
-            type === 'P' ? this.selectedProject.INDEX - 1 : this.selectedProject.INDEX + 1];
-        const PROJECT_ELEMENT_ID = `${NEXT_PROJECT.moduleCode === 3 ? 'proposal' : 'award'}-${NEXT_PROJECT.moduleItemId}`;
-        const NEXT_PROJECT_ELEMENT = document.getElementById(PROJECT_ELEMENT_ID);
-        if (NEXT_PROJECT_ELEMENT) {
-            NEXT_PROJECT_ELEMENT.click();
-        }
     }
 
     modifyReviewComment(isSubSectionComment = false, subSectionCode = null) {
