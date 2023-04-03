@@ -183,14 +183,6 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * 
-	 * @param disclosureId 
-	 * @param 
-	 * @return get ProjectIds Based On Params
-	 */
-	public List<Integer> getProjectIdsBasedOnParams(Integer moduleCode, String personId, List<Integer> statuses, Integer disclosureId);
-
-	/**
-	 * 
 	 * @param 
 	 * @return get SFI Based On DisclosureId
 	 */
@@ -512,14 +504,6 @@ public interface ConflictOfInterestDao {
 	public List<CoiConflictHistory> getCoiConflictHistory(Integer coiConflictHistoryId);
 
 	/**
-	 * @param proposalIds
-	 * @param proposalStatuses
-	 * @param searchString
-	 * @return
-	 */
-	public List<DisclosureDetailDto> getProposalsBasedOnParams(List<Integer> proposalIds, List<Integer> proposalStatuses, String searchString);
-
-	/**
 	 * @param disclosureId
 	 * @return
 	 */
@@ -559,7 +543,7 @@ public interface ConflictOfInterestDao {
 	 * @return list of count objects
 	 */
 	List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId);
-	
+
 	/**
 	 * This method is used to get Entity Details by Entity Id
 	 * @return COIEntity
@@ -569,13 +553,13 @@ public interface ConflictOfInterestDao {
 	public List<CoiDisclosure> getActiveDisclosure(String personId);
 
 	public Integer getNumberOfSFIBasedOnDisclosureId(Integer disclosureId);
-	
+
 	/**
 	 * @param vo
 	 * @return list of coi
 	 */
 	public DashBoardProfile getCOIDashboard(CoiDashboardVO vo);
-	
+
 	public Integer getCOIDashboardCount(CoiDashboardVO vo);
 
 	/**
@@ -595,5 +579,15 @@ public interface ConflictOfInterestDao {
 	public List<COIEntity> getAllEntityList(ConflictOfInterestVO vo);
 
 	public void setEntityStatus(ConflictOfInterestVO vo);
-	
+
+
+	/**
+	 *
+	 * @param moduleCode
+	 * @param personId
+	 * @param disclosureId
+	 * @param status
+	 * @return
+	 */
+	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String status);
 }
