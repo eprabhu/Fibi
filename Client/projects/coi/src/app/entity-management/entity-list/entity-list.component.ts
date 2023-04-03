@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-entity-list',
@@ -11,14 +12,16 @@ export class EntityListComponent implements OnInit {
 
   isViewEntityDetails = false;
   entityList = [];
-  constructor() { }
+  constructor(private _router: Router) { }
 
   ngOnInit() {
     this.viewListOfEntity();
   }
 
-  viewDetails(value) {
-    this.viewEntityDetails.emit(value);
+  viewDetails() {
+    this._router.navigate(['/coi/entity-management/entity-list'])
+
+    // this.viewEntityDetails.emit(value);
   }
 
   viewListOfEntity() {

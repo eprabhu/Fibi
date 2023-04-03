@@ -6,6 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { CommonService } from '../../../common/services/common.service';
 import { CoiEntity, CoiFinancialEntity } from '../add-sfi.interface';
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../../../fibi/src/app/common/services/end-point.config';
+import { hideModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 export interface EndpointOptions {
   contextField: string;
@@ -67,19 +68,23 @@ export class AddSfiComponent implements OnInit {
   }
 
   addEntityToggle(event) {
+    hideModal(event)
+  }
+  hideRelationshipModal(event) {
     this.showRelationshipModal = event;
   }
 
   saveOrUpdateCOIEntity() {
-    const BODY = ''
-    this.sfiService.saveOrUpdateCOIEntity(BODY).subscribe((res: any) => {
-      if (res) {
 
-      }
-    },
-      err => {
+    // const BODY = ''
+    // this.sfiService.saveOrUpdateCOIEntity(BODY).subscribe((res: any) => {
+    //   if (res) {
 
-      });
+    //   }
+    // },
+    //   err => {
+
+    //   });
   }
 
   selectNewEntity(event) {
@@ -111,4 +116,5 @@ export class AddSfiComponent implements OnInit {
     this.clearCountryField = new String('true');
     this.clearField = new String('true');
   }
+
 }

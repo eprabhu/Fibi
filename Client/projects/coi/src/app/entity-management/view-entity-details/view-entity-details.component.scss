@@ -5,7 +5,7 @@
   background: #54BF5B;
   position: relative;
   left: -22px;
-  top: -7px;
+  top: -12px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -33,21 +33,28 @@
 }
 
 .action-btn {
-    background-color: white;
-    border-color: #d3cccc;
-    border-radius: 3px;
-    width: 3cm;
+  background-color: white;
+  border-color: #d3cccc;
+  border-radius: 4px;
+  width: 13rem;
+  height: 3rem;
+  color: #7c868f;
 }
 
 .icon-size {
-  height: 14px;
+   height: 14px;
+  position: relative;
+  top: 2px;
+  right: 3px;
 }
 
 
 .back-ward {
-  position: relative;
-  right: -10px;
-  top: -2px;
+    position: relative;
+    right: 10px;
+    top: 5px;
+    left: 10px;
+    color: #7c868f;
 }
 
 .fs-3{
@@ -62,3 +69,13 @@
   color: red;
 }
 
+h1{
+    position: relative;
+    bottom: 9px;
+    right: 12px;
+}
+.fw-medium {
+  position: relative;
+  bottom: 7px;
+  color: #7c868f;
+}

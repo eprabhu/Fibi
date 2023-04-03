@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { AddRelationshipModalComponent } from './Add-relationship-modal.component';
+import { EntityDetailsListComponent } from './entity-details-list.component';
 
-describe('AddRelationshipModalComponent', () => {
-  let component: AddRelationshipModalComponent;
-  let fixture: ComponentFixture<AddRelationshipModalComponent>;
+describe('EntityDetailsListComponent', () => {
+  let component: EntityDetailsListComponent;
+  let fixture: ComponentFixture<EntityDetailsListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddRelationshipModalComponent ]
+      declarations: [ EntityDetailsListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddRelationshipModalComponent);
+    fixture = TestBed.createComponent(EntityDetailsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class AdditionalSfiDetailsComponent implements OnInit {
 
   constructor() { }
-  sponsorsResearch = 'N';
+  sponsorsResearch = 'Y';
   isExpanded = true;
   ngOnInit() {
   }

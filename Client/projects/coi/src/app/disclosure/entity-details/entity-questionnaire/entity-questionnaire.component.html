@@ -1,9 +1,9 @@
-<div class="container-fluid">
+<div *ngIf="definedRelationships?.length" class="container-fluid m-2 border-nav">
   <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
     <div (click)="currentSelected.tab = 'Financial'" class="border-end navigation-icons px-3 py-1" role="button">
       <span [class.active]="currentSelected.tab === 'Financial'?'active':''" class="pb-3 active">Financial</span>
     </div>
-    <div (click)="currentSelected.tab = 'Commitment'" class="navigation-icons px-3 py-1" role="button">
+    <div (click)="currentSelected.tab = 'Commitment'" class="border-end navigation-icons px-3 py-1" role="button">
       <span [class.active]="currentSelected.tab === 'Commitment'?'active':''">Commitment</span>
     </div>
     <div (click)="currentSelected.tab = 'Travel'" class="navigation-icons px-3 py-1" role="button">
@@ -13,7 +13,7 @@
 </div>
 <div class="mt-4">
   <app-add-relationship *ngIf="!definedRelationships?.length"></app-add-relationship>
-  <div *ngIf="definedRelationships?.length" class="container-fluid">
+  <div *ngIf="definedRelationships?.length" class="container-fluid m-2">
     <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
       <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;">
         <div (click)="getQuestionnaire(coiFinancialEntityDetail)" class="border-end navigation-icons px-3 py-1"
@@ -23,16 +23,18 @@
             {{coiFinancialEntityDetail?.coiFinancialEntityRelType?.description}}</span>
         </div>
       </ng-container>
-      <div (click)="activeRelationship = 'add_relationship' " class="navigation-icons px-3 py-1" role="button">
-        <span [class.active]="activeRelationship === 'add_relationship'?'active':''">
+      <div (click)="activeRelationship = 'add_relationship' " class="navigation-icons px-3 py-1 text-primary" role="button">
+        <span>
           <mat-icon class="material-icons-outlined">add_circle_outline</mat-icon>
-          Add Relationship
+          <label class="btn-position">Add Relationship</label>
         </span>
       </div>
     </nav>
+  </div>
+  <div *ngIf="definedRelationships?.length" class="container-fluid m-2">
     <app-view-questionnaire-list [configuration]="configuration"
-      [questionnaireHeader]="'Relation with Significant Financial Interest'" [externalSaveEvent]="$externalSaveEvent"
-      [isShowSave]="false">
-    </app-view-questionnaire-list>
+    [questionnaireHeader]="'Relation with Significant Financial Interest'" [externalSaveEvent]="$externalSaveEvent"
+    [isShowSave]="false">
+  </app-view-questionnaire-list>
   </div>
 </div>

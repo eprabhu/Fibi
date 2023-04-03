@@ -40,7 +40,9 @@ export class EntityQuestionnaireComponent implements OnInit {
 
   getDataFromService() {
     this.getDefinedRelationships()
-    this.getQuestionnaire(this.definedRelationships[0])
+    if(this.definedRelationships.length > 0) {
+      this.getQuestionnaire(this.definedRelationships[0])
+    }
   }
   getSaveEvent(_event) {
     this.relationLookup.length ? this.addRelations() : this.navigateBack();
