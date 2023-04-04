@@ -309,3 +309,12 @@ export function getEndPointOptionsForPosititonId() {
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));
 }
+
+export function getEndPointOptionsForProposalDisclosure() {
+    endPointOptions.contextField = 'title';
+    endPointOptions.formatString = '#moduleItemId - title';
+    endPointOptions.path = 'loadProposalsForDisclosure';
+    endPointOptions.defaultValue = '';
+    endPointOptions.params = null;
+    return JSON.parse(JSON.stringify(endPointOptions));
+}
