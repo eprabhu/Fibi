@@ -157,7 +157,8 @@
               "projects/fibi/src/assets/css/style.css",
               "projects/fibi/src/assets/css/fibi-questionnaire-style.css",
               "projects/fibi/src/assets/css/fibi-codetable-style.css",
-              "projects/fibi/src/assets/css/workflow-style.css"
+              "projects/fibi/src/assets/css/workflow-style.css",
+              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
             ],
             "scripts": [
               "projects/coi/src/assets/js/bootstrap.bundle.min.js",
