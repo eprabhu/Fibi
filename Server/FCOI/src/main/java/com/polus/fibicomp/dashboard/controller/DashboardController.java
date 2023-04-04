@@ -217,25 +217,4 @@ public class DashboardController {
 		return dashboardService.getResponseEntityForDownload(commonVo, workbook);
 	}
 
-	@PostMapping(value = "/getCOIDashboard")
-	public String getCOIDashboard(@Valid @RequestBody CoiDashboardVO vo, HttpServletRequest request) {
-		logger.info("Requesting for getCOIDashboard");
-		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
-		return dashboardService.getCOIDashboard(vo);
-	}
-
-	@PostMapping(value = "/getCOIAdminDashboard")
-	public String getCOIAdminDashboard(@Valid @RequestBody CoiDashboardVO vo, HttpServletRequest request) {
-		logger.info("Requesting for getCOIAdminDashboard");
-		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
-		return dashboardService.getCOIAdminDashboard(vo);
-	}
-
-	@PostMapping(value = "/getSFIDashboard")
-	public String getSFIDashboard(@Valid @RequestBody CoiDashboardVO vo, HttpServletRequest request) {
-		logger.info("Requesting for getSFIDashboard");
-		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
-		return dashboardService.getSFIDashboard(vo);
-	}
-
 }
