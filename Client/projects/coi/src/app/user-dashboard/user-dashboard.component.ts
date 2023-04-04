@@ -1,7 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserDashboardService} from "./user-dashboard.service";
 import {subscriptionHandler} from "../../../../fibi/src/app/common/utilities/subscription-handler";
+import { openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 
+declare var $: any;
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
@@ -10,6 +12,7 @@ import {subscriptionHandler} from "../../../../fibi/src/app/common/utilities/sub
 })
 export class UserDashboardComponent implements OnInit, OnDestroy{
   $subscriptions = [];
+  isModalOpen= false;
   constructor(public service: UserDashboardService) {
   }
 
@@ -26,4 +29,5 @@ export class UserDashboardComponent implements OnInit, OnDestroy{
       this.service.activeDisclosures = res.coiDisclosures || [];
     }))
   }
+
 }

@@ -15,6 +15,7 @@ import {DataStoreService} from "./services/data-store.service";
 import {RouterGuardService} from "./services/router-guard.service";
 import {SharedModule} from "../shared/shared.module";
 import { SfiModule } from './sfi/sfi.module';
+import { ProjectDisclosureComponent } from './project-disclosure/project-disclosure.component';
 
 const routes: Routes = [
     {
@@ -55,7 +56,7 @@ const routes: Routes = [
     declarations: [
         DisclosureComponent,
         AddSfiComponent,
-        SearchFieldComponent,
+        SearchFieldComponent
     ],
     imports: [
         CommonModule,

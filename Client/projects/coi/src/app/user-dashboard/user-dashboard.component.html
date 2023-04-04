@@ -19,7 +19,8 @@
                 <p [queryParams]="{tabName: 1}"
                    [routerLink]="['/coi/create-disclosure/screening']"
                    class="m-0 cursor-pointer" role="button" title="Click to Revise FCOI"><u>Revise FCOI</u></p>
-                <p class="m-0 cursor-pointer" role="button" title="Click to Create Project Disclosure"><u>Create Project
+                <p class="m-0 cursor-pointer" role="button" title="Click to Create Project Disclosure"
+                 (click)="isModalOpen= true"><u>Create Project
                     Disclosure</u></p>
                 <p class="m-0 cursor-pointer" role="button" title="Click to Create Travel Disclosure"><u>Create Travel
                     Disclosure</u></p>
@@ -99,3 +100,4 @@
 
     <router-outlet></router-outlet>
 </div>
+<app-project-disclosure *ngIf="isModalOpen"></app-project-disclosure>

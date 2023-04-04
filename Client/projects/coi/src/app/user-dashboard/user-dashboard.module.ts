@@ -3,6 +3,9 @@ import {CommonModule} from '@angular/common';
 import {UserDashboardComponent} from './user-dashboard.component';
 import {RouterModule, Routes} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
+import { ProjectDisclosureComponent } from '../disclosure/project-disclosure/project-disclosure.component';
+import { CoiService } from '../disclosure/services/coi.service';
+import { DataStoreService } from '../disclosure/services/data-store.service';
 
 const routes: Routes = [
     {path: '', redirectTo: 'list/disclosures', pathMatch: 'full'},
@@ -20,12 +23,14 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         UserDashboardComponent,
+        ProjectDisclosureComponent
     ],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
         MatIconModule,
-    ]
+    ],
+    providers: [CoiService, DataStoreService]
 })
 export class UserDashboardModule {
 }
