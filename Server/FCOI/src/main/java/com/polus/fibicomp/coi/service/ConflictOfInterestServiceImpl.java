@@ -973,5 +973,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.setEntityStatus(vo);
 		return new ResponseEntity<>(vo, HttpStatus.OK);	
 	}
+
+	@Override
+	public ResponseEntity<Object> getAllSystemEntityList() {
+		ConflictOfInterestVO vo = new ConflictOfInterestVO();
+		vo.setCoiEntityList(conflictOfInterestDao.getAllSystemEntityList(vo));
+		return new ResponseEntity<>(vo, HttpStatus.OK);
+	}
 	
 }

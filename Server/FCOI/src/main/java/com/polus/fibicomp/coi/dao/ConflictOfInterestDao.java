@@ -590,4 +590,6 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String status);
+
+	public List<COIEntity> getAllSystemEntityList(ConflictOfInterestVO vo);
 }
