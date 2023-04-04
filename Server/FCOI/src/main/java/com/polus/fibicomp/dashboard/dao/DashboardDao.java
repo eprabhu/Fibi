@@ -225,24 +225,4 @@ public interface DashboardDao {
 	 */
 	public DashBoardProfile getDashBoardDataForAgreementBasedOnCategory(AgreementDashboardVO vo);
 
-	/**
-	 * @param vo
-	 * @return list of coi
-	 */
-	public DashBoardProfile getCOIDashboard(CoiDashboardVO vo);
-
-	/**
-	 * This method is used to get list of coi for admin
-	 * @param vo
-	 * @return list of coi
-	 */
-	public DashBoardProfile getCOIAdminDashboard(CoiDashboardVO vo);
-
-	/**
-	 * This method is used to get list of sfi
-	 * @param vo
-	 * @return list of sfi
-	 */
-	public DashBoardProfile getSFIDashboard(CoiDashboardVO vo);
-
 }

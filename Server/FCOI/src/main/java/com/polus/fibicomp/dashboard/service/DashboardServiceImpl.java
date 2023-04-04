@@ -1855,37 +1855,4 @@ public class DashboardServiceImpl implements DashboardService {
 		return workbook;
 	}
 
-	@Override
-	public String getCOIDashboard(CoiDashboardVO vo) {
-		DashBoardProfile dashBoardProfile = new DashBoardProfile();
-		try {
-			dashBoardProfile = dashboardDao.getCOIDashboard(vo);
-		} catch (Exception e) {
-			logger.error("Error in method getCOIDashboard", e);
-		}
-		return commonDao.convertObjectToJSON(dashBoardProfile);
-	}
-
-	@Override
-	public String getCOIAdminDashboard(@Valid CoiDashboardVO vo) {
-		DashBoardProfile dashBoardProfile = new DashBoardProfile();
-		try {
-			dashBoardProfile = dashboardDao.getCOIAdminDashboard(vo);
-		} catch (Exception e) {
-			logger.error("Error in method getCOIAdminDashboard", e);
-		}
-		return commonDao.convertObjectToJSON(dashBoardProfile);
-	}
-
-	@Override
-	public String getSFIDashboard(CoiDashboardVO vo) {
-		DashBoardProfile dashBoardProfile = new DashBoardProfile();
-		try {
-			dashBoardProfile = dashboardDao.getSFIDashboard(vo);
-		} catch (Exception e) {
-			logger.error("Error in method getSFIDashboard", e);
-		}
-		return commonDao.convertObjectToJSON(dashBoardProfile);
-	}
-
 }

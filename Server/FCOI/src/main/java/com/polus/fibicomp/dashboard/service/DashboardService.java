@@ -246,26 +246,5 @@ public interface DashboardService {
 	 * @return XSSF workBook.
 	 */
 	public XSSFWorkbook getXSSFWorkbookForAgreementCategoryDashboard(AgreementDashboardVO vo);
-
-	/**
-	 * This method is used to get COI dasboard data .
-	 * @param vo - 
-	 * @return A list of dashboard COI data.
-	 */
-	public String getCOIDashboard(CoiDashboardVO vo);
-
-	/**
-	 * This method is used to get COI Admin dasboard data .
-	 * @param vo - 
-	 * @return A list of dashboard COI data.
-	 */
-	public String getCOIAdminDashboard(@Valid CoiDashboardVO vo);
-
-	/**
-	 * This method is used to get SFI dasboard data .
-	 * @param vo - 
-	 * @return A list of dashboard SFI data.
-	 */
-	public String getSFIDashboard(CoiDashboardVO vo);
   
 }
