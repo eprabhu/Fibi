@@ -60,7 +60,7 @@
     "secure": false
   },
   "/getActiveDisclosure": {
-    "target": "http://192.168.1.189:9090/fibi4/",
+    "target": "https://stage.fibiweb.com/fibiCOI/",
     "secure": false
   },
     "/saveEntityProjectRelation": {
@@ -76,11 +76,15 @@
       "secure": false
     },
     "/searchEntity": {
-      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "target": "http://192.168.1.189:9090/fibi4/",
       "secure": false
     },
     "/findCountry": {
-      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
+    }, 
+    "/createSFI": {
+      "target": "http://192.168.1.189:9090/fibi4/",
       "secure": false
     }
   }

@@ -24,9 +24,8 @@
                 <span class="dateField">
                   <input matInput [matDatepicker]="startDate" id="start-date-involvement" (click)="startDate.open()"
                     class="form-control d-inline-block" placeholder="dd/MM/yyyy">
-                  <!-- <i class="material-icons-outlined">calendar_month</i> -->
-                  <mat-datepicker #startDate>
-                  </mat-datepicker>
+                  <i (click)="startDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                  <mat-datepicker #startDate></mat-datepicker>
                 </span>
                 <p class="new-line-property text-secondary fs-14-nav">Select a date</p>
               </div>
@@ -37,12 +36,13 @@
               </span>
               <div class="col-7">
                 <p class="fs-14 new-line-property text-secondary">Select a date</p>
+                <span class="dateField">
                 <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
                   class="form-control" placeholder="dd/MM/yyyy">
-                <!-- <mat-icon class="material-icons">date-picker</mat-icon> -->
-                <!-- <mat-datepicker-toggle matIconSuffix [for]="endDate"></mat-datepicker-toggle> -->
+                  <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                 <mat-datepicker #endDate>
                 </mat-datepicker>
+              </span>
                 <p class="new-line-property text-secondary fs-14-nav">Select a date</p>
               </div>
             </div>
@@ -103,7 +103,7 @@
         </div>
         <div class="col-12 d-flex">
           <span class="col-2">
-            <label class="col-7 fw-bold">Relationship of Entity to your University responsibilities</label><label
+            <label class="col-7 fw-bold fs-14">Relationship of Entity to your University responsibilities</label><label
               class="mandatory">*</label>
           </span>
           <div class="col-10 ">

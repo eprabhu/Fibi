@@ -7,83 +7,69 @@
     </button>
   </div>
 
-  <div class="card-content">
-    <div class="card-body">
-      <div class="table-responsive" *ngIf="coiFinancialEntityDetails?.length">
-        <table class="table tableSkin mb-0">
-          <thead>
-            <tr class="header-border text-left">
-              <th style="width: 15%" scope="col" id="entity-name">
-                <span class="hand-cursor" title="Entity Name">Entity Name</span>
-              </th>
-              <th style="width: 10%" scope="col" id="relation">
-                <span class="hand-cursor" title="Relation">Relation</span>
-              </th>
-              <th style="width: 10%" scope="col" id="Date-of-Creation">
-                <span class="hand-cursor" title="Date of Creation">Date of Creation</span>
-              </th>
+  <div class=" row p-2 "
+  *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
+  <!-- Main -->
+  <div class="border bg-white rounded-3 p-2 d-flex ">
+      <div class="col-11 bg-white ">
+          <div class=" mt-2 pb-2 pt-3 px-1" style="height: 77px;">
+              <div class="m-0 mb-2 row">
+                  <div class="col-9 ">
+                      <p class="entity-title">
+                          <strong>{{item?.coiEntity?.coiEntityName }}</strong>
+                      </p>
+                  </div>
+                  <div class="col-3 text-secondary fs-14">
+                      <span class="fw-bold me-2">Entity
+                          Type:</span>{{item?.coiEntity?.entityType.description.substr(0, 10)}}
+                  </div>
+              </div>
+              <!-- Under -->
+              <div class="align-items-center d-flex fs-14 m-0 row">
+                  <div class="col-6 text-secondary">
+                      <span class="fw-bold me-3">Relationship:</span>
+                      <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span
+                              class="fw-medium">Financial:
+                          </span> <em *ngFor="let relationship of item?.coiFinancialEntityDetails;let last = last">
+                              <span *ngIf="!last">{{relationship?.coiFinancialEntityRelType?.description}},
+                              </span>
+                              <span *ngIf="last">{{relationship?.coiFinancialEntityRelType?.description}}
+                              </span>
+                          </em></span>
+                      <span class="relationship-pill border px-3 py-1 me-2 rounded-4 fw-medium pill-color">Travel</span>
+                      <span class="relationship-pill border px-3 py-1 rounded-4 fw-medium pill-color">Commitment</span>
+                  </div>
 
-              <th style="width: 10%" scope="col">
-                <span class="hand-cursor" title="Start Date of Involvement">Start Date of Involvement</span>
-              </th>
-              <th scope="col"  style="width: 5%"  class="text-center">Status</th>
-              <th style="width: 10%" scope="col" class="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of coiFinancialEntityDetails; let i =index" class="pull-up text-left mt-1">
-              <td>
-                {{ item?.coiEntity?.coiEntityName }}</td>
-              <td>
-                <span *ngFor="let relationship of item?.coiFinancialEntityDetails; let last = last">
-                  <ng-container *ngIf="!last">{{relationship?.coiFinancialEntityRelType?.description}},</ng-container>
-                  <ng-container *ngIf="last">{{relationship?.coiFinancialEntityRelType?.description}}</ng-container>
-                </span>
-              </td>
+                  <div class="align-items-center col-3 d-flex justify-content-between text-secondary">
+                      <div>
+                          <span class="fw-bold me-2"> Date of creation: </span> {{ item?.coiEntity?.createTimestamp
+                          |dateFormatter }}
+                      </div>
+                  </div>
 
-              <td>
-                {{ item?.coiEntity?.createTimestamp |dateFormatter }}</td>
-
-              <td>
-                {{ item?.involvementStartDate |dateFormatter }}</td>
-
-                <td class="text-center">
-                    <span class="badge badge-pill" [ngClass]="item.isActive ? 'badge-success' : 'badge-secondary'">
-                        {{item?.isActive ? 'Active' : 'Inactive'}}
-                    </span>
-                </td>
-
-              <td class="p-0">
-
-                <ul class="actionButtonGroup text-center">
-                    <li>
-                        <a id="add-activity-btn" (click)="modifyReviewComment(true, item?.coiFinancialEntityId)">
-                            <img alt="add-activity icon" class="activity-icon" title="Click here to Add Review Comment"
-                                src="{{deployMap}}assets/images/playlist (2).svg">
-                        </a>
-                    </li>
-                    <li>
-                        <a title="View " class="btn btn-small btn-tertiary button-radius" id="view-sfi"
-                            [routerLink]="['/fibi/manage-sfi']" [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}">
-                            <i class="fa fa-eye pointer" aria-hidden="true"></i> View
-                        </a>
-                    </li>
-                </ul>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div *ngIf="coiFinancialEntityDetails?.length == 0" class="no-data-container">
-        <span class="no-data-icon-outer">
-          <div class="no-data-icon">
-            <i aria-hidden="true" class="fa fa-file-o"></i>
-            <i aria-hidden="true" class="fa fa-times-circle-o"></i>
+                  <div class="align-items-center col-3 d-flex justify-content-between text-secondary">
+                      <div>
+                          <span class="fw-bold me-2"> Relationship Start Date:</span>{{ item?.involvementStartDate
+                          |dateFormatter }}
+                      </div>
+                  </div>
+              </div>
           </div>
-        </span>
-        <h4>There is no Entity found.</h4>
       </div>
-    </div>
-  </div>
+      <!-- 2nd row -->
+      <div class="col-1 bg-white">
+          <div class="bg-white mt-2 pb-2 pt-3 px-1">
+              <button class="btn btn-outline-secondary sfi_action_btn  " style="padding: 3px;" id="view-sfi"
+              (click)="openSfiDetails(true, item?.coiFinancialEntityId)">
+                  <mat-icon class=" sfi_action_icon">remove_red_eye</mat-icon>
+              </button>
 
+              <button class="ms-3 fs-6 btn  btn-outline-secondary sfi_action_btn " style="padding: 3px; " title="Edit"
+                  id="edit-sfi">
+                  <mat-icon class="sfi_action_icon">edit</mat-icon>
+              </button>
+          </div>
+      </div>
+  </div>
+</div>
 </div>

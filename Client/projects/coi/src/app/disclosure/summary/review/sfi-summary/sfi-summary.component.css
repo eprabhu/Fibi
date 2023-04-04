@@ -11,3 +11,11 @@
 .comment-button:hover {
     background-color: #3b83ff !important;
 }
+
+  .sfi_action_btn:hover {
+    background-color: #2c77f4;
+  }
+  
+  .pill-color {
+    background-color: #ecf1f3;
+  }

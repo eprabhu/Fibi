@@ -20,6 +20,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     deployMap = environment.deployUrl;
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
     coiDetails: any = {};
+    searchText: string;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,

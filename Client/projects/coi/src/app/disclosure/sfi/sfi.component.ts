@@ -5,7 +5,7 @@ import { SfiService } from './sfi.service';
 import { DataStoreService } from '../services/data-store.service';
 import { CoiService } from '../services/coi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
-
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-sfi',
@@ -27,7 +27,9 @@ export class SfiComponent implements OnInit, OnDestroy {
     constructor(
         private _sfiService: SfiService,
         private _dataStore: DataStoreService,
-        public _coiService: CoiService
+        public _coiService: CoiService,
+        private _router: Router,
+        private _activatedRoute: ActivatedRoute
     ) { }
 
     ngOnInit() {
@@ -54,8 +56,6 @@ export class SfiComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this._sfiService.getSfiDetails(this.disclosureId, this.disclosureStatusCode, this.personId).subscribe((data: any) => {
             if (data) {
                 this.coiFinancialEntityDetails = data;
-                console.log('coiFinancialEntityDetails',this.coiFinancialEntityDetails);
-
             }
         }));
     }
@@ -72,6 +72,17 @@ export class SfiComponent implements OnInit, OnDestroy {
 
     closeSFIInfo() {
         this._coiService.isShowSFIInfo = false;
+    }
+
+    openSfiDetails(condition: boolean, entityId: number) {
+        this._sfiService.isShowSfiNavBar = condition;
+        this._router.navigate(
+            [], 
+            {
+              relativeTo: this._activatedRoute,
+              queryParams: {entityId: entityId}, 
+              queryParamsHandling: 'merge', // remove to replace all query params by provided
+            });
     }
 
 }
