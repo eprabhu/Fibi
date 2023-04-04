@@ -40,3 +40,8 @@ body {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.cdk-overlay-container{
+  position:fixed;
+  z-index:10613 !important;
+}

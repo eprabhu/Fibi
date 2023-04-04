@@ -11,7 +11,8 @@
             <div class="justify-content-between d-flex align-items-center">
               <div class="fs-16">Significant Financial Interest </div>
               <button class=" align-items-center d-flex btn btn-primary mt-0 py-1 px-3 h-100 fs-16 pt-1"
-                title="Create SFI" (click)="showRelationshipModal = true; saveOrUpdateCOIEntity()">
+              [queryParams]="{mode:'edit'}"
+                title="Create SFI" (click)="createSFI();">
                 <mat-icon class="fs-4 me-2 material-icons align-items-center d-flex">save</mat-icon>
                 Create SFI
               </button>
@@ -29,7 +30,6 @@
               [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here'" class="w-100 mt-4" [addSearchText]="true"
               (onNewValueSelect)="selectNewEntity($event)">
             </app-endpoint-search>
-            <!-- <app-search-field></app-search-field> -->
             <span class="col fs-12">
               <p class="new-line-property text-secondary fs-14-nav">Type in the official name of the
                 business or organization
@@ -37,6 +37,9 @@
                 entities, but not federal
                 agencies.</p>
             </span>
+            <div *ngIf="mandatoryList?.has('name')" class="invalid-feedback d-block">
+              {{mandatoryList?.get('name')}}
+            </div>
           </div>
         </div>
         <div class="row">
@@ -49,22 +52,26 @@
               (onSelect)="selectedCountryEvent($event)" [placeHolder]="'Type here for country'" class="w-100 mt-4"
               [ngClass]="(mandatoryList?.has('country')) ? 'is-invalid d-block' : ''">
             </app-endpoint-search>
-            <!-- <app-search-field></app-search-field> -->
             <span class="col fs-12">
               <p class="new-line-property text-secondary fs-14-nav">Select country from search bar.</p>
             </span>
+            <div *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block">
+              {{mandatoryList?.get('country')}}
+            </div>
           </div>
           <div class="col-1 fs-14 mt-3">
             <label class="d-block px-3 fw-bold" for="City">City<span class="mandatory">*</span>
             </label>
           </div>
           <div class="col-lg-4 mt-3">
-            <!-- <app-search-field></app-search-field> -->
-            <input class="form-control" placeholder="type city">
+            <input class="form-control" placeholder="Type City">
             <span class="col fs-12">
               <p class="new-line-property text-secondary fs-14-nav">Select a city from the available
                 options.</p>
             </span>
+            <div *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block">
+              {{mandatoryList?.get('country')}}
+            </div>
           </div>
         </div>
         <div class="row">
@@ -73,13 +80,9 @@
             </label>
           </div>
           <div class="col-lg-8 mt-3">
-            <app-search-field></app-search-field>
+            <input class="form-control" placeholder="Type Address">
             <span class="col fs-12">
-              <p class="new-line-property text-secondary fs-14-nav">Type in the official name of the
-                business or organization
-                you need to report. Entities to report include foreign, domestic, public or private
-                entities, but not federal
-                agencies.</p>
+              <p class="new-line-property text-secondary fs-14-nav">Enter the address of your organization.</p>
             </span>
           </div>
         </div>
@@ -110,6 +113,9 @@
                 business or organization
                 you need to report.</p>
             </span>
+            <!-- <div *ngIf="mandatoryList?.has('pincode')" class="invalid-feedback d-block">
+              {{mandatoryList?.get('pincode')}}
+            </div> -->
           </div>
         </div>
         <div class="row">
@@ -126,6 +132,9 @@
                 or organization
                 you need to report.</p>
             </span>
+            <!-- <div *ngIf="mandatoryList?.has('url')" class="invalid-feedback d-block">
+              {{mandatoryList?.get('url')}}
+            </div> -->
           </div>
           <div class="col-2 fs-14 mt-3">
             <label class="d-block px-3 fw-bold" for="City">Email Address<span class="mandatory">*</span>
@@ -140,6 +149,9 @@
                 or organization
                 you need to report.</p>
             </span>
+            <!-- <div class="invalid-feedback d-block mb-3" *ngIf="(mandatoryList?.get('email'))">
+              Please enter email address.
+            </div> -->
           </div>
         </div>
         <div class="row">
@@ -155,6 +167,9 @@
               <p class="new-line-property text-secondary fs-14-nav">Select type from the available
                 options.</p>
             </span>
+            <!-- <div *ngIf="mandatoryList?.has('type')" class="invalid-feedback d-block">
+              {{mandatoryList?.get('type')}}
+          </div> -->
           </div>
         </div>
       </div>

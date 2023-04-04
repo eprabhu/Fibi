@@ -30,6 +30,6 @@ export class AddRelationshipModalComponent implements OnInit {
   withoutRelation(){
     this.relationshipResult.emit('addRelationshipModal');
     this.hideModal.emit(false);
-    // this._router.navigate(['/coi/entity-details']);
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' }});
   }
 }
