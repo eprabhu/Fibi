@@ -1506,4 +1506,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		return awardDetails;
 	}
 
+	@Override
+	public List<COIEntity> getAllSystemEntityList(ConflictOfInterestVO vo) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<COIEntity> query = builder.createQuery(COIEntity.class);
+		Root<COIEntity> rootEntityName = query.from(COIEntity.class);
+		query.orderBy(builder.asc(rootEntityName.get("coiEntityName")));
+		return session.createQuery(query).getResultList();
+	}
+
 }

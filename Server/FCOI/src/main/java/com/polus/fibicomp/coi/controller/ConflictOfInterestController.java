@@ -301,4 +301,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.setEntityStatus(vo);
 	}
 	
+	@GetMapping("/getAllSystemEntityList")
+	public ResponseEntity<Object> getAllSystemEntityList() {
+		logger.info("Requesting for getAllSystemEntityList");
+		return conflictOfInterestService.getAllSystemEntityList();
+	}
+	
 }

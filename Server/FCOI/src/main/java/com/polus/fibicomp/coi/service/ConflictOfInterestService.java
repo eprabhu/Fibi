@@ -298,5 +298,7 @@ public interface ConflictOfInterestService {
 	public ResponseEntity<Object> getAllEntityList(ConflictOfInterestVO vo);
 
 	public ResponseEntity<Object> setEntityStatus(ConflictOfInterestVO vo);
+
+	public ResponseEntity<Object> getAllSystemEntityList();
 	
 }
