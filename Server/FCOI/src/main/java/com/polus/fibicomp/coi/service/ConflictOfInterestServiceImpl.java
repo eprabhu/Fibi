@@ -246,6 +246,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			disclosureDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE, vo.getPersonId(),
 					vo.getDisclosureId(), vo.getDisclosureStatusCode());
 		}
+		for (DisclosureDetailDto disclosureDetail : disclosureDetails) {
+			disclosureDetail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(vo.getDisclosureStatusCode()) ?
+					conflictOfInterestDao.checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, disclosureDetail.getModuleItemId(),
+							vo.getDisclosureId(), vo.getPersonId()) : Boolean.TRUE);
+			disclosureDetail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.AWARD_MODULE_CODE,
+					disclosureDetail.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
+		}
 		vo.setAwards(disclosureDetails);
 	}
 
@@ -257,6 +264,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		} else {
 			proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getPersonId(),
 					 vo.getDisclosureId(), vo.getDisclosureStatusCode());
+		}
+		for (DisclosureDetailDto disclosureDetail : proposalDetails) {
+			disclosureDetail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(vo.getDisclosureStatusCode()) ?
+					conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, disclosureDetail.getModuleItemId(),
+							vo.getDisclosureId(), vo.getPersonId()) : Boolean.TRUE);
+			disclosureDetail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE,
+					disclosureDetail.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
 		}
 		vo.setProposals(proposalDetails);
 	}

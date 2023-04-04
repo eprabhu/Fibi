@@ -4,7 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -1448,7 +1448,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement = connection.prepareCall("{call GET_DISCLOSURE_RELATIONS(?,?,?)}");
 				statement.setInt(1, moduleCode);
 				statement.setString(2, personId);
-				statement.setInt(3, disclosureId);
+				if (disclosureId == null) {
+					statement.setNull(3, Types.INTEGER);
+				} else {
+					statement.setInt(3, disclosureId);
+				}
 				statement.execute();
 				rset = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
@@ -1458,7 +1462,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setInt(2, moduleCode);
 				statement.setString(3, personId);
-				statement.setInt(4, disclosureId);
+				if (disclosureId == null) {
+					statement.setNull(4, Types.INTEGER);
+				} else {
+					statement.setInt(4, disclosureId);
+				}
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
 			}
@@ -1476,9 +1484,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setSponsor(rset.getString("SPONSOR_NAME"));
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
-					detail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode) ?
-							checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId, personId) : Boolean.TRUE);
-					detail.setDisclosureStatusCount(disclosureStatusCount(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId, personId));
 				}
 				else if (moduleCode == Constants.DEV_PROPOSAL_MODULE_CODE) {
 					detail.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
@@ -1492,15 +1497,13 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setPrimeSponsor(rset.getString("PRIME_SPONSOR_NAME"));
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
-					detail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode) ?
-							checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId, personId) : Boolean.TRUE);
-					detail.setDisclosureStatusCount(disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId, personId));
 				}
 				awardDetails.add(detail);
 
 			}
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			logger.error("Exception in getProjectsBasedOnParams: {} ", e.getMessage());
 		}
 		return awardDetails;
