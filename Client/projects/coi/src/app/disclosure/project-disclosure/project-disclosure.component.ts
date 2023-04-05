@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ElasticConfigService } from 'projects/fibi/src/app/common/services/elastic-config.service';
 import { Subscription } from 'rxjs';
-import { getEndPointOptionsForProposalDisclosure } from '../../../../../fibi/src/app/common/services/end-point.config';
+import { getEndPointOptionsForDepartment, getEndPointOptionsForProposalDisclosure, getEndPointOptionsForSponsor } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CoiService } from '../services/coi.service';
 import { DataStoreService } from '../services/data-store.service';
@@ -24,12 +25,21 @@ export class ProjectDisclosureComponent implements OnInit {
   ProposalSearchOptions: any;
   isSearchExternalProposal = false;
   $subscriptions: Subscription[] = [];
-
+  piElasticSearchOptions: any = {};
+  unitHttpOptions: any = {};
+  sponsorSearchOptions: any = {};
+  
   constructor(public coiService: CoiService, public _dataStore: DataStoreService,
-              private _router: Router) { }
+              private _router: Router,
+              private _elasticConfig: ElasticConfigService) { }
 
   ngOnInit() {
     openModal('createProjectDisclosureModal');
+    this.ProposalSearchOptions = getEndPointOptionsForProposalDisclosure();
+    this.piElasticSearchOptions = this._elasticConfig.getElasticForPerson();
+    this.unitHttpOptions = getEndPointOptionsForDepartment();
+    this.sponsorSearchOptions = getEndPointOptionsForSponsor();
+
   }
 
   clearDisclosureModal() {
@@ -62,7 +72,7 @@ export class ProjectDisclosureComponent implements OnInit {
         this.isShowResultCard = false;
         this.proposalDetails = {};
         this.ProposalSearchOptions = getEndPointOptionsForProposalDisclosure();
-            this.projectDisclosureValidation.clear();
+        this.projectDisclosureValidation.clear();
       }
     
       createProjectDisclosureAPI() {

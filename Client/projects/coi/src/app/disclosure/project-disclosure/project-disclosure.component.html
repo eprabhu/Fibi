@@ -6,16 +6,16 @@
     <div class="modal-dialog modal-lg modal-coi" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create Proposal Disclosure</h5>
-                <button type="button" class="close" data-dismiss="modal" id="support-dissmiss-btn" aria-label="Close"
+                <h5 class="modal-title">Create Project Disclosure</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="support-dissmiss-btn"  aria-label="Close"
                     (click)="clearDisclosureModal()">
-                    <span aria-hidden="true">&times;</span>
+                    <!-- <span aria-hidden="true">&times;</span> -->
                 </button>
             </div>
             <div class="modal-body modal-body-style pt-2">
                 <div class="my-3 mx-0 row">
                     <div class="col-12 pt-2 grey-info font ">
-                        <p>Please search your proposal from the list or manually enter the proposal details to continue
+                        <p>Please search your project from the list or manually enter the proposal details to continue
                             with the proposal disclosure.</p>
                     </div>
                 </div>
@@ -33,14 +33,14 @@
                     </div>
                     <div *ngIf="projectDisclosureValidation?.has('proposalSearch')" class="invalid-feedback d-block">
                         {{projectDisclosureValidation?.get('proposalSearch')}}
-                      </div>
+                    </div>
                     <div *ngIf="isShowResultCard" class="col-lg-12 col-12 mb-4 mt-2 shadow-lg resultCard px-0">
                         <button class="closeResultCard ontop" (click)="clearSearchFields()">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </button>
                         <div class="row">
                             <div class="col-12">
-                                <label class="f-14 mt-2 mb-2">Proposal Title : </label>
+                                <label class="f-14 mt-2 mb-2">Project Title : </label>
                                 <span class="ml-2">{{proposalDetails?.title}}</span>
                             </div>
                             <div class="col-6 mt-2 mb-2">
@@ -65,13 +65,13 @@
                 </div>
                 <div *ngIf="isSearchExternalProposal" class="row">
                     <div class="col-4">
-                        <label class="f-14">Proposal No</label>
-                        <input type="text" id="proposal-no" placeholder="Proposal No:" autocomplete="off"
+                        <label class="f-14">Project #</label>
+                        <input type="text" id="proposal-no" placeholder="Project No:" autocomplete="off"
                             [(ngModel)]="proposalDetails.moduleItemId" class="form-control" />
                     </div>
                     <div class="col-8">
-                        <label class="f-14">Proposal Title</label>
-                        <input type="text" id="proposal-no" placeholder="Proposal Title" autocomplete="off"
+                        <label class="f-14">Project Title</label>
+                        <input type="text" id="proposal-no" placeholder="Project Title" autocomplete="off"
                             [(ngModel)]="proposalDetails.title" class="form-control" />
                     </div>
                     <div class="col-4">
@@ -79,6 +79,7 @@
                         <app-elastic [options]="piElasticSearchOptions" [clearField]="clearPIField"
                             [placeHolder]="'Type here for Principal Investigator'">
                         </app-elastic>
+            
                     </div>
                     <div class="col-4">
                         <label class="f-14">Lead Unit</label>
@@ -87,25 +88,25 @@
                         </app-endpoint-search>
                     </div>
                     <div class="col-4">
-                        <label class="f-14">Sponsor</label>
+                        <label class="f-14">Prime Sponsor</label>
                         <app-endpoint-search [httpOptions]="sponsorSearchOptions" [clearField]="clearFieldSponsorField"
                             [placeHolder]="'Sponsor'">
                         </app-endpoint-search>
                     </div>
                 </div>
-                <div class="fs-14-nav anchor-link mt-4">
+                <div class="fs-14-nav mt-4" style="text-decoration: underline;cursor: pointer;color: #88e4f3;" >
                     <a *ngIf="!isSearchExternalProposal"
-                        (click)="clearSearchFields(); isSearchExternalProposal = true">Unable to find your Proposal from
+                        (click)="clearSearchFields(); isSearchExternalProposal = true"  >Unable to find your <span style="position: relative;bottom: 2px;font-size: 11px;" >Project</span>  from
                         the List?</a>
                     <a *ngIf="isSearchExternalProposal"
-                        (click)="clearSearchFields(); isSearchExternalProposal = false">Back to proposal search list</a>
+                        (click)="clearSearchFields(); isSearchExternalProposal = false">Back to <span style="color: blue;position: relative;bottom: 2px;font-size: 11px;" >Project</span> search list</a>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"
+                <button type="button" class="btn btn-outline-success fs-15" data-bs-dismiss="modal"
                     (click)="clearDisclosureModal(); isSearchExternalProposal = false">Cancel</button>
-                <button type="button" class="btn btn-primary-sub btn-sm" (click)="createProjectDisclosureAPI();">
-                    Continue with Proposal Disclosure
+                <button type="button" class="btn btn-success fs-15 " (click)="createProjectDisclosureAPI();">
+                    Continue with Project Disclosure
                 </button>
             </div>
         </div>

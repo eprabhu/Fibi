@@ -16,6 +16,7 @@ import {RouterGuardService} from "./services/router-guard.service";
 import {SharedModule} from "../shared/shared.module";
 import { SfiModule } from './sfi/sfi.module';
 import { ProjectDisclosureComponent } from './project-disclosure/project-disclosure.component';
+import { ElasticConfigService } from 'projects/fibi/src/app/common/services/elastic-config.service';
 
 const routes: Routes = [
     {
@@ -56,7 +57,7 @@ const routes: Routes = [
     declarations: [
         DisclosureComponent,
         AddSfiComponent,
-        SearchFieldComponent
+        SearchFieldComponent,
     ],
     imports: [
         CommonModule,
@@ -70,7 +71,8 @@ const routes: Routes = [
         ResolveServiceService,
         DataStoreService,
         CoiService,
-        RouterGuardService
+        RouterGuardService,
+        ElasticConfigService
     ]
 })
 export class DisclosureModule {
