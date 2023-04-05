@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { slowSlideInOut, slideHorizontal, fadeDown, slideInOut } from '../../../../fibi/src/app/common/utilities/animations';
 import { EntityManagementService } from './entity-management.service';
+import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-entity-management',
@@ -16,10 +18,14 @@ export class EntityManagementComponent implements OnInit {
   isViewAdvanceSearch = false;
   isHasSfiOn = true;
   isHasDisclosureOn = true;
+  coiElastic = null;
 
-  constructor(private _entityManagementService: EntityManagementService) {
+  constructor(private _entityManagementService: EntityManagementService,
+    private _elasticConfig: ElasticConfigService,private _router:Router) {
   }
   ngOnInit() {
+    this.coiElastic = this._elasticConfig.getElasticForCoi();
+
     // this.getCOIAdminDashboard()
   }
 
@@ -55,4 +61,8 @@ export class EntityManagementComponent implements OnInit {
     //     this._entityManagementService.coiRequestObject.advancedSearch === 'L'
     //         ? null : this._entityManagementService.coiRequestObject.property15;
   }
+  redirectToDisclosure(coi: any) {
+    this._router.navigate(['/coi/entity-management/entity-list'], { queryParams: { entityManageId: coi.id } });
+}
+
 }

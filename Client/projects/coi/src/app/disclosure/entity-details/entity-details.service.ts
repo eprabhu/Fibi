@@ -8,12 +8,21 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class EntityDetailsService {
 
-  previousURL = ''
+  previousURL = '';
+  lookups:any;
   $entityDetails = new BehaviorSubject<object>({});
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
   getSFIDetails(coiFinancialEntityId) {
     return this._http.get(`${this._commonService.baseUrl}/getSFIDetails/${coiFinancialEntityId}`);
-}
+  }
+
+  saveOrUpdateCoiFinancialEntityDetails(params) {
+    return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
+  }
+
+  addSFILookUp() {
+    return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
+  }
 
 }

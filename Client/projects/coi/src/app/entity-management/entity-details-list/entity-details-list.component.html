@@ -4,7 +4,9 @@
 <div>
   <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav bg-body-emphasis">
     <div (click)="currentSelected = 'Person'" class="border-end navigation-icons px-3 py-1" role="button">
-      <span [class.active]="currentSelected === 'Person'?'active':''" class="pb-3 active">Person</span>
+      <span [class.active]="currentSelected === 'Person'?'active':''" class="active">Person</span>
+      <span *ngIf="currentSelected === 'Person'"
+              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
     </div>
     <div (click)="currentSelected = 'Institutional'" class="border-end navigation-icons px-3 py-1" role="button">
       <span [class.active]="currentSelected === 'Institutional'?'active':''">Institutional</span>
@@ -31,7 +33,7 @@
   </thead>
   <tbody class="bg-white">
     <tr class="border" *ngFor="let entityListData of entityDetails;let i=index">
-      <td>{{entityListData?.name}}</td>
+      <td class="text-primary"><u>{{entityListData?.name}}</u></td>
       <td>{{entityListData?.department}}</td>
       <td>{{entityListData?.title}}</td>
       <td>{{entityListData?.involvementStartDate}}</td>

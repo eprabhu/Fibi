@@ -6,6 +6,8 @@ import { EntityListComponent } from './entity-list/entity-list.component';
 import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
 import { MatIconModule } from '@angular/material/icon';
 import { EntityDetailsListComponent } from './entity-details-list/entity-details-list.component';
+import { SharedModule } from '../shared/shared.module';
+import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 
 const routes: Routes = [
   { path: '', component: EntityManagementComponent },
@@ -22,10 +24,11 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    MatIconModule
+    MatIconModule,
+    SharedModule
   ],
   exports: [
-  ]
+  ],providers: [ElasticConfigService]
 })
 export class EntityManagementModule {
 }

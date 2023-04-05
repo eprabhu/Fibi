@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { slowSlideInOut} from '../../../../../fibi/src/app/common/utilities/animations';
+import { EntityManagementService } from '../entity-management.service';
 
 @Component({
   selector: 'app-view-entity-details',
@@ -10,11 +11,14 @@ import { slowSlideInOut} from '../../../../../fibi/src/app/common/utilities/anim
 })
 export class ViewEntityDetailsComponent implements OnInit {
 
-  @Output() hideEntityDetails: EventEmitter<any> = new EventEmitter<any>();
-
-  constructor(private _router:Router) { }
+  entityDetails = {};
+  constructor(private _router:Router,private _route:ActivatedRoute,private _entityManagementService:EntityManagementService) { }
 
   ngOnInit() {
+    const entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
+    this.getEntityDetails(entityManageId);
+
+
   }
 
   backToList(){
@@ -24,5 +28,11 @@ export class ViewEntityDetailsComponent implements OnInit {
 
   modifyEntity() {
     this._router.navigate(['/coi/create-disclosure/entity-details'])
+  }
+
+  getEntityDetails(entityId){
+    this._entityManagementService.getEntityDetails(entityId).subscribe((res:any)=>{
+      this.entityDetails = res;
+    })
   }
 }

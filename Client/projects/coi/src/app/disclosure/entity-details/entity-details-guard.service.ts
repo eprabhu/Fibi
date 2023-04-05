@@ -8,12 +8,18 @@ export class EntityDetailsGuardService implements CanActivate {
   constructor(private _entityDetails: EntityDetailsService) { }
 
   canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
+    this.getSfiLookUp();
     return new Promise<boolean>(async (resolve) => {
       const ENTITY_ID = route.queryParamMap.get('entityId');
       this._entityDetails.getSFIDetails(ENTITY_ID).subscribe((res: any) => {
         this._entityDetails.$entityDetails.next(res);
         resolve(true);
       })
+    });
+  }
+  getSfiLookUp() {
+    this._entityDetails.addSFILookUp().subscribe((res: any) => {
+      this._entityDetails.lookups = res.coiFinancialEntityRelType;
     });
   }
 }

@@ -21,3 +21,13 @@
   padding: 3px 12px;
   border-radius: 15px;
 }
+.active-color {
+  color: #007DEC;
+  position: absolute;
+  bottom: -24px;
+  right: calc(50% - 12px);
+}
+
+.active {
+  background-color: #d4e6f7;
+}

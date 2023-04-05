@@ -22,14 +22,16 @@
         </ul>
       </div>
       <div class="col-4 justify-content-end d-flex">
-        <button class="btn btn-primary d-flex" id="add-new-entity"><mat-icon class="add-icon">add</mat-icon> Add New Entity</button>
+        <button class="btn btn-primary d-flex" id="add-new-entity"><mat-icon class="add-icon">add</mat-icon> Add New
+          Entity</button>
       </div>
     </div>
   </div>
   <!-- <app-view-entity-details  *ngIf="viewDetails" (hideEntityDetails)="hideEntityDetails($event)"></app-view-entity-details> -->
   <div class="row mt-5">
     <div class="col-10 mt-1">
-      <input class="form-control w-100">
+      <app-elastic [options]="coiElastic" style="width: 400px" [placeHolder]="'Person Name, Data, etc.'"
+        (selectedResult)="redirectToDisclosure($event)"></app-elastic>
     </div>
     <div class="col-2 mt-1 justify-content-end d-flex">
       <button class="btn btn-primary d-flex" id="advanced-search"
@@ -41,24 +43,28 @@
       <div class="col-12 d-flex">
         <div class="col-3 d-grid ml-3">
           <label class="fw-bold">Entity Name</label>
-          <input type="text" class="form-control text-secondary" placeholder="Ex:">
+          <input type="text" class="form-control text-secondary" placeholder="Type here for the entity name">
         </div>
         <div class="col-3 d-grid ml-3">
           <label class="fw-bold">Country</label>
-          <input type="text" class="form-control text-secondary" placeholder="Ex:">
+          <input type="text" class="form-control text-secondary" placeholder="Type here for the country">
         </div>
         <div class="col-3 d-grid ml-3">
           <label class="fw-bold">Status</label>
           <select class="form-select text-secondary fw-medium fs-4">
+            <option value="">--Select--</option>
             <option value="1">Active</option>
-            <option value="2">In Active</option>
+            <option value="2">Inactive</option>
           </select>
         </div>
         <div class="col-3 d-grid ml-3">
           <label class="fw-bold">Entity Type</label>
           <select class="form-select text-secondary fw-medium fs-4">
-            <option value="1">For Profit</option>
-            <option value="2">Non-Profit</option>
+            <option value="">--Select--</option>
+            <option value="1">Publicly owned</option>
+            <option value="2">Private</option>
+            <option value="3">For Profit</option>
+            <option value="4">Non-Profit</option>
           </select>
         </div>
       </div>
@@ -69,11 +75,11 @@
             <span class="pt-1">
               <a *ngIf="isHasSfiOn" class="pl-2">
                 <label class="switch" (click)="isHasSfiOn = !isHasSfiOn">
-                  <input type="checkbox"checked>
+                  <input type="checkbox" checked>
                   <span class="slider round"><small>On</small></span>
                 </label>
               </a>
-              <a  *ngIf="!isHasSfiOn" class="pl-2">
+              <a *ngIf="!isHasSfiOn" class="pl-2">
                 <label class="switch" (click)="isHasSfiOn= !isHasSfiOn">
                   <input type="checkbox">
                   <span class="slider round"><small class="deactivate-text">Off</small></span>
@@ -88,11 +94,11 @@
             <span class="pt-1">
               <a *ngIf="isHasDisclosureOn" class="pl-2">
                 <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn">
-                  <input type="checkbox"checked>
+                  <input type="checkbox" checked>
                   <span class="slider round"><small>On</small></span>
                 </label>
               </a>
-              <a  *ngIf="!isHasDisclosureOn" class="pl-2">
+              <a *ngIf="!isHasDisclosureOn" class="pl-2">
                 <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn">
                   <input type="checkbox">
                   <span class="slider round"><small class="deactivate-text">Off</small></span>
@@ -104,17 +110,18 @@
         <div class="col-3 d-grid">
           <label class="fw-bold">Risk Level</label>
           <select class="form-select text-secondary fw-medium fs-4">
+            <option value="">--Select--</option>
             <option value="1">High</option>
             <option value="2">Medium</option>
             <option value="3">Low</option>
           </select>
         </div>
         <div class="col-2 d-flex justify-content-end align-items-end position">
-          <button class="btn btn-outline-secondary  fs-13 py-2 px-4">Clear</button>
+          <button class="btn btn-outline-secondary  fs-13 py-2 px-4" id="btn-clear">Clear</button>
           <button class="btn btn-primary">Search</button>
         </div>
       </div>
     </div>
   </div>
-  <app-entity-list (viewEntityDetails)="selectedEntity($event);isViewAdvanceSearch = false"></app-entity-list>
+  <app-entity-list [entityActiveTabName]="activeTabName" (viewEntityDetails)="selectedEntity($event);isViewAdvanceSearch = false"></app-entity-list>
 </div>
