@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { hideModal } from '../../../../../../../projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
@@ -7,18 +7,18 @@ import { hideModal } from '../../../../../../../projects/fibi/src/app/common/uti
   styleUrls: ['./add-relationship.component.scss']
 })
 export class AddRelationshipComponent implements OnInit {
-
+@Output() addRelationShip: EventEmitter<any> = new EventEmitter<any>();
   constructor() { }
   isShowRelationshipModal
   ngOnInit() {
   }
 
-  addRelationShip() {
-    this.isShowRelationshipModal = true;
+  addRelationShips() {
+    this.addRelationShip.emit('addRelationshipModal');
   }
 
   addEntityToggle(event) {
-    hideModal(event)
+
   }
   hideRelationshipModal(event) {
     this.isShowRelationshipModal = event

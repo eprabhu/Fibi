@@ -1,42 +1,107 @@
-<div *ngIf="definedRelationships?.length" class="container-fluid m-2 border-nav">
-  <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
-    <div (click)="currentSelected.tab = 'Financial'" class="border-end navigation-icons px-3 py-1" role="button">
-      <span [class.active]="currentSelected.tab === 'Financial'?'active':''" class="pb-3 active">Financial</span>
-    </div>
-    <div (click)="currentSelected.tab = 'Commitment'" class="border-end navigation-icons px-3 py-1" role="button">
-      <span [class.active]="currentSelected.tab === 'Commitment'?'active':''">Commitment</span>
-    </div>
-    <div (click)="currentSelected.tab = 'Travel'" class="navigation-icons px-3 py-1" role="button">
-      <span [class.active]="currentSelected.tab === 'Travel'?'active':''">Travel</span>
-    </div>
-  </nav>
-</div>
 <div class="mt-4">
-  <app-add-relationship *ngIf="!definedRelationships?.length"></app-add-relationship>
-  <div *ngIf="definedRelationships?.length" class="container-fluid m-2">
-    <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
-      <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;">
-        <div (click)="getQuestionnaire(coiFinancialEntityDetail)" class="border-end navigation-icons px-3 py-1"
-          role="button">
-          <span [class.active]="activeRelationship === coiFinancialEntityDetail?.financialEntityRelTypeCode?'active':''"
-            class="pb-3 active">
-            {{coiFinancialEntityDetail?.coiFinancialEntityRelType?.description}}</span>
-        </div>
-      </ng-container>
-      <div (click)="activeRelationship = 'add_relationship' " class="navigation-icons px-3 py-1 text-primary" role="button">
-        <span (click)="addRelationship()">
-          <mat-icon class="material-icons-outlined">add_circle_outline</mat-icon>
-          <label class="btn-position">Add Relationship</label>
-        </span>
+  <div *ngIf="definedRelationships?.length" class="container-fluid m-2 ">
+    <nav
+      class="border-nav bg-white border d-flex fs-14 fw-bold mt-3 shadow-sm user-dashboard-nav">
+      <div (click)="currentSelected.tab = 'Financial'" [class.bg-active]="currentSelected.tab === 'Financial'?'active':''"
+        class="left-curve align-items-end d-flex border-end navigation-icons px-3 py-1" role="button">
+        <span [class.active]="currentSelected.tab === 'Financial'?'active':''" class="pb-3 active">Financial</span>
+      </div>
+      <div (click)="currentSelected.tab = 'Commitment'" [class.bg-active]="currentSelected.tab === 'Commitment'?'active':''"
+        class="align-items-end d-flex border-end navigation-icons px-3 py-1" role="button">
+        <span [class.active]="currentSelected.tab === 'Commitment'?'active':''" class="pb-3 active">Commitment</span>
+      </div>
+      <div (click)="currentSelected.tab = 'Travel'" [class.bg-active]="currentSelected.tab === 'Travel'?'active':''"
+        class="right-curve align-items-end d-flex navigation-icons px-3 py-1" role="button">
+        <span [class.active]="currentSelected.tab === 'Travel'?'active':''" class="pb-3 active">Travel</span>
       </div>
     </nav>
   </div>
-  <div *ngIf="definedRelationships?.length" class="container-fluid m-2">
-    <app-view-questionnaire-list [configuration]="configuration"
-    [questionnaireHeader]="'Relation with Significant Financial Interest'" [externalSaveEvent]="$externalSaveEvent"
-    [isShowSave]="false">
-  </app-view-questionnaire-list>
+  <app-add-relationship *ngIf="!definedRelationships?.length" (addRelationShip)="openAddRelationshipModal($event)"></app-add-relationship>
+  <div *ngIf="definedRelationships?.length" class="container-fluid mx-2">
+    <div class="card">
+      <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav nav-width">
+        <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;">
+          <div (click)="getQuestionnaire(coiFinancialEntityDetail)" class="border-end navigation-icons px-3 py-1"
+            role="button">
+            <span
+              [class.active]="activeRelationship === coiFinancialEntityDetail?.financialEntityRelTypeCode?'active':''"
+              class="pb-3 active">
+              {{coiFinancialEntityDetail?.coiFinancialEntityRelType?.description}}</span>
+          </div>
+        </ng-container>
+        <div (click)="activeRelationship = 'add_relationship' " class="navigation-icons px-3 py-1 text-primary"
+          role="button">
+          <span (click)="openAddRelationshipModal('addRelationshipModal')">
+            <mat-icon class="material-icons-outlined">add_circle_outline</mat-icon>
+            <label class="btn-position">Add Relationship</label>
+          </span>
+        </div>
+      </nav>
+      <div *ngIf="definedRelationships?.length" class="container-fluid m-2">
+        <app-view-questionnaire-list [configuration]="configuration"
+          [questionnaireHeader]="'Relation With Significant Financial Interest'"
+          [externalSaveEvent]="$externalSaveEvent" [isShowSave]="false">
+        </app-view-questionnaire-list>
+      </div>
+    </div>
   </div>
 </div>
-<app-add-relationship-modal *ngIf="isShowRelationshipModal" [isWithOutRelationship]="false" (relationshipResult)="addEntityToggle($event)" (hideModal)="hideRelationshipModal($event)">
-</app-add-relationship-modal>
+<!-- <app-add-relationship-modal *ngIf="isShowRelationshipModal" [isWithOutRelationship]="false"
+ [relationLookup]="[relationLookup]" (relationshipResult)="addEntityToggle($event)"
+  (hideModal)="hideRelationshipModal($event)" (addEntityRelationship)="addRelationship($event)">
+</app-add-relationship-modal> -->
+
+<!-- Modal -->
+<div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-mdb-backdrop="true">
+  <div class="modal-dialog modal-lg ">
+    <div class="modal-content">
+      <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
+        <h3 class="modal-title fs-3" id="exampleModalLabel">Add Relations</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body ">
+        <div class="row ">
+          <p style="font-size: 13px;"><b>Significant Financial interest details</b>: Now includes
+            not-for-profit
+            entities other than government entities,institution of higher education and affiliated
+            organizations</p>
+        </div>
+        <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
+          style="margin-top: 26px;margin-bottom: 16px;">
+          <div class=" border " style="padding: 18px;">
+            <div style="display: flex; flex-direction: row; ">
+              <div class="form-check form-check-inline">
+                <label style="font-size: 13px; color: rgb(138, 133, 133);" class="form-check-label"><b>Select Relation:
+                  </b></label>
+              </div>
+              <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
+                <input type="radio" name="relation" class="form-check-input text-secondary"
+                  [value]="relation?.financialEntityRelTypeCode"
+                  [(ngModel)]="coiFinancialEntityDetail.financialEntityRelTypeCode" (ngModelChange)="setRelationship()">
+                <label class="text-secondary">
+                  {{relation?.description}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #noData>
+          <div class="no-data-container">
+            <span class="no-data-icon-outer">
+              <div class="no-data-icon">
+                <i class="fa fa-file-o" aria-hidden="true"></i>
+                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+              </div>
+            </span>
+            <h4>There are no relations.</h4>
+          </div>
+        </ng-template>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary fs-13 py-2" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addRelation()">Add relation</button>
+      </div>
+    </div>
+  </div>
+</div>

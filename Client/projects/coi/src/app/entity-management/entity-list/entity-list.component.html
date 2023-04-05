@@ -1,28 +1,29 @@
-<div>
+<div *ngIf="entityList">
   <table class="table tableSkin mt-3">
     <thead class="border bg-light">
       <tr class="from-row">
         <th class="col-1"></th>
         <th class="col-2">Name</th>
         <th class="col-2">Country</th>
-        <th class="col-2">Entity type</th>
-        <th class="col-2">Risk level</th>
+        <th class="col-2">Entity Type</th>
+        <th class="col-2">Risk Level</th>
         <th class="col-1">Status</th>
         <th class="col-2">Actions</th>
       </tr>
     </thead>
     <tbody class="bg-white">
       <tr class="border" *ngFor="let entityListData of entityList;let i=index">
-        <td [ngClass]="entityListData?.verified !=='U'?'':'entity-status shadow-sm align-items-center d-flex ps-2 mt-2'">
-          {{entityListData?.verified ==='U'?'Unverified':''}}
+        <td><span *ngIf="entityListData?.entityStatus?.entityStatusCode === '2'" class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2">
+          {{entityListData?.entityStatus?.description}}
+          </span>
         </td>
-        <td>{{entityListData?.name}}</td>
-        <td>{{entityListData?.country}}</td>
-        <td>{{entityListData?.entityType}}</td>
-        <td><mat-icon *ngIf="entityListData?.riskLevel === 'High'" class="invalid material-icons-round">warning</mat-icon>
-          {{entityListData?.riskLevel}}</td>
-        <td><span [ngClass]="entityListData.status ==='Active'?'status-active-pill':'status-inactive-pill'">
-         {{entityListData?.status}}
+        <td>{{entityListData?.coiEntityName}}</td>
+        <td>{{entityListData?.country?.countryName}}</td>
+        <td>{{entityListData?.entityType?.description}}</td>
+        <td><mat-icon *ngIf="entityListData?.entityRiskCategoryCode?.description === 'High'" class="invalid material-icons-round">warning</mat-icon>
+          {{entityListData?.entityRiskCategoryCode?.description}}</td>
+        <td><span [ngClass]="entityListData?.isActive ?'status-active-pill':'status-inactive-pill'">
+         {{entityListData?.isActive?'Active':'Inactive' }}
         </span>
         </td>
         <td>

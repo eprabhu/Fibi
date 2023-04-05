@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EntityManagementService } from '../entity-management.service';
 
 @Component({
   selector: 'app-entity-details-list',
@@ -20,13 +21,18 @@ export class EntityDetailsListComponent implements OnInit {
   isViewEntityDetails : true;
   isviewDetails :true;
   currentSelected = 'Person';
+  entityManageId = null;
 
-  constructor(private _router:Router) { }
+  constructor(private _router:Router,private _route:ActivatedRoute,private _entityManagementService:EntityManagementService) { }
 
 
   ngOnInit() {
+    this.entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
   }
 
+  getEntityDetails(){
+    this._entityManagementService
+  }
 
   viewDetails(data){
     this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' } })

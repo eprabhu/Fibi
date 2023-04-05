@@ -336,7 +336,7 @@ export function openModal(elementId: string, options = null) {
 }
 
 export function hideModal(elementId: string) {
-  let myModal = new bootstrap.Modal(document.getElementById(elementId));
-  myModal.hide();
+  let myModal = document.querySelector(`#${elementId} .btn-close`) as HTMLElement;
+  myModal.click();
 }
 

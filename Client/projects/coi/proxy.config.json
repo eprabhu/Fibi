@@ -82,9 +82,37 @@
     "/findCountry": {
       "target": "http://192.168.1.189:9090/fibi4/",
       "secure": false
-    }, 
+    },
     "/createSFI": {
       "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
+    },
+    "/saveOrUpdateCOIEntity": {
+      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "secure": false
+    },
+    "/getCOIAdminDashboard": {
+      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "secure": false
+    },
+    "/getAllSystemEntityList": {
+      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "secure": false
+    },
+    "/coifibi": {
+      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "secure": false
+    },
+    "/saveOrUpdateCoiFinancialEntityDetails": {
+      "secure": false,
+      "target": "https://stage.fibiweb.com/fibiCOI/"
+    },
+    "/loadSFILookups": {
+      "secure": false,
+      "target": "https://stage.fibiweb.com/fibiCOI/"
+    },
+    "/getEntityDetails": {
+      "target": "https://stage.fibiweb.com/fibiCOI/",
       "secure": false
     }
   }

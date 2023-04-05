@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
 import { EntityDetailsService } from '../entity-details.service';
-import { hideModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { hideModal, openModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { CoiFinancialEntityDetail } from '../../sfi/add-sfi.interface';
 
 @Component({
   selector: 'app-entity-questionnaire',
@@ -32,6 +33,10 @@ export class EntityQuestionnaireComponent implements OnInit {
     tab: 'Financial'
   }
   isShowRelationshipModal = false;
+  coiFinancialEntityDetail: CoiFinancialEntityDetail = new CoiFinancialEntityDetail();
+  isSave = false;
+  relationValidationMap = new Map();
+
 
   constructor(private _commonService: CommonService, private _router: Router, private _entityDetailsServices: EntityDetailsService) { }
 
@@ -41,15 +46,17 @@ export class EntityQuestionnaireComponent implements OnInit {
   }
 
   getDataFromService() {
+    this.relationLookup = this._entityDetailsServices.lookups;
     this.getDefinedRelationships()
     if (this.definedRelationships.length > 0) {
-      this.getQuestionnaire(this.definedRelationships[0])
+      this.getQuestionnaire(this.definedRelationships[0]);
     }
+    this.removeExistingRelation()
   }
-  getSaveEvent(_event) {
-    this.relationLookup.length ? this.addRelations() : this.navigateBack();
-    this.$externalSaveEvent.next(true);
-  }
+  // getSaveEvent(_event) {
+  //   this.relationLookup.length ? this.addRelations() : this.navigateBack();
+  //   this.$externalSaveEvent.next(true);
+  // }
   addRelations(flag = false) {
     this.isAddRelationButtonToggled = flag;
   }
@@ -61,6 +68,7 @@ export class EntityQuestionnaireComponent implements OnInit {
     this._entityDetailsServices.$entityDetails.subscribe((res: any) => {
       this.configuration.moduleItemKey = res.coiFinancialEntity.coiFinancialEntityId;
       this.definedRelationships = res.coiFinancialEntityDetails;
+      this.coiFinancialEntityDetail.coiFinancialEntityId = res.coiFinancialEntity.coiFinancialEntityId;
     });
   }
 
@@ -69,13 +77,66 @@ export class EntityQuestionnaireComponent implements OnInit {
     this.configuration.moduleSubItemKey = data.financialEntityRelTypeCode;
     this.configuration = Object.assign({}, this.configuration);
   }
-  addRelationship() {
-    this.isShowRelationshipModal = true;
+
+  addRelation() {
+    this.isSave = true;
+    if(this.isSave && this.validateRelationship()){
+      this._entityDetailsServices.saveOrUpdateCoiFinancialEntityDetails({
+        coiFinancialEntityDetail:
+          this.coiFinancialEntityDetail
+      }).subscribe((res: any) => {
+        this.definedRelationships.push(res);
+        this.getQuestionnaire(res.coiFinancialEntityRelType);
+        this.findRelation(res.financialEntityRelTypeCode);
+        this.clearRelationModal();
+        this.isSave = false;
+      })
+    } else {
+      hideModal('addRelationshipModal');
+    }
   }
-  hideRelationshipModal(event){
-    this.isShowRelationshipModal = event
+
+  closeModal(elementId) {
+    hideModal(elementId);
   }
-  addEntityToggle(event){
-    hideModal(event)
+
+  openAddRelationshipModal(elementId) {
+    openModal(elementId);
   }
+
+  setRelationship() {
+    this.coiFinancialEntityDetail.coiFinancialEntityRelType = this.relationLookup.find(
+      ele => ele.financialEntityRelTypeCode == this.coiFinancialEntityDetail.financialEntityRelTypeCode
+    );
+  }
+
+
+
+  private findRelation(financialEntityRelTypeCode: string) {
+    const RELATION_INDEX = this.relationLookup.findIndex(element => element.financialEntityRelTypeCode === financialEntityRelTypeCode);
+    if (RELATION_INDEX !== -1) {
+      this.relationLookup.splice(RELATION_INDEX, 1);
+    }
+  }
+
+  clearRelationModal() {
+    hideModal('addRelationshipModal');
+    this.coiFinancialEntityDetail.coiFinancialEntityRelType = null;
+    this.coiFinancialEntityDetail.financialEntityRelTypeCode = null;
+  }
+  private removeExistingRelation() {
+    if (this.definedRelationships.length) {
+      this.activeRelationship = this.definedRelationships[0].financialEntityRelTypeCode;
+      this.definedRelationships.forEach(element => {
+        this.findRelation(element.financialEntityRelTypeCode);
+      });
+    }
+  }
+  validateRelationship() {
+    this.relationValidationMap.clear();
+    if (!this.coiFinancialEntityDetail.financialEntityRelTypeCode) {
+        this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
+    }
+    return this.relationValidationMap.size === 0 ? true : false;
+}
 }

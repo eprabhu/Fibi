@@ -2,6 +2,7 @@
   .active {
     border-bottom: 2px solid #007DEC;
     color: #007DEC;
+    margin-bottom: -0.2rem !important;
   }
 }
 
@@ -16,5 +17,44 @@
 }
 
 .border-nav {
-  width: 18%;
+  width: 26rem;
+  border-radius: 1.5rem 1.5rem 0px 0px;
+  position: relative;
+  top: 5px;
+}
+.row{
+  border: 1px solid rgb(218, 213, 213);
+  margin: 10px;
+  background-color:#EEEEEE;
+  padding: 5px;
+  padding-top: 9px;
+}
+
+.modal {
+  z-index: 10612 !important;
+  background: #00000066;
+}
+// #noData{
+//   height: 13rem;
+// }
+// .no-data-icon-outer{
+
+// }
+.nav-width{
+  width: 97.7%;
+  position: relative;
+  left: 1.4rem;
+}
+
+.bg-active {
+  background-color: #007dec38;
+}
+
+.left-curve {
+  border-radius: 1.5rem 0 0px 0px;
+}
+
+.right-curve {
+  border-radius: 0 1.5rem 0px 0px;
+  padding-right: 2.9rem !important;
 }

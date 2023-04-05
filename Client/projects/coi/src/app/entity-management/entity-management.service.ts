@@ -18,6 +18,11 @@ export class EntityManagementService {
   getAllSystemEntityList(){
     return this._http.get(`${this._commonService.baseUrl}/getAllSystemEntityList`);
   }
+
+  getEntityDetails(entityId){
+    return this._http.get(`${this._commonService.baseUrl}/getAllSystemEntityList/${entityId}`);
+
+  }
 }
 export class CoiDashboardRequest {
   isDownload = false;

@@ -2,7 +2,7 @@
   <div class="card">
     <div class="content justify-content-center d-grid">
       <label class="new-line-property text-secondary fs-14-nav">Define Self/Spouse/Dependent Relationship</label>
-      <button class="btn btn-primary" (click)="addRelationShip()">
+      <button class="btn btn-primary" (click)="addRelationShips()">
         <div class="btn-position">
             <mat-icon  class="material-icons-outlined">add_circle_outline</mat-icon>
             Add Relationship
@@ -11,5 +11,4 @@
     </div>
   </div>
 </div>
-<app-add-relationship-modal *ngIf="isShowRelationshipModal" [isWithOutRelationship]="false" (hideModal)="hideRelationshipModal($event)">
-</app-add-relationship-modal>
+

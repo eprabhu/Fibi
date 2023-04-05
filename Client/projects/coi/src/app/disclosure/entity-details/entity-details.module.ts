@@ -9,6 +9,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { EntityQuestionnaireComponent } from './entity-questionnaire/entity-questionnaire.component';
 import { EntityDetailsService } from './entity-details.service';
 import { EntityDetailsGuardService } from './entity-details-guard.service';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [{ path: '', component:EntityDetailsComponent, canActivate:[EntityDetailsGuardService] }]
 
@@ -17,7 +18,8 @@ const routes: Routes = [{ path: '', component:EntityDetailsComponent, canActivat
     CommonModule,
     RouterModule.forChild(routes),
     MatIconModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   declarations: [
     EntityDetailsComponent,
