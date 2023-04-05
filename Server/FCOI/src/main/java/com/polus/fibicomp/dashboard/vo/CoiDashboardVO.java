@@ -70,6 +70,16 @@ public class CoiDashboardVO {
 	private Boolean property18;
 
 	private Boolean property19;
+	
+	private String filterType;
+
+	public String getFilterType() {
+		return filterType;
+	}
+
+	public void setFilterType(String filterType) {
+		this.filterType = filterType;
+	}
 
 	public Integer getPageNumber() {
 		return pageNumber;
