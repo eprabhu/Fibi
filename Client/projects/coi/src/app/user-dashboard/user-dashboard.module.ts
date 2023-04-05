@@ -6,6 +6,8 @@ import {MatIconModule} from "@angular/material/icon";
 import { ProjectDisclosureComponent } from '../disclosure/project-disclosure/project-disclosure.component';
 import { CoiService } from '../disclosure/services/coi.service';
 import { DataStoreService } from '../disclosure/services/data-store.service';
+import { ElasticConfigService } from 'projects/fibi/src/app/common/services/elastic-config.service';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
     {path: '', redirectTo: 'list/disclosures', pathMatch: 'full'},
@@ -24,13 +26,16 @@ const routes: Routes = [
     declarations: [
         UserDashboardComponent,
         ProjectDisclosureComponent
+        
     ],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
         MatIconModule,
+        SharedModule
     ],
-    providers: [CoiService, DataStoreService]
+    providers: [CoiService, DataStoreService,
+        ElasticConfigService]
 })
 export class UserDashboardModule {
 }

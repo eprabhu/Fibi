@@ -114,5 +114,18 @@
     "/getEntityDetails": {
       "target": "https://stage.fibiweb.com/fibiCOI/",
       "secure": false
+    },
+    "/loadProposalsForDisclosure": {
+      "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
+    },
+    "/findDepartment": {
+      "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
+    },
+    "/findSponsors": {
+      "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
     }
+
   }
