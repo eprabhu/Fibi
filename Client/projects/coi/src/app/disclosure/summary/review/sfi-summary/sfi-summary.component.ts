@@ -6,6 +6,7 @@ import { environment } from '../../../../../environments/environment';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
 import { CommentConfiguration } from '../../../coi-interface';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
-        private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService
+        private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
+        private _router: Router
     ) { }
 
     ngOnInit() {
@@ -72,6 +74,10 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this.commentConfiguration.isSubSectionComment = isSubSectionComment;
         this.commentConfiguration.coiSubSectionsId = subSectionCode;
         this._dataStoreAndEventsService.modifyReviewComment(this.commentConfiguration);
+    }
+
+    openSfiDetails(condition: boolean, entityId: number) {
+        this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' }});
     }
 
 }

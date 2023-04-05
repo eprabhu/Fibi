@@ -22,15 +22,15 @@
 
         <div class="row">
           <div class="col-2 fs-14 mt-3 px-3">
-            <label class="d-block px-3 fw-bold" for="Entity-Name">Entity Name<span class="mandatory">*</span>
+            <label class="d-block px-3" for="Entity-Name">Entity Name<span class="mandatory">*</span>
             </label>
           </div>
-          <div class="col-lg-8 mt-3">
+          <div class="col-lg-9 mt-3">
             <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
               [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here'" class="w-100 mt-4" [addSearchText]="true"
               (onNewValueSelect)="selectNewEntity($event)">
             </app-endpoint-search>
-            <span class="col fs-12">
+            <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav">Type in the official name of the
                 business or organization
                 you need to report. Entities to report include foreign, domestic, public or private
@@ -42,9 +42,11 @@
             </div>
           </div>
         </div>
+
+        
         <div class="row">
           <div class="col-2 fs-14 mt-3 px-3">
-            <label class="d-block px-3 fw-bold" for="Country">Country<span class="mandatory">*</span>
+            <label class="d-block px-3" for="Country">Country<span class="mandatory">*</span>
             </label>
           </div>
           <div class="col-lg-4 mt-3">
@@ -52,20 +54,20 @@
               (onSelect)="selectedCountryEvent($event)" [placeHolder]="'Type here for country'" class="w-100 mt-4"
               [ngClass]="(mandatoryList?.has('country')) ? 'is-invalid d-block' : ''">
             </app-endpoint-search>
-            <span class="col fs-12">
+            <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav">Select country from search bar.</p>
             </span>
             <div *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block">
               {{mandatoryList?.get('country')}}
             </div>
           </div>
-          <div class="col-1 fs-14 mt-3">
-            <label class="d-block px-3 fw-bold" for="City">City<span class="mandatory">*</span>
+          <div class="col-2 fs-14 mt-3">
+            <label class="d-block px-3" for="City">City<span class="mandatory">*</span>
             </label>
           </div>
-          <div class="col-lg-4 mt-3">
+          <div class="col-lg-3 mt-3">
             <input class="form-control" placeholder="Type City">
-            <span class="col fs-12">
+            <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav">Select a city from the available
                 options.</p>
             </span>
@@ -76,39 +78,39 @@
         </div>
         <div class="row">
           <div class="col-2 fs-14 mt-3 px-3">
-            <label class="d-block px-3 fw-bold" for="Address">Address<span class="mandatory">*</span>
+            <label class="d-block px-3" for="Address">Address<span class="mandatory">*</span>
             </label>
           </div>
-          <div class="col-lg-8 mt-3">
+          <div class="col-lg-9 mt-3">
             <input class="form-control" placeholder="Type Address">
-            <span class="col fs-12">
+            <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav">Enter the address of your organization.</p>
             </span>
           </div>
         </div>
         <div class="row">
           <div class="col-2 fs-14 mt-3 px-3">
-            <label class="d-block px-3 fw-bold" for="Country">Phone<span class="mandatory">*</span>
+            <label class="d-block px-3" for="Country">Phone<span class="mandatory">*</span>
             </label>
           </div>
           <div class="col-lg-4 mt-3">
-            <div class="col-7">
+            <div>
               <input class="form-control">
             </div>
-            <span class="col fs-12">
+            <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav">Type phone number.</p>
             </span>
           </div>
 
           <div class="col-2 fs-14 mt-3">
-            <label class="d-block px-3 fw-bold" for="City">Zip Code<span class="mandatory">*</span>
+            <label class="d-block px-3" for="City">Zip Code<span class="mandatory">*</span>
             </label>
           </div>
-          <div class="col-lg-4 mt-3">
-            <div class="col-7">
+          <div class="col-lg-3 mt-3">
+            <div>
               <input class="form-control">
             </div>
-            <span class="col fs-12">
+            <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav">Type in the official name of the
                 business or organization
                 you need to report.</p>
@@ -120,14 +122,14 @@
         </div>
         <div class="row">
           <div class="col-2 fs-14 mt-3">
-            <label class="d-block px-3 fw-bold" for="Country">Website
+            <label class="d-block px-3" for="Country">Website
             </label>
           </div>
           <div class="col-lg-4 mt-3">
-            <div class="col-7">
+            <div>
               <input class="form-control">
             </div>
-            <span class="col fs-12">
+            <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav">Type the website name of the business
                 or organization
                 you need to report.</p>
@@ -137,14 +139,14 @@
             </div> -->
           </div>
           <div class="col-2 fs-14 mt-3">
-            <label class="d-block px-3 fw-bold" for="City">Email Address<span class="mandatory">*</span>
+            <label class="d-block px-3" for="City">Email Address<span class="mandatory">*</span>
             </label>
           </div>
-          <div class="col-lg-4 mt-3">
-            <div class="col-7">
+          <div class="col-lg-3 mt-3">
+            <div>
               <input class="form-control">
             </div>
-            <span class="col fs-12">
+            <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav">Type the email address of the business
                 or organization
                 you need to report.</p>
@@ -156,14 +158,14 @@
         </div>
         <div class="row">
           <div class="col-2 fs-14 mt-3">
-            <label class="d-block px-3 fw-bold" for="Country">Entity Type<span class="mandatory">*</span>
+            <label class="d-block px-3" for="Country">Entity Type<span class="mandatory">*</span>
             </label>
           </div>
           <div class="col-lg-4 mt-3">
-            <div class="col-7">
+            <div>
               <input class="form-control">
             </div>
-            <span class="col fs-12">
+            <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav">Select type from the available
                 options.</p>
             </span>

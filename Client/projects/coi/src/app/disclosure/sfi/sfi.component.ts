@@ -75,14 +75,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     openSfiDetails(condition: boolean, entityId: number) {
-        this._sfiService.isShowSfiNavBar = condition;
-        this._router.navigate(
-            [], 
-            {
-              relativeTo: this._activatedRoute,
-              queryParams: {entityId: entityId}, 
-              queryParamsHandling: 'merge', // remove to replace all query params by provided
-            });
+        this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' }});
     }
 
 }
