@@ -141,6 +141,16 @@ public class ConflictOfInterestVO {
 	private String filterType;
 	
 	private List<COIEntity> coiEntityList;
+	
+	private Boolean isActive;
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 
 	public CoiDisclosure getCoiDisclosure() {
 		return coiDisclosure;

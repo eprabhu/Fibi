@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.ForeignKey;
@@ -23,34 +24,36 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.States;
+import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "COI_ENTITY")
+@Table(name = "ENTITY")
 @EntityListeners(AuditingEntityListener.class)
 public class COIEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "COI_ENTITY_ID")
+	@Column(name = "ENTITY_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer coiEntityId;
 
-	@Column(name = "COI_ENTITY_NAME")
+	@Column(name = "ENTITY_NAME")
 	private String coiEntityName;
-
-	@Column(name = "ENTITY_NAME_GIVEN_BY_CREATOR")
-	private String entityNameGivenByCreator;
-
-	@Column(name = "ORIGINAL_ENTITY_ID")
-	private Integer originalEntityId;
 
 	@Column(name = "ENTITY_STATUS_CODE")
 	private String entityStatusCode;
 
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK1"), name = "ENTITY_STATUS_CODE", referencedColumnName = "ENTITY_STATUS_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK5"), name = "ENTITY_STATUS_CODE", referencedColumnName = "ENTITY_STATUS_CODE", insertable = false, updatable = false)
 	private EntityStatus entityStatus;
+	
+	@Column(name = "RISK_CATEGORY_CODE")
+	private String riskCategoryCode;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK1"), name = "RISK_CATEGORY_CODE", referencedColumnName = "RISK_CATEGORY_CODE", insertable = false, updatable = false)
+	private EntityRiskCategoryCode entityRiskCategoryCode;
 
 	@Column(name = "ENTITY_TYPE_CODE")
 	private String entityTypeCode;
@@ -68,22 +71,25 @@ public class COIEntity implements Serializable {
 
 	@Column(name = "STATE_CODE")
 	private String stateCode;
+	
+	@Column(name = "PHONE")
+	private String phone;
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_FK4"), name = "STATE_CODE", referencedColumnName = "STATE_CODE", insertable = false, updatable = false)
 	private States state;
 
-	@Column(name = "ADDRESS_LINE_1")
-	private String addressLine1;
+	@Column(name = "ADDRESS")
+	private String address;
 
-	@Column(name = "ADDRESS_LINE_2")
-	private String addressLine2;
-
-	@Column(name = "ADDRESS_LINE_3")
-	private String addressLine3;
-
-	@Column(name = "PINCODE")
-	private String pincode;
+	@Column(name = "ZIP_CODE")
+	private String zipCode;
+	
+	@Column(name = "VERSION_NUMBER")
+	private String versionNumber;
+	
+	@Column(name = "VERSION_STATUS")
+	private String versionStatus;
 
 	@Column(name = "EMAIL_ADDRESS")
 	private String emailAddress;
@@ -112,6 +118,18 @@ public class COIEntity implements Serializable {
 
 	@Column(name = "APPROVED_USER")
 	private String approvedUser;
+	
+	@Column(name = "IS_ACTIVE")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean isActive;
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 
 	public Integer getCoiEntityId() {
 		return coiEntityId;
@@ -127,22 +145,6 @@ public class COIEntity implements Serializable {
 
 	public void setCoiEntityName(String coiEntityName) {
 		this.coiEntityName = coiEntityName;
-	}
-
-	public String getEntityNameGivenByCreator() {
-		return entityNameGivenByCreator;
-	}
-
-	public void setEntityNameGivenByCreator(String entityNameGivenByCreator) {
-		this.entityNameGivenByCreator = entityNameGivenByCreator;
-	}
-
-	public Integer getOriginalEntityId() {
-		return originalEntityId;
-	}
-
-	public void setOriginalEntityId(Integer originalEntityId) {
-		this.originalEntityId = originalEntityId;
 	}
 
 	public String getEntityStatusCode() {
@@ -209,36 +211,12 @@ public class COIEntity implements Serializable {
 		this.state = state;
 	}
 
-	public String getAddressLine1() {
-		return addressLine1;
+	public String getZipCode() {
+		return zipCode;
 	}
 
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
-	}
-
-	public String getAddressLine2() {
-		return addressLine2;
-	}
-
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
-	}
-
-	public String getAddressLine3() {
-		return addressLine3;
-	}
-
-	public void setAddressLine3(String addressLine3) {
-		this.addressLine3 = addressLine3;
-	}
-
-	public String getPincode() {
-		return pincode;
-	}
-
-	public void setPincode(String pincode) {
-		this.pincode = pincode;
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 	public String getEmailAddress() {
@@ -303,6 +281,54 @@ public class COIEntity implements Serializable {
 
 	public void setApprovedUser(String approvedUser) {
 		this.approvedUser = approvedUser;
+	}
+
+	public String getRiskCategoryCode() {
+		return riskCategoryCode;
+	}
+
+	public void setRiskCategoryCode(String riskCategoryCode) {
+		this.riskCategoryCode = riskCategoryCode;
+	}
+
+	public EntityRiskCategoryCode getEntityRiskCategoryCode() {
+		return entityRiskCategoryCode;
+	}
+
+	public void setEntityRiskCategoryCode(EntityRiskCategoryCode entityRiskCategoryCode) {
+		this.entityRiskCategoryCode = entityRiskCategoryCode;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getVersionNumber() {
+		return versionNumber;
+	}
+
+	public void setVersionNumber(String versionNumber) {
+		this.versionNumber = versionNumber;
+	}
+
+	public String getVersionStatus() {
+		return versionStatus;
+	}
+
+	public void setVersionStatus(String versionStatus) {
+		this.versionStatus = versionStatus;
 	}
 
 }

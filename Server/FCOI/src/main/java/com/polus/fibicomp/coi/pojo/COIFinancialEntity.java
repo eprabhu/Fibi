@@ -37,12 +37,8 @@ public class COIFinancialEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer coiFinancialEntityId;
 
-	@Column(name = "COI_ENTITY_ID")
+	@Column(name = "ENTITY_ID")
 	private Integer coiEntityId;
-	
-	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "COI_FINANCIAL_ENTITY_FK1"), name = "COI_ENTITY_ID", referencedColumnName = "COI_ENTITY_ID", insertable = false, updatable = false)
-	private COIEntity coiEntity;
 
 	@Column(name = "PERSON_ID")
 	private String personId;
@@ -83,6 +79,9 @@ public class COIFinancialEntity implements Serializable {
 
 	@Transient
 	private List<COIFinancialEntityDetails> coiFinancialEntityDetails;
+	
+	@Transient
+	private COIEntity coiEntity;
 
 	public Integer getCoiFinancialEntityId() {
 		return coiFinancialEntityId;
