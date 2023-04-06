@@ -77,7 +77,7 @@ export class DefineRelationComponent implements OnInit {
 
   hideSfiNavBar() {
         this.relationShipOverlay.nativeElement.style.display = 'block';
-        document.documentElement.classList.add('cdk-global-scrollblock');
+        document.documentElement.classList.remove('cdk-global-scrollblock');
         this.isShowDetails = false;
         setTimeout(() => {
           this.closePage.emit(false);

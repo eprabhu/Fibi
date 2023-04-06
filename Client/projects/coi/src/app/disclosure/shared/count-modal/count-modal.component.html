@@ -1,12 +1,13 @@
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-open-button" data-bs-toggle="modal" data-bs-target="#coiCountsViewModal"></button>
+
 <div class="modal modal-coi fade mySkinDialog" id="coiCountsViewModal" tabindex="-1" role="dialog"
   aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">{{getModalHeader()}}</h4>
-        <button type="button" class="close" id="req-doc-popup-dismiss-btn" aria-label="Close"
+        <button type="button" data-bs-dismiss="modal"  class="btn-close" id="req-doc-popup-dismiss-btn" aria-label="Close"
           (click)="closeCountModal()">
-          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body" *ngIf="moduleCode === 8 && inputType === 'DISCLOSURE_TAB'">
@@ -34,8 +35,8 @@
               </td>
               <td>{{ item?.involvementEndDate |dateFormatter }}</td>
               <td>
-                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"
-                  [routerLink]="['/fibi/manage-sfi']"
+                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization" data-bs-dismiss="modal"
+                  [routerLink]="['/coi/entity-details']"
                   [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}"
                   (click)="closeCountModal()" >
                   <i class="fa fa-eye" aria-hidden="true"></i>
@@ -58,12 +59,12 @@
       </div>
       <div class="modal-body" *ngIf="moduleCode === 3 || moduleCode === 1">
         <ul class="subTabs tool-tab mb-0">
-          <li [ngClass]="{'active':currentModalTab == 'Proposal'}" class="w-50">
+          <li [class.active]="currentModalTab == 'Proposal'" class="w-50">
             <a class="subTabLink" (click)='currentModalTab = "Proposal"; switchTableData()' tabindex="0">
               <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Proposals'}}</span>
             </a>
           </li>
-          <li [ngClass]="{'active':currentModalTab == 'Award'}" class="w-50">
+          <li [class.active]="currentModalTab == 'Award'" class="w-50">
             <a (click)='currentModalTab = "Award"; switchTableData()' class="subTabLink " tabindex="0">
               <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Awards related to this SFI' : 'Awards'}}
               </span>
@@ -93,7 +94,7 @@
               <td style="width: 20%;">{{name.sponsor}}</td>
               <!-- <td style="width: 10%;" *ngIf="inputType === 'SFI_TAB'">No Conflict</td> -->
               <td style="width: 10%;" *ngIf="currentModalTab == 'Proposal'">
-                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"
+                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"  data-bs-dismiss="modal"
                   [routerLink]="['/fibi/proposal/overview']" [queryParams]={proposalId:name.moduleItemId}
                   data-dismiss="modal">
                   <i class="fa fa-eye" aria-hidden="true"></i>
@@ -101,7 +102,7 @@
                 </button>
               </td>
               <td style="width: 10%;" *ngIf="currentModalTab == 'Award'">
-                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"
+                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"  data-bs-dismiss="modal"
                   [routerLink]="['/fibi/award/overview']" [queryParams]={awardId:name.moduleItemId}
                   data-dismiss="modal">
                   <i class="fa fa-eye" aria-hidden="true"></i>
@@ -172,8 +173,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary mr-0" id="req-attachment-close-btn"
-          (click)="closeCountModal()">Close</button>
+        <button type="button" class="btn btn-outline-secondary mr-0" id="req-attachment-close-btn"
+          data-bs-dismiss="modal" (click)="closeCountModal()">Close</button>
       </div>
     </div>
   </div>

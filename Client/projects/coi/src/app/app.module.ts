@@ -14,6 +14,7 @@ import {FooterComponent} from "./common/footer/footer.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AppHttpInterceptor} from './common/services/http-interceptor';
 import {DashboardGuardService} from "./common/services/dashboard-guard.service";
+import { ElasticConfigService } from '../../../fibi/src/app/common/services/elastic-config.service';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -36,6 +37,7 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
     ],
     providers: [CommonService,
         DashboardGuardService,
+        ElasticConfigService,
         {
             provide: APP_INITIALIZER,
             useFactory: getappConfiguration,

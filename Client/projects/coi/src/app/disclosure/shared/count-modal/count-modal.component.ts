@@ -41,7 +41,7 @@ export class CountModalComponent implements OnInit {
 	getSFIDatas() {
 		this.$subscriptions.push(this._countModalService.getSFICount(this.disclosureId, this.disclosureSequenceStatusCode,this.personId).subscribe((data: any) => {
 			this.coiFinancialEntityDetails = data;
-			$('#coiCountsViewModal').modal('show');
+			document.getElementById('hidden-open-button').click();
 		}));
 	}
 
@@ -52,7 +52,7 @@ export class CountModalComponent implements OnInit {
 			this.projectDatas = data;
 			this.currentModalTab = this.moduleCode === 1 ? 'Award' : 'Proposal';
 			this.switchTableData();
-			$('#coiCountsViewModal').modal('show');
+			document.getElementById('hidden-open-button').click();
 		}, err => {
 			this.closeCountModal();
 		}));
@@ -62,7 +62,7 @@ export class CountModalComponent implements OnInit {
 			this.projectDatas = data;
 			this.currentModalTab = this.moduleCode === 1 ? 'Award' : 'Proposal';
 			this.switchTableData();
-			$('#coiCountsViewModal').modal('show');
+			document.getElementById('hidden-open-button').click();
 		}, err => {
 			this.closeCountModal();
 		}));
@@ -72,7 +72,7 @@ export class CountModalComponent implements OnInit {
 	getDisclosureDatas() {
 		this.$subscriptions.push(this._countModalService.getDisclosureDetails(this.disclosureId).subscribe((data: any) => {
 			this.coiFinancialEntityDetails = data;
-			$('#coiCountsViewModal').modal('show');
+			document.getElementById('hidden-open-button').click();
 		}));
 	}
 
@@ -88,7 +88,6 @@ export class CountModalComponent implements OnInit {
 
 	closeCountModal() {
 		this.closeModal.emit(false);
-		$('#coiCountsViewModal').modal('hide');
 	}
 
 	switchTableData() {

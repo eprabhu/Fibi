@@ -12,7 +12,7 @@ export class ReviewComponent implements OnInit {
     coiDetails: any = {};
 
     constructor(
-        private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService
+        public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService
     ) { }
 
     ngOnInit() {

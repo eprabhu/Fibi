@@ -21,6 +21,15 @@
 
 <app-screening-questionnaire-summary></app-screening-questionnaire-summary>
 <app-sfi-summary></app-sfi-summary>
-<app-relationship-summary></app-relationship-summary>
+<div class="main-title" id="COI803">
+  <h3 class="d-flex align-items-center"><strong>Relationships</strong>
+  <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="View entity relationships." data-bs-placement="top">
+    <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
+  </span>
+  </h3>
+</div>
+<ng-container *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
+  <app-relationship-summary [selectedProject]="award"></app-relationship-summary>
+</ng-container>
 <app-conflict-management-summary></app-conflict-management-summary>
 <app-certify-summary></app-certify-summary>

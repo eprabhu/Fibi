@@ -1,3 +1,586 @@
 <div class="container-fluid px-3 py-2">
+  <section class="row">
+    <div (click)="changeTab('NEW_SUBMISSIONS')"
+      class="align-items-center col d-flex dash-card justify-content-center pointer py-4 ml-4 flex-column">
+      <div class="align-items-center d-flex justify-content-center" style="height:40px">
+        <p class="f-5 bold">{{dashboardCounts?.newSubmissionsCount}}</p>
+        <p class="f-18 fw-500 mx-4">New Submissions</p>
+      </div>
+      <div class="align-items-center d-flex justify-content-center" style="height:40px">
+        <p class="bold" style="font-size: 2.5rem">{{dashboardCounts?.unassignedCount}}</p>
+        <p class="f-16 fw-500 mx-4">Unassigned</p>
+      </div>
+    </div>
+    <div (click)="searchConflictIdentified()" class="col dash-card pointer">
+      <div class="align-items-center d-flex h-100 justify-content-center">
+        <p class="f-5 bold">{{dashboardCounts?.conflictIdentifiedCount}}</p>
+        <p class="f-18 fw-500 mx-4">Conflicts Identified</p>
+      </div>
+    </div>
+    <div [routerLink]="['/coi/entity-management']" class="col dash-card pointer">
+      <div class="align-items-center d-flex h-100 justify-content-center">
+        <p class="f-5 bold">{{dashboardCounts?.pendingEntityApproval}}</p>
+        <p class="f-18 fw-500 mx-4">Pending Entity Approval</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-ad">
+    <nav class="coi-admin-dash mb-3 mx-0 row">
+      <div class="bg-white ">
+        <ul class="m-0 p-0 p-3 f-14">
+          <li (click)="changeTab('ALL_DISCLOSURES')"
+            [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
+            class="p-3 position-relative text-center ml-3" style="width: 109.11px">
+            All Disclosures
+          <li class="separator mx-3"></li>
+          <li (click)="changeTab('NEW_SUBMISSIONS')"
+            [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
+            class="p-3 position-relative text-center" style="width: 130.7px">
+            New Submissions
+          <li class="separator mx-3"></li>
+          <li (click)="changeTab('MY_REVIEWS')"
+            [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
+            class="p-3 position-relative text-center" style="width: 130.7px">Pending Reviews
+          <li class="separator mx-3"></li>
+          <li (click)="changeTab('ALL_REVIEWS')"
+            [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS'"
+            class="p-3 position-relative text-center" style="width: 130.7px">All Reviews
+          </li>
+          <li class="separator mx-3"></li>
+          <li (click)="changeTab('TRAVEL_DISCLOSURES')"
+            [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES'"
+            class="p-3 position-relative text-center" style="width: 130.7px">Travel Disclosures
+          </li>
+        </ul>
+        <div *ngIf="isAdvanceSearchTab(_coiAdminDashboardService.coiRequestObject.tabName)"
+          class="d-flex mb-10 mt-2">
+          <div class="form-group col-lg-10 col-md-10 col-10 d-flex position-relative">
+            <app-elastic [options]="coiElastic" style="width: 1400px"
+              [placeHolder]="'Search : Disclosure#, Category, Full Name, Status, person#'"
+              (selectedResult)="redirectToDisclosure($event)"></app-elastic>
+          </div>
+          <button role="button" class="btn btn-primary d-flex mb-2 ml-3" id="advanced-search" (click)="toggleADSearch()"style="margin-left:18px;"
+          aria-controls="collapseExample"
+          aria-expanded="false"
+          aria-label="Toggle Advanced Search"><mat-icon>tune</mat-icon> Advanced Search</button>
+
+          <!-- <button class="btn btn-tertiary mb-2 ml-3"  role="button"
+            aria-expanded="false" aria-controls="collapseCOI">
+            <i aria-hidden="true" class="fa fa-sliders"></i>
+            Advanced Search
+          </button> -->
+        </div>
+      </div>
+    </nav>
+
+    <div class="sort-div" *ngIf="isShowAllProposalList">
+      <span class="fs-14 fw-medium me-2 text-secondary">Sort by:</span>
+      <span (click)="currentSelected.filter='did'; sortResult('coiDisclosureNumber')"
+      [class.filter-active]="isActive('coiDisclosureNumber')"
+        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white"
+        role="button">
+        <div class="d-inline-flex align-items-center">
+          <label>Disclosure#</label>
+          <mat-icon class="text-secondary arrow" *ngIf="!_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']">arrow_downward</mat-icon>
+          <mat-icon class="arrow" *ngIf="_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']=== 'asc' ">arrow_downward</mat-icon>
+          <mat-icon class="arrow"*ngIf="_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']=== 'desc' ">arrow_upward</mat-icon>
+        </div>
+      </span>
+      <span (click)="currentSelected.filter='dName';sortResult('disclosurePersonFullName')"
+      [class.filter-active]="isActive('disclosurePersonFullName')"
+        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white mx-1" role="button">
+        <div class="d-inline-flex align-items-center">
+          <label>Person Name</label>
+          <mat-icon class="text-secondary arrow" *ngIf="!_coiAdminDashboardService.coiRequestObject.sort['disclosurePersonFullName']">arrow_downward</mat-icon>
+          <mat-icon class="arrow" *ngIf="_coiAdminDashboardService.coiRequestObject.sort['disclosurePersonFullName']=== 'asc' ">arrow_downward</mat-icon>
+          <mat-icon class="arrow"*ngIf="_coiAdminDashboardService.coiRequestObject.sort['disclosurePersonFullName']=== 'desc' ">arrow_upward</mat-icon>
+        </div>
+      </span>
+      <span (click)="currentSelected.filter='dType';sortResult('disclosureCategoryType')" [class.filter-active]="isActive('disclosureCategoryType')"
+        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white" role="button">
+        <div class="d-inline-flex align-items-center">
+          <label>Disclosure Type</label>
+          <mat-icon class="text-secondary arrow" *ngIf="!_coiAdminDashboardService.coiRequestObject.sort['disclosureCategoryType']">arrow_downward</mat-icon>
+          <mat-icon class="arrow" *ngIf="_coiAdminDashboardService.coiRequestObject.sort['disclosureCategoryType']=== 'asc' ">arrow_downward</mat-icon>
+          <mat-icon class="arrow"*ngIf="_coiAdminDashboardService.coiRequestObject.sort['disclosureCategoryType']=== 'desc' ">arrow_upward</mat-icon>
+        </div>
+      </span>
+      <span (click)="currentSelected.filter='dStatus';sortResult('disclosureStatus')" [class.filter-active]="isActive('disclosureStatus')"
+        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white mx-1" role="button">
+        <div class="d-inline-flex align-items-center">
+          <label>Disclosure Status</label>
+          <mat-icon class="text-secondary arrow" *ngIf="!_coiAdminDashboardService.coiRequestObject.sort['disclosureStatus']">arrow_downward</mat-icon>
+          <mat-icon class="arrow" *ngIf="_coiAdminDashboardService.coiRequestObject.sort['disclosureStatus']=== 'asc' ">arrow_downward</mat-icon>
+          <mat-icon class="arrow"*ngIf="_coiAdminDashboardService.coiRequestObject.sort['disclosureStatus']=== 'desc' ">arrow_upward</mat-icon>
+        </div>
+      </span>
+      <!-- <span (click)="currentSelected.filter='certificationDate'"
+        [class.filter-active]="currentSelected.filter=='certificationDate'"
+        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white" role="button">Certification Date</span> -->
+      <span (click)="currentSelected.filter='expirationDate';sortResult('expirationDate')" [class.filter-active]="isActive('expirationDate')"
+        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white mx-1" role="button">
+        Expiration Date
+        <div class="d-inline-flex align-items-center">
+          <label>Expiration Date</label>
+          <mat-icon class="text-secondary arrow" *ngIf="!_coiAdminDashboardService.coiRequestObject.sort['expirationDate']">arrow_downward</mat-icon>
+          <mat-icon class="arrow" *ngIf="_coiAdminDashboardService.coiRequestObject.sort['expirationDate']=== 'asc' ">arrow_downward</mat-icon>
+          <mat-icon class="arrow"*ngIf="_coiAdminDashboardService.coiRequestObject.sort['expirationDate']=== 'desc' ">arrow_upward</mat-icon>
+        </div>
+      </span>
+      <span (click)="currentSelected.filter='lastUpdated';sortResult('updateTimeStamp')" [class.filter-active]="isActive('updateTimeStamp')"
+        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white" role="button">
+        <div class="d-inline-flex align-items-center">
+          <label>Last Updated</label>
+          <mat-icon class="text-secondary arrow" *ngIf="!_coiAdminDashboardService.coiRequestObject.sort['updateTimeStamp']">arrow_downward</mat-icon>
+          <mat-icon class="arrow" *ngIf="_coiAdminDashboardService.coiRequestObject.sort['updateTimeStamp']=== 'asc' ">arrow_downward</mat-icon>
+          <mat-icon class="arrow"*ngIf="_coiAdminDashboardService.coiRequestObject.sort['updateTimeStamp']=== 'desc' ">arrow_upward</mat-icon>
+        </div>
+      </span>
+    </div>
+
+    <div class="card mb-3 collapse" id="collapseExample" >
+      <div class="card-body">
+        <ng-container *ngIf="_coiAdminDashboardService.coiRequestObject.tabName !='ENTITY'">
+          <div class="form-row row mt-2">
+            <!-- Person Name -->
+            <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+              <label class="d-block">Person Name</label>
+              <app-elastic (selectedResult)="selectPersonName($event)" [clearField]="advSearchClearField"
+                [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person Name'">
+              </app-elastic>
+            </div>
+            <!-- Department Name -->
+            <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Department Name</ng-container>
+              </label>
+              <app-endpoint-search (onSelect)="leadUnitChangeFunction($event)" [clearField]="advSearchClearField"
+                [httpOptions]="leadUnitSearchOptions" [placeHolder]="'Type here for Department Name'">
+              </app-endpoint-search>
+            </div>
+            <!-- Entity Name -->
+            <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+              <label class="d-block">Entity Name</label>
+              <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
+                [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here'" class="w-100 mt-4">
+              </app-endpoint-search>
+            </div>
+            <!-- Entity Country -->
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">Entity Country</label>
+              <app-endpoint-search (onSelect)="selectEntityCountry($event)" [clearField]="advSearchClearField"
+                [httpOptions]="countrySearchOptions" [placeHolder]="'Type here for entity country'">
+              </app-endpoint-search>
+            </div>
+          </div>
+          <div class="form-row row mt-2">
+            <!-- Disclosure # -->
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Disclosure #</ng-container>
+              </label>
+              <input [(ngModel)]="_coiAdminDashboardService.coiRequestObject.property1" class="form-control"
+                placeholder="Disclosure Number" type="text" />
+            </div>
+            <!-- Disclosure Type -->
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Disclosure Type</ng-container>
+              </label>
+              <app-look-up (selectedResult)="onLookupSelect($event, 'property5')" [options]="disclosureTypeOptions"
+                [selectedLookUpList]="lookupValues['property5']">
+              </app-look-up>
+            </div>
+            <!-- Disclosure Status -->
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Disclosure Status</ng-container>
+              </label>
+              <app-look-up (selectedResult)="onLookupSelect($event, 'property4')" [options]="disclosureStatusOptions"
+                [selectedLookUpList]="lookupValues['property4']">
+              </app-look-up>
+            </div>
+            <!-- Conflict Status -->
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Conflict Status</ng-container>
+              </label>
+              <app-look-up (selectedResult)="onLookupSelect($event, 'property22')" [options]="conflictStatusOptions"
+                [selectedLookUpList]="lookupValues['property22']">
+              </app-look-up>
+            </div>
+          </div>
+          <!-- <div class="form-row row mt-2">
+                   Project Type
+                   <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                    <label class="d-block">
+                        <ng-container>Project Type</ng-container>
+                    </label>
+                    <select [(ngModel)]="_coiAdminDashboardService.coiRequestObject.property14"
+                            class="form-control">
+                        <option [ngValue]="null">--Select--</option>
+                        <option [value]="1">Award</option>
+                        <option [value]="3">Proposal</option>
+                    </select>
+                    </div>
+                     Project Title
+                     <div class="col-xl-6 col-lg-5 col-sm-6 col-6">
+                      <label class="d-block">Project Title</label>
+                      <input [(ngModel)]="_coiAdminDashboardService.coiRequestObject.property11" class="form-control"
+                             placeholder="Project Title" type="text"/>
+                    </div>
+                    Project Status
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                      <label class="d-block">
+                          <ng-container>Project Status</ng-container>
+                      </label>
+                      <app-look-up (selectedResult)="onLookupSelect($event, 'property4')"
+                                   [options]="disclosureStatusOptions"
+                                   [selectedLookUpList]="lookupValues['property4']">
+                      </app-look-up>
+                  </div>
+                  </div> -->
+          <div class="form-row row mt-2">
+            <!-- Sponsor Status -->
+            <!-- <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                    <label class="d-block">
+                        <ng-container>Sponsor</ng-container>
+                    </label>
+                    <app-look-up (selectedResult)="onLookupSelect($event, 'property4')"
+                                 [options]="disclosureStatusOptions"
+                                 [selectedLookUpList]="lookupValues['property4']">
+                    </app-look-up>
+                    </div> -->
+            <!-- Review Status -->
+            <!-- Start Date -->
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Approval Date</ng-container>
+              </label>
+              <span class="dateField">
+                <input matInput [matDatepicker]="approvalDate" id="approvalDate" (click)="approvalDate.open()"
+                  class="form-control d-inline-block" placeholder="dd/MM/yyyy">
+                <i (click)="approvalDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                <mat-datepicker #approvalDate></mat-datepicker>
+              </span>
+            </div>
+            <!-- End Date -->
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Expiration Date</ng-container>
+              </label>
+              <span class="dateField">
+                <input matInput [matDatepicker]="expirationDate" id="expiration-date" (click)="expirationDate.open()"
+                  class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.expirationDate" placeholder="dd/MM/yyyy">
+                <i (click)="expirationDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                <mat-datepicker #expirationDate></mat-datepicker>
+              </span>
+            </div>
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Review Status</ng-container>
+              </label>
+              <app-look-up (selectedResult)="onLookupSelect($event, 'property21')" [options]="coiReviewStatusOptions"
+                [selectedLookUpList]="lookupValues['property21']">
+              </app-look-up>
+            </div>
+            <!-- Disposition Status -->
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Disposition Status</ng-container>
+              </label>
+              <app-look-up (selectedResult)="onLookupSelect($event, 'property20')" [options]="disPositionOptions"
+                [selectedLookUpList]="lookupValues['property20']">
+              </app-look-up>
+            </div>
+
+          </div>
+          <div class="form-row row mt-2">
+            <!-- Has SFI -->
+            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Has SFI</ng-container>
+              </label>
+              <span class="mt-2">
+                <a *ngIf="!_coiAdminDashboardService.coiRequestObject.property15">
+                  <label class="switch">
+                    <input (click)="_coiAdminDashboardService.coiRequestObject.property15
+                                = !_coiAdminDashboardService.coiRequestObject.property15" type="checkbox">
+                    <span class="slider round"><small class="deactivate-text">No</small></span>
+                  </label>
+                </a>
+                <a *ngIf="_coiAdminDashboardService.coiRequestObject.property15">
+                  <label class="switch">
+                    <input (click)="_coiAdminDashboardService.coiRequestObject.property15
+                                = !_coiAdminDashboardService.coiRequestObject.property15" checked type="checkbox">
+                    <span class="slider round"><small>Yes</small></span>
+                  </label>
+                </a>
+              </span>
+            </div>
+            <!-- Certification Date -->
+            <!-- <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Certification Date</ng-container>
+              </label>
+              <span class="dateField">
+                <input (keypress)="commonService._keyPress($event, 'date');"
+                  (keyup.enter)="setAdvanceSearchValuesToServiceObject();$coiList.next()"
+                  [(ngModel)]="advanceSearchDates.endDate" [owlDateTimeTrigger]="advSearchEndDate"
+                  [owlDateTime]="advSearchEndDate" [placeholder]="DEFAULT_DATE_FORMAT" autocomplete="off"
+                  class="form-control" id="adv-search-end-date" maxlength="60" type="text" />
+                <i [owlDateTimeTrigger]="advSearchEndDate" aria-hidden="true"
+                  class="fa fa-calendar fa-large insidePicker hand-cursor" id="award-sub-date-icon"
+                  title="Open Calender"></i>
+                <owl-date-time #advSearchEndDate (afterPickerOpen)="setFocusToElement('adv-search-end-date')"
+                  [pickerType]="'calendar'">
+                </owl-date-time>
+              </span>
+            </div> -->
+          </div>
+          <div class="d-flex justify-content-end">
+            <button (click)="performAdvanceSearch()" class="btn btn-primary mx-3">Search</button>
+            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs mr-2">Clear</button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <ng-container
+      *ngIf="isShowAllProposalList">
+      <ng-container *ngFor="let coi of coiList;">
+        <section class="mt-3 shadow-sm coi-card">
+          <div class="card-bg f-14 pt-3">
+            <div>
+              <div class="row mb-3 px-3">
+                <div class="col">
+                  <!-- <label for="id" class="label-text">Disclosure Number:</label> -->
+                  <span id="id" class="grey-text m-0">#{{coi?.coiDisclosureNumber}}</span>
+                </div>
+                <div class="col">
+                  <label for="person-name" class="label-text">Person Name:</label>
+                  <span *ngIf="coi?.disclosurePersonFullName" id="person-name" class="grey-text">{{coi?.disclosurePersonFullName}}</span>
+                  <span *ngIf="!coi?.disclosurePersonFullName" class="noDataExists">No data exist</span>
+                </div>
+                <div class="col">
+                  <label for="type" class="label-text">Disclosure Type:</label>
+                  <span *ngIf="coi?.disclosureCategoryType" id="type" class="grey-text">{{coi?.disclosureCategoryType}}</span>
+                  <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">No data exist</span>
+                </div>
+                <div class="col">
+                  <label for="status" class="label-text">Disclosure Status:</label>
+                  <div *ngIf="coi?.disclosureStatus" class="badge f-13 rounded-pill bg-{{getDisclosureStatusBadge(coi?.disclosureStatusCode)}}"  [class.text-dark]="getDisclosureStatusBadge(coi?.disclosureStatusCode) === 'warning'"
+                    id="status">
+                    {{coi?.disclosureStatus}}
+                  </div>
+                  <div *ngIf="!coi?.disclosureStatus" class="noDataExists">No data exist</div>
+                </div>
+              </div>
+              <div class="row mb-3 px-3">
+                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                  <label for="event-type" class="label-text">Disclosure Event Type:</label>
+                  <span id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
+                    coi?.disclosureCategoryTypeCode)}}</span>
+                  <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">No data exist</span>
+                </div>
+                <div class="col">
+                  <label for="event-type" class="label-text">Certification Date:</label>
+                  <span class="noDataExists">No data exist</span>
+                  <!-- <span *ngIf="!coi?.disclosureCategoryType" id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
+                    coi?.disclosureCategoryTypeCode)}}</span> -->
+                </div>
+                <div class="col">
+                  <label for="event-type" class="label-text">Expiration Date:</label>
+                  <span *ngIf="!coi?.expirationDate" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.expirationDate" id="event-type" class="grey-text">{{coi?.expirationDate | dateFormatter}}</span>
+                </div>
+                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                  <label for="disp-status" class="label-text">Disposition Status:</label>
+                  <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.dispositionStatus"
+                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
+                    id="disp-status">{{coi?.dispositionStatus}}</span>
+                </div>
+                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
+                  <label for="last-approved-version" class="label-text">Last Approved Version:</label>
+                  <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
+                </div>
+                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
+                  <label for="disp-status" class="label-text">Disposition Status:</label>
+                  <span *ngIf="!coi?.disclosureDispositionCode" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.disclosureDispositionCode"
+                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
+                    id="disp-status">{{coi?.dispositionStatus}}</span>
+                </div>
+              </div>
+              <div class="row mb-3 px-3">
+                <div class="col-3" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                  <label for="last-approved-version" class="label-text">Last Approved Version:</label>
+                  <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
+                </div>
+                <div class="col-3">
+                  <label for="last-approved-version-date" class="label-text">Last Approved Version Date:</label>
+                  <span *ngIf="!coi?.lastApprovedVersionDate" class="noDataExists">No data date exist</span>
+                  <span *ngIf="coi?.lastApprovedVersionDate" id="last-approved-version-date" class="grey-text">{{coi?.lastApprovedVersionDate | dateFormatter}}</span>
+                </div>
+                <div class="col-6" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
+                  <label for="revision-reason" class="label-text">Revision Reason:</label>
+                  <span *ngIf="!coi?.reviseComment" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.reviseComment" id="revision-reason" class="grey-text">{{coi?.reviseComment}}</span>
+                </div>
+                <div class="col-3 align-self-center"
+                  *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                  <label class="m-0" for="last-updated" class="label-text"> Review Status for </label>
+                  <!-- <span *ngIf="!coi?.reviewerFullName" class="noDataExists">No disclosure type exist</span> -->
+                  <span *ngIf="coi?.reviewerFullName" id="last-updated" class="grey-text"><i class="bold">{{coi?.reviewerFullName}}</i>
+                    : <span
+                      class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewerStatusCode)}}"  [class.text-dark]="getReviewStatusBadge(coi?.reviewerStatusCode) === 'warning'">{{coi?.reviewerStatus}}</span></span>
+                </div>
+                <div class="col-3">
+                  <label for="review-status" class="label-text">Review Status:</label>
+                  <span *ngIf="!coi?.reviewStatusTypeCode" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.reviewStatusTypeCode" class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewStatusTypeCode)}}" [class.text-dark]="getReviewStatusBadge(coi?.reviewStatusTypeCode) === 'warning'"
+                    id="review-status">{{coi?.reviewStatus}}</span>
+                </div>
+              </div>
+              <div class="row mb-2 px-3" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col-6"
+                  [ngClass]="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS' ?'col-6':'col-9'">
+                  <label for="revision-reason" class="label-text">Revision Reason:</label>
+                  <span *ngIf="!coi?.reviseComment" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.reviseComment" id="revision-reason" class="grey-text">{{coi?.reviseComment}}</span>
+                </div>
+              </div>
+              <div class="row py-2 m-0 bg-white">
+                <div class="col-3 d-flex align-items-center">
+                  <div
+                    (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);"
+                    *ngIf="coi?.disclosureStatusCode == 1" class="bold-blue-number pointer">
+                    {{coi?.noOfSfiInPending || 0}}
+                  </div>
+                  <div *ngIf="coi?.disclosureStatusCode != 1" class="bold-blue-number mt-1 pointer"
+                    (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">
+                    {{coi?.noOfSfiInActive || 0}}
+                  </div>
+                  <div class="ml-2 mt-1 pointer"
+                    (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">
+                    <label class="label-text">Significant Financial Interest</label> </div>
+                </div>
+                <div class="col-3 d-flex align-items-center">
+                  <div class="d-flex align-items-center">
+                    <div
+                      (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);"
+                      *ngIf="coi?.numberOfProposals" class="bold-blue-number pointer">
+                      {{coi?.numberOfProposals}}
+                    </div>
+                    <div *ngIf="!coi?.numberOfProposals" class="bold-blue-number">
+                      {{coi?.numberOfProposals}}
+                    </div>
+                    <div class="ml-2 mt-1 pointer"
+                      (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">
+                      <label class="label-text">Proposals</label></div>
+                  </div>
+                  <div class="d-flex align-items-center ml-15 pl-5">
+                    <div
+                      (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);"
+                      *ngIf="coi?.numberOfAwards" class="bold-blue-number pointer">
+                      {{coi?.numberOfAwards}}
+                    </div>
+                    <div *ngIf="!coi?.numberOfAwards" class="bold-blue-number">
+                      {{coi?.numberOfAwards}}
+                    </div>
+                    <div class="ml-2 mt-1 pointer"
+                      (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">
+                      <label class="label-text"> Awards</label></div>
+                  </div>
+                </div>
+                <div class="col-3 align-self-center grey-text">
+                  <label class="m-0" for="last-updated">Last Updated On:</label>
+                  <span id="last-updated">{{coi?.updateTimeStamp | dateFormatter}}
+                    by {{coi?.updateUser}}</span>
+                </div>
+                <div class="col-auto ms-auto">
+
+                  <button
+                  [routerLink]="['/coi/disclosure/summary']"
+                    [queryParams]="{disclosureId:coi?.coiDisclosureId}" class="btn btn-tertiary f-13 mt-0 mr-2">
+                    <i aria-hidden="true" class="fa fa-eye"></i>
+                    View
+                  </button>
+                  <button *ngIf="coi?.reviewerStatusCode === '1' &&
+                  _coiAdminDashboardService.coiRequestObject.tabName=='PENDING_DISCLOSURES'"
+                    [disabled]="isSaving" data-bs-toggle="modal" data-bs-target="#ReviewModal" class="btn btn-primary f-13"
+                    (click)="selectedStartReviewCoiId=coi?.reviewId;selectedReviewStatusCode = coi?.reviewerStatusCode">
+                    <i aria-hidden="true" class="fa fa-file-text-o"></i> Start Review
+                  </button>
+                  <button *ngIf="coi?.reviewerStatusCode === '2' &&
+                                        _coiAdminDashboardService.coiRequestObject.tabName=='PENDING_DISCLOSURES'"
+                    [disabled]="isSaving" data-toggle="modal" data-target="#ReviewModal" class="btn btn-primary f-13"
+                    (click)="selectedStartReviewCoiId=coi?.reviewId;selectedReviewStatusCode = coi?.reviewerStatusCode">
+                    <i aria-hidden="true" class="fa fa-file-text-o"></i> Complete Review
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </ng-container>
+      <!-- Pagination -->
+      <div *ngIf="coiList.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+        <nav aria-label="pagination section" class="pagination justify-content-end">
+          <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="result.disclosureCount">
+          </app-pagination>
+        </nav>
+      </div>
+      <div *ngIf="coiList == null || coiList?.length == 0">
+        <app-no-information></app-no-information>
+        <!-- <span class="no-data-icon-outer">
+          <div class="no-data-icon">
+            <i aria-hidden="true" class="fa fa-file-o"></i>
+            <i aria-hidden="true" class="fa fa-times-circle-o"></i>
+          </div>
+        </span>
+        <h4>There are no {{_coiAdminDashboardService.coiRequestObject.tabName == 'ALL_DISCLOSURES' ?
+          'disclosures' : 'pending reviews'}} available.</h4> -->
+      </div>
+    </ng-container>
+
+    <ng-template #noData>
+      <app-no-information></app-no-information>
+    </ng-template>
+
+  </section>
+
+  <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
+    [disclosureNumber]="currentDisclosureNumber" [moduleCode]="selectedModuleCode" [inputType]="inputType"
+    [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"></app-count-modal>
+  <!-- Confirmation Modal -->
+  <div class="modal fade mySkinDialog" id="ReviewModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header ct-footer-padding">
+          <h4 class="modal-title">Confirmation</h4>
+        </div>
+        <div class="modal-body ct-modal-padding">
+          <div class="row">
+            <div class="col-lg-12">
+              <p class="m-0 pt-3 pb-4">Are you sure you want to {{selectedReviewStatusCode == '1' ? 'start':
+                'complete'}} this Review?</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer ct-footer-padding">
+          <button class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" id="claim-sumbit-no-btn" type="button">No
+          </button>
+          <button (click)="processDisclosureReview()" data-bs-dismiss="modal" class="btn btn-primary btn-sm"
+            type="button">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>

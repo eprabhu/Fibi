@@ -18,6 +18,8 @@ import {MatIconModule} from "@angular/material/icon";
 import { SharedComponentModule } from '../../../../../fibi/src/app/shared-component/shared-component.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AddCommentSliderComponent } from './review/relationship-summary/add-comment-slider/add-comment-slider.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     imports: [
@@ -28,7 +30,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatIconModule,
         MatInputModule,
         MatFormFieldModule,
-        SharedComponentModule
+        SharedComponentModule,
+        SharedModule
     ],
     declarations: [
         SummaryComponent,
@@ -39,6 +42,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         RelationshipSummaryComponent,
         CertifySummaryComponent,
         ConflictManagementSummaryComponent,
+        AddCommentSliderComponent
     ],
     providers: [
         CoiSummaryEventsAndStoreService,
