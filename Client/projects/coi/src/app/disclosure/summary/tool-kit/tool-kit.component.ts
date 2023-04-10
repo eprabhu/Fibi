@@ -94,7 +94,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         }).subscribe((data: any) => {
             this.projectList = data;
             this._dataStoreAndEventsService.conflictStatusList = data.coiDisclosureDetailStatuses;
-            this._dataStoreAndEventsService.concatenatedProjectList = [...data.proposals, ...data.awards];
+            this._dataStoreAndEventsService.concatenatedProjectList = [...data.awards,...data.proposals];
             if (this.projectList.proposals.length || this.projectList.awards.length) {
                 this.openProjectRelationships(this.projectList.awards[0] ?
                   this.projectList.awards[0] : this.projectList.proposals[0], 0);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
@@ -16,9 +16,11 @@ declare var $: any;
 })
 export class RelationshipSummaryComponent implements OnInit {
 
+    @Input() selectedProject: any;
     $subscriptions: Subscription[] = [];
     projectRelations: any = [];
-    selectedProject: any = {};
+    isOpenSlider = false;
+    // selectedProject: any = {};
     deployMap = environment.deployUrl;
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
 
@@ -26,7 +28,6 @@ export class RelationshipSummaryComponent implements OnInit {
     projectDetails: any = {};
     conflictIndex = -1;
     coiDetails: any = {};
-
     conflictHistory: any = [];
 
     projectConflictValidationMap = new Map();
@@ -39,7 +40,8 @@ export class RelationshipSummaryComponent implements OnInit {
 
     ngOnInit() {
         this.fetchCOIDetails();
-        this.listenForProjectDetails();
+        this.getEntityProjectRelations();
+        // this.listenForProjectDetails();
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
         this.commentConfiguration.coiSectionsTypeCode = 3;
     }
@@ -80,7 +82,7 @@ export class RelationshipSummaryComponent implements OnInit {
                 // if (data && this.selectedProject.proposalIdlinkedInDisclosure && data.proposals.length) {
                 //     this.selectedProject = data.proposals[0];
                 // }
-            this.setSubSectionList();
+            // this.setSubSectionList();
         }, _err => {
             //this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project details. Please try again.');
         }));
@@ -134,6 +136,10 @@ export class RelationshipSummaryComponent implements OnInit {
     clearConflictModal() {
         this.projectConflictValidationMap.clear();
         this.reviewerConflict = { comment: {comments: ''}};
+    }
+
+    closePage() {
+      this.isOpenSlider = false;
     }
 
 }

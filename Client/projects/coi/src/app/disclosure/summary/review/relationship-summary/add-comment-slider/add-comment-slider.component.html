@@ -1,0 +1,69 @@
+<div class="card" #addCommentOverlay>
+  <div @enterAnimation class="row fixed-tree" *ngIf="isOpenSlider">
+    <div class="close shadow-medium" (click)="hideSfiNavBar()">
+      <img src="assets/images/close.svg" alt="close button">
+    </div>
+    <div class="relationship-content">
+      <div class="card-header">
+        <h4>Project Conflict (Google)</h4>
+      </div>
+      <div class="card outer-card mt-20">
+        <div class="card-body">
+          <div class="info-card">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+          </div>
+          <div>
+            <div class="card mt-20 comment-card">
+              <div class="card-header">
+                <div class="col-12 d-flex align-items-center">
+                  <h5>Conflict Status:</h5>
+                  <span class="ml-15">
+                    <select
+                    class="form-control select-default">
+                    <option [value]=null>--Select--</option>
+                    <option [value]="status.discDetStatusCode" *ngFor="let status of dataStoreService.conflictStatusList">
+                        {{status?.description}}</option>
+                    </select>
+                  </span>
+                </div>
+              </div>
+              <div class="card-body">
+                <textarea class="form-control" placeholder="Type Comments">
+                </textarea>
+              </div>
+              <div class="card-footer text-muted">
+                <button type="button" class="btn btn-primary float-end" data-bs-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-outline-secondary float-end mr-10" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="main-title" id="">
+        <h3 class="d-flex align-items-center"><strong>Conflict History</strong>
+        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="View conflict history." data-bs-placement="top">
+          <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
+        </span>
+        </h3>
+      </div>
+      <ng-container *ngFor="let historyEntry of log;let index = index;let last = last;let first=first">
+      <div class="row">
+        <div class="col-1 time-line" style="position: relative">
+                <span class="badge rounded-pill bg-success">No Conflict</span>
+        </div>
+        <div class="col-10 pb-4">
+          <div class="align-items-center ml-5 mx-0">
+            <span class="d-flex align-items-center text-muted">
+              <mat-icon class="person-icon">person_outline</mat-icon>
+              <label class="fw-700 fs-14">Renjith</label>
+                <span class="ml-15 fs-12">12/12/2002 4:31:00pm</span></span>
+            <div class="p-3 person-card fs-13">
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
+            </div>
+          </div>
+      </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

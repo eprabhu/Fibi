@@ -32,4 +32,9 @@ ul.sb-results-dropdown-menu > li:hover, ul.sb-results-dropdown-menu > li:focus, 
 
 .sb-seachresults {
   z-index: 1004;
+  min-width: 24%;
+}
+
+.ml-2 {
+  margin-left: 6px;
 }

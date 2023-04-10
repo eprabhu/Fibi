@@ -1,11 +1,5 @@
-<div id="COI803" class="main-title">
-  <h3 class="d-flex align-items-center"><strong>Relationships</strong>
-  <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="View entity relationships." data-bs-placement="top">
-    <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
-  </span>
-  </h3>
-</div>
-<div class="card" *ngIf="selectedProject?.moduleCode">
+
+<div [id]= selectedProject?.moduleItemId class="card" *ngIf="selectedProject?.moduleCode">
     <div class="card-header px-4 d-flex align-items-center justify-content-between">
       <div class="col-12 d-flex align-items-center">
         <ng-container  *ngIf="selectedProject?.moduleCode == 3">
@@ -74,7 +68,7 @@
                     <span class="badge rounded-pill bg-warning mt-2" *ngIf="test?.coiDisclosureDetailsStatus?.discDetStatusCode == 3">{{test?.coiDisclosureDetailsStatus?.description}}</span>
                   </td>
                   <td>
-                    <button type="button" class="btn btn-outline-primary btn-sm action-buttons mr-15">
+                    <button type="button" class="btn btn-outline-primary btn-sm action-buttons mr-15"  (click)="isOpenSlider = true">
                       <mat-icon role="img">add_circle_outline</mat-icon>
                     </button>
                     <button type="button" class="btn btn-outline-primary btn-sm action-buttons">
@@ -90,6 +84,7 @@
       </div>
 </div>
 
+<app-add-comment-slider *ngIf="isOpenSlider" (closePage)="closePage()" [isOpenSlider]="isOpenSlider"></app-add-comment-slider>
 <!-- Reviewer Conflict Modal -->
 <div class="modal modal-coi fade mySkinDialog" id="reviewer-conflict-modal" role="dialog">
     <div class="modal-dialog">

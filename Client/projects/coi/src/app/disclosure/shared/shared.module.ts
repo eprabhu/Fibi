@@ -5,6 +5,7 @@ import {RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
 import { ActivityComponent } from '../activity-track/activity.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { ActivityComponent } from '../activity-track/activity.component';
     imports: [
         CommonModule,
         FormsModule,
-        RouterModule
+        RouterModule,
+        SharedModule
     ],
     exports: [
         CountModalComponent,

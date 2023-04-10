@@ -21,6 +21,12 @@
     user-select: none;
 }
 
+.main-title {
+  border-bottom: 1px solid #dbdbdb;
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
 
 /* Hide the browser's default checkbox */
 
@@ -59,5 +65,16 @@
   .base-variant-text-color{
     color: #48647f;
     font-weight: 500;
+  }
+
+  .info-icon {
+    margin-top : -7px;
+    height     : 22px;
+    width      : 22px;
+    font-size  : 16px;
+    position   : absolute;
+    margin-left: 2px;
+    color      : #6f7395;
+    cursor     : pointer;
   }
 

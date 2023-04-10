@@ -1,0 +1,174 @@
+.dash-card {
+  box-shadow: 0px 10px 15px -3px rgb(0 0 0 / 2%);
+  background: white;
+  min-height: 125px;
+  margin: 0 35px;
+  border-radius: 6px;
+}
+
+.f-5 {
+  font-size: 4rem;
+}
+
+
+.action-buttons {
+  height: 24px;
+  padding: 0.3px 1px;
+  margin-top: 0px
+}
+
+.counts {
+  font-weight: bold;
+  font-size: 24px;
+  color: #2a77f3;
+}
+
+
+.green-text {
+  color: green;
+}
+
+.pending-border {
+  border: 1px solid #1d847b;
+}
+
+.resultCard::before {
+  border-left: none;
+}
+
+.coi-card {
+  border: 1px solid #ededed;
+}
+
+// .coi-card label {
+//   font-weight: 600;
+//   color: #333;
+//   font-size: 14px;
+// }
+
+.coi-card span:not(.text-success,.text-warning,.text-info,.text-danger,.text-primary).badge-warning {
+  color: #3f4449 !important;
+}
+
+.bold-blue-number {
+  color: #2c77f4;
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 4px;
+}
+
+
+nav ul {
+  cursor: pointer;
+  list-style-type: none;
+  display: flex;
+}
+
+nav ul li {
+  white-space: nowrap;
+}
+
+.admin-main-navigation .fa {
+  position: absolute;
+  bottom: -20px;
+  right: calc(50% - 8px);
+  font-size: 2em;
+}
+
+.btn-tertiary {
+  margin-left: auto;
+}
+
+.separator {
+  border: 1px solid #ededed;
+  margin: 10px 0;
+}
+
+.link-btn {
+  color: #3b83ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.btn-size-override {
+  width: auto !important;
+  height: auto !important;
+  min-width: auto !important;
+}
+
+.status-badge-info, .status-badge-info:hover {
+  background-color: #cef5f891;
+  color: #046a71b8 !important;
+  border: #046a715c 1px solid;
+  padding: 0.4rem 1rem !important;
+  font-size: 11px !important;
+}
+
+.comment-icon {
+  opacity: .4;
+  font-size: 11px;
+}
+
+.searchButton {
+  left:1px;
+  top:4px;
+}
+
+.sort-div {
+  background-color: #eeeeee;
+  padding: 5px;
+    margin-top: -10px;
+}
+
+.filter-active {
+  border: 2px solid #54BF5B !important;
+}
+
+.coi-admin-dash li.active {
+    color: #007DEC;
+    font-weight: bold;
+    border-bottom: 3px solid #007DEC;
+    padding: 19px 16px;
+}
+
+.card-bg {
+  background-color: #eeeeee;
+}
+
+.deactivate-text {
+  color: #7c7c7c !important;
+}
+
+.label-text {
+  font-weight: 600;
+  color      : #697a80;
+  font-size  : 14px;
+}
+
+.grey-text {
+  font-size: 14px;
+  color: #48647f;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.rounded-pill {
+  margin-left: 5px;
+}
+
+.section-ad {
+  margin: 27px;
+}
+
+.arrow {
+  font-size: 21px;
+  height: 21px;
+}
+
+.noDataExists {
+  color      : #9e9e9e !important;
+  font-weight: bold;
+  font-size  : 14px;
+  margin-left: 5px;
+}
+

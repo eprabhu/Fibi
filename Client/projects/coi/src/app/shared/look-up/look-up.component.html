@@ -14,19 +14,19 @@
       <ng-container *ngIf="isMultiple">
         <li>
           <input type="checkbox" id="selectAllLookup" [(ngModel)]="isSelectAll"
-            (click)="selectOrUnSelectAllLookUp($event.target.checked)" class="mt-2">
+            (click)="selectOrUnSelectAllLookUp($event.target.checked)">
             <label for="selectAllLookup" class="ml-2">Select All</label>
         </li>
         <li class="search-result-item" *ngFor="let lookup of lookUpList | lookupFilter : searchText">
           <input type="checkbox" id="selected{{lookup.code}}" [(ngModel)]="lookup.isChecked"
-            (ngModelChange)="selectOrUnSelectLookupItem(lookup)" class="mt-2">
+            (ngModelChange)="selectOrUnSelectLookupItem(lookup)">
           <label for="selected{{lookup.code}}" [innerHTML]="lookup.description" class="ml-2"></label>
         </li>
       </ng-container>
       <!-- multi-check-ends -->
       <!-- simple dropdown -->
       <ng-container *ngIf="!isMultiple">
-          <li class="search-result-item" (click)="selectOrUnSelectLookupItem(null)">        
+          <li class="search-result-item" (click)="selectOrUnSelectLookupItem(null)">
             <label value= "null">--select--</label>
           </li>
         <li class="search-result-item" *ngFor="let lookup of lookUpList | lookupFilter : searchText" (click)="selectOrUnSelectLookupItem(lookup)">
