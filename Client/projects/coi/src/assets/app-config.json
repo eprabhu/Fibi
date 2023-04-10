@@ -2,5 +2,6 @@
   "baseUrl": "",
   "fibiUrl": "http://192.168.1.20:1111/",
   "COIUrl": "http://192.168.1.20:2222/",
-  "enableSSO": false
+  "enableSSO": false,
+  "elasticIndexUrl": "http://192.168.1.47:9200/"
 }

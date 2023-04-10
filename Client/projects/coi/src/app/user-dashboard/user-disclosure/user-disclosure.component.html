@@ -1,6 +1,6 @@
 <div class="row">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
-        <div class="col pe-0">
+        <div class="col-6 pe-0" *ngIf="disclosure?.disclosureCategoryTypeCode == '1'">
             <div class="shadow-sm disclosure-card border rounded">
                 <div class="border-bottom d-flex disclosure-card-heading-blue px-3 py-2 rounded-top-2">
                     <div class="col"><strong class="fs-15">FCOI Disclosure</strong></div>
@@ -21,16 +21,16 @@
 
                     <div class="col">
                         <div>
-                            <span class="fw-bold text-secondary">Discl. ID:</span>
+                            <span class="fw-bold text-secondary">Disclosure ID:</span>
                             <span class="ps-2 span-data-color">#{{disclosure?.disclosureId}}</span>
                         </div>
                         <div class="my-1">
-                            <span class="fw-bold text-secondary">Cert Date:</span>
+                            <span class="fw-bold text-secondary">Certification Date:</span>
                             <span class="ps-2 span-data-color">{{disclosure?.certifiedTimestamp | dateFormatter}}</span>
                         </div>
                         <div>
                             <span class="fw-bold text-secondary"># of SFI:</span>
-                            <span class="ps-2 fw-bold text-primary">04</span>
+                            <span class="ps-2 fw-bold text-primary">{{disclosure?.numberOfSFI}}</span>
                         </div>
                     </div>
 
@@ -51,90 +51,101 @@
                 </div>
             </div>
         </div>
-    </ng-container>
-    <div class="col">
-        <div class="shadow-sm disclosure-card border rounded">
-            <div class="border-bottom d-flex disclosure-card-heading-green rounded-top-2 px-3 py-2">
-                <div class="col"><strong class="fs-15">OPA Disclosure</strong></div>
-                <div class="col d-flex fs-14 justify-content-between align-items-center">
-                    <div><span class="fw-bold text-secondary">Status:</span> <span
-                            class="disclosure-active-pill ms-2">Active</span></div>
-                    <div class="align-items-center d-flex fs-14 text-secondary" role="button">
-                        <span class="fw-medium">VIEW</span>
-                        <mat-icon>chevron_right</mat-icon>
+        <div class="col-6" *ngIf="disclosure?.disclosureCategoryTypeCode == '2'">
+            <div class="shadow-sm disclosure-card border rounded">
+                <div class="border-bottom d-flex disclosure-card-heading-green rounded-top-2 px-3 py-2">
+                    <div class="col"><strong class="fs-15">OPA Disclosure</strong></div>
+                    <div class="col d-flex fs-14 justify-content-between align-items-center">
+                        <div><span class="fw-bold text-secondary">Status:</span> <span
+                                class="disclosure-active-pill ms-2">Active</span></div>
+                        <div class="align-items-center d-flex fs-14 text-secondary" role="button">
+                            <span class="fw-medium">VIEW</span>
+                            <mat-icon>chevron_right</mat-icon>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="d-flex disclosure-card-body-green fs-14 p-3 rounded-bottom-2">
-                <div class="col">
-                    <div>
-                        <span class="fw-bold text-secondary">OPA Cycle:</span>
-                        <span class="ps-2 span-data-color">June 2021 - May 2022</span>
-                    </div>
-                    <div class="my-1">
-                        <span class="fw-bold text-secondary"># of Days Summer:</span>
-                        <span class="ps-2 span-data-color">3</span>
-                    </div>
+                <div class="d-flex disclosure-card-body-green fs-14 p-3 rounded-bottom-2">
+                    <div class="col">
+                        <div>
+                            <span class="fw-bold text-secondary">OPA Cycle:</span>
+                            <span class="ps-2 span-data-color">June 2021 - May 2022</span>
+                        </div>
+                        <div class="my-1">
+                            <span class="fw-bold text-secondary"># of Days Summer:</span>
+                            <span class="ps-2 span-data-color">3</span>
+                        </div>
 
-                </div>
-                <div class="col">
-                    <div>
-                        <span class="fw-bold text-secondary">Last Update:</span>
-                        <span class="ps-2 span-data-color">01/18/2023</span>
                     </div>
-                    <div class="my-1">
-                        <span class="fw-bold text-secondary"># of Days Academic</span>
-                        <span class="ps-2 span-data-color">35</span>
+                    <div class="col">
+                        <div>
+                            <span class="fw-bold text-secondary">Last Update:</span>
+                            <span class="ps-2 span-data-color">01/18/2023</span>
+                        </div>
+                        <div class="my-1">
+                            <span class="fw-bold text-secondary"># of Days Academic</span>
+                            <span class="ps-2 span-data-color">35</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 </div>
 
 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
-    <div (click)="currentSelected.tab='IN_PROGRESS'"
+    <div (click)="setTab('IN_PROGRESS_DISCLOSURES')"
          class="border-end navigation-icons px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab=='IN_PROGRESS'" class="pb-3 active">In Progress Disclosures (3)</span>
+        <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="pb-3 active">
+            In Progress Disclosures({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
-    <div (click)="currentSelected.tab='APPROVED'"
+    <div (click)="setTab('APPROVED_DISCLOSURES')"
          class="border-end navigation-icons px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab=='APPROVED'" class="pb-3">Approved Disclosures(1)</span>
+        <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'"
+              class="pb-3">Approved Disclosures({{dashboardCount?.approvedDisclosureCount || 0}})</span>
     </div>
-    <div (click)="currentSelected.tab='TRAVEL'"
+    <div (click)="setTab('TRAVEL_DISCLOSURES')"
          class="border-end navigation-icons px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab=='TRAVEL'" class="pb-3">Travel Disclosures(2)</span>
+        <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'"
+              class="pb-3">Travel Disclosures({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
-    <div (click)="currentSelected.tab='HISTORY'" class="navigation-icons px-3 py-1"
+    <div (click)="setTab('DISCLOSURE_HISTORY')" class="navigation-icons px-3 py-1"
          role="button">
-        <span [class.active]="currentSelected.tab=='HISTORY'" class="pb-3">Disclosure History</span>
+        <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'"
+              class="pb-3">Disclosure History ({{dashboardCount?.disclosureHistoryCount || 0}})</span>
     </div>
 </nav>
 
 <div class="advance-search-area border d-flex mt-2 rounded-1">
-    <div class="border-end fs-14 px-3 py-2">
+    <div class="border-end fs-14 p-3">
         <span class="fs-14 fw-medium me-2 text-secondary">Filter by:</span>
-        <span (click)="currentSelected.filter='ALL'" [class.filter-active]="currentSelected.filter=='ALL'"
+        <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
               class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active"
               role="button">All</span>
-        <span (click)="currentSelected.filter='OPA'" [class.filter-active]="currentSelected.filter=='OPA'"
+        <span (click)="setFilter('FCOI')" [class.filter-active]="currentSelected.filter=='FCOI'"
+              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">FCOI</span>
+        <span (click)="setFilter('PROJECT')" [class.filter-active]="currentSelected.filter=='PROJECT'"
+              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Project</span>
+        <span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
               class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>
-        <span (click)="currentSelected.filter='FCOI'" [class.filter-active]="currentSelected.filter=='FCOI'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">FCOI</span>
     </div>
     <div class="d-flex flex-fill">
-        <input class="advance-search-input border-0" type="text">
+        <input class="advance-search-input border-0 px-4" id="searchText" type="text" [(ngModel)]="searchText">
+        <label for="searchText" class="fs-15 ml-15 mt-3" *ngIf="!searchText">
+            <mat-icon class="me-2">search</mat-icon> Search Disclosure; Ex: Proposal Disclosure</label>
     </div>
 </div>
-
-<ng-container *ngFor="let disclosure of disclosureArray">
+<app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
+<ng-container
+        *ngFor="let disclosure of filteredDisclosureArray | SearchFilter: searchText:['coiDisclosureNumber', 'disclosureCategoryType',
+        'disclosureStatus', 'dispositionStatus', 'proposalTitle', 'updateUser', 'noOfSfiInPending', 'proposalId', 'reviewStatus']">
     <div class="bg-white border mt-2 rounded-1 shadow-sm">
         <div class="border-bottom fs-14 p-3 text-secondary">
-            <div><span class="fw-bold me-2">Proposal:</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
+            <div *ngIf="disclosure?.coiDisclosureCategoryType?.disclosureCategoryTypeCode == '3'"><span
+                    class="fw-bold me-2">Proposal:</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
             </div>
             <div class="d-flex my-2">
                 <div class="col">
-                    <span class="fw-bold me-2">Discl.:</span> #{{disclosure?.coiDisclosureNumber}}
+                    <span class="fw-bold me-2">Disclosure ID:</span> #{{disclosure?.coiDisclosureNumber}}
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disposition Status:</span> <span
@@ -172,14 +183,16 @@
                 <strong>Significant Financial Interest</strong>
             </div>
             <div class="col text-secondary fs-14 d-flex">
-                <div class="align-items-center col d-flex fs-14 text-secondary">
-                    <strong class="fs-18 me-2 text-primary">{{disclosure?.numberOfProposals}}</strong>
-                    <strong>Proposals</strong>
-                </div>
-                <div class="align-items-center col d-flex fs-14 text-secondary">
-                    <strong class="fs-18 me-2 text-primary">{{disclosure?.numberOfAwards}}</strong>
-                    <strong>Awards</strong>
-                </div>
+                <ng-container *ngIf="disclosure?.coiDisclosureCategoryType?.disclosureCategoryTypeCode == '1'">
+                    <div class="align-items-center col d-flex fs-14 text-secondary">
+                        <strong class="fs-18 me-2 text-primary">{{disclosure?.numberOfProposals}}</strong>
+                        <strong>Proposals</strong>
+                    </div>
+                    <div class="align-items-center col d-flex fs-14 text-secondary">
+                        <strong class="fs-18 me-2 text-primary">{{disclosure?.numberOfAwards}}</strong>
+                        <strong>Awards</strong>
+                    </div>
+                </ng-container>
             </div>
             <div class="col">
                 <div>Last Updated:</div>
@@ -187,7 +200,8 @@
                     by {{disclosure?.updateUser}}</div>
             </div>
             <div class="col d-flex justify-content-end">
-                <button class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
+                <button *ngIf="disclosure?.coiDisclosureCategoryType?.disclosureCategoryTypeCode == '1' && disclosure?.coiDisclosureStatus?.disclosureStatusCode == '3'"
+                        class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
                     <mat-icon class="me-1">restart_alt</mat-icon>
                     Revise
                 </button>

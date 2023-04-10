@@ -46,7 +46,7 @@ import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/ut
      templateUrl: './view-questionnaire.component.html',
      styleUrls: ['./view-questionnaire.component.css'],
      animations: [easeIn],
-     providers: [QuestionnaireService, ElasticConfigService],
+     providers: [QuestionnaireService],
  })
  export class ViewQuestionnaireComponent implements OnInit, OnChanges, OnDestroy {
      @Input() questionnaireDetails: any = {};

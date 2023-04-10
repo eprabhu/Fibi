@@ -10,6 +10,11 @@ export class UserDashboardService {
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
   getActiveDisclosure() {
-    return this._http.get(this._commonService.baseUrl + '/getActiveDisclosure');
+    return this._http.get(this._commonService.baseUrl + '/getActiveDisclosures');
   }
+
+  reviseDisclosure(reviseObject) {
+    return this._http.post(this._commonService.baseUrl + '/reviseDisclosure', reviseObject);
+  }
+
 }

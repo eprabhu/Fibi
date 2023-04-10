@@ -3,29 +3,31 @@
         <div class="col-sm-9 col-xxl-10 pe-0">
             <div class="border pi-info-text p-3 rounded-1">
                 <p class="fs-14 m-0">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-                    molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
-                    numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
-                    optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
-                    obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
-                    nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit,
-                    tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
-                    quia. Quo neque error repudiandae fuga? <span class="fw-medium"><u>Read More</u></span>
+                    <span *ngIf="!isReadMore && headerInfoText.length > 520 else showFullInfo">
+                        {{headerInfoText | slice:0:520}}...
+                        <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read More</u></span>
+                    </span>
+                    <ng-template #showFullInfo>
+                        {{headerInfoText}}
+                        <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Show Less</u></span>
+                    </ng-template>
                 </p>
             </div>
         </div>
         <div class="col-sm-3 col-xxl-2">
             <div class="border pi-quick-links py-2 px-3 shadow-sm fs-15 h-100">
-                <p [queryParams]="{tabName: 1}"
+                <p *ngIf="hasFCOI && hasActiveFCOI"
+                        (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
+                        title="Click to Revise FCOI"><u>Revise FCOI</u></p>
+                <p *ngIf="!hasFCOI" [queryParams]="{tabName: 'CURRENT_DISCLOSURES'}"
                    [routerLink]="['/coi/create-disclosure/screening']"
-                   class="m-0 cursor-pointer" role="button" title="Click to Revise FCOI"><u>Revise FCOI</u></p>
-                <p class="m-0 cursor-pointer" role="button" title="Click to Create Project Disclosure"
-                 (click)="isModalOpen= true"><u>Create Project
+                   class="m-0 cursor-pointer" role="button" title="Click to Create FCOI"><u>Create FCOI</u></p>
+                <p (click)="isModalOpen= true" class="m-0 cursor-pointer" role="button"
+                   title="Click to Create Project Disclosure"><u>Create Project
                     Disclosure</u></p>
                 <p class="m-0 cursor-pointer" role="button" title="Click to Create Travel Disclosure"><u>Create Travel
                     Disclosure</u></p>
-                <p class="m-0 cursor-pointer" role="button" title="Click to Create Significant Financial Interest"><u>Create
-                    Significant Financial Interest</u></p>
+                <p class="m-0 cursor-pointer" role="button" title="Click to Create SFI"><u>Create SFI</u></p>
             </div>
         </div>
     </div>
@@ -101,3 +103,40 @@
     <router-outlet></router-outlet>
 </div>
 <app-project-disclosure *ngIf="isModalOpen"></app-project-disclosure>
+<a class="d-none" data-bs-target="#reviewConfirmationModal" data-bs-toggle="modal" id="triggerReviseModal"></a>
+<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog" data-backdrop="static"
+     data-keyboard="false" id="reviewConfirmationModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Revision for Disclosure: #{{this.hasFCOI?.disclosureId}}</h5>
+                <button (click)="clearModal();" aria-label="Close" class="btn close m-0 p-0" data-dismiss="modal"
+                        id="req-doc-popup-dismiss-btn" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="form-row">
+                        <div class="col-12">
+                            <label for="desc-award">Description</label>
+                            <textarea [(ngModel)]="reviseObject.reviseComment" [isShowLimiter]='true' [limit]=2000
+                                      appLengthValidator class="form-control" id="desc-award"></textarea>
+                            <div class="invalid-feedback d-block">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="clearModal();" class="btn btn-outline-secondary fs-15 mr-0"
+                        id="req-attachment-close-btn"
+                        type="button">Cancel
+                </button>
+                <button (click)="reviseDisclosure();" class="btn btn-outline-primary fs-15"
+                        id="req-attachment-add-btn" type="button">Create Revision
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

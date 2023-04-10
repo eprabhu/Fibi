@@ -7,6 +7,7 @@ import {COI} from "./coi-interface";
 import {DataStoreService} from "./services/data-store.service";
 import {CoiService} from "./services/coi.service";
 import {Location} from "@angular/common";
+import {deepCloneObject} from "../../../../fibi/src/app/common/utilities/custom-utilities";
 
 @Component({
     selector: 'app-disclosure',
@@ -18,6 +19,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     isCardExpanded = true;
     isCreateMode = false;
     isSaving = false;
+    isCOIAdministrator = true;
     certificationText = 'I certify that the information provided for the Financial conflict of interest, including, responses to screening questions, list of my pertinent Significant Financial interests and possible relationship to my sponsored activity is an accurate and current statement of my reportable outside interests and activities.';
     $subscriptions: Subscription[] = [];
     coiData = new COI();
@@ -40,10 +42,28 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.getDataFromStore();
+        this.routeToAppropriateMode();
+        this.listenDataChangeFromStore();
     }
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    private listenDataChangeFromStore() {
+        this.$subscriptions.push(
+            this.dataStore.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
+            })
+        );
+    }
+
+    routeToAppropriateMode() {
+        if(this.coiData.coiDisclosure.coiDisclosureStatus.disclosureStatusCode == '1' && !this.isCreateMode) {
+            this.router.navigate(['/coi/create-disclosure/screening'], {queryParamsHandling: 'preserve'});
+        } else if (this.coiData.coiDisclosure.coiDisclosureStatus.disclosureStatusCode != '1' && this.isCreateMode) {
+            this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
+        }
     }
 
     setStepFirstTime(currentUrl) {
@@ -142,7 +162,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             default: return 'white';
         }
     }
-    
+
     getReviewStatusBadge(statusCode) {
         switch (statusCode) {
             case '1': return 'warning';
@@ -183,4 +203,23 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
+    completeDisclosureReview() {
+        this.$subscriptions.push(this.coiService.completeDisclosureReview(this.coiData.coiDisclosure.disclosureId)
+            .subscribe((res: any) => {
+                this.updateDisclosureReviewStatus(res);
+            }, _err => {
+                // _err.error.text === 'REVIEW_STATUS_NOT_COMPLETE' ? $('#completeReviewErrorModal').modal('show') :
+                    // this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
+            }));
+    }
+
+    updateDisclosureReviewStatus(res) {
+        this.coiData.coiDisclosure = deepCloneObject(res);
+        this.dataStore.updateStore(['coiDisclosure'], this.coiData);
+        // this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
+    }
+
+    triggerSave() {
+        this.coiService.globalSave$.next();
+    }
 }

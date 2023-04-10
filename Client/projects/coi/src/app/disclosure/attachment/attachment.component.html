@@ -75,7 +75,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Add Attachments</h5>
-        <button type="button" class="close" data-dismiss="modal" id="external-review-doc-popup-dismiss-btn"
+        <button type="button" class="close btn m-0" data-bs-dismiss="modal" id="external-review-doc-popup-dismiss-btn"
           aria-label="Close" (click)="clearAttachmentDetails()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -130,7 +130,7 @@
         </div>
       </div>
       <div class="modal-footer float-right mt-3" *ngIf="uploadedFile.length > 0">
-        <button type="button" class="btn btn-secondary" id="external-review-doc-popup-close-btn" data-dismiss="modal"
+        <button type="button" class="btn btn-secondary" id="external-review-doc-popup-close-btn" data-bs-dismiss="modal"
           (click)="clearAttachmentDetails()">Close</button>
         <button type="button" class="btn btn-primary-sub" id="external-review-doc-popup-add-btn">Add</button>
       </div>

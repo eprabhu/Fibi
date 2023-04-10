@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {CoiSummaryEventsAndStoreService} from "../../coi-summary-events-and-store.service";
+import {CommentConfiguration} from "../../../coi-interface";
 
 @Component({
   selector: 'app-conflict-management-summary',
@@ -6,5 +8,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./conflict-management-summary.component.scss']
 })
 export class ConflictManagementSummaryComponent {
+
+  commentConfiguration: CommentConfiguration = new CommentConfiguration();
+
+  constructor(private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService) {
+  }
+
+  modifyReviewComment() {
+    this._dataStoreAndEventsService.modifyReviewComment(this.commentConfiguration);
+  }
 
 }

@@ -66,8 +66,8 @@
       placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
     </div>
     <div class="col-3 mt-5">
-  <button type="button" class="btn btn-secondary mr-0" id="req-attachment-close-btn" data-toggle="modal"
-  data-target="#clearConfirmationModal">Clear All</button>
+  <button type="button" class="btn btn-secondary mr-0" id="req-attachment-close-btn" data-bs-toggle="modal"
+  data-bs-target="#clearConfirmationModal">Clear All</button>
   <button type="button" class="btn btn-secondary mr-0" id="req-attachment-add-btn" (click)="applyToAll()">Apply to All</button>
     </div>
   </div>
@@ -127,7 +127,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Confirmation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -135,10 +135,10 @@
         <p>This feature will clear all the data including any data you have manually entered  in the table. Do you wish to proceed? </p>
       </div>
       <div class="modal-footer">
-        <button type="button" id="cancel-clear" class="btn btn-secondary btn-sm"
-        data-dismiss="modal">Cancel</button>
-      <button type="button" id="confirm-clear" class="btn btn-primary-sub btn-sm"
-      (click)="clearAll()" data-dismiss="modal">Clear</button>
+        <button type="button" id="cancel-clear" class="btn btn-outline-secondary fs-14"
+        data-bs-dismiss="modal">Cancel</button>
+      <button type="button" id="confirm-clear" class="btn btn-outline-primary fs-14"
+      (click)="clearAll()" data-bs-dismiss="modal">Clear</button>
       </div>
     </div>
   </div>

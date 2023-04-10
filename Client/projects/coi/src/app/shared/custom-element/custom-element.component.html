@@ -22,7 +22,7 @@
                 <h4>There is no information in this section.</h4>
         </div>
         <div id="custom-element-body" class="card-body" *ngIf="(customElements != null && customElements?.length != 0 && isShowOtherInfo)">
-            <div class="form-row">
+            <div class="row">
                 <div class="" *ngFor="let list of customElements; let i = index" 
                     [ngClass]="list.filterType == 'Text'?'col-12':'col-xl-3 col-lg-4 col-sm-6 col-12'">
                     <div [ngSwitch]="true">

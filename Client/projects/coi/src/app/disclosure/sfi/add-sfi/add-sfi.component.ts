@@ -95,11 +95,12 @@ export class AddSfiComponent implements OnInit {
   }
 
   addEntityToggle(event) {
-    hideModal(event)
+    hideModal(event);
   }
 
   hideRelationshipModal(event) {
     this.showRelationshipModal = event;
+    this.showSfiNavBar();
   }
 
  createSFI() {

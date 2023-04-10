@@ -16,7 +16,7 @@ import {SharedModule} from "../../shared/shared.module";
         RouterModule.forChild([{ path: '', component: ReviewComponent }]),
         FormsModule,
         SharedModule,
-        CoiSharedModule
+        CoiSharedModule,
     ],
     declarations: [
         ReviewComponent,

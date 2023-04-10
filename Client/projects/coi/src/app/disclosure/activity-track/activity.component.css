@@ -44,7 +44,7 @@
     z-index: 1;
     position: relative;
 }
-.form-row > div {
+.row > div {
     margin-bottom: 1.4rem;
 }
 
@@ -63,4 +63,9 @@
 .modal-scroll {
     max-height: 65vh;
     overflow: auto;
+}
+
+li.active {
+    color: #007DEC !important;
+    border-bottom: 2px solid #007DEC;
 }

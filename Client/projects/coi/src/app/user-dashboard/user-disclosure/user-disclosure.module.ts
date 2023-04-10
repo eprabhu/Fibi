@@ -5,6 +5,8 @@ import {RouterModule, Routes} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
 import {UserDisclosureService} from "./user-disclosure.service";
 import {SharedModule} from "../../shared/shared.module";
+import {SharedComponentModule} from "../../shared-components/shared-component.module";
+import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [{path: '', component: UserDisclosureComponent}];
 
@@ -17,6 +19,8 @@ const routes: Routes = [{path: '', component: UserDisclosureComponent}];
         RouterModule.forChild(routes),
         MatIconModule,
         SharedModule,
+        SharedComponentModule,
+        FormsModule
     ],
     providers: [UserDisclosureService]
 })

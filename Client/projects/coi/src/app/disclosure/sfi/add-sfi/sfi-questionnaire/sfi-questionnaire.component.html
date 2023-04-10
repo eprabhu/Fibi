@@ -14,8 +14,8 @@
                     </div>
                 </span>
                 <h4>There is no relations added.</h4>
-                <button *ngIf="isEditMode" class="btn btn-primary mt-3" title="Add Relationship" data-toggle="modal"
-                    data-target="#relation-selection">Add Relationship
+                <button *ngIf="isEditMode" class="btn btn-primary mt-3" title="Add Relationship" data-bs-toggle="modal"
+                    data-bs-target="#relation-selection">Add Relationship
                 </button>
             </div>
         </div>
@@ -67,7 +67,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Relations</h5>
-                <button id="special-review-dlt" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button id="special-review-dlt" type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -103,13 +103,13 @@
                 </ng-template>
             </div>
             <div class="modal-footer">
-                <button *ngIf="isAddRelationButtonToggled" type="button" class="btnSkin btn-secondary" data-dismiss="modal"
-                    data-toggle="modal">Cancel
+                <button *ngIf="isAddRelationButtonToggled" type="button" class="btnSkin btn-secondary" data-bs-dismiss="modal"
+                    data-bs-toggle="modal">Cancel
                 </button>
-                <button *ngIf="definedRelationships?.length" type="button" class="btnSkin btn-secondary" data-dismiss="modal"
-                    data-toggle="modal" (click)="navigateBack()">Continue without selecting Relation
+                <button *ngIf="definedRelationships?.length" type="button" class="btnSkin btn-secondary" data-bs-dismiss="modal"
+                    data-bs-toggle="modal" (click)="navigateBack()">Continue without selecting Relation
                 </button>
-                <button id="add-review-btn" type="button" class="btn btn-primary btn-sm" data-dismiss="modal"
+                <button id="add-review-btn" type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal"
                     (click)="saveOrUpdateCoiFinancialEntityDetails()">Add Relation
                 </button>
             </div>

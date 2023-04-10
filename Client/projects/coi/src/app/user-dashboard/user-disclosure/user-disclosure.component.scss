@@ -42,6 +42,18 @@
   &:hover {
     background-color: white;
   }
+  input {
+    background-color: #F5F5F5;
+    &:hover {
+      background-color: white;
+    }
+  }
+  label {
+    position: absolute;
+    color: #747474;
+    display: flex;
+    align-items: center;
+  }
 }
 .filter-active {
   border: 2px solid #54BF5B !important;

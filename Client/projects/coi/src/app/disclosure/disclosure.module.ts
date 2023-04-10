@@ -15,8 +15,7 @@ import {DataStoreService} from "./services/data-store.service";
 import {RouterGuardService} from "./services/router-guard.service";
 import {SharedModule} from "../shared/shared.module";
 import { SfiModule } from './sfi/sfi.module';
-import { ProjectDisclosureComponent } from './project-disclosure/project-disclosure.component';
-import { ElasticConfigService } from 'projects/fibi/src/app/common/services/elastic-config.service';
+import {CoiSharedModule} from "./shared/shared.module";
 
 const routes: Routes = [
     {
@@ -64,15 +63,16 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         MatIconModule,
         MatButtonModule,
-        SharedModule, SfiModule
+        SharedModule,
+        SfiModule,
+        CoiSharedModule
     ],
     providers: [
         SfiService,
         ResolveServiceService,
         DataStoreService,
         CoiService,
-        RouterGuardService,
-        ElasticConfigService
+        RouterGuardService
     ]
 })
 export class DisclosureModule {
