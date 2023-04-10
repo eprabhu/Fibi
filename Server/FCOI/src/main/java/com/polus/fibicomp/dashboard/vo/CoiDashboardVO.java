@@ -81,6 +81,12 @@ public class CoiDashboardVO {
 		this.filterType = filterType;
 	}
 
+	private List<@Pattern(regexp="^$|[0-9]*$", message="Disposition Status must not include special characters.") String> property20;
+
+	private List<@Pattern(regexp="^$|[0-9]*$", message="Review Status must not include special characters.") String> property21;
+
+	private List<@Pattern(regexp="^$|[0-9]*$", message="Conflict Status must not include special characters.") String> property22;
+
 	public Integer getPageNumber() {
 		return pageNumber;
 	}
@@ -305,4 +311,27 @@ public class CoiDashboardVO {
 		this.property19 = property19;
 	}
 
+	public List<String> getProperty20() {
+		return property20;
+	}
+
+	public void setProperty20(List<String> property20) {
+		this.property20 = property20;
+	}
+
+	public List<String> getProperty21() {
+		return property21;
+	}
+
+	public void setProperty21(List<String> property21) {
+		this.property21 = property21;
+	}
+
+	public List<String> getProperty22() {
+		return property22;
+	}
+
+	public void setProperty22(List<String> property22) {
+		this.property22 = property22;
+	}
 }

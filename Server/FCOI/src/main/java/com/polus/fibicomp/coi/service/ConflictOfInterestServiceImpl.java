@@ -886,12 +886,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ConflictOfInterestVO saveSingleEntityProjectRelation(ConflictOfInterestVO vo) {
 		try {
 			CoiDisclosureDetails entityProjectRelation = vo.getCoiDisclosureDetail();
-			CoiConflictHistory coiConflictHistory = new CoiConflictHistory();
 			conflictOfInterestDao.saveOrUpdateCoiDisclosureDetail(entityProjectRelation);
-			coiConflictHistory.setComment(entityProjectRelation.getComment().getComments());
-			coiConflictHistory.setCoiDetStatusCode(entityProjectRelation.getDiscDetStatusCode());
-			coiConflictHistory.setDisclosureDetailsId(entityProjectRelation.getDisclosureDetailsId());
-			conflictOfInterestDao.saveOrUpdateCoiConflictHistory(coiConflictHistory);
 			vo.setCoiDisclosureDetail(entityProjectRelation);
 		} catch (Exception e) {
 			logger.error("saveSingleEntityProjectRelation : {}", e.getMessage());

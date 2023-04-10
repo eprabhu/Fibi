@@ -1072,9 +1072,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Boolean isDownload = vo.getIsDownload();
 		Map<String, String> sort = vo.getSort();
 		String personId = AuthenticatedUser.getLoginPersonId();
+		List<String> dispositionStatusCodes = vo.getProperty20();
+		List<String> reviewStatusCodes = vo.getProperty21();
+		List<String> conflictStatusCodes = vo.getProperty22();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 				statement.setString(1, disclosureId);
 				statement.setString(2, disclosurePersonId);
 				statement.setString(3, homeUnit);
@@ -1096,11 +1099,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(19, isAdvancedSearch);
 				statement.setString(20, projectTypeCode);
 				statement.setString(21, hasSFIFlag);
+				statement.setString(22, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
+				statement.setString(23, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
+				statement.setString(24, conflictStatusCodes != null && !conflictStatusCodes.isEmpty() ? String.join(",", conflictStatusCodes) : null);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_COI_DISCLOSURE_ADMIN_DASHBOARD";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, disclosureId);
@@ -1124,6 +1130,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(20, isAdvancedSearch);
 				statement.setString(21, projectTypeCode);
 				statement.setString(22, hasSFIFlag);
+				statement.setString(23, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
+				statement.setString(24, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
+				statement.setString(25, conflictStatusCodes != null && !conflictStatusCodes.isEmpty() ? String.join(",", conflictStatusCodes) : null);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
