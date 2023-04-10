@@ -1,9 +1,9 @@
 <div class="card">
     <div class="card-content">
-        <div class="card-body pt-4 mt-2">
-            <div *ngIf="isShowFilters" class="form-row mb-5 pb-3">
+        <div class="card-body px-4">
+            <div *ngIf="isShowFilters" class="row mb-5 pb-3">
                 <div class="col-lg col-12">
-                    <label class="block-display">Section</label>
+                    <label class="block-display fs-14 fw-medium">Section</label>
                     <select class="form-control" [(ngModel)]="filterObject.sectionCode">
                         <option value="undefined">--Select--</option>
                         <option *ngFor="let section of coiSection" [hidden]="section.isActive != true"
@@ -13,17 +13,17 @@
                     </select>
                 </div>
                 <div class="col-lg col-12">
-                    <label class="d-block">Person</label>
+                    <label class="d-block fs-14 fw-medium">Person</label>
                     <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField" [placeHolder]="'Search Assignee'"
                         (selectedResult)="selectPerson($event)">
                     </app-elastic>
                 </div>
                 <div class="align-self-end col-lg-auto col-12 d-flex">
-                    <button class="btn btn-secondary btn-xs mt-4 mr-4" (click)="clearFiler()">Clear</button>
+                    <button class="btn btn-secondary btn-xs mt-4 me-4" (click)="clearFiler()">Clear</button>
                     <button class="btn btn-primary btn-sm mt-4" (click)="loadCoiReviewComments()">Search</button>
                 </div>
             </div>
-            <div class="pullSide">
+            <div>
                 <div class="topGrid gridSkin">
                     <div *ngIf="reviewComment?.length; else noDataContainer">
                         <ng-template #recursiveList let-commentList>
@@ -32,7 +32,7 @@
 
                                 <!-- Comment Logo -->
                                 <div class="comment-message-logo pr-2">
-                                    <i class="fa fa-user-circle fa-2x txt-big mr-1 text-secondary"
+                                    <i class="fa fa-user-circle fa-2x txt-big me-1 text-secondary"
                                         aria-hidden="true"></i>
                                 </div>
                                 <div class="comment-message-body pt-1">
@@ -40,7 +40,7 @@
                                         <div class="comment-inner-head-left">
                                             <!-- full name of commenter -->
                                             <span
-                                                class="text-black font-weight-bold txt-medium">{{listItem.updateUserFullName}}</span>
+                                                class="text-black fw-bold txt-medium me-2">{{listItem.updateUserFullName}}</span>
                                             <span class="txt-medium">[Section:
                                                 {{listItem?.coiSectionsType?.description}}]</span>
                                             <span *ngIf="listItem?.coiSubSectionsId" class="txt-medium">[Sub-section:
@@ -50,14 +50,14 @@
                                             <span *ngIf="listItem?.isPrivate" class="fw-700 text-primary txt-medium">
                                                 Private</span>
                                             <!-- time -->
-                                            <p class="d-inline ml-10 txt-medium text-secondary font-weight-light">
+                                            <p class="d-inline ms-10 txt-medium text-secondary font-weight-light">
                                                 {{listItem?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</p>
 
-                                            <span *ngIf="listItem?.coiReviewCommentTag?.length" class="mt-2 ml-3">
+                                            <span *ngIf="listItem?.coiReviewCommentTag?.length" class="mt-2 ms-3">
                                                 <ng-container *ngFor="let tag of listItem.coiReviewCommentTag">
-                                                    <div class="fs-12 rounded-icon status-badge-info">
+                                                    <div class="fs-12 me-2 rounded-icon status-badge-info">
                                                         <span>
-                                                            <i class="fa mr-2" [ngClass]="tag.tagPersonId ? 'fa-user' : 'fa-users'" aria-hidden="true"></i>
+                                                            <i class="fa me-2" [ngClass]="tag.tagPersonId ? 'fa-user' : 'fa-users'" aria-hidden="true"></i>
                                                             {{ tag.tagPersonId ? tag.tagPersonFullName : tag.tagGroupName}}
                                                         </span>
                                                     </div>
@@ -76,14 +76,14 @@
                                             </div>
                                         </div>
                                         <div *ngIf="isAllowModification" class="f-13 text-secondary">
-                                            <span class="hand-cursor mr-4"
+                                            <span class="hand-cursor me-4"
                                                 (click)="modifyReviewComment(listItem, index, true, listItem?.coiParentCommentId)">
-                                                <i aria-hidden="true" class="fa fa-pencil mr-2"></i>
+                                                <i aria-hidden="true" class="fa fa-pencil me-2"></i>
                                                 Edit comment
                                             </span>
-                                            <span class="hand-cursor" data-toggle="modal" data-target="#delete-comment"
+                                            <span class="hand-cursor" data-bs-toggle="modal" data-bs-target="#delete-comment"
                                                 (click)="setDeleteObject(listItem, index)">
-                                                <i aria-hidden="true" class="fa fa-trash mr-2"></i>
+                                                <i aria-hidden="true" class="fa fa-trash me-2"></i>
                                                 Delete
                                             </span>
                                         </div>
@@ -93,7 +93,7 @@
                                         <div>
                                             <i *ngIf="listItem?.comment" aria-hidden="true"
                                                 class="fa fa-quote-left comment-icon"></i>
-                                            <sub> <span class="fs-14 text-content-color new-line-property"
+                                            <sub> <span class="fs-14 text-content-color new-line-property ms-2"
                                                     [innerHTML]="listItem?.comment"></span>
                                             </sub>
                                             <hr *ngIf="listItem?.coiReviewCommentAttachment?.length && listItem?.comment"
@@ -105,14 +105,14 @@
                                                     <span class="px-2">
                                                         {{attachment.fileName}}
                                                         <i aria-hidden="true"
-                                                            class="fa fa-download badge-icon ml-1 hand-cursor"
+                                                            class="fa fa-download badge-icon ms-1 hand-cursor"
                                                             title="Download {{attachment.fileName}}"
                                                             (click)="downloadAttachment(attachment)">
                                                         </i>
                                                         <i *ngIf="isAllowModification" aria-hidden="true"
-                                                            class="fa fa-times badge-icon ml-1 hand-cursor"
-                                                            title="Delete {{attachment.fileName}}" data-toggle="modal"
-                                                            data-target="#delete-comment-attachment"
+                                                            class="fa fa-times badge-icon ms-1 hand-cursor"
+                                                            title="Delete {{attachment.fileName}}" data-bs-toggle="modal"
+                                                            data-bs-target="#delete-comment-attachment"
                                                             (click)="setDeleteObject(listItem, attachmentIndex, attachment.coiReviewCommentAttId)">
                                                         </i>
                                                     </span>
@@ -121,15 +121,15 @@
                                         </div>
                                     </div>
                                     <div *ngIf="!listItem?.coiParentCommentId" class="f-13 text-secondary my-3">
-                                        <span *ngIf="listItem?.childComments?.length" class="hand-cursor mr-4"
+                                        <span *ngIf="listItem?.childComments?.length" class="hand-cursor me-4"
                                             (click)="listItem.isShowReplies = !listItem.isShowReplies">
-                                            <i aria-hidden="true" class="fa fa-commenting mr-2"></i>
+                                            <i aria-hidden="true" class="fa fa-commenting me-2"></i>
                                             <ng-container *ngIf="!listItem.isShowReplies">Show</ng-container>
                                             <ng-container *ngIf="listItem.isShowReplies">Hide</ng-container> replies
                                         </span>
                                         <span class="hand-cursor"
                                             (click)="modifyReviewComment(listItem, index, false, listItem?.coiReviewCommentId)">
-                                            <i aria-hidden="true" class="fa fa-reply mr-2"></i>
+                                            <i aria-hidden="true" class="fa fa-reply me-2"></i>
                                             Reply
                                         </span>
                                     </div>
@@ -168,9 +168,9 @@
     role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header pe-0">
                 <h5 class="modal-title">Delete Comment</h5>
-                <button id="prop-dlt-member-dismiss" type="button" class="close" data-dismiss="modal" aria-label="Close"
+                <button id="prop-dlt-member-dismiss" type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close"
                     (click)="deleteComment = {}">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -179,10 +179,10 @@
                 <p>Are you sure you want to delete this comment?</p>
             </div>
             <div class="modal-footer">
-                <button id="prop-project-close-btn" type="button" class=" btn-secondary btn-sm" data-dismiss="modal"
-                    data-toggle="modal" (click)="deleteComment = {}">Cancel</button>
-                <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary-sub btn-sm"
-                    (click)="deleteReviewComment()" data-dismiss="modal">Delete</button>
+                <button id="prop-project-close-btn" type="button" class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
+                    data-bs-toggle="modal" (click)="deleteComment = {}">Cancel</button>
+                <button id="prop-project-team-delete-btn" type="button" class="btn btn-outline-danger fs-14"
+                    (click)="deleteReviewComment()" data-bs-dismiss="modal">Delete</button>
             </div>
         </div>
     </div>
@@ -193,9 +193,9 @@
     role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header pe-0">
                 <h5 class="modal-title">Delete Comment Attachment</h5>
-                <button id="prop-dlt-member-dismiss" type="button" class="close" data-dismiss="modal" aria-label="Close"
+                <button id="prop-dlt-member-dismiss" type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close"
                     (click)="deleteComment = {}">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -204,10 +204,10 @@
                 <p>Are you sure you want to delete this attachment?</p>
             </div>
             <div class="modal-footer">
-                <button id="prop-project-close-btn" type="button" class=" btn-secondary btn-sm" data-dismiss="modal"
-                    data-toggle="modal" (click)="deleteComment = {}">Cancel</button>
-                <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary-sub btn-sm"
-                    (click)="deleteReviewAttachment()" data-dismiss="modal">Delete</button>
+                <button id="prop-project-close-btn" type="button" class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
+                    data-bs-toggle="modal" (click)="deleteComment = {}">Cancel</button>
+                <button id="prop-project-team-delete-btn" type="button" class="btn btn-outline-danger fs-14"
+                    (click)="deleteReviewAttachment()" data-bs-dismiss="modal">Delete</button>
             </div>
         </div>
     </div>

@@ -1,10 +1,10 @@
-<div class="modal modal-coi  fade mySkinDialog" id="coi-activity-modal" tabindex="-1" role="dialog"
-    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal modal-coi fade mySkinDialog" data-backdrop="static" data-keyboard="false" id="coi-activity-modal" tabindex="-1" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header pe-0">
                 <h5 class="modal-title" id="skippedSchedulesLongTitle">Review Comments</h5>
-                <button type="button" id="agreement-approve-dismiss-btn" (click)="clearModal()" class="close" aria-label="Close">
+                <button data-bs-dismiss="modal" type="button" id="agreement-approve-dismiss-btn" (click)="clearModal()" class="close btn m-0" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -12,16 +12,16 @@
                 <div class="mb-4">
                     <ul class="subTabs mb-0">
                       <li [ngClass]="{active:(commentTab == 'MODIFY')}" (click)="commentTab = 'MODIFY'" tabindex="0">
-                        <a class="subTabLink">{{editIndex != -1 ? 'Update Comment':'Add Comment'}}</a>
+                        <span class="subTabLink">{{editIndex != -1 ? 'Update Comment':'Add Comment'}}</span>
                       </li>
                       <li [ngClass]="{active:(commentTab == 'VIEW')}" (click)="commentTab = 'VIEW'" tabindex="0">
-                        <a class="subTabLink">View Comments</a>
+                        <span class="subTabLink">View Comments</span>
                       </li>
                     </ul>
                   </div>
 
-                <div *ngIf="commentTab == 'MODIFY'" class="form-row">
-                    <div [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
+                <div *ngIf="commentTab == 'MODIFY'" class="row">
+                    <div class="mb-3" [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
                         <label class="block-display">
                             <span class="mandatory">*</span>
                             Section
@@ -93,7 +93,7 @@
                             </ng-container>
                         </ng-container>
                     </div>
-                    <div class="col-12 mb-0">
+                    <div class="col-12 mb-3">
                         <label class="block-display">
                             <span class="mandatory">*</span>Comment</label>
                         <textarea [(ngModel)]="reviewCommentObject.comment" appLengthValidator [isShowLimiter]="true"
@@ -128,8 +128,8 @@
                 </div>
             </div>
             <div *ngIf="commentTab != 'VIEW'" class="modal-footer">
-                <button (click)="clearModal()" class="btn btn-secondary btn-sm  btn-xs">Cancel</button>
-                <button class="btn btn-primary-sub btn-sm  btn-xs" (click)="addComments()">
+                <button (click)="clearModal()" class="btn btn-outline-secondary fs-14">Cancel</button>
+                <button class="btn btn-outline-primary fs-14" (click)="addComments()">
                     {{editIndex != -1 ? 'Update Comment':'Add Comment'}}</button>
             </div>
         </div>

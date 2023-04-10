@@ -43,8 +43,9 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule} fro
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatIconModule} from '@angular/material/icon';
 import {DATE_PICKER_FORMAT_MATERIAL} from "../../../../fibi/src/app/app-constants";
-import {CommonService} from "../common/services/common.service";
 import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
+import {MatMenuModule} from '@angular/material/menu';
+import {CdkMenuModule} from '@angular/cdk/menu';
 
 @NgModule({
     imports: [
@@ -54,7 +55,9 @@ import { AddRelationshipModalComponent } from './add-relationship-modal/add-rela
         CKEditorModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatIconModule
+        MatIconModule,
+        CdkMenuModule,
+        MatMenuModule
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective, AppEndpointSearchComponent, CustomElementComponent,
         ViewQuestionnaireComponent, LookUpComponent, LookupFilterPipe,
@@ -99,7 +102,9 @@ import { AddRelationshipModalComponent } from './add-relationship-modal/add-rela
         MatDatepickerModule,
         MatNativeDateModule,
         MatIconModule,
-        AddRelationshipModalComponent
+        AddRelationshipModalComponent,
+        CdkMenuModule,
+        MatMenuModule
     ],
 
     providers: [

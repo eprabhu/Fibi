@@ -13,13 +13,12 @@ import {SfiSummaryComponent} from './review/sfi-summary/sfi-summary.component';
 import {CoiSummaryService} from './coi-summary.service';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from "../../shared/shared.module";
-import { ConflictManagementSummaryComponent } from './review/conflict-management-summary/conflict-management-summary.component';
+import {ConflictManagementSummaryComponent} from './review/conflict-management-summary/conflict-management-summary.component';
 import {MatIconModule} from "@angular/material/icon";
-import { SharedComponentModule } from '../../../../../fibi/src/app/shared-component/shared-component.module';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { AddCommentSliderComponent } from './review/relationship-summary/add-comment-slider/add-comment-slider.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {AddCommentSliderComponent} from './review/relationship-summary/add-comment-slider/add-comment-slider.component';
+import {SharedComponentModule} from "../../shared-components/shared-component.module";
 
 @NgModule({
     imports: [
@@ -31,7 +30,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         MatInputModule,
         MatFormFieldModule,
         SharedComponentModule,
-        SharedModule
     ],
     declarations: [
         SummaryComponent,

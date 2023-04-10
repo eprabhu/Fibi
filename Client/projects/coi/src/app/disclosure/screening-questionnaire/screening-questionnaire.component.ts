@@ -13,10 +13,13 @@ import {deepCloneObject} from "../../../../../fibi/src/app/common/utilities/cust
     selector: 'app-screening-questionnaire',
     template: `
         <div>
-            <app-view-questionnaire-list [configuration] = "configuration"
-                [questionnaireHeader]="''"
-                [saveButtonLabel]="'Save and Continue'"
-                (QuestionnaireSaveEvent)= "getSaveEvent($event)">
+            <app-view-questionnaire-list
+                    [configuration]="configuration"
+                    [externalSaveEvent]='coiService.globalSave$'
+                    [questionnaireHeader]="''"
+                    [isShowSave]="false"
+                    [saveButtonLabel]="'Save and Continue'"
+                    (QuestionnaireSaveEvent)="getSaveEvent($event)">
             </app-view-questionnaire-list>
         </div>
     `
@@ -43,7 +46,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
         private _commonService: CommonService,
         private _dataStore: DataStoreService,
         private _router: Router,
-        private _coiService: CoiService
+        public coiService: CoiService
     ) { }
 
     ngOnInit() {
@@ -79,16 +82,16 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
 
     private evaluateDisclosureQuestionnaire() {
         this.$subscriptions.push(
-            this._coiService.evaluateDisclosureQuestionnaire({
+            this.coiService.evaluateDisclosureQuestionnaire({
                 moduleCode : this.configuration.moduleItemCode,
                 submoduleCode : 0,
                 moduleItemId : this.configuration.moduleItemKey
             }).subscribe((data: boolean) => {
                 this.coiDisclosure.isDisclosureQuestionnaire = data;
                 this._dataStore.updateStore(['coiDisclosure'], this);
-                const NEXT_STEP = data ? '/fibi/coi/sfi' : '/fibi/coi/certify';
+                const NEXT_STEP = data ? '/coi/create-disclosure/sfi' : '/coi/create-disclosure/certification';
                 this._router.navigate([NEXT_STEP], { queryParamsHandling: 'preserve' });
-                this._coiService.stepTabName = data ? 'sfi' : 'certify';
+                this.coiService.stepTabName = data ? 'sfi' : 'certify';
             }, _err => {
                 // this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in evaluating disclosure.');
             })

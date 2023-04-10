@@ -1,19 +1,21 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { CommonService } from '../../common/services/common.service';
-import { ActivityService } from './activity.service';
-import { DataStoreService } from '../services/data-store.service';
-import { CoiService } from '../services/coi.service';
-import { CommentConfiguration, CommentRequest } from '../coi-interface';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {CommonService} from '../../common/services/common.service';
+import {ActivityService} from './activity.service';
+import {DataStoreService} from '../services/data-store.service';
+import {CoiService} from '../services/coi.service';
+import {CommentConfiguration, CommentRequest} from '../coi-interface';
 import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+import bootstrap from "../../../assets/js/bootstrap.bundle.min.js";
 
 declare let $: any;
+
 @Component({
     selector: 'app-coi-review-comment-modal',
     templateUrl: './activity.component.html',
     styleUrls: ['./activity.component.css'],
-    providers: [ActivityService, ElasticConfigService]
+    providers: [ActivityService]
 })
 export class ActivityComponent implements OnInit, OnDestroy {
 
@@ -36,6 +38,7 @@ export class ActivityComponent implements OnInit, OnDestroy {
     categoryClearFiled: String;
     uploadedFile: any = [];
     adminGroup: any = [];
+    modal;
 
     commentTab = 'MODIFY';
 
@@ -45,9 +48,12 @@ export class ActivityComponent implements OnInit, OnDestroy {
         private _coiService: CoiService,
         private _elasticConfigService: ElasticConfigService,
         private _reviewService: ActivityService
-    ) { }
+    ) {
+    }
 
     ngOnInit() {
+        this.modal = new bootstrap.Modal(document.getElementById('coi-activity-modal'),{ backdrop: 'static',
+                keyboard: false});
         this.getDataFromStore();
         this.listenTriggerReviewComment();
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
@@ -55,6 +61,91 @@ export class ActivityComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    setReviewCommentObject() {
+        this.reviewCommentObject.coiSectionsTypeCode = this.modalConfiguration.coiSectionsTypeCode;
+        this.reviewCommentObject.coiParentCommentId = this.modalConfiguration.coiParentCommentId;
+        this.reviewCommentObject.comment = this.modalConfiguration.comment;
+        this.reviewCommentObject.disclosureId = this.modalConfiguration.disclosureId;
+        this.reviewCommentObject.isPrivate = this.modalConfiguration.isPrivate;
+        this.reviewCommentObject.coiReviewCommentTag = this.modalConfiguration.coiReviewCommentTag;
+        this.reviewCommentObject.coiReviewCommentAttachment = this.modalConfiguration.coiReviewCommentAttachment;
+        this.reviewCommentObject.coiReviewId = this.modalConfiguration.coiReviewId;
+        this.reviewCommentObject.coiReviewCommentId = this.modalConfiguration.coiReviewCommentId;
+        this.reviewCommentObject.coiSubSectionsId = this.modalConfiguration.isSubSectionComment ?
+            this.modalConfiguration.coiSubSectionsId : null;
+    }
+
+    selectPerson(event: any) {
+        if (event) {
+            this.reviewCommentObject.coiReviewCommentTag.push(this.coiReviewCommentTag(event, null));
+        }
+        this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
+    }
+
+    adminGroupSelect(event: any) {
+        if (event) {
+            this.reviewCommentObject.coiReviewCommentTag.push(this.coiReviewCommentTag(null, event));
+        }
+        this.setAdminGroupOptions();
+    }
+
+    removeReviewer(index: number) {
+        this.reviewCommentObject.coiReviewCommentTag.splice(index, 1);
+    }
+
+    addAttachments(files: any) {
+        if (files && files.length) {
+            Array.from(files).forEach((element: any) => {
+                this.uploadedFile.push(element);
+            });
+        }
+    }
+
+    clearModal() {
+        this.modal.hide();
+        this.uploadedFile = [];
+        this.reviewCommentObject = new CommentRequest();
+    }
+
+    addComments() {
+        if (this.validateComment()) {
+            this.reviewCommentObject.coiSectionsType = this.findSection(this.reviewCommentObject.coiSectionsTypeCode);
+            if (this.modalConfiguration.isSubSectionComment) {
+                this.findSubSection(this.reviewCommentObject.coiSubSectionsId);
+            }
+            this.$subscriptions.push(this._reviewService.addCOIReviewComment({
+                coiReviewComment: this.reviewCommentObject
+            }, this.uploadedFile).subscribe((data: any) => {
+                this._coiService.triggerReviewCommentDataUpdate$.next({
+                    coiReviewComment: {
+                        ...data.coiReviewComment,
+                        coiReviewCommentAttachment: data.coiReviewCommentAttachment
+                    },
+                    commentType: this.setAddCommentType(),
+                    coiParentCommentId: this.modalConfiguration.coiParentCommentId,
+                    modifyIndex: this.modalConfiguration.modifyIndex
+                });
+                this.clearModal();
+                // this._commonService.showToast(HTTP_SUCCESS_STATUS,
+                //     `Review comment ${ this.modalConfiguration.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
+            }, _err => {
+                // this._commonService.showToast(HTTP_ERROR_STATUS,
+                //     `Error in adding ${ this.modalConfiguration.modifyIndex === -1 ? 'adding' : 'updating'}  comment. Please try again.`);
+            }));
+        }
+    }
+
+    validateComment() {
+        this.validationMap.clear();
+        if (!this.reviewCommentObject.coiSectionsTypeCode || this.reviewCommentObject.coiSectionsTypeCode === 'null') {
+            this.validationMap.set('coiSectionsTypeCode', 'Please select a section type.');
+        }
+        if (!this.reviewCommentObject.comment) {
+            this.validationMap.set('comment', 'Please add a comment.');
+        }
+        return this.validationMap.size === 0;
     }
 
     private getDataFromStore() {
@@ -88,24 +179,10 @@ export class ActivityComponent implements OnInit, OnDestroy {
                 this.setReviewCommentObject();
                 this.subSectionList = this.modalConfiguration.subSectionList;
                 this.editIndex = this.modalConfiguration.modifyIndex;
-                $('#coi-activity-modal').modal('show');
+                this.modal.show();
                 this.commentTab = 'MODIFY';
             }
         }));
-    }
-
-    setReviewCommentObject() {
-        this.reviewCommentObject.coiSectionsTypeCode = this.modalConfiguration.coiSectionsTypeCode;
-        this.reviewCommentObject.coiParentCommentId = this.modalConfiguration.coiParentCommentId;
-        this.reviewCommentObject.comment = this.modalConfiguration.comment;
-        this.reviewCommentObject.disclosureId = this.modalConfiguration.disclosureId;
-        this.reviewCommentObject.isPrivate = this.modalConfiguration.isPrivate;
-        this.reviewCommentObject.coiReviewCommentTag = this.modalConfiguration.coiReviewCommentTag;
-        this.reviewCommentObject.coiReviewCommentAttachment = this.modalConfiguration.coiReviewCommentAttachment;
-        this.reviewCommentObject.coiReviewId = this.modalConfiguration.coiReviewId;
-        this.reviewCommentObject.coiReviewCommentId = this.modalConfiguration.coiReviewCommentId;
-        this.reviewCommentObject.coiSubSectionsId = this.modalConfiguration.isSubSectionComment ?
-            this.modalConfiguration.coiSubSectionsId : null;
     }
 
     private coiReviewCommentTag(person: any, group: any) {
@@ -118,38 +195,6 @@ export class ActivityComponent implements OnInit, OnDestroy {
         };
     }
 
-    selectPerson(event: any) {
-        if (event) {
-            this.reviewCommentObject.coiReviewCommentTag.push(this.coiReviewCommentTag(event, null));
-        }
-        this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
-    }
-
-    adminGroupSelect(event: any) {
-        if (event) {
-            this.reviewCommentObject.coiReviewCommentTag.push(this.coiReviewCommentTag(null, event));
-        }
-        this.setAdminGroupOptions();
-    }
-
-    removeReviewer(index: number) {
-        this.reviewCommentObject.coiReviewCommentTag.splice(index, 1);
-    }
-
-    addAttachments(files: any) {
-        if (files && files.length) {
-            Array.from(files).forEach((element: any) => {
-                this.uploadedFile.push(element);
-            });
-        }
-    }
-
-    clearModal() {
-        $('#coi-activity-modal').modal('hide');
-        this.uploadedFile = [];
-        this.reviewCommentObject = new CommentRequest();
-    }
-
     private findSection(sectionCode: string) {
         return this.coiSection.find(ele => ele.coiSectionsTypeCode == sectionCode);
     }
@@ -160,34 +205,6 @@ export class ActivityComponent implements OnInit, OnDestroy {
         this.reviewCommentObject[SUB_SECTION_KEY] = SUB_SECTION[SUB_SECTION_KEY];
     }
 
-    addComments() {
-        if (this.validateComment()) {
-            this.reviewCommentObject.coiSectionsType = this.findSection(this.reviewCommentObject.coiSectionsTypeCode);
-            if (this.modalConfiguration.isSubSectionComment) {
-                this.findSubSection(this.reviewCommentObject.coiSubSectionsId);
-            }
-            this.$subscriptions.push(this._reviewService.addCOIReviewComment({
-                coiReviewComment: this.reviewCommentObject
-            }, this.uploadedFile).subscribe((data: any) => {
-                this._coiService.triggerReviewCommentDataUpdate$.next({
-                    coiReviewComment: {
-                        ...data.coiReviewComment,
-                        coiReviewCommentAttachment: data.coiReviewCommentAttachment
-                    },
-                    commentType: this.setAddCommentType(),
-                    coiParentCommentId: this.modalConfiguration.coiParentCommentId,
-                    modifyIndex: this.modalConfiguration.modifyIndex
-                });
-                this.clearModal();
-                // this._commonService.showToast(HTTP_SUCCESS_STATUS,
-                //     `Review comment ${ this.modalConfiguration.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
-            }, _err => {
-                // this._commonService.showToast(HTTP_ERROR_STATUS,
-                //     `Error in adding ${ this.modalConfiguration.modifyIndex === -1 ? 'adding' : 'updating'}  comment. Please try again.`);
-            }));
-        }
-    }
-
     private setAddCommentType() {
         if (this.modalConfiguration.coiParentCommentId) {
             return this.modalConfiguration.modifyIndex !== -1 ? 'MODIFY_REPLY' : 'ADD_REPLY';
@@ -195,16 +212,4 @@ export class ActivityComponent implements OnInit, OnDestroy {
             return this.modalConfiguration.modifyIndex !== -1 ? 'MODIFY_COMMENT' : 'ADD_COMMENT';
         }
     }
-
-    validateComment() {
-        this.validationMap.clear();
-        if (!this.reviewCommentObject.coiSectionsTypeCode || this.reviewCommentObject.coiSectionsTypeCode === 'null') {
-            this.validationMap.set('coiSectionsTypeCode', 'Please select a section type.');
-        }
-        if (!this.reviewCommentObject.comment) {
-            this.validationMap.set('comment', 'Please add a comment.');
-        }
-        return this.validationMap.size === 0;
-    }
-
 }

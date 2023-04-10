@@ -4,18 +4,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Grant Call Details</h5>
-                <button id="grantdetail-close" type="button" class="close" data-dismiss="modal" (click)="closeModal();" aria-label="Close">
+                <button id="grantdetail-close" type="button" class="close btn m-0" data-bs-dismiss="modal" (click)="closeModal();" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body modal-height-container">
-                <div class="form-row  mb-3">
+                <div class="row  mb-3">
                     <div class="col">
                         <label class="d-block">Title of Grant Call</label>
                         <span>{{grantCallDetails?.grantCallName}}</span>
                     </div>
                 </div>
-                <div class="form-row  mb-3">
+                <div class="row  mb-3">
                     <div class="col-4">
                         <label class="d-block">Grant Call ID</label>
                         <span>{{grantCallDetails?.grantCallId}}</span>
@@ -29,7 +29,7 @@
                         <span>{{concatUnitNumberAndUnitName(grantCallDetails?.homeUnitNumber,grantCallDetails?.homeUnitName)}}</span>
                     </div>
                 </div>
-                <div class="form-row  mb-3">
+                <div class="row  mb-3">
                     <div class="col">
                         <label class="d-block">Funding Scheme</label>
                         <span>{{grantCallDetails?.sponsorFundingScheme?.fundingScheme?.schemeName}}</span>
@@ -44,7 +44,7 @@
                         <span>{{grantCallDetails?.sponsorType?.description}}</span>
                     </div>
                 </div>
-                <div class="form-row  mb-3">
+                <div class="row  mb-3">
                     <div class="col">
                         <label class="d-block">Opening Date</label>
                         <span>{{grantCallDetails?.openingDate | dateFormatter}}</span>
@@ -64,7 +64,7 @@
                             class="noDataExists">No internal submission deadline specified</label>
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="row">
                     <div class="col">
                         <label class="block-display">Weblink to Grant Call</label>
                         <span>{{grantCallDetails?.externalUrl}}</span>
@@ -85,7 +85,7 @@
                             <ng-container i18n="@@PROPOSAL_OVER_HEAD_RATE_TYPE">Over Head Rate Type</ng-container> not specified</label>
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="row">
                     <div class="col rich-editor overflow-auto">
                         <label class="d-block">Grant Call Theme</label>
                         <label class="noDataExists"
@@ -100,11 +100,11 @@
                     </div>
                 </div>
                 <div class="modal-footer px-0">
-                    <button id="close-grantDetails" type="button" class="btn btn-secondary btn-sm" (click)="closeModal();" data-dismiss="modal"
+                    <button id="close-grantDetails" type="button" class="btn btn-outline-secondary fs-14" (click)="closeModal();" data-bs-dismiss="modal"
                         aria-label="Close">
                         Close
                     </button>
-                    <a id="edit-grantdetails-close-btn" class="btn btn-primary-sub btn-sm" href="#/fibi/grant?grantId={{grantCallId}}" target="_blank">More Details
+                    <a id="edit-grantdetails-close-btn" class="btn btn-outline-primary fs-14" href="#/fibi/grant?grantId={{grantCallId}}" target="_blank">More Details
                     </a>
                 </div>
 
@@ -112,4 +112,4 @@
         </div>
     </div>
 </div>
-<button id="trigger-grant-details" [hidden]="true" data-toggle="modal" data-target="#app-grant-details-modal"></button>
+<button id="trigger-grant-details" [hidden]="true" data-bs-toggle="modal" data-bs-target="#app-grant-details-modal"></button>

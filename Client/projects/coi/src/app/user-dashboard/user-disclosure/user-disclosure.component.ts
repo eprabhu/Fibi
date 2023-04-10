@@ -9,6 +9,7 @@ import {UserDashboardService} from "../user-dashboard.service";
 })
 
 export class UserDisclosureComponent {
+    searchText = '';
     currentSelected = {
         tab: 'IN_PROGRESS',
         filter: 'ALL'
@@ -21,15 +22,30 @@ export class UserDisclosureComponent {
         isDownload: false,
     };
     disclosureArray: any[] = [];
+    filteredDisclosureArray: any[] = [];
+    dashboardCount: any;
     isActiveDisclosureAvailable = false;
 
     constructor(public userDisclosureService: UserDisclosureService, public userDashboardService: UserDashboardService) {
     }
 
     ngOnInit() {
+       this.loadDashboard();
+       this.loadDashboardCount();
+    }
+
+    loadDashboard() {
         this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject).subscribe((res: any) => {
             this.disclosureArray = res.disclosureViews ? res.disclosureViews : [];
             console.log(this.disclosureArray);
+            this.searchText = '';
+            this.setFilter();
+        })
+    }
+
+    loadDashboardCount() {
+        this.userDisclosureService.getCOIDashboardCount(this.dashboardRequestObject).subscribe((res: any) => {
+            this.dashboardCount = res;
         })
     }
 
@@ -100,6 +116,34 @@ export class UserDisclosureComponent {
             }
         } else if (disclosureCategoryType == 3) {
             return 'Proposal';
+        }
+    }
+
+    setTab(tabName) {
+        this.currentSelected.tab= tabName;
+        this.dashboardRequestObject.tabName = tabName;
+        this.loadDashboard();
+    }
+
+    setFilter(type = 'ALL') {
+        this.currentSelected.filter = type;
+        this.filterDashboardData();
+    }
+
+    filterDashboardData() {
+        if (this.currentSelected.filter == 'ALL') {
+            this.filteredDisclosureArray = this.disclosureArray;
+        } else {
+            this.filteredDisclosureArray = this.disclosureArray.filter(disclosure => {
+                switch(this.currentSelected.filter) {
+                    case 'PROJECT':
+                        return ['3', '5'].includes(disclosure.disclosureCategoryTypeCode);
+                    case 'OPA':
+                        return disclosure.disclosureCategoryTypeCode == '2';
+                    case 'FCOI':
+                        return disclosure.disclosureCategoryTypeCode == '1';
+                }
+            });
         }
     }
 }

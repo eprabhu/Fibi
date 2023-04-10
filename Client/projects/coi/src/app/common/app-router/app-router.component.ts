@@ -1,7 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonService} from "../services/common.service";
-import {copyToClipboard} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
-import {getFromLocalStorage} from "../../../../../fibi/src/app/common/utilities/user-service";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 
 @Component({

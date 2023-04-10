@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject} from 'rxjs';
 import {environment} from "../../../environments/environment";
 import {getFromLocalStorage, setIntoLocalStorage} from "../../../../../fibi/src/app/common/utilities/user-service";
+import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
 
 @Injectable()
 export class CommonService {
@@ -40,6 +41,7 @@ export class CommonService {
     elasticAuthScheme = '';
     elasticDelimiter = '';
     elasticPassword = '';
+    elasticIndexUrl = '';
     generalFileType = '';
     appLoaderContent = '';
     isEnableLock = false;
@@ -48,7 +50,7 @@ export class CommonService {
     timer: any
     dashboardModules: any = {};
 
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
 
     /**
@@ -94,6 +96,7 @@ export class CommonService {
         this.fibiUrl = configurationData.fibiUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isDevelopment = configurationData.isDevelopment;
+        this.elasticConfigService.url = configurationData.elasticIndexUrl;
     }
 
     pageScroll(elementId) {

@@ -1,8 +1,8 @@
-<div class="success-banner p-2 mb-2 d-flex justify-content-between"
+<div class="success-banner px-3 mb-2 d-flex justify-content-between align-items-center"
 	*ngIf="result?.header?.QUESTIONNAIRE_DESCRIPTION && isQuestionnaireInfo">
 	<span><i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
 		<em>{{result?.header?.QUESTIONNAIRE_DESCRIPTION}}</em></span>
-	<button (click)="isQuestionnaireInfo = false" type="button" id="modal-close" class="close close-button"
+	<button (click)="isQuestionnaireInfo = false" type="button" id="modal-close" class="btn close fs-16 p-0 close-button"
 		aria-label="Close">
 		<span class="d-block" aria-hidden="true">&times;</span>
 	</button>
@@ -225,8 +225,8 @@
 							<div class="answer-field p-0 ml-4">
 								<a id="add-attach{{questionnaireDetails?.QUESTIONNAIRE_ID}}"
 									class="btn-link mb-3 answer-field" *ngIf="!isViewMode"
-									(click)="attachmentIndex = indexQuestion" data-toggle="modal"
-									[attr.data-target]="'#AttachmentModal' + questionnaireDetails?.QUESTIONNAIRE_ID">
+									(click)="attachmentIndex = indexQuestion" data-bs-toggle="modal"
+									[attr.data-bs-target]="'#AttachmentModal' + questionnaireDetails?.QUESTIONNAIRE_ID">
 									<i aria-hidden="true" class="fa fa-paperclip mr-3"></i>Add Attachment</a>
 							</div>
 							<span *ngIf="question.ANSWERS[1]" class="qst-attachment-label answer-field ml-3">
@@ -457,7 +457,7 @@
 		<div class="row mt-2">
 			<div class="col-12">
 				<div class="col-12 text-right pr-0">
-					<button class="btn btn-primary-sub btn-sm"
+					<button class="btn btn-outline-primary fs-14"
 						*ngIf="!isViewMode && questionnaire.questions.length != 0 && isShowSave"
 						(click)="saveQuestionnaire()" id="save">{{saveButtonLabel}}</button>
 				</div>
@@ -501,7 +501,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="AttachmentModalTitle">Add Attachment</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="tempFiles = [];">
+				<button type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close" (click)="tempFiles = [];">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
@@ -526,10 +526,10 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" (click)="tempFiles = [];" class="btn btn-secondary btn-sm"
-						data-dismiss="modal">Close</button>
-					<button type="button" (click)="addFileToArray();" data-dismiss="modal"
-						class="btn btn-primary-sub btn-sm">Add</button>
+					<button type="button" (click)="tempFiles = [];" class="btn btn-outline-secondary fs-14"
+						data-bs-dismiss="modal">Close</button>
+					<button type="button" (click)="addFileToArray();" data-bs-dismiss="modal"
+						class="btn btn-outline-primary fs-14">Add</button>
 				</div>
 			</div>
 		</div>

@@ -5,13 +5,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="skippedSchedulesLongTitle">Add to Address Book</h5>
-        <button type="button" id="add-non-employee-KP-dissmiss" class="close" data-dismiss="modal" aria-label="Close"
+        <button type="button" id="add-non-employee-KP-dissmiss" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close"
           (click)="clearRolodexDetails();emitRolodexResult(null);">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="form-row">               
+        <div class="row">
           <div class="form-group col-lg-1 col-md-4 col-sm-6 col-12">   
             <label class="block-display">Prefix</label>
             <select [(ngModel)]="genderType" class="form-control ng-pristine ng-valid ng-touched wd-100">
@@ -139,13 +139,13 @@
         </div>
       </div>
       <div class="modal-footer px-4">
-        <button type="button" id="award-non-employee-close-btn" class="btn btn-secondary btn-sm" data-dismiss="modal"
+        <button type="button" id="award-non-employee-close-btn" class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
           (click)="clearRolodexDetails();emitRolodexResult(null);">Cancel</button>
-        <button type="button" id="award-non-employee-add-btn" class="btn btn-primary-sub btn-sm"
+        <button type="button" id="award-non-employee-add-btn" class="btn btn-outline-primary fs-14"
           (click)="saveRolodex('I');">Save</button>
       </div>
     </div>
   </div>
 </div>
-<button id="app-add-non-employee-btn" data-toggle="modal" data-target="#app-generic-addNonEmployee-modal"
+<button id="app-add-non-employee-btn" data-bs-toggle="modal" data-bs-target="#app-generic-addNonEmployee-modal"
   [hidden]="true"></button>

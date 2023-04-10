@@ -24,7 +24,7 @@
     "secure": false
   },
   "/getEntityProjectRelations": {
-    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "target": "http://192.168.1.189:9090/fibi4/",
     "secure": false
   },
   "/getCoiReview": {
@@ -52,6 +52,58 @@
     "secure": false
   },
   "/getDisclosureRelations": {
+    "target": "http://192.168.1.189:9090/fibi4/",
+    "secure": false
+  },
+  "/getTabCount": {
+    "target": "http://192.168.1.189:9090/fibi4/",
+    "secure": false
+  },
+  "/getActiveDisclosures": {
+    "target": "http://192.168.1.189:9090/fibi4/",
+    "secure": false
+  },
+  "/saveEntityProjectRelation": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/singleEntityProjectRelation": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/getSFIDetails": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/searchEntity": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/findCountry": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/addCOIReviewComment": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/deleteCOIReviewComment": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/completeDisclosureReview": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/evaluateDisclosureQuestionnaire": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/reviseDisclosure": {
+    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "secure": false
+  },
+  "/saveQuestionnaire": {
     "target": "https://stage.fibiweb.com/fibiCOI/",
     "secure": false
   },
@@ -63,28 +115,8 @@
     "target": "https://stage.fibiweb.com/fibiCOI/",
     "secure": false
   },
-    "/saveEntityProjectRelation": {
-    "target": "https://stage.fibiweb.com/fibiCOI/",
-    "secure": false
-   },
-    "/singleEntityProjectRelation": {
-    "target": "https://stage.fibiweb.com/fibiCOI/",
-    "secure": false
-    },
-    "/getSFIDetails": {
-      "target": "https://stage.fibiweb.com/fibiCOI/",
-      "secure": false
-    },
-    "/searchEntity": {
-      "target": "http://192.168.1.189:9090/fibi4/",
-      "secure": false
-    },
-    "/findCountry": {
-      "target": "http://192.168.1.189:9090/fibi4/",
-      "secure": false
-    },
     "/createSFI": {
-      "target": "http://192.168.1.189:9090/fibi4/",
+      "target": "https://stage.fibiweb.com/fibiCOI/",
       "secure": false
     },
     "/saveOrUpdateCOIEntity": {
@@ -96,7 +128,7 @@
       "secure": false
     },
     "/getAllSystemEntityList": {
-      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "target": "http://192.168.1.189:9090/fibi4/",
       "secure": false
     },
     "/coifibi": {

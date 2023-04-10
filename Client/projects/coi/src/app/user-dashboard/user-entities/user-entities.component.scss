@@ -5,6 +5,18 @@
   &:hover {
     background-color: white;
   }
+  input {
+    background-color: #F5F5F5;
+    &:hover {
+      background-color: white;
+    }
+  }
+  label {
+    position: absolute;
+    color: #747474;
+    display: flex;
+    align-items: center;
+  }
 }
 
 .filter-active {
@@ -66,4 +78,9 @@
 .entity-title {
   margin-top: -4px;
   margin-bottom: 0;
+}
+
+.advance-search-input {
+  width: 100%;
+  height: 43px;
 }

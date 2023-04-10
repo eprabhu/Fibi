@@ -15,7 +15,6 @@ declare var $: any;
     selector: 'app-coi-review-location',
     templateUrl: './location.component.html',
     styleUrls: ['./location.component.css'],
-    providers: [ElasticConfigService]
 })
 export class LocationComponent implements OnInit, OnDestroy {
 

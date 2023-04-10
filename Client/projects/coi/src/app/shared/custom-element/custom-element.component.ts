@@ -23,7 +23,6 @@ import {DEFAULT_DATE_FORMAT} from "../../../../../fibi/src/app/app-constants";
   selector: 'app-custom-element',
   templateUrl: './custom-element.component.html',
   styleUrls: ['./custom-element.component.css'],
-  providers: [ElasticConfigService]
 })
 export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
 

@@ -3,9 +3,9 @@
         <div class="border shadow-sm">
             <div class="disclosure-heading px-3 d-flex">
                 <div class="align-self-center flex-fill">
-                    <p class="m-0"><strong>FCOI by <span class="text-primary"><u>Griffiths, Danielle</u></span></strong>
+                    <p class="m-0"><strong>{{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by <span class="text-primary"><u>{{coiData?.person?.fullName}}</u></span></strong>
                         -
-                        (Home Unit: <strong>External Organizations</strong>)</p>
+                        (Home Unit: <strong>{{coiData?.person?.unit?.unitName}}</strong>)</p>
                 </div>
                 <div class="d-flex">
                     <ng-container *ngIf="isCreateMode">
@@ -202,15 +202,16 @@
                         Add Significant Financial Interest
                     </button>
                 </div>
-                <div class="d-flex justify-content-around px-3 pb-3"
-                     *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()">
-                    <button class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                <div *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
+                     class="d-flex justify-content-around px-3 pb-3">
+                    <button (click)="triggerSave()" class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">save</mat-icon>
                         Save
                     </button>
                 </div>
-                <div class="d-flex justify-content-around px-3" *ngIf="router.url.includes('create-disclosure/certification') && !coiData.coiDisclosure.certifiedBy">
-                    <button [disabled]="!coiService.isCertified" (click)="certifyDisclosure()"
+                <div *ngIf="router.url.includes('create-disclosure/certification') && !coiData.coiDisclosure.certifiedBy"
+                     class="d-flex justify-content-around px-3">
+                    <button (click)="certifyDisclosure()" [disabled]="!coiService.isCertified"
                             class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">done</mat-icon>
                         Submit
@@ -231,7 +232,8 @@
                     <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-secondary pb-0 fs-14 col-2">
                         <mat-icon>home</mat-icon>
                     </button>
-                    <button [disabled]="router.url.includes('coi/disclosure/summary')" (click)="location.back()" class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
+                    <button (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
+                            class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
                     </button>
@@ -241,22 +243,28 @@
                     </button>
                 </div>
                 <div class="d-flex justify-content-around px-3 pb-3">
-                    <button class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
+                    <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusTypeCode == '2'"
+                            class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+                            data-bs-target="#add-location-modal" data-bs-toggle="modal"
+                            title="Add Review Location">
                         <mat-icon class="me-2">person_add</mat-icon>
                         Assign Reviewer
                     </button>
                 </div>
                 <div class="d-flex justify-content-around px-3">
-                    <button class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
+                    <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusTypeCode == '2'"
+                            class="me-2 fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center" data-bs-target="#completeReviewModalFromDashboard"
+                            data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
                         Complete Review
                     </button>
+
                     <button aria-expanded="false"
-                            class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center ms-2 p-0 w-100"
-                            data-bs-toggle="dropdown">
+                            class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center p-0 w-100"
+                            data-bs-toggle="dropdown" id="moreActions" role="button">
                         <mat-icon>more_vert</mat-icon>
                     </button>
-                    <ul class="border dropdown-menu p-0 rounded-0" style="">
+                    <ul class="border dropdown-menu p-0 rounded-0" style="" aria-labelledby="moreActions">
                         <li class="ash-text border-bottom"><span class="dropdown-item fs-15 fw-medium">
                             <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
                         </li>
@@ -275,6 +283,69 @@
         </div>
     </div>
 </div>
+
+<!-- Complete review modal -->
+<div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pe-0">
+                <h4 class="modal-title">Complete Review
+                </h4>
+                <button aria-label="Close" class="close btn m-0" data-bs-dismiss="modal" id="dissmiss-btn"
+                        type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mt-2 mb-0">
+                    <div class="col-lg-12">
+                        <p>Are you sure you want to complete the review of this disclosure?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
+                        type="button">Cancel
+                </button>
+                <button (click)="completeDisclosureReview()" class="btn btn-outline-primary fs-14"
+                        data-bs-dismiss="modal"
+                        type="button">Complete Review
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Complete review modal -->
+<div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboardErrorModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header pe-0">
+                <h4 class="modal-title">Warning!
+                </h4>
+                <button aria-label="Close" class="close btn m-0" data-bs-dismiss="modal" id="dissmiss-btn" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mt-2 mb-0">
+                    <div class="col-lg-12">
+                        <div class="alert alert-danger fs-12">
+                            <i aria-hidden="true" class="fa fa-exclamation-circle icon text-danger mr-3"></i>
+                            There still are some pending reviews for the reviewers to complete. Please wait until all
+                            the reviews are completed.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
+                        type="button">Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="mx-3">
     <router-outlet></router-outlet>
 </div>
+<app-coi-review-comment-modal></app-coi-review-comment-modal>

@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Warning</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeEmitModal('no')">
+        <button type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close" (click)="closeEmitModal('no')">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -16,9 +16,9 @@
         </b>?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" id="cancel-clear" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="closeEmitModal('no')">No</button>
-      <button type="button" id="confirm-clear" class="btn btn-primary-sub btn-sm"
-      (click)="setPreviousNext()" data-dismiss="modal">Yes</button>
+        <button type="button" id="cancel-clear" class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" (click)="closeEmitModal('no')">No</button>
+      <button type="button" id="confirm-clear" class="btn btn-outline-primary fs-14"
+      (click)="setPreviousNext()" data-bs-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>
