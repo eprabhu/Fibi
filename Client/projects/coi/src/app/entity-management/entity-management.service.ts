@@ -20,7 +20,7 @@ export class EntityManagementService {
   }
 
   getEntityDetails(entityId){
-    return this._http.get(`${this._commonService.baseUrl}/getAllSystemEntityList/${entityId}`);
+    return this._http.get(`${this._commonService.baseUrl}/getEntityDetails/${entityId}`);
 
   }
 }

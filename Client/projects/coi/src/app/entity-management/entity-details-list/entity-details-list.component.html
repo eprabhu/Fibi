@@ -1,53 +1,123 @@
 <div class="container-fluid">
   <app-view-entity-details></app-view-entity-details>
-<div class="fw-bold m-2">Relationships</div>
-<div>
-  <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav bg-body-emphasis">
-    <div (click)="currentSelected = 'Person'" class="border-end navigation-icons px-3 py-1" role="button">
-      <span [class.active]="currentSelected === 'Person'?'active':''" class="active">Person</span>
-      <span *ngIf="currentSelected === 'Person'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+  <div class="fw-bold m-2">Relationships</div>
+  <div>
+    <nav
+      class="align-items-center bg-white border d-flex fs-14 fw-medium mt-3 py-1 shadow-sm user-dashboard-nav bg-body-emphasis">
+      <div (click)="currentSelected = 'Person'" class=" navigation-icons text-secondary py-1" role="button">
+        <span [class.active]="currentSelected === 'Person'?'active':''" class="px-5 ">Person</span>
+        <span *ngIf="currentSelected === 'Person'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+      </div>
+      <div (click)="currentSelected = 'Institutional'" class=" navigation-icons text-secondary py-1" role="button">
+        <span [class.active]="currentSelected === 'Institutional'?'active':''"  class="px-5">Institutional</span>
+        <span *ngIf="currentSelected === 'Institutional'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+
+      </div>
+      <div (click)="currentSelected = 'Other Entities'" class=" navigation-icons text-secondary py-1" role="button">
+        <span [class.active]="currentSelected === 'Other Entities'?'active':''"  class="px-5">Other Entities</span>
+        <span *ngIf="currentSelected === 'Other Entities'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+
+      </div>
+      <div (click)="currentSelected = 'Disclosures'" class="navigation-icons text-secondary py-1" role="button">
+        <span [class.active]="currentSelected === 'Disclosures'?'active':''"  class="px-5">Disclosures</span>
+        <span *ngIf="currentSelected === 'Disclosures'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+
+      </div>
+    </nav>
+  </div>
+  <div class="row mt-1">
+    <div class="col-10 mt-1">
+      <app-elastic [options]="coiElastic" style="width: 400px" [placeHolder]="'Entity Name, Country etc.'"
+        (selectedResult)="redirectToEntity($event)"></app-elastic>
     </div>
-    <div (click)="currentSelected = 'Institutional'" class="border-end navigation-icons px-3 py-1" role="button">
-      <span [class.active]="currentSelected === 'Institutional'?'active':''">Institutional</span>
+    <div class="col-2 mt-1 justify-content-end d-flex px-4">
+      <button class="btn btn-primary fs-13 d-flex" id="advanced-search"
+        (click)="isViewAdvanceSearch=!isViewAdvanceSearch"><mat-icon class="add-icon">tune</mat-icon> Advanced Search</button>
     </div>
-    <div (click)="currentSelected = 'Other Entities'" class="border-end navigation-icons px-3 py-1" role="button">
-      <span [class.active]="currentSelected === 'Other Entities'?'active':''">Other Entities</span>
+  </div>
+  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-4">
+    <div class="row m-2">
+      <div class="col-12 d-flex">
+        <div class="col-3 d-grid ml-3">
+          <label class="fw-bold fs-14">Person Name</label>
+          <input type="text" class="form-control text-secondary fs-13" placeholder="Person Name">
+        </div>
+        <div class="col-3 d-grid ml-3">
+          <label class="fw-bold fs-14">Department</label>
+          <input type="text" class="form-control text-secondary fs-13" placeholder="Department">
+        </div>
+        <div class="col-3 d-grid ml-3">
+          <label class="fw-bold fs-14">Title</label>
+          <input type="text" class="form-control text-secondary fs-13" placeholder="Title">
+
+        </div>
+        <div class="col-3 d-grid ml-3">
+          <label class="fw-bold fs-14">Start Date of Involvement</label>
+          <span class="dateField">
+            <input matInput [matDatepicker]="startDate" id="start-date-involvement" (click)="startDate.open()"
+            class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy">
+            <i (click)="startDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
+            <mat-datepicker #startDate>
+            </mat-datepicker>
+          </span>
+        </div>
+      </div>
+      <div class="col-12 d-flex mt-3">
+        <div class="col-3 d-grid">
+          <label class="fw-bold fs-14">End Date of Involvement</label>
+         <span class="dateField">
+          <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
+            class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy">
+            <i (click)="endDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
+          <mat-datepicker #endDate>
+          </mat-datepicker>
+        </span>
+      </div>
+        <div class="col-3 d-grid">
+          <label class="fw-bold fs-14">Status</label>
+          <select class="form-select text-secondary fw-medium fs-13">
+            <option value="">--Select Status--</option>
+            <option value="1">Active</option>
+            <option value="2">Inactive</option>
+          </select>
+        </div>
+        <div class="col-6 d-flex justify-content-end align-items-end position">
+          <button class="btn btn-outline-secondary  fs-13 py-2 px-4 mr-10" id="btn-clear">Clear</button>
+          <button class="btn btn-primary fs-13">Search</button>
+        </div>
+      </div>
     </div>
-    <div (click)="currentSelected = 'Disclosures'" class="navigation-icons px-3 py-1" role="button">
-      <span [class.active]="currentSelected === 'Disclosures'?'active':''">Disclosures</span>
-    </div>
-  </nav>
-</div>
-<table class="table tableSkin mt-3">
-  <thead class="border bg-light">
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Department</th>
-      <th scope="col">Title</th>
-      <th scope="col">Start Date of Involvement</th>
-      <th scope="col">End Date of Involvement</th>
-      <th scope="col">Relationship Status</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody class="bg-white">
-    <tr class="border" *ngFor="let entityListData of entityDetails;let i=index">
-      <td class="text-primary"><u>{{entityListData?.name}}</u></td>
-      <td>{{entityListData?.department}}</td>
-      <td>{{entityListData?.title}}</td>
-      <td>{{entityListData?.involvementStartDate}}</td>
-      <td>{{entityListData?.involvementStartDate}}</td>
-      <td><span [ngClass]="entityListData.status ==='A'?'status-active-pill':'status-inactive-pill'">
-       {{entityListData?.status === 'A'?'Active':'Inactive'}}
-      </span>
-      </td>
-      <td>
-        <button style="padding: 3px 18px;font-size: 13px; " class="btn btn-outline-secondary"
-          (click)="isViewEntityDetails =!isViewEntityDetails;viewDetails(isViewEntityDetails)"><span><i
-              class="fa fa-eye" aria-hidden="true"></i></span> View</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  </div>
+
+  <table class="table tableSkin mt-1">
+    <thead class="border bg-light">
+      <tr>
+        <th class="text-secondary fs-14" scope="col">Name</th>
+        <th class="text-secondary fs-14" scope="col">Department</th>
+        <th class="text-secondary fs-14" scope="col">Title</th>
+        <th class="text-secondary fs-14" scope="col">Start Date of Involvement</th>
+        <th class="text-secondary fs-14" scope="col">End Date of Involvement</th>
+        <th class="text-secondary fs-14" scope="col">Relationship Status</th>
+        <th class="text-secondary fs-14" scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white">
+      <tr class="border" *ngFor="let entityListData of entityDetails;let i=index">
+        <td class="fs-13 text-primary"><u>{{entityListData?.name}}</u></td>
+        <td class="fs-13 text-secondary">{{entityListData?.department}}</td>
+        <td class="fs-13 text-secondary">{{entityListData?.title}}</td>
+        <td class="fs-13 text-secondary">{{entityListData?.involvementStartDate}}</td>
+        <td class="fs-13 text-secondary">{{entityListData?.involvementStartDate}}</td>
+        <td class="fs-13 text-secondary"><span [ngClass]="entityListData.status ==='A'?'status-active-pill':'status-inactive-pill'">
+            {{entityListData?.status === 'A'?'Active':'Inactive'}}
+          </span>
+        </td>
+        <td>
+          <button  class="btn btn-outline-secondary fs-13"
+            (click)="isViewEntityDetails =!isViewEntityDetails;viewDetails(isViewEntityDetails)"><span><i
+                class="fa fa-eye" aria-hidden="true"></i></span> View</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

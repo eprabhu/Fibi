@@ -13,19 +13,19 @@
 .btn-position {
   position: relative;
   bottom: 5px;
-  left: 5px;
 }
 
 .border-nav {
-  width: 26rem;
+  width: 26.3rem;
   border-radius: 1.5rem 1.5rem 0px 0px;
   position: relative;
   top: 5px;
 }
-.row{
+
+.row {
   border: 1px solid rgb(218, 213, 213);
   margin: 10px;
-  background-color:#EEEEEE;
+  background-color: #EEEEEE;
   padding: 5px;
   padding-top: 9px;
 }
@@ -34,16 +34,18 @@
   z-index: 10612 !important;
   background: #00000066;
 }
+
 // #noData{
 //   height: 13rem;
 // }
 // .no-data-icon-outer{
 
 // }
-.nav-width{
+.nav-width {
   width: 97.7%;
   position: relative;
   left: 1.4rem;
+  border-radius: 0.5rem;
 }
 
 .bg-active {
@@ -56,5 +58,31 @@
 
 .right-curve {
   border-radius: 0 1.5rem 0px 0px;
-  padding-right: 2.9rem !important;
+  padding-right: 2rem !important;
+}
+
+.r-title {
+  display: inline-block;
+  text-transform: lowercase;
+}
+
+.r-title::first-letter {
+  text-transform: uppercase;
+}
+
+.navigation-title {
+  .active {
+    // border-bottom: 2px solid #007DEC;
+    color: #007DEC;
+    margin-bottom: -0.2rem !important;
+    font-weight: bold;
+    position: relative;
+    bottom: 5px;
+  }
+}
+
+.nav-bar {
+  border-bottom: 2px solid #007DEC;
+  position: relative;
+  bottom: -6px;
 }

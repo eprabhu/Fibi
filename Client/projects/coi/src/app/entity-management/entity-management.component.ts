@@ -61,7 +61,7 @@ export class EntityManagementComponent implements OnInit {
     //     this._entityManagementService.coiRequestObject.advancedSearch === 'L'
     //         ? null : this._entityManagementService.coiRequestObject.property15;
   }
-  redirectToDisclosure(coi: any) {
+  redirectToEntity(coi: any) {
     this._router.navigate(['/coi/entity-management/entity-list'], { queryParams: { entityManageId: coi.id } });
 }
 
