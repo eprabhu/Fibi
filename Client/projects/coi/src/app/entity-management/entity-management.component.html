@@ -2,7 +2,7 @@
   <div *ngIf="!viewDetails" class="row">
     <div class="col-12 d-flex">
       <div class="col-8">
-        <ul class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
+        <ul class="header-navigation-links d-flex align-items-center m-0 fs-13 cursor-pointer p-0 text-secondary">
           <li class="mr-2 cursor-pointer" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}" role="presentation"
             (click)="entityTabName('ALL_ENTITIES')">All Entities
             <span *ngIf="activeTabName === 'ALL_ENTITIES'"
@@ -21,8 +21,8 @@
           </li>
         </ul>
       </div>
-      <div class="col-4 justify-content-end d-flex">
-        <button class="btn btn-primary d-flex" id="add-new-entity"><mat-icon class="add-icon">add</mat-icon> Add New
+      <div class="col-4 justify-content-end d-flex ">
+        <button class="btn btn-primary d-flex fs-13" id="add-new-entity"><mat-icon class="add-icon">add</mat-icon> Add New
           Entity</button>
       </div>
     </div>
@@ -30,36 +30,36 @@
   <!-- <app-view-entity-details  *ngIf="viewDetails" (hideEntityDetails)="hideEntityDetails($event)"></app-view-entity-details> -->
   <div class="row mt-5">
     <div class="col-10 mt-1">
-      <app-elastic [options]="coiElastic" style="width: 400px" [placeHolder]="'Person Name, Data, etc.'"
-        (selectedResult)="redirectToDisclosure($event)"></app-elastic>
+      <app-elastic [options]="coiElastic" style="width: 400px" [placeHolder]="'Entity Name, Country etc.'"
+        (selectedResult)="redirectToEntity($event)"></app-elastic>
     </div>
     <div class="col-2 mt-1 justify-content-end d-flex">
-      <button class="btn btn-primary d-flex" id="advanced-search"
-        (click)="isViewAdvanceSearch=!isViewAdvanceSearch"><mat-icon>tune</mat-icon> Advanced Search</button>
+      <button class="btn btn-primary fs-13 d-flex" id="advanced-search"
+        (click)="isViewAdvanceSearch=!isViewAdvanceSearch"><mat-icon class="add-icon">tune</mat-icon> Advanced Search</button>
     </div>
   </div>
   <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-4">
     <div class="row m-2">
       <div class="col-12 d-flex">
         <div class="col-3 d-grid ml-3">
-          <label class="fw-bold">Entity Name</label>
-          <input type="text" class="form-control text-secondary" placeholder="Type here for the entity name">
+          <label class="fw-bold fs-14">Entity Name</label>
+          <input type="text" class="form-control text-secondary fs-13" placeholder="Type here for the entity name">
         </div>
         <div class="col-3 d-grid ml-3">
-          <label class="fw-bold">Country</label>
-          <input type="text" class="form-control text-secondary" placeholder="Type here for the country">
+          <label class="fw-bold fs-14">Country</label>
+          <input type="text" class="form-control text-secondary fs-13" placeholder="Type here for the country">
         </div>
         <div class="col-3 d-grid ml-3">
-          <label class="fw-bold">Status</label>
-          <select class="form-select text-secondary fw-medium fs-4">
+          <label class="fw-bold fs-14">Status</label>
+          <select class="form-select text-secondary fw-medium fs-13">
             <option value="">--Select--</option>
             <option value="1">Active</option>
             <option value="2">Inactive</option>
           </select>
         </div>
         <div class="col-3 d-grid ml-3">
-          <label class="fw-bold">Entity Type</label>
-          <select class="form-select text-secondary fw-medium fs-4">
+          <label class="fw-bold fs-14">Entity Type</label>
+          <select class="form-select text-secondary fw-medium fs-13">
             <option value="">--Select--</option>
             <option value="1">Publicly owned</option>
             <option value="2">Private</option>
@@ -68,11 +68,11 @@
           </select>
         </div>
       </div>
-      <div class="col-12 d-flex">
+      <div class="col-12 d-flex mt-3">
         <div class="col-3 d-grid">
-          <label class="fw-bold">Has SFI</label>
+          <label class="fw-bold fs-14">Has SFI</label>
           <div class="activate-btn align-items-center d-flex pt-1">
-            <span class="pt-1">
+            <span class="pt-1 fs-13">
               <a *ngIf="isHasSfiOn" class="pl-2">
                 <label class="switch" (click)="isHasSfiOn = !isHasSfiOn">
                   <input type="checkbox" checked>
@@ -89,9 +89,9 @@
           </div>
         </div>
         <div class="col-3 d-grid">
-          <label class="fw-bold">Has Disclosure</label>
+          <label class="fw-bold fs-14">Has Disclosure</label>
           <div class="activate-btn align-items-center d-flex pt-1">
-            <span class="pt-1">
+            <span class="pt-1 fs-13">
               <a *ngIf="isHasDisclosureOn" class="pl-2">
                 <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn">
                   <input type="checkbox" checked>
@@ -108,8 +108,8 @@
           </div>
         </div>
         <div class="col-3 d-grid">
-          <label class="fw-bold">Risk Level</label>
-          <select class="form-select text-secondary fw-medium fs-4">
+          <label class="fw-bold fs-14">Risk Level</label>
+          <select class="form-select text-secondary fw-medium fs-13">
             <option value="">--Select--</option>
             <option value="1">High</option>
             <option value="2">Medium</option>
@@ -118,7 +118,7 @@
         </div>
         <div class="col-2 d-flex justify-content-end align-items-end position">
           <button class="btn btn-outline-secondary  fs-13 py-2 px-4" id="btn-clear">Clear</button>
-          <button class="btn btn-primary">Search</button>
+          <button class="btn btn-primary fs-13">Search</button>
         </div>
       </div>
     </div>

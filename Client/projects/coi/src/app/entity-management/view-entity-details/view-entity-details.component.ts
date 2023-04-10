@@ -11,7 +11,7 @@ import { EntityManagementService } from '../entity-management.service';
 })
 export class ViewEntityDetailsComponent implements OnInit {
 
-  entityDetails = {};
+  entityDetails:any = {};
   constructor(private _router:Router,private _route:ActivatedRoute,private _entityManagementService:EntityManagementService) { }
 
   ngOnInit() {
@@ -32,7 +32,8 @@ export class ViewEntityDetailsComponent implements OnInit {
 
   getEntityDetails(entityId){
     this._entityManagementService.getEntityDetails(entityId).subscribe((res:any)=>{
-      this.entityDetails = res;
+      this.entityDetails = res.coiEntity;
+      // debugger
     })
   }
 }

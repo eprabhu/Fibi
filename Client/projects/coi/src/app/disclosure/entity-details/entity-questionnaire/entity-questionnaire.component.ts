@@ -42,7 +42,7 @@ export class EntityQuestionnaireComponent implements OnInit {
 
   ngOnInit() {
     this.getDataFromService();
-    this.configuration.enableViewMode = true;
+    this.configuration.enableViewMode = false;
   }
 
   getDataFromService() {

@@ -1,9 +1,10 @@
-  <div class="card mt-4" [@slowSlideInOut]>
+  <div *ngIf="entityDetails" class="card mt-4" [@slowSlideInOut]>
     <div class="card-header">
       <div class="row d-flex">
         <div class="col-6 d-flex">
-          <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2">Active</span>
-          <h1 class="m-1 fw-bold">  Alexion Pharmaceuticals</h1>
+          <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2" [ngClass]="entityDetails.isActive ?'':'inactive'">
+            {{entityDetails.isActive?'Active':'Inactive'}}</span>
+          <h1 class="m-1 fw-bold fs-18">{{entityDetails?.coiEntityName}}</h1>
         </div>
         <div class="col-6 align-items-center justify-content-end action-bar mt-1 d-flex">
           <button class="m-1 new-line-property text-secondary fs-14-nav shadow action-btn">
@@ -20,7 +21,7 @@
             History</button>
           <span class="back-ward" (click)="backToList()">
            <i class="fa fa-reply"></i>
-            <label class="fw-medium">Back</label>
+            <label class="fw-medium fs-13">Back</label>
           </span>
         </div>
       </div>
@@ -29,46 +30,53 @@
       <div class="row d-flex">
         <div class="col-12 d-flex">
           <div class="col-2 d-grid">
-            <span class="fw-bold">Entity Type</span>
-            <label class="text-secondary">Publicly Owned for Profit</label>
+            <span class="fw-bold fs-14">Entity Type</span>
+            <label class="text-secondary fs-13">{{entityDetails?.entityType?.description}}</label>
           </div>
           <div class="col-2 d-grid">
-            <span class="fw-bold">Country</span>
-            <label class="text-secondary">United States of America</label>
+            <span class="fw-bold fs-14">Country</span>
+            <label class="text-secondary fs-13">{{entityDetails?.country?.countryName}}</label>
           </div>
           <div class="col-2 d-grid">
-            <span class="fw-bold">City</span>
-            <label class="text-secondary">Boston</label>
+            <span class="fw-bold fs-14">City</span>
+            <label class="text-secondary fs-13">{{entityDetails?.state !==null?entityDetails?.state:'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <span class="fw-bold">Website</span>
-            <label class="text-secondary">www.alexionpharma.com</label>
+            <span class="fw-bold fs-14">Website</span>
+            <label class="text-secondary fs-13">{{entityDetails?.webUrl !==null?entityDetails?.webUrl:'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <span class="fw-bold">Email Address </span>
-            <label class="text-secondary">contact@alexionpharma.com</label>
+            <span class="fw-bold fs-14">Email Address </span>
+            <label class="text-secondary fs-13">{{entityDetails?.emailAddress!==null? entityDetails?.emailAddress:'No Data'}}</label>
           </div>
           <div class="col-1 d-grid">
-            <span class="fw-bold">Phone Number</span>
-            <label class="text-secondary">1-475-230-2596</label>
+            <span class="fw-bold fs-14">Phone Number</span>
+            <label class="text-secondary fs-13">{{entityDetails?.phone !==null ? entityDetails?.phone:'No Data'}}</label>
           </div>
         </div>
-        <div class="col-12 d-flex">
+        <div class="col-12 d-flex mt-3">
           <div class="col-6 d-grid">
-            <span class="fw-bold">Address</span>
-            <label class="text-secondary">ALEXION GLOBALHEADQUARTERES121 Seaport Blvd, Boston,</label>
+            <span class="fw-bold fs-14">Address</span>
+            <label class="text-secondary fs-13">{{entityDetails?.address !==null ? entityDetails?.address:'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <span class="fw-bold">Risk Level</span>
-            <label class="text-secondary"><mat-icon class="invalid material-icons-round">warning</mat-icon>High</label>
+            <span class="fw-bold fs-14">Risk Level</span>
+            <label class="text-secondary fs-13"><mat-icon *ngIf="entityDetails?.entityRiskCategoryCode?.description ==='High'"
+               class="invalid material-icons-round">warning</mat-icon>{{entityDetails?.entityRiskCategoryCode !==null?
+                entityDetails?.entityRiskCategoryCode?.description:'No data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <span class="fw-bold">Verified By</span>
-            <label class="text-secondary">Will Smith on 02/12/2022</label>
+            <span class="fw-bold fs-14">Verified By</span>
+            <label *ngIf="entityDetails?.approvedUser;else noData" class="text-secondary fs-13">
+              <mat-icon class="mat-done">done</mat-icon>
+              {{entityDetails?.approvedUser}} on {{entityDetails?.approvedTimestamp|dateFormatterWithTimeZone:'long'}}</label>
+            <ng-template #noData>
+              <label class="text-secondary fs-13">No Data</label>
+            </ng-template>
           </div>
           <div class="col-2 d-grid">
-            <span class="fw-bold">Last Updated by</span>
-            <label class="text-secondary">Erick MS,02/16/2023 2:23 AM</label>
+            <span class="fw-bold fs-14">Last Updated by</span>
+            <label class="text-secondary fs-13">{{entityDetails?.updateUser}} on {{entityDetails?.updateTimestamp |dateFormatterWithTimeZone:'long'}}</label>
           </div>
         </div>
       </div>

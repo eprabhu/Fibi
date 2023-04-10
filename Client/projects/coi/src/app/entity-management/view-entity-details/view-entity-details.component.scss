@@ -71,12 +71,18 @@
 
 h1{
     position: relative;
-    bottom: 9px;
-    right: 12px;
+    bottom: .5rem;
+    right: 2rem;
 }
 .fw-medium {
   position: relative;
   bottom: 1px;
   color: #7c868f;
   left: 6px;
+}
+.inactive {
+  background-color :#5f6462
+}
+.mat-done{
+  color: #6bc293;
 }

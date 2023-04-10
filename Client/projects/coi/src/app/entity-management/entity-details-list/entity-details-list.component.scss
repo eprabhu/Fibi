@@ -2,16 +2,19 @@
   .active {
     border-bottom: 2px solid #007DEC;
     color: #007DEC;
+    position: relative;
+    bottom: 0.5rem;
   }
 }
 
 .user-dashboard-nav {
   min-height: 42px;
+  background-color: #ececec !important
 }
 .status-active-pill {
   background-color: #4CB57D;
   color: white;
-  padding: 3px 12px;
+  padding: 3px 17px;
   border-radius: 15px;
 
 }
@@ -23,11 +26,33 @@
 }
 .active-color {
   color: #007DEC;
-  position: absolute;
-  bottom: -24px;
-  right: calc(50% - 12px);
+  position: relative;
+  right: calc(50% - 0px);
+  bottom: -2rem;
 }
 
 .active {
   background-color: #d4e6f7;
+  padding: 5px
+}
+
+.form-control,.form-select {
+  width: 90%;
+}
+
+.insidePicker{
+  position: relative;
+  right: 3rem !important;
+}
+
+#btn-clear {
+  width: 7rem;
+  height: 3.5rem;
+}
+.position{
+  position: relative;
+  right: 3.5rem;
+}
+#advanced-search{
+  width: 15.4rem;
 }

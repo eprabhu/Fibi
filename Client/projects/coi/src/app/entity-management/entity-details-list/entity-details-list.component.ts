@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService } from '../entity-management.service';
+import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
   selector: 'app-entity-details-list',
   templateUrl: './entity-details-list.component.html',
-  styleUrls: ['./entity-details-list.component.scss']
+  styleUrls: ['./entity-details-list.component.scss'],
+  animations: [slowSlideInOut]
 })
 export class EntityDetailsListComponent implements OnInit {
 
@@ -22,11 +24,15 @@ export class EntityDetailsListComponent implements OnInit {
   isviewDetails :true;
   currentSelected = 'Person';
   entityManageId = null;
+  coiElastic = null;
+  isViewAdvanceSearch = false;
 
   constructor(private _router:Router,private _route:ActivatedRoute,private _entityManagementService:EntityManagementService) { }
 
 
   ngOnInit() {
+    console.log(this.currentSelected);
+
     this.entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
   }
 
@@ -35,6 +41,10 @@ export class EntityDetailsListComponent implements OnInit {
   }
 
   viewDetails(data){
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' } })
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' } });
+  }
+
+  redirectToEntity(event){
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' } });
   }
 }

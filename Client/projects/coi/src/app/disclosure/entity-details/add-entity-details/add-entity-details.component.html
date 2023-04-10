@@ -5,10 +5,11 @@
         <div class="col-6 d-flex">
           <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"
             [ngClass]="!entityDetails?.isActive?'inactive':''">{{!entityDetails?.isActive?'Inactive':'Active'}}</span>
-          <h1 class="m-1 fw-bold"> {{entityDetails?.coiEntity?.coiEntityName}}</h1>
+          <h1 class="m-1 fw-bold fs-18"> {{entityDetails?.coiEntity?.coiEntityName}}</h1>
         </div>
         <div class="col-6 align-items-center justify-content-end action-bar mt-1 d-flex">
           <button class="m-1 new-line-property text-secondary fs-14-nav shadow action-btn">
+            <!-- <i class="fa fa-pencil icon-size"></i> -->
             <mat-icon class="justify-content-center align-items-center fs-4 icon-size">
               mode
             </mat-icon>
@@ -21,9 +22,8 @@
             <mat-icon class="justify-content-center align-items-center fs-4 icon-size">history </mat-icon>
             History</button>
           <span class="back-ward" (click)="navigateBack()">
-            <i class="fa fa-reply justify-content-center align-items-center fs-3"></i>
-            <!-- <mat-icon class="justify-content-center align-items-center fs-3"> reply</mat-icon> -->
-            <label class="fw-medium">Back</label>
+            <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
+            <label class="fw-medium fs-13">Back</label>
           </span>
         </div>
       </div>
@@ -32,28 +32,28 @@
       <div class="row d-flex">
         <div class="col-12 d-flex">
           <div class="col-2 d-grid">
-            <strong>Entity Type</strong>
-            <label class="text-secondary">{{entityDetails?.coiEntity?.entityType?.description !==null? entityDetails?.coiEntity?.entityType?.description: 'No Data'}}</label>
+            <strong class="fs-14">Entity Type</strong>
+            <label class="text-secondary fs-13">{{entityDetails?.coiEntity?.entityType?.description !==null? entityDetails?.coiEntity?.entityType?.description: 'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <strong>Country</strong>
-            <label class="text-secondary">{{entityDetails?.coiEntity?.country?.countryName !== null?entityDetails?.coiEntity?.country?.countryName:'No Data'}}</label>
+            <strong class="fs-14">Country</strong>
+            <label class="text-secondary fs-13">{{entityDetails?.coiEntity?.country?.countryName !== null?entityDetails?.coiEntity?.country?.countryName:'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <strong>City</strong>
-            <label class="text-secondary">{{entityDetails?.coiEntity?.state !== null? entityDetails?.coiEntity?.state:'No Data'}}</label>
+            <strong class="fs-14">City</strong>
+            <label class="text-secondary fs-13">{{entityDetails?.coiEntity?.state !== null? entityDetails?.coiEntity?.state:'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <strong>Website</strong>
-            <label class="text-secondary">{{entityDetails?.coiEntity?.webUrl !==null? entityDetails?.coiEntity?.webUrl: 'No Data'}}</label>
+            <strong class="fs-14">Website</strong>
+            <label class="text-secondary fs-13">{{entityDetails?.coiEntity?.webUrl !==null? entityDetails?.coiEntity?.webUrl: 'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <strong>Email Address </strong>
-            <label class="text-secondary">{{entityDetails?.coiEntity?.emailAddress!==null ? entityDetails?.coiEntity?.emailAddress:'No Data'}}</label>
+            <strong class="fs-14">Email Address </strong>
+            <label class="text-secondary fs-13">{{entityDetails?.coiEntity?.emailAddress!==null ? entityDetails?.coiEntity?.emailAddress:'No Data'}}</label>
           </div>
           <div class="col-1 d-grid">
-            <strong>Phone Number</strong>
-            <label class="text-secondary">{{'1-475-230-2596'=='1-475-230-2596'?'1-475-230-2597':'No Data' }}</label>
+            <strong class="fs-14">Phone Number</strong>
+            <label class="text-secondary fs-13">{{'1-475-230-2596'=='1-475-230-2596'?'1-475-230-2597':'No Data' }}</label>
           </div>
           <div *ngIf="!isExpanded"
                 class="col-8 d-flex toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm more-position">
@@ -62,12 +62,12 @@
         </div>
         <div *ngIf="isExpanded" class="col-12 d-flex">
           <div class="col-8 d-grid">
-            <strong>Address</strong>
-            <label class="text-secondary">{{entityDetails?.coiEntity?.addressLine1!== null ? entityDetails?.coiEntity?.addressLine1:'No Data'}}</label>
+            <strong class="fs-14">Address</strong>
+            <label class="text-secondary fs-13">{{entityDetails?.coiEntity?.addressLine1!== null ? entityDetails?.coiEntity?.addressLine1:'No Data'}}</label>
           </div>
           <div class="col-4 mt-3">
-            <label class="text-secondary fw-bold mr-10">Last Updated by :</label>
-            <label class="text-secondary ">{{entityDetails?.updateUser}} on {{entityDetails?.updateTimestamp | dateFormatterWithTimeZone:
+            <label class="text-secondary fw-bold mr-10 fs-14">Last Updated by :</label>
+            <label class="text-secondary fs-13">{{entityDetails?.updateUser}} on {{entityDetails?.updateTimestamp | dateFormatterWithTimeZone:
               'long'}}</label>
           </div>
         </div>
@@ -78,42 +78,42 @@
       <div class="row">
         <div class="col-12 d-flex">
           <div class="col-2 d-grid">
-            <strong>Sponsors Research</strong>
-            <label class="text-secondary">Yes</label>
+            <strong class="fs-14">Sponsors Research</strong>
+            <label class="text-secondary fs-13">Yes</label>
           </div>
           <div class="col-2 d-grid">
-            <strong>Start Date Of Involvement</strong>
-            <label class="text-secondary">{{entityDetails?.involvementStartDate | dateFormatterWithTimeZone}}</label>
+            <strong class="fs-14">Start Date Of Involvement</strong>
+            <label class="text-secondary fs-13">{{entityDetails?.involvementStartDate | dateFormatterWithTimeZone}}</label>
           </div>
           <div class="col-4 d-grid">
-            <strong>Relationship Type</strong>
-            <label class="text-secondary">Financial</label>
+            <strong class="fs-14">Relationship Type</strong>
+            <label class="text-secondary fs-13">Financial</label>
           </div>
           <div class="col-2 d-grid">
-            <strong>Relationship With</strong>
-            <label class="text-secondary">Self</label>
+            <strong class="fs-14">Relationship With</strong>
+            <label class="text-secondary fs-13">Self</label>
           </div>
         </div>
         <div class="col">
           <div class="col-12 d-grid mt-3">
-            <strong>Relationship With Entity</strong>
-            <label class="text-secondary">Serving on Advisory Board</label>
+            <strong class="fs-14">Relationship With Entity</strong>
+            <label class="text-secondary fs-13">Serving on Advisory Board</label>
           </div>
           <div class="col-12 d-grid mt-3">
-            <strong>Principal Business Area Of Entity</strong>
-            <label class="text-secondary">Serving on Advisory Board</label>
+            <strong class="fs-14">Principal Business Area Of Entity</strong>
+            <label class="text-secondary fs-13">Serving on Advisory Board</label>
           </div>
           <div class="col-12 d-grid mt-3">
-            <strong>Relationship With Entity</strong>
-            <label class="text-secondary">Alexion is focused on developing and delivering life-transforming therapies for patients with
+            <strong class="fs-14">Relationship With Entity</strong>
+            <label class="text-secondary fs-13">Alexion is focused on developing and delivering life-transforming therapies for patients with
               <!-- <a href="">Read More</a> -->
             </label>
           </div>
           <div class="row">
             <div class="col-12 d-flex">
               <div class="col-4 d-grid mt-3">
-                <strong>Relationship Of Entity To Your University Responsibilities</strong>
-                <label class="text-secondary">Entity sponsoring Funded Research</label>
+                <strong class="fs-14">Relationship Of Entity To Your University Responsibilities</strong>
+                <label class="text-secondary fs-13">Entity sponsoring Funded Research</label>
               </div>
               <div *ngIf="isExpanded" class="col-8 d-flex toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm less-position">
                 <mat-icon (click)="isExpanded=!isExpanded">expand_less</mat-icon>

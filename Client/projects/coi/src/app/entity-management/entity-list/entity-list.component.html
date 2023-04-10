@@ -1,6 +1,6 @@
 <div *ngIf="entityList">
   <table class="table tableSkin mt-3">
-    <thead class="border bg-light">
+    <thead class="border bg-light fs-14">
       <tr class="from-row">
         <th class="col-1"></th>
         <th class="col-2">Name</th>
@@ -11,26 +11,26 @@
         <th class="col-2">Actions</th>
       </tr>
     </thead>
-    <tbody class="bg-white">
+    <tbody class="bg-white fs-13">
       <tr class="border" *ngFor="let entityListData of entityList;let i=index">
         <td><span *ngIf="entityListData?.entityStatus?.entityStatusCode === '2'" class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2">
           {{entityListData?.entityStatus?.description}}
           </span>
         </td>
-        <td>{{entityListData?.coiEntityName}}</td>
-        <td>{{entityListData?.country?.countryName}}</td>
-        <td>{{entityListData?.entityType?.description}}</td>
-        <td><mat-icon *ngIf="entityListData?.entityRiskCategoryCode?.description === 'High'" class="invalid material-icons-round">warning</mat-icon>
+        <td class="text-secondary">{{entityListData?.coiEntityName}}</td>
+        <td class="text-secondary">{{entityListData?.country?.countryName}}</td>
+        <td class="text-secondary">{{entityListData?.entityType?.description}}</td>
+        <td class="text-secondary"><mat-icon *ngIf="entityListData?.entityRiskCategoryCode?.description === 'High'" class="invalid material-icons-round">warning</mat-icon>
           {{entityListData?.entityRiskCategoryCode?.description}}</td>
         <td><span [ngClass]="entityListData?.isActive ?'status-active-pill':'status-inactive-pill'">
          {{entityListData?.isActive?'Active':'Inactive' }}
         </span>
         </td>
         <td>
-          <button class="btn btn-outline-secondary fs-14"
+          <button class="btn btn-outline-secondary fs-13"
             (click)="isViewEntityDetails =!isViewEntityDetails;viewDetails(entityListData)"><span><i
                 class="fa fa-eye" aria-hidden="true"></i></span> View</button>
-          <button class="btn btn-outline-secondary fs-14 m-1"><span><i
+          <button class="btn btn-outline-secondary fs-13 m-1"><span><i
                 class="fa fa-pencil" aria-hidden="true"></i></span> Modify</button>
         </td>
       </tr>

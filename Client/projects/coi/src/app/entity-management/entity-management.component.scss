@@ -114,7 +114,7 @@
     margin-top: 5px;
     display: inline-block;
     font-weight: 700;
-    color: #fff;
+    color: #fff !important;
 
   }
 }
@@ -138,7 +138,7 @@ input:checked+.slider:before {
     position: relative;
     left: 95px;
 }
-#add-new-entity{
+#add-new-entity,#advanced-search{
   width: 15.4rem;
 }
 
@@ -158,4 +158,11 @@ input:checked+.slider:before {
 
 small{
   color: white;
+}
+
+.add-icon{
+  position: relative;
+  bottom: 0rem;
+  font-size: 2rem;
+  right: 0.2rem;
 }
