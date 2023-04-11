@@ -21,14 +21,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "COI_DISCLOSURE_AUDIT_TRAIL")
 @EntityListeners(AuditingEntityListener.class)
-public class CoiDisclosureAuditTrail implements Serializable {
+public class CoiDisclosureOldAuditTrail implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "COI_DISCLOSURE_AUDIT_TRAIL_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer coiDisclosureAuditTrailId;
+	private Integer CoiDisclosureOldAuditTrailId;
 	
 	@Column(name = "DISCLOSURE_ID")
 	private Integer disclosureId;
@@ -54,12 +54,12 @@ public class CoiDisclosureAuditTrail implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
-	public Integer getCoiDisclosureAuditTrailId() {
-		return coiDisclosureAuditTrailId;
+	public Integer getCoiDisclosureOldAuditTrailId() {
+		return CoiDisclosureOldAuditTrailId;
 	}
 
-	public void setCoiDisclosureAuditTrailId(Integer coiDisclosureAuditTrailId) {
-		this.coiDisclosureAuditTrailId = coiDisclosureAuditTrailId;
+	public void setCoiDisclosureOldAuditTrailId(Integer CoiDisclosureOldAuditTrailId) {
+		this.CoiDisclosureOldAuditTrailId = CoiDisclosureOldAuditTrailId;
 	}
 
 	public Integer getDisclosureId() {

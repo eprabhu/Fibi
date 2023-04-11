@@ -125,24 +125,24 @@ public class COIFinancialEntityDto {
 		return coiEntityType;
 	}
 
-	public void setCoiEntityType(String coiEntityType) {
-		this.coiEntityType = coiEntityType;
+	public void setCoiEntityType(String CoiEntityType) {
+		this.coiEntityType = CoiEntityType;
 	}
 
 	public String getCoiEntityCountry() {
 		return coiEntityCountry;
 	}
 
-	public void setCoiEntityCountry(String coiEntityCountry) {
-		this.coiEntityCountry = coiEntityCountry;
+	public void setCoiEntityCountry(String CoiEntityCountry) {
+		this.coiEntityCountry = CoiEntityCountry;
 	}
 
 	public String getCoiEntityEmail() {
 		return coiEntityEmail;
 	}
 
-	public void setCoiEntityEmail(String coiEntityEmail) {
-		this.coiEntityEmail = coiEntityEmail;
+	public void setCoiEntityEmail(String CoiEntityEmail) {
+		this.coiEntityEmail = CoiEntityEmail;
 	}
 
 }

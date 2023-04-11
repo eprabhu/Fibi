@@ -36,7 +36,7 @@ public class CoiConflictHistory implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_CONFLICT_HISTORY_FK1"), name = "DISC_DET_STATUS_CODE", referencedColumnName = "DISC_DET_STATUS_CODE", insertable = false, updatable = false)
-	private CoiDisclosureDetailsStatus coiDisclosureDetailsStatus;
+	private CoiDisclosureOldDetailsStatus coiDisclosureOldDetailsStatus;
 
 	@Column(name = "DISCLOSURE_DETAILS_ID")
 	private Integer disclosureDetailsId;
@@ -71,12 +71,12 @@ public class CoiConflictHistory implements Serializable {
 		this.coiDetStatusCode = coiDetStatusCode;
 	}
 
-	public CoiDisclosureDetailsStatus getCoiDisclosureDetailsStatus() {
-		return coiDisclosureDetailsStatus;
+	public CoiDisclosureOldDetailsStatus getCoiDisclosureOldDetailsStatus() {
+		return coiDisclosureOldDetailsStatus;
 	}
 
-	public void setCoiDisclosureDetailsStatus(CoiDisclosureDetailsStatus coiDisclosureDetailsStatus) {
-		this.coiDisclosureDetailsStatus = coiDisclosureDetailsStatus;
+	public void setCoiDisclosureOldDetailsStatus(CoiDisclosureOldDetailsStatus coiDisclosureOldDetailsStatus) {
+		this.coiDisclosureOldDetailsStatus = coiDisclosureOldDetailsStatus;
 	}
 
 	public Integer getDisclosureDetailsId() {

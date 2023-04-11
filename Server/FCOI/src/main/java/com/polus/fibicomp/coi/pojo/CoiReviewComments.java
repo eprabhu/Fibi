@@ -60,7 +60,7 @@ public class CoiReviewComments implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_REVIEW_COMMENT_FK6"), name = "DISCLOSURE_ID", referencedColumnName = "DISCLOSURE_ID", insertable = false, updatable = false)
-	private CoiDisclosure coiDisclosure;
+	private CoiDisclosureOld coiDisclosureOld;
 	
 	@Column(name = "COMMENTED_BY_PERSON_ID")
 	private String commentedByPersonId;
@@ -93,7 +93,7 @@ public class CoiReviewComments implements Serializable {
 	private COIFinancialEntity coiFinancialEntity;
 	
 	@Transient
-	private CoiDisclosureDetails coiDisclosureDetails;
+	private CoiDisclosureOldDetails coiDisclosureOldDetails;
 	
 	@Transient
 	private List<CoiReviewCommentTag> coiReviewCommentTag;
@@ -226,12 +226,12 @@ public class CoiReviewComments implements Serializable {
 		this.updateUserFullName = updateUserFullName;
 	}
 
-	public CoiDisclosure getCoiDisclosure() {
-		return coiDisclosure;
+	public CoiDisclosureOld getCoiDisclosureOld() {
+		return coiDisclosureOld;
 	}
 
-	public void setCoiDisclosure(CoiDisclosure coiDisclosure) {
-		this.coiDisclosure = coiDisclosure;
+	public void setCoiDisclosureOld(CoiDisclosureOld coiDisclosureOld) {
+		this.coiDisclosureOld = coiDisclosureOld;
 	}
 
 	public COIFinancialEntity getCoiFinancialEntity() {
@@ -242,12 +242,12 @@ public class CoiReviewComments implements Serializable {
 		this.coiFinancialEntity = coiFinancialEntity;
 	}
 
-	public CoiDisclosureDetails getCoiDisclosureDetails() {
-		return coiDisclosureDetails;
+	public CoiDisclosureOldDetails getCoiDisclosureOldDetails() {
+		return coiDisclosureOldDetails;
 	}
 
-	public void setCoiDisclosureDetails(CoiDisclosureDetails coiDisclosureDetails) {
-		this.coiDisclosureDetails = coiDisclosureDetails;
+	public void setCoiDisclosureOldDetails(CoiDisclosureOldDetails coiDisclosureOldDetails) {
+		this.coiDisclosureOldDetails = coiDisclosureOldDetails;
 	}
 
 	public List<CoiReviewCommentTag> getCoiReviewCommentTag() {

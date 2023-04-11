@@ -26,7 +26,7 @@ import com.polus.fibicomp.util.JpaCharBooleanConversion;
 @Entity
 @Table(name = "COI_DISC_DETAILS_COMMENTS")
 @EntityListeners(AuditingEntityListener.class)
-public class CoiDisclosureDetailsComments implements Serializable {
+public class CoiDisclosureOldDetailsComments implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,7 @@ public class CoiDisclosureDetailsComments implements Serializable {
 	@JsonBackReference
 	@OneToOne(cascade = { CascadeType.REFRESH })
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISC_DETAILS_COMMENTS_FK1"), name = "DISCLOSURE_DETAILS_ID", referencedColumnName = "DISCLOSURE_DETAILS_ID")
-	private CoiDisclosureDetails coiDisclosureDetails;
+	private CoiDisclosureOldDetails CoiDisclosureOldDetails;
 
 	@Column(name = "DISCLOSURE_NUMBER")
 	private String disclosureNumber;
@@ -72,12 +72,12 @@ public class CoiDisclosureDetailsComments implements Serializable {
 		this.disclosureDetailsCommentId = disclosureDetailsCommentId;
 	}
 
-	public CoiDisclosureDetails getCoiDisclosureDetails() {
-		return coiDisclosureDetails;
+	public CoiDisclosureOldDetails getCoiDisclosureOldDetails() {
+		return CoiDisclosureOldDetails;
 	}
 
-	public void setCoiDisclosureDetails(CoiDisclosureDetails coiDisclosureDetails) {
-		this.coiDisclosureDetails = coiDisclosureDetails;
+	public void setCoiDisclosureOldDetails(CoiDisclosureOldDetails CoiDisclosureOldDetails) {
+		this.CoiDisclosureOldDetails = CoiDisclosureOldDetails;
 	}
 
 	public String getDisclosureNumber() {

@@ -3,7 +3,6 @@ package com.polus.fibicomp.coi.pojo;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -16,56 +15,65 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "COI_FINANCIAL_ENTITY")
+@Table(name = "PERSON_ENTITY")
 @EntityListeners(AuditingEntityListener.class)
-public class COIFinancialEntity implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@Column(name = "COI_FINANCIAL_ENTITY_ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer coiFinancialEntityId;
-
-	@Column(name = "ENTITY_ID")
-	private Integer coiEntityId;
+public class PersonEntity implements Serializable {
 	
-	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "COI_FINANCIAL_ENTITY_FK1"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
-	private CoiEntity CoiEntity;
-
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@Column(name = "PERSON_ENTITY_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer personEntityId;
+	
 	@Column(name = "PERSON_ID")
 	private String personId;
-
-	@Column(name = "ENTITY_VERSION_NUMBER")
-	private Integer entityVersionNumber;
-
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ENTITY_FK1"), name = "PERSON_ID", referencedColumnName = "PERSON_ID", insertable = false, updatable = false)
+	private Person person;
+	
+	@Column(name = "ENTITY_ID")
+	private Integer entityId;
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ENTITY_FK2"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
+	private CoiEntity CoiEntity;
+	
+	@Column(name = "ENTITY_NUMBER")
+	private Integer entityNumber;
+	
+	@Column(name = "IS_RELATIONSHIP_ACTIVE")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean isRelationshipActive;
+	
+	@Column(name = "VERSION_NUMBER")
+	private Integer versionNumber;
+	
+	@Column(name = "VERSION_STATUS")
+	private String versionStatus;
+	
 	@Column(name = "INVOLVEMENT_START_DATE")
 	private Date involvementStartDate;
 
 	@Column(name = "INVOLVEMENT_END_DATE")
 	private Date involvementEndDate;
-
-	@Column(name = "IS_ACTIVE")
-	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean isActive;
-
+	
 	@Column(name = "STUDENT_INVOLVEMENT")
 	private String studentInvolvement;
 
 	@Column(name = "STAFF_INVOLVEMENT")
 	private String staffInvolvement;
-
+	
 	@Column(name = "INSTITUTE_RESOURCE_INVOLVEMENT")
 	private String instituteResourceInvolvement;
 
@@ -77,35 +85,12 @@ public class COIFinancialEntity implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
-	@CreatedDate
-	@Column(name = "CREATE_TIMESTAMP")
-	private Timestamp createTimestamp;
-
-	@Transient
-	private List<COIFinancialEntityDetails> coiFinancialEntityDetails;
-
-	public Integer getCoiFinancialEntityId() {
-		return coiFinancialEntityId;
+	public Integer getPersonEntityId() {
+		return personEntityId;
 	}
 
-	public void setCoiFinancialEntityId(Integer coiFinancialEntityId) {
-		this.coiFinancialEntityId = coiFinancialEntityId;
-	}
-
-	public Integer getCoiEntityId() {
-		return coiEntityId;
-	}
-
-	public void setCoiEntityId(Integer coiEntityId) {
-		this.coiEntityId = coiEntityId;
-	}
-
-	public CoiEntity getCoiEntity() {
-		return CoiEntity;
-	}
-
-	public void setCoiEntity(CoiEntity CoiEntity) {
-		this.CoiEntity = CoiEntity;
+	public void setPersonEntityId(Integer personEntityId) {
+		this.personEntityId = personEntityId;
 	}
 
 	public String getPersonId() {
@@ -116,20 +101,60 @@ public class COIFinancialEntity implements Serializable {
 		this.personId = personId;
 	}
 
-	public Integer getEntityVersionNumber() {
-		return entityVersionNumber;
+	public Person getPerson() {
+		return person;
 	}
 
-	public void setEntityVersionNumber(Integer entityVersionNumber) {
-		this.entityVersionNumber = entityVersionNumber;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
-	public Boolean getIsActive() {
-		return isActive;
+	public Integer getEntityId() {
+		return entityId;
 	}
 
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
+	public void setEntityId(Integer entityId) {
+		this.entityId = entityId;
+	}
+
+	public CoiEntity getCoiEntity() {
+		return CoiEntity;
+	}
+
+	public void setCoiEntity(CoiEntity CoiEntity) {
+		this.CoiEntity = CoiEntity;
+	}
+
+	public Integer getEntityNumber() {
+		return entityNumber;
+	}
+
+	public void setEntityNumber(Integer entityNumber) {
+		this.entityNumber = entityNumber;
+	}
+
+	public Boolean getIsRelationshipActive() {
+		return isRelationshipActive;
+	}
+
+	public void setIsRelationshipActive(Boolean isRelationshipActive) {
+		this.isRelationshipActive = isRelationshipActive;
+	}
+
+	public Integer getVersionNumber() {
+		return versionNumber;
+	}
+
+	public void setVersionNumber(Integer versionNumber) {
+		this.versionNumber = versionNumber;
+	}
+
+	public String getVersionStatus() {
+		return versionStatus;
+	}
+
+	public void setVersionStatus(String versionStatus) {
+		this.versionStatus = versionStatus;
 	}
 
 	public Date getInvolvementStartDate() {
@@ -186,22 +211,6 @@ public class COIFinancialEntity implements Serializable {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
-	}
-
-	public List<COIFinancialEntityDetails> getCoiFinancialEntityDetails() {
-		return coiFinancialEntityDetails;
-	}
-
-	public void setCoiFinancialEntityDetails(List<COIFinancialEntityDetails> coiFinancialEntityDetails) {
-		this.coiFinancialEntityDetails = coiFinancialEntityDetails;
-	}
-
-	public Timestamp getCreateTimestamp() {
-		return createTimestamp;
-	}
-
-	public void setCreateTimestamp(Timestamp createTimestamp) {
-		this.createTimestamp = createTimestamp;
 	}
 
 }

@@ -14,10 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.polus.fibicomp.coi.pojo.COIEntity;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureDetails;
+import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
@@ -59,7 +59,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping(value = "/searchEntity")
-	public List<COIEntity> searchEnitiy(@RequestBody ConflictOfInterestVO vo) {
+	public List<CoiEntity> searchEnitiy(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for searchEntity");
 		return conflictOfInterestService.searchEnitiy(vo.getSearchString());
 	}
@@ -91,7 +91,7 @@ public class ConflictOfInterestController {
 	@PatchMapping("/certifyDisclosure")
 	public ResponseEntity<Object> certifyDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for certifyDisclosure");
-		return conflictOfInterestService.certifyDisclosure(vo.getCoiDisclosure());
+		return conflictOfInterestService.certifyDisclosure(vo.getCoiDisclosureOld());
 	}
 
 	@PostMapping("/getEntityProjectRelations")
@@ -211,9 +211,9 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/updateProjectConflictStatus")
-	public CoiDisclosureDetails updateProjectConflictStatus(@RequestBody ConflictOfInterestVO vo) {
+	public CoiDisclosureOldDetails updateProjectConflictStatus(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for updateProjectConflictStatus");
-		return conflictOfInterestService.updateProjectConflictStatus(vo.getCoiDisclosureDetail());
+		return conflictOfInterestService.updateProjectConflictStatus(vo.getCoiDisclosureOldDetail());
 	}
 	
 	@GetMapping("/loadProjectConflictHistory/{disclosureDetailsId}")
@@ -243,10 +243,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.checkSFICompleted(vo);
 	}
 	
-	@PostMapping(value = "/saveOrUpdateCOIEntity")
-	public ResponseEntity<Object> saveOrUpdateCOIEntity(@RequestBody ConflictOfInterestVO vo) {
+	@PostMapping(value = "/saveOrUpdateCoiEntity")
+	public ResponseEntity<Object> saveOrUpdateCoiEntity(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for createEntity");
-		return conflictOfInterestService.saveOrUpdateCOIEntity(vo);
+		return conflictOfInterestService.saveOrUpdateCoiEntity(vo);
 	}
 	
 	@GetMapping("/getEntityDetails/{coiEntityId}")

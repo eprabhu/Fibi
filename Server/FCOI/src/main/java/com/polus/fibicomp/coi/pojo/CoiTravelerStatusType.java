@@ -1,5 +1,6 @@
 package com.polus.fibicomp.coi.pojo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -11,14 +12,14 @@ import javax.persistence.Table;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "ENTITY_RISK_CATEGORY")
-public class EntityRiskCategoryCode {
+@Table(name = "COI_TRAVELER_STATUS_TYPE")
+public class CoiTravelerStatusType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "RISK_CATEGORY_CODE")
-	private String riskCategoryCode;
+	@Column(name = "TRAVEL_STATUS_CODE")
+	private String travelStatusCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -33,12 +34,12 @@ public class EntityRiskCategoryCode {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	public String getRiskCategoryCode() {
-		return riskCategoryCode;
+	public String getTravelStatusCode() {
+		return travelStatusCode;
 	}
 
-	public void setRiskCategoryCode(String riskCategoryCode) {
-		this.riskCategoryCode = riskCategoryCode;
+	public void setTravelStatusCode(String travelStatusCode) {
+		this.travelStatusCode = travelStatusCode;
 	}
 
 	public String getDescription() {
@@ -74,4 +75,3 @@ public class EntityRiskCategoryCode {
 	}
 
 }
-
