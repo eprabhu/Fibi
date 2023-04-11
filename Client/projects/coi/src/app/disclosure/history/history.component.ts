@@ -104,5 +104,12 @@ export class HistoryComponent implements OnInit {
       default: return '';
     }
   }
-
+  getBadgeTextColor(code) {
+    switch (code) {
+      case 1: return 'white';
+      case 2: return 'black';
+      case 3: return 'white';
+      default: return '';
+    }
+  }
 }
