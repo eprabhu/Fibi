@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -84,6 +86,14 @@ public class PersonEntity implements Serializable {
 	@LastModifiedBy
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
+	
+	@CreatedBy
+	@Column(name = "CREATE_USER")
+	private String createUser;
+
+	@CreatedDate
+	@Column(name = "CREATE_TIMESTAMP")
+	private Timestamp createTimestamp;
 
 	public Integer getPersonEntityId() {
 		return personEntityId;
@@ -211,6 +221,22 @@ public class PersonEntity implements Serializable {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+
+	public String getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
+
+	public Timestamp getCreateTimestamp() {
+		return createTimestamp;
+	}
+
+	public void setCreateTimestamp(Timestamp createTimestamp) {
+		this.createTimestamp = createTimestamp;
 	}
 
 }
