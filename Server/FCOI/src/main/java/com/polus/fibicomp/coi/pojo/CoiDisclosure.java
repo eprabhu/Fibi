@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -43,8 +45,11 @@ public class CoiDisclosure implements Serializable {
 	@Column(name = "DISCLOSURE_NUMBER")
 	private String disclosureNumber;
 	
-	@Column(name = "DISCLOSURE_VERSION_NUMBER")
-	private Integer disclosureVersionNumber;
+	@Column(name = "VERSION_NUMBER")
+	private Integer versionNumber;
+	
+	@Column(name = "VERSION_STATUS")
+	private String versionStatus;
 	
 	@Column(name = "FCOI_TYPE_CODE")
 	private String fcoitypeCode;
@@ -91,7 +96,7 @@ public class CoiDisclosure implements Serializable {
 	private String certifiedBy;
 	
 	@Column(name = "CERTIFIED_AT")
-	private String certifiedAt;
+	private Timestamp certifiedAt;
 	
 	@Column(name = "REVISION_COMMENT")
 	private String revisionComment;
@@ -103,6 +108,14 @@ public class CoiDisclosure implements Serializable {
 	@LastModifiedBy
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
+	
+	@CreatedBy
+	@Column(name = "CREATE_USER")
+	private String createUser;
+
+	@CreatedDate
+	@Column(name = "CREATE_TIMESTAMP")
+	private Timestamp createTimestamp;
 
 	public Integer getDisclosureId() {
 		return disclosureId;
@@ -134,14 +147,6 @@ public class CoiDisclosure implements Serializable {
 
 	public void setDisclosureNumber(String disclosureNumber) {
 		this.disclosureNumber = disclosureNumber;
-	}
-
-	public Integer getDisclosureVersionNumber() {
-		return disclosureVersionNumber;
-	}
-
-	public void setDisclosureVersionNumber(Integer disclosureVersionNumber) {
-		this.disclosureVersionNumber = disclosureVersionNumber;
 	}
 
 	public String getFcoitypeCode() {
@@ -248,14 +253,6 @@ public class CoiDisclosure implements Serializable {
 		this.certifiedBy = certifiedBy;
 	}
 
-	public String getCertifiedAt() {
-		return certifiedAt;
-	}
-
-	public void setCertifiedAt(String certifiedAt) {
-		this.certifiedAt = certifiedAt;
-	}
-
 	public String getRevisionComment() {
 		return revisionComment;
 	}
@@ -278,6 +275,46 @@ public class CoiDisclosure implements Serializable {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+
+	public Integer getVersionNumber() {
+		return versionNumber;
+	}
+
+	public void setVersionNumber(Integer versionNumber) {
+		this.versionNumber = versionNumber;
+	}
+
+	public String getVersionStatus() {
+		return versionStatus;
+	}
+
+	public void setVersionStatus(String versionStatus) {
+		this.versionStatus = versionStatus;
+	}
+
+	public Timestamp getCertifiedAt() {
+		return certifiedAt;
+	}
+
+	public void setCertifiedAt(Timestamp certifiedAt) {
+		this.certifiedAt = certifiedAt;
+	}
+
+	public String getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
+
+	public Timestamp getCreateTimestamp() {
+		return createTimestamp;
+	}
+
+	public void setCreateTimestamp(Timestamp createTimestamp) {
+		this.createTimestamp = createTimestamp;
 	}
 
 }
