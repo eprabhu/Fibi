@@ -80,12 +80,8 @@ public class CoiEntity implements Serializable {
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY1_FK3"), name = "COUNTRY_CODE", referencedColumnName = "COUNTRY_CODE", insertable = false, updatable = false)
 	private Country country;
 	
-	@Column(name = "STATE_CODE")
-	private String stateCode;
-	
-	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY1_FK4"), name = "STATE_CODE", referencedColumnName = "STATE_CODE", insertable = false, updatable = false)
-	private States state;
+	@Column(name = "CITY")
+	private String city;
 	
 	@Column(name = "ADDRESS")
 	private String address;
@@ -237,22 +233,6 @@ public class CoiEntity implements Serializable {
 		this.country = country;
 	}
 
-	public String getStateCode() {
-		return stateCode;
-	}
-
-	public void setStateCode(String stateCode) {
-		this.stateCode = stateCode;
-	}
-
-	public States getState() {
-		return state;
-	}
-
-	public void setState(States state) {
-		this.state = state;
-	}
-
 	public String getAddress() {
 		return address;
 	}
@@ -339,6 +319,14 @@ public class CoiEntity implements Serializable {
 
 	public void setApprovedTimestamp(Timestamp approvedTimestamp) {
 		this.approvedTimestamp = approvedTimestamp;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 }
