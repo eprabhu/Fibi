@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.polus.fibicomp.coi.pojo.COIEntity;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureDetails;
+import com.polus.fibicomp.coi.pojo.CoiDisclosureOld;
+import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
@@ -56,7 +56,7 @@ public interface ConflictOfInterestService {
 	 * @param searchString
 	 * @return A list of entity
 	 */
-	public List<COIEntity> searchEnitiy(String searchString);
+	public List<CoiEntity> searchEnitiy(String searchString);
 
 	/**
 	 * This method is used for get lookup table of sfi
@@ -87,10 +87,10 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used to certifyDisclosure
-	 * @param coiDisclosure
+	 * @param CoiDisclosureOld
 	 * @return vo
 	 */
-	public ResponseEntity<Object> certifyDisclosure(CoiDisclosure coiDisclosure);
+	public ResponseEntity<Object> certifyDisclosure(CoiDisclosureOld CoiDisclosureOld);
 
 	/**
 	 * This method is used to save disclosure Relationship details.
@@ -223,10 +223,10 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used for update ProjectConflictStatus
-	 * @param coiDisclosureDetails
-	 * @return CoiDisclosureDetails
+	 * @param CoiDisclosureOldDetails
+	 * @return CoiDisclosureOldDetails
 	 */
-	public CoiDisclosureDetails updateProjectConflictStatus(CoiDisclosureDetails coiDisclosureDetails);
+	public CoiDisclosureOldDetails updateProjectConflictStatus(CoiDisclosureOldDetails CoiDisclosureOldDetails);
 
 	/**
 	 * This method is used for get Project Conflict History
@@ -261,7 +261,7 @@ public interface ConflictOfInterestService {
 	 * @param vo
 	 * @return vo
 	 */
-	public ResponseEntity<Object> saveOrUpdateCOIEntity(ConflictOfInterestVO vo);
+	public ResponseEntity<Object> saveOrUpdateCoiEntity(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used to get entity details based on coiEntityId

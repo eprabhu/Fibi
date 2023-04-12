@@ -1,5 +1,6 @@
 package com.polus.fibicomp.coi.pojo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -11,8 +12,8 @@ import javax.persistence.Table;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "ENTITY_RISK_CATEGORY")
-public class EntityRiskCategoryCode {
+@Table(name = "COI_RISK_CATEGORY")
+public class CoiRiskCategory implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -72,6 +73,5 @@ public class EntityRiskCategoryCode {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
+	
 }
-

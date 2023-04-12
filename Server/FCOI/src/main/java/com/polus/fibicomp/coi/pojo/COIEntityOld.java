@@ -27,19 +27,19 @@ import com.polus.fibicomp.pojo.States;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "ENTITY")
+@Table(name = "ENTITY_OLD")
 @EntityListeners(AuditingEntityListener.class)
-public class COIEntity implements Serializable {
+public class COIEntityOld implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ENTITY_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer coiEntityId;
+	private Integer CoiEntityId;
 
 	@Column(name = "ENTITY_NAME")
-	private String coiEntityName;
+	private String CoiEntityName;
 
 	@Column(name = "ENTITY_STATUS_CODE")
 	private String entityStatusCode;
@@ -132,19 +132,19 @@ public class COIEntity implements Serializable {
 	}
 
 	public Integer getCoiEntityId() {
-		return coiEntityId;
+		return CoiEntityId;
 	}
 
-	public void setCoiEntityId(Integer coiEntityId) {
-		this.coiEntityId = coiEntityId;
+	public void setCoiEntityId(Integer CoiEntityId) {
+		this.CoiEntityId = CoiEntityId;
 	}
 
 	public String getCoiEntityName() {
-		return coiEntityName;
+		return CoiEntityName;
 	}
 
-	public void setCoiEntityName(String coiEntityName) {
-		this.coiEntityName = coiEntityName;
+	public void setCoiEntityName(String CoiEntityName) {
+		this.CoiEntityName = CoiEntityName;
 	}
 
 	public String getEntityStatusCode() {

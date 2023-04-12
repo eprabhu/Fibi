@@ -21,14 +21,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "COI_DISCLOSURE_ATTACHMENTS")
 @EntityListeners(AuditingEntityListener.class)
-public class CoiDisclosureAttachments implements Serializable {
+public class CoiDisclosureOldAttachments implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "COI_DISCLOSURE_ATTACHMENTS_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer coiDisclosureAttachmentId;
+	private Integer CoiDisclosureOldAttachmentId;
 	
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -76,12 +76,12 @@ public class CoiDisclosureAttachments implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
-	public Integer getCoiDisclosureAttachmentId() {
-		return coiDisclosureAttachmentId;
+	public Integer getCoiDisclosureOldAttachmentId() {
+		return CoiDisclosureOldAttachmentId;
 	}
 
-	public void setCoiDisclosureAttachmentId(Integer coiDisclosureAttachmentId) {
-		this.coiDisclosureAttachmentId = coiDisclosureAttachmentId;
+	public void setCoiDisclosureOldAttachmentId(Integer CoiDisclosureOldAttachmentId) {
+		this.CoiDisclosureOldAttachmentId = CoiDisclosureOldAttachmentId;
 	}
 
 	public String getDescription() {

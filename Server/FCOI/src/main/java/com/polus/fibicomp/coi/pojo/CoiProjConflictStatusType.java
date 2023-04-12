@@ -12,14 +12,14 @@ import javax.persistence.Table;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "COI_DISCLOSURE_CATEGORY_TYPE")
-public class COIDisclosureCategoryType implements Serializable {
-
+@Table(name = "COI_PROJ_CONFLICT_STATUS_TYPE")
+public class CoiProjConflictStatusType implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "DISCLOSURE_CATEGORY_TYPE_CODE")
-	private String disclosureCategoryTypeCode;
+	@Column(name = "PROJECT_CONFLICT_STATUS_CODE")
+	private String projectConflictStatusCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -34,12 +34,12 @@ public class COIDisclosureCategoryType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	public String getDisclosureCategoryTypeCode() {
-		return disclosureCategoryTypeCode;
+	public String getProjectConflictStatusCode() {
+		return projectConflictStatusCode;
 	}
 
-	public void setDisclosureCategoryTypeCode(String disclosureCategoryTypeCode) {
-		this.disclosureCategoryTypeCode = disclosureCategoryTypeCode;
+	public void setProjectConflictStatusCode(String projectConflictStatusCode) {
+		this.projectConflictStatusCode = projectConflictStatusCode;
 	}
 
 	public String getDescription() {
@@ -73,5 +73,5 @@ public class COIDisclosureCategoryType implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
+	
 }

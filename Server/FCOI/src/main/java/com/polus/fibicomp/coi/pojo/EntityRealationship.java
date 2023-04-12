@@ -20,12 +20,15 @@ public class EntityRealationship implements Serializable {
 	@Id
 	@Column(name = "ID")
 	private Integer id;
+	
+	@Column(name = "ENTITY_NUMBER")
+	private Integer entityNumber;
 
-	@Column(name = "REL_NODE_TYPE_CODE")
-	private Integer relNodeTypeCode;
+	@Column(name = "NODE_TYPE_CODE")
+	private Integer nodeTypeCode;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_RELATIONSHIP_FK1"), name = "REL_NODE_TYPE_CODE", referencedColumnName = "REL_NODE_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_RELATIONSHIP_FK1"), name = "NODE_TYPE_CODE", referencedColumnName = "REL_NODE_TYPE_CODE", insertable = false, updatable = false)
 	private EntityRelNodeType entityRelNodeType;
 	
 	@Column(name = "NODE_ID")

@@ -4,15 +4,15 @@ import java.util.List;
 
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
-import com.polus.fibicomp.coi.pojo.COIEntity;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityRelType;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureDetails;
+import com.polus.fibicomp.coi.pojo.CoiDisclosureOld;
+import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureDetailsStatus;
+import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetailsStatus;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
@@ -22,7 +22,7 @@ import com.polus.fibicomp.person.pojo.Person;
 
 public class ConflictOfInterestVO {
 
-	private CoiDisclosure coiDisclosure;
+	private CoiDisclosureOld coiDisclosureOld;
 
 	private Person person;
 
@@ -30,7 +30,7 @@ public class ConflictOfInterestVO {
 
 	private COIFinancialEntity coiFinancialEntity;
 
-	private COIEntity coiEntity;
+	private CoiEntity coiEntity;
 
 	private String personId;
 
@@ -46,7 +46,7 @@ public class ConflictOfInterestVO {
 
 	private List<COIFinancialEntityRelType> coiFinancialEntityRelType;
 
-	private List<CoiDisclosureDetailsStatus> coiDisclosureDetailStatuses;
+	private List<CoiDisclosureOldDetailsStatus> coiDisclosureOldDetailStatuses;
 
 	private List<COIFinancialEntityDetails> coiFinancialEntityDetails;
 
@@ -58,7 +58,7 @@ public class ConflictOfInterestVO {
 
 	private Integer moduleItemId;
 
-	private List<CoiDisclosureDetails> coiDisclosureDetails;
+	private List<CoiDisclosureOldDetails> coiDisclosureOldDetails;
 
 	private Integer disclosureId;
 
@@ -80,11 +80,11 @@ public class ConflictOfInterestVO {
 
 	private String disclosureSequenceStatusCode;
 
-	private List<CoiDisclosure> coiDisclosures;
+	private List<CoiDisclosureOld> coiDisclosureOlds;
 
 	private Integer coiFinancialEntityId;
 	
-    private List<CoiSectionsType> CoiSectionsType;
+    private List<CoiSectionsType> coiSectionsType;
 	
 	private CoiReview coiReview;
 	
@@ -116,7 +116,7 @@ public class ConflictOfInterestVO {
 	
 	private String sort;
 
-	private CoiDisclosureDetails coiDisclosureDetail;
+	private CoiDisclosureOldDetails coiDisclosureOldDetail;
 
 	private String disclosureCategoryType;
 
@@ -140,7 +140,7 @@ public class ConflictOfInterestVO {
 	
 	private String filterType;
 	
-	private List<COIEntity> coiEntityList;
+	private List<CoiEntity> coiEntityList;
 	
 	private Boolean isActive;
 
@@ -152,12 +152,12 @@ public class ConflictOfInterestVO {
 		this.isActive = isActive;
 	}
 
-	public CoiDisclosure getCoiDisclosure() {
-		return coiDisclosure;
+	public CoiDisclosureOld getCoiDisclosureOld() {
+		return coiDisclosureOld;
 	}
 
-	public void setCoiDisclosure(CoiDisclosure coiDisclosure) {
-		this.coiDisclosure = coiDisclosure;
+	public void setCoiDisclosureOld(CoiDisclosureOld coiDisclosureOld) {
+		this.coiDisclosureOld = coiDisclosureOld;
 	}
 
 	public Person getPerson() {
@@ -184,11 +184,11 @@ public class ConflictOfInterestVO {
 		this.coiFinancialEntity = coiFinancialEntity;
 	}
 
-	public COIEntity getCoiEntity() {
+	public CoiEntity getCoiEntity() {
 		return coiEntity;
 	}
 
-	public void setCoiEntity(COIEntity coiEntity) {
+	public void setCoiEntity(CoiEntity coiEntity) {
 		this.coiEntity = coiEntity;
 	}
 
@@ -248,12 +248,12 @@ public class ConflictOfInterestVO {
 		this.coiFinancialEntityRelType = coiFinancialEntityRelType;
 	}
 
-	public List<CoiDisclosureDetailsStatus> getCoiDisclosureDetailStatuses() {
-		return coiDisclosureDetailStatuses;
+	public List<CoiDisclosureOldDetailsStatus> getCoiDisclosureOldDetailStatuses() {
+		return coiDisclosureOldDetailStatuses;
 	}
 
-	public void setCoiDisclosureDetailStatuses(List<CoiDisclosureDetailsStatus> coiDisclosureDetailStatuses) {
-		this.coiDisclosureDetailStatuses = coiDisclosureDetailStatuses;
+	public void setCoiDisclosureOldDetailStatuses(List<CoiDisclosureOldDetailsStatus> coiDisclosureOldDetailStatuses) {
+		this.coiDisclosureOldDetailStatuses = coiDisclosureOldDetailStatuses;
 	}
 	public List<COIFinancialEntityDetails> getCoiFinancialEntityDetails() {
 		return coiFinancialEntityDetails;
@@ -295,12 +295,12 @@ public class ConflictOfInterestVO {
 		this.moduleItemId = moduleItemId;
 	}
 
-	public List<CoiDisclosureDetails> getCoiDisclosureDetails() {
-		return coiDisclosureDetails;
+	public List<CoiDisclosureOldDetails> getCoiDisclosureOldDetails() {
+		return coiDisclosureOldDetails;
 	}
 
-	public void setCoiDisclosureDetails(List<CoiDisclosureDetails> coiDisclosureDetails) {
-		this.coiDisclosureDetails = coiDisclosureDetails;
+	public void setCoiDisclosureOldDetails(List<CoiDisclosureOldDetails> coiDisclosureOldDetails) {
+		this.coiDisclosureOldDetails = coiDisclosureOldDetails;
 	}
 
 	public Integer getDisclosureId() {
@@ -383,12 +383,12 @@ public class ConflictOfInterestVO {
 		this.disclosureSequenceStatusCode = disclosureSequenceStatusCode;
 	}
 
-	public List<CoiDisclosure> getCoiDisclosures() {
-		return coiDisclosures;
+	public List<CoiDisclosureOld> getCoiDisclosureOlds() {
+		return coiDisclosureOlds;
 	}
 
-	public void setCoiDisclosures(List<CoiDisclosure> coiDisclosures) {
-		this.coiDisclosures = coiDisclosures;
+	public void setCoiDisclosureOlds(List<CoiDisclosureOld> coiDisclosureOlds) {
+		this.coiDisclosureOlds = coiDisclosureOlds;
 	}
 
 	public Integer getCoiFinancialEntityId() {
@@ -400,11 +400,11 @@ public class ConflictOfInterestVO {
 	}
 
 	public List<CoiSectionsType> getCoiSectionsType() {
-		return CoiSectionsType;
+		return coiSectionsType;
 	}
 
 	public void setCoiSectionsType(List<CoiSectionsType> coiSectionsType) {
-		CoiSectionsType = coiSectionsType;
+		this.coiSectionsType = coiSectionsType;
 	}
 
 	public CoiReview getCoiReview() {
@@ -527,12 +527,12 @@ public class ConflictOfInterestVO {
 		this.sort = sort;
 	}
 
-	public CoiDisclosureDetails getCoiDisclosureDetail() {
-		return coiDisclosureDetail;
+	public CoiDisclosureOldDetails getCoiDisclosureOldDetail() {
+		return coiDisclosureOldDetail;
 	}
 
-	public void setCoiDisclosureDetail(CoiDisclosureDetails coiDisclosureDetail) {
-		this.coiDisclosureDetail = coiDisclosureDetail;
+	public void setCoiDisclosureOldDetail(CoiDisclosureOldDetails coiDisclosureOldDetail) {
+		this.coiDisclosureOldDetail = coiDisclosureOldDetail;
 	}
 
 	public String getDisclosureCategoryType() {
@@ -623,11 +623,11 @@ public class ConflictOfInterestVO {
 		this.filterType = filterType;
 	}
 
-	public List<COIEntity> getCoiEntityList() {
+	public List<CoiEntity> getCoiEntityList() {
 		return coiEntityList;
 	}
 
-	public void setCoiEntityList(List<COIEntity> coiEntityList) {
+	public void setCoiEntityList(List<CoiEntity> coiEntityList) {
 		this.coiEntityList = coiEntityList;
 	}
 

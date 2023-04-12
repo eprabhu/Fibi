@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "COI_DISCLOSURE_DETAILS")
 @EntityListeners(AuditingEntityListener.class)
-public class CoiDisclosureDetails implements Serializable {
+public class CoiDisclosureOldDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -40,14 +40,14 @@ public class CoiDisclosureDetails implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE_DETAILS_FK1"), name = "DISCLOSURE_ID", referencedColumnName = "DISCLOSURE_ID", insertable = false, updatable = false)
-	private CoiDisclosure coiDisclosure;
+	private CoiDisclosureOld CoiDisclosureOld;
 	
 	@Column(name = "DISC_DET_STATUS_CODE")
 	private String discDetStatusCode;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE_DETAILS_FK2"), name = "DISC_DET_STATUS_CODE", referencedColumnName = "DISC_DET_STATUS_CODE", insertable = false, updatable = false)
-	private CoiDisclosureDetailsStatus coiDisclosureDetailsStatus;
+	private CoiDisclosureOldDetailsStatus CoiDisclosureOldDetailsStatus;
 
 	@Column(name = "COI_FINANCIAL_ENTITY_ID")
 	private Integer coiFinancialEntityId;
@@ -78,11 +78,11 @@ public class CoiDisclosureDetails implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE_DETAILS_FK4"), name = "COI_REVIEWER_STATUS_CODE", referencedColumnName = "DISC_DET_STATUS_CODE", insertable = false, updatable = false)
-	private CoiDisclosureDetailsStatus coiReviewerStatus;
+	private CoiDisclosureOldDetailsStatus coiReviewerStatus;
 
 	@JsonManagedReference
-	@OneToOne(mappedBy = "coiDisclosureDetails", orphanRemoval = true, cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	private CoiDisclosureDetailsComments comment;
+	@OneToOne(mappedBy = "CoiDisclosureOldDetails", orphanRemoval = true, cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	private CoiDisclosureOldDetailsComments comment;
 
 	public Integer getDisclosureDetailsId() {
 		return disclosureDetailsId;
@@ -100,12 +100,12 @@ public class CoiDisclosureDetails implements Serializable {
 		this.disclosureId = disclosureId;
 	}
 
-	public CoiDisclosure getCoiDisclosure() {
-		return coiDisclosure;
+	public CoiDisclosureOld getCoiDisclosureOld() {
+		return CoiDisclosureOld;
 	}
 
-	public void setCoiDisclosure(CoiDisclosure coiDisclosure) {
-		this.coiDisclosure = coiDisclosure;
+	public void setCoiDisclosureOld(CoiDisclosureOld CoiDisclosureOld) {
+		this.CoiDisclosureOld = CoiDisclosureOld;
 	}
 
 	public String getDiscDetStatusCode() {
@@ -116,12 +116,12 @@ public class CoiDisclosureDetails implements Serializable {
 		this.discDetStatusCode = discDetStatusCode;
 	}
 
-	public CoiDisclosureDetailsStatus getCoiDisclosureDetailsStatus() {
-		return coiDisclosureDetailsStatus;
+	public CoiDisclosureOldDetailsStatus getCoiDisclosureOldDetailsStatus() {
+		return CoiDisclosureOldDetailsStatus;
 	}
 
-	public void setCoiDisclosureDetailsStatus(CoiDisclosureDetailsStatus coiDisclosureDetailsStatus) {
-		this.coiDisclosureDetailsStatus = coiDisclosureDetailsStatus;
+	public void setCoiDisclosureOldDetailsStatus(CoiDisclosureOldDetailsStatus CoiDisclosureOldDetailsStatus) {
+		this.CoiDisclosureOldDetailsStatus = CoiDisclosureOldDetailsStatus;
 	}
 
 	public Integer getCoiFinancialEntityId() {
@@ -180,11 +180,11 @@ public class CoiDisclosureDetails implements Serializable {
 		this.updateUser = updateUser;
 	}
 
-	public CoiDisclosureDetailsComments getComment() {
+	public CoiDisclosureOldDetailsComments getComment() {
 		return comment;
 	}
 
-	public void setComment(CoiDisclosureDetailsComments comment) {
+	public void setComment(CoiDisclosureOldDetailsComments comment) {
 		this.comment = comment;
 	}
 
@@ -196,11 +196,11 @@ public class CoiDisclosureDetails implements Serializable {
 		this.coiReviewerStatusCode = coiReviewerStatusCode;
 	}
 
-	public CoiDisclosureDetailsStatus getCoiReviewerStatus() {
+	public CoiDisclosureOldDetailsStatus getCoiReviewerStatus() {
 		return coiReviewerStatus;
 	}
 
-	public void setCoiReviewerStatus(CoiDisclosureDetailsStatus coiReviewerStatus) {
+	public void setCoiReviewerStatus(CoiDisclosureOldDetailsStatus coiReviewerStatus) {
 		this.coiReviewerStatus = coiReviewerStatus;
 	}
 

@@ -43,7 +43,7 @@ public class CoiReview implements Serializable {
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_REVIEW_FK2"), name = "DISCLOSURE_ID", referencedColumnName = "DISCLOSURE_ID", insertable = false, updatable = false)
-	private CoiDisclosure coiDisclosure;
+	private CoiDisclosureOld coiDisclosureOld;
 	
 	@Column(name = "ADMIN_GROUP_ID")
 	private Integer adminGroupId;
@@ -105,12 +105,12 @@ public class CoiReview implements Serializable {
 		this.disclosureId = disclosureId;
 	}
 
-	public CoiDisclosure getCoiDisclosure() {
-		return coiDisclosure;
+	public CoiDisclosureOld getCoiDisclosureOld() {
+		return coiDisclosureOld;
 	}
 
-	public void setCoiDisclosure(CoiDisclosure coiDisclosure) {
-		this.coiDisclosure = coiDisclosure;
+	public void setCoiDisclosureOld(CoiDisclosureOld coiDisclosureOld) {
+		this.coiDisclosureOld = coiDisclosureOld;
 	}
 
 	public Integer getAdminGroupId() {
