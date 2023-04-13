@@ -43,7 +43,7 @@ public class CoiDisclosure implements Serializable {
 	private Person person;
 	
 	@Column(name = "DISCLOSURE_NUMBER")
-	private String disclosureNumber;
+	private Integer disclosureNumber;
 	
 	@Column(name = "VERSION_NUMBER")
 	private Integer versionNumber;
@@ -145,14 +145,6 @@ public class CoiDisclosure implements Serializable {
 
 	public void setPerson(Person person) {
 		this.person = person;
-	}
-
-	public String getDisclosureNumber() {
-		return disclosureNumber;
-	}
-
-	public void setDisclosureNumber(String disclosureNumber) {
-		this.disclosureNumber = disclosureNumber;
 	}
 
 	public String getFcoitypeCode() {
@@ -337,6 +329,14 @@ public class CoiDisclosure implements Serializable {
 
 	public void setModuleItemKey(String moduleItemKey) {
 		this.moduleItemKey = moduleItemKey;
+	}
+
+	public Integer getDisclosureNumber() {
+		return disclosureNumber;
+	}
+
+	public void setDisclosureNumber(Integer disclosureNumber) {
+		this.disclosureNumber = disclosureNumber;
 	}
 
 }

@@ -64,6 +64,10 @@ public class PersonEntity implements Serializable {
 	@Column(name = "VERSION_STATUS")
 	private String versionStatus;
 	
+	@Column(name = "SPONSORS_RESEARCH")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean sponsorsResearch;
+	
 	@Column(name = "INVOLVEMENT_START_DATE")
 	private Date involvementStartDate;
 
@@ -237,6 +241,14 @@ public class PersonEntity implements Serializable {
 
 	public void setCreateTimestamp(Timestamp createTimestamp) {
 		this.createTimestamp = createTimestamp;
+	}
+
+	public Boolean getSponsorsResearch() {
+		return sponsorsResearch;
+	}
+
+	public void setSponsorsResearch(Boolean sponsorsResearch) {
+		this.sponsorsResearch = sponsorsResearch;
 	}
 
 }

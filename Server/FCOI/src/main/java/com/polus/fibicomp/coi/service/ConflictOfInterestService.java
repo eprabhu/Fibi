@@ -308,4 +308,8 @@ public interface ConflictOfInterestService {
 	
 	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId);
 	
+	public ResponseEntity<Object> getCoiProjectTypes();
+
+	public ResponseEntity<Object> getPersonEntityDetails(ConflictOfInterestVO vo);
+	
 }

@@ -39,9 +39,9 @@ import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.pojo.COIDispositionStatus;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
-import com.polus.fibicomp.coi.pojo.COIFinancialEntityRelType;
 import com.polus.fibicomp.coi.pojo.COIReviewStatus;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOld;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldCategoryType;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
@@ -49,6 +49,7 @@ import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetailsStatus;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldStatus;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
+import com.polus.fibicomp.coi.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
@@ -59,6 +60,8 @@ import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.PersonEntity;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -185,8 +188,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<COIFinancialEntityRelType> fetchCOIFinancialEntityRelType() {
-		return hibernateTemplate.loadAll(COIFinancialEntityRelType.class);
+	public List<PersonEntityRelType> fetchPersonEntityRelType() {
+		return hibernateTemplate.loadAll(PersonEntityRelType.class);
 	}
 
 	@Override
@@ -996,7 +999,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		String filterType = vo.getFilterType();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD_COUNT(?,?,?,?,?,?,?,?)}");
 				statement.setString(1, personId);
 				statement.setString(2, setCOISortOrder(sort));
 				statement.setInt(3, 0);
@@ -1419,21 +1422,21 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<CoiEntity> outerQuery = builder.createQuery(CoiEntity.class);
-		Root<CoiEntity> CoiEntity = outerQuery.from(CoiEntity.class);
-		Subquery<COIFinancialEntity> subQuery = outerQuery.subquery(COIFinancialEntity.class);
-		Root<COIFinancialEntity> coiFinancialEntity = subQuery.from(COIFinancialEntity.class);
-		Predicate predicate1 = builder.equal(coiFinancialEntity.get("personId"), vo.getPersonId());
-		subQuery.select(coiFinancialEntity.get("entityId")).where(builder.and(predicate1));
+		Root<CoiEntity> coiEntity = outerQuery.from(CoiEntity.class);
+		Subquery<PersonEntity> subQuery = outerQuery.subquery(PersonEntity.class);
+		Root<PersonEntity> personEntity = subQuery.from(PersonEntity.class);
+		Predicate predicate1 = builder.equal(personEntity.get("personId"), vo.getPersonId());
+		subQuery.select(personEntity.get("entityId")).where(builder.and(predicate1));
 		if (vo.getFilterType() == null || vo.getFilterType().isEmpty()) {
-			outerQuery.select(CoiEntity).where(builder.in(CoiEntity.get("entityId")).value(subQuery));
+			outerQuery.select(coiEntity).where(builder.in(coiEntity.get("entityId")).value(subQuery));
 		} else if (vo.getFilterType().equals("active")) {
-			outerQuery.select(CoiEntity).where(builder.and(builder.in(CoiEntity.get("entityId")).value(subQuery),
-					builder.equal(CoiEntity.get("entityStatusCode"), "1")));
+			outerQuery.select(coiEntity).where(builder.and(builder.in(coiEntity.get("entityId")).value(subQuery),
+					builder.equal(coiEntity.get("isActive"), true)));
 		} else if (vo.getFilterType().equals("inactive")) {
-			outerQuery.select(CoiEntity).where(builder.and(builder.in(CoiEntity.get("entityId")).value(subQuery),
-					builder.equal(CoiEntity.get("entityStatusCode"), "2")));
+			outerQuery.select(coiEntity).where(builder.and(builder.in(coiEntity.get("entityId")).value(subQuery),
+					builder.equal(coiEntity.get("isActive"), false)));
 		}
-		outerQuery.orderBy(builder.asc(CoiEntity.get("entityName")));
+		outerQuery.orderBy(builder.asc(coiEntity.get("entityName")));
 		return session.createQuery(outerQuery).getResultList();
 	}
 
@@ -1553,6 +1556,68 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId) {
 		return hibernateTemplate.get(CoiTravelDisclosure.class, travelDisclosureId);
+	}
+	
+	@Override
+	public List<CoiProjectType> getCoiProjectTypes() {
+		return hibernateTemplate.loadAll(CoiProjectType.class);
+	}
+
+	@Override
+	public List<PersonEntity> getPersonEntityDetails(ConflictOfInterestVO vo) {
+		List<PersonEntity> personEntity = null;
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<PersonEntity> query = builder.createQuery(PersonEntity.class);
+			Root<PersonEntity> rootPersonEntity = query.from(PersonEntity.class);
+			if (vo.getFilterType().equals("Person")) {
+				query.where(builder.equal(rootPersonEntity.get("entityId"), vo.getCoiEntityId()));
+			}
+			return session.createQuery(query).getResultList();
+		} catch (Exception ex) {
+			return personEntity;
+		}
+	}
+
+	@Override
+	public Integer generateMaxCoiEntityNumber() {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+        Root<CoiEntity> root = query.from(CoiEntity.class);
+        query.select(builder.max(root.get("entityNumber")));
+        if(session.createQuery(query).getSingleResult() != null) {
+            return session.createQuery(query).getSingleResult() + 1;
+        } else {
+            return 1;
+        }
+	}
+
+	@Override
+	public PersonEntity saveOrUpdateSFI(PersonEntity personEntity) {
+		hibernateTemplate.saveOrUpdate(personEntity);
+		return personEntity;
+	}
+
+	@Override
+	public Integer generateMaxDisclosureNumber() {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+        Root<CoiDisclosure> root = query.from(CoiDisclosure.class);
+        query.select(builder.max(root.get("disclosureNumber")));
+        if(session.createQuery(query).getSingleResult() != null) {
+            return session.createQuery(query).getSingleResult() + 1;
+        } else {
+            return 1;
+        }
+	}
+	
+	@Override
+	public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure coiDisclosure) {
+		hibernateTemplate.saveOrUpdate(coiDisclosure);
+		return coiDisclosure;
 	}
 
 }
