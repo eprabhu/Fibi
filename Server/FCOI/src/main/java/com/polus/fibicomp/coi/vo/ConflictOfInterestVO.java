@@ -4,20 +4,21 @@ import java.util.List;
 
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityRelType;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOld;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
-import com.polus.fibicomp.coi.pojo.EntityStatus;
-import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetailsStatus;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.EntityStatus;
+import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.person.pojo.Person;
 
 public class ConflictOfInterestVO {
@@ -143,6 +144,26 @@ public class ConflictOfInterestVO {
 	private List<CoiEntity> coiEntityList;
 	
 	private Boolean isActive;
+	
+	private CoiTravelDisclosure coiTravelDisclosure;
+	
+	private List<CoiTravelDisclosure> coiTravelDisclosureList;
+
+	public List<CoiTravelDisclosure> getCoiTravelDisclosureList() {
+		return coiTravelDisclosureList;
+	}
+
+	public void setCoiTravelDisclosureList(List<CoiTravelDisclosure> coiTravelDisclosureList) {
+		this.coiTravelDisclosureList = coiTravelDisclosureList;
+	}
+
+	public CoiTravelDisclosure getCoiTravelDisclosure() {
+		return coiTravelDisclosure;
+	}
+
+	public void setCoiTravelDisclosure(List<CoiTravelDisclosure> list) {
+		this.coiTravelDisclosure = (CoiTravelDisclosure) list;
+	}
 
 	public Boolean getIsActive() {
 		return isActive;

@@ -10,12 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOld;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 
@@ -300,5 +301,11 @@ public interface ConflictOfInterestService {
 	public ResponseEntity<Object> setEntityStatus(ConflictOfInterestVO vo);
 
 	public ResponseEntity<Object> getAllSystemEntityList();
+	
+	public ResponseEntity<Object> createCoiTravelDisclosure(ConflictOfInterestVO vo);
+	
+	public ResponseEntity<Object> getAllCoiTravelDisclosureList();
+	
+	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId);
 	
 }

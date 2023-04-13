@@ -34,19 +34,20 @@ import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.award.pojo.AwardPerson;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOld;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetailsComments;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -988,6 +989,25 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
 		vo.setCoiEntityList(conflictOfInterestDao.getAllSystemEntityList(vo));
 		return new ResponseEntity<>(vo, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<Object> createCoiTravelDisclosure(ConflictOfInterestVO vo) {
+		CoiTravelDisclosure coiTravelDisclosure = new CoiTravelDisclosure();
+		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		return new ResponseEntity<>(coiTravelDisclosure, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<Object> getAllCoiTravelDisclosureList() {
+		ConflictOfInterestVO vo = new ConflictOfInterestVO();
+		vo.setCoiTravelDisclosure(conflictOfInterestDao.getAllCoiTravelDisclosureList(vo));
+		return new ResponseEntity<>(vo, HttpStatus.OK);
+	}
+
+	@Override
+	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId) {
+		return conflictOfInterestDao.getCoiTravelDisclosureDetailsById(travelDisclosureId);
 	}
 	
 }

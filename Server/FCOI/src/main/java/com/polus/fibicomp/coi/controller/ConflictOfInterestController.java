@@ -11,14 +11,23 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
@@ -305,6 +314,24 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> getAllSystemEntityList() {
 		logger.info("Requesting for getAllSystemEntityList");
 		return conflictOfInterestService.getAllSystemEntityList();
+	}
+	
+	@PostMapping(value = "/createCoiTravelDisclosure")
+	public ResponseEntity<Object> createCoiTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Request for createCoiTravelDisclosure");
+		return conflictOfInterestService.createCoiTravelDisclosure(vo);
+	}
+
+	@GetMapping(value = "/getAllCoiTravelDisclosureList")
+	public ResponseEntity<Object> getAllCoiTravelDisclosureList() {
+		logger.info("Request for getAllCoiTravelDisclosures");
+		return conflictOfInterestService.getAllCoiTravelDisclosureList();
+	}
+
+	@GetMapping(value = "/getCoiTravelDisclosureDetailsById/{travelDisclosureId}")
+	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Request for getCoiTravelDisclosureById");
+		return conflictOfInterestService.getCoiTravelDisclosureDetailsById(travelDisclosureId);
 	}
 	
 }
