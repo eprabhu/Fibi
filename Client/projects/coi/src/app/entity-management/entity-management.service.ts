@@ -10,18 +10,26 @@ export class EntityManagementService {
   constructor(private _commonService: CommonService, private _http: HttpClient) { }
 
   coiRequestObject = new CoiDashboardRequest();
+  isShowEntityNavBar = false;
 
-  getCOIAdminDashboard(prams) {
-    return this._http.post(this._commonService.baseUrl + '/getCOIAdminDashboard', prams)
-  }
-
-  getAllSystemEntityList(){
+  getAllSystemEntityList() {
     return this._http.get(`${this._commonService.baseUrl}/getAllSystemEntityList`);
   }
 
-  getEntityDetails(entityId){
+  getEntityDetails(entityId) {
     return this._http.get(`${this._commonService.baseUrl}/getEntityDetails/${entityId}`);
 
+  }
+  getEntityLookUp() {
+    return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
+  }
+
+  saveOrUpdateCOIEntity(prams) {
+    return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiEntity', prams)
+  }
+
+  getPersonEntityDetails(prams) {
+    return this._http.post(this._commonService.baseUrl + '/getPersonEntityDetails', prams)
   }
 }
 export class CoiDashboardRequest {

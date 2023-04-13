@@ -10,6 +10,10 @@ import { EntityQuestionnaireComponent } from './entity-questionnaire/entity-ques
 import { EntityDetailsService } from './entity-details.service';
 import { EntityDetailsGuardService } from './entity-details-guard.service';
 import { FormsModule } from '@angular/forms';
+import { SharedComponentModule } from '../../shared-components/shared-component.module';
+import { SfiModule } from '../sfi/sfi.module';
+import { DataStoreService } from '../services/data-store.service';
+import { CoiService } from '../services/coi.service';
 
 const routes: Routes = [{ path: '', component:EntityDetailsComponent, canActivate:[EntityDetailsGuardService] }]
 
@@ -19,7 +23,9 @@ const routes: Routes = [{ path: '', component:EntityDetailsComponent, canActivat
     RouterModule.forChild(routes),
     MatIconModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    SharedComponentModule,
+    // SfiModule
   ],
   declarations: [
     EntityDetailsComponent,
@@ -28,6 +34,9 @@ const routes: Routes = [{ path: '', component:EntityDetailsComponent, canActivat
     EntityQuestionnaireComponent
 
   ],
-  providers:[EntityDetailsService,EntityDetailsGuardService]
+  providers:[
+    EntityDetailsService,
+    EntityDetailsGuardService
+  ]
 })
 export class EntityDetailsModule { }

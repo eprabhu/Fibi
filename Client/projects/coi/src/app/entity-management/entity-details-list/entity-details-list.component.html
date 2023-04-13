@@ -2,24 +2,25 @@
   <app-view-entity-details></app-view-entity-details>
   <div class="fw-bold m-2">Relationships</div>
   <div>
+    <!-- [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"  -->
     <nav
       class="align-items-center bg-white border d-flex fs-14 fw-medium mt-3 py-1 shadow-sm user-dashboard-nav bg-body-emphasis">
-      <div (click)="currentSelected = 'Person'" class=" navigation-icons text-secondary py-1" role="button">
-        <span [class.active]="currentSelected === 'Person'?'active':''" class="px-5 ">Person</span>
+      <div (click)="currentTab('Person')" class=" navigation-icons text-secondary py-1" role="button">
+        <span [ngClass]="{'active':currentSelected === 'Person'}" class="px-5 ">Person</span>
         <span *ngIf="currentSelected === 'Person'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
       </div>
-      <div (click)="currentSelected = 'Institutional'" class=" navigation-icons text-secondary py-1" role="button">
-        <span [class.active]="currentSelected === 'Institutional'?'active':''"  class="px-5">Institutional</span>
+      <div (click)="currentTab('Institutional')" class=" navigation-icons text-secondary py-1" role="button">
+        <span [ngClass]="{'active':currentSelected === 'Institutional'}"  class="px-5">Institutional</span>
         <span *ngIf="currentSelected === 'Institutional'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
 
       </div>
-      <div (click)="currentSelected = 'Other Entities'" class=" navigation-icons text-secondary py-1" role="button">
-        <span [class.active]="currentSelected === 'Other Entities'?'active':''"  class="px-5">Other Entities</span>
-        <span *ngIf="currentSelected === 'Other Entities'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+      <div (click)="currentTab('Other_Entities')" class=" navigation-icons text-secondary py-1" role="button">
+        <span [ngClass]="{'active':currentSelected === 'Other_Entities'}"  class="px-5">Other Entities</span>
+        <span *ngIf="currentSelected === 'Other_Entities'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
 
       </div>
-      <div (click)="currentSelected = 'Disclosures'" class="navigation-icons text-secondary py-1" role="button">
-        <span [class.active]="currentSelected === 'Disclosures'?'active':''"  class="px-5">Disclosures</span>
+      <div (click)="currentTab('Disclosures')" class="navigation-icons text-secondary py-1" role="button">
+        <span [ngClass]="{'active':currentSelected === 'Disclosures'}"  class="px-5">Disclosures</span>
         <span *ngIf="currentSelected === 'Disclosures'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
 
       </div>
@@ -27,7 +28,7 @@
   </div>
   <div class="row mt-1">
     <div class="col-10 mt-1">
-      <app-elastic [options]="coiElastic" style="width: 400px" [placeHolder]="'Entity Name, Country etc.'"
+      <app-elastic [options]="coiElastic" style="width: 400px" [placeHolder]="'Person Name, Department etc.'"
         (selectedResult)="redirectToEntity($event)"></app-elastic>
     </div>
     <div class="col-2 mt-1 justify-content-end d-flex px-4">

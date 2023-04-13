@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityDetailsService } from '../entity-details.service';
+import { SfiService } from '../../sfi/sfi.service';
 
 @Component({
   selector: 'app-add-entity-details',
@@ -11,10 +12,12 @@ export class AddEntityDetailsComponent implements OnInit {
 
   isExpanded = true;
   entityDetails:any = {};
-  constructor(private _entityDetailsServices:EntityDetailsService,private _router: Router) { }
+  constructor(private _entityDetailsServices:EntityDetailsService,private _router: Router,
+    public sfiServices:SfiService) { }
 
   ngOnInit() {
     this.getEntityDetails();
+    // this.sfiServices.isShowSfiNavBar
   }
 
   getEntityDetails(){
@@ -23,9 +26,8 @@ export class AddEntityDetailsComponent implements OnInit {
     })
   }
 
-
   navigateBack() {
-    this._router.navigate(['/coi/user-dashboard/list/entities'])
+    this._router.navigate(['/coi/user-dashboard/entities'])
     // this._router.navigateByUrl(this._entityDetailsServices.previousURL);
   }
 }

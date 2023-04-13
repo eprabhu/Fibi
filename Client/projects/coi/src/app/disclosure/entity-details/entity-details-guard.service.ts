@@ -19,7 +19,7 @@ export class EntityDetailsGuardService implements CanActivate {
   }
   getSfiLookUp() {
     this._entityDetails.addSFILookUp().subscribe((res: any) => {
-      this._entityDetails.lookups = res.coiFinancialEntityRelType;
+      this._entityDetails.lookups = res.personEntityRelType;
     });
   }
 }

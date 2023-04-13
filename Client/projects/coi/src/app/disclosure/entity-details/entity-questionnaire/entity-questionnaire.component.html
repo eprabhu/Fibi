@@ -29,12 +29,18 @@
               {{coiFinancialEntityDetail?.coiFinancialEntityRelType?.description}}</span>
           </div>
         </ng-container>
-        <div (click)="activeRelationship = 'add_relationship' " class="px-3 py-1 text-primary"
+        <div *ngIf="isEditMode" (click)="activeRelationship = 'add_relationship' " class="px-3 py-1 text-primary"
           role="button">
           <span (click)="openAddRelationshipModal('addRelationshipModal')">
             <mat-icon class="material-icons-outlined pt-2 fs-18">add_circle_outline</mat-icon>
             <label class="btn-position">Add Relationship</label>
           </span>
+        </div>
+        <div *ngIf="isEditMode" class="mat-save">
+          <button class="btn" (click)="getSaveEvent()" type="button" title="Save questionnaire">
+            <mat-icon class="text-primary me-2 material-icons d-flex">save</mat-icon>
+            <!-- <label class="fs-14">Save</label> -->
+          </button>
         </div>
       </nav>
       <div *ngIf="definedRelationships?.length" class="container-fluid m-2">
@@ -87,14 +93,8 @@
           </div>
         </div>
         <ng-template #noData>
-          <div class="no-data-container">
-            <span class="no-data-icon-outer">
-              <div class="no-data-icon">
-                <i class="fa fa-file-o" aria-hidden="true"></i>
-                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-              </div>
-            </span>
-            <h4>There are no relations.</h4>
+          <div class="m-3">
+            <app-no-information></app-no-information>
           </div>
         </ng-template>
       </div>

@@ -1,7 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { slowSlideInOut} from '../../../../../fibi/src/app/common/utilities/animations';
 import { EntityManagementService } from '../entity-management.service';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-view-entity-details',
@@ -9,31 +11,37 @@ import { EntityManagementService } from '../entity-management.service';
   styleUrls: ['./view-entity-details.component.scss'],
   animations: [slowSlideInOut]
 })
-export class ViewEntityDetailsComponent implements OnInit {
+export class ViewEntityDetailsComponent implements OnInit,OnDestroy {
 
   entityDetails:any = {};
-  constructor(private _router:Router,private _route:ActivatedRoute,private _entityManagementService:EntityManagementService) { }
+  entityManageId:any;
+  $subscriptions: Subscription[] = [];
+
+  constructor(private _router:Router,private _route:ActivatedRoute,public entityManagementService:EntityManagementService) { }
 
   ngOnInit() {
-    const entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
-    this.getEntityDetails(entityManageId);
+    this.entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
+    this.getEntityDetails(this.entityManageId);
+  }
 
-
+  ngOnDestroy() {
+    this.entityManagementService.isShowEntityNavBar = false;
+    subscriptionHandler(this.$subscriptions);
   }
 
   backToList(){
     // this.hideEntityDetails.emit(false);
-    this._router.navigate(['/coi/entity-management'])
+    this._router.navigate(['/coi/entity-management']);
   }
 
   modifyEntity() {
-    this._router.navigate(['/coi/create-disclosure/entity-details'])
+    this._router.navigate(['/coi/create-disclosure/entity-details']);
   }
 
   getEntityDetails(entityId){
-    this._entityManagementService.getEntityDetails(entityId).subscribe((res:any)=>{
+   this.$subscriptions.push(this.entityManagementService.getEntityDetails(entityId).subscribe((res:any)=>{
       this.entityDetails = res.coiEntity;
       // debugger
-    })
+    }));
   }
 }

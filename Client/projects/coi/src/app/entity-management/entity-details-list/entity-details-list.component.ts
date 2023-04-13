@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService } from '../entity-management.service';
 import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
+import { Subscription } from 'rxjs';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
   selector: 'app-entity-details-list',
@@ -9,7 +11,7 @@ import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/ani
   styleUrls: ['./entity-details-list.component.scss'],
   animations: [slowSlideInOut]
 })
-export class EntityDetailsListComponent implements OnInit {
+export class EntityDetailsListComponent implements OnInit,OnChanges, OnDestroy {
 
   entityDetails = [
     { name: 'Daniel Griffith', department: 'Research Support Office', title: 'Research Assistant', involvementStartDate: '12/08/2022', involvementEndDate: '13/06/2023', status: 'A' },
@@ -20,31 +22,58 @@ export class EntityDetailsListComponent implements OnInit {
     { name: 'Garry Dcruz', department: 'College of Business', title: 'Research Associate', involvementStartDate: '12/12/2022', involvementEndDate: '14/03/2023', status: 'I' },
     { name: 'Dennis Daniel', department: 'Office of Finance ', title: 'Senior Research Associate', involvementStartDate: '01/08/2022', involvementEndDate: '13/10/2023', status: 'I' },
   ];
-  isViewEntityDetails : true;
-  isviewDetails :true;
+  isViewEntityDetails: true;
+  isviewDetails: true;
   currentSelected = 'Person';
   entityManageId = null;
   coiElastic = null;
   isViewAdvanceSearch = false;
+  $subscriptions: Subscription[] = [];
 
-  constructor(private _router:Router,private _route:ActivatedRoute,private _entityManagementService:EntityManagementService) { }
+
+  constructor(private _router: Router, private _route: ActivatedRoute, private _entityManagementService: EntityManagementService) { }
 
 
   ngOnInit() {
-    console.log(this.currentSelected);
-
     this.entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
+    // debugger
+    this.getRelationshipEntityList();
+
   }
 
-  getEntityDetails(){
+  ngOnDestroy() {
+    subscriptionHandler(this.$subscriptions);
+  }
+
+  getEntityDetails() {
     this._entityManagementService
   }
 
-  viewDetails(data){
+  viewDetails(data) {
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104', mode: 'edit' } });
+  }
+
+  redirectToEntity(event) {
     this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' } });
   }
 
-  redirectToEntity(event){
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' } });
+  ngOnChanges() {
+
+  }
+
+  getRelationshipEntityList() {
+    const REQ_BODY = {
+      'filterType': this.currentSelected,
+      'coiEntityId': 1
+    }
+    this.$subscriptions.push(this._entityManagementService.getPersonEntityDetails(REQ_BODY).subscribe((res: any) => {
+      // this.entityDetails = res.personEntity
+      // console.log(this.entityDetails);
+    }));
+  }
+
+  currentTab(tab) {
+    this.currentSelected = tab;
+    this.getRelationshipEntityList();
   }
 }
