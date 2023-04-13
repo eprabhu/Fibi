@@ -3,7 +3,7 @@
     box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.02);
     background: white;
     min-height: 125px;
-    margin: 0 35px;
+    margin: 0 15px;
     border-radius: 6px;
 }
 
@@ -24,9 +24,22 @@ nav ul li {
   white-space: nowrap;
 }
 
+.btn-secondary:focus {
+  color: #fff;
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.primary-button:focus {
+color: #fff;
+background-color: #0948b1;;
+background-color: #0948b1;;
+}
+
+
 .separator {
   border: 1px solid #ededed;
-  margin: 10px 0;
+  margin: 1px 0;
 }
 
 .btn-tertiary {
@@ -37,6 +50,9 @@ nav ul li {
   margin: 22px;
 }
 
+.coi-admin-dash li {
+  color: #7c7c7d;
+}
 
 .label-text {
   font-weight: 600;
@@ -55,13 +71,18 @@ nav ul li {
   margin-left: 5px;
 }
 
-.section-ad {
-  margin: 27px;
+.section-advanced-search {
+  margin: 22px;
+}
+
+.list {
+  padding-left: 2px;
 }
 
 .arrow {
   font-size: 18px;
   height: 18px;
+  margin-left: 4px;
 }
 
 .selected-arrow {
@@ -79,14 +100,6 @@ nav ul li {
   background-color: #eeeeee;
   padding: 9px;
   margin-top: -10px;
-}
-
-.dash-card {
-  box-shadow: 0px 10px 15px -3px rgb(0 0 0 / 2%);
-  background: white;
-  min-height: 125px;
-  margin: 0 35px;
-  border-radius: 6px;
 }
 
 .f-5 {
@@ -160,11 +173,6 @@ nav ul li {
 
 .btn-tertiary {
   margin-left: auto;
-}
-
-.separator {
-  border: 1px solid #ededed;
-  margin: 10px 0;
 }
 
 .link-btn {

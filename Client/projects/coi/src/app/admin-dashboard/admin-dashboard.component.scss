@@ -81,7 +81,7 @@ nav ul li {
 
 .separator {
   border: 1px solid #ededed;
-  margin: 10px 0;
+  margin: 1px 0;
 }
 
 .link-btn {
@@ -114,6 +114,18 @@ nav ul li {
   top:4px;
 }
 
+.btn-secondary:focus {
+    color: #fff;
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.primary-button:focus {
+  color: #fff;
+  background-color: #0948b1;;
+  background-color: #0948b1;;
+}
+
 .sort-div {
   background-color: #eeeeee;
   padding: 9px;
@@ -124,18 +136,26 @@ nav ul li {
   border: 2px solid #54BF5B !important;
 }
 
+.list {
+  padding-left: 2px;
+}
+
 .coi-admin-dash li.active {
-    color: #007DEC;
+    color: #007DEC !important;
     font-weight: bold;
     border-bottom: 3px solid #007DEC;
-    padding: 19px 16px;
+    padding: 7px 6px;
+}
+
+.coi-admin-dash li {
+  color: #7c7c7d;
 }
 
 .coi-admin-dash li:focus {
-  color: #007DEC;
+  color: #007DEC !important;
   font-weight: bold;
   border-bottom: 3px solid #007DEC;
-  padding: 19px 16px;
+  padding: 7px 6px;
 }
 
 .card-bg {
@@ -163,13 +183,14 @@ nav ul li {
   margin-left: 5px;
 }
 
-.section-ad {
-  margin: 27px;
+.section-advanced-search {
+  margin: 22px;
 }
 
 .arrow {
   font-size: 18px;
   height: 18px;
+  margin-left: 4px;
 }
 
 .selected-arrow {

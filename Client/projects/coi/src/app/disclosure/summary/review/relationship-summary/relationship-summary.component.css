@@ -243,6 +243,11 @@
   color:#48647f;
 }
 
+.comment-icon {
+  width: 33px;
+  line-height: 0px;
+}
+
 .info-icon {
   margin-top : -7px;
   height     : 22px;
