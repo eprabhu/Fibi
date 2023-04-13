@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AppRouterComponent} from "./common/app-router/app-router.component";
-import {DashboardGuardService} from "./common/services/dashboard-guard.service";
+import { DashboardGuardService } from './common/services/dashboard-guard.service';
 
 const routes: Routes = [
     {path: '', redirectTo: 'coi/user-dashboard/disclosures', pathMatch: 'full'},
@@ -33,6 +33,10 @@ const routes: Routes = [
             },
             {
               path:'entity-details', loadChildren:() => import ('../app/disclosure/entity-details/entity-details.module').then(m =>m.EntityDetailsModule)
+            },
+            {
+                path: 'expanded-widgets',
+                loadChildren: () => import('./common/header/expanded-widgets/expanded-action-list/expanded-widgets.module').then(m => m.ExpandedActionListModule)
             }
         ]
     },
