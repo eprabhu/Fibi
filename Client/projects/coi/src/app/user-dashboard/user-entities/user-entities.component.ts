@@ -32,7 +32,7 @@ export class UserEntitiesComponent implements OnInit {
   }
 
   viewEntityDetails(entities) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entities.coiFinancialEntityId } })
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entities.coiFinancialEntityId,mode:'edit' } })
   }
 
   setFilter(type = 'ALL') {

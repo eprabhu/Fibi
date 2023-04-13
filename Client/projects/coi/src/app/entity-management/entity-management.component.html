@@ -1,5 +1,5 @@
-<div class="container-fluid px-3 py-2" [@slideInOut]>
-  <div *ngIf="!viewDetails" class="row">
+<div class="container-fluid px-5 py-2 mt-1" [@slideInOut]>
+  <div class="row">
     <div class="col-12 d-flex">
       <div class="col-8">
         <ul class="header-navigation-links d-flex align-items-center m-0 fs-13 cursor-pointer p-0 text-secondary">
@@ -22,13 +22,15 @@
         </ul>
       </div>
       <div class="col-4 justify-content-end d-flex ">
-        <button class="btn btn-primary d-flex fs-13" id="add-new-entity"><mat-icon class="add-icon">add</mat-icon> Add New
+        <button class="btn btn-primary d-flex fs-13" id="add-new-entity" (click)="addNewEntity()"><mat-icon class="add-icon">add</mat-icon> Add New
           Entity</button>
+      </div>
+      <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
+        <app-add-new-entity-details [coiEntityManageId]="entityManageId" [isEditEntity]="isCoiEditEntity"></app-add-new-entity-details>
       </div>
     </div>
   </div>
-  <!-- <app-view-entity-details  *ngIf="viewDetails" (hideEntityDetails)="hideEntityDetails($event)"></app-view-entity-details> -->
-  <div class="row mt-5">
+  <div class="row mt-4">
     <div class="col-10 mt-1">
       <app-elastic [options]="coiElastic" style="width: 400px" [placeHolder]="'Entity Name, Country etc.'"
         (selectedResult)="redirectToEntity($event)"></app-elastic>
@@ -123,5 +125,6 @@
       </div>
     </div>
   </div>
-  <app-entity-list [entityActiveTabName]="activeTabName" (viewEntityDetails)="selectedEntity($event);isViewAdvanceSearch = false"></app-entity-list>
+  <app-entity-list [entityActiveTabName]="activeTabName" (modifyEntityId)="selectedEntity($event);isViewAdvanceSearch = false"></app-entity-list>
 </div>
+

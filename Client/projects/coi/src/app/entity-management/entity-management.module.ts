@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { EntityDetailsListComponent } from './entity-details-list/entity-details-list.component';
 import { SharedModule } from '../shared/shared.module';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
+import { AddNewEntityDetailsComponent } from './add-new-entity-details/add-new-entity-details.component';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', component: EntityManagementComponent },
@@ -19,13 +21,15 @@ const routes: Routes = [
     EntityManagementComponent,
     EntityListComponent,
     ViewEntityDetailsComponent,
-    EntityDetailsListComponent
+    EntityDetailsListComponent,
+    AddNewEntityDetailsComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     MatIconModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   exports: [
   ],providers: [ElasticConfigService]

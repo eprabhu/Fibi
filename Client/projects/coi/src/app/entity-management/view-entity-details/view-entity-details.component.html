@@ -4,10 +4,10 @@
         <div class="col-6 d-flex">
           <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2" [ngClass]="entityDetails.isActive ?'':'inactive'">
             {{entityDetails.isActive?'Active':'Inactive'}}</span>
-          <h1 class="m-1 fw-bold fs-18">{{entityDetails?.coiEntityName}}</h1>
+          <h1 class="m-1 fw-bold fs-18">{{entityDetails?.entityName}}</h1>
         </div>
         <div class="col-6 align-items-center justify-content-end action-bar mt-1 d-flex">
-          <button class="m-1 new-line-property text-secondary fs-14-nav shadow action-btn">
+          <button class="m-1 new-line-property text-secondary fs-14-nav shadow action-btn" (click)="entityManagementService.isShowEntityNavBar=true">
             <mat-icon class="justify-content-center align-items-center fs-4 icon-size">
               mode
             </mat-icon>
@@ -26,6 +26,9 @@
         </div>
       </div>
     </div>
+    <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
+      <app-add-new-entity-details  [coiEntityManageId]="entityManageId" [isEditEntity]="true"></app-add-new-entity-details>
+    </div>
     <div class="card-body">
       <div class="row d-flex">
         <div class="col-12 d-flex">
@@ -39,11 +42,11 @@
           </div>
           <div class="col-2 d-grid">
             <span class="fw-bold fs-14">City</span>
-            <label class="text-secondary fs-13">{{entityDetails?.state !==null?entityDetails?.state:'No Data'}}</label>
+            <label class="text-secondary fs-13">{{entityDetails?.city !==null?entityDetails?.city:'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
             <span class="fw-bold fs-14">Website</span>
-            <label class="text-secondary fs-13">{{entityDetails?.webUrl !==null?entityDetails?.webUrl:'No Data'}}</label>
+            <label class="text-secondary fs-13">{{entityDetails?.webURL !==null?entityDetails?.webURL:'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
             <span class="fw-bold fs-14">Email Address </span>
@@ -61,9 +64,9 @@
           </div>
           <div class="col-2 d-grid">
             <span class="fw-bold fs-14">Risk Level</span>
-            <label class="text-secondary fs-13"><mat-icon *ngIf="entityDetails?.entityRiskCategoryCode?.description ==='High'"
-               class="invalid material-icons-round">warning</mat-icon>{{entityDetails?.entityRiskCategoryCode !==null?
-                entityDetails?.entityRiskCategoryCode?.description:'No data'}}</label>
+            <label class="text-secondary fs-13"><mat-icon *ngIf="entityDetails?.entityRiskCategory?.description ==='High'"
+               class="invalid material-icons-round">warning</mat-icon>{{entityDetails?.entityRiskCategory !==null?
+                entityDetails?.entityRiskCategory?.description:'No data'}}</label>
           </div>
           <div class="col-2 d-grid">
             <span class="fw-bold fs-14">Verified By</span>

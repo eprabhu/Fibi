@@ -81,7 +81,11 @@ h1{
   left: 6px;
 }
 .inactive {
-  background-color :#5f6462
+  background-color :#5f6462;
+  &:before {
+    content: "";
+    border-bottom: 6px solid #5f6462;
+  }
 }
 .mat-done{
   color: #6bc293;
