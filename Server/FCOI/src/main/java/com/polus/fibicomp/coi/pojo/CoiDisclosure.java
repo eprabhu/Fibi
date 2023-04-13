@@ -86,6 +86,12 @@ public class CoiDisclosure implements Serializable {
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE1_FK6"), name = "RISK_CATEGORY_CODE", referencedColumnName = "RISK_CATEGORY_CODE", insertable = false, updatable = false)
 	private CoiRiskCategory coiRiskCategory;
 	
+	@Column(name = "MODULE_CODE")
+	private Integer moduleCode;
+	
+	@Column(name = "MODULE_ITEM_KEY")
+	private String moduleItemKey;
+	
 	@Column(name = "EXPIRATION_DATE")
 	private Date expirationDate;
 	
@@ -315,6 +321,22 @@ public class CoiDisclosure implements Serializable {
 
 	public void setCreateTimestamp(Timestamp createTimestamp) {
 		this.createTimestamp = createTimestamp;
+	}
+
+	public Integer getModuleCode() {
+		return moduleCode;
+	}
+
+	public void setModuleCode(Integer moduleCode) {
+		this.moduleCode = moduleCode;
+	}
+
+	public String getModuleItemKey() {
+		return moduleItemKey;
+	}
+
+	public void setModuleItemKey(String moduleItemKey) {
+		this.moduleItemKey = moduleItemKey;
 	}
 
 }
