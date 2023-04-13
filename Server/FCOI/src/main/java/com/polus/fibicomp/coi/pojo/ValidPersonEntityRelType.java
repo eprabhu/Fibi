@@ -38,7 +38,7 @@ public class ValidPersonEntityRelType implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "VALID_PERSON_ENTITY_REL_TYPE_FK1"), name = "DISCLOSURE_TYPE_CODE", referencedColumnName = "DISCLOSURE_TYPE_CODE", insertable = false, updatable = false)
-	private CoiDisclosureOldType CoiDisclosureOldType;
+	private CoiDisclosureType CoiDisclosureType;
 
 	@Column(name = "RELATIONSHIP_TYPE_CODE")
 	private String RelationshipTypeCode;
@@ -79,14 +79,6 @@ public class ValidPersonEntityRelType implements Serializable {
 
 	public void setDisclosureTypeCode(String disclosureTypeCode) {
 		this.disclosureTypeCode = disclosureTypeCode;
-	}
-
-	public CoiDisclosureOldType getCoiDisclosureOldType() {
-		return CoiDisclosureOldType;
-	}
-
-	public void setCoiDisclosureOldType(CoiDisclosureOldType CoiDisclosureOldType) {
-		this.CoiDisclosureOldType = CoiDisclosureOldType;
 	}
 
 	public String getRelationshipTypeCode() {
@@ -143,6 +135,14 @@ public class ValidPersonEntityRelType implements Serializable {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+
+	public CoiDisclosureType getCoiDisclosureType() {
+		return CoiDisclosureType;
+	}
+
+	public void setCoiDisclosureType(CoiDisclosureType coiDisclosureType) {
+		CoiDisclosureType = coiDisclosureType;
 	}
 	
 }

@@ -13,7 +13,7 @@ import javax.persistence.ForeignKey;
 
 @Entity
 @Table(name = "ENTITY_RELATIONSHIP")
-public class EntityRealationship implements Serializable {
+public class EntityRelationship implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

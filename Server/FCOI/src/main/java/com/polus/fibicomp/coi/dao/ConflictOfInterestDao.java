@@ -11,9 +11,9 @@ import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.pojo.COIDispositionStatus;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntity;
 import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
-import com.polus.fibicomp.coi.pojo.COIFinancialEntityRelType;
 import com.polus.fibicomp.coi.pojo.COIReviewStatus;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOld;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldCategoryType;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
@@ -21,6 +21,7 @@ import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetailsStatus;
 import com.polus.fibicomp.coi.pojo.CoiDisclosureOldStatus;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
+import com.polus.fibicomp.coi.pojo.CoiProjectType;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
@@ -31,6 +32,8 @@ import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.PersonEntity;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.DashBoardProfile;
@@ -97,7 +100,7 @@ public interface ConflictOfInterestDao {
 	 * This method is used for get FinancialEntityRelType(lookup)
 	 * @return
 	 */
-	public List<COIFinancialEntityRelType> fetchCOIFinancialEntityRelType();
+	public List<PersonEntityRelType> fetchPersonEntityRelType();
 
 	/**
 	 * This method is used for get sfi details of a person
@@ -599,4 +602,17 @@ public interface ConflictOfInterestDao {
 	public List<CoiTravelDisclosure> getAllCoiTravelDisclosureList(ConflictOfInterestVO vo);
 	
 	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId);
+	
+	public List<CoiProjectType> getCoiProjectTypes();
+
+	public List<PersonEntity> getPersonEntityDetails(ConflictOfInterestVO vo);
+
+	public Integer generateMaxCoiEntityNumber();
+
+	public PersonEntity saveOrUpdateSFI(PersonEntity personEntity);
+
+	public Integer generateMaxDisclosureNumber();
+	
+	public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure CoiDisclosure);
+	
 }

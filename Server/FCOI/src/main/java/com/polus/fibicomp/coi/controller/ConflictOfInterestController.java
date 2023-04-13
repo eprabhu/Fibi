@@ -87,7 +87,7 @@ public class ConflictOfInterestController {
 
 	@PostMapping(value = "/createSFI")
 	public ResponseEntity<Object> createSFI(@RequestBody ConflictOfInterestVO vo) {
-		logger.info("Requesting for searchEntity");
+		logger.info("Requesting for createSFI");
 		return conflictOfInterestService.createSFI(vo);
 	}
 
@@ -332,6 +332,18 @@ public class ConflictOfInterestController {
 	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
 		logger.info("Request for getCoiTravelDisclosureById");
 		return conflictOfInterestService.getCoiTravelDisclosureDetailsById(travelDisclosureId);
+	}
+	
+	@GetMapping("/getCoiProjectTypes")
+	public ResponseEntity<Object> getCoiProjectTypes() {
+		logger.info("Requesting for getCoiProjectTypes");
+		return conflictOfInterestService.getCoiProjectTypes();
+	}
+	
+	@PostMapping(value = "/getPersonEntityDetails")
+	public ResponseEntity<Object> getPersonEntityDetails(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for getPersonEntityDetails");
+		return conflictOfInterestService.getPersonEntityDetails(vo);
 	}
 	
 }

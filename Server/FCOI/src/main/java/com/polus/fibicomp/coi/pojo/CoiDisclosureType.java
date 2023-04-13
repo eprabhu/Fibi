@@ -13,7 +13,7 @@ import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
 @Table(name = "COI_DISCLOSURE_TYPE")
-public class CoiDisclosureOldType implements Serializable {
+public class CoiDisclosureType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
