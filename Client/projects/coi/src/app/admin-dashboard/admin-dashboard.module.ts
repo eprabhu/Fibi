@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { CoiSharedModule } from '../disclosure/shared/shared.module';
 import { AdminDashboardService } from './admin-dashboard.service';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [{path: '', component: AdminDashboardComponent}];
 
@@ -20,7 +21,9 @@ const routes: Routes = [{path: '', component: AdminDashboardComponent}];
         SharedModule,
         CoiSharedModule,
         SharedComponentModule,
-        MatIconModule
+        MatIconModule,
+        FormsModule,
+        SharedModule
     ],
     providers: [AdminDashboardService]
 })

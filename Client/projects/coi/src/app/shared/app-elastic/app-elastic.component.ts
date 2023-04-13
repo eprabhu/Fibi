@@ -20,6 +20,7 @@ export class AppElasticComponent implements OnChanges, OnInit {
 	@Input() clearField: String;
 	@Input() isError: boolean;
 	@Input() isDisabled: boolean;
+  @Input() uniqueId: any;
 	@Output() selectedResult: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onEmpty: EventEmitter<any> = new EventEmitter<any>();
 	@ViewChild('searchField', { static: true }) searchField: ElementRef;
@@ -39,6 +40,7 @@ export class AppElasticComponent implements OnChanges, OnInit {
 
 	ngOnInit() {
 		this.searchText = this.options && this.options.defaultValue || '';
+    this.setUnquieIdForSearchText();
 	}
 
 	ngOnChanges() {
@@ -119,6 +121,10 @@ export class AppElasticComponent implements OnChanges, OnInit {
 			return '';
 		 }
 	}
+
+  setUnquieIdForSearchText() {
+    this.searchField.nativeElement.id = this.uniqueId ?  this.uniqueId : Math.random() + '';
+  }
 
 	checkForIcon(k) {
 		return this.options.icons && this.options.icons[k] ? this.options.icons[k] : '';

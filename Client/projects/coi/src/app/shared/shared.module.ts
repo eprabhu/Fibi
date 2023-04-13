@@ -46,6 +46,7 @@ import {DATE_PICKER_FORMAT_MATERIAL} from "../../../../fibi/src/app/app-constant
 import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {CdkMenuModule} from '@angular/cdk/menu';
+import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
     imports: [
@@ -65,7 +66,7 @@ import {CdkMenuModule} from '@angular/cdk/menu';
         LengthValidatorDirective, CurrencyFormatDirective, CustomCurrencyPipe, QuestionnaireListCompareComponent,
         AutoGrowDirective, QuestionnaireCompareComponent, CustomElementCompareComponent, GrantDetailsViewComponent, AppTimePickerComponent,
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
-        DragNDragDirective, CustomTagRemoverPipe,AddRelationshipModalComponent],
+        DragNDragDirective, CustomTagRemoverPipe,AddRelationshipModalComponent,PaginationComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -79,6 +80,7 @@ import {CdkMenuModule} from '@angular/cdk/menu';
         LookUpComponent,
         AddressBookComponent,
         DateFormatPipe,
+        PaginationComponent,
         SearchFilterPipe,
         CustomCurrencyPipe,
         ViewQuestionnaireListComponent,

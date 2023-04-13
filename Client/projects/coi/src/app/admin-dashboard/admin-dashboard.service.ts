@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CommonService } from '../common/services/common.service';
 
 @Injectable()
@@ -12,7 +14,9 @@ export class AdminDashboardService {
   }
 
   getCOIAdminDashboard(params: any) {
-      return this._http.post(this._commonService.baseUrl + '/getCOIAdminDashboard', params);
+      return this._http.post(this._commonService.baseUrl + '/getCOIAdminDashboard', params).pipe(catchError((err) => {
+        return of();
+      }));
   }
 
   loadDisclosureAdminDashboardCounts() {
@@ -60,9 +64,20 @@ export class CoiDashboardRequest {
   property20 = null;
   property21 = null;
   property22 = null;
+  property23 = null;
   pageNumber = 20;
   sort: any = {};
   tabName = 'ALL_DISCLOSURES';
   advancedSearch = 'L';
   currentPage = 1;
 }
+
+export class SortCountObj {
+  coiDisclosureNumber = 0;
+  disclosurePersonFullName = 0;
+  disclosureCategoryType = 0;
+  disclosureStatus = 0;
+  expirationDate = 0;
+  certificationDate = 0;
+  updateTimeStamp = 0;
+};

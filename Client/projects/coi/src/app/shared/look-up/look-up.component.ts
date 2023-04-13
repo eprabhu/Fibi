@@ -57,6 +57,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
   @Input() isExternalArray = false;
   @Input() externalArray: any = [];
   @Input() isDisabled;
+  @Input() uniqueId = null;
   @Output() selectedResult: EventEmitter<Array<LookUp>> = new EventEmitter<Array<LookUp>>();
   @ViewChild('dropdownOverlay', { static: true }) dropdownOverlay: ElementRef;
   @ViewChild('searchField', { static: true }) searchField: ElementRef;
@@ -69,6 +70,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
     this.isSelectAll = this.lookUpList.length && this.lookUpList.length === this.selectedLookUpList.length ? true : false;
     this.updateLookUpSettings();
     this.setSelectedValue();
+    this.setUnquieIdForSearchText();
     if (!this.isMultiple) {
       this.selection = this.defaultValue || '--select--';
     }
@@ -213,6 +215,10 @@ export class LookUpComponent implements OnChanges, OnDestroy {
 
   setLookUpListStatus(status: boolean) {
     this.isActive = status;
+  }
+
+  setUnquieIdForSearchText() {
+    this.searchField.nativeElement.id = this.uniqueId ?  this.uniqueId : Math.random() + '';
   }
 
   /**

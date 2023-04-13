@@ -10,7 +10,7 @@ import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utili
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
 import { DataStoreService } from '../disclosure/services/data-store.service';
-import { AdminDashboardService, CoiDashboardRequest } from './admin-dashboard.service';
+import { AdminDashboardService, CoiDashboardRequest, SortCountObj } from './admin-dashboard.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -48,7 +48,7 @@ export class AdminDashboardComponent {
   advSearchClearField: String;
   coiList = [];
   isActiveDisclosureAvailable: boolean;
-  advanceSearchDates = { approvalDate: null, expirationDate: null };
+  advanceSearchDates = { approvalDate: null, expirationDate: null, certificationDate: null  };
   selectedStartReviewCoiId = null;
   selectedReviewStatusCode = null;
   isSaving = false;
@@ -66,15 +66,9 @@ export class AdminDashboardComponent {
   replyComment: any[] = [];
   searchText: any;
   EntitySearchOptions: any = {};
-  sortCountObj: any = {
-    'coiDisclosureNumber': 0,
-    'disclosurePersonFullName': 0,
-    'disclosureCategoryType': 0,
-    'disclosureStatus': 0,
-    'expirationDate': 0,
-    'updateTimeStamp': 0
-  };
+  sortCountObj: SortCountObj;
   sortMap: any = {};
+  clearField: String;
 
   constructor(public _coiAdminDashboardService: AdminDashboardService,
     private _router: Router,
@@ -83,6 +77,8 @@ export class AdminDashboardComponent {
   }
 
   ngOnInit() {
+    this.sortCountObj = new SortCountObj();
+    this.sortMap = {};
     this.coiElastic = this._elasticConfig.getElasticForCoi();
     this.getDashboardDetails();
     this.getDashboardCounts();
@@ -214,6 +210,7 @@ export class AdminDashboardComponent {
   setAdvanceSearchValuesToServiceObject() {
     this._coiAdminDashboardService.coiRequestObject.property6 = parseDateWithoutTimestamp(this.advanceSearchDates.approvalDate);
     this._coiAdminDashboardService.coiRequestObject.property7 = parseDateWithoutTimestamp(this.advanceSearchDates.expirationDate);
+    this._coiAdminDashboardService.coiRequestObject.property23 = parseDateWithoutTimestamp(this.advanceSearchDates.certificationDate);
     this._coiAdminDashboardService.coiRequestObject.property15 =
       this._coiAdminDashboardService.coiRequestObject.advancedSearch === 'L'
         ? null : this._coiAdminDashboardService.coiRequestObject.property15;
@@ -408,9 +405,12 @@ export class AdminDashboardComponent {
   }
 
   private resetAdvanceSearchFields() {
+    this.sortCountObj = new SortCountObj();
+    this.sortMap = {};
     this._coiAdminDashboardService.coiRequestObject = new CoiDashboardRequest();
-    this.advanceSearchDates = { approvalDate: null, expirationDate: null };
+    this.advanceSearchDates = { approvalDate: null, expirationDate: null, certificationDate: null };
     this.advSearchClearField = new String('true');
+    this.clearField = new String('true');
     this.lookupValues = [];
   }
 
@@ -439,20 +439,7 @@ export class AdminDashboardComponent {
   }
 
   selectedEvent(event) {
-    if (event) {
-      console.log(event);
-      //   this.entityDetails.coiEntity = event;
-      //   this.entityDetails.coiEntityId = event.coiEntityId;
-      //   if (event.country) {
-      //     this.countrySearchOptions.defaultValue = event.country.countryName;
-      //     this.selectedCountryEvent(event.country);
-      //   }
-      //   this.clearCountryField = new String('false');
-      // } else {
-      //   this.entityDetails.coiEntity = new CoiEntity();
-      //   this.clearCountryField = new String('true');
-      //   this.clearSFIFields();
-    }
+    this._coiAdminDashboardService.coiRequestObject.property8 = event ? event.coiEntityId : null;
   }
 
   isActive(colName) {
