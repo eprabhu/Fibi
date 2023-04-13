@@ -51,8 +51,10 @@ export function getEndPointOptionsForSponsorByType(sponsorName, sponsorTypeCode)
 }
 
 export function getEndPointOptionsForLeadUnit(defaultValue = '') {
-    endPointOptions.contextField = LEAD_UNIT_OUTPUT_FORMAT;
-    endPointOptions.formatString = LEAD_UNIT_OUTPUT_FORMAT;
+    endPointOptions.contextField = 'unitName';
+    endPointOptions.formatString = 'unitName';
+    // endPointOptions.contextField = LEAD_UNIT_OUTPUT_FORMAT;
+    // endPointOptions.formatString = LEAD_UNIT_OUTPUT_FORMAT;
     endPointOptions.path = 'findLeadUnits';
     endPointOptions.defaultValue = defaultValue;
     endPointOptions.params = null;
@@ -105,8 +107,8 @@ export function getEndPointOptionsForCongressionalDistrict() {
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 export function getEndPointOptionsForEntity() {
-    endPointOptions.contextField = 'coiEntityName';
-    endPointOptions.formatString = 'coiEntityName';
+    endPointOptions.contextField = 'entityName';
+    endPointOptions.formatString = 'entityName';
     endPointOptions.path = 'searchEntity';
     endPointOptions.defaultValue = '';
     endPointOptions.params = null;

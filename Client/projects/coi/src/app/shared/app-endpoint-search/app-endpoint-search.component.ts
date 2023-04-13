@@ -22,6 +22,7 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
 	@Input() clearField: String;
 	@Input() isError: boolean;
 	@Input() isDisabled: boolean;
+  @Input() uniqueId = null;
 	@Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onEmpty: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onNewValueSelect: EventEmitter<any> = new EventEmitter<any>();
@@ -31,6 +32,7 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
 
 	searchText = '';
 	tempSearchText = '';
+  isShowresultValue = false;
 	isResultSelected = true;
 	timer: any;
 	results = [];
@@ -38,10 +40,12 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
 	isActive = false;
 	$subscriptions: Subscription[] = [];
 	newSearchText = '';
+  content: string;
 	constructor(private _appEndpointSearchService: AppEndpointSearchService, private _ref: ChangeDetectorRef) { }
 
 	ngOnInit() {
 		this.searchText = this.httpOptions && this.httpOptions.defaultValue || '';
+    this.setUnquieIdForSearchText();
 	}
 	ngOnChanges() {
 		if (!this.isError) {
@@ -64,9 +68,11 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
 	 */
 	getEndpointSearchResult(): void {
 		if (this.httpOptions) {
+      this.isShowresultValue = false;
 			clearTimeout(this.timer);
 			this.timer = setTimeout(() => {
 				const temporaryText = this.searchText.trim();
+        this.isShowresultValue = false;
 				this.newSearchText = this.addSearchText ? temporaryText : '';
 				this.$subscriptions.push(
 					this._appEndpointSearchService.endpointSearch(this.httpOptions.path, temporaryText, this.httpOptions.params)
@@ -83,16 +89,27 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
 										this.results.push({ 'label': label, 'value': el });
 									});
 								}
+                setTimeout(() => {
+                  this.content = this.results.length + ' data found. Please use your arrow keys to navigate';
+                  this.isShowresultValue = true;
+                }, 1500);
 							} else {
 								this.onEmpty.emit({ 'searchString': this.searchText });
 								if (!this.addSearchText) {
 									this.results.push({ 'label': 'No results' });
 								}
+                setTimeout(() => {
+                  this.content = 'No data found. Please search with another value';
+                  this.isShowresultValue = true;
+                }, 1500);
 							}
 						}));
 			}, 500);
 		}
 	}
+  setUnquieIdForSearchText() {
+    this.searchField.nativeElement.id = this.uniqueId ?  this.uniqueId : Math.random() + '';
+  }
 	/**
 	 * call on focus this creates a empty search string call
 	 * use this wisely if data is large it can cause error

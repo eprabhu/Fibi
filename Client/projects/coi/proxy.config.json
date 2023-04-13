@@ -162,6 +162,26 @@
     "/getPersonEntityDetails": {
       "target": "http://192.168.1.189:9090/fibi4/",
       "secure": false
+    },
+    "/loadDisclosureAdminDashboardCounts": {
+      "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
+    },
+    "/findLeadUnits": {
+      "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
+    },
+    "/getLookUpDatas": {
+      "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
+    },
+    "/getCOIReviewerDashboard": {
+      "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
+    },
+    "/loadDisclosureReviewerQuickCardCounts": {
+      "target": "http://192.168.1.189:9090/fibi4/",
+      "secure": false
     }
 
   }
