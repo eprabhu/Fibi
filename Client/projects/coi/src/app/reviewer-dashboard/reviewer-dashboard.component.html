@@ -1,5 +1,5 @@
 <div class="container-fluid px-3 py-2">
-  <section class="row justify-content-center">
+  <!-- <section class="row justify-content-center">
     <div class="dash-card pointer">
       <div class="align-items-center d-flex h-100 justify-content-center">
         <p class="f-5 bold">{{dashboardCounts?.conflictIdentifiedCount}}</p>
@@ -12,11 +12,11 @@
         <p class="f-18 fw-500 mx-4">Pending Entity Approval</p>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <section class="section-card">
-    <nav class="coi-admin-dash mb-3 mx-0 row">
-      <div class="bg-white">
+    <nav class="coi-admin-dash mb-3 mx-0 row border">
+      <div class="bg-white list">
         <ul class="m-0 p-0 p-3 f-14">
           <li (click)="changeTab('NEW_SUBMISSIONS')" tabindex="0" (keyup.enter)="changeTab('NEW_SUBMISSIONS')"
             (keyup.space)="changeTab('NEW_SUBMISSIONS')"
@@ -24,14 +24,14 @@
             class="p-3 position-relative text-center ml-3" style="width: 128.11px">
             New Submissions
           </li>
-          <li class="separator mx-3"></li>
+          <li class="separator"></li>
           <li (click)="changeTab('MY_REVIEWS')" tabindex="0" (keyup.enter)="changeTab('MY_REVIEWS')"
             (keyup.space)="changeTab('MY_REVIEWS')"
             [class.active]="reviewerDashboardService.reviewerRequestObject.tabName=='MY_REVIEWS'"
             class="p-3 position-relative text-center" style="width: 130.7px">
             My Reviews
           </li>
-          <li class="separator mx-3"></li>
+          <li class="separator"></li>
           <!-- <li (click)="changeTab('COI_COMMITTEE')"
             [class.active]="reviewerDashboardService.reviewerRequestObject.tabName=='COI_COMMITTEE'"
             class="p-3 position-relative text-center" style="width: 130.7px">
@@ -45,14 +45,14 @@
             Review History
           </li>
         </ul>
-        <div class="d-flex">
-          <div class="form-group col-lg-10 col-md-10 col-10 d-flex position-relative">
+        <div class="d-flex mb-2">
+          <div class="form-group col position-relative">
             <app-elastic [options]="coiElastic" style="width: 1400px"
               [placeHolder]="'Search : Disclosure#, Category, Full Name, Status, person#'"
               (selectedResult)="redirectToDisclosure($event)"></app-elastic>
           </div>
-          <div class="form-group col-lg-2 col-md-2 col-2">
-            <button role="button" class="btn btn-primary d-flex align-items-center" id="advanced-search"
+          <div class="form-group col-auto">
+            <button role="button" class="btn btn-primary d-flex align-items-center primary-button" id="advanced-search"
               (click)="toggleADSearch()" style="margin-left:18px;" aria-controls="collapseExample" aria-expanded="false"
               aria-label="Toggle Advanced Search"><mat-icon>tune</mat-icon>
               <div> Advanced Search </div>
@@ -62,11 +62,11 @@
       </div>
     </nav>
 
-    <div class="sort-div" *ngIf="isShowAllProposalList && coiList.length">
+    <div class="sort-div border" *ngIf="isShowAllProposalList && coiList.length">
       <span class="fs-14 fw-medium me-2 text-secondary">Sort by:</span>
       <span tabindex="0" (keydown.enter)="sortResult('coiDisclosureNumber')" (click)="sortResult('coiDisclosureNumber')"
         [class.filter-active]="isActive('coiDisclosureNumber')"
-        class="shadow-sm fw-medium px-3 py-1 fs-13 ml-15 border rounded-5 bg-white" role="button">
+        class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 ml-15 border rounded-5 bg-white" role="button">
         <div class="d-inline-flex align-items-center">
           <label>Disclosure#
             <ngContainer hidden="true">sorting in
@@ -83,7 +83,7 @@
       </span>
       <span tabindex="0" (keydown.enter)="sortResult('disclosurePersonFullName')"
         (click)="sortResult('disclosurePersonFullName')" [class.filter-active]="isActive('disclosurePersonFullName')"
-        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white mx-1" role="button">
+        class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
         <div class="d-inline-flex align-items-center">
           <label>Person Name</label>
           <mat-icon class="text-secondary arrow"
@@ -96,7 +96,7 @@
       </span>
       <span tabindex="0" (keydown.enter)="sortResult('disclosureCategoryType')"
         (click)="sortResult('disclosureCategoryType')" [class.filter-active]="isActive('disclosureCategoryType')"
-        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white" role="button">
+        class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
         <div class="d-inline-flex align-items-center">
           <label>Disclosure Type</label>
           <mat-icon class="text-secondary arrow"
@@ -109,7 +109,7 @@
       </span>
       <span tabindex="0" (keydown.enter)="sortResult('disclosureStatus')" (click)="sortResult('disclosureStatus')"
         [class.filter-active]="isActive('disclosureStatus')"
-        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white mx-1" role="button">
+        class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
         <div class="d-inline-flex align-items-center">
           <label>Disclosure Status</label>
           <mat-icon class="text-secondary arrow"
@@ -122,7 +122,7 @@
       </span>
       <span tabindex="0" (keydown.enter)="sortResult('certificationDate')" (click)="sortResult('certificationDate')"
         [class.filter-active]="isActive('certificationDate')"
-        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white mx-1" role="button">
+        class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
         <div class="d-inline-flex align-items-center">
           <label>Certification Date</label>
           <mat-icon class="text-secondary arrow"
@@ -135,7 +135,7 @@
       </span>
       <span tabindex="0" (keydown.enter)="sortResult('expirationDate')" (click)="sortResult('expirationDate')"
         [class.filter-active]="isActive('expirationDate')"
-        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white mx-1" role="button">
+        class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
         <div class="d-inline-flex align-items-center">
           <label>Expiration Date</label>
           <mat-icon class="text-secondary arrow"
@@ -148,7 +148,7 @@
       </span>
       <span tabindex="0" (keydown.enter)="sortResult('updateTimeStamp')" (click)="sortResult('updateTimeStamp')"
         [class.filter-active]="isActive('updateTimeStamp')"
-        class="shadow-sm fw-medium px-3 py-1 fs-13 border rounded-5 bg-white" role="button">
+        class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
         <div class="d-inline-flex align-items-center">
           <label>Last Updated</label>
           <mat-icon class="text-secondary arrow"
@@ -161,7 +161,7 @@
       </span>
     </div>
 
-    <div class="card mb-3 collapse" id="collapseExample">
+    <div class="card mb-3 collapse border" id="collapseExample">
       <div class="card-body">
         <div class="form-row row mt-2">
           <!-- Disclosure # -->
