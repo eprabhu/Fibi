@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { EntityDetailsService } from '../entity-details.service';
-import { SfiService } from '../../sfi/sfi.service';
 
 @Component({
   selector: 'app-add-entity-details',
@@ -12,8 +11,7 @@ export class AddEntityDetailsComponent implements OnInit {
 
   isExpanded = true;
   entityDetails:any = {};
-  constructor(private _entityDetailsServices:EntityDetailsService,private _router: Router,
-    public sfiServices:SfiService) { }
+  constructor(private _entityDetailsServices:EntityDetailsService,private _router: Router) { }
 
   ngOnInit() {
     this.getEntityDetails();

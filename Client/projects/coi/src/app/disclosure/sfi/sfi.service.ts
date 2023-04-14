@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
 import { SFI } from './add-sfi.interface';
+import { Subject } from 'rxjs';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SfiService {
     isShowSfiNavBar = false;
     sfiDetails: SFI;
     previousURL= '';
+    $addSfi = new Subject<Boolean>();
     
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
@@ -18,12 +18,20 @@ export class SfiService {
             {'disclosureId': id, 'disclosureStatusCode': disclosureStatusCode, 'personId': personId});
     }
 
-    createSFI(prams) {
-    return this._http.post(this._commonService.baseUrl + '/createSFI', prams)
-  }
+    createSFI(params) {
+        return this._http.post(this._commonService.baseUrl + '/createSFI', params)
+    }
 
-  getSFIDetails(coiFinancialEntityId) {
-    return this._http.get(`${this._commonService.baseUrl}/getSFIDetails/${coiFinancialEntityId}`)
-  }
+    saveOrUpdateCoiEntity(params) {
+        return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiEntity', params)
+    }
 
+    getSFIDetails(coiFinancialEntityId) {
+        return this._http.get(`${this._commonService.baseUrl}/getSFIDetails/${coiFinancialEntityId}`)
+    }
+
+    addSFILookUp() {
+        return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
+    }
+  
 }

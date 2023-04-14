@@ -76,7 +76,7 @@
     "secure": false
   },
   "/searchEntity": {
-    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "target": "http://192.168.1.189:9090/fibi4/",
     "secure": false
   },
   "/findCountry": {
@@ -116,7 +116,7 @@
     "secure": false
   },
     "/createSFI": {
-      "target": "https://stage.fibiweb.com/fibiCOI/",
+      "target": "http://192.168.1.189:9090/fibi4/",
       "secure": false
     },
     "/saveOrUpdateCoiEntity": {

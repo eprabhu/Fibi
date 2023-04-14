@@ -13,20 +13,28 @@
     </div>
     <div *ngIf="isExpanded" class="card-body form-group">
       <div class="">
-        
         <div class="row">
           <div class="col-12 d-flex">
-            <div class="col-6  d-flex">
+            <div class="col-6 d-flex">
               <span class="col-4">
                 <label class="col-6 fs-14">Start date of involvement </label><label class="mandatory">*</label>
               </span>
               <div class="col-7">
-                <span class="dateField">
-                  <input matInput [matDatepicker]="startDate" id="start-date-involvement" (click)="startDate.open()"
-                    class="form-control d-inline-block" placeholder="dd/MM/yyyy">
-                  <i (click)="startDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
-                  <mat-datepicker #startDate></mat-datepicker>
-                </span>
+                  <span class="dateField w-100">
+                    <input matInput [matDatepicker]="startDate" id="start-date-involvement" placeholder="dd/MM/yyyy"
+                      style="width: 100% !important" (click)="startDate.open()"
+                      autocomplete="off" class="d-inline-block form-control"
+                      [(ngModel)]="sfiService.entityDetails.involvementStartDate"  
+                      (keypress)="_commonService._keyPress($event, 'date')"
+                      [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''"
+                      [disabled]="isViewMode" />
+                    <i (click)="startDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                    <mat-datepicker #startDate>
+                    </mat-datepicker>
+                  </span>
+                  <div *ngIf="mandatoryList?.has('date')" class="invalid-feedback d-block">
+                    {{mandatoryList?.get('date')}}
+                </div>
                 <p class="new-line-property text-secondary fs-13">Select a date</p>
               </div>
             </div>
@@ -36,12 +44,16 @@
               </span>
               <div class="col-7">
                 <span class="dateField">
-                <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
-                  class="form-control" placeholder="dd/MM/yyyy">
+                  <input matInput [matDatepicker]="endDate" id="end-date-involvement" placeholder="dd/MM/yyyy"
+                    style="width: 100% !important" (click)="endDate.open()" autocomplete="off"
+                    class="d-inline-block form-control" 
+                    [(ngModel)]="sfiService.entityDetails.involvementEndDate"
+                    (keypress)="_commonService._keyPress($event, 'date')"
+                    [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''" [disabled]="isViewMode" />
                   <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
-                <mat-datepicker #endDate>
-                </mat-datepicker>
-              </span>
+                  <mat-datepicker #endDate>
+                  </mat-datepicker>
+                </span>
                 <p class="new-line-property text-secondary fs-13">Select a date</p>
               </div>
             </div>
