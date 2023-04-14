@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { SfiService } from './sfi.service';
 import { DataStoreService } from '../services/data-store.service';
 import { CoiService } from '../services/coi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-sfi',
@@ -14,7 +14,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class SfiComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
-
     coiFinancialEntityDetails: any[] = [];
     searchText: string;
     dependencies = ['coiDisclosure', 'numberOfSFI'];
@@ -28,8 +27,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         private _sfiService: SfiService,
         private _dataStore: DataStoreService,
         public _coiService: CoiService,
-        private _router: Router,
-        private _activatedRoute: ActivatedRoute
+        private _router: Router
     ) { }
 
     ngOnInit() {
@@ -37,6 +35,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         this.getEditMode();
         this.getSfiDetails();
         this.listenDataChangeFromStore();
+        this.listenForAdd();
     }
 
     ngOnDestroy() {
@@ -69,6 +68,23 @@ export class SfiComponent implements OnInit, OnDestroy {
             })
         );
     }
+    
+    listenForAdd() {
+        this.$subscriptions.push(
+            this._sfiService.$addSfi.subscribe((data: boolean) => {
+                this.getSfiDetails();
+                this._sfiService.isShowSfiNavBar = false;
+                this.removeEntityId();
+            })
+        );
+    }
+
+    removeEntityId() {
+        this._router.navigate([], {
+          queryParams: {entityId: null},
+          queryParamsHandling: 'merge'
+        })
+      }
 
     closeSFIInfo() {
         this._coiService.isShowSFIInfo = false;

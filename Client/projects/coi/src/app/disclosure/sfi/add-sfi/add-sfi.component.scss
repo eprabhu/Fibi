@@ -31,9 +31,15 @@
     /* background-color: #d1d0d0; */
 }
 
-select {
-    background-color: #eef5ff;
+.card-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
+
+// select {
+//     background-color: #eef5ff;
+// }
 
 select option {
     background-color: #fff;

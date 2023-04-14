@@ -43,7 +43,6 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule} fro
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatIconModule} from '@angular/material/icon';
 import {DATE_PICKER_FORMAT_MATERIAL} from "../../../../fibi/src/app/app-constants";
-import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {CdkMenuModule} from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
@@ -66,7 +65,7 @@ import { PaginationComponent } from './pagination/pagination.component';
         LengthValidatorDirective, CurrencyFormatDirective, CustomCurrencyPipe, QuestionnaireListCompareComponent,
         AutoGrowDirective, QuestionnaireCompareComponent, CustomElementCompareComponent, GrantDetailsViewComponent, AppTimePickerComponent,
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
-        DragNDragDirective, CustomTagRemoverPipe,AddRelationshipModalComponent,PaginationComponent],
+        DragNDragDirective, CustomTagRemoverPipe,PaginationComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -104,7 +103,6 @@ import { PaginationComponent } from './pagination/pagination.component';
         MatDatepickerModule,
         MatNativeDateModule,
         MatIconModule,
-        AddRelationshipModalComponent,
         CdkMenuModule,
         MatMenuModule
     ],

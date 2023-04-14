@@ -16,6 +16,7 @@ import {RouterGuardService} from "./services/router-guard.service";
 import {SharedModule} from "../shared/shared.module";
 import { SfiModule } from './sfi/sfi.module';
 import {CoiSharedModule} from "./shared/shared.module";
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
     {
@@ -56,7 +57,7 @@ const routes: Routes = [
     declarations: [
         DisclosureComponent,
         AddSfiComponent,
-        SearchFieldComponent,
+        SearchFieldComponent
     ],
     imports: [
         CommonModule,
@@ -65,7 +66,8 @@ const routes: Routes = [
         MatButtonModule,
         SharedModule,
         SfiModule,
-        CoiSharedModule
+        CoiSharedModule,
+        FormsModule
     ],
     providers: [
         SfiService,
