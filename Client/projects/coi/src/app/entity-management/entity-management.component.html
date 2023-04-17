@@ -1,107 +1,135 @@
-<div class="container-fluid px-5 py-2 mt-1" [@slideInOut]>
+<div class="container-fluid px-5 py-2 " [@slideInOut]>
   <div class="row">
     <div class="col-12 d-flex">
-      <div class="col-8">
-        <ul class="header-navigation-links d-flex align-items-center m-0 fs-13 cursor-pointer p-0 text-secondary">
-          <li class="mr-2 cursor-pointer" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}" role="presentation"
+      <div class="col">
+        <ul class="header-navigation-links d-flex align-items-center m-0 f-15 cursor-pointer p-0 text-secondary">
+          <li tabindex="0" class="mr-15 cursor-pointer" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"
+            role="tab" (keyup.enter)="entityTabName('ALL_ENTITIES')" (keyup.space)="entityTabName('ALL_ENTITIES')"
             (click)="entityTabName('ALL_ENTITIES')">All Entities
             <span *ngIf="activeTabName === 'ALL_ENTITIES'"
               class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
 
           </li>
-          <li class="mr-2 cursor-pointer" [ngClass]="{'active': activeTabName === 'UNVERIFIED'}" role="presentation"
+          <li tabindex="0" class="mr-15 ml-15 cursor-pointer" [ngClass]="{'active': activeTabName === 'UNVERIFIED'}"
+            role="tab" (keyup.enter)="entityTabName('UNVERIFIED')" (keyup.space)="entityTabName('UNVERIFIED')"
             (click)="entityTabName('UNVERIFIED')">Unverified Entities
             <span *ngIf="activeTabName === 'UNVERIFIED'"
               class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
           </li>
-          <li class="mr-2 cursor-pointer" [ngClass]="{'active': activeTabName === 'HIGH_RISK'}" role="presentation"
+          <li tabindex="0" class="mr-15 ml-15 cursor-pointer" [ngClass]="{'active': activeTabName === 'HIGH_RISK'}"
+            role="tab" (keyup.enter)="entityTabName('HIGH_RISK')" (keyup.space)="entityTabName('HIGH_RISK')"
             (click)="entityTabName('HIGH_RISK')">High Risk Entities
             <span *ngIf="activeTabName === 'HIGH_RISK'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
 
           </li>
         </ul>
       </div>
-      <div class="col-4 justify-content-end d-flex ">
-        <button class="btn btn-primary d-flex fs-13" id="add-new-entity" (click)="addNewEntity()"><mat-icon class="add-icon">add</mat-icon> Add New
+      <div class="justify-content-end d-flex mt-3 ">
+        <button class="btn btn-primary d-flex fs-13" id="add-new-entity" title="Add new entity"
+          (click)="addNewEntity()"><mat-icon class="add-icon">add</mat-icon> Add New
           Entity</button>
       </div>
-      <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
-        <app-add-new-entity-details [coiEntityManageId]="entityManageId" [isEditEntity]="isCoiEditEntity"></app-add-new-entity-details>
-      </div>
     </div>
+  </div>
+  <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
+    <app-add-new-entity-details [coiEntityManageId]="entityManageId"
+      [isEditEntity]="isCoiEditEntity"></app-add-new-entity-details>
   </div>
   <div class="row mt-4">
-    <div class="col-10 mt-1">
-      <app-elastic [options]="coiElastic" style="width: 400px" [placeHolder]="'Entity Name, Country etc.'"
-        (selectedResult)="redirectToEntity($event)"></app-elastic>
-    </div>
-    <div class="col-2 mt-1 justify-content-end d-flex">
-      <button class="btn btn-primary fs-13 d-flex" id="advanced-search"
-        (click)="isViewAdvanceSearch=!isViewAdvanceSearch"><mat-icon class="add-icon">tune</mat-icon> Advanced Search</button>
+    <div class="col-12 d-flex mt-1">
+      <div class="col">
+        <app-elastic [options]="coiElastic" [placeHolder]="'Entity Name, Country etc.'"
+          [uniqueId]="'btn-entity-elastic'" (selectedResult)="redirectToEntity($event)"></app-elastic>
+      </div>
+      <div class="ml-15 justify-content-end d-flex">
+        <button class="btn btn-primary fs-13 d-flex" id="advanced-search" title="Advance search"
+          (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search" aria-expanded="true"
+          aria-label="Toggle Advanced Search"><mat-icon class="add-icon">tune</mat-icon> Advanced
+          Search
+        </button>
+      </div>
     </div>
   </div>
-  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-4">
-    <div class="row m-2">
-      <div class="col-12 d-flex">
-        <div class="col-3 d-grid ml-3">
-          <label class="fw-bold fs-14">Entity Name</label>
-          <input type="text" class="form-control text-secondary fs-13" placeholder="Type here for the entity name">
+  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow rounded-3" id="view-advance-search">
+    <div class="card-body">
+      <div class="form-row row m-2">
+        <!-- <div class="col-12 d-flex"> -->
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block" for="adv-entity-name">Entity Name</label>
+          <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
+            [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here for entity name'"
+            class=" text-secondary fs-13" [uniqueId]="'adv-entity-name'">
+          </app-endpoint-search>
         </div>
-        <div class="col-3 d-grid ml-3">
-          <label class="fw-bold fs-14">Country</label>
-          <input type="text" class="form-control text-secondary fs-13" placeholder="Type here for the country">
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block" for="adv-entity-country">Country</label>
+          <!-- <input type="text" class="form-control text-secondary fs-13" placeholder="Type here for the country"> -->
+          <app-endpoint-search (onSelect)="selectEntityCountry($event)" [clearField]="advSearchClearField"
+            [httpOptions]="countrySearchOptions" class=" text-secondary fs-13"
+            [placeHolder]="'Type here for entity country'" [uniqueId]="'adv-entity-country'">
+          </app-endpoint-search>
         </div>
-        <div class="col-3 d-grid ml-3">
-          <label class="fw-bold fs-14">Status</label>
-          <select class="form-select text-secondary fw-medium fs-13">
-            <option value="">--Select--</option>
-            <option value="1">Active</option>
-            <option value="2">Inactive</option>
-          </select>
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block">Status</label>
+          <!-- <select class="form-select text-secondary fw-medium fs-13">
+              <option value="">--Select--</option>
+              <option value="1">Active</option>
+              <option value="2">Inactive</option>
+            </select> -->
+          <app-look-up (selectedResult)="onLookupSelect($event, 'property3')" [options]="statusTypeOptions"
+            [selectedLookUpList]="lookupValues['property3']" class=" text-secondary fs-13"
+            [uniqueId]="'adv-disclosure-type'">
+          </app-look-up>
         </div>
-        <div class="col-3 d-grid ml-3">
-          <label class="fw-bold fs-14">Entity Type</label>
-          <select class="form-select text-secondary fw-medium fs-13">
-            <option value="">--Select--</option>
-            <option value="1">Publicly owned</option>
-            <option value="2">Private</option>
-            <option value="3">For Profit</option>
-            <option value="4">Non-Profit</option>
-          </select>
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block" for="adv-entity-type">Entity Type</label>
+          <app-look-up (selectedResult)="onLookupSelect($event, 'property4')" [options]="entityTypeOptions"
+            [selectedLookUpList]="lookupValues['property4']" class=" text-secondary fs-13"
+            [uniqueId]="'adv-entity-type'">
+          </app-look-up>
+          <!-- <select class="form-select text-secondary fw-medium fs-13">
+              <option value="">--Select--</option>
+              <option value="1">Publicly owned</option>
+              <option value="2">Private</option>
+              <option value="3">For Profit</option>
+              <option value="4">Non-Profit</option>
+            </select> -->
         </div>
+        <!-- </div> -->
       </div>
-      <div class="col-12 d-flex mt-3">
-        <div class="col-3 d-grid">
-          <label class="fw-bold fs-14">Has SFI</label>
+      <div class="form-row row m-2">
+        <div class="col-3">
+          <label class="fw-bold fs-14 d-block" for="btn-has-sfi">Has SFI</label>
           <div class="activate-btn align-items-center d-flex pt-1">
-            <span class="pt-1 fs-13">
+            <span class="pt-1 fs-13" id="btn-has-sfi" aria-label="Toggle Has Sfi" title="Toggle Has Sfi">
               <a *ngIf="isHasSfiOn" class="pl-2">
-                <label class="switch" (click)="isHasSfiOn = !isHasSfiOn">
-                  <input type="checkbox" checked>
+                <label class="switch">
+                  <input type="checkbox" checked  (click)="isHasSfiOn = !isHasSfiOn;onHasSif(isHasSfiOn?'Y':'N')">
                   <span class="slider round"><small>On</small></span>
                 </label>
               </a>
               <a *ngIf="!isHasSfiOn" class="pl-2">
-                <label class="switch" (click)="isHasSfiOn= !isHasSfiOn">
-                  <input type="checkbox">
+                <label class="switch">
+                  <input type="checkbox" (click)="isHasSfiOn = !isHasSfiOn;onHasSif(isHasSfiOn?'Y':'N')">
                   <span class="slider round"><small class="deactivate-text">Off</small></span>
                 </label>
               </a>
             </span>
           </div>
         </div>
-        <div class="col-3 d-grid">
-          <label class="fw-bold fs-14">Has Disclosure</label>
+        <div class="col-3">
+          <label class="fw-bold fs-14 d-block" for="btn-has-disclosure">Has Disclosure</label>
           <div class="activate-btn align-items-center d-flex pt-1">
-            <span class="pt-1 fs-13">
+            <span class="pt-1 fs-13" id="btn-has-disclosure" aria-label="Toggle Has Disclosure"
+              title="Toggle Has Disclosure">
               <a *ngIf="isHasDisclosureOn" class="pl-2">
-                <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn">
+                <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn;onHasDisclosure(isHasDisclosureOn?'Y':'N')">
                   <input type="checkbox" checked>
                   <span class="slider round"><small>On</small></span>
                 </label>
               </a>
               <a *ngIf="!isHasDisclosureOn" class="pl-2">
-                <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn">
+                <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn;onHasDisclosure(isHasDisclosureOn?'Y':'N')">
                   <input type="checkbox">
                   <span class="slider round"><small class="deactivate-text">Off</small></span>
                 </label>
@@ -109,22 +137,26 @@
             </span>
           </div>
         </div>
-        <div class="col-3 d-grid">
-          <label class="fw-bold fs-14">Risk Level</label>
-          <select class="form-select text-secondary fw-medium fs-13">
-            <option value="">--Select--</option>
-            <option value="1">High</option>
-            <option value="2">Medium</option>
-            <option value="3">Low</option>
-          </select>
+        <div class="col-3">
+          <label class="fw-bold fs-14 d-block" for="adv-entity-type">Risk Level</label>
+          <!-- <select class="form-select text-secondary fw-medium fs-13">
+              <option value="">--Select--</option>
+              <option value="1">High</option>
+              <option value="2">Medium</option>
+              <option value="3">Low</option>
+            </select> -->
+          <app-look-up (selectedResult)="onLookupSelect($event, 'property7')" [options]="riskLevelTypeOptions"
+            [selectedLookUpList]="lookupValues['property7']" class=" text-secondary fs-13"
+            [uniqueId]="'adv-entity-type'">
+          </app-look-up>
         </div>
-        <div class="col-2 d-flex justify-content-end align-items-end position">
-          <button class="btn btn-outline-secondary  fs-13 py-2 px-4" id="btn-clear">Clear</button>
-          <button class="btn btn-primary fs-13">Search</button>
+        <div class="col-3 d-flex justify-content-end align-items-end">
+          <button class="btn btn-outline-secondary  fs-13 py-2 px-4" id="btn-clear" (click)="clearAdvancedSearch()">Clear</button>
+          <button class="btn btn-primary fs-13" id="btn-search">Search</button>
         </div>
       </div>
     </div>
   </div>
-  <app-entity-list [entityActiveTabName]="activeTabName" (modifyEntityId)="selectedEntity($event);isViewAdvanceSearch = false"></app-entity-list>
+  <app-entity-list [entityActiveTabName]="activeTabName"
+    (modifyEntityId)="selectedEntity($event);isViewAdvanceSearch = false"></app-entity-list>
 </div>
-

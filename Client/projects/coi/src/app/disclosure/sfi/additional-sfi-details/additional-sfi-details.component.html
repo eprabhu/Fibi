@@ -7,7 +7,7 @@
           <h5 class="fs-16">Additional Details</h5>
         </span>
         <span class="col-8 align-items-center d-flex justify-content-end material-icons-outlined"
-          (click)="isExpanded = !isExpanded;alert()">{{isExpanded?'expand_more' :'expand_less'}}</span>
+          (click)="isExpanded = !isExpanded;">{{isExpanded?'expand_more' :'expand_less'}}</span>
       </div>
       <hr>
     </div>
@@ -24,7 +24,7 @@
                     <input matInput [matDatepicker]="startDate" id="start-date-involvement" placeholder="dd/MM/yyyy"
                       style="width: 100% !important" (click)="startDate.open()"
                       autocomplete="off" class="d-inline-block form-control"
-                      [(ngModel)]="sfiService.entityDetails.involvementStartDate"  
+                      [(ngModel)]="sfiService.entityDetails.involvementStartDate"
                       (keypress)="_commonService._keyPress($event, 'date')"
                       [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''"
                       [disabled]="isViewMode" />
@@ -46,7 +46,7 @@
                 <span class="dateField">
                   <input matInput [matDatepicker]="endDate" id="end-date-involvement" placeholder="dd/MM/yyyy"
                     style="width: 100% !important" (click)="endDate.open()" autocomplete="off"
-                    class="d-inline-block form-control" 
+                    class="d-inline-block form-control"
                     [(ngModel)]="sfiService.entityDetails.involvementEndDate"
                     (keypress)="_commonService._keyPress($event, 'date')"
                     [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''" [disabled]="isViewMode" />

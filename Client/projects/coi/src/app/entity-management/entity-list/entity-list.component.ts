@@ -22,10 +22,6 @@ export class EntityListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private _router: Router, private _entityManagementService: EntityManagementService) { }
 
   ngOnInit() {
-
-    console.log(this.entityActiveTabName);
-
-    // this.viewListOfEntity();
   }
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
@@ -43,11 +39,10 @@ export class EntityListComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnChanges() {
     this.viewListOfEntity();
-    console.log('onChange', this.entityActiveTabName);
   }
 
   modifyEntityDetails(data) {
-    this.modifyEntityId.emit(data.entityId)
+    this.modifyEntityId.emit(data.entityId);
 
   }
 }

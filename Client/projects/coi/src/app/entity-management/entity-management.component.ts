@@ -4,6 +4,7 @@ import { slowSlideInOut, slideHorizontal, fadeDown, slideInOut } from '../../../
 import { EntityManagementService } from './entity-management.service';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { Router } from '@angular/router';
+import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 
 @Component({
   selector: 'app-entity-management',
@@ -16,18 +17,30 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   entityManageId = null;
   activeTabName = 'ALL_ENTITIES';
   isViewAdvanceSearch = false;
-  isHasSfiOn = true;
-  isHasDisclosureOn = true;
+  isHasSfiOn = false;
+  isHasDisclosureOn = false;
   coiElastic = null;
   isCoiEditEntity = false;
+  clearField: String;
+  advSearchClearField: String;
+  EntitySearchOptions: any = {};
+  countrySearchOptions: any = {};
+  lookupValues = [];
+  riskLevelTypeOptions = 'entity_risk_category#RISK_CATEGORY_CODE#true#true';
+  entityTypeOptions = 'entity_type#ENTITY_TYPE_CODE#true#true';
+  statusTypeOptions = 'entity_status#ENTITY_STATUS_CODE#true';
+
+
 
   constructor(public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService, private _router: Router) {
   }
   ngOnInit() {
     this.coiElastic = this._elasticConfig.getElasticForCoi();
+    this.EntitySearchOptions = getEndPointOptionsForEntity();
+    this.countrySearchOptions = getEndPointOptionsForCountry();
+    this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
 
-    // this.getCOIAdminDashboard()
   }
   ngOnDestroy() {
     this.entityManagementService.isShowEntityNavBar = false;
@@ -41,7 +54,8 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   }
 
   entityTabName(tabName) {
-    this.activeTabName = tabName
+    this.activeTabName = tabName;
+    this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
   }
 
   getRequestObject() {
@@ -65,4 +79,26 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.entityManagementService.isShowEntityNavBar = true;
   }
 
+  selectedEvent(event) {
+    this.entityManagementService.coiRequestObject.property1 = event ? event.coiEntityId : null;
+  }
+
+  selectEntityCountry(country: any) {
+    this.entityManagementService.coiRequestObject.property2 = country ? country.countryCode : null;
+  }
+
+  onLookupSelect(data: any, property: string) {
+    this.lookupValues[property] = data;
+    this.entityManagementService.coiRequestObject[property] = data.length ? data.map(d => d.code) : [];
+  }
+  onHasSif(data: any) {
+    this.entityManagementService.coiRequestObject.property5 = data;
+  }
+  onHasDisclosure(data: any) {
+    this.entityManagementService.coiRequestObject.property6 = data;
+  }
+
+  clearAdvancedSearch() {
+
+  }
 }

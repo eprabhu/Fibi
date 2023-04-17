@@ -5,6 +5,8 @@ import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/an
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { EntityDetails } from '../entity-details-interface';
+import { CommonService } from '../../common/services/common.service';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/fibi/src/app/app-constants';
 
 export interface EndpointOptions {
   contextField: string;
@@ -49,7 +51,7 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
   ]
 
 
-  constructor(public entityManagementService: EntityManagementService) { }
+  constructor(public entityManagementService: EntityManagementService, private _commonService: CommonService) { }
 
   ngOnInit() {
     this.showSfiNavBar();
@@ -67,9 +69,14 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
   createEntity() {
     const isValid = this.entityValidation();
     if (isValid) {
-      this.$subscriptions.push(this.entityManagementService.saveOrUpdateCOIEntity(this.entityDetails).subscribe((res: EntityDetails) => {
-        this.entityDetails = res;
-      }));
+      this.$subscriptions.push(this.entityManagementService.
+        saveOrUpdateCOIEntity(this.entityDetails).subscribe((res: EntityDetails) => {
+          this.entityDetails = res;
+          this.entityManagementService.isShowEntityNavBar = false;
+          // this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity?'Update ':'Created '}Entity Successfully completed.`);
+        }, _err => {
+          // this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+        }));
     }
   }
 
@@ -118,7 +125,7 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
   getEntityDetails() {
     this.$subscriptions.push(this.entityManagementService.getEntityDetails(this.coiEntityManageId).subscribe((res: EntityDetails) => {
       this.entityDetails = res;
-      this.clearCountryField =new String('false');
+      this.clearCountryField = new String('false');
       this.countrySearchOptions.defaultValue = this.entityDetails.coiEntity.country.countryName;
       this.selectedCountryEvent(res.coiEntity.country)
       // this.entityDetails.coiEntity.country = res.coiEntity.country;
@@ -128,7 +135,7 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
 
   entityValidation() {
     this.mandatoryList.clear();
-    const email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)| (".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)| (".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!this.entityDetails.coiEntity.country) {
       this.mandatoryList.set('country', '* Please choose a country.');
     }
@@ -138,24 +145,36 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
     if (!this.entityDetails.coiEntity.entityTypeCode) {
       this.mandatoryList.set('entityType', '* Please choose a entity type.');
     }
-    if(!this.entityDetails.coiEntity.address) {
-      this.mandatoryList.set('address','* Please enter a entity address.')
+    if (!this.entityDetails.coiEntity.address) {
+      this.mandatoryList.set('address', '* Please enter a entity address.')
     }
-    if(!this.entityDetails.coiEntity.phone) {
-      this.mandatoryList.set('phoneNumber','* Please enter a entity phone number.')
+    if (!this.entityDetails.coiEntity.phone) {
+      this.mandatoryList.set('phoneNumber', '* Please enter a entity phone number.')
     }
-    if(!this.entityDetails.coiEntity.emailAddress) {
-      this.mandatoryList.set('email','* Please enter a entity email address.')
-    } else if(!(email.test(String(this.entityDetails.coiEntity.emailAddress).toLowerCase()))){
-      this.mandatoryList.set('email','* Please select a valid email address.')
+    if (!this.entityDetails.coiEntity.emailAddress) {
+      this.mandatoryList.set('email', '* Please enter a entity email address.')
+    } else if (!(emailPattern.test(String(this.entityDetails.coiEntity.emailAddress).toLowerCase()))) {
+      this.mandatoryList.set('email', '* Please select a valid email address.')
     }
-    if(!this.entityDetails.coiEntity.webURL) {
-      this.mandatoryList.set('website','* Please enter a entity website.')
+    if (!this.entityDetails.coiEntity.webURL) {
+      this.mandatoryList.set('website', '* Please enter a entity website.')
     }
     // if(!this.entityDetails.coiEntity.riskCategoryCode) {
     //   this.mandatoryList.set('riskLevel', '* Please choose a risk level.');
     // }
 
     return this.mandatoryList.size === 0 ? true : false;
+  }
+
+  phoneNumberValidation(event: any) {
+    // const phonePattern = (/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[0-9]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/);
+    // if(!phonePattern.test(input)) {
+    //   console.log('Ho');
+
+    // }
+    const pattern = /[0-9]\d*/;
+    if (!pattern.test(String.fromCharCode(event.charCode))) {
+      event.preventDefault();
+    }
   }
 }
