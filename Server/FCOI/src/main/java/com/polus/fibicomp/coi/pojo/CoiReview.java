@@ -43,7 +43,7 @@ public class CoiReview implements Serializable {
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_REVIEW_FK2"), name = "DISCLOSURE_ID", referencedColumnName = "DISCLOSURE_ID", insertable = false, updatable = false)
-	private CoiDisclosureOld coiDisclosureOld;
+	private CoiDisclosure coiDisclosure;
 	
 	@Column(name = "ADMIN_GROUP_ID")
 	private Integer adminGroupId;
@@ -56,8 +56,8 @@ public class CoiReview implements Serializable {
 	private String reviewStatusTypeCode ;
 
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "COI_REVIEW_FK4"), name = "REVIEW_STATUS_TYPE_CODE", referencedColumnName = "REVIEW_STATUS_TYPE_CODE", insertable = false, updatable = false)
-	private COIReviewStatus coiReviewStatus;
+	@JoinColumn(foreignKey = @ForeignKey(name = "COI_REVIEW_FK4"), name = "REVIEW_STATUS_TYPE_CODE", referencedColumnName = "REVIEW_STATUS_CODE", insertable = false, updatable = false)
+	private CoiReviewStatusType coiReviewStatus;
 	
 	@Column(name = "DESCRIPTION")
 	private String description ;
@@ -105,14 +105,6 @@ public class CoiReview implements Serializable {
 		this.disclosureId = disclosureId;
 	}
 
-	public CoiDisclosureOld getCoiDisclosureOld() {
-		return coiDisclosureOld;
-	}
-
-	public void setCoiDisclosureOld(CoiDisclosureOld coiDisclosureOld) {
-		this.coiDisclosureOld = coiDisclosureOld;
-	}
-
 	public Integer getAdminGroupId() {
 		return adminGroupId;
 	}
@@ -135,14 +127,6 @@ public class CoiReview implements Serializable {
 
 	public void setReviewStatusTypeCode(String reviewStatusTypeCode) {
 		this.reviewStatusTypeCode = reviewStatusTypeCode;
-	}
-
-	public COIReviewStatus getCoiReviewStatus() {
-		return coiReviewStatus;
-	}
-
-	public void setCoiReviewStatus(COIReviewStatus coiReviewStatus) {
-		this.coiReviewStatus = coiReviewStatus;
 	}
 
 	public Timestamp getUpdateTimestamp() {
@@ -193,4 +177,19 @@ public class CoiReview implements Serializable {
 		this.description = description;
 	}
 
+	public CoiDisclosure getCoiDisclosure() {
+		return coiDisclosure;
+	}
+
+	public void setCoiDisclosure(CoiDisclosure coiDisclosure) {
+		this.coiDisclosure = coiDisclosure;
+	}
+
+	public CoiReviewStatusType getCoiReviewStatus() {
+		return coiReviewStatus;
+	}
+
+	public void setCoiReviewStatus(CoiReviewStatusType coiReviewStatus) {
+		this.coiReviewStatus = coiReviewStatus;
+	}
 }

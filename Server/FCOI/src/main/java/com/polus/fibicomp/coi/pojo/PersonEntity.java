@@ -3,18 +3,9 @@ package com.polus.fibicomp.coi.pojo;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -98,6 +89,9 @@ public class PersonEntity implements Serializable {
 	@CreatedDate
 	@Column(name = "CREATE_TIMESTAMP")
 	private Timestamp createTimestamp;
+
+	@Transient
+	private List<PersonEntityRelationship> personEntityRelationships;
 
 	public Integer getPersonEntityId() {
 		return personEntityId;
@@ -251,4 +245,11 @@ public class PersonEntity implements Serializable {
 		this.sponsorsResearch = sponsorsResearch;
 	}
 
+	public List<PersonEntityRelationship> getPersonEntityRelationships() {
+		return personEntityRelationships;
+	}
+
+	public void setPersonEntityRelationships(List<PersonEntityRelationship> personEntityRelationships) {
+		this.personEntityRelationships = personEntityRelationships;
+	}
 }

@@ -19,7 +19,7 @@ public class CoiAttachmentCategoryType implements Serializable {
 
 	@Id
 	@Column(name = "COI_ATTA_CATEGORY_TYPE_CODE")
-	private String coiAttaCategoryTypeCode;
+	private String attachmentCategoryTypeCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -34,12 +34,12 @@ public class CoiAttachmentCategoryType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	public String getCoiAttaCategoryTypeCode() {
-		return coiAttaCategoryTypeCode;
+	public String getAttachmentCategoryTypeCode() {
+		return attachmentCategoryTypeCode;
 	}
 
-	public void setCoiAttaCategoryTypeCode(String coiAttaCategoryTypeCode) {
-		this.coiAttaCategoryTypeCode = coiAttaCategoryTypeCode;
+	public void setAttachmentCategoryTypeCode(String attachmentCategoryTypeCode) {
+		this.attachmentCategoryTypeCode = attachmentCategoryTypeCode;
 	}
 
 	public String getDescription() {

@@ -6,6 +6,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
+import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +29,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
-import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
-import com.polus.fibicomp.coi.pojo.CoiReview;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
@@ -92,15 +93,15 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/saveOrUpdateCoiFinancialEntityDetails")
-	public COIFinancialEntityDetails saveCoiFinancialEntityDetails(@RequestBody ConflictOfInterestVO vo) {
+	public PersonEntityRelationship saveCoiFinancialEntityDetails(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for saveOrUpdateCoiFinancialEntityDetails");
-		return conflictOfInterestService.saveOrUpdateCoiFinancialEntityDetails(vo.getCoiFinancialEntityDetail());
+		return conflictOfInterestService.saveOrUpdatePersonEntityRelationship(vo.getPersonEntityRelationship());
 	}
 
 	@PatchMapping("/certifyDisclosure")
 	public ResponseEntity<Object> certifyDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for certifyDisclosure");
-		return conflictOfInterestService.certifyDisclosure(vo.getCoiDisclosureOld());
+		return conflictOfInterestService.certifyDisclosure(vo.getCoiDisclosure());
 	}
 
 	@PostMapping("/getEntityProjectRelations")
@@ -220,9 +221,9 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/updateProjectConflictStatus")
-	public CoiDisclosureOldDetails updateProjectConflictStatus(@RequestBody ConflictOfInterestVO vo) {
+	public CoiDisclEntProjDetails updateProjectConflictStatus(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for updateProjectConflictStatus");
-		return conflictOfInterestService.updateProjectConflictStatus(vo.getCoiDisclosureOldDetail());
+		return conflictOfInterestService.updateProjectConflictStatus(vo.getCoiDisclEntProjDetail());
 	}
 	
 	@GetMapping("/loadProjectConflictHistory/{disclosureDetailsId}")
@@ -315,7 +316,7 @@ public class ConflictOfInterestController {
 		logger.info("Requesting for getAllSystemEntityList");
 		return conflictOfInterestService.getAllSystemEntityList();
 	}
-	
+
 	@PostMapping(value = "/createCoiTravelDisclosure")
 	public ResponseEntity<Object> createCoiTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for createCoiTravelDisclosure");
@@ -333,17 +334,31 @@ public class ConflictOfInterestController {
 		logger.info("Request for getCoiTravelDisclosureById");
 		return conflictOfInterestService.getCoiTravelDisclosureDetailsById(travelDisclosureId);
 	}
-	
+
 	@GetMapping("/getCoiProjectTypes")
 	public ResponseEntity<Object> getCoiProjectTypes() {
 		logger.info("Requesting for getCoiProjectTypes");
 		return conflictOfInterestService.getCoiProjectTypes();
 	}
-	
+
 	@PostMapping(value = "/getPersonEntityDetails")
 	public ResponseEntity<Object> getPersonEntityDetails(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for getPersonEntityDetails");
 		return conflictOfInterestService.getPersonEntityDetails(vo);
 	}
-	
+
+
+	@PostMapping(value = "/getCOIReviewerDashboard")
+	public ResponseEntity<Object> getCOIReviewerDashboard(@Valid @RequestBody CoiDashboardVO vo) {
+		logger.info("Requesting for getCOIReviewerDashboard");
+		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
+		return conflictOfInterestService.getCOIReviewerDashboard(vo);
+	}
+
+	@GetMapping(value = "/loadDisclosureReviewerQuickCardCounts")
+	public ResponseEntity<Object> loadDisclosureReviewerQuickCardCounts() {
+		logger.info("Request for loadDisclosureReviewerQuickCardCounts");
+		logger.info("Login Person Id : {}", AuthenticatedUser.getLoginPersonId());
+		return conflictOfInterestService.loadDisclosureReviewerQuickCardCounts();
+	}
 }

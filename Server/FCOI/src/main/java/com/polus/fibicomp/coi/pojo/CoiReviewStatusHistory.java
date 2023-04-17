@@ -30,7 +30,7 @@ public class CoiReviewStatusHistory implements Serializable {
 	private Integer coiReviewStatusHistoryId;
 
 	@Column(name = "COI_REVIEW_STATUS_CODE")
-	private String coiReviewSatusCode;
+	private String coiReviewStatusCode;
 
 	@Column(name = "COI_REVIEW_ID")
 	private Integer coiReviewId;
@@ -55,12 +55,12 @@ public class CoiReviewStatusHistory implements Serializable {
 		this.coiReviewStatusHistoryId = coiReviewStatusHistoryId;
 	}
 
-	public String getCoiReviewSatusCode() {
-		return coiReviewSatusCode;
+	public String getCoiReviewStatusCode() {
+		return coiReviewStatusCode;
 	}
 
-	public void setCoiReviewSatusCode(String coiReviewSatusCode) {
-		this.coiReviewSatusCode = coiReviewSatusCode;
+	public void setCoiReviewStatusCode(String coiReviewStatusCode) {
+		this.coiReviewStatusCode = coiReviewStatusCode;
 	}
 
 	public Integer getCoiReviewId() {

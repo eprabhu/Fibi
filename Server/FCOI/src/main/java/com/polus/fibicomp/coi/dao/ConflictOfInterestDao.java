@@ -3,37 +3,34 @@ package com.polus.fibicomp.coi.dao;
 import java.util.List;
 import java.util.Map;
 
+
+import com.polus.fibicomp.coi.pojo.EntityStatus;
+import com.polus.fibicomp.coi.pojo.PersonEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
+import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
+import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiSectionsType;
+import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
+import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
+import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
+import com.polus.fibicomp.coi.pojo.CoiFileData;
+import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
+import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
+import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.coi.pojo.CoiProjectType;
 
 import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
-import com.polus.fibicomp.coi.pojo.COIDispositionStatus;
-import com.polus.fibicomp.coi.pojo.COIFinancialEntity;
-import com.polus.fibicomp.coi.pojo.COIFinancialEntityDetails;
-import com.polus.fibicomp.coi.pojo.COIReviewStatus;
-import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureOld;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureOldCategoryType;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetails;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureOldDetailsStatus;
-import com.polus.fibicomp.coi.pojo.CoiDisclosureOldStatus;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
-import com.polus.fibicomp.coi.pojo.CoiFileData;
-import com.polus.fibicomp.coi.pojo.CoiProjectType;
-import com.polus.fibicomp.coi.pojo.CoiReview;
-import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
-import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
-import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
-import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
-import com.polus.fibicomp.coi.pojo.CoiReviewComments;
-import com.polus.fibicomp.coi.pojo.CoiSectionsType;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
-import com.polus.fibicomp.coi.pojo.EntityStatus;
-import com.polus.fibicomp.coi.pojo.EntityType;
-import com.polus.fibicomp.coi.pojo.PersonEntity;
-import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.DashBoardProfile;
@@ -45,17 +42,17 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * This method is used for save disclosure details
-	 * @param CoiDisclosureOld
+	 * @param coiDisclosure
 	 * @return
 	 */
-	public CoiDisclosureOld saveOrUpdateCoiDisclosureOld(CoiDisclosureOld CoiDisclosureOld);
+	public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure coiDisclosure);
 
 	/**
 	 * This method is used for get disclosure details
-	 * @param CoiDisclosureOldId
+	 * @param coiDisclosureId
 	 * @return
 	 */
-	public CoiDisclosureOld loadDisclosure(Integer CoiDisclosureOldId);
+	public CoiDisclosure loadDisclosure(Integer coiDisclosureId);
 
 	/**
 	 * This method is used for get number of sfi for a person
@@ -75,7 +72,7 @@ public interface ConflictOfInterestDao {
 	 * @param personId
 	 * @return
 	 */
-	public List<COIFinancialEntity> fetchCOIFinancialEntityByPersonId(String personId);
+	public List<PersonEntity> fetchCOIFinancialEntityByPersonId(String personId);
 
 	/**
 	 * This method is used for get entity details
@@ -107,61 +104,61 @@ public interface ConflictOfInterestDao {
 	 * @param personId
 	 * @return
 	 */
-	public List<COIFinancialEntity> getSFIOfDisclosure(String personId);
+	public List<PersonEntity> getSFIOfDisclosure(String personId);
 
 	/**
 	 * 
 	 * @param 
 	 * @return list of Coi Disclosure Detail Statuses
 	 */
-	public List<CoiDisclosureOldDetailsStatus> getCoiDisclosureOldDetailStatuses();
+	List<CoiConflictStatusType> getCoiConflictStatusTypes();
 
 	/**
 	 * This method is used for get sfi details based on financialEntityId
 	 * @param financialEntityId
 	 * @return
 	 */
-	public COIFinancialEntity getSFIDetails(Integer financialEntityId);
+	PersonEntity getSFIDetails(Integer financialEntityId);
 	
 	/**
 	 * This method is used for get CoiFinancialEntityDetails based on coiFinancialEntityId
 	 * @param coiFinancialEntityId
 	 * @return list of CoiFinancialEntityDetails
 	 */
-	public List<COIFinancialEntityDetails> getCoiFinancialEntityDetails(Integer coiFinancialEntityId);
+	List<PersonEntityRelationship> getCoiFinancialEntityDetails(Integer coiFinancialEntityId);
 
 	/**
 	 * This method is used for save CoiFinancialEntityDetails
-	 * @param coiFinancialEntityDetails
+	 * @param personEntityRelationship
 	 * @return saved information of coiFinancialEntity
 	 */
-	public COIFinancialEntityDetails saveOrUpdateCoiFinancialEntityDetails(COIFinancialEntityDetails coiFinancialEntityDetails);
+	PersonEntityRelationship saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
 
 	/**
 	 * This method is used for save SFI details
-	 * @param coiFinancialEntity
+	 * @param personEntity
 	 * @return saved information of coiFinancialEntity
 	 */
-	public COIFinancialEntity saveOrUpdateCoiSFI(COIFinancialEntity coiFinancialEntity);
+	PersonEntity saveOrUpdateCoiSFI(PersonEntity personEntity);
 
 	/**
 	 * This method is used for save coiEntity details
 	 * @param coiEntity
 	 * @return saved information of coiEntity
 	 */
-	public CoiEntity saveOrUpdateCoiEntity(CoiEntity coiEntity);
+	CoiEntity saveOrUpdateCoiEntity(CoiEntity coiEntity);
 
 	/**
 	 * This method is used for get number of Disclosure of a person that are in CURRENT_DISCLOSURE type
 	 * @return count of disclosures
 	 */
-	public Integer getNumberOfDisclosure(String disclosureCategoryType);
+	Integer getNumberOfDisclosure(String disclosureCategoryType);
 
 	/**
 	 * This method is used for certify disclosure
-	 * @param CoiDisclosureOld
+	 * @param coiDisclosure
 	 */
-	public void certifyDisclosure(CoiDisclosureOld coiDisclosureOld);
+	public void certifyDisclosure(CoiDisclosure coiDisclosure);
 
 	/**
 	 * 
@@ -169,14 +166,14 @@ public interface ConflictOfInterestDao {
 	 * @param 
 	 * @return list of Coi Disclosure Details
 	 */
-	public List<CoiDisclosureOldDetails> getProjectRelationshipByParam(Integer moduleCode, Integer moduleItemId, String loginPersonId, Integer disclosureId);
+	public List<CoiDisclEntProjDetails> getProjectRelationshipByParam(Integer moduleCode, Integer moduleItemId, String loginPersonId, Integer disclosureId);
 
 	/**
 	 * 
 	 * @param 
 	 * @return save or update of Coi Disclosure Details
 	 */
-	public CoiDisclosureOldDetails saveOrUpdateCoiDisclosureOldDetail(CoiDisclosureOldDetails entityProjectRelation);
+	CoiDisclEntProjDetails saveOrUpdateCoiDisclEntProjDetails(CoiDisclEntProjDetails entityProjectRelation);
 
 	/**
 	 * 
@@ -190,7 +187,7 @@ public interface ConflictOfInterestDao {
 	 * @param 
 	 * @return get SFI Based On DisclosureId
 	 */
-	public List<COIFinancialEntity> getSFIBasedOnDisclosureId(Integer disclosureId);
+	public List<PersonEntity> getSFIBasedOnDisclosureId(Integer disclosureId);
 
 	/**
 	 * This method is used for evaluate DisclosureQuestionnaire
@@ -210,22 +207,22 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * This method is used for get Disclosure Ids based on coiFinancialEntityId
-	 * @param coiFinancialEntityDetails
+	 * @param coiFinancialEntityId
 	 * @return list of Disclosure Ids
 	 */
 	public List<Integer> getDisclosureIdsByCOIFinancialEntityId(Integer coiFinancialEntityId);
 
 	/**
 	 * This method is used for get Disclosure Details based on coiFinancialEntityId and sequence statusCodes
-	 * @param coiFinancialEntityDetails
+	 * @param disclosureIds
 	 * @param statusCodes
 	 * @return list of Disclosures
 	 */
-	public List<CoiDisclosureOld> getActiveAndPendingCoiDisclosureOldDetailsByDisclosureIdsAndSequenceStatus(List<Integer> disclosureIds, List<String> statusCodes);
+	public List<CoiDisclosure> getActiveAndPendingCoiDisclosureDetailsByDisclosureIdsAndSequenceStatus(List<Integer> disclosureIds, List<String> statusCodes);
 
 	/**
 	 * This method is used for get ModuleItemKeys based on coiFinancialEntityId and module code
-	 * @param coiFinancialEntityDetails
+	 * @param coiFinancialEntityId
 	 * @param moduleCode
 	 * @return list of ModuleItemKeys
 	 */
@@ -311,28 +308,28 @@ public interface ConflictOfInterestDao {
 	 * @param reviewStatusTypeCode
 	 * @return
 	 */
-	public COIReviewStatus getReviewStatus(String reviewStatusTypeCode);
+	public CoiReviewStatusType getReviewStatus(String reviewStatusTypeCode);
 
 	/**
 	 * 
 	 * @param coiReviewAssigneeHistory
 	 * @return
 	 */
-	public CoiReviewAssigneeHistory saveOrUpdateCoiReviewAssigneeHistory(CoiReviewAssigneeHistory coiReviewAssigneeHistory);
+	CoiReviewAssigneeHistory saveOrUpdateCoiReviewAssigneeHistory(CoiReviewAssigneeHistory coiReviewAssigneeHistory);
 
 	/**
 	 * This method is used for get DisclosureStatus By Code
 	 * @param disclosureStatusCode
-	 * @return CoiDisclosureOldStatus
+	 * @return COIDisclosureStatus
 	 */
-	public CoiDisclosureOldStatus getDisclosureStatusByCode(String disclosureStatusCode);
+	CoiConflictStatusType getDisclosureStatusByCode(String disclosureStatusCode);
 
 	/**
 	 * This method is used for get Disposition Status By Code
 	 * @param dispositionStatusTypeCode
 	 * @return COIDispositionStatus
 	 */
-	public COIDispositionStatus getDispositionStatusByCode(String dispositionStatusTypeCode);
+	CoiDispositionStatusType getDispositionStatusByCode(String dispositionStatusTypeCode);
 
 	/**
 	 * This method is used for get count SFIs of person in disclosure
@@ -444,9 +441,9 @@ public interface ConflictOfInterestDao {
 	/**
 	 * This method is used for get ProjectRelationship/disclosureDetails
 	 * @param disclosureDetailsId
-	 * @return CoiDisclosureOldDetails
+	 * @return CoiDisclosureDetails
 	 */
-	public CoiDisclosureOldDetails getProjectRelationship(Integer disclosureDetailsId);
+	CoiDisclEntProjDetails getProjectRelationship(Integer disclosureDetailsId);
 
 	/**
 	 * This method is used for get tags of a comment
@@ -469,10 +466,10 @@ public interface ConflictOfInterestDao {
 	public void deleteReviewTagByCommentId(Integer coiReviewCommentId);
 
 	/**
-	 * This method is used for complete CoiDisclosureOld
-	 * @param CoiDisclosureOld
+	 * This method is used for complete CoiDisclosure
+	 * @param coiDisclosure
 	 */
-	public void completeDisclosureReview(CoiDisclosureOld coiDisclosureOld);
+	public void completeDisclosureReview(CoiDisclosure coiDisclosure);
 
 	/**
 	 * This method is used for get number of incomplete reviews
@@ -489,9 +486,9 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * This method is used for add Reviewer Status
-	 * @param CoiDisclosureOldDetails
+	 * @param coiDisclosureDetails
 	 */
-	public void addReviewerStatus(CoiDisclosureOldDetails coiDisclosureOldDetails);
+	void addReviewerStatus(CoiDisclEntProjDetails coiDisclosureDetails);
 
 	/**
 	 * This method is used for saveOrUpdate ProjectConflictHistory
@@ -517,13 +514,13 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureCategoryTypeCode
 	 * @return
 	 */
-	public CoiDisclosureOldCategoryType getDisclosureCategoryTypeByCode(String disclosureCategoryTypeCode);
+//	public COIDisclosureCategoryType getDisclosureCategoryTypeByCode(String disclosureCategoryTypeCode);
 
 	/**
 	 * @param disclosureNumber
 	 * @return
 	 */
-	public List<CoiDisclosureOld> getCoiDisclosureOldsByDisclosureNumber(String disclosureNumber);
+	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(String disclosureNumber);
 
 	/**
 	 * This method is used for get count of comments
@@ -550,11 +547,11 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * This method is used to get Entity Details by Entity Id
-	 * @return coiEntity
+	 * @return COIEntity
 	 */
 	public CoiEntity getCoiEntityDetailsById(Integer coiEntityId);
 
-	public List<CoiDisclosureOld> getActiveDisclosure(String personId);
+	public List<CoiDisclosure> getActiveDisclosure(String personId);
 
 	public Integer getNumberOfSFIBasedOnDisclosureId(Integer disclosureId);
 
@@ -596,13 +593,13 @@ public interface ConflictOfInterestDao {
 	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String status);
 
 	public List<CoiEntity> getAllSystemEntityList(ConflictOfInterestVO vo);
-	
+
 	public CoiTravelDisclosure saveOrUpdateCoiTravelDisclosure(CoiTravelDisclosure coiTravelDisclosure);
-	
+
 	public List<CoiTravelDisclosure> getAllCoiTravelDisclosureList(ConflictOfInterestVO vo);
-	
+
 	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId);
-	
+
 	public List<CoiProjectType> getCoiProjectTypes();
 
 	public List<PersonEntity> getPersonEntityDetails(ConflictOfInterestVO vo);
@@ -612,7 +609,20 @@ public interface ConflictOfInterestDao {
 	public PersonEntity saveOrUpdateSFI(PersonEntity personEntity);
 
 	public Integer generateMaxDisclosureNumber();
-	
-	public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure CoiDisclosure);
-	
+
+
+	/**
+	 *
+	 * @param vo
+	 * @return
+	 */
+	DashBoardProfile getCOIReviewerDashboard(CoiDashboardVO vo);
+
+	/**
+	 *
+	 * @param dashboardType
+	 * @param loginPersonId
+	 * @return
+	 */
+	ConflictOfInterestVO loadDisclosureQuickCardCounts(String dashboardType, String loginPersonId);
 }

@@ -19,7 +19,7 @@ public class PersonEntityRelType implements Serializable {
 
 	@Id
 	@Column(name = "RELATIONSHIP_TYPE_CODE")
-	private String RelationshipTypeCode;
+	private String relationshipTypeCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -35,11 +35,11 @@ public class PersonEntityRelType implements Serializable {
 	private Boolean isActive;
 
 	public String getRelationshipTypeCode() {
-		return RelationshipTypeCode;
+		return relationshipTypeCode;
 	}
 
 	public void setRelationshipTypeCode(String relationshipTypeCode) {
-		RelationshipTypeCode = relationshipTypeCode;
+		this.relationshipTypeCode = relationshipTypeCode;
 	}
 
 	public String getDescription() {
