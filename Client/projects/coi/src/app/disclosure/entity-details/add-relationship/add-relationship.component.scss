@@ -16,3 +16,26 @@
   position: relative;
   top: -5px;
 }
+
+.link {
+  position: absolute;
+    bottom: 6rem;
+    color: gray;
+    background: #f5f7f9;
+    padding: 1.2rem 1.3rem;
+    border-radius: 50%;
+    opacity: 1;
+    width: 80px;
+    height: 80px;
+    font-size: 14px;
+    border: 2px solid #e6e7e8;
+
+}
+
+.link img {
+  width: 25px;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%,-50%);
+}

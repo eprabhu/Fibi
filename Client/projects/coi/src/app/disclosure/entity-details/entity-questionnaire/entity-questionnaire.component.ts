@@ -129,7 +129,7 @@ export class EntityQuestionnaireComponent implements OnInit,OnDestroy {
 
 
   private findRelation(financialEntityRelTypeCode: string) {
-    const RELATION_INDEX = this.relationLookup.findIndex(element => element.financialEntityRelTypeCode === financialEntityRelTypeCode);
+    const RELATION_INDEX = this.relationLookup.findIndex(element => element.relationshipTypeCode === financialEntityRelTypeCode);
     if (RELATION_INDEX !== -1) {
       this.relationLookup.splice(RELATION_INDEX, 1);
     }

@@ -75,6 +75,9 @@ const routes: Routes = [
         DataStoreService,
         CoiService,
         RouterGuardService
+    ],
+    exports:[
+      AddSfiComponent
     ]
 })
 export class DisclosureModule {

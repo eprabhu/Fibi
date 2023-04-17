@@ -3,7 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService } from '../entity-management.service';
 import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
 import { Subscription } from 'rxjs';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
+import { getEndPointOptionsForLeadUnit } from '../../../../../fibi/src/app/common/services/end-point.config';
+import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 
 @Component({
   selector: 'app-entity-details-list',
@@ -13,15 +16,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
 })
 export class EntityDetailsListComponent implements OnInit,OnChanges, OnDestroy {
 
-  entityDetails = [
-    { name: 'Daniel Griffith', department: 'Research Support Office', title: 'Research Assistant', involvementStartDate: '12/08/2022', involvementEndDate: '13/06/2023', status: 'A' },
-    { name: 'George Johanson', department: 'President\'s Office', title: 'Assistant Research Scientist', involvementStartDate: '15/08/2022', involvementEndDate: '04/09/2023', status: 'A' },
-    { name: 'Roger Summerdon', department: 'School of Art, Design and Media', title: 'Assistant Research Scientist', involvementStartDate: '17/09/2022', involvementEndDate: '25/07/2023', status: 'A' },
-    { name: 'Ian George', department: 'College Of Science', title: 'Senior Research Associate', involvementStartDate: '22/10/2022', involvementEndDate: '20/12/2023', status: 'A' },
-    { name: 'Danny Johnson', department: 'NIE Office of Teacher Education', title: 'Research Associate', involvementStartDate: '24/06/2022', involvementEndDate: '13/11/2023', status: 'I' },
-    { name: 'Garry Dcruz', department: 'College of Business', title: 'Research Associate', involvementStartDate: '12/12/2022', involvementEndDate: '14/03/2023', status: 'I' },
-    { name: 'Dennis Daniel', department: 'Office of Finance ', title: 'Senior Research Associate', involvementStartDate: '01/08/2022', involvementEndDate: '13/10/2023', status: 'I' },
-  ];
+  entityDetails:any;
   isViewEntityDetails: true;
   isviewDetails: true;
   currentSelected = 'Person';
@@ -29,15 +24,26 @@ export class EntityDetailsListComponent implements OnInit,OnChanges, OnDestroy {
   coiElastic = null;
   isViewAdvanceSearch = false;
   $subscriptions: Subscription[] = [];
+  advSearchClearField: String;
+  elasticPersonSearchOptions: any = {};
+  leadUnitSearchOptions: any = {};
+  lookupValues = [];
+  statusTypeOptions = 'ENTITY_STATUS#ENTITY_STATUS_CODE#true#true';
+  advanceSearchDates = {
+    startDate:null,
+    endDate: null
+  }
 
-
-  constructor(private _router: Router, private _route: ActivatedRoute, private _entityManagementService: EntityManagementService) { }
+  constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
+    private _elasticConfig: ElasticConfigService) { }
 
 
   ngOnInit() {
     this.entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
-    // debugger
     this.getRelationshipEntityList();
+    this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
+    this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
+
 
   }
 
@@ -46,7 +52,7 @@ export class EntityDetailsListComponent implements OnInit,OnChanges, OnDestroy {
   }
 
   getEntityDetails() {
-    this._entityManagementService
+    this.entityManagementService
   }
 
   viewDetails(data) {
@@ -66,14 +72,32 @@ export class EntityDetailsListComponent implements OnInit,OnChanges, OnDestroy {
       'filterType': this.currentSelected,
       'coiEntityId': 1
     }
-    this.$subscriptions.push(this._entityManagementService.getPersonEntityDetails(REQ_BODY).subscribe((res: any) => {
-      // this.entityDetails = res.personEntity
-      // console.log(this.entityDetails);
+    this.$subscriptions.push(this.entityManagementService.getPersonEntityDetails(REQ_BODY).subscribe((res: any) => {
+      this.entityDetails = res.personEntityList
+      console.log(this.entityDetails);
     }));
   }
 
   currentTab(tab) {
     this.currentSelected = tab;
     this.getRelationshipEntityList();
+  }
+
+  selectPersonName(person: any) {
+    this.entityManagementService.relationshipDashboardRequest.property1 = person ? person.prncpl_id : null;
+  }
+
+  leadUnitChangeFunction(unit: any) {
+    this.entityManagementService.relationshipDashboardRequest.property2 = unit ? unit.unitNumber : null;
+  }
+
+  onLookupSelect(data: any, property: string) {
+    this.lookupValues[property] = data;
+    this.entityManagementService.relationshipDashboardRequest[property] = data.length ? data.map(d => d.code) : [];
+  }
+
+  advanceSearchRelationships() {
+    this.entityManagementService.relationshipDashboardRequest.property4 = parseDateWithoutTimestamp(this.advanceSearchDates.startDate);
+    this.entityManagementService.relationshipDashboardRequest.property5 = parseDateWithoutTimestamp(this.advanceSearchDates.endDate);
   }
 }

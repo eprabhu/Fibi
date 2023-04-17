@@ -1,12 +1,13 @@
 <div class="mt-4">
   <div *ngIf="definedRelationships?.length" class="container-fluid m-2 ">
-    <nav
-      class="border-nav bg-white border d-flex fs-15 fw-bold mt-3 shadow-sm user-dashboard-nav">
-      <div (click)="currentSelected.tab = 'Financial'" [class.bg-active]="currentSelected.tab === 'Financial'?'active':''"
+    <nav class="border-nav bg-white border d-flex fs-15 fw-bold mt-3 shadow user-dashboard-nav">
+      <div (click)="currentSelected.tab = 'Financial'"
+        [class.bg-active]="currentSelected.tab === 'Financial'?'active':''"
         class="left-curve align-items-end d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
         <span [class.active]="currentSelected.tab === 'Financial'?'active':''" class="pb-3 active">Financial</span>
       </div>
-      <div (click)="currentSelected.tab = 'Commitment'" [class.bg-active]="currentSelected.tab === 'Commitment'?'active':''"
+      <div (click)="currentSelected.tab = 'Commitment'"
+        [class.bg-active]="currentSelected.tab === 'Commitment'?'active':''"
         class="align-items-end d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
         <span [class.active]="currentSelected.tab === 'Commitment'?'active':''" class="pb-3 active">Commitment</span>
       </div>
@@ -16,13 +17,17 @@
       </div>
     </nav>
   </div>
-  <app-add-relationship *ngIf="!definedRelationships?.length" (addRelationShip)="openAddRelationshipModal($event)"></app-add-relationship>
+  <app-add-relationship *ngIf="!definedRelationships?.length"
+    (addRelationShip)="openAddRelationshipModal($event)"></app-add-relationship>
   <div *ngIf="definedRelationships?.length" class="container-fluid mx-2">
-    <div class="card">
-      <nav class="align-items-center bg-white border d-flex fs-14  mt-5 py-1 shadow-sm user-dashboard-nav nav-width">
+    <div class="card shadow">
+      <!-- <div> -->
+      <nav
+        class="align-items-center bg-white border d-flex fs-14  mt-5 py-1 shadow-sm user-dashboard-nav ml-15 mr-15 rounded-2">
         <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;">
-          <div (click)="getQuestionnaire(coiFinancialEntityDetail)" class="border-end navigation-title px-3 py-1 text-secondary"
-            role="button" [ngClass]="activeRelationship === coiFinancialEntityDetail?.financialEntityRelTypeCode?'nav-bar':''">
+          <div (click)="getQuestionnaire(coiFinancialEntityDetail)"
+            class="border-end navigation-title px-3 py-1 text-secondary" role="button"
+            [ngClass]="activeRelationship === coiFinancialEntityDetail?.financialEntityRelTypeCode?'nav-bar':''">
             <span
               [class.active]="activeRelationship === coiFinancialEntityDetail?.financialEntityRelTypeCode?'active':''"
               class="active r-title">
@@ -37,12 +42,14 @@
           </span>
         </div>
         <div *ngIf="isEditMode" class="mat-save">
-          <button class="btn" (click)="getSaveEvent()" type="button" title="Save questionnaire">
-            <mat-icon class="text-primary me-2 material-icons d-flex">save</mat-icon>
-            <!-- <label class="fs-14">Save</label> -->
+          <button class="align-items-center d-flex btn btn-primary mt-0 py-1 px-3 h-100 fs-13 pt-1"
+            title="Save questionnaire" (click)="getSaveEvent();">
+            <mat-icon class="fs-16 me-2 material-icons align-items-center d-flex">save</mat-icon>
+            <span class="fs-13">Save</span>
           </button>
         </div>
       </nav>
+      <!-- </div> -->
       <div *ngIf="definedRelationships?.length" class="container-fluid m-2">
         <app-view-questionnaire-list [configuration]="configuration"
           [questionnaireHeader]="'Relation With Significant Financial Interest'"

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { hideModal } from '../../../../../../../projects/fibi/src/app/common/utilities/custom-utilities';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-add-relationship',
@@ -9,7 +10,8 @@ import { hideModal } from '../../../../../../../projects/fibi/src/app/common/uti
 export class AddRelationshipComponent implements OnInit {
 @Output() addRelationShip: EventEmitter<any> = new EventEmitter<any>();
   constructor() { }
-  isShowRelationshipModal
+  isShowRelationshipModal;
+  deployMap = environment.deployUrl;
   ngOnInit() {
   }
 

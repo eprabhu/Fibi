@@ -34,12 +34,13 @@
 
 .action-btn {
   background-color: white;
-  border-color: #d3cccc;
-  border-radius: 4px;
   width: 13rem;
   height: 3rem;
-  color: #7c868f;
+  color: #7c868f !important;
+  border: 2px solid #d3cccc;
+  border-radius: 0px;
 }
+
 
 .icon-size {
    height: 14px;

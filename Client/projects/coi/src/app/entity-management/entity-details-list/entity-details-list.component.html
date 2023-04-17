@@ -1,124 +1,141 @@
-<div class="container-fluid">
+<div class="container-fluid m-3">
   <app-view-entity-details></app-view-entity-details>
-  <div class="fw-bold m-2">Relationships</div>
-  <div>
+  <div class="fw-bold ml-15 mt-3">Relationships</div>
+  <div class="ml-15 mr-15 shadow">
     <!-- [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"  -->
     <nav
-      class="align-items-center bg-white border d-flex fs-14 fw-medium mt-3 py-1 shadow-sm user-dashboard-nav bg-body-emphasis">
-      <div (click)="currentTab('Person')" class=" navigation-icons text-secondary py-1" role="button">
+      class="align-items-center bg-white border d-flex fs-14 fw-medium mt-3 py-1 user-dashboard-nav bg-body-emphasis">
+      <div tabindex="0" (click)="currentTab('Person')" class=" navigation-icons text-secondary py-1" role="button"
+        id="btn-person" title="Person">
         <span [ngClass]="{'active':currentSelected === 'Person'}" class="px-5 ">Person</span>
         <span *ngIf="currentSelected === 'Person'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
       </div>
-      <div (click)="currentTab('Institutional')" class=" navigation-icons text-secondary py-1" role="button">
-        <span [ngClass]="{'active':currentSelected === 'Institutional'}"  class="px-5">Institutional</span>
-        <span *ngIf="currentSelected === 'Institutional'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
-
+      <div tabindex="0" (click)="currentTab('Institutional')" class=" navigation-icons text-secondary py-1"
+        role="button" id="btn-institutional" title="Institutional">
+        <span [ngClass]="{'active':currentSelected === 'Institutional'}" class="px-5">Institutional</span>
+        <span *ngIf="currentSelected === 'Institutional'"
+          class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
       </div>
-      <div (click)="currentTab('Other_Entities')" class=" navigation-icons text-secondary py-1" role="button">
-        <span [ngClass]="{'active':currentSelected === 'Other_Entities'}"  class="px-5">Other Entities</span>
-        <span *ngIf="currentSelected === 'Other_Entities'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
-
+      <div tabindex="0" (click)="currentTab('Other_Entities')" class=" navigation-icons text-secondary py-1"
+        role="button" id="btn-other-entities" title="Other Entities">
+        <span [ngClass]="{'active':currentSelected === 'Other_Entities'}" class="px-5">Other Entities</span>
+        <span *ngIf="currentSelected === 'Other_Entities'"
+          class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
       </div>
-      <div (click)="currentTab('Disclosures')" class="navigation-icons text-secondary py-1" role="button">
-        <span [ngClass]="{'active':currentSelected === 'Disclosures'}"  class="px-5">Disclosures</span>
+      <div tabindex="0" (click)="currentTab('Disclosures')" class="navigation-icons text-secondary py-1" role="button"
+        id="btn-disclosure" title="Disclosures">
+        <span [ngClass]="{'active':currentSelected === 'Disclosures'}" class="px-5">Disclosures</span>
         <span *ngIf="currentSelected === 'Disclosures'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
-
       </div>
     </nav>
   </div>
-  <div class="row mt-1">
-    <div class="col-10 mt-1">
-      <app-elastic [options]="coiElastic" style="width: 400px" [placeHolder]="'Person Name, Department etc.'"
-        (selectedResult)="redirectToEntity($event)"></app-elastic>
-    </div>
-    <div class="col-2 mt-1 justify-content-end d-flex px-4">
-      <button class="btn btn-primary fs-13 d-flex" id="advanced-search"
-        (click)="isViewAdvanceSearch=!isViewAdvanceSearch"><mat-icon class="add-icon">tune</mat-icon> Advanced Search</button>
+  <div class="row m-3 mb-0 mt-1">
+    <div class="col-12 d-flex">
+      <div class="col">
+        <app-elastic [options]="coiElastic" [placeHolder]="'Person Name, Department etc.'"
+          [uniqueId]="'btn-entity-elastic'" (selectedResult)="redirectToEntity($event)"></app-elastic>
+      </div>
+      <div class="ml-15 justify-content-end d-flex">
+        <button class="btn btn-primary fs-13 d-flex" id="advanced-search" title="Advance search"
+          (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search" aria-expanded="true"
+          aria-label="Toggle Advanced Search"><mat-icon class="add-icon">tune</mat-icon> Advanced
+          Search
+        </button>
+      </div>
     </div>
   </div>
-  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-4">
-    <div class="row m-2">
-      <div class="col-12 d-flex">
-        <div class="col-3 d-grid ml-3">
-          <label class="fw-bold fs-14">Person Name</label>
-          <input type="text" class="form-control text-secondary fs-13" placeholder="Person Name">
+  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 shadow border ml-15 mr-15">
+    <div class="card-body">
+      <div class="form-row row m-2">
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block">Person Name</label>
+          <!-- <input type="text" class="form-control text-secondary fs-13" placeholder="Person Name"> -->
+          <app-elastic (selectedResult)="selectPersonName($event)" [clearField]="advSearchClearField"
+            [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person Name'"
+            [uniqueId]="'adv-person-name'">
+          </app-elastic>
         </div>
-        <div class="col-3 d-grid ml-3">
-          <label class="fw-bold fs-14">Department</label>
-          <input type="text" class="form-control text-secondary fs-13" placeholder="Department">
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block">Department</label>
+          <!-- <input type="text" class="form-control text-secondary fs-13" placeholder="Department"> -->
+          <app-endpoint-search (onSelect)="leadUnitChangeFunction($event)" [clearField]="advSearchClearField"
+            [httpOptions]="leadUnitSearchOptions" [placeHolder]="'Type here for Department Name'"
+            [uniqueId]="'adv-department-name'">
+          </app-endpoint-search>
         </div>
-        <div class="col-3 d-grid ml-3">
-          <label class="fw-bold fs-14">Title</label>
-          <input type="text" class="form-control text-secondary fs-13" placeholder="Title">
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block">Title</label>
+          <input type="text" class="form-control text-secondary fs-13" placeholder="Type here Title" [(ngModel)]="entityManagementService.coiRequestObject.property3">
 
         </div>
-        <div class="col-3 d-grid ml-3">
-          <label class="fw-bold fs-14">Start Date of Involvement</label>
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block">Start Date of Involvement</label>
           <span class="dateField">
             <input matInput [matDatepicker]="startDate" id="start-date-involvement" (click)="startDate.open()"
-            class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy">
+              class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy" [(ngModel)]="advanceSearchDates.startDate">
             <i (click)="startDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
             <mat-datepicker #startDate>
             </mat-datepicker>
           </span>
         </div>
       </div>
-      <div class="col-12 d-flex mt-3">
-        <div class="col-3 d-grid">
-          <label class="fw-bold fs-14">End Date of Involvement</label>
-         <span class="dateField">
-          <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
-            class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy">
-            <i (click)="endDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
-          <mat-datepicker #endDate>
-          </mat-datepicker>
-        </span>
-      </div>
-        <div class="col-3 d-grid">
-          <label class="fw-bold fs-14">Status</label>
-          <select class="form-select text-secondary fw-medium fs-13">
-            <option value="">--Select Status--</option>
-            <option value="1">Active</option>
-            <option value="2">Inactive</option>
-          </select>
+      <div class="form-row row m-2">
+        <div class="col-3">
+            <label class="fw-bold fs-14 d-block" for="end-date-involvement">End Date of Involvement</label>
+            <span class="dateField">
+              <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
+                class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy" [(ngModel)]="advanceSearchDates.endDate">
+              <i (click)="endDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
+              <mat-datepicker #endDate>
+              </mat-datepicker>
+            </span>
+          </div>
+        <div class="col-3">
+          <label class="fw-bold fs-14 d-block">Status</label>
+          <app-look-up (selectedResult)="onLookupSelect($event, 'property6')" [options]="statusTypeOptions"
+            [selectedLookUpList]="lookupValues['property6']" class=" text-secondary fs-13"
+            [uniqueId]="'adv-status-type'">
+          </app-look-up>
         </div>
-        <div class="col-6 d-flex justify-content-end align-items-end position">
+        <div class="col-6 d-flex justify-content-end align-items-end">
           <button class="btn btn-outline-secondary  fs-13 py-2 px-4 mr-10" id="btn-clear">Clear</button>
-          <button class="btn btn-primary fs-13">Search</button>
+          <button class="btn btn-primary fs-13" (click)="advanceSearchRelationships()">Search</button>
         </div>
       </div>
     </div>
   </div>
-
-  <table class="table tableSkin mt-1">
-    <thead class="border bg-light">
-      <tr>
-        <th class="text-secondary fs-14" scope="col">Name</th>
-        <th class="text-secondary fs-14" scope="col">Department</th>
-        <th class="text-secondary fs-14" scope="col">Title</th>
-        <th class="text-secondary fs-14" scope="col">Start Date of Involvement</th>
-        <th class="text-secondary fs-14" scope="col">End Date of Involvement</th>
-        <th class="text-secondary fs-14" scope="col">Relationship Status</th>
-        <th class="text-secondary fs-14" scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody class="bg-white">
-      <tr class="border" *ngFor="let entityListData of entityDetails;let i=index">
-        <td class="fs-13 text-primary"><u>{{entityListData?.name}}</u></td>
-        <td class="fs-13 text-secondary">{{entityListData?.department}}</td>
-        <td class="fs-13 text-secondary">{{entityListData?.title}}</td>
-        <td class="fs-13 text-secondary">{{entityListData?.involvementStartDate}}</td>
-        <td class="fs-13 text-secondary">{{entityListData?.involvementStartDate}}</td>
-        <td class="fs-13 text-secondary"><span [ngClass]="entityListData.status ==='A'?'status-active-pill':'status-inactive-pill'">
-            {{entityListData?.status === 'A'?'Active':'Inactive'}}
-          </span>
-        </td>
-        <td>
-          <button  class="btn btn-outline-secondary fs-13"
-            (click)="isViewEntityDetails =!isViewEntityDetails;viewDetails(isViewEntityDetails)"><span><i
-                class="fa fa-eye" aria-hidden="true"></i></span> View</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="mt-2 ml-15 mr-15 border-1 shadow-medium">
+    <table class="table tableSkin">
+      <thead class="border bg-light">
+        <tr>
+          <th class="text-secondary fs-14" scope="col">Name</th>
+          <th class="text-secondary fs-14" scope="col">Department</th>
+          <th class="text-secondary fs-14" scope="col">Title</th>
+          <th class="text-secondary fs-14" scope="col">Start Date of Involvement</th>
+          <th class="text-secondary fs-14" scope="col">End Date of Involvement</th>
+          <th class="text-secondary fs-14" scope="col">Relationship Status</th>
+          <th class="text-secondary fs-14" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <tr class="border" *ngFor="let entityListData of entityDetails;let i=index">
+          <td class="fs-13 text-primary"><u>{{entityListData?.person?.fullName}}</u></td>
+          <td class="fs-13 text-secondary">{{entityListData?.person?.unit?.unitName}}</td>
+          <td class="fs-13 text-secondary">{{entityListData?.coiEntity?.entityName}}</td>
+          <td class="fs-13 text-secondary">{{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}</td>
+          <td class="fs-13 text-secondary">{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</td>
+          <td class="fs-13 text-secondary"><span
+              [ngClass]="entityListData.coiEntity?.isActive?'status-active-pill':'status-inactive-pill'">
+              {{entityListData?.coiEntity?.isActive?'Active':'Inactive'}}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-outline-secondary fs-13"
+              (click)="isViewEntityDetails =!isViewEntityDetails;viewDetails(entityListData)"><span><i class="fa fa-eye"
+                  aria-hidden="true"></i></span> View</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
