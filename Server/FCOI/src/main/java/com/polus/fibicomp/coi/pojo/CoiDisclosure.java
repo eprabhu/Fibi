@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -56,7 +57,7 @@ public class CoiDisclosure implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE1_FK2"), name = "FCOI_TYPE_CODE", referencedColumnName = "FCOI_TYPE_CODE", insertable = false, updatable = false)
-	private CoiDisclosureFcoiType CoiDisclosureOldFcoiType;
+	private CoiDisclosureFcoiType CoiDisclosureFcoiType;
 	
 	@Column(name = "CONFLICT_STATUS_CODE")
 	private String conflictStatusCode;
@@ -123,6 +124,15 @@ public class CoiDisclosure implements Serializable {
 	@Column(name = "CREATE_TIMESTAMP")
 	private Timestamp createTimestamp;
 
+	@Transient
+	private String updateUserFullName;
+
+	@Transient
+	private String createUserFullName;
+
+	@Transient
+	private Integer numberOfSFI;
+
 	public Integer getDisclosureId() {
 		return disclosureId;
 	}
@@ -155,12 +165,12 @@ public class CoiDisclosure implements Serializable {
 		this.fcoitypeCode = fcoitypeCode;
 	}
 
-	public CoiDisclosureFcoiType getCoiDisclosureOldFcoiType() {
-		return CoiDisclosureOldFcoiType;
+	public com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType getCoiDisclosureFcoiType() {
+		return CoiDisclosureFcoiType;
 	}
 
-	public void setCoiDisclosureOldFcoiType(CoiDisclosureFcoiType CoiDisclosureOldFcoiType) {
-		this.CoiDisclosureOldFcoiType = CoiDisclosureOldFcoiType;
+	public void setCoiDisclosureFcoiType(com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType coiDisclosureFcoiType) {
+		CoiDisclosureFcoiType = coiDisclosureFcoiType;
 	}
 
 	public String getConflictStatusCode() {
@@ -339,4 +349,27 @@ public class CoiDisclosure implements Serializable {
 		this.disclosureNumber = disclosureNumber;
 	}
 
+	public String getUpdateUserFullName() {
+		return updateUserFullName;
+	}
+
+	public void setUpdateUserFullName(String updateUserFullName) {
+		this.updateUserFullName = updateUserFullName;
+	}
+
+	public String getCreateUserFullName() {
+		return createUserFullName;
+	}
+
+	public void setCreateUserFullName(String createUserFullName) {
+		this.createUserFullName = createUserFullName;
+	}
+
+	public Integer getNumberOfSFI() {
+		return numberOfSFI;
+	}
+
+	public void setNumberOfSFI(Integer numberOfSFI) {
+		this.numberOfSFI = numberOfSFI;
+	}
 }

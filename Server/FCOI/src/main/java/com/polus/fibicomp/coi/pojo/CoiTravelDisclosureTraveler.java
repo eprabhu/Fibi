@@ -28,7 +28,7 @@ public class CoiTravelDisclosureTraveler implements Serializable {
 	@Id
 	@Column(name = "TRAVEL_TRAVELER_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer travelTravelerid;
+	private Integer travelTravelerId;
 	
 	@Column(name = "TRAVEL_DISCLOSURE_ID")
 	private Integer travelDisclosureId;
@@ -52,12 +52,12 @@ public class CoiTravelDisclosureTraveler implements Serializable {
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
 
-	public Integer getTravelTravelerid() {
-		return travelTravelerid;
+	public Integer getTravelTravelerId() {
+		return travelTravelerId;
 	}
 
-	public void setTravelTravelerid(Integer travelTravelerid) {
-		this.travelTravelerid = travelTravelerid;
+	public void setTravelTravelerId(Integer travelTravelerId) {
+		this.travelTravelerId = travelTravelerId;
 	}
 
 	public Integer getTravelDisclosureId() {

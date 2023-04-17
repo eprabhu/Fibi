@@ -19,7 +19,7 @@ public class CoiAttachmentType implements Serializable {
 
 	@Id
 	@Column(name = "COI_ATTA_TYPE_CODE")
-	private String coiAttachmentTypeCode;
+	private String attachmentTypeCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -34,12 +34,12 @@ public class CoiAttachmentType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	public String getCoiAttachmentTypeCode() {
-		return coiAttachmentTypeCode;
+	public String getAttachmentTypeCode() {
+		return attachmentTypeCode;
 	}
 
-	public void setCoiAttachmentTypeCode(String coiAttachmentTypeCode) {
-		this.coiAttachmentTypeCode = coiAttachmentTypeCode;
+	public void setAttachmentTypeCode(String attachmentTypeCode) {
+		this.attachmentTypeCode = attachmentTypeCode;
 	}
 
 	public String getDescription() {

@@ -31,24 +31,24 @@ public class CoiAttachmentCateTypeMapping implements Serializable {
 	@Id
 	@Column(name = "COI_ATTA_CATE_TYPE_MAPPING_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer coiAttachmentCateTypeMappingId;
+	private Integer attachmentCateTypeMappingId;
 	
 	@Column(name = "DESCRIPTION")
 	private String description;
 
 	@Column(name = "COI_ATTA_CATEGORY_TYPE_CODE")
-	private String coiAttachmentCategoryTypeCode;
+	private String attachmentCategoryTypeCode;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_ATTA_CATE_TYPE_MAPPING_FK1"), name = "COI_ATTA_CATEGORY_TYPE_CODE", referencedColumnName = "COI_ATTA_CATEGORY_TYPE_CODE", insertable = false, updatable = false)
-	private CoiAttachmentCategoryType coiAttachmentCategoryType;
+	private CoiAttachmentCategoryType attachmentCategoryType;
 
 	@Column(name = "COI_ATTA_TYPE_CODE")
-	private String coiAttachmentTypeCode;
+	private String attachmentTypeCode;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_ATTA_CATE_TYPE_MAPPING_FK2"), name = "COI_ATTA_TYPE_CODE", referencedColumnName = "COI_ATTA_TYPE_CODE", insertable = false, updatable = false)
-	private CoiAttachmentType coiAttachmentType;
+	private CoiAttachmentType attachmentType;
 	
 	@Column(name = "IS_ACTIVE")
 	@Convert(converter = JpaCharBooleanConversion.class)
@@ -62,12 +62,12 @@ public class CoiAttachmentCateTypeMapping implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
-	public Integer getCoiAttachmentCateTypeMappingId() {
-		return coiAttachmentCateTypeMappingId;
+	public Integer getAttachmentCateTypeMappingId() {
+		return attachmentCateTypeMappingId;
 	}
 
-	public void setCoiAttachmentCateTypeMappingId(Integer coiAttachmentCateTypeMappingId) {
-		this.coiAttachmentCateTypeMappingId = coiAttachmentCateTypeMappingId;
+	public void setAttachmentCateTypeMappingId(Integer attachmentCateTypeMappingId) {
+		this.attachmentCateTypeMappingId = attachmentCateTypeMappingId;
 	}
 
 	public String getDescription() {
@@ -78,44 +78,36 @@ public class CoiAttachmentCateTypeMapping implements Serializable {
 		this.description = description;
 	}
 
-	public String getCoiAttachmentCategoryTypeCode() {
-		return coiAttachmentCategoryTypeCode;
+	public String getAttachmentCategoryTypeCode() {
+		return attachmentCategoryTypeCode;
 	}
 
-	public void setCoiAttachmentCategoryTypeCode(String coiAttachmentCategoryTypeCode) {
-		this.coiAttachmentCategoryTypeCode = coiAttachmentCategoryTypeCode;
+	public void setAttachmentCategoryTypeCode(String attachmentCategoryTypeCode) {
+		this.attachmentCategoryTypeCode = attachmentCategoryTypeCode;
 	}
 
-	public CoiAttachmentCategoryType getCoiAttachmentCategoryType() {
-		return coiAttachmentCategoryType;
+	public CoiAttachmentCategoryType getAttachmentCategoryType() {
+		return attachmentCategoryType;
 	}
 
-	public void setCoiAttachmentCategoryType(CoiAttachmentCategoryType coiAttachmentCategoryType) {
-		this.coiAttachmentCategoryType = coiAttachmentCategoryType;
+	public void setAttachmentCategoryType(CoiAttachmentCategoryType attachmentCategoryType) {
+		this.attachmentCategoryType = attachmentCategoryType;
 	}
 
-	public String getCoiAttachmentTypeCode() {
-		return coiAttachmentTypeCode;
+	public String getAttachmentTypeCode() {
+		return attachmentTypeCode;
 	}
 
-	public void setCoiAttachmentTypeCode(String coiAttachmentTypeCode) {
-		this.coiAttachmentTypeCode = coiAttachmentTypeCode;
+	public void setAttachmentTypeCode(String attachmentTypeCode) {
+		this.attachmentTypeCode = attachmentTypeCode;
 	}
 
-	public CoiAttachmentType getCoiAttachmentType() {
-		return coiAttachmentType;
+	public CoiAttachmentType getAttachmentType() {
+		return attachmentType;
 	}
 
-	public void setCoiAttachmentType(CoiAttachmentType coiAttachmentType) {
-		this.coiAttachmentType = coiAttachmentType;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
+	public void setAttachmentType(CoiAttachmentType attachmentType) {
+		this.attachmentType = attachmentType;
 	}
 
 	public Timestamp getUpdateTimestamp() {
@@ -133,5 +125,4 @@ public class CoiAttachmentCateTypeMapping implements Serializable {
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
 	}
-
 }

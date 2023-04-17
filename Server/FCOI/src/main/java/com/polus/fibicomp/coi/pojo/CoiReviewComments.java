@@ -60,7 +60,7 @@ public class CoiReviewComments implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_REVIEW_COMMENT_FK6"), name = "DISCLOSURE_ID", referencedColumnName = "DISCLOSURE_ID", insertable = false, updatable = false)
-	private CoiDisclosureOld coiDisclosureOld;
+	private CoiDisclosure coiDisclosure;
 	
 	@Column(name = "COMMENTED_BY_PERSON_ID")
 	private String commentedByPersonId;
@@ -90,13 +90,13 @@ public class CoiReviewComments implements Serializable {
 	private String updateUserFullName;
 	
 	@Transient
-	private COIFinancialEntity coiFinancialEntity;
-	
-	@Transient
-	private CoiDisclosureOldDetails coiDisclosureOldDetails;
-	
-	@Transient
 	private List<CoiReviewCommentTag> coiReviewCommentTag;
+
+	@Transient
+	private PersonEntity personEntity;
+
+	@Transient
+	private CoiDisclEntProjDetails disclEntProjDetails;
 	
 	public Integer getCoiReviewCommentId() {
 		return coiReviewCommentId;
@@ -226,30 +226,6 @@ public class CoiReviewComments implements Serializable {
 		this.updateUserFullName = updateUserFullName;
 	}
 
-	public CoiDisclosureOld getCoiDisclosureOld() {
-		return coiDisclosureOld;
-	}
-
-	public void setCoiDisclosureOld(CoiDisclosureOld coiDisclosureOld) {
-		this.coiDisclosureOld = coiDisclosureOld;
-	}
-
-	public COIFinancialEntity getCoiFinancialEntity() {
-		return coiFinancialEntity;
-	}
-
-	public void setCoiFinancialEntity(COIFinancialEntity coiFinancialEntity) {
-		this.coiFinancialEntity = coiFinancialEntity;
-	}
-
-	public CoiDisclosureOldDetails getCoiDisclosureOldDetails() {
-		return coiDisclosureOldDetails;
-	}
-
-	public void setCoiDisclosureOldDetails(CoiDisclosureOldDetails coiDisclosureOldDetails) {
-		this.coiDisclosureOldDetails = coiDisclosureOldDetails;
-	}
-
 	public List<CoiReviewCommentTag> getCoiReviewCommentTag() {
 		return coiReviewCommentTag;
 	}
@@ -258,4 +234,27 @@ public class CoiReviewComments implements Serializable {
 		this.coiReviewCommentTag = coiReviewCommentTag;
 	}
 
+	public CoiDisclosure getCoiDisclosure() {
+		return coiDisclosure;
+	}
+
+	public void setCoiDisclosure(CoiDisclosure coiDisclosure) {
+		this.coiDisclosure = coiDisclosure;
+	}
+
+	public PersonEntity getPersonEntity() {
+		return personEntity;
+	}
+
+	public void setPersonEntity(PersonEntity personEntity) {
+		this.personEntity = personEntity;
+	}
+
+	public CoiDisclEntProjDetails getDisclEntProjDetails() {
+		return disclEntProjDetails;
+	}
+
+	public void setDisclEntProjDetails(CoiDisclEntProjDetails disclEntProjDetails) {
+		this.disclEntProjDetails = disclEntProjDetails;
+	}
 }

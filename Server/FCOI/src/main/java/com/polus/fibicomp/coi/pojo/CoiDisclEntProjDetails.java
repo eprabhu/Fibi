@@ -35,10 +35,10 @@ public class CoiDisclEntProjDetails implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCL_ENT_PROJ_DETAILS_FK1"), name = "DISCLOSURE_ID", referencedColumnName = "DISCLOSURE_ID", insertable = false, updatable = false)
-	private CoiDisclosure CoiDisclosure;
+	private CoiDisclosure coiDisclosure;
 	
 	@Column(name = "DISCLOSURE_NUMBER")
-	private String disclosureNumber;
+	private Integer disclosureNumber;
 	
 	@Column(name = "PERSON_ENTITY_ID")
 	private Integer personEntityId;
@@ -95,18 +95,18 @@ public class CoiDisclEntProjDetails implements Serializable {
 	}
 
 	public CoiDisclosure getCoiDisclosure() {
-		return CoiDisclosure;
+		return coiDisclosure;
 	}
 
-	public void setCoiDisclosure(CoiDisclosure CoiDisclosure) {
-		this.CoiDisclosure = CoiDisclosure;
+	public void setCoiDisclosure(CoiDisclosure coiDisclosure) {
+		this.coiDisclosure = coiDisclosure;
 	}
 
-	public String getDisclosureNumber() {
+	public Integer getDisclosureNumber() {
 		return disclosureNumber;
 	}
 
-	public void setDisclosureNumber(String disclosureNumber) {
+	public void setDisclosureNumber(Integer disclosureNumber) {
 		this.disclosureNumber = disclosureNumber;
 	}
 
