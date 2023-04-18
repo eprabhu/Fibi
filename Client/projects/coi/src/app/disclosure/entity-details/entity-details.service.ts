@@ -11,6 +11,7 @@ export class EntityDetailsService {
   previousURL = '';
   lookups:any;
   $entityDetails = new BehaviorSubject<object>({});
+  isExpanded = true;
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
   getSFIDetails(coiFinancialEntityId) {
