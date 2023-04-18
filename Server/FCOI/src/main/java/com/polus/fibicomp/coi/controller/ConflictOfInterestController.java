@@ -311,10 +311,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.setEntityStatus(vo);
 	}
 	
-	@GetMapping("/getAllSystemEntityList")
-	public ResponseEntity<Object> getAllSystemEntityList() {
+	@PostMapping("/getAllSystemEntityList")
+	public ResponseEntity<Object> getAllSystemEntityList(@RequestBody CoiDashboardVO vo) {
 		logger.info("Requesting for getAllSystemEntityList");
-		return conflictOfInterestService.getAllSystemEntityList();
+		return conflictOfInterestService.getAllSystemEntityList(vo);
 	}
 
 	@PostMapping(value = "/createCoiTravelDisclosure")
@@ -341,10 +341,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getCoiProjectTypes();
 	}
 
-	@PostMapping(value = "/getPersonEntityDetails")
-	public ResponseEntity<Object> getPersonEntityDetails(@RequestBody ConflictOfInterestVO vo) {
+	@PostMapping(value = "/getPersonEntityDashboard")
+	public ResponseEntity<Object> getPersonEntityDashboard(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for getPersonEntityDetails");
-		return conflictOfInterestService.getPersonEntityDetails(vo);
+		return conflictOfInterestService.getPersonEntityDashboard(vo);
 	}
 
 
@@ -361,4 +361,17 @@ public class ConflictOfInterestController {
 		logger.info("Login Person Id : {}", AuthenticatedUser.getLoginPersonId());
 		return conflictOfInterestService.loadDisclosureReviewerQuickCardCounts();
 	}
+	
+	@GetMapping("/getCoiEntityDetails/{personEntityId}")
+	public ResponseEntity<Object> getCoiEntityDetails(@PathVariable("personEntityId") Integer personEntityId) {
+		logger.info("Requesting for getCoiEntityDetails");
+		return conflictOfInterestService.getCoiEntityDetails(personEntityId);
+	}
+	
+	@GetMapping("/getPersonEntityDetails/{personEntityId}")
+	public ResponseEntity<Object> getPersonEntityDetails(@PathVariable("personEntityId") Integer personEntityId) {
+		logger.info("Requesting for getPersonEntityDetails");
+		return conflictOfInterestService.getPersonEntityDetails(personEntityId);
+	}
+	
 }

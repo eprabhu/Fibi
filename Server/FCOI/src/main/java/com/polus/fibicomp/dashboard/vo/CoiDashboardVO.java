@@ -73,14 +73,6 @@ public class CoiDashboardVO {
 	
 	private String filterType;
 
-	public String getFilterType() {
-		return filterType;
-	}
-
-	public void setFilterType(String filterType) {
-		this.filterType = filterType;
-	}
-
 	private List<@Pattern(regexp="^$|[0-9]*$", message="Disposition Status must not include special characters.") String> property20;
 
 	private List<@Pattern(regexp="^$|[0-9]*$", message="Review Status must not include special characters.") String> property21;
@@ -334,4 +326,13 @@ public class CoiDashboardVO {
 	public void setProperty22(List<String> property22) {
 		this.property22 = property22;
 	}
+	
+	public String getFilterType() {
+		return filterType;
+	}
+
+	public void setFilterType(String filterType) {
+		this.filterType = filterType;
+	}
+	
 }

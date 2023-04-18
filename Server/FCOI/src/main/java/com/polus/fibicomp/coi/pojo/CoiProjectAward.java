@@ -59,11 +59,11 @@ public class CoiProjectAward implements Serializable {
 	@Column(name = "PRIME_SPONSOR_NAME")
 	private String primeSponsorName;
 	
-	@Column(name = "PROPOSAL_START_DATE")
-	private Date proposalStartDate;
+	@Column(name = "AWARD_START_DATE")
+	private Date awardStartDate;
 	
-	@Column(name = "PROPOSAL_END_DATE")
-	private Date proposalEndDate;
+	@Column(name = "AWARD_END_DATE")
+	private Date awardEndDate;
 
 	@Column(name = "LEAD_UNIT_NAME")
 	private String leadUnitName;
@@ -159,22 +159,6 @@ public class CoiProjectAward implements Serializable {
 		this.primeSponsorName = primeSponsorName;
 	}
 
-	public Date getProposalStartDate() {
-		return proposalStartDate;
-	}
-
-	public void setProposalStartDate(Date proposalStartDate) {
-		this.proposalStartDate = proposalStartDate;
-	}
-
-	public Date getProposalEndDate() {
-		return proposalEndDate;
-	}
-
-	public void setProposalEndDate(Date proposalEndDate) {
-		this.proposalEndDate = proposalEndDate;
-	}
-
 	public String getLeadUnitName() {
 		return leadUnitName;
 	}
@@ -205,6 +189,22 @@ public class CoiProjectAward implements Serializable {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+
+	public Date getAwardStartDate() {
+		return awardStartDate;
+	}
+
+	public void setAwardStartDate(Date awardStartDate) {
+		this.awardStartDate = awardStartDate;
+	}
+
+	public Date getAwardEndDate() {
+		return awardEndDate;
+	}
+
+	public void setAwardEndDate(Date awardEndDate) {
+		this.awardEndDate = awardEndDate;
 	}
 
 }

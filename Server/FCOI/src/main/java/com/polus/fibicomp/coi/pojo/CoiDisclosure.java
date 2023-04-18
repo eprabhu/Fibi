@@ -132,6 +132,9 @@ public class CoiDisclosure implements Serializable {
 
 	@Transient
 	private Integer numberOfSFI;
+	
+	@Transient
+	private String coiProjectTypeCode;
 
 	public Integer getDisclosureId() {
 		return disclosureId;
@@ -372,4 +375,13 @@ public class CoiDisclosure implements Serializable {
 	public void setNumberOfSFI(Integer numberOfSFI) {
 		this.numberOfSFI = numberOfSFI;
 	}
+
+	public String getCoiProjectTypeCode() {
+		return coiProjectTypeCode;
+	}
+
+	public void setCoiProjectTypeCode(String coiProjectTypeCode) {
+		this.coiProjectTypeCode = coiProjectTypeCode;
+	}
+	
 }
