@@ -6,6 +6,7 @@ import { CoiFinancialEntity, CoiFinancialEntityDetail } from '../add-sfi.interfa
 import { AddSfiService } from '../add-sfi.service';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {CommonService} from "../../../../common/services/common.service";
+import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../../../fibi/src/app/app-constants";
 
 declare var $: any;
 
@@ -105,9 +106,9 @@ export class SfiQuestionnaireComponent implements OnInit, OnDestroy {
                 this.getQuestionnaire(data.coiFinancialEntityRelType);
                 this.findRelation(data.financialEntityRelTypeCode);
                 this.clearRelationModal();
-                // this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Financial Entity Relations saved successfully.');
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Financial Entity Relations saved successfully.');
             }, _err => {
-                // this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving financial entity relations. Please try again.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving financial entity relations. Please try again.');
             }));
         }
     }

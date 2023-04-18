@@ -6,6 +6,7 @@ import { CommonService } from '../../../../common/services/common.service';
 import { CommentConfiguration } from '../../../coi-interface';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
 import { CoiSummaryService } from '../../coi-summary.service';
+import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../../../fibi/src/app/app-constants";
 
 declare var $: any;
 
@@ -84,7 +85,7 @@ export class RelationshipSummaryComponent implements OnInit {
                 // }
             // this.setSubSectionList();
         }, _err => {
-            //this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project details. Please try again.');
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project details. Please try again.');
         }));
     }
 
@@ -114,11 +115,11 @@ export class RelationshipSummaryComponent implements OnInit {
                 }).subscribe((data: any) => {
                     this.projectRelations[this.conflictIndex].coiReviewerStatusCode = data.coiReviewerStatusCode;
                     this.projectRelations[this.conflictIndex].coiReviewerStatus = data.coiReviewerStatus;
-                   // this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict status updated successfully.');
+                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict status updated successfully.');
                     $('#reviewer-conflict-modal').modal('hide');
                     this.clearConflictModal();
                 }, _err => {
-                   // this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
+                   this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
                 }));
         }
     }
@@ -129,7 +130,7 @@ export class RelationshipSummaryComponent implements OnInit {
                 this.conflictHistory = data;
                 $('#conflict-history-modal').modal('show');
             }, _err => {
-                //this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching conflict status history. Please try again.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching conflict status history. Please try again.');
             }));
     }
 

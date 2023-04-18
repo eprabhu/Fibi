@@ -45,3 +45,15 @@ body {
   position:fixed;
   z-index:10613 !important;
 }
+
+.modal-footer {
+  .btn-outline-secondary,
+  .btn-outline-primary,
+  .btn-danger{
+    font-size: 1.4rem !important;
+    min-width: 5em;
+    padding: 0.5rem 1rem !important;
+    height: 35px;
+  }
+}
+

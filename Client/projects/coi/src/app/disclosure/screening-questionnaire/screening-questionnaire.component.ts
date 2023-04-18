@@ -8,6 +8,7 @@ import { CoiService } from '../services/coi.service';
 import { DataStoreService } from '../services/data-store.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {deepCloneObject} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
+import {HTTP_ERROR_STATUS} from "../../../../../fibi/src/app/app-constants";
 
 @Component({
     selector: 'app-screening-questionnaire',
@@ -93,7 +94,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
                 this._router.navigate([NEXT_STEP], { queryParamsHandling: 'preserve' });
                 this.coiService.stepTabName = data ? 'sfi' : 'certify';
             }, _err => {
-                // this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in evaluating disclosure.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in evaluating disclosure.');
             })
         );
     }

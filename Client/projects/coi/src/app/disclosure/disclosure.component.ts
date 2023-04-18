@@ -8,6 +8,9 @@ import {DataStoreService} from "./services/data-store.service";
 import {CoiService} from "./services/coi.service";
 import {Location} from "@angular/common";
 import {deepCloneObject} from "../../../../fibi/src/app/common/utilities/custom-utilities";
+import {ElasticConfigService} from "../../../../fibi/src/app/common/services/elastic-config.service";
+import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../fibi/src/app/app-constants";
+import {CommonService} from "../common/services/common.service";
 
 @Component({
     selector: 'app-disclosure',
@@ -25,8 +28,17 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     coiData = new COI();
     currentStepNumber: 1 | 2 | 3 | 4 = 1;
 
+    assignReviewerActionDetails: any = {};
+    assignReviewerActionValidation = new Map();
+    adminGroupsCompleterOptions: any = {};
+    personElasticOptions: any = {};
+    categoryClearFiled: String;
+    assigneeClearField: String;
+
     constructor(public router: Router,
+                private _commonService: CommonService,
                 private _route: ActivatedRoute,
+                private _elasticConfigService: ElasticConfigService,
                 public sfiService: SfiService,
                 public coiService: CoiService,
                 public location: Location,
@@ -41,6 +53,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.getDataFromStore();
         this.routeToAppropriateMode();
         this.listenDataChangeFromStore();
@@ -143,6 +156,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 });
             }
         });
+        this.setAdminGroupOptions();
     }
 
 
@@ -208,18 +222,76 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             .subscribe((res: any) => {
                 this.updateDisclosureReviewStatus(res);
             }, _err => {
-                // _err.error.text === 'REVIEW_STATUS_NOT_COMPLETE' ? $('#completeReviewErrorModal').modal('show') :
-                    // this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
+                if(_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
+                    document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();
+                } else {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
+                }
             }));
     }
 
     updateDisclosureReviewStatus(res) {
         this.coiData.coiDisclosure = deepCloneObject(res);
         this.dataStore.updateStore(['coiDisclosure'], this.coiData);
-        // this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
     }
 
     triggerSave() {
         this.coiService.globalSave$.next();
+    }
+
+    private validateAssignReviewerAction() {
+        this.assignReviewerActionValidation.clear();
+        if (!this.assignReviewerActionDetails.assigneePersonId && !this.assignReviewerActionDetails.adminGroupId) {
+            this.assignReviewerActionValidation.set('reviewer', 'Please select an admin group or assignee.');
+        }
+        return this.assignReviewerActionValidation.size === 0;
+    }
+
+    saveOrUpdateCoiReview() {
+        if (this.validateAssignReviewerAction()) {
+            this.assignReviewerActionDetails.disclosureId = this.coiData.coiDisclosure.disclosureId;
+            this.$subscriptions.push(this.coiService.saveOrUpdateCoiReview({ coiReview: this.assignReviewerActionDetails }).subscribe((res: any) => {
+                this.assignReviewerActionDetails = {};
+                this.triggerAssignReviewerModal();
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review added successfully.`);
+            }, _err => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in adding review.`);
+            }));
+        }
+    }
+
+    adminGroupSelect(event: any): void {
+        this.assignReviewerActionDetails.adminGroupId = event ? event.adminGroupId : null;
+        this.assignReviewerActionDetails.adminGroup = event ? event : null;
+    }
+
+    assigneeSelect(event: any): void {
+        this.assignReviewerActionDetails.assigneePersonId = event ? event.prncpl_id : null;
+        this.assignReviewerActionDetails.assigneePersonName = event ? event.full_name : null;
+    }
+
+    private setAdminGroupOptions(): void {
+        this.adminGroupsCompleterOptions = {
+            arrayList: this.getActiveAdminGroups(),
+            contextField: 'adminGroupName',
+            filterFields: 'adminGroupName',
+            formatString: 'adminGroupName',
+            defaultValue: ''
+        };
+    }
+
+    private getActiveAdminGroups() {
+        return this.coiData.adminGroup.filter(element => element.isActive === 'Y');
+    }
+
+    triggerAssignReviewerModal() {
+        this.assignReviewerActionDetails = {};
+        this.assignReviewerActionValidation.clear();
+        this.assigneeClearField = new String('true');
+        this.categoryClearFiled = new String('true');
+        const isReviewTab = this.router.url.includes('disclosure/review');
+        document.getElementById(isReviewTab ?
+            'add-review-modal-trigger':'assign-reviewer-modal-trigger').click();
     }
 }

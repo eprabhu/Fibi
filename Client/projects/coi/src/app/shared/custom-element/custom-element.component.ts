@@ -17,7 +17,7 @@ import {
 } from "../../../../../fibi/src/app/common/services/end-point.config";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {AutoSaveService} from "../../../../../fibi/src/app/common/services/auto-save.service";
-import {DEFAULT_DATE_FORMAT} from "../../../../../fibi/src/app/app-constants";
+import {DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
 
 @Component({
   selector: 'app-custom-element',
@@ -306,7 +306,7 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
             this.result = data || [];
             if (this.result !== null) {
                 if (this.isShowSave) {
-                    // this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Other Information(s) saved successfully.');
+                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Other Information(s) saved successfully.');
                 }
               this.customElements = this.result.customElements;
               this.isRadioEmpty = true;
@@ -315,7 +315,7 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
             }
             this.isSaving = false;
           }, err => {
-                // this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving Other Information(s) failed. Please try again.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving Other Information(s) failed. Please try again.');
                 this.isSaving = false;
             }));
       }

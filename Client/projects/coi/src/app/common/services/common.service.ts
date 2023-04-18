@@ -4,6 +4,10 @@ import {BehaviorSubject} from 'rxjs';
 import {environment} from "../../../environments/environment";
 import {getFromLocalStorage, setIntoLocalStorage} from "../../../../../fibi/src/app/common/utilities/user-service";
 import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
+import {Toast} from "bootstrap";
+import {HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
+
+declare var $: any;
 
 @Injectable()
 export class CommonService {
@@ -47,7 +51,9 @@ export class CommonService {
     isEnableLock = false;
     isDevelopment = false;
     isPreventDefaultLoader = false;
-    timer: any
+    timer: any;
+    appToastContent = '';
+    toastClass = 'success';
     dashboardModules: any = {};
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
@@ -60,7 +66,7 @@ export class CommonService {
         return new Promise(async (resolve, reject) => {
             const CONFIG_DATA: any = await this.readConfigFile();
             this.assignConfigurationValues(CONFIG_DATA);
-            setIntoLocalStorage(JSON.parse('{"personID":"900002465","firstName":"Abhinav","lastName":"Adu-Djan","fullName":"Adu-Djan, Abhinav K","email":"","roleNumber":null,"userName":"jennie","unitNumber":"061000","jwtRoles":[],"unitAdmin":false,"login":true,"superUser":false,"externalUser":false}'));
+            setIntoLocalStorage(JSON.parse('{"personID":"10000000001","firstName":"Will","lastName":"Smith","fullName":"Smith, Will","email":"","roleNumber":null,"userName":"willsmith","unitNumber":"000001","jwtRoles":[],"unitAdmin":true,"login":true,"superUser":true,"externalUser":false}'));
             if (this.enableSSO) {
                 const USER_DATA = await this.loginWithCurrentUser();
                 this.isValidUser = USER_DATA.body['login'];
@@ -181,6 +187,14 @@ export class CommonService {
 
     fetchPermissions() {
         return this._http.get(this.baseUrl + '/getAllSystemRights').toPromise();
+    }
+
+    showToast(status = HTTP_SUCCESS_STATUS, toastContent = '') {
+        let toast = new Toast(document.getElementById('coi-bootstrap-toast'));
+        this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
+            'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
+        this.toastClass = HTTP_SUCCESS_STATUS ? 'success' : 'danger';
+        toast.show();
     }
 
 }

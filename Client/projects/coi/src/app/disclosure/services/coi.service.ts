@@ -48,5 +48,11 @@ export class CoiService {
         this.triggerAddReviewComment$.next(data);
     }
 
+    saveOrUpdateCoiReview(params: any) {
+        return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiReview', params);
+    }
 
+    getCoiProjectTypes() {
+        return this._http.get(this._commonService.baseUrl + '/getCoiProjectTypes');
+    }
 }

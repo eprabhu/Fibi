@@ -3,8 +3,8 @@
         <div class="col-sm-9 col-xxl-10 pe-0">
             <div class="border pi-info-text p-3 rounded-1">
                 <p class="fs-14 m-0">
-                    <span *ngIf="!isReadMore && headerInfoText.length > 520 else showFullInfo">
-                        {{headerInfoText | slice:0:520}}...
+                    <span *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
+                        {{headerInfoText | slice:0:650}}...
                         <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read More</u></span>
                     </span>
                     <ng-template #showFullInfo>
@@ -18,11 +18,11 @@
             <div class="border pi-quick-links py-2 px-3 shadow-sm fs-15 h-100">
                 <p *ngIf="hasFCOI && hasActiveFCOI"
                         (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
-                        title="Click to Revise FCOI"><u>Revise FCOI</u></p>
+                        title="Click to Revise FCOI"><u>Create/Revise FCOI</u></p>
                 <p *ngIf="!hasFCOI" [queryParams]="{tabName: 'CURRENT_DISCLOSURES'}"
                    [routerLink]="['/coi/create-disclosure/screening']"
-                   class="m-0 cursor-pointer" role="button" title="Click to Create FCOI"><u>Create FCOI</u></p>
-                <p (click)="isModalOpen= true" class="m-0 cursor-pointer" role="button"
+                   class="m-0 cursor-pointer" role="button" title="Click to Create FCOI"><u>Create/Revise FCOI</u></p>
+                <p (click)="service.isModalOpen= true" class="m-0 cursor-pointer" role="button"
                    title="Click to Create Project Disclosure"><u>Create Project
                     Disclosure</u></p>
                 <p class="m-0 cursor-pointer" role="button" title="Click to Create Travel Disclosure"><u>Create Travel
@@ -86,12 +86,14 @@
     <div class="navigation border text-center shadow-sm mb-3">
         <div class="row m-0 text-secondary">
             <div [routerLink]="['disclosures']"
+                 tabindex="0" aria-label="Goto My Disclosures"
                  class="cursor-pointer align-items-center border-end col d-flex justify-content-around p-0"
                  role="button" routerLinkActive="active"
                  title="Goto My Disclosures">
                 <strong class="fs-18">My Disclosures</strong>
             </div>
             <div [routerLink]="['entities']"
+                 tabindex="0" aria-label="Goto My Entities"
                  class="cursor-pointer align-items-center col d-flex justify-content-center p-0" role="button"
                  routerLinkActive="active"
                  title="Goto My Entities">
@@ -102,7 +104,7 @@
 
     <router-outlet></router-outlet>
 </div>
-<app-project-disclosure *ngIf="isModalOpen"></app-project-disclosure>
+<app-project-disclosure *ngIf="service.isModalOpen"></app-project-disclosure>
 <a class="d-none" data-bs-target="#reviewConfirmationModal" data-bs-toggle="modal" id="triggerReviseModal"></a>
 <div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog" data-backdrop="static"
      data-keyboard="false" id="reviewConfirmationModal" role="dialog" tabindex="-1">

@@ -26,7 +26,7 @@ export class UserEntitiesComponent implements OnInit {
 
   ngOnInit(): void {
     this.$subscriptions.push(this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject).subscribe((data: any) => {
-      this.entityArray = data.coiFinancialEntityList;
+      this.entityArray = data.coiFinancialEntityList || [];
       this.setFilter();
     }));
   }

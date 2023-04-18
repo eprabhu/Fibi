@@ -110,6 +110,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     editReview(review: any, index: number): void {
+        this.clearReviewModal();
         this.reviewDetails = review;
         this.modifyIndex = index;
         this.personElasticOptions.defaultValue = review.assigneePersonName;
@@ -125,7 +126,7 @@ export class LocationComponent implements OnInit, OnDestroy {
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.modifyIndex = -1;
                 this.reviewDetails = {};
-                $('#add-location-modal').modal('hide');
+                document.getElementById('add-review-modal-trigger').click();
                 //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
             }, _err => {
                 //this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
@@ -207,4 +208,11 @@ export class LocationComponent implements OnInit, OnDestroy {
         }
     }
 
+    clearReviewModal() {
+        this.reviewDetails = {};
+        this.modifyIndex = -1;
+        this.validationMap.clear();
+        this.assigneeClearField = new String('true');
+        this.categoryClearFiled = new String('true');
+    }
 }

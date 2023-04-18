@@ -6,6 +6,7 @@ import {CommonService} from "../common/services/common.service";
 export class UserDashboardService {
 
   activeDisclosures = [];
+  isModalOpen = false;
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
@@ -15,6 +16,10 @@ export class UserDashboardService {
 
   reviseDisclosure(reviseObject) {
     return this._http.post(this._commonService.baseUrl + '/reviseDisclosure', reviseObject);
+  }
+
+  getAllRemaindersList() {
+    return this._http.get(this._commonService.baseUrl + '/getAllRemaindersList');
   }
 
 }

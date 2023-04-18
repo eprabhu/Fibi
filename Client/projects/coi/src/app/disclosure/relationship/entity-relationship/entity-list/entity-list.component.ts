@@ -6,6 +6,7 @@ import { CoiService } from '../../../services/coi.service';
 import { DataStoreService } from '../../../services/data-store.service';
 import { EntityRelationshipService } from '../entity-relationship.service';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
+import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../../../fibi/src/app/app-constants";
 
 class ProjectDetails {
   projectNumber = '';
@@ -111,9 +112,9 @@ export class EntityListComponent implements OnInit {
       this.openModal.emit(true);
     } else {
       // tslint:disable-next-line: triple-equals
-      // this._entityService.currentCommonProjectArray != 0 ?
-      //   this._commonService.showToast(HTTP_SUCCESS_STATUS, 'No more next project available') :
-      //   this._commonService.showToast(HTTP_SUCCESS_STATUS, 'No more previous project available');
+      this._entityService.currentCommonProjectArray != 0 ?
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'No more next project available') :
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'No more previous project available');
     }
     } else {
       this._entityService.$previousNext.next(type);
@@ -135,7 +136,7 @@ saveClick() {
         this.setPreviousNext('N');
       }
   }, err => {
-    // this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relations');
+    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relations');
   }));
 }
 
