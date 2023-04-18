@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { forkJoin, Observable, Subscriber } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
+import {forkJoin, Observable, Subscriber} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
-import { CommonService } from '../../common/services/common.service';
-import { CoiService } from './coi.service';
-import { DataStoreService } from './data-store.service';
+import {CommonService} from '../../common/services/common.service';
+import {CoiService} from './coi.service';
+import {DataStoreService} from './data-store.service';
 
 @Injectable()
 export class ResolveServiceService {
@@ -15,7 +15,8 @@ export class ResolveServiceService {
         private _dataStore: DataStoreService,
         private _coiService: CoiService,
         private _router: Router
-    ) { }
+    ) {
+    }
 
     canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
 
@@ -58,8 +59,11 @@ export class ResolveServiceService {
             this._router.navigate(['/coi/user-dashboard']);
             return null;
         }
-        return this._coiService.createDisclosure({ disclosureCategoryType: tabName })
-            .pipe((catchError(error => this.redirectOnError(error))));
+        return this._coiService.createDisclosure({
+            coiDisclosure: {
+                fcoitypeCode: 1, personId: this._commonService.getCurrentUserDetail('personID')
+            }
+        }).pipe((catchError(error => this.redirectOnError(error))));
     }
 
     private hideManualLoader() {

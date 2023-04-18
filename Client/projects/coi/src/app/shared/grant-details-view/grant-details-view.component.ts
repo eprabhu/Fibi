@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { GrantDetailsViewService } from './grant-details-view.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+import {HTTP_ERROR_STATUS} from "../../../../../fibi/src/app/app-constants";
 
 @Component({
   selector: 'app-grant-details-view',
@@ -58,7 +59,7 @@ export class GrantDetailsViewComponent implements OnInit, OnChanges, OnDestroy {
       this.grantCallDetails.closingTime = this.convertTo12HourFormat(this.grantCallDetails.closingTime);
       document.getElementById('trigger-grant-details').click();
     }, err => {
-      //this._commonService.showToast(HTTP_ERROR_STATUS, 'Loading grant call failed. Please try again.');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Loading grant call failed. Please try again.');
     }));
   }
 

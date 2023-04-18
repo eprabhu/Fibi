@@ -129,7 +129,7 @@
             </div>
             <div *ngIf="commentTab != 'VIEW'" class="modal-footer">
                 <button (click)="clearModal()" class="btn btn-outline-secondary fs-14">Cancel</button>
-                <button class="btn btn-outline-primary fs-14" (click)="addComments()">
+                <button class="btn btn-primary fs-14" (click)="addComments()">
                     {{editIndex != -1 ? 'Update Comment':'Add Comment'}}</button>
             </div>
         </div>

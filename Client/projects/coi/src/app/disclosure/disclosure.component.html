@@ -245,13 +245,13 @@
                 <div class="d-flex justify-content-around px-3 pb-3">
                     <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusTypeCode == '2'"
                             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-                            data-bs-target="#add-location-modal" data-bs-toggle="modal"
+                            (click)="triggerAssignReviewerModal()"
                             title="Add Review Location">
                         <mat-icon class="me-2">person_add</mat-icon>
                         Assign Reviewer
                     </button>
                 </div>
-                <div class="d-flex justify-content-around px-3">
+                <div class="position-static d-flex justify-content-around px-3">
                     <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusTypeCode == '2'"
                             class="me-2 fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center" data-bs-target="#completeReviewModalFromDashboard"
                             data-bs-toggle="modal">
@@ -307,7 +307,7 @@
                 <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
                         type="button">Cancel
                 </button>
-                <button (click)="completeDisclosureReview()" class="btn btn-outline-primary fs-14"
+                <button (click)="completeDisclosureReview()" class="btn btn-primary fs-14"
                         data-bs-dismiss="modal"
                         type="button">Complete Review
                 </button>
@@ -315,21 +315,22 @@
         </div>
     </div>
 </div>
+<span class="d-none" id="reviewPendingCompleteReviewErrorModalTrigger"
+      data-bs-target="#completeReviewModalFromDashboardErrorModal" data-bs-toggle="modal"></span>
 <!-- Complete review modal -->
 <div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboardErrorModal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header pe-0">
-                <h4 class="modal-title">Warning!
-                </h4>
-                <button aria-label="Close" class="close btn m-0" data-bs-dismiss="modal" id="dissmiss-btn" type="button">
+                <h4 class="modal-title">Warning!</h4>
+                <button aria-label="Close" class="close btn m-0" data-bs-dismiss="modal" type="button">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="row mt-2 mb-0">
                     <div class="col-lg-12">
-                        <div class="alert alert-danger fs-12">
+                        <div class="alert alert-danger fs-14">
                             <i aria-hidden="true" class="fa fa-exclamation-circle icon text-danger mr-3"></i>
                             There still are some pending reviews for the reviewers to complete. Please wait until all
                             the reviews are completed.
@@ -349,3 +350,55 @@
     <router-outlet></router-outlet>
 </div>
 <app-coi-review-comment-modal></app-coi-review-comment-modal>
+
+<!--assign reviewer modal start-->
+<div class="modal modal-coi fade mySkinDialog" id="assign-reviewer-modal" role="dialog" aria-labelledby="skippedSchedulesTitle"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Review for {{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by {{coiData?.person?.fullName}}</h5>
+                <button type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close"
+                        (click)="assignReviewerActionDetails = {}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="locationId" class="col-lg-6 col-sm-12 col-12">
+                        <label class="d-block">Admin Group</label>
+                        <app-autocompleter [completerOptions]="adminGroupsCompleterOptions"
+                                           [clearField]="categoryClearFiled" [placeHolder]="'Search for Admin Group'"
+                                           (onSelect)="adminGroupSelect($event)">
+                        </app-autocompleter>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-12">
+                        <label class="d-block">Assignee</label>
+                        <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
+                                     [placeHolder]="'Search Assignee'" (selectedResult)="assigneeSelect($event)">
+                        </app-elastic>
+                    </div>
+                    <div class="ml-2" *ngIf="assignReviewerActionValidation.has('reviewer')">
+                        <span class="mandatory d-inline-block">{{assignReviewerActionValidation.get('reviewer')}}</span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <label class="block-display">
+                            Description</label>
+                        <textarea [(ngModel)]="assignReviewerActionDetails.description" appLengthValidator [isShowLimiter]="true" [limit]="2000"
+                                  rows="2" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="agreement-approve-close" type="button"
+                        (click)="assignReviewerActionDetails = {}">Close</button>
+                <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
+                        (click)="saveOrUpdateCoiReview();" type="button">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<span id="assign-reviewer-modal-trigger" data-bs-target="#assign-reviewer-modal" data-bs-toggle="modal" class="d-none"></span>
+<!--assign reviewer modal end-->

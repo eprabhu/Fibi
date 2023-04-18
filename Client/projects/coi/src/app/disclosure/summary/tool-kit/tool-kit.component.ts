@@ -8,6 +8,7 @@ import { CoiSummaryService } from '../coi-summary.service';
 import {slideHorizontal} from "../../../../../../fibi/src/app/common/utilities/animations";
 import { scrollIntoView } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import {subscriptionHandler} from "../../../../../../fibi/src/app/common/utilities/subscription-handler";
+import {HTTP_ERROR_STATUS} from "../../../../../../fibi/src/app/app-constants";
 
 @Component({
     selector: 'app-tool-kit',
@@ -100,7 +101,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
                   this.projectList.awards[0] : this.projectList.proposals[0], 0);
             }
         }, _err => {
-            // this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project list');
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project list');
         });
     }
 

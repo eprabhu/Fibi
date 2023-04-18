@@ -1,6 +1,4 @@
-
 <!-- Proposal Disclosure Modal -->
-
 <div class="modal fade show mySkinDialog" tabindex="-1" id="createProjectDisclosureModal" role="dialog"
     aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg modal-coi" role="document">
@@ -19,15 +17,31 @@
                             with the proposal disclosure.</p>
                     </div>
                 </div>
-                <div *ngIf="!isSearchExternalProposal">
+                <div>
+                    <span class="project-types-label">Project Type :</span>
+                    <div>
+                        <ul class="project-types mb-0">
+                            <li *ngFor="let type of projectTypes" class="me-5 d-flex align-items-center">
+                                <input [(ngModel)]="selectedProjectType" (ngModelChange)="changeProjectType()"
+                                       [value]="type.description" class="me-2 cursor-pointer"
+                                       type="radio" name="project-type" id="{{type?.description}}">
+                                <label class="cursor-pointer" for="{{type?.description}}">{{type?.description}}</label>
+                            </li>
+                        </ul>
+                        <div *ngIf="projectDisclosureValidation?.has('projectSelect')" class="invalid-feedback d-block">
+                            {{projectDisclosureValidation?.get('projectSelect')}}
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-3" *ngIf="selectedProjectType && !isSearchExternalProject">
                     <label for="proposal-disclosure" class="f-14 mb-3">
-                        Proposal Search</label>
+                        {{selectedProjectType}} Search</label>
                     <div class="form-row justify-content-center">
                         <div class="col-12 searchBox mb-0">
-                            <app-endpoint-search id="proposal-search" [httpOptions]="ProposalSearchOptions"
-                                [clearField]="clearProposalField" (onSelect)="selectedProposal($event)"
-                                [isError]="projectDisclosureValidation?.has('proposalSearch')"
-                                [placeHolder]="'Search: Proposal ID, Title, Principal Investigator, Sponsor, Proposal Lead Unit'">
+                            <app-endpoint-search id="proposal-search" [httpOptions]="projectSearchOptions"
+                                                 [clearField]="clearProjectField" (onSelect)="selectedProposal($event)"
+                                                 [isError]="projectDisclosureValidation?.has('proposalSearch')"
+                                                 [placeHolder]="'Search: '+selectedProjectType+' ID, Title, Principal Investigator, Sponsor, '+selectedProjectType+' Lead Unit'">
                             </app-endpoint-search>
                         </div>
                     </div>
@@ -40,39 +54,39 @@
                         </button>
                         <div class="row">
                             <div class="col-12">
-                                <label class="f-14 mt-2 mb-2">Project Title : </label>
-                                <span class="ml-2">{{proposalDetails?.title}}</span>
+                                <label class="f-14 mt-2 mb-2">{{selectedProjectType}} Title : </label>
+                                <span class="ml-2">{{manualProjectAddDetails?.title}}</span>
                             </div>
                             <div class="col-6 mt-2 mb-2">
                                 <label class="f-14">Principal Investigator : </label>
-                                <span class="ml-2">{{proposalDetails?.principalInvestigator}}</span>
+                                <span class="ml-2">{{manualProjectAddDetails?.principalInvestigator}}</span>
                             </div>
                             <div class="col-6 mt-2 mb-2">
                                 <label class="f-14">Lead Unit : </label>
-                                <span class="ml-2">{{proposalDetails?.unitName}}</span>
+                                <span class="ml-2">{{manualProjectAddDetails?.unitName}}</span>
                             </div>
                             <div class="col-6 mb-2 mt-2">
                                 <label class="f-14">Period : </label>
-                                <span class="ml-2">{{proposalDetails?.startDate | dateFormatter}} -
-                                    {{proposalDetails?.endDate | dateFormatter}}</span>
+                                <span class="ml-2">{{manualProjectAddDetails?.startDate | dateFormatter}} -
+                                    {{manualProjectAddDetails?.endDate | dateFormatter}}</span>
                             </div>
                             <div class="col-6 mb-2 mt-2">
                                 <label class="f-14">Sponsor : </label>
-                                <span class="ml-2">{{proposalDetails?.sponsor}}</span>
+                                <span class="ml-2">{{manualProjectAddDetails?.sponsor}}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div *ngIf="isSearchExternalProposal" class="row">
+                <div *ngIf="isSearchExternalProject" class="row">
                     <div class="col-4">
-                        <label class="f-14">Project #</label>
-                        <input type="text" id="proposal-no" placeholder="Project No:" autocomplete="off"
-                            [(ngModel)]="proposalDetails.moduleItemId" class="form-control" />
+                        <label class="f-14">{{selectedProjectType}} #</label>
+                        <input type="text" id="proposal-no" placeholder="{{this.selectedProjectType}} No:" autocomplete="off"
+                               [(ngModel)]="manualProjectAddDetails.moduleItemId" class="form-control" />
                     </div>
                     <div class="col-8">
-                        <label class="f-14">Project Title</label>
-                        <input type="text" id="proposal-no" placeholder="Project Title" autocomplete="off"
-                            [(ngModel)]="proposalDetails.title" class="form-control" />
+                        <label class="f-14">{{selectedProjectType}} Title</label>
+                        <input type="text" id="proposal-no" placeholder="{{this.selectedProjectType}} Title" autocomplete="off"
+                               [(ngModel)]="manualProjectAddDetails.title" class="form-control" />
                     </div>
                     <div class="col-4">
                         <label class="f-14">Principal Investigator</label>
@@ -89,23 +103,23 @@
                     </div>
                     <div class="col-4">
                         <label class="f-14">Prime Sponsor</label>
-                        <app-endpoint-search [httpOptions]="sponsorSearchOptions" [clearField]="clearFieldSponsorField"
+                        <app-endpoint-search [httpOptions]="sponsorSearchOptions" [clearField]="clearSponsorField"
                             [placeHolder]="'Sponsor'">
                         </app-endpoint-search>
                     </div>
                 </div>
-                <div class="fs-14-nav mt-4" style="text-decoration: underline;cursor: pointer;color: #88e4f3;" >
-                    <a *ngIf="!isSearchExternalProposal"
-                        (click)="clearSearchFields(); isSearchExternalProposal = true"  >Unable to find your <span style="position: relative;bottom: 2px;font-size: 11px;" >Project</span>  from
+                <div *ngIf="selectedProjectType" class="fs-14-nav mt-4 text-primary" style="text-decoration: underline;cursor: pointer;" >
+                    <a *ngIf="!isSearchExternalProject"
+                        (click)="switchExternalProject(true);"  >Unable to find your <span class="fw-500">{{selectedProjectType}}</span>  from
                         the List?</a>
-                    <a *ngIf="isSearchExternalProposal"
-                        (click)="clearSearchFields(); isSearchExternalProposal = false">Back to <span style="color: blue;position: relative;bottom: 2px;font-size: 11px;" >Project</span> search list</a>
+                    <a *ngIf="isSearchExternalProject"
+                        (click)="switchExternalProject(false);">Back to <span class="fw-500">{{selectedProjectType}}</span> search list</a>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-success fs-15" data-bs-dismiss="modal"
-                    (click)="clearDisclosureModal(); isSearchExternalProposal = false">Cancel</button>
-                <button type="button" class="btn btn-success fs-15 " (click)="createProjectDisclosureAPI();">
+                <button type="button" class="btn btn-outline-secondary fs-15" data-bs-dismiss="modal"
+                    (click)="clearDisclosureModal(); isSearchExternalProject = false">Cancel</button>
+                <button type="button" class="btn btn-primary fs-15 " (click)="createProjectDisclosureAPI();">
                     Continue with Project Disclosure
                 </button>
             </div>

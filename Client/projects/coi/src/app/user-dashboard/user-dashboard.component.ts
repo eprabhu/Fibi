@@ -3,6 +3,8 @@ import {UserDashboardService} from "./user-dashboard.service";
 import {subscriptionHandler} from "../../../../fibi/src/app/common/utilities/subscription-handler";
 import { openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import {Router} from "@angular/router";
+import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../fibi/src/app/app-constants";
+import {CommonService} from "../common/services/common.service";
 
 declare var $: any;
 @Component({
@@ -28,11 +30,12 @@ export class UserDashboardComponent implements OnInit, OnDestroy{
                     diminish, or eliminate the Conflict of Interest.`;
   $subscriptions = [];
 
-  constructor(public service: UserDashboardService, private _router: Router) {
+  constructor(public service: UserDashboardService, private _router: Router, public commonService: CommonService) {
   }
 
   ngOnInit(): void {
     this.getActiveDisclosure();
+    this.getAllRemaindersList();
   }
 
   ngOnDestroy() {
@@ -41,16 +44,16 @@ export class UserDashboardComponent implements OnInit, OnDestroy{
 
   getActiveDisclosure() {
     this.$subscriptions.push(this.service.getActiveDisclosure().subscribe((res: any) => {
-      this.service.activeDisclosures = res.coiDisclosures || [];
+      this.service.activeDisclosures = res.coiDisclosureOlds || [];
       this.updateFCOIStatuses();
     }))
   }
 
   updateFCOIStatuses() {
     this.hasFCOI = this.service.activeDisclosures.find(disclosure =>
-        disclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode == '1'
+        disclosure.disclosureCategoryTypeCode == '1'
     );
-    this.hasActiveFCOI = this.hasFCOI ? this.hasFCOI.coiDisclosureStatus.disclosureStatusCode == 3 : false;
+    this.hasActiveFCOI = this.hasFCOI ? this.hasFCOI.dispositionStatusTypeCode == '2' : false;
   }
 
   clearModal(): void {
@@ -71,7 +74,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy{
         .subscribe((data: any) => {
               // this.reviseDisclosureObject = data;
               // this.clearModal();
-              // this._commonService.showToast(HTTP_SUCCESS_STATUS, 'New version of disclosure created.');
+              this.commonService.showToast(HTTP_SUCCESS_STATUS, 'New version of disclosure created.');
               this._router.navigate(['/coi/disclosure/summary'], {
                 queryParams: {
                   disclosureId: data.coiDisclosure.disclosureId
@@ -79,8 +82,14 @@ export class UserDashboardComponent implements OnInit, OnDestroy{
               });
             },
             err => {
-              // this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating new version. Please try again.');
+              this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating new version. Please try again.');
             }));
+  }
+
+  getAllRemaindersList() {
+    this.$subscriptions.push(this.service.getAllRemaindersList().subscribe((res: any) => {
+      console.log(res);
+    }));
   }
 
 }
