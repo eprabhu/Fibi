@@ -1,16 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivityService } from '../../../../../../fibi/src/app/agreement/agreement-shared/activity-track/activity.service';
-import { slideHorizontal } from '../../../../../../fibi/src/app/common/utilities/animations';
-import { SfiService } from '../../../disclosure/sfi/sfi.service';
-import { environment } from '../../../../environments/environment';
-import { CommonService } from '../../../common/services/common.service';
-import { CoiEntity, CoiFinancialEntity } from '../add-sfi.interface';
-import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../../../fibi/src/app/common/services/end-point.config';
-import { hideModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { ActivityService } from '../../../../../fibi/src/app/agreement/agreement-shared/activity-track/activity.service';
+import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
+import { SfiService } from '../../disclosure/sfi/sfi.service';
+import { environment } from '../../../environments/environment';
+import { CommonService } from '../../common/services/common.service';
+import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
+import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
-import { catchError } from 'rxjs/internal/operators/catchError';
+import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 
 export interface EndpointOptions {
   contextField: string;
@@ -52,6 +50,7 @@ export class AddSfiComponent implements OnInit {
   emailWarningMsg: any;
   sfiLookUpList: any = {};
   isExpandedAdditionalDetails = true;
+  isResultFromSearch = false;
 
   constructor(public sfiService: SfiService, public _commonService: CommonService,
     private _activatedRoute: ActivatedRoute, private _router: Router) { }
@@ -192,6 +191,7 @@ export class AddSfiComponent implements OnInit {
 
   selectedEvent(event) {
     if (event) {
+      this.isResultFromSearch = true;
       this.coiEntity = event;
       if (event.country) {
         this.countrySearchOptions.defaultValue = event.country.countryName;
@@ -207,7 +207,7 @@ export class AddSfiComponent implements OnInit {
 
   selectedCountryEvent(event) {
     this.coiEntity.country = event;
-    this.coiEntity.countryCode = event.countryCode;
+    this.coiEntity.country.countryCode = event.countryCode;
   }
 
   clearSFIFields() {
@@ -217,6 +217,7 @@ export class AddSfiComponent implements OnInit {
     };
     this.clearCountryField = new String('true');
     this.clearField = new String('true');
+    this.isResultFromSearch = false;
   }
 
   checkMandatoryFilled() {
@@ -244,18 +245,18 @@ export class AddSfiComponent implements OnInit {
       if (!this.coiEntity.zipCode) {
         this.mandatoryList.set('zipCode', '* Please enter a zipCode.');
       }
-      if (!this.additionalDetails.involvementStartDate) {
-        this.mandatoryList.set('date', '* Please enter a start date.');
-      }
-      if (!this.additionalDetails.staffInvolvement) {
-        this.mandatoryList.set('staff', '* Please enter Relationship with Entity details.');
-      }
-      if (!this.additionalDetails.studentInvolvement) {
-        this.mandatoryList.set('student', '* Please enter Principle Business Area of Entity details.');
-      }
-      if (!this.additionalDetails.instituteResourceInvolvement) {
-        this.mandatoryList.set('resource', '* Please enter Relationship of Entity to your University responsibilities details.');
-      }
+    }
+    if (!this.additionalDetails.involvementStartDate) {
+      this.mandatoryList.set('date', '* Please enter a start date.');
+    }
+    if (!this.additionalDetails.staffInvolvement) {
+      this.mandatoryList.set('staff', '* Please enter Relationship with Entity details.');
+    }
+    if (!this.additionalDetails.studentInvolvement) {
+      this.mandatoryList.set('student', '* Please enter Principle Business Area of Entity details.');
+    }
+    if (!this.additionalDetails.instituteResourceInvolvement) {
+      this.mandatoryList.set('resource', '* Please enter Relationship of Entity to your University responsibilities details.');
     }
     return this.mandatoryList.size !== 0 || this.emailWarningMsg ? false : true;
 

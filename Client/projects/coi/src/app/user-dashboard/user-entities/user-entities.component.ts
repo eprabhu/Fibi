@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SFIDashboardRequestObject } from "../../disclosure/coi-interface";
 import { CoiService } from "../../disclosure/services/coi.service";
+import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { UserEntitiesService } from "./user-entities.service";
 
 @Component({
@@ -21,10 +22,15 @@ export class UserEntitiesComponent implements OnInit {
   filteredEntityArray = [];
   searchText = '';
 
-  constructor(private _userEntityService: UserEntitiesService, private _router: Router) {
+  constructor(private _userEntityService: UserEntitiesService, private _router: Router,
+              private _sfiService: SfiService,) {
   }
 
   ngOnInit(): void {
+    this.fetchMyEntities();
+  }
+
+  private fetchMyEntities() {
     this.$subscriptions.push(this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject).subscribe((data: any) => {
       this.entityArray = data.coiFinancialEntityList || [];
       this.setFilter();
@@ -48,6 +54,23 @@ export class UserEntitiesComponent implements OnInit {
         return this.currentSelected.filter == 'Active' ? entity.isActive == 'Y':entity.isActive == 'N'
       });
     }
+  }
+
+  listenForAdd() {
+    this.$subscriptions.push(
+        this._sfiService.$addSfi.subscribe((data: boolean) => {
+            this.fetchMyEntities();
+            this._sfiService.isShowSfiNavBar = false;
+            this.removeEntityId();
+        })
+    );
+}
+
+removeEntityId() {
+    this._router.navigate([], {
+      queryParams: {entityId: null},
+      queryParamsHandling: 'merge'
+    })
   }
 
 }
