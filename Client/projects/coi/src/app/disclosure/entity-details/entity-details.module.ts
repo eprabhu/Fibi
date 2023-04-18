@@ -14,6 +14,8 @@ import { SharedComponentModule } from '../../shared-components/shared-component.
 import { SfiModule } from '../sfi/sfi.module';
 import { DataStoreService } from '../services/data-store.service';
 import { CoiService } from '../services/coi.service';
+import { ViewSfiDetailsComponent } from './add-entity-details/view-sfi-details/view-sfi-details.component';
+import { ViewRelationshipDetailsComponent } from './add-entity-details/view-relationship-details/view-relationship-details.component';
 
 const routes: Routes = [{ path: '', component:EntityDetailsComponent, canActivate:[EntityDetailsGuardService] }]
 
@@ -31,8 +33,9 @@ const routes: Routes = [{ path: '', component:EntityDetailsComponent, canActivat
     EntityDetailsComponent,
     AddEntityDetailsComponent,
     AddRelationshipComponent,
-    EntityQuestionnaireComponent
-
+    EntityQuestionnaireComponent,
+    ViewSfiDetailsComponent,
+    ViewRelationshipDetailsComponent,
   ],
   providers:[
     EntityDetailsService,

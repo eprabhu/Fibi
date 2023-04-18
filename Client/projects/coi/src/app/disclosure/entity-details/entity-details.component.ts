@@ -9,16 +9,16 @@ import { EntityDetailsService } from './entity-details.service';
 })
 export class EntityDetailsComponent implements OnInit {
 
-  constructor(private _entityDetails:EntityDetailsService,private _route:ActivatedRoute) {
+  constructor(public _entityDetails:EntityDetailsService,private _route:ActivatedRoute) {
     this.clearSfiNavBarStyle();
   }
   entityDetails = {};
   ngOnInit() {
-
+    
   }
-
-  clearSfiNavBarStyle() {
+    
+   clearSfiNavBarStyle() {
     document.body.style.removeProperty('overflow');
   }
-
+  isExpanded: any
 }
