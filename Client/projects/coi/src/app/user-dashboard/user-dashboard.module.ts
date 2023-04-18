@@ -8,6 +8,8 @@ import { CoiService } from '../disclosure/services/coi.service';
 import { DataStoreService } from '../disclosure/services/data-store.service';
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
+import { SfiService } from '../disclosure/sfi/sfi.service';
+import { DisclosureModule } from '../disclosure/disclosure.module';
 
 const routes: Routes = [
     {path: '', redirectTo: 'disclosures', pathMatch: 'full'},
@@ -33,9 +35,10 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         MatIconModule,
         SharedModule,
-        FormsModule
+        FormsModule,
+        DisclosureModule
     ],
-    providers: [CoiService, DataStoreService]
+    providers: [CoiService, DataStoreService, SfiService]
 })
 export class UserDashboardModule {
 }

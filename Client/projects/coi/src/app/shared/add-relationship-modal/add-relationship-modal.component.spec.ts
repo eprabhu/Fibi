@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { SfiQuestionnaireComponent } from './sfi-questionnaire.component';
+import { AddRelationshipModalComponent } from './add-relationship-modal.component';
 
-describe('SfiQuestionnaireComponent', () => {
-  let component: SfiQuestionnaireComponent;
-  let fixture: ComponentFixture<SfiQuestionnaireComponent>;
+describe('AddRelationshipModalComponent', () => {
+  let component: AddRelationshipModalComponent;
+  let fixture: ComponentFixture<AddRelationshipModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SfiQuestionnaireComponent ]
+      declarations: [ AddRelationshipModalComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SfiQuestionnaireComponent);
+    fixture = TestBed.createComponent(AddRelationshipModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

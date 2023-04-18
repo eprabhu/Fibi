@@ -270,6 +270,18 @@ select option {
     background: #ccc
 }
 
-  .disable-scroll{
-    overflow-y: hidden !important;
-  }
+.disable-scroll {
+      overflow-y: hidden !important;
+}
+        
+small {
+    margin-left: 8px;
+    margin-top: 5px;
+    display: inline-block;
+    font-weight: 700;
+    color: #fff !important;
+} 
+
+.deactivate-text {
+    color: #fff !important;
+}

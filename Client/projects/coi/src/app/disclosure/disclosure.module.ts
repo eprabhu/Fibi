@@ -5,7 +5,6 @@ import {RouterModule, Routes} from "@angular/router";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 
-import {AddSfiComponent} from './sfi/add-sfi/add-sfi.component';
 import {SfiService} from './sfi/sfi.service';
 import {SearchFieldComponent} from './sfi/search-field/search-field.component';
 
@@ -57,7 +56,6 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         DisclosureComponent,
-        AddSfiComponent,
         SearchFieldComponent
     ],
     imports: [
@@ -77,9 +75,7 @@ const routes: Routes = [
         CoiService,
         RouterGuardService
     ],
-    exports:[
-      AddSfiComponent
-    ]
+    exports:[]
 })
 export class DisclosureModule {
 }

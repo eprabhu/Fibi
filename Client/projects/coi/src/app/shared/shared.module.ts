@@ -46,6 +46,8 @@ import {DATE_PICKER_FORMAT_MATERIAL} from "../../../../fibi/src/app/app-constant
 import {MatMenuModule} from '@angular/material/menu';
 import {CdkMenuModule} from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
+import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
+import { AddSfiComponent } from './add-sfi/add-sfi.component';
 
 @NgModule({
     imports: [
@@ -65,7 +67,9 @@ import { PaginationComponent } from './pagination/pagination.component';
         LengthValidatorDirective, CurrencyFormatDirective, CustomCurrencyPipe, QuestionnaireListCompareComponent,
         AutoGrowDirective, QuestionnaireCompareComponent, CustomElementCompareComponent, GrantDetailsViewComponent, AppTimePickerComponent,
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
-        DragNDragDirective, CustomTagRemoverPipe,PaginationComponent],
+        DragNDragDirective, CustomTagRemoverPipe,PaginationComponent,
+        AddRelationshipModalComponent,
+        AddSfiComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -104,7 +108,9 @@ import { PaginationComponent } from './pagination/pagination.component';
         MatNativeDateModule,
         MatIconModule,
         CdkMenuModule,
-        MatMenuModule
+        MatMenuModule,
+        AddRelationshipModalComponent,
+        AddSfiComponent
     ],
 
     providers: [
