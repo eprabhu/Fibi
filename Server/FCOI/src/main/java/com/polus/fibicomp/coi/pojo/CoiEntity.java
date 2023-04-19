@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -120,6 +121,18 @@ public class CoiEntity implements Serializable {
 	
 	@Column(name = "APPROVED_TIMESTAMP")
 	private Timestamp approvedTimestamp;
+	
+	@Transient
+	private String countryDescription;
+	
+	@Transient
+	private String entityTypeDescription;
+	
+	@Transient
+	private String riskLevelDescription;
+	
+	@Transient
+	private String statusDescription;
 
 	public Integer getEntityId() {
 		return entityId;
@@ -329,4 +342,36 @@ public class CoiEntity implements Serializable {
 		this.city = city;
 	}
 
+	public String getEntityTypeDescription() {
+		return entityTypeDescription;
+	}
+
+	public void setEntityTypeDescription(String entityTypeDescription) {
+		this.entityTypeDescription = entityTypeDescription;
+	}
+
+	public String getRiskLevelDescription() {
+		return riskLevelDescription;
+	}
+
+	public void setRiskLevelDescription(String riskLevelDescription) {
+		this.riskLevelDescription = riskLevelDescription;
+	}
+
+	public String getStatusDescription() {
+		return statusDescription;
+	}
+
+	public void setStatusDescription(String statusDescription) {
+		this.statusDescription = statusDescription;
+	}
+
+	public String getCountryDescription() {
+		return countryDescription;
+	}
+
+	public void setCountryDescription(String countryDescription) {
+		this.countryDescription = countryDescription;
+	}
+	
 }

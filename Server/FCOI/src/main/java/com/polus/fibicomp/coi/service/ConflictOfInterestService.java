@@ -301,7 +301,7 @@ public interface ConflictOfInterestService {
 
 	ResponseEntity<Object> setEntityStatus(ConflictOfInterestVO vo);
 
-	ResponseEntity<Object> getAllSystemEntityList();
+	ResponseEntity<Object> getAllSystemEntityList(CoiDashboardVO vo);
 
 	ResponseEntity<Object> createCoiTravelDisclosure(ConflictOfInterestVO vo);
 
@@ -311,7 +311,7 @@ public interface ConflictOfInterestService {
 
 	ResponseEntity<Object> getCoiProjectTypes();
 
-	ResponseEntity<Object> getPersonEntityDetails(ConflictOfInterestVO vo);
+	public ResponseEntity<Object> getPersonEntityDashboard(ConflictOfInterestVO vo);
 
 
 	/**
@@ -327,4 +327,8 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> loadDisclosureReviewerQuickCardCounts();
+	
+	public ResponseEntity<Object> getCoiEntityDetails(Integer personEntityId);
+
+	public ResponseEntity<Object> getPersonEntityDetails(Integer personEntityId);
 }

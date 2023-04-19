@@ -24,6 +24,8 @@ import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
+import com.polus.fibicomp.coi.pojo.CoiProjectAward;
+import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
@@ -592,7 +594,7 @@ public interface ConflictOfInterestDao {
 	 */
 	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String status);
 
-	public List<CoiEntity> getAllSystemEntityList(ConflictOfInterestVO vo);
+	public List<CoiEntity> getAllSystemEntityList(CoiDashboardVO vo);
 
 	public CoiTravelDisclosure saveOrUpdateCoiTravelDisclosure(CoiTravelDisclosure coiTravelDisclosure);
 
@@ -602,7 +604,7 @@ public interface ConflictOfInterestDao {
 
 	public List<CoiProjectType> getCoiProjectTypes();
 
-	public List<PersonEntity> getPersonEntityDetails(ConflictOfInterestVO vo);
+	public List<PersonEntity> getPersonEntityDashboard(ConflictOfInterestVO vo);
 
 	public Integer generateMaxCoiEntityNumber();
 
@@ -625,4 +627,12 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	ConflictOfInterestVO loadDisclosureQuickCardCounts(String dashboardType, String loginPersonId);
+	
+	public CoiProjectProposal saveOrUpdateCoiProjectProposal(CoiProjectProposal coiProjectProposal);
+
+	public CoiProjectAward saveOrUpdateCoiProjectAward(CoiProjectAward coiProjectAward);
+
+	public List<CoiEntity> getCoiEntityDetailsByEntityId(Integer personEntityId);
+
+	public PersonEntity getPersonEntityDetailsByEntityId(Integer personEntityId);
 }

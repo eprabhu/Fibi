@@ -142,6 +142,10 @@ public class ConflictOfInterestVO {
 	private List<PersonEntityRelType> personEntityRelType;
 
 	private Integer personEntityId;
+	
+	private CoiProjectProposal coiProjectProposal;
+	
+	private CoiProjectAward coiProjectAward;
 
 	public CoiDisclosure getCoiDisclosure() {
 		return coiDisclosure;
@@ -678,4 +682,29 @@ public class ConflictOfInterestVO {
 	public void setActive(Boolean active) {
 		isActive = active;
 	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public CoiProjectProposal getCoiProjectProposal() {
+		return coiProjectProposal;
+	}
+
+	public void setCoiProjectProposal(CoiProjectProposal coiProjectProposal) {
+		this.coiProjectProposal = coiProjectProposal;
+	}
+
+	public CoiProjectAward getCoiProjectAward() {
+		return coiProjectAward;
+	}
+
+	public void setCoiProjectAward(CoiProjectAward coiProjectAward) {
+		this.coiProjectAward = coiProjectAward;
+	}
+	
 }
