@@ -237,7 +237,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		criteriaUpdate.set("certificationText", coiDisclosure.getCertificationText());
 		criteriaUpdate.set("certifiedAt", coiDisclosure.getCertifiedAt());
 		criteriaUpdate.set("certifiedBy", coiDisclosure.getCertifiedBy());
-//		criteriaUpdate.set("disclosureStatusCode", coiDisclosure.getDisclosureStatusCode());
+		criteriaUpdate.set("conflictStatusCode", coiDisclosure.getConflictStatusCode());
 		criteriaUpdate.set("dispositionStatusCode", coiDisclosure.getDispositionStatusCode());
 		criteriaUpdate.set("reviewStatusCode", coiDisclosure.getReviewStatusCode());
 		criteriaUpdate.set("updateTimestamp", commonDao.getCurrentTimestamp());
@@ -370,9 +370,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public List<String> getModuleItemKeysByCOIFinancialEntityIdAndModuleCode(Integer coiFinancialEntityId, Integer moduleCode) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		String hqlQuery = "SELECT distinct(moduleItemKey) FROM CoiDisclosureOldDetails WHERE coiFinancialEntityId=:coiFinancialEntityId and moduleCode=:moduleCode ";
+		String hqlQuery = "SELECT distinct(moduleItemKey) FROM CoiDisclEntProjDetails WHERE personEntityId=:personEntityId and moduleCode=:moduleCode ";
 		org.hibernate.query.Query<String> query = session.createQuery(hqlQuery);
-		query.setParameter("coiFinancialEntityId", coiFinancialEntityId);
+		query.setParameter("personEntityId", coiFinancialEntityId);
 		query.setParameter("moduleCode", moduleCode);
 		return query.getResultList();
 	}
