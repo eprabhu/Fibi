@@ -168,11 +168,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		proposalDisclosure.setDisclosureNumber(coiDisclosure.getDisclosureNumber());
 		proposalDisclosure.setPersonEntityId(sfiDetail != null ? sfiDetail.getPersonEntityId() : null);
 		proposalDisclosure.setPersonEntity(sfiDetail != null ? sfiDetail : null);
-//		CoiDisclosureOldDetailsComments comment = new CoiDisclosureOldDetailsComments();
-//		comment.setDisclosureNumber(coiDisclosure.getDisclosureNumber());
-//		comment.setCommentTypeCode(DISCLOSURE_COMMENT_TYPE_CODE);
-//		comment.setCoiDisclosureOldDetails(proposalDisclosure);
-//		proposalDisclosure.setComment(comment);
 		proposalDisclosure.setModuleCode(conflictOfInterestVO.getModuleCode());
 		proposalDisclosure.setModuleItemKey(conflictOfInterestVO.getModuleItemId().toString());
 		conflictOfInterestDao.saveOrUpdateCoiDisclEntProjDetails(proposalDisclosure);
@@ -205,12 +200,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestVO.setCoiSectionsType(conflictOfInterestDao.fetchCoiSections());
 		conflictOfInterestVO.setCoiReviewActivitys(conflictOfInterestDao.fetchCoiReviewActivity());
 		conflictOfInterestVO.setAdminGroup(commonDao.fetchAdminGroupsBasedOnModuleCode(Constants.MODULE_CODE_COI_DISCLOSURE));
-//		if (Constants.PROPOSAL_DISCLOSURE.equals(coiDisclosure.getDisclosureCategoryTypeCode()) ) {
-//			conflictOfInterestVO.setProposalIdlinkedInDisclosure(conflictOfInterestDao.getProposalIdLinkedInDisclosure(disclosureId));
-//		} else {
-//			conflictOfInterestVO.setNumberOfAward(getNumberOfAwardInDisclosure(CoiDisclosureOld.getDisclosureStatusCode(), CoiDisclosureOld.getPersonId(), CoiDisclosureOld.getDisclosureId()));
-//			conflictOfInterestVO.setNumberOfProposal(getNumberOfProposalInDisclosure(CoiDisclosureOld.getDisclosureStatusCode(), CoiDisclosureOld.getPersonId(), CoiDisclosureOld.getDisclosureId()));
-//		}
+		if (Constants.PROPOSAL_DISCLOSURE.equals(coiDisclosure.getFcoitypeCode()) ) {
+			conflictOfInterestVO.setProposalIdlinkedInDisclosure(conflictOfInterestDao.getProposalIdLinkedInDisclosure(disclosureId));
+		} else {
+			conflictOfInterestVO.setNumberOfAward(getNumberOfAwardInDisclosure(coiDisclosure.getConflictStatusCode(),
+					coiDisclosure.getPersonId(), coiDisclosure.getDisclosureId()));
+			conflictOfInterestVO.setNumberOfProposal(getNumberOfProposalInDisclosure(coiDisclosure.getConflictStatusCode(),
+					coiDisclosure.getPersonId(), coiDisclosure.getDisclosureId()));
+		}
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
 	}
 
@@ -373,10 +370,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_TYPE_CODE);
 		coiDisclosure.setReviewStatusCode(SUBMITTED_FOR_REVIEW);
 		conflictOfInterestDao.certifyDisclosure(coiDisclosure);
-		CoiDisclosure CoiDisclosureOldDetails = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
-//		CoiDisclosureOldDetails.setCreateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getCreateUser()));
-//		CoiDisclosureOldDetails.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getUpdateUser()));
-		return new ResponseEntity<>(CoiDisclosureOldDetails, HttpStatus.OK);
+		CoiDisclosure coiDisclosureObj = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
+		coiDisclosureObj.setCreateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getCreateUser()));
+		coiDisclosureObj.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getUpdateUser()));
+		return new ResponseEntity<>(coiDisclosureObj, HttpStatus.OK);
 	}
 
 	@Override
@@ -515,7 +512,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			disclosures = conflictOfInterestDao.getActiveAndPendingCoiDisclosureDetailsByDisclosureIdsAndSequenceStatus(disclosureIds, sequenceStatusCodes);
 			if (disclosures != null && !disclosures.isEmpty()) {
 				disclosures.forEach(disclosure -> {
-//					disclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(disclosure.getUpdateUser()));
+					disclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(disclosure.getUpdateUser()));
 				});
 			}
 		}
@@ -710,9 +707,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiReviewComments.forEach(reviewComments -> {
 			reviewComments.setCoiReviewCommentAttachment(conflictOfInterestDao.fetchReviewCommentAttachment(reviewComments.getCoiReviewCommentId()));
 			reviewComments.setUpdateUserFullName(personDao.getUserFullNameByUserName(reviewComments.getUpdateUser()));
-			CoiDisclosure CoiDisclosureOld = reviewComments.getCoiDisclosure();
-//			CoiDisclosureOld.setCreateUserFullName(personDao.getUserFullNameByUserName(CoiDisclosureOld.getCreateUser()));
-//			CoiDisclosureOld.setUpdateUserFullName(personDao.getUserFullNameByUserName(CoiDisclosureOld.getUpdateUser()));
+			CoiDisclosure coiDisclosure = reviewComments.getCoiDisclosure();
+			coiDisclosure.setCreateUserFullName(personDao.getUserFullNameByUserName(coiDisclosure.getCreateUser()));
+			coiDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(coiDisclosure.getUpdateUser()));
 			reviewComments.setCoiReviewCommentTag(conflictOfInterestDao.fetchCoiReviewCommentTag(reviewComments.getCoiReviewCommentId()));
 			reviewComments.getCoiReviewCommentTag().forEach(reviewCommentTag -> {
 				if (reviewCommentTag.getTagPersonId() != null) {
