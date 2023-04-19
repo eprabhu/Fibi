@@ -1,9 +1,10 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { slowSlideInOut} from '../../../../../fibi/src/app/common/utilities/animations';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
 import { EntityManagementService } from '../entity-management.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
+import { CommonService } from '../../common/services/common.service';
 
 @Component({
   selector: 'app-view-entity-details',
@@ -11,13 +12,16 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./view-entity-details.component.scss'],
   animations: [slowSlideInOut]
 })
-export class ViewEntityDetailsComponent implements OnInit,OnDestroy {
+export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
-  entityDetails:any = {};
-  entityManageId:any;
+  entityDetails: any = {};
+  entityManageId: any;
   $subscriptions: Subscription[] = [];
 
-  constructor(private _router:Router,private _route:ActivatedRoute,public entityManagementService:EntityManagementService) { }
+  constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
+    private _commonServices: CommonService) {
+    this.getPreviousURL();
+  }
 
   ngOnInit() {
     this.entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
@@ -29,7 +33,7 @@ export class ViewEntityDetailsComponent implements OnInit,OnDestroy {
     subscriptionHandler(this.$subscriptions);
   }
 
-  backToList(){
+  backToList() {
     // this.hideEntityDetails.emit(false);
     this._router.navigate(['/coi/entity-management']);
   }
@@ -38,10 +42,17 @@ export class ViewEntityDetailsComponent implements OnInit,OnDestroy {
     this._router.navigate(['/coi/create-disclosure/entity-details']);
   }
 
-  getEntityDetails(entityId){
-   this.$subscriptions.push(this.entityManagementService.getEntityDetails(entityId).subscribe((res:any)=>{
+  getEntityDetails(entityId) {
+    this.$subscriptions.push(this.entityManagementService.getEntityDetails(entityId).subscribe((res: any) => {
       this.entityDetails = res.coiEntity;
-      // debugger
+    }));
+  }
+
+  getPreviousURL() {
+    this.$subscriptions.push(this._router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this._commonServices.previousURL = event.url;
+      }
     }));
   }
 }

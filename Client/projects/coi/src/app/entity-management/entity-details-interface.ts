@@ -17,7 +17,7 @@ export interface EntityType {
 export interface Currency {
   currencyCode: string;
   currency: string;
-  currencySymbol: string | null;
+  currencySymbol?: string;
   updateUser: string;
   updateTimestamp: number;
 }
@@ -51,9 +51,9 @@ export class CoiEntity {
   entityType?: EntityType;
   countryCode?: string;
   country?: Country;
-  phone: string | null;
-  city: string | null;
-  address: string | null;
+  phone?: string;
+  city?: string;
+  address?: string;
   zipCode: string;
   versionNumber: string;
   versionStatus: string;
@@ -63,8 +63,8 @@ export class CoiEntity {
   createUser: string;
   updateTimestamp: number;
   updateUser: string;
-  approvedTimestamp: number | null;
-  approvedUser: string | null;
+  approvedTimestamp?: number;
+  approvedUser?: string;
   isActive: boolean;
 }
 

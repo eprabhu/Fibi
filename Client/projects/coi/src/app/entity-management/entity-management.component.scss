@@ -14,7 +14,8 @@
   position: relative;
 }
 
-.header-navigation-links li.active {
+.header-navigation-links li.active,
+.header-navigation-links li:focus{
   color: #007DEC;
   font-weight: bold;
   border-bottom: 3px solid #007DEC;

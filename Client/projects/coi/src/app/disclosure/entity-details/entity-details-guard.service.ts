@@ -5,21 +5,36 @@ import { EntityDetailsService } from './entity-details.service';
 @Injectable()
 export class EntityDetailsGuardService implements CanActivate {
 
-  constructor(private _entityDetails: EntityDetailsService) { }
+  constructor(private _entityDetailsService: EntityDetailsService) { }
 
   canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
-    this.getSfiLookUp();
     return new Promise<boolean>(async (resolve) => {
       const ENTITY_ID = route.queryParamMap.get('entityId');
-      this._entityDetails.getSFIDetails(ENTITY_ID).subscribe((res: any) => {
-        this._entityDetails.$entityDetails.next(res);
-        resolve(true);
+      this.getSfiLookUp();
+      this._entityDetailsService.getSFIDetails(ENTITY_ID).subscribe((res: any) => {
+        this._entityDetailsService.$entityDetailsTest.next(res);
+      // this.getCoiEntityDetails(ENTITY_ID);
+      // this.getCoiEntityRelationships(ENTITY_ID);
+      resolve(true);
       })
     });
   }
   getSfiLookUp() {
-    this._entityDetails.addSFILookUp().subscribe((res: any) => {
-      this._entityDetails.lookups = res.personEntityRelType;
+    this._entityDetailsService.addSFILookUp().subscribe((res: any) => {
+      this._entityDetailsService.lookups = res.personEntityRelType;
     });
+  }
+
+//    getCoiEntityDetails(ENTITY_ID) {
+//     this._entityDetailsService.getCoiEntityDetails(ENTITY_ID).subscribe((res: any) => {
+//       this._entityDetailsService.$entityDetails.next(res);
+//     })
+//   }
+  getCoiEntityRelationships(ENTITY_ID) {
+    this._entityDetailsService.getRelationshipEntityDetails(ENTITY_ID).subscribe((res: any) => {
+      this._entityDetailsService.$relationshipsDetails.next(res);
+      console.log('getCoiEntityRelationships', res);
+
+    })
   }
 }

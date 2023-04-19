@@ -1,0 +1,30 @@
+  .card {
+    background-color: #ebf3fb;
+  }
+
+  .relationship {
+      color: #7e8b8f;
+      padding: 2px 12px;
+      background-color: #fffaea;
+      border-end-end-radius: 5rem;
+      border-start-end-radius: 5rem;
+      position: relative;
+      left: -17px;
+      top: -15px;
+      font-weight: 500 !important;
+      border: 2px solid #f3dca4 !important;
+      font-size: 16px;
+      width: 15rem;
+  }
+
+  .toggle-header-btn {
+    width: 30px;
+    color: #A64040;
+    height: 30px;
+    background-color:  #fff5f5 !important;
+    mat-icon {
+      transform: scale(1.2);
+    }
+  }
+
+

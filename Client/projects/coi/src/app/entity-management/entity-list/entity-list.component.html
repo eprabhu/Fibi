@@ -1,4 +1,4 @@
-<div *ngIf="entityList">
+<div *ngIf="entityList.length>0;else noData">
   <table class="table tableSkin mt-3">
     <thead class="border bg-light fs-14">
       <tr class="form-row">
@@ -6,34 +6,45 @@
         <th class="col-2">Name</th>
         <th class="col-2">Country</th>
         <th class="col-2">Entity Type</th>
-        <th class="col-2">Risk Level</th>
+        <!-- <th class="col-2">Risk Level</th> -->
         <th class="col-1">Status</th>
         <th class="col-2">Actions</th>
       </tr>
     </thead>
     <tbody class="bg-white fs-13">
       <tr class="border" *ngFor="let entityListData of entityList;let i=index">
-        <td><span *ngIf="entityListData?.entityStatus?.entityStatusCode === '2'" class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2">
-          {{entityListData?.entityStatus?.description}}
+        <td><span *ngIf="entityListData?.statusDescription === 'Unverified'"
+            class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2">
+            {{entityListData?.statusDescription}}
           </span>
         </td>
         <td class="text-secondary">{{entityListData?.entityName}}</td>
-        <td class="text-secondary">{{entityListData?.country?.countryName}}</td>
-        <td class="text-secondary">{{entityListData?.entityType?.description}}</td>
-        <td class="text-secondary"><mat-icon *ngIf="entityListData?.entityRiskCategory?.description === 'High'" class="invalid material-icons-round">warning</mat-icon>
-          {{entityListData?.entityRiskCategory?.description}}</td>
+        <td class="text-secondary">{{entityListData?.countryDescription}}</td>
+        <td class="text-secondary">{{entityListData?.entityTypeDescription}}</td>
+        <!-- <td class="text-secondary"><mat-icon *ngIf="entityListData?.riskLevelDescription === 'High'"
+            class="invalid material-icons-round">warning</mat-icon>
+          {{entityListData?.riskLevelDescription}}</td> -->
         <td><span [ngClass]="entityListData?.isActive ?'status-active-pill':'status-inactive-pill'">
-         {{entityListData?.isActive?'Active':'Inactive' }}
-        </span>
+            {{entityListData?.isActive?'Active':'Inactive' }}
+          </span>
         </td>
         <td>
           <button class="btn btn-outline-secondary fs-13"
-            (click)="isViewEntityDetails =!isViewEntityDetails;viewDetails(entityListData)"><span><i
-                class="fa fa-eye" aria-hidden="true"></i></span> View</button>
+            (click)="isViewEntityDetails = !isViewEntityDetails;viewDetails(entityListData)"><span><i class="fa fa-eye"
+                aria-hidden="true"></i></span> View</button>
           <button class="btn btn-outline-secondary fs-13 m-1" (click)="modifyEntityDetails(entityListData)"><span><i
                 class="fa fa-pencil" aria-hidden="true"></i></span> Modify</button>
         </td>
       </tr>
     </tbody>
   </table>
+  <div *ngIf="entityList.length>0"  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+    <nav aria-label="pagination section" class="pagination justify-content-end">
+      <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount">
+      </app-pagination>
+    </nav>
+  </div>
 </div>
+<ng-template #noData>
+  <app-no-information></app-no-information>
+</ng-template>

@@ -1,4 +1,4 @@
-.navigation-icons {
+.navigation-icons{
   .active {
     border-bottom: 2px solid #007DEC;
     color: #007DEC;
@@ -7,10 +7,16 @@
   }
 }
 
+.user-dashboard-nav span:focus{
+  border-bottom: 2px solid #007DEC;
+  color: #007DEC;
+}
+
 .user-dashboard-nav {
   min-height: 42px;
   background-color: #ececec !important
 }
+
 .status-active-pill {
   background-color: #4CB57D;
   color: white;
@@ -36,14 +42,6 @@
   padding: 5px
 }
 
-// .form-control,.form-select {
-//   width: 90%;
-// }
-
-// .insidePicker{
-//   position: relative;
-//   right: 3rem !important;
-// }
 
 #btn-clear {
   width: 7rem;
@@ -57,6 +55,3 @@
   width: 15.4rem;
 }
 
-// .dateField {
-//   width: 36rem !important;
-// }

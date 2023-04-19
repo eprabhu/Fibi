@@ -1,8 +1,5 @@
 <div class="container-fluid">
-  <!-- <app-add-entity-details></app-add-entity-details> -->
-  <app-view-sfi-details > </app-view-sfi-details>
-    
-  <app-view-relationship-details *ngIf="_entityDetails.isExpanded"></app-view-relationship-details>
-
+  <app-view-sfi-details> </app-view-sfi-details>
+  <app-view-relationship-details *ngIf="entityDetailService.isExpanded"></app-view-relationship-details>
   <app-entity-questionnaire></app-entity-questionnaire>
 </div>

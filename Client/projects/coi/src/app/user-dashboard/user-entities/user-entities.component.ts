@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { SFIDashboardRequestObject } from "../../disclosure/coi-interface";
 import { CoiService } from "../../disclosure/services/coi.service";
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { UserEntitiesService } from "./user-entities.service";
+import { CommonService } from '../../common/services/common.service';
 
 @Component({
   selector: 'app-user-entities',
@@ -23,7 +24,7 @@ export class UserEntitiesComponent implements OnInit {
   searchText = '';
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
-              private _sfiService: SfiService,) {
+              private _sfiService: SfiService,private _commonServices:CommonService) {
   }
 
   ngOnInit(): void {
@@ -71,6 +72,14 @@ removeEntityId() {
       queryParams: {entityId: null},
       queryParamsHandling: 'merge'
     })
+  }
+
+  getPreviousURL() {
+    this.$subscriptions.push(this._router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this._commonServices.previousURL = event.url;
+      }
+    }));
   }
 
 }

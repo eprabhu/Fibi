@@ -44,6 +44,7 @@ export class SfiComponent implements OnInit, OnDestroy {
 
     getEditMode() {
         const DATA = this._dataStore.getData(this.dependencies);
+        // this.disclosureStatusCode = 0;
         this.disclosureStatusCode = DATA.coiDisclosure.disclosureStatusCode;
         this.disclosureId =  DATA.coiDisclosure.disclosureId;
         this.isEditMode = this._dataStore.getEditModeForCOI();
@@ -68,7 +69,7 @@ export class SfiComponent implements OnInit, OnDestroy {
             })
         );
     }
-    
+
     listenForAdd() {
         this.$subscriptions.push(
             this._sfiService.$addSfi.subscribe((data: boolean) => {

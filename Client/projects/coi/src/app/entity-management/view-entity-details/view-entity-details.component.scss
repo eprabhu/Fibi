@@ -1,11 +1,11 @@
 .entity-status {
   color: white;
-  width: 80px;
+  width: 90px;
   height: 27px;
   background: #54BF5B;
   position: relative;
-  left: -22px;
-  top: -12px;
+  left: -26px;
+  top: -10px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -17,18 +17,19 @@
     width: 0;
     border-bottom: 6px solid #01830A;
     border-left: 6px solid transparent;
-    top: -6px;
+    top: -5px;
     left: 0;
   }
 }
+
 .card-header {
   background-color: #ebf3fb;
   height: 44px;
 }
 
-.action-bar{
+.action-bar {
   position: relative;
-  top: -11px;
+  top: -7px;
   left: -5px;
 }
 
@@ -41,9 +42,15 @@
   border-radius: 0px;
 }
 
+.action-btn:focus {
+  border: 2px solid #007DEC !important;
+  color: #007DEC !important;
+
+}
+
 
 .icon-size {
-   height: 14px;
+  height: 14px;
   position: relative;
   top: 2px;
   right: 3px;
@@ -51,43 +58,58 @@
 
 
 .back-ward {
-    position: relative;
-    right: 10px;
-    top: 3px;
-    left: 10px;
-    color: #7c868f;
+  position: relative;
+  // right: 10px;
+  // top: 3px;
+  // left: 10px;
+  color: #7c868f;
+  display: contents;
 }
 
-.fs-3{
+.back-ward:focus {
+  color: #007DEC;
+}
+
+.fs-3 {
   position: relative;
   right: -4px;
   color: #7c868f;
 }
 
-.invalid{
+.invalid {
   position: relative;
   top: 6px;
   color: red;
 }
 
-h1{
-    position: relative;
-    bottom: .5rem;
-    right: 2rem;
+h1 {
+  position: relative;
+  bottom: .5rem;
+  right: 2rem;
 }
+
 .fw-medium {
   position: relative;
   bottom: 1px;
-  color: #7c868f;
+  // color: #7c868f;
   left: 6px;
 }
+
+
+
 .inactive {
-  background-color :#5f6462;
+  background-color: #5f6462;
+
   &:before {
     content: "";
     border-bottom: 6px solid #5f6462;
   }
 }
-.mat-done{
+
+.mat-done {
   color: #6bc293;
 }
+
+// .action-bar button :focus{
+//   background-color: #011527 !important;
+// }
