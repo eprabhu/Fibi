@@ -70,29 +70,29 @@
   <div class="modal-dialog modal-lg ">
     <div class="modal-content">
       <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
-        <h3 class="modal-title fs-3" id="exampleModalLabel">Add Relations</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relations</h3>
+        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body ">
         <div class="row ">
-          <p class="fs-13"><b>Significant Financial interest details</b>: Now includes
+          <p class="fs-13"><b>Significant Financial Interest Details</b>: Now Includes
             not-for-profit
-            entities other than government entities,institution of higher education and affiliated
-            organizations</p>
+            Entities Other than Government Entities,Institution of Higher Education and Affiliated
+            Organizations.</p>
         </div>
         <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
           style="margin-top: 26px;margin-bottom: 16px;">
-          <div class=" border " style="padding: 18px;">
+          <div class=" border "style="padding:28px ;">
             <div style="display: flex; flex-direction: row; ">
               <div class="form-check form-check-inline">
-                <label style="font-size: 13px; color: rgb(138, 133, 133);" class="form-check-label"><b>Select Relation:
+                <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation:
                   </b></label>
               </div>
-              <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
+              <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline  ">
                 <input type="radio" name="relation" class="form-check-input text-secondary"
-                  [value]="relation?.relationshipTypeCode"
-                  [(ngModel)]="coiFinancialEntityDetail.relationshipTypeCode" (ngModelChange)="setRelationship()">
-                <label class="text-secondary r-title">
+                  [value]="relation?.financialEntityRelTypeCode"
+                  [(ngModel)]="coiFinancialEntityDetail.financialEntityRelTypeCode" (ngModelChange)="setRelationship()">
+                <label class="text-secondary r-title fs-14">
                   {{relation?.description}}
                 </label>
               </div>
@@ -107,7 +107,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="addRelation()">Add relation</button>
+        <button type="button" class="btn btn-primary mr-10" (click)="addRelation()">Add Relation</button>
       </div>
     </div>
   </div>

@@ -1,19 +1,19 @@
 
 <!-- Modal -->
-<div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-mdb-backdrop="true">
-  <div class="modal-dialog modal-lg ">
+<div class="modal fade rounded" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-mdb-backdrop="true">
+  <div class="modal-dialog modal-lg">
       <div class="modal-content">
-          <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
-              <h1 class="modal-title f-16" id="exampleModalLabel">Add Relations</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
-          </div>
+           <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
           <div class="modal-body ">
               <!-- Paragraph -->
               <div class="row ">
-                  <p style="font-size: 14px;"><b>Significant Financial interest details</b>: Now includes
+                  <p style="font-size: 13px;"><b>Significant Financial Interest Details</b>: Now Includes
                       not-for-profit
-                      entities other than government entities,institution of higher education and affiliated
-                      organizations</p>
+                      Entities other than Government Entities,Institution of Higher Education and Affiliated
+                      Organizations.</p>
               </div>
               <!-- Radio -->
               <div class="relation d-flex justify-content-center  " style="margin-top: 26px;margin-bottom: 16px;">
@@ -46,9 +46,9 @@
               </div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary fs-14 py-2" data-bs-dismiss="modal" (click)="closeModal()">cancel</button>
-              <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-14 py-2" (click)="continueWithoutRelation()">continue without selecting relation</button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addRelation()">Add relation</button>
+              <button type="button" class="btn btn-outline-secondary fs-14 py-2" data-bs-dismiss="modal" (click)="closeModal()">Cancel</button>
+              <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-14 py-2" (click)="continueWithoutRelation()">Continue Without Selecting Relation</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addRelation()">Add Relation</button>
           </div>
       </div>
   </div>
