@@ -12,7 +12,7 @@ import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utili
   templateUrl: './entity-questionnaire.component.html',
   styleUrls: ['./entity-questionnaire.component.scss']
 })
-export class EntityQuestionnaireComponent implements OnInit,OnDestroy {
+export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
 
   $externalSaveEvent = new BehaviorSubject<Boolean>(null);
   configuration: any = {
@@ -43,8 +43,8 @@ export class EntityQuestionnaireComponent implements OnInit,OnDestroy {
 
   constructor(private _commonService: CommonService, private _router: Router,
     private _entityDetailsServices: EntityDetailsService,
-    private _activatedRoute:ActivatedRoute
-    ) { }
+    private _activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit';
@@ -53,13 +53,15 @@ export class EntityQuestionnaireComponent implements OnInit,OnDestroy {
 
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
     hideModal('addRelationshipModal');
   }
 
   getDataFromService() {
     this.relationLookup = this._entityDetailsServices.lookups;
+    console.log(this.relationLookup);
+
     this.getDefinedRelationships()
     if (this.definedRelationships.length > 0) {
       this.getQuestionnaire(this.definedRelationships[0]);
@@ -81,7 +83,7 @@ export class EntityQuestionnaireComponent implements OnInit,OnDestroy {
     this._router.navigateByUrl(this._entityDetailsServices.previousURL);
   }
   getDefinedRelationships() {
-    this.$subscriptions.push(this._entityDetailsServices.$entityDetails.subscribe((res: any) => {
+    this.$subscriptions.push(this._entityDetailsServices.$entityDetailsTest.subscribe((res: any) => {
       this.configuration.moduleItemKey = res.coiFinancialEntity.coiFinancialEntityId;
       this.definedRelationships = res.coiFinancialEntityDetails;
       this.coiFinancialEntityDetail.coiFinancialEntityId = res.coiFinancialEntity.coiFinancialEntityId;
@@ -96,14 +98,16 @@ export class EntityQuestionnaireComponent implements OnInit,OnDestroy {
 
   addRelation() {
     this.isSave = true;
-    if(this.isSave && this.validateRelationship()){
-     this.$subscriptions.push(this._entityDetailsServices.saveOrUpdateCoiFinancialEntityDetails({
-        coiFinancialEntityDetail:
-          this.coiFinancialEntityDetail
-      }).subscribe((res: any) => {
+    if (this.isSave && this.validateRelationship()) {
+      const REQ_BODY = {
+        "questionnaireAnsHeaderId": null,
+        "personEntityId": this._activatedRoute.snapshot.queryParamMap.get('entityId'),
+        "validPersonEntityRelTypeCode": this.coiFinancialEntityDetail.relationshipTypeCode
+      }
+      this.$subscriptions.push(this._entityDetailsServices.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
         this.definedRelationships.push(res);
-        this.getQuestionnaire(res.coiFinancialEntityRelType);
-        this.findRelation(res.financialEntityRelTypeCode);
+        this.getQuestionnaire(res.personEntityRelType);
+        this.findRelation(res.validPersonEntityRelTypeCode);
         this.clearRelationModal();
         this.isSave = false;
       }));
@@ -121,9 +125,8 @@ export class EntityQuestionnaireComponent implements OnInit,OnDestroy {
   }
 
   setRelationship() {
-    this.coiFinancialEntityDetail.coiFinancialEntityRelType = this.relationLookup.find(
-      ele => ele.financialEntityRelTypeCode == this.coiFinancialEntityDetail.financialEntityRelTypeCode
-    );
+    this.coiFinancialEntityDetail.personEntityRelType = this.relationLookup.find(
+      ele => ele.relationshipTypeCode === this.coiFinancialEntityDetail.relationshipTypeCode);
   }
 
 
@@ -137,8 +140,8 @@ export class EntityQuestionnaireComponent implements OnInit,OnDestroy {
 
   clearRelationModal() {
     hideModal('addRelationshipModal');
-    this.coiFinancialEntityDetail.coiFinancialEntityRelType = null;
-    this.coiFinancialEntityDetail.financialEntityRelTypeCode = null;
+    this.coiFinancialEntityDetail.personEntityRelType = null;
+    this.coiFinancialEntityDetail.relationshipTypeCode = null;
   }
   private removeExistingRelation() {
     if (this.definedRelationships.length) {
@@ -150,10 +153,10 @@ export class EntityQuestionnaireComponent implements OnInit,OnDestroy {
   }
   validateRelationship() {
     this.relationValidationMap.clear();
-    if (!this.coiFinancialEntityDetail.financialEntityRelTypeCode) {
-        this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
+    if (!this.coiFinancialEntityDetail.relationshipTypeCode) {
+      this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
     }
     return this.relationValidationMap.size === 0 ? true : false;
-}
+  }
 
 }

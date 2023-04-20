@@ -9,8 +9,11 @@ import { BehaviorSubject } from 'rxjs';
 export class EntityDetailsService {
 
   previousURL = '';
-  lookups:any;
+  lookups: any;
   $entityDetails = new BehaviorSubject<object>({});
+  $entityDetailsTest = new BehaviorSubject<object>({});
+
+  $relationshipsDetails = new BehaviorSubject<object>({});
   isExpanded = true;
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
@@ -24,6 +27,14 @@ export class EntityDetailsService {
 
   addSFILookUp() {
     return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
+  }
+
+  getCoiEntityDetails(personEntityId) {
+    return this._http.get(`${this._commonService.baseUrl}/getCoiEntityDetails/${personEntityId}`);
+  }
+
+  getRelationshipEntityDetails(personEntityId) {
+    return this._http.get(`${this._commonService.baseUrl}/getPersonEntityDetails/${personEntityId}`);
   }
 
 }

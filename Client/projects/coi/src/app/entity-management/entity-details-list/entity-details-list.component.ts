@@ -1,12 +1,13 @@
 import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EntityManagementService } from '../entity-management.service';
+import { EntityManagementService, RelationshipDashboardRequest } from '../entity-management.service';
 import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-entity-details-list',
@@ -14,9 +15,9 @@ import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilitie
   styleUrls: ['./entity-details-list.component.scss'],
   animations: [slowSlideInOut]
 })
-export class EntityDetailsListComponent implements OnInit,OnChanges, OnDestroy {
+export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy {
 
-  entityDetails:any;
+  entityDetails: any = [];
   isViewEntityDetails: true;
   isviewDetails: true;
   currentSelected = 'Person';
@@ -28,39 +29,37 @@ export class EntityDetailsListComponent implements OnInit,OnChanges, OnDestroy {
   elasticPersonSearchOptions: any = {};
   leadUnitSearchOptions: any = {};
   lookupValues = [];
-  statusTypeOptions = 'ENTITY_STATUS#ENTITY_STATUS_CODE#true#true';
+  statusTypeOptions = 'EMPTY#EMPTY#true#true';
   advanceSearchDates = {
-    startDate:null,
+    startDate: null,
     endDate: null
   }
+  resultCount: number = 0;
+  $relationshipEntityList = new Subject();
+
+
 
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService) { }
 
 
   ngOnInit() {
-    this.entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
+    this.entityManagementService.relationshipDashboardRequest.filterType = 'Person';
     this.getRelationshipEntityList();
     this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
     this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
-
-
   }
 
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
   }
 
-  getEntityDetails() {
-    this.entityManagementService
-  }
-
   viewDetails(data) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104', mode: 'edit' } });
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: data.personEntityId, mode: 'edit' } });
   }
 
   redirectToEntity(event) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' } });
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: event.personEntityId, mode: 'edit' } });
   }
 
   ngOnChanges() {
@@ -68,27 +67,32 @@ export class EntityDetailsListComponent implements OnInit,OnChanges, OnDestroy {
   }
 
   getRelationshipEntityList() {
-    const REQ_BODY = {
-      'filterType': this.currentSelected,
-      'coiEntityId': 1
-    }
-    this.$subscriptions.push(this.entityManagementService.getPersonEntityDetails(REQ_BODY).subscribe((res: any) => {
-      this.entityDetails = res.personEntityList
-      console.log(this.entityDetails);
-    }));
+    const id = parseInt(this._route.snapshot.queryParamMap.get('entityManageId'));
+    this.entityManagementService.relationshipDashboardRequest.id = id;
+    this.$subscriptions.push(
+      // this.$relationshipEntityList.pipe(
+      // switchMap(()=>
+      this.entityManagementService.getPersonEntityDashboard(this.entityManagementService.relationshipDashboardRequest)
+        // ))
+        .subscribe((res: any) => {
+          this.entityDetails = res.personEntityList;
+        }));
   }
 
   currentTab(tab) {
-    this.currentSelected = tab;
+    this.resetAdvanceSearchFields();
+    this.entityManagementService.relationshipDashboardRequest.filterType = tab;
     this.getRelationshipEntityList();
+    // this.$relationshipEntityList.next();
   }
 
+
   selectPersonName(person: any) {
-    this.entityManagementService.relationshipDashboardRequest.property1 = person ? person.prncpl_id : null;
+    this.entityManagementService.relationshipDashboardRequest.property3 = person ? person.prncpl_id : null;
   }
 
   leadUnitChangeFunction(unit: any) {
-    this.entityManagementService.relationshipDashboardRequest.property2 = unit ? unit.unitNumber : null;
+    // this.entityManagementService.relationshipDashboardRequest.property2 = unit ? unit.unitNumber : null;
   }
 
   onLookupSelect(data: any, property: string) {
@@ -97,7 +101,26 @@ export class EntityDetailsListComponent implements OnInit,OnChanges, OnDestroy {
   }
 
   advanceSearchRelationships() {
-    this.entityManagementService.relationshipDashboardRequest.property4 = parseDateWithoutTimestamp(this.advanceSearchDates.startDate);
-    this.entityManagementService.relationshipDashboardRequest.property5 = parseDateWithoutTimestamp(this.advanceSearchDates.endDate);
+    this.entityManagementService.relationshipDashboardRequest.property1 = parseDateWithoutTimestamp(this.advanceSearchDates.startDate);
+    this.entityManagementService.relationshipDashboardRequest.property2 = parseDateWithoutTimestamp(this.advanceSearchDates.endDate);
+    this.getRelationshipEntityList();
+
+  }
+
+  actionsOnPageChange(event) {
+    this.entityManagementService.relationshipDashboardRequest.currentPage = event;
+  }
+
+  resetAdvanceSearchFields() {
+    this.advanceSearchDates.endDate = null;
+    this.advanceSearchDates.startDate = null;
+    this.entityManagementService.relationshipDashboardRequest = new RelationshipDashboardRequest();
+    this.advSearchClearField = new String('true');
+    this.lookupValues = [];
+  }
+
+  clearAdvanceSearch() {
+    this.resetAdvanceSearchFields();
+    this.getRelationshipEntityList();
   }
 }

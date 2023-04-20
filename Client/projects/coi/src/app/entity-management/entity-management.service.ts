@@ -9,13 +9,16 @@ export class EntityManagementService {
 
   constructor(private _commonService: CommonService, private _http: HttpClient) { }
 
-  coiRequestObject = new CoiDashboardRequest();
+  coiRequestObject = new EntityDashboardRequest();
   isShowEntityNavBar = false;
   relationshipDashboardRequest = new RelationshipDashboardRequest();
+  statusCodes: any = [
+    {code: 'Y', description: 'Active'},
+    {code: 'N', description: 'Inactive'}
+  ];
 
-
-  getAllSystemEntityList() {
-    return this._http.get(`${this._commonService.baseUrl}/getAllSystemEntityList`);
+  getAllSystemEntityList(prams) {
+    return this._http.post(this._commonService.baseUrl+'/getAllSystemEntityList',prams);
   }
 
   getEntityDetails(entityId) {
@@ -30,37 +33,35 @@ export class EntityManagementService {
     return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiEntity', prams)
   }
 
-  getPersonEntityDetails(prams) {
-    return this._http.post(this._commonService.baseUrl + '/getPersonEntityDetails', prams)
+  getPersonEntityDashboard(prams) {
+    return this._http.post(this._commonService.baseUrl + '/getPersonEntityDashboard', prams)
   }
 }
-export class CoiDashboardRequest {
+export class EntityDashboardRequest {
   isDownload = false;
   property1 = '';
-  property2 = [];
-  property3 = [];
-  property4 = [];
-  property5 = null;
-  property6 = null;
-  property7 = null;
+  property2 = '';
+  property20 = [];
+  property21 = [];
+  property22 = [];
+  property18 = false;
+  property19 = false;
   sort: any = {};
-  sortBy:'updateTimeStamp'
   tabName = '';
   advancedSearch = 'L';
   currentPage = 1;
+  pageNumber = 20;
 }
 export class RelationshipDashboardRequest{
-  isDownload = false;
-  property1 = '';
+  property1 = null;
   property2 = null;
   property3 = null;
-  property4 = null
-  property5 = null;
-  property6 = [];
-  sort: any = {};
-  sortBy:'updateTimeStamp'
-  tabName = '';
-  advancedSearch = 'L';
+  property4 = []
+  // property5 = null;
+  // sort: any = {};
+  // sortBy:'updateTimeStamp'
+  filterType = null;
   currentPage = 1;
-
+  pageNumber = 20;
+  id = null;
 }

@@ -48,7 +48,7 @@
     "secure": false
   },
   "/getSFIDashboard": {
-    "target": "https://stage.fibiweb.com/fibiCOI/",
+    "target": "http://192.168.1.80:9090/fibi4/",
     "secure": false
   },
   "/getDisclosureRelations": {
@@ -137,7 +137,7 @@
     },
     "/saveOrUpdateCoiFinancialEntityDetails": {
       "secure": false,
-      "target": "https://stage.fibiweb.com/fibiCOI/"
+      "target": "http://192.168.1.80:9090/fibi4/"
     },
     "/loadSFILookups": {
       "secure": false,
@@ -159,8 +159,8 @@
       "target": "http://192.168.1.189:9090/fibi4/",
       "secure": false
     },
-    "/getPersonEntityDetails": {
-      "target": "http://192.168.1.189:9090/fibi4/",
+    "/getPersonEntityDashboard": {
+      "target": "http://192.168.1.80:9090/fibi4/",
       "secure": false
     },
     "/loadDisclosureAdminDashboardCounts": {
@@ -210,6 +210,14 @@
   },
   "/getCoiProjectTypes": {
     "target": "http://192.168.1.189:9090/fibi4/",
+    "secure": false
+  },
+  "/getCoiEntityDetails": {
+    "target": "http://192.168.1.80:9090/fibi4/",
+    "secure": false
+  },
+  "/getPersonEntityDetails": {
+    "target": "http://192.168.1.80:9090/fibi4/",
     "secure": false
   }
 }

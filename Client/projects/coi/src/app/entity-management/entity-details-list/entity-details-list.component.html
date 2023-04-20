@@ -1,31 +1,34 @@
-<div class="container-fluid m-3">
+<div class="container-fluid">
   <app-view-entity-details></app-view-entity-details>
   <div class="fw-bold ml-15 mt-3">Relationships</div>
   <div class="ml-15 mr-15 shadow">
     <!-- [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"  -->
     <nav
       class="align-items-center bg-white border d-flex fs-14 fw-medium mt-3 py-1 user-dashboard-nav bg-body-emphasis">
-      <div tabindex="0" (click)="currentTab('Person')" class=" navigation-icons text-secondary py-1" role="button"
-        id="btn-person" title="Person">
-        <span [ngClass]="{'active':currentSelected === 'Person'}" class="px-5 ">Person</span>
-        <span *ngIf="currentSelected === 'Person'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+      <div (click)="currentTab('Person')" class=" navigation-icons text-secondary py-1" role="button"
+        id="btn-person" title="Person" (keyup.enter)="currentTab('Person')" (keyup.space)="currentTab('Person')">
+        <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Person'}" class="px-5 ">Person</span>
+        <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Person'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
       </div>
-      <div tabindex="0" (click)="currentTab('Institutional')" class=" navigation-icons text-secondary py-1"
-        role="button" id="btn-institutional" title="Institutional">
-        <span [ngClass]="{'active':currentSelected === 'Institutional'}" class="px-5">Institutional</span>
-        <span *ngIf="currentSelected === 'Institutional'"
+      <div (click)="currentTab('Institutional')" class=" navigation-icons text-secondary py-1"
+        role="button" id="btn-institutional" title="Institutional" (keyup.enter)="currentTab('Institutional')"
+        (keyup.space)="currentTab('Institutional')">
+        <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Institutional'}" class="px-5">Institutional</span>
+        <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Institutional'"
           class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
       </div>
-      <div tabindex="0" (click)="currentTab('Other_Entities')" class=" navigation-icons text-secondary py-1"
-        role="button" id="btn-other-entities" title="Other Entities">
-        <span [ngClass]="{'active':currentSelected === 'Other_Entities'}" class="px-5">Other Entities</span>
-        <span *ngIf="currentSelected === 'Other_Entities'"
+      <div (click)="currentTab('Other_Entities')" class=" navigation-icons text-secondary py-1"
+        role="button" id="btn-other-entities" title="Other Entities" (keyup.enter)="currentTab('Other_Entities')"
+        (keyup.space)="currentTab('Other_Entities')">
+        <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Other_Entities'}" class="px-5">Other Entities</span>
+        <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Other_Entities'"
           class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
       </div>
-      <div tabindex="0" (click)="currentTab('Disclosures')" class="navigation-icons text-secondary py-1" role="button"
-        id="btn-disclosure" title="Disclosures">
-        <span [ngClass]="{'active':currentSelected === 'Disclosures'}" class="px-5">Disclosures</span>
-        <span *ngIf="currentSelected === 'Disclosures'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+      <div  (click)="currentTab('Disclosures')" class="navigation-icons text-secondary py-1" role="button"
+        id="btn-disclosure" title="Disclosures" (keyup.enter)="currentTab('Disclosures')"
+        (keyup.space)="currentTab('Disclosures')">
+        <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Disclosures'}" class="px-5">Disclosures</span>
+        <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Disclosures'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
       </div>
     </nav>
   </div>
@@ -48,15 +51,14 @@
     <div class="card-body">
       <div class="form-row row m-2">
         <div class="col-3 ml-3">
-          <label class="fw-bold fs-14 d-block">Person Name</label>
-          <!-- <input type="text" class="form-control text-secondary fs-13" placeholder="Person Name"> -->
+          <label class="fw-bold fs-14 d-block" id="adv-person-name">Person Name</label>
           <app-elastic (selectedResult)="selectPersonName($event)" [clearField]="advSearchClearField"
             [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person Name'"
             [uniqueId]="'adv-person-name'">
           </app-elastic>
         </div>
         <div class="col-3 ml-3">
-          <label class="fw-bold fs-14 d-block">Department</label>
+          <label class="fw-bold fs-14 d-block" for="adv-department-name">Department</label>
           <!-- <input type="text" class="form-control text-secondary fs-13" placeholder="Department"> -->
           <app-endpoint-search (onSelect)="leadUnitChangeFunction($event)" [clearField]="advSearchClearField"
             [httpOptions]="leadUnitSearchOptions" [placeHolder]="'Type here for Department Name'"
@@ -64,15 +66,16 @@
           </app-endpoint-search>
         </div>
         <div class="col-3 ml-3">
-          <label class="fw-bold fs-14 d-block">Title</label>
-          <input type="text" class="form-control text-secondary fs-13" placeholder="Type here Title" [(ngModel)]="entityManagementService.coiRequestObject.property3">
-
+          <label class="fw-bold fs-14 d-block" for="adv-title">Title</label>
+          <input type="text" class="form-control text-secondary fs-13" placeholder="Type here Title" id="adv-title">
+          <!-- [(ngModel)]="entityManagementService.coiRequestObject.property3" -->
         </div>
         <div class="col-3 ml-3">
-          <label class="fw-bold fs-14 d-block">Start Date of Involvement</label>
+          <label class="fw-bold fs-14 d-block" for="start-date-involvement">Start Date of Involvement</label>
           <span class="dateField">
             <input matInput [matDatepicker]="startDate" id="start-date-involvement" (click)="startDate.open()"
-              class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy" [(ngModel)]="advanceSearchDates.startDate">
+              class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy"
+              [(ngModel)]="advanceSearchDates.startDate">
             <i (click)="startDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
             <mat-datepicker #startDate>
             </mat-datepicker>
@@ -81,30 +84,32 @@
       </div>
       <div class="form-row row m-2">
         <div class="col-3">
-            <label class="fw-bold fs-14 d-block" for="end-date-involvement">End Date of Involvement</label>
-            <span class="dateField">
-              <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
-                class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy" [(ngModel)]="advanceSearchDates.endDate">
-              <i (click)="endDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
-              <mat-datepicker #endDate>
-              </mat-datepicker>
-            </span>
-          </div>
+          <label class="fw-bold fs-14 d-block" for="end-date-involvement">End Date of Involvement</label>
+          <span class="dateField">
+            <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
+              class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy"
+              [(ngModel)]="advanceSearchDates.endDate">
+            <i (click)="endDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
+            <mat-datepicker #endDate>
+            </mat-datepicker>
+          </span>
+        </div>
         <div class="col-3">
-          <label class="fw-bold fs-14 d-block">Status</label>
-          <app-look-up (selectedResult)="onLookupSelect($event, 'property6')" [options]="statusTypeOptions"
-            [selectedLookUpList]="lookupValues['property6']" class=" text-secondary fs-13"
+          <label class="fw-bold fs-14 d-block" for="adv-status-type">Status</label>
+          <app-look-up (selectedResult)="onLookupSelect($event, 'property4')" [options]="statusTypeOptions"
+            [selectedLookUpList]="lookupValues['property4']" [externalArray]="entityManagementService.statusCodes" [isExternalArray]="true" class=" text-secondary fs-13"
             [uniqueId]="'adv-status-type'">
           </app-look-up>
         </div>
         <div class="col-6 d-flex justify-content-end align-items-end">
-          <button class="btn btn-outline-secondary  fs-13 py-2 px-4 mr-10" id="btn-clear">Clear</button>
-          <button class="btn btn-primary fs-13" (click)="advanceSearchRelationships()">Search</button>
+          <button class="btn btn-outline-secondary  fs-13 py-2 px-4 mr-10" id="btn-clear"
+            (click)="clearAdvanceSearch()">Clear</button>
+          <button class="btn btn-primary fs-13" (click)="advanceSearchRelationships()" id="btn-search">Search</button>
         </div>
       </div>
     </div>
   </div>
-  <div class="mt-2 ml-15 mr-15 border-1 shadow-medium">
+  <div *ngIf="entityDetails.length > 0;else noData" class="mt-2 ml-15 mr-15 border-1 shadow-medium">
     <table class="table tableSkin">
       <thead class="border bg-light">
         <tr>
@@ -137,5 +142,16 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  <ng-template #noData>
+    <div class="m-4">
+      <app-no-information></app-no-information>
+    </div>
+  </ng-template>
+  <div *ngIf="entityDetails.length>0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+    <nav aria-label="pagination section" class="pagination justify-content-end m-3">
+      <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount">
+      </app-pagination>
+    </nav>
   </div>
 </div>

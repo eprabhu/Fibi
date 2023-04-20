@@ -1,87 +1,100 @@
-  <div *ngIf="entityDetails" class="card mt-4 ml-15 mr-15 shadow-medium rounded-3 border" [@slowSlideInOut]>
-    <div class="card-header">
-      <div class="row d-flex">
-        <div class="col-6 d-flex">
-          <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2" [ngClass]="entityDetails.isActive ?'':'inactive'">
-            {{entityDetails.isActive?'Active':'Inactive'}}</span>
+<div *ngIf="entityDetails" class="card mt-4 ml-15 mr-15 shadow-medium rounded-3 border" [@slowSlideInOut]>
+  <div class="card-header">
+    <div class="row d-flex">
+      <div class="col-12 d-flex">
+        <div class="col-8 d-flex">
+          <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"
+            [ngClass]="entityDetails.isActive ?'':'inactive'">
+            <label class="px-2">{{!entityDetails?.isActive?'Inactive':'Active'}}</label></span>
           <h1 class="m-1 fw-bold fs-18">{{entityDetails?.entityName}}</h1>
         </div>
-        <div class="col-6 align-items-center justify-content-end action-bar mt-1 d-flex">
-          <button tabindex="0" class="btn m-1 new-line-property text-secondary fs-14-nav action-btn" (click)="entityManagementService.isShowEntityNavBar=true">
-            <mat-icon class="justify-content-center align-items-center fs-4 icon-size" id="btn-modify" title="Modify Entity">
-              mode
-            </mat-icon>
-            Modify</button>
-          <button tabindex="0" class="btn m-1 action-btn new-line-property text-secondary fs-14-nav" id="btn-inactivate" title="Entity Inactivate">
-            <mat-icon class="justify-content-center align-items-center fs-4 icon-size">schedule</mat-icon>
-            Inactivate
-          </button>
-          <button tabindex="0" class="btn m-1 action-btn new-line-property text-secondary fs-14-nav" id="btn-history" title="Entity History">
-            <mat-icon class="justify-content-center align-items-center fs-4 icon-size">history </mat-icon>
-            History</button>
-          <span tabindex="0" class="back-ward" (click)="backToList()" role="button" id="btn-back" title="Back ward button">
-           <i class="fa fa-reply"></i>
-            <label class="fw-medium fs-13">Back</label>
+        <div class="col-4 justify-content-end d-flex">
+          <div class="action-bar d-flex">
+            <button tabindex="0" class="btn m-1 new-line-property text-secondary fs-14-nav action-btn"
+              (click)="entityManagementService.isShowEntityNavBar=true">
+              <mat-icon class="justify-content-center align-items-center fs-4 icon-size" id="btn-modify"
+                title="Modify Entity">
+                mode
+              </mat-icon>
+              Modify</button>
+            <button tabindex="0" class="btn m-1 action-btn new-line-property text-secondary fs-14-nav"
+              id="btn-inactivate" title="Entity Inactivate">
+              <mat-icon class="justify-content-center align-items-center fs-4 icon-size">schedule</mat-icon>
+              Inactivate
+            </button>
+            <button tabindex="0" class="btn m-1 action-btn new-line-property text-secondary fs-14-nav" id="btn-history"
+              title="Entity History">
+              <mat-icon class="justify-content-center align-items-center fs-4 icon-size">history </mat-icon>
+              History</button>
+          </div>
+          <span tabindex="0" class="back-ward" (click)="backToList()" role="button" id="btn-back"
+            title="Back ward button">
+            <i class="fa fa-reply mt-1"></i>
+            <label class="fw-medium fs-13 mt-1">Back</label>
           </span>
         </div>
       </div>
     </div>
-    <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
-      <app-add-new-entity-details  [coiEntityManageId]="entityManageId" [isEditEntity]="true"></app-add-new-entity-details>
-    </div>
-    <div class="card-body">
-      <div class="row d-flex">
-        <div class="col-12 d-flex">
-          <div class="col-2 d-grid">
-            <span class="fw-bold fs-14">Entity Type</span>
-            <label class="text-secondary fs-14">{{entityDetails?.entityType?.description}}</label>
-          </div>
-          <div class="col-2 d-grid">
-            <span class="fw-bold fs-14">Country</span>
-            <label class="text-secondary fs-14">{{entityDetails?.country?.countryName}}</label>
-          </div>
-          <div class="col-2 d-grid">
-            <span class="fw-bold fs-14">City</span>
-            <label class="text-secondary fs-14">{{entityDetails?.city !==null?entityDetails?.city:'No Data'}}</label>
-          </div>
-          <div class="col-2 d-grid">
-            <span class="fw-bold fs-14">Website</span>
-            <label class="text-secondary fs-14">{{entityDetails?.webURL !==null?entityDetails?.webURL:'No Data'}}</label>
-          </div>
-          <div class="col-2 d-grid">
-            <span class="fw-bold fs-14">Email Address </span>
-            <label class="text-secondary fs-14">{{entityDetails?.emailAddress!==null? entityDetails?.emailAddress:'No Data'}}</label>
-          </div>
-          <div class="col-1 d-grid">
-            <span class="fw-bold fs-14">Phone Number</span>
-            <label class="text-secondary fs-14">{{entityDetails?.phone !==null ? entityDetails?.phone:'No Data'}}</label>
-          </div>
+  </div>
+  <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
+    <app-add-new-entity-details [coiEntityManageId]="entityManageId" [isEditEntity]="true"></app-add-new-entity-details>
+  </div>
+  <div class="card-body">
+    <div class="row d-flex">
+      <div class="col-12 d-flex">
+        <div class="col-2 d-grid">
+          <span class="fw-bold fs-14">Entity Type</span>
+          <label class="text-secondary fs-14">{{entityDetails?.entityType?.description}}</label>
         </div>
-        <div class="col-12 d-flex mt-3">
-          <div class="col-6 d-grid">
-            <span class="fw-bold fs-14">Address</span>
-            <label class="text-secondary fs-14">{{entityDetails?.address !==null ? entityDetails?.address:'No Data'}}</label>
-          </div>
-          <div class="col-2 d-grid">
-            <span class="fw-bold fs-14">Risk Level</span>
-            <label class="text-secondary fs-14"><mat-icon *ngIf="entityDetails?.entityRiskCategory?.description ==='High'"
-               class="invalid material-icons-round">warning</mat-icon>{{entityDetails?.entityRiskCategory !==null?
-                entityDetails?.entityRiskCategory?.description:'No data'}}</label>
-          </div>
-          <div class="col-2 d-grid">
-            <span class="fw-bold fs-14">Verified By</span>
-            <label *ngIf="entityDetails?.approvedUser;else noData" class="text-secondary fs-14">
-              <mat-icon class="mat-done">done</mat-icon>
-              {{entityDetails?.approvedUser}} on {{entityDetails?.approvedTimestamp|dateFormatterWithTimeZone:'long'}}</label>
-            <ng-template #noData>
-              <label class="text-secondary fs-14">No Data</label>
-            </ng-template>
-          </div>
-          <div class="col-2 d-grid">
-            <span class="fw-bold fs-14">Last Updated by</span>
-            <label class="text-secondary fs-14">{{entityDetails?.updateUser}} on {{entityDetails?.updateTimestamp |dateFormatterWithTimeZone:'long'}}</label>
-          </div>
+        <div class="col-2 d-grid">
+          <span class="fw-bold fs-14">Country</span>
+          <label class="text-secondary fs-14">{{entityDetails?.country?.countryName}}</label>
+        </div>
+        <div class="col-2 d-grid">
+          <span class="fw-bold fs-14">City</span>
+          <label class="text-secondary fs-14">{{entityDetails?.city !==null?entityDetails?.city:'No Data'}}</label>
+        </div>
+        <div class="col-2 d-grid">
+          <span class="fw-bold fs-14">Website</span>
+          <label class="text-secondary fs-14">{{entityDetails?.webURL !==null?entityDetails?.webURL:'No Data'}}</label>
+        </div>
+        <div class="col-2 d-grid">
+          <span class="fw-bold fs-14">Email Address </span>
+          <label class="text-secondary fs-14">{{entityDetails?.emailAddress!==null? entityDetails?.emailAddress:'No
+            Data'}}</label>
+        </div>
+        <div class="col-1 d-grid">
+          <span class="fw-bold fs-14">Phone Number</span>
+          <label class="text-secondary fs-14">{{entityDetails?.phone !==null ? entityDetails?.phone:'No Data'}}</label>
+        </div>
+      </div>
+      <div class="col-12 d-flex mt-3">
+        <div class="col-6 d-grid">
+          <span class="fw-bold fs-14">Address</span>
+          <label class="text-secondary fs-14">{{entityDetails?.address !==null ? entityDetails?.address:'No Data'}}</label>
+        </div>
+        <div class="col-2 d-grid">
+          <span class="fw-bold fs-14">Risk Level</span>
+          <label class="text-secondary fs-14"><mat-icon *ngIf="entityDetails?.entityRiskCategory?.description ==='High'"
+              class="invalid material-icons-round">warning</mat-icon>{{entityDetails?.entityRiskCategory !==null?
+            entityDetails?.entityRiskCategory?.description:'No data'}}</label>
+        </div>
+        <div class="col-2 d-grid">
+          <span class="fw-bold fs-14">Verified By</span>
+          <label *ngIf="entityDetails?.approvedUser;else noData" class="text-secondary fs-14">
+            <mat-icon class="mat-done">done</mat-icon>
+            {{entityDetails?.approvedUser}} on
+            {{entityDetails?.approvedTimestamp|dateFormatterWithTimeZone:'long'}}</label>
+          <ng-template #noData>
+            <label class="text-secondary fs-14">No Data</label>
+          </ng-template>
+        </div>
+        <div class="col-2 d-grid">
+          <span class="fw-bold fs-14">Last Updated by</span>
+          <label class="text-secondary fs-14">{{entityDetails?.updateUser}} on {{entityDetails?.updateTimestamp
+            |dateFormatterWithTimeZone:'long'}}</label>
         </div>
       </div>
     </div>
   </div>
+</div>

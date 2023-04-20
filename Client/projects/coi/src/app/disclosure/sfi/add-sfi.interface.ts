@@ -14,10 +14,9 @@ export interface EntityType {
     isActive: boolean;
 }
 
-export interface CoiFinancialEntityRelType {
-    financialEntityRelTypeCode: string;
+export interface PersonEntityRelType {
+    relationshipTypeCode: string;
     description: string;
-    questionnaireNumber?: any;
     updateTimestamp: any;
     updateUser: string;
     isActive: boolean;
@@ -89,8 +88,8 @@ export class CoiFinancialEntityDetail {
     questionnaireAnsHeaderId?: any = null;
     coiFinancialEntityId: number = null;
     coiFinancialEntity: CoiFinancialEntity;
-    financialEntityRelTypeCode = '';
-    coiFinancialEntityRelType: CoiFinancialEntityRelType;
+    relationshipTypeCode = '';
+    personEntityRelType: PersonEntityRelType;
     updateTimestamp: number;
     updateUser: string;
 }

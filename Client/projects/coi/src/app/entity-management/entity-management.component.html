@@ -8,7 +8,6 @@
             (click)="entityTabName('ALL_ENTITIES')">All Entities
             <span *ngIf="activeTabName === 'ALL_ENTITIES'"
               class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
-
           </li>
           <li tabindex="0" class="mr-15 ml-15 cursor-pointer" [ngClass]="{'active': activeTabName === 'UNVERIFIED'}"
             role="tab" (keyup.enter)="entityTabName('UNVERIFIED')" (keyup.space)="entityTabName('UNVERIFIED')"
@@ -53,7 +52,6 @@
   <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow rounded-3" id="view-advance-search">
     <div class="card-body">
       <div class="form-row row m-2">
-        <!-- <div class="col-12 d-flex"> -->
         <div class="col-3 ml-3">
           <label class="fw-bold fs-14 d-block" for="adv-entity-name">Entity Name</label>
           <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
@@ -63,7 +61,6 @@
         </div>
         <div class="col-3 ml-3">
           <label class="fw-bold fs-14 d-block" for="adv-entity-country">Country</label>
-          <!-- <input type="text" class="form-control text-secondary fs-13" placeholder="Type here for the country"> -->
           <app-endpoint-search (onSelect)="selectEntityCountry($event)" [clearField]="advSearchClearField"
             [httpOptions]="countrySearchOptions" class=" text-secondary fs-13"
             [placeHolder]="'Type here for entity country'" [uniqueId]="'adv-entity-country'">
@@ -71,46 +68,36 @@
         </div>
         <div class="col-3 ml-3">
           <label class="fw-bold fs-14 d-block">Status</label>
-          <!-- <select class="form-select text-secondary fw-medium fs-13">
-              <option value="">--Select--</option>
-              <option value="1">Active</option>
-              <option value="2">Inactive</option>
-            </select> -->
-          <app-look-up (selectedResult)="onLookupSelect($event, 'property3')" [options]="statusTypeOptions"
-            [selectedLookUpList]="lookupValues['property3']" class=" text-secondary fs-13"
+          <app-look-up (selectedResult)="onLookupSelect($event, 'property20')" [options]="statusTypeOptions"
+            [selectedLookUpList]="lookupValues['property20']" [externalArray]="entityManagementService.statusCodes" [isExternalArray]="true" class=" text-secondary fs-13"
             [uniqueId]="'adv-disclosure-type'">
           </app-look-up>
         </div>
         <div class="col-3 ml-3">
           <label class="fw-bold fs-14 d-block" for="adv-entity-type">Entity Type</label>
-          <app-look-up (selectedResult)="onLookupSelect($event, 'property4')" [options]="entityTypeOptions"
-            [selectedLookUpList]="lookupValues['property4']" class=" text-secondary fs-13"
+          <app-look-up (selectedResult)="onLookupSelect($event, 'property21')" [options]="entityTypeOptions"
+            [selectedLookUpList]="lookupValues['property21']" class=" text-secondary fs-13"
             [uniqueId]="'adv-entity-type'">
           </app-look-up>
-          <!-- <select class="form-select text-secondary fw-medium fs-13">
-              <option value="">--Select--</option>
-              <option value="1">Publicly owned</option>
-              <option value="2">Private</option>
-              <option value="3">For Profit</option>
-              <option value="4">Non-Profit</option>
-            </select> -->
         </div>
-        <!-- </div> -->
       </div>
       <div class="form-row row m-2">
         <div class="col-3">
           <label class="fw-bold fs-14 d-block" for="btn-has-sfi">Has SFI</label>
-          <div class="activate-btn align-items-center d-flex pt-1">
+          <div class="activate-btn align-items-center d-flex">
             <span class="pt-1 fs-13" id="btn-has-sfi" aria-label="Toggle Has Sfi" title="Toggle Has Sfi">
-              <a *ngIf="isHasSfiOn" class="pl-2">
+              <a *ngIf="entityManagementService.coiRequestObject.property18" class="pl-2">
                 <label class="switch">
-                  <input type="checkbox" checked  (click)="isHasSfiOn = !isHasSfiOn;onHasSif(isHasSfiOn?'Y':'N')">
+                  <input type="checkbox" checked
+                    (click)="entityManagementService.coiRequestObject.property18 = !entityManagementService.coiRequestObject.property18"
+                    (keypress.enter)="entityManagementService.coiRequestObject.property18 = !entityManagementService.coiRequestObject.property18">
                   <span class="slider round"><small>On</small></span>
                 </label>
               </a>
-              <a *ngIf="!isHasSfiOn" class="pl-2">
+              <a *ngIf="!entityManagementService.coiRequestObject.property18" class="pl-2">
                 <label class="switch">
-                  <input type="checkbox" (click)="isHasSfiOn = !isHasSfiOn;onHasSif(isHasSfiOn?'Y':'N')">
+                  <input type="checkbox" (click)="entityManagementService.coiRequestObject.property18 = !entityManagementService.coiRequestObject.property18"
+                    (keypress.enter)="entityManagementService.coiRequestObject.property18 = !entityManagementService.coiRequestObject.property18">
                   <span class="slider round"><small class="deactivate-text">Off</small></span>
                 </label>
               </a>
@@ -119,17 +106,19 @@
         </div>
         <div class="col-3">
           <label class="fw-bold fs-14 d-block" for="btn-has-disclosure">Has Disclosure</label>
-          <div class="activate-btn align-items-center d-flex pt-1">
+          <div class="activate-btn align-items-center d-flex">
             <span class="pt-1 fs-13" id="btn-has-disclosure" aria-label="Toggle Has Disclosure"
               title="Toggle Has Disclosure">
-              <a *ngIf="isHasDisclosureOn" class="pl-2">
-                <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn;onHasDisclosure(isHasDisclosureOn?'Y':'N')">
+              <a *ngIf="entityManagementService.coiRequestObject.property19" class="pl-2">
+                <label class="switch"
+                  (click)="entityManagementService.coiRequestObject.property19 = !entityManagementService.coiRequestObject.property19">
                   <input type="checkbox" checked>
                   <span class="slider round"><small>On</small></span>
                 </label>
               </a>
-              <a *ngIf="!isHasDisclosureOn" class="pl-2">
-                <label class="switch" (click)="isHasDisclosureOn = !isHasDisclosureOn;onHasDisclosure(isHasDisclosureOn?'Y':'N')">
+              <a *ngIf="!entityManagementService.coiRequestObject.property19" class="pl-2">
+                <label class="switch"
+                  (click)="entityManagementService.coiRequestObject.property19 = !entityManagementService.coiRequestObject.property19">
                   <input type="checkbox">
                   <span class="slider round"><small class="deactivate-text">Off</small></span>
                 </label>
@@ -139,24 +128,20 @@
         </div>
         <div class="col-3">
           <label class="fw-bold fs-14 d-block" for="adv-entity-type">Risk Level</label>
-          <!-- <select class="form-select text-secondary fw-medium fs-13">
-              <option value="">--Select--</option>
-              <option value="1">High</option>
-              <option value="2">Medium</option>
-              <option value="3">Low</option>
-            </select> -->
-          <app-look-up (selectedResult)="onLookupSelect($event, 'property7')" [options]="riskLevelTypeOptions"
-            [selectedLookUpList]="lookupValues['property7']" class=" text-secondary fs-13"
+          <app-look-up (selectedResult)="onLookupSelect($event, 'property22')" [options]="riskLevelTypeOptions"
+            [selectedLookUpList]="lookupValues['property22']" class=" text-secondary fs-13"
             [uniqueId]="'adv-entity-type'">
           </app-look-up>
         </div>
         <div class="col-3 d-flex justify-content-end align-items-end">
-          <button class="btn btn-outline-secondary  fs-13 py-2 px-4" id="btn-clear" (click)="clearAdvancedSearch()">Clear</button>
-          <button class="btn btn-primary fs-13" id="btn-search">Search</button>
+          <button class="btn btn-outline-secondary  fs-13 py-2 px-4" id="btn-clear"
+            (click)="clearAdvancedSearch()">Clear</button>
+          <button class="btn btn-primary fs-13" id="btn-search" (click)="advancedSearch()">Search</button>
         </div>
       </div>
     </div>
   </div>
   <app-entity-list [entityActiveTabName]="activeTabName"
-    (modifyEntityId)="selectedEntity($event);isViewAdvanceSearch = false"></app-entity-list>
+    (modifyEntityId)="selectedEntity($event);isViewAdvanceSearch = false" (navNextPage)="navigateNextPage($event)"
+    [entityList]="entityList"></app-entity-list>
 </div>

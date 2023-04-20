@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { AddNewEntityDetailsComponent } from './add-new-entity-details/add-new-entity-details.component';
 import { FormsModule } from '@angular/forms';
+import { SharedComponentModule } from '../shared-components/shared-component.module';
 
 const routes: Routes = [
   { path: '', component: EntityManagementComponent },
@@ -29,7 +30,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MatIconModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    SharedComponentModule
   ],
   exports: [
   ],providers: [ElasticConfigService]

@@ -1,5 +1,5 @@
 <div class="mt-4">
-  <div *ngIf="definedRelationships?.length" class="container-fluid m-2 ">
+  <div *ngIf="definedRelationships?.length" class="container-fluid">
     <nav class="border-nav bg-white border d-flex fs-15 fw-bold mt-3 shadow user-dashboard-nav">
       <div (click)="currentSelected.tab = 'Financial'"
         [class.bg-active]="currentSelected.tab === 'Financial'?'active':''"
@@ -19,7 +19,7 @@
   </div>
   <app-add-relationship *ngIf="!definedRelationships?.length"
     (addRelationShip)="openAddRelationshipModal($event)"></app-add-relationship>
-  <div *ngIf="definedRelationships?.length" class="container-fluid mx-2">
+  <div *ngIf="definedRelationships?.length" class="container-fluid">
     <div class="card shadow">
       <!-- <div> -->
       <nav

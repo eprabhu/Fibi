@@ -55,6 +55,7 @@ export class CommonService {
     appToastContent = '';
     toastClass = 'success';
     dashboardModules: any = {};
+    previousURL = null;
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }

@@ -1,10 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { slowSlideInOut, slideHorizontal, fadeDown, slideInOut } from '../../../../fibi/src/app/common/utilities/animations';
-import { EntityManagementService } from './entity-management.service';
+import { EntityDashboardRequest, EntityManagementService } from './entity-management.service';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { Router } from '@angular/router';
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
+import { Subscription } from 'rxjs';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../fibi/src/app/app-constants';
+import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
+
 
 @Component({
   selector: 'app-entity-management',
@@ -17,8 +21,6 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   entityManageId = null;
   activeTabName = 'ALL_ENTITIES';
   isViewAdvanceSearch = false;
-  isHasSfiOn = false;
-  isHasDisclosureOn = false;
   coiElastic = null;
   isCoiEditEntity = false;
   clearField: String;
@@ -28,7 +30,10 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   lookupValues = [];
   riskLevelTypeOptions = 'entity_risk_category#RISK_CATEGORY_CODE#true#true';
   entityTypeOptions = 'entity_type#ENTITY_TYPE_CODE#true#true';
-  statusTypeOptions = 'entity_status#ENTITY_STATUS_CODE#true';
+  statusTypeOptions = 'EMPTY#EMPTY#true#true';
+  entityList: any = [];
+  $subscriptions: Subscription[] = [];
+  // resultCount: number = 0;
 
 
 
@@ -40,9 +45,11 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.EntitySearchOptions = getEndPointOptionsForEntity();
     this.countrySearchOptions = getEndPointOptionsForCountry();
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
+    this.viewListOfEntity();
 
   }
   ngOnDestroy() {
+    subscriptionHandler(this.$subscriptions)
     this.entityManagementService.isShowEntityNavBar = false;
 
   }
@@ -54,51 +61,62 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   }
 
   entityTabName(tabName) {
+    this.resetAdvanceSearchFields();
     this.activeTabName = tabName;
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
+    this.viewListOfEntity();
   }
 
-  getRequestObject() {
-    this.setAdvanceSearchValuesToServiceObject();
-    return this.entityManagementService.coiRequestObject;
-  }
-  setAdvanceSearchValuesToServiceObject() {
-    // this.entityManagementService.coiRequestObject.property6 = parseDateWithoutTimestamp(this.advanceSearchDates.startDate);
-    // this.entityManagementService.coiRequestObject.property7 = parseDateWithoutTimestamp(this.advanceSearchDates.endDate);
-    // this.entityManagementService.coiRequestObject.property15 =
-    //     this.entityManagementService.coiRequestObject.advancedSearch === 'L'
-    //         ? null : this.entityManagementService.coiRequestObject.property15;
-  }
   redirectToEntity(coi: any) {
     this._router.navigate(['/coi/entity-management/entity-list'], { queryParams: { entityManageId: coi.id } });
   }
 
+  viewListOfEntity() {
+    this.$subscriptions.push(this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject).subscribe((res: any) => {
+      this.entityList = res.coiEntityList;
+      // this.resultCount = this.entityList.length;
+    }, _error => {
+      // this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+    }));
+  }
+
   addNewEntity() {
     this.entityManageId = null;
-    this.isCoiEditEntity = false
+    this.isCoiEditEntity = false;
     this.entityManagementService.isShowEntityNavBar = true;
   }
 
   selectedEvent(event) {
-    this.entityManagementService.coiRequestObject.property1 = event ? event.coiEntityId : null;
+    this.entityManagementService.coiRequestObject.property1 = event ? event.entityName : '';
   }
 
   selectEntityCountry(country: any) {
-    this.entityManagementService.coiRequestObject.property2 = country ? country.countryCode : null;
+    this.entityManagementService.coiRequestObject.property2 = country ? country.countryCode : '';
   }
 
   onLookupSelect(data: any, property: string) {
     this.lookupValues[property] = data;
     this.entityManagementService.coiRequestObject[property] = data.length ? data.map(d => d.code) : [];
   }
-  onHasSif(data: any) {
-    this.entityManagementService.coiRequestObject.property5 = data;
-  }
-  onHasDisclosure(data: any) {
-    this.entityManagementService.coiRequestObject.property6 = data;
+
+
+  resetAdvanceSearchFields() {
+    this.entityManagementService.coiRequestObject = new EntityDashboardRequest();
+    this.advSearchClearField = new String('true');
+    this.clearField = new String('true');
+    this.lookupValues = [];
   }
 
   clearAdvancedSearch() {
+    this.resetAdvanceSearchFields();
+    this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
+    this.viewListOfEntity();
+  }
+  navigateNextPage(event) {
+    this.viewListOfEntity();
+  }
 
+  advancedSearch(){
+    this.viewListOfEntity();
   }
 }
