@@ -93,9 +93,9 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/saveOrUpdateCoiFinancialEntityDetails")
-	public PersonEntityRelationship saveCoiFinancialEntityDetails(@RequestBody ConflictOfInterestVO vo) {
+	public PersonEntityRelationship saveCoiFinancialEntityDetails(@RequestBody PersonEntityRelationship vo) {
 		logger.info("Request for saveOrUpdateCoiFinancialEntityDetails");
-		return conflictOfInterestService.saveOrUpdatePersonEntityRelationship(vo.getPersonEntityRelationship());
+		return conflictOfInterestService.saveOrUpdatePersonEntityRelationship(vo);
 	}
 
 	@PatchMapping("/certifyDisclosure")
@@ -342,7 +342,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping(value = "/getPersonEntityDashboard")
-	public ResponseEntity<Object> getPersonEntityDashboard(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> getPersonEntityDashboard(@RequestBody CoiDashboardVO vo) {
 		logger.info("Requesting for getPersonEntityDetails");
 		return conflictOfInterestService.getPersonEntityDashboard(vo);
 	}

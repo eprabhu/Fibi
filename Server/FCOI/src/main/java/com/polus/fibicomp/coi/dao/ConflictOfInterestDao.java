@@ -604,7 +604,7 @@ public interface ConflictOfInterestDao {
 
 	public List<CoiProjectType> getCoiProjectTypes();
 
-	public List<PersonEntity> getPersonEntityDashboard(ConflictOfInterestVO vo);
+	DashBoardProfile getPersonEntityDashboard(CoiDashboardVO vo);
 
 	public Integer generateMaxCoiEntityNumber();
 
@@ -632,7 +632,7 @@ public interface ConflictOfInterestDao {
 
 	public CoiProjectAward saveOrUpdateCoiProjectAward(CoiProjectAward coiProjectAward);
 
-	public List<CoiEntity> getCoiEntityDetailsByEntityId(Integer personEntityId);
+	CoiEntity getCoiEntityDetailsByEntityId(Integer personEntityId);
 
 	public PersonEntity getPersonEntityDetailsByEntityId(Integer personEntityId);
 }

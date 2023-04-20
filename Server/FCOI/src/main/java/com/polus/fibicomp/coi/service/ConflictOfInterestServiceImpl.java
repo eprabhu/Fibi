@@ -113,29 +113,29 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		if(conflictOfInterestVO.getCoiProjectProposal()!=null) {
 			CoiProjectProposal coiProjectProposal = conflictOfInterestDao.saveOrUpdateCoiProjectProposal(conflictOfInterestVO.getCoiProjectProposal());
 			coiDisclosure.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
-			coiDisclosure.setFcoitypeCode("2");
+			coiDisclosure.setFcoiTypeCode("2");
 			coiDisclosure.setModuleItemKey(coiProjectProposal.getProposalNumber());
 			coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
 		}
 		else if(conflictOfInterestVO.getCoiProjectAward()!=null) {
 			CoiProjectAward coiProjectAward = conflictOfInterestDao.saveOrUpdateCoiProjectAward(conflictOfInterestVO.getCoiProjectAward());
 			coiDisclosure.setModuleCode(Constants.AWARD_MODULE_CODE);
-			coiDisclosure.setFcoitypeCode("3");
+			coiDisclosure.setFcoiTypeCode("3");
 			coiDisclosure.setModuleItemKey(coiProjectAward.getAwardNumber());
 			coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
 		}
-		else if(conflictOfInterestVO.getCoiDisclosure().getFcoitypeCode()!=null && !conflictOfInterestVO.getCoiDisclosure().getFcoitypeCode().isEmpty()) {
-			if (!conflictOfInterestVO.getCoiDisclosure().getFcoitypeCode().equals("4")) {
+		else if(conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode()!=null && !conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode().isEmpty()) {
+			if (!conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode().equals("4")) {
 				coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
 			}
 		}
 		else if(conflictOfInterestVO.getCoiDisclosure().getCoiProjectTypeCode()!=null && !conflictOfInterestVO.getCoiDisclosure().getCoiProjectTypeCode().isEmpty()) {
 			if (conflictOfInterestVO.getCoiDisclosure().getCoiProjectTypeCode().equals("3")) {
 				coiDisclosure.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
-				coiDisclosure.setFcoitypeCode("2");
+				coiDisclosure.setFcoiTypeCode("2");
 			} else if (conflictOfInterestVO.getCoiDisclosure().getCoiProjectTypeCode().equals("1")) {
 				coiDisclosure.setModuleCode(Constants.AWARD_MODULE_CODE);
-				coiDisclosure.setFcoitypeCode("3");
+				coiDisclosure.setFcoiTypeCode("3");
 			}
 			coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
 		}
@@ -200,7 +200,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestVO.setCoiSectionsType(conflictOfInterestDao.fetchCoiSections());
 		conflictOfInterestVO.setCoiReviewActivitys(conflictOfInterestDao.fetchCoiReviewActivity());
 		conflictOfInterestVO.setAdminGroup(commonDao.fetchAdminGroupsBasedOnModuleCode(Constants.MODULE_CODE_COI_DISCLOSURE));
-		if (Constants.PROPOSAL_DISCLOSURE.equals(coiDisclosure.getFcoitypeCode()) ) {
+		if (Constants.PROPOSAL_DISCLOSURE.equals(coiDisclosure.getFcoiTypeCode()) ) {
 			conflictOfInterestVO.setProposalIdlinkedInDisclosure(conflictOfInterestDao.getProposalIdLinkedInDisclosure(disclosureId));
 		} else {
 			conflictOfInterestVO.setNumberOfAward(getNumberOfAwardInDisclosure(coiDisclosure.getConflictStatusCode(),
@@ -933,12 +933,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public String getCOIAdminDashboard(@Valid CoiDashboardVO vo) {
-		DashBoardProfile dashBoardProfile = new DashBoardProfile();
-		try {
-			dashBoardProfile = conflictOfInterestDao.getCOIAdminDashboard(vo);
-		} catch (Exception e) {
-			logger.error("Error in method getCOIAdminDashboard", e);
-		}
+		DashBoardProfile dashBoardProfile = conflictOfInterestDao.getCOIAdminDashboard(vo);
 		return commonDao.convertObjectToJSON(dashBoardProfile);
 	}
 
@@ -1019,9 +1014,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> getPersonEntityDashboard(ConflictOfInterestVO vo) {
-		vo.setPersonEntityList(conflictOfInterestDao.getPersonEntityDashboard(vo));
-		return new ResponseEntity<>(vo, HttpStatus.OK);
+	public ResponseEntity<Object> getPersonEntityDashboard(CoiDashboardVO vo) {
+		return new ResponseEntity<>(conflictOfInterestDao.getPersonEntityDashboard(vo), HttpStatus.OK);
 	}
 
 
@@ -1053,7 +1047,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getCoiEntityDetails(Integer personEntityId) {
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
-		vo.setCoiEntityList(conflictOfInterestDao.getCoiEntityDetailsByEntityId(personEntityId));
+		vo.setCoiEntity(conflictOfInterestDao.getCoiEntityDetailsByEntityId(personEntityId));
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
 
