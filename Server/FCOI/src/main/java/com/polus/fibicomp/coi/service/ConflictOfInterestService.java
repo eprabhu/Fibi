@@ -311,7 +311,7 @@ public interface ConflictOfInterestService {
 
 	ResponseEntity<Object> getCoiProjectTypes();
 
-	public ResponseEntity<Object> getPersonEntityDashboard(ConflictOfInterestVO vo);
+	ResponseEntity<Object> getPersonEntityDashboard(CoiDashboardVO vo);
 
 
 	/**

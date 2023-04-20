@@ -19,7 +19,7 @@ public class CoiDisclosureFcoiType implements Serializable {
 
 	@Id
 	@Column(name = "FCOI_TYPE_CODE")
-	private String fcoitypeCode;
+	private String fcoiTypeCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -34,12 +34,12 @@ public class CoiDisclosureFcoiType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	public String getFcoitypeCode() {
-		return fcoitypeCode;
+	public String getFcoiTypeCode() {
+		return fcoiTypeCode;
 	}
 
-	public void setFcoitypeCode(String fcoitypeCode) {
-		this.fcoitypeCode = fcoitypeCode;
+	public void setFcoiTypeCode(String fcoiTypeCode) {
+		this.fcoiTypeCode = fcoiTypeCode;
 	}
 
 	public String getDescription() {

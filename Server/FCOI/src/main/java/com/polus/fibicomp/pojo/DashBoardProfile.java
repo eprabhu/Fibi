@@ -125,6 +125,18 @@ public class DashBoardProfile {
 
 	private Integer coiFinancialEntityListCount;
 
+	private Integer count;
+
+	private List<Object> data;
+
+	public DashBoardProfile() {
+	}
+
+	public DashBoardProfile(Integer count, List<Object> data) {
+		this.count = count;
+		this.data = data;
+	}
+
 	public ArrayList<HashMap<String, Object>> getDashBoardDetailMap() {
 		return dashBoardDetailMap;
 	}
@@ -507,6 +519,21 @@ public class DashBoardProfile {
 
 	public void setCoiFinancialEntityListCount(Integer coiFinancialEntityListCount) {
 		this.coiFinancialEntityListCount = coiFinancialEntityListCount;
-	}	
+	}
 
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
+	public List<Object> getData() {
+		return data;
+	}
+
+	public void setData(List<Object> data) {
+		this.data = data;
+	}
 }

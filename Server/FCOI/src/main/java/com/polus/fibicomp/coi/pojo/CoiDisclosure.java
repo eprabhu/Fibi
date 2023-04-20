@@ -53,11 +53,11 @@ public class CoiDisclosure implements Serializable {
 	private String versionStatus;
 	
 	@Column(name = "FCOI_TYPE_CODE")
-	private String fcoitypeCode;
+	private String fcoiTypeCode;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE1_FK2"), name = "FCOI_TYPE_CODE", referencedColumnName = "FCOI_TYPE_CODE", insertable = false, updatable = false)
-	private CoiDisclosureFcoiType CoiDisclosureFcoiType;
+	private CoiDisclosureFcoiType coiDisclosureFcoiType;
 	
 	@Column(name = "CONFLICT_STATUS_CODE")
 	private String conflictStatusCode;
@@ -160,20 +160,20 @@ public class CoiDisclosure implements Serializable {
 		this.person = person;
 	}
 
-	public String getFcoitypeCode() {
-		return fcoitypeCode;
+	public String getFcoiTypeCode() {
+		return fcoiTypeCode;
 	}
 
-	public void setFcoitypeCode(String fcoitypeCode) {
-		this.fcoitypeCode = fcoitypeCode;
+	public void setFcoiTypeCode(String fcoiTypeCode) {
+		this.fcoiTypeCode = fcoiTypeCode;
 	}
 
-	public com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType getCoiDisclosureFcoiType() {
-		return CoiDisclosureFcoiType;
+	public CoiDisclosureFcoiType getCoiDisclosureFcoiType() {
+		return coiDisclosureFcoiType;
 	}
 
-	public void setCoiDisclosureFcoiType(com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType coiDisclosureFcoiType) {
-		CoiDisclosureFcoiType = coiDisclosureFcoiType;
+	public void setCoiDisclosureFcoiType(CoiDisclosureFcoiType coiDisclosureFcoiType) {
+		this.coiDisclosureFcoiType = coiDisclosureFcoiType;
 	}
 
 	public String getConflictStatusCode() {

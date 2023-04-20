@@ -40,7 +40,7 @@ public class PersonEntity implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ENTITY_FK2"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
-	private CoiEntity CoiEntity;
+	private CoiEntity coiEntity;
 	
 	@Column(name = "ENTITY_NUMBER")
 	private Integer entityNumber;
@@ -93,6 +93,9 @@ public class PersonEntity implements Serializable {
 	@Transient
 	private List<PersonEntityRelationship> personEntityRelationships;
 
+	@Transient
+	private  String personFullName;
+
 	public Integer getPersonEntityId() {
 		return personEntityId;
 	}
@@ -126,11 +129,11 @@ public class PersonEntity implements Serializable {
 	}
 
 	public CoiEntity getCoiEntity() {
-		return CoiEntity;
+		return coiEntity;
 	}
 
-	public void setCoiEntity(CoiEntity CoiEntity) {
-		this.CoiEntity = CoiEntity;
+	public void setCoiEntity(CoiEntity coiEntity) {
+		this.coiEntity = coiEntity;
 	}
 
 	public Integer getEntityNumber() {
@@ -251,5 +254,13 @@ public class PersonEntity implements Serializable {
 
 	public void setPersonEntityRelationships(List<PersonEntityRelationship> personEntityRelationships) {
 		this.personEntityRelationships = personEntityRelationships;
+	}
+
+	public String getPersonFullName() {
+		return personFullName;
+	}
+
+	public void setPersonFullName(String personFullName) {
+		this.personFullName = personFullName;
 	}
 }

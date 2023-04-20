@@ -7,7 +7,9 @@ import java.util.Map;
 import javax.validation.constraints.Pattern;
 
 public class CoiDashboardVO {
-	
+
+	private Integer id;
+
 	private Integer pageNumber;
 
 	private Integer currentPage;
@@ -78,6 +80,16 @@ public class CoiDashboardVO {
 	private List<@Pattern(regexp="^$|[0-9]*$", message="Review Status must not include special characters.") String> property21;
 
 	private List<@Pattern(regexp="^$|[0-9]*$", message="Conflict Status must not include special characters.") String> property22;
+
+	private String property23;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public Integer getPageNumber() {
 		return pageNumber;
@@ -334,5 +346,12 @@ public class CoiDashboardVO {
 	public void setFilterType(String filterType) {
 		this.filterType = filterType;
 	}
-	
+
+	public String getProperty23() {
+		return property23;
+	}
+
+	public void setProperty23(String property23) {
+		this.property23 = property23;
+	}
 }
