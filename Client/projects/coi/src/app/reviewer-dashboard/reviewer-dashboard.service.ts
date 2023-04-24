@@ -14,7 +14,7 @@ constructor(private _http: HttpClient,
   private _commonService: CommonService) { }
 
 
-getCOIAdminDashboard(params: any) {
+  getCOIReviewerDashboard(params: any) {
   return this._http.post(this._commonService.baseUrl + '/getCOIReviewerDashboard', params).pipe(catchError((err) => {
     return of();
   }));

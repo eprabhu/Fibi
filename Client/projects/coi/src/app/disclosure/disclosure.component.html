@@ -95,13 +95,13 @@
                                     </td>
                                     <td class="ps-2">Significant Financial Interest</td>
                                 </tr>
-                                <tr *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != '3'">
+                                <tr *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode != '3'">
                                     <td><span
                                             class="bold-blue-color">{{coiData?.numberOfProposal ? coiData?.numberOfProposal : 0}}</span>
                                     </td>
                                     <td class="ps-2">Proposals</td>
                                 </tr>
-                                <tr *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode != '3'">
+                                <tr *ngIf="!coiData.proposalIdlinkedInDisclosure && coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode != '3'">
                                     <td><span
                                             class="bold-blue-color">{{coiData?.numberOfAward ? coiData?.numberOfAward : 0}}</span>
                                     </td>

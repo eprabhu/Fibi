@@ -20,6 +20,8 @@ export class UserDisclosureComponent {
         sort: {'createTimestamp': 'asc'},
         tabName: 'PROPOSAL_DISCLOSURES',
         isDownload: false,
+        // filterType = 'All', 'FCOI', 'Project', 'OPA';
+        filterType: 'All'
     };
     disclosureArray: any[] = [];
     filteredDisclosureArray: any[] = [];
@@ -127,6 +129,7 @@ export class UserDisclosureComponent {
 
     setFilter(type = 'ALL') {
         this.currentSelected.filter = type;
+        this.dashboardRequestObject.filterType = type;
         this.filterDashboardData();
     }
 

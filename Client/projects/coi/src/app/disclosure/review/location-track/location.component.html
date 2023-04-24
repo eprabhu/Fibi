@@ -5,7 +5,7 @@
             <div class="justify-content-between row">
                 <div class="col-auto">Review List</div>
                 <div class="col-auto">
-                    <button *ngIf="coiDisclosure?.reviewStatusTypeCode == '2'" (click)="clearReviewModal()" class="btn btn-tertiary btn-sm mt-0 button-right" data-bs-toggle="modal"
+                    <button *ngIf="coiDisclosure?.reviewStatusCode == '2'" (click)="clearReviewModal()" class="btn btn-tertiary btn-sm mt-0 button-right" data-bs-toggle="modal"
                         title="Add Review Location" data-bs-target="#add-location-modal">
                         Add Review
                     </button>
@@ -249,7 +249,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review' : 'Add Review' }} for {{coiDisclosure?.coiDisclosureCategoryType?.description}} by {{disclosurePerson?.fullName}}</h5>
+                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review' : 'Add Review' }} for {{coiDisclosure?.coiDisclosureFcoiType?.description}} by {{disclosurePerson?.fullName}}</h5>
                 <button type="button" class="btn close pt-2" data-bs-dismiss="modal" aria-label="Close"
                     (click)="reviewDetails = {}">
                     <span aria-hidden="true">&times;</span>

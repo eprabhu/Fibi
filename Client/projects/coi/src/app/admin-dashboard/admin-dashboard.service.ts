@@ -46,7 +46,7 @@ export class AdminDashboardService {
 
 export class CoiDashboardRequest {
   isDownload = false;
-  property1 = '';
+  property1 = null;
   property2 = null;
   property3 = null;
   property4 = null;

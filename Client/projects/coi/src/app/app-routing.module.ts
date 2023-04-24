@@ -4,9 +4,11 @@ import {AppRouterComponent} from "./common/app-router/app-router.component";
 import { DashboardGuardService } from './common/services/dashboard-guard.service';
 
 const routes: Routes = [
-    {path: '', redirectTo: 'coi/user-dashboard/disclosures', pathMatch: 'full'},
+    // {path: '', redirectTo: 'coi/user-dashboard/disclosures', pathMatch: 'full'}
+    {path: '', redirectTo: 'coi', pathMatch: 'full'},
     {
         path: 'coi', component: AppRouterComponent, canActivate: [DashboardGuardService], children: [
+            {path: '', redirectTo: 'user-dashboard', pathMatch: 'full'},
             {
                 path: 'disclosure',
                 loadChildren: () => import('./disclosure/disclosure.module').then(m => m.DisclosureModule)

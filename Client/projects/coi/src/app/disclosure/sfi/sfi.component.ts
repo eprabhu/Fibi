@@ -18,7 +18,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     searchText: string;
     dependencies = ['coiDisclosure', 'numberOfSFI'];
     isEditMode = false;
-    disclosureStatusCode: any;
+    conflictStatusCode: any;
     disclosureId: any;
     personId: any;
     isSFINotAvailable = false;
@@ -44,8 +44,8 @@ export class SfiComponent implements OnInit, OnDestroy {
 
     getEditMode() {
         const DATA = this._dataStore.getData(this.dependencies);
-        // this.disclosureStatusCode = 0;
-        this.disclosureStatusCode = DATA.coiDisclosure.disclosureStatusCode;
+        this.conflictStatusCode = 0;
+        this.conflictStatusCode = DATA.coiDisclosure.conflictStatusCode;
         this.disclosureId =  DATA.coiDisclosure.disclosureId;
         this.isEditMode = this._dataStore.getEditModeForCOI();
         this.personId = DATA.coiDisclosure.personId;
@@ -53,7 +53,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     getSfiDetails() {
-        this.$subscriptions.push(this._sfiService.getSfiDetails(this.disclosureId, this.disclosureStatusCode, this.personId).subscribe((data: any) => {
+        this.$subscriptions.push(this._sfiService.getSfiDetails(this.disclosureId, this.conflictStatusCode, this.personId).subscribe((data: any) => {
             if (data) {
                 this.coiFinancialEntityDetails = data;
             }

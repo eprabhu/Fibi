@@ -44,10 +44,11 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
 
 
   ngOnInit() {
-    this.entityManagementService.relationshipDashboardRequest.filterType = 'Person';
+    this.entityManagementService.relationshipDashboardRequest.filterType = 'PERSON';
     this.getRelationshipEntityList();
     this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
     this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
+    this.currentTab('Person');
   }
 
   ngOnDestroy() {

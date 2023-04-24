@@ -5,6 +5,7 @@ import { openModal } from '../../../../fibi/src/app/common/utilities/custom-util
 import {Router} from "@angular/router";
 import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../fibi/src/app/app-constants";
 import {CommonService} from "../common/services/common.service";
+import { SfiService } from '../disclosure/sfi/sfi.service';
 
 declare var $: any;
 @Component({
@@ -30,7 +31,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy{
                     diminish, or eliminate the Conflict of Interest.`;
   $subscriptions = [];
 
-  constructor(public service: UserDashboardService, private _router: Router, public commonService: CommonService) {
+  constructor(public service: UserDashboardService, private _router: Router, public commonService: CommonService,
+              public sfiService: SfiService) {
   }
 
   ngOnInit(): void {

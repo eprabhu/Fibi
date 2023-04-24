@@ -61,7 +61,7 @@ export class ResolveServiceService {
         }
         return this._coiService.createDisclosure({
             coiDisclosure: {
-                fcoitypeCode: 1, personId: this._commonService.getCurrentUserDetail('personID')
+                fcoiTypeCode: 1, personId: this._commonService.getCurrentUserDetail('personID')
             }
         }).pipe((catchError(error => this.redirectOnError(error))));
     }
