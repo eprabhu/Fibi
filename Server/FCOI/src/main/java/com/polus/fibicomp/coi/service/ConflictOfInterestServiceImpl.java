@@ -133,15 +133,20 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			if (conflictOfInterestVO.getCoiDisclosure().getCoiProjectTypeCode().equals("3")) {
 				coiDisclosure.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
 				coiDisclosure.setFcoiTypeCode("2");
+				coiDisclosure.setModuleItemKey(conflictOfInterestVO.getCoiDisclosure().getModuleItemKey());
 			} else if (conflictOfInterestVO.getCoiDisclosure().getCoiProjectTypeCode().equals("1")) {
 				coiDisclosure.setModuleCode(Constants.AWARD_MODULE_CODE);
 				coiDisclosure.setFcoiTypeCode("3");
+				coiDisclosure.setModuleItemKey(conflictOfInterestVO.getCoiDisclosure().getModuleItemKey());
 			}
 			coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
 		}
+		coiDisclosure.setConflictStatusCode(Constants.DISCLOSURE_STATUS_PENDING);
+		coiDisclosure.setCoiConflictStatusType(conflictOfInterestDao.getDisclosureStatusByCode(Constants.DISCLOSURE_STATUS_PENDING));
+		coiDisclosure.setCoiDispositionStatusType(conflictOfInterestDao.getDispositionStatusByCode(DISPOSITION_STATUS_TYPE_CODE));
 		coiDisclosure.setVersionNumber(1);
 		coiDisclosure.setVersionStatus("Pending");
-		coiDisclosure.setDispositionStatusCode("1");
+		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_TYPE_CODE);
 		coiDisclosure.setReviewStatusCode("1");
 		coiDisclosure.setRiskCategoryCode("1");
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);

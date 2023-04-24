@@ -38,16 +38,16 @@ public class DisclosureView implements Serializable {
 	private String fullName;
 
 	@Column(name = "DISCLOSURE_DISPOSITION_CODE")
-	private Integer disclosureDispositionCode;
+	private Integer dispositionStatusCode;
 
 	@Column(name = "DISCLOSURE_DISPOSITION")
-	private String disclosureDisposition;
+	private String dispositionStatus;
 
 	@Column(name = "DISCLOSURE_STATUS_CODE")
-	private Integer disclosureStatusCode;
+	private Integer conflictStatusCode;
 
 	@Column(name = "DISCLOSURE_STATUS")
-	private String disclosureStatus;
+	private String conflictStatus;
 
 	@Column(name = "MODULE_ITEM_KEY")
 	private String moduleItemKey;
@@ -65,13 +65,7 @@ public class DisclosureView implements Serializable {
 	private String updateUser;
 	
 	@Transient
-	private String disclosureSequenceStatusCode;
-
-	@Transient
-	private String disclosureSequenceStatus;
-
-	@Transient
-	private String dispositionStatus;
+	private String versionStatus;
 
 	@Transient
 	private String reviewStatus;
@@ -110,10 +104,10 @@ public class DisclosureView implements Serializable {
 	private String disclosurePersonFullName;
 
 	@Transient
-	private String disclosureCategoryTypeCode;
+	private String fcoiTypeCode;
 
 	@Transient
-	private String disclosureCategoryType;
+	private String fcoiType;
 
 	@Transient
 	private Timestamp lastApprovedVersionDate;
@@ -122,7 +116,7 @@ public class DisclosureView implements Serializable {
 	private String reviseComment;
 
 	@Transient
-	private String reviewStatusTypeCode;
+	private String reviewStatusCode;
 
 	@Transient
 	private Integer reviewId;
@@ -193,36 +187,28 @@ public class DisclosureView implements Serializable {
 		this.fullName = fullName;
 	}
 
-	public Integer getDisclosureDispositionCode() {
-		return disclosureDispositionCode;
+	public Integer getDispositionStatusCode() {
+		return dispositionStatusCode;
 	}
 
-	public void setDisclosureDispositionCode(Integer disclosureDispositionCode) {
-		this.disclosureDispositionCode = disclosureDispositionCode;
+	public void setDispositionStatusCode(Integer dispositionStatusCode) {
+		this.dispositionStatusCode = dispositionStatusCode;
 	}
 
-	public String getDisclosureDisposition() {
-		return disclosureDisposition;
+	public Integer getConflictStatusCode() {
+		return conflictStatusCode;
 	}
 
-	public void setDisclosureDisposition(String disclosureDisposition) {
-		this.disclosureDisposition = disclosureDisposition;
+	public void setConflictStatusCode(Integer conflictStatusCode) {
+		this.conflictStatusCode = conflictStatusCode;
 	}
 
-	public Integer getDisclosureStatusCode() {
-		return disclosureStatusCode;
+	public String getConflictStatus() {
+		return conflictStatus;
 	}
 
-	public void setDisclosureStatusCode(Integer disclosureStatusCode) {
-		this.disclosureStatusCode = disclosureStatusCode;
-	}
-
-	public String getDisclosureStatus() {
-		return disclosureStatus;
-	}
-
-	public void setDisclosureStatus(String disclosureStatus) {
-		this.disclosureStatus = disclosureStatus;
+	public void setConflictStatus(String conflictStatus) {
+		this.conflictStatus = conflictStatus;
 	}
 
 	public String getModuleItemKey() {
@@ -269,20 +255,12 @@ public class DisclosureView implements Serializable {
 		return serialVersionUID;
 	}
 
-	public String getDisclosureSequenceStatusCode() {
-		return disclosureSequenceStatusCode;
+	public String getVersionStatus() {
+		return versionStatus;
 	}
 
-	public void setDisclosureSequenceStatusCode(String disclosureSequenceStatusCode) {
-		this.disclosureSequenceStatusCode = disclosureSequenceStatusCode;
-	}
-
-	public String getDisclosureSequenceStatus() {
-		return disclosureSequenceStatus;
-	}
-
-	public void setDisclosureSequenceStatus(String disclosureSequenceStatus) {
-		this.disclosureSequenceStatus = disclosureSequenceStatus;
+	public void setVersionStatus(String versionStatus) {
+		this.versionStatus = versionStatus;
 	}
 
 	public String getDispositionStatus() {
@@ -389,20 +367,20 @@ public class DisclosureView implements Serializable {
 		this.disclosurePersonFullName = disclosurePersonFullName;
 	}
 
-	public String getDisclosureCategoryTypeCode() {
-		return disclosureCategoryTypeCode;
+	public String getFcoiTypeCode() {
+		return fcoiTypeCode;
 	}
 
-	public void setDisclosureCategoryTypeCode(String disclosureCategoryTypeCode) {
-		this.disclosureCategoryTypeCode = disclosureCategoryTypeCode;
+	public void setFcoiTypeCode(String fcoiTypeCode) {
+		this.fcoiTypeCode = fcoiTypeCode;
 	}
 
-	public String getDisclosureCategoryType() {
-		return disclosureCategoryType;
+	public String getFcoiType() {
+		return fcoiType;
 	}
 
-	public void setDisclosureCategoryType(String disclosureCategoryType) {
-		this.disclosureCategoryType = disclosureCategoryType;
+	public void setFcoiType(String fcoiType) {
+		this.fcoiType = fcoiType;
 	}
 
 	public Timestamp getLastApprovedVersionDate() {
@@ -421,12 +399,12 @@ public class DisclosureView implements Serializable {
 		this.reviseComment = reviseComment;
 	}
 
-	public String getReviewStatusTypeCode() {
-		return reviewStatusTypeCode;
+	public String getReviewStatusCode() {
+		return reviewStatusCode;
 	}
 
-	public void setReviewStatusTypeCode(String reviewStatusTypeCode) {
-		this.reviewStatusTypeCode = reviewStatusTypeCode;
+	public void setReviewStatusCode(String reviewStatusCode) {
+		this.reviewStatusCode = reviewStatusCode;
 	}
 
 	public Integer getReviewId() {
