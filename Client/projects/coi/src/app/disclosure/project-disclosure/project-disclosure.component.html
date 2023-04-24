@@ -25,7 +25,7 @@
                                 <input [(ngModel)]="selectedProjectType" (ngModelChange)="changeProjectType()"
                                        [value]="type.description" class="me-2 cursor-pointer"
                                        type="radio" name="project-type" id="{{type?.description}}">
-                                <label class="cursor-pointer" for="{{type?.description}}">{{type?.description}}</label>
+                                <label class="cursor-pointer fw-medium" for="{{type?.description}}">{{type?.description}}</label>
                             </li>
                         </ul>
                         <div *ngIf="projectDisclosureValidation?.has('projectSelect')" class="invalid-feedback d-block">
@@ -77,43 +77,53 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="isSearchExternalProject" class="row">
+                <div *ngIf="isSearchExternalProject" class="row mt-3">
                     <div class="col-4">
                         <label class="f-14">{{selectedProjectType}} #</label>
                         <input type="text" id="proposal-no" placeholder="{{this.selectedProjectType}} No:" autocomplete="off"
-                               [(ngModel)]="manualProjectAddDetails.moduleItemId" class="form-control" />
+                               [(ngModel)]="manualProjectAddDetails.moduleItemId" class="form-control"
+                               [ngClass]="(projectDisclosureValidation?.has('proposalSearch')) ? 'is-invalid d-block' : ''"/>
+                        <div *ngIf="projectDisclosureValidation?.has('proposalSearch')" class="invalid-feedback d-block">
+                            please add a {{this.selectedProjectType}} #
+                        </div>
                     </div>
                     <div class="col-8">
                         <label class="f-14">{{selectedProjectType}} Title</label>
                         <input type="text" id="proposal-no" placeholder="{{this.selectedProjectType}} Title" autocomplete="off"
                                [(ngModel)]="manualProjectAddDetails.title" class="form-control" />
                     </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <label class="f-14">Principal Investigator</label>
-                        <app-elastic [options]="piElasticSearchOptions" [clearField]="clearPIField"
+                        <app-elastic (selectedResult)="onPISelect($event)" [options]="piElasticSearchOptions" [clearField]="clearPIField"
                             [placeHolder]="'Type here for Principal Investigator'">
                         </app-elastic>
             
                     </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <label class="f-14">Lead Unit</label>
-                        <app-endpoint-search id="prop-LU" [clearField]="clearLUField" [httpOptions]="unitHttpOptions"
+                        <app-endpoint-search (onSelect)="onLeadUnitSelect($event)" id="prop-LU" [clearField]="clearLUField" [httpOptions]="unitHttpOptions"
                             [placeHolder]="'Type here for Lead Unit'">
                         </app-endpoint-search>
                     </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <label class="f-14">Prime Sponsor</label>
-                        <app-endpoint-search [httpOptions]="sponsorSearchOptions" [clearField]="clearSponsorField"
-                            [placeHolder]="'Sponsor'">
+                        <app-endpoint-search (onSelect)="onPrimeSponsorSelect($event)" [httpOptions]="primeSponsorSearchOptions" [clearField]="clearPrimeSponsorField"
+                            [placeHolder]="'Prime Sponsor'">
+                        </app-endpoint-search>
+                    </div>
+                    <div class="col-6">
+                        <label class="f-14">Sponsor</label>
+                        <app-endpoint-search (onSelect)="onSponsorSelect($event)" [httpOptions]="sponsorSearchOptions" [clearField]="clearSponsorField"
+                                             [placeHolder]="'Sponsor'">
                         </app-endpoint-search>
                     </div>
                 </div>
                 <div *ngIf="selectedProjectType" class="fs-14-nav mt-4 text-primary" style="text-decoration: underline;cursor: pointer;" >
                     <a *ngIf="!isSearchExternalProject"
                         (click)="switchExternalProject(true);"  >Unable to find your <span class="fw-500">{{selectedProjectType}}</span>  from
-                        the List?</a>
+                        the search?</a>
                     <a *ngIf="isSearchExternalProject"
-                        (click)="switchExternalProject(false);">Back to <span class="fw-500">{{selectedProjectType}}</span> search list</a>
+                        (click)="switchExternalProject(false);">Back to <span class="fw-500">{{selectedProjectType}}</span> search.</a>
                 </div>
             </div>
             <div class="modal-footer">

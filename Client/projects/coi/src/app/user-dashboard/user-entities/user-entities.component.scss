@@ -17,10 +17,14 @@
     display: flex;
     align-items: center;
   }
+  span:not(:first-child) {
+    padding: 6px 20px !important;
+  }
 }
 
 .filter-active {
   border: 2px solid #54BF5B !important;
+  background: #F5FEF5 !important;
 }
 
 .relationship-pill {

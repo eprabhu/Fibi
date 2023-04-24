@@ -54,9 +54,13 @@
     display: flex;
     align-items: center;
   }
+  span:not(:first-child) {
+    padding: 6px 20px !important;
+  }
 }
 .filter-active {
   border: 2px solid #54BF5B !important;
+  background: #F5FEF5 !important;
 }
 
 .chin {
@@ -72,6 +76,11 @@
 
 .user-dashboard-nav {
   min-height: 42px;
+  color: #7c7c7c;
+}
+
+.light-dark-text-color {
+  color: #6A7980;
 }
 .badge {
   font-family: "Roboto", sans-serif;
@@ -81,4 +90,8 @@
 }
 .bg-success{
   background-color: #4CB57D !important; 
+}
+
+.text-blue-color {
+  color: #007DEC;
 }

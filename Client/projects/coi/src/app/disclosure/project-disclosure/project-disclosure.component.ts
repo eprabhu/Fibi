@@ -26,6 +26,7 @@ export class ProjectDisclosureComponent implements OnInit {
     isShowResultCard = false;
     clearProjectField: String;
     clearSponsorField: String;
+    clearPrimeSponsorField: String;
     clearPIField: String;
     clearLUField: String;
     manualProjectAddDetails: any = {};
@@ -35,6 +36,7 @@ export class ProjectDisclosureComponent implements OnInit {
     $subscriptions: Subscription[] = [];
     piElasticSearchOptions: any = {};
     unitHttpOptions: any = {};
+    primeSponsorSearchOptions: any = {};
     sponsorSearchOptions: any = {};
     projectTypes = [];
     selectedProjectType = null;
@@ -50,6 +52,7 @@ export class ProjectDisclosureComponent implements OnInit {
         this.piElasticSearchOptions = this._elasticConfig.getElasticForPerson();
         this.unitHttpOptions = getEndPointOptionsForDepartment();
         this.sponsorSearchOptions = getEndPointOptionsForSponsor();
+        this.primeSponsorSearchOptions = getEndPointOptionsForSponsor();
 
     }
 
@@ -59,13 +62,13 @@ export class ProjectDisclosureComponent implements OnInit {
         this.isShowResultCard = false;
         this.clearProjectField = new String('true');
         this.clearSponsorField = new String('true');
+        this.clearPrimeSponsorField = new String('true');
         this.clearPIField = new String('true');
         this.clearLUField = new String('true');
         this.manualProjectAddDetails = {};
         this.manualProjectAddDetails.moduleItemId = null;
         this.manualProjectAddDetails.title = null;
         this.projectDisclosureValidation.clear();
-
     }
 
     selectedProposal(event) {
@@ -78,18 +81,12 @@ export class ProjectDisclosureComponent implements OnInit {
     }
 
     clearSearchFields() {
-
         this.changeProjectType();
-
     }
 
     createProjectDisclosureAPI() {
         if (this.validateProject()) {
-            this.$subscriptions.push(this.coiService.createDisclosure({coiDisclosure:{
-                    coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
-                    moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this._commonService.getCurrentUserDetail('personID')
-            }}).subscribe((data: any) => {
+            this.$subscriptions.push(this.coiService.createDisclosure(this.getRO()).subscribe((data: any) => {
                 if (data) {
                     this._router.navigate(['/coi/create-disclosure/screening'], {
                         queryParams: {
@@ -101,6 +98,35 @@ export class ProjectDisclosureComponent implements OnInit {
             }, _err => {
             }));
         }
+    }
+
+    getRO() {
+        if(this.isSearchExternalProject) {
+            return {coiDisclosure:{
+                    coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
+                    moduleItemKey: this.manualProjectAddDetails.moduleItemId,
+                    personId: this._commonService.getCurrentUserDetail('personID'),
+                },[this.selectedProjectType == 'Award' ? 'coiProjectAward':'coiProjectProposal']: {
+                    coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
+                    ...this.getCreateDisclosureRO()
+                }
+            }
+        } else {
+            return {coiDisclosure:{
+                    coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
+                    moduleItemKey: this.manualProjectAddDetails.moduleItemId,
+                    personId: this._commonService.getCurrentUserDetail('personID'),
+
+                }}
+        }
+    }
+
+    getCreateDisclosureRO() {
+        const RO = {...this.manualProjectAddDetails,
+            [this.selectedProjectType == 'Award' ? 'awardNumber':'proposalNumber']: this.manualProjectAddDetails.moduleItemId
+        };
+        delete RO.moduleItemId;
+        return RO;
     }
 
     getCoiProjectTypeFromCode(description = this.selectedProjectType) {
@@ -122,6 +148,7 @@ export class ProjectDisclosureComponent implements OnInit {
         this.clearProjectField = new String('true');
         this.isShowResultCard = false;
         this.clearSponsorField = new String('true');
+        this.clearPrimeSponsorField = new String('true');
         this.clearPIField = new String('true');
         this.clearLUField = new String('true');
         this.manualProjectAddDetails = {};
@@ -160,4 +187,20 @@ export class ProjectDisclosureComponent implements OnInit {
         }));
     }
 
+    onPISelect(selectedValue: any) {
+        this.manualProjectAddDetails.piPersonId = selectedValue.prncpl_id;
+        this.manualProjectAddDetails.piName = selectedValue.full_name;
+    }
+
+    onLeadUnitSelect(selectedValue: any) {
+        this.manualProjectAddDetails.leadUnitName = selectedValue.unitDetail;
+    }
+
+    onPrimeSponsorSelect(selectedValue: any) {
+        this.manualProjectAddDetails.primeSponsorName = selectedValue.sponsorName;
+    }
+
+    onSponsorSelect(selectedValue: any) {
+        this.manualProjectAddDetails.sponsorName = selectedValue.sponsorName;
+    }
 }
