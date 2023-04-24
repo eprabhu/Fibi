@@ -71,14 +71,11 @@
     <div class="modal-content">
       <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
         <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relations</h3>
-        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body ">
         <div class="row ">
-          <p class="fs-13"><b>Significant Financial Interest Details</b>: Now Includes
-            not-for-profit
-            Entities Other than Government Entities,Institution of Higher Education and Affiliated
-            Organizations.</p>
+          <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
         </div>
         <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
           style="margin-top: 26px;margin-bottom: 16px;">

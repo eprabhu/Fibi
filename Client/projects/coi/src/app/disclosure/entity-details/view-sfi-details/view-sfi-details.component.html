@@ -82,7 +82,7 @@
               entityDetails?.address:'No Data'}}</label>
           </div>
           <div class="col-4 mt-3">
-            <label class="text-secondary fw-bold mr-10 fs-14">Last Updated by :</label>
+            <label class="fw-bold mr-10 fs-14">Last Updated by :</label>
             <label class="text-secondary fs-14">
               {{entityDetails?.updateUser !==null? (entityDetails?.updateUser +' on'):'No Data' }} {{
                 entityDetails?.updateUser !==null?(entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long'):''}}

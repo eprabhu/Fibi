@@ -12,10 +12,11 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
 import { DisclosureModule } from '../disclosure/disclosure.module';
 
 const routes: Routes = [
-    {path: '', redirectTo: 'disclosures', pathMatch: 'full'},
+    // {path: '', redirectTo: 'disclosures', pathMatch: 'full'},
     {
         path: '', component: UserDashboardComponent,
-        children: [{
+        children: [{ path: '', redirectTo: 'disclosures', pathMatch: 'full' },
+        {
             path: 'disclosures',
             loadChildren: () => import('./user-disclosure/user-disclosure.module').then(m => m.UserDisclosureModule)
         }, {
@@ -35,8 +36,7 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         MatIconModule,
         SharedModule,
-        FormsModule,
-        DisclosureModule
+        FormsModule
     ],
     providers: [CoiService, DataStoreService, SfiService]
 })

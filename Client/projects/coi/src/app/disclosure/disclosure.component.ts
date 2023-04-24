@@ -72,9 +72,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     routeToAppropriateMode() {
-        if(this.coiData.coiDisclosure.coiDisclosureStatus.disclosureStatusCode == '1' && !this.isCreateMode) {
+        if(this.coiData.coiDisclosure.coiConflictStatusType.conflictStatusCode == '1' && !this.isCreateMode) {
             this.router.navigate(['/coi/create-disclosure/screening'], {queryParamsHandling: 'preserve'});
-        } else if (this.coiData.coiDisclosure.coiDisclosureStatus.disclosureStatusCode != '1' && this.isCreateMode) {
+        } else if (this.coiData.coiDisclosure.coiConflictStatusType.conflictStatusCode != '1' && this.isCreateMode) {
             this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
         }
     }

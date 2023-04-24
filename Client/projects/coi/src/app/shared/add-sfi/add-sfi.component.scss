@@ -114,7 +114,7 @@ select option {
 }
 
 .card-height {
-    border-radius:20px 0px 0px 20px;
+    border-radius:18px 0px 0px 20px;
 }
 
 .card-border {
@@ -284,4 +284,27 @@ small {
 
 .deactivate-text {
     color: #fff !important;
+}
+
+.pl-7 {
+    padding-left: 7rem;
+}
+
+.col-custom {
+    flex: 0 0 auto;
+    width: 11.666667%;
+}
+
+.col-additional-details {
+    flex: 0 0 auto;
+    width: 12.666667%;
+}
+
+.col-entity-type {
+    flex: 0 0 auto;
+    width: 38.333333%;
+}
+
+.mr-1rem {
+    margin-right: 1rem;
 }

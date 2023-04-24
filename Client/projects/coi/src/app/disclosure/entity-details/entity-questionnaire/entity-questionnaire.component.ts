@@ -60,14 +60,11 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
 
   getDataFromService() {
     this.relationLookup = this._entityDetailsServices.lookups;
-    console.log(this.relationLookup);
 
     this.getDefinedRelationships()
     if (this.definedRelationships.length > 0) {
       this.getQuestionnaire(this.definedRelationships[0]);
     }
-    // console.log(this.relationLookup);
-
     this.removeExistingRelation()
   }
 
@@ -84,9 +81,9 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   }
   getDefinedRelationships() {
     this.$subscriptions.push(this._entityDetailsServices.$entityDetailsTest.subscribe((res: any) => {
-      this.configuration.moduleItemKey = res.coiFinancialEntity.coiFinancialEntityId;
-      this.definedRelationships = res.coiFinancialEntityDetails;
-      this.coiFinancialEntityDetail.coiFinancialEntityId = res.coiFinancialEntity.coiFinancialEntityId;
+      this.configuration.moduleItemKey = res.personEntity.personEntityId;
+      this.definedRelationships = res.personEntityRelationships;
+      // this.coiFinancialEntityDetail.coiFinancialEntityId = res.coiFinancialEntity.coiFinancialEntityId;
     }));
   }
 

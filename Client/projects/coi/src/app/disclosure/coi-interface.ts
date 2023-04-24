@@ -11,63 +11,63 @@ export class COI {
     proposalIdlinkedInDisclosure: any;
 }
 
-export interface CoiDisclosureStatus {
-    disclosureStatusCode: string;
+export interface CoiConflictStatusType {
+    conflictStatusCode: string;
     description: string;
     updateTimestamp: number;
     updateUser: string;
     isActive: boolean;
 }
 
-export interface CoiDispositionStatus {
-    dispositionStatusTypeCode: string;
+export interface CoiDispositionStatusType {
+    dispositionStatusCode: string;
     description: string;
     updateTimestamp: number;
     updateUser: string;
     isActive: boolean;
 }
 
-export interface CoiReviewStatus {
-    reviewStatusTypeCode: string;
+export interface CoiReviewStatusType {
+    reviewStatusCode: string;
     description: string;
     updateTimestamp: number;
     updateUser: string;
     isActive: boolean;
 }
 
-export interface CoiDisclosureCategoryType {
-    disclosureCategoryTypeCode: string;
+export interface CoiDisclosureFcoiType {
+    fcoiTypeCode: string;
     description: string;
     updateTimestamp: number;
     updateUser: string;
     isActive: boolean;
 }
 
-export interface CoiDisclosureSequence {
-    disclosureSequenceStatusCode: string;
-    description: string;
-    updateTimestamp: number;
-    updateUser: string;
-    isActive: boolean;
-}
+// export interface CoiDisclosureSequence {
+//     disclosureSequenceStatusCode: string;
+//     description: string;
+//     updateTimestamp: number;
+//     updateUser: string;
+//     isActive: boolean;
+// }
 
 export class CoiDisclosure {
     disclosureId: number;
     disclosureNumber: string;
-    disclosureVersionNumber: number;
+    versionNumber: number;
     personId: string;
-    disclosureStatusCode: string;
-    coiDisclosureStatus: CoiDisclosureStatus;
-    dispositionStatusTypeCode: string;
-    coiDispositionStatus: CoiDispositionStatus;
-    reviewStatusTypeCode: string;
-    coiReviewStatus: CoiReviewStatus;
-    disclosureCategoryTypeCode: string;
-    coiDisclosureCategoryType: CoiDisclosureCategoryType;
-    disclosureSequenceStatusCode: string;
-    coiDisclosureSequence: CoiDisclosureSequence;
+    conflictStatusCode: string;
+    coiConflictStatusType: CoiConflictStatusType;
+    dispositionStatusCode: string;
+    coiDispositionStatusType: CoiDispositionStatusType;
+    reviewStatusCode: string;
+    coiReviewStatusType: CoiReviewStatusType;
+    fcoiTypeCode: string;
+    coiDisclosureFcoiType: CoiDisclosureFcoiType;
+    versionStatus: string;
+    // coiDisclosureSequence: CoiDisclosureSequence;
     certificationText?: any;
-    certifiedTimestamp?: any;
+    certifiedAt?: any;
     expirationDate: number;
     certifiedBy?: any;
     createUser: string;

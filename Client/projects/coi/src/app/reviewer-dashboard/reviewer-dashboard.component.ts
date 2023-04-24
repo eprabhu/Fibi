@@ -85,7 +85,7 @@ export class ReviewerDashboardComponent implements OnInit {
 
   getDashboardDetails() {
     this.$subscriptions.push(this.$coiList.pipe(
-      switchMap(() => this.reviewerDashboardService.getCOIAdminDashboard(this.getRequestObject())))
+      switchMap(() => this.reviewerDashboardService.getCOIReviewerDashboard(this.getRequestObject())))
       .subscribe((data: any) => {
         this.result = data || [];
         if (this.result) {

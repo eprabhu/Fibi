@@ -27,9 +27,13 @@
                     Disclosure</u></p>
                 <p class="m-0 cursor-pointer" role="button" title="Click to Create Travel Disclosure"><u>Create Travel
                     Disclosure</u></p>
-                <p class="m-0 cursor-pointer" role="button" title="Click to Create SFI"><u>Create SFI</u></p>
+                <p  (click)="sfiService.isShowSfiNavBar = true" class="m-0 cursor-pointer" role="button" title="Click to Create SFI"><u>Create SFI</u></p>
             </div>
         </div>
+    </div>
+
+    <div *ngIf="sfiService.isShowSfiNavBar" class="task-nav-div" id="task-navigation-bar">
+        <app-add-sfi></app-add-sfi>
     </div>
 
     <div class="notifications mb-2">
