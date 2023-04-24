@@ -11,7 +11,7 @@ import {UserDashboardService} from "../user-dashboard.service";
 export class UserDisclosureComponent {
     searchText = '';
     currentSelected = {
-        tab: 'IN_PROGRESS',
+        tab: 'IN_PROGRESS_DISCLOSURES',
         filter: 'ALL'
     }
     dashboardRequestObject = {
@@ -21,7 +21,7 @@ export class UserDisclosureComponent {
         tabName: 'PROPOSAL_DISCLOSURES',
         isDownload: false,
         // filterType = 'All', 'FCOI', 'Project', 'OPA';
-        filterType: 'All'
+        filterType: 'ALL'
     };
     disclosureArray: any[] = [];
     filteredDisclosureArray: any[] = [];

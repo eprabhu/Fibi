@@ -1,12 +1,12 @@
 <div class="row">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
-        <div class="col-6 pe-0" *ngIf="disclosure?.disclosureCategoryTypeCode == '1'">
+        <div class="col-6 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1'">
             <div class="shadow-sm disclosure-card border rounded">
                 <div class="border-bottom d-flex disclosure-card-heading-blue px-3 py-2 rounded-top-2">
                     <div class="col"><strong class="fs-15">FCOI Disclosure</strong></div>
                     <div class="col d-flex fs-14 justify-content-between align-items-center">
                         <div><span class="fw-bold text-secondary">Discl. Status:</span> <span
-                                class="disclosure-active-pill ms-2">{{disclosure?.coiDisclosureStatus?.description}}</span>
+                                class="disclosure-active-pill ms-2">{{disclosure?.conflictStatus}}</span>
                         </div>
                         <div [queryParams]={disclosureId:disclosure.disclosureId}
                              [routerLink]="['/coi/disclosure/summary']"
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6" *ngIf="disclosure?.disclosureCategoryTypeCode == '2'">
+        <div class="col-6" *ngIf="disclosure?.fcoiTypeCode == '2'">
             <div class="shadow-sm disclosure-card border rounded">
                 <div class="border-bottom d-flex disclosure-card-heading-green rounded-top-2 px-3 py-2">
                     <div class="col"><strong class="fs-15">OPA Disclosure</strong></div>
@@ -136,11 +136,11 @@
 </div>
 <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
 <ng-container
-        *ngFor="let disclosure of filteredDisclosureArray | SearchFilter: searchText:['coiDisclosureNumber', 'disclosureCategoryType',
-        'disclosureStatus', 'dispositionStatus', 'proposalTitle', 'updateUser', 'noOfSfiInPending', 'proposalId', 'reviewStatus']">
-    <div class="bg-white border mt-2 rounded-1 shadow-sm">
-        <div class="border-bottom fs-14 p-3 text-secondary">
-            <div *ngIf="disclosure?.coiDisclosureCategoryType?.disclosureCategoryTypeCode == '3'"><span
+        *ngFor="let disclosure of filteredDisclosureArray | SearchFilter: searchText:['coiDisclosureNumber', 'fcoiType',
+        'conflictStatus', 'dispositionStatus', 'proposalTitle', 'updateUser', 'noOfSfiInPending', 'proposalId', 'reviewStatus']">
+    <div class="bg-white border mt-2 rounded-1 shadow-sm light-dark-text-color">
+        <div class="border-bottom fs-14 p-3">
+            <div *ngIf="disclosure?.fcoiTypeCode == '3'"><span
                     class="fw-bold me-2">Proposal:</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
             </div>
             <div class="d-flex my-2">
@@ -149,20 +149,20 @@
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disposition Status:</span> <span
-                        class="badge bg-{{getDispositionStatusBadge(disclosure?.disclosureDispositionCode)}} text-{{ getDispositinTextColor(disclosure?.disclosureDispositionCode)}} fs-14 pending-status-pill rounded-pill">{{disclosure?.dispositionStatus}}</span>
+                        class="badge bg-{{getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} text-{{ getDispositinTextColor(disclosure?.dispositionStatusCode)}} fs-14 pending-status-pill rounded-pill">{{disclosure?.dispositionStatus}}</span>
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Review Status:</span> <span
-                        class="badge bg-{{getReviewStatusBadge(disclosure?.reviewStatusTypeCode)}} text-{{ getReviewStatusTextColor(disclosure?.reviewStatusTypeCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.reviewStatus}}</span>
+                        class="badge bg-{{getReviewStatusBadge(disclosure?.reviewStatusCode)}} text-{{ getReviewStatusTextColor(disclosure?.reviewStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.reviewStatus}}</span>
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disclosure Status:</span> <span
-                        class="badge bg-{{getDisclosureStatusBadge(disclosure?.disclosureStatusCode)}} text-{{getDisclosureStatusText(disclosure?.disclosureStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.disclosureStatus}}</span>
+                        class="badge bg-{{getDisclosureStatusBadge(disclosure?.conflictStatusCode)}} text-{{getDisclosureStatusText(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
                 </div>
             </div>
             <div class="d-flex">
                 <div class="col">
-                    <span class="fw-bold me-2">Type:</span> {{getEventType(disclosure?.disclosureSequenceStatusCode, disclosure?.disclosureCategoryTypeCode)}}
+                    <span class="fw-bold me-2">Type:</span> {{disclosure?.versionStatus}}
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Certification Date:</span> <span
@@ -177,19 +177,19 @@
                 </div>
             </div>
         </div>
-        <div class="align-items-center chin d-flex fs-14 mx-3 text-secondary">
-            <div class="align-items-center col d-flex fs-14 text-secondary">
-                <strong class="fs-18 me-2 text-primary">{{disclosure?.noOfSfiInPending}}</strong>
+        <div class="align-items-center chin d-flex fs-14 mx-3 ">
+            <div class="align-items-center col d-flex fs-14">
+                <strong class="fs-18 me-2 text-blue-color">{{disclosure?.noOfSfiInPending}}</strong>
                 <strong>SFIs</strong>
             </div>
             <div class="col text-secondary fs-14 d-flex">
-                <ng-container *ngIf="disclosure?.coiDisclosureCategoryType?.disclosureCategoryTypeCode == '1'">
-                    <div class="align-items-center col d-flex fs-14 text-secondary">
-                        <strong class="fs-18 me-2 text-primary">{{disclosure?.numberOfProposals}}</strong>
+                <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
+                    <div class="align-items-center col d-flex fs-14">
+                        <strong class="fs-18 me-2 text-blue-color">{{disclosure?.numberOfProposals}}</strong>
                         <strong>Proposals</strong>
                     </div>
-                    <div class="align-items-center col d-flex fs-14 text-secondary">
-                        <strong class="fs-18 me-2 text-primary">{{disclosure?.numberOfAwards}}</strong>
+                    <div class="align-items-center col d-flex fs-14">
+                        <strong class="fs-18 me-2 text-blue-color">{{disclosure?.numberOfAwards}}</strong>
                         <strong>Awards</strong>
                     </div>
                 </ng-container>
@@ -200,7 +200,7 @@
                     by {{disclosure?.updateUser}}</div>
             </div>
             <div class="col d-flex justify-content-end">
-                <button *ngIf="disclosure?.coiDisclosureCategoryType?.disclosureCategoryTypeCode == '1' && disclosure?.coiDisclosureStatus?.disclosureStatusCode == '3'"
+                <button *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.conflictStatusCode == '3'"
                         class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
                     <mat-icon class="me-1">restart_alt</mat-icon>
                     Revise
