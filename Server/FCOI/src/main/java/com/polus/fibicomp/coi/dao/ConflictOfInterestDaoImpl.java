@@ -1361,7 +1361,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				coiFinancialEntityDto.setCreateTimestamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
 				coiFinancialEntityDto.setLastUpdatedOn(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 				coiFinancialEntityDto.setNoOfDisclosures(resultSet.getInt("NO_OF_DISCLOSURES"));
-				coiFinancialEntityDto.setIsActive(resultSet.getString("IS_ACTIVE"));
+				coiFinancialEntityDto.setIsActive(resultSet.getString("IS_RELATIONSHIP_ACTIVE"));
 				coiFinancialEntityDto.setNoOfProposals(resultSet.getInt("NO_OF_PROPOSALS"));
 				coiFinancialEntityDto.setNoOfAwards(resultSet.getInt("NO_OF_AWARDS"));
 				coiFinancialEntityDto.setInvolvementEndDate(resultSet.getDate("INVOLVEMENT_END_DATE"));

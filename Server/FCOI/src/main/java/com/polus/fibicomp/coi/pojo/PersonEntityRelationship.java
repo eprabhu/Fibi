@@ -30,9 +30,9 @@ public class PersonEntityRelationship implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "PERSON_ENTITY_REL_TYPE")
+	@Column(name = "PERSON_ENTITY_REL_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer personEntityRelType;
+	private Integer personEntityRelId;
 	
 	@Column(name = "PERSON_ENTITY_ID")
 	private Integer personEntityId;
@@ -71,14 +71,6 @@ public class PersonEntityRelationship implements Serializable {
 	@LastModifiedBy
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
-
-	public Integer getPersonEntityRelType() {
-		return personEntityRelType;
-	}
-
-	public void setPersonEntityRelType(Integer personEntityRelType) {
-		this.personEntityRelType = personEntityRelType;
-	}
 
 	public Integer getPersonEntityId() {
 		return personEntityId;
@@ -166,6 +158,14 @@ public class PersonEntityRelationship implements Serializable {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+
+	public Integer getPersonEntityRelId() {
+		return personEntityRelId;
+	}
+
+	public void setPersonEntityRelId(Integer personEntityRelId) {
+		this.personEntityRelId = personEntityRelId;
 	}
 
 }
