@@ -1,6 +1,6 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { slideInOut, fadeDown, slideHorizontalOverlay, slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
+import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
 
@@ -52,7 +52,7 @@ export class RelationshipComponent {
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       this.proposalArray = data.awards;
       data.proposals.every(ele => this.proposalArray.push(ele));
-      this.coiStatusList = data.coiDisclosureDetailStatuses;
+      this.coiStatusList = data.coiConflictStatusTypes;
     });
   }
 

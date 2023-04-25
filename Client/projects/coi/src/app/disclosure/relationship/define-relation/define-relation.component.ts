@@ -69,6 +69,9 @@ export class DefineRelationComponent implements OnInit {
     if (this.isShowDetails) {
       this.relationShipOverlay.nativeElement.style.display = 'block';
       document.documentElement.classList.add('cdk-global-scrollblock');
+      setTimeout(() => {
+        document.getElementById("close-define-relation").focus();
+      })
     } else {
       this.relationShipOverlay.nativeElement.style.display = 'none';
       document.documentElement.classList.remove('cdk-global-scrollblock');
