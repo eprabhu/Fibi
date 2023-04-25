@@ -374,4 +374,16 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getPersonEntityDetails(personEntityId);
 	}
 	
+	@GetMapping("/getRelationshipLookup/{tabName}")
+	public ResponseEntity<Object> getRelatioshipDetails(@PathVariable("tabName") String tabName) {
+		logger.info("Requesting for getRelatioshipDetails");
+		return conflictOfInterestService.getRelatioshipDetails(tabName);
+	}
+	
+	@PostMapping("/getPersonEntityRelationship")
+	public ResponseEntity<Object> getPersonEntityRelationship(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for getPersonEntityRelationship");
+		return conflictOfInterestService.getPersonEntityRelationship(vo);
+	}
+	
 }

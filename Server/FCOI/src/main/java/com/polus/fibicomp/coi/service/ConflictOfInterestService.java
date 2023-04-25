@@ -331,4 +331,8 @@ public interface ConflictOfInterestService {
 	public ResponseEntity<Object> getCoiEntityDetails(Integer personEntityId);
 
 	public ResponseEntity<Object> getPersonEntityDetails(Integer personEntityId);
+
+	ResponseEntity<Object> getRelatioshipDetails(String tabName);
+
+	ResponseEntity<Object> getPersonEntityRelationship(ConflictOfInterestVO vo);
 }

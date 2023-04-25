@@ -146,6 +146,10 @@ public class ConflictOfInterestVO {
 	private CoiProjectProposal coiProjectProposal;
 	
 	private CoiProjectAward coiProjectAward;
+	
+	private String tabName;
+	
+	private String disclosureTypeCode;
 
 	public CoiDisclosure getCoiDisclosure() {
 		return coiDisclosure;
@@ -705,6 +709,22 @@ public class ConflictOfInterestVO {
 
 	public void setCoiProjectAward(CoiProjectAward coiProjectAward) {
 		this.coiProjectAward = coiProjectAward;
+	}
+
+	public String getTabName() {
+		return tabName;
+	}
+
+	public void setTabName(String tabName) {
+		this.tabName = tabName;
+	}
+
+	public String getDisclosureTypeCode() {
+		return disclosureTypeCode;
+	}
+
+	public void setDisclosureTypeCode(String disclosureTypeCode) {
+		this.disclosureTypeCode = disclosureTypeCode;
 	}
 	
 }
