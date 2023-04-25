@@ -9,7 +9,7 @@
 
 <div class="card" #relationShipOverlay [class.overlay]="isShowDetails">
   <div @enterAnimation *ngIf="isShowDetails" class="row fixed-tree">
-    <div class="close shadow-medium" (click)="hideSfiNavBar()">
+    <div tabindex="-1" id = "close-define-relation" class="close shadow-medium" (click)="hideSfiNavBar()">
       <img src="{{deployMap}}assets/images/close.svg" alt="close button">
     </div>
     <div class="relationship-content">
@@ -59,13 +59,13 @@
                   <br>
                   <div class="col-2">
                     <span class="mandatory">*</span>
-                    <label class="fw-500">COI Status
-                      <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Update your conflict status." data-bs-placement="top">
+                    <label for="COI_Status_dropdown" class="fw-500">COI Status
+                      <span class="d-inline-block" data-bs-toggle="tooltip" title="Update your conflict status." data-bs-placement="top">
                         <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
                       </span>
                     </label>
                     <div>
-                      <select [(ngModel)]="coiStatusCode"
+                      <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode"
                       class="form-control select-default">
                       <option [value]=null>--Select--</option>
                       <option [value]="status.discDetStatusCode" *ngFor="let status of coiStatusList">
@@ -77,15 +77,15 @@
                     </span>
                   </div>
                   <div class="col-7">
-                    <label class="fw-500">Define relationship between SFIs and Projects
-                      <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Briefly describe the relationship between the project and SFI." data-bs-placement="top">
+                    <label for="coi_description" class="fw-500">Define relationship between SFIs and Projects
+                      <span class="d-inline-block" data-bs-toggle="tooltip" title="Briefly describe the relationship between the project and SFI." data-bs-placement="top">
                         <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon></span>
                     </label>
-                    <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt"
+                    <textarea class="form-control comment-text-box textarea-height" id="coi_description"
                     [(ngModel)]="coiDescription" appAutoGrow rows="1"
                     placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
                   </div>
-                  <div class="col-3 button-align" *ngIf="newArray.length > 0">
+                  <div class="col-3 button-align" *ngIf="newArray?.length > 0">
                     <!-- data-bs-toggle="modal" data-bs-target="#applyToAllConfirmationModal" -->
                 <button type="button" class="btn btn-outline-secondary mr-10 btn-sm" id="clear all entities coi status and description" (click)="openClearConfirmationModal()">Clear All</button>
                 <button type="button" class="btn btn-primary btn-sm" id="apply common coi status and description and save"(click)="openSaveAllConfirmationModal()">Apply & Save</button>
@@ -93,7 +93,7 @@
                 </div>
               </div>
               <div class="fixed-header">
-                <table class="table m-2 fs-14 fw-medium" *ngIf="newArray.length > 0">
+                <table class="table m-2 fs-14 fw-medium" *ngIf="newArray?.length > 0">
                   <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                   <thead class="fixed-th">
                       <tr class="header-border table-secondary">
@@ -138,7 +138,7 @@
                   </tbody>
                 </table>
               </div>
-                <div *ngIf="newArray.length == 0">
+                <div *ngIf="newArray?.length == 0">
                   <app-no-information> </app-no-information>
                 </div>
         </div>

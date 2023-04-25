@@ -183,6 +183,13 @@
   font-size    : 14px;
 }
 
+.close:focus, .close:hover  {
+    background-color: var(--bs-form-control-bg);
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
 .close img {
   width    : 17px;
   position : absolute;

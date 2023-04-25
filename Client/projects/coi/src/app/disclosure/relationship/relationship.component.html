@@ -1,4 +1,4 @@
-<div class="form-group col-lg-12 col-md-12 col-12 d-flex mx-auto">
+<div class="form-group col-lg-12 col-md-12 col-12 d-flex mx-auto" *ngIf="proposalArray.length>1">
   <input type="text" placeholder="Search by Module Id, Module Name, PI, Status, Sponsor, Prime Sponsor  "
       class="searchInput form-control" [(ngModel)]="searchText">
       <a class="searchButton">
