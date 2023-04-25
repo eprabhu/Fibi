@@ -108,8 +108,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
         this.clearRelationModal();
         this.isSave = false;
       }));
-    } else {
-      hideModal('addRelationshipModal');
     }
   }
 

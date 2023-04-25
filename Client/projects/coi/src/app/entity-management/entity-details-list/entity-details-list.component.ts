@@ -44,11 +44,12 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
 
 
   ngOnInit() {
-    this.entityManagementService.relationshipDashboardRequest.filterType = 'PERSON';
+    this.entityManagementService.relationshipDashboardRequest.filterType = 'Person';
     this.getRelationshipEntityList();
     this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
     this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
-    this.currentTab('Person');
+    this.$relationshipEntityList.next();
+
   }
 
   ngOnDestroy() {
@@ -71,20 +72,21 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
     const id = parseInt(this._route.snapshot.queryParamMap.get('entityManageId'));
     this.entityManagementService.relationshipDashboardRequest.id = id;
     this.$subscriptions.push(
-      // this.$relationshipEntityList.pipe(
-      // switchMap(()=>
+      this.$relationshipEntityList.pipe(
+      switchMap(()=>
       this.entityManagementService.getPersonEntityDashboard(this.entityManagementService.relationshipDashboardRequest)
-        // ))
+        ))
         .subscribe((res: any) => {
-          this.entityDetails = res.personEntityList;
+          this.entityDetails = res.data || [];
+          this.resultCount = res.count;
         }));
   }
 
   currentTab(tab) {
     this.resetAdvanceSearchFields();
     this.entityManagementService.relationshipDashboardRequest.filterType = tab;
-    this.getRelationshipEntityList();
-    // this.$relationshipEntityList.next();
+    // this.getRelationshipEntityList();
+    this.$relationshipEntityList.next();
   }
 
 
@@ -104,7 +106,8 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
   advanceSearchRelationships() {
     this.entityManagementService.relationshipDashboardRequest.property1 = parseDateWithoutTimestamp(this.advanceSearchDates.startDate);
     this.entityManagementService.relationshipDashboardRequest.property2 = parseDateWithoutTimestamp(this.advanceSearchDates.endDate);
-    this.getRelationshipEntityList();
+    // this.getRelationshipEntityList();
+    this.$relationshipEntityList.next();
 
   }
 
@@ -122,6 +125,8 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
 
   clearAdvanceSearch() {
     this.resetAdvanceSearchFields();
-    this.getRelationshipEntityList();
+    // this.getRelationshipEntityList();
+    this.$relationshipEntityList.next();
+
   }
 }

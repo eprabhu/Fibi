@@ -37,7 +37,7 @@
     </div>
   </div>
   <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
-    <app-add-new-entity-details [coiEntityManageId]="entityManageId" [isEditEntity]="true"></app-add-new-entity-details>
+    <app-add-new-entity-details [coiEntityManageId]="entityManageId" [isEditEntity]="true" (updatedDataStore)="updatedEntityDetails($event)"></app-add-new-entity-details>
   </div>
   <div class="card-body">
     <div class="row d-flex">

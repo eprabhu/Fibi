@@ -55,4 +55,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
       }
     }));
   }
+  updatedEntityDetails(event) {
+    if(event) {
+      this.getEntityDetails(this.entityManageId);
+    }
+  }
 }

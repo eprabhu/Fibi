@@ -87,13 +87,14 @@
               </div>
               <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline  ">
                 <input type="radio" name="relation" class="form-check-input text-secondary"
-                  [value]="relation?.financialEntityRelTypeCode"
-                  [(ngModel)]="coiFinancialEntityDetail.financialEntityRelTypeCode" (ngModelChange)="setRelationship()">
+                  [value]="relation?.relationshipTypeCode"
+                  [(ngModel)]="coiFinancialEntityDetail.relationshipTypeCode" (ngModelChange)="setRelationship()" [ngClass]="relationValidationMap.has('relationRadio')?'is-invalid d-block' : ''">
                 <label class="text-secondary r-title fs-14">
                   {{relation?.description}}
                 </label>
               </div>
             </div>
+            <div *ngIf="relationValidationMap.has('relationRadio')" class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}</div>
           </div>
         </div>
         <ng-template #noData>
