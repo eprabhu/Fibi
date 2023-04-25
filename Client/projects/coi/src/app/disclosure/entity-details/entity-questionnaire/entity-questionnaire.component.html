@@ -79,22 +79,21 @@
         </div>
         <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
           style="margin-top: 26px;margin-bottom: 16px;">
-          <div class=" border "style="padding:28px ;">
+          <div class=" border "style="padding: 25px ; padding-left:0px ;">
             <div style="display: flex; flex-direction: row; ">
               <div class="form-check form-check-inline">
                 <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation:
                   </b></label>
               </div>
-              <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline  ">
+              <div *ngFor="let relation of relationLookup; " class="form-check form-check-inline  ">
                 <input type="radio" name="relation" class="form-check-input text-secondary"
-                  [value]="relation?.relationshipTypeCode"
-                  [(ngModel)]="coiFinancialEntityDetail.relationshipTypeCode" (ngModelChange)="setRelationship()" [ngClass]="relationValidationMap.has('relationRadio')?'is-invalid d-block' : ''">
+                  [value]="relation?.isActive" 
+                  [(ngModel)]="coiFinancialEntityDetail.financialEntityRelTypeCode" (ngModelChange)="setRelationship()">
                 <label class="text-secondary r-title fs-14">
                   {{relation?.description}}
                 </label>
               </div>
             </div>
-            <div *ngIf="relationValidationMap.has('relationRadio')" class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}</div>
           </div>
         </div>
         <ng-template #noData>
