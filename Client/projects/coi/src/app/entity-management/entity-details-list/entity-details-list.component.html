@@ -124,14 +124,14 @@
       </thead>
       <tbody class="bg-white">
         <tr class="border" *ngFor="let entityListData of entityDetails;let i=index">
-          <td class="fs-13 text-primary"><u>{{entityListData?.person?.fullName}}</u></td>
+          <td class="fs-13 text-primary"><u>{{entityListData?.personFullName}}</u></td>
           <td class="fs-13 text-secondary">{{entityListData?.person?.unit?.unitName}}</td>
           <td class="fs-13 text-secondary">{{entityListData?.coiEntity?.entityName}}</td>
           <td class="fs-13 text-secondary">{{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}</td>
           <td class="fs-13 text-secondary">{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</td>
           <td class="fs-13 text-secondary"><span
-              [ngClass]="entityListData.coiEntity?.isActive?'status-active-pill':'status-inactive-pill'">
-              {{entityListData?.coiEntity?.isActive?'Active':'Inactive'}}
+              [ngClass]="entityListData.isRelationshipActive?'status-active-pill':'status-inactive-pill'">
+              {{entityListData?.isRelationshipActive?'Active':'Inactive'}}
             </span>
           </td>
           <td>

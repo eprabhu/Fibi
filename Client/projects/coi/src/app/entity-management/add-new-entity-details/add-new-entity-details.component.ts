@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { EntityManagementService } from '../entity-management.service';
 import { getEndPointOptionsForCountry } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
@@ -49,7 +49,7 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
       'riskCategoryCode': '3'
     }
   ]
-
+  @Output() updatedDataStore = new EventEmitter<boolean>();
 
   constructor(public entityManagementService: EntityManagementService, private _commonService: CommonService) { }
 
@@ -72,7 +72,11 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
       this.$subscriptions.push(this.entityManagementService.
         saveOrUpdateCOIEntity(this.entityDetails).subscribe((res: EntityDetails) => {
           this.entityDetails = res;
+          if (this.isEditEntity) {
+            this.updatedDataStore.emit(true);
+          }
           this.entityManagementService.isShowEntityNavBar = false;
+
           // this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity?'Update ':'Created '}Entity Successfully completed.`);
         }, _err => {
           // this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');

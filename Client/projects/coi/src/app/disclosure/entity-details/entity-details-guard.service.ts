@@ -33,8 +33,6 @@ export class EntityDetailsGuardService implements CanActivate {
   getCoiEntityRelationships(ENTITY_ID) {
     this._entityDetailsService.getRelationshipEntityDetails(ENTITY_ID).subscribe((res: any) => {
       this._entityDetailsService.$relationshipsDetails.next(res);
-      console.log('getCoiEntityRelationships', res);
-
     })
   }
 }
