@@ -60,6 +60,7 @@ import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -97,8 +98,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public CoiDisclosure loadDisclosure (Integer coiDisclosureOld) {
-		return hibernateTemplate.get(CoiDisclosure.class, coiDisclosureOld);
+	public CoiDisclosure loadDisclosure (Integer disclosureId) {
+		return hibernateTemplate.get(CoiDisclosure.class, disclosureId);
 	}
 
 	@Override
@@ -872,22 +873,22 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public List<CoiDisclosure> getActiveDisclosure(String personId) {
-		List<CoiDisclosure> CoiDisclosureOlds = new ArrayList<>();
+		List<CoiDisclosure> CoiDisclosures = new ArrayList<>();
 		try {
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<CoiDisclosure> query = builder.createQuery(CoiDisclosure.class);
-			Root<CoiDisclosure> rootCoiDisclosureOld = query.from(CoiDisclosure.class);
-			query.where(builder.and(builder.equal(rootCoiDisclosureOld.get("personId"), personId),
-//					builder.equal(rootCoiDisclosureOld.get("disclosureCategoryTypeCode"), 1),
-					builder.equal(rootCoiDisclosureOld.get("versionStatus"), 2)));
+			Root<CoiDisclosure> rootCoiDisclosure = query.from(CoiDisclosure.class);
+			query.where(builder.and(builder.equal(rootCoiDisclosure.get("personId"), personId),
+					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1"),
+					builder.equal(rootCoiDisclosure.get("versionStatus"), "Active")));
 			CoiDisclosure coiDisclosure = session.createQuery(query).getSingleResult();
 			coiDisclosure.setNumberOfSFI(getNumberOfSFIBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
-			CoiDisclosureOlds.add(coiDisclosure);
+			CoiDisclosures.add(coiDisclosure);
 		} catch (Exception ex) {
-			CoiDisclosureOlds = null;
+			CoiDisclosures = null;
 		}
-		return CoiDisclosureOlds;
+		return CoiDisclosures;
 	}
 
 	@Override
@@ -895,9 +896,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
-		Root<CoiDisclEntProjDetails> rootCoiDisclosureOldDetails = query.from(CoiDisclEntProjDetails.class);
-		query.where(builder.equal(rootCoiDisclosureOldDetails.get("disclosureDetailsId"), disclosureId));
-		query.multiselect(builder.countDistinct(rootCoiDisclosureOldDetails.get("coiFinancialEntityId")));
+		Root<CoiDisclEntProjDetails> rootCoiDisclosureDetails = query.from(CoiDisclEntProjDetails.class);
+		query.where(builder.equal(rootCoiDisclosureDetails.get("disclosureDetailsId"), disclosureId));
+		query.multiselect(builder.countDistinct(rootCoiDisclosureDetails.get("disclosureDetailsId")));
 		Long numberOfSFI = session.createQuery(query).getSingleResult();
 		return numberOfSFI.intValue();
 	}
@@ -2071,4 +2072,28 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			throw new ApplicationException("Unable to fetch data", ex, Constants.JAVA_ERROR);
 		}
 	}
+	
+	@Override
+	public List<ValidPersonEntityRelType> getRelatioshipDetails(String disclosureTypeCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ValidPersonEntityRelType> query = builder.createQuery(ValidPersonEntityRelType.class);
+		Root<ValidPersonEntityRelType> rootValidPersonEntityRelType = query.from(ValidPersonEntityRelType.class);
+		query.where(builder.equal(rootValidPersonEntityRelType.get("disclosureTypeCode"), disclosureTypeCode));
+		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public List<PersonEntityRelationship> getRelatioshipDetails(ConflictOfInterestVO vo) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
+		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
+		query.where(builder.and(
+			    builder.equal(rootPersonEntityRelationship.get("personEntityId"), vo.getPersonEntityId()),
+			    builder.equal(rootPersonEntityRelationship.get("validPersonEntityRelType").get("disclosureTypeCode"), vo.getDisclosureTypeCode())
+			));
+		return session.createQuery(query).getResultList();
+	}
+	
 }
