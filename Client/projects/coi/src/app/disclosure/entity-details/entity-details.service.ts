@@ -25,8 +25,8 @@ export class EntityDetailsService {
     return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
   }
 
-  addSFILookUp() {
-    return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
+  addSFILookUp(tabName) {
+    return this._http.get(`${this._commonService.baseUrl}/getRelationshipLookup/${tabName}`);
   }
 
   getCoiEntityDetails(personEntityId) {
@@ -35,6 +35,10 @@ export class EntityDetailsService {
 
   getRelationshipEntityDetails(personEntityId) {
     return this._http.get(`${this._commonService.baseUrl}/getPersonEntityDetails/${personEntityId}`);
+  }
+
+  getPersonEntityRelationship(params){
+    return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship',params)
   }
 
 }

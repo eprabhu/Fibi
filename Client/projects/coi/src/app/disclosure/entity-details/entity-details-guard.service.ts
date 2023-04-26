@@ -10,7 +10,7 @@ export class EntityDetailsGuardService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
       const ENTITY_ID = route.queryParamMap.get('entityId');
-      this.getSfiLookUp();
+      // this.getSfiLookUp();
       this._entityDetailsService.getSFIDetails(ENTITY_ID).subscribe((res: any) => {
         this._entityDetailsService.$entityDetailsTest.next(res);
       // this.getCoiEntityDetails(ENTITY_ID);
@@ -19,11 +19,11 @@ export class EntityDetailsGuardService implements CanActivate {
       })
     });
   }
-  getSfiLookUp() {
-    this._entityDetailsService.addSFILookUp().subscribe((res: any) => {
-      this._entityDetailsService.lookups = res.personEntityRelType;
-    });
-  }
+  // getSfiLookUp() {
+  //   this._entityDetailsService.addSFILookUp().subscribe((res: any) => {
+  //     this._entityDetailsService.lookups = res.personEntityRelType;
+  //   });
+  // }
 
 //    getCoiEntityDetails(ENTITY_ID) {
 //     this._entityDetailsService.getCoiEntityDetails(ENTITY_ID).subscribe((res: any) => {
