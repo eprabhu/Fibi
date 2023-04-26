@@ -8,7 +8,7 @@ import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../..
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { getDateObjectFromTimeStamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 
 export interface EndpointOptions {
   contextField: string;
