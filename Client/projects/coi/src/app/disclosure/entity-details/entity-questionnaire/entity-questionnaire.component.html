@@ -1,19 +1,19 @@
 <div class="mt-4">
   <div *ngIf="definedRelationships?.length" class="container-fluid">
     <nav class="border-nav bg-white border d-flex fs-15 fw-bold mt-3 shadow user-dashboard-nav">
-      <div (click)="currentSelected.tab = 'Financial'"
-        [class.bg-active]="currentSelected.tab === 'Financial'?'active':''"
+      <div (click)="currentSelected.tab = 'FINANCIAL'"
+        [class.bg-active]="currentSelected.tab === 'FINANCIAL'?'active':''"
         class="left-curve align-items-end d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab === 'Financial'?'active':''" class="pb-3 active">Financial</span>
+        <span [class.active]="currentSelected.tab === 'FINANCIAL'?'active':''" class="pb-3 active">Financial</span>
       </div>
-      <div (click)="currentSelected.tab = 'Commitment'"
-        [class.bg-active]="currentSelected.tab === 'Commitment'?'active':''"
+      <div (click)="currentSelected.tab = 'COMMITMENT'"
+        [class.bg-active]="currentSelected.tab === 'COMMITMENT'?'active':''"
         class="align-items-end d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab === 'Commitment'?'active':''" class="pb-3 active">Commitment</span>
+        <span [class.active]="currentSelected.tab === 'COMMITMENT'?'active':''" class="pb-3 active">Commitment</span>
       </div>
-      <div (click)="currentSelected.tab = 'Travel'" [class.bg-active]="currentSelected.tab === 'Travel'?'active':''"
+      <div (click)="currentSelected.tab = 'TRAVEL'" [class.bg-active]="currentSelected.tab === 'TRAVEL'?'active':''"
         class="right-curve align-items-end d-flex navigation-icons text-secondary px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab === 'Travel'?'active':''" class="pb-3 active">Travel</span>
+        <span [class.active]="currentSelected.tab === 'TRAVEL'?'active':''" class="pb-3 active">Travel</span>
       </div>
     </nav>
   </div>
@@ -85,12 +85,13 @@
                 <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation:
                   </b></label>
               </div>
-              <div *ngFor="let relation of relationLookup; " class="form-check form-check-inline  ">
+              <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
+                <!-- {{relation | json }} -->
                 <input type="radio" name="relation" class="form-check-input text-secondary"
-                  [value]="relation?.isActive" 
-                  [(ngModel)]="coiFinancialEntityDetail.financialEntityRelTypeCode" (ngModelChange)="setRelationship()">
+                  [value]="relation?.personEntityRelType?.relationshipTypeCode" [(ngModel)]="coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode"
+                  (ngModelChange)="setRelationship()" [ngClass]="relationValidationMap.has('relationRadio')?'is-invalid d-block' : ''">
                 <label class="text-secondary r-title fs-14">
-                  {{relation?.description}}
+                  {{relation?.personEntityRelType?.description}}
                 </label>
               </div>
             </div>

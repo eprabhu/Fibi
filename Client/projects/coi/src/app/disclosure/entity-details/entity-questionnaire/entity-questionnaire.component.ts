@@ -4,7 +4,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
 import { EntityDetailsService } from '../entity-details.service';
 import { hideModal, openModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { CoiFinancialEntityDetail } from '../../sfi/add-sfi.interface';
+import { EntityDetail } from '../../sfi/add-sfi.interface';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
@@ -31,14 +31,15 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   isAddRelationButtonToggled = false;
   activeRelationship: any = 0;
   currentSelected = {
-    tab: 'Financial'
+    tab: 'FINANCIAL'
   }
   isShowRelationshipModal = false;
-  coiFinancialEntityDetail: CoiFinancialEntityDetail = new CoiFinancialEntityDetail();
+  coiFinancialEntityDetail: EntityDetail = new EntityDetail();
   isSave = false;
   relationValidationMap = new Map();
   isEditMode = false;
   $subscriptions: Subscription[] = [];
+  test:any;
 
 
   constructor(private _commonService: CommonService, private _router: Router,
@@ -59,13 +60,18 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   }
 
   getDataFromService() {
-    this.relationLookup = this._entityDetailsServices.lookups;
-
-    this.getDefinedRelationships()
+    this.getRelationshipLookUp();
+    this.getDefinedRelationships();
     if (this.definedRelationships.length > 0) {
       this.getQuestionnaire(this.definedRelationships[0]);
     }
-    this.removeExistingRelation()
+    this.removeExistingRelation();
+  }
+
+  getRelationshipLookUp() {
+    this.$subscriptions.push(this._entityDetailsServices.addSFILookUp(this.currentSelected.tab).subscribe((res: any) => {
+      this.relationLookup = res.validPersonEntityRelTypes;
+    }));
   }
 
   getSaveEvent(_event) {
@@ -99,7 +105,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
       const REQ_BODY = {
         "questionnaireAnsHeaderId": null,
         "personEntityId": this._activatedRoute.snapshot.queryParamMap.get('entityId'),
-        "validPersonEntityRelTypeCode": this.coiFinancialEntityDetail.relationshipTypeCode
+        "validPersonEntityRelTypeCode": this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode
       }
       this.$subscriptions.push(this._entityDetailsServices.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
         this.definedRelationships.push(res);
@@ -121,7 +127,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
 
   setRelationship() {
     this.coiFinancialEntityDetail.personEntityRelType = this.relationLookup.find(
-      ele => ele.relationshipTypeCode === this.coiFinancialEntityDetail.relationshipTypeCode);
+      ele => ele.personEntityRelType.relationshipTypeCode === this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode);
   }
 
 
@@ -136,7 +142,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   clearRelationModal() {
     hideModal('addRelationshipModal');
     this.coiFinancialEntityDetail.personEntityRelType = null;
-    this.coiFinancialEntityDetail.relationshipTypeCode = null;
+    this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode = null;
   }
   private removeExistingRelation() {
     if (this.definedRelationships.length) {
@@ -148,7 +154,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   }
   validateRelationship() {
     this.relationValidationMap.clear();
-    if (!this.coiFinancialEntityDetail.relationshipTypeCode) {
+
+    if (!this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode) {
       this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
     }
     return this.relationValidationMap.size === 0 ? true : false;
