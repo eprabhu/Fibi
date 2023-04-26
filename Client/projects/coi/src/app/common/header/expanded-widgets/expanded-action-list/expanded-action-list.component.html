@@ -7,10 +7,10 @@
             <span>
                 <ul class="nav nav-pills mb-0 hand-cursor">
                     <li class="nav-item pt-2" (click)="inboxTab = 'PENDING';getActionList(false);isInboxInfo = true;">
-                        <a class="nav-link" [ngClass]="{active:(inboxTab == 'PENDING')}">Pending</a>
+                        <a class="nav-link nav-item " [ngClass]="{active:(inboxTab == 'PENDING')}">Pending</a>
                     </li>
                     <li class="nav-item pt-2" (click)="inboxTab = 'PROCESSED'; getActionList(true);isInboxInfo = true;">
-                        <a class="nav-link" [ngClass]="{active:(inboxTab == 'PROCESSED')}">Processed</a>
+                        <a class="nav-link nav-item " [ngClass]="{active:(inboxTab == 'PROCESSED')}">Processed</a>
                     </li>
                     <li class="ml-2 pt-2">
                         <a class="switch-view px-3 py-2" (click)="viewInboxSearch = !viewInboxSearch;"><i
@@ -20,8 +20,8 @@
                         <a class="switch-view px-3 py-2" (click)="clearInboxSearchField();getInboxTab()">
                             <i class="fa fa-refresh" aria-hidden="true" title="Refresh"></i></a>
                     </li>
-                    <li class="ml-3">
-                        <button type="button" class="btn more-btn" [routerLink]="['fibi/dashboard']"
+                    <li class="ml-3 Back-to-Award-List ">
+                        <button type="button" class="btn more-btn" [routerLink]="['/coi/user-dashboard']"
                             title="Back to Award List"><i class="fa fa-reply" aria-hidden="true"></i></button>
                     </li>
                 </ul>
@@ -41,9 +41,9 @@
         </button>
     </div>
     <div *ngIf="viewInboxSearch" class="card inbox-card">
-        <button type="button" id="modal-close" class="close no-outline mr-2" data-dismiss="modal"
+        <button type="button" id="modal-close" class="btn no-outline " data-dismiss="modal"
             (click)="viewInboxSearch = false" aria-label="Close">
-            <span class="d-block" aria-hidden="true">&times;</span>
+            <span class="d-block modal-close" aria-hidden="true">&times;</span>
         </button>
         <div class="card-content">
             <div class="card-body">
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     <div class="text-right col-12 mt-3">
-                        <button id="adv-search-clear-grant" class="btn btn-secondary btn-sm btn-xs mr-sm-2 mr-0"
+                        <button id="adv-search-clear-grant" class="btn btn-secondary btn-sm btn-xs mr-sm-2 me-3"
                             (click)="clearInboxSearchField();getInboxTab()">Clear</button>
                         <button id="adv-search-grant" class="btn btn-primary btn-sm btn-xs"
                             (click)="getInboxTab()">Search</button>

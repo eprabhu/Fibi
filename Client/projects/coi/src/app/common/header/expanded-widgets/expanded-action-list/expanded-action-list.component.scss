@@ -40,8 +40,6 @@ table {
     border-top: none !important;
 }
 .switch-view {
-    color: #9ea3a9 !important;
-    background: #dddfe2 !important;
     border-radius: 3px;
     display: inline-block;
 }
@@ -64,21 +62,19 @@ table {
 .switch-view:hover i {
     cursor: pointer;
     border-radius: 3px;
-    color: #5d5e5f !important;
+    color: #0056b3 !important;
 }
-
-.nav-pills .nav-item:hover a.active {
+.nav-pills.nav-item:hover a.active {
     color: #fff;
 }
-
 .py-25 {
     padding-top: .6rem;
     padding-bottom: .6rem;
 }
-
 .nav-pills .nav-link {
-    font-weight: 400;
+    font-weight: 700;
     color: #007bff;
+    color: black;
 }
 .nav-pills .nav-link.active {
     color: #fff;
@@ -90,6 +86,20 @@ table {
 .no-outline {
     outline: 0em;
     position: absolute;
-    right: 0;
+    right: 12px;
     z-index: 1;
+    padding: 0px;
+}
+.Back-to-Award-List :hover {
+    background-color: #949494 !important;
+    color: rgb(250, 250, 250) !important;
+}
+.modal-close {
+    font-size: 28px;
+    font-weight: 700;
+    color: #48647f;
+}
+.modal-close:hover {
+   color: #aaa;
+   opacity: 0.9;
 }
