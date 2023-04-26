@@ -89,6 +89,8 @@ public class QuestionnaireDataBus {
 	private String ruleId;
 
 	private Boolean rulePassed;
+	
+	private String questionnaireMode;
 
 	public QuestionnaireDataBus() {
 		moduleSubItemCodes = new ArrayList<>();
@@ -412,6 +414,14 @@ public class QuestionnaireDataBus {
 
 	public void setRulePassed(Boolean rulePassed) {
 		this.rulePassed = rulePassed;
+	}
+
+	public String getQuestionnaireMode() {
+		return questionnaireMode;
+	}
+
+	public void setQuestionnaireMode(String questionnaireMode) {
+		this.questionnaireMode = questionnaireMode;
 	}
 
 }
