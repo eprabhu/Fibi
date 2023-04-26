@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
+import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
@@ -640,4 +641,12 @@ public interface ConflictOfInterestDao {
 	public List<ValidPersonEntityRelType> getRelatioshipDetails(String tabName);
 
 	public List<PersonEntityRelationship> getRelatioshipDetails(ConflictOfInterestVO vo);
+
+	public CoiReviewStatusType getReviewStatusByCode(String reviewStatusPending);
+
+	public CoiRiskCategory getRiskCategoryStatusByCode(String riskCategoryLow);
+
+	public PersonEntityRelationship getPersonEntityRelationshipByPersonEntityRelId(Integer personEntityRelId);
+
+	public ValidPersonEntityRelType getValidPersonEntityRelTypeByTypeCode(Integer validPersonEntityRelTypeCode);
 }
