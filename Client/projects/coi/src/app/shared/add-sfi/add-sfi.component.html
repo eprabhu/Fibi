@@ -5,12 +5,12 @@
       <img src="{{deployMap}}assets/images/close.svg" alt="close button">
     </div>
     <div class="tool-kit-body card-height scrollable-table">
-      <div class="card mb-3 card-height">
-        <div class="card-header px-4 card-border">
+      <div class="card card-height">
+        <div class="card-header px-4">
           <h5 class="card-title review-title">
             <div class="justify-content-between d-flex align-items-center">
               <div class="fs-16">Significant Financial Interest </div>
-              <button class=" align-items-center d-flex btn btn-primary mt-0 py-1 px-3 h-100 fs-16 pt-1"
+              <button class=" align-items-center d-flex btn btn-primary mt-0 py-1 h-100 fs-16 pt-1"
                 [queryParams]="{mode:'edit'}" title="Create SFI" (click)="createSFI();">
                 <mat-icon class="fs-4 me-2 material-icons align-items-center d-flex">save</mat-icon>
                 Create SFI
@@ -19,12 +19,12 @@
           </h5>
         </div>
 
-        <div class="container-fluid">
+        <div class="container-fluid card-color">
           <div class="card shadow-sm border mt-2" tabindex="-1">
 
         <div class="row px-4">
-          <div class="col-custom d-flex px-3 mt-2">
-            <label class="d-block px-3 fw-500 fs-14" for="Entity-Name">Entity Name<span class="mandatory px-2">*</span>
+          <div class="col-custom d-flex mt-2">
+            <label class="d-block font fs-14 px-1 pt-2" for="Entity-Name">Entity Name<span class="mandatory px-2">*</span>
             </label>
           </div>
           <div class="col mt-3">
@@ -33,22 +33,22 @@
               (onNewValueSelect)="selectNewEntity($event)" [isDisabled]="isViewMode"
               [isError]="mandatoryList?.has('name')">
             </app-endpoint-search>
+            <div *ngIf="mandatoryList?.has('name')" class="invalid-feedback d-block fs-13">
+              {{mandatoryList?.get('name')}}
+            </div>
             <span class="col fs-13">
-              <p class="new-line-property text-secondary fs-14-nav mt-2">Type in the official name of the
+              <p class="new-line-property text-secondary px-1-nav mt-2 mb-0">Type in the official name of the
                 business or organization
                 you need to report. Entities to report include foreign, domestic, public or private
                 entities, but not federal
                 agencies.</p>
             </span>
-            <div *ngIf="mandatoryList?.has('name')" class="invalid-feedback d-block">
-              {{mandatoryList?.get('name')}}
-            </div>
           </div>
         </div>
 
         <div class="row px-4">
-          <div class="col-custom d-flex px-3 mt-2">
-            <label class="d-block px-3 fw-500 fs-14" for="Country">Country<span class="mandatory px-2">*</span>
+          <div class="col-custom d-flex mt-2">
+            <label class="d-block font fs-14 px-1 pt-2" for="Country">Country<span class="mandatory px-2">*</span>
             </label>
           </div>
           <div class="col mt-3">
@@ -57,62 +57,63 @@
               [isDisabled]="isResultFromSearch || isViewMode" class="w-100 mt-4"
               [isError]="mandatoryList?.has('country')">
             </app-endpoint-search>
-            <span class="col fs-13">
-              <p class="new-line-property text-secondary fs-14-nav mt-2">Select country from search bar.</p>
-            </span>
-            <div *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block">
+            <div *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block fs-13">
               {{mandatoryList?.get('country')}}
             </div>
+            <span class="col fs-13">
+              <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Select country from search bar.</p>
+            </span>
           </div>
           <div class="col-2 fs-15 pl-7 d-flex mt-2">
-            <label class="d-block px-3 fw-500 fs-14" for="City">City
+            <label class="d-block font fs-14 px-1 pt-2" for="City">City
             </label>
           </div>
           <div class="col-lg-4 mt-3">
             <input type="text" class="form-control" placeholder="Type City" [(ngModel)]="coiEntity.city"
               [disabled]="isResultFromSearch || isViewMode">
             <span class="col fs-13">
-              <p class="new-line-property text-secondary fs-14-nav mt-2">Select a city from the available
-                options.</p>
+              <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type City.</p>
             </span>
           </div>
         </div>
         <div class="row px-4">
-          <div class="col-custom d-flex px-3 mt-2">
-            <label class="d-block px-3 fw-500 fs-14" for="Address">Address<span class="mandatory px-2">*</span>
+          <div class="col-custom d-flex mt-2">
+            <label class="d-block font fs-14 px-1 pt-2" for="Address">Address<span class="mandatory px-2">*</span>
             </label>
           </div>
           <div class="col mt-3">
             <input type="text" class="form-control" placeholder="Type Address" [(ngModel)]="coiEntity.address"
+              [ngClass]="mandatoryList?.has('address') ? 'is-invalid d-block' : ''"
               [disabled]="isResultFromSearch || isViewMode">
+              <div *ngIf="mandatoryList?.has('address')" class="invalid-feedback d-block fs-13">
+                {{mandatoryList?.get('address')}}
+              </div>
             <span class="col fs-13">
-              <p class="new-line-property text-secondary fs-14-nav mt-2">Enter the address of your organization.</p>
+              <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Enter the address of your organization.</p>
             </span>
-            <div *ngIf="mandatoryList?.has('address')" class="invalid-feedback d-block">
-              {{mandatoryList?.get('address')}}
-            </div>
           </div>
         </div>
         <div class="row px-4">
-          <div class="col-custom d-flex px-3 mt-2">
-            <label class="d-block px-3 fw-500 fs-14" for="Phone">Phone<span class="mandatory px-2">*</span>
+          <div class="col-custom d-flex mt-2">
+            <label class="d-block font fs-14 px-1 pt-2" for="Phone">Phone<span class="mandatory px-2">*</span>
             </label>
           </div>
           <div class="col mt-3">
             <div>
               <input class="form-control" placeholder="Type Phone Number" [(ngModel)]="coiEntity.phone"
-                (keypress)="inputRestriction($event)" [disabled]="isResultFromSearch || isViewMode">
+                (keypress)="inputRestriction($event)" [disabled]="isResultFromSearch || isViewMode"
+                [ngClass]="mandatoryList?.has('phone') ? 'is-invalid d-block' : ''">
             </div>
-            <span class="col fs-13">
-              <p class="new-line-property text-secondary fs-14-nav mt-2">Type phone number.</p>
-            </span>
-            <div *ngIf="mandatoryList?.has('phone')" class="invalid-feedback d-block">
+            <div *ngIf="mandatoryList?.has('phone')" class="invalid-feedback d-block fs-13">
               {{mandatoryList?.get('phone')}}
             </div>
+            <span class="col fs-13">
+              <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type phone number.</p>
+            </span>
           </div>
 
           <div class="col-2 fs-15 pl-7 d-flex mt-2">
-            <label class="d-block px-3 fw-500 fs-14" for="Zip Code">Zip Code<span class="mandatory px-2">*</span>
+            <label class="d-block font fs-14 px-1 pt-2" for="Zip Code">Zip Code<span class="mandatory px-2">*</span>
             </label>
           </div>
           <div class="col-lg-4 mt-3">
@@ -120,19 +121,19 @@
               (keypress)="inputRestriction($event)"
               [ngClass]="(mandatoryList?.has('zipCode')) ? 'is-invalid d-block' : ''"
               [disabled]="isResultFromSearch || isViewMode">
+              <div *ngIf="mandatoryList?.has('zipCode')" class="invalid-feedback d-block fs-13">
+                {{mandatoryList?.get('zipCode')}}
+              </div>
             <span class="col fs-13">
-              <p class="new-line-property text-secondary fs-14-nav mt-2">Type in the official name of the business or
+              <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type in the official name of the business or
                 organization
                 you need to report.</p>
             </span>
-            <div *ngIf="mandatoryList?.has('zipCode')" class="invalid-feedback d-block">
-              {{mandatoryList?.get('zipCode')}}
-            </div>
           </div>
         </div>
         <div class="row px-4">
           <div class="col-custom d-flex mt-2">
-            <label class="d-block px-3 fw-500 fs-14" for="Country">Website
+            <label class="d-block font fs-14 px-1 pt-2" for="Country">Website
             </label>
           </div>
           <div class="col mt-3">
@@ -140,13 +141,13 @@
               [ngClass]="(mandatoryList?.has('url')) ? 'is-invalid d-block' : ''"
               [disabled]="isResultFromSearch || isViewMode">
             <span class="col fs-13">
-              <p class="new-line-property text-secondary fs-14-nav mt-2">Type the website name of the business or
+              <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type the website name of the business or
                 organization
                 you need to report.</p>
             </span>
           </div>
           <div class="col-2 fs-15 pl-7 d-flex mt-2">
-            <label class="d-block px-3 fw-500 fs-14" for="email">Email Address<span class="mandatory px-2">*</span>
+            <label class="d-block font fs-14 px-1 pt-2" for="email">Email Address<span class="mandatory px-2">*</span>
             </label>
           </div>
           <div class="col-lg-4 mt-3">
@@ -155,21 +156,21 @@
               [ngClass]="(mandatoryList?.get('email')) || emailWarningMsg != null ? 'is-invalid d-block' : ''"
               [disabled]="isResultFromSearch || isViewMode">
             <div *ngIf="emailWarningMsg != null">
-              <span class="invalid-feedback d-block">&nbsp;{{emailWarningMsg}}</span>
+              <span class="invalid-feedback d-block fs-13">&nbsp;{{emailWarningMsg}}</span>
+            </div>
+            <div class="invalid-feedback d-block mb-3 fs-13" *ngIf="(mandatoryList?.has('email'))">
+              {{mandatoryList?.get('email')}}
             </div>
             <span class="col fs-13">
-              <p class="new-line-property text-secondary fs-14-nav mt-2">Type the email address of the business
+              <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type the email address of the business
                 or organization
                 you need to report.</p>
             </span>
-            <div class="invalid-feedback d-block mb-3" *ngIf="(mandatoryList?.has('email'))">
-              {{mandatoryList?.get('email')}}
-            </div>
           </div>
         </div>
         <div class="row px-4">
           <div class="col-custom d-flex mt-2">
-            <label class="d-block px-3 fw-500 fs-14" for="Entity Type">Entity Type<span class="mandatory px-2">*</span>
+            <label class="d-block font fs-14 px-1 pt-2" for="Entity Type">Entity Type<span class="mandatory px-2">*</span>
             </label>
           </div>
           <div class="col-entity-type">
@@ -181,29 +182,28 @@
                 [hidden]="type?.isActive != true">
                 {{type?.description}}</option>
             </select>
-            <span class="col fs-13">
-              <p class="new-line-property text-secondary fs-14-nav mt-2">Select type from the available
-                options.</p>
-            </span>
-            <div *ngIf="mandatoryList?.has('type')" class="invalid-feedback d-block">
+            <div *ngIf="mandatoryList?.has('type')" class="invalid-feedback d-block fs-13">
               {{mandatoryList?.get('type')}}
             </div>
+            <span class="col fs-13">
+              <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Select type from the available
+                options.</p>
+            </span>
           </div>
         </div>
-      </div>
       </div>
       </div>
 
       <!-- Additional Details -->
 
-      <div class="container-fluid">
+      <div class="container-fluid mt-3">
         <div class="card shadow-sm border mb-3" tabindex="-1">
           <div class="m-2 mb-0">
             <div class="row d-flex">
-              <span class="col-4">
-                <h5 class="fs-16 pl-15 mt-3 fw-500">Additional Details</h5>
+              <span class="col-4 px-4">
+                <h5 class="fs-16 mt-3 fw-500">Additional Details</h5>
               </span>
-              <span class="col-8 d-flex justify-content-end material-icons-outlined hand-cursor mt-2"
+              <span class="position-absolute d-flex justify-content-end material-icons-outlined hand-cursor mt-2"
                 (click)="isExpandedAdditionalDetails = !isExpandedAdditionalDetails;">{{isExpandedAdditionalDetails?'expand_less'
                 :'expand_more'}}</span>
             </div>
@@ -212,7 +212,7 @@
           <div *ngIf="isExpandedAdditionalDetails" class="card-body mr-1rem pt-0">
               <div class="row py-3">
                 <div class="col-additional-details mt-2 d-flex">
-                  <label class="d-block fw-500 fs-14" for="Start date of involvement">Start date of involvement<span
+                  <label class="d-block font fs-14" for="Start date of involvement">Start date of involvement<span
                       class="mandatory px-2">*</span>
                   </label>
                 </div>
@@ -227,13 +227,13 @@
                     <mat-datepicker #startDate [pickerType]="'calendar'">
                     </mat-datepicker>
                   </span>
-                  <p class="new-line-property text-secondary fs-13 mt-2">Select a date</p>
-                  <div *ngIf="mandatoryList?.has('date')" class="invalid-feedback d-block">
+                  <div *ngIf="mandatoryList?.has('date')" class="invalid-feedback d-block fs-13">
                     {{mandatoryList?.get('date')}}
                   </div>
+                  <p class="new-line-property text-secondary fs-13 mt-2 mb-0">Select a date</p>
                 </div>
                 <div class="col-2 pl-7 mt-2 d-flex">
-                  <label class="d-block fw-500 fs-14" for="End date of involvement">End date of involvement
+                  <label class="d-block font fs-14" for="End date of involvement">End date of involvement
                   </label>
                 </div>
                 <div class="col-lg-4 mt-3 px-0">
@@ -246,12 +246,12 @@
                     <mat-datepicker #endDate [pickerType]="'calendar'">
                     </mat-datepicker>
                   </span>
-                  <p class="new-line-property text-secondary fs-13 mt-2">Select a date</p>
+                  <p class="new-line-property text-secondary fs-13 mt-2 mb-0">Select a date</p>
                 </div>
               </div>
                 <div class="row py-3">
                   <div class="col-additional-details d-flex">
-                    <label class="d-block fw-500 fs-14">Sponsors Research </label>
+                    <label class="d-block font fs-14">Sponsors Research </label>
                   </div>
                   <div class="col-7">
                     <span class="mt-2" aria-label="Disclosures_has_sfi" role="switch">
@@ -273,14 +273,17 @@
                 <div class="row py-3">
 
                 <div class="col-additional-details d-flex">
-                  <label class="d-block fw-500 fs-14">Relationship with Entity<span class="mandatory px-2">*</span></label>
+                  <label class="d-block font fs-14">Relationship with Entity<span class="mandatory px-2">*</span></label>
                 </div>
                 <div class="col px-0 mb-4">
                   <textarea appAutoGrow class="form-control" placeholder="Type here" id="releationship-entity" 
                     [(ngModel)]="additionalDetails.staffInvolvement"
                     [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''">
                 </textarea>
-                  <p class="new-line-property text-secondary fs-13 mt-2">This description is presented in the Relationship
+                <div *ngIf="mandatoryList?.has('staff')" class="invalid-feedback d-block fs-13">
+                  {{mandatoryList?.get('staff')}}
+                </div>
+                  <p class="new-line-property text-secondary fs-13 mt-2 mb-0">This description is presented in the Relationship
                     section to help you relate this entity to your research
                     projects.
                     Please enter an adequate description of the organization, and of your role with them,to aid both
@@ -288,43 +291,40 @@
                     a
                     reviewers' understanding of the association between the entity and work.
                   </p>
-                  <div *ngIf="mandatoryList?.has('staff')" class="invalid-feedback d-block">
-                    {{mandatoryList?.get('staff')}}
-                  </div>
                 </div>
               </div>
                 <div class="row py-3">
 
                 <div class="col-additional-details d-flex">
-                  <label class="d-block fw-500 fs-14">Principle Business Area of Entity<span class="mandatory px-2">*</span></label>
+                  <label class="d-block font fs-14">Principle Business Area of Entity<span class="mandatory px-2">*</span></label>
                 </div>
                 <div class="col px-0 mb-4">
                   <textarea appAutoGrow class="form-control" placeholder="Type here" 
                     [(ngModel)]="additionalDetails.studentInvolvement"
                     [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''">
                 </textarea>
-                  <p class="new-line-property text-secondary fs-13 mt-2">Please enter an adequate description of the entity's principal are of business.
+                <div *ngIf="mandatoryList?.has('student')" class="invalid-feedback d-block fs-13">
+                  {{mandatoryList?.get('student')}}
+                </div>
+                  <p class="new-line-property text-secondary fs-13 mt-2 mb-0">Please enter an adequate description of the entity's principal are of business.
                   </p>
-                  <div *ngIf="mandatoryList?.has('student')" class="invalid-feedback d-block">
-                    {{mandatoryList?.get('student')}}
-                  </div>
                 </div>
               </div>
                 <div class="row py-3">
 
                 <div class="col-additional-details d-flex">
-                  <label class="d-block fw-500 fs-14">Relationship of Entity to your University responsibilities<span class="mandatory px-2">*</span></label>
+                  <label class="d-block font fs-14">Relationship of Entity to your University responsibilities<span class="mandatory px-2">*</span></label>
                 </div>
                 <div class="col px-0 mb-4">
                   <textarea appAutoGrow class="form-control" placeholder="Type here"
                     [(ngModel)]="additionalDetails.instituteResourceInvolvement"
                     [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''">
                 </textarea>
-                  <p class="new-line-property text-secondary fs-14-nav mt-2">Please enter an adequate description of the entity's relationship to your University responsibilities.
+                <div *ngIf="mandatoryList?.has('resource')" class="invalid-feedback d-block fs-13">
+                  {{mandatoryList?.get('resource')}}
+                </div>
+                  <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Please enter an adequate description of the entity's relationship to your University responsibilities.
                   </p>
-                  <div *ngIf="mandatoryList?.has('resource')" class="invalid-feedback d-block">
-                    {{mandatoryList?.get('resource')}}
-                  </div>
                 </div>
               </div>
           </div>
@@ -332,7 +332,9 @@
         <!-- Additional Details Ends -->
       </div>
     </div>
+    </div>
   </div>
   <app-add-relationship-modal *ngIf="showRelationshipModal" [isWithOutRelationship]="true" [personEntityId]="additionalDetails?.personEntityId"
     (relationshipResult)="addEntityToggle($event)" (hideModal)="hideRelationshipModal($event)">
   </app-add-relationship-modal>
+</div>

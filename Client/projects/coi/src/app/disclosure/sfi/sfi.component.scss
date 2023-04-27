@@ -30,3 +30,12 @@
 .pill-color {
   background-color: #ecf1f3;
 }
+
+.r-title {
+  display: inline-block;
+  text-transform: lowercase;
+}
+
+.r-title::first-letter {
+  text-transform: uppercase;
+}
