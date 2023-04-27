@@ -39,7 +39,7 @@ public class CoiTravelDisclosure implements Serializable {
 	private Integer travelDisclosureId;
 	
 	@Column(name = "TRAVEL_NUMBER")
-	private String travelNumber;
+	private Integer travelNumber;
 	
 	@Column(name = "VERSION_NUMBER")
 	private Integer versionNumber;
@@ -82,6 +82,10 @@ public class CoiTravelDisclosure implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isSponsoredTravel;
 	
+	@Column(name = "IS_INTERNATIONAL_TRAVEL")
+	@Convert(converter = JpaCharBooleanConversion.class)
+	private Boolean isInterNationalTravel;
+	
 	@Column(name = "TRAVEL_TITLE")
 	private String travelTitle;
 	
@@ -94,6 +98,9 @@ public class CoiTravelDisclosure implements Serializable {
 	@Column(name = "TRAVEL_START_DATE")
 	private Date travelStartDate;
 	
+	@Column(name = "TRAVEL_END_DATE")
+	private Date travelEndDate;
+
 	@Column(name = "NO_OF_DAYS")
 	private Integer noOfDays;
 	
@@ -103,6 +110,9 @@ public class CoiTravelDisclosure implements Serializable {
 	@Column(name = "DESTINATION_COUNTRY")
 	private String destinationCountry;
 	
+	@Column(name = "STATE")
+	private String travelstate;
+	
 	@Column(name = "RELATIONSHIP_TO_YOUR_RESEARCH")
 	private String relationshipToYourResearch;
 	
@@ -111,7 +121,7 @@ public class CoiTravelDisclosure implements Serializable {
 	
 	@Column(name = "ACKNOWLEDGE_AT")
 	private String acknowledgeAt;
-	
+
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
@@ -128,6 +138,22 @@ public class CoiTravelDisclosure implements Serializable {
 	@Column(name = "CREATE_TIMESTAMP")
 	private Timestamp createTimestamp;
 
+	public Boolean getIsInterNationalTravel() {
+		return isInterNationalTravel;
+	}
+
+	public void setIsInterNationalTravel(Boolean isInterNationalTravel) {
+		this.isInterNationalTravel = isInterNationalTravel;
+	}
+
+	public String getTravelstate() {
+		return travelstate;
+	}
+
+	public void setTravelstate(String travelstate) {
+		this.travelstate = travelstate;
+	}
+
 	public Integer getTravelDisclosureId() {
 		return travelDisclosureId;
 	}
@@ -136,11 +162,11 @@ public class CoiTravelDisclosure implements Serializable {
 		this.travelDisclosureId = travelDisclosureId;
 	}
 
-	public String getTravelNumber() {
+	public Integer getTravelNumber() {
 		return travelNumber;
 	}
 
-	public void setTravelNumber(String travelNumber) {
+	public void setTravelNumber(Integer travelNumber) {
 		this.travelNumber = travelNumber;
 	}
 
@@ -270,6 +296,14 @@ public class CoiTravelDisclosure implements Serializable {
 
 	public void setTravelStartDate(Date travelStartDate) {
 		this.travelStartDate = travelStartDate;
+	}
+	
+	public Date getTravelEndDate() {
+		return travelEndDate;
+	}
+
+	public void setTravelEndDate(Date travelEndDate) {
+		this.travelEndDate = travelEndDate;
 	}
 
 	public Integer getNoOfDays() {

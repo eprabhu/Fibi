@@ -56,6 +56,9 @@ import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
+import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
+import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -2120,6 +2123,49 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public ValidPersonEntityRelType getValidPersonEntityRelTypeByTypeCode(Integer validPersonEntityRelTypeCode) {
 		return hibernateTemplate.get(ValidPersonEntityRelType.class, validPersonEntityRelTypeCode);
+	}
+	
+	@Override
+	public CoiTravelDisclosureTraveler saveOrUpdateCoiTravelDisclosureTraveller(CoiTravelDisclosureTraveler coiTravelDisclosureTraveller) {
+		hibernateTemplate.saveOrUpdate(coiTravelDisclosureTraveller);
+		return coiTravelDisclosureTraveller;
+	}
+	
+	@Override
+	public Integer generateMaxTravelNumber() {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+        Root<CoiTravelDisclosure> root = query.from(CoiTravelDisclosure.class);
+        query.select(builder.max(root.get("travelNumber")));
+        if(session.createQuery(query).getSingleResult() != null) {
+             Integer result = session.createQuery(query).getSingleResult();
+             return result+1;
+        } else {
+            return 1;
+        }
+	}
+    
+	@Override
+	public List<CoiTravelerType> loadTravellerTypesLookup() {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelerType> query = builder.createQuery(CoiTravelerType.class);
+		Root<CoiTravelerType> root = query.from(CoiTravelerType.class);
+		query.where(builder.equal(root.get("isActive"), true));
+		query.orderBy(builder.asc(root.get("travelerTypeCode")));
+		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public List<CoiTravelerStatusType> loadTravelStatusTypesLookup() {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelerStatusType> query = builder.createQuery(CoiTravelerStatusType.class);
+		Root<CoiTravelerStatusType> root = query.from(CoiTravelerStatusType.class);
+		query.where(builder.equal(root.get("isActive"), true));
+		query.orderBy(builder.asc(root.get("travelStatusCode")));
+		return session.createQuery(query).getResultList();
 	}
 	
 }
