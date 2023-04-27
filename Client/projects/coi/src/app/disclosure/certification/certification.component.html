@@ -7,14 +7,26 @@
     </div>
   </div>-->
 
-<div class="card my-3">
 
+<div class="border pi-info-text p-3 rounded-1">
+    <p class="fs-14 m-0">
+            <span *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
+                {{headerInfoText | slice:0:650}}...
+                <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read More</u></span>
+            </span>
+        <ng-template #showFullInfo>
+            {{headerInfoText}}
+            <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Show Less</u></span>
+        </ng-template>
+    </p>
+</div>
+<div class="card">
     <div class="card-body">
-
-        <div class="gridSkin p-15 text-center d-flex">
-            <div><input (change)="_coiService.isCertified = !_coiService.isCertified" [checked]="_coiService.isCertified" [disabled]="!isEditMode"
-                        class="certify-box mt-1"
-                        type="checkbox"></div>
+        <div class="gridSkin p-15 text-center d-flex mx-5" style="margin-top: 111px; min-height: 460px">
+            <div class="me-3"><input (change)="_coiService.isCertified = !_coiService.isCertified"
+                                     [checked]="_coiService.isCertified" [disabled]="!isEditMode"
+                                     class="certify-box mt-1"
+                                     type="checkbox"></div>
             <div class="fs-16">
                 <p *ngIf="coiDisclosure?.certificationText">{{coiDisclosure.certificationText}}</p>
                 <p *ngIf="!coiDisclosure.certificationText">{{certificationText}}</p>

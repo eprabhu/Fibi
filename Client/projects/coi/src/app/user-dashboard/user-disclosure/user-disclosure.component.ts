@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {UserDisclosureService} from "./user-disclosure.service";
 import {UserDashboardService} from "../user-dashboard.service";
+import {CommonService} from "../../common/services/common.service";
 
 @Component({
     selector: 'app-user-disclosure',
@@ -28,7 +29,9 @@ export class UserDisclosureComponent {
     dashboardCount: any;
     isActiveDisclosureAvailable = false;
 
-    constructor(public userDisclosureService: UserDisclosureService, public userDashboardService: UserDashboardService) {
+    constructor(public userDisclosureService: UserDisclosureService,
+                public userDashboardService: UserDashboardService,
+                public commonService: CommonService) {
     }
 
     ngOnInit() {
@@ -57,6 +60,22 @@ export class UserDisclosureComponent {
             case 2:
             case 3: return 'success';
             default: return 'info';
+        }
+    }
+    getDispositionStatusBadgeUpdated(statusCode) {
+        switch (statusCode) {
+            case '1': return 'warning';
+            case 2: return 'success';
+            case 3: return 'danger';
+            default: return 'info';
+        }
+    }
+    getDispositionStatusTextColor(statusCode) {
+        switch (statusCode) {
+            case '1': return 'black';
+            case 2: return 'white';
+            case 3: return 'white';
+            default: return 'white';
         }
     }
     getDispositinTextColor(statusCode) {

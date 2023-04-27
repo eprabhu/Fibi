@@ -3,9 +3,9 @@
         <div class="border shadow-sm">
             <div class="disclosure-heading px-3 d-flex">
                 <div class="align-self-center flex-fill">
-                    <p class="m-0"><strong>{{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by <span class="text-primary"><u>{{coiData?.person?.fullName}}</u></span></strong>
+                    <p class="m-0"><strong>{{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} by <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
                         -
-                        (Home Unit: <strong>{{coiData?.person?.unit?.unitName}}</strong>)</p>
+                        (Home Unit: <strong>{{coiData?.coiDisclosure?.person?.unit?.unitName}}</strong>)</p>
                 </div>
                 <div class="d-flex">
                     <ng-container *ngIf="isCreateMode">
@@ -32,7 +32,7 @@
                     </ng-container>
                 </div>
             </div>
-            <div *ngIf="isCardExpanded" class="d-flex p-3 triple-card bg-white">
+            <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 triple-card bg-white">
                 <div class="col">
                     <div class="border h-100 rounded-1">
                         <span class="status-pill">Status</span>
@@ -41,7 +41,7 @@
                                 <tr>
                                     <td>Disposition:</td>
                                     <td class="ps-4"><span
-                                            class="bg-{{getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} text-{{ getDispositionStatusTextColor(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
+                                            class="{{commonService.getDisclosureConflictStatus(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -95,13 +95,13 @@
                                     </td>
                                     <td class="ps-2">Significant Financial Interest</td>
                                 </tr>
-                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '3'">
+                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1','3'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
                                     <td><span
                                             class="bold-blue-color">{{coiData?.numberOfProposal ? coiData?.numberOfProposal : 0}}</span>
                                     </td>
                                     <td class="ps-2">Proposals</td>
                                 </tr>
-                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '3'">
+                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1','3'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
                                     <td><span
                                             class="bold-blue-color">{{coiData?.numberOfAward ? coiData?.numberOfAward : 0}}</span>
                                     </td>
@@ -116,7 +116,7 @@
 
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress navigation-tabs row">
-                    <div (click)="goToStep(1)" [class.complete]="currentStepNumber > 0" [routerLink]="['screening']"
+                    <div (click)="goToStep(1)" [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])" [routerLink]="['screening']"
                          class="col h-100 m-0" queryParamsHandling='merge'
                          title="Goto step Screening Questionnaire">
                         Screening Questionnaire
@@ -126,7 +126,7 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(2)" [class.complete]="currentStepNumber > 1" [routerLink]="['sfi']"
+                    <div (click)="goToStep(2)" [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])" [routerLink]="['sfi']"
                          class="col ps-5 text-nowrap" queryParamsHandling='merge'
                          title="Goto step Significant Financial Interest(SFIs)">
                         Significant Financial Interest(SFIs)
@@ -136,7 +136,7 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(3)" [class.complete]="currentStepNumber > 2" [routerLink]="['relationship']"
+                    <div (click)="goToStep(3)" [class.complete]="isRouteComplete(['relationship', 'certification'])" [routerLink]="['relationship']"
                          class="col" queryParamsHandling='merge' title="Goto step Relationships">
                         <span class="align-self-center">Relationships</span>
                         <div class="arrow-wrapper">
@@ -145,7 +145,7 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(4)" [class.complete]="currentStepNumber > 3" [routerLink]="['certification']"
+                    <div (click)="goToStep(4)" [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
                          class="col" queryParamsHandling='merge' title="Goto step Certification">
                         <span class="align-self-center">Certification</span>
                     </div>
@@ -243,7 +243,7 @@
                     </button>
                 </div>
                 <div class="d-flex justify-content-around px-3 pb-3">
-                    <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusTypeCode == '2'"
+                    <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
                             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
                             (click)="triggerAssignReviewerModal()"
                             title="Add Review Location">
@@ -252,17 +252,17 @@
                     </button>
                 </div>
                 <div class="position-static d-flex justify-content-around px-3">
-                    <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusTypeCode == '2'"
+                    <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
                             class="me-2 fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center" data-bs-target="#completeReviewModalFromDashboard"
                             data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
                         Complete Review
                     </button>
 
-                    <button aria-expanded="false"
-                            class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center p-0 w-100"
+                    <button style="white-space: nowrap;" aria-expanded="false"
+                            class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
                             data-bs-toggle="dropdown" id="moreActions" role="button">
-                        <mat-icon>more_vert</mat-icon>
+                        <mat-icon class="me-1">more_vert</mat-icon> More Options
                     </button>
                     <ul class="border dropdown-menu p-0 rounded-0" style="" aria-labelledby="moreActions">
                         <li class="ash-text border-bottom"><span class="dropdown-item fs-15 fw-medium">
@@ -357,7 +357,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Review for {{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by {{coiData?.person?.fullName}}</h5>
+                <h5 class="modal-title">Add Review for {{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by {{coiData?.coiDisclosure?.person?.fullName}}</h5>
                 <button type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close"
                         (click)="assignReviewerActionDetails = {}">
                     <span aria-hidden="true">&times;</span>

@@ -66,7 +66,7 @@ export class DataStoreService {
     }
 
     getEditModeForCOI(): boolean {
-        return this.storeData.coiDisclosure.conflictStatusCode === '1';
+        return this.storeData.coiDisclosure.dispositionStatusCode === '1';
     }
 
 }

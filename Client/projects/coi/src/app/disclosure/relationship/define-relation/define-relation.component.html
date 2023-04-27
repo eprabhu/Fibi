@@ -85,7 +85,7 @@
                     [(ngModel)]="coiDescription" appAutoGrow rows="1"
                     placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
                   </div>
-                  <div class="col-3 button-align" *ngIf="newArray?.length > 0">
+                  <div class="col-3 button-align" *ngIf="entityProjectDetails?.length > 0">
                     <!-- data-bs-toggle="modal" data-bs-target="#applyToAllConfirmationModal" -->
                 <button type="button" class="btn btn-outline-secondary mr-10 btn-sm" id="clear all entities coi status and description" (click)="openClearConfirmationModal()">Clear All</button>
                 <button type="button" class="btn btn-primary btn-sm" id="apply common coi status and description and save"(click)="openSaveAllConfirmationModal()">Apply & Save</button>
@@ -93,7 +93,7 @@
                 </div>
               </div>
               <div class="fixed-header">
-                <table class="table m-2 fs-14 fw-medium" *ngIf="newArray?.length > 0">
+                <table class="table m-2 fs-14 fw-medium" *ngIf="entityProjectDetails?.length > 0">
                   <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                   <thead class="fixed-th">
                       <tr class="header-border table-secondary">
@@ -104,7 +104,7 @@
                       </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let test of newArray; let i = index">
+                    <tr *ngFor="let test of entityProjectDetails; let i = index">
                       <td class="table-data border-end fw-600">{{test?.coiFinancialEntity?.coiEntity?.coiEntityName}}</td>
                       <td class="border-end">
                         <select [(ngModel)]="test.discDetStatusCode"
@@ -138,7 +138,7 @@
                   </tbody>
                 </table>
               </div>
-                <div *ngIf="newArray?.length == 0">
+                <div *ngIf="entityProjectDetails?.length == 0">
                   <app-no-information> </app-no-information>
                 </div>
         </div>
@@ -193,7 +193,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>Do you want to clear the data of <strong> {{newArray[clearIndex]?.coiFinancialEntity?.coiEntity?.coiEntityName}} </strong> values?</p>
+        <p>Do you want to clear the data of <strong> {{entityProjectDetails && entityProjectDetails[clearIndex] && entityProjectDetails[clearIndex]?.coiFinancialEntity?.coiEntity?.coiEntityName}} </strong> values?</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="clearSingleEntity()" data-bs-dismiss="modal">Yes</button>

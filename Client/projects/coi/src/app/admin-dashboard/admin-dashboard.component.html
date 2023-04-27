@@ -397,16 +397,16 @@
                 </div>
                 <div class="col">
                   <label for="type" class="label-text">Disclosure Type:</label>
-                  <span *ngIf="coi?.disclosureCategoryType" id="type" class="grey-text">{{coi?.disclosureCategoryType}}</span>
-                  <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.fcoiType" id="type" class="grey-text">{{coi?.fcoiType}}</span>
+                  <span *ngIf="!coi?.fcoiType" class="noDataExists">No data exist</span>
                 </div>
                 <div class="col">
                   <label for="status" class="label-text">Disclosure Status:</label>
-                  <div *ngIf="coi?.disclosureStatus" class="badge f-13 rounded-pill bg-{{getDisclosureStatusBadge(coi?.disclosureStatusCode)}}"  [class.text-dark]="getDisclosureStatusBadge(coi?.disclosureStatusCode) === 'warning'"
+                  <div *ngIf="coi?.conflictStatus" class="badge f-13 rounded-pill bg-{{getDisclosureStatusBadge(coi?.conflictStatus)}}"  [class.text-dark]="getDisclosureStatusBadge(coi?.disclosureStatusCode) === 'warning'"
                     id="status">
-                    {{coi?.disclosureStatus}}
+                    {{coi?.conflictStatus}}
                   </div>
-                  <div *ngIf="!coi?.disclosureStatus" class="noDataExists">No data exist</div>
+                  <div *ngIf="!coi?.conflictStatus" class="noDataExists">No data exist</div>
                 </div>
               </div>
               <div class="row mb-3 px-3">
@@ -441,9 +441,9 @@
                 </div>
                 <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="disp-status" class="label-text">Disposition Status:</label>
-                  <span *ngIf="!coi?.disclosureDispositionCode" class="noDataExists">No data exist</span>
-                  <span *ngIf="coi?.disclosureDispositionCode"
-                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
+                  <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.dispositionStatus"
+                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.dispositionStatus)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatus) === 'warning'"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
               </div>
@@ -473,8 +473,8 @@
                 </div>
                 <div class="col-3">
                   <label for="review-status" class="label-text">Review Status:</label>
-                  <span *ngIf="!coi?.reviewStatusTypeCode" class="noDataExists">No data exist</span>
-                  <span *ngIf="coi?.reviewStatusTypeCode" class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewStatusTypeCode)}}" [class.text-dark]="getReviewStatusBadge(coi?.reviewStatusTypeCode) === 'warning'"
+                  <span *ngIf="!coi?.reviewStatus" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.reviewStatus" class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewStatus)}}" [class.text-dark]="getReviewStatusBadge(coi?.reviewStatus) === 'warning'"
                     id="review-status">{{coi?.reviewStatus}}</span>
                 </div>
               </div>

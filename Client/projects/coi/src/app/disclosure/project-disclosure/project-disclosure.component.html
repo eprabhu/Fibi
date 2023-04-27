@@ -49,29 +49,29 @@
                         {{projectDisclosureValidation?.get('proposalSearch')}}
                     </div>
                     <div *ngIf="isShowResultCard" class="col-lg-12 col-12 mb-4 mt-2 shadow-lg resultCard px-0">
-                        <button class="closeResultCard ontop" (click)="clearSearchFields()">
+                        <button class="closeResultCard ontop bg-danger text-white" (click)="clearSearchFields()">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </button>
                         <div class="row">
                             <div class="col-12">
-                                <label class="f-14 mt-2 mb-2">{{selectedProjectType}} Title : </label>
+                                <label class="f-14 mt-2 mb-2 pe-2">{{selectedProjectType}} Title : </label>
                                 <span class="ml-2">{{manualProjectAddDetails?.title}}</span>
                             </div>
-                            <div class="col-6 mt-2 mb-2">
-                                <label class="f-14">Principal Investigator : </label>
+                            <div class="col-6 mt-2 mb-2 ">
+                                <label class="f-14 pe-2">Principal Investigator : </label>
                                 <span class="ml-2">{{manualProjectAddDetails?.principalInvestigator}}</span>
                             </div>
-                            <div class="col-6 mt-2 mb-2">
-                                <label class="f-14">Lead Unit : </label>
+                            <div class="col-6 mt-2 mb-2 ">
+                                <label class="f-14 pe-2">Lead Unit : </label>
                                 <span class="ml-2">{{manualProjectAddDetails?.unitName}}</span>
                             </div>
-                            <div class="col-6 mb-2 mt-2">
-                                <label class="f-14">Period : </label>
+                            <div class="col-6 mb-2 mt-2 ">
+                                <label class="f-14 pe-2">Period : </label>
                                 <span class="ml-2">{{manualProjectAddDetails?.startDate | dateFormatter}} -
                                     {{manualProjectAddDetails?.endDate | dateFormatter}}</span>
                             </div>
-                            <div class="col-6 mb-2 mt-2">
-                                <label class="f-14">Sponsor : </label>
+                            <div class="col-6 mb-2 mt-2 ">
+                                <label class="f-14 pe-2">Sponsor : </label>
                                 <span class="ml-2">{{manualProjectAddDetails?.sponsor}}</span>
                             </div>
                         </div>

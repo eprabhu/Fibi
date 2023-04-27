@@ -36,7 +36,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     assigneeClearField: String;
 
     constructor(public router: Router,
-                private _commonService: CommonService,
+                public commonService: CommonService,
                 private _route: ActivatedRoute,
                 private _elasticConfigService: ElasticConfigService,
                 public sfiService: SfiService,
@@ -72,9 +72,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     routeToAppropriateMode() {
-        if(this.coiData.coiDisclosure.coiConflictStatusType.conflictStatusCode == '1' && !this.isCreateMode) {
+        if(this.coiData.coiDisclosure.reviewStatusCode == '1' && !this.isCreateMode) {
             this.router.navigate(['/coi/create-disclosure/screening'], {queryParamsHandling: 'preserve'});
-        } else if (this.coiData.coiDisclosure.coiConflictStatusType.conflictStatusCode != '1' && this.isCreateMode) {
+        } else if (this.coiData.coiDisclosure.reviewStatusCode != '1' && this.isCreateMode) {
             this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
         }
     }
@@ -105,6 +105,23 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
         this.currentStepNumber--;
         this.navigateToStep();
+    }
+
+    isRouteComplete(possibleActiveRoutes: string[] = []) {
+        return possibleActiveRoutes.some(paths => this.router.url.includes(paths));
+    }
+
+    getDisclosureTitleName(fcoiTypeCode: any) {
+        switch (fcoiTypeCode) {
+            case '1':
+                return 'FCOI';
+            case '2':
+                return 'Proposal Disclosure';
+            case '3':
+                return 'Award Disclosure';
+            case '4':
+                return 'FCOI';
+        }
     }
 
     navigateToStep() {
@@ -225,7 +242,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 if(_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
                     document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();
                 } else {
-                    this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
                 }
             }));
     }
@@ -233,7 +250,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     updateDisclosureReviewStatus(res) {
         this.coiData.coiDisclosure = deepCloneObject(res);
         this.dataStore.updateStore(['coiDisclosure'], this.coiData);
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
+        this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
     }
 
     triggerSave() {
@@ -254,9 +271,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(this.coiService.saveOrUpdateCoiReview({ coiReview: this.assignReviewerActionDetails }).subscribe((res: any) => {
                 this.assignReviewerActionDetails = {};
                 this.triggerAssignReviewerModal();
-                this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review added successfully.`);
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review added successfully.`);
             }, _err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in adding review.`);
+                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in adding review.`);
             }));
         }
     }
@@ -282,7 +299,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     private getActiveAdminGroups() {
-        return this.coiData.adminGroup.filter(element => element.isActive === 'Y');
+        return this.coiData.adminGroup && this.coiData.adminGroup.filter(element => element.isActive === 'Y') || [];
     }
 
     triggerAssignReviewerModal() {
