@@ -6,13 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
-import com.polus.fibicomp.coi.pojo.CoiReview;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
-import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
@@ -317,24 +316,6 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getAllSystemEntityList(vo);
 	}
 
-	@PostMapping(value = "/createCoiTravelDisclosure")
-	public ResponseEntity<Object> createCoiTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
-		logger.info("Request for createCoiTravelDisclosure");
-		return conflictOfInterestService.createCoiTravelDisclosure(vo);
-	}
-
-	@GetMapping(value = "/getAllCoiTravelDisclosureList")
-	public ResponseEntity<Object> getAllCoiTravelDisclosureList() {
-		logger.info("Request for getAllCoiTravelDisclosures");
-		return conflictOfInterestService.getAllCoiTravelDisclosureList();
-	}
-
-	@GetMapping(value = "/getCoiTravelDisclosureDetailsById/{travelDisclosureId}")
-	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
-		logger.info("Request for getCoiTravelDisclosureById");
-		return conflictOfInterestService.getCoiTravelDisclosureDetailsById(travelDisclosureId);
-	}
-
 	@GetMapping("/getCoiProjectTypes")
 	public ResponseEntity<Object> getCoiProjectTypes() {
 		logger.info("Requesting for getCoiProjectTypes");
@@ -384,6 +365,36 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> getPersonEntityRelationship(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for getPersonEntityRelationship");
 		return conflictOfInterestService.getPersonEntityRelationship(vo);
+	}
+	
+	@PostMapping(value = "/createCoiTravelDisclosure")
+	public ResponseEntity<Object> createCoiTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Request for createCoiTravelDisclosure");
+		return conflictOfInterestService.createCoiTravelDisclosure(vo);
+	}
+
+	@GetMapping(value = "/getAllCoiTravelDisclosureList")
+	public ResponseEntity<Object> getAllCoiTravelDisclosureList() {
+		logger.info("Request for getAllCoiTravelDisclosures");
+		return conflictOfInterestService.getAllCoiTravelDisclosureList();
+	}
+
+	@GetMapping(value = "/getCoiTravelDisclosureDetailsById/{travelDisclosureId}")
+	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Request for getCoiTravelDisclosureById");
+		return conflictOfInterestService.getCoiTravelDisclosureDetailsById(travelDisclosureId);
+	}
+
+	@GetMapping("/loadTravellerTypesLookup")
+	public ResponseEntity<Object> loadTravellerTypesLookup() {
+		logger.info("Requesting for loadTravellerTypesLookup");
+		return conflictOfInterestService.loadTravellerTypesLookup();
+	}
+
+	@GetMapping("/loadTravelStatusTypesLookup")
+	public ResponseEntity<Object> loadTravelStatusTypesLookup() {
+		logger.info("Requesting for loadTravelStatusTypesLookup");
+		return conflictOfInterestService.loadTravelStatusTypesLookup();
 	}
 	
 }
