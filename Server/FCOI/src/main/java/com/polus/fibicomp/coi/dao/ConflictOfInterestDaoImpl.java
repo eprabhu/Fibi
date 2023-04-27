@@ -53,6 +53,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
+import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
@@ -2094,6 +2095,31 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			    builder.equal(rootPersonEntityRelationship.get("validPersonEntityRelType").get("disclosureTypeCode"), vo.getDisclosureTypeCode())
 			));
 		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public CoiReviewStatusType getReviewStatusByCode(String reviewStatusPending) {
+		return hibernateTemplate.get(CoiReviewStatusType.class, reviewStatusPending);
+	}
+
+	@Override
+	public CoiRiskCategory getRiskCategoryStatusByCode(String riskCategoryLow) {
+		return hibernateTemplate.get(CoiRiskCategory.class, riskCategoryLow);
+	}
+
+	@Override
+	public PersonEntityRelationship getPersonEntityRelationshipByPersonEntityRelId(Integer personEntityRelId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
+		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
+		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityRelId"), personEntityRelId));
+		return session.createQuery(query).getSingleResult();
+	}
+
+	@Override
+	public ValidPersonEntityRelType getValidPersonEntityRelTypeByTypeCode(Integer validPersonEntityRelTypeCode) {
+		return hibernateTemplate.get(ValidPersonEntityRelType.class, validPersonEntityRelTypeCode);
 	}
 	
 }

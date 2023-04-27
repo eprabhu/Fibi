@@ -92,7 +92,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final Integer DISCLOSURE_VERSION_NUMBER = 1;
 	private static final String DISCLOSURE_SEQUENCE_STATUS_CODE = "1";
 	private static final String DISPOSITION_STATUS_TYPE_CODE = "1";
+	private static final String DISPOSITION_STATUS_PENDING = "1";
 	private static final String REVIEW_STATUS_TYPE_CODE = "1";
+	private static final String REVIEW_STATUS_PENDING = "1";
+	private static final String RISK_CATEGORY_LOW = "3";
 	private static final String CURRENTDISCLOSURE = "CURRENT_DISCLOSURES";
 	private static final String PROPOSALDISCLOSURE = "PROPOSAL_DISCLOSURES";
 	private static final String TRAVELDISCLOSURE = "TRAVEL_DISCLOSURES";
@@ -141,14 +144,16 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			}
 			coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
 		}
-		coiDisclosure.setConflictStatusCode(Constants.DISCLOSURE_STATUS_PENDING);
-		coiDisclosure.setCoiConflictStatusType(conflictOfInterestDao.getDisclosureStatusByCode(Constants.DISCLOSURE_STATUS_PENDING));
-		coiDisclosure.setCoiDispositionStatusType(conflictOfInterestDao.getDispositionStatusByCode(DISPOSITION_STATUS_TYPE_CODE));
+		coiDisclosure.setConflictStatusCode(Constants.DISCLOSURE_STATUS_NO_CONFLICT);
+		coiDisclosure.setCoiConflictStatusType(conflictOfInterestDao.getDisclosureStatusByCode(Constants.DISCLOSURE_STATUS_NO_CONFLICT));
+		coiDisclosure.setCoiDispositionStatusType(conflictOfInterestDao.getDispositionStatusByCode(DISPOSITION_STATUS_PENDING));
+		coiDisclosure.setCoiReviewStatusType(conflictOfInterestDao.getReviewStatusByCode(REVIEW_STATUS_PENDING));
+		coiDisclosure.setCoiRiskCategory(conflictOfInterestDao.getRiskCategoryStatusByCode(RISK_CATEGORY_LOW));
 		coiDisclosure.setVersionNumber(1);
 		coiDisclosure.setVersionStatus("Pending");
-		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_TYPE_CODE);
-		coiDisclosure.setReviewStatusCode("1");
-		coiDisclosure.setRiskCategoryCode("1");
+		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
+		coiDisclosure.setReviewStatusCode(REVIEW_STATUS_PENDING);
+		coiDisclosure.setRiskCategoryCode(RISK_CATEGORY_LOW);
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
@@ -369,7 +374,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public PersonEntityRelationship saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship) {
-		return conflictOfInterestDao.saveOrUpdatePersonEntityRelationship(personEntityRelationship);
+		personEntityRelationship.setValidPersonEntityRelType(conflictOfInterestDao.getValidPersonEntityRelTypeByTypeCode(personEntityRelationship.getValidPersonEntityRelTypeCode()));
+		conflictOfInterestDao.saveOrUpdatePersonEntityRelationship(personEntityRelationship);
+		return conflictOfInterestDao.getPersonEntityRelationshipByPersonEntityRelId(personEntityRelationship.getPersonEntityRelId());
 	}
 
 	@Override

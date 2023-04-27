@@ -156,18 +156,21 @@ public class PrintController {
 		return printService.generateAwardExpensePDFReport(response, vo);
 	}
 
-	@GetMapping(value = "/generateProgressReport/{progressReportId}")
-	public ResponseEntity<byte[]> generateProgressReport(HttpServletResponse response, @PathVariable(value = "progressReportId", required = true) final Integer progressReportId) throws Exception {
+	@GetMapping(value = "/generateProgressReport/{progressReportId}/{questionnaireMode}")
+	public ResponseEntity<byte[]> generateProgressReport(HttpServletResponse response, 
+			@PathVariable(value = "progressReportId", required = true) final Integer progressReportId,
+			@PathVariable(value = "questionnaireMode", required = true) final String questionnaireMode) throws Exception {
 		logger.info("Requesting for generateProgressReport");
 		logger.info("progressReportId : {} ", progressReportId);
-		return progressReportPrintService.generateProgressReport(response, progressReportId);
+		return progressReportPrintService.generateProgressReport(response, progressReportId, questionnaireMode);
 	}
 
 	@GetMapping(value = "/printEntireProgressReport")
-	public void printEntireProgressReport(HttpServletResponse response, @RequestHeader(value = "progressReportId", required = true) final Integer progressReportId, @RequestHeader(value = "awardId", required = true) final Integer awardId, @RequestHeader(value = "awardLeadUnitNumber", required = true) final String awardLeadUnitNumber) {
+	public void printEntireProgressReport(HttpServletResponse response, @RequestHeader(value = "progressReportId", required = true) final Integer progressReportId, @RequestHeader(value = "awardId", required = true) final Integer awardId, @RequestHeader(value = "awardLeadUnitNumber", required = true) final String awardLeadUnitNumber,
+			@RequestHeader(value = "questionnaireMode", required = true) final String questionnaireMode) {
 		logger.info("Requesting for downloadProgressReport");
 		logger.info("progressReportId : {} ", progressReportId);
-		progressReportPrintService.printEntireProgressReport(progressReportId, awardId, awardLeadUnitNumber, response);
+		progressReportPrintService.printEntireProgressReport(progressReportId, awardId, awardLeadUnitNumber, response, questionnaireMode);
 	}
 
 	@PostMapping(value = "/generateAwardKeyPersonTimesheetReport")

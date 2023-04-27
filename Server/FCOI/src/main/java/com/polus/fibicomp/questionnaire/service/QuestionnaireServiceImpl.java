@@ -116,6 +116,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		Integer moduleSubItemCode = questionnaireDataBus.getModuleSubItemCode();
 		String actionPersonId = questionnaireDataBus.getActionPersonId();
 		String updateUser = AuthenticatedUser.getLoginUserName();
+		String questionaireMode = questionnaireDataBus.getQuestionnaireMode();
 		logger.info("moduleItemKey : {}", moduleItemKey);
 		logger.info("moduleSubItemKey : {}", moduleSubItemKey);
 		logger.info("moduleItemCode : {}", moduleItemCode);
@@ -123,7 +124,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		logger.info("actionPersonId : {}", actionPersonId);
 		logger.info("updateUser : {}", updateUser);
 		List<HashMap<String, Object>> applicableQuestionnaire = questionnaireDAO.getApplicableQuestionnaireData(
-				moduleItemKey, moduleSubItemKey, moduleItemCode, moduleSubItemCode, actionPersonId, updateUser);
+				moduleItemKey, moduleSubItemKey, moduleItemCode, moduleSubItemCode, actionPersonId, updateUser, questionaireMode);
 		if(questionnaireDataBus.getQuestionnaireNumbers() !=null && !questionnaireDataBus.getQuestionnaireNumbers().isEmpty()){
 			applicableQuestionnaire = applicableQuestionnaire.stream().filter(queObjs ->
 					questionnaireDataBus.getQuestionnaireNumbers().contains(queObjs.get("QUESTIONNAIRE_NUMBER"))).collect(Collectors.toList());

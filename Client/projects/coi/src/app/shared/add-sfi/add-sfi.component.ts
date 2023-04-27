@@ -8,7 +8,8 @@ import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../..
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { getDateObjectFromTimeStamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { DEFAULT_DATE_FORMAT } from 'projects/fibi/src/app/app-constants';
 
 export interface EndpointOptions {
   contextField: string;
@@ -39,6 +40,7 @@ export class AddSfiComponent implements OnInit {
   isAddAttachment = false;
   isAddAssignee = false;
   dateTime: string;
+  datePlaceHolder = DEFAULT_DATE_FORMAT;
   isReadMore: false;
   showRelationshipModal = false;
   clearField: any = false;

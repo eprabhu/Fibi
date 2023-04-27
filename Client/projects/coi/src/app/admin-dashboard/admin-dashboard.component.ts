@@ -32,6 +32,7 @@ export class AdminDashboardComponent {
   selectedModuleCode: any;
   currentDisclosureId: any;
   currentDisclosureNumber: any;
+  datePlaceHolder = DEFAULT_DATE_FORMAT;
   advancedSearch = { hasSFI: true };
   conflictStatusOptions = 'coi_disc_det_status#DISC_DET_STATUS_CODE#true#true';
   disclosureStatusOptions = 'coi_disclosure_status#DISCLOSURE_STATUS_CODE#true#true';

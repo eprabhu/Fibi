@@ -104,10 +104,10 @@ public class ProgressReportPrintServiceImpl implements ProgressReportPrintServic
 	public CommonDao commonDao;
 
 	@Override
-	public ResponseEntity<byte[]> generateProgressReport(HttpServletResponse response, Integer progressReportId) {
+	public ResponseEntity<byte[]> generateProgressReport(HttpServletResponse response, Integer progressReportId, String questionnaireMode) {
 		ResponseEntity<byte[]> attachmentData = null;
 		try {
-			ByteArrayOutputStream bos = prepareProgressReportExcelData(progressReportId);
+			ByteArrayOutputStream bos = prepareProgressReportExcelData(progressReportId, questionnaireMode);
 			attachmentData = getResponseEntityForExcelDownload(bos.toByteArray());
 		} catch (Exception e) {
 			logger.error("Exception in generateProgressReport : {} ", e.getMessage());
@@ -116,7 +116,7 @@ public class ProgressReportPrintServiceImpl implements ProgressReportPrintServic
 		return attachmentData;	
 	}
 
-	private ByteArrayOutputStream prepareProgressReportExcelData(Integer progressReportId) {
+	private ByteArrayOutputStream prepareProgressReportExcelData(Integer progressReportId, String questionnaireMode) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
 			XSSFWorkbook workbook = new XSSFWorkbook();
@@ -129,7 +129,7 @@ public class ProgressReportPrintServiceImpl implements ProgressReportPrintServic
 			}
 			XSSFSheet sheet = workbook.createSheet(documentHeading);
 			commonService.addDetailsInHeader(workbook,sheet);
-			prepareExcelSheetForProgressReport(documentHeading, awardProgressReport, sheet, workbook);
+			prepareExcelSheetForProgressReport(documentHeading, awardProgressReport, sheet, workbook, questionnaireMode);
 			workbook.write(bos);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -362,13 +362,13 @@ public class ProgressReportPrintServiceImpl implements ProgressReportPrintServic
         RegionUtil.setBorderBottom(BorderStyle.HAIR, rangeAddress, sheet);
     }
 
-	private void prepareExcelSheetForProgressReport(String documentHeading, AwardProgressReport awardProgressReport, XSSFSheet sheet, XSSFWorkbook workbook) throws Exception {
+	private void prepareExcelSheetForProgressReport(String documentHeading, AwardProgressReport awardProgressReport, XSSFSheet sheet, XSSFWorkbook workbook, String questionnaireMode) throws Exception {
 		XSSFCellStyle tableBodyStyle = workbook.createCellStyle();
 		int rowNumber = 0;
 		rowNumber = prepareProgressReportGeneralInformationForExcel(documentHeading, sheet, rowNumber, awardProgressReport, workbook);
 		rowNumber = prepareSummaryReportDetail(sheet, ++rowNumber, awardProgressReport, workbook);
 		rowNumber = prepareResearchMilestoneDetail(sheet, ++rowNumber, awardProgressReport.getProgressReportId(), tableBodyStyle, workbook);
-		rowNumber = prepareRecordOfEquipment(sheet, ++rowNumber, awardProgressReport.getProgressReportId(), tableBodyStyle, workbook);
+		rowNumber = prepareRecordOfEquipment(sheet, ++rowNumber, awardProgressReport.getProgressReportId(), tableBodyStyle, workbook, questionnaireMode);
 		rowNumber = prepareFutureReportDetail(sheet, ++rowNumber, awardProgressReport, workbook);
 		rowNumber = preparePerformanceOfIndicatorDetail(sheet, ++rowNumber, awardProgressReport.getProgressReportId(), tableBodyStyle, workbook);
 		rowNumber = prepareKPIDetail(sheet, ++rowNumber, awardProgressReport.getProgressReportId(), tableBodyStyle, workbook);
@@ -744,7 +744,7 @@ public class ProgressReportPrintServiceImpl implements ProgressReportPrintServic
 		return newHeader.toArray();
 	}
 
-	public Integer prepareRecordOfEquipment(XSSFSheet sheet, int rowNumber, Integer progressReportId, XSSFCellStyle tableBodyStyle, XSSFWorkbook workbook) throws Exception {
+	public Integer prepareRecordOfEquipment(XSSFSheet sheet, int rowNumber, Integer progressReportId, XSSFCellStyle tableBodyStyle, XSSFWorkbook workbook, String questionnaireMode) throws Exception {
 		sheet.addMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 0, 8));
 		setBordersToMergedCells(sheet, new CellRangeAddress(rowNumber, rowNumber, 0, 8));
 		Row headerRow = sheet.createRow(rowNumber++);
@@ -760,7 +760,7 @@ public class ProgressReportPrintServiceImpl implements ProgressReportPrintServic
 
 		String logginPersonId = AuthenticatedUser.getLoginPersonId();
 		String updateUser = AuthenticatedUser.getLoginUserName();
-		List<HashMap<String, Object>> mapList = questionnaireDAO.getApplicableQuestionnaireData(progressReportId.toString(), Constants.SUBMODULE_ITEM_KEY, Constants.PROGRESS_REPORT_MODULE_CODE, Constants.PROGRESS_REPORT_SUBMODULE_CODE, logginPersonId, updateUser);
+		List<HashMap<String, Object>> mapList = questionnaireDAO.getApplicableQuestionnaireData(progressReportId.toString(), Constants.SUBMODULE_ITEM_KEY, Constants.PROGRESS_REPORT_MODULE_CODE, Constants.PROGRESS_REPORT_SUBMODULE_CODE, logginPersonId, updateUser, questionnaireMode);
 		CommonVO vo = new CommonVO();
 		vo.setPersonId(logginPersonId);
 		vo.setUserName(updateUser);
@@ -2015,7 +2015,7 @@ public class ProgressReportPrintServiceImpl implements ProgressReportPrintServic
 	}
 
 	@Override
-	public void printEntireProgressReport(Integer progressReportId, Integer awardId, String awardLeadUnitNumber, HttpServletResponse response) {
+	public void printEntireProgressReport(Integer progressReportId, Integer awardId, String awardLeadUnitNumber, HttpServletResponse response, String questionnaireMode) {
 		response.setContentType("application/zip");
 		String documentHeading = null;
 		String reportClassCode = progressReportDao.getReportClassCodeByProgressReportId(progressReportId);
@@ -2045,7 +2045,7 @@ public class ProgressReportPrintServiceImpl implements ProgressReportPrintServic
 					zos.write(data);
 				}
 			}
-			ByteArrayOutputStream bos = prepareProgressReportExcelData(progressReportId);
+			ByteArrayOutputStream bos = prepareProgressReportExcelData(progressReportId, questionnaireMode);
 			zos.putNextEntry(new ZipEntry(new StringBuilder(documentHeading).append("_").append(progressReportId).append(".xlsx").toString()));
 			zos.write(bos.toByteArray());
 			zos.closeEntry();

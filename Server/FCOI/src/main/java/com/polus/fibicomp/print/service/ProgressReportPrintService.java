@@ -16,7 +16,7 @@ public interface ProgressReportPrintService {
 	 * @param progressReportId
 	 * @return
 	 */
-	public ResponseEntity<byte[]> generateProgressReport(HttpServletResponse response, Integer progressReportId);
+	public ResponseEntity<byte[]> generateProgressReport(HttpServletResponse response, Integer progressReportId, String questionnaireMode);
 
 	/**
 	 * @param progressReportId
@@ -24,6 +24,6 @@ public interface ProgressReportPrintService {
 	 * @param awardLeadUnitNumber
 	 * @param response
 	 */
-	public void printEntireProgressReport(Integer progressReportId, Integer awardId, String awardLeadUnitNumber, HttpServletResponse response);
+	public void printEntireProgressReport(Integer progressReportId, Integer awardId, String awardLeadUnitNumber, HttpServletResponse response, String questionnaireMode);
 
 }

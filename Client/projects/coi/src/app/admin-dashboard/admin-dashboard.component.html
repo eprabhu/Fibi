@@ -57,7 +57,7 @@
         <!-- <div *ngIf="isAdvanceSearchTab(_coiAdminDashboardService.coiRequestObject.tabName)" class="d-flex mb-2">
           <div class="form-group col">
             <app-elastic [options]="coiElastic" style="width: 1400px"
-              [placeHolder]="'Search : Disclosure#, Category, Full Name, Status, person#'"
+              [placeHolder]="'Search: Person, Department, Entity, Disclosure#'"
               (selectedResult)="redirectToDisclosure($event)"></app-elastic>
           </div>
           <div class="form-group  col-auto">
@@ -177,21 +177,21 @@
                 Department Name
               </label>
               <app-endpoint-search (onSelect)="leadUnitChangeFunction($event)" [clearField]="advSearchClearField"
-                [httpOptions]="leadUnitSearchOptions" [placeHolder]="'Type here for Department Name'" [uniqueId]="'adv-disclosure-department-name'">
+                [httpOptions]="leadUnitSearchOptions" [placeHolder]="'Search by Department'" [uniqueId]="'adv-disclosure-department-name'">
               </app-endpoint-search>
             </div>
             <!-- Entity Name -->
             <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
               <label class="d-block" for="adv-disclosure-entity-name">Entity Name</label>
               <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
-                [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here for entity name'" class="w-100 mt-4" [uniqueId]="'adv-disclosure-entity-name'">
+                [httpOptions]="EntitySearchOptions" [placeHolder]="'Search by Entity Name'" class="w-100 mt-4" [uniqueId]="'adv-disclosure-entity-name'">
               </app-endpoint-search>
             </div>
             <!-- Entity Country -->
             <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
               <label class="d-block" for="adv-disclosure-entity-country">Entity Country</label>
               <app-endpoint-search (onSelect)="selectEntityCountry($event)" [clearField]="advSearchClearField"
-                [httpOptions]="countrySearchOptions" [placeHolder]="'Type here for entity country'" [uniqueId]="'adv-disclosure-entity-country'">
+                [httpOptions]="countrySearchOptions" [placeHolder]="'Search by Country'" [uniqueId]="'adv-disclosure-entity-country'">
               </app-endpoint-search>
             </div>
           </div>
@@ -282,9 +282,18 @@
                                  [selectedLookUpList]="lookupValues['property4']">
                     </app-look-up>
                     </div> -->
+            
+            
             <!-- Review Status -->
-            <!-- Certification Date -->
             <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+              <label class="d-block">
+                <ng-container>Review Status</ng-container>
+              </label>
+              <app-look-up (selectedResult)="onLookupSelect($event, 'property21')" [options]="coiReviewStatusOptions"
+                [selectedLookUpList]="lookupValues['property21']">
+              </app-look-up>
+            </div>
+            <!-- <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
               <label class="d-block" for="adv-disclosure-certification-date">
                 Certification Date
               </label>
@@ -294,7 +303,19 @@
                 <i (click)="certificationDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                 <mat-datepicker #certificationDate></mat-datepicker>
               </span>
-            </div>
+            </div> -->
+            <!-- Certification Date -->
+           <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+            <label class="d-block" for="adv-disclosure-certification-date">
+              Certification Date
+            </label>
+            <span class="dateField">
+              <input id="adv-disclosure-certification-date" (keypress)="certificationDate.open()"  matInput [matDatepicker]="certificationDate" (click)="certificationDate.open()"
+                class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.certificationDate" placeholder="{{datePlaceHolder}}">
+              <i (click)="certificationDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+              <mat-datepicker #certificationDate></mat-datepicker>
+            </span>
+          </div>
             <!-- Approval Date -->
             <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
               <label class="d-block" for="adv-disclosure-approval-date">
@@ -302,7 +323,7 @@
               </label>
               <span class="dateField">
                 <input id="adv-disclosure-approval-date"(keypress)="approvalDate.open()"  matInput [matDatepicker]="approvalDate" (click)="approvalDate.open()"
-                  class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.approvalDate" placeholder="dd/MM/yyyy">
+                  class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.approvalDate" placeholder="{{datePlaceHolder}}">
                 <i (click)="approvalDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                 <mat-datepicker #approvalDate></mat-datepicker>
               </span>
@@ -314,19 +335,12 @@
               </label>
               <span class="dateField">
                 <input matInput [matDatepicker]="expirationDate" (keypress)="expirationDate.open()" id="adv-disclosure-expiration-date" (click)="expirationDate.open()"
-                  class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.expirationDate" placeholder="dd/MM/yyyy">
+                  class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.expirationDate"placeholder="{{datePlaceHolder}}">
                 <i (click)="expirationDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                 <mat-datepicker #expirationDate></mat-datepicker>
               </span>
             </div>
-            <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
-              <label class="d-block">
-                <ng-container>Review Status</ng-container>
-              </label>
-              <app-look-up (selectedResult)="onLookupSelect($event, 'property21')" [options]="coiReviewStatusOptions"
-                [selectedLookUpList]="lookupValues['property21']">
-              </app-look-up>
-            </div>
+            
           </div>
           <div class="form-row row mt-2">
             <!-- Has SFI -->
@@ -358,8 +372,8 @@
             </div>
           </div>
           <div class="d-flex justify-content-end">
-            <button (click)="performAdvanceSearch()" class="btn btn-primary mx-3 primary-button">Search</button>
             <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs mr-2">Clear</button>
+            <button (click)="performAdvanceSearch()" class="btn btn-primary mx-3 primary-button">Search</button>
           </div>
         </ng-container>
       </div>

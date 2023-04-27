@@ -559,7 +559,7 @@ public class QuestionnaireDAO {
 		}
 	}
 
-	public List<HashMap<String, Object>> getApplicableQuestionnaireData(String moduleItemKey,String moduleSubItemKey, Integer moduleItemCode, Integer moduleSubItemCode, String logginPersonId, String updateUser) throws Exception {	
+	public List<HashMap<String, Object>> getApplicableQuestionnaireData(String moduleItemKey,String moduleSubItemKey, Integer moduleItemCode, Integer moduleSubItemCode, String logginPersonId, String updateUser, String questionaireMode) throws Exception {	
 		List<HashMap<String, Object>> allApplicableQNR = getAllApplicableQuestionnaire(moduleItemKey, moduleSubItemKey, moduleItemCode, moduleSubItemCode);
 		List<HashMap<String, Object>> ruleFilterQNR = evalueQuestionnaireRule(allApplicableQNR,moduleItemKey, moduleItemCode, moduleSubItemCode,logginPersonId,  updateUser, moduleSubItemKey);
 		List<HashMap<String, Object>> answeredQNR = getAnsweredQuestionnaire(moduleItemCode, moduleSubItemCode, moduleItemKey, moduleSubItemKey);
