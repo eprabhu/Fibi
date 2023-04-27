@@ -39,7 +39,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   relationValidationMap = new Map();
   isEditMode = false;
   $subscriptions: Subscription[] = [];
-  test:any;
 
 
   constructor(private _commonService: CommonService, private _router: Router,
@@ -59,9 +58,9 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     hideModal('addRelationshipModal');
   }
 
-  getDataFromService() {
+  async getDataFromService() {
     this.getRelationshipLookUp();
-    this.getDefinedRelationships();
+    await this.getDefinedRelationships();
     if (this.definedRelationships.length > 0) {
       this.getQuestionnaire(this.definedRelationships[0]);
     }
@@ -86,16 +85,23 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     this._router.navigateByUrl(this._entityDetailsServices.previousURL);
   }
   getDefinedRelationships() {
-    this.$subscriptions.push(this._entityDetailsServices.$entityDetailsTest.subscribe((res: any) => {
-      this.configuration.moduleItemKey = res.personEntity.personEntityId;
-      this.definedRelationships = res.personEntityRelationships;
-      // this.coiFinancialEntityDetail.coiFinancialEntityId = res.coiFinancialEntity.coiFinancialEntityId;
-    }));
+    const REQ_BODY = {
+      "tabName": this.currentSelected.tab,
+      "personEntityId": this._activatedRoute.snapshot.queryParamMap.get('entityId')
+    }
+    return new Promise<boolean>((resolve) => {
+     this.$subscriptions.push(this._entityDetailsServices.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
+        this.configuration.moduleItemKey = this._entityDetailsServices.entityDetails.entityId;
+        this.definedRelationships = res.personEntityRelationships;
+        resolve(true);
+        // this.coiFinancialEntityDetail.coiFinancialEntityId = res.coiFinancialEntity.coiFinancialEntityId;
+      }));
+    })
   }
 
   getQuestionnaire(data: any) {
-    this.activeRelationship = data.financialEntityRelTypeCode;
-    this.configuration.moduleSubItemKey = data.financialEntityRelTypeCode;
+    this.activeRelationship = data.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode;
+    this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
     this.configuration = Object.assign({}, this.configuration);
   }
 
@@ -109,8 +115,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
       }
       this.$subscriptions.push(this._entityDetailsServices.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
         this.definedRelationships.push(res);
-        this.getQuestionnaire(res.personEntityRelType);
-        this.findRelation(res.validPersonEntityRelTypeCode);
+        this.getQuestionnaire(res);
+        this.findRelation(res.validPersonEntityRelType.relationshipTypeCode);
         this.clearRelationModal();
         this.isSave = false;
       }));
@@ -133,7 +139,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
 
 
   private findRelation(financialEntityRelTypeCode: string) {
-    const RELATION_INDEX = this.relationLookup.findIndex(element => element.relationshipTypeCode === financialEntityRelTypeCode);
+    const RELATION_INDEX = this.relationLookup.findIndex(element => element.personEntityRelType.relationshipTypeCode === financialEntityRelTypeCode);
     if (RELATION_INDEX !== -1) {
       this.relationLookup.splice(RELATION_INDEX, 1);
     }
@@ -146,9 +152,9 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   }
   private removeExistingRelation() {
     if (this.definedRelationships.length) {
-      this.activeRelationship = this.definedRelationships[0].financialEntityRelTypeCode;
+      this.activeRelationship = this.definedRelationships[0].validPersonEntityRelType.relationshipTypeCode;
       this.definedRelationships.forEach(element => {
-        this.findRelation(element.financialEntityRelTypeCode);
+        this.findRelation(element.validPersonEntityRelType.personEntityRelType.relationshipTypeCode);
       });
     }
   }
@@ -160,5 +166,4 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     }
     return this.relationValidationMap.size === 0 ? true : false;
   }
-
 }

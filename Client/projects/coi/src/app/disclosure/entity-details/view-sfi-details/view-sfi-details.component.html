@@ -4,67 +4,70 @@
       <div class="row d-flex">
         <div class="col-12 d-flex">
           <div class="col-8 d-flex">
-            <span *ngIf="entityDetails" class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"
-              [ngClass]="!entityDetails?.isActive?'inactive':''">
-              <label class="px-2">{{!entityDetails?.isActive?'Inactive':'Active'}}</label> </span>
-            <h1 class="m-1 fw-bold fs-18"> {{entityDetails?.entityName}}</h1>
+            <span *ngIf="entityDetailsServices.entityDetails" class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"
+              [ngClass]="!entityDetailsServices.entityDetails?.isActive?'inactive':''">
+              <label class="px-2">{{!entityDetailsServices.entityDetails?.isActive?'Inactive':'Active'}}</label> </span>
+            <h1 class="m-1 fw-bold fs-18"> {{entityDetailsServices.entityDetails?.entityName}}</h1>
           </div>
           <!-- </div> -->
           <!-- <div class="col-6 align-items-center justify-content-end action-bar mt-1 d-flex"> -->
           <div class="col-4 d-flex justify-content-end">
-            <div class="action-bar d-flex">
-              <button class="btn m-1 new-line-property text-secondary fs-14-nav shadow action-btn">
+            <div class="action-bar mx-3 d-flex">
+              <button tabindex="0" class="btn m-1 new-line-property text-secondary fs-14-nav action-btn">
                 <mat-icon class="justify-content-center align-items-center fs-4 icon-size">
                   mode
                 </mat-icon>
                 Modify</button>
-              <button class="btn m-1 action-btn new-line-property text-secondary fs-14-nav shadow">
+              <button class="btn m-1 action-btn new-line-property text-secondary fs-14-nav">
                 <mat-icon class="justify-content-center align-items-center fs-4 icon-size">schedule</mat-icon>
                 Inactivate
               </button>
-              <button class="btn m-1 action-btn new-line-property text-secondary fs-14-nav shadow">
+              <button class="btn m-1 action-btn new-line-property text-secondary fs-14-nav">
                 <mat-icon class="justify-content-center align-items-center fs-4 icon-size">history </mat-icon>
                 History</button>
             </div>
-            <span class="back-ward" (click)="navigateBack()">
-              <i class="fa fa-reply justify-content-center align-items-center fs-14 mt-2"></i>
-              <label class="fw-medium fs-13 mt-1">Back</label>
-            </span>
+            <div class="ml-15">
+              <button tabindex="0" type="button" class="btn back-ward" (click)="navigateBack()" title="Back">
+                <i class="fa fa-reply justify-content-center align-items-center fs-14 mt-2"></i>
+                <!-- <label class="fw-medium fs-13 mt-1">Back</label> -->
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
     <div class="card-body">
       <div class="row d-flex">
-        <div class="col-12 d-flex">
+        <div class="col-12 d-flex pb-4">
           <div class="col-2 d-grid">
-            <strong class="fs-14">Entity Type</strong>
-            <label class="text-secondary fs-14">{{entityDetails?.entityType !==null?
-              entityDetails?.entityType?.description: 'No Data'}}</label>
+            <label class="fs-14 fw-500" >Entity Type</label>
+            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.entityType !==null?
+              entityDetailsServices.entityDetails?.entityType?.description: 'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <strong class="fs-14">Country</strong>
-            <label class="text-secondary fs-14">{{entityDetails?.country?.countryName !==
-              null?entityDetails?.country?.countryName:'No Data'}}</label>
+            <label class="fs-14 fw-500" >Country</label>
+            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.country?.countryName !==
+              null?entityDetailsServices.entityDetails?.country?.countryName:'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <strong class="fs-14">City</strong>
-            <label class="text-secondary fs-14">{{entityDetails?.city !== null?
-              entityDetails?.city:'No Data'}}</label>
+            <label class="fs-14 fw-500" >City</label>
+            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.city !== null?
+              entityDetailsServices.entityDetails?.city:'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <strong class="fs-14">Website</strong>
-            <label class="text-secondary fs-14">{{entityDetails?.webURL !==null?
-              entityDetails?.webURL: 'No Data'}}</label>
+            <label class="fs-14 fw-500" >Website</label>
+            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.webURL !==null?
+              entityDetailsServices.entityDetails?.webURL: 'No Data'}}</label>
           </div>
           <div class="col-2 d-grid">
-            <strong class="fs-14">Email Address </strong>
-            <label class="text-secondary fs-14">{{entityDetails?.emailAddress!==null ?
-              entityDetails?.emailAddress:'No Data'}}</label>
+            <label class="fs-14 fw-500" >Email Address </label>
+            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.emailAddress!==null ?
+              entityDetailsServices.entityDetails?.emailAddress:'No Data'}}</label>
           </div>
           <div class="col-1 d-grid">
-            <strong class="fs-14">Phone Number</strong>
-            <label class="text-secondary fs-14">{{entityDetails?.phone !==null?entityDetails?.phone:'No Data'
+            <label class="fs-14 fw-500" >Phone Number</label>
+            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.phone !==null?entityDetailsServices.entityDetails?.phone:'No Data'
               }}</label>
           </div>
           <div class="col-1 d-flex justify-content-end">
@@ -75,17 +78,17 @@
             </div>
           </div>
         </div>
-        <div *ngIf="entityDetailsServices.isExpanded" class="col-12 d-flex">
+        <div *ngIf="entityDetailsServices.isExpanded" class="col-12 d-flex pb-4">
           <div class="col-8 d-grid">
-            <strong class="fs-14">Address</strong>
-            <label class="text-secondary fs-14">{{entityDetails?.address!== null ?
-              entityDetails?.address:'No Data'}}</label>
+            <label class="fs-14 fw-500">Address</label>
+            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.address!== null ?
+              entityDetailsServices.entityDetails?.address:'No Data'}}</label>
           </div>
-          <div class="col-4 mt-3">
-            <label class="fw-bold mr-10 fs-14">Last Updated by :</label>
+          <div class="col-4 mt-3 text-secondary">
+            <label class="fw-500 mr-10 fs-14 ">Last Updated by :</label>
             <label class="text-secondary fs-14">
-              {{entityDetails?.updateUser !==null? (entityDetails?.updateUser +' on'):'No Data' }} {{
-                entityDetails?.updateUser !==null?(entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long'):''}}
+              {{entityDetailsServices.entityDetails?.updateUser !==null? (entityDetailsServices.entityDetails?.updateUser +' on'):'No Data' }} {{
+                entityDetailsServices.entityDetails?.updateUser !==null?(entityDetailsServices.entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long'):''}}
             </label>
           </div>
         </div>

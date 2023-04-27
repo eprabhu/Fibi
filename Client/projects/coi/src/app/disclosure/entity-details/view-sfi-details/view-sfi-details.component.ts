@@ -28,11 +28,12 @@ export class ViewSfiDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    subscriptionHandler(this.$subscriptions)
+    subscriptionHandler(this.$subscriptions);
   }
   getEntityDetails(entityId) {
     this.$subscriptions.push(this.entityDetailsServices.getCoiEntityDetails(entityId).subscribe((res: any) => {
       this.entityDetails = res.coiEntity;
+      this.entityDetailsServices.entityDetails = res.coiEntity;
     }));
   }
 

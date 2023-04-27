@@ -10,7 +10,7 @@ export class EntityDetailsService {
 
   previousURL = '';
   lookups: any;
-  $entityDetails = new BehaviorSubject<object>({});
+  entityDetails:any;
   $entityDetailsTest = new BehaviorSubject<object>({});
 
   $relationshipsDetails = new BehaviorSubject<object>({});

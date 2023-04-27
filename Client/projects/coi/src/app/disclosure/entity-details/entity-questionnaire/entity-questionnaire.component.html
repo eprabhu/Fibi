@@ -1,19 +1,19 @@
 <div class="mt-4">
-  <div *ngIf="definedRelationships?.length" class="container-fluid">
+  <div  class="container-fluid">
     <nav class="border-nav bg-white border d-flex fs-15 fw-bold mt-3 shadow user-dashboard-nav">
-      <div (click)="currentSelected.tab = 'FINANCIAL'"
+      <div (click)="currentSelected.tab = 'FINANCIAL';getDataFromService()"
         [class.bg-active]="currentSelected.tab === 'FINANCIAL'?'active':''"
-        class="left-curve align-items-end d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab === 'FINANCIAL'?'active':''" class="pb-3 active">Financial</span>
+        class="left-curve align-items-center d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
+        <span [class.active]="currentSelected.tab === 'FINANCIAL'?'active':''" class=" active">Financial</span>
       </div>
-      <div (click)="currentSelected.tab = 'COMMITMENT'"
+      <div (click)="currentSelected.tab = 'COMMITMENT';getDataFromService()"
         [class.bg-active]="currentSelected.tab === 'COMMITMENT'?'active':''"
-        class="align-items-end d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab === 'COMMITMENT'?'active':''" class="pb-3 active">Commitment</span>
+        class="align-items-center d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
+        <span [class.active]="currentSelected.tab === 'COMMITMENT'?'active':''" class=" active">Commitment</span>
       </div>
-      <div (click)="currentSelected.tab = 'TRAVEL'" [class.bg-active]="currentSelected.tab === 'TRAVEL'?'active':''"
-        class="right-curve align-items-end d-flex navigation-icons text-secondary px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab === 'TRAVEL'?'active':''" class="pb-3 active">Travel</span>
+      <div (click)="currentSelected.tab = 'TRAVEL';getDataFromService()" [class.bg-active]="currentSelected.tab === 'TRAVEL'?'active':''"
+        class="right-curve align-items-center d-flex navigation-icons text-secondary px-3 py-1" role="button">
+        <span [class.active]="currentSelected.tab === 'TRAVEL'?'active':''" class=" active">Travel</span>
       </div>
     </nav>
   </div>
@@ -27,11 +27,11 @@
         <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;">
           <div (click)="getQuestionnaire(coiFinancialEntityDetail)"
             class="border-end navigation-title px-3 py-1 text-secondary" role="button"
-            [ngClass]="activeRelationship === coiFinancialEntityDetail?.financialEntityRelTypeCode?'nav-bar':''">
+            [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'nav-bar':''">
             <span
-              [class.active]="activeRelationship === coiFinancialEntityDetail?.financialEntityRelTypeCode?'active':''"
+              [class.active]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active':''"
               class="active r-title">
-              {{coiFinancialEntityDetail?.coiFinancialEntityRelType?.description}}</span>
+              {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}</span>
           </div>
         </ng-container>
         <div *ngIf="isEditMode" (click)="activeRelationship = 'add_relationship' " class="px-3 py-1 text-primary"
@@ -79,14 +79,13 @@
         </div>
         <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
           style="margin-top: 26px;margin-bottom: 16px;">
-          <div class=" border "style="padding: 25px ; padding-left:0px ;">
+          <div class=" border "style="padding:28px ;">
             <div style="display: flex; flex-direction: row; ">
               <div class="form-check form-check-inline">
                 <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation:
                   </b></label>
               </div>
               <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
-                <!-- {{relation | json }} -->
                 <input type="radio" name="relation" class="form-check-input text-secondary"
                   [value]="relation?.personEntityRelType?.relationshipTypeCode" [(ngModel)]="coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode"
                   (ngModelChange)="setRelationship()" [ngClass]="relationValidationMap.has('relationRadio')?'is-invalid d-block' : ''">
@@ -95,6 +94,7 @@
                 </label>
               </div>
             </div>
+            <div *ngIf="relationValidationMap.has('relationRadio')" class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}</div>
           </div>
         </div>
         <ng-template #noData>
