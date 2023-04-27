@@ -34,4 +34,8 @@ export class SfiService {
         return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
     }
 
+    saveOrUpdateCoiFinancialEntityDetails(params) {
+        return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
+    }
+    
 }

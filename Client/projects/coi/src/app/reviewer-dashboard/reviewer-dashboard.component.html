@@ -45,22 +45,22 @@
             Review History
           </li>
         </ul>
-        <div class="d-flex mb-2">
-          <div class="form-group col position-relative">
-            <app-elastic [options]="coiElastic" style="width: 1400px"
-              [placeHolder]="'Search: Disclosure#,Category,Full Name,status,person#'"
-              (selectedResult)="redirectToDisclosure($event)"></app-elastic>
-          </div>
-          <div class="form-group col-auto">
-            <button role="button" class="btn btn-primary d-flex align-items-center primary-button" id="advanced-search"
-              (click)="toggleADSearch()" style="margin-left:18px;" aria-controls="collapseExample" aria-expanded="false"
-              aria-label="Toggle Advanced Search"><mat-icon>tune</mat-icon>
-              <div> Advanced Search </div>
-            </button>
-          </div>
-        </div>
       </div>
     </nav>
+    <div class="d-flex mb-2">
+      <div class="form-group col position-relative">
+        <app-elastic [options]="coiElastic" style="width: 1400px"
+          [placeHolder]="'Search : Person, Department, Entity, Disclosure#'"
+          (selectedResult)="redirectToDisclosure($event)"></app-elastic>
+      </div>
+      <div class="form-group col-auto">
+        <button role="button" class="btn btn-primary d-flex align-items-center primary-button" id="advanced-search"
+          (click)="toggleADSearch()" style="margin-left:18px;" aria-controls="collapseExample" aria-expanded="false"
+          aria-label="Toggle Advanced Search"><mat-icon>tune</mat-icon>
+          <div> Advanced Search </div>
+        </button>
+      </div>
+    </div>
 
     <div class="sort-div border" *ngIf="isShowAllProposalList && coiList.length">
       <span class="fs-14 fw-medium me-2 text-secondary">Sort by:</span>
@@ -474,3 +474,4 @@
     </ng-template>
 
   </section>
+</div>

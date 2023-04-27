@@ -1,40 +1,35 @@
-<div class="container-fluid px-5 py-2 " [@slideInOut]>
-  <div class="row">
-    <div class="col-12 d-flex">
-      <div class="col">
+<div class="container-fluid px-5 py-2 mt-4" [@slideInOut]>
+  <div class="row bg-white mx-0 d-flex py-2 mt-2 align-items-center border">
+      <nav class="coi-admin-dash mx-0 borderlist">
         <ul class="header-navigation-links d-flex align-items-center m-0 f-15 cursor-pointer p-0 text-secondary">
-          <li tabindex="0" class="mr-15 cursor-pointer" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"
+          <li tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"
             role="tab" (keyup.enter)="entityTabName('ALL_ENTITIES')" (keyup.space)="entityTabName('ALL_ENTITIES')"
             (click)="entityTabName('ALL_ENTITIES')">All Entities
-            <span *ngIf="activeTabName === 'ALL_ENTITIES'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
           </li>
-          <li tabindex="0" class="mr-15 ml-15 cursor-pointer" [ngClass]="{'active': activeTabName === 'UNVERIFIED'}"
+          <li class="separator px-0"></li>
+          <li tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'UNVERIFIED'}"
             role="tab" (keyup.enter)="entityTabName('UNVERIFIED')" (keyup.space)="entityTabName('UNVERIFIED')"
             (click)="entityTabName('UNVERIFIED')">Unverified Entities
-            <span *ngIf="activeTabName === 'UNVERIFIED'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
           </li>
-          <li tabindex="0" class="mr-15 ml-15 cursor-pointer" [ngClass]="{'active': activeTabName === 'HIGH_RISK'}"
+          <li class="separator px-0"></li>
+          <li tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'HIGH_RISK'}"
             role="tab" (keyup.enter)="entityTabName('HIGH_RISK')" (keyup.space)="entityTabName('HIGH_RISK')"
             (click)="entityTabName('HIGH_RISK')">High Risk Entities
-            <span *ngIf="activeTabName === 'HIGH_RISK'" class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
-
           </li>
         </ul>
-      </div>
-      <div class="justify-content-end d-flex mt-3 ">
-        <button class="btn btn-primary d-flex fs-13" id="add-new-entity" title="Add new entity"
+      </nav>
+      
+      <div class="align-items-center d-flex justify-content-end">
+        <button class="btn btn-primary d-flex fs-13 align-items-center" id="add-new-entity" title="Add new entity"
           (click)="addNewEntity()"><mat-icon class="add-icon">add</mat-icon> Add New
           Entity</button>
       </div>
-    </div>
   </div>
   <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
     <app-add-new-entity-details [coiEntityManageId]="entityManageId"
       [isEditEntity]="isCoiEditEntity"></app-add-new-entity-details>
   </div>
-  <div class="row mt-4">
+  <div class="row mt-3">
     <div class="col-12 d-flex mt-1">
       <div class="col">
         <app-elastic [options]="coiElastic" [placeHolder]="'Entity Name, Country etc.'"

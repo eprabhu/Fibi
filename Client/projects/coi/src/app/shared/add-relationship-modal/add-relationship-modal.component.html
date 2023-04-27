@@ -7,49 +7,56 @@
               <h1 class="modal-title f-16" id="exampleModalLabel">Add Relations</h1>
               <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
           </div>
-          <div class="modal-body ">
-              <!-- Paragraph -->
-              <div class="row ">
-                  <p style="font-size: 14px;"><b>Significant Financial Interest Details</b>: Now includes
-                      not-for-profit
-                      entities other than government entities, institution of higher education and affiliated
-                      organizations.</p>
-              </div>
-              <!-- Radio -->
-              <div class="relation d-flex justify-content-center  " style="margin-top: 26px;margin-bottom: 16px;">
-                  <div class=" border " style="padding: 18px;">
-                      <div style="display: flex; flex-direction: row; ">
-                          <div class="form-check form-check-inline">
-                              <label style="font-size: 14px; color: rgb(138, 133, 133);" class="form-check-label"
-                                  for="inlineRadio1"><b>Select Relation: </b></label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                                  value="option1">
-                              <label style="font-size: 14px;color:rgb(46 42 42 / 94%);font-weight: 400;"
-                                  class="form-check-label" for="inlineRadio1">SELF</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                                  value="option2">
-                              <label style="font-size: 14px;color:rgb(46 42 42 / 94%);font-weight: 400;"
-                                  class="form-check-label" for="inlineRadio2">SPOUSE</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                                  value="option2">
-                              <label style="font-size: 14px;color:rgb(46 42 42 / 94%);font-weight: 400;"
-                                  class="form-check-label" for="inlineRadio2">DEPENDENT</label>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary fs-14 py-2" data-bs-dismiss="modal" (click)="closeModal()">Cancel</button>
-              <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-14 py-2" (click)="continueWithoutRelation()">Continue without selecting relation</button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addRelation()">Add relation</button>
-          </div>
+        <div class="modal-body ">
+            <!-- Paragraph -->
+            <div class="row">
+                <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than
+                    government entities, institution of higher education and affiliated organizations.</p>
+            </div>
+            <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
+                style="margin-top: 26px;margin-bottom: 16px;">
+                <div class=" border " style="padding: 25px ; padding-left:0px ;">
+                    <div style="display: flex; flex-direction: row; ">
+                        <div class="form-check form-check-inline">
+                            <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation:
+                                </b></label>
+                        </div>
+                        <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
+                            <input type="radio" name="relation" class="form-check-input text-secondary"
+                                [value]="relation?.relationshipTypeCode"
+                                [(ngModel)]="entityDetail.validPersonEntityRelTypes.relationshipTypeCode"
+                                (ngModelChange)="setRelationship()"
+                                [ngClass]="relationValidationMap.has('relationRadio')?'is-invalid d-block' : ''">
+                            <label class="text-secondary r-title fs-14">
+                                {{relation?.description}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-template #noData>
+                <div class="no-data-container">
+                    <span class="no-data-icon-outer">
+                        <div class="no-data-icon">
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                        </div>
+                    </span>
+                    <h4>There are no relations.</h4>
+                </div>
+            </ng-template>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary fs-14 py-2" data-dismiss="modal"
+                (click)="closeModal()">Cancel
+            </button>
+            <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-14 py-2"
+                data-dismiss="modal" (click)="continueWithoutRelation()">Continue without selecting Relation
+            </button>
+            <button id="add-review-btn" type="button" class="btn btn-primary btn-sm" data-dismiss="modal"
+                (click)="addRelation()">Add Relation
+            </button>
+        </div>
       </div>
   </div>
 </div>

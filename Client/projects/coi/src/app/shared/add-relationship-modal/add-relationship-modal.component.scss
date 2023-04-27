@@ -16,3 +16,12 @@
 .modal-header {
     border-radius: 2rem 2rem 0rem 0rem;
 }
+
+.r-title {
+    display: inline-block;
+    text-transform: lowercase;
+  }
+  
+  .r-title::first-letter {
+    text-transform: uppercase;
+  }
