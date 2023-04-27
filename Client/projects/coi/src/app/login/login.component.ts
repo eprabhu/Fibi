@@ -59,14 +59,14 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
             this.$subscriptions.push(this._loginService.login(this.credentials).subscribe((data: any) => {
                 this.isSaving = false;
                 if (data.body != null) {
-                    if (data.body.login === true) {
+                    if (data.body) {
                         this.commonService.updateLocalStorageWithUserDetails(data);
                         this.commonService.getRequiredParameters().then(systemParameters => {
                             this.commonService.assignSystemParameters(systemParameters);
                         });
                         this._router.navigate(['coi/user-dashboard']);
                     } else {
-                        // this.commonService.showToast(HTTP_ERROR_STATUS, 'The username or password that you have entered is incorrect', 5000);
+                        this.commonService.showToast(HTTP_ERROR_STATUS, 'The username or password that you have entered is incorrect');
                     }
                 }
             }));

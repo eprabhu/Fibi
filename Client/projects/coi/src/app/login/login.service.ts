@@ -9,7 +9,7 @@ export class LoginService {
     }
 
     login(credentials: any) {
-        const requestObject = {principalName: credentials.username, password: credentials.password};
-        return this._http.post(this._commonService.baseUrl + '/login', requestObject, { observe: 'response' });
+        const requestObject = {username: credentials.username, password: credentials.password};
+        return this._http.post(this._commonService.baseUrl + '/auth/login', requestObject, { observe: 'response' });
     }
 }

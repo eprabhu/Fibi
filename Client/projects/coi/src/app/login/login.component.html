@@ -28,12 +28,12 @@
 						<div *ngIf="isCapsOn" class="caps-msg f-14 mb-4 text-black-50">
 							Caps Lock is on.
 						</div>
-						<!--<button (click)="login()" [disabled]="!(credentials.username && credentials.password)"
-                                class="w-100" color="primary" mat-raised-button>Login
-						</button>-->
-						<button [routerLink]="['/']"
+						<button (click)="login()" [disabled]="!(credentials.username && credentials.password)"
                                 class="w-100" color="primary" mat-raised-button>Login
 						</button>
+<!--						<button [routerLink]="['/']"-->
+<!--                                class="w-100" color="primary" mat-raised-button>Login-->
+<!--						</button>-->
 					</span>
 					<ng-template #resetPassword>
 						<div>

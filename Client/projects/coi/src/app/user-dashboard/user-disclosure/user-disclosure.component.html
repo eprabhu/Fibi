@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row my-4">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
         <div class="col-6 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1'">
             <div class="shadow-sm disclosure-card border rounded">
@@ -6,7 +6,7 @@
                     <div class="col"><strong class="fs-15">FCOI Disclosure</strong></div>
                     <div class="col d-flex fs-14 justify-content-between align-items-center">
                         <div><span class="fw-bold text-secondary">Discl. Status:</span> <span
-                                class="disclosure-active-pill ms-2">{{disclosure?.conflictStatus}}</span>
+                                class="disclosure-active-pill ms-2 {{commonService.getDisclosureConflictStatus(disclosure?.conflictStatusCode)}}">{{disclosure?.coiConflictStatusType?.description}}</span>
                         </div>
                         <div [queryParams]={disclosureId:disclosure.disclosureId}
                              [routerLink]="['/coi/disclosure/summary']"
@@ -37,7 +37,10 @@
                     <div class="col">
                         <div>
                             <span class="fw-bold text-secondary">Disposition Status:</span>
-                            <span class="ms-2 disclosure-active-pill">{{disclosure?.coiDispositionStatus?.description}}</span>
+                            <span class="ms-2 disclosure-active-pill
+                            bg-{{getDispositionStatusBadgeUpdated(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}
+                            text-{{getDispositionStatusTextColor(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
+                                {{disclosure?.coiDispositionStatusType?.description}}</span>
                         </div>
                         <div class="my-1">
                             <span class="fw-bold text-secondary">Expiration Date:</span>
@@ -140,8 +143,11 @@
         'conflictStatus', 'dispositionStatus', 'proposalTitle', 'updateUser', 'noOfSfiInPending', 'proposalId', 'reviewStatus']">
     <div class="bg-white border mt-2 rounded-1 shadow-sm light-dark-text-color">
         <div class="border-bottom fs-14 p-3">
-            <div *ngIf="disclosure?.fcoiTypeCode == '3'"><span
+            <div *ngIf="disclosure?.fcoiTypeCode == '2'"><span
                     class="fw-bold me-2">Proposal:</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
+            </div>
+            <div *ngIf="disclosure?.fcoiTypeCode == '3'"><span
+                    class="fw-bold me-2">Award:</span> #{{disclosure?.awardId}} - {{disclosure?.awardTitle}}
             </div>
             <div class="d-flex my-2">
                 <div class="col">
@@ -157,7 +163,7 @@
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disclosure Status:</span> <span
-                        class="badge bg-{{getDisclosureStatusBadge(disclosure?.conflictStatusCode)}} text-{{getDisclosureStatusText(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
+                        class="badge {{commonService.getDisclosureConflictStatus(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
                 </div>
             </div>
             <div class="d-flex">
@@ -195,8 +201,7 @@
                 </ng-container>
             </div>
             <div class="col">
-                <div>Last Updated:</div>
-                <div>{{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}
+                <div>Last Updated: {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}
                     by {{disclosure?.updateUser}}</div>
             </div>
             <div class="col d-flex justify-content-end">

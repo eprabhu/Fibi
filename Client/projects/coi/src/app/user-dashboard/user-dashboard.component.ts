@@ -49,16 +49,16 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     getActiveDisclosure() {
         this.$subscriptions.push(this.service.getActiveDisclosure().subscribe((res: any) => {
-            this.service.activeDisclosures = res.coiDisclosureOlds || [];
+            this.service.activeDisclosures = res.coiDisclosures || [];
             this.updateFCOIStatuses();
         }))
     }
 
     updateFCOIStatuses() {
         this.hasFCOI = this.service.activeDisclosures.find(disclosure =>
-            disclosure.disclosureCategoryTypeCode == '1'
+            disclosure.fcoiTypeCode == '1'
         );
-        this.hasActiveFCOI = this.hasFCOI ? this.hasFCOI.dispositionStatusTypeCode == '2' : false;
+        this.hasActiveFCOI = this.hasFCOI ? this.hasFCOI.dispositionStatusCode == '2' : false;
     }
 
     clearModal(): void {

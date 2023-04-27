@@ -129,7 +129,7 @@ export class CommonService {
      *  will be moved to application context once SSO is stable
      */
     updateLocalStorageWithUserDetails(details) {
-        details.body['Authorization'] = details.headers.get('Authorization');
+        details.body['Authorization'] = details.headers.get('authorization');
         this.currentUserDetails = details.body;
         setIntoLocalStorage(details.body);
     }
@@ -186,16 +186,31 @@ export class CommonService {
         this.isEnableLock = parameters.isEnableLock;
     }
 
-    fetchPermissions() {
-        return this._http.get(this.baseUrl + '/getAllSystemRights').toPromise();
+    async fetchPermissions() {
+        if(this.rightsArray.length) {
+            return this.rightsArray;
+        }
+        this.rightsArray = this._http.get(this.baseUrl + '/getAllSystemRights').toPromise();
+        return this.rightsArray;
     }
 
     showToast(status = HTTP_SUCCESS_STATUS, toastContent = '') {
         let toast = new Toast(document.getElementById('coi-bootstrap-toast'));
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
-        this.toastClass = HTTP_SUCCESS_STATUS ? 'success' : 'danger';
+        this.toastClass = status === HTTP_SUCCESS_STATUS ? 'success' : 'danger';
         toast.show();
+    }
+
+    getDisclosureConflictStatus(statusCode: string) {
+        switch(String(statusCode)) {
+            case '1':
+                return 'bg-success text-white';
+            case '2':
+            case '3':
+            case '4':
+                return 'bg-warning text-black';
+        }
     }
 
 }

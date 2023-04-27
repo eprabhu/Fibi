@@ -74,6 +74,12 @@ export class ProjectDisclosureComponent implements OnInit {
     selectedProposal(event) {
         if (event) {
             this.manualProjectAddDetails.moduleItemId = this.selectedProjectType == 'Award' ? event.awardId: event.moduleItemId;
+            this.manualProjectAddDetails.title = this.selectedProjectType == 'Award' ? event.awardNumber+ '-'+ event.title: event.title;
+            this.manualProjectAddDetails.principalInvestigator = this.selectedProjectType == 'Award' ? event.principalInvestigator: event.principalInvestigator;
+            this.manualProjectAddDetails.unitName = this.selectedProjectType == 'Award' ? event.unitName: event.unitName;
+            this.manualProjectAddDetails.startDate = this.selectedProjectType == 'Award' ? event.startDate: event.startDate;
+            this.manualProjectAddDetails.endDate = this.selectedProjectType == 'Award' ? event.endDate: event.endDate;
+            this.manualProjectAddDetails.sponsor = this.selectedProjectType == 'Award' ? event.sponsorName: event.sponsor;
             this.isShowResultCard = true;
         } else {
             this.clearSearchFields();

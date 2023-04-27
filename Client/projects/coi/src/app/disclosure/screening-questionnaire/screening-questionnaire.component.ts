@@ -15,6 +15,7 @@ import {HTTP_ERROR_STATUS} from "../../../../../fibi/src/app/app-constants";
     template: `
         <div>
             <app-view-questionnaire-list
+                    [isShowExportButton]="false"
                     [configuration]="configuration"
                     [externalSaveEvent]='coiService.globalSave$'
                     [questionnaireHeader]="''"

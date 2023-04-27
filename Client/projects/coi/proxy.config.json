@@ -124,7 +124,7 @@
       "secure": false
     },
     "/getCOIAdminDashboard": {
-      "target": "http://192.168.1.189:9090/fibi4/",
+      "target": "http://192.168.1.37:9090/fibi4/",
       "secure": false
     },
     "/getAllSystemEntityList": {
@@ -176,7 +176,7 @@
       "secure": false
     },
     "/getCOIReviewerDashboard": {
-      "target": "http://192.168.1.189:9090/fibi4/",
+      "target": "http://192.168.1.37:9090/fibi4/",
       "secure": false
     },
     "/loadDisclosureReviewerQuickCardCounts": {
@@ -226,6 +226,10 @@
   },
   "/getPersonEntityRelationship":{
     "target": "http://192.168.1.189:9090/fibi4/",
+    "secure": false
+  },
+  "/auth/login": {
+    "target": "http://192.168.1.189:9090/",
     "secure": false
   }
 }

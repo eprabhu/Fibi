@@ -35,7 +35,7 @@ export class DefineRelationComponent implements OnInit {
   coiValidationMap: Map<string, string> = new Map();
   coiTableValidation: Map<string, string> = new Map();
 
-  newArray: Array<any> = [];
+  entityProjectDetails: Array<any> = [];
   disclosureNumber: any;
   disclosureStatusCode: any;
   isEditMode: boolean = true;
@@ -98,7 +98,7 @@ export class DefineRelationComponent implements OnInit {
     applyToAll() {
       this.coiValidationMap.clear();
       this.coiTableValidation.clear();
-      this.newArray.forEach((ele: any) => {
+      this.entityProjectDetails.forEach((ele: any) => {
         if (!ele.discDetStatusCode) {
           ele.discDetStatusCode = this.coiStatusCode;
         } if (!ele.comment.comments) {
@@ -110,7 +110,7 @@ export class DefineRelationComponent implements OnInit {
 
     getEntityList() {
       this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
-        this.newArray = data.coiDisclosureDetails;
+        this.entityProjectDetails = data.coiDisclosureDetails;
         this.selectedProject = this.module;
         this.isShowDetails = true;
         this.showTaskNavBar();
@@ -128,7 +128,7 @@ export class DefineRelationComponent implements OnInit {
     }
 
     isAnyOneEntityAnswered() {
-       return !!this.newArray.find(ele => ele.discDetStatusCode || ele.comment.comments);
+       return !!this.entityProjectDetails.find(ele => ele.discDetStatusCode || ele.comment.comments);
     }
 
     openSaveAllConfirmationModal() {
@@ -141,7 +141,7 @@ export class DefineRelationComponent implements OnInit {
     }
 
     clearAll() {
-      this.newArray.forEach((ele: any) => {
+      this.entityProjectDetails.forEach((ele: any) => {
         ele.discDetStatusCode = null;
         ele.comment.comments = null;
       });
@@ -155,29 +155,29 @@ export class DefineRelationComponent implements OnInit {
       // if (!this.newArray[index].discDetStatusCode && !this.newArray[index].comment.comments) {
       //   this.coiTableValidation.set('clear'+index , 'No data to clear');
       // } else {
-        this.newArray[this.clearIndex ].discDetStatusCode = null;
-        this.newArray[this.clearIndex ].comment.comments = null;
-        this.newArray[this.clearIndex ].coiFinancialEntityId = this.newArray[this.clearIndex ].coiFinancialEntity.coiFinancialEntityId;
-        this.newArray[this.clearIndex ].disclosureId = this.coiData.coiDisclosure.disclosureId;
-        this.newArray[this.clearIndex ].disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
-        this.newArray[this.clearIndex ].moduleCode = this.selectedProject.moduleCode;
-        this.newArray[this.clearIndex ].moduleItemKey = this.selectedProject.moduleItemId;
-        this.getCommentObject(this.newArray[this.clearIndex ].comment);
-        this.newArray[this.clearIndex ].coiDisclosureDetailsStatus = this.getStatusObject(this.newArray[this.clearIndex ].discDetStatusCode);
-        this.singleSaveClick(this.newArray[this.clearIndex], this.clearIndex);
+        this.entityProjectDetails[this.clearIndex ].discDetStatusCode = null;
+        this.entityProjectDetails[this.clearIndex ].comment.comments = null;
+        this.entityProjectDetails[this.clearIndex ].coiFinancialEntityId = this.entityProjectDetails[this.clearIndex ].coiFinancialEntity.coiFinancialEntityId;
+        this.entityProjectDetails[this.clearIndex ].disclosureId = this.coiData.coiDisclosure.disclosureId;
+        this.entityProjectDetails[this.clearIndex ].disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
+        this.entityProjectDetails[this.clearIndex ].moduleCode = this.selectedProject.moduleCode;
+        this.entityProjectDetails[this.clearIndex ].moduleItemKey = this.selectedProject.moduleItemId;
+        this.getCommentObject(this.entityProjectDetails[this.clearIndex ].comment);
+        this.entityProjectDetails[this.clearIndex ].coiDisclosureDetailsStatus = this.getStatusObject(this.entityProjectDetails[this.clearIndex ].discDetStatusCode);
+        this.singleSaveClick(this.entityProjectDetails[this.clearIndex], this.clearIndex);
     }
 
     openClearModal(index) {
       this.coiTableValidation.clear();
       this.clearIndex = index;
-      if (this.newArray[index].discDetStatusCode || this.newArray[index].comment.comments) {
+      if (this.entityProjectDetails[index].discDetStatusCode || this.entityProjectDetails[index].comment.comments) {
         document.getElementById('hidden-single-clear-button').click();
       }
     }
 
     saveSingleEntity(index, test) {
       this.coiTableValidation.delete('save'+index );
-      if ([null, 'null'].includes(this.newArray[index].discDetStatusCode)) {
+      if ([null, 'null'].includes(this.entityProjectDetails[index].discDetStatusCode)) {
         this.coiTableValidation.set('save'+index , 'Please select COI Status');
       } else {
         test.coiFinancialEntityId = test.coiFinancialEntity.coiFinancialEntityId;
@@ -192,7 +192,7 @@ export class DefineRelationComponent implements OnInit {
     }
 
     prepareSaveObject() {
-      this.newArray.forEach((ele: any) => {
+      this.entityProjectDetails.forEach((ele: any) => {
         ele.coiFinancialEntityId = ele.coiFinancialEntity.coiFinancialEntityId;
         ele.disclosureId = this.coiData.coiDisclosure.disclosureId;
         ele.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
@@ -215,15 +215,15 @@ export class DefineRelationComponent implements OnInit {
 
     saveClick() {
       this.prepareSaveObject();
-        this._relationShipService.saveEntityProjectRelation(this.newArray, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
-          this.newArray = data.coiDisclosureDetails;
+        this._relationShipService.saveEntityProjectRelation(this.entityProjectDetails, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+          this.entityProjectDetails = data.coiDisclosureDetails;
         }, err => {
       });
     }
 
     singleSaveClick(element, index) {
         this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
-          this.newArray[index] = data.coiDisclosureDetail;
+          this.entityProjectDetails[index] = data.coiDisclosureDetail;
           this.toast.show();
           this.clearIndex = null;
       }, err => {
