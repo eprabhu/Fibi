@@ -117,9 +117,9 @@ select option {
     border-radius:10px 0px 0px 10px;
 }
 
-.card-border {
-    border-radius:20px 0px 0px 0px;
-}
+// .card-border {
+//     border-radius:20px 0px 0px 0px;
+// }
 
 .close-btn {
     color: #a92034;
@@ -307,4 +307,12 @@ small {
 
 .mr-1rem {
     margin-right: 1rem;
+}
+
+.font {
+font-weight: 500;
+}
+
+.card-color {
+    background-color: #FBFBFF;
 }

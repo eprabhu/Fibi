@@ -208,8 +208,12 @@ export class AddSfiComponent implements OnInit {
   }
 
   selectedCountryEvent(event) {
-    this.coiEntity.country = event;
-    this.coiEntity.country.countryCode = event.countryCode;
+    if (event) {
+      this.coiEntity.country = event;
+      this.countrySearchOptions.defaultValue = event.countryName;
+    } else {
+      this.coiEntity.country = null;
+    }
   }
 
   clearSFIFields() {
@@ -225,14 +229,14 @@ export class AddSfiComponent implements OnInit {
   checkMandatoryFilled() {
     this.mandatoryList.clear();
     if (!this.coiEntity.entityName) {
-      this.mandatoryList.set('name', '* Please choose a entity name.');
+      this.mandatoryList.set('name', '* Please choose an entity name.');
     }
     if (!this.coiEntity.entityId) {
       if (!this.coiEntity.country) {
         this.mandatoryList.set('country', '* Please choose a country.');
       }
       if (!this.coiEntity.entityTypeCode || this.coiEntity.entityTypeCode === 'null') {
-        this.mandatoryList.set('type', '* Please choose a entity type.');
+        this.mandatoryList.set('type', '* Please choose an entity type.');
       }
       if (!this.coiEntity.emailAddress) {
         this.mandatoryList.set('email', '* Please enter a email address.');

@@ -48,9 +48,7 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
     this.setUnquieIdForSearchText();
 	}
 	ngOnChanges() {
-		if (!this.isError) {
-			this.searchText = this.httpOptions && this.httpOptions.defaultValue || '';
-		}
+		this.searchText = this.httpOptions && this.httpOptions.defaultValue || '';
 		this.clearField = '' + this.clearField;
 		if (this.clearField === 'true') {
 			this.searchText = '';

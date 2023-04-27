@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { SfiService } from './sfi.service';
@@ -22,6 +22,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     disclosureId: any;
     personId: any;
     isSFINotAvailable = false;
+    reviewStatus: any;
 
     constructor(
         private _sfiService: SfiService,
@@ -46,6 +47,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         const DATA = this._dataStore.getData(this.dependencies);
         this.conflictStatusCode = 0;
         this.conflictStatusCode = DATA.coiDisclosure.conflictStatusCode;
+        this.reviewStatus = DATA.coiDisclosure.reviewStatusCode;
         this.disclosureId =  DATA.coiDisclosure.disclosureId;
         this.isEditMode = this._dataStore.getEditModeForCOI();
         this.personId = DATA.coiDisclosure.personId;
@@ -53,7 +55,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     getSfiDetails() {
-        this.$subscriptions.push(this._sfiService.getSfiDetails(this.disclosureId, this.conflictStatusCode, this.personId).subscribe((data: any) => {
+        this.$subscriptions.push(this._sfiService.getSfiDetails(this.disclosureId, this.reviewStatus, this.personId).subscribe((data: any) => {
             if (data) {
                 this.coiFinancialEntityDetails = data;
             }

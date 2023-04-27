@@ -1,6 +1,6 @@
 <div class="mt-3 mx-0 row">
 </div>
-<div class="card-body bg-white mt-1">
+<div class="mt-1">
     <div class="row justify-content-center " *ngIf="coiFinancialEntityDetails?.length">
         <div class="form-group searchBox col-lg">
             <input type="text" placeholder="Search by SFI" class="ng-pristine ng-valid ng-touched form-control"
@@ -23,32 +23,30 @@
 <div class=" row p-2 "
     *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
     <!-- Main -->
-    <div class="border bg-white rounded-3 p-2 d-flex ">
+    <div class="border d-flex px-0 rounded-3 shadow-sm">
         <div class="col-11 bg-white ">
             <div class=" mt-2 pb-2 pt-3 px-1" style="height: 77px;">
                 <div class="m-0 mb-2 row">
                     <div class="col-9 ">
                         <!-- <span class="inactive-ribbon shadow-sm align-items-center d-flex ps-2">Inactive</span> -->
                         <p class="entity-title">
-                            <strong>{{item?.coiEntity?.coiEntityName }}</strong>
+                            <strong>{{item?.coiEntity?.entityName}}</strong>
                         </p>
                     </div>
                     <div class="col-3 text-secondary fs-14">
                         <span class="fw-bold me-2">Entity
-                            Type:</span>{{item?.coiEntity?.entityType.description.substr(0, 10)}}
-                    </div>
-                </div>
+                            Type:</span>{{item?.coiEntity?.entityType?.description.substr(0,20)}}
+                    </div>                </div>
                 <!-- Under -->
                 <div class="align-items-center d-flex fs-14 m-0 row">
                     <div class="col-6 text-secondary">
                         <span class="fw-bold me-3">Relationship:</span>
                         <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span
                                 class="fw-medium">Financial:
-                            </span> <em *ngFor="let relationship of item?.coiFinancialEntityDetails;let last = last">
-                                <span *ngIf="!last">{{relationship?.coiFinancialEntityRelType?.description}},
-                                    <!-- {{item?.coiFinancialEntityDetails?.length>1? relationship?.coiFinancialEntityRelType?.description +'#': relationship?.coiFinancialEntityRelType?.description}} -->
+                            </span> <em *ngFor="let relationship of item?.validPersonEntityRelTypes;let last = last">
+                                <span class="r-title" *ngIf="!last">{{relationship?.personEntityRelType?.description +','}}
                                 </span>
-                                <span *ngIf="last">{{relationship?.coiFinancialEntityRelType?.description}}
+                                <span class="r-title" *ngIf="last">{{relationship?.personEntityRelType?.description}}
                                 </span>
                             </em></span>
                         <span class="relationship-pill border px-3 py-1 me-2 rounded-4 fw-medium pill-color">Travel</span>
@@ -80,7 +78,7 @@
         <!-- 2nd row -->
         <div class="col-1 bg-white">
             <div class="bg-white mt-2 pb-2 pt-3 px-1">
-                <button class="btn btn-outline-secondary sfi_action_btn cursor-pointer" style="padding: 3px;" id="view-sfi"
+                <button class="btn btn-outline-primary sfi_action_btn cursor-pointer mt-3" style="padding: 3px;" id="view-sfi"
                 (click)="openSfiDetails(true, item?.coiFinancialEntityId)">
                     <mat-icon class=" sfi_action_icon">remove_red_eye</mat-icon>
                 </button>
@@ -88,5 +86,9 @@
         </div>
     </div>
 </div>
+
 </div>
+</div>
+<div *ngIf="!coiFinancialEntityDetails?.length">
+    <app-no-information> </app-no-information>
 </div>

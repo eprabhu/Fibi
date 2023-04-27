@@ -13,9 +13,9 @@ export class SfiService {
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-    getSfiDetails(id, disclosureStatusCode, personId) {
+    getSfiDetails(id, reviewStatusCode, personId) {
         return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure',
-            {'disclosureId': id, 'disclosureStatusCode': disclosureStatusCode, 'personId': personId});
+            {'disclosureId': id, 'reviewStatus': reviewStatusCode, 'personId': personId});
     }
 
     createSFI(params) {
