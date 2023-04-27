@@ -282,8 +282,8 @@
                                  [selectedLookUpList]="lookupValues['property4']">
                     </app-look-up>
                     </div> -->
-            
-            
+
+
             <!-- Review Status -->
             <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
               <label class="d-block">
@@ -340,7 +340,7 @@
                 <mat-datepicker #expirationDate></mat-datepicker>
               </span>
             </div>
-            
+
           </div>
           <div class="form-row row mt-2">
             <!-- Has SFI -->
@@ -386,21 +386,21 @@
           <div class="card-bg border f-14 pt-3">
             <div>
               <div class="row mb-3 px-3">
-                <div class="col">
+                <div class="col d-flex">
                   <!-- <label for="id" class="label-text">Disclosure Number:</label> -->
                   <span id="id" class="grey-text m-0">#{{coi?.coiDisclosureNumber}}</span>
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="person-name" class="label-text">Person Name:</label>
                   <span *ngIf="coi?.disclosurePersonFullName" id="person-name" class="grey-text">{{coi?.disclosurePersonFullName}}</span>
                   <span *ngIf="!coi?.disclosurePersonFullName" class="noDataExists">No data exist</span>
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="type" class="label-text">Disclosure Type:</label>
                   <span *ngIf="coi?.fcoiType" id="type" class="grey-text">{{coi?.fcoiType}}</span>
                   <span *ngIf="!coi?.fcoiType" class="noDataExists">No data exist</span>
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="status" class="label-text">Disclosure Status:</label>
                   <div *ngIf="coi?.conflictStatus" class="badge f-13 rounded-pill bg-{{getDisclosureStatusBadge(coi?.conflictStatus)}}"  [class.text-dark]="getDisclosureStatusBadge(coi?.disclosureStatusCode) === 'warning'"
                     id="status">
@@ -410,36 +410,36 @@
                 </div>
               </div>
               <div class="row mb-3 px-3">
-                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
                   <label for="event-type" class="label-text">Disclosure Event Type:</label>
                   <span id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
                     coi?.disclosureCategoryTypeCode)}}</span>
                   <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">No data exist</span>
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="event-type" class="label-text">Certification Date:</label>
                   <span class="noDataExists">No data exist</span>
                   <!-- <span *ngIf="!coi?.disclosureCategoryType" id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
                     coi?.disclosureCategoryTypeCode)}}</span> -->
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="event-type" class="label-text">Expiration Date:</label>
                   <span *ngIf="!coi?.expirationDate" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.expirationDate" id="event-type" class="grey-text">{{coi?.expirationDate | dateFormatter}}</span>
                 </div>
-                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
                   <label for="disp-status" class="label-text">Disposition Status:</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.dispositionStatus"
                     class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
-                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="last-approved-version" class="label-text">Last Approved Version:</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
                 </div>
-                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="disp-status" class="label-text">Disposition Status:</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.dispositionStatus"
@@ -448,22 +448,22 @@
                 </div>
               </div>
               <div class="row mb-3 px-3">
-                <div class="col-3" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col-3 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
                   <label for="last-approved-version" class="label-text">Last Approved Version:</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
                 </div>
-                <div class="col-3">
+                <div class="col-3 d-flex">
                   <label for="last-approved-version-date" class="label-text">Last Approved Version Date:</label>
                   <span *ngIf="!coi?.lastApprovedVersionDate" class="noDataExists">No data date exist</span>
                   <span *ngIf="coi?.lastApprovedVersionDate" id="last-approved-version-date" class="grey-text">{{coi?.lastApprovedVersionDate | dateFormatter}}</span>
                 </div>
-                <div class="col-6" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
+                <div class="col-6 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="revision-reason" class="label-text">Revision Reason:</label>
                   <span *ngIf="!coi?.reviseComment" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.reviseComment" id="revision-reason" class="grey-text">{{coi?.reviseComment}}</span>
                 </div>
-                <div class="col-3 align-self-center"
+                <div class="col-3 d-flex align-self-center"
                   *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
                   <label class="m-0" for="last-updated" class="label-text"> Review Status for </label>
                   <!-- <span *ngIf="!coi?.reviewerFullName" class="noDataExists">No disclosure type exist</span> -->
@@ -471,7 +471,7 @@
                     : <span
                       class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewerStatusCode)}}"  [class.text-dark]="getReviewStatusBadge(coi?.reviewerStatusCode) === 'warning'">{{coi?.reviewerStatus}}</span></span>
                 </div>
-                <div class="col-3">
+                <div class="col-3 d-flex">
                   <label for="review-status" class="label-text">Review Status:</label>
                   <span *ngIf="!coi?.reviewStatus" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.reviewStatus" class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewStatus)}}" [class.text-dark]="getReviewStatusBadge(coi?.reviewStatus) === 'warning'"
@@ -479,7 +479,7 @@
                 </div>
               </div>
               <div class="row mb-2 px-3" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
-                <div class="col-6"
+                <div class="col-6 d-flex"
                   [ngClass]="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS' ?'col-6':'col-9'">
                   <label for="revision-reason" class="label-text">Revision Reason:</label>
                   <span *ngIf="!coi?.reviseComment" class="noDataExists">No data exist</span>

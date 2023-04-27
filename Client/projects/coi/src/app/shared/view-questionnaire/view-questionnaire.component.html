@@ -30,8 +30,8 @@
 						<a (click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)"
 							class="tooltip"><i aria-hidden="true" class="fa fa-info-circle ct-icon-right hand-cursor"></i>
 						</a>
-							
-						
+
+
 						<div *ngIf="showHelpMsg[indexQuestion] == true" class="row qst-category-margin">
 							<div class="col-12 col-sm-12 col-md-12 pl-0 qst-helpCard">
 								<button (click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)"
@@ -151,7 +151,7 @@
 							</div>
 							<span class="question-font mb-2">{{question.QUESTION}}</span>
 							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)" class="fa fa-info-circle" aria-hidden="true"></i>
-								
+
 							<div *ngFor=" let option of questionnaire.options"
 								class="answer-options answer-field  p-0 ml-4">
 								<span *ngIf="question.QUESTION_ID == option.QUESTION_ID">
@@ -186,7 +186,7 @@
 							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"
 										(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)"
 										class="fa fa-info-circle" aria-hidden="true"></i>
-							
+
 							<div class="answer-options answer-field p-0 ml-4"
 								*ngFor=" let option of questionnaire.options">
 								<span *ngIf="question.QUESTION_ID == option.QUESTION_ID">
@@ -221,7 +221,7 @@
 							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"
 										(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)"
 										class="fa fa-info-circle" aria-hidden="true"></i>
-							
+
 							<div class="answer-field p-0 ml-4">
 								<a id="add-attach{{questionnaireDetails?.QUESTIONNAIRE_ID}}"
 									class="btn-link mb-3 answer-field" *ngIf="!isViewMode"
@@ -268,7 +268,7 @@
 							<i class="answer-field" *ngIf="question.DESCRIPTION || question.HELP_LINK"
 										(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)"
 										class="fa fa-info-circle" aria-hidden="true"></i>
-							
+
 							<div class="answer-field p-0 ml-4">
 								<textarea name="name" [disabled]="isViewMode" rows="2" appLengthValidator appAutoGrow
 									[isShowLimiter]='!isViewMode' id="ans_{{question.QUESTION_ID}}"
@@ -303,20 +303,17 @@
 							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"
 										(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)"
 										class="fa fa-info-circle" aria-hidden="true"></i>
-							
 							<div class="answer-field p-0 ml-4">
 								<div class="qst-date-dv">
-									<input class="qst-date-picker px-3" [owlDateTimeTrigger]="dt3"
-										[(ngModel)]="question.ANSWERS[1]"
-										(keypress)="_commonService._keyPress($event, 'date')" [disabled]="isViewMode"
-										placeholder="{{question.ANSWERS[1]}}" id="ans_{{question.QUESTION_ID}}"
-										[owlDateTime]="dt3" [ngClass]="(isViewMode) ? 'date-opacity' : ''">
-									<span class="trigger qst-date-i" [owlDateTimeTrigger]="dt3" *ngIf="!isViewMode">
-										<i aria-hidden="true" class="fa fa-calendar"></i>
-									</span>
-									<owl-date-time [pickerType]="'calendar'" #dt3
-										(afterPickerOpen)="setFocusToElement(question.QUESTION)"
-										(afterPickerClosed)="setDateFormat(indexQuestion, question)"></owl-date-time>
+                  <span class="dateField">
+                    <input matInput [matDatepicker]="questionnaire_date" [disabled]="isViewMode"
+                      id="ans_{{question.QUESTION_ID}}" (click)="certificationDate.open()"
+                      class="form-control d-inline-block" [(ngModel)]="question.ANSWERS[1]"
+                     (ngModelChange)="showChildQuestions(question)"
+                      placeholder="dd/MM/yyyy">
+                    <i (click)="questionnaire_date.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                    <mat-datepicker #questionnaire_date></mat-datepicker>
+                  </span>
 								</div>
 							</div>
 							<div class="row qst-category-margin answer-field"
@@ -346,7 +343,7 @@
 							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"
 										(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)"
 										class="fa fa-info-circle" aria-hidden="true"></i>
-							
+
 							<div class="answer-field p-0 ml-4">
 								<app-elastic [options]="searchOptions[question.QUESTION_ID + question.ANSWER_TYPE]"
 									[clearField]="clearElasticField" [placeHolder]="question.placeHolder"
@@ -379,7 +376,7 @@
 							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"
 										(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)"
 										class="fa fa-info-circle" aria-hidden="true"></i>
-							
+
 							<div class="answer-field p-0 ml-4">
 								<app-endpoint-search
 									[httpOptions]="searchOptions[question.QUESTION_ID + question.ANSWER_TYPE]"

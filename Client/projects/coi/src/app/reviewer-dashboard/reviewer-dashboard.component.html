@@ -259,23 +259,23 @@
           <div class="card-bg f-14 pt-3">
             <div>
               <div class="row mb-3 px-3">
-                <div class="col">
+                <div class="col d-flex">
                   <!-- <label for="id" class="label-text">Disclosure Number:</label> -->
                   <span id="id" class="grey-text m-0">#{{coi?.coiDisclosureNumber}}</span>
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="person-name" class="label-text">Person Name:</label>
                   <span *ngIf="coi?.disclosurePersonFullName" id="person-name"
                     class="grey-text">{{coi?.disclosurePersonFullName}}</span>
                   <span *ngIf="!coi?.disclosurePersonFullName" class="noDataExists">No data exist</span>
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="type" class="label-text">Disclosure Type:</label>
                   <span *ngIf="coi?.disclosureCategoryType" id="type"
                     class="grey-text">{{coi?.disclosureCategoryType}}</span>
                   <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">No data exist</span>
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="status" class="label-text">Disclosure Status:</label>
                   <div *ngIf="coi?.disclosureStatus"
                     class="badge f-13 rounded-pill bg-{{getDisclosureStatusBadge(coi?.disclosureStatusCode)}}"
@@ -286,25 +286,25 @@
                 </div>
               </div>
               <div class="row mb-3 px-3">
-                <div class="col" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS'">
                   <label for="event-type" class="label-text">Disclosure Event Type:</label>
                   <span id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
                     coi?.disclosureCategoryTypeCode)}}</span>
                   <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">No data exist</span>
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="event-type" class="label-text">Certification Date:</label>
                   <span class="noDataExists">No data exist</span>
                   <!-- <span *ngIf="!coi?.disclosureCategoryType" id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
                         coi?.disclosureCategoryTypeCode)}}</span> -->
                 </div>
-                <div class="col">
+                <div class="col d-flex">
                   <label for="event-type" class="label-text">Expiration Date:</label>
                   <span *ngIf="!coi?.expirationDate" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.expirationDate" id="event-type" class="grey-text">{{coi?.expirationDate |
                     dateFormatter}}</span>
                 </div>
-                <div class="col" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS'">
                   <label for="disp-status" class="label-text">Disposition Status:</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.dispositionStatus"
@@ -312,13 +312,13 @@
                     [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
-                <div class="col" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="last-approved-version" class="label-text">Last Approved Version:</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version"
                     class="grey-text">{{coi?.lastApprovedVersion}}</span>
                 </div>
-                <div class="col" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="disp-status" class="label-text">Disposition Status:</label>
                   <span *ngIf="!coi?.disclosureDispositionCode" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.disclosureDispositionCode"
