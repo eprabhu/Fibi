@@ -45,6 +45,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
@@ -1005,13 +1006,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> createCoiTravelDisclosure(ConflictOfInterestVO vo) {
-		CoiTravelDisclosure coiTravelDisclosure = new CoiTravelDisclosure();
-		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
-		return new ResponseEntity<>(coiTravelDisclosure, HttpStatus.OK);
-	}
-
-	@Override
 	public ResponseEntity<Object> getAllCoiTravelDisclosureList() {
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
 		vo.setCoiTravelDisclosureList(conflictOfInterestDao.getAllCoiTravelDisclosureList(vo));
@@ -1102,6 +1096,55 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		vo = getDisclosureTypecode(vo);
 		vo.setPersonEntityRelationships(conflictOfInterestDao.getRelatioshipDetails(vo));
 		return new ResponseEntity<>(vo, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<Object> createCoiTravelDisclosure(ConflictOfInterestVO vo) {
+		CoiTravelDisclosure coiTravelDisclosure = new CoiTravelDisclosure();
+		coiTravelDisclosure.setTravelDisclosureId(vo.getTravelDisclosureId());
+		coiTravelDisclosure.setVersionNumber(1);
+		coiTravelDisclosure.setEntityId(vo.getEntityId());
+		coiTravelDisclosure.setEntityNumber(vo.getEntityNumber());
+		coiTravelDisclosure.setTravelTitle(vo.getTravelTitle());
+		coiTravelDisclosure.setTravelstate(vo.getTravelState());
+		coiTravelDisclosure.setDestinationCity(vo.getDestinationCity());
+		coiTravelDisclosure.setPurposeOfTheTrip(vo.getPurposeOfTheTrip());
+		coiTravelDisclosure.setRelationshipToYourResearch(vo.getRelationshipToYourResearch());
+		coiTravelDisclosure.setTravelStartDate(vo.getTravelStartDate());
+		coiTravelDisclosure.setTravelEndDate(vo.getTravelEndDate());
+		coiTravelDisclosure.setTravelStatusCode(vo.getTravelStatusCode());
+		coiTravelDisclosure.setIsSponsoredTravel(vo.getIsSponsoredTravel());
+		coiTravelDisclosure.setTravelAmount(vo.getTravelAmount());
+		coiTravelDisclosure.setDestinationCountry(vo.getDestinationCountry());
+		coiTravelDisclosure.setNoOfDays(vo.getNoOfDays());
+		coiTravelDisclosure.setIsInterNationalTravel(vo.getIsInternationalTravel());
+		coiTravelDisclosure.setTravelNumber((conflictOfInterestDao.generateMaxTravelNumber()));
+		coiTravelDisclosure.setPersonId(AuthenticatedUser.getLoginPersonId());
+		coiTravelDisclosure.setVersionStatus(vo.getVersionStatus());
+		coiTravelDisclosure.setIsInterNationalTravel(vo.getIsInternationalTravel());
+		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		vo.getTravellerTypeCode().forEach(typeCode -> {
+			CoiTravelDisclosureTraveler coiTravelDisclosureTraveller = new CoiTravelDisclosureTraveler();
+			coiTravelDisclosureTraveller.setTravelTravelerId(vo.getTravelTravellerId());
+			coiTravelDisclosureTraveller.setTravelDisclosureId(coiTravelDisclosure.getTravelDisclosureId());
+			coiTravelDisclosureTraveller.setUpdateUser(AuthenticatedUser.getLoginUserName());
+			coiTravelDisclosureTraveller.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+			coiTravelDisclosureTraveller.setTravelerTypeCode(typeCode);
+			conflictOfInterestDao.saveOrUpdateCoiTravelDisclosureTraveller(coiTravelDisclosureTraveller);
+		});
+		return new ResponseEntity<>(coiTravelDisclosure, HttpStatus.OK); 
+	}
+   	
+	@Override
+	public ResponseEntity<Object> loadTravellerTypesLookup() {
+		return new ResponseEntity<>(conflictOfInterestDao.loadTravellerTypesLookup(),  HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<Object> loadTravelStatusTypesLookup() {
+		return new ResponseEntity<>(conflictOfInterestDao.loadTravelStatusTypesLookup(),  HttpStatus.OK);
 	}
 	
 }

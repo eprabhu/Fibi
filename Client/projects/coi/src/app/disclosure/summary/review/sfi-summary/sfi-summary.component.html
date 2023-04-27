@@ -21,7 +21,7 @@
                   </div>
                   <div class="col-3 text-secondary fs-14">
                       <span class="fw-bold me-2">Entity
-                          Type:</span>{{item?.coiEntity?.entityType.description.substr(0, 10)}}
+                          Type:</span>{{item?.coiEntity?.entityType?.description.substr(0, 10)}}
                   </div>
               </div>
               <!-- Under -->
@@ -69,5 +69,8 @@
           </div>
       </div>
   </div>
+</div>
+<div *ngIf="!coiFinancialEntityDetails.length">
+    <app-no-information> </app-no-information>
 </div>
 </div>

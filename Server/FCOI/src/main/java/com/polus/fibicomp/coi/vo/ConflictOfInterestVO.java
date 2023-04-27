@@ -1,10 +1,32 @@
 package com.polus.fibicomp.coi.vo;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
-import com.polus.fibicomp.coi.pojo.*;
+import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
+import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiProjectAward;
+import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
+import com.polus.fibicomp.coi.pojo.CoiProjectType;
+import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
+import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
+import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.coi.pojo.CoiSectionsType;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.EntityStatus;
+import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.PersonEntity;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.person.pojo.Person;
 
 public class ConflictOfInterestVO {
@@ -150,6 +172,295 @@ public class ConflictOfInterestVO {
 	private String tabName;
 	
 	private String disclosureTypeCode;
+	
+	private Integer travelDisclosureId;
+	
+	private Integer travelNumber;
+    
+	private Integer versionNumber;
+	
+	private String versionStatus;
+	
+	private Integer entityId;
+	
+	private Integer entityNumber;
+
+	private String travelStatusCode;
+	
+	private Boolean isSponsoredTravel;
+	
+	private String travelTitle;
+	
+	private String purposeOfTheTrip;
+	
+	private BigDecimal travelAmount;
+	
+	private Date travelStartDate;
+	
+	private Date travelEndDate;
+	
+	private Integer noOfDays;
+	
+	private String destinationCity;
+	
+	private String destinationCountry;
+	
+	private String relationshipToYourResearch;
+	
+	private String acknowledgeBy;
+	
+	private String acknowledgeAt;
+	
+	private Timestamp updateTimeStamp;
+	
+	private String updateUser;
+	
+	private String createUser;
+	
+	private Timestamp createTimeStamp;
+
+	private String travelState;
+	
+	private Boolean isInternationalTravel;
+	
+	private List<CoiTravelerType> CoiTravelerType;
+
+	private Integer travelTravellerId;
+	
+	private Integer travellerDisclosureId;
+	
+	private List<String> travellerTypeCode;
+	
+	public List<String> getTravellerTypeCode() {
+		return travellerTypeCode;
+	}
+
+	public void setTravellerTypeCode(List<String> travellerTypeCode) {
+		this.travellerTypeCode = travellerTypeCode;
+	}
+
+	public List<CoiTravelerType> getCoiTravelerType() {
+		return CoiTravelerType;
+	}
+
+	public void setCoiTravelerType(List<CoiTravelerType> coiTravelerType) {
+		CoiTravelerType = coiTravelerType;
+	}
+
+	public Boolean getIsInternationalTravel() {
+		return isInternationalTravel;
+	}
+
+	public void setIsInternationalTravel(Boolean isInternationalTravel) {
+		this.isInternationalTravel = isInternationalTravel;
+	}
+
+	public String getTravelStatusCode() {
+		return travelStatusCode;
+	}
+
+	public void setTravelStatusCode(String travelStatusCode) {
+		this.travelStatusCode = travelStatusCode;
+	}
+
+	public String getTravelState() {
+		return travelState;
+	}
+
+	public void setTravelState(String travelState) {
+		this.travelState = travelState;
+	}
+
+	public Integer getTravelTravellerId() {
+		return travelTravellerId;
+	}
+
+	public void setTravelTravellerId(Integer travelTravellerId) {
+		this.travelTravellerId = travelTravellerId;
+	}
+	
+	public Integer getTravelDisclosureId() {
+		return travelDisclosureId;
+	}
+
+	public Integer getVersionNumber() {
+		return versionNumber;
+	}
+
+	public String getVersionStatus() {
+		return versionStatus;
+	}
+
+	public Integer getEntityNumber() {
+		return entityNumber;
+	}
+
+	public Integer getEntityId() {
+		return entityId;
+	}
+
+	public Boolean getIsSponsoredTravel() {
+		return isSponsoredTravel;
+	}
+
+	public String getTravelTitle() {
+		return travelTitle;
+	}
+
+	public String getPurposeOfTheTrip() {
+		return purposeOfTheTrip;
+	}
+
+	public Integer getNoOfDays() {
+		return noOfDays;
+	}
+
+	public String getDestinationCity() {
+		return destinationCity;
+	}
+
+	public String getDestinationCountry() {
+		return destinationCountry;
+	}
+
+	public String getRelationshipToYourResearch() {
+		return relationshipToYourResearch;
+	}
+
+	public String getAcknowledgeBy() {
+		return acknowledgeBy;
+	}
+
+	public String getAcknowledgeAt() {
+		return acknowledgeAt;
+	}
+
+	public void setTravelDisclosureId(Integer travelDisclosureId) {
+		this.travelDisclosureId = travelDisclosureId;
+	}
+
+	public void setVersionNumber(Integer versionNumber) {
+		this.versionNumber = versionNumber;
+	}
+
+	public void setVersionStatus(String versionStatus) {
+		this.versionStatus = versionStatus;
+	}
+
+	public void setEntityNumber(Integer entityNumber) {
+		this.entityNumber = entityNumber;
+	}
+
+	public Integer getTravelNumber() {
+		return travelNumber;
+	}
+
+	public void setTravelNumber(Integer travelNumber) {
+		this.travelNumber = travelNumber;
+	}
+
+	public void setEntityId(Integer entityId) {
+		this.entityId = entityId;
+	}
+
+	public void setIsSponsoredTravel(Boolean isSponsoredTravel) {
+		this.isSponsoredTravel = isSponsoredTravel;
+	}
+
+	public void setPurposeOfTheTrip(String purposeOfTheTrip) {
+		this.purposeOfTheTrip = purposeOfTheTrip;
+	}
+
+	public void setNoOfDays(Integer noOfDays) {
+		this.noOfDays = noOfDays;
+	}
+
+	public void setDestinationCity(String destinationCity) {
+		this.destinationCity = destinationCity;
+	}
+
+	public void setDestinationCountry(String destinationCountry) {
+		this.destinationCountry = destinationCountry;
+	}
+
+	public void setRelationshipToYourResearch(String relationshipToYourResearch) {
+		this.relationshipToYourResearch = relationshipToYourResearch;
+	}
+
+	public void setAcknowledgeBy(String acknowledgeBy) {
+		this.acknowledgeBy = acknowledgeBy;
+	}
+
+	public void setAcknowledgeAt(String acknowledgeAt) {
+		this.acknowledgeAt = acknowledgeAt;
+	}
+	public Integer getTravellerDisclosureId() {
+		return travellerDisclosureId;
+	}
+
+	public void setTravellerDisclosureId(Integer travellerDisclosureId) {
+		this.travellerDisclosureId = travellerDisclosureId;
+	}
+	
+	public BigDecimal getTravelAmount() {
+		return travelAmount;
+	}
+
+	public Date getTravelStartDate() {
+		return travelStartDate;
+	}
+
+	public Date getTravelEndDate() {
+		return travelEndDate;
+	}
+
+	public Timestamp getUpdateTimeStamp() {
+		return updateTimeStamp;
+	}
+
+	public String getUpdateUser() {
+		return updateUser;
+	}
+
+	public String getCreateUser() {
+		return createUser;
+	}
+
+	public Timestamp getCreateTimeStamp() {
+		return createTimeStamp;
+	}
+
+	public void setTravelTitle(String travelTitle) {
+		this.travelTitle = travelTitle;
+	}
+
+	public void setTravelAmount(BigDecimal travelAmount) {
+		this.travelAmount = travelAmount;
+	}
+
+	public void setTravelStartDate(Date travelStartDate) {
+		this.travelStartDate = travelStartDate;
+	}
+
+	public void setTravelEndDate(Date travelEndDate) {
+		this.travelEndDate = travelEndDate;
+	}
+
+	public void setUpdateTimeStamp(Timestamp updateTimeStamp) {
+		this.updateTimeStamp = updateTimeStamp;
+	}
+
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
+
+	public void setCreateTimeStamp(Timestamp createTimeStamp) {
+		this.createTimeStamp = createTimeStamp;
+	}
 
 	public CoiDisclosure getCoiDisclosure() {
 		return coiDisclosure;

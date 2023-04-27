@@ -3,38 +3,40 @@ package com.polus.fibicomp.coi.dao;
 import java.util.List;
 import java.util.Map;
 
-
-import com.polus.fibicomp.coi.pojo.EntityStatus;
-import com.polus.fibicomp.coi.pojo.PersonEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
-import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
-import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
-import com.polus.fibicomp.coi.pojo.CoiReview;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
-import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
-import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.EntityType;
-import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiSectionsType;
-import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
-import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
-import com.polus.fibicomp.coi.pojo.CoiReviewComments;
-import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
-import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
-import com.polus.fibicomp.coi.pojo.CoiFileData;
-import com.polus.fibicomp.coi.pojo.CoiProjectAward;
-import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
-import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
-import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
-import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-import com.polus.fibicomp.coi.pojo.CoiProjectType;
 
 import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
+import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
+import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiFileData;
+import com.polus.fibicomp.coi.pojo.CoiProjectAward;
+import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
+import com.polus.fibicomp.coi.pojo.CoiProjectType;
+import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
+import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
+import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
+import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
+import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
+import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
+import com.polus.fibicomp.coi.pojo.CoiSectionsType;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
+import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
+import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.EntityStatus;
+import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.PersonEntity;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.DashBoardProfile;
@@ -613,6 +615,8 @@ public interface ConflictOfInterestDao {
 	public PersonEntity saveOrUpdateSFI(PersonEntity personEntity);
 
 	public Integer generateMaxDisclosureNumber();
+	
+	public CoiTravelDisclosureTraveler saveOrUpdateCoiTravelDisclosureTraveller(CoiTravelDisclosureTraveler coiTravelDisclosureTraveller);
 
 
 	/**
@@ -649,4 +653,10 @@ public interface ConflictOfInterestDao {
 	public PersonEntityRelationship getPersonEntityRelationshipByPersonEntityRelId(Integer personEntityRelId);
 
 	public ValidPersonEntityRelType getValidPersonEntityRelTypeByTypeCode(Integer validPersonEntityRelTypeCode);
+	
+	public Integer generateMaxTravelNumber();
+	
+	public List<CoiTravelerType> loadTravellerTypesLookup();
+	
+	public List<CoiTravelerStatusType> loadTravelStatusTypesLookup();
 }

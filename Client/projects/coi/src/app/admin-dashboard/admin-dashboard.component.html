@@ -83,7 +83,7 @@
       </div>
     </div>
 
-    <div class="sort-div border" *ngIf="isShowAllProposalList && coiList.length">
+    <div class="sort-div border mt-2" *ngIf="isShowAllProposalList && coiList.length">
       <span class="fs-14 fw-medium me-2 text-secondary">Sort by:</span>
       <span  tabindex="0" (keydown.enter)="sortResult('coiDisclosureNumber')"
         (click)="sortResult('coiDisclosureNumber')"
@@ -160,7 +160,7 @@
       </span>
     </div>
 
-    <div class="card mb-3 collapse border" id="collapseExample" >
+    <div class="card mb-3 collapse border mt-2" id="collapseExample" >
       <div class="card-body">
         <ng-container *ngIf="_coiAdminDashboardService.coiRequestObject.tabName !='ENTITY'">
           <div class="form-row row mt-2">

@@ -27,8 +27,8 @@ export const SSO_LOGOUT_URL = '';
 /* KKI Specific Change (Don't Delete) in Month/Day/Year format for DEFAULT_DATE_FORMAT, LONG_DATE_FORMAT,
 parseInput, fullPickerInput, datePickerInput */
 
-export const DEFAULT_DATE_FORMAT = 'MM/DD/YYYY';
-export const LONG_DATE_FORMAT = 'MM/DD/YYYY h:mm:ss a';
+export const DEFAULT_DATE_FORMAT = 'MM/dd/YYYY';
+export const LONG_DATE_FORMAT = 'MM/dd/YYYY h:mm:ss a';
 export const TIME_FORMAT = 'h:mm:ss a';
 export const AWARD_LABEL = $localize`:@@COMMON_AWARD:Award`;
 export const KEY_PERSON_LABEL = $localize`:@@COMMON_KEY_PERSONNEL:Key Personnel`;
@@ -40,9 +40,9 @@ export const ETHICS_SAFETY_LABEL = 'Special Review';
 export const AREA_OF_RESEARCH = $localize`:@@COMMON_AREA_OF_RESEARCH/SOCIETAL_CHALLENGE_AREA:Area of Research/Societal Challenge Area`;
 
 export const DATE_PICKER_FORMAT = {
-  parseInput: 'DD/MM/YYYY HH:mm:ss',
-  fullPickerInput: 'DD/MM/YYYY HH:mm:ss',
-  datePickerInput: 'DD/MM/YYYY',
+  parseInput: 'MM/DD/YYYY HH:mm:ss',
+  fullPickerInput: 'MM/DD/YYYY HH:mm:ss',
+  datePickerInput: 'MM/DD/YYYY',
   timePickerInput: 'HH:mm:ss',
   monthYearLabel: 'MMM YYYY',
   dateA11yLabel: 'LL',

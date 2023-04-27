@@ -335,4 +335,8 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> getRelatioshipDetails(String tabName);
 
 	ResponseEntity<Object> getPersonEntityRelationship(ConflictOfInterestVO vo);
+	
+	ResponseEntity<Object> loadTravellerTypesLookup();
+	
+	ResponseEntity<Object> loadTravelStatusTypesLookup();
 }
