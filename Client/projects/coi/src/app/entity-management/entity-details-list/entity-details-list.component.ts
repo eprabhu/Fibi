@@ -57,11 +57,11 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   viewDetails(data) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: data.personEntityId, mode: 'edit' } });
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: data.personEntityId, mode: 'view' } });
   }
 
   redirectToEntity(event) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: event.personEntityId, mode: 'edit' } });
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: event.personEntityId, mode: 'view' } });
   }
 
   ngOnChanges() {

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { SFIDashboardRequestObject } from "../../disclosure/coi-interface";
 import { CoiService } from "../../disclosure/services/coi.service";
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { UserEntitiesService } from "./user-entities.service";
 import { CommonService } from '../../common/services/common.service';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
   selector: 'app-user-entities',
@@ -12,7 +13,7 @@ import { CommonService } from '../../common/services/common.service';
   styleUrls: ['./user-entities.component.scss'],
   providers: [UserEntitiesService]
 })
-export class UserEntitiesComponent implements OnInit {
+export class UserEntitiesComponent implements OnInit, OnDestroy {
   currentSelected = {
     tab: 'IN_PROGRESS',
     filter: 'ALL'
@@ -24,13 +25,16 @@ export class UserEntitiesComponent implements OnInit {
   searchText = '';
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
-              private _sfiService: SfiService,private _commonServices:CommonService) {
+    private _sfiService: SfiService, private _commonServices: CommonService) {
+    this.getPreviousURL();
   }
 
   ngOnInit(): void {
     this.fetchMyEntities();
   }
-
+  ngOnDestroy() {
+    subscriptionHandler(this.$subscriptions);
+  }
   private fetchMyEntities() {
     this.$subscriptions.push(this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject).subscribe((data: any) => {
       this.entityArray = data.coiFinancialEntityList || [];
@@ -39,7 +43,7 @@ export class UserEntitiesComponent implements OnInit {
   }
 
   viewEntityDetails(entities) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entities.coiFinancialEntityId,mode:'edit' } })
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entities.coiFinancialEntityId, mode: 'edit' } })
   }
 
   setFilter(type = 'ALL') {

@@ -3,6 +3,7 @@
     border-bottom: 2px solid #007DEC;
     color: #007DEC;
     margin-bottom: -0.2rem !important;
+    padding: 7.3px 0px;
   }
 }
 
@@ -16,7 +17,7 @@
 }
 
 .border-nav {
-  width: 26.3rem;
+  width: max-content;
   border-radius: 1.5rem 1.5rem 0px 0px;
   position: relative;
   top: 0px;
