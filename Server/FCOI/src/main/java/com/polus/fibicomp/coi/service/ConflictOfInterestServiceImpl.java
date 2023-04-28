@@ -115,7 +115,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String REVIEW_STATUS_COMPLETE = "4";
 	private static final String DISCLOSURE_NO_CONFLICT_STATUS_CODE = "1";
 	private static final String DISCLOSURE_VERSION_STATUS = "Active";
-
+	private static final String DISCLOSURE_REVIEW_IN_PROGRESS = "3";
+	private static final String DISCLOSURE_REVIEW_COMPLETED = "4";
 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
@@ -631,12 +632,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		 coiReview.setCoiReviewStatus(conflictOfInterestDao.getReviewStatus(REVIEW_STATUS_TYPE_CODE));
 		}
 		conflictOfInterestDao.saveOrUpdateCoiReview(vo.getCoiReview());
+		/*Need clarification*/
 		coiReviewAssigneeHistory.setAdminGroupId(coiReview.getAdminGroupId());
 		coiReviewAssigneeHistory.setAssigneePersonId(coiReview.getAssigneePersonId());
 		coiReviewAssigneeHistory.setAssigneeType(coiReview.getAdminGroupId() != null ? "G" :"P");
 		coiReviewAssigneeHistory.setCoiReviewId(coiReview.getCoiReviewId());
 		coiReviewAssigneeHistory.setCoiReviewActivityId(CREATE_ACTIVIVITY);
 		conflictOfInterestDao.saveOrUpdateCoiReviewAssigneeHistory(coiReviewAssigneeHistory);
+		/*Need clarification*/
 		return coiReview;
 	}
 
@@ -652,7 +655,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public CoiReview startReview(ConflictOfInterestVO vo){
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
-		conflictOfInterestDao.startReview(Constants.SUBMITTED_FOR_REVIEW,vo.getCoiReview().getCoiReviewId());
+		conflictOfInterestDao.startReview(DISCLOSURE_REVIEW_IN_PROGRESS,vo.getCoiReview().getCoiReviewId());
 		String personName = vo.getCoiReview().getAssigneePersonName();
 		CoiReview coiReview = conflictOfInterestDao.loadCoiReview(vo.getCoiReview().getCoiReviewId());
 		coiReview.setAssigneePersonName(personName);
@@ -771,7 +774,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public CoiReview completeReview(ConflictOfInterestVO vo){
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
-		conflictOfInterestDao.startReview(COMPLETE,vo.getCoiReview().getCoiReviewId());
+		conflictOfInterestDao.startReview(DISCLOSURE_REVIEW_COMPLETED,vo.getCoiReview().getCoiReviewId());
 		String personName = vo.getCoiReview().getAssigneePersonName();
 		CoiReview coiReview = conflictOfInterestDao.loadCoiReview(vo.getCoiReview().getCoiReviewId());
 		coiReview.setAssigneePersonName(personName);
@@ -1015,6 +1018,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> getAllSystemEntityList(CoiDashboardVO vo) {
 		ConflictOfInterestVO conflictOfInterestVO = new ConflictOfInterestVO();
 		conflictOfInterestVO.setCoiEntityList(conflictOfInterestDao.getAllSystemEntityList(vo));
+		conflictOfInterestVO.setEntityCount(conflictOfInterestDao.getAllSystemEntityListCount(vo));
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
 	}
 
