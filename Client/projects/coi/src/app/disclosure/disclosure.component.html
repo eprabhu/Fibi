@@ -32,9 +32,9 @@
                     </ng-container>
                 </div>
             </div>
-            <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 triple-card bg-white">
+            <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 triple-card pb-1 bg-white">
                 <div class="col">
-                    <div class="border h-100 rounded-1">
+                    <div class="border h-100 rounded-1 position-relative">
                         <span class="status-pill">Status</span>
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div class="border h-100 mx-3 rounded-1">
+                    <div class="border h-100 mx-3 rounded-1 position-relative">
                         <span class="status-pill">Date</span>
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
@@ -85,10 +85,10 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div class="border h-100 rounded-1">
+                    <div class="border h-100 rounded-1 position-relative">
                         <span class="status-pill">Relationship with</span>
                         <div class="ps-4 table-negative-margin">
-                            <table class="fs-14 fw-medium">
+                            <table class="fs-14 fw-medium spaced-table">
                                 <tr>
                                     <td><span
                                             class="bold-blue-color">{{coiData?.numberOfSFI ? coiData?.numberOfSFI : 0}}</span>
@@ -227,7 +227,7 @@
             </div>
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
-            <div class="flex-fill h-100 border-end bg-white shadow-sm">
+            <div class="flex-fill side-height border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
                     <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-secondary pb-0 fs-14 col-2 me-2">
                         <mat-icon>home</mat-icon>

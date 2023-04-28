@@ -1,5 +1,5 @@
 .disclosure-heading {
-  height: 45px;
+  height: 40px;;
   background-color: #E8E8E8;
 }
 
@@ -106,7 +106,7 @@ $bg-color: #E4F1FF;
 }
 
 .status-pill {
-  position: relative;
+  position: absolute;
   left: 14px;
   top: -12px;
   background-color: white;
@@ -121,9 +121,14 @@ $bg-color: #E4F1FF;
   margin-top: -10px;
 }
 
+.side-height {
+  height: 213px;
+}
+
 .spaced-table {
+  margin-top: 25px;
   border-collapse: separate;
-  border-spacing: 0 5px;
+  border-spacing: 0 2px;
   color: #6A7980;
 }
 
@@ -194,5 +199,5 @@ table {
 }
 
 .bg-success{
-  background-color: #4CB57D !important; 
+  background-color: #4CB57D !important;
 }

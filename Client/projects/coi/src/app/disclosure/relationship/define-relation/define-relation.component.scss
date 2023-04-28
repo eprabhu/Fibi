@@ -72,16 +72,15 @@
 }
 
 .label-text {
-  font-weight: 600;
-  color      : #333;
+  font-weight: 700;
+  color      : #6A7980;
   font-size  : 14px;
 }
 
 .grey-text {
   font-size: 13px;
-  color: #7c7c7c;
-  font-weight: 700;
-  margin-left: 2px;
+  color: #48647F;
+  margin-left: 8px;
 }
 
 .table {
@@ -100,12 +99,16 @@
 }
 
 .outer-card {
-  height: 100vh;
+  // height: 100vh;
   box-shadow: 0 0px 8px rgba(53, 49, 80, .2);
 }
 
 .select-default {
   appearance: auto;
+}
+
+.entity-title {
+  color: #242424;
 }
 
 .active-ribbon {
@@ -157,9 +160,8 @@
 
 .noDataExists {
   color      : #9e9e9e !important;
-  font-weight: bold;
   font-size  : 12px;
-  margin-left: 2px;
+  margin-left: 8px;
 }
 
 .mandatory {
