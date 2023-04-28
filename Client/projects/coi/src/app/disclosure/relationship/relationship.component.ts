@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
+import { environment } from '../../../environments/environment';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
 
@@ -14,13 +15,16 @@ export class RelationshipComponent {
   isShowRelation = false;
   proposalArray = [];
   coiStatusList = [];
+  deployMap = environment.deployUrl;
   searchText: any;
   searchResult = [];
   moduleId: any;
   moduleCode: any;
   selectedProject: any;
   coiData: any;
+  isShowWhiteIcon = false;
   selectedProjectForView: any;
+  collapseViewMore = {};
 
   constructor(private _relationShipService: RelationshipService,private _route: ActivatedRoute,
     private _dataStore: DataStoreService,public _router: Router) { }
@@ -61,6 +65,10 @@ export class RelationshipComponent {
     this.moduleId = test.moduleItemId ;
     this.selectedProject = test;
     this.isShowRelation = true;
+  }
+
+  collapseViewMoreOption(id: number, flag: boolean): void {
+    this.collapseViewMore[id] = !flag;
   }
 
 }

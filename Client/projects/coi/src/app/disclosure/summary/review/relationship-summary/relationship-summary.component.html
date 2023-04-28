@@ -5,13 +5,13 @@
         <ng-container  *ngIf="selectedProject?.moduleCode == 3">
           <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
           <p class="entity-title mt-3">
-              <strong>{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
+              <strong class="fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
           </p>
         </ng-container>
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
           <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
           <p class="entity-title mt-3">
-              <strong>#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
+              <strong class="fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
           </p>
         </ng-container>
         <button type="button" class="btn btn-outline-primary btn-sm header-buttons">

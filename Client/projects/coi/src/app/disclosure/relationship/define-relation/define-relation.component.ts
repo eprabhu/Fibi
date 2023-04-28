@@ -28,6 +28,7 @@ export class DefineRelationComponent implements OnInit {
   // $subscriptions: Subscription[] = [];
   coiStatusCode: any = null;
   coiDescription: any;
+  reviewStatusCode: any;
   sfiDetails: any;
   dependencies = ['coiDisclosure'];
   currentProjectId: any;
@@ -55,14 +56,14 @@ export class DefineRelationComponent implements OnInit {
   constructor(private _relationShipService: RelationshipService, public snackBar: MatSnackBar, private _dataStore: DataStoreService) { }
 
   ngOnInit() {
-    this.toast=new Toast(this.toastEl.nativeElement,{})
+    this.toast=new Toast(this.toastEl.nativeElement,{});
     this.getDataFromStore();
     this.getEntityList();
   }
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    console.log(this.coiData)
+    this.isEditMode = this.coiData.coiDisclosure.reviewStatusCode == '1';
   }
 
   showTaskNavBar() {
@@ -110,7 +111,7 @@ export class DefineRelationComponent implements OnInit {
 
     getEntityList() {
       this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
-        this.entityProjectDetails = data.coiDisclosureDetails;
+        this.entityProjectDetails = data.coiDisclEntProjDetails;
         this.selectedProject = this.module;
         this.isShowDetails = true;
         this.showTaskNavBar();

@@ -16,13 +16,13 @@
       <div class="col-12 d-flex align-items-center" *ngIf="selectedProject?.moduleCode == 3">
         <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
         <p class="entity-title">
-            <strong>{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
+            <strong class=" fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
         </p>
       </div>
       <div class="col-12 d-flex align-items-center" *ngIf="selectedProject?.moduleCode == 1">
         <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
         <p class="entity-title">
-            <strong>#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
+            <strong class="fs-18">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
         </p>
       </div>
         <div class="card outer-card">
@@ -54,8 +54,8 @@
               <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
               </div>
               </div>
-              <div class="inner-card card m-2">
-                <div class="row m-2" *ngIf="isEditMode">
+              <div class="inner-card card m-2" *ngIf="isEditMode">
+                <div class="row m-2">
                   <br>
                   <div class="col-2">
                     <span class="mandatory">*</span>
