@@ -34,6 +34,7 @@ import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 @RestController
+@RequestMapping("/coi")
 public class ConflictOfInterestController {
 
 	protected static Logger logger = LogManager.getLogger(ConflictOfInterestController.class.getName());
@@ -397,4 +398,8 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.loadTravelStatusTypesLookup();
 	}
 	
+	@GetMapping("hello")
+	public ResponseEntity<String> hello() {
+		return new ResponseEntity<>("Hello from COI", HttpStatus.OK);
+	} 
 }
