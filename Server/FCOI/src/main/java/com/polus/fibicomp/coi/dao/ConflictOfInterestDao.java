@@ -664,4 +664,6 @@ public interface ConflictOfInterestDao {
 
 	public CoiDisclosure getMasterDisclosureByPersonId(String personId);
 
+	public Integer getAllSystemEntityListCount(CoiDashboardVO vo);
+
 }

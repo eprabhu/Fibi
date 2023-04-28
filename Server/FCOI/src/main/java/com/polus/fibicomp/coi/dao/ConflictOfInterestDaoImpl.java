@@ -2201,5 +2201,74 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			return null;
 		}
 	}
+
+	@Override
+	public Integer getAllSystemEntityListCount(CoiDashboardVO vo) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		ResultSet resultSet = null;
+		String tabName = vo.getTabName();
+		Integer currentPage = vo.getCurrentPage();
+		Integer pageNumber = vo.getPageNumber();
+		String isAdvancedSearch = vo.getAdvancedSearch();
+		Boolean isDownload = vo.getIsDownload();
+		Map<String, String> sort = vo.getSort();
+		String entityName = vo.getProperty1();
+		String country = vo.getProperty2();
+		String entityStatus = vo.getProperty20() != null && !vo.getProperty20().isEmpty() ? String.join(",", vo.getProperty20()) : "";
+		String entityType = vo.getProperty21() != null && !vo.getProperty21().isEmpty() ? String.join(",", vo.getProperty21()) : "";
+		String entityRiskLevel = vo.getProperty22() != null && !vo.getProperty22().isEmpty() ? String.join(",", vo.getProperty22()) : "";
+		Boolean hasSFI = vo.getProperty18();
+		Boolean hasDisclosure = vo.getProperty19();
+		Integer count = null;
+		try {
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call GET_ALL_SYSTEM_ENTITY_LIST_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+				statement.setString(1, tabName);
+				statement.setString(2, setCOISortOrder(sort));
+				statement.setInt(3, (pageNumber == null ? 0 : pageNumber));
+				statement.setInt(4, (currentPage == null ? 0 : currentPage - 1));
+				statement.setString(5, country);
+				statement.setBoolean(6, isDownload);
+				statement.setString(7, isAdvancedSearch);
+				statement.setString(8, entityStatus);
+				statement.setString(9, entityType);
+				statement.setString(10, entityRiskLevel);
+				statement.setBoolean(11, hasSFI);
+				statement.setBoolean(12, hasDisclosure);
+				statement.setString(13, entityName);
+				statement.execute();
+				resultSet = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String procedureName = "GET_ALL_SYSTEM_ENTITY_LIST_COUNT";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				statement.setString(2, tabName);
+				statement.setString(3, setCOISortOrder(sort));
+				statement.setInt(4, (currentPage == null ? 0 : currentPage - 1));
+				statement.setInt(5, (pageNumber == null ? 0 : pageNumber));
+				statement.setString(6, country);
+				statement.setBoolean(7, isDownload);
+				statement.setString(8, isAdvancedSearch);
+				statement.setString(9, entityStatus);
+				statement.setString(10, entityType);
+				statement.setString(11, entityRiskLevel);
+				statement.setBoolean(12, hasSFI);
+				statement.setBoolean(13, hasDisclosure);
+				statement.setString(13, entityName);
+				statement.execute();
+				resultSet = (ResultSet) statement.getObject(1);
+			}
+			while (resultSet.next()) {
+				 count = Integer.parseInt(resultSet.getString(1));
+			}
+		} catch (SQLException e) {
+			logger.error("Error in GET_ALL_SYSTEM_ENTITY_LIST_COUNT {}", e.getMessage());
+		}
+		return count;
+	}
 	
 }

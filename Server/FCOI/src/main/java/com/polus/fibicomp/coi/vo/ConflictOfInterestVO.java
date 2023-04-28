@@ -232,6 +232,16 @@ public class ConflictOfInterestVO {
 	private List<String> travellerTypeCode;
 	
 	private String reviewStatus;
+	
+	private Integer entityCount;
+
+	public Integer getEntityCount() {
+		return entityCount;
+	}
+
+	public void setEntityCount(Integer entityCount) {
+		this.entityCount = entityCount;
+	}
 
 	public String getReviewStatus() {
 		return reviewStatus;
