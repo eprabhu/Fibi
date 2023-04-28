@@ -138,6 +138,21 @@ public class DisclosureView implements Serializable {
 
 	@Transient
 	private String proposalTitle;
+	
+	@Transient
+	private String awardlId;
+
+	@Transient
+	private String awardTitle;
+	
+	@Transient
+	private Integer noOfSfi;
+
+	@Transient
+	private Integer noOfAward;
+
+	@Transient
+	private Integer noOfProposal;
 
 	public Integer getCoiDisclosureId() {
 		return coiDisclosureId;
@@ -461,6 +476,46 @@ public class DisclosureView implements Serializable {
 
 	public void setProposalTitle(String proposalTitle) {
 		this.proposalTitle = proposalTitle;
+	}
+
+	public String getAwardlId() {
+		return awardlId;
+	}
+
+	public void setAwardlId(String awardlId) {
+		this.awardlId = awardlId;
+	}
+
+	public String getAwardTitle() {
+		return awardTitle;
+	}
+
+	public void setAwardTitle(String awardTitle) {
+		this.awardTitle = awardTitle;
+	}
+
+	public Integer getNoOfSfi() {
+		return noOfSfi;
+	}
+
+	public void setNoOfSfi(Integer noOfSfi) {
+		this.noOfSfi = noOfSfi;
+	}
+
+	public Integer getNoOfAward() {
+		return noOfAward;
+	}
+
+	public void setNoOfAward(Integer noOfAward) {
+		this.noOfAward = noOfAward;
+	}
+
+	public Integer getNoOfProposal() {
+		return noOfProposal;
+	}
+
+	public void setNoOfProposal(Integer noOfProposal) {
+		this.noOfProposal = noOfProposal;
 	}
 
 }
