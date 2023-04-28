@@ -1177,6 +1177,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
 				disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
 				disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
+				disclosureView.setReviewStatus(resultSet.getString("EXPIRATION_DATE"));
 				disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
 				disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
 				disclosureView.setLastApprovedVersionDate(resultSet.getTimestamp("LAST_APPROVED_DATE"));
@@ -1204,6 +1205,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			dashBoardProfile.setDisclosureViews(disclosureViews);
 			dashBoardProfile.setDisclosureCount(getCOIAdminDashboardCount(vo));
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("Error in getCOIAdminDashboard {}", e.getMessage());
 			throw new ApplicationException("Error in getCOIAdminDashboard {}", e, Constants.JAVA_ERROR);
 		}
@@ -1866,13 +1868,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER_FULL_NAME"));
 				disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
 				disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
-				if (tabName.equals("PENDING_DISCLOSURES")) {
-					disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
-					disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
-					disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
-					disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
-					disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
-				}
+				disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
+				disclosureView.setExpirationDate(resultSet.getTimestamp("CERTIFIED_AT"));
+				disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
+				disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
+				disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
+				disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
+				disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
+
 				disclosureViews.add(disclosureView);
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
@@ -1963,7 +1966,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				count = Integer.parseInt(resultSet.getString(1));
 			}
 		} catch (Exception e) {
-			logger.error("Error in getCOIReviewerDashboard {}", e.getMessage());
+			logger.error("Error in getCOIReviewerDashboardCount {}", e.getMessage());
+			throw new ApplicationException("Error in getCOIReviewerDashboardCount", e, Constants.JAVA_ERROR);
 		}
 		return count;
 	}
