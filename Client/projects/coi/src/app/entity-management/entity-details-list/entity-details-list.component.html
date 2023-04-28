@@ -44,8 +44,10 @@
       <div class="ml-15 justify-content-end d-flex">
         <button class="btn btn-primary fs-13 d-flex" id="advanced-search" title="Advance search"
           (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search" aria-expanded="true"
-          aria-label="Toggle Advanced Search"><mat-icon class="add-icon">tune</mat-icon> Advanced
-          Search
+          aria-label="Toggle Advanced Search"><mat-icon class="add-icon">tune</mat-icon>
+          <label class="fs-13 mt-1">
+            Advanced Search
+          </label>
         </button>
       </div>
     </div>
@@ -105,9 +107,9 @@
           </app-look-up>
         </div>
         <div class="col-6 d-flex justify-content-end align-items-end">
-          <button class="btn btn-outline-secondary  fs-13 py-2 px-4 mr-10" id="btn-clear"
+          <button class="btn btn-outline-secondary  fs-14 py-2 px-4 mr-10" id="btn-clear"
             (click)="clearAdvanceSearch()">Clear</button>
-          <button class="btn btn-primary fs-13" (click)="advanceSearchRelationships()" id="btn-search">Search</button>
+          <button class="btn btn-primary fs-14" (click)="advanceSearchRelationships()" id="btn-search">Search</button>
         </div>
       </div>
     </div>

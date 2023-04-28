@@ -1,5 +1,8 @@
   .card {
     background-color: #ebf3fb;
+    border-radius: 0px 0px 5px 5px;
+    position: relative;
+    bottom: 1px;
   }
 
   .relationship {
@@ -27,4 +30,7 @@
     }
   }
 
+  .text-secondary {
+    color: #6A7980;
+  }
 

@@ -33,7 +33,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   statusTypeOptions = 'EMPTY#EMPTY#true#true';
   entityList: any = [];
   $subscriptions: Subscription[] = [];
-  // resultCount: number = 0;
+  resultCount: number = 0;
 
 
 
@@ -74,7 +74,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   viewListOfEntity() {
     this.$subscriptions.push(this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject).subscribe((res: any) => {
       this.entityList = res.coiEntityList;
-      // this.resultCount = this.entityList.length;
+      this.resultCount = res.entityCount;
     }, _error => {
       // this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
     }));

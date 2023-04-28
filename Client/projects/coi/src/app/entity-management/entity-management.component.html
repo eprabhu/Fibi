@@ -22,7 +22,7 @@
       <div class="align-items-center d-flex justify-content-end">
         <div class="mx-1">
           <button class="btn btn-primary d-flex fs-13 align-items-center px-4" id="add-new-entity" title="Add new entity"
-            (click)="addNewEntity()"><mat-icon class="add-icon">add</mat-icon> Add New
+            (click)="addNewEntity()"><mat-icon class="add-icon mt-1">add</mat-icon> Add New
             Entity</button>
         </div>
       </div>
@@ -131,14 +131,14 @@
           </app-look-up>
         </div>
         <div class="col-3 d-flex justify-content-end align-items-end">
-          <button class="btn btn-outline-secondary  fs-13 py-2 px-4" id="btn-clear"
+          <button class="btn btn-outline-secondary  fs-14 py-2 px-4" id="btn-clear"
             (click)="clearAdvancedSearch()">Clear</button>
-          <button class="btn btn-primary fs-13" id="btn-search" (click)="advancedSearch()">Search</button>
+          <button class="btn btn-primary fs-14" id="btn-search" (click)="advancedSearch()">Search</button>
         </div>
       </div>
     </div>
   </div>
   <app-entity-list [entityActiveTabName]="activeTabName"
     (modifyEntityId)="selectedEntity($event);isViewAdvanceSearch = false" (navNextPage)="navigateNextPage($event)"
-    [entityList]="entityList"></app-entity-list>
+    [entityList]="entityList" [resultCount]="resultCount"></app-entity-list>
 </div>

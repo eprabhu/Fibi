@@ -47,7 +47,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit';
+    this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit'
     this.getDataFromService();
     this.configuration.enableViewMode = !this.isEditMode;
 
