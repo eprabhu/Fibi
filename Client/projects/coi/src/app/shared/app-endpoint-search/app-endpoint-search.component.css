@@ -65,3 +65,6 @@ ul.sb-results-dropdown-menu > li:last-child {
 .z-index {
     z-index: 1200;
 }
+.search-icon-invalid {
+    right: 28px;
+}
