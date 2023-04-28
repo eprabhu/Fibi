@@ -10,7 +10,7 @@
 }
 .material-icons-outlined{
   position: relative;
-    top: 6px;
+    top: 4px;
     right: 3px;
 }
 
@@ -40,4 +40,14 @@
   top: 50%;
   right: 50%;
   transform: translate(50%,-50%);
+}
+
+#add-relationship {
+  width: 295px
+}
+
+.relation-label {
+  position: relative;
+    bottom: 3px;
+    left: 4px;
 }

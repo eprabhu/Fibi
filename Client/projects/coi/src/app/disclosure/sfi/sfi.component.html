@@ -18,7 +18,7 @@
                     [routerLink]="['/fibi/coi/relationship']" (click)="_coiService.stepTabName = 'relationship'">Proceed to Relationships
             </button>
         </div> -->
-    
+
 
 <div class=" row p-2 "
     *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
@@ -79,7 +79,7 @@
         <div class="col-1 bg-white">
             <div class="bg-white mt-2 pb-2 pt-3 px-1">
                 <button class="btn btn-outline-primary sfi_action_btn cursor-pointer mt-3" style="padding: 3px;" id="view-sfi"
-                (click)="openSfiDetails(true, item?.coiFinancialEntityId)">
+                (click)="openSfiDetails(true, item?.coiEntity?.entityId)">
                     <mat-icon class=" sfi_action_icon">remove_red_eye</mat-icon>
                 </button>
             </div>

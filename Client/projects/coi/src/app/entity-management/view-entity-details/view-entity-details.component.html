@@ -46,39 +46,39 @@
       <div class="col-12 d-flex">
         <div class="col-2">
           <div class="row">
-            <span class="fw-bold fs-14">Entity Type</span>
+            <span class="fw-500 fs-14">Entity Type</span>
             <label class="text-secondary fs-14">{{entityDetails?.entityType?.description}}</label>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-bold fs-14">Country</span>
+            <span class="fw-500 fs-14">Country</span>
             <label class="text-secondary fs-14">{{entityDetails?.country?.countryName}}</label>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-bold fs-14">City</span>
+            <span class="fw-500 fs-14">City</span>
             <label class="text-secondary fs-14">{{entityDetails?.city !==null?entityDetails?.city:'No Data'}}</label>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-bold fs-14">Website</span>
+            <span class="fw-500 fs-14">Website</span>
             <label class="text-secondary fs-14">
               {{entityDetails?.webURL !==null?entityDetails?.webURL:'No Data'}}</label>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-bold fs-14">Email Address </span>
+            <span class="fw-500 fs-14">Email Address </span>
             <label class="text-secondary fs-14">
               {{entityDetails?.emailAddress!==null? entityDetails?.emailAddress:'NoData'}}</label>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-bold fs-14">Phone Number</span>
+            <span class="fw-500 fs-14">Phone Number</span>
             <label class="text-secondary fs-14">
               {{entityDetails?.phone !==null ? entityDetails?.phone:'No Data'}}</label>
           </div>
@@ -89,18 +89,18 @@
       <div class="col-12 d-flex mt-3">
         <div class="col-6">
           <div class="row">
-            <span class="fw-bold fs-14">Address</span>
+            <span class="fw-500 fs-14">Address</span>
             <label class="text-secondary fs-14 mt-1 pr-15">
               {{entityDetails?.address !==null ? entityDetails?.address:'No Data'}}</label>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-bold fs-14">Risk Level</span>
+            <span class="fw-500 fs-14">Risk Level</span>
             <div class="text-secondary fs-14 d-flex">
               <mat-icon *ngIf="entityDetails?.entityRiskCategory?.description ==='High'"
                 class="invalid material-icons-round">warning</mat-icon>
-                <label class="mt-1 px-2">
+                <label class="mt-1">
                   {{entityDetails?.entityRiskCategory !==null?
                     entityDetails?.entityRiskCategory?.description:'No data'}}
                 </label>
@@ -109,7 +109,7 @@
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-bold fs-14">Verified By</span>
+            <span class="fw-500 fs-14">Verified By</span>
             <div *ngIf="entityDetails?.approvedUser;else noData"  class="text-secondary fs-14 d-flex">
               <mat-icon class="mat-done">done</mat-icon>
               <label class="mt-1 px-2">
@@ -123,7 +123,7 @@
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-bold fs-14">Last Updated by</span>
+            <span class="fw-500 fs-14">Last Updated by</span>
             <label class="text-secondary fs-14 mt-1">{{entityDetails?.updateUser}} on {{entityDetails?.updateTimestamp
               |dateFormatterWithTimeZone:'long'}}</label>
           </div>

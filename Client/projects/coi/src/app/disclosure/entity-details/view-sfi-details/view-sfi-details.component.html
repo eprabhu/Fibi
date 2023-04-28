@@ -4,7 +4,8 @@
       <div class="row d-flex">
         <div class="col-12 d-flex">
           <div class="col-8 d-flex">
-            <span *ngIf="entityDetailsServices.entityDetails" class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"
+            <span *ngIf="entityDetailsServices.entityDetails"
+              class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"
               [ngClass]="!entityDetailsServices.entityDetails?.isActive?'inactive':''">
               <label class="px-2">{{!entityDetailsServices.entityDetails?.isActive?'Inactive':'Active'}}</label> </span>
             <h1 class="m-1 fw-bold fs-18"> {{entityDetailsServices.entityDetails?.entityName}}</h1>
@@ -40,35 +41,48 @@
     <div class="card-body">
       <div class="row d-flex">
         <div class="col-12 d-flex pb-4">
-          <div class="col-2 d-grid">
-            <label class="fs-14 fw-500" >Entity Type</label>
-            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.entityType !==null?
-              entityDetailsServices.entityDetails?.entityType?.description: 'No Data'}}</label>
+          <div class="col-2">
+            <div class="row">
+              <label class="fs-14 fw-500">Entity Type</label>
+              <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.entityType !==null?
+                entityDetailsServices.entityDetails?.entityType?.description: 'No Data'}}</label>
+            </div>
           </div>
-          <div class="col-2 d-grid">
-            <label class="fs-14 fw-500" >Country</label>
-            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.country?.countryName !==
-              null?entityDetailsServices.entityDetails?.country?.countryName:'No Data'}}</label>
+          <div class="col-2">
+            <div class="row">
+              <label class="fs-14 fw-500">Country</label>
+              <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.country?.countryName !==
+                null?entityDetailsServices.entityDetails?.country?.countryName:'No Data'}}</label>
+            </div>
           </div>
-          <div class="col-2 d-grid">
-            <label class="fs-14 fw-500" >City</label>
-            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.city !== null?
-              entityDetailsServices.entityDetails?.city:'No Data'}}</label>
+          <div class="col-2">
+            <div class="row">
+              <label class="fs-14 fw-500">City</label>
+              <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.city !== null?
+                entityDetailsServices.entityDetails?.city:'No Data'}}</label>
+            </div>
           </div>
-          <div class="col-2 d-grid">
-            <label class="fs-14 fw-500" >Website</label>
-            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.webURL !==null?
-              entityDetailsServices.entityDetails?.webURL: 'No Data'}}</label>
+          <div class="col-2">
+            <div class="row">
+              <label class="fs-14 fw-500">Website</label>
+              <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.webURL !==null?
+                entityDetailsServices.entityDetails?.webURL: 'No Data'}}</label>
+            </div>
           </div>
-          <div class="col-2 d-grid">
-            <label class="fs-14 fw-500" >Email Address </label>
-            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.emailAddress!==null ?
-              entityDetailsServices.entityDetails?.emailAddress:'No Data'}}</label>
+          <div class="col-2">
+            <div class="row">
+              <label class="fs-14 fw-500">Email Address </label>
+              <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.emailAddress!==null ?
+                entityDetailsServices.entityDetails?.emailAddress:'No Data'}}</label>
+            </div>
           </div>
-          <div class="col-1 d-grid">
-            <label class="fs-14 fw-500" >Phone Number</label>
-            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.phone !==null?entityDetailsServices.entityDetails?.phone:'No Data'
-              }}</label>
+          <div class="col-1">
+            <div class="row">
+              <label class="fs-14 fw-500">Phone Number</label>
+              <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.phone
+                !==null?entityDetailsServices.entityDetails?.phone:'No Data'
+                }}</label>
+            </div>
           </div>
           <div class="col-1 d-flex justify-content-end">
             <div *ngIf="!entityDetailsServices.isExpanded"
@@ -78,17 +92,23 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="row">
         <div *ngIf="entityDetailsServices.isExpanded" class="col-12 d-flex pb-4">
-          <div class="col-8 d-grid">
-            <label class="fs-14 fw-500">Address</label>
-            <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.address!== null ?
-              entityDetailsServices.entityDetails?.address:'No Data'}}</label>
+          <div class="col-8">
+            <div class="row">
+              <label class="fs-14 fw-500">Address</label>
+              <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.address!== null ?
+                entityDetailsServices.entityDetails?.address:'No Data'}}</label>
+            </div>
           </div>
           <div class="col-4 mt-3 text-secondary">
             <label class="fw-500 mr-10 fs-14 ">Last Updated by :</label>
             <label class="text-secondary fs-14">
-              {{entityDetailsServices.entityDetails?.updateUser !==null? (entityDetailsServices.entityDetails?.updateUser +' on'):'No Data' }} {{
-                entityDetailsServices.entityDetails?.updateUser !==null?(entityDetailsServices.entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long'):''}}
+              {{entityDetailsServices.entityDetails?.updateUser !==null?
+              (entityDetailsServices.entityDetails?.updateUser +' on'):'No Data' }} {{
+              entityDetailsServices.entityDetails?.updateUser
+              !==null?(entityDetailsServices.entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long'):''}}
             </label>
           </div>
         </div>

@@ -1,21 +1,22 @@
 .navigation-icons{
   .active {
-    border-bottom: 2px solid #007DEC;
     color: #007DEC;
-    position: relative;
-    bottom: 0.5rem;
+    font-weight: bold;
+    border-bottom: 3px solid #007DEC;
+    padding: 10px 16px;
   }
 }
 
 .user-dashboard-nav span:focus{
-  border-bottom: 2px solid #007DEC;
+  border-bottom: 3px solid #007DEC;
   color: #007DEC;
+  padding: 10px 16px;
 
 }
 
 .user-dashboard-nav {
   min-height: 42px;
-  background-color: #ececec !important
+  background-color: white !important
 }
 
 .status-active-pill {
@@ -39,8 +40,8 @@
 }
 
 .active {
-  background-color: #d4e6f7;
-  padding: 5px
+  // background-color: #d4e6f7;
+  // padding: 5px
 }
 
 
