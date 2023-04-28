@@ -1,0 +1,166 @@
+<div class="push4slideMenu pageMinHeight" id="scrollToTop">
+    <div class="container-fluid pushFixedHeaderFooter">
+        <!-- <div class="headerPush"></div> -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h4 class="card-title">
+                            <div>Frequently Asked Questions</div>
+                        </h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-2 pt-4 pl-5">
+                                    <h4>Categories</h4>
+                                </div>
+                                <div class="col-8 mb-25 p-0">
+                                    <div class="searchBox" id="searchElastic">
+                                        <input [(ngModel)]="searchText" (ngModelChange)="searchQuestions(searchText)"
+                                            placeholder="Search by Questions..."
+                                            class="form-control ng-pristine ng-valid ng-touched">
+                                        <a class="searchButton">
+                                            <i aria-hidden="true" class="fa fa-search fa-med pt-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- Modal -->
+                                <div class="col-2">
+                                    <button title="Add New Question" class="btn btn-sm btn-primary" id="add-faq-btn"
+                                        data-bs-target="#add-new-faq" data-bs-toggle="modal" (click)="addNewQuestion()">
+                                        Add New Question
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row pt-5 pb-4">
+                                <div class="col-2 side-scroll pl-4">
+                                    <div class="category-sidebar" *ngFor="let category of categoryList;let index=index">
+                                        <div id="accordion" role="tablist" aria-multiselectable="true"
+                                            class="category-list-color">
+                                            <ul [ngClass]="(index === selectedCategory) ? 'categorylist-active' : 'category-list'"
+                                                style="list-style: none">
+                                                <li>
+                                                    <tr>
+                                                        <a data-toggle="collapse" data-parent="#accordion"
+                                                            (click)="(category.faqSubCategory.length > 0) ? isCollapse[index] = !isCollapse[index] : displayFAQ(category.categoryCode,'' ,true,index)"
+                                                            [attr.data-target]="'#collapseOne' + index"
+                                                            aria-expanded="false" aria-controls="collapseOne"
+                                                            class="collapsed category-link">
+                                                            <td>
+                                                                <h4 class="hand-cursor"
+                                                                    title="{{category.description}}">
+                                                                    {{category.description}}
+                                                                </h4>
+                                                            </td>
+                                                            <td>
+                                                                <cdk-accordion class="example-accordion ">
+                                                                    <cdk-accordion-item
+                                                                        #accordionItem="cdkAccordionItem"
+                                                                        class="example-accordion-item" tabindex="0"
+                                                                        [attr.id]="'accordion-header-' + index"
+                                                                        [attr.aria-expanded]="accordionItem.expanded"
+                                                                        [attr.aria-controls]="'accordion-body-' + index">
+                                                                        <div class="example-accordion-item-header"
+                                                                            (click)="accordionItem.toggle()">
+
+                                                                            <i aria-hidden="true"
+                                                                                class="accordion-arrow collapsed"
+                                                                                *ngIf="category.faqSubCategory.length > 0"
+                                                                                [ngClass]="(isCollapse[index] === true)?'fa fa-angle-up':'fa fa-angle-down'"
+                                                                                data-toggle="collapse"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapseOne"></i>
+                                                                        </div>
+                                                                    </cdk-accordion-item>
+                                                                </cdk-accordion>
+                                                            </td>
+                                                        </a>
+                                                    </tr>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                        <!-- extra details showing button -->
+                                        <div class="example-accordion-item-body" role="region"
+                                            [style.display]="accordionItem.expanded ? '' : 'none'"
+                                            [attr.id]="'accordion-body-' + index"
+                                            [attr.aria-labelledby]="'accordion-header-' + index">
+                                            <ul class="nav" *ngFor="let subcategory of category.faqSubCategory">
+                                                <li class="active">
+                                                    <h5 class="subheader hand-cursor"
+                                                        (click)="displayFAQ(category.categoryCode, subcategory.subCategoryCode,false,i)">
+                                                        {{ subcategory.description }}
+                                                    </h5>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Middle side -->
+                                <div class="col-7 pt-3 side-scroll">
+                                    <h2>{{ categoryName }}</h2>
+                                    <div class="row">
+                                        <div class="col-12 ">
+                                            <div *ngIf="questionsList.length === 0">
+                                                <p>There are no questions in this category</p>
+                                            </div>
+                                            <div class="qa-display " id="qa-tab" *ngIf="questionsList.length > 0">
+                                                <div *ngFor="let questions of tempQuestionList;let i=index"
+                                                    class="qa-flex mt-2">
+                                                    <div style="padding-right: 10px;">
+                                                        <!-- {{ questions.question }} -->
+                                                        <h4 class="pt-4" id="question-title-{{i}}"
+                                                            value="{{ questions.question }}">
+                                                            {{ questions.question }} </h4>
+                                                        <p>{{ questions.answer }}</p>
+                                                        <p><a href="" (click)="redirectUrl(questions?.url);"
+                                                                *ngIf="questions.url != ''">{{ questions.url }}</a></p>
+                                                        <span class="fileChips hand-cursor"
+                                                            style="word-break: break-all;"
+                                                            *ngFor="let question of questions.faqAttachment"
+                                                            (click)="saveAttachment(question,question.faqAttachmentId)">
+                                                            <span>{{question.fileName}}
+                                                                <i aria-hidden="true" class="fa fa-download"
+                                                                    title="Click here to download {{question.fileName}}"></i>
+                                                            </span>
+                                                        </span>
+                                                    </div>
+                                                    <!-- Edit  -->
+                                                    <div>
+                                                        <mat-icon [attr.title]="'edit'" style="cursor: pointer;"
+                                                            (click)="editdata(questions,index)">
+                                                            edit
+                                                        </mat-icon>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Extreme right side -->
+                                <div class="col-3 right-sidebar side-scroll">
+                                    <div class="question-tab timeline">
+                                        <ul class="pl-3">
+                                            <!-- right arrow -->
+                                            <li id="question-{{ i }}"
+                                                *ngFor="let questions of questionsList;let i=index"
+                                                [ngClass]="(i === selectedQuestion) ? 'questionlist-active' : 'question-list '"
+                                                (click)="pageScroll('question-title-'+i); highlightQuestion(i)">
+                                                <a class="hand-cursor category-link ">{{questions.question}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-add-faq (newdata)="updatedata($event)" (selectedResult)="resetFaqTrigger($event)" [questiondata]="allQuestionData"
+    [editIndex]="editIndex" [buttonName]="buttonName"></app-add-faq>
