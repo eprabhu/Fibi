@@ -19,7 +19,7 @@ export class UserDisclosureComponent {
         advancedSearch: 'L',
         pageNumber: 30,
         sort: {'createTimestamp': 'asc'},
-        tabName: 'PROPOSAL_DISCLOSURES',
+        tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         // filterType = 'All', 'FCOI', 'Project', 'OPA';
         filterType: 'ALL'

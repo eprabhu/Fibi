@@ -41,7 +41,7 @@
                                 <tr>
                                     <td>Disposition:</td>
                                     <td class="ps-4"><span
-                                            class="{{commonService.getDisclosureConflictStatus(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                            class="bg-{{getDisclosureStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} text-{{getDisclosureStatusBadgeTextColor(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} px-3 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -53,7 +53,7 @@
                                 <tr>
                                     <td>Disclosure:</td>
                                     <td class="ps-4"><span
-                                            class="bg-{{getDisclosureStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} text-{{getDisclosureStatusBadgeTextColor(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} px-3 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
+                                            class="{{commonService.getDisclosureConflictStatus(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
                                     </td>
                                 </tr>
                             </table>
