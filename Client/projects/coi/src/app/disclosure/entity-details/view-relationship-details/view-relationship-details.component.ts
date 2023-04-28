@@ -31,8 +31,6 @@ export class ViewRelationshipDetailsComponent implements OnInit, OnDestroy {
   getEntityDetails(personEntityId) {
     this.$subscriptions.push(this.entityDetailsServices.getRelationshipEntityDetails(personEntityId).subscribe((res: any) => {
       this.relationshipsDetails = res.personEntity;
-      console.log('this.relationshipsDetails,',this.relationshipsDetails);
-
     }));
   }
 
