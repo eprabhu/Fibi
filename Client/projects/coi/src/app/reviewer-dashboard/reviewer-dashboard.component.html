@@ -256,8 +256,8 @@
     <ng-container *ngIf="isShowAllProposalList">
       <ng-container *ngFor="let coi of coiList;">
         <section class="mt-3 shadow-sm coi-card">
-          <div class="card-bg f-14 pt-3">
-            <div>
+          <div class="bg-white f-14 pt-3">
+            <div class="border-bottom">
               <div class="row mb-3 px-3">
                 <div class="col d-flex">
                   <!-- <label for="id" class="label-text">Disclosure Number:</label> -->
@@ -308,8 +308,8 @@
                   <label for="disp-status" class="label-text">Disposition Status:</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.dispositionStatus"
-                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"
-                    [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
+                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
+                    [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
                 <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
@@ -320,15 +320,15 @@
                 </div>
                 <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="disp-status" class="label-text">Disposition Status:</label>
-                  <span *ngIf="!coi?.disclosureDispositionCode" class="noDataExists">No data exist</span>
-                  <span *ngIf="coi?.disclosureDispositionCode"
-                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"
-                    [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
+                  <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.dispositionStatus"
+                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
+                    [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
               </div>
               <div class="row mb-3 px-3">
-                <div class="col-3" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col-3 d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS'">
                   <label for="last-approved-version" class="label-text">Last Approved Version:</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version"
@@ -356,10 +356,10 @@
                 </div>
                 <div class="col-3">
                   <label for="review-status" class="label-text">Review Status:</label>
-                  <span *ngIf="!coi?.reviewStatusTypeCode" class="noDataExists">No data exist</span>
-                  <span *ngIf="coi?.reviewStatusTypeCode"
-                    class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewStatusTypeCode)}}"
-                    [class.text-dark]="getReviewStatusBadge(coi?.reviewStatusTypeCode) === 'warning'"
+                  <span *ngIf="!coi?.reviewStatusCode" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.reviewStatusCode"
+                    class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewStatusCode)}}"
+                    [class.text-dark]="getReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
                     id="review-status">{{coi?.reviewStatus}}</span>
                 </div>
               </div>
@@ -371,6 +371,7 @@
                   <span *ngIf="coi?.reviseComment" id="revision-reason" class="grey-text">{{coi?.reviseComment}}</span>
                 </div>
               </div>
+            </div>
               <div class="row py-2 m-0 bg-white">
                 <div class="col-3 d-flex align-items-center">
                   <div
@@ -445,7 +446,6 @@
                   </button>
                 </div>
               </div>
-            </div>
           </div>
         </section>
       </ng-container>
