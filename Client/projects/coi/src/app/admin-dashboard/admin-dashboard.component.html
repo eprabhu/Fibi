@@ -1,4 +1,4 @@
-<div class="container-fluid px-3 py-2">
+<div class="px-3 py-2">
   <!-- <section class="row">
     <div (click)="changeTab('NEW_SUBMISSIONS')"
       class="align-items-center col d-flex dash-card justify-content-center pointer py-4 ml-4 flex-column shadow-medium border mt-3">
@@ -24,34 +24,34 @@
   <section class="section-advanced-search">
     <nav class="coi-admin-dash mb-3 mx-0 row border shadow-sm">
       <div class="bg-white list">
-        <ul class="m-0 p-0 p-3 f-14">
+        <ul class="m-0 p-0">
           <li tabindex="0" (click)="changeTab('ALL_DISCLOSURES')"
           (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
             [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='ALL_DISCLOSURES'"
-            class="p-3 position-relative text-center ml-3 fs-14" style="width: 115.11px">
+            class="p-3 position-relative text-center ml-3">
             All Disclosures
           <li class="separator"></li>
           <li tabindex="0" (click)="changeTab('NEW_SUBMISSIONS')"
           (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
             [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='NEW_SUBMISSIONS'"
-            class="p-3 position-relative text-center fs-14" style="width: 130.7px">
+            class="p-3 position-relative text-center">
             New Submissions
           <li class="separator"></li>
           <li tabindex="0" (click)="changeTab('MY_REVIEWS')"
           (keyup.enter)="changeTab('MY_REVIEWS')" (keyup.space)="changeTab('MY_REVIEWS')"
             [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
-            class="p-3 position-relative text-center  fs-14" style="width: 116.7px">My Reviews
+            class="p-3 position-relative text-center  fs-14">My Reviews
           <li class="separator"></li>
           <li tabindex="0" (click)="changeTab('ALL_REVIEWS')"
           (keyup.enter)="changeTab('ALL_REVIEWS')" (keyup.space)="changeTab('ALL_REVIEWS')"
             [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS'"
-            class="p-3 position-relative text-center fs-14" style="width: 116.7px">All Reviews
+            class="p-3 position-relative text-center">All Reviews
           </li>
           <li class="separator"></li>
           <li tabindex="0" (click)="changeTab('TRAVEL_DISCLOSURES')"
           (keyup.enter)="changeTab('TRAVEL_DISCLOSURES')" (keyup.space)="changeTab('TRAVEL_DISCLOSURES')"
             [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES'"
-            class="p-3 position-relative text-center fs-14" style="width: 130.7px">Travel Disclosures
+            class="p-3 position-relative text-center">Travel Disclosures
           </li>
         </ul>
         <!-- <div *ngIf="isAdvanceSearchTab(_coiAdminDashboardService.coiRequestObject.tabName)" class="d-flex mb-2">
@@ -163,7 +163,7 @@
     <div class="card mb-3 collapse border mt-2" id="collapseExample" >
       <div class="card-body">
         <ng-container *ngIf="_coiAdminDashboardService.coiRequestObject.tabName !='ENTITY'">
-          <div class="form-row row mt-2">
+          <div class="form-row row">
             <!-- Person Name -->
             <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
               <label class="d-block" for="adv-disclosure-person-name">Person Name</label>
@@ -195,7 +195,7 @@
               </app-endpoint-search>
             </div>
           </div>
-          <div class="form-row row mt-2">
+          <div class="form-row row mt-3">
             <!-- Disclosure # -->
             <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
               <label class="d-block" for="adv-disclosure-id">
@@ -241,7 +241,7 @@
               </app-look-up>
             </div>
           </div>
-          <!-- <div class="form-row row mt-2">
+          <!-- <div class="form-row row mt-3">
                    Project Type
                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
                     <label class="d-block">
@@ -271,7 +271,7 @@
                       </app-look-up>
                   </div>
                   </div> -->
-          <div class="form-row row mt-2">
+          <div class="form-row row mt-3">
             <!-- Sponsor Status -->
             <!-- <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
                     <label class="d-block">
@@ -342,7 +342,7 @@
             </div>
 
           </div>
-          <div class="form-row row mt-2">
+          <div class="form-row row mt-3">
             <!-- Has SFI -->
             <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3"  aria-labelledby ="Disclosures_has_sfi">
               <label class="d-block">
@@ -372,7 +372,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-end">
-            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs mr-2">Clear</button>
+            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs">Clear</button>
             <button (click)="performAdvanceSearch()" class="btn btn-primary mx-3 primary-button">Search</button>
           </div>
         </ng-container>
