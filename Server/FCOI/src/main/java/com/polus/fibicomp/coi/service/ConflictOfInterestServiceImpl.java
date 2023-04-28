@@ -300,9 +300,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					 vo.getDisclosureId(), vo.getDisclosureStatusCode());
 		}
 		for (DisclosureDetailDto disclosureDetail : proposalDetails) {
-			disclosureDetail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(vo.getDisclosureStatusCode()) ?
-					conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, disclosureDetail.getModuleItemId(),
-							vo.getDisclosureId(), vo.getPersonId()) : Boolean.TRUE);
+			disclosureDetail.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE,
+					disclosureDetail.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
 			disclosureDetail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE,
 					disclosureDetail.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
 		}

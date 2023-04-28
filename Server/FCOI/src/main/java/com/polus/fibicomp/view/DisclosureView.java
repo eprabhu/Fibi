@@ -1,157 +1,53 @@
 package com.polus.fibicomp.view;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+public class DisclosureView {
 
-import org.hibernate.annotations.Immutable;
-
-@Entity
-@Immutable
-@Table(name = "DISCLOSURE_MV")
-public class DisclosureView implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@Column(name = "COI_DISCLOSURE_ID")
 	private Integer coiDisclosureId;
-
-	@Column(name = "DOCUMENT_NUMBER")
 	private String documentNumber;
-
-	@Column(name = "COI_DISCLOSURE_NUMBER")
 	private String coiDisclosureNumber;
-
-	@Column(name = "SEQUENCE_NUMBER")
 	private Integer sequenceNumber;
-
-	@Column(name = "PERSON_ID")
 	private String personId;
-
-	@Column(name = "FULL_NAME")
 	private String fullName;
-
-	@Column(name = "DISCLOSURE_DISPOSITION_CODE")
-	private Integer dispositionStatusCode;
-
-	@Column(name = "DISCLOSURE_DISPOSITION")
+	private String dispositionStatusCode;
 	private String dispositionStatus;
-
-	@Column(name = "DISCLOSURE_STATUS_CODE")
-	private Integer conflictStatusCode;
-
-	@Column(name = "DISCLOSURE_STATUS")
+	private String conflictStatusCode;
 	private String conflictStatus;
-
-	@Column(name = "MODULE_ITEM_KEY")
 	private String moduleItemKey;
-
-	@Column(name = "DISC_ACTIVE_STATUS")
 	private Integer discActiveStatus;
-
-	@Column(name = "EXPIRATION_DATE")
 	private Timestamp expirationDate;
-
-	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimeStamp;
-
-	@Column(name = "UPDATE_USER")
 	private String updateUser;
-	
-	@Transient
 	private String versionStatus;
-
-	@Transient
 	private String reviewStatus;
-	
-	@Transient
 	private Timestamp submittedDate;
-
-	@Transient
 	private Integer lastApprovedVersion;
-
-	@Transient
 	private Integer noOfSfiInActive;
-
-	@Transient
 	private Integer noOfSfiInPending;
-
-	@Transient
 	private Integer noOfAwardInPending;
-
-	@Transient
 	private Integer noOfProposalInPending;
-
-	@Transient
 	private Integer noOfAwardInActive;
-
-	@Transient
 	private Integer noOfProposalInActive;
-
-	@Transient
 	private Timestamp createTimestamp;
-
-	@Transient
 	private Integer disclosureVersionNumber;
-
-	@Transient
 	private String disclosurePersonFullName;
-
-	@Transient
 	private String fcoiTypeCode;
-
-	@Transient
 	private String fcoiType;
-
-	@Transient
 	private Timestamp lastApprovedVersionDate;
-
-	@Transient
 	private String reviseComment;
-
-	@Transient
 	private String reviewStatusCode;
-
-	@Transient
 	private Integer reviewId;
-
-	@Transient
 	private String reviewDescription;
-
-	@Transient
 	private String reviewerStatusCode;
-
-	@Transient
 	private String reviewerStatus;
-
-	@Transient
 	private String reviewerFullName;
-
-	@Transient
 	private String proposalId;
-
-	@Transient
 	private String proposalTitle;
-	
-	@Transient
 	private String awardlId;
-
-	@Transient
 	private String awardTitle;
-	
-	@Transient
 	private Integer noOfSfi;
-
-	@Transient
 	private Integer noOfAward;
-
-	@Transient
 	private Integer noOfProposal;
 
 	public Integer getCoiDisclosureId() {
@@ -202,19 +98,19 @@ public class DisclosureView implements Serializable {
 		this.fullName = fullName;
 	}
 
-	public Integer getDispositionStatusCode() {
+	public String getDispositionStatusCode() {
 		return dispositionStatusCode;
 	}
 
-	public void setDispositionStatusCode(Integer dispositionStatusCode) {
+	public void setDispositionStatusCode(String dispositionStatusCode) {
 		this.dispositionStatusCode = dispositionStatusCode;
 	}
 
-	public Integer getConflictStatusCode() {
+	public String getConflictStatusCode() {
 		return conflictStatusCode;
 	}
 
-	public void setConflictStatusCode(Integer conflictStatusCode) {
+	public void setConflictStatusCode(String conflictStatusCode) {
 		this.conflictStatusCode = conflictStatusCode;
 	}
 
@@ -264,10 +160,6 @@ public class DisclosureView implements Serializable {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 	public String getVersionStatus() {
