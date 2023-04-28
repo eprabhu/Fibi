@@ -156,8 +156,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			}
 			coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
 		}
-		coiDisclosure.setConflictStatusCode(Constants.DISCLOSURE_CONFLICT_STATUS_PENDING);
-		coiDisclosure.setCoiConflictStatusType(conflictOfInterestDao.getDisclosureStatusByCode(Constants.DISCLOSURE_CONFLICT_STATUS_PENDING));
 		coiDisclosure.setCoiDispositionStatusType(conflictOfInterestDao.getDispositionStatusByCode(DISPOSITION_STATUS_PENDING));
 		coiDisclosure.setCoiReviewStatusType(conflictOfInterestDao.getReviewStatusByCode(REVIEW_STATUS_PENDING));
 		coiDisclosure.setCoiRiskCategory(conflictOfInterestDao.getRiskCategoryStatusByCode(RISK_CATEGORY_LOW));
