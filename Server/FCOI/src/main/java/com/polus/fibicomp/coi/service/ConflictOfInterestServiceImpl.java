@@ -168,7 +168,20 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
+		prepareDisclosureEntityProjectRelation(conflictOfInterestVO);
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
+	}
+	
+	private void prepareDisclosureEntityProjectRelation(ConflictOfInterestVO conflictOfInterestVO) {
+		CoiDisclosure coiDisclosure = conflictOfInterestVO.getCoiDisclosure();
+		List<PersonEntity> sfiDetails = conflictOfInterestDao.getSFIOfDisclosure(coiDisclosure.getPersonId());
+		if(sfiDetails.isEmpty()) {
+			saveDisclosureDetail(coiDisclosure, null, conflictOfInterestVO);
+		} else {
+			 sfiDetails.forEach(sfiDetail -> {
+				saveDisclosureDetail(coiDisclosure, sfiDetail, conflictOfInterestVO);
+			});
+		}
 	}
 
 	private void prepareProposalDisclosureProjectRelation(ConflictOfInterestVO conflictOfInterestVO) {
@@ -185,15 +198,17 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	private void saveDisclosureDetail(CoiDisclosure coiDisclosure, PersonEntity sfiDetail, ConflictOfInterestVO conflictOfInterestVO) {
-		CoiDisclEntProjDetails proposalDisclosure = new CoiDisclEntProjDetails();
-		proposalDisclosure.setCoiDisclosure(coiDisclosure);
-		proposalDisclosure.setDisclosureId(coiDisclosure.getDisclosureId());
-		proposalDisclosure.setDisclosureNumber(coiDisclosure.getDisclosureNumber());
-		proposalDisclosure.setPersonEntityId(sfiDetail != null ? sfiDetail.getPersonEntityId() : null);
-		proposalDisclosure.setPersonEntity(sfiDetail != null ? sfiDetail : null);
-		proposalDisclosure.setModuleCode(conflictOfInterestVO.getModuleCode());
-		proposalDisclosure.setModuleItemKey(conflictOfInterestVO.getModuleItemId().toString());
-		conflictOfInterestDao.saveOrUpdateCoiDisclEntProjDetails(proposalDisclosure);
+		CoiDisclEntProjDetails coiDisclEntProjDetails = new CoiDisclEntProjDetails();
+		coiDisclEntProjDetails.setCoiDisclosure(coiDisclosure);
+		coiDisclEntProjDetails.setDisclosureId(coiDisclosure.getDisclosureId());
+		coiDisclEntProjDetails.setDisclosureNumber(coiDisclosure.getDisclosureNumber());
+		coiDisclEntProjDetails.setPersonEntityId(sfiDetail != null ? sfiDetail.getPersonEntityId() : null);
+		coiDisclEntProjDetails.setPersonEntity(sfiDetail != null ? sfiDetail : null);
+		coiDisclEntProjDetails.setEntityId(sfiDetail != null ? sfiDetail.getEntityId() : null);
+		coiDisclEntProjDetails.setEntityNumber(sfiDetail != null ? sfiDetail.getEntityNumber() : null);
+		coiDisclEntProjDetails.setModuleCode(coiDisclosure.getModuleCode());
+		coiDisclEntProjDetails.setModuleItemKey(coiDisclosure.getModuleItemKey());
+		conflictOfInterestDao.saveOrUpdateCoiDisclEntProjDetails(coiDisclEntProjDetails);
 	}
 
 //	private void generateDisclosureCategoryType(String disclosureCategoryType, CoiDisclosure CoiDisclosureOld) {
