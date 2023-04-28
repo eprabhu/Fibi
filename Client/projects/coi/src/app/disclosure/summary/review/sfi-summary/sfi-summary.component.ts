@@ -77,7 +77,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     }
 
     openSfiDetails(condition: boolean, entityId: number) {
-        this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104' }});
+        this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104',mode:'view' }});
     }
 
 }

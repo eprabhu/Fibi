@@ -62,14 +62,14 @@
   width: 120px;
   height: 30px;
   color: #7c868f !important;
-  border: 2px solid #d3cccc;
+  border: 1.8px solid #d3cccc;
   border-radius: 0px;
   &:hover{
-    border: 2px solid #007DEC;
+    border: 1.8px solid #007DEC;
     color: #007DEC !important;
   }
   &:focus{
-    border: 2px solid #007DEC;
+    border: 1.8px solid #007DEC;
     color: #007DEC !important;
   }
 }

@@ -18,11 +18,13 @@
           </li>
         </ul>
       </nav>
-      
+
       <div class="align-items-center d-flex justify-content-end">
-        <button class="btn btn-primary d-flex fs-13 align-items-center" id="add-new-entity" title="Add new entity"
-          (click)="addNewEntity()"><mat-icon class="add-icon">add</mat-icon> Add New
-          Entity</button>
+        <div class="mx-1">
+          <button class="btn btn-primary d-flex fs-13 align-items-center px-4" id="add-new-entity" title="Add new entity"
+            (click)="addNewEntity()"><mat-icon class="add-icon">add</mat-icon> Add New
+            Entity</button>
+        </div>
       </div>
   </div>
   <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
@@ -35,7 +37,7 @@
         <app-elastic [options]="coiElastic" [placeHolder]="'Entity Name, Country etc.'"
           [uniqueId]="'btn-entity-elastic'" (selectedResult)="redirectToEntity($event)"></app-elastic>
       </div>
-      <div class="ml-15 justify-content-end d-flex">
+      <div class="ml-15 justify-content-end d-flex mx-3">
         <button class="btn btn-primary fs-13 d-flex" id="advanced-search" title="Advance search"
           (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search" aria-expanded="true"
           aria-label="Toggle Advanced Search"><mat-icon class="add-icon">tune</mat-icon> Advanced

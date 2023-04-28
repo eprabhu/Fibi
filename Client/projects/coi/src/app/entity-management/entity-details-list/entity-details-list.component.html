@@ -5,33 +5,33 @@
     <!-- [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"  -->
     <nav
       class="align-items-center bg-white border d-flex fs-14 fw-medium mt-3 py-1 user-dashboard-nav bg-body-emphasis">
-      <div (click)="currentTab('Person')" class=" navigation-icons text-secondary py-1" role="button"
+      <div (click)="currentTab('Person')" class="border-end navigation-icons text-secondary py-1" role="button"
         id="btn-person" title="Person" (keyup.enter)="currentTab('Person')" (keyup.space)="currentTab('Person')">
         <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Person'}" class="px-5 ">Person</span>
         <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Person'" class="active-color"></span> -->
-        <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Person'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+        <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Person'"
+              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span> -->
       </div>
-      <div (click)="currentTab('Institutional')" class=" navigation-icons text-secondary py-1"
+      <div (click)="currentTab('Institutional')" class="border-end navigation-icons text-secondary py-1"
         role="button" id="btn-institutional" title="Institutional" (keyup.enter)="currentTab('Institutional')"
         (keyup.space)="currentTab('Institutional')">
         <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Institutional'}" class="px-5">Institutional</span>
-        <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Institutional'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+        <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Institutional'"
+              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span> -->
       </div>
-      <div (click)="currentTab('Other_Entities')" class=" navigation-icons text-secondary py-1"
+      <div (click)="currentTab('Other_Entities')" class="border-end navigation-icons text-secondary py-1"
         role="button" id="btn-other-entities" title="Other Entities" (keyup.enter)="currentTab('Other_Entities')"
         (keyup.space)="currentTab('Other_Entities')">
         <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Other_Entities'}" class="px-5">Other Entities</span>
-        <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Other_Entities'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+        <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Other_Entities'"
+              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span> -->
       </div>
-      <div  (click)="currentTab('Disclosures')" class="navigation-icons text-secondary py-1" role="button"
+      <div  (click)="currentTab('Disclosures')" class="border-end navigation-icons text-secondary py-1" role="button"
         id="btn-disclosure" title="Disclosures" (keyup.enter)="currentTab('Disclosures')"
         (keyup.space)="currentTab('Disclosures')">
         <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Disclosures'}" class="px-5">Disclosures</span>
-        <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Disclosures'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span>
+        <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Disclosures'"
+              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span> -->
       </div>
     </nav>
   </div>
