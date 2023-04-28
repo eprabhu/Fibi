@@ -19,6 +19,7 @@ export class UserDisclosureService {
             "sort": {
                 "createTimestamp": "asc"
             },
+            "filterType": "ALL",
             "isDownload": false
         });
     }

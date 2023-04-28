@@ -185,17 +185,17 @@
         </div>
         <div class="align-items-center chin d-flex fs-14 mx-3 ">
             <div class="align-items-center col d-flex fs-14">
-                <strong class="fs-18 me-2 text-blue-color">{{disclosure?.noOfSfiInPending}}</strong>
+                <strong class="fs-18 me-2 text-blue-color">{{disclosure?.noOfSfi}}</strong>
                 <strong>SFIs</strong>
             </div>
             <div class="col text-secondary fs-14 d-flex">
                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
                     <div class="align-items-center col d-flex fs-14">
-                        <strong class="fs-18 me-2 text-blue-color">{{disclosure?.numberOfProposals}}</strong>
+                        <strong class="fs-18 me-2 text-blue-color">{{disclosure?.noOfProposal}}</strong>
                         <strong>Proposals</strong>
                     </div>
                     <div class="align-items-center col d-flex fs-14">
-                        <strong class="fs-18 me-2 text-blue-color">{{disclosure?.numberOfAwards}}</strong>
+                        <strong class="fs-18 me-2 text-blue-color">{{disclosure?.noOfAward}}</strong>
                         <strong>Awards</strong>
                     </div>
                 </ng-container>

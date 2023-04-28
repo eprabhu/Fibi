@@ -39,6 +39,7 @@ export class CertificationComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
+        this._coiService.isCertified = false;
     }
 
     private getDataFromStore() {
