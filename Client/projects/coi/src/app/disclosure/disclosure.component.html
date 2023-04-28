@@ -95,13 +95,13 @@
                                     </td>
                                     <td class="ps-2">Significant Financial Interest</td>
                                 </tr>
-                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1','3'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
+                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
                                     <td><span
                                             class="bold-blue-color">{{coiData?.numberOfProposal ? coiData?.numberOfProposal : 0}}</span>
                                     </td>
                                     <td class="ps-2">Proposals</td>
                                 </tr>
-                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1','3'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
+                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
                                     <td><span
                                             class="bold-blue-color">{{coiData?.numberOfAward ? coiData?.numberOfAward : 0}}</span>
                                     </td>
@@ -222,25 +222,38 @@
                 Notes & Attachments
 
             </div>
-            <div *ngIf="sfiService.isShowSfiNavBar" class="task-nav-div" id="task-navigation-bar">
+            <div>
                 <app-add-sfi></app-add-sfi>
             </div>
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill h-100 border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
-                    <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-secondary pb-0 fs-14 col-2">
+                    <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-secondary pb-0 fs-14 col-2 me-2">
                         <mat-icon>home</mat-icon>
                     </button>
-                    <button (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
+                    <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
                             class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
                     </button>
-                    <button class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
+                    <button *ngIf="![4].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center me-2">
                         <mat-icon class="me-2">rate_review</mat-icon>
                         Comments
                     </button>
+                    <button  *ngIf="[4].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" style="white-space: nowrap;" aria-expanded="false"
+                            class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
+                            data-bs-toggle="dropdown" id="moreActionsForComplete" role="button">
+                        <mat-icon class="me-1">more_vert</mat-icon> More Options
+                    </button>
+                    <ul class="border dropdown-menu p-0 rounded-0" style="" aria-labelledby="moreActionsForComplete">
+                        <li class="ash-text border-bottom"><span class="dropdown-item fs-15 fw-medium">
+                            <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
+                        </li>
+                        <li class="ash-text"><span class="dropdown-item fs-15 fw-medium">
+                            <mat-icon class="me-2 ash-text">print</mat-icon> Print</span>
+                        </li>
+                    </ul>
                 </div>
                 <div class="d-flex justify-content-around px-3 pb-3">
                     <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
@@ -259,7 +272,7 @@
                         Complete Review
                     </button>
 
-                    <button style="white-space: nowrap;" aria-expanded="false"
+                    <button *ngIf="![4].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" style="white-space: nowrap;" aria-expanded="false"
                             class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
                             data-bs-toggle="dropdown" id="moreActions" role="button">
                         <mat-icon class="me-1">more_vert</mat-icon> More Options

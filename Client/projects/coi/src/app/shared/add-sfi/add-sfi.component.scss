@@ -286,8 +286,8 @@ small {
     color: #fff !important;
 }
 
-.pl-7 {
-    padding-left: 7rem;
+.pl-85 {
+    padding-left: 8.5rem;
 }
 
 .col-custom {
@@ -309,10 +309,16 @@ small {
     margin-right: 1rem;
 }
 
-.font {
-font-weight: 500;
-}
-
 .card-color {
     background-color: #FBFBFF;
+}
+
+.right-align {
+    padding-left: 11rem;
+}
+
+.date-field-error {
+    right: 28px;
+    position: absolute;
+    top: 8px;
 }

@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnChanges, ViewChild } from '@angular/core';
 import { ActivityService } from '../../../../../fibi/src/app/agreement/agreement-shared/activity-track/activity.service';
-import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
+import { slideHorizontal } from './../../../../../fibi/src/app/common/utilities/animations';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { environment } from '../../../environments/environment';
 import { CommonService } from '../../common/services/common.service';
@@ -25,7 +25,7 @@ export interface EndpointOptions {
   providers: [ActivityService],
   animations: [slideHorizontal]
 })
-export class AddSfiComponent implements OnInit {
+export class AddSfiComponent implements OnChanges {
 
   isSaving = false;
   scrollHeight: number;
@@ -57,7 +57,7 @@ export class AddSfiComponent implements OnInit {
   constructor(public sfiService: SfiService, public _commonService: CommonService,
     private _activatedRoute: ActivatedRoute, private _router: Router) { }
 
-  ngOnInit() {
+  ngOnChanges() {
     // this.sfiLookUpList = this.sfiService.lookups;
     this.getSFILookup();
     this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
@@ -100,17 +100,22 @@ export class AddSfiComponent implements OnInit {
       this.sfiService.isShowSfiNavBar = false;
       this.showSfiNavBar();
       this.removeEntityId();
+      this.mandatoryList.clear();
+      this.coiEntity = {
+        entityTypeCode: null
+      };
+      this.additionalDetails = {
+        sponsorsResearch: false
+      }
     }
   }
 
   showSfiNavBar() {
     if (this.sfiService.isShowSfiNavBar) {
-      this.sfiNavOverlay.nativeElement.style.display = 'block';
       this.scrollHeight = document.documentElement.scrollTop;
       document.body.style.overflow = 'hidden';
       document.documentElement.style.top = - this.scrollHeight + 'px';
     } else {
-      this.sfiNavOverlay.nativeElement.style.display = 'none';
       document.body.style.overflow = 'auto';
       document.documentElement.scrollTop = this.scrollHeight;
     }
@@ -124,37 +129,6 @@ export class AddSfiComponent implements OnInit {
     this.showRelationshipModal = event;
     this.showSfiNavBar();
   }
-
-  //  createSFI() {
-  //     if (this.checkMandatoryFilled() && !this.isSaving) {
-  //       this.isSaving = true;
-  //       // this.entityDetails.involvementStartDate = parseDateWithoutTimestamp(this.entityDetails.involvementStartDate);
-  //       // this.entityDetails.involvementEndDate = parseDateWithoutTimestamp(this.entityDetails.involvementEndDate);
-  //       this.$subscriptions.push(this.sfiService.createSFI({ 'coiFinancialEntity': this.entityDetails,
-  //             disclosureId: parseInt(this._activatedRoute.snapshot.queryParamMap.get('dId')),
-  //             proposalDisclosureWithNoSfi : this._activatedRoute.snapshot.queryParamMap.get('isSFINotAvailable') == 'true' ? true : false
-  //       })
-  //         .subscribe((data: any) => {
-  //           this.sfiService.sfiDetails = JSON.parse(JSON.stringify(data));
-  //           this.isSaving = false;
-  //           this.showRelationshipModal= true;
-  //           this._router.navigate([], {
-  //             queryParams: {
-  //               entityId: data.coiFinancialEntity.coiFinancialEntityId
-  //             },
-  //             queryParamsHandling: 'merge',
-  //           });
-  //           this.entityDetails = data.coiFinancialEntity;
-  //           this.EntitySearchOptions.defaultValue = this.coiEntity.entityName;
-  //           this.entityDetails.involvementStartDate = getDateObjectFromTimeStamp(this.entityDetails.involvementStartDate);
-  //           this.entityDetails.involvementEndDate = getDateObjectFromTimeStamp(this.entityDetails.involvementEndDate);
-
-  //         },
-  //           err => {
-  //             this.isSaving = false;
-  //           }));
-  //     }
-  //   }
 
   createSFI() {
     if (!this.checkMandatoryFilled() && !this.isSaving) {
@@ -229,40 +203,40 @@ export class AddSfiComponent implements OnInit {
   checkMandatoryFilled() {
     this.mandatoryList.clear();
     if (!this.coiEntity.entityName) {
-      this.mandatoryList.set('name', '* Please choose an entity name.');
+      this.mandatoryList.set('name', 'Please choose an entity name.');
     }
     if (!this.coiEntity.entityId) {
       if (!this.coiEntity.country) {
-        this.mandatoryList.set('country', '* Please choose a country.');
+        this.mandatoryList.set('country', 'Please choose a country.');
       }
       if (!this.coiEntity.entityTypeCode || this.coiEntity.entityTypeCode === 'null') {
-        this.mandatoryList.set('type', '* Please choose an entity type.');
+        this.mandatoryList.set('type', 'Please choose an entity type.');
       }
       if (!this.coiEntity.emailAddress) {
-        this.mandatoryList.set('email', '* Please enter a email address.');
+        this.mandatoryList.set('email', 'Please enter a email address.');
       }
       if (!this.coiEntity.address) {
-        this.mandatoryList.set('address', '* Please enter an address.');
+        this.mandatoryList.set('address', 'Please enter an address.');
       }
       if (!this.coiEntity.phone) {
-        this.mandatoryList.set('phone', '* Please enter phone number.');
+        this.mandatoryList.set('phone', 'Please enter phone number.');
       }
       this.emailValidation();
       if (!this.coiEntity.zipCode) {
-        this.mandatoryList.set('zipCode', '* Please enter a zipCode.');
+        this.mandatoryList.set('zipCode', 'Please enter a zipCode.');
       }
     }
     if (!this.additionalDetails.involvementStartDate) {
-      this.mandatoryList.set('date', '* Please enter a start date.');
+      this.mandatoryList.set('date', 'Please enter a start date.');
     }
     if (!this.additionalDetails.staffInvolvement) {
-      this.mandatoryList.set('staff', '* Please enter Relationship with Entity details.');
+      this.mandatoryList.set('staff', 'Please enter Relationship with Entity details.');
     }
     if (!this.additionalDetails.studentInvolvement) {
-      this.mandatoryList.set('student', '* Please enter Principle Business Area of Entity details.');
+      this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity details.');
     }
     if (!this.additionalDetails.instituteResourceInvolvement) {
-      this.mandatoryList.set('resource', '* Please enter Relationship of Entity to your University responsibilities details.');
+      this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
     }
     return this.mandatoryList.size !== 0 || this.emailWarningMsg ? false : true;
 
@@ -287,6 +261,23 @@ export class AddSfiComponent implements OnInit {
     const pattern = /[0-9\+\-\/\ ]/;
     if (!pattern.test(String.fromCharCode(event.charCode))) {
       event.preventDefault();
+    }
+  }
+
+  phoneNumberValidation(input) {
+    this.mandatoryList.clear();
+    // tslint:disable-next-line:max-line-length
+    const pattern = (/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[0-9]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/);
+    if (!pattern.test(input)) {
+      this.checkForInvalidPhoneNumber(input);
+    }
+  }
+
+  checkForInvalidPhoneNumber(input) {
+    if (/^([a-zA-Z]|[0-9a-zA-Z])+$/.test(input)) {
+      this.mandatoryList.set('phoneNumber', 'Alphabets cannot be added in Phone number field.');
+    } else {
+      this.mandatoryList.set('phoneNumber', 'Please add a valid number');
     }
   }
 
