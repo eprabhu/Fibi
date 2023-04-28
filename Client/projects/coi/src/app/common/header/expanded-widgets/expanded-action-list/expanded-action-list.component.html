@@ -96,32 +96,44 @@
                 <table class="table tableSkin">
                     <caption class=""></caption>
                     <thead class="">
-                        <tr>
-                            <th scope="col"></th>
+                        <tr>                          
+                            <th class="tablehead fs-12 mb-3"scope="col " colspan="2"><i class="fa fa-info-circle mr-1"></i> Items awaiting an Action :</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="pull-up" *ngFor="let testinbox of testInboxDeatils">
-                            <td class="td-pd" (click)="goToActionPath(inbox)">
+                    <tbody class="pt-3">
+                        <tr class="pull-up pt-3" *ngFor="let testinbox of testInboxDeatils; let i= index">
+                            <td class="td-pd pt-3" (click)="goToActionPath(testinbox?.inbox)">
                                 <div>
                                     <span class="font-style">{{(testinbox.inbox?.message?.description)?.length>1 ?
                                         (testinbox.inbox?.message?.description | slice:0:150)+'...' :
-                                        testinbox.inbox?.message?.description}}</span>
-                                    <span class="d-block text-break">{{(testinbox.inbox?.message?.description)}}</span>
+                                        testinbox.inbox?.message?.description}}</span><br>
+                                    <span class="font-style fw-normal">disclosureId: {{(testinbox.inbox?.message?.disclosureId)?.length>1 ?
+                                        (testinbox.inbox?.message?.disclosureId | slice:0:150)+'' :
+                                        testinbox.inbox?.message?.disclosureId}}</span>
+                                    <!-- <span class="d-block text-break">{{(testinbox.inbox?.message?.description)}}</span> -->
+                                    <span class="d-block text-break fw-normal ">{{(testinbox.inbox?.message?.Proposal)}}</span>
                                 </div>
                             </td>
-                            <td style="width:20%" (click)="goToActionPath(inbox)">
+                            <td style="width:20%" (click)="goToActionPath(testinbox?.inbox)">
                                 <div class="text-right">
                                     <span class="block-display fw-600">
                                         <i class="fa fa-clock-o mr-2"
-                                            title="{{inbox?.arrivalDate | dateFormatterWithTimeZone: 'long'}}"
-                                            aria-hidden="true"></i>{{getTimeInterval(inbox?.arrivalDate)}}</span>
+                                            title="{{testinbox?.inbox?.arrivalDate}}"
+                                            aria-hidden="true"></i><span>{{testinbox?.inbox?.arrivalDate}}</span></span>
+                                           
+                                             <!-- demo data(time)
+                                            <!-- <span class="block-display fw-600">
+                                                <i class="fa fa-clock-o mr-2"
+                                                    title="{{testinbox?.inbox?.arrivalDate | dateFormatter}}"
+                                                       aria-hidden="true"></i>{{testInboxDeatils?.inbox?.arrivalDate}}</span> -->
+                                                       <label *ngIf="i >= 2" style="color: #007bff;font-weight: 400; cursor: pointer;">Development Proposal</label>
+                                                       <label *ngIf="i < 2" style="color: #007bff;font-weight: 400; cursor: pointer;">Award</label>
                                     <span
                                         *ngIf="testinbox.inbox.messageTypeCode !== '121' && testinbox.inbox.messageTypeCode !== '122' else variation"
                                         class="{{testinbox.inbox.class}} float-right mt-1">
-                                        {{inbox?.name}}</span>
+                                        {{testinbox?.inbox?.name}}</span>
                                     <ng-template #variation>
-                                        <span class="{{inbox.class}} float-right mt-1">Variation Request</span>
+                                        <span class="{{testinbox?.inbox.class}} float-right mt-1">Variation Request</span>
                                     </ng-template>
                                 </div>
                             </td>

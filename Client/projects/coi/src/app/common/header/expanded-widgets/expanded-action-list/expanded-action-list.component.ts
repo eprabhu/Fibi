@@ -16,7 +16,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
     styleUrls: ['./expanded-action-list.component.scss']
 })
 export class ExpandedActionListComponent implements OnInit, OnDestroy {
-
+    
     inboxObject: any = {
         moduleCode: null
     };
@@ -25,158 +25,66 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
         {
             inbox: {
                 message: {
-                    description: "casual talk."
+                    description: "Disclosure Approved",
+                    disclosureId:"66",
+                    Proposal:" #25849 - Start-up Research Grant (SRG) scheme"
                 },
                 messageTypeCode: '123',
                 class: "fresher",
-                arrivalDate: "31/01/2000"
+                arrivalDate: "31/01/2015"
+            },
+
+        },
+        // {
+        //     inbox: {
+        //         message: {
+        //             description: "Disclosure Submitted for Review",
+        //             disclosureId:"3",
+        //             Proposal:" #25849 - Start-up Research Grant (SRG) scheme"
+        //         },
+        //         messageTypeCode: '123',
+        //         arrivalDate:'21/09/2010'
+        //     },
+
+        // },
+        {
+            inbox: {
+                message: {
+                    description: "Disclosure Submitted for Review"                 ,
+                    disclosureId:"16",
+                    Proposal:" #25849 - UV induced Cell Death in Plants- An overview"
+                },
+                messageTypeCode: '123',
+                arrivalDate: "01/02/2004"
             },
 
         },
         {
             inbox: {
                 message: {
-                    description: "casual talk."
+                    description: "Management Plan uploaded ",
+                    disclosureId:"62",
+                    Proposal:" #25849 - Start-up Research Grant (SRG) scheme"
                 },
                 messageTypeCode: '123',
+                arrivalDate: "03/02/2010"
             },
 
         },
         {
             inbox: {
                 message: {
-                    description: "casual talk."
+                    description: "Potential Conflict Identified",
+                    disclosureId:"61",
+                   
                 },
                 messageTypeCode: '123',
+                arrivalDate: "04/02/2002"
+
             },
 
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "casual talk."
-                },
-                messageTypeCode: '123',
-            },
-
-        },
+        }
+        
     ];
     $subscriptions: Subscription[] = [];
     modulePath = Object.assign({}, Constants.paths);
@@ -195,6 +103,8 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.clearInboxSearchField();
         this.getActionList(false);
+        console.log(this.testInboxDeatils);
+        
     }
 
     ngOnDestroy() {
@@ -277,7 +187,7 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
             {
                 inbox: {
                     message: {
-                        description: "casual talk."
+                        description: "Management Plan uploaded"
                     }
                 },
 
@@ -285,7 +195,7 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
             {
                 inbox: {
                     message: {
-                        description: "casual talk."
+                        description: "Management Plan uploaded"
                     }
                 },
 
