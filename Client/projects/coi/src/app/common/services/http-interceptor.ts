@@ -34,7 +34,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
     */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // this.AuthToken = this._commonService.getCurrentUserDetail('Authorization');
-        this.AuthToken = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3aWxsc21pdGgiLCJwZXJzb25JZCI6IjEwMDAwMDAwMDAxIiwidW5pdE51bWJlciI6IjAwMDAwMSIsImZ1bGxOYW1lIjoiU21pdGgsIFdpbGwiLCJpc0V4dGVybmFsVXNlciI6ZmFsc2UsImlhdCI6MTY4MjU3MTY0MCwiZXhwIjoxNjgyNjE0ODQwfQ.kPEckalf9eyxlPe1eS8hWnCVJtw2oU7iq_uMcUh0IQn6BqIkOfxcT3YDo2ljfZbdEIEulAZH49z7Kb8WgLCOuw';
+        this.AuthToken = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3aWxsc21pdGgiLCJwZXJzb25JZCI6IjEwMDAwMDAwMDAxIiwidW5pdE51bWJlciI6IjAwMDAwMSIsImZ1bGxOYW1lIjoiU21pdGgsIFdpbGwiLCJpc0V4dGVybmFsVXNlciI6ZmFsc2UsImlhdCI6MTY4MjU3MDczNywiZXhwIjoxNjgyNjEzOTM3fQ.JFUCtbYOf6_Zwtp1BiV8YZviS9zN02NvZ7CZMMnZxarZz8zv_0FB-PkzTBKgWqXKWxw73zz_GQIt4cOu9FMG4w';
+        
         if (this.AuthToken) {
             req = req.clone({ headers: req.headers.set('Authorization', this.AuthToken) });
         }
