@@ -659,4 +659,9 @@ public interface ConflictOfInterestDao {
 	public List<CoiTravelerType> loadTravellerTypesLookup();
 	
 	public List<CoiTravelerStatusType> loadTravelStatusTypesLookup();
+	
+	public List<ValidPersonEntityRelType> getValidPersonEntityRelTypes(Integer personEntityId);
+
+	public CoiDisclosure getMasterDisclosureByPersonId(String personId);
+
 }

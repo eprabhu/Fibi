@@ -976,6 +976,13 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 				disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER"));
 //				disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
+				disclosureView.setNoOfSfi(resultSet.getInt("NO_OF_SFI"));
+				disclosureView.setNoOfProposal(resultSet.getInt("NO_OF_PROPOSAL"));
+				disclosureView.setNoOfAward(resultSet.getInt("NO_OF_AWARD"));
+				disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLE"));
+				disclosureView.setProposalId(resultSet.getString("PROPOSAL_NUMBER"));
+				disclosureView.setAwardlId(resultSet.getString("AWARD_NUMBER"));
+				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLE"));
 				disclosureViews.add(disclosureView);
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
@@ -2166,6 +2173,33 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.where(builder.equal(root.get("isActive"), true));
 		query.orderBy(builder.asc(root.get("travelStatusCode")));
 		return session.createQuery(query).getResultList();
+	}
+	
+	@Override
+	public List<ValidPersonEntityRelType> getValidPersonEntityRelTypes(Integer personEntityId) {	
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ValidPersonEntityRelType> query = builder.createQuery(ValidPersonEntityRelType.class);
+		Root<PersonEntityRelationship> rootCOIFinancialEntity = query.from(PersonEntityRelationship.class);
+		query.select(rootCOIFinancialEntity.get("validPersonEntityRelType")); 
+		query.where(builder.equal(rootCOIFinancialEntity.get("personEntityId"), personEntityId));
+		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public CoiDisclosure getMasterDisclosureByPersonId(String personId) {
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<CoiDisclosure> query = builder.createQuery(CoiDisclosure.class);
+			Root<CoiDisclosure> rootCoiDisclosure = query.from(CoiDisclosure.class);
+			query.where(builder.and(builder.equal(rootCoiDisclosure.get("personId"), personId),
+					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1")));
+			query.where(builder.equal(rootCoiDisclosure.get("personId"), personId));
+			return session.createQuery(query).getSingleResult();
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 	
 }
