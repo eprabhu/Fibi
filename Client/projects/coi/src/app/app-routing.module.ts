@@ -39,6 +39,10 @@ const routes: Routes = [
             {
                 path: 'expanded-widgets',
                 loadChildren: () => import('./common/header/expanded-widgets/expanded-action-list/expanded-widgets.module').then(m => m.ExpandedActionListModule)
+            },
+            {
+                path:'user',
+                loadChildren: () => import('./user/user.module').then(m => m.UserModule)
             }
         ]
     },

@@ -1,0 +1,23 @@
+.label {
+    font-size: 1.4rem;
+    margin-bottom: 0;
+    color: #333;
+    font-weight: 600;
+}
+
+.mandatory {
+    color: red !important;
+    padding-right: 2px;
+    font-size: 1.2rem
+}
+
+.block-display {
+    //TODO: d-block
+    display: block !important;
+}
+
+.subcategoryalign {
+    padding: 6px;
+    margin-top: -6px;
+    margin-left: 7px;
+}

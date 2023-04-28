@@ -19,7 +19,7 @@ export class FaqComponent implements OnInit, OnDestroy {
   categoryName: any;
   showAddFaq = false;
   selectedCategory = 0;
-  selectedQuestion = 0;
+  selectedQuestion:any;
   faqDetails: any;
   attachmentList: any = [];
   tempQuestionList: any;
@@ -37,6 +37,11 @@ export class FaqComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
   }
+
+  test(category: any, i: number) { 
+    (category.faqSubCategory.length > 0) ? this.isCollapse[i] = !this.isCollapse[i] : this.displayFAQ(category.categoryCode,'' ,true,i)
+  }
+
   /**
    * @param  {} categoryName
    * returns the current category name

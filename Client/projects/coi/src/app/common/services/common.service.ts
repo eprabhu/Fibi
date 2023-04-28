@@ -46,7 +46,7 @@ export class CommonService {
     elasticDelimiter = '';
     elasticPassword = '';
     elasticIndexUrl = '';
-    generalFileType = '';
+    generalFileType = 'pdf';
     appLoaderContent = '';
     isEnableLock = false;
     isDevelopment = false;

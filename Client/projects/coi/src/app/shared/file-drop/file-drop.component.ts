@@ -22,7 +22,7 @@ export class FileDropComponent implements OnInit {
     }
   }
 
-  onFileDrop(files) {
+  onFileDrop(files) { 
     const fileList = this.checkFileExtensionSize(files);
     this.filesDropEvent.emit(fileList);
     (this.fileSelector.nativeElement as HTMLInputElement).value = '';

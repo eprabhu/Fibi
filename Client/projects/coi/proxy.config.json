@@ -201,7 +201,7 @@
     "secure": false
   },
   "/getAllRemaindersList": {
-    "target": "http://192.168.1.226:9090/fibi4/",
+    "target": "http://192.168.1.189:9090/fibi4/",
     "secure": false
   },
   "/findAward": {
@@ -231,5 +231,25 @@
   "/auth/login": {
     "target": "http://192.168.1.189:9090/",
     "secure": false
+  },
+  "/fetchFaqDetails": {
+    "target": "http://192.168.1.189:9090/fibi4/",
+    "secure": false
+  },
+  "/downloadFaqAttachment": {
+    "target": "http://192.168.1.189:9090/fibi4/",
+    "secure": false
+  },
+  "/listFaqCategory": {
+    "secure": false,
+    "target": "http://192.168.1.189:9090/fibi4/"
+  },
+  "/addFaqAttachment": {
+    "secure": false,
+    "target": "http://192.168.1.189:9090/fibi4/"
+  },
+  "/saveFaq": {
+    "secure": false,
+    "target": "http://192.168.1.189:9090/fibi4/"
   }
 }
