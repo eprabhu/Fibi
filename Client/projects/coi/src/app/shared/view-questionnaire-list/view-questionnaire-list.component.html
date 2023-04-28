@@ -1,5 +1,5 @@
-<div class="card">
-    <div class="card-header" [ngClass]="isShowExportButton ? '' : 'pr-0' ">
+<div class="card m-1">
+    <!-- <div class="card-header" [ngClass]="isShowExportButton ? '' : 'pr-0' ">
         <h4 class="card-title align-items-center d-flex">
             <div class="">{{questionnaireHeader}}</div>
             <div class="text-right ms-auto" *ngIf="this.questionnaireList?.length != 0 && !isShowBackButton">
@@ -35,7 +35,7 @@
                 </span>
             </div>
         </h4>
-    </div>
+    </div> -->
     <div *ngIf="questionnaireList.length == 0 && isShowQuestionnaire" class="no-data-container">
         <span class="no-data-icon-outer">
             <div class="no-data-icon">
@@ -84,7 +84,7 @@
         </div>
     </div>
     <div *ngIf="this.questionnaireList.length != 0 && isShowQuestionnaire" class="tab-pane">
-        <div class="card mt-2">
+        <div class="card my-2 mb-3 mx-3">
             <div class="card-body pt-0">
                 <app-view-questionnaire [questionnaireDetails]="activeQuestionnaire"
                     (questionnaireSaveEvent)="updateParentData($event)" [isViewMode]="isViewMode"

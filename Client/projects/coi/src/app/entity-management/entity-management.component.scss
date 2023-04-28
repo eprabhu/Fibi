@@ -133,9 +133,9 @@ input:checked+.slider:before {
     position: relative;
     left: 95px;
 }
-// #add-new-entity,#advanced-search{
-//   width: 15.4rem;
-// }
+#add-new-entity,#advanced-search{
+  width: 145px;
+}
 
 // #advanced-search{
 //   width: 58%;
@@ -157,9 +157,9 @@ small{
 
 .add-icon{
   position: relative;
-  bottom: 0rem;
-  font-size: 2rem;
-  right: 0.2rem;
+  top: 1px;
+  font-size: 18px;
+  right:2px;
 }
 
 .border:focus{

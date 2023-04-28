@@ -2,6 +2,9 @@
   height: 250px;
   margin-left: -4px;
   margin-right: 5px;
+  position: relative;
+  bottom: 1px;
+  border-radius: 0px 0px 5px 5px;
 }
 
 .content {
@@ -10,7 +13,7 @@
 }
 .material-icons-outlined{
   position: relative;
-    top: 4px;
+    top: 5px;
     right: 3px;
 }
 
@@ -48,6 +51,6 @@
 
 .relation-label {
   position: relative;
-    bottom: 3px;
+    bottom: 2px;
     left: 4px;
 }

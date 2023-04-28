@@ -18,7 +18,7 @@ export class EntityListComponent implements  OnChanges {
   @Output() navNextPage: EventEmitter<any> = new EventEmitter<any>()
   isViewEntityDetails = false;
   $subscriptions: Subscription[] = [];
-  resultCount: number = 0;
+  @Input() resultCount: number = 0;
 
 
   constructor(private _router: Router, private _entityManagementService: EntityManagementService) { }
@@ -29,7 +29,7 @@ export class EntityListComponent implements  OnChanges {
   }
 
   ngOnChanges() {
-    this.resultCount = this.entityList.length;
+    // this.resultCount = this.entityList.length;
   }
 
   modifyEntityDetails(data) {

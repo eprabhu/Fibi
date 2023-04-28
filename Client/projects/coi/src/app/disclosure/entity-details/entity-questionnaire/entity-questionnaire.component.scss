@@ -92,7 +92,7 @@
 
 .mat-save {
   position: absolute;
-  right: 2rem;
+  right: 10px;
 }
 
 .modal-header{
@@ -117,4 +117,46 @@
 .on-data-position{
   position: relative;
   bottom: 7px;
+}
+
+.card-br{
+  border-radius: 0px 0px 5px 5px;
+}
+
+.nav-position{
+  position: static;
+}
+
+.scrollable-table {
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: auto;
+  overscroll-behavior: contain;
+}
+
+.scrollable-table thead {
+  position: sticky !important;
+  top: 0;
+  z-index: 1;
+}
+
+::-webkit-scrollbar {
+  width: .4em;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: #eee
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc
+}
+
+.disable-scroll {
+  overflow-y: hidden !important;
 }

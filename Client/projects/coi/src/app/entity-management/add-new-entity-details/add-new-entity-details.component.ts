@@ -64,6 +64,7 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
+    this.hideEntityNavBar();
   }
 
   createEntity() {
@@ -76,10 +77,9 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
             this.updatedDataStore.emit(true);
           }
           this.entityManagementService.isShowEntityNavBar = false;
-
-          // this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity?'Update ':'Created '}Entity Successfully completed.`);
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity?'Update ':'Created '}Entity Successfully completed.`);
         }, _err => {
-          // this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
     }
   }
@@ -163,9 +163,9 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
     if (!this.entityDetails.coiEntity.webURL) {
       this.mandatoryList.set('website', '* Please enter a entity website.')
     }
-    // if(!this.entityDetails.coiEntity.riskCategoryCode) {
-    //   this.mandatoryList.set('riskLevel', '* Please choose a risk level.');
-    // }
+    if(!this.entityDetails.coiEntity.zipCode) {
+      this.mandatoryList.set('zipCode', '* Please enter a zip code.');
+    }
 
     return this.mandatoryList.size === 0 ? true : false;
   }

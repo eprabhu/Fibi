@@ -1,5 +1,5 @@
-<div>
-  <div *ngIf="entityDetailsServices.isExpanded" class="card border ps-4 ">
+<div class="container-fluid">
+  <div *ngIf="entityDetailsServices.isExpanded" class="card border ps-4 shadow">
     <div class="relationship fw-bold col-1 shadow-lg">Relationships</div>
     <div class="row">
       <div class="col-12 d-flex">
@@ -19,7 +19,7 @@
         <div class="col-3">
           <div class="row">
             <label class="fs-14 fw-500">Relationship Type</label>
-            <label class="text-secondary fs-14">{{relationshipsDetails?.personEntityRelationships}}</label>
+            <label class="text-secondary fs-14">{{relationshipsDetails?.personEntityRelationships?relationshipsDetails?.personEntityRelationships:'No Data'}}</label>
           </div>
         </div>
         <div class="col-3">
@@ -34,14 +34,13 @@
       <div class="col-12 mt-3">
         <div class="row">
           <label class="fs-14 fw-500">Relationship With Entity</label>
-          <label class="text-secondary fs-14">Serving on Advisory Board</label>
+          <label class="text-secondary fs-14">{{relationshipsDetails?.staffInvolvement?relationshipsDetails?.staffInvolvement:'No Data'}}</label>
         </div>
       </div>
       <div class="col-12 mt-3">
         <div class="row">
           <label class="fs-14 fw-500">Principal Business Area Of Entity</label>
-          <label class="text-secondary fs-14">Alexion is focused on developing and delivering life-transforming
-            therapies for patients with
+          <label class="text-secondary fs-14">{{relationshipsDetails?.studentInvolvement?relationshipsDetails?.studentInvolvement:'No Data'}}
             <!-- <a href="">Read More</a> -->
           </label>
         </div>
@@ -51,7 +50,7 @@
           <div class="col-11 mt-3">
             <div class="row">
               <label class="fs-14 fw-500">Relationship Of Entity To Your University Responsibilities</label>
-              <label class="text-secondary fs-14">Entity sponsoring Funded Research</label>
+              <label class="text-secondary fs-14">{{relationshipsDetails?.instituteResourceInvolvement?relationshipsDetails?.instituteResourceInvolvement:'No Data'}}</label>
             </div>
           </div>
           <div class="col-1 d-flex justify-content-end mt-3 px-3">

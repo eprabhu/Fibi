@@ -1,6 +1,6 @@
 .task-right-div {
   width: 80%;
-  top: 0;
+  top: -5px;
   display: block;
   right: 1px;
   position: fixed;
@@ -292,9 +292,18 @@ select option {
 }
 .col-custom-right {
   flex: 0 0 auto;
-  width: 16.6%;
+  width: 181px;
 }
 
 .card-size{
   min-height: 88vh;
+}
+.card-header {
+  position: sticky;
+  top: 0;
+  z-index: 2
+}
+
+.container-bg-color {
+ background-color: #FBFBFF;
 }

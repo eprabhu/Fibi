@@ -14,7 +14,10 @@ export class EntityDetailsComponent implements OnInit,OnDestroy {
   }
   entityDetails = {};
   ngOnInit() {
-
+    const isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit'
+    if(isEditMode){
+      this.entityDetailService.isExpanded = false;
+    }
   }
 
   ngOnDestroy(): void {
@@ -23,5 +26,4 @@ export class EntityDetailsComponent implements OnInit,OnDestroy {
    clearSfiNavBarStyle() {
     document.body.style.removeProperty('overflow');
   }
-  isExpanded: any
 }
