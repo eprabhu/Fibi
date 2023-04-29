@@ -8,6 +8,7 @@ import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../..
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../fibi/src/app/app-constants';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
+import { CommonService } from '../common/services/common.service';
 
 
 @Component({
@@ -38,7 +39,8 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
 
 
   constructor(public entityManagementService: EntityManagementService,
-    private _elasticConfig: ElasticConfigService, private _router: Router) {
+    private _elasticConfig: ElasticConfigService, private _router: Router,
+    private _commonService:CommonService) {
   }
   ngOnInit() {
     this.coiElastic = this._elasticConfig.getElasticForCoi();
@@ -76,7 +78,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
       this.entityList = res.coiEntityList;
       this.resultCount = res.entityCount;
     }, _error => {
-      // this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
     }));
   }
 
@@ -118,5 +120,11 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
 
   advancedSearch(){
     this.viewListOfEntity();
+  }
+
+  updateEntityListDashboard(event){
+    if(event) {
+      this.viewListOfEntity();
+    }
   }
 }

@@ -1,6 +1,6 @@
 .task-right-div {
   width: 80%;
-  top: -5px;
+  top: 0px;
   display: block;
   right: 1px;
   position: fixed;
@@ -11,11 +11,11 @@
 .tool-kit-body {
   background: #FFF;
   width: 100%;
-  top: 0.5rem;
+  top: 0;
   box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
   position: absolute;
   z-index: 10;
-  // height: 100% !important;
+  height: 100%;
   float: right;
 }
 
@@ -33,6 +33,12 @@
 
 select {
   height: 3.5rem;
+}
+
+.card-header {
+  position: sticky;
+  top: 0;
+  z-index: 2
 }
 
 select option {
@@ -115,13 +121,13 @@ select option {
 }
 
 .card-height {
-  border-radius: 15px 0px 0px 15px;
+  border-radius: 10px 0px 0px 10px;
 }
 
-.card-border {
-  border-radius: 15px 0px 0px 0px;
-  background: #efefef;
-}
+// .card-border {
+//   border-radius: 15px 0px 0px 0px;
+//   background: #efefef;
+// }
 
 .close-btn {
   color: #a92034;
@@ -134,7 +140,7 @@ select option {
 
 .close {
   position: absolute;
-  top: 6rem;
+  top: 35px;
   color: grey;
   background: #ffffff;
   z-index: 1500;
@@ -142,8 +148,8 @@ select option {
   border-radius: 50%;
   left: -24px;
   opacity: 1;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   font-size: 14px;
 }
 
@@ -247,7 +253,7 @@ select option {
   max-height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
-  height: auto;
+  height: 100%;
   overscroll-behavior: contain;
 }
 
@@ -282,28 +288,35 @@ select option {
   border-radius: 15px;
 }
 
-.col-9 {
-  width: 166.5%;
-}
 
 .col-custom {
   flex: 0 0 auto;
-  width: 16.6%;
+  width: 11.666667%;
 }
-.col-custom-right {
+
+.col-additional-details {
   flex: 0 0 auto;
-  width: 181px;
+  width: 12.666667%;
 }
 
-.card-size{
-  min-height: 88vh;
-}
-.card-header {
-  position: sticky;
-  top: 0;
-  z-index: 2
+// .col-custom-right {
+//   flex: 0 0 auto;
+//   width: 181px;
+// }
+
+.col-entity-type {
+  flex: 0 0 auto;
+  width: 38.333333%;
 }
 
-.container-bg-color {
- background-color: #FBFBFF;
+.mr-1rem {
+  margin-right: 1rem;
+}
+
+.card-color {
+  background-color: #FBFBFF;
+}
+
+.pl-85 {
+  padding-left: 8.5rem;
 }

@@ -46,7 +46,9 @@ export class EntityDashboardRequest {
   property22 = [];
   property18 = false;
   property19 = false;
-  sort: any = {};
+  sort: any = {
+    sortBy : 'updateTimeStamp'
+  };
   tabName = '';
   advancedSearch = 'L';
   currentPage = 1;

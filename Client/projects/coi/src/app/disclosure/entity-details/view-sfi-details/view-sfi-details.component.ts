@@ -5,6 +5,7 @@ import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utili
 import { Subscription } from 'rxjs';
 import { NavigationService } from '../../../../../../fibi/src/app/common/services/navigation.service';
 import { CommonService } from '../../../common/services/common.service';
+import { HTTP_ERROR_STATUS } from '../../../app-constants';
 
 @Component({
   selector: 'app-view-sfi-details',
@@ -34,6 +35,8 @@ export class ViewSfiDetailsComponent implements OnInit, OnDestroy {
     this.$subscriptions.push(this.entityDetailsServices.getCoiEntityDetails(entityId).subscribe((res: any) => {
       this.entityDetails = res.coiEntity;
       this.entityDetailsServices.entityDetails = res.coiEntity;
+    },_error=>{
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
     }));
   }
 
