@@ -79,6 +79,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
       this.resultCount = res.entityCount;
     }, _error => {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+      this.entityList = [];
     }));
   }
 
