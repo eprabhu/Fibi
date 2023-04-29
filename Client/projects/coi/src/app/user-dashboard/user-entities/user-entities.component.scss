@@ -88,3 +88,14 @@
   width: 100%;
   height: 43px;
 }
+
+
+
+.r-title {
+  display: inline-block;
+  text-transform: lowercase;
+}
+
+.r-title::first-letter {
+  text-transform: uppercase;
+}
