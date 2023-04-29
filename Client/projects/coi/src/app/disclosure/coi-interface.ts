@@ -9,6 +9,8 @@ export class COI {
     adminGroup: AdminGroup[];
     coiSections: any[];
     proposalIdlinkedInDisclosure: any;
+    projectDetail: any;
+
 }
 
 export interface CoiConflictStatusType {

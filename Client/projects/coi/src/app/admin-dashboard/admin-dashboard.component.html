@@ -1,4 +1,4 @@
-<div class="px-3 py-2">
+<div class="py-2">
   <!-- <section class="row">
     <div (click)="changeTab('NEW_SUBMISSIONS')"
       class="align-items-center col d-flex dash-card justify-content-center pointer py-4 ml-4 flex-column shadow-medium border mt-3">
@@ -22,7 +22,7 @@
   </section> -->
 
   <section class="section-advanced-search">
-    <nav class="coi-admin-dash mb-3 mx-0 row border shadow-sm">
+    <nav class="coi-admin-dash mb-2 mx-0 row border shadow-sm">
       <div class="bg-white list">
         <ul class="m-0 p-0">
           <li tabindex="0" (click)="changeTab('ALL_DISCLOSURES')"
@@ -37,9 +37,9 @@
             class="p-3 position-relative text-center">
             New Submissions
           <li class="separator"></li>
-          <li tabindex="0" (click)="changeTab('MY_REVIEWS')"
-          (keyup.enter)="changeTab('MY_REVIEWS')" (keyup.space)="changeTab('MY_REVIEWS')"
-            [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
+          <li tabindex="0" (click)="changeTab('PENDING_DISCLOSURES')"
+          (keyup.enter)="changeTab('PENDING_DISCLOSURES')" (keyup.space)="changeTab('PENDING_DISCLOSURES')"
+            [class.active]="_coiAdminDashboardService.coiRequestObject.tabName=='PENDING_DISCLOSURES'"
             class="p-3 position-relative text-center  fs-14">My Reviews
           <li class="separator"></li>
           <li tabindex="0" (click)="changeTab('ALL_REVIEWS')"
@@ -54,19 +54,6 @@
             class="p-3 position-relative text-center">Travel Disclosures
           </li>
         </ul>
-        <!-- <div *ngIf="isAdvanceSearchTab(_coiAdminDashboardService.coiRequestObject.tabName)" class="d-flex mb-2">
-          <div class="form-group col">
-            <app-elastic [options]="coiElastic" style="width: 1400px"
-              [placeHolder]="'Search: Person, Department, Entity, Disclosure#'"
-              (selectedResult)="redirectToDisclosure($event)"></app-elastic>
-          </div>
-          <div class="form-group  col-auto">
-            <button role="button" class="btn btn-primary d-flex align-items-center primary-button" id="advanced-search" (click)="toggleADSearch()"style="margin-left:18px;"
-            aria-controls="collapseExample"
-            aria-expanded="false"
-            aria-label="Toggle Advanced Search"><mat-icon>tune</mat-icon><div>Advanced Search</div> </button>
-          </div>
-        </div> -->
       </div>
     </nav>
     <div *ngIf="isAdvanceSearchTab(_coiAdminDashboardService.coiRequestObject.tabName)" class="d-flex mb-2">
@@ -76,18 +63,17 @@
           (selectedResult)="redirectToDisclosure($event)"></app-elastic>
       </div>
       <div class="form-group  col-auto">
-        <button role="button" class="btn btn-primary d-flex align-items-center primary-button" id="advanced-search" (click)="toggleADSearch()"style="margin-left:18px;"
+        <button role="button" class="btn btn-primary d-flex align-items-center primary-button ms-3 fs-14" id="advanced-search" (click)="toggleADSearch()"
         aria-controls="collapseExample"
         aria-expanded="false"
-        aria-label="Toggle Advanced Search"><mat-icon>tune</mat-icon><div>Advanced Search</div> </button>
+        aria-label="Toggle Advanced Search"><mat-icon class="me-3">tune</mat-icon>Advanced Search</button>
       </div>
     </div>
 
     <div class="sort-div border mt-2" *ngIf="isShowAllProposalList && coiList.length">
       <span class="fs-14 fw-medium me-2 text-secondary">Sort by:</span>
       <span  tabindex="0" (keydown.enter)="sortResult('coiDisclosureNumber')"
-        (click)="sortResult('coiDisclosureNumber')"
-        [class.filter-active]="isActive('coiDisclosureNumber')"
+        (click)="sortResult('coiDisclosureNumber')" [class.filter-active]="_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']"
         class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 ml-15 border rounded-5 bg-white" role="button">
         <div class="d-inline-flex align-items-center">
           <label class="offscreen">Click to Sort by Disclosure Id in {{_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']=== 'asc' ? 'Descending Order' : 'Ascending Order'}} </label>
@@ -372,8 +358,8 @@
             </div>
           </div>
           <div class="d-flex justify-content-end">
-            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs">Clear</button>
-            <button (click)="performAdvanceSearch()" class="btn btn-primary mx-3 primary-button">Search</button>
+            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs fs-14">Clear</button>
+            <button (click)="performAdvanceSearch()" class="btn btn-primary fs-14 ms-3 primary-button">Search</button>
           </div>
         </ng-container>
       </div>
@@ -402,15 +388,15 @@
                 </div>
                 <div class="col d-flex">
                   <label for="status" class="label-text">Disclosure Status:</label>
-                  <div *ngIf="coi?.conflictStatus" class="badge f-13 rounded-pill bg-{{getDisclosureStatusBadge(coi?.conflictStatus)}}"  [class.text-dark]="getDisclosureStatusBadge(coi?.disclosureStatusCode) === 'warning'"
-                    id="status">
+                  <div *ngIf="coi?.conflictStatus" class="badge f-13 rounded-pill {{commonService.getDisclosureConflictBadge(coi?.conflictStatusCode)}}"
+                       id="status">
                     {{coi?.conflictStatus}}
                   </div>
                   <div *ngIf="!coi?.conflictStatus" class="noDataExists">No data exist</div>
                 </div>
               </div>
               <div class="row mb-3 px-3">
-                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label for="event-type" class="label-text">Disclosure Event Type:</label>
                   <span id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
                     coi?.disclosureCategoryTypeCode)}}</span>
@@ -427,28 +413,28 @@
                   <span *ngIf="!coi?.expirationDate" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.expirationDate" id="event-type" class="grey-text">{{coi?.expirationDate | dateFormatter}}</span>
                 </div>
-                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label for="disp-status" class="label-text">Disposition Status:</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.dispositionStatus"
                     class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
-                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
                   <label for="last-approved-version" class="label-text">Last Approved Version:</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
                 </div>
-                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
+                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
                   <label for="disp-status" class="label-text">Disposition Status:</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.dispositionStatus"
-                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.dispositionStatus)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatus) === 'warning'"
+                    class="badge f-13 rounded-pill {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
               </div>
               <div class="row mb-3 px-3">
-                <div class="col-3 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                <div class="col-3 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label for="last-approved-version" class="label-text">Last Approved Version:</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
@@ -458,32 +444,32 @@
                   <span *ngIf="!coi?.lastApprovedVersionDate" class="noDataExists">No data date exist</span>
                   <span *ngIf="coi?.lastApprovedVersionDate" id="last-approved-version-date" class="grey-text">{{coi?.lastApprovedVersionDate | dateFormatter}}</span>
                 </div>
-                <div class="col-6 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'MY_REVIEWS'">
+                <div class="col-6 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
                   <label for="revision-reason" class="label-text">Revision Reason:</label>
-                  <span *ngIf="!coi?.reviseComment" class="noDataExists">No data exist</span>
-                  <span *ngIf="coi?.reviseComment" id="revision-reason" class="grey-text">{{coi?.reviseComment}}</span>
+                  <span *ngIf="!coi?.revisionComment" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.revisionComment" id="revision-reason" class="grey-text">{{coi?.revisionComment}}</span>
                 </div>
                 <div class="col-3 d-flex align-self-center"
-                  *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+                  *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label class="m-0" for="last-updated" class="label-text"> Review Status for </label>
                   <!-- <span *ngIf="!coi?.reviewerFullName" class="noDataExists">No disclosure type exist</span> -->
                   <span *ngIf="coi?.reviewerFullName" id="last-updated" class="grey-text"><i class="bold">{{coi?.reviewerFullName}}</i>
                     : <span
-                      class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewerStatusCode)}}"  [class.text-dark]="getReviewStatusBadge(coi?.reviewerStatusCode) === 'warning'">{{coi?.reviewerStatus}}</span></span>
+                      class="badge f-13 rounded-pill {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}">{{coi?.reviewerStatus}}</span></span>
                 </div>
                 <div class="col-3 d-flex">
                   <label for="review-status" class="label-text">Review Status:</label>
                   <span *ngIf="!coi?.reviewStatus" class="noDataExists">No data exist</span>
-                  <span *ngIf="coi?.reviewStatus" class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewStatus)}}" [class.text-dark]="getReviewStatusBadge(coi?.reviewStatus) === 'warning'"
+                  <span *ngIf="coi?.reviewStatus" class="badge f-13 rounded-pill {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
                     id="review-status">{{coi?.reviewStatus}}</span>
                 </div>
               </div>
-              <div class="row mb-2 px-3" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS'">
+              <div class="row mb-2 px-3" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                 <div class="col-6 d-flex"
-                  [ngClass]="_coiAdminDashboardService.coiRequestObject.tabName == 'MY_REVIEWS' ?'col-6':'col-9'">
+                  [ngClass]="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES' ?'col-6':'col-9'">
                   <label for="revision-reason" class="label-text">Revision Reason:</label>
-                  <span *ngIf="!coi?.reviseComment" class="noDataExists">No data exist</span>
-                  <span *ngIf="coi?.reviseComment" id="revision-reason" class="grey-text">{{coi?.reviseComment}}</span>
+                  <span *ngIf="!coi?.revisionComment" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.revisionComment" id="revision-reason" class="grey-text">{{coi?.revisionComment}}</span>
                 </div>
               </div>
             </div>
@@ -532,15 +518,15 @@
                 </div>
                 <div class="col-3 align-self-center grey-text">
                   <label class="m-0" for="last-updated">Last Updated On:</label>
-                  <span id="last-updated">{{coi?.updateTimeStamp | dateFormatter}}
+                  <span id="last-updated">{{coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}
                     by {{coi?.updateUser}}</span>
                 </div>
                 <div class="col-auto ms-auto">
 
                   <button
                   [routerLink]="['/coi/disclosure/summary']"
-                    [queryParams]="{disclosureId:coi?.coiDisclosureId}" class="btn btn-tertiary f-13 mt-0 mr-2">
-                    <i aria-hidden="true" class="fa fa-eye"></i>
+                    [queryParams]="{disclosureId:coi?.coiDisclosureId}" class="align-items-center btn btn-outline-primary d-flex fs-14">
+                    <mat-icon class="me-1">visibility</mat-icon>
                     View
                   </button>
                   <!-- <button *ngIf="coi?.reviewerStatusCode === '1' &&

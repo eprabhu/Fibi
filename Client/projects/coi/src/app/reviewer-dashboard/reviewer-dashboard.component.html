@@ -1,4 +1,4 @@
-<div class="px-3 py-2">
+<div class="py-2">
   <!-- <section class="row justify-content-center">
     <div class="dash-card pointer">
       <div class="align-items-center d-flex h-100 justify-content-center">
@@ -15,7 +15,7 @@
   </section> -->
 
   <section class="section-card">
-    <nav class="coi-admin-dash mb-3 mx-0 row border">
+    <nav class="coi-admin-dash mb-2 mx-0 row border">
       <div class="bg-white list">
         <ul class="m-0 p-0">
           <li (click)="changeTab('NEW_SUBMISSIONS')" tabindex="0" (keyup.enter)="changeTab('NEW_SUBMISSIONS')"
@@ -54,10 +54,10 @@
           (selectedResult)="redirectToDisclosure($event)"></app-elastic>
       </div>
       <div class="form-group col-auto">
-        <button role="button" class="btn btn-primary d-flex align-items-center primary-button" id="advanced-search"
-          (click)="toggleADSearch()" style="margin-left:18px;" aria-controls="collapseExample" aria-expanded="false"
-          aria-label="Toggle Advanced Search"><mat-icon>tune</mat-icon>
-          <div> Advanced Search </div>
+        <button role="button" class="btn btn-primary d-flex align-items-center primary-button ms-3 fs-14" id="advanced-search"
+          (click)="toggleADSearch()" aria-controls="collapseExample" aria-expanded="false"
+          aria-label="Toggle Advanced Search"><mat-icon class="me-3">tune</mat-icon>
+         Advanced Search
         </button>
       </div>
     </div>
@@ -246,8 +246,8 @@
             </app-endpoint-search>
           </div>
           <div class="d-flex justify-content-end mt-3">
-            <button (click)="performAdvanceSearch()" class="btn btn-primary mx-3">Search</button>
-            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs">Clear</button>
+            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs fs-14">Clear</button>
+            <button (click)="performAdvanceSearch()" class="btn btn-primary mx-3 fs-14">Search</button>
           </div>
         </div>
       </div>
@@ -277,10 +277,9 @@
                 </div>
                 <div class="col d-flex">
                   <label for="status" class="label-text">Disclosure Status:</label>
-                  <div *ngIf="coi?.disclosureStatus"
-                    class="badge f-13 rounded-pill bg-{{getDisclosureStatusBadge(coi?.disclosureStatusCode)}}"
-                    [class.text-dark]="getDisclosureStatusBadge(coi?.disclosureStatusCode) === 'warning'" id="status">
-                    {{coi?.disclosureStatus}}
+                  <div *ngIf="coi?.conflictStatus"
+                    class="badge f-13 rounded-pill {{commonService.getDisclosureConflictBadge(coi?.conflictStatusCode)}}">
+                    {{coi?.conflictStatus}}
                   </div>
                   <div *ngIf="!coi?.disclosureStatus" class="noDataExists">No data exist</div>
                 </div>
@@ -308,9 +307,8 @@
                   <label for="disp-status" class="label-text">Disposition Status:</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.dispositionStatus"
-                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
-                    [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
-                    id="disp-status">{{coi?.dispositionStatus}}</span>
+                    class="badge f-13 rounded-pill {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}">
+                    {{coi?.dispositionStatus}}</span>
                 </div>
                 <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="last-approved-version" class="label-text">Last Approved Version:</label>
@@ -322,9 +320,8 @@
                   <label for="disp-status" class="label-text">Disposition Status:</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.dispositionStatus"
-                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
-                    [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
-                    id="disp-status">{{coi?.dispositionStatus}}</span>
+                    class="badge f-13 rounded-pill {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}">
+                    {{coi?.dispositionStatus}}</span>
                 </div>
               </div>
               <div class="row mb-3 px-3">
@@ -342,8 +339,8 @@
                 </div>
                 <div class="col-6" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="revision-reason" class="label-text">Revision Reason:</label>
-                  <span *ngIf="!coi?.reviseComment" class="noDataExists">No data exist</span>
-                  <span *ngIf="coi?.reviseComment" id="revision-reason" class="grey-text">{{coi?.reviseComment}}</span>
+                  <span *ngIf="!coi?.revisionComment" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.revisionComment" id="revision-reason" class="grey-text">{{coi?.revisionComment}}</span>
                 </div>
                 <div class="col-3 align-self-center"
                   *ngIf="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS'">
@@ -358,8 +355,7 @@
                   <label for="review-status" class="label-text">Review Status:</label>
                   <span *ngIf="!coi?.reviewStatusCode" class="noDataExists">No data exist</span>
                   <span *ngIf="coi?.reviewStatusCode"
-                    class="badge f-13 rounded-pill bg-{{getReviewStatusBadge(coi?.reviewStatusCode)}}"
-                    [class.text-dark]="getReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
+                    class="badge f-13 rounded-pill {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
                     id="review-status">{{coi?.reviewStatus}}</span>
                 </div>
               </div>
@@ -367,8 +363,8 @@
                 <div class="col-6"
                   [ngClass]="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS' ?'col-6':'col-9'">
                   <label for="revision-reason" class="label-text">Revision Reason:</label>
-                  <span *ngIf="!coi?.reviseComment" class="noDataExists">No data exist</span>
-                  <span *ngIf="coi?.reviseComment" id="revision-reason" class="grey-text">{{coi?.reviseComment}}</span>
+                  <span *ngIf="!coi?.revisionComment" class="noDataExists">No data exist</span>
+                  <span *ngIf="coi?.revisionComment" id="revision-reason" class="grey-text">{{coi?.revisionComment}}</span>
                 </div>
               </div>
             </div>
@@ -420,14 +416,14 @@
                 </div>
                 <div class="col-3 align-self-center grey-text">
                   <label class="m-0" for="last-updated">Last Updated On:</label>
-                  <span id="last-updated">{{coi?.updateTimeStamp | dateFormatter}}
+                  <span id="last-updated">{{coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}
                     by {{coi?.updateUser}}</span>
                 </div>
                 <div class="col-auto ms-auto">
 
                   <button [routerLink]="['/coi/disclosure/summary']" [queryParams]="{disclosureId:coi?.coiDisclosureId}"
-                    class="btn btn-tertiary f-13 mt-0 mr-2">
-                    <i aria-hidden="true" class="fa fa-eye"></i>
+                    class="align-items-center btn btn-outline-primary d-flex fs-14">
+                    <mat-icon class="me-1">visibility</mat-icon>
                     View
                   </button>
                   <button *ngIf="coi?.reviewerStatusCode === '1' &&

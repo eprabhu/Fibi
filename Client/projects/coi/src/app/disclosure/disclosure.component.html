@@ -1,11 +1,18 @@
-<div class="border-top-0 mb-3 mx-3 row">
+<div class="border-top-0 mb-3 mx-3 row header-sticky">
     <div class="col-9 p-0">
         <div class="border shadow-sm">
             <div class="disclosure-heading px-3 d-flex">
                 <div class="align-self-center flex-fill">
-                    <p class="m-0"><strong>{{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} by <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
-                        -
-                        (Home Unit: <strong>{{coiData?.coiDisclosure?.person?.unit?.unitName}}</strong>)</p>
+                    <p class="m-0">
+                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1'">
+                            <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI by <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span> {{coiData?.coiDisclosure?.person?.unit?.unitName}}</strong>
+                        </ng-container>
+                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
+                            <strong title="{{coiData.projectDetail.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}} : {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} #{{coiData.projectDetail.moduleItemId}} : {{(coiData.projectDetail.title)?.length>80 ?
+                                (coiData.projectDetail.title | slice:0:80)+'...' :
+                                coiData.projectDetail.title}} by <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
+                        </ng-container>
+                    </p>
                 </div>
                 <div class="d-flex">
                     <ng-container *ngIf="isCreateMode">
@@ -13,7 +20,7 @@
                             <mat-icon class="green-label">bookmark</mat-icon>
                         </div>
                         <div class="flex-fill ps-3">
-                            <div class="three-pixel-padding-top">
+                            <div>
                                 <p class="m-0 fs-14">COI Training: <strong>Completed</strong></p>
                             </div>
                             <div>
@@ -41,19 +48,19 @@
                                 <tr>
                                     <td>Disposition:</td>
                                     <td class="ps-4"><span
-                                            class="bg-{{getDisclosureStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} text-{{getDisclosureStatusBadgeTextColor(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} px-3 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
+                                            class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} px-3 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Review:</td>
                                     <td class="ps-4"><span
-                                            class="bg-{{getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}} text-{{getReviewStatusBadgeTextColor(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}} px-3 py-1 rounded-5">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
+                                            class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}} px-3 py-1 rounded-5">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Disclosure:</td>
                                     <td class="ps-4"><span
-                                            class="{{commonService.getDisclosureConflictStatus(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                            class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
                                     </td>
                                 </tr>
                             </table>
@@ -209,7 +216,7 @@
                         Save
                     </button>
                 </div>
-                <div *ngIf="router.url.includes('create-disclosure/certification') && !coiData.coiDisclosure.certifiedBy"
+                <div *ngIf="router.url.includes('create-disclosure/certification')"
                      class="d-flex justify-content-around px-3">
                     <button (click)="certifyDisclosure()" [disabled]="!coiService.isCertified"
                             class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
@@ -237,11 +244,11 @@
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
                     </button>
-                    <button *ngIf="![4].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center me-2">
+                    <button *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center me-2">
                         <mat-icon class="me-2">rate_review</mat-icon>
                         Comments
                     </button>
-                    <button  *ngIf="[4].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" style="white-space: nowrap;" aria-expanded="false"
+                    <button  *ngIf="['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" style="white-space: nowrap;" aria-expanded="false"
                             class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
                             data-bs-toggle="dropdown" id="moreActionsForComplete" role="button">
                         <mat-icon class="me-1">more_vert</mat-icon> More Options
@@ -271,8 +278,7 @@
                         <mat-icon class="me-2">done</mat-icon>
                         Complete Review
                     </button>
-
-                    <button *ngIf="![4].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" style="white-space: nowrap;" aria-expanded="false"
+                    <button *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" style="white-space: nowrap;" aria-expanded="false"
                             class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
                             data-bs-toggle="dropdown" id="moreActions" role="button">
                         <mat-icon class="me-1">more_vert</mat-icon> More Options
@@ -304,9 +310,8 @@
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Complete Review
                 </h4>
-                <button aria-label="Close" class="close btn m-0" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" id="dissmiss-btn"
                         type="button">
-                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -336,8 +341,7 @@
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Warning!</h4>
-                <button aria-label="Close" class="close btn m-0" data-bs-dismiss="modal" type="button">
-                    <span aria-hidden="true">&times;</span>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button">
                 </button>
             </div>
             <div class="modal-body">
@@ -371,9 +375,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Review for {{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by {{coiData?.coiDisclosure?.person?.fullName}}</h5>
-                <button type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close"
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         (click)="assignReviewerActionDetails = {}">
-                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">

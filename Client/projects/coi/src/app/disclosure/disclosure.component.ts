@@ -116,9 +116,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             case '1':
                 return 'FCOI';
             case '2':
-                return 'Proposal Disclosure';
+                return 'Proposal';
             case '3':
-                return 'Award Disclosure';
+                return 'Award';
             case '4':
                 return 'FCOI';
         }
@@ -176,52 +176,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.setAdminGroupOptions();
     }
 
-
-    getDispositionStatusBadge(statusCode) {
-        switch (statusCode) {
-            case '1': return 'warning';
-            case 2: return 'success';
-            case 3: return 'danger';
-            default: return 'info';
-        }
-    }
-    getDispositionStatusTextColor(statusCode) {
-        switch (statusCode) {
-            case '1': return 'black';
-            case 2: return 'white';
-            case 3: return 'white';
-            default: return 'white';
-        }
-    }
-
-    getReviewStatusBadge(statusCode) {
-        switch (statusCode) {
-            case '1': return 'warning';
-            case '2': return 'info';
-            case '3': return 'success';
-            default: return 'danger';
-        }
-    }
-    getReviewStatusBadgeTextColor(statusCode) {
-        switch (statusCode) {
-            case '1': return 'black';
-            case '2': return 'white';
-            case '3': return 'white';
-            default: return 'white';
-        }
-    }
-
-    getDisclosureStatusBadge(statusCode) {
-        switch (statusCode) {
-            case '1': return 'warning';
-            case '2':
-            case '4':
-            case '5':
-                return 'info';
-            case '3': case '6': return 'success';
-            default: return 'danger';
-        }
-    }
     getDisclosureStatusBadgeTextColor(statusCode) {
         switch (statusCode) {
             case '1': return 'black';

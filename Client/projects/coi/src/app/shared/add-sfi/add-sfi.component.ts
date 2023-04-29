@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnChanges, ViewChild } from '@angular/core';
+import {Component, ElementRef, OnChanges, OnInit, ViewChild} from '@angular/core';
 import { ActivityService } from '../../../../../fibi/src/app/agreement/agreement-shared/activity-track/activity.service';
 import { slideHorizontal } from './../../../../../fibi/src/app/common/utilities/animations';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
@@ -25,7 +25,7 @@ export interface EndpointOptions {
   providers: [ActivityService],
   animations: [slideHorizontal]
 })
-export class AddSfiComponent implements OnChanges {
+export class AddSfiComponent implements OnChanges, OnInit {
 
   isSaving = false;
   scrollHeight: number;
@@ -57,15 +57,21 @@ export class AddSfiComponent implements OnChanges {
   constructor(public sfiService: SfiService, public _commonService: CommonService,
     private _activatedRoute: ActivatedRoute, private _router: Router) { }
 
+    ngOnInit(): void {
+      this.getSFILookup();
+      this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
+        this.coiEntity.entityId = params['entityId'];
+        if (this.coiEntity.entityId) {
+          this.getSfiDetails();
+        }
+      }));
+      this.showSfiNavBar();
+      this.EntitySearchOptions = getEndPointOptionsForEntity();
+      this.countrySearchOptions = getEndPointOptionsForCountry();
+    }
+
   ngOnChanges() {
-    // this.sfiLookUpList = this.sfiService.lookups;
     this.getSFILookup();
-    this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
-      this.coiEntity.entityId = params['entityId'];
-      if (this.coiEntity.entityId) {
-        this.getSfiDetails();
-      }
-    }));
     this.showSfiNavBar();
     this.EntitySearchOptions = getEndPointOptionsForEntity();
     this.countrySearchOptions = getEndPointOptionsForCountry();
@@ -107,6 +113,7 @@ export class AddSfiComponent implements OnChanges {
       this.additionalDetails = {
         sponsorsResearch: false
       }
+      this.clearSFIFields();
     }
   }
 
@@ -197,6 +204,8 @@ export class AddSfiComponent implements OnChanges {
     };
     this.clearCountryField = new String('true');
     this.clearField = new String('true');
+    this.EntitySearchOptions = getEndPointOptionsForEntity();
+    this.countrySearchOptions = getEndPointOptionsForCountry();
     this.isResultFromSearch = false;
   }
 

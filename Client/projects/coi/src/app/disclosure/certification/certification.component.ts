@@ -46,7 +46,6 @@ export class CertificationComponent implements OnInit, OnDestroy {
         const DATA = this._dataStore.getData(this.dependencies);
         this.coiDisclosure = DATA.coiDisclosure;
         if (this.coiDisclosure.certifiedBy) {
-            this.isEditMode = false;
             this._coiService.isCertified = true;
         }
         // this.isEditMode = this._dataStore.getEditModeForCOI();

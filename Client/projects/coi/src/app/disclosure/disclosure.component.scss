@@ -180,7 +180,7 @@ table {
 }
 
 .min-height-189 {
-  min-height: 220px;
+  min-height: 213px;
   max-height: 232px;
 }
 
@@ -200,4 +200,10 @@ table {
 
 .bg-success{
   background-color: #4CB57D !important;
+}
+
+.header-sticky {
+  position: sticky;
+  top: 65px;
+  z-index: 1;
 }
