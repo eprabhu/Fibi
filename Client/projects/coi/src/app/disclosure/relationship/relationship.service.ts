@@ -38,7 +38,7 @@ getEntityList(moduleCode, moduleId, id, status) {
 
 saveEntityProjectRelation(params, moduleCode, moduleItemId, did) {
   return this._http.post(this._commonService.baseUrl + '/saveEntityProjectRelation',
-  {'coiDisclosureDetails': params,
+  {'coiDisclEntProjDetails': params,
   'moduleCode': moduleCode,
   'moduleItemId': moduleItemId,
    'disclosureId': did,
@@ -47,7 +47,7 @@ saveEntityProjectRelation(params, moduleCode, moduleItemId, did) {
 
 singleEntityProjectRelation(params, moduleCode, moduleItemId, did) {
   return this._http.post(this._commonService.baseUrl + '/singleEntityProjectRelation',
-  {'coiDisclosureDetail': params,
+  {'coiDisclEntProjDetail': params,
   'moduleCode': moduleCode,
   'moduleItemId': moduleItemId,
    'disclosureId': did,});

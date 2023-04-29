@@ -1,12 +1,3 @@
-<div #myToast id="success-toast"class="toast align-items-center text-white success-toast border-0" role="alert" aria-live="assertive" aria-atomic="true">
-  <div class="d-flex">
-    <div class="toast-body">
-      Hello, world! This is a toast message.
-    </div>
-    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-  </div>
-</div>
-
 <div class="card" #relationShipOverlay [class.overlay]="isShowDetails">
   <div @enterAnimation *ngIf="isShowDetails" class="row fixed-tree">
     <div tabindex="-1" id = "close-define-relation" class="close shadow-medium" (click)="hideSfiNavBar()">
@@ -68,7 +59,7 @@
                       <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode"
                       class="form-control select-default">
                       <option [value]=null>--Select--</option>
-                      <option [value]="status.discDetStatusCode" *ngFor="let status of coiStatusList">
+                      <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList">
                           {{status?.description}}</option>
                       </select>
                     </div>
@@ -81,6 +72,7 @@
                       <span class="d-inline-block" data-bs-toggle="tooltip" title="Briefly describe the relationship between the project and SFI." data-bs-placement="top">
                         <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon></span>
                     </label>
+                    <!-- [(ngModel)]="coiDescription" -->
                     <textarea class="form-control comment-text-box textarea-height" id="coi_description"
                     [(ngModel)]="coiDescription" appAutoGrow rows="1"
                     placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
@@ -100,17 +92,17 @@
                         <th style="width: 20%;">Significant Financial Interest</th>
                         <th style="width: 20%;"> <span class="mandatory">*</span>COI Status</th>
                         <th style="width: 40%;">Define relationship between SFIs and Projects</th>
-                        <th style="width: 20%;">Actions</th>
+                        <th style="width: 20%;" *ngIf="isEditMode">Actions</th>
                       </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let test of entityProjectDetails; let i = index">
-                      <td class="table-data border-end fw-600">{{test?.coiFinancialEntity?.coiEntity?.coiEntityName}}</td>
+                      <td class="table-data border-end fw-600">{{test?.personEntity?.coiEntity?.entityName}}</td>
                       <td class="border-end">
-                        <select [(ngModel)]="test.discDetStatusCode"
+                        <select [(ngModel)]="test.projectConflictStatusCode"
                         class="form-control select-default" [disabled]="!isEditMode">
                         <option value=null>--Select--</option>
-                        <option [value]="status.discDetStatusCode" *ngFor="let status of coiStatusList; let i = index">
+                        <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList; let i = index">
                             {{status?.description}}</option>
                         </select>
                         <!-- <span class="invalid-feedback" *ngIf="coiTableValidation.get('clear'+i)">
@@ -124,14 +116,14 @@
                       </td>
                       <td class="border-end">
                         <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt"
-                        [(ngModel)]="test.comment.comments" appAutoGrow
+                        appAutoGrow
                         [disabled]="!isEditMode" rows="1"
                         placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
                       </td>
-                      <td>
-                        <button type="button" class="btn btn-outline-secondary btn-sm mr-10" id="clear {{test?.coiFinancialEntity?.coiEntity?.coiEntityName}} coi status and description" (click)="openClearModal(i)"
+                      <td *ngIf="isEditMode">
+                        <button type="button" class="btn btn-outline-secondary btn-sm mr-10" id="clear {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="openClearModal(i)"
                         >Clear</button>
-                        <button type="button" class="btn btn-primary btn-sm" id="save {{test?.coiFinancialEntity?.coiEntity?.coiEntityName}} coi status and description" (click)="saveSingleEntity(i, test)"
+                        <button type="button" class="btn btn-primary btn-sm" id="save {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="saveSingleEntity(i, test)"
                         >Save</button>
                       </td>
                     </tr>
@@ -193,7 +185,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>Do you want to clear the data of <strong> {{entityProjectDetails && entityProjectDetails[clearIndex] && entityProjectDetails[clearIndex]?.coiFinancialEntity?.coiEntity?.coiEntityName}} </strong> values?</p>
+        <p>Do you want to clear the data of <strong> {{entityProjectDetails && entityProjectDetails[clearIndex] && entityProjectDetails[clearIndex]?.personEntity?.coiEntity?.entityName}} </strong> values?</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="clearSingleEntity()" data-bs-dismiss="modal">Yes</button>

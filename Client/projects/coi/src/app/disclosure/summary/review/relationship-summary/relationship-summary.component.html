@@ -60,16 +60,17 @@
               </thead>
               <tbody class="white-bg" >
                 <tr *ngFor="let test of projectRelations; let i = index" class="tr-hover">
-                  <td class="table-data border-end fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.coiFinancialEntity?.coiEntity?.coiEntityName}}</td>
+                  <td class="table-data border-end fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.personEntity?.coiEntity?.entityName}}</td>
                   <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.comment?.comments}}</td>
                   <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">
-                    <span class="badge rounded-pill bg-danger mt-2" *ngIf="test?.coiDisclosureDetailsStatus?.discDetStatusCode == 1">{{test?.coiDisclosureDetailsStatus?.description}}</span>
-                    <span class="badge rounded-pill bg-success mt-2" *ngIf="test?.coiDisclosureDetailsStatus?.discDetStatusCode == 2">{{test?.coiDisclosureDetailsStatus?.description}}</span>
-                    <span class="badge rounded-pill bg-warning mt-2" *ngIf="test?.coiDisclosureDetailsStatus?.discDetStatusCode == 3">{{test?.coiDisclosureDetailsStatus?.description}}</span>
+                    <span class="badge rounded-pill bg-danger mt-2" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 1">{{test?.coiProjConflictStatusType?.description}}</span>
+                    <span class="badge rounded-pill bg-success mt-2" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 2">{{test?.coiProjConflictStatusType?.description}}</span>
+                    <span class="badge rounded-pill bg-warning mt-2" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 3">{{test?.coiProjConflictStatusType?.description}}</span>
                   </td>
-                  <td class="px-3" [class.border-0]="i != projectRelations?.length-1">
-                    <button type="button" class="btn btn-outline-primary btn-sm action-buttons mr-15"  (click)="isOpenSlider = true">
-                      <mat-icon role="img">add_circle_outline</mat-icon>
+                  <td class="px-3" [class.border-0]="i!= projectRelations?.length-1">
+                    <button type="button" (mouseenter)="isShowHoverWhite[i]= true" (mouseout)="isShowHoverWhite[i]= false" class="btn btn-outline-primary btn-sm action-buttons mr-15"  (click)="isOpenSlider = true">
+                      <img *ngIf= "!isShowHoverWhite[i]" src="{{deployMap}}assets/images/conflict-history.svg">
+                      <img *ngIf= "isShowHoverWhite[i]" src="{{deployMap}}assets/images/conflict-history-hover.svg">
                     </button>
                     <button type="button" class="btn btn-outline-primary btn-sm action-buttons comment-icon p-0">
                       <mat-icon role="img">rate_review</mat-icon>
