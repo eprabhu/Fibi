@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../environments/environment';
+import { CommonService } from '../../common/services/common.service';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
 
@@ -24,10 +25,11 @@ export class RelationshipComponent {
   coiData: any;
   isShowWhiteIcon = false;
   selectedProjectForView: any;
+  isEditMode: boolean = true;
   collapseViewMore = {};
 
   constructor(private _relationShipService: RelationshipService,private _route: ActivatedRoute,
-    private _dataStore: DataStoreService,public _router: Router) { }
+    private _dataStore: DataStoreService,public _router: Router, private _commonService: CommonService) { }
 
   closePage() {
     this.isShowRelation = false;
@@ -50,13 +52,13 @@ export class RelationshipComponent {
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    console.log(this.coiData)
+    this.isEditMode = this.coiData.coiDisclosure.reviewStatusCode == '1';
 }
   loadProjectRelations() {
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       this.proposalArray = data.awards;
       data.proposals.every(ele => this.proposalArray.push(ele));
-      this.coiStatusList = data.coiConflictStatusTypes;
+      this.coiStatusList = data.coiProjConflictStatusTypes;
     });
   }
 
@@ -71,4 +73,15 @@ export class RelationshipComponent {
     this.collapseViewMore[id] = !flag;
   }
 
+  openProjectMoreDetails(moduleId, moduleCode) {
+    if (moduleCode == 3) {
+      let test = this._commonService.fibiUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
+      window.open (test, '_blank')
+      // this._router.navigate([test,{ queryParams: { proposalId:  moduleId}}]);
+    } else {
+      let test2 = this._commonService.fibiUrl + '#/fibi/award/overview?awardId=' + moduleId;
+      window.open (test2, '_blank')
+      // this._router.navigate([test2,{ queryParams: { awardId:  moduleId}}]);
+    }
+  }
 }
