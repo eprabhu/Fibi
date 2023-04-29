@@ -21,7 +21,11 @@
     display: inline-block;
     text-transform: lowercase;
   }
-  
+
   .r-title::first-letter {
     text-transform: uppercase;
   }
+
+  // .my-modal-backdrop {
+  //   z-index: 0;
+  // }

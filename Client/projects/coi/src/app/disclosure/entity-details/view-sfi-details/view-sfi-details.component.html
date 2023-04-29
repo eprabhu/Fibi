@@ -105,7 +105,7 @@
           <div class="col-4 mt-3 text-secondary">
             <label class="fw-500 mr-10 fs-14 ">Last Updated On:</label>
             <label class="text-secondary fs-14">
-              {{entityDetailsServices.entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')}} By {{entityDetailsServices.entityDetails?.updateUser}}
+              {{(entityDetailsServices.entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')}} By {{entityDetailsServices.entityDetails?.updateUser}}
             </label>
           </div>
         </div>

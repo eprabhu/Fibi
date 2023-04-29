@@ -122,6 +122,7 @@
               </div>
               <div class="col mt-3">
                 <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.zipCode"
+                (keypress)="inputRestriction($event)"
                   [ngClass]="(mandatoryList?.has('zipCode')) ? 'is-invalid d-block' : ''" id="zip-code">
                 <span *ngIf="(mandatoryList?.has('zipCode'))" class="invalid-feedback d-block fs-14-nav">
                   {{(mandatoryList?.get('zipCode'))}}

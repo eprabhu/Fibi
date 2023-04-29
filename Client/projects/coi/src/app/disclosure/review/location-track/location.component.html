@@ -53,7 +53,7 @@
                     <th scope="col">
                         <span>Status</span>
                     </th>
-                    <th scope="col" class="text-right">Actions</th>
+                    <th scope="col" class="text-right justify-content-center d-flex">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,7 +68,7 @@
                             {{review?.coiReviewStatus?.description}}
                         </span>
                     </td>
-                    <td class="text-right">
+                    <td class="text-right justify-content-end d-flex">
                         <ul class="actionButtonGroup" style="position: relative;">
                             <li *ngIf="review.reviewStatusTypeCode == '1'" class="hand-cursor" title="Start review">
                                 <a id="start-review-btn" data-bs-toggle="modal"
@@ -184,7 +184,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">Complete Review by {{reviewActionConfirmation?.assigneePersonName ? reviewActionConfirmation?.assigneePersonName : reviewActionConfirmation?.adminGroup?.adminGroupName}}
                 </h4>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                         type="button">
                 </button>
             </div>
@@ -219,11 +219,8 @@
             <div class="modal-header">
                 <h4 class="modal-title">Start Review by {{reviewActionConfirmation?.assigneePersonName ? reviewActionConfirmation?.assigneePersonName : reviewActionConfirmation?.adminGroup?.adminGroupName}}
                 </h4>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                         type="button">
-                </button>
-                <button type="button" class="btn-close " data-bs-dismiss="modal" id="dissmiss-btn" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -255,7 +252,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review' : 'Add Review' }} for {{coiDisclosure?.coiDisclosureFcoiType?.description}} by {{disclosurePerson?.fullName}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                <button type="button" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
                     (click)="reviewDetails = {}">
                 </button>
             </div>

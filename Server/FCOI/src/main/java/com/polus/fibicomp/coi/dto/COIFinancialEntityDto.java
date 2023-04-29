@@ -33,6 +33,8 @@ public class COIFinancialEntityDto {
 
 	private String coiEntityEmail;
 
+	private String relationshipTypes;
+
 	public Integer getCoiFinancialEntityId() {
 		return coiFinancialEntityId;
 	}
@@ -145,4 +147,11 @@ public class COIFinancialEntityDto {
 		this.coiEntityEmail = CoiEntityEmail;
 	}
 
+	public String getRelationshipTypes() {
+		return relationshipTypes;
+	}
+
+	public void setRelationshipTypes(String relationshipTypes) {
+		this.relationshipTypes = relationshipTypes;
+	}
 }

@@ -46,7 +46,7 @@
     background-color: #f9e3e5;
     padding: 5px 10px;
     font-size: 13px;
-} 
+}
 
 .negotiation-comment {
     background: #f4f5f7;
@@ -59,4 +59,7 @@
 
 .time-font {
     font-size: 1.4rem;
+}
+.updown-arrow {
+  width: 32px;
 }
