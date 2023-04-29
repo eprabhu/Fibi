@@ -29,22 +29,22 @@
           </div>
            <div class="row">
               <div class=" col-4">
-                 <label class="label-text">{{test?.moduleCode == 1 ? 'Award Status:' : 'Proposal Status:'}}</label>
+                 <label class="label-text">{{test?.moduleCode == 1 ? 'Award Status :' : 'Proposal Status :'}}</label>
                  <span class="grey-text">{{test?.moduleStatus}} </span>
              </div>
              <div class=" col-4">
-                 <label class="label-text">Principal Investigator:</label>
+                 <label class="label-text">Principal Investigator :</label>
                  <span class="grey-text">{{test?.principalInvestigator}} </span>
           </div>
           </div>
           <div>
-              <label class="label-text">Sponsor:</label>
+              <label class="label-text">Sponsor :</label>
               <span class="grey-text">{{test?.sponsor}} </span>
           </div>
           <div>
-              <label class="label-text">Prime sponsor:</label>
+              <label class="label-text">Prime Sponsor :</label>
               <span *ngIf="test.primeSponsor" class="grey-text">{{test?.primeSponsor}} </span>
-              <span *ngIf="!test.primeSponsor" class="noDataExists">No Prime Sponsor exist</span>
+              <span *ngIf="!test.primeSponsor" class="noDataExists"> -- No Data --</span>
           </div>
         </div>
         <div class="col-4 p-10">
@@ -139,7 +139,7 @@
           <div class="col-lg-4 col-sm-6 col-6 mb-3">
             <label class="d-block label-text">PI</label>
             <span [ngClass]="selectedProjectForView?.principalInvestigator ? 'grey-text m-0' : 'noDataExists'">
-              {{selectedProjectForView?.principalInvestigator ? selectedProjectForView?.principalInvestigator : 'No Data'}}</span>
+              {{selectedProjectForView?.principalInvestigator ? selectedProjectForView?.principalInvestigator : '-- No Data --'}}</span>
           </div>
           <div class="col-lg-4 col-sm-6 col-6 mb-3">
             <label class="d-block label-text">Period</label>
@@ -149,7 +149,7 @@
           <div class="col-lg-4 col-sm-6 col-6 mb-3">
             <label class="d-block label-text">{{selectedProjectForView?.moduleCode == 3 ? 'Proposal' : 'Award'}}  Status</label>
             <span [ngClass]="selectedProjectForView?.moduleStatus ? 'grey-text m-0' : 'noDataExists'">
-             {{selectedProjectForView?.moduleStatus ? selectedProjectForView?.moduleStatus : 'No Data'}}</span>
+             {{selectedProjectForView?.moduleStatus ? selectedProjectForView?.moduleStatus : '-- No Data --'}}</span>
           </div>
           <div class="col-lg-4 col-sm-6 col-12 mb-3">
             <label class="d-block label-text">Lead Unit</label>
@@ -159,12 +159,12 @@
           <div class="col-lg-4 col-sm-6 col-6 mb-3">
             <label class="d-block label-text">Sponsor</label>
             <span [ngClass]="selectedProjectForView?.sponsor ? 'grey-text m-0' : 'noDataExists'">
-              {{selectedProjectForView?.sponsor ? selectedProjectForView?.sponsor : 'No Data'}}</span>
+              {{selectedProjectForView?.sponsor ? selectedProjectForView?.sponsor : '-- No Data --'}}</span>
           </div>
           <div class="col-lg-4 col-sm-6 col-6 mb-3">
             <label class="d-block label-text">Prime Sponsor</label>
             <span [ngClass]="selectedProjectForView?.primeSponsor ? 'grey-text m-0' : 'noDataExists'">
-              {{selectedProjectForView?.primeSponsor ? selectedProjectForView?.primeSponsor : 'No Data'}}</span>
+              {{selectedProjectForView?.primeSponsor ? selectedProjectForView?.primeSponsor : '-- No Data --'}}</span>
           </div>
         </div>
       </div>

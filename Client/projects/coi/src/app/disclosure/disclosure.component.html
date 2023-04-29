@@ -5,12 +5,12 @@
                 <div class="align-self-center flex-fill">
                     <p class="m-0">
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1'">
-                            <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI by <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span> {{coiData?.coiDisclosure?.person?.unit?.unitName}}</strong>
+                            <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span> {{coiData?.coiDisclosure?.person?.unit?.unitName}}</strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                            <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}} : {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} #{{coiData?.projectDetail?.moduleItemId}} : {{(coiData?.projectDetail?.title)?.length>80 ?
+                            <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}} : {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} : {{(coiData?.projectDetail?.title)?.length>80 ?
                                 (coiData?.projectDetail?.title | slice:0:80)+'...' :
-                                coiData?.projectDetail?.title}} by <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
+                                coiData?.projectDetail?.title}} ] By <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
                         </ng-container>
                     </p>
                 </div>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="flex-fill ps-3">
                             <div>
-                                <p class="m-0 fs-14">COI Training: <strong>Completed</strong></p>
+                                <p class="m-0 fs-14">COI Training : <strong>Completed</strong></p>
                             </div>
                             <div>
                                 <p class="mb-0 fs-14 negative-three-pixel-margin">Expiration Date: 23/02/2024</p>

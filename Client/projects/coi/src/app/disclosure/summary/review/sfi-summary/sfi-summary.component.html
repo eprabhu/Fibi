@@ -20,16 +20,15 @@
                       </p>
                   </div>
                   <div class="col-3 text-secondary fs-14">
-                      <span class="fw-bold me-2">Entity
-                          Type:</span>{{item?.coiEntity?.entityType?.description.substr(0, 10)}}
+                      <span class="fw-bold me-2">Entity Type :</span>{{item?.coiEntity?.entityType?.description.substr(0, 10)}}
                   </div>
               </div>
               <!-- Under -->
               <div class="align-items-center d-flex fs-14 m-0 row">
                   <div class="col-6 text-secondary">
-                      <span class="fw-bold me-3">Relationship:</span>
+                      <span class="fw-bold me-3">Relationship :</span>
                       <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span
-                              class="fw-medium">Financial:
+                              class="fw-medium">Financial :
                           </span> <em *ngFor="let relationship of item?.coiFinancialEntityDetails;let last = last">
                               <span *ngIf="!last">{{relationship?.coiFinancialEntityRelType?.description}},
                               </span>
@@ -42,7 +41,7 @@
 
                   <div class="align-items-center col-3 d-flex justify-content-between text-secondary">
                       <div>
-                          <span class="fw-bold me-2"> Date of creation: </span> {{ item?.coiEntity?.createTimestamp
+                          <span class="fw-bold me-2"> Date of Creation : </span> {{ item?.coiEntity?.createTimestamp
                           |dateFormatter }}
                       </div>
                   </div>

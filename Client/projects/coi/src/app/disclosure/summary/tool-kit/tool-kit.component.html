@@ -12,7 +12,7 @@
             </div>
             <div class="fs-15 mb-2 p-3 sub-navigation-to-tabs">
                 <div class="fw-bold" (click)="scrollIntoView('COI803', 'start')">Relationships</div>
-                <div>
+                <div *ngIf="!projectList?.awards?.length">
                   <div class="fw-medium py-1">Awards</div>
                   <div class="bg-sub-goto border fw-medium p-2 rounded-1">
                       <ng-container *ngFor="let award of projectList?.awards">
@@ -21,12 +21,12 @@
                         </div>
                       </ng-container>
                       <ng-container *ngIf="!projectList?.awards?.length">
-                          <div class="sub-goto bg-white border p-1">No Awards found
+                          <div class="sub-goto bg-white border p-1">-- No Awards --
                           </div>
                       </ng-container>
                   </div>
               </div>
-                <div>
+                <div *ngIf="!projectList?.proposals?.length">
                     <div class="fw-medium py-1">Proposals</div>
                     <div class="bg-sub-goto border fw-medium p-2 rounded-1">
                         <ng-container *ngFor="let proposals of projectList?.proposals; let i = index">
@@ -35,7 +35,7 @@
                             </div>
                         </ng-container>
                         <ng-container *ngIf="!projectList?.proposals?.length">
-                            <div class="sub-goto bg-white border p-1">No proposals found
+                            <div class="sub-goto bg-white border p-1">-- No Proposals--
                             </div>
                         </ng-container>
                     </div>

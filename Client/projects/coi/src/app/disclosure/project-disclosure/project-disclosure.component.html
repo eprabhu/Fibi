@@ -49,7 +49,7 @@
                     <div *ngIf="isShowResultCard" class="col-lg-12 col-12 mb-4 mt-2 shadow-lg resultCard px-0">
                         <div class="row">
                             <div class="col-12">
-                                <label class="f-14 mt-2 mb-2 pe-2">{{selectedProjectType}} Title : </label>
+                                <label class="f-14 mt-2 mb-2 pe-2">Title : </label>
                                 <span class="ml-2">{{manualProjectAddDetails?.title}}</span>
                             </div>
                             <div class="col-6 mt-2 mb-2 ">
@@ -79,7 +79,7 @@
                                [(ngModel)]="manualProjectAddDetails.moduleItemId" class="form-control" />
                     </div>
                     <div class="col-8">
-                        <label class="f-14">{{selectedProjectType}} Title</label>
+                        <label class="f-14">Title</label>
                         <input type="text" id="proposal-no" placeholder="{{this.selectedProjectType}} Title" autocomplete="off"
                                [(ngModel)]="manualProjectAddDetails.title" class="form-control" />
                     </div>

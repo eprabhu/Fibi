@@ -267,13 +267,13 @@
                   <label for="person-name" class="label-text">Person Name :</label>
                   <span *ngIf="coi?.disclosurePersonFullName" id="person-name"
                     class="grey-text">{{coi?.disclosurePersonFullName}}</span>
-                  <span *ngIf="!coi?.disclosurePersonFullName" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.disclosurePersonFullName" class="noDataExists">-- No Data --</span>
                 </div>
                 <div class="col d-flex">
                   <label for="type" class="label-text">Disclosure Type :</label>
                   <span *ngIf="coi?.disclosureCategoryType" id="type"
                     class="grey-text">{{coi?.disclosureCategoryType}}</span>
-                  <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">-- No Data --</span>
                 </div>
                 <div class="col d-flex">
                   <label for="status" class="label-text">Disclosure Status :</label>
@@ -281,7 +281,7 @@
                     class="badge f-13 rounded-pill {{commonService.getDisclosureConflictBadge(coi?.conflictStatusCode)}}">
                     {{coi?.conflictStatus}}
                   </div>
-                  <div *ngIf="!coi?.disclosureStatus" class="noDataExists">No data exist</div>
+                  <div *ngIf="!coi?.disclosureStatus" class="noDataExists">-- No Data --</div>
                 </div>
               </div>
               <div class="row mb-3 px-3">
@@ -289,36 +289,36 @@
                   <label for="event-type" class="label-text">Disclosure Event Type :</label>
                   <span id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
                     coi?.disclosureCategoryTypeCode)}}</span>
-                  <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.disclosureCategoryType" class="noDataExists">-- No Data --</span>
                 </div>
                 <div class="col d-flex">
                   <label for="event-type" class="label-text">Certification Date:</label>
-                  <span class="noDataExists">No data exist</span>
+                  <span class="noDataExists">-- No Data --</span>
                   <!-- <span *ngIf="!coi?.disclosureCategoryType" id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
                         coi?.disclosureCategoryTypeCode)}}</span> -->
                 </div>
                 <div class="col d-flex">
                   <label for="event-type" class="label-text">Expiration Date :</label>
-                  <span *ngIf="!coi?.expirationDate" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.expirationDate" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.expirationDate" id="event-type" class="grey-text">{{coi?.expirationDate |
                     dateFormatter}}</span>
                 </div>
                 <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS'">
                   <label for="disp-status" class="label-text">Disposition Status :</label>
-                  <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.dispositionStatus" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.dispositionStatus"
                     class="badge f-13 rounded-pill {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}">
                     {{coi?.dispositionStatus}}</span>
                 </div>
                 <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="last-approved-version" class="label-text">Last Approved Version :</label>
-                  <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version"
                     class="grey-text">{{coi?.lastApprovedVersion}}</span>
                 </div>
                 <div class="col d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="disp-status" class="label-text">Disposition Status :</label>
-                  <span *ngIf="!coi?.dispositionStatus" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.dispositionStatus" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.dispositionStatus"
                     class="badge f-13 rounded-pill {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}">
                     {{coi?.dispositionStatus}}</span>
@@ -327,7 +327,7 @@
               <div class="row mb-3 px-3">
                 <div class="col-3 d-flex" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS'">
                   <label for="last-approved-version" class="label-text">Last Approved Version :</label>
-                  <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version"
                     class="grey-text">{{coi?.lastApprovedVersion}}</span>
                 </div>
@@ -339,7 +339,7 @@
                 </div>
                 <div class="col-6" *ngIf="reviewerDashboardService.reviewerRequestObject.tabName != 'MY_REVIEWS'">
                   <label for="revision-reason" class="label-text">Revision Reason:</label>
-                  <span *ngIf="!coi?.revisionComment" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.revisionComment" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.revisionComment" id="revision-reason" class="grey-text">{{coi?.revisionComment}}</span>
                 </div>
                 <div class="col-3 align-self-center"
@@ -353,7 +353,7 @@
                 </div>
                 <div class="col-3">
                   <label for="review-status" class="label-text">Review Status :</label>
-                  <span *ngIf="!coi?.reviewStatusCode" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.reviewStatusCode" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.reviewStatusCode"
                     class="badge f-13 rounded-pill {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
                     id="review-status">{{coi?.reviewStatus}}</span>
@@ -363,7 +363,7 @@
                 <div class="col-6"
                   [ngClass]="reviewerDashboardService.reviewerRequestObject.tabName == 'MY_REVIEWS' ?'col-6':'col-9'">
                   <label for="revision-reason" class="label-text">Revision Reason :</label>
-                  <span *ngIf="!coi?.revisionComment" class="noDataExists">No data exist</span>
+                  <span *ngIf="!coi?.revisionComment" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.revisionComment" id="revision-reason" class="grey-text">{{coi?.revisionComment}}</span>
                 </div>
               </div>

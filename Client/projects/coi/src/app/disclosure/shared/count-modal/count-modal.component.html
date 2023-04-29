@@ -17,9 +17,9 @@
           <thead class="sticky-top">
             <tr class="header-border">
               <th>Entity Name</th>
-              <th>Relationship Start Date</th>
+              <th>Start Date of Involvement</th>
               <th>Relationship With</th>
-              <th>Last Update</th>
+              <th>End Date of Involvement</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -130,8 +130,8 @@
           <thead class="sticky-top">
             <tr class="header-border">
               <th>Disclosure Type</th>
-              <th>Submission date</th>
-              <th>Disclosure status</th>
+              <th>Submission Date</th>
+              <th>Disclosure Status</th>
               <th>Last Modified</th>
               <th>Actions</th>
             </tr>
@@ -149,7 +149,7 @@
               </td>
               <td>{{ item?.createTimestamp |dateFormatter }}</td>
               <td>{{ item?.coiDisclosureStatus?.description}}</td>
-              <td>By {{ item?.updateUserFullName }} on {{ item?.updateTimestamp |dateFormatterWithTimeZone: 'long' }}</td>
+              <td>By {{ item?.updateUserFullName }} On {{ item?.updateTimestamp |dateFormatterWithTimeZone: 'long' }}</td>
               <td>
                 <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"
                   (click)="closeCountModal()"

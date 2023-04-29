@@ -8,9 +8,7 @@
                     <button *ngIf="coiDisclosure?.reviewStatusCode == '2'" (click)="clearReviewModal()" class="btn btn-tertiary btn-sm mt-0 button-right justify-content-center d-flex align-items-center" data-bs-toggle="modal"
                         title="Add Review Location" data-bs-target="#add-location-modal">
                         <mat-icon class="me-2">person_add</mat-icon>
-                        <!-- <label> -->
                           Assign Reviewer
-                        <!-- </label> -->
                     </button>
                 </div>
                 <button class="btn updown-arrow mt-1 mx-3" (click)="isCollapsed = !isCollapsed">
@@ -182,7 +180,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Complete Review by {{reviewActionConfirmation?.assigneePersonName ? reviewActionConfirmation?.assigneePersonName : reviewActionConfirmation?.adminGroup?.adminGroupName}}
+                <h4 class="modal-title">Complete Review By {{reviewActionConfirmation?.assigneePersonName ? reviewActionConfirmation?.assigneePersonName : reviewActionConfirmation?.adminGroup?.adminGroupName}}
                 </h4>
                 <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                         type="button">

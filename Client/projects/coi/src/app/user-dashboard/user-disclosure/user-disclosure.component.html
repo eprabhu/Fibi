@@ -120,7 +120,7 @@
 
 <div class="advance-search-area border d-flex mt-2 rounded-1">
     <div class="border-end fs-14 p-3">
-        <span class="fs-14 fw-medium me-2 text-secondary">Filter by:</span>
+        <span class="fs-14 fw-medium me-2 text-secondary">Filter By:</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
               class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active"
               role="button">All</span>
@@ -144,42 +144,42 @@
     <div class="bg-white border mt-2 rounded-1 shadow-sm light-dark-text-color">
         <div class="border-bottom fs-14 p-3">
             <div *ngIf="disclosure?.fcoiTypeCode == '2'"><span
-                    class="fw-bold me-2">Proposal:</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
+                    class="fw-bold me-2">Proposal :</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
             </div>
             <div *ngIf="disclosure?.fcoiTypeCode == '3'"><span
-                    class="fw-bold me-2">Award:</span> #{{disclosure?.awardId}} - {{disclosure?.awardTitle}}
+                    class="fw-bold me-2">Award :</span> #{{disclosure?.awardId}} - {{disclosure?.awardTitle}}
             </div>
             <div class="d-flex my-2">
                 <div class="col">
-                    <span class="fw-bold me-2">Disclosure:</span> #{{disclosure?.coiDisclosureNumber}}
+                    <span class="fw-bold me-2">Disclosure :</span> #{{disclosure?.coiDisclosureNumber}}
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Disposition Status:</span> <span
+                    <span class="fw-bold me-2">Disposition Status :</span> <span
                         class="badge bg-{{getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} text-{{ getDispositinTextColor(disclosure?.dispositionStatusCode)}} fs-14 pending-status-pill rounded-pill">{{disclosure?.dispositionStatus}}</span>
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Review Status:</span> <span
+                    <span class="fw-bold me-2">Review Status :</span> <span
                         class="badge bg-{{getReviewStatusBadge(disclosure?.reviewStatusCode)}} text-{{ getReviewStatusTextColor(disclosure?.reviewStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.reviewStatus}}</span>
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Disclosure Status:</span> <span
+                    <span class="fw-bold me-2">Disclosure Status :</span> <span
                         class="badge {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
                 </div>
             </div>
             <div class="d-flex">
                 <div class="col">
-                    <span class="fw-bold me-2">Type:</span> {{disclosure?.fcoiType}}
+                    <span class="fw-bold me-2">Type :</span> {{disclosure?.fcoiType}}
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Certification Date:</span> <span
+                    <span class="fw-bold me-2">Certification Date :</span> <span
                         *ngIf="disclosure.submittedDate">{{disclosure?.submittedDate |
                     dateFormatter}} </span>
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Expiration Date:</span> {{disclosure?.expirationDate | dateFormatter}}
+                    <span class="fw-bold me-2">Expiration Date :</span> {{disclosure?.expirationDate | dateFormatter}}
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Create Date:</span> {{disclosure?.createTimestamp | dateFormatterWithTimeZone}}
+                    <span class="fw-bold me-2">Create Date :</span> {{disclosure?.createTimestamp | dateFormatterWithTimeZone}}
                 </div>
             </div>
         </div>

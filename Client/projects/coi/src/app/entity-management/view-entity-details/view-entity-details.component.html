@@ -113,7 +113,7 @@
             <div *ngIf="entityDetails?.approvedUser;else noData"  class="text-secondary fs-14 d-flex">
               <mat-icon class="mat-done">done</mat-icon>
               <label class="mt-1 px-2">
-                {{entityDetails?.approvedUser}} on
+                {{entityDetails?.approvedUser}} On
                 {{entityDetails?.approvedTimestamp|dateFormatterWithTimeZone:'long'}}</label>
             </div>
             <ng-template #noData>
@@ -123,9 +123,9 @@
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Last Updated On</span>
-            <label class="text-secondary fs-14 mt-1">{{entityDetails?.updateTimestamp
-              |dateFormatterWithTimeZone:'long'}} By {{entityDetails?.updateUser}}</label>
+            <span class="fw-500 fs-14">Last Updated By</span>
+            <label class="text-secondary fs-14 mt-1">{{entityDetails?.updateUser}} On {{entityDetails?.updateTimestamp
+              |dateFormatterWithTimeZone:'long'}}</label>
           </div>
         </div>
       </div>

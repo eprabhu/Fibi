@@ -65,11 +65,11 @@
                                             </span>
                                             <div *ngIf="isShowDisclosureInfo" class="bold-600 mb-1 text-secondary">
                                                 <span class="fs-14-nav">
-                                                    <label for="d-type">Disclosure: </label>
+                                                    <label for="d-type">Disclosure : </label>
                                                     <a id="d-type" [routerLink]="listItem?.coiDisclosure?.disclosureStatusCode == '1' ?
                                                       ['/fibi/coi/screening-questionnaire'] : ['/fibi/coi']"
                                                       [queryParams]="{disclosureId:listItem?.coiDisclosure?.disclosureId}">
-                                                      {{listItem?.coiDisclosure?.coiDisclosureCategoryType?.description}} by
+                                                      {{listItem?.coiDisclosure?.coiDisclosureCategoryType?.description}} By
                                                       {{listItem?.coiDisclosure?.createUserFullName}}
                                                     </a>
                                                 </span>
@@ -79,12 +79,12 @@
                                             <span class="hand-cursor me-4"
                                                 (click)="modifyReviewComment(listItem, index, true, listItem?.coiParentCommentId)">
                                                 <i aria-hidden="true" class="fa fa-pencil me-2"></i>
-                                                Edit comment
+                                                Edit Comment
                                             </span>
                                             <span class="hand-cursor" data-bs-toggle="modal" data-bs-target="#delete-comment"
                                                 (click)="setDeleteObject(listItem, index)">
                                                 <i aria-hidden="true" class="fa fa-trash me-2"></i>
-                                                Delete
+                                                Delete Comment
                                             </span>
                                         </div>
                                     </div>
