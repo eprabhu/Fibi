@@ -21,34 +21,34 @@
 
                     <div class="col">
                         <div>
-                            <span class="fw-bold text-secondary">Disclosure ID:</span>
+                            <span class="fw-bold text-secondary">Disclosure: </span>
                             <span class="ps-2 span-data-color">#{{disclosure?.disclosureId}}</span>
                         </div>
                         <div class="my-1">
-                            <span class="fw-bold text-secondary">Certification Date:</span>
+                            <span class="fw-bold text-secondary">Certification Date: </span>
                             <span class="ps-2 span-data-color">{{disclosure?.certifiedTimestamp | dateFormatter}}</span>
                         </div>
                         <div>
-                            <span class="fw-bold text-secondary"># of SFI:</span>
+                            <span class="fw-bold text-secondary">SFI's: </span>
                             <span class="ps-2 fw-bold text-primary">{{disclosure?.numberOfSFI}}</span>
                         </div>
                     </div>
 
                     <div class="col">
                         <div>
-                            <span class="fw-bold text-secondary">Disposition Status:</span>
+                            <span class="fw-bold text-secondary">Disposition Status: </span>
                             <span class="ms-2 disclosure-active-pill
                             bg-{{getDispositionStatusBadgeUpdated(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}
                             text-{{getDispositionStatusTextColor(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
                                 {{disclosure?.coiDispositionStatusType?.description}}</span>
                         </div>
                         <div class="my-1">
-                            <span class="fw-bold text-secondary">Expiration Date:</span>
+                            <span class="fw-bold text-secondary">Expiration Date: </span>
                             <span class="ps-2 span-data-color">{{disclosure?.expirationDate | dateFormatter}}</span>
                         </div>
                         <div>
-                            <span class="fw-bold text-secondary">Last Update:</span>
-                            <span class="ps-2 span-data-color">{{disclosure?.updateTimestamp | dateFormatter}}</span>
+                            <span class="fw-bold text-secondary">Last Update On:</span>
+                            <span class="ps-2 span-data-color">{{disclosure?.updateTimestamp | dateFormatter}} By {{disclosure?.updateUser}}</span>
                         </div>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
             </div>
             <div class="d-flex my-2">
                 <div class="col">
-                    <span class="fw-bold me-2">Disclosure ID:</span> #{{disclosure?.coiDisclosureNumber}}
+                    <span class="fw-bold me-2">Disclosure:</span> #{{disclosure?.coiDisclosureNumber}}
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disposition Status:</span> <span
@@ -186,7 +186,7 @@
         <div class="align-items-center chin d-flex fs-14 mx-3 ">
             <div class="align-items-center col-3 d-flex fs-14">
                 <strong class="fs-18 me-2 text-blue-color">{{disclosure?.noOfSfi}}</strong>
-                <strong>SFIs</strong>
+                <strong>SFI's</strong>
             </div>
             <div class="col-3 text-secondary fs-14 d-flex">
                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
@@ -201,8 +201,8 @@
                 </ng-container>
             </div>
             <div class="col-3">
-                <div>Last Updated: {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}
-                    by {{disclosure?.updateUser}}</div>
+                <div>Last Updated On: {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}
+                    By {{disclosure?.updateUser}}</div>
             </div>
             <div class="col-auto ms-auto d-flex justify-content-end">
                 <button *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.conflictStatusCode == '3'"

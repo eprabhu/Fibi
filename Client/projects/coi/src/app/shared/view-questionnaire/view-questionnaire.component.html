@@ -8,9 +8,9 @@
 	</button>
 </div>
 <div class="text-right fs-12 p-1">
-	<span *ngIf="result?.header?.ANS_PERSON_FULL_NAME"><em> Last updated by
-			{{result?.header?.ANS_PERSON_FULL_NAME}} on
-			{{result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long'}}</em></span>
+	<span *ngIf="result?.header?.ANS_PERSON_FULL_NAME"><em> Last Updated On
+		{{result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long'}} By {{result?.header?.ANS_PERSON_FULL_NAME}}
+			</em></span>
 </div>
 <div class="col-md-12 users-list-tbl mb-3 px-0"
 	*ngIf="questionnaire?.questions != undefined && questionnaire?.questions != null">

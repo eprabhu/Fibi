@@ -50,6 +50,7 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
     }
   ]
   @Output() updatedDataStore = new EventEmitter<boolean>();
+  @Output() updateEntityList = new EventEmitter<boolean>();
 
   constructor(public entityManagementService: EntityManagementService, private _commonService: CommonService) { }
 
@@ -73,9 +74,7 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
       this.$subscriptions.push(this.entityManagementService.
         saveOrUpdateCOIEntity(this.entityDetails).subscribe((res: EntityDetails) => {
           this.entityDetails = res;
-          if (this.isEditEntity) {
-            this.updatedDataStore.emit(true);
-          }
+          this.isEditEntity ? this.updatedDataStore.emit(true) : this.updateEntityList.emit(true);
           this.entityManagementService.isShowEntityNavBar = false;
           this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity?'Update ':'Created '}Entity Successfully completed.`);
         }, _err => {
@@ -140,6 +139,9 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
   entityValidation() {
     this.mandatoryList.clear();
     const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)| (".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    const phonePattern = (/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[0-9]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/);
+
     if (!this.entityDetails.coiEntity.country) {
       this.mandatoryList.set('country', '* Please choose a country.');
     }
@@ -170,15 +172,34 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
     return this.mandatoryList.size === 0 ? true : false;
   }
 
-  phoneNumberValidation(event: any) {
-    // const phonePattern = (/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[0-9]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/);
-    // if(!phonePattern.test(input)) {
-    //   console.log('Ho');
+  phoneNumberValidation(input) {
+    this.mandatoryList.clear();
+    const pattern = (/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[0-9]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/);
+    if (!pattern.test(input)) {
+      this.checkForInvalidPhoneNumber(input);
+    }
+  }
 
-    // }
-    const pattern = /[0-9]\d*/;
+  checkForInvalidPhoneNumber(input) {
+    if (/^([a-zA-Z]|[0-9a-zA-Z])+$/.test(input)) {
+      this.mandatoryList.set('phoneNumber', 'Alphabets cannot be added in Phone number field.');
+    } else {
+      this.mandatoryList.set('phoneNumber', 'Please add a valid number.');
+    }
+  }
+
+  inputRestriction(event: any) {
+    const pattern = /[0-9\+\-\/\ ]/;
     if (!pattern.test(String.fromCharCode(event.charCode))) {
       event.preventDefault();
     }
   }
+
+  // phoneNumberValidation(event: any) {
+  //   const pattern = /[0-9]\d*/;
+  //   if (!pattern.test(String.fromCharCode(event.charCode))) {
+  //     event.preventDefault();
+  //   }
+  // }
+
 }

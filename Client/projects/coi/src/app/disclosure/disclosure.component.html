@@ -292,9 +292,8 @@
                         </li>
                     </ul>
                 </div>
-                <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated by:</span>
-                    {{coiData?.coiDisclosure?.updateUser}}
-                    on {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}
+                <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated On:</span>
+                    {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} By {{coiData?.coiDisclosure?.updateUser}}
                 </div>
             </div>
             <ng-container *ngIf="router.url.includes('/coi/disclosure/summary')">
