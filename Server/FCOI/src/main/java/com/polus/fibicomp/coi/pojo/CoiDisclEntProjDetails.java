@@ -52,7 +52,7 @@ public class CoiDisclEntProjDetails implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCL_ENT_PROJ_DETAILS_FK3"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
-	private CoiEntity CoiEntity;
+	private CoiEntity coiEntity;
 	
 	@Column(name = "ENTITY_NUMBER")
 	private Integer entityNumber;
@@ -135,11 +135,11 @@ public class CoiDisclEntProjDetails implements Serializable {
 	}
 
 	public CoiEntity getCoiEntity() {
-		return CoiEntity;
+		return coiEntity;
 	}
 
-	public void setCoiEntity(CoiEntity CoiEntity) {
-		this.CoiEntity = CoiEntity;
+	public void setCoiEntity(CoiEntity coiEntity) {
+		this.coiEntity = coiEntity;
 	}
 
 	public Integer getEntityNumber() {

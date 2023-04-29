@@ -290,6 +290,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public String getDisclosureRelations(ConflictOfInterestVO vo) {
 		vo.setCoiConflictStatusTypes(conflictOfInterestDao.getCoiConflictStatusTypes());
+		vo.setCoiProjConflictStatusTypes(conflictOfInterestDao.getProjConflictStatusTypes());
 		prepareProposalDisclosureDetails(vo);
 		prepareAwardDisclosureDetails(vo);
 		return commonDao.convertObjectToJSON(vo);

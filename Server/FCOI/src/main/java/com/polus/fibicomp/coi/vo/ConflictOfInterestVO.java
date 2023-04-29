@@ -11,6 +11,7 @@ import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
 import com.polus.fibicomp.coi.pojo.CoiProjectType;
@@ -236,6 +237,16 @@ public class ConflictOfInterestVO {
 	private String reviewStatus;
 	
 	private Integer entityCount;
+	
+	private List<CoiProjConflictStatusType> coiProjConflictStatusTypes;
+
+	public List<CoiProjConflictStatusType> getCoiProjConflictStatusTypes() {
+		return coiProjConflictStatusTypes;
+	}
+
+	public void setCoiProjConflictStatusTypes(List<CoiProjConflictStatusType> coiProjConflictStatusTypes) {
+		this.coiProjConflictStatusTypes = coiProjConflictStatusTypes;
+	}
 
 	public Integer getEntityCount() {
 		return entityCount;

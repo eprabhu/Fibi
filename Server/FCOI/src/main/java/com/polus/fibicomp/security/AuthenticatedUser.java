@@ -1,5 +1,6 @@
 package com.polus.fibicomp.security;
 
+import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +12,8 @@ import com.polus.fibicomp.constants.Constants;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 /*
  * This class is used for fetch logged in User Details from the Request Object
  * This method is not Thread safe*/
@@ -25,7 +28,8 @@ public final class AuthenticatedUser {
 	/*
 	 * used for fetch Claims Object*/
 	public static Claims getLoginPersonDetailFromJWT() {
-		return Jwts.parser().setSigningKey(Constants.SECRET).parseClaimsJws(getJwtFromRequest()).getBody();
+		SecretKey secret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(Constants.SECRET)); 
+		return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(getJwtFromRequest()).getBody();
 	}
 
 	private static String getJwtFromRequest() {
