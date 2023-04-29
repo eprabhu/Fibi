@@ -1,8 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { Toast } from 'bootstrap';
 import { slideHorizontal } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../../environments/environment';
+import { HTTP_ERROR_STATUS } from '../../../app-constants';
+import { CommonService } from '../../../common/services/common.service';
 import { DataStoreService } from '../../services/data-store.service';
 import { RelationshipService } from '../relationship.service';
 declare var $: any;
@@ -47,16 +48,13 @@ export class DefineRelationComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   coiData: any;
-  toast:any;
   clearIndex: any;
 
   @ViewChild('relationShipOverlay', { static: true }) relationShipOverlay: ElementRef;
-  @ViewChild('myToast',{static:true}) toastEl: ElementRef
 
-  constructor(private _relationShipService: RelationshipService, public snackBar: MatSnackBar, private _dataStore: DataStoreService) { }
+  constructor(private _relationShipService: RelationshipService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
 
   ngOnInit() {
-    this.toast=new Toast(this.toastEl.nativeElement,{});
     this.getDataFromStore();
     this.getEntityList();
   }
@@ -100,11 +98,12 @@ export class DefineRelationComponent implements OnInit {
       this.coiValidationMap.clear();
       this.coiTableValidation.clear();
       this.entityProjectDetails.forEach((ele: any) => {
-        if (!ele.discDetStatusCode) {
-          ele.discDetStatusCode = this.coiStatusCode;
-        } if (!ele.comment.comments) {
-          ele.comment.comments = this.coiDescription;
+        if (!ele.projectConflictStatusCode) {
+          ele.projectConflictStatusCode = this.coiStatusCode;
         }
+        // if (!ele.comment.comments) {
+        //   ele.comment.comments = this.coiDescription;
+        // }
       });
       this.saveClick();
     }
@@ -129,7 +128,8 @@ export class DefineRelationComponent implements OnInit {
     }
 
     isAnyOneEntityAnswered() {
-       return !!this.entityProjectDetails.find(ele => ele.discDetStatusCode || ele.comment.comments);
+      // || ele.comment.comments
+       return !!this.entityProjectDetails.find(ele => ele.projectConflictStatusCode);
     }
 
     openSaveAllConfirmationModal() {
@@ -143,73 +143,75 @@ export class DefineRelationComponent implements OnInit {
 
     clearAll() {
       this.entityProjectDetails.forEach((ele: any) => {
-        ele.discDetStatusCode = null;
-        ele.comment.comments = null;
+        ele.projectConflictStatusCode = null;
+        // ele.comment.comments = null;
       });
       this.coiStatusCode = null;
       this.coiDescription = '';
+      this.coiTableValidation.clear();
       this.saveClick();
     }
 
     clearSingleEntity() {
       this.coiTableValidation.delete('save'+this.clearIndex );
-      // if (!this.newArray[index].discDetStatusCode && !this.newArray[index].comment.comments) {
+      // if (!this.newArray[index].projectConflictStatusCode && !this.newArray[index].comment.comments) {
       //   this.coiTableValidation.set('clear'+index , 'No data to clear');
       // } else {
-        this.entityProjectDetails[this.clearIndex ].discDetStatusCode = null;
-        this.entityProjectDetails[this.clearIndex ].comment.comments = null;
-        this.entityProjectDetails[this.clearIndex ].coiFinancialEntityId = this.entityProjectDetails[this.clearIndex ].coiFinancialEntity.coiFinancialEntityId;
+        this.entityProjectDetails[this.clearIndex ].projectConflictStatusCode = null;
+        // this.entityProjectDetails[this.clearIndex ].comment.comments = null;
+        this.entityProjectDetails[this.clearIndex ].personEntity = this.entityProjectDetails[this.clearIndex ].personEntity.personEntity;
         this.entityProjectDetails[this.clearIndex ].disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.entityProjectDetails[this.clearIndex ].disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
         this.entityProjectDetails[this.clearIndex ].moduleCode = this.selectedProject.moduleCode;
         this.entityProjectDetails[this.clearIndex ].moduleItemKey = this.selectedProject.moduleItemId;
-        this.getCommentObject(this.entityProjectDetails[this.clearIndex ].comment);
-        this.entityProjectDetails[this.clearIndex ].coiDisclosureDetailsStatus = this.getStatusObject(this.entityProjectDetails[this.clearIndex ].discDetStatusCode);
+        // this.getCommentObject(this.entityProjectDetails[this.clearIndex ].comment);
+        this.entityProjectDetails[this.clearIndex ].coiProjConflictStatusType = this.getStatusObject(this.entityProjectDetails[this.clearIndex ].projectConflictStatusCode);
         this.singleSaveClick(this.entityProjectDetails[this.clearIndex], this.clearIndex);
     }
 
     openClearModal(index) {
       this.coiTableValidation.clear();
       this.clearIndex = index;
-      if (this.entityProjectDetails[index].discDetStatusCode || this.entityProjectDetails[index].comment.comments) {
+      // || this.entityProjectDetails[index].comment.comments)
+      if (this.entityProjectDetails[index].projectConflictStatusCode) {
         document.getElementById('hidden-single-clear-button').click();
       }
     }
 
     saveSingleEntity(index, test) {
       this.coiTableValidation.delete('save'+index );
-      if ([null, 'null'].includes(this.entityProjectDetails[index].discDetStatusCode)) {
+      if ([null, 'null'].includes(this.entityProjectDetails[index].projectConflictStatusCode)) {
         this.coiTableValidation.set('save'+index , 'Please select COI Status');
       } else {
-        test.coiFinancialEntityId = test.coiFinancialEntity.coiFinancialEntityId;
+        test.personEntityId = test.personEntity.personEntityId;
         test.disclosureId = this.coiData.coiDisclosure.disclosureId;
         test.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
         test.moduleCode = this.selectedProject.moduleCode;
         test.moduleItemKey = this.selectedProject.moduleItemId;
-        this.getCommentObject(test.comment);
-        test.coiDisclosureDetailsStatus = this.getStatusObject(test.discDetStatusCode);
+        // this.getCommentObject(test.comment);
+        test.coiProjConflictStatusType = this.getStatusObject(test.projectConflictStatusCode);
         this.singleSaveClick(test, index);
       }
     }
 
     prepareSaveObject() {
       this.entityProjectDetails.forEach((ele: any) => {
-        ele.coiFinancialEntityId = ele.coiFinancialEntity.coiFinancialEntityId;
+        ele.personEntityId = ele.personEntity.personEntityId;
         ele.disclosureId = this.coiData.coiDisclosure.disclosureId;
         ele.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
         ele.moduleCode = this.selectedProject.moduleCode;
         ele.moduleItemKey = this.selectedProject.moduleItemId;
-        this.getCommentObject(ele.comment);
-        ele.coiDisclosureDetailsStatus = this.getStatusObject(ele.discDetStatusCode);
+        // this.getCommentObject(ele.comment);
+        ele.coiProjConflictStatusType = this.getStatusObject(ele.projectConflictStatusCode);
       });
     }
 
     getStatusObject(code) {
-      return this.coiStatusList.find(ele => ele.discDetStatusCode === code);
+      return this.coiStatusList.find(ele => ele.projectConflictStatusCode === code);
     }
 
     getCommentObject(comment: any) {
-        comment.disclosureNumber = '1000-0037';
+        comment.disclosureNumber = this.coiData.disclosureNumber;
         comment.commentTypeCode = 1;
         comment.comments = comment.comments ? comment.comments : null;
     }
@@ -217,15 +219,15 @@ export class DefineRelationComponent implements OnInit {
     saveClick() {
       this.prepareSaveObject();
         this._relationShipService.saveEntityProjectRelation(this.entityProjectDetails, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
-          this.entityProjectDetails = data.coiDisclosureDetails;
+          this.entityProjectDetails = data.coiDisclEntProjDetails;
         }, err => {
       });
     }
 
     singleSaveClick(element, index) {
         this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
-          this.entityProjectDetails[index] = data.coiDisclosureDetail;
-          this.toast.show();
+          this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in evaluating disclosure.');
           this.clearIndex = null;
       }, err => {
       });

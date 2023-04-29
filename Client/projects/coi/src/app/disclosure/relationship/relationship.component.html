@@ -57,10 +57,10 @@
                     <label class="count-label">Conflict :</label>
                   </div>
                   <div class="col-6" style="text-align: center;">
-                    <span *ngIf="test.sfiCompleted !== null" class="fs-12 badge badge-pill badge-primary Conflict-badge">
+                    <span *ngIf="test.sfiCompleted != null" class="fs-12 badge badge-pill badge-primary Conflict-badge">
                       <span>{{getDisclosureCount(1, test.disclosureStatusCount)}}</span>
                       </span>
-                      <span *ngIf="test.sfiCompleted == null">--</span>
+                      <span *ngIf="test.sfiCompleted == null" class="count-margin">--</span>
                   </div>
                 </div>
                 <div class="row">
@@ -71,7 +71,7 @@
                       <span *ngIf="test.sfiCompleted !== null" class="fs-12 badge badge-pill badge-primary noConflict-badge">
                       <span>{{getDisclosureCount(2, test.disclosureStatusCount)}}</span>
                     </span>
-                    <span *ngIf="test.sfiCompleted == null">--</span>
+                    <span *ngIf="test.sfiCompleted == null" class="count-margin">--</span>
                   </div>
                 </div>
                 <div class="row">
@@ -83,26 +83,27 @@
                     <span *ngIf="test.sfiCompleted !== null" class="fs-12 badge badge-pill badge-primary potentialConflict-badge">
                       <span>{{getDisclosureCount(3, test.disclosureStatusCount)}}</span>
                     </span>
-                    <span *ngIf="test.sfiCompleted == null">--</span>
+                    <span *ngIf="test.sfiCompleted == null" class="count-margin">--</span>
                   </div>
                 </div>
               </div>
               <div class="col-6 mt-3" style="text-align: center;">
                 <div class="row mt-2">
                   <div class="col-12">
-                    <button class="btn btn-primary btn-sm d-flex define-relation" *ngIf="!test.sfiCompleted" (click)="openDefineRelationship(test)" type="submit">
+                    <button class="btn btn-primary btn-sm d-flex define-relation" *ngIf="!test.sfiCompleted && isEditMode" (click)="openDefineRelationship(test)" type="submit">
                       <img src="{{deployMap}}assets/images/define-relation-hover.svg" class="mr-2 hover_img" alt="close button">Define Relationship
                     </button>
-                    <button type="button" class="btn btn-outline-secondary define-relation btn-sm d-flex" (mouseover) ="isShowWhiteIcon = true" (mouseout) ="isShowWhiteIcon = false" *ngIf="test.sfiCompleted" (click)="openDefineRelationship(test)">
+                    <button type="button" class="btn btn-outline-secondary define-relation btn-sm d-flex" (mouseover) ="isShowWhiteIcon = true" (mouseout) ="isShowWhiteIcon = false" *ngIf="test.sfiCompleted || (!test.sfiCompleted && !isEditMode)" (click)="openDefineRelationship(test)">
                       <img *ngIf="isShowWhiteIcon" src="{{deployMap}}assets/images/define-relation-hover.svg" class="mr-2 hover_img" alt="define relationship">
-                      <img *ngIf="!isShowWhiteIcon" src="{{deployMap}}assets/images/define-relation.svg" class="mr-2 hover_img" alt="define relationship">Define Relationship
+                      <img *ngIf="!isShowWhiteIcon" src="{{deployMap}}assets/images/define-relation.svg" class="mr-2 hover_img" alt="define relationship">
+                      {{isEditMode ? 'Define Relationship' : 'Manage Relationship'}}
                     </button>
                     </div>
                   </div>
                   <div class="row">
                   <div class="col-12">
                     <div class="disclosure-status-complete ml-15" *ngIf="test.sfiCompleted == true"><mat-icon class="complete-icon">done</mat-icon><span class="complete">Completed</span></div>
-                    <div class="disclosure-status-incomplete ml-15" *ngIf="test.sfiCompleted == false"><mat-icon class="in-complete-icon">not_interested</mat-icon><span class="notComplete">Not Completed</span></div>                  </div>
+                    <div class="disclosure-status-incomplete" [class.count-margin]="!test.sfiCompleted && !isEditMode" *ngIf="test.sfiCompleted == false"><mat-icon class="in-complete-icon">not_interested</mat-icon><span class="notComplete">Not Completed</span></div>                  </div>
                   </div>
               </div>
             </div>
@@ -168,7 +169,7 @@
         </div>
       </div>
       <div class="modal-footer mx-2">
-        <button type="button" (click)="selectedProjectForView= null" class="btn btn-primary" data-bs-dismiss="modal">More Details</button>
+        <button type="button" (click)="openProjectMoreDetails(selectedProjectForView.moduleItemId, selectedProjectForView.moduleCode);selectedProjectForView= null;" class="btn btn-primary" data-bs-dismiss="modal">More Details</button>
         <button type="button" (click)="selectedProjectForView= null" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
     </div>
     </div>
