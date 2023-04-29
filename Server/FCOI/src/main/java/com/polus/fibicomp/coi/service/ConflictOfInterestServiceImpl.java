@@ -248,6 +248,16 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 //		}
 		ConflictOfInterestVO conflictOfInterestVO = new ConflictOfInterestVO();
 		CoiDisclosure coiDisclosure = conflictOfInterestDao.loadDisclosure(disclosureId);
+		String coiTypeCode = coiDisclosure.getFcoiTypeCode();
+		if (Constants.PROPOSAL_DISCLOSURE.equals(coiTypeCode)) {
+			List<DisclosureDetailDto> projDetailObjs = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE,
+					AuthenticatedUser.getLoginPersonId(), disclosureId, null);
+			conflictOfInterestVO.setProjectDetail(projDetailObjs == null || projDetailObjs.isEmpty() ? null : projDetailObjs.get(0));
+		} else if (Constants.AWARD_DISCLOSURE.equals(coiTypeCode)) {
+			List<DisclosureDetailDto> projDetailObjs = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE,
+					AuthenticatedUser.getLoginPersonId(), disclosureId, null);
+			conflictOfInterestVO.setProjectDetail(projDetailObjs == null || projDetailObjs.isEmpty() ? null : projDetailObjs.get(0));
+		}
 		coiDisclosure.setNumberOfSFI(conflictOfInterestDao.getNumberOfSFIBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
@@ -499,6 +509,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public String reviseDisclosure(ConflictOfInterestVO vo) {
 		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(vo.getDisclosureId());
+		if (!disclosure.getReviewStatusCode().equals(4)) {  // review status code 4 -> completed
+			throw new ApplicationException("You are attempting to revise a pending version of disclosure. You can only have one revision at a time.",
+					Constants.JAVA_ERROR);
+		}
 		CoiDisclosure copyDisclosure = new CoiDisclosure();
 		copyDisclosure.setRevisionComment(vo.getRevisionComment());
 		copyDisclosure(disclosure, copyDisclosure);
@@ -509,7 +523,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	private CoiDisclosure copyDisclosure(CoiDisclosure disclosure, CoiDisclosure copyDisclosure) {
-		copyDisclosure.setVersionStatus(Constants.DISCLOSURE_STATUS_PENDING);
+		copyDisclosure.setFcoiTypeCode(disclosure.getFcoiTypeCode());
+		copyDisclosure.setConflictStatusCode(Constants.DISCLOSURE_STATUS_PENDING);
 		copyDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_TYPE_CODE);
 		copyDisclosure.setReviewStatusCode(REVIEW_STATUS_TYPE_CODE);
 		copyDisclosure.setVersionStatus(DISCLOSURE_SEQUENCE_STATUS_CODE);
@@ -542,7 +557,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public boolean evaluateDisclosureQuestionnaire(ConflictOfInterestVO vo) {
 		Boolean isDisclosureQuestionnaire = conflictOfInterestDao.evaluateDisclosureQuestionnaire(vo.getModuleCode(),vo.getSubmoduleCode(),vo.getModuleItemId());
-		conflictOfInterestDao.setDisclosureQuestionnaire(isDisclosureQuestionnaire,vo.getModuleItemId());
+//		conflictOfInterestDao.setDisclosureQuestionnaire(isDisclosureQuestionnaire,vo.getModuleItemId());
 		return isDisclosureQuestionnaire;
 	}
 
@@ -969,12 +984,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public String getCOIDashboard(CoiDashboardVO vo) {
-		DashBoardProfile dashBoardProfile = new DashBoardProfile();
-		try {
-			dashBoardProfile = conflictOfInterestDao.getCOIDashboard(vo);
-		} catch (Exception e) {
-			logger.error("Error in method getCOIDashboard", e);
-		}
+		DashBoardProfile dashBoardProfile = conflictOfInterestDao.getCOIDashboard(vo);
 		return commonDao.convertObjectToJSON(dashBoardProfile);
 	}
 

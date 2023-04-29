@@ -47,6 +47,8 @@ public class ConflictOfInterestVO {
 
 	private List<DisclosureDetailDto> awards;
 
+	private DisclosureDetailDto projectDetail;
+
 	private String searchString;
 
 	private List<EntityStatus> entityStatus;
@@ -1057,5 +1059,12 @@ public class ConflictOfInterestVO {
 	public void setDisclosureTypeCode(String disclosureTypeCode) {
 		this.disclosureTypeCode = disclosureTypeCode;
 	}
-	
+
+	public DisclosureDetailDto getProjectDetail() {
+		return projectDetail;
+	}
+
+	public void setProjectDetail(DisclosureDetailDto projectDetail) {
+		this.projectDetail = projectDetail;
+	}
 }

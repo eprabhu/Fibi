@@ -344,7 +344,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaUpdate<CoiDisclosure> criteriaUpdate = cb.createCriteriaUpdate(CoiDisclosure.class);
 		Root<CoiDisclosure> root = criteriaUpdate.from(CoiDisclosure.class);
-//		criteriaUpdate.set("isDisclosureQuestionnaire",isDisclosureQuestionnaire);
+		criteriaUpdate.set("isDisclosureQuestionnaire",isDisclosureQuestionnaire);
 		criteriaUpdate.where(cb.equal(root.get("disclosureId"),disclosureId));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
@@ -979,16 +979,18 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setNoOfSfi(resultSet.getInt("NO_OF_SFI"));
 				disclosureView.setNoOfProposal(resultSet.getInt("NO_OF_PROPOSAL"));
 				disclosureView.setNoOfAward(resultSet.getInt("NO_OF_AWARD"));
-				disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLE"));
-				disclosureView.setProposalId(resultSet.getString("PROPOSAL_NUMBER"));
-				disclosureView.setAwardlId(resultSet.getString("AWARD_NUMBER"));
-				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLE"));
+				disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
+//				disclosureView.setProposalId(resultSet.getString("PROPOSAL_NUMBER"));
+//				disclosureView.setAwardlId(resultSet.getString("AWARD_NUMBER"));
+				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
 				disclosureViews.add(disclosureView);
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
 			dashBoardProfile.setTotalServiceRequest(getCOIDashboardCount(vo));
 		} catch (SQLException e) {
+			e.printStackTrace();
 			logger.error("Error in getCOIDashboard {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch data", e, Constants.JAVA_ERROR);
 		}
 		return dashBoardProfile;
 	}
@@ -1039,6 +1041,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			}
 		} catch (SQLException e) {
 			logger.error("Error in getCOIDashboardCount {}", e.getMessage());
+			throw new ApplicationException("Error in getCOIDashboardCount", e, Constants.JAVA_ERROR);
 		}
 		return count;
 	}
