@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Calendar;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -118,14 +119,19 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 
 	@Override
+	//TODO revisit and check logics, statuses
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
 		CoiDisclosure coiDisclosure = conflictOfInterestVO.getCoiDisclosure() != null?conflictOfInterestVO.getCoiDisclosure():new CoiDisclosure();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.YEAR, 1);
+		coiDisclosure.setExpirationDate(cal.getTime());
 		if(conflictOfInterestVO.getCoiProjectProposal()!=null) {
 			CoiProjectProposal coiProjectProposal = conflictOfInterestDao.saveOrUpdateCoiProjectProposal(conflictOfInterestVO.getCoiProjectProposal());
 			coiDisclosure.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
 			coiDisclosure.setFcoiTypeCode("2");
 			coiDisclosure.setModuleItemKey(coiProjectProposal.getProposalNumber());
 			coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
+//			coiDisclosure.setExpirationDate(coiProjectProposal.getProposalEndDate());
 		}
 		else if(conflictOfInterestVO.getCoiProjectAward()!=null) {
 			CoiProjectAward coiProjectAward = conflictOfInterestDao.saveOrUpdateCoiProjectAward(conflictOfInterestVO.getCoiProjectAward());
@@ -133,6 +139,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiDisclosure.setFcoiTypeCode("3");
 			coiDisclosure.setModuleItemKey(coiProjectAward.getAwardNumber());
 			coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
+//			coiDisclosure.setExpirationDate(coiProjectAward.getAwardEndDate());
 		}
 		else if(conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode()!=null && !conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode().isEmpty()) {
 			if (!conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode().equals("4")) {
@@ -355,8 +362,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		} else {
 			personEntities = conflictOfInterestDao.getSFIBasedOnDisclosureId(vo.getDisclosureId());
 		}
-		personEntities.forEach(personEntity -> personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao
-				.getValidPersonEntityRelTypes(personEntity.getPersonEntityId())));
+//		personEntities.forEach(personEntity -> personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao
+//				.getValidPersonEntityRelTypes(personEntity.getPersonEntityId())));
 		vo.setPersonEntities(personEntities);
 		return new ResponseEntity<>(personEntities, HttpStatus.OK);
 	}
@@ -942,9 +949,18 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 	
 	@Override
+	//TODO update & versioning is pending
 	public ResponseEntity<Object> saveOrUpdateCoiEntity(ConflictOfInterestVO vo) {
 		CoiEntity coiEntity = vo.getCoiEntity();
-		coiEntity.setEntityNumber(conflictOfInterestDao.generateMaxCoiEntityNumber());
+		coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		if (coiEntity.getEntityId() == null) {
+			coiEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
+			coiEntity.setEntityStatusCode("3"); //Unverified
+			coiEntity.setIsActive(true); // Y
+			coiEntity.setVersionStatus("Active");
+			coiEntity.setVersionNumber(1);
+			coiEntity.setEntityNumber(conflictOfInterestDao.generateMaxCoiEntityNumber());
+		}
 		conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
@@ -978,12 +994,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public String getSFIDashboard(CoiDashboardVO vo) {
-		DashBoardProfile dashBoardProfile = new DashBoardProfile();
-		try {
-			dashBoardProfile = conflictOfInterestDao.getSFIDashboard(vo);
-		} catch (Exception e) {
-			logger.error("Error in method getSFIDashboard", e);
-		}
+		DashBoardProfile dashBoardProfile = conflictOfInterestDao.getSFIDashboard(vo);
+
 		return commonDao.convertObjectToJSON(dashBoardProfile);
 	}
 	
