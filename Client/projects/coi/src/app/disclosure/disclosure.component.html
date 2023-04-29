@@ -46,19 +46,19 @@
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
                                 <tr>
-                                    <td>Disposition:</td>
+                                    <td>Disposition :</td>
                                     <td class="ps-4"><span
                                             class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}} px-3 py-1 rounded-5 text-black">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Review:</td>
+                                    <td>Review :</td>
                                     <td class="ps-4"><span
                                             class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}} px-3 py-1 rounded-5">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Disclosure:</td>
+                                    <td>Disclosure :</td>
                                     <td class="ps-4"><span
                                             class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
                                     </td>
@@ -73,17 +73,17 @@
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
                                 <tr>
-                                    <td>Create:</td>
+                                    <td>Created :</td>
                                     <td class="ps-4" style="padding-right: 115px;">{{coiData?.coiDisclosure?.createTimestamp ? (coiData?.coiDisclosure?.createTimestamp |
                                         dateFormatterWithTimeZone) : ''}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Certification:</td>
+                                    <td>Certification :</td>
                                     <td class="ps-4" style="padding-right: 115px;" >{{coiData?.coiDisclosure?.certifiedTimestamp ?
                                         (coiData?.coihideRelationshipModalDisclosure?.certifiedTimestamp | dateFormatter) : ''}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Expiration:</td>
+                                    <td>Expiration :</td>
                                     <td class="ps-4" style="padding-right: 115px;" >{{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
                                         dateFormatter) : ''}}</td>
                                 </tr>
@@ -292,8 +292,8 @@
                         </li>
                     </ul>
                 </div>
-                <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated On:</span>
-                    {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} By {{coiData?.coiDisclosure?.updateUser}}
+                <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated By:</span>
+                    {{coiData?.coiDisclosure?.updateUser}} On {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} 
                 </div>
             </div>
             <ng-container *ngIf="router.url.includes('/coi/disclosure/summary')">
