@@ -5,7 +5,11 @@ import { switchMap } from 'rxjs/operators';
 import { DEFAULT_DATE_FORMAT, HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../../../fibi/src/app/app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
-import { isEmptyObject, setFocusToElement } from '../../../../fibi/src/app/common/utilities/custom-utilities';
+import {
+  deepCloneObject,
+  isEmptyObject,
+  setFocusToElement
+} from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
@@ -81,26 +85,25 @@ export class AdminDashboardComponent {
     this.sortCountObj = new SortCountObj();
     this.sortMap = {};
     this.coiElastic = this._elasticConfig.getElasticForCoi();
-    this.getDashboardDetails();
-    this.getDashboardCounts();
     this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
     this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
     this.countrySearchOptions = getEndPointOptionsForCountry();
     this.EntitySearchOptions = getEndPointOptionsForEntity();
-    this.$coiList.next();
     this.setAdvanceSearch();
+    this.getDashboardCounts();
   }
 
   setAdvanceSearch() {
+    this.isShowAllProposalList = true;
     if (this._coiAdminDashboardService.coiRequestObject.tabName === 'ALL_DISCLOSURES') {
-      document.getElementById('collapseExample').classList.add('show');
-      this.isShowAllProposalList = false;
+      // document.getElementById('collapseExample').classList.add('show');
+      // this.isShowAllProposalList = false;
     } else {
       // if (this._coiAdminDashboardService.isAdvanceSearch) {
       //   document.getElementById('collapseExample').classList.add('show');
       // } else {
-        document.getElementById('collapseExample').classList.remove('show');
-        this.isShowAllProposalList = true;
+      //   document.getElementById('collapseExample').classList.remove('show');
+      //   this.isShowAllProposalList = true;
       // }
 
     }
@@ -118,6 +121,10 @@ export class AdminDashboardComponent {
     this.$subscriptions.push(this._coiAdminDashboardService.loadDisclosureAdminDashboardCounts()
       .subscribe((res: any) => {
         this.dashboardCounts = res;
+        setTimeout(() => {
+          this.getDashboardDetails();
+          this.$coiList.next();
+        })
       }));
   }
 
@@ -168,7 +175,7 @@ export class AdminDashboardComponent {
   }
 
   isAdvanceSearchTab(tabName) {
-    return ['ALL_DISCLOSURES', 'PENDING_DISCLOSURES', 'NEW_SUBMISSIONS', 'MY_REVIEWS', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES'].includes(tabName);
+    return ['ALL_DISCLOSURES', 'PENDING_DISCLOSURES', 'NEW_SUBMISSIONS', 'PENDING_DISCLOSURES', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES'].includes(tabName);
   }
 
   fetchMentionedComments() {
@@ -322,42 +329,32 @@ export class AdminDashboardComponent {
 
   getReviewStatusBadge(statusCode) {
     switch (statusCode) {
-      case '1':
-        return 'warning';
-      case '2':
-        return 'info';
-      case '3':
-        return 'success';
-      default:
-        return 'danger';
+      case '1': return 'warning';
+      case '2': return 'info';
+      case '3': return 'success';
+      case '4': return 'success';
+      default: return 'danger';
     }
   }
 
   getDisclosureStatusBadge(statusCode) {
     switch (statusCode) {
-      case 1:
-        return 'warning';
-      case 2:
-      case 4:
-      case 5:
+      case '1': return 'warning';
+      case '2':
+      case '4':
+      case '5':
         return 'info';
-      case 3:
-      case 6:
-        return 'success';
-      default:
-        return 'danger';
+      case '3': case '6': return 'success';
+      default: return 'danger';
     }
   }
 
   getDispositionStatusBadge(statusCode) {
     switch (statusCode) {
-      case 1:
-        return 'warning';
-      case 2:
-      case 3:
-        return 'success';
-      default:
-        return 'info';
+      case '1': return 'warning';
+      case 2: return 'success';
+      case 3: return 'danger';
+      default: return 'info';
     }
   }
 
@@ -435,7 +432,7 @@ export class AdminDashboardComponent {
       this.sortCountObj[sortFieldBy] = 0;
       delete this.sortMap[sortFieldBy];
     }
-    this._coiAdminDashboardService.coiRequestObject.sort = this.sortMap;
+    this._coiAdminDashboardService.coiRequestObject.sort = deepCloneObject(this.sortMap);
     this.$coiList.next();
   }
 
@@ -444,7 +441,7 @@ export class AdminDashboardComponent {
   }
 
   isActive(colName) {
-    if (!isEmptyObject(this._coiAdminDashboardService.coiRequestObject.sort) && Object.keys(this._coiAdminDashboardService.coiRequestObject.sort).includes(colName)) {
+    if (!isEmptyObject(this._coiAdminDashboardService.coiRequestObject.sort) && colName in this._coiAdminDashboardService.coiRequestObject.sort) {
       return true;
     } else {
       return false;

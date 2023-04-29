@@ -19,8 +19,8 @@
           </h5>
         </div>
 
-        <div class="container-fluid card-color">
-          <div class="card shadow-sm border mt-2 pb-3" tabindex="-1">
+        <div class="card-color p-3">
+          <div class="card padding-top-24 shadow-sm border mt-2" tabindex="-1">
 
         <div class="row px-4">
           <div class="col-custom d-flex mt-2">
@@ -46,7 +46,7 @@
           </div>
         </div>
 
-        <div class="row px-4">
+        <div class="row px-4 pt-4">
           <div class="col-custom d-flex mt-2">
             <label class="d-block fw-500 fs-14 px-1 pt-2" for="Country">Country<span class="mandatory px-2">*</span>
             </label>
@@ -76,7 +76,7 @@
             </span>
           </div>
         </div>
-        <div class="row px-4">
+        <div class="row px-4 pt-4">
           <div class="col-custom d-flex mt-2">
             <label class="d-block fw-500 fs-14 px-1 pt-2" for="Address">Address<span class="mandatory px-2">*</span>
             </label>
@@ -93,7 +93,7 @@
             </span>
           </div>
         </div>
-        <div class="row px-4">
+        <div class="row px-4 pt-4">
           <div class="col-custom d-flex mt-2">
             <label class="d-block fw-500 fs-14 px-1 pt-2" for="Phone">Phone<span class="mandatory px-2">*</span>
             </label>
@@ -132,7 +132,7 @@
             </span>
           </div>
         </div>
-        <div class="row px-4">
+        <div class="row px-4 pt-4">
           <div class="col-custom d-flex mt-2">
             <label class="d-block fw-500 fs-14 px-1 pt-2" for="Country">Website
             </label>
@@ -167,7 +167,7 @@
             </span>
           </div>
         </div>
-        <div class="row px-4">
+        <div class="row px-4 pt-4 pb-5">
           <div class="col-custom d-flex mt-2">
             <label class="d-block fw-500 fs-14 px-1 pt-2" for="Entity Type">Entity Type<span class="mandatory px-2">*</span>
             </label>
@@ -195,7 +195,7 @@
 
       <!-- Additional Details -->
 
-      <div class="container-fluid mt-3">
+      <div class="mt-1 px-3">
         <div class="card shadow-sm border mb-3" tabindex="-1">
           <div class="m-2 mb-0">
             <div class="row d-flex">
@@ -211,7 +211,7 @@
           <div *ngIf="isExpandedAdditionalDetails" class="card-body mr-1rem pt-0">
               <div class="row py-3">
                 <div class="col-additional-details mt-2 d-flex">
-                  <label class="d-block fw-500 fs-14" for="Start date of involvement">Start date of involvement<span
+                  <label class="d-block fw-500 fs-14 px-1 pt-2" for="Start date of involvement">Start date of involvement<span
                       class="mandatory px-2">*</span>
                   </label>
                 </div>
@@ -231,7 +231,7 @@
                   </div>
                 </div>
                 <div class="col-additional-details pl-5 mt-2 d-flex">
-                  <label class="d-block fw-500 fs-14" for="End date of involvement">End date of involvement
+                  <label class="d-block fw-500 fs-14 px-1 pt-2" for="End date of involvement">End date of involvement
                   </label>
                 </div>
                 <div class="col-lg-3 col-sm-3 col-12 mt-3 px-0">
@@ -245,11 +245,11 @@
                     </mat-datepicker>
                   </span>
                 </div>
-              
-                  <div class="col-additional-details d-flex pl-5 ">
-                    <label class="d-block fw-500 fs-14">Sponsors Research </label>
+
+                  <div class="col-additional-details d-flex pl-5 mt-3">
+                    <label class="d-block fw-500 fs-14 px-1 pt-2">Sponsors Research </label>
                   </div>
-                  <div class="col d-flex">
+                  <div class="col d-flex mt-3">
                     <span class="mt-2" aria-label="Disclosures_has_sfi" role="switch">
                       <a *ngIf="additionalDetails.sponsorsResearch" class="pl-2">
                         <label class="switch" (click)="additionalDetails.sponsorsResearch = false">
@@ -269,10 +269,10 @@
                 <div class="row py-3">
 
                 <div class="col-additional-details d-flex">
-                  <label class="d-block fw-500 fs-14">Relationship with Entity<span class="mandatory px-2">*</span></label>
+                  <label class="d-block fw-500 fs-14 px-1 pt-2">Relationship with Entity<span class="mandatory px-2">*</span></label>
                 </div>
                 <div class="col px-0 mb-4">
-                  <textarea appAutoGrow class="form-control" id="releationship-entity" 
+                  <textarea appAutoGrow class="form-control" id="releationship-entity"
                     [(ngModel)]="additionalDetails.staffInvolvement"
                     [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''">
                 </textarea>
@@ -292,7 +292,7 @@
                 <div class="row py-3">
 
                 <div class="col-additional-details d-flex">
-                  <label class="d-block fw-500 fs-14">Principle Business Area of Entity<span class="mandatory px-2">*</span></label>
+                  <label class="d-block fw-500 fs-14 px-1 pt-2">Principle Business Area of Entity<span class="mandatory px-2">*</span></label>
                 </div>
                 <div class="col px-0 mb-4">
                   <textarea appAutoGrow class="form-control"
@@ -309,7 +309,7 @@
                 <div class="row py-3">
 
                 <div class="col-additional-details d-flex">
-                  <label class="d-block fw-500 fs-14">Relationship of Entity to your University responsibilities<span class="mandatory px-2">*</span></label>
+                  <label class="d-block fw-500 fs-14 px-1 pt-2">Relationship of Entity to your University responsibilities<span class="mandatory px-2">*</span></label>
                 </div>
                 <div class="col px-0 mb-4">
                   <textarea appAutoGrow class="form-control"

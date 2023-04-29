@@ -56,9 +56,10 @@ export class UserDisclosureComponent {
 
     getDispositionStatusBadge(statusCode) {
         switch (statusCode) {
-            case 1: return 'warning';
-            case 2:
-            case 3: return 'success';
+            case '1': return 'warning';
+            case '2':
+            case '3': return 'success';
+            case '4': return 'warning';
             default: return 'info';
         }
     }
@@ -67,6 +68,7 @@ export class UserDisclosureComponent {
             case '1': return 'warning';
             case 2: return 'success';
             case 3: return 'danger';
+            case '4': return 'warning';
             default: return 'info';
         }
     }
@@ -80,9 +82,10 @@ export class UserDisclosureComponent {
     }
     getDispositinTextColor(statusCode) {
         switch (statusCode) {
-            case 1: return 'black';
-            case 2:
-            case 3: return 'white';
+            case '1': return 'black';
+            case '2':
+            case '3': return 'white';
+            case '4': return 'black';
             default: return 'white';
         }
     }
@@ -92,6 +95,7 @@ export class UserDisclosureComponent {
             case '1': return 'warning';
             case '2': return 'info';
             case '3': return 'success';
+            case '4': return 'success';
             default: return 'danger';
         }
     }
@@ -159,11 +163,11 @@ export class UserDisclosureComponent {
             this.filteredDisclosureArray = this.disclosureArray.filter(disclosure => {
                 switch(this.currentSelected.filter) {
                     case 'PROJECT':
-                        return ['3', '5'].includes(disclosure.disclosureCategoryTypeCode);
+                        return ['3', '2'].includes(disclosure.fcoiTypeCode);
                     case 'OPA':
-                        return disclosure.disclosureCategoryTypeCode == '2';
+                        return disclosure.fcoiTypeCode == '5';
                     case 'FCOI':
-                        return disclosure.disclosureCategoryTypeCode == '1';
+                        return disclosure.fcoiTypeCode == '1';
                 }
             });
         }

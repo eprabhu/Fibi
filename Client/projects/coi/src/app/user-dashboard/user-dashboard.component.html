@@ -116,9 +116,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Create Revision for Disclosure: #{{this.hasFCOI?.disclosureId}}</h5>
-                <button (click)="clearModal();" aria-label="Close" class="btn close m-0 p-0" data-dismiss="modal"
+                <button (click)="clearModal();" aria-label="Close" class="btn-close" data-dismiss="modal"
                         id="req-doc-popup-dismiss-btn" type="button">
-                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -126,7 +125,7 @@
                     <div class="form-row">
                         <div class="col-12">
                             <label for="desc-award">Description</label>
-                            <textarea [(ngModel)]="reviseObject.reviseComment" [isShowLimiter]='true' [limit]=2000
+                            <textarea [(ngModel)]="reviseObject.revisionComment" [isShowLimiter]='true' [limit]=2000
                                       appLengthValidator class="form-control" id="desc-award"></textarea>
                             <div class="invalid-feedback d-block">
                             </div>
@@ -139,7 +138,7 @@
                         id="req-attachment-close-btn"
                         type="button">Cancel
                 </button>
-                <button (click)="reviseDisclosure();" class="btn btn-outline-primary fs-15"
+                <button (click)="reviseDisclosure();" class="btn btn-primary fs-15"
                         id="req-attachment-add-btn" type="button">Create Revision
                 </button>
             </div>

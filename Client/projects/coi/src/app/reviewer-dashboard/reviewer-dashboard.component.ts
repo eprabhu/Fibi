@@ -7,6 +7,7 @@ import { getEndPointOptionsForEntity, getEndPointOptionsForLeadUnit } from '../.
 import { isEmptyObject } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { ReviewerDashboardRequest, ReviewerDashboardService, SortCountObj } from './reviewer-dashboard.service';
+import {CommonService} from "../common/services/common.service";
 
 @Component({
   selector: 'app-reviewer-dashboard',
@@ -39,6 +40,7 @@ export class ReviewerDashboardComponent implements OnInit {
   isActiveDisclosureAvailable: boolean;
 
   constructor(public reviewerDashboardService: ReviewerDashboardService,
+    public commonService: CommonService,
     private _router: Router, private _elasticConfig: ElasticConfigService) { }
 
 

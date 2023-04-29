@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../fibi/src/app/app-constants";
 import {CommonService} from "../common/services/common.service";
 import { SfiService } from '../disclosure/sfi/sfi.service';
+import {hideModal, openModal} from "../../../../fibi/src/app/common/utilities/custom-utilities";
 
 declare var $: any;
 
@@ -19,7 +20,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     hasFCOI: any;
     hasActiveFCOI = false;
     isModalOpen = false;
-    reviseObject: any = {reviseComment: null, disclosureId: null};
+    reviseObject: any = {revisionComment: null, disclosureId: null};
     isReadMore = false;
     headerInfoText = `University policy requires that university officers, faculty, and staff and others acting on its 
     behalf avoid ethical, legal, financial, and other conflicts of interest and ensure that their activities and 
@@ -58,27 +59,25 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         this.hasFCOI = this.service.activeDisclosures.find(disclosure =>
             disclosure.fcoiTypeCode == '1'
         );
-        this.hasActiveFCOI = this.hasFCOI ? this.hasFCOI.dispositionStatusCode == '2' : false;
+        this.hasActiveFCOI = this.hasFCOI ? this.hasFCOI.reviewStatusCode == '4' : false;
     }
 
     clearModal(): void {
-        this.reviseObject.reviseComment = null;
+        this.reviseObject.revisionComment = null;
         document.getElementById('triggerReviseModal').click();
     }
 
     openReviseModal() {
-        this.reviseObject = {reviseComment: null, disclosureId: null};
+        this.reviseObject = {revisionComment: null, disclosureId: null};
         this.reviseObject.disclosureId = this.hasFCOI.disclosureId;
-        this.reviseObject.reviseComment = '';
-        document.getElementById('triggerReviseModal').click();
+        this.reviseObject.revisionComment = '';
+        openModal('reviewConfirmationModal');
     }
 
     reviseDisclosure() {
         document.getElementById('triggerReviseModal').click();
         this.$subscriptions.push(this.service.reviseDisclosure(this.reviseObject)
             .subscribe((data: any) => {
-                    // this.reviseDisclosureObject = data;
-                    // this.clearModal();
                     this.commonService.showToast(HTTP_SUCCESS_STATUS, 'New version of disclosure created.');
                     this._router.navigate(['/coi/disclosure/summary'], {
                         queryParams: {
@@ -87,7 +86,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
                     });
                 },
                 err => {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating new version. Please try again.');
+                    this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
+                        err.error.errorMessage : 'Error in creating new version. Please try again.');
                 }));
     }
 

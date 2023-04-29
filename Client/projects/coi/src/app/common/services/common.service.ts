@@ -187,7 +187,7 @@ export class CommonService {
     }
 
     async fetchPermissions() {
-        if(this.rightsArray.length) {
+        if (this.rightsArray.length) {
             return this.rightsArray;
         }
         this.rightsArray = this._http.get(this.baseUrl + '/getAllSystemRights').toPromise();
@@ -202,13 +202,44 @@ export class CommonService {
         toast.show();
     }
 
-    getDisclosureConflictStatus(statusCode: string) {
-        switch(String(statusCode)) {
+    getDisclosureConflictBadge(statusCode: string) {
+        switch (String(statusCode)) {
             case '1':
                 return 'bg-success text-white';
             case '2':
             case '3':
             case '4':
+                return 'bg-warning text-black';
+        }
+    }
+
+    getReviewStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1':
+                return 'bg-warning text-black';
+            case '2':
+                return 'bg-info text-white';
+            case '3':
+                return 'bg-success text-white';
+            case '4':
+                return 'bg-success text-white';
+            default:
+                return 'bg-danger text-white';
+        }
+    }
+
+    getDispositionStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1':
+                return 'bg-warning text-black';
+            case '2':
+            case '4':
+            case '5':
+                return 'bg-info text-white';
+            case '3':
+            case '6':
+                return 'bg-success text-white';
+            default:
                 return 'bg-warning text-black';
         }
     }
