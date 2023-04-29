@@ -266,6 +266,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			conflictOfInterestVO.setProjectDetail(projDetailObjs == null || projDetailObjs.isEmpty() ? null : projDetailObjs.get(0));
 		}
 		coiDisclosure.setNumberOfSFI(conflictOfInterestDao.getNumberOfSFIBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
+		coiDisclosure.setUpdateUserFullName(coiDisclosure.getPerson().getFullName());
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
 	}

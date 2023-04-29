@@ -44,7 +44,7 @@ public class DisclosureView {
 	private String reviewerFullName;
 	private String proposalId;
 	private String proposalTitle;
-	private String awardlId;
+	private String awardId;
 	private String awardTitle;
 	private Integer noOfSfi;
 	private Integer noOfAward;
@@ -370,12 +370,12 @@ public class DisclosureView {
 		this.proposalTitle = proposalTitle;
 	}
 
-	public String getAwardlId() {
-		return awardlId;
+	public String getAwardId() {
+		return awardId;
 	}
 
-	public void setAwardlId(String awardlId) {
-		this.awardlId = awardlId;
+	public void setAwardId(String awardId) {
+		this.awardId = awardId;
 	}
 
 	public String getAwardTitle() {

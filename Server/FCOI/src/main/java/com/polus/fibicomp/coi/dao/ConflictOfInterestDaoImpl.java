@@ -889,6 +889,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1"),
 					builder.equal(rootCoiDisclosure.get("versionStatus"), "Active")));
 			CoiDisclosure coiDisclosure = session.createQuery(query).getSingleResult();
+			coiDisclosure.setUpdateUserFullName(coiDisclosure.getPerson().getFullName());
 			coiDisclosure.setNumberOfSFI(getNumberOfSFIBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
 			CoiDisclosures.add(coiDisclosure);
 		} catch (Exception ex) {
@@ -982,8 +983,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setNoOfProposal(resultSet.getInt("NO_OF_PROPOSAL"));
 				disclosureView.setNoOfAward(resultSet.getInt("NO_OF_AWARD"));
 				disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
-//				disclosureView.setProposalId(resultSet.getString("PROPOSAL_NUMBER"));
-//				disclosureView.setAwardlId(resultSet.getString("AWARD_NUMBER"));
+				disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
+				disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
 				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
 				disclosureViews.add(disclosureView);
 			}
