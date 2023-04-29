@@ -123,9 +123,9 @@
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Last Updated by</span>
-            <label class="text-secondary fs-14 mt-1">{{entityDetails?.updateUser}} on {{entityDetails?.updateTimestamp
-              |dateFormatterWithTimeZone:'long'}}</label>
+            <span class="fw-500 fs-14">Last Updated On</span>
+            <label class="text-secondary fs-14 mt-1">{{entityDetails?.updateTimestamp
+              |dateFormatterWithTimeZone:'long'}} By {{entityDetails?.updateUser}}</label>
           </div>
         </div>
       </div>

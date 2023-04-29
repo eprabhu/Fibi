@@ -76,7 +76,7 @@
         (click)="sortResult('coiDisclosureNumber')" [class.filter-active]="_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']"
         class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 ml-15 border rounded-5 bg-white" role="button">
         <div class="d-inline-flex align-items-center">
-          <label class="offscreen">Click to Sort by Disclosure Id in {{_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']=== 'asc' ? 'Descending Order' : 'Ascending Order'}} </label>
+          <label class="offscreen">Click to Sort by Disclosure # in {{_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']=== 'asc' ? 'Descending Order' : 'Ascending Order'}} </label>
           <label aria-hidden="true">Disclosure#</label>
           <mat-icon class="text-secondary arrow" *ngIf="!_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']">arrow_downward</mat-icon>
           <mat-icon class="arrow selected-arrow" *ngIf="_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']=== 'asc' ">arrow_downward</mat-icon>
