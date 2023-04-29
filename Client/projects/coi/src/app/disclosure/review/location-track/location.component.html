@@ -101,7 +101,7 @@
                                     <div class="dropdown-menu dropdown-menu-right action-dropdown-menu"
                                         aria-labelledby="dropdownMenuButton">
                                         <ul class="location-options">
-                                            <li *ngIf="review.reviewStatusTypeCode == '1'" class="hand-cursor" title="Start Review">
+                                          <!-- <li *ngIf="review.reviewStatusTypeCode == '1'" class="hand-cursor" title="Start Review">
                                                 <a class="dropdown-item" data-bs-toggle="modal"
                                                     data-bs-target="#coi-start-review"
                                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
@@ -123,7 +123,7 @@
                                                     <mat-icon class="me-2" title="Click here to add review comment">rate_review</mat-icon>
                                                     <span>Add Review Comment</span>
                                                 </a>
-                                            </li>
+                                            </li>-->
                                             <li *ngIf="review.reviewStatusTypeCode == '1'" title="Edit Review" class="hand-cursor">
                                                 <a class="dropdown-item" id="edit-location-btn"
                                                     data-bs-toggle="modal"

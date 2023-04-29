@@ -5,7 +5,7 @@
                 <div class="border-bottom d-flex disclosure-card-heading-blue px-3 py-2 rounded-top-2">
                     <div class="col"><strong class="fs-15">FCOI Disclosure</strong></div>
                     <div class="col d-flex fs-14 justify-content-between align-items-center">
-                        <div><span class="fw-bold text-secondary">Disclosure Status:</span> <span
+                        <div><span class="fw-bold text-secondary">Disclosure Status :</span> <span
                                 class="disclosure-active-pill ms-2 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.coiConflictStatusType?.description}}</span>
                         </div>
                         <div [queryParams]={disclosureId:disclosure.disclosureId}
@@ -21,34 +21,34 @@
 
                     <div class="col">
                         <div>
-                            <span class="fw-bold text-secondary">Disclosure: </span>
+                            <span class="fw-bold text-secondary">Disclosure : </span>
                             <span class="ps-2 span-data-color">#{{disclosure?.disclosureId}}</span>
                         </div>
                         <div class="my-1">
-                            <span class="fw-bold text-secondary">Certification Date: </span>
+                            <span class="fw-bold text-secondary">Certification Date : </span>
                             <span class="ps-2 span-data-color">{{disclosure?.certifiedTimestamp | dateFormatter}}</span>
                         </div>
                         <div>
-                            <span class="fw-bold text-secondary">SFI's: </span>
+                            <span class="fw-bold text-secondary">SFI's : </span>
                             <span class="ps-2 fw-bold text-primary">{{disclosure?.numberOfSFI}}</span>
                         </div>
                     </div>
 
                     <div class="col">
                         <div>
-                            <span class="fw-bold text-secondary">Disposition Status: </span>
+                            <span class="fw-bold text-secondary">Disposition Status : </span>
                             <span class="ms-2 disclosure-active-pill
                             bg-{{getDispositionStatusBadgeUpdated(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}
                             text-{{getDispositionStatusTextColor(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
                                 {{disclosure?.coiDispositionStatusType?.description}}</span>
                         </div>
                         <div class="my-1">
-                            <span class="fw-bold text-secondary">Expiration Date: </span>
+                            <span class="fw-bold text-secondary">Expiration Date : </span>
                             <span class="ps-2 span-data-color">{{disclosure?.expirationDate | dateFormatter}}</span>
                         </div>
                         <div>
-                            <span class="fw-bold text-secondary">Last Update On:</span>
-                            <span class="ps-2 span-data-color">{{disclosure?.updateTimestamp | dateFormatter}} By {{disclosure?.updateUser}}</span>
+                            <span class="fw-bold text-secondary">Last Update By :</span>
+                            <span class="ps-2 span-data-color">{{disclosure?.updateUser}} On {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
                         </div>
                     </div>
                 </div>
@@ -70,18 +70,18 @@
                 <div class="d-flex disclosure-card-body-green fs-14 p-3 rounded-bottom-2">
                     <div class="col">
                         <div>
-                            <span class="fw-bold text-secondary">OPA Cycle:</span>
+                            <span class="fw-bold text-secondary">OPA Cycle :</span>
                             <span class="ps-2 span-data-color">June 2021 - May 2022</span>
                         </div>
                         <div class="my-1">
-                            <span class="fw-bold text-secondary"># of Days Summer:</span>
+                            <span class="fw-bold text-secondary"># of Days Summer :</span>
                             <span class="ps-2 span-data-color">3</span>
                         </div>
 
                     </div>
                     <div class="col">
                         <div>
-                            <span class="fw-bold text-secondary">Last Update:</span>
+                            <span class="fw-bold text-secondary">Last Update By :</span>
                             <span class="ps-2 span-data-color">01/18/2023</span>
                         </div>
                         <div class="my-1">
