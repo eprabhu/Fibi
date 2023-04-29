@@ -88,7 +88,7 @@ END IF;
 										T1.INVOLVEMENT_START_DATE,
                                         T1.UPDATE_TIMESTAMP,
                                         T1.CREATE_TIMESTAMP, 
-                                        T1.IS_ACTIVE, 
+                                        T1.IS_RELATIONSHIP_ACTIVE, 
                                         T1.INVOLVEMENT_END_DATE, 
                                         T6.DESCRIPTION AS ENTITY_TYPE, 
                                         T2.EMAIL_ADDRESS, 

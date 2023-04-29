@@ -307,7 +307,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public List<PersonEntity> getSFIBasedOnDisclosureId(Integer disclosureId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		StringBuilder hqlQuery = new StringBuilder();
-		hqlQuery.append("SELECT DISTINCT C3 FROM CoiDisclosure C1 INNER JOIN CoiDisclEntProjDetails C2 ON C2.disclosureId=C1.disclosureId ");
+		hqlQuery.append("SELECT DISTINCT C3 FROM CoiDisclEntProjDetails C2  ");
 		hqlQuery.append("INNER JOIN PersonEntity C3 ON C3.personEntityId=C2.personEntityId ");
 		hqlQuery.append("WHERE  C2.disclosureId = :disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
@@ -1385,12 +1385,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				coiFinancialEntityDto.setCoiEntityType(resultSet.getString("ENTITY_TYPE"));
 				coiFinancialEntityDto.setCoiEntityCountry(resultSet.getString("COUNTRY_NAME"));
 				coiFinancialEntityDto.setCoiEntityEmail(resultSet.getString("EMAIL_ADDRESS"));
+				coiFinancialEntityDto.setRelationshipTypes(resultSet.getString("RELATIONSHIP_TYPES"));
 				coiFinancialEntityDtos.add(coiFinancialEntityDto);
 			}
 			dashBoardProfile.setCoiFinancialEntityList(coiFinancialEntityDtos);
 			dashBoardProfile.setCoiFinancialEntityListCount(getSFIDashboardCount(vo));
 		} catch (SQLException e) {
 			logger.error("Error in getSFIDashboard {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch data", e, Constants.JAVA_ERROR);
 		}
 		return dashBoardProfile;
 	}

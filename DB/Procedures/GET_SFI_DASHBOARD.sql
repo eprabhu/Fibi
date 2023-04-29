@@ -88,11 +88,12 @@ END IF;
 										T1.INVOLVEMENT_START_DATE,
                                         T1.UPDATE_TIMESTAMP,
                                         T1.CREATE_TIMESTAMP, 
-                                        T1.IS_ACTIVE, 
+                                        T1.IS_RELATIONSHIP_ACTIVE, 
                                         T1.INVOLVEMENT_END_DATE, 
                                         T6.DESCRIPTION AS ENTITY_TYPE, 
                                         T2.EMAIL_ADDRESS, 
                                         T7.COUNTRY_NAME, 
+										T8.RELATIONSHIP_TYPES,
                                         IFNULL(T3.NO_OF_DISCLOSURES,0) AS NO_OF_DISCLOSURES, 
                                         IFNULL(T4.NO_OF_PROPOSALS,0) AS NO_OF_PROPOSALS,
                                         IFNULL(T5.NO_OF_AWARDS,0) AS NO_OF_AWARDS 
@@ -109,7 +110,13 @@ END IF;
 												   FROM COI_DISCL_ENT_PROJ_DETAILS T1 WHERE T1.MODULE_CODE = 1 
                                                    GROUP BY T1.PERSON_ENTITY_ID) T5 ON T5.PERSON_ENTITY_ID = T1.PERSON_ENTITY_ID 
 										LEFT JOIN ENTITY_TYPE T6 ON T6.ENTITY_TYPE_CODE = T2.ENTITY_TYPE_CODE 
-                                        LEFT JOIN COUNTRY T7 ON T7.COUNTRY_CODE = T2.COUNTRY_CODE ', JOIN_CONDITION, ' WHERE T1.PERSON_ID = ''', AV_PERSON_ID , '''', TAB_QUERY, 
+                                        LEFT JOIN COUNTRY T7 ON T7.COUNTRY_CODE = T2.COUNTRY_CODE 
+										LEFT JOIN (SELECT T.PERSON_ENTITY_ID, GROUP_CONCAT(DISTINCT(T3.DESCRIPTION) SEPARATOR ",") AS RELATIONSHIP_TYPES FROM PERSON_ENTITY T 
+										LEFT JOIN PERSON_ENTITY_RELATIONSHIP T1 ON T1.PERSON_ENTITY_ID = T.PERSON_ENTITY_ID
+										LEFT JOIN VALID_PERSON_ENTITY_REL_TYPE T2 ON T1.VALID_PERSON_ENTITY_REL_TYPE_CODE 
+										LEFT JOIN PERSON_ENTITY_REL_TYPE T3 ON T3.RELATIONSHIP_TYPE_CODE = T2.RELATIONSHIP_TYPE_CODE 
+										GROUP BY T.PERSON_ENTITY_ID)T8 ON T8.PERSON_ENTITY_ID = T1.PERSON_ENTITY_ID ',
+										JOIN_CONDITION, ' WHERE T1.PERSON_ID = ''', AV_PERSON_ID , '''', TAB_QUERY, 
                                         ' GROUP BY T1.PERSON_ENTITY_ID) T ',LS_FILTER_CONDITION,' ',AV_SORT_TYPE,' ',LS_OFFSET_CONDITION);
 
 
