@@ -16,12 +16,12 @@ export class QuestionnaireListCompareService {
         if (this.checkInCache(cacheName)) {
             return of(this.deepCopy(this.questionnaireListCache[cacheName]));
         }
-        return this._http.post(this._commonService.baseUrl + '/getApplicableQuestionnaire', params)
+        return this._http.post(this._commonService.fibiUrl + '/getApplicableQuestionnaire', params)
         .pipe(map(data => this.updateQuestionnaireListCache(cacheName, data)));
     }
 
     getQuestionnaire(data) {
-        return this._http.post(this._commonService.baseUrl + '/getQuestionnaire', data );
+        return this._http.post(this._commonService.fibiUrl + '/getQuestionnaire', data );
     }
 
     checkInCache(cacheName: string): boolean {

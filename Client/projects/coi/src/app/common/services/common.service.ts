@@ -17,6 +17,7 @@ export class CommonService {
     isShowOverlay = false;
     baseUrl = '';
     fibiUrl = '';
+    authUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -67,7 +68,6 @@ export class CommonService {
         return new Promise(async (resolve, reject) => {
             const CONFIG_DATA: any = await this.readConfigFile();
             this.assignConfigurationValues(CONFIG_DATA);
-            setIntoLocalStorage(JSON.parse('{"personID":"10000000001","firstName":"Will","lastName":"Smith","fullName":"Smith, Will","email":"","roleNumber":null,"userName":"willsmith","unitNumber":"000001","jwtRoles":[],"unitAdmin":true,"login":true,"superUser":true,"externalUser":false}'));
             if (this.enableSSO) {
                 const USER_DATA = await this.loginWithCurrentUser();
                 this.isValidUser = USER_DATA.body['login'];
@@ -75,8 +75,8 @@ export class CommonService {
             }
             if (this.currentUserDetails && this.currentUserDetails.Authorization) {
                 try {
-                    const SYSTEM_PARAMETERS: any = await this.getRequiredParameters();
-                    this.assignSystemParameters(SYSTEM_PARAMETERS);
+                    // const SYSTEM_PARAMETERS: any = await this.getRequiredParameters();
+                    // this.assignSystemParameters(SYSTEM_PARAMETERS);
                 } catch (e) {
                     console.error(e)
                 }
@@ -101,6 +101,7 @@ export class CommonService {
     assignConfigurationValues(configurationData) {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
+        this.authUrl = configurationData.authUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isDevelopment = configurationData.isDevelopment;
         this.elasticConfigService.url = configurationData.elasticIndexUrl;
@@ -121,7 +122,7 @@ export class CommonService {
     }
 
     loginWithCurrentUser() {
-        return this._http.post(this.baseUrl + '/login', {}, {observe: 'response'}).toPromise();
+        return this._http.post(this.baseUrl + '/auth/login', {}, {observe: 'response'}).toPromise();
     }
 
     /**

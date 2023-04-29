@@ -17,7 +17,7 @@ export class UserDisclosureComponent {
     }
     dashboardRequestObject = {
         advancedSearch: 'L',
-        pageNumber: 30,
+        pageNumber: 200,
         sort: {'createTimestamp': 'asc'},
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
@@ -42,7 +42,6 @@ export class UserDisclosureComponent {
     loadDashboard() {
         this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject).subscribe((res: any) => {
             this.disclosureArray = res.disclosureViews ? res.disclosureViews : [];
-            console.log(this.disclosureArray);
             this.searchText = '';
             this.setFilter();
         })

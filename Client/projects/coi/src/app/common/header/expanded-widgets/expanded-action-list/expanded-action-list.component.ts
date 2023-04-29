@@ -103,7 +103,6 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.clearInboxSearchField();
         this.getActionList(false);
-        console.log(this.testInboxDeatils);
         
     }
 
