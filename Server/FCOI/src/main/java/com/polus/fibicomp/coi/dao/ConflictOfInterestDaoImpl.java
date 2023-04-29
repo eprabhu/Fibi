@@ -43,6 +43,7 @@ import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
+import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
 import com.polus.fibicomp.coi.pojo.CoiProjectType;
@@ -280,7 +281,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		StringBuilder hqlQuery = new StringBuilder();
-		hqlQuery.append("SELECT (SELECT COUNT(*) FROM PERSON_ENTITY WHERE PERSON_ID = :personId) as entityCount, ");
+		hqlQuery.append("SELECT (SELECT COUNT(*) FROM COI_DISCLOSURE C1 INNER JOIN COI_DISCL_ENT_PROJ_DETAILS C2 ON C2.DISCLOSURE_ID=C1.DISCLOSURE_ID "
+				+ "WHERE C1.PERSON_ID = :personId and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId ) as entityCount, ");
 		hqlQuery.append("(SELECT COUNT(*) FROM COI_DISCLOSURE C1 INNER JOIN COI_DISCL_ENT_PROJ_DETAILS C2 ON C2.DISCLOSURE_ID=C1.DISCLOSURE_ID ");
 		hqlQuery.append("INNER JOIN PERSON_ENTITY C3 ON C3.PERSON_ENTITY_ID=C2.PERSON_ENTITY_ID ");
 //		hqlQuery.append("INNER JOIN COI_DISC_DETAILS_COMMENTS C4 ON C4.DISCLOSURE_DETAILS_ID=C2.DISCLOSURE_DETAILS_ID ");
@@ -2276,6 +2278,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			logger.error("Error in GET_ALL_SYSTEM_ENTITY_LIST_COUNT {}", e.getMessage());
 		}
 		return count;
+	}
+
+	@Override
+	public List<CoiProjConflictStatusType> getProjConflictStatusTypes() {
+		return hibernateTemplate.loadAll(CoiProjConflictStatusType.class);
 	}
 	
 }

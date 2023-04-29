@@ -15,6 +15,7 @@ import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
+import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
 import com.polus.fibicomp.coi.pojo.CoiProjectType;
@@ -665,5 +666,7 @@ public interface ConflictOfInterestDao {
 	public CoiDisclosure getMasterDisclosureByPersonId(String personId);
 
 	public Integer getAllSystemEntityListCount(CoiDashboardVO vo);
+
+	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
 
 }
