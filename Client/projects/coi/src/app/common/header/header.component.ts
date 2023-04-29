@@ -39,7 +39,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
     ngOnInit() {
         this.fullName = this._commonService.getCurrentUserDetail('fullName');
-        console.log(this._commonService.fetchPermissions());
     }
 
     ngOnDestroy(): void {

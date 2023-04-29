@@ -111,7 +111,7 @@ export class ProjectDisclosureComponent implements OnInit {
             return {coiDisclosure:{
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this._commonService.getCurrentUserDetail('personID'),
+                    personId: this._commonService.getCurrentUserDetail('personId'),
                 },[this.selectedProjectType == 'Award' ? 'coiProjectAward':'coiProjectProposal']: {
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     ...this.getCreateDisclosureRO()
@@ -121,7 +121,7 @@ export class ProjectDisclosureComponent implements OnInit {
             return {coiDisclosure:{
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this._commonService.getCurrentUserDetail('personID'),
+                    personId: this._commonService.getCurrentUserDetail('personId'),
 
                 }}
         }

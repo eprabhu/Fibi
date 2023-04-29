@@ -80,7 +80,7 @@
                   <div class="col-3 button-align" *ngIf="entityProjectDetails?.length > 0">
                     <!-- data-bs-toggle="modal" data-bs-target="#applyToAllConfirmationModal" -->
                 <button type="button" class="btn btn-outline-secondary mr-10 btn-sm" id="clear all entities coi status and description" (click)="openClearConfirmationModal()">Clear All</button>
-                <button type="button" class="btn btn-primary btn-sm" id="apply common coi status and description and save"(click)="openSaveAllConfirmationModal()">Apply & Save</button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" id="apply common coi status and description and save"(click)="openSaveAllConfirmationModal()">Apply & Save</button>
                   </div>
                 </div>
               </div>
@@ -123,7 +123,7 @@
                       <td *ngIf="isEditMode">
                         <button type="button" class="btn btn-outline-secondary btn-sm mr-10" id="clear {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="openClearModal(i)"
                         >Clear</button>
-                        <button type="button" class="btn btn-primary btn-sm" id="save {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="saveSingleEntity(i, test)"
+                        <button type="button" class="btn btn-primary btn-sm fs-14" id="save {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="saveSingleEntity(i, test)"
                         >Save</button>
                       </td>
                     </tr>

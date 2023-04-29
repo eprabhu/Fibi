@@ -81,7 +81,6 @@ export class ReviewerDashboardComponent implements OnInit {
 
   getCount() {
     this.$subscriptions.push(this.reviewerDashboardService.loadDisclosureReviewerQuickCardCounts().subscribe((data:any) => {
-      console.log(data);
     }));
   }
 

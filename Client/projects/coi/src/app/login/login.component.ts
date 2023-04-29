@@ -61,9 +61,9 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (data.body != null) {
                     if (data.body) {
                         this.commonService.updateLocalStorageWithUserDetails(data);
-                        this.commonService.getRequiredParameters().then(systemParameters => {
-                            this.commonService.assignSystemParameters(systemParameters);
-                        });
+                        // this.commonService.getRequiredParameters().then(systemParameters => {
+                        //     this.commonService.assignSystemParameters(systemParameters);
+                        // });
                         this._router.navigate(['coi/user-dashboard']);
                     } else {
                         this.commonService.showToast(HTTP_ERROR_STATUS, 'The username or password that you have entered is incorrect');

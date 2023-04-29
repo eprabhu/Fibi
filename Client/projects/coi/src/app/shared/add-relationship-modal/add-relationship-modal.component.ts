@@ -97,6 +97,7 @@ export class AddRelationshipModalComponent implements OnInit {
   continueWithoutRelation() {
     this._sfiService.$addSfi.next(true);
     hideModal('addRelationshipModal');
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: this.personEntityId, mode: 'edit' } })
     this._sfiService.isShowSfiNavBar = false;
   }
 

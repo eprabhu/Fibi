@@ -146,7 +146,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
 
     getApplicableQuestionnaire(requestObject) {
         requestObject = JSON.parse(JSON.stringify(requestObject));
-        return this._http.post(this._commonService.baseUrl + '/getApplicableQuestionnaire', requestObject)
+        return this._http.post(this._commonService.fibiUrl + '/getApplicableQuestionnaire', requestObject)
     }
 
     combineQuestionnaireList(newList) {

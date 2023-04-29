@@ -70,7 +70,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     private getDataFromStore() {
         const DATA = this._dataStore.getData(this.dependencies);
         this.coiDisclosure = DATA.coiDisclosure;
-        this.adminGroups = DATA.adminGroup;
+        this.adminGroups = DATA.adminGroup || [];
         this.disclosurePerson = DATA.person;
         this.commentConfiguration.disclosureId = this.coiDisclosure.disclosureId;
         this.getCoiReview();

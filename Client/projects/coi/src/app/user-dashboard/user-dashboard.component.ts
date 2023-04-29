@@ -41,7 +41,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.getActiveDisclosure();
-        this.getAllRemaindersList();
+        // this.getAllRemaindersList();
     }
 
     ngOnDestroy() {
@@ -71,7 +71,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         this.reviseObject = {revisionComment: null, disclosureId: null};
         this.reviseObject.disclosureId = this.hasFCOI.disclosureId;
         this.reviseObject.revisionComment = '';
-        openModal('reviewConfirmationModal');
+       //  openModal('reviewConfirmationModal');
     }
 
     reviseDisclosure() {
@@ -93,7 +93,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     getAllRemaindersList() {
         this.$subscriptions.push(this.service.getAllRemaindersList().subscribe((res: any) => {
-            console.log(res);
         }));
     }
 

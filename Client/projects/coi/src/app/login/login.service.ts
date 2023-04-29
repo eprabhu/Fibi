@@ -10,6 +10,6 @@ export class LoginService {
 
     login(credentials: any) {
         const requestObject = {username: credentials.username, password: credentials.password};
-        return this._http.post(this._commonService.baseUrl + '/auth/login', requestObject, { observe: 'response' });
+        return this._http.post(this._commonService.authUrl + '/login', requestObject, { observe: 'response' });
     }
 }

@@ -16,7 +16,7 @@
         </div>
         <div class="col-sm-3 col-xxl-2">
             <div class="border pi-quick-links py-2 px-3 shadow-sm fs-15 h-100">
-                <p *ngIf="hasFCOI && hasActiveFCOI"
+                <p *ngIf="hasFCOI && hasActiveFCOI" data-bs-target="#reviewConfirmationModal" data-bs-toggle="modal"
                         (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
                         title="Click to Revise FCOI"><u>Create/Revise FCOI</u></p>
                 <p *ngIf="!hasFCOI" [queryParams]="{tabName: 'CURRENT_DISCLOSURES'}"
@@ -110,8 +110,7 @@
 </div>
 <app-project-disclosure *ngIf="service.isModalOpen"></app-project-disclosure>
 <a class="d-none" data-bs-target="#reviewConfirmationModal" data-bs-toggle="modal" id="triggerReviseModal"></a>
-<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog" data-backdrop="static"
-     data-keyboard="false" id="reviewConfirmationModal" role="dialog" tabindex="-1">
+<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog" id="reviewConfirmationModal" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -134,7 +133,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button (click)="clearModal();" class="btn btn-outline-secondary fs-15 mr-0"
+                <button (click)="clearModal();" class="btn btn-outline-secondary fs-15 mr-0" data-dismiss="modal"
                         id="req-attachment-close-btn"
                         type="button">Cancel
                 </button>

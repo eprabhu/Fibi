@@ -9,11 +9,11 @@ export class QuestionnaireService {
   constructor( private _http: HttpClient, private _commonService: CommonService) { }
 
   getApplicableQuestionnaire( params ) {
-    return this._http.post(this._commonService.baseUrl + '/getApplicableQuestionnaire', params);
+    return this._http.post(this._commonService.fibiUrl + '/getApplicableQuestionnaire', params);
   }
 
   getQuestionnaire(data) {
-    return this._http.post(this._commonService.baseUrl + '/getQuestionnaire', data );
+    return this._http.post(this._commonService.fibiUrl + '/getQuestionnaire', data );
   }
 
   saveQuestionnaire(data, filesArray) {
@@ -24,7 +24,7 @@ export class QuestionnaireService {
       });
     }
     formData.append('formDataJson', JSON.stringify(data));
-    return this._http.post(this._commonService.baseUrl + '/saveQuestionnaire', formData);
+    return this._http.post(this._commonService.fibiUrl + '/saveQuestionnaire', formData);
   }
 
   downloadAttachment(attachmentId) {
