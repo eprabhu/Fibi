@@ -8,6 +8,8 @@ import { ElasticConfigService } from '../../../../../fibi/src/app/common/service
 import { getEndPointOptionsForLeadUnit } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { switchMap } from 'rxjs/operators';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { CommonService } from '../../common/services/common.service';
 
 @Component({
   selector: 'app-entity-details-list',
@@ -40,7 +42,7 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
 
 
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
-    private _elasticConfig: ElasticConfigService) { }
+    private _elasticConfig: ElasticConfigService,private _commonService:CommonService) { }
 
 
   ngOnInit() {
@@ -79,6 +81,8 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
         .subscribe((res: any) => {
           this.entityDetails = res.data || [];
           this.resultCount = res.count;
+        },_error=>{
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
   }
 

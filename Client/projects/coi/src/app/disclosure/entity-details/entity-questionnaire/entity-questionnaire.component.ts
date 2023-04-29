@@ -6,6 +6,7 @@ import { EntityDetailsService } from '../entity-details.service';
 import { hideModal, openModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { EntityDetail } from '../../sfi/add-sfi.interface';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { HTTP_ERROR_STATUS } from '../../../app-constants';
 
 @Component({
   selector: 'app-entity-questionnaire',
@@ -70,6 +71,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   getRelationshipLookUp() {
     this.$subscriptions.push(this._entityDetailsServices.addSFILookUp(this.currentSelected.tab).subscribe((res: any) => {
       this.relationLookup = res.validPersonEntityRelTypes;
+    },_error=>{
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
     }));
   }
 
@@ -95,6 +98,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
         this.definedRelationships = res.personEntityRelationships;
         resolve(true);
         // this.coiFinancialEntityDetail.coiFinancialEntityId = res.coiFinancialEntity.coiFinancialEntityId;
+      },_error=>{
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
       }));
     })
   }
@@ -119,6 +124,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
         this.findRelation(res.validPersonEntityRelType.relationshipTypeCode);
         this.clearRelationModal();
         this.isSave = false;
+      },_error=>{
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
       }));
     }
   }

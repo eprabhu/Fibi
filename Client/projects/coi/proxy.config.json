@@ -250,6 +250,10 @@
   },
   "/saveFaq": {
     "secure": false,
-    "target": "http://192.168.1.80:9090/fibi4/"
+    "target": "http://192.168.1.189:9090/fibi4/"
+  },
+  "/completeCOIReview":{
+    "target": "http://192.168.1.189:9090/fibi4/",
+    "secure": false
   }
 }

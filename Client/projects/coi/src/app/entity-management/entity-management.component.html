@@ -28,7 +28,7 @@
       </div>
   </div>
   <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
-    <app-add-new-entity-details [coiEntityManageId]="entityManageId"
+    <app-add-new-entity-details [coiEntityManageId]="entityManageId" (updateEntityList)="updateEntityListDashboard($event)"
       [isEditEntity]="isCoiEditEntity"></app-add-new-entity-details>
   </div>
   <div class="row mt-3">

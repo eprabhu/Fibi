@@ -5,6 +5,7 @@ import { EntityManagementService } from '../entity-management.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
   selector: 'app-view-entity-details',
@@ -45,6 +46,8 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   getEntityDetails(entityId) {
     this.$subscriptions.push(this.entityManagementService.getEntityDetails(entityId).subscribe((res: any) => {
       this.entityDetails = res.coiEntity;
+    },_error=> {
+      this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
     }));
   }
 

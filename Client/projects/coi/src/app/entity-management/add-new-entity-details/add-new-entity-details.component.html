@@ -19,16 +19,17 @@
             </div>
           </h5>
         </div>
-        <div class="container-fluid container-bg-color">
-          <div class="card shadow-sm border mt-2 card-size" tabindex="-1">
-            <div class="row mx-2  mt-3">
+        <div class="container-fluid card-color">
+          <div class="card shadow-sm border mt-2 pb-3" tabindex="-1">
+
+            <div class="row px-4">
               <div class="col-custom d-flex mt-2">
-                <label class="d-block fw-500 fs-14" for="entity-name">Entity Name<span class="mandatory px-2">*</span>
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="entity-name">Entity Name<span
+                    class="mandatory px-2">*</span>
                 </label>
               </div>
               <div class="col mt-3">
-                <input type="text" class="form-control fs-13"
-                  [(ngModel)]="entityDetails.coiEntity.entityName"
+                <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.entityName"
                   [ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''" id="entity-name">
                 <span *ngIf="(mandatoryList?.has('entityName'))" class="invalid-feedback d-block fs-14-nav">
                   {{(mandatoryList?.get('entityName'))}}
@@ -42,12 +43,13 @@
                 </span>
               </div>
             </div>
-            <div class="row mx-2">
-              <div class="col-custom d-flex  mt-2">
-                <label class="d-block  fw-500 fs-14" for="country">Country<span class="mandatory">*</span>
+
+            <div class="row px-4">
+              <div class="col-custom d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="country">Country<span class="mandatory px-2">*</span>
                 </label>
               </div>
-              <div class="col  mt-3">
+              <div class="col mt-3">
                 <app-endpoint-search [clearField]="clearCountryField" [httpOptions]="countrySearchOptions"
                   [isError]="(mandatoryList?.has('country'))" (onSelect)="selectedCountryEvent($event)"
                   class="w-100 mt-4 fs-13" [uniqueId]="'country'">
@@ -59,11 +61,11 @@
                   <p class="new-line-property text-secondary fs-14-nav mt-2">Select country from search bar.</p>
                 </span>
               </div>
-              <div class="col-2 fs-15  d-flex mt-2 mx-1 ">
-                <label class="d-block fw-500 fs-14 px-5" for="city">City
+              <div class="col-2 fs-15 pl-85 d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="city">City
                 </label>
               </div>
-              <div class="col-lg-4 mt-3">
+              <div class="col mt-3">
                 <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.city" id="city">
                 <span class="col fs-13">
                   <p class="new-line-property text-secondary fs-14-nav mt-2">Type in the city of the business or
@@ -71,9 +73,9 @@
                 </span>
               </div>
             </div>
-            <div class="row mx-2">
+            <div class="row px-4">
               <div class="col-custom d-flex mt-2">
-                <label class="d-block fw-500 fs-14" for="address">Address<span class="mandatory px-2">*</span>
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="address">Address<span class="mandatory px-2">*</span>
                 </label>
               </div>
               <div class="col mt-3">
@@ -92,25 +94,30 @@
                 </span>
               </div>
             </div>
-            <div class="row mx-2">
+            <div class="row px-4">
               <div class="col-custom d-flex mt-2">
-                <label class="d-block fw-500 fs-14" for="Phone">Phone<span class="mandatory px-2">*</span>
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="phone-number">Phone<span
+                    class="mandatory px-2">*</span>
                 </label>
               </div>
-              <div class="col  mt-3">
-                <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.phone"
-                  [ngClass]="(mandatoryList?.has('phoneNumber')) ? 'is-invalid d-block' : ''"
-                  (keypress)="phoneNumberValidation($event)" id="phone-number">
+              <div class="col mt-3">
+                <div>
+                  <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.phone"
+                    [ngClass]="(mandatoryList?.has('phoneNumber')) ? 'is-invalid d-block' : ''"
+                    (keypress)="inputRestriction($event)"
+                    (keyup)="phoneNumberValidation($event)" id="phone-number">
+                </div>
                 <span *ngIf="(mandatoryList?.has('phoneNumber'))" class="invalid-feedback d-block fs-14-nav">
                   {{(mandatoryList?.get('phoneNumber'))}}
                 </span>
                 <span class="col fs-13">
-                  <p class="new-line-property text-secondary fs-14-nav mt-2">Type in the phone number of the business or
-                    organization you want to report.</p>
+                  <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type in the phone number of the
+                    business or organization you want to report.</p>
                 </span>
               </div>
-              <div class="col-custom-right d-flex mt-2 ">
-                <label class="d-block fw-500 fs-14 px-5" for="zip-code">Zip Code<span class="mandatory px-2">*</span>
+              <div class="col-2 fs-15 pl-85 d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="zip-code">Zip Code<span
+                    class="mandatory px-2">*</span>
                 </label>
               </div>
               <div class="col mt-3">
@@ -125,9 +132,9 @@
                 </span>
               </div>
             </div>
-            <div class="row mx-2">
-              <div class="col-custom d-flex mt-2 ">
-                <label class="d-block fw-500 fs-14 " for="website">Website<span class="mandatory px-2">*</span>
+            <div class="row px-4">
+              <div class="col-custom d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="website">Website<span class="mandatory px-2">*</span>
                 </label>
               </div>
               <div class="col mt-3">
@@ -142,12 +149,12 @@
                     you need to report.</p>
                 </span>
               </div>
-              <div class="col-custom-right d-flex mt-2">
-                <label class="d-block fw-500 fs-14 px-5" for="email-address">Email Address<span
+              <div class="col-2 fs-15 pl-85 d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="email-address">Email Address<span
                     class="mandatory px-2">*</span>
                 </label>
               </div>
-              <div class="col  mt-3">
+              <div class="col mt-3">
                 <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.emailAddress"
                   [ngClass]="(mandatoryList?.has('email')) ? 'is-invalid d-block' : ''" id="email-address">
                 <span *ngIf="(mandatoryList?.has('email'))" class="invalid-feedback d-block fs-14-nav">
@@ -159,16 +166,16 @@
                 </span>
               </div>
             </div>
-            <div class="row mx-2">
-              <div class="col-custom d-flex mt-2 ">
-                <label class="d-block fw-500 fs-14" for="entity-type">Entity Type<span class="mandatory px-2">*</span>
+            <div class="row px-4">
+              <div class="col-custom d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="entity-type">Entity Type<span class="mandatory px-2">*</span>
                 </label>
               </div>
               <div class="col mt-3">
-                <select class="form-select text-secondary fw-medium fs-13"
+                <select class="form-select text-secondary fs-14"
                   [(ngModel)]="entityDetails.coiEntity.entityTypeCode" (ngModelChange)="setEntityTypeObj()"
                   [ngClass]="(mandatoryList?.has('entityType')) ? 'is-invalid d-block' : ''" id="entity-type">
-                  <option [value]="null">--Select--</option>
+                  <option [value]="null">--Select Type--</option>
                   <ng-container *ngFor="let entityType of entityTypeList">
                     <option [value]="entityType?.entityTypeCode">{{entityType?.description}}</option>
                   </ng-container>
@@ -180,12 +187,12 @@
                     options.</p>
                 </span>
               </div>
-              <div class="col-custom-right d-flex mt-2">
-                <label class="d-block fw-500 fs-14 mx-5 px-1 " for="risk-level">Risk Level
+              <div class="col-2 fs-15 pl-85 d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="risk-level">Risk Level
                 </label>
               </div>
-              <div class="col-4 mt-3">
-                <select class="form-select text-secondary fw-medium fs-13"
+              <div class="col mt-3">
+                <select class="form-select text-secondary fs-14"
                   [(ngModel)]="entityDetails.coiEntity.riskCategoryCode" (ngModelChange)="setEntityRiskCategoryObj()"
                   id="risk-level">
                   <!-- [ngClass]="(mandatoryList?.has('riskLevel')) ? 'is-invalid d-block' : ''"> -->
