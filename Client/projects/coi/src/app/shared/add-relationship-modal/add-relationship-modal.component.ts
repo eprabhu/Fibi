@@ -30,7 +30,7 @@ export class AddRelationshipModalComponent implements OnInit {
     moduleSubitemCodes: [801],
     moduleItemKey: '',
     moduleSubItemKey: '',
-    actionUserId: this._commonService.getCurrentUserDetail('personID'),
+    actionUserId: this._commonService.getCurrentUserDetail('personId'),
     actionPersonName: this._commonService.getCurrentUserDetail('fullName'),
     enableViewMode: false,
     isChangeWarning: true,

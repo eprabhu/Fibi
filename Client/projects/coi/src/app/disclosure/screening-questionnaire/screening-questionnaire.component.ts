@@ -37,7 +37,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
         moduleSubitemCodes: [0],
         moduleItemKey: '',
         moduleSubItemKey: 0,
-        actionUserId: this._commonService.getCurrentUserDetail('personID'),
+        actionUserId: this._commonService.getCurrentUserDetail('personId'),
         actionPersonName: this._commonService.getCurrentUserDetail('fullName'),
         enableViewMode: false,
         isChangeWarning: true,

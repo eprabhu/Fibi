@@ -17,7 +17,7 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck {
         moduleSubitemCodes: [0],
         moduleItemKey: '',
         moduleSubItemKey: 0,
-        actionUserId: this._commonService.getCurrentUserDetail('personID'),
+        actionUserId: this._commonService.getCurrentUserDetail('personId'),
         actionPersonName: this._commonService.getCurrentUserDetail('fullName'),
         enableViewMode: true,
         isChangeWarning: true,
