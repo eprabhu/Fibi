@@ -5,11 +5,11 @@
                 <div class="align-self-center flex-fill">
                     <p class="m-0">
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1'">
-                            <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span> {{coiData?.coiDisclosure?.person?.unit?.unitName}}</strong>
+                            <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span> [Home Unit : {{coiData?.coiDisclosure?.person?.unit?.unitName}} ]</strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                            <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}} : {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} : {{(coiData?.projectDetail?.title)?.length>44 ?
-                                (coiData?.projectDetail?.title | slice:0:44)+'...' :
+                            <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}} : {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} : {{(coiData?.projectDetail?.title)?.length>60 ?
+                                (coiData?.projectDetail?.title | slice:0: 60)+'...' :
                                 coiData?.projectDetail?.title}} ] By <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
                         </ng-container>
                     </p>
