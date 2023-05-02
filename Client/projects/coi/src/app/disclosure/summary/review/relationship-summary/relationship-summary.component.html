@@ -63,9 +63,9 @@
                   <td class="table-data border-end fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.personEntity?.coiEntity?.entityName}}</td>
                   <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.comment?.comments}}</td>
                   <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">
-                    <span class="badge rounded-pill bg-danger mt-2" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 1">{{test?.coiProjConflictStatusType?.description}}</span>
-                    <span class="badge rounded-pill bg-success mt-2" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 2">{{test?.coiProjConflictStatusType?.description}}</span>
-                    <span class="badge rounded-pill bg-warning mt-2" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 3">{{test?.coiProjConflictStatusType?.description}}</span>
+                    <span class="badge rounded-pill bg-danger mt-2 fs-13" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 3 ">{{test?.coiProjConflictStatusType?.description}}</span>
+                    <span class="badge rounded-pill bg-success mt-2 fs-13" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 1">{{test?.coiProjConflictStatusType?.description}}</span>
+                    <span class="badge rounded-pill bg-warning text-dark mt-2 fs-13" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 2">{{test?.coiProjConflictStatusType?.description}}</span>
                   </td>
                   <td class="px-3" [class.border-0]="i!= projectRelations?.length-1">
                     <button type="button" (mouseenter)="isShowHoverWhite[i]= true" (mouseout)="isShowHoverWhite[i]= false" class="btn btn-outline-primary btn-sm action-buttons mr-15"  (click)="isOpenSlider = true">

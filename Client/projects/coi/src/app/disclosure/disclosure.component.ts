@@ -27,6 +27,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     coiData = new COI();
     currentStepNumber: 1 | 2 | 3 | 4 = 1;
+    tempStepNumber: any;
+    clickedOption: any;
 
     assignReviewerActionDetails: any = {};
     assignReviewerActionValidation = new Map();
@@ -92,19 +94,40 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     goToStep(stepPosition?: any) {
+      if (this.dataStore.dataChanged) {
+        this.tempStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
+        document.getElementById('hidden-validate-button').click();
+      } else {
         if (!stepPosition && this.currentStepNumber == 4) {
             return;
         }
         this.currentStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
         this.navigateToStep();
+      }
+    }
+
+    leavePageClicked() {
+      this.dataStore.dataChanged = false;
+      this.coiService.unSavedModules = '';
+      this.currentStepNumber = this.tempStepNumber;
+      this.navigateToStep();
+    }
+
+    stayOnPageClicked() {
+      this.tempStepNumber = this.clickedOption == 'previous' ? this.currentStepNumber + 1 : this.currentStepNumber - 1;
     }
 
     goBackStep() {
+      if (this.dataStore.dataChanged) {
+        this.tempStepNumber = this.currentStepNumber - 1;
+        document.getElementById('hidden-validate-button').click();
+      } else {
         if (this.currentStepNumber == 1) {
             return;
         }
         this.currentStepNumber--;
         this.navigateToStep();
+      }
     }
 
     isRouteComplete(possibleActiveRoutes: string[] = []) {
@@ -125,22 +148,23 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     navigateToStep() {
-        let nextStepUrl = '';
-        switch (this.currentStepNumber) {
-            case 1:
-                nextStepUrl = '/coi/create-disclosure/screening';
-                break;
-            case 2:
-                nextStepUrl = '/coi/create-disclosure/sfi';
-                break;
-            case 3:
-                nextStepUrl = '/coi/create-disclosure/relationship';
-                break;
-            case 4:
-                nextStepUrl = '/coi/create-disclosure/certification';
-                break;
-        }
-        this.router.navigate([nextStepUrl], {queryParamsHandling: 'preserve'})
+
+          let nextStepUrl = '';
+          switch (this.currentStepNumber) {
+              case 1:
+                  nextStepUrl = '/coi/create-disclosure/screening';
+                  break;
+              case 2:
+                  nextStepUrl = '/coi/create-disclosure/sfi';
+                  break;
+              case 3:
+                  nextStepUrl = '/coi/create-disclosure/relationship';
+                  break;
+              case 4:
+                  nextStepUrl = '/coi/create-disclosure/certification';
+                  break;
+          }
+          this.router.navigate([nextStepUrl], {queryParamsHandling: 'preserve'})
     }
 
     certifyDisclosure() {
@@ -149,10 +173,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             const REQUESTREPORTDATA = {
                 coiDisclosure: {
                     disclosureId: this.coiData.coiDisclosure.disclosureId,
-                    certificationText: this.coiData.coiDisclosure.certificationText ? this.coiData.coiDisclosure.certificationText : this.certificationText
+                    certificationText: this.coiData.coiDisclosure.certificationText ? this.coiData.coiDisclosure.certificationText : this.certificationText,
+                    conflictStatusCode: this.dataStore.disclosureStatus
                 }
             };
             this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
+                this.dataStore.dataChanged = false;
                 this.dataStore.updateStore(['coiDisclosure'], {coiDisclosure: res});
                 this.isSaving = false;
                 this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});

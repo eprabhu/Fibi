@@ -9,11 +9,10 @@ import { DataStoreService } from '../services/data-store.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {deepCloneObject} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 import {HTTP_ERROR_STATUS} from "../../../../../fibi/src/app/app-constants";
-
 @Component({
     selector: 'app-screening-questionnaire',
     template: `
-        <div>
+        <div id="screening-questionnaire-coi">
             <app-view-questionnaire-list
                     [isShowExportButton]="false"
                     [configuration]="configuration"
@@ -21,7 +20,8 @@ import {HTTP_ERROR_STATUS} from "../../../../../fibi/src/app/app-constants";
                     [questionnaireHeader]="''"
                     [isShowSave]="false"
                     [saveButtonLabel]="'Save and Continue'"
-                    (QuestionnaireSaveEvent)="getSaveEvent($event)">
+                    (QuestionnaireSaveEvent)="getSaveEvent($event)"
+                    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)">
             </app-view-questionnaire-list>
         </div>
     `
@@ -79,6 +79,8 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
     }
 
     getSaveEvent(_event: any) {
+        this._dataStore.dataChanged = false;
+        this.coiService.unSavedModules = '';
         this.evaluateDisclosureQuestionnaire();
     }
 
@@ -98,6 +100,11 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in evaluating disclosure.');
             })
         );
+    }
+
+    markQuestionnaireAsEdited(changeStatus: boolean): void {
+      this.coiService.unSavedModules = 'Screening Questionnaire';
+      this._dataStore.dataChanged = changeStatus;
     }
 
 }

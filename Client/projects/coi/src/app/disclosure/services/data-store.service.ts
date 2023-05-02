@@ -9,6 +9,8 @@ export class DataStoreService {
     constructor() { }
 
     private storeData: COI = new COI();
+    disclosureStatus: any;
+    dataChanged = false;
     currentDashboardTab = 'CURRENT_DISCLOSURES';
 
     entityDetails = [

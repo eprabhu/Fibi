@@ -73,7 +73,7 @@
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
                                 <tr>
-                                    <td>Created :</td>
+                                    <td>Create :</td>
                                     <td class="ps-4" style="padding-right: 86px;" >{{coiData?.coiDisclosure?.createTimestamp ? (coiData?.coiDisclosure?.createTimestamp |
                                         dateFormatterWithTimeZone) : ''}}</td>
                                 </tr>
@@ -123,7 +123,7 @@
 
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress navigation-tabs row">
-                    <div (click)="goToStep(1)" [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])" [routerLink]="['screening']"
+                    <div (click)="goToStep(1)" [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
                          class="col h-100 m-0" queryParamsHandling='merge'
                          title="Goto step Screening Questionnaire">
                         Screening Questionnaire
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(2)" [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])" [routerLink]="['sfi']"
+                    <div (click)="goToStep(2)" [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
                          class="col ps-5 text-nowrap" queryParamsHandling='merge'
                          title="Goto step Significant Financial Interest(SFIs)">
                         Significant Financial Interest(SFIs)
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(3)" [class.complete]="isRouteComplete(['relationship', 'certification'])" [routerLink]="['relationship']"
+                    <div (click)="goToStep(3)" [class.complete]="isRouteComplete(['relationship', 'certification'])"
                          class="col" queryParamsHandling='merge' title="Goto step Relationships">
                         <span class="align-self-center">Relationships</span>
                         <div class="arrow-wrapper">
@@ -152,7 +152,7 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(4)" [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
+                    <div (click)="goToStep(4)" [class.complete]="isRouteComplete(['certification'])"
                          class="col" queryParamsHandling='merge' title="Goto step Certification">
                         <span class="align-self-center">Certification</span>
                     </div>
@@ -191,12 +191,12 @@
                     <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-grey pb-0 fs-14 col-2">
                         <mat-icon>home</mat-icon>
                     </button>
-                    <button (click)="goBackStep()" [disabled]="currentStepNumber==1"
+                    <button (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1"
                             class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
                     </button>
-                    <button (click)="goToStep()" [disabled]="currentStepNumber==4"
+                    <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
                             class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">redo</mat-icon>
                         Next
@@ -418,3 +418,32 @@
 </div>
 <span id="assign-reviewer-modal-trigger" data-bs-target="#assign-reviewer-modal" data-bs-toggle="modal" class="d-none"></span>
 <!--assign reviewer modal end-->
+
+
+<!--Unsaved Changes Modal-->
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-validate-button" data-bs-toggle="modal" data-bs-target="#saveAndExitModal"></button>
+<div class="modal modal-coi fade mySkinDialog" id="saveAndExitModal" role="dialog" aria-labelledby="saveAndExitModal"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close" data-bs-dismiss="modal"
+                   aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">You have unsaved changes in
+                  <strong>{{coiService.unSavedModules}}.</strong></p>
+                   <p>Do you want to leave the
+                    <ng-container *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">page without saving</ng-container>
+                    <ng-container *ngIf="coiService.unSavedModules != 'Screening Questionnaire'"><strong>Certification</strong> Page</ng-container>
+                  ?</p>
+            </div>
+            <div class="modal-footer mx-2">
+              <button type="button" class="btn btn-primary btn-sm fs-14" (click)="leavePageClicked();" data-bs-dismiss="modal">Leave Page</button>
+              <button type="button" class="btn btn-outline-secondary" (click)="stayOnPageClicked()" data-bs-dismiss="modal">Stay On Page</button>
+          </div>
+        </div>
+    </div>
+</div>

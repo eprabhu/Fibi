@@ -10,6 +10,7 @@ export class CoiService {
     triggerAddReviewComment$: Subject<any> = new Subject();
     triggerReviewCommentDataUpdate$: Subject<any> = new Subject();
     globalSave$: Subject<any> = new Subject<any>();
+    unSavedModules = '';
 
     isShowInfo = true;
     isShowSFIInfo = true;

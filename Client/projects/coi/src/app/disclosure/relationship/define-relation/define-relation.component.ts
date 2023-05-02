@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { slideHorizontal } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../../environments/environment';
-import { HTTP_ERROR_STATUS } from '../../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 import { DataStoreService } from '../../services/data-store.service';
 import { RelationshipService } from '../relationship.service';
@@ -227,9 +227,10 @@ export class DefineRelationComponent implements OnInit {
     singleSaveClick(element, index) {
         this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
           this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in evaluating disclosure.');
           this.clearIndex = null;
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Relationship saved successfully.');
       }, err => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving.');
       });
     }
 
