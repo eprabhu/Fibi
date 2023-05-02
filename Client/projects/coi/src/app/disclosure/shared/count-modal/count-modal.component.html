@@ -17,8 +17,8 @@
           <thead class="sticky-top">
             <tr class="header-border">
               <th>Entity Name</th>
-              <th>Start Date of Involvement</th>
               <th>Relationship With</th>
+              <th>Start Date of Involvement</th>
               <th>End Date of Involvement</th>
               <th>Actions</th>
             </tr>
@@ -26,7 +26,6 @@
           <tbody>
             <tr *ngFor="let item of coiFinancialEntityDetails">
               <td>{{ item?.coiEntity?.entityName }}</td>
-              <td>{{ item?.involvementStartDate |dateFormatter }}</td>
               <td>
                 <span *ngFor="let relationship of item?.coiFinancialEntityDetails; let last = last">
                   
@@ -34,6 +33,7 @@
                   <ng-container *ngIf="last">{{relationship?.validPersonEntityRelTypes?.description}}</ng-container>
                 </span>
               </td>
+              <td>{{ item?.involvementStartDate |dateFormatter }}</td>
               <td>{{ item?.involvementEndDate |dateFormatter }}</td>
               <td>
                 <!-- btn btn-outline-primary action-buttons p-2  -->
