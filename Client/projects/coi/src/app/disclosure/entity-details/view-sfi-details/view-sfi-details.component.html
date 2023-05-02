@@ -45,21 +45,21 @@
             <div class="row">
               <label class="fs-14 fw-500">Entity Type</label>
               <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.entityType !==null?
-                entityDetailsServices.entityDetails?.entityType?.description: 'No Data'}}</label>
+                entityDetailsServices.entityDetails?.entityType?.description: '-- No Data --'}}</label>
             </div>
           </div>
           <div class="col-2">
             <div class="row">
               <label class="fs-14 fw-500">Country</label>
               <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.country?.countryName !==
-                null?entityDetailsServices.entityDetails?.country?.countryName:'No Data'}}</label>
+                null?entityDetailsServices.entityDetails?.country?.countryName:'-- No Data --'}}</label>
             </div>
           </div>
           <div class="col-2">
             <div class="row">
               <label class="fs-14 fw-500">City</label>
               <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.city !== null?
-                entityDetailsServices.entityDetails?.city:'No Data'}}</label>
+                entityDetailsServices.entityDetails?.city:'-- No Data --'}}</label>
             </div>
           </div>
           <div class="col-2">
@@ -67,7 +67,7 @@
               <label class="fs-14 fw-500">Website</label>
               <label class="text-primary fs-14 anchor-link">
                 <a class="anchor-link"  (click)="redirectUrl(entityDetails?.webURL)">
-                  {{entityDetails?.webURL !==null?entityDetails?.webURL:'No Data'}}
+                  {{entityDetails?.webURL !==null?entityDetails?.webURL:'-- No Data --'}}
                 </a>
               </label>
             </div>
@@ -76,14 +76,14 @@
             <div class="row">
               <label class="fs-14 fw-500">Email Address </label>
               <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.emailAddress!==null ?
-                entityDetailsServices.entityDetails?.emailAddress:'No Data'}}</label>
+                entityDetailsServices.entityDetails?.emailAddress:'-- No Data --'}}</label>
             </div>
           </div>
           <div class="col-1">
             <div class="row">
               <label class="fs-14 fw-500">Phone Number</label>
               <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.phone
-                !==null?entityDetailsServices.entityDetails?.phone:'No Data'
+                !==null?entityDetailsServices.entityDetails?.phone:'-- No Data --'
                 }}</label>
             </div>
           </div>
@@ -102,13 +102,13 @@
             <div class="row">
               <label class="fs-14 fw-500">Address</label>
               <label class="text-secondary fs-14">{{entityDetailsServices.entityDetails?.address!== null ?
-                entityDetailsServices.entityDetails?.address:'No Data'}}</label>
+                entityDetailsServices.entityDetails?.address:'-- No Data --'}}</label>
             </div>
           </div>
           <div class="col-4 mt-3 text-secondary">
-            <label class="fw-500 mr-10 fs-14 ">Last Updated On:</label>
+            <label class="fw-500 mr-10 fs-14 ">Last Updated By :</label>
             <label class="text-secondary fs-14">
-              {{(entityDetailsServices.entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')}} By {{entityDetailsServices.entityDetails?.updateUser}}
+              {{entityDetailsServices.entityDetails?.updateUser}} On {{(entityDetailsServices.entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')}}
             </label>
           </div>
         </div>
