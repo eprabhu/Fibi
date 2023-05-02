@@ -113,7 +113,7 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
     getActionList(type) {
         if (!this.isSaving) {
             this.isSaving = true;
-            this.inboxObject.toPersonId = this._commonService.getCurrentUserDetail('personID');
+            this.inboxObject.toPersonId = this._commonService.getCurrentUserDetail('personId');
             this.inboxObject.isViewAll = 'N';
             this.inboxObject.processed = type;
             this.inboxObject.fromDate = parseDateWithoutTimestamp(this.inboxObject.fromDate);

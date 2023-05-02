@@ -50,7 +50,6 @@ export class CommonService {
     generalFileType = 'pdf';
     appLoaderContent = '';
     isEnableLock = false;
-    isDevelopment = false;
     isPreventDefaultLoader = false;
     timer: any;
     appToastContent = '';
@@ -103,7 +102,11 @@ export class CommonService {
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
         this.enableSSO = configurationData.enableSSO;
-        this.isDevelopment = configurationData.isDevelopment;
+        this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
+        this.elasticUserName = configurationData.elasticUserName;
+        this.elasticDelimiter = configurationData.elasticDelimiter;
+        this.elasticPassword = configurationData.elasticPassword;
+        this.elasticAuthScheme = configurationData.elasticAuthScheme;
         this.elasticConfigService.url = configurationData.elasticIndexUrl;
     }
 
@@ -136,6 +139,7 @@ export class CommonService {
     }
 
     getCurrentUserDetail(detailsKey: string) {
+        console.log(this.currentUserDetails);
         return this.currentUserDetails && this.currentUserDetails[detailsKey] ?
             this.currentUserDetails[detailsKey] : this.updateCurrentUser(detailsKey);
     }

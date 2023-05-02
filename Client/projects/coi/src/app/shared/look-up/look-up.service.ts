@@ -8,7 +8,7 @@ export class LookUpService {
 constructor(private _commonService: CommonService, private _http: HttpClient) { }
 
 getLookupData(params) {
-   return this._http.post(this._commonService.baseUrl + '/getLookUpDatas', params );
+   return this._http.post(this._commonService.fibiUrl + '/getLookUpDatas', params );
 }
 
 }

@@ -180,7 +180,7 @@ export class AdminDashboardComponent {
 
   fetchMentionedComments() {
     this.$subscriptions.push(this._coiAdminDashboardService.loadCoiReviewComments({
-      personId: this.commonService.getCurrentUserDetail('personID'),
+      personId: this.commonService.getCurrentUserDetail('personId'),
       disclosureId: null,
       coiSubSectionsId: null,
       coiSectionsTypeCode: null,

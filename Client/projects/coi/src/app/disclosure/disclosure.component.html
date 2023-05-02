@@ -293,7 +293,7 @@
                     </ul>
                 </div>
                 <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated By:</span>
-                    {{coiData?.coiDisclosure?.updateUser}} On {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}} 
+                    {{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}
                 </div>
             </div>
             <ng-container *ngIf="router.url.includes('/coi/disclosure/summary')">
@@ -341,7 +341,7 @@
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Warning!</h4>
-                <button aria-label="Close" class="btn-close me-3" data-bs-dismiss="modal" type="button">
+                <button aria-label="Close" class="btn-close mx-3" data-bs-dismiss="modal" type="button">
                 </button>
             </div>
             <div class="modal-body">
