@@ -62,7 +62,7 @@
                 </span>
               </div>
               <div class="col-2 fs-15 pl-85 d-flex mt-2">
-                <label class="d-block fw-500 fs-14 px-1 pt-2" for="city">City : 
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="city">City :
                 </label>
               </div>
               <div class="col mt-3">
@@ -105,7 +105,7 @@
                   <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.phone"
                     [ngClass]="(mandatoryList?.has('phoneNumber')) ? 'is-invalid d-block' : ''"
                     (keypress)="inputRestriction($event)"
-                    (keyup)="phoneNumberValidation($event)" id="phone-number">
+                    (ngModelChange)="phoneNumberValidation($event)" id="phone-number">
                 </div>
                 <span *ngIf="(mandatoryList?.has('phoneNumber'))" class="invalid-feedback d-block fs-14-nav">
                   {{(mandatoryList?.get('phoneNumber'))}}
@@ -116,7 +116,7 @@
                 </span>
               </div>
               <div class="col-2 fs-15 pl-85 d-flex mt-2">
-                <label class="d-block fw-500 fs-14 px-1 pt-2" for="zip-code">Zip Code : <span
+                <label class="d-block fw-500 fs-14 pt-2" for="zip-code">Zip Code : <span
                     class="mandatory px-2">*</span>
                 </label>
               </div>
