@@ -49,6 +49,15 @@ public class DisclosureView {
 	private Integer noOfSfi;
 	private Integer noOfAward;
 	private Integer noOfProposal;
+	private Timestamp certifiedAt;
+
+	public Timestamp getCertifiedAt() {
+		return certifiedAt;
+	}
+
+	public void setCertifiedAt(Timestamp certifiedAt) {
+		this.certifiedAt = certifiedAt;
+	}
 
 	public Integer getCoiDisclosureId() {
 		return coiDisclosureId;
