@@ -26,7 +26,7 @@ export const SSO_LOGOUT_URL = '';
 
 /* KKI Specific Change (Don't Delete) in Month/Day/Year format for DEFAULT_DATE_FORMAT, LONG_DATE_FORMAT,
 parseInput, fullPickerInput, datePickerInput */
-
+export const DATE_PLACEHOLDER = 'MM/DD/YYYY'
 export const DEFAULT_DATE_FORMAT = 'MM/dd/YYYY';
 export const LONG_DATE_FORMAT = 'MM/dd/YYYY h:mm:ss a';
 export const TIME_FORMAT = 'h:mm:ss a';

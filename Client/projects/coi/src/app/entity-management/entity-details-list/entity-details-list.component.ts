@@ -10,6 +10,7 @@ import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilitie
 import { switchMap } from 'rxjs/operators';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
+import { DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
 
 @Component({
   selector: 'app-entity-details-list',
@@ -25,6 +26,7 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
   currentSelected = 'Person';
   entityManageId = null;
   coiElastic = null;
+  datePlaceHolder = DATE_PLACEHOLDER;
   isViewAdvanceSearch = false;
   $subscriptions: Subscription[] = [];
   advSearchClearField: String;
