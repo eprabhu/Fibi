@@ -6,10 +6,10 @@ import { environment } from '../../../environments/environment';
 import { CommonService } from '../../common/services/common.service';
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
-import { DEFAULT_DATE_FORMAT } from 'projects/fibi/src/app/app-constants';
+import { getDateObjectFromTimeStamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
 
 export interface EndpointOptions {
   contextField: string;
@@ -40,7 +40,7 @@ export class AddSfiComponent implements OnInit {
   isAddAttachment = false;
   isAddAssignee = false;
   dateTime: string;
-  datePlaceHolder = DEFAULT_DATE_FORMAT;
+  datePlaceHolder = DATE_PLACEHOLDER;
   isReadMore: false;
   showRelationshipModal = false;
   clearField: any = false;
@@ -54,7 +54,7 @@ export class AddSfiComponent implements OnInit {
   isExpandedAdditionalDetails = true;
   isResultFromSearch = false;
 
-  constructor( public sfiService: SfiService, public _commonService: CommonService, private _router: Router ) { }
+  constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
     ngOnInit(): void {
       this.getSFILookup();

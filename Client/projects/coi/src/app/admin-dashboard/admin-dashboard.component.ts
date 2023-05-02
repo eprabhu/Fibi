@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { DEFAULT_DATE_FORMAT, HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../../../fibi/src/app/app-constants';
+import { DEFAULT_DATE_FORMAT, HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, DATE_PLACEHOLDER } from '../../../../fibi/src/app/app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
@@ -24,7 +24,7 @@ import { AdminDashboardService, CoiDashboardRequest, SortCountObj } from './admi
 export class AdminDashboardComponent {
 
   setFocusToElement = setFocusToElement;
-  DEFAULT_DATE_FORMAT = DEFAULT_DATE_FORMAT;
+  DEFAULT_DATE_FORMAT =DATE_PLACEHOLDER;
   currentTab = 'ALL';
   coiElastic = null;
   isShowAllProposalList = false;
@@ -37,7 +37,7 @@ export class AdminDashboardComponent {
   currentDisclosureId: any;
   currentDisclosureNumber: any;
   disclosureType:any
-  datePlaceHolder = DEFAULT_DATE_FORMAT;
+  datePlaceHolder = DATE_PLACEHOLDER;
   advancedSearch = { hasSFI: true };
   conflictStatusOptions = 'coi_disc_det_status#DISC_DET_STATUS_CODE#true#true';
   disclosureStatusOptions = 'coi_disclosure_status#DISCLOSURE_STATUS_CODE#true#true';
