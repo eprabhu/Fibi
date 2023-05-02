@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { ActivityService } from '../../../../../fibi/src/app/agreement/agreement-shared/activity-track/activity.service';
 import { slideHorizontal } from './../../../../../fibi/src/app/common/utilities/animations';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
@@ -6,10 +6,10 @@ import { environment } from '../../../environments/environment';
 import { CommonService } from '../../common/services/common.service';
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
-import { DEFAULT_DATE_FORMAT, DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
+import { getDateObjectFromTimeStamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
 
 export interface EndpointOptions {
   contextField: string;
@@ -25,7 +25,7 @@ export interface EndpointOptions {
   providers: [ActivityService],
   animations: [slideHorizontal]
 })
-export class AddSfiComponent implements OnChanges, OnInit {
+export class AddSfiComponent implements OnInit {
 
   isSaving = false;
   scrollHeight: number;
@@ -54,38 +54,18 @@ export class AddSfiComponent implements OnChanges, OnInit {
   isExpandedAdditionalDetails = true;
   isResultFromSearch = false;
 
-  constructor(public sfiService: SfiService, public _commonService: CommonService,
-    private _activatedRoute: ActivatedRoute, private _router: Router) { }
+  constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
     ngOnInit(): void {
       this.getSFILookup();
-      this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
-        this.coiEntity.entityId = params['entityId'];
-        if (this.coiEntity.entityId) {
-          this.getSfiDetails();
-        }
-      }));
       this.showSfiNavBar();
       this.EntitySearchOptions = getEndPointOptionsForEntity();
       this.countrySearchOptions = getEndPointOptionsForCountry();
     }
 
-  ngOnChanges() {
-    this.getSFILookup();
-    this.showSfiNavBar();
-    this.EntitySearchOptions = getEndPointOptionsForEntity();
-    this.countrySearchOptions = getEndPointOptionsForCountry();
-  }
-
   getSFILookup() {
     this.$subscriptions.push(this.sfiService.addSFILookUp().subscribe((res: any) => {
       this.sfiLookUpList = res;
-    }));
-  }
-
-  getSfiDetails() {
-    this.$subscriptions.push(this.sfiService.getSFIDetails(this.coiEntity.entityId).subscribe(data => {
-
     }));
   }
 
@@ -134,6 +114,7 @@ export class AddSfiComponent implements OnChanges, OnInit {
 
   hideRelationshipModal(event) {
     this.showRelationshipModal = event;
+    this.clearSFIFields();
     this.showSfiNavBar();
   }
 
