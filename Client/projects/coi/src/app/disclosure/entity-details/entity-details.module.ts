@@ -14,7 +14,7 @@ import { ViewSfiDetailsComponent } from './view-sfi-details/view-sfi-details.com
 import { ViewRelationshipDetailsComponent } from './view-relationship-details/view-relationship-details.component';
 import { SfiService } from '../sfi/sfi.service';
 
-const routes: Routes = [{ path: '', component:EntityDetailsComponent, canActivate:[EntityDetailsGuardService] }]
+const routes: Routes = [{ path: '', component:EntityDetailsComponent }]
 
 @NgModule({
   imports: [
