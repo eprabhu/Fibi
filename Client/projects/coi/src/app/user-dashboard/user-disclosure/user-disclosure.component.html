@@ -47,8 +47,8 @@
                             <span class="ps-2 span-data-color">{{disclosure?.expirationDate | dateFormatter}}</span>
                         </div>
                         <div>
-                            <span class="fw-bold text-secondary">Last Update On :</span>
-                            <span class="ps-2 span-data-color">{{disclosure?.updateUserFullName}} By {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
+                            <span class="fw-bold text-secondary">Last Update By :</span>
+                            <span class="ps-2 span-data-color">{{disclosure?.updateUserFullName}} On {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
                         </div>
                     </div>
                 </div>
@@ -200,9 +200,8 @@
                     </div>
                 </ng-container>
             </div>
-            <div class="col-3">
-                <div>Last Updated On: {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}
-                    By {{disclosure?.updateUser}}</div>
+            <div class="col-4">
+                <div>Last Updated By : {{disclosure?.updateUser}} On {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}</div>
             </div>
             <div class="col-auto ms-auto d-flex justify-content-end">
                 <button *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.conflictStatusCode == '3'"
