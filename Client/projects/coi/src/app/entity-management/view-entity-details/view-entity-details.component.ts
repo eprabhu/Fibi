@@ -63,4 +63,13 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
       this.getEntityDetails(this.entityManageId);
     }
   }
+
+
+  redirectUrl(url) {
+    if (url.includes('http')) {
+      window.open(url, '_blank');
+    } else {
+      window.open('//' + url, '_blank');
+    }
+  }
 }

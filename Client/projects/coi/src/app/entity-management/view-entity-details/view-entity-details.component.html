@@ -65,8 +65,11 @@
         <div class="col-2">
           <div class="row">
             <span class="fw-500 fs-14">Website</span>
-            <label class="text-secondary fs-14">
-              {{entityDetails?.webURL !==null?entityDetails?.webURL:'-- No Data --'}}</label>
+            <label class="text-primary fs-14 anchor-link">
+              <a class="anchor-link" (click)="redirectUrl(entityDetails?.webURL)">
+                {{entityDetails?.webURL !==null?entityDetails?.webURL:'-- No Data --'}}
+              </a>
+            </label>
           </div>
         </div>
         <div class="col-2">

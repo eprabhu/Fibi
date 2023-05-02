@@ -45,4 +45,12 @@ export class ViewSfiDetailsComponent implements OnInit, OnDestroy {
       this._router.navigate(['/coi/user-dashboard/entities']);
   }
 
+  redirectUrl(url) {
+    if (url.includes('http')) {
+      window.open(url, '_blank');
+    } else {
+      window.open('//' + url, '_blank');
+    }
+  }
+
 }

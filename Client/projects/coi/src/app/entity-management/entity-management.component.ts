@@ -5,10 +5,11 @@ import { EntityDashboardRequest, EntityManagementService } from './entity-manage
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { Router } from '@angular/router';
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../fibi/src/app/app-constants';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
+import { switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   entityList: any = [];
   $subscriptions: Subscription[] = [];
   resultCount: number = 0;
+  $entityDetailsList = new Subject();
 
 
 
@@ -48,6 +50,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.countrySearchOptions = getEndPointOptionsForCountry();
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
     this.viewListOfEntity();
+    this.$entityDetailsList.next();
 
   }
   ngOnDestroy() {
@@ -66,7 +69,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.resetAdvanceSearchFields();
     this.activeTabName = tabName;
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
-    this.viewListOfEntity();
+    this.$entityDetailsList.next()
   }
 
   redirectToEntity(coi: any) {
@@ -74,13 +77,18 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   }
 
   viewListOfEntity() {
-    this.$subscriptions.push(this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject).subscribe((res: any) => {
-      this.entityList = res.coiEntityList;
-      this.resultCount = res.entityCount;
-    }, _error => {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-      this.entityList = [];
-    }));
+    this.$subscriptions.push(
+      this.$entityDetailsList.pipe(
+        switchMap(() =>
+          this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject)
+        ))
+        .subscribe((res: any) => {
+          this.entityList = res.coiEntityList || [];
+          this.resultCount = res.entityCount;
+        }, _error => {
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+          this.entityList = [];
+        }));
   }
 
   addNewEntity() {
@@ -113,19 +121,19 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   clearAdvancedSearch() {
     this.resetAdvanceSearchFields();
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
-    this.viewListOfEntity();
+    this.$entityDetailsList.next();
   }
   navigateNextPage(event) {
-    this.viewListOfEntity();
+    this.$entityDetailsList.next();
   }
 
   advancedSearch(){
-    this.viewListOfEntity();
+    this.$entityDetailsList.next();
   }
 
   updateEntityListDashboard(event){
     if(event) {
-      this.viewListOfEntity();
+      this.$entityDetailsList.next();
     }
   }
 }
