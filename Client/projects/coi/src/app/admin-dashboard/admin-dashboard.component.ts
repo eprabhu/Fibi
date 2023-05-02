@@ -36,6 +36,7 @@ export class AdminDashboardComponent {
   selectedModuleCode: any;
   currentDisclosureId: any;
   currentDisclosureNumber: any;
+  disclosureType:any
   datePlaceHolder = DEFAULT_DATE_FORMAT;
   advancedSearch = { hasSFI: true };
   conflictStatusOptions = 'coi_disc_det_status#DISC_DET_STATUS_CODE#true#true';
@@ -260,6 +261,7 @@ export class AdminDashboardComponent {
     this.isShowCountModal = true;
     this.currentDisclosureId = id;
     this.currentDisclosureNumber = coiNumber;
+    this.disclosureType=moduleName;
     this.inputType = 'DISCLOSURE_TAB';
     this.disclosureSequenceStatusCode = disSeqCode;
     this.personId = personId;
