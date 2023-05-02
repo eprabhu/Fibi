@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {CountModalService} from "./count-modal.service";
+import {CountModalService} from "./count-modal.service";	
 
 declare var $: any;
 

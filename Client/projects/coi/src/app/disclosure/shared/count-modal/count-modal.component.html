@@ -6,7 +6,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">{{getModalHeader()}}</h4>
-        <button type="button" data-bs-dismiss="modal"  class="btn-close" id="req-doc-popup-dismiss-btn" aria-label="Close"
+        <button type="button" data-bs-dismiss="modal"  class="btn-close fs-12" id="req-doc-popup-dismiss-btn" aria-label="Close"
           (click)="closeCountModal()">
         </button>
       </div>
@@ -25,22 +25,23 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of coiFinancialEntityDetails">
-              <td>{{ item?.coiEntity?.coiEntityName }}</td>
+              <td>{{ item?.coiEntity?.entityName }}</td>
               <td>{{ item?.involvementStartDate |dateFormatter }}</td>
               <td>
                 <span *ngFor="let relationship of item?.coiFinancialEntityDetails; let last = last">
-                  <ng-container *ngIf="!last">{{relationship?.coiFinancialEntityRelType?.description}},</ng-container>
-                  <ng-container *ngIf="last">{{relationship?.coiFinancialEntityRelType?.description}}</ng-container>
+                  
+                  <ng-container *ngIf="!last">{{relationship?.validPersonEntityRelTypes?.description}},</ng-container>
+                  <ng-container *ngIf="last">{{relationship?.validPersonEntityRelTypes?.description}}</ng-container>
                 </span>
               </td>
               <td>{{ item?.involvementEndDate |dateFormatter }}</td>
               <td>
-                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization" data-bs-dismiss="modal"
+                <!-- btn btn-outline-primary action-buttons p-2  -->
+                <button class="align-items-center btn btn-outline-primary d-flex fs-14 " aria-label="Edit Organization" data-bs-dismiss="modal"
                   [routerLink]="['/coi/entity-details']"
                   [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}"
                   (click)="closeCountModal()" >
-                  <i class="fa fa-eye" aria-hidden="true"></i>
-                  <span class="f-12">View</span>
+                  <i class="fa fa-eye" aria-hidden="true"><span class="f-12 mx-2">View</span></i>
                 </button>
               </td>
             </tr>
