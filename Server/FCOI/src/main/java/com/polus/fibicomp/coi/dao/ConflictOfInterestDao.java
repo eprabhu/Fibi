@@ -12,6 +12,7 @@ import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
@@ -663,10 +664,14 @@ public interface ConflictOfInterestDao {
 	
 	public List<ValidPersonEntityRelType> getValidPersonEntityRelTypes(Integer personEntityId);
 
-	public CoiDisclosure getMasterDisclosureByPersonId(String personId);
+	public List<CoiDisclosure> getMasterDisclosureByPersonId(String personId);
 
 	public Integer getAllSystemEntityListCount(CoiDashboardVO vo);
 
 	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
+
+	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode);
+
+	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);
 
 }
