@@ -1,6 +1,6 @@
 <div class="row my-4">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
-        <div class="col-6 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1'">
+        <div class="col-6 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
             <div class="shadow-sm disclosure-card border rounded">
                 <div class="border-bottom d-flex disclosure-card-heading-blue px-3 py-2 rounded-top-2">
                     <div class="col"><strong class="fs-15">FCOI Disclosure</strong></div>
@@ -29,7 +29,7 @@
                             <span class="ps-2 span-data-color">{{disclosure?.certifiedTimestamp | dateFormatter}}</span>
                         </div>
                         <div>
-                            <span class="fw-bold text-secondary">SFI's : </span>
+                            <span class="fw-bold text-secondary">SFIs : </span>
                             <span class="ps-2 fw-bold text-primary">{{disclosure?.numberOfSFI}}</span>
                         </div>
                     </div>
@@ -171,6 +171,9 @@
                     <span class="fw-bold me-2">Type :</span> {{disclosure?.fcoiType}}
                 </div>
                 <div class="col">
+                    <span class="fw-bold me-2">Create Date :</span> {{disclosure?.createTimestamp | dateFormatterWithTimeZone}}
+                </div>
+                <div class="col">
                     <span class="fw-bold me-2">Certification Date :</span> <span
                         *ngIf="disclosure.submittedDate">{{disclosure?.submittedDate |
                     dateFormatter}} </span>
@@ -178,15 +181,12 @@
                 <div class="col">
                     <span class="fw-bold me-2">Expiration Date :</span> {{disclosure?.expirationDate | dateFormatter}}
                 </div>
-                <div class="col">
-                    <span class="fw-bold me-2">Create Date :</span> {{disclosure?.createTimestamp | dateFormatterWithTimeZone}}
-                </div>
             </div>
         </div>
         <div class="align-items-center chin d-flex fs-14 mx-3 ">
             <div class="align-items-center col-3 d-flex fs-14">
                 <strong class="fs-18 me-2 text-blue-color">{{disclosure?.noOfSfi}}</strong>
-                <strong>SFI's</strong>
+                <strong>SFIs</strong>
             </div>
             <div class="col-3 text-secondary fs-14 d-flex">
                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">

@@ -5,6 +5,7 @@ import {LoginService} from "./login.service";
 import {CommonService} from "../common/services/common.service";
 import {subscriptionHandler} from "../../../../fibi/src/app/common/utilities/subscription-handler";
 import {HTTP_ERROR_STATUS} from "../../../../fibi/src/app/app-constants";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
     selector: 'app-login',
@@ -65,9 +66,14 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                         //     this.commonService.assignSystemParameters(systemParameters);
                         // });
                         this._router.navigate(['coi/user-dashboard']);
-                    } else {
-                        this.commonService.showToast(HTTP_ERROR_STATUS, 'The username or password that you have entered is incorrect');
                     }
+                }
+            }, (err: HttpErrorResponse) => {
+                this.isSaving = false;
+                if (err.status == 403) {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'The username or password that you have entered is incorrect');
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
                 }
             }));
         }

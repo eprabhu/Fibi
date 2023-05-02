@@ -46,7 +46,7 @@ export class ResolveServiceService {
         const HTTP_REQUESTS = [];
         const MODULE_ID = route.queryParamMap.get('disclosureId');
         MODULE_ID ? HTTP_REQUESTS.push(this.loadDisclosure(MODULE_ID)) :
-            HTTP_REQUESTS.push(this.createDisclosure(route.queryParamMap.get('tabName')));
+            HTTP_REQUESTS.push(this.createDisclosure());
         return HTTP_REQUESTS;
     }
 
@@ -54,11 +54,7 @@ export class ResolveServiceService {
         return this._coiService.loadDisclosure(disclosureId).pipe((catchError(error => this.redirectOnError(error))));
     }
 
-    private createDisclosure(tabName: string) {
-        if (!tabName) {
-            this._router.navigate(['/coi/user-dashboard']);
-            return null;
-        }
+    private createDisclosure() {
         return this._coiService.createDisclosure({
             coiDisclosure: {
                 fcoiTypeCode: 1, personId: this._commonService.getCurrentUserDetail('personId')
