@@ -59,7 +59,22 @@ export class RelationshipComponent {
       this.proposalArray = data.awards;
       data.proposals.every(ele => this.proposalArray.push(ele));
       this.coiStatusList = data.coiProjConflictStatusTypes;
+      this._dataStore.disclosureStatus = this.getDisclosureStatus();
     });
+  }
+
+  /**
+   * conflict - 3
+   * No Conflict - 1
+   * Potential Conflict - 2
+   */
+  getDisclosureStatus(): any {
+   let test : any;
+    this.proposalArray.forEach(ele => {
+         test = ele.disclosureStatusCount.find(ele => ele[3] > 0) ? '3' :
+                ele.disclosureStatusCount.find(ele => ele[2] > 0) ? '2' : '1';
+    });
+    return test;
   }
 
   openDefineRelationship(test) {

@@ -209,9 +209,9 @@ export class CommonService {
             case '1':
                 return 'bg-success text-white';
             case '2':
+                return 'bg-warning text-black'
             case '3':
-            case '4':
-                return 'bg-warning text-black';
+                return 'bg-danger text-white';
         }
     }
 
