@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DEFAULT_DATE_FORMAT } from 'projects/fibi/src/app/app-constants';
+import { DEFAULT_DATE_FORMAT, DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
 import { Constants } from 'projects/fibi/src/app/common/constants/action-list.constants';
 import { CommonService } from '../../../services/common.service';
 import { setFocusToElement } from 'projects/fibi/src/app/common/utilities/custom-utilities';
@@ -90,7 +90,7 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
     modulePath = Object.assign({}, Constants.paths);
     viewInboxSearch = false;
     inboxTab = 'PENDING';
-    datePlaceHolder = DEFAULT_DATE_FORMAT;
+    datePlaceHolder = DATE_PLACEHOLDER;
     setFocusToElement = setFocusToElement;
     moduleList: any = [];
     isInboxInfo = true;
