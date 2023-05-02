@@ -7,8 +7,6 @@ import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/
 import {Toast} from "bootstrap";
 import {HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
 
-declare var $: any;
-
 @Injectable()
 export class CommonService {
 
@@ -139,7 +137,6 @@ export class CommonService {
     }
 
     getCurrentUserDetail(detailsKey: string) {
-        console.log(this.currentUserDetails);
         return this.currentUserDetails && this.currentUserDetails[detailsKey] ?
             this.currentUserDetails[detailsKey] : this.updateCurrentUser(detailsKey);
     }
