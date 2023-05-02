@@ -40,14 +40,15 @@
                 <div class="align-items-center d-flex fs-14 m-0 row">
                     <div class="col-6 text-secondary">
                         <span class="fw-bold me-3">Relationship :</span>
-                        <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span
-                                class="fw-medium">Financial :
+                        <span *ngIf="item?.validPersonEntityRelTypes?.length" class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
+                            <span  class="fw-medium">Financial :
                             </span> <em *ngFor="let relationship of item?.validPersonEntityRelTypes;let last = last">
                                 <span class="r-title" *ngIf="!last">{{relationship?.personEntityRelType?.description +','}}
                                 </span>
                                 <span class="r-title" *ngIf="last">{{relationship?.personEntityRelType?.description}}
                                 </span>
                             </em></span>
+                            <span *ngIf="!item?.validPersonEntityRelTypes?.length"> No Data</span>
                         <!-- <span class="relationship-pill border px-3 py-1 me-2 rounded-4 fw-medium pill-color">Travel</span>
                         <span class="relationship-pill border px-3 py-1 rounded-4 fw-medium pill-color">Commitment</span> -->
                     </div>
