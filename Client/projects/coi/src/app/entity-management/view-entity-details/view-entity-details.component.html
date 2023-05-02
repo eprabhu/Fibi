@@ -59,28 +59,28 @@
         <div class="col-2">
           <div class="row">
             <span class="fw-500 fs-14">City</span>
-            <label class="text-secondary fs-14">{{entityDetails?.city !==null?entityDetails?.city:'No Data'}}</label>
+            <label class="text-secondary fs-14">{{entityDetails?.city !==null?entityDetails?.city:'-- No Data --'}}</label>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
             <span class="fw-500 fs-14">Website</span>
             <label class="text-secondary fs-14">
-              {{entityDetails?.webURL !==null?entityDetails?.webURL:'No Data'}}</label>
+              {{entityDetails?.webURL !==null?entityDetails?.webURL:'-- No Data --'}}</label>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
             <span class="fw-500 fs-14">Email Address </span>
             <label class="text-secondary fs-14">
-              {{entityDetails?.emailAddress!==null? entityDetails?.emailAddress:'NoData'}}</label>
+              {{entityDetails?.emailAddress!==null? entityDetails?.emailAddress:'-- No Data --'}}</label>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
             <span class="fw-500 fs-14">Phone Number</span>
             <label class="text-secondary fs-14">
-              {{entityDetails?.phone !==null ? entityDetails?.phone:'No Data'}}</label>
+              {{entityDetails?.phone !==null ? entityDetails?.phone:'-- No Data --'}}</label>
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@
           <div class="row">
             <span class="fw-500 fs-14">Address</span>
             <label class="text-secondary fs-14 mt-1 pr-15">
-              {{entityDetails?.address !==null ? entityDetails?.address:'No Data'}}</label>
+              {{entityDetails?.address !==null ? entityDetails?.address:'-- No Data --'}}</label>
           </div>
         </div>
         <div class="col-2">
@@ -102,7 +102,7 @@
                 class="invalid material-icons-round">warning</mat-icon>
                 <label class="mt-1">
                   {{entityDetails?.entityRiskCategory !==null?
-                    entityDetails?.entityRiskCategory?.description:'No data'}}
+                    entityDetails?.entityRiskCategory?.description:'-- No Data --'}}
                 </label>
                 </div>
           </div>
@@ -117,7 +117,7 @@
                 {{entityDetails?.approvedTimestamp|dateFormatterWithTimeZone:'long'}}</label>
             </div>
             <ng-template #noData>
-              <label class="text-secondary fs-14 mt-1">No Data</label>
+              <label class="text-secondary fs-14 mt-1">-- No Data --</label>
             </ng-template>
           </div>
         </div>

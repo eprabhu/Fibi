@@ -441,7 +441,7 @@
                 </div>
                 <div class="col-3 d-flex">
                   <label for="last-approved-version-date" class="label-text">Last Approved Version Date :</label>
-                  <span *ngIf="!coi?.lastApprovedVersionDate" class="noDataExists">No data date exist</span>
+                  <span *ngIf="!coi?.lastApprovedVersionDate" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.lastApprovedVersionDate" id="last-approved-version-date" class="grey-text">{{coi?.lastApprovedVersionDate | dateFormatter}}</span>
                 </div>
                 <div class="col-6 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
@@ -517,7 +517,7 @@
                   </div>
                 </div>
                 <div class="col-3 align-self-center grey-text">
-                  <label class="label-text" for="last-updated">Last Updated By :</label>
+                  <label class="label-text" for="last-updated">Last Updated By : </label>
                   <span id="last-updated">{{coi?.updateUser}} On {{coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
                 </div>
                 <div class="col-auto ms-auto">
