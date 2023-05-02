@@ -572,7 +572,7 @@
   </section>
 
   <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
-    [disclosureNumber]="currentDisclosureNumber" [moduleCode]="selectedModuleCode" [inputType]="inputType"
+    [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode" [inputType]="inputType"
     [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"></app-count-modal>
   <!-- Confirmation Modal -->
   <div class="modal fade mySkinDialog" id="ReviewModal" role="dialog">
