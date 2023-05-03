@@ -399,9 +399,9 @@ public class ConflictOfInterestController {
 		logger.info("Requesting for loadTravelStatusTypesLookup");
 		return conflictOfInterestService.loadTravelStatusTypesLookup();
 	}
-	
-	@GetMapping("hello")
-	public ResponseEntity<String> hello() {
-		return new ResponseEntity<>("Hello from COI", HttpStatus.OK);
-	} 
+
+	@GetMapping("/checkEntity/{entityId}/added")
+	public ResponseEntity<Object> checkEntityAdded(@PathVariable("entityId") Integer entityId) {
+		return new ResponseEntity<>(conflictOfInterestService.checkEntityAdded(entityId), HttpStatus.OK);
+	}
 }

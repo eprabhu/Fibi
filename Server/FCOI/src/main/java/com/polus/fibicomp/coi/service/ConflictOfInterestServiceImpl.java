@@ -176,6 +176,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		prepareDisclosureEntityProjectRelation(conflictOfInterestVO);
+		if(coiDisclosure.getFcoiTypeCode().equals("1")) { // if type is FCOI
+			conflictOfInterestDao.syncProjectWithDisclosure(Constants.DEV_PROPOSAL_MODULE_CODE, coiDisclosure.getDisclosureId(),
+					coiDisclosure.getDisclosureNumber());
+			conflictOfInterestDao.syncProjectWithDisclosure(Constants.AWARD_MODULE_CODE, coiDisclosure.getDisclosureId(),
+					coiDisclosure.getDisclosureNumber());
+		}
 		return loadDisclosure(coiDisclosure.getDisclosureId());
 	}
 	
@@ -535,7 +541,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	private CoiDisclosure copyDisclosure(CoiDisclosure disclosure, CoiDisclosure copyDisclosure) {
 		copyDisclosure.setFcoiTypeCode(disclosure.getFcoiTypeCode());
-//		copyDisclosure.setConflictStatusCode(Constants.DISCLOSURE_STATUS_PENDING);
 		copyDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_TYPE_CODE);
 		copyDisclosure.setReviewStatusCode(REVIEW_STATUS_TYPE_CODE);
 		copyDisclosure.setVersionStatus(DISCLOSURE_SEQUENCE_STATUS_CODE);
@@ -1213,5 +1218,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> loadTravelStatusTypesLookup() {
 		return new ResponseEntity<>(conflictOfInterestDao.loadTravelStatusTypesLookup(),  HttpStatus.OK);
 	}
-	
+
+	@Override
+	public Object checkEntityAdded(Integer entityId) {
+		return conflictOfInterestDao.checkEntityAdded(entityId);
+	}
 }
