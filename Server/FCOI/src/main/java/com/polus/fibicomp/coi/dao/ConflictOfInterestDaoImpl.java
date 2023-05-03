@@ -21,18 +21,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.internal.SessionImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.orm.hibernate5.HibernateTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.polus.fibicomp.agreements.pojo.AdminGroup;
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
@@ -67,6 +55,21 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.polus.fibicomp.agreements.pojo.AdminGroup;
+import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+import com.polus.fibicomp.award.pojo.Award;
+import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
+import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -926,7 +929,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
 		Root<CoiDisclEntProjDetails> rootCoiDisclosureDetails = query.from(CoiDisclEntProjDetails.class);
-		query.where(builder.equal(rootCoiDisclosureDetails.get("disclosureDetailsId"), disclosureId));
+		query.where(builder.equal(rootCoiDisclosureDetails.get("disclosureId"), disclosureId));
 		query.multiselect(builder.countDistinct(rootCoiDisclosureDetails.get("disclosureDetailsId")));
 		Long numberOfSFI = session.createQuery(query).getSingleResult();
 		return numberOfSFI.intValue();
@@ -1221,6 +1224,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
 				disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
 				disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
+				disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
 				if (tabName.equals("PENDING_DISCLOSURES")) {
 					disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
 					disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
@@ -2229,7 +2233,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			Root<CoiDisclosure> rootCoiDisclosure = query.from(CoiDisclosure.class);
 			query.where(builder.and(builder.equal(rootCoiDisclosure.get("personId"), personId),
 					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1")));
-			query.where(builder.equal(rootCoiDisclosure.get("personId"), personId));
 			return session.createQuery(query).getResultList();
 		} catch (Exception ex) {
 			return null;
@@ -2311,6 +2314,37 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
+	public boolean checkEntityAdded(Integer entityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("select (CASE WHEN count(pe.personEntityId) > 0 THEN true ELSE false END) from PersonEntity pe where " +
+				"pe.entityId = :entityId AND pe.personId = :personId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("personId", AuthenticatedUser.getLoginPersonId());
+		return (Boolean) query.getSingleResult();
+	}
+
+	@Override
+	public void syncProjectWithDisclosure(Integer moduleCode, Integer disclosureId, Integer disclosureNumber) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		try {
+			CallableStatement statement = connection.prepareCall("{call SYNC_PROJECTS_DISCLOSURE(?,?,?,?,?)}");
+			statement.setInt(1, moduleCode);
+			statement.setInt(2, disclosureId);
+			statement.setInt(3, disclosureNumber);
+			statement.setString(4, AuthenticatedUser.getLoginPersonId());
+			statement.setString(5, AuthenticatedUser.getLoginUserName());
+			statement.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ApplicationException("error in sync projects", e, Constants.DB_FN_ERROR);
+		}
+	}
+
+	@Override
 	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode) {
 		return hibernateTemplate.get(CoiDisclosureFcoiType.class, coiTypeCode);
 	}
@@ -2324,5 +2358,33 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityId"), personEntityId));
 		return session.createQuery(query).getResultList();
 	}
-	
+
+	@Override
+	public Integer getNumberOfProposalsBasedOnDisclosureId(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<CoiDisclEntProjDetails> rootCoiDisclEntProjDetails = query.from(CoiDisclEntProjDetails.class);
+		query.where(builder.and(
+			    builder.equal(rootCoiDisclEntProjDetails.get("moduleCode"), Constants.DEV_PROPOSAL_MODULE_CODE)),
+			    builder.equal(rootCoiDisclEntProjDetails.get("disclosureId"), disclosureId));
+		query.multiselect(builder.countDistinct(rootCoiDisclEntProjDetails.get("disclosureDetailsId")));
+		Long numberOfProposals = session.createQuery(query).getSingleResult();
+		return numberOfProposals.intValue();
+	}
+
+	@Override
+	public Integer getNumberOfAwardsBasedOnDisclosureId(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<CoiDisclEntProjDetails> rootCoiDisclEntProjDetails = query.from(CoiDisclEntProjDetails.class);
+		query.where(builder.and(
+			    builder.equal(rootCoiDisclEntProjDetails.get("moduleCode"), Constants.AWARD_MODULE_CODE)),
+			    builder.equal(rootCoiDisclEntProjDetails.get("disclosureId"), disclosureId));
+		query.multiselect(builder.countDistinct(rootCoiDisclEntProjDetails.get("disclosureDetailsId")));
+		Long numberOfAwards = session.createQuery(query).getSingleResult();
+		return numberOfAwards.intValue();
+	}
+
 }
