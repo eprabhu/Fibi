@@ -58,7 +58,7 @@
                   </div>
                   <div class="col-6" style="text-align: center;">
                       <span *ngIf="test.sfiCompleted !== null" class="fs-12 badge badge-pill badge-primary noConflict-badge">
-                      <span>{{getDisclosureCount(2, test.disclosureStatusCount)}}</span>
+                      <span>{{getDisclosureCount(1, test.disclosureStatusCount)}}</span>
                     </span>
                     <span *ngIf="test.sfiCompleted == null" class="count-margin">--</span>
                   </div>
@@ -70,7 +70,7 @@
                   </div>
                   <div class="col-6"  style="text-align: center;">
                     <span *ngIf="test.sfiCompleted !== null" class="fs-12 badge badge-pill badge-primary potentialConflict-badge">
-                      <span>{{getDisclosureCount(3, test.disclosureStatusCount)}}</span>
+                      <span>{{getDisclosureCount(2, test.disclosureStatusCount)}}</span>
                     </span>
                     <span *ngIf="test.sfiCompleted == null" class="count-margin">--</span>
                   </div>
@@ -81,7 +81,7 @@
                   </div>
                   <div class="col-6" style="text-align: center;">
                     <span *ngIf="test.sfiCompleted != null" class="fs-12 badge badge-pill badge-primary Conflict-badge">
-                      <span>{{getDisclosureCount(1, test.disclosureStatusCount)}}</span>
+                      <span>{{getDisclosureCount(3, test.disclosureStatusCount)}}</span>
                       </span>
                       <span *ngIf="test.sfiCompleted == null" class="count-margin">--</span>
                   </div>

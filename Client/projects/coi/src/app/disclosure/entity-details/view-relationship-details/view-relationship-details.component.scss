@@ -34,3 +34,11 @@
     color: #6A7980;
   }
 
+  .r-title {
+    display: inline-block;
+    text-transform: lowercase;
+  }
+
+  .r-title::first-letter {
+    text-transform: uppercase;
+  }

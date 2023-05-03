@@ -19,13 +19,20 @@
         <div class="col-3">
           <div class="row">
             <label class="fs-14 fw-500">Relationship Type</label>
-            <label class="text-secondary fs-14">{{relationshipsDetails?.personEntityRelationships?relationshipsDetails?.personEntityRelationships:'-- No Data --'}}</label>
+            <label class="text-secondary  fs-14">{{personEntityRelationships.length>0?'Financial':'-- No Data --'}}</label>
           </div>
         </div>
         <div class="col-3">
           <div class="row">
             <label class="fs-14 fw-500">Relationship With</label>
-            <label class="text-secondary fs-14">Self</label>
+            <div class="col" *ngIf="personEntityRelationships.length>0;else noData">
+            <ng-container  *ngFor="let data of personEntityRelationships;let last = last" class="col">
+            <span class="r-title text-secondary fs-14" *ngIf="!last">{{data?.validPersonEntityRelType?.personEntityRelType?.description +'/'}}
+            </span>
+            <span class="r-title text-secondary fs-14" *ngIf="last">{{data?.validPersonEntityRelType?.personEntityRelType?.description}}
+            </span>
+            </ng-container>
+          </div>
           </div>
         </div>
       </div>
@@ -65,3 +72,8 @@
     </div>
     <!-- </div> -->
   </div>
+  <ng-template #noData>
+    <label class="text-secondary fs-14">
+      -- No Data --
+    </label>
+  </ng-template>

@@ -16,6 +16,7 @@ import {SharedModule} from "../shared/shared.module";
 import { SfiModule } from './sfi/sfi.module';
 import {CoiSharedModule} from "./shared/shared.module";
 import { FormsModule } from '@angular/forms';
+import { CommonService } from '../common/services/common.service';
 
 
 const routes: Routes = [
@@ -73,7 +74,8 @@ const routes: Routes = [
         ResolveServiceService,
         DataStoreService,
         CoiService,
-        RouterGuardService
+        RouterGuardService,
+        CommonService
     ],
     exports:[]
 })

@@ -182,18 +182,6 @@
     cursor: pointer;
   }
 
-  .bg-success {
-    background-color: #6cc973 !important;
-  }
-
-  .bg-warning {
-    background-color: #c59c59 !important;
-  }
-
-  .bg-danger {
-    background-color: #ca4e4f !important;
-  }
-
   .noDataExists {
     color      : #9e9e9e !important;
     font-size  : 13px;

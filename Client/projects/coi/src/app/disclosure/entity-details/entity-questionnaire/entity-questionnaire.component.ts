@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
@@ -40,6 +40,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   relationValidationMap = new Map();
   isEditMode = false;
   $subscriptions: Subscription[] = [];
+  @Output() updateRelationship: EventEmitter<any> = new EventEmitter<any>();
+
 
 
   constructor(private _commonService: CommonService, private _router: Router,
@@ -124,6 +126,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
         this.findRelation(res.validPersonEntityRelType.relationshipTypeCode);
         this.clearRelationModal();
         this.isSave = false;
+        this.updateRelationship.emit(res);
       },_error=>{
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
       }));

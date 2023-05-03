@@ -13,6 +13,7 @@ export class EntityDetailsComponent implements OnInit,OnDestroy {
     this.clearSfiNavBarStyle();
   }
   entityDetails = {};
+  updateRelationshipDetails:any;
   ngOnInit() {
     const isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit'
     if(isEditMode){
@@ -25,5 +26,9 @@ export class EntityDetailsComponent implements OnInit,OnDestroy {
   }
    clearSfiNavBarStyle() {
     document.body.style.removeProperty('overflow');
+  }
+
+  updateRelationship(event){
+  this.updateRelationshipDetails = event;
   }
 }
