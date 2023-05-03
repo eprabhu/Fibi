@@ -16,7 +16,7 @@
             <p class="entity-title">
             <strong class="fs-18" (click)="selectedProjectForView=test;" data-bs-toggle="modal" data-bs-target="#moduleViewModal">#{{test?.moduleItemId}} - {{test?.title?.length > 75 && !collapseViewMore[test?.moduleItemId] ? (test?.title | slice:0:75)+'...' : test?.title}}
             </strong>
-            <span (click)="collapseViewMoreOption(test?.moduleItemId, collapseViewMore[test?.moduleItemId])" *ngIf="test?.title?.length > 75" class="collapse-text">
+            <span (click)="collapseViewMoreOption(test?.moduleItemId, collapseViewMore[test?.moduleItemId])" *ngIf="test?.title?.length > 75" class="collapse-text fs-13">
               {{collapseViewMore[test?.moduleItemId] ? "Show Less" : "Read More"}}
             </span>
             </p>
@@ -28,11 +28,11 @@
             </p>
           </div>
            <div class="row">
-              <div class=" col-4">
+              <div class=" col-6">
                  <label class="label-text">{{test?.moduleCode == 1 ? 'Award Status :' : 'Proposal Status :'}}</label>
                  <span class="grey-text">{{test?.moduleStatus}} </span>
              </div>
-             <div class=" col-4">
+             <div class=" col-6">
                  <label class="label-text">Principal Investigator :</label>
                  <span class="grey-text">{{test?.principalInvestigator}} </span>
           </div>
@@ -77,7 +77,7 @@
                 </div>
                 <div class="row">
                   <div class="col-6">
-                    <label class="count-label">Conflict Identified:</label>
+                    <label class="count-label">Conflict Identified :</label>
                   </div>
                   <div class="col-6" style="text-align: center;">
                     <span *ngIf="test.sfiCompleted != null" class="fs-12 badge badge-pill badge-primary Conflict-badge">

@@ -5,7 +5,7 @@ import {environment} from "../../../environments/environment";
 import {getFromLocalStorage, setIntoLocalStorage} from "../../../../../fibi/src/app/common/utilities/user-service";
 import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
 import {Toast} from "bootstrap";
-import {HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
+import { HTTP_SUCCESS_STATUS } from '../../app-constants';
 
 @Injectable()
 export class CommonService {
@@ -197,10 +197,13 @@ export class CommonService {
     }
 
     showToast(status = HTTP_SUCCESS_STATUS, toastContent = '') {
-        let toast = new Toast(document.getElementById('coi-bootstrap-toast'));
+        let toast: any = new Toast(document.getElementById('coi-bootstrap-toast'));
+        let toast_body: any = document.getElementById('coi-bootstrap-toast-body');
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
-        this.toastClass = status === HTTP_SUCCESS_STATUS ? 'success' : 'danger';
+        this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' : 'bg-danger';
+        toast_body.innerText =  this.appToastContent;
+        toast._element.classList.add(this.toastClass)
         toast.show();
     }
 
