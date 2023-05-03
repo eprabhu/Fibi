@@ -132,9 +132,31 @@ public class CoiDisclosure implements Serializable {
 
 	@Transient
 	private Integer numberOfSFI;
+
+	@Transient
+	private Integer numberOfProposals;
+	
+	@Transient
+	private Integer numberOfAwards;
 	
 	@Transient
 	private String coiProjectTypeCode;
+
+	public Integer getNumberOfProposals() {
+		return numberOfProposals;
+	}
+
+	public void setNumberOfProposals(Integer numberOfProposals) {
+		this.numberOfProposals = numberOfProposals;
+	}
+
+	public Integer getNumberOfAwards() {
+		return numberOfAwards;
+	}
+
+	public void setNumberOfAwards(Integer numberOfAwards) {
+		this.numberOfAwards = numberOfAwards;
+	}
 
 	public Integer getDisclosureId() {
 		return disclosureId;
