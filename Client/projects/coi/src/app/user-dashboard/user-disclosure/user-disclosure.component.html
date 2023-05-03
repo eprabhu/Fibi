@@ -120,7 +120,7 @@
 
 <div class="advance-search-area border d-flex mt-2 rounded-1">
     <div class="border-end fs-14 p-3">
-        <span class="fs-14 fw-medium me-2 text-secondary">Filter By:</span>
+        <span class="fs-14 fw-medium me-2 text-secondary">Filter By Type :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
               class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active"
               role="button">All</span>
@@ -134,7 +134,7 @@
     <div class="d-flex flex-fill">
         <input class="advance-search-input border-0 px-4" id="searchText" type="text" [(ngModel)]="searchText">
         <label for="searchText" class="fs-15 ml-15 mt-3" *ngIf="!searchText">
-            <mat-icon class="me-2">search</mat-icon> Search Disclosure; Ex: Proposal Disclosure</label>
+            <mat-icon class="me-2">search</mat-icon> Search Disclosure </label>
     </div>
 </div>
 <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
@@ -201,7 +201,7 @@
                 </ng-container>
             </div>
             <div class="col-4">
-                <div>Last Updated By : {{disclosure?.updateUser}} On {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}</div>
+                <div><span class="fw-bold me-2">Last Updated By : </span> {{disclosure?.updateUser}} On {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}</div>
             </div>
             <div class="col-auto ms-auto d-flex justify-content-end">
                 <button *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.conflictStatusCode == '3'"

@@ -419,11 +419,11 @@
                     class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
-                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
+               <!-- <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
                   <label for="last-approved-version" class="label-text">Last Approved Version :</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
-                </div>
+                </div> -->
                 <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
                   <label for="disp-status" class="label-text">Disposition Status :</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">-- No Data --</span>
@@ -433,7 +433,7 @@
                 </div>
               </div>
               <div class="row mb-3 px-3">
-                <div class="col-3 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
+               <!-- <div class="col-3 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label for="last-approved-version" class="label-text">Last Approved Version :</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
@@ -447,8 +447,8 @@
                   <label for="revision-reason" class="label-text">Revision Reason :</label>
                   <span *ngIf="!coi?.revisionComment" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.revisionComment" id="revision-reason" class="grey-text">{{coi?.revisionComment}}</span>
-                </div>
-                <div class="col-3 d-flex align-self-center"
+                </div>-->
+                <div class="col-9 d-flex align-self-center"
                   *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label class="m-0" for="last-updated" class="label-text"> Review Status for </label>
                   <!-- <span *ngIf="!coi?.reviewerFullName" class="noDataExists">No disclosure type exist</span> -->
@@ -463,14 +463,14 @@
                     id="review-status">{{coi?.reviewStatus}}</span>
                 </div>
               </div>
-              <div class="row mb-2 px-3" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
+              <!-- <div class="row mb-2 px-3" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                 <div class="col-6 d-flex"
                   [ngClass]="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES' ?'col-6':'col-9'">
                   <label for="revision-reason" class="label-text">Revision Reason :</label>
                   <span *ngIf="!coi?.revisionComment" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.revisionComment" id="revision-reason" class="grey-text">{{coi?.revisionComment}}</span>
                 </div>
-              </div>
+              </div>-->
             </div>
               <div class="row py-2 m-0 bg-white">
                 <div class="col-3 d-flex align-items-center">
@@ -515,12 +515,11 @@
                       <label class="label-text"> Awards</label></div>
                   </div>
                 </div>
-                <div class="col-3 align-self-center grey-text">
+                <div class="col-3 d-flex align-items-center">
                   <label class="label-text" for="last-updated">Last Updated By : </label>
-                  <span id="last-updated">{{coi?.updateUser}} On {{coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
+                  <span id="last-updated" class="grey-text">{{coi?.updateUser}} On {{coi?.updateTimeStamp | dateFormatterWithTimeZone: 'long'}}</span>
                 </div>
                 <div class="col-auto ms-auto">
-
                   <button
                   [routerLink]="['/coi/disclosure/summary']"
                     [queryParams]="{disclosureId:coi?.coiDisclosureId}" class="align-items-center btn btn-outline-primary d-flex fs-14">
