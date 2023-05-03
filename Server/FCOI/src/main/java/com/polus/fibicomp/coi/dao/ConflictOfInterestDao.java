@@ -670,6 +670,20 @@ public interface ConflictOfInterestDao {
 
 	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
 
+	/**
+	 *
+	 * @param enitityId
+	 * @return
+	 */
+	boolean checkEntityAdded(Integer enitityId);
+
+	/**
+	 *
+	 * @param devProposalModuleCode
+	 * @param disclosureId
+	 * @param disclosureNumber
+	 */
+	void syncProjectWithDisclosure(Integer devProposalModuleCode, Integer disclosureId, Integer disclosureNumber);
 	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode);
 
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);

@@ -21,18 +21,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.internal.SessionImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.orm.hibernate5.HibernateTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.polus.fibicomp.agreements.pojo.AdminGroup;
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
@@ -67,6 +55,21 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.polus.fibicomp.agreements.pojo.AdminGroup;
+import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+import com.polus.fibicomp.award.pojo.Award;
+import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
+import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -2311,6 +2314,37 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
+	public boolean checkEntityAdded(Integer entityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("select (CASE WHEN count(pe.personEntityId) > 0 THEN true ELSE false END) from PersonEntity pe where " +
+				"pe.entityId = :entityId AND pe.personId = :personId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("personId", AuthenticatedUser.getLoginPersonId());
+		return (Boolean) query.getSingleResult();
+	}
+
+	@Override
+	public void syncProjectWithDisclosure(Integer moduleCode, Integer disclosureId, Integer disclosureNumber) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		try {
+			CallableStatement statement = connection.prepareCall("{call SYNC_PROJECTS_DISCLOSURE(?,?,?,?,?)}");
+			statement.setInt(1, moduleCode);
+			statement.setInt(2, disclosureId);
+			statement.setInt(3, disclosureNumber);
+			statement.setString(4, AuthenticatedUser.getLoginPersonId());
+			statement.setString(5, AuthenticatedUser.getLoginUserName());
+			statement.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ApplicationException("error in sync projects", e, Constants.DB_FN_ERROR);
+		}
+	}
+
+	@Override
 	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode) {
 		return hibernateTemplate.get(CoiDisclosureFcoiType.class, coiTypeCode);
 	}
@@ -2352,5 +2386,5 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Long numberOfAwards = session.createQuery(query).getSingleResult();
 		return numberOfAwards.intValue();
 	}
-	
+
 }
