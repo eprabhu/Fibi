@@ -175,12 +175,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
-		prepareDisclosureEntityProjectRelation(conflictOfInterestVO);
 		if(coiDisclosure.getFcoiTypeCode().equals("1")) { // if type is FCOI
 			conflictOfInterestDao.syncProjectWithDisclosure(Constants.DEV_PROPOSAL_MODULE_CODE, coiDisclosure.getDisclosureId(),
 					coiDisclosure.getDisclosureNumber());
 			conflictOfInterestDao.syncProjectWithDisclosure(Constants.AWARD_MODULE_CODE, coiDisclosure.getDisclosureId(),
 					coiDisclosure.getDisclosureNumber());
+		} else {
+			prepareDisclosureEntityProjectRelation(conflictOfInterestVO);
 		}
 		return loadDisclosure(coiDisclosure.getDisclosureId());
 	}
