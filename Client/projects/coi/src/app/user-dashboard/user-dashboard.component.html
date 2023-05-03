@@ -95,6 +95,7 @@
                  role="button" routerLinkActive="active"
                  title="Goto My Disclosures">
                 <strong class="fs-18">My Disclosures</strong>
+                <img [class.d-none]="!router.url.includes('user-dashboard/disclosures')" class="nav-tip-active" src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
             </div>
             <div [routerLink]="['entities']"
                  tabindex="0" aria-label="Goto My Entities"
@@ -102,6 +103,7 @@
                  routerLinkActive="active"
                  title="Goto My Entities">
                 <strong class="fs-18">My Entities</strong>
+                <img [class.d-none]="!router.url.includes('user-dashboard/entities')" class="nav-tip-active" src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
             </div>
         </div>
     </div>
