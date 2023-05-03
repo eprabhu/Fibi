@@ -1,12 +1,13 @@
 .left-div{
     width: 75%;
+    margin-top: 26px;
     display: inline-block;
     transition: width 1.2s ease-in-out;
 }
 .right-div{
-    width: 25%;
-    position: sticky;
-    margin-left: 8px;
-    top: 279px;
-    height: 100vh;
+    margin-top: 6px;
+    display: inline-block;
+    width: 24%;
+    position: fixed;
+    margin-left: 3px;
 }
