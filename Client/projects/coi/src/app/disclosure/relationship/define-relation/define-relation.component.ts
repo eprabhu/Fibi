@@ -220,7 +220,13 @@ export class DefineRelationComponent implements OnInit {
       this.prepareSaveObject();
         this._relationShipService.saveEntityProjectRelation(this.entityProjectDetails, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
           this.entityProjectDetails = data.coiDisclEntProjDetails;
+          this.coiDescription = '';
+          this.coiStatusCode = null;
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
         }, err => {
+          this.coiDescription = '';
+          this.coiStatusCode = null;
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
       });
     }
 
@@ -228,9 +234,9 @@ export class DefineRelationComponent implements OnInit {
         this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
           this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
           this.clearIndex = null;
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Relationship saved successfully.');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
       });
     }
 
