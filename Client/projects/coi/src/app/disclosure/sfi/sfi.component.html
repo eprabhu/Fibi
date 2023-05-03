@@ -48,7 +48,7 @@
                                 <span class="r-title" *ngIf="last">{{relationship?.personEntityRelType?.description}}
                                 </span>
                             </em></span>
-                            <span *ngIf="!item?.validPersonEntityRelTypes?.length"> No Data</span>
+                            <span class="noDataExists" *ngIf="!item?.validPersonEntityRelTypes?.length">-- No Data --</span>
                         <!-- <span class="relationship-pill border px-3 py-1 me-2 rounded-4 fw-medium pill-color">Travel</span>
                         <span class="relationship-pill border px-3 py-1 rounded-4 fw-medium pill-color">Commitment</span> -->
                     </div>
