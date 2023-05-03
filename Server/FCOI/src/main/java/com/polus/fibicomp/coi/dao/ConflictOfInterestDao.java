@@ -674,4 +674,8 @@ public interface ConflictOfInterestDao {
 
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);
 
+	public Integer getNumberOfProposalsBasedOnDisclosureId(Integer disclosureId);
+
+	public Integer getNumberOfAwardsBasedOnDisclosureId(Integer disclosureId);
+
 }

@@ -926,7 +926,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
 		Root<CoiDisclEntProjDetails> rootCoiDisclosureDetails = query.from(CoiDisclEntProjDetails.class);
-		query.where(builder.equal(rootCoiDisclosureDetails.get("disclosureDetailsId"), disclosureId));
+		query.where(builder.equal(rootCoiDisclosureDetails.get("disclosureId"), disclosureId));
 		query.multiselect(builder.countDistinct(rootCoiDisclosureDetails.get("disclosureDetailsId")));
 		Long numberOfSFI = session.createQuery(query).getSingleResult();
 		return numberOfSFI.intValue();
@@ -1221,6 +1221,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
 				disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
 				disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
+				disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
 				if (tabName.equals("PENDING_DISCLOSURES")) {
 					disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
 					disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
@@ -2229,7 +2230,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			Root<CoiDisclosure> rootCoiDisclosure = query.from(CoiDisclosure.class);
 			query.where(builder.and(builder.equal(rootCoiDisclosure.get("personId"), personId),
 					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1")));
-			query.where(builder.equal(rootCoiDisclosure.get("personId"), personId));
 			return session.createQuery(query).getResultList();
 		} catch (Exception ex) {
 			return null;
@@ -2323,6 +2323,34 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
 		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityId"), personEntityId));
 		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public Integer getNumberOfProposalsBasedOnDisclosureId(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<CoiDisclEntProjDetails> rootCoiDisclEntProjDetails = query.from(CoiDisclEntProjDetails.class);
+		query.where(builder.and(
+			    builder.equal(rootCoiDisclEntProjDetails.get("moduleCode"), Constants.DEV_PROPOSAL_MODULE_CODE)),
+			    builder.equal(rootCoiDisclEntProjDetails.get("disclosureId"), disclosureId));
+		query.multiselect(builder.countDistinct(rootCoiDisclEntProjDetails.get("disclosureDetailsId")));
+		Long numberOfProposals = session.createQuery(query).getSingleResult();
+		return numberOfProposals.intValue();
+	}
+
+	@Override
+	public Integer getNumberOfAwardsBasedOnDisclosureId(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<CoiDisclEntProjDetails> rootCoiDisclEntProjDetails = query.from(CoiDisclEntProjDetails.class);
+		query.where(builder.and(
+			    builder.equal(rootCoiDisclEntProjDetails.get("moduleCode"), Constants.AWARD_MODULE_CODE)),
+			    builder.equal(rootCoiDisclEntProjDetails.get("disclosureId"), disclosureId));
+		query.multiselect(builder.countDistinct(rootCoiDisclEntProjDetails.get("disclosureDetailsId")));
+		Long numberOfAwards = session.createQuery(query).getSingleResult();
+		return numberOfAwards.intValue();
 	}
 	
 }
