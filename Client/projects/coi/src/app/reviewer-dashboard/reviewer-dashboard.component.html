@@ -120,17 +120,17 @@
             *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosureStatus']=== 'desc' ">arrow_upward</mat-icon>
         </div>
       </span>
-      <span tabindex="0" (keydown.enter)="sortResult('certificationDate')" (click)="sortResult('certificationDate')"
-        [class.filter-active]="isActive('certificationDate')"
+      <span tabindex="0" (keydown.enter)="sortResult('certifiedAt')" (click)="sortResult('certifiedAt')"
+        [class.filter-active]="isActive('certifiedAt')"
         class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
         <div class="d-inline-flex align-items-center">
           <label>Certification Date</label>
           <mat-icon class="text-secondary arrow"
-            *ngIf="!reviewerDashboardService.reviewerRequestObject.sort['certificationDate']">arrow_downward</mat-icon>
+            *ngIf="!reviewerDashboardService.reviewerRequestObject.sort['certifiedAt']">arrow_downward</mat-icon>
           <mat-icon class="arrow selected-arrow"
-            *ngIf="reviewerDashboardService.reviewerRequestObject.sort['certificationDate']=== 'asc' ">arrow_downward</mat-icon>
+            *ngIf="reviewerDashboardService.reviewerRequestObject.sort['certifiedAt']=== 'asc' ">arrow_downward</mat-icon>
           <mat-icon class="arrow selected-arrow"
-            *ngIf="reviewerDashboardService.reviewerRequestObject.sort['certificationDate']=== 'desc' ">arrow_upward</mat-icon>
+            *ngIf="reviewerDashboardService.reviewerRequestObject.sort['certifiedAt']=== 'desc' ">arrow_upward</mat-icon>
         </div>
       </span>
       <span tabindex="0" (keydown.enter)="sortResult('expirationDate')" (click)="sortResult('expirationDate')"
@@ -293,9 +293,9 @@
                 </div>
                 <div class="col d-flex">
                   <label for="event-type" class="label-text">Certification Date:</label>
-                  <span class="noDataExists">-- No Data --</span>
-                  <!-- <span *ngIf="!coi?.disclosureCategoryType" id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
-                        coi?.disclosureCategoryTypeCode)}}</span> -->
+                  <span *ngIf="!coi?.certifiedAt" class="noDataExists">-- No Data --</span>
+                  <span *ngIf="coi?.certifiedAt" class="grey-text">{{coi?.certifiedAt |
+                          dateFormatter}}</span>
                 </div>
                 <div class="col d-flex">
                   <label for="event-type" class="label-text">Expiration Date :</label>

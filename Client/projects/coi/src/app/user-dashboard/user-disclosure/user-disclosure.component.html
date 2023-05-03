@@ -26,7 +26,7 @@
                         </div>
                         <div class="my-1">
                             <span class="fw-bold text-secondary">Certification Date : </span>
-                            <span class="ps-2 span-data-color">{{disclosure?.certifiedTimestamp | dateFormatter}}</span>
+                            <span class="ps-2 span-data-color">{{disclosure?.certifiedAt | dateFormatter}}</span>
                         </div>
                         <div>
                             <span class="fw-bold text-secondary">SFIs : </span>
@@ -175,7 +175,7 @@
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Certification Date :</span> <span
-                        *ngIf="disclosure.submittedDate">{{disclosure?.submittedDate |
+                        *ngIf="disclosure.certifiedAt">{{disclosure?.certifiedAt |
                     dateFormatter}} </span>
                 </div>
                 <div class="col">
@@ -200,7 +200,7 @@
                     </div>
                 </ng-container>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <div>Last Updated By : {{disclosure?.updateUser}} On {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}</div>
             </div>
             <div class="col-auto ms-auto d-flex justify-content-end">

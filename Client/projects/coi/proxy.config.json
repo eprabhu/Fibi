@@ -172,7 +172,7 @@
       "secure": false
     },
     "/getLookUpDatas": {
-      "target": "http://192.168.1.189:9090/coi/",
+      "target": "http://192.168.1.189:9090/",
       "secure": false
     },
     "/getCOIReviewerDashboard": {

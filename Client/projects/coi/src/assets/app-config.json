@@ -3,5 +3,10 @@
   "fibiUrl": "",
   "authUrl": "/auth",
   "enableSSO": false,
+  "isElasticAuthentiaction" : false,
+  "elasticUserName": "elastic",
+  "elasticDelimiter": ":",
+  "elasticPassword":"changeme",
+  "elasticAuthScheme": "Basic",
   "elasticIndexUrl": "http://192.168.1.47:9200/"
 }
