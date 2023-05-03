@@ -33,7 +33,7 @@
               <div class="col-6">
                 <label class="label-text">Prime Sponsor :</label>
               <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
-              <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">No Prime Sponsor exist</span>
+              <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">-- No Data --</span>
               </div>
               <div class="col-6">
                 <label class="label-text">Proposal Status : </label>
@@ -97,7 +97,9 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let test of entityProjectDetails; let i = index">
-                      <td class="table-data border-end fw-600">{{test?.personEntity?.coiEntity?.entityName}}</td>
+                      <td class="table-data border-end fw-600">
+                        <div class="mt-3">{{test?.personEntity?.coiEntity?.entityName}}</div>
+                        </td>
                       <td class="border-end">
                         <select [(ngModel)]="test.projectConflictStatusCode"
                         class="form-control select-default" [disabled]="!isEditMode">
