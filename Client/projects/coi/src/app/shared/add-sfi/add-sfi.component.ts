@@ -53,7 +53,6 @@ export class AddSfiComponent implements OnInit {
   sfiLookUpList: any = {};
   isExpandedAdditionalDetails = true;
   isResultFromSearch = false;
-  dateValidation: string;
 
   constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
@@ -147,7 +146,6 @@ export class AddSfiComponent implements OnInit {
       this.showRelationshipModal= true;
       this.additionalDetails.involvementStartDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementStartDate);
       this.additionalDetails.involvementEndDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementEndDate);
-      this.endDateValidation();
     }));
   }
 
@@ -190,7 +188,7 @@ export class AddSfiComponent implements OnInit {
     this.EntitySearchOptions = getEndPointOptionsForEntity();
     this.countrySearchOptions = getEndPointOptionsForCountry();
     this.isResultFromSearch = false;
-    this.endDateValidation();
+    this.mandatoryList.clear();
   }
 
   checkMandatoryFilled() {
@@ -231,8 +229,8 @@ export class AddSfiComponent implements OnInit {
     if (!this.additionalDetails.instituteResourceInvolvement) {
       this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
     }
+    this.endDateValidation();
     return this.mandatoryList.size !== 0 || this.emailWarningMsg ? false : true;
-
   }
 
   emailValidation() {
@@ -275,11 +273,11 @@ export class AddSfiComponent implements OnInit {
   }
 
   endDateValidation(): void {
-    const REQ_DATE = removeTimeZoneFromDateObject(new Date());
-    this.dateValidation = '';
-    if (this.additionalDetails.involvementEndDate && compareDates(this.additionalDetails.involvementEndDate, REQ_DATE) === -1) {
-        this.dateValidation = 'The selected date has already passed.';
+    this.mandatoryList.delete('endDate');
+    if (this.additionalDetails.involvementStartDate && this.additionalDetails.involvementEndDate &&
+        (compareDates(this.additionalDetails.involvementStartDate, this.additionalDetails.involvementEndDate) === 1)) {
+        this.mandatoryList.set('endDate', 'Please provide a valid date.');
     }
-}
+  }
 
 }

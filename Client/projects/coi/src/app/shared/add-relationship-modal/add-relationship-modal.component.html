@@ -5,7 +5,7 @@
       <div class="modal-content">
           <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
               <h1 class="modal-title f-16" id="exampleModalLabel">Add Relationship</h1>
-              <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="continueWithoutRelation();"></button>
+              <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="closeRelationModal();"></button>
           </div>
         <div class="modal-body ">
             <!-- Paragraph -->
@@ -15,7 +15,8 @@
             </div>
             <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
                 style="margin-top: 26px;margin-bottom: 16px;">
-                <div class=" border " style="padding: 25px ; padding-left:0px ;">
+                <div class=" border " style="padding: 25px ; padding-left:0px ;"
+                [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
                     <div style="display: flex; flex-direction: row; ">
                         <div class="form-check form-check-inline">
                             <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation:
@@ -25,14 +26,16 @@
                             <input type="radio" name="relation" class="form-check-input text-secondary"
                                 [value]="relation?.relationshipTypeCode"
                                 [(ngModel)]="entityDetail.validPersonEntityRelTypes.relationshipTypeCode"
-                                (ngModelChange)="setRelationship()"
-                                [ngClass]="relationValidationMap.has('relationRadio')?'is-invalid d-block' : ''">
+                                (ngModelChange)="setRelationship()">
                             <label class="text-secondary r-title fs-14">
                                 {{relation?.description}}
                             </label>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div *ngIf="relationValidationMap.has('relationRadio')"
+              class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
             </div>
             <ng-template #noData>
                 <div class="no-data-container">

@@ -76,7 +76,7 @@
     <div class="modal-content">
       <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
         <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relations</h3>
-        <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="clearModal()"></button>
       </div>
       <div class="modal-body ">
         <div class="row ">
@@ -84,23 +84,27 @@
         </div>
         <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
           style="margin-top: 26px;margin-bottom: 16px;">
-          <div class=" border "style="padding:28px ;">
-            <div style="display: flex; flex-direction: row; ">
+          <div class=" border "style="padding:28px ;"
+          [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
+            <div style="display: flex; flex-direction: row;">
               <div class="form-check form-check-inline">
                 <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation :
                   </b></label>
               </div>
               <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
                 <input type="radio" name="relation" class="form-check-input text-secondary"
-                  [value]="relation?.personEntityRelType?.relationshipTypeCode" [(ngModel)]="coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode"
+                  [value]="relation?.personEntityRelType?.relationshipTypeCode" 
+                  [(ngModel)]="coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode"
                   (ngModelChange)="setRelationship()">
                 <label class="text-secondary r-title fs-14">
                   {{relation?.personEntityRelType?.description}}
                 </label>
               </div>
             </div>
-            <div *ngIf="relationValidationMap.has('relationRadio')" class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}</div>
           </div>
+        </div>
+        <div *ngIf="relationValidationMap.has('relationRadio')"
+              class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
         </div>
         <ng-template #noData>
           <div class="m-3">
@@ -109,7 +113,7 @@
         </ng-template>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal" (click)="clearModal()">Cancel</button>
         <button type="button" class="btn btn-primary mr-10 fs-14" (click)="addRelation()">Add Relation</button>
       </div>
     </div>
