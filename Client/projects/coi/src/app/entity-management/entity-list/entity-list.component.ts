@@ -29,7 +29,6 @@ export class EntityListComponent implements  OnChanges {
   }
 
   ngOnChanges() {
-    // this.resultCount = this.entityList.length;
   }
 
   modifyEntityDetails(data) {

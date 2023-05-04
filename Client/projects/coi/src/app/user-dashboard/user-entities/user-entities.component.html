@@ -33,7 +33,7 @@
         <div class="align-items-center d-flex fs-14 m-0 row">
             <div class="col-8 text-secondary">
                 <span class="fw-bold me-3">Relationship : </span>
-                <span *ngIf="entities?.relationshipTypes?.length" class="relationship-pill border px-3 py-1 rounded-4 me-2"><span>{{getRelationshipTypes(entities?.relationshipTypes)}}</span></span>
+                <span *ngIf="entities?.relationshipTypes?.length" class="relationship-pill border px-3 py-1 rounded-4 me-2">Financial:<em>{{getRelationshipTypes(entities?.relationshipTypes)}}</em></span>
                 <span class="noDataExists" *ngIf="!entities?.relationshipTypes?.length">-- No Data --</span>
             </div>
             <div class="align-items-center col-4 d-flex justify-content-between text-secondary">

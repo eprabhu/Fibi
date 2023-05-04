@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavigationService } from './common/services/navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  constructor(private _navigationService : NavigationService) {}
+
   title = 'coi';
 }

@@ -1,5 +1,5 @@
   .card {
-    background-color: #ebf3fb;
+    background-color: #f3f7fb;
     border-radius: 0px 0px 5px 5px;
     position: relative;
     bottom: 1px;
@@ -30,7 +30,7 @@
     }
   }
 
-  .text-secondary {
+  .text-color {
     color: #6A7980;
   }
 
@@ -41,4 +41,7 @@
 
   .r-title::first-letter {
     text-transform: uppercase;
+  }
+  .text-no-data{
+    color: #9e9e9e;
   }
