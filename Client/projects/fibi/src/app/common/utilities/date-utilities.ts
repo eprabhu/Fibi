@@ -378,3 +378,11 @@ function getEndDateAfterRemovingIncompleteMonth(endDate: Date, actualStartDate: 
     }
 }
 
+// calculation of no. of days between two date 
+export function getTotalNoOfDays(startDate, endDate): number {
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+    const Difference_In_Time = endDate.getTime() - startDate.getTime();
+    const Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    return Difference_In_Days
+}
