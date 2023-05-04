@@ -15,6 +15,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AppHttpInterceptor} from './common/services/http-interceptor';
 import {DashboardGuardService} from "./common/services/dashboard-guard.service";
 import { ElasticConfigService } from '../../../fibi/src/app/common/services/elastic-config.service';
+import { NavigationService } from './common/services/navigation.service';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -48,7 +49,7 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
             provide: HTTP_INTERCEPTORS,
             useClass: AppHttpInterceptor,
             multi: true
-        }, {provide: LocationStrategy, useClass: HashLocationStrategy}],
+        }, {provide: LocationStrategy, useClass: HashLocationStrategy},NavigationService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

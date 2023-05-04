@@ -1,11 +1,11 @@
-<div *ngIf="entityDetails" class="card mt-4 ml-15 mr-15 shadow rounded-3 border" [@slowSlideInOut]>
+<div *ngIf="entityDetails" class="card mt-4 ml-15 mr-15 shadow-sm rounded-3 border" >
   <div class="card-header">
     <div class="row d-flex">
       <div class="col-12 d-flex">
         <div class="col-8 d-flex">
           <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"
             [ngClass]="entityDetails.isActive ?'':'inactive'">
-            <label class="px-2">{{!entityDetails?.isActive?'Inactive':'Active'}}</label></span>
+            <span class="px-2">{{!entityDetails?.isActive?'Inactive':'Active'}}</span></span>
           <h1 class="m-1 fw-bold fs-18">{{entityDetails?.entityName}}</h1>
         </div>
         <div class="col-4 justify-content-end d-flex">
@@ -46,44 +46,44 @@
       <div class="col-12 d-flex">
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Entity Type</span>
-            <label class="text-secondary fs-14">{{entityDetails?.entityType?.description}}</label>
+            <label class="fw-500 fs-14">Entity Type</label>
+            <span class="text-color fs-14" *ngIf="entityDetails?.entityType?.description;else noData">{{entityDetails?.entityType?.description}}</span>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Country</span>
-            <label class="text-secondary fs-14">{{entityDetails?.country?.countryName}}</label>
+            <label class="fw-500 fs-14">Country</label>
+            <span class="text-color fs-14" *ngIf="entityDetails?.country?.countryName;else noData">{{entityDetails?.country?.countryName}}</span>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">City</span>
-            <label class="text-secondary fs-14">{{entityDetails?.city !==null?entityDetails?.city:'-- No Data --'}}</label>
+            <label class="fw-500 fs-14">City</label>
+            <span class="text-color fs-14" *ngIf="entityDetails?.city;else noData">{{entityDetails?.city}}</span>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Website</span>
-            <label class="text-primary fs-14 anchor-link">
+            <label class="fw-500 fs-14">Website</label>
+            <span class="text-primary fs-14 anchor-link" *ngIf="entityDetails?.webURL;else noData">
               <a class="anchor-link" (click)="redirectUrl(entityDetails?.webURL)">
-                {{entityDetails?.webURL !==null?entityDetails?.webURL:'-- No Data --'}}
+                {{entityDetails?.webURL}}
               </a>
-            </label>
+            </span>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Email Address </span>
-            <label class="text-secondary fs-14">
-              {{entityDetails?.emailAddress!==null? entityDetails?.emailAddress:'-- No Data --'}}</label>
+            <label class="fw-500 fs-14">Email Address </label>
+            <span class="text-color fs-14" *ngIf="entityDetails?.emailAddress;else noData">
+              {{entityDetails?.emailAddress}}</span>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Phone Number</span>
-            <label class="text-secondary fs-14">
-              {{entityDetails?.phone !==null ? entityDetails?.phone:'-- No Data --'}}</label>
+            <label class="fw-500 fs-14">Phone Number</label>
+            <span *ngIf="entityDetails?.phone;else noData" class="text-color fs-14">
+              {{entityDetails?.phone}}</span>
           </div>
         </div>
       </div>
@@ -92,46 +92,47 @@
       <div class="col-12 d-flex mt-3">
         <div class="col-6">
           <div class="row">
-            <span class="fw-500 fs-14">Address</span>
-            <label class="text-secondary fs-14 mt-1 pr-15">
-              {{entityDetails?.address !==null ? entityDetails?.address:'-- No Data --'}}</label>
+            <label class="fw-500 fs-14">Address</label>
+            <span *ngIf="entityDetails?.address;else noData" class="text-color fs-14 mt-1 pr-15">
+              {{entityDetails?.address}}</span>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Risk Level</span>
-            <div class="text-secondary fs-14 d-flex">
+            <label class="fw-500 fs-14">Risk Level</label>
+            <div class="text-color fs-14 d-flex">
               <mat-icon *ngIf="entityDetails?.entityRiskCategory?.description ==='High'"
                 class="invalid material-icons-round">warning</mat-icon>
-                <label class="mt-1">
-                  {{entityDetails?.entityRiskCategory !==null?
-                    entityDetails?.entityRiskCategory?.description:'-- No Data --'}}
-                </label>
+                <span *ngIf="entityDetails?.entityRiskCategory;else noData" class="mt-1">
+                  {{entityDetails?.entityRiskCategory?.description}}
+                </span>
                 </div>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Verified By</span>
-            <div *ngIf="entityDetails?.approvedUser;else noData"  class="text-secondary fs-14 d-flex">
+            <label class="fw-500 fs-14">Verified By</label>
+            <div *ngIf="entityDetails?.approvedUser;else noData"  class="text-color fs-14 d-flex">
               <mat-icon class="mat-done">done</mat-icon>
-              <label class="mt-1 px-2">
+              <span class="mt-1 px-2">
                 {{entityDetails?.approvedUser}} On
-                {{entityDetails?.approvedTimestamp|dateFormatterWithTimeZone:'long'}}</label>
+                {{entityDetails?.approvedTimestamp|dateFormatterWithTimeZone:'long'}}</span>
             </div>
-            <ng-template #noData>
-              <label class="text-secondary fs-14 mt-1">-- No Data --</label>
-            </ng-template>
           </div>
         </div>
         <div class="col-2">
           <div class="row">
-            <span class="fw-500 fs-14">Last Updated By</span>
-            <label class="text-secondary fs-14 mt-1">{{entityDetails?.updateUser}} On {{entityDetails?.updateTimestamp
-              |dateFormatterWithTimeZone:'long'}}</label>
+            <label class="fw-500 fs-14">Last Updated By</label>
+            <span *ngIf="entityDetails?.updatedUserFullName;else noData" class="text-color fs-14 mt-1">{{entityDetails?.updatedUserFullName}} on {{entityDetails?.updateTimestamp
+              |dateFormatterWithTimeZone:'long'}}</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<ng-template #noData>
+  <span class="text-no-data fs-14">
+    -- No Data --
+  </span>
+</ng-template>

@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
 import { EntityManagementService } from '../entity-management.service';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
@@ -11,7 +11,7 @@ import { HTTP_ERROR_STATUS } from '../../app-constants';
   selector: 'app-view-entity-details',
   templateUrl: './view-entity-details.component.html',
   styleUrls: ['./view-entity-details.component.scss'],
-  animations: [slowSlideInOut]
+  // animations: [slowSlideInOut]
 })
 export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
@@ -21,7 +21,6 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
     private _commonServices: CommonService) {
-    this.getPreviousURL();
   }
 
   ngOnInit() {
@@ -51,13 +50,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  getPreviousURL() {
-    this.$subscriptions.push(this._router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this._commonServices.previousURL = event.url;
-      }
-    }));
-  }
+
   updatedEntityDetails(event) {
     if(event) {
       this.getEntityDetails(this.entityManageId);

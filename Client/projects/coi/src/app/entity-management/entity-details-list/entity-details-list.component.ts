@@ -6,11 +6,11 @@ import { Subject, Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit } from '../../../../../fibi/src/app/common/services/end-point.config';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
+import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { switchMap } from 'rxjs/operators';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
-import { DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../../../fibi/src/app/app-constants';
 
 @Component({
   selector: 'app-entity-details-list',

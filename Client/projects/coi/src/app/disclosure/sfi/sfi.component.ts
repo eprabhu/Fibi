@@ -29,10 +29,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         private _sfiService: SfiService,
         private _dataStore: DataStoreService,
         public _coiService: CoiService,
-        private _router: Router,
-        private _commonServices :CommonService
-    ) {
-      this.getPreviousURL();
+        private _router: Router) {
     }
 
     ngOnInit() {
@@ -101,11 +98,4 @@ export class SfiComponent implements OnInit, OnDestroy {
         this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entityId ,mode:'view' }});
     }
 
-    getPreviousURL() {
-      this.$subscriptions.push(this._router.events.subscribe(event => {
-        if (event instanceof NavigationEnd) {
-          this._commonServices.previousURL = event.url;
-        }
-      }));
-    }
 }

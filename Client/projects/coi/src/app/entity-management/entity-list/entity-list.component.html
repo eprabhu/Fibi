@@ -6,9 +6,9 @@
         <th class="col-2">Name</th>
         <th class="col-2">Country</th>
         <th class="col-2">Entity Type</th>
-        <th *ngIf="entityActiveTabName === 'HIGH_RISK'" class="col-1">Risk Level</th>
+        <th class="col-2">Risk Level</th>
         <th class="col-2">Status</th>
-        <th class="col-2">Actions</th>
+        <th class="col-1">Actions</th>
       </tr>
     </thead>
     <tbody class="bg-white fs-13">
@@ -21,7 +21,7 @@
         <td class="text-secondary">{{entityListData?.entityName}}</td>
         <td class="text-secondary">{{entityListData?.countryDescription}}</td>
         <td class="text-secondary">{{entityListData?.entityTypeDescription}}</td>
-        <td *ngIf="entityActiveTabName === 'HIGH_RISK'" class="text-secondary"><mat-icon *ngIf="entityListData?.riskLevelDescription === 'High'"
+        <td class="text-secondary"><mat-icon *ngIf="entityListData?.riskLevelDescription === 'High'"
             class="invalid material-icons-round">warning</mat-icon>
           {{entityListData?.riskLevelDescription}}</td>
         <td><span [ngClass]="entityListData?.isActive ?'status-active-pill':'status-inactive-pill'">

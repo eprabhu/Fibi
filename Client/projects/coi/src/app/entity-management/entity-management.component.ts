@@ -22,7 +22,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
 
   entityManageId = null;
   activeTabName = 'ALL_ENTITIES';
-  isViewAdvanceSearch = false;
+  isViewAdvanceSearch = true;
   coiElastic = null;
   isCoiEditEntity = false;
   clearField: String;
@@ -37,6 +37,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   $subscriptions: Subscription[] = [];
   resultCount: number = 0;
   $entityDetailsList = new Subject();
+  isSearchData = false;
 
 
 
@@ -49,8 +50,6 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.EntitySearchOptions = getEndPointOptionsForEntity();
     this.countrySearchOptions = getEndPointOptionsForCountry();
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
-    this.viewListOfEntity();
-    this.$entityDetailsList.next();
 
   }
   ngOnDestroy() {
@@ -69,7 +68,9 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.resetAdvanceSearchFields();
     this.activeTabName = tabName;
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
-    this.$entityDetailsList.next()
+    this.entityList = [];
+    this.isSearchData = false;
+    // this.$entityDetailsList.next()
   }
 
   redirectToEntity(coi: any) {
@@ -128,7 +129,9 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   }
 
   advancedSearch(){
+    this.viewListOfEntity();
     this.$entityDetailsList.next();
+    this.isSearchData = true
   }
 
   updateEntityListDashboard(event){

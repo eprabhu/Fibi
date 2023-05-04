@@ -1,4 +1,4 @@
-<div class="py-2" [@slideInOut]>
+<div class="py-2 px-3" [@slideInOut]>
   <div class="row bg-white mx-0 d-flex py-1 pb-2 align-items-center border ">
       <nav class="coi-admin-dash mx-0 borderlist">
         <ul class="header-navigation-links d-flex align-items-center m-0 f-15 cursor-pointer p-0 text-secondary">
@@ -46,7 +46,7 @@
       </div>
     </div>
   </div>
-  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow rounded-3" id="view-advance-search">
+  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow-sm rounded-3" id="view-advance-search">
     <div class="card-body">
       <div class="form-row row m-2">
         <div class="col-3 ml-3">
@@ -138,7 +138,7 @@
       </div>
     </div>
   </div>
-  <app-entity-list [entityActiveTabName]="activeTabName"
+  <app-entity-list *ngIf="isSearchData" [entityActiveTabName]="activeTabName"
     (modifyEntityId)="selectedEntity($event);isViewAdvanceSearch = false" (navNextPage)="navigateNextPage($event)"
     [entityList]="entityList" [resultCount]="resultCount"></app-entity-list>
 </div>

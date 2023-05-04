@@ -26,7 +26,6 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonServices: CommonService) {
-    this.getPreviousURL();
   }
 
   ngOnInit(): void {
@@ -78,13 +77,6 @@ removeEntityId() {
     })
   }
 
-  getPreviousURL() {
-    this.$subscriptions.push(this._router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this._commonServices.previousURL = event.url;
-      }
-    }));
-  }
 
   getRelationshipTypes(relationshipTypes) {
     return relationshipTypes.split(',').map((type: any) => {
