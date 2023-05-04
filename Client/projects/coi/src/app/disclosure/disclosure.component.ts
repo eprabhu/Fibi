@@ -218,7 +218,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     completeDisclosureReview() {
-        this.$subscriptions.push(this.coiService.completeDisclosureReview(this.coiData.coiDisclosure.disclosureId)
+        this.$subscriptions.push(this.coiService
+            .completeDisclosureReview(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureNumber)
             .subscribe((res: any) => {
                 this.updateDisclosureReviewStatus(res);
             }, _err => {
