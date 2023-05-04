@@ -123,9 +123,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	//TODO revisit and check logics, statuses
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
 		CoiDisclosure coiDisclosure = conflictOfInterestVO.getCoiDisclosure() != null?conflictOfInterestVO.getCoiDisclosure():new CoiDisclosure();
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.YEAR, 1);
-		coiDisclosure.setExpirationDate(cal.getTime());
 		if(conflictOfInterestVO.getCoiProjectProposal()!=null) {
 			CoiProjectProposal coiProjectProposal = conflictOfInterestDao.saveOrUpdateCoiProjectProposal(conflictOfInterestVO.getCoiProjectProposal());
 			coiDisclosure.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
@@ -450,6 +447,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setCertifiedAt(commonDao.getCurrentTimestamp());
 		coiDisclosure.setReviewStatusCode(SUBMITTED_FOR_REVIEW);
 		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.YEAR, 1);
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		coiDisclosure.setExpirationDate(cal.getTime());
 		conflictOfInterestDao.certifyDisclosure(coiDisclosure);
 		CoiDisclosure coiDisclosureObj = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
 		coiDisclosureObj.setCreateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getCreateUser()));
@@ -911,7 +912,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> completeDisclosureReview(Integer disclosureId){
+	public ResponseEntity<Object> completeDisclosureReview(Integer disclosureId, Integer disclosureNumber){
 		if (conflictOfInterestDao.numberOfInCompleteReview(disclosureId).equals(0)) {
 			CoiDisclosure coiDisclosure = new CoiDisclosure();
 			coiDisclosure.setDisclosureId(disclosureId);
@@ -920,6 +921,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiDisclosure.setReviewStatusCode(REVIEW_STATUS_COMPLETE);
 			coiDisclosure.setVersionStatus(DISCLOSURE_VERSION_STATUS);
 			conflictOfInterestDao.completeDisclosureReview(coiDisclosure);
+			CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(disclosureId);
+			if (disclosure.getFcoiTypeCode().equals("1")) {
+				conflictOfInterestDao.archiveDisclosureOldVersions(disclosureId, disclosureNumber);
+			}
 			return new ResponseEntity<>(conflictOfInterestDao.loadDisclosure(disclosureId), HttpStatus.OK);
 		}
 		return new ResponseEntity<>("REVIEW_STATUS_NOT_COMPLETE", HttpStatus.OK);

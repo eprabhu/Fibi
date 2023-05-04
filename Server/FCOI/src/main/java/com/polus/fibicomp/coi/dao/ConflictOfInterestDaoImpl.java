@@ -253,6 +253,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		criteriaUpdate.set("reviewStatusCode", coiDisclosure.getReviewStatusCode());
 		criteriaUpdate.set("updateTimestamp", commonDao.getCurrentTimestamp());
 		criteriaUpdate.set("updateUser", AuthenticatedUser.getLoginUserName());
+		criteriaUpdate.set("expirationDate",coiDisclosure.getExpirationDate());
 		criteriaUpdate.where(cb.equal(root.get("disclosureId"), coiDisclosure.getDisclosureId()));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
@@ -2423,4 +2424,15 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		}
 	}
 
+	@Override
+	public void archiveDisclosureOldVersions(Integer disclosureId, Integer disclosureNumber) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiDisclosure SET versionStatus = :archived where disclosureId != :disclosureId AND disclosureNumber = :disclosureNumber");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("archived", "Archived"); // set old disclosure to archived
+		query.setParameter("disclosureId", disclosureId);
+		query.setParameter("disclosureNumber", disclosureNumber);
+		query.executeUpdate();
+	}
 }
