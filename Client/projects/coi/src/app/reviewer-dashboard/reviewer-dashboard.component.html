@@ -260,8 +260,8 @@
             <div class="border-bottom">
               <div class="row mb-3 px-3">
                 <div class="col d-flex">
-                  <!-- <label for="id" class="label-text">Disclosure Number:</label> -->
-                  <span id="id" class="grey-text m-0">#{{coi?.coiDisclosureNumber}}</span>
+                   <label for="id" class="label-text">Disclosure #:</label>
+                  <span id="id" class="grey-text m-0">{{coi?.coiDisclosureNumber}}</span>
                 </div>
                 <div class="col d-flex">
                   <label for="person-name" class="label-text">Person Name :</label>
@@ -333,7 +333,7 @@
                 </div>
                 <div class="col-3">
                   <label for="last-approved-version-date" class="label-text">Last Approved Version Date :</label>
-                  <span *ngIf="!coi?.lastApprovedVersionDate" class="noDataExists">No data date exist</span>
+                  <span *ngIf="!coi?.lastApprovedVersionDate" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.lastApprovedVersionDate" id="last-approved-version-date"
                     class="grey-text">{{coi?.lastApprovedVersionDate | dateFormatter}}</span>
                 </div>
