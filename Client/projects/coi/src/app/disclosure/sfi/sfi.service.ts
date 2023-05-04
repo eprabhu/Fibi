@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 @Injectable()
 export class SfiService {
     isShowSfiNavBar = false;
-    // sfiDetails: SFI;
+    isSFIRequired = false;
     previousURL= '';
     $addSfi = new Subject<Boolean>();
 

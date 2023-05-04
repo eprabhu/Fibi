@@ -182,6 +182,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.dataStore.updateStore(['coiDisclosure'], {coiDisclosure: res});
                 this.isSaving = false;
                 this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
+            }, err => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, (err.error) ?
+                    err.error : 'Error in certifying disclosure. Please try again.');
             }));
         }
     }
