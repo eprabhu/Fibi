@@ -13,7 +13,7 @@
                       <li [ngClass]="{active:(commentTab == 'MODIFY')}" (click)="commentTab = 'MODIFY'" tabindex="0">
                         <span class="subTabLink">{{editIndex != -1 ? 'Update Comment':'Add Comment'}}</span>
                       </li>
-                      <li [ngClass]="{active:(commentTab == 'VIEW')}" (click)="commentTab = 'VIEW'" tabindex="0">
+                      <li [ngClass]="{active:(commentTab == 'VIEW')}" (click)="commentTab = 'VIEW'; addComments()" tabindex="0">
                         <span class="subTabLink">View Comments</span>
                       </li>
                     </ul>

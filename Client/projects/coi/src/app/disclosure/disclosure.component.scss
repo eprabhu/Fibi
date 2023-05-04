@@ -4,9 +4,9 @@
 }
 
 .triple-card {
-  .col {
-    height: 110px;
-  }
+
+    height: 96px;
+
 }
 
 .navigation-tabs {
@@ -122,7 +122,7 @@ $bg-color: #E4F1FF;
 }
 
 .side-height {
-  height: 213px;
+  height:  198px;
 }
 
 .spaced-table {
@@ -180,8 +180,8 @@ table {
 }
 
 .min-height-189 {
-  min-height: 213px;
-  max-height: 232px;
+  min-height: 200px;
+  max-height: 200px;
 }
 
 .btn-outline-grey {
@@ -204,6 +204,6 @@ table {
 
 .header-sticky {
   position: sticky;
-  top: 65px;
+  top: 51px;
   z-index: 50;
 }

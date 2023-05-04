@@ -193,6 +193,10 @@
     padding: 0;
   }
 
+  .left-margin {
+    margin-left: 3px;
+  }
+
   .card-body {
     background-color: #fffdf6 !important;
     padding: 0;
