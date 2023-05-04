@@ -245,9 +245,9 @@
                     <mat-datepicker #endDate [pickerType]="'calendar'">
                     </mat-datepicker>
                   </span>
-                  <div *ngIf="dateValidation" class="invalid-feedback d-block fs-13">
-                    {{dateValidation}}
-                </div>
+                  <div *ngIf="(mandatoryList.get('endDate'))" class="fs-13 invalid-feedback d-block">
+                    {{mandatoryList.get('endDate')}}
+                  </div>
                 </div>
 
                   <div class="col-additional-details d-flex pl-5 mt-3">

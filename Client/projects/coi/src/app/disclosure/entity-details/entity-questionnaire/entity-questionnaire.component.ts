@@ -176,4 +176,9 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     }
     return this.relationValidationMap.size === 0 ? true : false;
   }
+
+  clearModal() {
+    this.relationValidationMap.clear();
+  }
+
 }
