@@ -1,25 +1,32 @@
 
 <div [id]= selectedProject?.moduleItemId class="card border shadow mt-2" *ngIf="selectedProject?.moduleCode">
     <div class="card-header px-4 d-flex align-items-center justify-content-between">
-      <div class="col-12 d-flex align-items-center">
-        <ng-container  *ngIf="selectedProject?.moduleCode == 3">
+      <span class="align-items-center d-flex">
+        <ng-container *ngIf="selectedProject?.moduleCode == 3">
           <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
           <p class="entity-title mt-3">
-              <strong class="fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
+            <strong class="fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
           </p>
         </ng-container>
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
           <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
           <p class="entity-title mt-3">
-              <strong class="fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
+            <strong class="fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
           </p>
         </ng-container>
-        <button type="button" class="btn btn-outline-primary btn-sm header-buttons">
-          <mat-icon role="img">rate_review</mat-icon>
+      </span>
+      <span class="align-items-center d-flex">
+        <button class="btn btn-sm add-activity-button p-0 view-icon mr-5" id="add-activity" title="Add Review Comment"
+          type="button">
+          <mat-icon class="btn btn-outline-secondary comment-button me-3">rate_review</mat-icon>
         </button>
-      </div>
-      </div>
-      <div class="card-body">
+        <button class="updown-arrow" (click)="isCollapsed = !isCollapsed">
+          <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'" class="fa-large"
+            aria-hidden="true"></i>
+        </button>
+      </span>
+    </div>
+      <div *ngIf="isCollapsed" class="card-body">
             <div class="row m-2">
             <div class="col-4">
               <label class="label-text">Principal Investigator :</label>

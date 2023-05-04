@@ -8,7 +8,7 @@ import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../..
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { getDateObjectFromTimeStamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { compareDates, getDateObjectFromTimeStamp, removeTimeZoneFromDateObject } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
 
 export interface EndpointOptions {
@@ -53,6 +53,7 @@ export class AddSfiComponent implements OnInit {
   sfiLookUpList: any = {};
   isExpandedAdditionalDetails = true;
   isResultFromSearch = false;
+  dateValidation: string;
 
   constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
@@ -146,6 +147,7 @@ export class AddSfiComponent implements OnInit {
       this.showRelationshipModal= true;
       this.additionalDetails.involvementStartDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementStartDate);
       this.additionalDetails.involvementEndDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementEndDate);
+      this.endDateValidation();
     }));
   }
 
@@ -188,6 +190,7 @@ export class AddSfiComponent implements OnInit {
     this.EntitySearchOptions = getEndPointOptionsForEntity();
     this.countrySearchOptions = getEndPointOptionsForCountry();
     this.isResultFromSearch = false;
+    this.endDateValidation();
   }
 
   checkMandatoryFilled() {
@@ -270,5 +273,13 @@ export class AddSfiComponent implements OnInit {
       this.mandatoryList.set('phoneNumber', 'Please add a valid number');
     }
   }
+
+  endDateValidation(): void {
+    const REQ_DATE = removeTimeZoneFromDateObject(new Date());
+    this.dateValidation = '';
+    if (this.additionalDetails.involvementEndDate && compareDates(this.additionalDetails.involvementEndDate, REQ_DATE) === -1) {
+        this.dateValidation = 'The selected date has already passed.';
+    }
+}
 
 }

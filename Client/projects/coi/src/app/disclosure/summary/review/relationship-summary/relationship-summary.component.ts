@@ -31,6 +31,7 @@ export class RelationshipSummaryComponent implements OnInit {
     conflictIndex = -1;
     coiDetails: any = {};
     conflictHistory: any = [];
+    isCollapsed = true;
 
     projectConflictValidationMap = new Map();
 
