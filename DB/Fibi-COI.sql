@@ -8,11 +8,35 @@
 6) Check if the syntax is correct for all scripts. Add semicolon at the end of scripts. If there is any string data put it in quotes.
 */
 
-/*
-NB: Letter templates google drive link
-*/
-DROP TABLE IF EXISTS `entity_type`;
+SET FOREIGN_KEY_CHECKS=0; 
 
+DROP TABLE IF EXISTS `ENTITY_TYPE` ;
+DROP TABLE IF EXISTS `ENTITY_STATUS`;
+DROP TABLE IF EXISTS `COI_ENTITY`;
+DROP TABLE IF EXISTS `ENTITY_SPONSOR_RELATIONSHIP`; 
+DROP TABLE IF EXISTS `ENTITY_ORG_RELATIONSHIP`;
+DROP TABLE IF EXISTS `COI_FIN_ENTITY_REL_TYPE`;
+DROP TABLE IF EXISTS `COI_FINANCIAL_ENTITY`; 
+DROP TABLE IF EXISTS `COI_FIN_ENTITY_DETAILS`;
+DROP TABLE IF EXISTS  `COI_DISCLOSURE_CATEGORY_TYPE`; 
+DROP TABLE IF EXISTS `COI_DISCLOSURE_STATUS`;
+DROP TABLE IF EXISTS `COI_DISPOSITION_STATUS`;
+DROP TABLE IF EXISTS `COI_REVIEW_STATUS`;
+DROP TABLE IF EXISTS `COI_DISCLOSURE_SEQUENCE_STATUS`;
+DROP TABLE IF EXISTS `COI_DISCLOSURE`;
+DROP TABLE IF EXISTS `COI_DISC_COMMENT_TYPE`;
+DROP TABLE IF EXISTS `COI_DISC_DET_STATUS`;
+DROP TABLE IF EXISTS `COI_DISCLOSURE_DETAILS`;
+DROP TABLE IF EXISTS `COI_DISC_DETAILS_COMMENTS`;
+DROP TABLE IF EXISTS `COI_AUDIT_ACTION_TYPE`;
+DROP TABLE IF EXISTS `COI_DISCLOSURE_AUDIT_TRAIL`;
+DROP TABLE IF EXISTS `COI_ATTACHMENT_TYPE`;
+DROP TABLE IF EXISTS `COI_ATTACHMENT_CATEGORY_TYPE`;
+DROP TABLE IF EXISTS `COI_ATTA_CATE_TYPE_MAPPING`;
+DROP TABLE IF EXISTS `COI_FILE_DATA`;
+DROP TABLE IF EXISTS `COI_DISCLOSURE_ATTACHMENTS`;
+
+DROP TABLE IF EXISTS `entity_type`;
 CREATE TABLE `entity_type` (
   `ENTITY_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -23,7 +47,6 @@ CREATE TABLE `entity_type` (
 );
 
 DROP TABLE IF EXISTS `entity_status`;
-
 CREATE TABLE `entity_status` (
   `ENTITY_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -34,7 +57,6 @@ CREATE TABLE `entity_status` (
 );
 
 DROP TABLE IF EXISTS `entity_risk_category`;
-
 CREATE TABLE `entity_risk_category` (
   `RISK_CATEGORY_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(45) DEFAULT NULL,
@@ -45,7 +67,6 @@ CREATE TABLE `entity_risk_category` (
 );
 
 DROP TABLE IF EXISTS `entity`;
-
 CREATE TABLE `entity` (
   `ENTITY_ID` int(11) NOT NULL AUTO_INCREMENT,
   `ENTITY_NUMBER` int(11) DEFAULT NULL,
@@ -81,7 +102,6 @@ CREATE TABLE `entity` (
 );
 
 DROP TABLE IF EXISTS `entity_relationship_type`;
-
 CREATE TABLE `entity_relationship_type` (
   `ENTITY_REL_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -92,7 +112,6 @@ CREATE TABLE `entity_relationship_type` (
 );
 
 DROP TABLE IF EXISTS `entity_rel_node_type`;
-
 CREATE TABLE `entity_rel_node_type` (
   `REL_NODE_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -103,7 +122,6 @@ CREATE TABLE `entity_rel_node_type` (
 );
 
 DROP TABLE IF EXISTS `entity_relationship`;
-
 CREATE TABLE `entity_relationship` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ENTITY_NUMBER` int(11) NOT NULL,
@@ -120,7 +138,6 @@ CREATE TABLE `entity_relationship` (
 );
 
 DROP TABLE IF EXISTS `person_entity`;
-
 CREATE TABLE `person_entity` (
   `PERSON_ENTITY_ID` int(11) NOT NULL AUTO_INCREMENT,
   `PERSON_ID` varchar(45) DEFAULT NULL,
@@ -147,7 +164,6 @@ CREATE TABLE `person_entity` (
 );
 
 DROP TABLE IF EXISTS `coi_disclosure_type`;
-
 CREATE TABLE `coi_disclosure_type` (
   `DISCLOSURE_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -158,7 +174,6 @@ CREATE TABLE `coi_disclosure_type` (
 );
 
 DROP TABLE IF EXISTS `person_entity_rel_type`;
-
 CREATE TABLE `person_entity_rel_type` (
   `RELATIONSHIP_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -169,7 +184,6 @@ CREATE TABLE `person_entity_rel_type` (
 );
 
 DROP TABLE IF EXISTS `valid_person_entity_rel_type`;
-
 CREATE TABLE `valid_person_entity_rel_type` (
   `VALID_PERSON_ENTITY_REL_TYPE_CODE` int(11) NOT NULL AUTO_INCREMENT,
   `DISCLOSURE_TYPE_CODE` varchar(3) DEFAULT NULL,
@@ -187,7 +201,6 @@ CREATE TABLE `valid_person_entity_rel_type` (
 );
 
 DROP TABLE IF EXISTS `person_entity_relationship`;
-
 CREATE TABLE `person_entity_relationship` (
   `PERSON_ENTITY_REL_ID` int(11) NOT NULL AUTO_INCREMENT,
   `PERSON_ENTITY_ID` int(11) DEFAULT NULL,
@@ -202,12 +215,11 @@ CREATE TABLE `person_entity_relationship` (
   PRIMARY KEY (`PERSON_ENTITY_REL_ID`),
   KEY `PERSON_ENTITY_RELATIONSHIP_FK1_idx` (`PERSON_ENTITY_ID`),
   KEY `PERSON_ENTITY_RELATIONSHIP_FK2_idx` (`VALID_PERSON_ENTITY_REL_TYPE_CODE`),
-  CONSTRAINT `PERSON_ENTITY_RELATIONSHIP_FK1` FOREIGN KEY (`PERSON_ENTITY_ID`) REFERENCES `person_entity` (`PERSON_ENTITY_ID`)
+  CONSTRAINT `PERSON_ENTITY_RELATIONSHIP_FK1` FOREIGN KEY (`PERSON_ENTITY_ID`) REFERENCES `person_entity` (`PERSON_ENTITY_ID`),
   CONSTRAINT `PERSON_ENTITY_RELATIONSHIP_FK2` FOREIGN KEY (`VALID_PERSON_ENTITY_REL_TYPE_CODE`) REFERENCES `valid_person_entity_rel_type` (`VALID_PERSON_ENTITY_REL_TYPE_CODE`)
 );
 
 DROP TABLE IF EXISTS `coi_project_type`;
-
 CREATE TABLE `coi_project_type` (
   `COI_PROJECT_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -218,7 +230,6 @@ CREATE TABLE `coi_project_type` (
 );
 
 DROP TABLE IF EXISTS `coi_project_proposal`;
-
 CREATE TABLE `coi_project_proposal` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `EXTERNAL_SYSTEM_REF_ID` int(11) DEFAULT NULL,
@@ -242,7 +253,6 @@ CREATE TABLE `coi_project_proposal` (
 );
 
 DROP TABLE IF EXISTS `coi_project_award`;
-
 CREATE TABLE `coi_project_award` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `EXTERNAL_SYSTEM_REF_ID` int(11) DEFAULT NULL,
@@ -265,7 +275,6 @@ CREATE TABLE `coi_project_award` (
 );
 
 DROP TABLE IF EXISTS `coi_disclosure_fcoi_type`;
-
 CREATE TABLE `coi_disclosure_fcoi_type` (
   `FCOI_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -276,7 +285,6 @@ CREATE TABLE `coi_disclosure_fcoi_type` (
 );
 
 DROP TABLE IF EXISTS `coi_conflict_status_type`;
-
 CREATE TABLE `coi_conflict_status_type` (
   `CONFLICT_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -287,7 +295,6 @@ CREATE TABLE `coi_conflict_status_type` (
 );
 
 DROP TABLE IF EXISTS `coi_disposition_status_type`;
-
 CREATE TABLE `coi_disposition_status_type` (
   `DISPOSITION_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -298,7 +305,6 @@ CREATE TABLE `coi_disposition_status_type` (
 );
 
 DROP TABLE IF EXISTS `coi_review_status_type`;
-
 CREATE TABLE `coi_review_status_type` (
   `REVIEW_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -309,7 +315,6 @@ CREATE TABLE `coi_review_status_type` (
 );
 
 DROP TABLE IF EXISTS `coi_risk_category`;
-
 CREATE TABLE `coi_risk_category` (
   `RISK_CATEGORY_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -320,7 +325,6 @@ CREATE TABLE `coi_risk_category` (
 );
 
 DROP TABLE IF EXISTS `coi_disclosure`;
-
 CREATE TABLE `coi_disclosure` (
   `DISCLOSURE_ID` int(11) NOT NULL AUTO_INCREMENT,
   `PERSON_ID` varchar(45) DEFAULT NULL,
@@ -359,7 +363,6 @@ CREATE TABLE `coi_disclosure` (
 );
 
 DROP TABLE IF EXISTS `coi_proj_conflict_status_type`;
-
 CREATE TABLE `coi_proj_conflict_status_type` (
   `PROJECT_CONFLICT_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -370,7 +373,6 @@ CREATE TABLE `coi_proj_conflict_status_type` (
 );
 
 DROP TABLE IF EXISTS `coi_discl_ent_proj_details`;
-
 CREATE TABLE `coi_discl_ent_proj_details` (
   `DISCLOSURE_DETAILS_ID` int(11) NOT NULL AUTO_INCREMENT,
   `DISCLOSURE_ID` int(11) DEFAULT NULL,
@@ -395,7 +397,6 @@ CREATE TABLE `coi_discl_ent_proj_details` (
 );
 
 DROP TABLE IF EXISTS `discl_atta_status`;
-
 CREATE TABLE `discl_atta_status` (
   `ATTA_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -406,7 +407,6 @@ CREATE TABLE `discl_atta_status` (
 );
 
 DROP TABLE IF EXISTS `discl_file_data`;
-
 CREATE TABLE `discl_file_data` (
   `FILE_DATA_ID` int(11) NOT NULL AUTO_INCREMENT,
   `FILE_PATH` varchar(255) DEFAULT NULL,
@@ -416,7 +416,6 @@ CREATE TABLE `discl_file_data` (
 );
 
 DROP TABLE IF EXISTS `discl_atta_type`;
-
 CREATE TABLE `discl_atta_type` (
   `ATTA_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -427,7 +426,6 @@ CREATE TABLE `discl_atta_type` (
 );
 
 DROP TABLE IF EXISTS `discl_component_type`;
-
 CREATE TABLE `discl_component_type` (
   `COMPONENT_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -438,7 +436,6 @@ CREATE TABLE `discl_component_type` (
 );
 
 DROP TABLE IF EXISTS `discl_valid_compnent_atta_ty`;
-
 CREATE TABLE `discl_valid_compnent_atta_ty` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `COMPONENT_TYPE_CODE` varchar(3) DEFAULT NULL,
@@ -455,7 +452,6 @@ CREATE TABLE `discl_valid_compnent_atta_ty` (
 );
 
 DROP TABLE IF EXISTS `discl_comment_type`;
-
 CREATE TABLE `discl_comment_type` (
   `COMMENT_TYPE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -466,7 +462,6 @@ CREATE TABLE `discl_comment_type` (
 );
 
 DROP TABLE IF EXISTS `discl_valid_compnent_comnt_ty`;
-
 CREATE TABLE `discl_valid_compnent_comnt_ty` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `COMPONENT_TYPE_CODE` varchar(1) DEFAULT NULL,
@@ -483,7 +478,6 @@ CREATE TABLE `discl_valid_compnent_comnt_ty` (
 );
 
 DROP TABLE IF EXISTS `discl_comment`;
-
 CREATE TABLE `discl_comment` (
   `COMMENT_ID` int(11) NOT NULL AUTO_INCREMENT,
   `COMPONENT_TYPE_CODE` varchar(1) DEFAULT NULL,
@@ -505,7 +499,6 @@ CREATE TABLE `discl_comment` (
 );
 
 DROP TABLE IF EXISTS `coi_traveler_type`;
-
 CREATE TABLE `coi_traveler_type` (
   `TRAVELER_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -516,7 +509,6 @@ CREATE TABLE `coi_traveler_type` (
 );
 
 DROP TABLE IF EXISTS `coi_travel_status_type`;
-
 CREATE TABLE `coi_travel_status_type` (
   `TRAVEL_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -527,7 +519,6 @@ CREATE TABLE `coi_travel_status_type` (
 );
 
 DROP TABLE IF EXISTS `coi_travel_disclosure`;
-
 CREATE TABLE `coi_travel_disclosure` (
   `TRAVEL_DISCLOSURE_ID` int(11) NOT NULL AUTO_INCREMENT,
   `TRAVEL_NUMBER` int(11) DEFAULT NULL,
@@ -568,7 +559,6 @@ CREATE TABLE `coi_travel_disclosure` (
 );
 
 DROP TABLE IF EXISTS `coi_travel_disclosure_traveler`;
-
 CREATE TABLE `coi_travel_disclosure_traveler` (
   `TRAVEL_TRAVELER_ID` int(11) NOT NULL AUTO_INCREMENT,
   `TRAVEL_DISCLOSURE_ID` int(11) DEFAULT NULL,
@@ -583,7 +573,6 @@ CREATE TABLE `coi_travel_disclosure_traveler` (
 );
 
 DROP TABLE IF EXISTS `discl_attachment`;
-
 CREATE TABLE `discl_attachment` (
   `ATTACHMENT_ID` int(11) NOT NULL AUTO_INCREMENT,
   `COMMENT_ID` int(11) DEFAULT NULL,
@@ -614,6 +603,8 @@ CREATE TABLE `discl_attachment` (
   CONSTRAINT `DISCL_ATTACHMENT_FK4` FOREIGN KEY (`ATTA_STATUS_CODE`) REFERENCES `discl_atta_status` (`ATTA_STATUS_CODE`),
   CONSTRAINT `DISCL_ATTACHMENT_FK5` FOREIGN KEY (`FILE_DATA_ID`) REFERENCES `discl_file_data` (`FILE_DATA_ID`)
 );
+
+SET FOREIGN_KEY_CHECKS=1; 
 
 INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('1','Publicly Owned','Y',now(),'quickstart');
 INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('2','Private','Y',now(),'quickstart');
@@ -689,11 +680,7 @@ DROP PROCEDURE IF EXISTS GET_SFI_DASHBOARD_COUNT;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_ADMIN_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT;
 DROP FUNCTION IF EXISTS FN_EVAL_DISCLOSURE_QUESTIONNAIRE;
-DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
-DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;
 DROP PROCEDURE IF EXISTS GET_DISCLOSURE_RELATIONS;
-DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
-DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;
 DROP PROCEDURE IF EXISTS GET_ALL_SYSTEM_ENTITY_LIST;
 DROP PROCEDURE IF EXISTS GET_ALL_SYSTEM_ENTITY_LIST_COUNT;
 DROP PROCEDURE IF EXISTS SYNC_PROJECTS_DISCLOSURE;
@@ -705,11 +692,7 @@ DROP PROCEDURE IF EXISTS SYNC_PROJECTS_DISCLOSURE;
 \. ./Procedures/GET_COI_DISCLOSURE_ADMIN_DASHBOARD.sql
 \. ./Procedures/GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT.sql
 \. ./Functions/FN_EVAL_DISCLOSURE_QUESTIONNAIRE.sql
-\. ./Procedures/GET_COI_DISCLOSURE_DASHBOARD.sql
-\. ./Procedures/GET_COI_DISCLOSURE_DASHBOARD_COUNT.sql
 \. ./Procedures/GET_DISCLOSURE_RELATIONS.sql
-\. ./Procedures/GET_COI_DISCLOSURE_DASHBOARD.sql
-\. ./Procedures/GET_COI_DISCLOSURE_DASHBOARD_COUNT.sql
 \. ./Procedures/GET_ALL_SYSTEM_ENTITY_LIST.sql
 \. ./Procedures/GET_ALL_SYSTEM_ENTITY_LIST_COUNT.sql
 \. ./Procedures/SYNC_PROJECTS_DISCLOSURE.sql
