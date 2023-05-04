@@ -77,6 +77,6 @@ export class AppHttpInterceptor implements HttpInterceptor {
     }
 
     isUnAuthorized(error: HttpErrorResponse) {
-        return error && error.error && error.error.message == "un authorized access to application";
+        return error && error.error && error.error.message == "missing authorization header";
     }
 }

@@ -61,7 +61,7 @@
                                     <td>Disclosure :</td>
                                     <td class="ps-4">
                                         <span *ngIf="coiData?.coiDisclosure?.coiConflictStatusType?.description" class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
-                                        <span *ngIf="!coiData?.coiDisclosure?.coiConflictStatusType?.description" class="noDataExists">-- No Data --</span>
+                                        <span *ngIf="!coiData?.coiDisclosure?.coiConflictStatusType?.description" class="noDataExists fw-normal">-- No Data --</span>
                                     </td>
                                 </tr>
                             </table>
@@ -75,22 +75,22 @@
                             <table class="fs-14 fw-medium spaced-table">
                                 <tr>
                                     <td>Create :</td>
-                                    <td class="ps-4" style="padding-right: 86px;" >{{coiData?.coiDisclosure?.createTimestamp ? (coiData?.coiDisclosure?.createTimestamp |
+                                    <td>{{coiData?.coiDisclosure?.createTimestamp ? (coiData?.coiDisclosure?.createTimestamp |
                                         dateFormatterWithTimeZone) : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td>Certification :</td>
-                                    <td class="ps-4" style="padding-right: 115px;" >
+                                    <td>
                                         <ng-container *ngIf="coiData?.coiDisclosure?.certifiedAt">
                                             {{coiData?.coiDisclosure?.certifiedAt ?
                                             (coiData?.coiDisclosure?.certifiedAt | dateFormatter) : ''}}
                                         </ng-container>
-                                        <span *ngIf="!coiData?.coiDisclosure?.certifiedAt" class="noDataExists">-- No Data --</span>
+                                        <span *ngIf="!coiData?.coiDisclosure?.certifiedAt" class="noDataExists fw-normal">-- No Data --</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Expiration :</td>
-                                    <td class="ps-4" style="padding-right: 86px;"  >{{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
+                                    <td>{{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
                                         dateFormatter) : ''}}</td>
                                 </tr>
                             </table>

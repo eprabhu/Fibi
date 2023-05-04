@@ -419,11 +419,11 @@
                     class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
-               <!-- <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
+                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
                   <label for="last-approved-version" class="label-text">Last Approved Version :</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
-                </div> -->
+                </div>
                 <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
                   <label for="disp-status" class="label-text">Disposition Status :</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">-- No Data --</span>
