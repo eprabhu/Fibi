@@ -1,0 +1,172 @@
+.divCenter {
+    display: flex;
+    align-items: center;
+}
+
+.fw-500 {
+    font-weight: 500 !important;
+}
+
+.col-custom {
+    width: 100px !important;
+}
+.col-custom-city {
+    width: 60px !important;
+    margin-left: 40px !important;
+}
+
+.col-custom-endDate {
+    width: 90px !important;
+    margin-left: 10px !important;
+}
+
+.invalid-feedback {
+    color: rgb(176 42 55)
+}
+
+.invalid-border {
+    border-color: #dc3545 !important;
+}
+
+.matMarginLeft {
+    margin-left: -10px;
+}
+
+.travelDisclosure-radio-checkbox {
+    accent-color: #0d6efd !important;
+    -ms-transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+}
+
+
+.bg-primary {
+    background-color: #0d6efd !important;
+    color: #fff;
+}
+
+.bg-outline-primary {
+    border-color: #0d6efd !important;
+}
+
+
+
+// sfi
+.task-right-div {
+    width: 80%;
+    top: 0;
+    display: block;
+    right: 1px;
+    position: fixed;
+    height: 100%;
+    z-index: 10610;
+}
+
+.tool-kit-body {
+    background: #FFF;
+    width: 100%;
+    top: 0;
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+    position: absolute;
+    z-index: 10;
+    height: 100%;
+    float: right;
+}
+
+.card-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+select {
+    font-size: 1.3rem !important;
+    width: 100%;
+}
+
+select option {
+    background-color: #fff;
+}
+
+.btn-primary,
+.btn-outline-primary {
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    height: 25px;
+}
+
+.overlay {
+    position: fixed;
+    /* Sit on top of the page content */
+    width: 100%;
+    /* Full width (cover the whole page) */
+    height: 100%;
+    /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(128 128 128 / 16%);
+    z-index: 9999;
+    /* Specify a stack order in case you're using a different order for other elements */
+    overflow: hidden;
+}
+
+.card-border {
+    border-radius: 10px 0px 0px 10px;
+}
+
+.card-height {
+    height: 100vh !important;
+}
+
+.card-border {
+    border-radius: 20px 0px 0px 0px;
+}
+
+.close {
+    position: absolute;
+    top: 35px;
+    color: grey;
+    background: #ffffff;
+    z-index: 1500;
+    padding: 1.2rem 1.3rem;
+    border-radius: 50%;
+    left: -17px;
+    opacity: 1;
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+}
+
+.close img {
+    width: 17px;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}
+
+.scrollable-table {
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+    overscroll-behavior: contain;
+}
+
+::-webkit-scrollbar {
+    width: .4em;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+    background: #eee
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc
+}

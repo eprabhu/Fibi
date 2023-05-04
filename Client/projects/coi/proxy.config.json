@@ -255,5 +255,17 @@
   "/completeCOIReview":{
     "target": "http://192.168.1.189:9090/coi/",
     "secure": false
+  },
+  "/createCoiTravelDisclosure": {
+    "target": "http://192.168.1.189:8083/coi/",
+    "secure": false
+  },
+  "/loadTravellerTypesLookup": {
+    "target": "http://192.168.1.189:8083/coi/",
+    "secure": false
+  },
+  "/loadTravelStatusTypesLookup": {
+    "target": "http://192.168.1.189:8083/coi/",
+    "secure": false
   }
 }
