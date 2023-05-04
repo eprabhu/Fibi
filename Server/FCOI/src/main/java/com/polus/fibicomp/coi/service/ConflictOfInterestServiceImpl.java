@@ -144,8 +144,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		else if(conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode()!=null && !conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode().isEmpty()) {
 			if (!conflictOfInterestVO.getCoiDisclosure().getFcoiTypeCode().equals("4")) {
-				List<CoiDisclosure> disclosure = conflictOfInterestDao.getMasterDisclosureByPersonId(conflictOfInterestVO.getCoiDisclosure().getPersonId());
-				if (!disclosure.isEmpty()||disclosure == null) {
+				if(conflictOfInterestDao.isMasterDisclosurePresent(conflictOfInterestVO.getCoiDisclosure().getPersonId())) {
 					return new ResponseEntity<>("Could not create master disclosure ",
 							HttpStatus.METHOD_NOT_ALLOWED);
 				}
@@ -249,7 +248,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 //		conflictOfInterestVO.setPerson(personDao.getPersonDetailById(coiDisclosure.getPersonId()));
 //		conflictOfInterestVO.setNumberOfSFI(conflictOfInterestDao.getSFICountBasedOnParams(coiDisclosure.getVersionStatus(),
 //				coiDisclosure.getPersonId(), coiDisclosure.getDisclosureId()));
-//		conflictOfInterestVO.setCoiSectionsType(conflictOfInterestDao.fetchCoiSections());
 //		conflictOfInterestVO.setCoiReviewActivitys(conflictOfInterestDao.fetchCoiReviewActivity());
 //		conflictOfInterestVO.setAdminGroup(commonDao.fetchAdminGroupsBasedOnModuleCode(Constants.MODULE_CODE_COI_DISCLOSURE));
 //		if (Constants.PROPOSAL_DISCLOSURE.equals(coiDisclosure.getFcoiTypeCode()) ) {
@@ -278,6 +276,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
 		coiDisclosure.setCoiDisclosureFcoiType(conflictOfInterestDao.getCoiDisclosureFcoiTypeByCode(coiTypeCode));
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
+		conflictOfInterestVO.setCoiSectionsType(conflictOfInterestDao.fetchCoiSections());
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
 	}
 
@@ -438,6 +437,15 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> certifyDisclosure(CoiDisclosure coiDisclosure) {
+		Boolean isDisclosureQuestionnaire = conflictOfInterestDao.evaluateDisclosureQuestionnaire(8,0,coiDisclosure.getDisclosureId());
+		if(isDisclosureQuestionnaire) {
+			if(!conflictOfInterestDao.isSFIDefined(conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId()).getPersonId())) {
+				return new ResponseEntity<>("Atleast one SFI has to be defined", HttpStatus.METHOD_NOT_ALLOWED);
+			}
+			if(!conflictOfInterestDao.isRelationshipDefined(coiDisclosure.getDisclosureId())) {
+				return new ResponseEntity<>("Atleast one relationship has to be defined", HttpStatus.METHOD_NOT_ALLOWED);
+			}
+		}
 		coiDisclosure.setCertifiedBy(AuthenticatedUser.getLoginPersonId());
 		coiDisclosure.setCertifiedAt(commonDao.getCurrentTimestamp());
 		coiDisclosure.setReviewStatusCode(SUBMITTED_FOR_REVIEW);

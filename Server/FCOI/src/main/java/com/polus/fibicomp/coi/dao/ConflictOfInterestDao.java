@@ -664,8 +664,6 @@ public interface ConflictOfInterestDao {
 	
 	public List<ValidPersonEntityRelType> getValidPersonEntityRelTypes(Integer personEntityId);
 
-	public List<CoiDisclosure> getMasterDisclosureByPersonId(String personId);
-
 	public Integer getAllSystemEntityListCount(CoiDashboardVO vo);
 
 	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
@@ -691,5 +689,11 @@ public interface ConflictOfInterestDao {
 	public Integer getNumberOfProposalsBasedOnDisclosureId(Integer disclosureId);
 
 	public Integer getNumberOfAwardsBasedOnDisclosureId(Integer disclosureId);
+
+	public boolean isSFIDefined(String personId);
+
+	public boolean isRelationshipDefined(Integer disclosureId);
+
+	public boolean isMasterDisclosurePresent(String personId);
 
 }
