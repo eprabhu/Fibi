@@ -90,13 +90,13 @@
     <div class="navigation border text-center shadow-sm mb-3">
         <div class="row m-0 text-secondary">
             <div [routerLink]="['disclosures']" tabindex="0" aria-label="Goto My Disclosures"
-                class="cursor-pointer align-items-center border-end col d-flex justify-content-around p-0" role="button"
+                class="cursor-pointer align-items-center border-end col d-flex justify-content-around p-0 position-relative" role="button"
                 routerLinkActive="active" title="Goto My Disclosures">
                 <strong class="fs-18">My Disclosures</strong>
                 <img [class.d-none]="!router.url.includes('user-dashboard/disclosures')" class="nav-tip-active" src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
             </div>
             <div [routerLink]="['entities']" tabindex="0" aria-label="Goto My Entities"
-                class="cursor-pointer align-items-center col d-flex justify-content-center p-0" role="button"
+                class="cursor-pointer align-items-center col d-flex justify-content-center p-0 position-relative" role="button"
                 routerLinkActive="active" title="Goto My Entities">
                 <strong class="fs-18">My Entities</strong>
                 <img [class.d-none]="!router.url.includes('user-dashboard/entities')" class="nav-tip-active" src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">

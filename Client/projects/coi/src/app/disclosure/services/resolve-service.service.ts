@@ -6,6 +6,7 @@ import {catchError} from 'rxjs/operators';
 import {CommonService} from '../../common/services/common.service';
 import {CoiService} from './coi.service';
 import {DataStoreService} from './data-store.service';
+import {HTTP_ERROR_STATUS} from "../../app-constants";
 
 @Injectable()
 export class ResolveServiceService {
@@ -68,6 +69,8 @@ export class ResolveServiceService {
     }
 
     private redirectOnError(error) {
+            this._commonService.showToast(HTTP_ERROR_STATUS, (error.error) ?
+                error.error : 'Something went wrong. Please try again.');
         if (error.status === 403 && error.error !== 'DISCLOSURE_EXISTS') {
             this._commonService.forbiddenModule = '8';
             this._router.navigate(['/fibi/error/403']);
