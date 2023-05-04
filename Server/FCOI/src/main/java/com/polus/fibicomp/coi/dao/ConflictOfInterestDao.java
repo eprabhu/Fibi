@@ -696,4 +696,10 @@ public interface ConflictOfInterestDao {
 
 	public boolean isMasterDisclosurePresent(String personId);
 
+	/**
+	 *
+	 * @param disclosureId
+	 * @param disclosureNumber
+	 */
+	void archiveDisclosureOldVersions(Integer disclosureId, Integer disclosureNumber);
 }

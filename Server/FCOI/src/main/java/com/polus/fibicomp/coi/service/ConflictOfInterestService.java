@@ -219,9 +219,10 @@ public interface ConflictOfInterestService {
 	/**
 	 * This method is used for complete Disclosure
 	 * @param disclosureId
+	 * @param disclosureNumber
 	 * @return Disclosure details
 	 */
-	ResponseEntity<Object> completeDisclosureReview(Integer disclosureId);
+	ResponseEntity<Object> completeDisclosureReview(Integer disclosureId, Integer disclosureNumber);
 
 	/**
 	 * This method is used for update ProjectConflictStatus

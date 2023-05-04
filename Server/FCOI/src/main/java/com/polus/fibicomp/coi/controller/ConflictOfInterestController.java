@@ -216,10 +216,11 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.downloadCoiReviewAttachment(attachmentId);
 	}
 
-	@PostMapping("/completeDisclosureReview/{disclosureId}")
-	public ResponseEntity<Object> completeDisclosureReview(@PathVariable("disclosureId") Integer disclosureId) {
+	@PostMapping("/completeDisclosureReview/{disclosureId}/{disclosureNumber}")
+	public ResponseEntity<Object> completeDisclosureReview(@PathVariable("disclosureId") Integer disclosureId,
+														   @PathVariable("disclosureNumber") Integer disclosureNumber) {
 		logger.info("Request for completeDisclosureReview");
-		return conflictOfInterestService.completeDisclosureReview(disclosureId);
+		return conflictOfInterestService.completeDisclosureReview(disclosureId, disclosureNumber);
 	}
 
 	@PostMapping("/updateProjectConflictStatus")
