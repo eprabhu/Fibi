@@ -3,7 +3,7 @@
     <nav class="border-nav bg-white border d-flex fs-15 fw-bold mt-3 shadow user-dashboard-nav">
       <div (click)="currentSelected.tab = 'FINANCIAL';getDataFromService()"
         [class.bg-active]="currentSelected.tab === 'FINANCIAL'?'active':''"
-        class="left-curve align-items-center d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
+        class="left-curve align-items-center d-flex border-end navigation-icons text-secondary px-5" role="button">
         <span [class.active]="currentSelected.tab === 'FINANCIAL'?'active':''" class=" active">Financial</span>
       </div>
       <!-- <div (click)="currentSelected.tab = 'COMMITMENT';getDataFromService()"
@@ -93,7 +93,7 @@
               <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
                 <input type="radio" name="relation" class="form-check-input text-secondary"
                   [value]="relation?.personEntityRelType?.relationshipTypeCode" [(ngModel)]="coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode"
-                  (ngModelChange)="setRelationship()" [ngClass]="relationValidationMap.has('relationRadio')?'is-invalid d-block' : ''">
+                  (ngModelChange)="setRelationship()">
                 <label class="text-secondary r-title fs-14">
                   {{relation?.personEntityRelType?.description}}
                 </label>

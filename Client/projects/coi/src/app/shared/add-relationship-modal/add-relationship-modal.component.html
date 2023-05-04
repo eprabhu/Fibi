@@ -4,7 +4,7 @@
   <div class="modal-dialog modal-lg ">
       <div class="modal-content">
           <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
-              <h1 class="modal-title f-16" id="exampleModalLabel">Add Relations</h1>
+              <h1 class="modal-title f-16" id="exampleModalLabel">Add Relationship</h1>
               <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="continueWithoutRelation();"></button>
           </div>
         <div class="modal-body ">
@@ -42,19 +42,16 @@
                             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                         </div>
                     </span>
-                    <h4>There are no relations.</h4>
+                    <h4>There are no relationships.</h4>
                 </div>
             </ng-template>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary fs-14 py-2" data-dismiss="modal"
-                (click)="continueWithoutRelation()">Cancel
-            </button>
             <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-14 py-2"
-                data-dismiss="modal" (click)="continueWithoutRelation()">Continue without selecting Relation
+                data-dismiss="modal" (click)="continueWithoutRelation()">Continue without Relationship
             </button>
             <button id="add-review-btn" type="button" class="btn btn-primary btn-sm fs-14" data-dismiss="modal"
-                (click)="addRelation()">Add Relation
+                (click)="addRelation()">Add Relationship
             </button>
         </div>
       </div>
