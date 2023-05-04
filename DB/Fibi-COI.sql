@@ -11,6 +11,7 @@
 /*
 NB: Letter templates google drive link
 */
+DROP TABLE IF EXISTS `entity_type`;
 
 CREATE TABLE `entity_type` (
   `ENTITY_TYPE_CODE` varchar(3) NOT NULL,
@@ -21,6 +22,8 @@ CREATE TABLE `entity_type` (
   PRIMARY KEY (`ENTITY_TYPE_CODE`)
 );
 
+DROP TABLE IF EXISTS `entity_status`;
+
 CREATE TABLE `entity_status` (
   `ENTITY_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -30,6 +33,8 @@ CREATE TABLE `entity_status` (
   PRIMARY KEY (`ENTITY_STATUS_CODE`)
 );
 
+DROP TABLE IF EXISTS `entity_risk_category`;
+
 CREATE TABLE `entity_risk_category` (
   `RISK_CATEGORY_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(45) DEFAULT NULL,
@@ -38,6 +43,8 @@ CREATE TABLE `entity_risk_category` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`RISK_CATEGORY_CODE`)
 );
+
+DROP TABLE IF EXISTS `entity`;
 
 CREATE TABLE `entity` (
   `ENTITY_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -73,6 +80,8 @@ CREATE TABLE `entity` (
   CONSTRAINT `ENTITY1_FK5` FOREIGN KEY (`RISK_CATEGORY_CODE`) REFERENCES `entity_risk_category` (`RISK_CATEGORY_CODE`)
 );
 
+DROP TABLE IF EXISTS `entity_relationship_type`;
+
 CREATE TABLE `entity_relationship_type` (
   `ENTITY_REL_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -82,6 +91,8 @@ CREATE TABLE `entity_relationship_type` (
   PRIMARY KEY (`ENTITY_REL_TYPE_CODE`)
 );
 
+DROP TABLE IF EXISTS `entity_rel_node_type`;
+
 CREATE TABLE `entity_rel_node_type` (
   `REL_NODE_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -90,6 +101,8 @@ CREATE TABLE `entity_rel_node_type` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`REL_NODE_TYPE_CODE`)
 );
+
+DROP TABLE IF EXISTS `entity_relationship`;
 
 CREATE TABLE `entity_relationship` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -105,6 +118,8 @@ CREATE TABLE `entity_relationship` (
   CONSTRAINT `ENITY_RELATIONSHIP_FK1` FOREIGN KEY (`ENTITY_REL_TYPE_CODE`) REFERENCES `entity_relationship_type` (`ENTITY_REL_TYPE_CODE`),
   CONSTRAINT `ENITY_RELATIONSHIP_FK2` FOREIGN KEY (`NODE_TYPE_CODE`) REFERENCES `entity_rel_node_type` (`REL_NODE_TYPE_CODE`)
 );
+
+DROP TABLE IF EXISTS `person_entity`;
 
 CREATE TABLE `person_entity` (
   `PERSON_ENTITY_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -131,6 +146,8 @@ CREATE TABLE `person_entity` (
   CONSTRAINT `PERSON_ENTITY_FK2` FOREIGN KEY (`ENTITY_ID`) REFERENCES `entity` (`ENTITY_ID`)
 );
 
+DROP TABLE IF EXISTS `coi_disclosure_type`;
+
 CREATE TABLE `coi_disclosure_type` (
   `DISCLOSURE_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -140,6 +157,8 @@ CREATE TABLE `coi_disclosure_type` (
   PRIMARY KEY (`DISCLOSURE_TYPE_CODE`)
 );
 
+DROP TABLE IF EXISTS `person_entity_rel_type`;
+
 CREATE TABLE `person_entity_rel_type` (
   `RELATIONSHIP_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -148,6 +167,8 @@ CREATE TABLE `person_entity_rel_type` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`RELATIONSHIP_TYPE_CODE`)
 );
+
+DROP TABLE IF EXISTS `valid_person_entity_rel_type`;
 
 CREATE TABLE `valid_person_entity_rel_type` (
   `VALID_PERSON_ENTITY_REL_TYPE_CODE` int(11) NOT NULL AUTO_INCREMENT,
@@ -164,6 +185,8 @@ CREATE TABLE `valid_person_entity_rel_type` (
   CONSTRAINT `VALID_PERSON_ENTITY_REL_TYPE_FK1` FOREIGN KEY (`DISCLOSURE_TYPE_CODE`) REFERENCES `coi_disclosure_type` (`DISCLOSURE_TYPE_CODE`),
   CONSTRAINT `VALID_PERSON_ENTITY_REL_TYPE_FK2` FOREIGN KEY (`RELATIONSHIP_TYPE_CODE`) REFERENCES `person_entity_rel_type` (`RELATIONSHIP_TYPE_CODE`)
 );
+
+DROP TABLE IF EXISTS `person_entity_relationship`;
 
 CREATE TABLE `person_entity_relationship` (
   `PERSON_ENTITY_REL_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -183,6 +206,8 @@ CREATE TABLE `person_entity_relationship` (
   CONSTRAINT `PERSON_ENTITY_RELATIONSHIP_FK2` FOREIGN KEY (`VALID_PERSON_ENTITY_REL_TYPE_CODE`) REFERENCES `valid_person_entity_rel_type` (`VALID_PERSON_ENTITY_REL_TYPE_CODE`)
 );
 
+DROP TABLE IF EXISTS `coi_project_type`;
+
 CREATE TABLE `coi_project_type` (
   `COI_PROJECT_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -191,6 +216,8 @@ CREATE TABLE `coi_project_type` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`COI_PROJECT_TYPE_CODE`)
 );
+
+DROP TABLE IF EXISTS `coi_project_proposal`;
 
 CREATE TABLE `coi_project_proposal` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -214,6 +241,8 @@ CREATE TABLE `coi_project_proposal` (
   CONSTRAINT `COI_PROJECT_PROPOSAL_FK1` FOREIGN KEY (`COI_PROJECT_TYPE_CODE`) REFERENCES `coi_project_type` (`COI_PROJECT_TYPE_CODE`)
 );
 
+DROP TABLE IF EXISTS `coi_project_award`;
+
 CREATE TABLE `coi_project_award` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `EXTERNAL_SYSTEM_REF_ID` int(11) DEFAULT NULL,
@@ -235,6 +264,8 @@ CREATE TABLE `coi_project_award` (
   CONSTRAINT `COI_PROJECT_AWARD_FK1` FOREIGN KEY (`COI_PROJECT_TYPE_CODE`) REFERENCES `coi_project_type` (`COI_PROJECT_TYPE_CODE`)
 );
 
+DROP TABLE IF EXISTS `coi_disclosure_fcoi_type`;
+
 CREATE TABLE `coi_disclosure_fcoi_type` (
   `FCOI_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -243,6 +274,8 @@ CREATE TABLE `coi_disclosure_fcoi_type` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`FCOI_TYPE_CODE`)
 );
+
+DROP TABLE IF EXISTS `coi_conflict_status_type`;
 
 CREATE TABLE `coi_conflict_status_type` (
   `CONFLICT_STATUS_CODE` varchar(3) NOT NULL,
@@ -253,6 +286,8 @@ CREATE TABLE `coi_conflict_status_type` (
   PRIMARY KEY (`CONFLICT_STATUS_CODE`)
 );
 
+DROP TABLE IF EXISTS `coi_disposition_status_type`;
+
 CREATE TABLE `coi_disposition_status_type` (
   `DISPOSITION_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -261,6 +296,8 @@ CREATE TABLE `coi_disposition_status_type` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`DISPOSITION_STATUS_CODE`)
 );
+
+DROP TABLE IF EXISTS `coi_review_status_type`;
 
 CREATE TABLE `coi_review_status_type` (
   `REVIEW_STATUS_CODE` varchar(3) NOT NULL,
@@ -271,6 +308,8 @@ CREATE TABLE `coi_review_status_type` (
   PRIMARY KEY (`REVIEW_STATUS_CODE`)
 );
 
+DROP TABLE IF EXISTS `coi_risk_category`;
+
 CREATE TABLE `coi_risk_category` (
   `RISK_CATEGORY_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -279,6 +318,8 @@ CREATE TABLE `coi_risk_category` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`RISK_CATEGORY_CODE`)
 );
+
+DROP TABLE IF EXISTS `coi_disclosure`;
 
 CREATE TABLE `coi_disclosure` (
   `DISCLOSURE_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -317,6 +358,8 @@ CREATE TABLE `coi_disclosure` (
   CONSTRAINT `COI_DISCLOSURE1_FK6` FOREIGN KEY (`RISK_CATEGORY_CODE`) REFERENCES `coi_risk_category` (`RISK_CATEGORY_CODE`)
 );
 
+DROP TABLE IF EXISTS `coi_proj_conflict_status_type`;
+
 CREATE TABLE `coi_proj_conflict_status_type` (
   `PROJECT_CONFLICT_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -325,6 +368,8 @@ CREATE TABLE `coi_proj_conflict_status_type` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`PROJECT_CONFLICT_STATUS_CODE`)
 );
+
+DROP TABLE IF EXISTS `coi_discl_ent_proj_details`;
 
 CREATE TABLE `coi_discl_ent_proj_details` (
   `DISCLOSURE_DETAILS_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -349,6 +394,8 @@ CREATE TABLE `coi_discl_ent_proj_details` (
   CONSTRAINT `COI_DISCL_ENT_PROJ_DETAILS_FK4` FOREIGN KEY (`PROJECT_CONFLICT_STATUS_CODE`) REFERENCES `coi_proj_conflict_status_type` (`PROJECT_CONFLICT_STATUS_CODE`)
 );
 
+DROP TABLE IF EXISTS `discl_atta_status`;
+
 CREATE TABLE `discl_atta_status` (
   `ATTA_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -358,6 +405,8 @@ CREATE TABLE `discl_atta_status` (
   PRIMARY KEY (`ATTA_STATUS_CODE`)
 );
 
+DROP TABLE IF EXISTS `discl_file_data`;
+
 CREATE TABLE `discl_file_data` (
   `FILE_DATA_ID` int(11) NOT NULL AUTO_INCREMENT,
   `FILE_PATH` varchar(255) DEFAULT NULL,
@@ -365,6 +414,8 @@ CREATE TABLE `discl_file_data` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`FILE_DATA_ID`)
 );
+
+DROP TABLE IF EXISTS `discl_atta_type`;
 
 CREATE TABLE `discl_atta_type` (
   `ATTA_TYPE_CODE` varchar(3) NOT NULL,
@@ -375,6 +426,8 @@ CREATE TABLE `discl_atta_type` (
   PRIMARY KEY (`ATTA_TYPE_CODE`)
 );
 
+DROP TABLE IF EXISTS `discl_component_type`;
+
 CREATE TABLE `discl_component_type` (
   `COMPONENT_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -383,6 +436,8 @@ CREATE TABLE `discl_component_type` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`COMPONENT_TYPE_CODE`)
 );
+
+DROP TABLE IF EXISTS `discl_valid_compnent_atta_ty`;
 
 CREATE TABLE `discl_valid_compnent_atta_ty` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -397,7 +452,9 @@ CREATE TABLE `discl_valid_compnent_atta_ty` (
   KEY `DISCL_VALID_COMPONENT_ATTA_TYPE_FK2_idx` (`ATTA_TYPE_CODE`),
   CONSTRAINT `DISCL_VALID_COMPONENT_ATTA_TYPE_FK1` FOREIGN KEY (`COMPONENT_TYPE_CODE`) REFERENCES `discl_component_type` (`COMPONENT_TYPE_CODE`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `DISCL_VALID_COMPONENT_ATTA_TYPE_FK2` FOREIGN KEY (`ATTA_TYPE_CODE`) REFERENCES `discl_atta_type` (`ATTA_TYPE_CODE`) ON DELETE RESTRICT ON UPDATE RESTRICT
-)
+);
+
+DROP TABLE IF EXISTS `discl_comment_type`;
 
 CREATE TABLE `discl_comment_type` (
   `COMMENT_TYPE` varchar(3) NOT NULL,
@@ -407,6 +464,8 @@ CREATE TABLE `discl_comment_type` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`COMMENT_TYPE`)
 );
+
+DROP TABLE IF EXISTS `discl_valid_compnent_comnt_ty`;
 
 CREATE TABLE `discl_valid_compnent_comnt_ty` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -422,6 +481,8 @@ CREATE TABLE `discl_valid_compnent_comnt_ty` (
   CONSTRAINT `DISCL_VALID_CMPNENT_COMNT_TY_FK1` FOREIGN KEY (`COMPONENT_TYPE_CODE`) REFERENCES `discl_component_type` (`COMPONENT_TYPE_CODE`),
   CONSTRAINT `DISCL_VALID_CMPNENT_COMNT_TY_FK2` FOREIGN KEY (`COMMENT_TYPE`) REFERENCES `discl_comment_type` (`COMMENT_TYPE`)
 );
+
+DROP TABLE IF EXISTS `discl_comment`;
 
 CREATE TABLE `discl_comment` (
   `COMMENT_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -443,6 +504,8 @@ CREATE TABLE `discl_comment` (
   CONSTRAINT `DISCL_COMMENT_FK2` FOREIGN KEY (`COMMENT_TYPE`) REFERENCES `discl_comment_type` (`COMMENT_TYPE`)
 );
 
+DROP TABLE IF EXISTS `coi_traveler_type`;
+
 CREATE TABLE `coi_traveler_type` (
   `TRAVELER_TYPE_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -452,6 +515,8 @@ CREATE TABLE `coi_traveler_type` (
   PRIMARY KEY (`TRAVELER_TYPE_CODE`)
 );
 
+DROP TABLE IF EXISTS `coi_travel_status_type`;
+
 CREATE TABLE `coi_travel_status_type` (
   `TRAVEL_STATUS_CODE` varchar(3) NOT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
@@ -460,6 +525,8 @@ CREATE TABLE `coi_travel_status_type` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`TRAVEL_STATUS_CODE`)
 );
+
+DROP TABLE IF EXISTS `coi_travel_disclosure`;
 
 CREATE TABLE `coi_travel_disclosure` (
   `TRAVEL_DISCLOSURE_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -500,6 +567,8 @@ CREATE TABLE `coi_travel_disclosure` (
   CONSTRAINT `COI_TRAVEL_DISCLOSURE_FK4` FOREIGN KEY (`TRAVEL_STATUS_CODE`) REFERENCES `coi_travel_status_type` (`TRAVEL_STATUS_CODE`)
 );
 
+DROP TABLE IF EXISTS `coi_travel_disclosure_traveler`;
+
 CREATE TABLE `coi_travel_disclosure_traveler` (
   `TRAVEL_TRAVELER_ID` int(11) NOT NULL AUTO_INCREMENT,
   `TRAVEL_DISCLOSURE_ID` int(11) DEFAULT NULL,
@@ -512,6 +581,8 @@ CREATE TABLE `coi_travel_disclosure_traveler` (
   CONSTRAINT `COI_TRAVEL_DISCLOSURE_TRAVELER_FK1` FOREIGN KEY (`TRAVEL_DISCLOSURE_ID`) REFERENCES `coi_travel_disclosure` (`TRAVEL_DISCLOSURE_ID`),
   CONSTRAINT `COI_TRAVEL_DISCLOSURE_TRAVELER_FK2` FOREIGN KEY (`TRAVELER_TYPE_CODE`) REFERENCES `coi_traveler_type` (`TRAVELER_TYPE_CODE`)
 );
+
+DROP TABLE IF EXISTS `discl_attachment`;
 
 CREATE TABLE `discl_attachment` (
   `ATTACHMENT_ID` int(11) NOT NULL AUTO_INCREMENT,
