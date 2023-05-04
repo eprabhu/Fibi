@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
-import {UserDisclosureService} from "./user-disclosure.service";
-import {UserDashboardService} from "../user-dashboard.service";
-import {CommonService} from "../../common/services/common.service";
+import { Component } from '@angular/core';
+import { UserDisclosureService } from "./user-disclosure.service";
+import { UserDashboardService } from "../user-dashboard.service";
+import { CommonService } from "../../common/services/common.service";
+import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -10,15 +11,18 @@ import {CommonService} from "../../common/services/common.service";
 })
 
 export class UserDisclosureComponent {
+    isShowCountModal = false;
     searchText = '';
     currentSelected = {
         tab: 'IN_PROGRESS_DISCLOSURES',
-        filter: 'ALL'
+        filter: 'ALL',
+
+
     }
     dashboardRequestObject = {
         advancedSearch: 'L',
         pageNumber: 200,
-        sort: {'createTimestamp': 'asc'},
+        sort: { 'createTimestamp': 'asc' },
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         // filterType = 'All', 'FCOI', 'Project', 'OPA';
@@ -28,15 +32,24 @@ export class UserDisclosureComponent {
     filteredDisclosureArray: any[] = [];
     dashboardCount: any;
     isActiveDisclosureAvailable = false;
+    selectedModuleCode: number;
+    currentDisclosureId: any;
+    currentDisclosureNumber: any;
+    disclosureType: any;
+    inputType: string;
+    coiList: [];
+    disclosureSequenceStatusCode: any;
+    personId: any;
+
 
     constructor(public userDisclosureService: UserDisclosureService,
-                public userDashboardService: UserDashboardService,
-                public commonService: CommonService) {
+        public userDashboardService: UserDashboardService,
+        public commonService: CommonService) {
     }
 
     ngOnInit() {
-       this.loadDashboard();
-       this.loadDashboardCount();
+        this.loadDashboard();
+        this.loadDashboardCount();
     }
 
     loadDashboard() {
@@ -52,6 +65,7 @@ export class UserDisclosureComponent {
             this.dashboardCount = res;
         })
     }
+
 
     getDispositionStatusBadge(statusCode) {
         switch (statusCode) {
@@ -107,7 +121,7 @@ export class UserDisclosureComponent {
         }
     }
 
- 
+
 
 
     getDisclosureStatusBadge(statusCode) {
@@ -144,9 +158,27 @@ export class UserDisclosureComponent {
     }
 
     setTab(tabName) {
-        this.currentSelected.tab= tabName;
+        this.currentSelected.tab = tabName;
         this.dashboardRequestObject.tabName = tabName;
         this.loadDashboard();
+    }
+    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId) {
+        switch (moduleName) {
+            case 'sfi':
+                this.selectedModuleCode = 8;
+                break;
+
+            default:
+                this.selectedModuleCode = 0;
+        }
+        this.isShowCountModal = true;
+        this.currentDisclosureId = id;
+        this.currentDisclosureNumber = coiNumber;
+        this.disclosureType = moduleName;
+        this.inputType = 'DISCLOSURE_TAB';
+        this.disclosureSequenceStatusCode = disSeqCode;
+        this.personId = personId;
+        openModal('coiCountsViewModal');
     }
 
     setFilter(type = 'ALL') {
@@ -160,7 +192,7 @@ export class UserDisclosureComponent {
             this.filteredDisclosureArray = this.disclosureArray;
         } else {
             this.filteredDisclosureArray = this.disclosureArray.filter(disclosure => {
-                switch(this.currentSelected.filter) {
+                switch (this.currentSelected.filter) {
                     case 'PROJECT':
                         return ['3', '2'].includes(disclosure.fcoiTypeCode);
                     case 'OPA':

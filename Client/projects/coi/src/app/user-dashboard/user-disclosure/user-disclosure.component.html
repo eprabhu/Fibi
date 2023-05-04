@@ -1,6 +1,6 @@
-<div class="row">
+<div class="row my-4">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
-        <div class="col-6 pe-0 my-4" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
+        <div class="col-6 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
             <div class="shadow-sm disclosure-card border rounded">
                 <div class="border-bottom d-flex disclosure-card-heading-blue px-3 py-2 rounded-top-2">
                     <div class="col"><strong class="fs-15">FCOI Disclosure</strong></div>
@@ -9,8 +9,8 @@
                                 class="disclosure-active-pill ms-2 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.coiConflictStatusType?.description}}</span>
                         </div>
                         <div [queryParams]={disclosureId:disclosure.disclosureId}
-                             [routerLink]="['/coi/disclosure/summary']"
-                             class="align-items-center d-flex fs-14 text-secondary" role="button">
+                            [routerLink]="['/coi/disclosure/summary']"
+                            class="align-items-center d-flex fs-14 text-secondary" role="button">
                             <span class="fw-medium">VIEW</span>
                             <mat-icon>chevron_right</mat-icon>
                         </div>
@@ -26,8 +26,10 @@
                         </div>
                         <div class="my-2">
                             <span class="fw-bold text-secondary">Certification Date : </span>
-                            <span *ngIf="disclosure?.certifiedAt" class="ps-2 span-data-color">{{disclosure?.certifiedAt | dateFormatter}}</span>
-                            <span *ngIf="!disclosure?.certifiedAt" class="ps-2 span-data-color noDataExists">-- No Data --</span>
+                            <span *ngIf="disclosure?.certifiedAt" class="ps-2 span-data-color">{{disclosure?.certifiedAt
+                                | dateFormatter}}</span>
+                            <span *ngIf="!disclosure?.certifiedAt" class="ps-2 span-data-color noDataExists">-- No Data
+                                --</span>
                         </div>
                         <div>
                             <span class="fw-bold text-secondary">SFIs : </span>
@@ -38,7 +40,8 @@
                     <div class="col">
                         <div>
                             <span class="fw-bold text-secondary">Disposition Status : </span>
-                            <span class="ms-2 disclosure-active-pill
+                            <span
+                                class="ms-2 disclosure-active-pill
                                 {{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
                                 {{disclosure?.coiDispositionStatusType?.description}}</span>
                         </div>
@@ -48,7 +51,8 @@
                         </div>
                         <div>
                             <span class="fw-bold text-secondary">Last Update By :</span>
-                            <span class="ps-2 span-data-color">{{disclosure?.updateUserFullName}} On {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
+                            <span class="ps-2 span-data-color">{{disclosure?.updateUserFullName}} On
+                                {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
                         </div>
                     </div>
                 </div>
@@ -96,25 +100,21 @@
 </div>
 
 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
-    <div (click)="setTab('IN_PROGRESS_DISCLOSURES')"
-         class="border-end navigation-icons px-3 py-1" role="button">
+    <div (click)="setTab('IN_PROGRESS_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button">
         <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="pb-3 active">
             In Progress Disclosures({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
-    <div (click)="setTab('APPROVED_DISCLOSURES')"
-         class="border-end navigation-icons px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'"
-              class="pb-3">Approved Disclosures({{dashboardCount?.approvedDisclosureCount || 0}})</span>
+    <div (click)="setTab('APPROVED_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button">
+        <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'" class="pb-3">Approved
+            Disclosures({{dashboardCount?.approvedDisclosureCount || 0}})</span>
     </div>
-    <div (click)="setTab('TRAVEL_DISCLOSURES')"
-         class="border-end navigation-icons px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'"
-              class="pb-3">Travel Disclosures({{dashboardCount?.travelDisclosureCount || 0}})</span>
+    <div (click)="setTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button">
+        <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="pb-3">Travel
+            Disclosures({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
-    <div (click)="setTab('DISCLOSURE_HISTORY')" class="navigation-icons px-3 py-1"
-         role="button">
-        <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'"
-              class="pb-3">Disclosure History ({{dashboardCount?.disclosureHistoryCount || 0}})</span>
+    <div (click)="setTab('DISCLOSURE_HISTORY')" class="navigation-icons px-3 py-1" role="button">
+        <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3">Disclosure History
+            ({{dashboardCount?.disclosureHistoryCount || 0}})</span>
     </div>
 </nav>
 
@@ -122,14 +122,13 @@
     <div class="border-end fs-14 p-3">
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Type :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active"
-              role="button">All</span>
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active" role="button">All</span>
         <span (click)="setFilter('FCOI')" [class.filter-active]="currentSelected.filter=='FCOI'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">FCOI</span>
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">FCOI</span>
         <span (click)="setFilter('PROJECT')" [class.filter-active]="currentSelected.filter=='PROJECT'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Project</span>
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Project</span>
         <span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>
     </div>
     <div class="d-flex flex-fill">
         <input class="advance-search-input border-0 px-4" id="searchText" type="text" [(ngModel)]="searchText">
@@ -139,15 +138,15 @@
 </div>
 <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
 <ng-container
-        *ngFor="let disclosure of filteredDisclosureArray | SearchFilter: searchText:['coiDisclosureNumber', 'fcoiType',
+    *ngFor="let disclosure of filteredDisclosureArray | SearchFilter: searchText:['coiDisclosureNumber', 'fcoiType',
         'conflictStatus', 'dispositionStatus', 'proposalTitle', 'updateUser', 'noOfSfiInPending', 'proposalId', 'reviewStatus']">
     <div class="bg-white border mt-2 rounded-1 shadow-sm light-dark-text-color">
         <div class="border-bottom fs-14 p-3">
-            <div *ngIf="disclosure?.fcoiTypeCode == '2'"><span
-                    class="fw-bold me-2">Proposal :</span> #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
+            <div *ngIf="disclosure?.fcoiTypeCode == '2'"><span class="fw-bold me-2">Proposal :</span>
+                #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
             </div>
-            <div *ngIf="disclosure?.fcoiTypeCode == '3'"><span
-                    class="fw-bold me-2">Award :</span> #{{disclosure?.awardId}} - {{disclosure?.awardTitle}}
+            <div *ngIf="disclosure?.fcoiTypeCode == '3'"><span class="fw-bold me-2">Award :</span>
+                #{{disclosure?.awardId}} - {{disclosure?.awardTitle}}
             </div>
             <div class="d-flex my-2">
                 <div class="col">
@@ -162,9 +161,8 @@
                         class="badge bg-{{getReviewStatusBadge(disclosure?.reviewStatusCode)}} text-{{ getReviewStatusTextColor(disclosure?.reviewStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.reviewStatus}}</span>
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Disclosure Status :</span>
-                    <span *ngIf="disclosure?.conflictStatus" class="badge {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
-                    <span *ngIf="!disclosure?.conflictStatus" class="noDataExists">-- No Data --</span>
+                    <span class="fw-bold me-2">Disclosure Status :</span> <span
+                        class="badge {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
                 </div>
             </div>
             <div class="d-flex">
@@ -172,7 +170,8 @@
                     <span class="fw-bold me-2">Type :</span> {{disclosure?.fcoiType}}
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Create Date :</span> {{disclosure?.createTimestamp | dateFormatterWithTimeZone}}
+                    <span class="fw-bold me-2">Create Date :</span> {{disclosure?.createTimestamp |
+                    dateFormatterWithTimeZone}}
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Certification Date :</span>
@@ -184,11 +183,17 @@
                 </div>
             </div>
         </div>
+        
         <div class="align-items-center chin d-flex fs-14 mx-3 ">
+            <ng-container >
             <div class="align-items-center col-3 d-flex fs-14">
                 <strong class="fs-18 me-2 text-blue-color">{{disclosure?.noOfSfi}}</strong>
-                <strong>SFIs</strong>
+                <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
+                <label class="label-text hand-cursor ml-2 mt-1"
+                    (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId);">
+                    <strong>SFI</strong></label>
             </div>
+           </ng-container>
             <div class="col-3 text-secondary fs-14 d-flex">
                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
                     <div class="align-items-center col d-flex fs-14">
@@ -202,24 +207,29 @@
                 </ng-container>
             </div>
             <div class="col-4">
-                <div><span class="fw-bold me-2">Last Updated By : </span> {{disclosure?.updateUser}} On {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}</div>
+                <div><span class="fw-bold me-2">Last Updated By : </span> {{disclosure?.updateUser}} On
+                    {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}</div>
             </div>
             <div class="col-auto ms-auto d-flex justify-content-end">
                 <button *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.conflictStatusCode == '3'"
-                        class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
+                    class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
                     <mat-icon class="me-1">restart_alt</mat-icon>
                     Revise
                 </button>
                 <button [queryParams]={disclosureId:disclosure.coiDisclosureId}
-                        [routerLink]="['/coi/disclosure/summary']"
-                        class="align-items-center btn btn-outline-primary d-flex fs-14">
+                    [routerLink]="['/coi/disclosure/summary']"
+                    class="align-items-center btn btn-outline-primary d-flex fs-14">
                     <mat-icon class="me-1">visibility</mat-icon>
                     View
                 </button>
             </div>
         </div>
     </div>
+
 </ng-container>
 
 
 
+<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [disclosureNumber]="currentDisclosureNumber"
+    [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode" [inputType]="inputType" [personId]="personId"
+    [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"></app-count-modal>

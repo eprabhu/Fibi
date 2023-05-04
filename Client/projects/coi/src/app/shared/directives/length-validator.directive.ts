@@ -27,7 +27,7 @@ export class LengthValidatorDirective implements OnInit, OnChanges {
     @Input() limit = 2000;
     @Input() elementId: string;
     @Input() isShowLimiter = true;
-    @Input() styleList = 'p2 text-right word-count';
+    @Input() styleList = 'p2 text-end word-count';
     @Input() ngModel;
 
     customElementId = null;

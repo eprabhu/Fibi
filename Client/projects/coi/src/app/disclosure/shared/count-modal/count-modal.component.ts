@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {CountModalService} from "./count-modal.service";	
 
+
 declare var $: any;
 
 @Component({
@@ -12,7 +13,7 @@ declare var $: any;
 })
 export class CountModalComponent implements OnInit {
 
-	@Input() moduleCode: number;
+	@Input() moduleCode: number  ;
 	@Input() disclosureId: number;
 	@Input() disclosureSequenceStatusCode: number;
 	@Input() disclosureNumber: number;
@@ -25,10 +26,11 @@ export class CountModalComponent implements OnInit {
 	currentModalTab = 'Award';
 	projectDatas: any;
 	coiFinancialEntityDetails: any[] = [];
-
+    
 	constructor(private _countModalService: CountModalService) { }
 
 	ngOnInit() {
+		console.log('this.moduleCode:', this.moduleCode)
 		if (this.moduleCode === 8) {
 			this.getSFIDatas();
 		} else if (this.moduleCode === 101 && this.inputType === 'SFI_TAB') {
@@ -41,6 +43,7 @@ export class CountModalComponent implements OnInit {
 	getSFIDatas() {
 		this.$subscriptions.push(this._countModalService.getSFICount(this.disclosureId, this.disclosureSequenceStatusCode,this.personId).subscribe((data: any) => {
 			this.coiFinancialEntityDetails = data;
+			console.log('this.coiFinancialEntityDetails:', this.coiFinancialEntityDetails)
 			document.getElementById('hidden-open-button').click();
 		}));
 	}
@@ -84,6 +87,7 @@ export class CountModalComponent implements OnInit {
 		} else if (this.moduleCode === 3 || this.moduleCode === 1) {
 			return `Proposals, Awards and Protocols related to: #${this.disclosureNumber} - ${this.disclosureType}`;
 		}
+		
 	}
 
 	closeCountModal() {
