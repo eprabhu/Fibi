@@ -10,6 +10,7 @@ import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { DisclosureModule } from '../disclosure/disclosure.module';
+import { TravelDisclosureComponent } from '../disclosure/travel-disclosure/travel-disclosure.component';
 
 const routes: Routes = [
     // {path: '', redirectTo: 'disclosures', pathMatch: 'full'},
@@ -28,8 +29,8 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         UserDashboardComponent,
-        ProjectDisclosureComponent
-        
+        ProjectDisclosureComponent,
+        TravelDisclosureComponent
     ],
     imports: [
         CommonModule,
