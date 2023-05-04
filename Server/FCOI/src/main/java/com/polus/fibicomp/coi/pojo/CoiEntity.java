@@ -134,6 +134,9 @@ public class CoiEntity implements Serializable {
 	@Transient
 	private String statusDescription;
 
+	@Transient
+	private String updatedUserFullName;
+
 	public Integer getEntityId() {
 		return entityId;
 	}
@@ -373,5 +376,12 @@ public class CoiEntity implements Serializable {
 	public void setCountryDescription(String countryDescription) {
 		this.countryDescription = countryDescription;
 	}
-	
+
+	public String getUpdatedUserFullName() {
+		return updatedUserFullName;
+	}
+
+	public void setUpdatedUserFullName(String updatedUserFullName) {
+		this.updatedUserFullName = updatedUserFullName;
+	}
 }

@@ -1005,6 +1005,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> getEntityDetails(Integer coiEntityId) {
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
 		vo.setCoiEntity(conflictOfInterestDao.getCoiEntityDetailsById(coiEntityId));
+		vo.getCoiEntity().setUpdatedUserFullName(personDao.getUserFullNameByUserName(vo.getCoiEntity().getUpdateUser()));
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
 
@@ -1135,6 +1136,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> getCoiEntityDetails(Integer personEntityId) {
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
 		vo.setCoiEntity(conflictOfInterestDao.getCoiEntityDetailsByEntityId(personEntityId));
+		vo.getCoiEntity().setUpdatedUserFullName(personDao.getUserFullNameByUserName(vo.getCoiEntity().getUpdateUser()));
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
 
