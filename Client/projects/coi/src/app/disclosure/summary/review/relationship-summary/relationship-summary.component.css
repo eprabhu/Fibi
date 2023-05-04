@@ -249,3 +249,12 @@
   color      : #6f7395;
   cursor     : pointer;
 }
+
+.view-icon {
+  margin-right: 2.5rem;
+}
+
+.mat-icon {
+  width: auto;
+  height: auto;
+}
