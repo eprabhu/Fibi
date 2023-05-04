@@ -135,3 +135,54 @@ nav ul li.active {
 .modal {
   background: #00000066 !important;
 }
+
+.bg-container {
+  height: 100%;
+  background-image: linear-gradient(to right, #587ff5 , #706be5);
+
+  .login-container {
+    display: flex;
+    position: absolute;
+    background-color: white;
+    width: 450px;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* box-shadow: 1px 2px 6px 0px rgba(0, 0, 0, 0.2);		 */
+    //  border-radius: 15px;
+    overflow: hidden;
+    .login-img-wrapper {
+      flex: 1;
+      padding: 160px 53px 34px 53px;
+      background-image: url(assets/images/fibiLogo_white.png),url(assets/images/img.jpg);
+      background-size: 27%, cover;
+      background-repeat: no-repeat, no-repeat;
+      background-position: center center, 10% center;
+      .tagline {
+        bottom: 26%;
+        color: #9e9e9e;
+      }
+    }
+    .login-content-wrapper {
+      flex: 1;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      background-color: white;
+      padding: 15px;
+      .login-button {
+        border: 0;
+        color: white;
+        background-color: #587ff4;
+        line-height: 35px;
+        transition: background-color 0.3s ease-in;
+        outline: none;
+      }
+      .login-button:hover {
+        background-color: #6f6de6;
+      }
+    }
+  }
+}
+
