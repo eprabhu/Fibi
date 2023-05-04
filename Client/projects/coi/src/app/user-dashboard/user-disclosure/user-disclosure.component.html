@@ -162,8 +162,9 @@
                         class="badge bg-{{getReviewStatusBadge(disclosure?.reviewStatusCode)}} text-{{ getReviewStatusTextColor(disclosure?.reviewStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.reviewStatus}}</span>
                 </div>
                 <div class="col">
-                    <span class="fw-bold me-2">Disclosure Status :</span> <span
-                        class="badge {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
+                    <span class="fw-bold me-2">Disclosure Status :</span>
+                    <span *ngIf="disclosure?.conflictStatus" class="badge {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
+                    <span *ngIf="!disclosure?.conflictStatus" class="noDataExists">-- No Data --</span>
                 </div>
             </div>
             <div class="d-flex">

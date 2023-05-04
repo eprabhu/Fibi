@@ -6,6 +6,7 @@ import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../fibi/src/app/a
 import {CommonService} from "../common/services/common.service";
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import {hideModal, openModal} from "../../../../fibi/src/app/common/utilities/custom-utilities";
+import {environment} from "../../environments/environment";
 
 declare var $: any;
 
@@ -17,6 +18,7 @@ declare var $: any;
 })
 export class UserDashboardComponent implements OnInit, OnDestroy {
 
+    deployMap = environment.deployUrl;
     hasFCOI: any;
     hasActiveFCOI = false;
     isModalOpen = false;
@@ -36,7 +38,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     $subscriptions = [];
 
     constructor(public service: UserDashboardService, private _router: Router, public commonService: CommonService,
-                public sfiService: SfiService) {
+                public sfiService: SfiService, public router: Router) {
     }
 
     ngOnInit(): void {

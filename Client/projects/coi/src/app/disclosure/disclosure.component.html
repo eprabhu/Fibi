@@ -59,8 +59,9 @@
                                 </tr>
                                 <tr>
                                     <td>Disclosure :</td>
-                                    <td class="ps-4"><span
-                                            class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                    <td class="ps-4">
+                                        <span *ngIf="coiData?.coiDisclosure?.coiConflictStatusType?.description" class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                        <span *ngIf="!coiData?.coiDisclosure?.coiConflictStatusType?.description" class="noDataExists">-- No Data --</span>
                                     </td>
                                 </tr>
                             </table>
@@ -79,8 +80,13 @@
                                 </tr>
                                 <tr>
                                     <td>Certification :</td>
-                                    <td class="ps-4" style="padding-right: 115px;" >{{coiData?.coiDisclosure?.certifiedAt ?
-                                        (coiData?.coiDisclosure?.certifiedAt | dateFormatter) : ''}}</td>
+                                    <td class="ps-4" style="padding-right: 115px;" >
+                                        <ng-container *ngIf="coiData?.coiDisclosure?.certifiedAt">
+                                            {{coiData?.coiDisclosure?.certifiedAt ?
+                                            (coiData?.coiDisclosure?.certifiedAt | dateFormatter) : ''}}
+                                        </ng-container>
+                                        <span *ngIf="!coiData?.coiDisclosure?.certifiedAt" class="noDataExists">-- No Data --</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Expiration :</td>
