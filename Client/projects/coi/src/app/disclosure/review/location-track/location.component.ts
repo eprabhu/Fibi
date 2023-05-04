@@ -203,7 +203,9 @@ export class LocationComponent implements OnInit, OnDestroy {
         switch (statusCode) {
             case '1': return 'warning';
             case '2': return 'info';
-            case '3': return 'success';
+            case '3': return 'info';
+            case '5': return 'warning';
+            case '4': return 'success';
             default: return 'danger';
         }
     }

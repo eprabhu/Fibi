@@ -89,16 +89,18 @@
                   <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                   <thead class="fixed-th">
                       <tr class="header-border table-secondary">
-                        <th style="width: 20%;">Significant Financial Interest</th>
+                        <th style="width: 25%;">Significant Financial Interest</th>
                         <th style="width: 20%;"> <span class="mandatory">*</span>COI Status</th>
-                        <th style="width: 40%;">Define relationship between SFIs and Projects</th>
-                        <th style="width: 20%;" *ngIf="isEditMode">Actions</th>
+                        <th style="width: 35%;">Define relationship between SFIs and Projects</th>
+                        <th style="width: 14%;" *ngIf="isEditMode">Actions</th>
                       </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let test of entityProjectDetails; let i = index">
                       <td class="table-data border-end fw-600">
-                        <div class="mt-3">{{test?.personEntity?.coiEntity?.entityName}}</div>
+                        <div class="mt-3" [title]="test?.personEntity?.coiEntity?.entityName">
+                          {{test?.personEntity?.coiEntity?.entityName?.length > 100 ? (test?.personEntity?.coiEntity?.entityName | slice:0:100)+'...' : test?.personEntity?.coiEntity?.entityName}}
+                        </div>
                         </td>
                       <td class="border-end">
                         <select [(ngModel)]="test.projectConflictStatusCode"

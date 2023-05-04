@@ -62,9 +62,9 @@
                     <td>{{review?.createTimestamp | dateFormatterWithTimeZone: 'long' }}
                     </td>
                     <td>
-                        <span class="fw-700 text-{{getReviewStatusBadge(review?.coiReviewStatus?.reviewStatusTypeCode)}}">
-                            {{review?.coiReviewStatus?.description}}
-                        </span>
+                      <span class="badge bg-{{getReviewStatusBadge(review?.coiReviewStatus?.reviewStatusCode)}} fs-14 px-3 py-1 rounded-5">
+                      {{review?.coiReviewStatus?.description}}
+                      </span>
                     </td>
                     <td class="text-right justify-content-end d-flex">
                         <ul class="actionButtonGroup" style="position: relative;">
@@ -106,22 +106,22 @@
                                                     <i class="fa fa-play-circle me-2 fs-2" aria-hidden="true"> </i>
                                                     <span>Start Review</span>
                                                 </a>
-                                            </li>
-                                            <li *ngIf="review.reviewStatusTypeCode == '2'" class="hand-cursor" title="Complete Review">
-                                                <a class="dropdown-item"
-                                                    data-bs-toggle="modal" data-bs-target="#CompleteReviewModal"
-                                                    (click)="modifyIndex = index;reviewActionConfirmation = review">
-                                                    <i class="fa fa-stop-circle-o me-2 fs-2" aria-hidden="true">
-                                                    </i>
-                                                    <span>Complete Review</span>
-                                                </a>
-                                            </li>
+                                            </li
                                             <li class="hand-cursor" title="Add Review Comment">
                                                 <a class="dropdown-item add-activity-button" (click)="modifyReviewComment()">
                                                     <mat-icon class="me-2" title="Click here to add review comment">rate_review</mat-icon>
                                                     <span>Add Review Comment</span>
                                                 </a>
                                             </li>-->
+                                            <!-- <li *ngIf="review.reviewStatusTypeCode == '2'" class="hand-cursor" title="Complete Review">
+                                              <a class="dropdown-item"
+                                                  data-bs-toggle="modal" data-bs-target="#CompleteReviewModal"
+                                                  (click)="modifyIndex = index;reviewActionConfirmation = review">
+                                                  <i class="fa fa-stop-circle-o me-2 fs-2" aria-hidden="true">
+                                                  </i>
+                                                  <span>Complete Review</span>
+                                              </a>
+                                          </li> -->
                                             <li *ngIf="review.reviewStatusTypeCode == '1'" title="Edit Review" class="hand-cursor">
                                                 <a class="dropdown-item" id="edit-location-btn"
                                                     data-bs-toggle="modal"
