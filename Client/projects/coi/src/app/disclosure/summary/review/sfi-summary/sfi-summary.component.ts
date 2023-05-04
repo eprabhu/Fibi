@@ -22,6 +22,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
     coiDetails: any = {};
     searchText: string;
+    isCollapsed = true;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,

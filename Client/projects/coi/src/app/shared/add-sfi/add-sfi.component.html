@@ -239,11 +239,15 @@
                     <input matInput [matDatepicker]="endDate" id="end-date-involvement" placeholder="{{datePlaceHolder}}"
                       style="width: 100% !important" (click)="endDate.open()" autocomplete="off"
                       class="d-inline-block form-control" [(ngModel)]="additionalDetails.involvementEndDate"
-                      (keypress)="_commonService._keyPress($event, 'date')" />
+                      (ngModelChange)="endDateValidation()"
+                      (keypress)="_commonService._keyPress($event, 'date')"/>
                     <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                     <mat-datepicker #endDate [pickerType]="'calendar'">
                     </mat-datepicker>
                   </span>
+                  <div *ngIf="dateValidation" class="invalid-feedback d-block fs-13">
+                    {{dateValidation}}
+                </div>
                 </div>
 
                   <div class="col-additional-details d-flex pl-5 mt-3">

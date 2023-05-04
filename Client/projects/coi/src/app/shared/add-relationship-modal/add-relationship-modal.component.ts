@@ -98,7 +98,7 @@ export class AddRelationshipModalComponent implements OnInit {
     this._sfiService.$addSfi.next(true);
     this.clearRelationModal();
     this.closeModal();
-    // this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: this.personEntityId, mode: 'edit' } })
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: this.personEntityId, mode: 'edit' } })
     this._sfiService.isShowSfiNavBar = false;
   }
 
