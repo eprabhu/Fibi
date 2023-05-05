@@ -16,7 +16,7 @@ import { switchMap } from 'rxjs/operators';
   selector: 'app-entity-management',
   templateUrl: './entity-management.component.html',
   styleUrls: ['./entity-management.component.scss'],
-  animations: [slideInOut, slowSlideInOut, fadeDown]
+  animations: [slideInOut]
 })
 export class EntityManagementComponent implements OnInit, OnDestroy {
 
@@ -67,9 +67,12 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
     if(this.activeTabName ==='ALL_ENTITIES'){
       this.isSearchData = false;
+      this.isViewAdvanceSearch = true;
+
     } else {
       this.isSearchData = true;
       this.viewListOfEntity();
+      this.isViewAdvanceSearch = false;
     }
   }
 
