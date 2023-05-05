@@ -49,7 +49,7 @@ export class ReviewerDashboardComponent implements OnInit {
     this.getCount();
     this.getDashboardDetails();
     this.coiElastic = this._elasticConfig.getElasticForCoi();
-    this.EntitySearchOptions = getEndPointOptionsForEntity();
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
     this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
     this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
     this.$coiList.next();

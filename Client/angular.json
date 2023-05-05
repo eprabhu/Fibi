@@ -185,7 +185,15 @@
                   "with": "projects/coi/src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              }
             },
             "development": {
               "buildOptimizer": false,
@@ -209,7 +217,7 @@
               "host": "0.0.0.0",
               "proxyConfig": "projects/coi/proxy.config.json",
               "disableHostCheck": true,
-              "port": 2223
+              "port": 2222
             }
           },
           "defaultConfiguration": "development"

@@ -90,8 +90,12 @@
                                 </tr>
                                 <tr>
                                     <td>Expiration :</td>
-                                    <td>{{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
-                                        dateFormatter) : ''}}</td>
+                                    <td>
+                                        <ng-container *ngIf="coiData?.coiDisclosure?.expirationDate">
+                                            {{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
+                                            dateFormatter) : ''}}
+                                        </ng-container>
+                                        <span *ngIf="!coiData?.coiDisclosure?.expirationDate" class="noDataExists fw-normal">-- No Data --</span></td>
                                 </tr>
                             </table>
                         </div>

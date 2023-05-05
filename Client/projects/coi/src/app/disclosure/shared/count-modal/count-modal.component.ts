@@ -30,7 +30,6 @@ export class CountModalComponent implements OnInit {
 	constructor(private _countModalService: CountModalService) { }
 
 	ngOnInit() {
-		console.log('this.moduleCode:', this.moduleCode)
 		if (this.moduleCode === 8) {
 			this.getSFIDatas();
 		} else if (this.moduleCode === 101 && this.inputType === 'SFI_TAB') {
@@ -43,7 +42,6 @@ export class CountModalComponent implements OnInit {
 	getSFIDatas() {
 		this.$subscriptions.push(this._countModalService.getSFICount(this.disclosureId, this.disclosureSequenceStatusCode,this.personId).subscribe((data: any) => {
 			this.coiFinancialEntityDetails = data;
-			console.log('this.coiFinancialEntityDetails:', this.coiFinancialEntityDetails)
 			document.getElementById('hidden-open-button').click();
 		}));
 	}

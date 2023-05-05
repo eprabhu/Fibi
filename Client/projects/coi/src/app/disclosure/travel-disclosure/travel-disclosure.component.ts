@@ -39,8 +39,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         public userDashboardService: UserDashboardService) { }
 
     ngOnInit(): void {
-        this.EntitySearchOptions = getEndPointOptionsForEntity();
-        this.countrySearchOptions = getEndPointOptionsForCountry();
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.loadTravellerTypesLookup();
         this.loadTravelStatusTypesLookup();
     }
@@ -190,8 +190,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
 
     clearDisclosureModal(): void {
         this.userDashboardService.isShowTravelDisclosure = false;
-        this.EntitySearchOptions = getEndPointOptionsForEntity();
-        this.countrySearchOptions = getEndPointOptionsForCountry();
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.clearField = new String('true');
         this.countryClearField = new String('true');
         this.mandatoryList.clear();

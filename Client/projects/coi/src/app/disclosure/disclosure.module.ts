@@ -74,9 +74,7 @@ const routes: Routes = [
         ResolveServiceService,
         DataStoreService,
         CoiService,
-        RouterGuardService,
-        CommonService
-    ],
+        RouterGuardService],
     exports:[]
 })
 export class DisclosureModule {
