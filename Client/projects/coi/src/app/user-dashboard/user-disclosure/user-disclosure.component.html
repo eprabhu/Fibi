@@ -163,7 +163,7 @@
                 <div class="col">
                     <span class="fw-bold me-2">Disclosure Status :</span>
                     <span *ngIf="disclosure?.conflictStatus"
-                          class="badge {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
+                        class="badge {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
                     <span *ngIf="!disclosure?.conflictStatus" class="noDataExists">-- No Data --</span>
                 </div>
             </div>
@@ -187,17 +187,17 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="align-items-center chin d-flex fs-14 mx-3 ">
-            <ng-container >
             <div class="align-items-center col-3 d-flex fs-14">
-                <strong class="fs-18 me-2 text-blue-color">{{disclosure?.noOfSfi}}</strong>
+                <strong class="fs-18 me-2  hand-cursor text-blue-color">{{disclosure?.noOfSfi}}</strong>
                 <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
-                <label class="label-text hand-cursor ml-2 mt-1"
-                    (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId);">
-                    <strong>SFI</strong></label>
+                <label class="label-text hand-cursor mt-1">
+                    <strong (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi);">
+                        SFI
+                    </strong>
+                </label>    
             </div>
-           </ng-container>
             <div class="col-3 text-secondary fs-14 d-flex">
                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
                     <div class="align-items-center col d-flex fs-14">
@@ -234,6 +234,7 @@
 
 
 
-<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [disclosureNumber]="currentDisclosureNumber"
-    [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode" [inputType]="inputType" [personId]="personId"
-    [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"></app-count-modal>
+<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId"
+    [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
+    [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
+    (closeModal)="closeModalEvent($event)"></app-count-modal>
