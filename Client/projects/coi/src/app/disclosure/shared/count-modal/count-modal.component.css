@@ -1,17 +1,22 @@
-.subTabs li.active, li:hover {
+.subTabs li.active {
     font-weight: 500 !important;
     margin-left: -1px !important;
     margin-right: -1px !important;
     box-shadow: none !important;
-    background-color: #effafb!important;
-    border-bottom: 1px solid #1e847b !important;
+    border-bottom: 3px solid #007DEC;
+    color: #007DEC;
+}
+
+.separator {
+    border: 2px solid black;
+    margin: 1px 0;
 }
 
 .btn-outline-secondary {
-  font-size: 1.4rem;
-  min-width: 5em;
-  padding: .5rem 1rem;
-  height: 35px;
+    font-size: 1.4rem;
+    min-width: 5em;
+    padding: .5rem 1rem;
+    height: 35px;
 }
 
 
@@ -26,4 +31,11 @@
     overflow: auto;
 }
 
+.textUnderline {
+    text-decoration: none;
+}
 
+.navigation-icons.active {
+    border-bottom: 2px solid #007DEC;
+    color: #007DEC;
+}
