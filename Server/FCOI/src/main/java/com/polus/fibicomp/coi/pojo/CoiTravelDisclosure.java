@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -137,6 +139,17 @@ public class CoiTravelDisclosure implements Serializable {
 	@CreatedDate
 	@Column(name = "CREATE_TIMESTAMP")
 	private Timestamp createTimestamp;
+	
+	@Transient
+	private List<String> coiTravellerTypeCodeList;
+
+	public List<String> getCoiTravellerTypeCodeList() {
+		return coiTravellerTypeCodeList;
+	}
+
+	public void setCoiTravellerTypeCodeList(List<String> coiTravellerTypeCodeList) {
+		this.coiTravellerTypeCodeList = coiTravellerTypeCodeList;
+	}
 
 	public Boolean getIsInterNationalTravel() {
 		return isInterNationalTravel;
