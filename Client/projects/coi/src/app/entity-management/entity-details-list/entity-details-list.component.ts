@@ -92,7 +92,7 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
     this.resetAdvanceSearchFields();
     this.entityManagementService.relationshipDashboardRequest.filterType = tab;
     // this.getRelationshipEntityList();
-    this.$relationshipEntityList.next();
+    // this.$relationshipEntityList.next();
   }
 
 
@@ -113,7 +113,7 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
     this.entityManagementService.relationshipDashboardRequest.property1 = parseDateWithoutTimestamp(this.advanceSearchDates.startDate);
     this.entityManagementService.relationshipDashboardRequest.property2 = parseDateWithoutTimestamp(this.advanceSearchDates.endDate);
     // this.getRelationshipEntityList();
-    this.$relationshipEntityList.next();
+    // this.$relationshipEntityList.next();
 
   }
 
@@ -132,7 +132,7 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
   clearAdvanceSearch() {
     this.resetAdvanceSearchFields();
     // this.getRelationshipEntityList();
-    this.$relationshipEntityList.next();
+    // this.$relationshipEntityList.next();
 
   }
 }
