@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {CountModalService} from "./count-modal.service";	
-
+import { hideModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 declare var $: any;
 
@@ -89,9 +89,9 @@ export class CountModalComponent implements OnInit {
 	}
 
 	closeCountModal() {
+		hideModal('coiCountsViewModal');  
 		this.closeModal.emit(false);
 	}
-
 	switchTableData() {
 		this.tableArray = this.currentModalTab === 'Proposal' ? this.projectDatas.proposals : this.projectDatas.awards;
 	}
