@@ -6,20 +6,20 @@
         <div class="col-3">
           <div class="row">
             <label class="fs-14 fw-500">Sponsors Research</label>
-            <label class="text-color fs-14">{{relationshipsDetails?.sponsorsResearch?'Yes':'No'}}</label>
+            <span class="text-color fs-14">{{relationshipsDetails?.sponsorsResearch?'Yes':'No'}}</span>
           </div>
         </div>
         <div class="col-3">
           <div class="row">
             <label class="fs-14 fw-500">Start Date Of Involvement</label>
-            <label *ngIf="relationshipsDetails?.involvementStartDate;else noData" class="text-color fs-14">{{relationshipsDetails?.involvementStartDate |
-              dateFormatterWithTimeZone}}</label>
+            <span *ngIf="relationshipsDetails?.involvementStartDate;else noData" class="text-color fs-14">{{relationshipsDetails?.involvementStartDate |
+              dateFormatterWithTimeZone}}</span>
           </div>
         </div>
         <div class="col-3">
           <div class="row">
             <label class="fs-14 fw-500">Relationship Type</label>
-            <label *ngIf="personEntityRelationships.length>0;else noData" class="text-color  fs-14">{{'Financial'}}</label>
+            <span *ngIf="personEntityRelationships.length>0;else noData" class="text-color  fs-14">{{'Financial'}}</span>
           </div>
         </div>
         <div class="col-3">
@@ -41,15 +41,15 @@
       <div class="col-12 mt-3">
         <div class="row">
           <label class="fs-14 fw-500">Relationship With Entity</label>
-          <label *ngIf="relationshipsDetails?.staffInvolvement;else noData" class="text-color fs-14">{{relationshipsDetails?.staffInvolvement}}</label>
+          <span *ngIf="relationshipsDetails?.staffInvolvement;else noData" class="text-color fs-14">{{relationshipsDetails?.staffInvolvement}}</span>
         </div>
       </div>
       <div class="col-12 mt-3">
         <div class="row">
           <label class="fs-14 fw-500">Principal Business Area Of Entity</label>
-          <label *ngIf="relationshipsDetails?.studentInvolvement;else noData" class="text-color fs-14">{{relationshipsDetails?.studentInvolvement}}
+          <span *ngIf="relationshipsDetails?.studentInvolvement;else noData" class="text-color fs-14">{{relationshipsDetails?.studentInvolvement}}
             <!-- <a href="">Read More</a> -->
-          </label>
+          </span>
         </div>
       </div>
       <div class="row">
@@ -57,7 +57,7 @@
           <div class="col-11 mt-3">
             <div class="row">
               <label class="fs-14 fw-500">Relationship Of Entity To Your University Responsibilities</label>
-              <label *ngIf="relationshipsDetails?.instituteResourceInvolvement;else noData" class="text-color fs-14">{{relationshipsDetails?.instituteResourceInvolvement}}</label>
+              <span *ngIf="relationshipsDetails?.instituteResourceInvolvement;else noData" class="text-color fs-14">{{relationshipsDetails?.instituteResourceInvolvement}}</span>
             </div>
           </div>
           <div class="col-1 d-flex justify-content-end mt-3 px-3">

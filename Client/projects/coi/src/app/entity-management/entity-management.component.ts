@@ -36,10 +36,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   entityList: any = [];
   $subscriptions: Subscription[] = [];
   resultCount: number = 0;
-  $entityDetailsList = new Subject();
   isSearchData = false;
-
-
 
   constructor(public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService, private _router: Router,
@@ -68,9 +65,12 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.resetAdvanceSearchFields();
     this.activeTabName = tabName;
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
-    this.entityList = [];
-    this.isSearchData = false;
-    // this.$entityDetailsList.next()
+    if(this.activeTabName ==='ALL_ENTITIES'){
+      this.isSearchData = false;
+    } else {
+      this.isSearchData = true;
+      this.viewListOfEntity();
+    }
   }
 
   redirectToEntity(coi: any) {
@@ -79,10 +79,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
 
   viewListOfEntity() {
     this.$subscriptions.push(
-      this.$entityDetailsList.pipe(
-        switchMap(() =>
           this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject)
-        ))
         .subscribe((res: any) => {
           this.entityList = res.coiEntityList || [];
           this.resultCount = res.entityCount;
@@ -122,21 +119,20 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   clearAdvancedSearch() {
     this.resetAdvanceSearchFields();
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
-    this.$entityDetailsList.next();
+    this.viewListOfEntity();
   }
   navigateNextPage(event) {
-    this.$entityDetailsList.next();
+    this.viewListOfEntity();
   }
 
   advancedSearch(){
     this.viewListOfEntity();
-    this.$entityDetailsList.next();
-    this.isSearchData = true
+    this.isSearchData = true;
   }
 
   updateEntityListDashboard(event){
     if(event) {
-      this.$entityDetailsList.next();
+      this.viewListOfEntity();
     }
   }
 }
