@@ -44,8 +44,8 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.coiElastic = this._elasticConfig.getElasticForCoi();
-    this.EntitySearchOptions = getEndPointOptionsForEntity();
-    this.countrySearchOptions = getEndPointOptionsForCountry();
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+    this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
 
   }

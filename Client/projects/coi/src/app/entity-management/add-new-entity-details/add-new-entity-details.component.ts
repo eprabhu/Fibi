@@ -60,7 +60,7 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
     if (this.coiEntityManageId) {
       this.getEntityDetails();
     }
-    this.countrySearchOptions = getEndPointOptionsForCountry();
+    this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
   }
 
   ngOnDestroy() {

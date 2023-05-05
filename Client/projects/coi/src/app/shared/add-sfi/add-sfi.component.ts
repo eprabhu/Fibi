@@ -59,8 +59,8 @@ export class AddSfiComponent implements OnInit {
     ngOnInit(): void {
       this.getSFILookup();
       this.showSfiNavBar();
-      this.EntitySearchOptions = getEndPointOptionsForEntity();
-      this.countrySearchOptions = getEndPointOptionsForCountry();
+      this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+      this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     }
 
   getSFILookup() {
@@ -185,8 +185,8 @@ export class AddSfiComponent implements OnInit {
     };
     this.clearCountryField = new String('true');
     this.clearField = new String('true');
-    this.EntitySearchOptions = getEndPointOptionsForEntity();
-    this.countrySearchOptions = getEndPointOptionsForCountry();
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+    this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.isResultFromSearch = false;
     this.mandatoryList.clear();
   }
