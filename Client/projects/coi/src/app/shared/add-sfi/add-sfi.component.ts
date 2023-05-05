@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { ActivityService } from '../../../../../fibi/src/app/agreement/agreement-shared/activity-track/activity.service';
-import { slideHorizontal } from './../../../../../fibi/src/app/common/utilities/animations';
+import { slideHorizontalFast } from './../../../../../fibi/src/app/common/utilities/animations';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { environment } from '../../../environments/environment';
 import { CommonService } from '../../common/services/common.service';
@@ -23,7 +23,7 @@ export interface EndpointOptions {
   templateUrl: './add-sfi.component.html',
   styleUrls: ['./add-sfi.component.scss'],
   providers: [ActivityService],
-  animations: [slideHorizontal]
+  animations: [slideHorizontalFast]
 })
 export class AddSfiComponent implements OnInit {
 
