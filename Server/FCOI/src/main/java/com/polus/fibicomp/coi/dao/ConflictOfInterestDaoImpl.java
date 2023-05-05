@@ -2435,4 +2435,29 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("disclosureNumber", disclosureNumber);
 		query.executeUpdate();
 	}
+	
+	@Override
+	public Integer fetchMaxPersonEntityId(String personId, Integer entityId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		String hqlQuery = "SELECT max(personEntityId) FROM PersonEntity WHERE personId=:personId and entityId=:entityId";
+		org.hibernate.query.Query<Integer> query = session.createQuery(hqlQuery);
+		query.setParameter("personId", personId);
+		query.setParameter("entityId", entityId);
+		return query.getSingleResult();
+	}
+	
+	@Override
+	public Integer generateMaxPersonEntityId() {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+        Root<PersonEntity> root = query.from(PersonEntity.class);
+        query.select(builder.max(root.get("personEntityId")));
+        if(session.createQuery(query).getSingleResult() != null) {
+             Integer result = session.createQuery(query).getSingleResult();
+             return result+1;
+        } else {
+            return 1;
+        }
+	}
 }

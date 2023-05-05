@@ -702,4 +702,8 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureNumber
 	 */
 	void archiveDisclosureOldVersions(Integer disclosureId, Integer disclosureNumber);
+	
+	public Integer fetchMaxPersonEntityId(String personId, Integer entityId);
+	
+	public Integer generateMaxPersonEntityId();
 }
