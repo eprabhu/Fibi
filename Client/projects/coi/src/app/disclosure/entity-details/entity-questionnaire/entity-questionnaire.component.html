@@ -1,6 +1,6 @@
 <div class="mt-4">
   <div  class="container-fluid">
-    <nav class="border-nav bg-white border d-flex fs-15 fw-bold mt-3 shadow user-dashboard-nav">
+    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 shadow-sm user-dashboard-nav">
       <div (click)="currentSelected.tab = 'FINANCIAL';getDataFromService()"
         [class.bg-active]="currentSelected.tab === 'FINANCIAL'?'active':''"
         class="left-curve align-items-center d-flex border-end navigation-icons text-secondary px-5" role="button">
@@ -20,7 +20,7 @@
   <app-add-relationship *ngIf="!definedRelationships?.length && isEditMode"
     (addRelationShip)="openAddRelationshipModal($event)"></app-add-relationship>
   <div *ngIf="definedRelationships?.length" class="container-fluid">
-    <div class="card shadow border card-br" >
+    <div class="card shadow-sm border card-br" >
       <!-- <div> -->
       <nav
         class="align-items-center bg-white border d-flex fs-14 mt-5 shadow-sm user-dashboard-nav mx-4 mr-2 rounded-2 seperator nav-position">
@@ -29,7 +29,7 @@
             class="border-end text-secondary" role="button"
             [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'navigation-icons':''">
             <span
-              [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active':''"
+              [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
               class="active r-title px-3 py-3">
               {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}</span>
           </div>
@@ -59,7 +59,7 @@
     </div>
   </div>
   <div *ngIf="!definedRelationships?.length && !isEditMode" class="mx-2 on-data-position">
-    <div class="mx-1 shadow">
+    <div class="mx-1 shadow-sm">
       <app-no-information></app-no-information>
     </div>
   </div>
@@ -93,7 +93,7 @@
               </div>
               <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
                 <input type="radio" name="relation" class="form-check-input text-secondary"
-                  [value]="relation?.personEntityRelType?.relationshipTypeCode" 
+                  [value]="relation?.personEntityRelType?.relationshipTypeCode"
                   [(ngModel)]="coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode"
                   (ngModelChange)="setRelationship()">
                 <label class="text-secondary r-title fs-14">

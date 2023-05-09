@@ -93,7 +93,7 @@
                     <button class="align-items-center btn btn-primary btn-sm d-flex define-relation fs-14" *ngIf="!test.sfiCompleted && isEditMode" (click)="openDefineRelationship(test)" type="submit">
                       <img src="{{deployMap}}assets/images/define-relation-hover.svg" class="mr-2 hover_img" alt="close button">Define Relationship
                     </button>
-                    <button type="button" class="align-items-center btn btn-outline-secondary define-relation btn-sm d-flex" (mouseover) ="isShowWhiteIcon = true" (mouseout) ="isShowWhiteIcon = false" *ngIf="test.sfiCompleted || (!test.sfiCompleted && !isEditMode)" (click)="openDefineRelationship(test)">
+                    <button type="button" class="align-items-center btn btn-outline-primary define-relation btn-sm d-flex" (mouseover) ="isShowWhiteIcon = true" (mouseout) ="isShowWhiteIcon = false" *ngIf="test.sfiCompleted || (!test.sfiCompleted && !isEditMode)" (click)="openDefineRelationship(test)">
                       <img *ngIf="isShowWhiteIcon" src="{{deployMap}}assets/images/define-relation-hover.svg" class="mr-2 hover_img" alt="define relationship">
                       <img *ngIf="!isShowWhiteIcon" src="{{deployMap}}assets/images/define-relation.svg" class="mr-2 hover_img" alt="define relationship">
                       {{isEditMode ? 'Define Relationship' : 'Manage Relationship'}}
@@ -119,7 +119,8 @@
   <app-no-information> </app-no-information>
 </div>
 </ng-container>
-<app-define-relation *ngIf="isShowRelation" [coiStatusList]="coiStatusList" [moduleCode]="moduleCode" [moduleItemId]="moduleId" [module]="selectedProject" (closePage)="closePage()"></app-define-relation>
+<app-define-relation *ngIf="isShowRelation" [coiStatusList]="coiStatusList" [moduleCode]="moduleCode"
+  [moduleItemId]="moduleId" [module]="selectedProject" (closePage)="closePage()"></app-define-relation>
 
 <button type="button" class="btn btn-primary btn-sm" hidden=true id="module-view-modal-button" data-bs-toggle="modal" data-bs-target="#moduleViewModal"></button>
 <div class="modal fade" id="moduleViewModal" tabindex="-1" aria-labelledby="moduleViewModal" aria-hidden="true">

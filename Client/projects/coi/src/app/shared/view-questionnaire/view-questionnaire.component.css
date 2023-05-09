@@ -68,7 +68,7 @@
 }
 .question-font{
     color: #48647f !important;
-    white-space: pre-line;  
+    white-space: pre-line;
 }
 
 .qst-date-picker::placeholder {
@@ -130,3 +130,10 @@
     background: #e9ecefd6;
 }
 
+.questionnaire-card{
+  margin-left: 3px !important;
+}
+.questionnaire-card:hover{
+  margin-left: 1px !important;
+  border-left: solid 3px #007DEC;
+}

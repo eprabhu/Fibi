@@ -1,9 +1,7 @@
 <div class="card" #entityNavOverlay [class.overlay]="entityManagementService.isShowEntityNavBar">
   <div *ngIf="entityManagementService.isShowEntityNavBar" @enterAnimation
     class="task-right-div card-height d-flex align-items-center" id="task-nav-bar">
-    <div tabindex="0" class="close shadow-medium" (click)="hideEntityNavBar()" id="btn-close" title="Close button">
-      <img src="{{deployMap}}assets/images/close.svg" alt="close button">
-    </div>
+    <app-slider-close-btn tabindex="0" (click)="hideEntityNavBar()"></app-slider-close-btn>
     <div class="tool-kit-body card-height scrollable-table">
       <div class=" mb-3 card-height">
         <div class="card-header px-4 card-border">

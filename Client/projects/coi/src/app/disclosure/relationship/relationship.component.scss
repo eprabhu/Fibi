@@ -195,11 +195,21 @@ label {
 .tr-height {
   line-height: 35px;
 }
-.btn-outline-secondary {
+// .btn-outline-secondary {
+//   font-size: 1.4rem;
+//   padding: .5rem 1rem;
+// }
+
+.btn-outline-primary {
+  border-color:#6c757d;
   font-size: 1.4rem;
   padding: .5rem 1rem;
+  color: #6c757d;
+  &:hover{
+    border-color:#0d6efd;
+    color:#ffff;
+  }
 }
-
 .btn-primary {
   height: 32px;
 }
