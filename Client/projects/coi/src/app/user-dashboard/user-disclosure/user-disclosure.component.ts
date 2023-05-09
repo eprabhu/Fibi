@@ -37,10 +37,11 @@ export class UserDisclosureComponent {
     disclosureType: any;
     inputType: string;
     coiList: [];
+    ishover: [] = [];
     disclosureSequenceStatusCode: any;
     personId: any;
-
-
+    onButtonHovering:any = true;
+    index:any
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
         public commonService: CommonService) {
@@ -49,6 +50,8 @@ export class UserDisclosureComponent {
     ngOnInit() {
         this.loadDashboard();
         this.loadDashboardCount();
+       
+        
     }
 
     loadDashboard() {
@@ -154,6 +157,7 @@ export class UserDisclosureComponent {
         } else if (disclosureCategoryType == 3) {
             return 'Proposal';
         }
+        
     }
 
     setTab(tabName) {
@@ -191,7 +195,7 @@ export class UserDisclosureComponent {
     filterDashboardData() {
         if (this.currentSelected.filter == 'ALL') {
             this.filteredDisclosureArray = this.disclosureArray;
-            console.log(this.filteredDisclosureArray)
+            // console.log(this.filteredDisclosureArray)
         } else {
             this.filteredDisclosureArray = this.disclosureArray.filter(disclosure => {
                 switch (this.currentSelected.filter) {

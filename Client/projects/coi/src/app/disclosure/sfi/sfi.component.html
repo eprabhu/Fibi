@@ -39,7 +39,7 @@
                 <!-- Under -->
                 <div class="align-items-center d-flex fs-14 m-0 row">
                     <div class="col-6 text-secondary">
-                        <span class="fw-bold me-3">Relationship :</span>
+                        <span class="fw-bold me-2">Relationship :</span>
                         <span *ngIf="item?.validPersonEntityRelTypes?.length" class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
                             <span  class="fw-medium">Financial :
                             </span> <em *ngFor="let relationship of item?.validPersonEntityRelTypes;let last = last">
@@ -55,7 +55,7 @@
 
                     <div class="align-items-center col-3 d-flex justify-content-between text-secondary">
                         <div>
-                            <span class="fw-bold me-2"> Date of Creation : </span> {{ item?.coiEntity?.createTimestamp
+                            <span class="fw-bold"> Date of Creation : </span> {{ item?.coiEntity?.createTimestamp
                             |dateFormatter }}
                         </div>
                     </div>
