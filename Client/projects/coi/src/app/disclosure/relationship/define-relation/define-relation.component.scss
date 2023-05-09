@@ -72,15 +72,16 @@
 }
 
 .label-text {
-  font-weight: 700;
-  color      : #6A7980;
+  font-weight: 500;
+  color      : #48647f;
   font-size  : 14px;
 }
 
 .grey-text {
   font-size: 14px;
-  color: #48647F;
+  color: #6a7980;
   margin-left: 8px;
+  font-weight: 500;
 }
 
 .table {
@@ -192,4 +193,29 @@
 
 .error-toast {
   background-color: #ffe6e7;
+}
+table {
+  th {
+    height: 40px;
+    vertical-align: middle;
+    background-color: #f0f2f3 !important;
+  }
+  td:first-child {
+    color: #48647f;
+  }
+  thead {
+    tr:first-child {
+      outline: 1px solid #dddddd;
+    }
+  }
+  tr {
+    border-style: hidden;
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+    td:last-child {
+      width: 1%;
+      white-space: nowrap;
+    }
+  }
 }
