@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { subscriptionHandler } from "../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Subscription } from "rxjs";
 import { SfiService } from './sfi/sfi.service';
-import { COI } from "./coi-interface";
+import {ApplicableQuestionnaire, COI, getApplicableQuestionnaireData} from "./coi-interface";
 import { DataStoreService } from "./services/data-store.service";
 import { CoiService } from "./services/coi.service";
 import { Location } from "@angular/common";
@@ -29,6 +29,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     currentStepNumber: 1 | 2 | 3 | 4 = 1;
     tempStepNumber: any;
     clickedOption: any;
+    disclosureDetailsForSFI = {disclosureId: null, disclosureNumber: null};
 
     assignReviewerActionDetails: any = {};
     assignReviewerActionValidation = new Map();
@@ -72,6 +73,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.dataStore.dataChanged = false;
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -177,27 +179,65 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.router.navigate([nextStepUrl], { queryParamsHandling: 'preserve' })
     }
 
-    certifyDisclosure() {
-        if (!this.isSaving && this.coiService.isCertified) {
+    checkQuestionnaireCompletedBeforeCertify() {
+        if (!this.isSaving) {
             this.isSaving = true;
-            const REQUESTREPORTDATA = {
-                coiDisclosure: {
-                    disclosureId: this.coiData.coiDisclosure.disclosureId,
-                    certificationText: this.coiData.coiDisclosure.certificationText ? this.coiData.coiDisclosure.certificationText : this.certificationText,
-                    conflictStatusCode: this.dataStore.disclosureStatus
-                }
-            };
-            this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
-                this.dataStore.dataChanged = false;
-                this.dataStore.updateStore(['coiDisclosure'], { coiDisclosure: res });
-                this.isSaving = false;
-                this.router.navigate(['/coi/disclosure/summary'], { queryParamsHandling: 'preserve' });
-                this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
-            }, err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, (err.error) ?
-                    err.error : 'Error in certifying disclosure. Please try again.');
-            }));
+            this.coiService.getApplicableQuestionnaire(this.getApplicationQuestionnaireRO())
+                .subscribe((res: getApplicableQuestionnaireData) => {
+                    this.certifyIfQuestionnaireCompleted(res);
+                }, _err => {
+                    this.isSaving = false;
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
+                });
         }
+    }
+
+    private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
+        if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
+            if (this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
+                this.certifyDisclosure();
+            } else {
+                this.isSaving = false;
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Please complete Screening Questionnaire');
+            }
+        }
+    }
+
+    isAllQuestionnaireCompleted(questionnaires: ApplicableQuestionnaire[]) {
+        return questionnaires.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y');
+    }
+
+    getApplicationQuestionnaireRO() {
+        return {
+            "moduleItemCode": 8,
+            "moduleSubItemCode": 0,
+            "moduleSubItemKey": 0,
+            "moduleItemKey": this.coiData.coiDisclosure.disclosureId,
+            "actionUserId": this.commonService.getCurrentUserDetail('personId'),
+            "actionPersonName": this.commonService.getCurrentUserDetail('fullName'),
+            "questionnaireMode": "ACTIVE_ANSWERED_UNANSWERED"
+        }
+    }
+
+    certifyDisclosure() {
+        const REQUESTREPORTDATA = {
+            coiDisclosure: {
+                disclosureId: this.coiData.coiDisclosure.disclosureId,
+                certificationText: this.coiData.coiDisclosure.certificationText ? this.coiData.coiDisclosure.certificationText : this.certificationText,
+                conflictStatusCode: this.dataStore.disclosureStatus
+            }
+        };
+        this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
+            this.dataStore.dataChanged = false;
+            this.dataStore.updateStore(['coiDisclosure'], { coiDisclosure: res });
+            this.isSaving = false;
+            this.router.navigate(['/coi/disclosure/summary'], { queryParamsHandling: 'preserve' });
+            this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
+        }, err => {
+            this.isSaving = false;
+            this.commonService.showToast(HTTP_ERROR_STATUS, (err.error) ?
+                err.error : 'Error in certifying disclosure. Please try again.');
+        }));
     }
 
     private getDataFromStore() {
@@ -213,6 +253,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 });
             }
         });
+        this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
+        this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
         this.setAdminGroupOptions();
     }
 

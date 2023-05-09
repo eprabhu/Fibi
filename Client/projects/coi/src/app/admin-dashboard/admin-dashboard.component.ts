@@ -163,7 +163,9 @@ export class AdminDashboardComponent {
       this.resetAdvanceSearchFields();
       this._coiAdminDashboardService.coiRequestObject.tabName = tabName;
       this.setAdvanceSearch();
-      this.$coiList.next();
+      if(tabName != 'ALL_DISCLOSURES') {
+        this.$coiList.next();
+      }
       return;
     }
     this._coiAdminDashboardService.coiRequestObject.tabName = tabName;

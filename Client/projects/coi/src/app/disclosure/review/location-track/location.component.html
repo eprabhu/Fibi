@@ -62,7 +62,7 @@
                     <td>{{review?.createTimestamp | dateFormatterWithTimeZone: 'long' }}
                     </td>
                     <td>
-                      <span class="badge bg-{{getReviewStatusBadge(review?.coiReviewStatus?.reviewStatusCode)}} fs-14 px-3 py-1 rounded-5">
+                      <span [class.text-black]="review?.reviewStatusTypeCode == '1'" class="fw-medium badge bg-{{getReviewStatusBadge(review?.coiReviewStatus?.reviewStatusCode)}} fs-14 rounded-5">
                       {{review?.coiReviewStatus?.description}}
                       </span>
                     </td>
@@ -75,7 +75,7 @@
                                     <i class="fa fa-play-circle" aria-hidden="true"> </i>
                                 </a>
                             </li>
-                            <li *ngIf="review.reviewStatusTypeCode == '2'" class="hand-cursor" title="Complete Review">
+                            <li *ngIf="review.reviewStatusTypeCode == '3'" class="hand-cursor" title="Complete Review">
                                 <a id="complete-review-btn" data-bs-toggle="modal"
                                     data-bs-target="#CompleteReviewModal"
                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
@@ -89,7 +89,7 @@
                                 </a>
                             </li>
 
-                            <li>
+                            <li *ngIf="review.reviewStatusTypeCode == '1'">
                                 <span class="d-inline-block dropdown">
                                     <button class="btn btn-sm dropdown-toggle icons-toggle more-btn list-more-btn ms-1 fs-15"
                                         type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"

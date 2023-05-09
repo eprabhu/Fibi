@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import { ActivityService } from '../../../../../fibi/src/app/agreement/agreement-shared/activity-track/activity.service';
 import { slideHorizontalFast } from './../../../../../fibi/src/app/common/utilities/animations';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
@@ -26,6 +26,8 @@ export interface EndpointOptions {
   animations: [slideHorizontalFast]
 })
 export class AddSfiComponent implements OnInit {
+
+  @Input() disclosureDetails: {disclosureId: any, disclosureNumber: any} = {disclosureId: null, disclosureNumber: null};
 
   isSaving = false;
   scrollHeight: number;
@@ -139,7 +141,8 @@ export class AddSfiComponent implements OnInit {
           entityId: this.coiEntity.entityId,
           entityNumber: this.coiEntity.entityNumber,
           ...this.additionalDetails
-        }
+        },
+        ...this.disclosureDetails
     }).subscribe((data: any) => {
       this.additionalDetails = data.personEntity;
       this.isSaving = false;
@@ -171,10 +174,10 @@ export class AddSfiComponent implements OnInit {
 
   selectedCountryEvent(event) {
     if (event) {
-      this.coiEntity.country = event;
+      this.coiEntity.countryCode = event.countryCode;
       this.countrySearchOptions.defaultValue = event.countryName;
     } else {
-      this.coiEntity.country = null;
+      this.coiEntity.countryCode = null;
     }
   }
 
@@ -197,7 +200,7 @@ export class AddSfiComponent implements OnInit {
       this.mandatoryList.set('name', 'Please choose an entity name.');
     }
     if (!this.coiEntity.entityId) {
-      if (!this.coiEntity.country) {
+      if (!this.coiEntity.countryCode) {
         this.mandatoryList.set('country', 'Please choose a country.');
       }
       if (!this.coiEntity.entityTypeCode || this.coiEntity.entityTypeCode === 'null') {

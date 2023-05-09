@@ -10,15 +10,9 @@
                                 [Home Unit : {{coiData?.coiDisclosure?.person?.unit?.unitName}} ]</strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                            <strong
-                                title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}}
-                                :
-                                {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                                Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} :
-                                {{(coiData?.projectDetail?.title)?.length>60 ?
-                                (coiData?.projectDetail?.title | slice:0: 60)+'...' :
-                                coiData?.projectDetail?.title}} ] By <span
-                                    class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
+                            <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}} : {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} : {{(coiData?.projectDetail?.title)?.length>50 ?
+                                (coiData?.projectDetail?.title | slice:0: 50)+'...' :
+                                coiData?.projectDetail?.title}} ] By <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
                         </ng-container>
                     </p>
                 </div>
@@ -251,7 +245,7 @@
                 </div>
                 <div *ngIf="router.url.includes('create-disclosure/certification')"
                     class="d-flex justify-content-around px-3">
-                    <button (click)="certifyDisclosure()" [disabled]="!coiService.isCertified"
+                    <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">done</mat-icon>
                         Submit
@@ -263,7 +257,7 @@
 
             </div>
             <div>
-                <app-add-sfi></app-add-sfi>
+                <app-add-sfi [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi>
             </div>
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
