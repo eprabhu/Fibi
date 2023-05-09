@@ -12,6 +12,9 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ForeignKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -102,10 +105,12 @@ public class Person implements Serializable {
 	@Column(name = "HOME_UNIT")
 	private String homeUnit;
 
-	
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_FK1"), name = "HOME_UNIT", referencedColumnName = "UNIT_NUMBER", insertable = false, updatable = false)
+	private Unit unit;
 
 	@Column(name = "IS_FACULTY")
-	@Convert(converter = JpaCharBooleanConversion.class)
+//	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isFaculty;
 
 	@Column(name = "IS_GRADUATE_STUDENT_STAFF")

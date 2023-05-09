@@ -814,7 +814,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 //	}
 
 	@Override
-	public List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(String disclosureNumber) {
+	public List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(Integer disclosureNumber) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<CoiDisclosure> query = builder.createQuery(CoiDisclosure.class);
@@ -2312,17 +2312,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public void syncProjectWithDisclosure(Integer moduleCode, Integer disclosureId, Integer disclosureNumber) {
+	public void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		SessionImpl sessionImpl = (SessionImpl) session;
 		Connection connection = sessionImpl.connection();
 		try {
 			CallableStatement statement = connection.prepareCall("{call SYNC_PROJECTS_DISCLOSURE(?,?,?,?,?)}");
-			statement.setInt(1, moduleCode);
-			statement.setInt(2, disclosureId);
-			statement.setInt(3, disclosureNumber);
-			statement.setString(4, AuthenticatedUser.getLoginPersonId());
-			statement.setString(5, AuthenticatedUser.getLoginUserName());
+			statement.setInt(1, disclosureId);
+			statement.setInt(2, disclosureNumber);
+			statement.setString(3, AuthenticatedUser.getLoginPersonId());
+			statement.setString(4, AuthenticatedUser.getLoginUserName());
+			statement.setInt(5, personEntityId);
 			statement.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
