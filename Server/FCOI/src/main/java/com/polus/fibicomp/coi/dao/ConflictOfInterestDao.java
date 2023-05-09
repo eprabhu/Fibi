@@ -528,7 +528,7 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureNumber
 	 * @return
 	 */
-	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(String disclosureNumber);
+	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(Integer disclosureNumber);
 
 	/**
 	 * This method is used for get count of comments
@@ -677,11 +677,11 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 *
-	 * @param devProposalModuleCode
 	 * @param disclosureId
 	 * @param disclosureNumber
+	 * @param personEntityId
 	 */
-	void syncProjectWithDisclosure(Integer devProposalModuleCode, Integer disclosureId, Integer disclosureNumber);
+	void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId);
 	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode);
 
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);

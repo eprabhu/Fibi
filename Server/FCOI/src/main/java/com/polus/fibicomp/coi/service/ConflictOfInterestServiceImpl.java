@@ -172,10 +172,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		if(coiDisclosure.getFcoiTypeCode().equals("1")) { // if type is FCOI
-			conflictOfInterestDao.syncProjectWithDisclosure(Constants.DEV_PROPOSAL_MODULE_CODE, coiDisclosure.getDisclosureId(),
-					coiDisclosure.getDisclosureNumber());
-			conflictOfInterestDao.syncProjectWithDisclosure(Constants.AWARD_MODULE_CODE, coiDisclosure.getDisclosureId(),
-					coiDisclosure.getDisclosureNumber());
+			conflictOfInterestDao.syncProjectWithDisclosure(coiDisclosure.getDisclosureId(),
+					coiDisclosure.getDisclosureNumber(), null);
 		} else {
 			prepareDisclosureEntityProjectRelation(conflictOfInterestVO);
 		}
@@ -423,6 +421,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		personEntity.setIsRelationshipActive(true);
 		personEntity.setPersonId(AuthenticatedUser.getLoginPersonId());
 		conflictOfInterestDao.saveOrUpdateSFI(personEntity);
+		if (vo.getDisclosureId() != null && vo.getDisclosureNumber() != null) {
+			conflictOfInterestDao.syncProjectWithDisclosure(vo.getDisclosureId(), vo.getDisclosureNumber(), personEntity.getPersonEntityId());
+		}
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
 
@@ -547,6 +548,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		vo.setCoiDisclosure(copyDisclosure);
 		vo.setDisclosureId(copyDisclosure.getDisclosureId());
 		copyDisclosureDetails(disclosure, copyDisclosure);
+		if(copyDisclosure.getFcoiTypeCode().equals("1")) { // if type is FCOI
+			conflictOfInterestDao.syncProjectWithDisclosure(copyDisclosure.getDisclosureId(),
+					copyDisclosure.getDisclosureNumber(), null);
+		}
 		return commonDao.convertObjectToJSON(vo);
 	}
 

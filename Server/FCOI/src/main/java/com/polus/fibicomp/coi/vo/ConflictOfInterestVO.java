@@ -134,7 +134,7 @@ public class ConflictOfInterestVO {
 
 	private String proposalIdlinkedInDisclosure;
 
-	private String disclosureNumber;
+	private Integer disclosureNumber;
 
 	private Boolean proposalDisclosureWithNoSfi;
 	
@@ -887,11 +887,11 @@ public class ConflictOfInterestVO {
 		this.proposalIdlinkedInDisclosure = proposalIdlinkedInDisclosure;
 	}
 
-	public String getDisclosureNumber() {
+	public Integer getDisclosureNumber() {
 		return disclosureNumber;
 	}
 
-	public void setDisclosureNumber(String disclosureNumber) {
+	public void setDisclosureNumber(Integer disclosureNumber) {
 		this.disclosureNumber = disclosureNumber;
 	}
 
