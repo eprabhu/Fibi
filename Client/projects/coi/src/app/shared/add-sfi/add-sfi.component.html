@@ -1,9 +1,7 @@
 <div class="card" #sfiNavOverlay [class.overlay]="sfiService?.isShowSfiNavBar">
   <div @enterAnimation *ngIf="sfiService?.isShowSfiNavBar"
     class="task-right-div card-height d-flex align-items-center">
-    <div tabindex="-1" class="close shadow-medium" (click)="hideSfiNavBar()">
-      <img src="{{deployMap}}assets/images/close.svg" alt="close button">
-    </div>
+    <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
     <div class="tool-kit-body card-height scrollable-table">
       <div class="card card-height">
         <div class="card-header px-4 py-2">

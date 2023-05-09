@@ -49,6 +49,7 @@ export class DefineRelationComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   coiData: any;
   clearIndex: any;
+  imgUrl = this.deployMap + 'assets/images/close-black.svg';
 
   @ViewChild('relationShipOverlay', { static: true }) relationShipOverlay: ElementRef;
 

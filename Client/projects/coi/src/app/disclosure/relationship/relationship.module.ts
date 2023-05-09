@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { SearchFilterPipe } from './directives/search-filter.pipe';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { SharedModule } from '../../shared/shared.module';
+import {CoiSharedModule} from "../shared/shared.module";
 
 const routes: Routes = [{path: '', component: RelationshipComponent}];
 
@@ -30,7 +31,8 @@ const routes: Routes = [{path: '', component: RelationshipComponent}];
         MatFormFieldModule,
         MatSnackBarModule,
         SharedComponentModule,
-        SharedModule
+        SharedModule,
+        CoiSharedModule
     ],
     providers: [
         RelationshipService
