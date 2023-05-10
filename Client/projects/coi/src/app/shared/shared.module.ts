@@ -48,7 +48,6 @@ import {CdkMenuModule} from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
 import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
 import { AddSfiComponent } from './add-sfi/add-sfi.component';
-import {CoiSharedModule} from "../disclosure/shared/shared.module";
 
 @NgModule({
     imports: [
@@ -60,8 +59,7 @@ import {CoiSharedModule} from "../disclosure/shared/shared.module";
         MatNativeDateModule,
         MatIconModule,
         CdkMenuModule,
-        MatMenuModule,
-        CoiSharedModule
+        MatMenuModule
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective, AppEndpointSearchComponent, CustomElementComponent,
         ViewQuestionnaireComponent, LookUpComponent, LookupFilterPipe,

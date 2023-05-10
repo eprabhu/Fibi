@@ -19,6 +19,7 @@ import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.com
         CommonModule,
         FormsModule,
         RouterModule,
+        SharedModule
     ],
     exports: [
         CountModalComponent,
