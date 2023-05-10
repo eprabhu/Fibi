@@ -38,7 +38,7 @@ export class RelationshipSummaryComponent implements OnInit {
     constructor(
         private _coiSummaryService: CoiSummaryService,
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _commonService: CommonService
+        public _commonService: CommonService
     ) { }
 
     ngOnInit() {

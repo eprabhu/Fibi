@@ -78,3 +78,8 @@
     cursor     : pointer;
   }
 
+  .updown-arrow-relation {
+    position: absolute;
+    right: 363px;
+    top: auto;
+  }
