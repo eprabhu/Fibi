@@ -4,13 +4,13 @@
         <h4 class="card-title review-title">
             <div class="justify-content-between row">
                 <div class="col-auto">Reviewers</div>
-                <div class="col-auto me-2">
+                <!-- <div class="col-auto me-2">
                     <button *ngIf="coiDisclosure?.reviewStatusCode == '2'" (click)="clearReviewModal()" class="btn btn-tertiary btn-sm mt-0 button-right justify-content-center d-flex align-items-center" data-bs-toggle="modal"
                         title="Add Review Location" data-bs-target="#add-location-modal">
                         <mat-icon class="me-2">person_add</mat-icon>
                           Assign Reviewer
                     </button>
-                </div>
+                </div> -->
                 <button class=" updown-arrow mt-1" (click)="isCollapsed = !isCollapsed">
                     <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
                         class="fa-large" aria-hidden="true"></i>
@@ -66,32 +66,30 @@
                       {{review?.coiReviewStatus?.description}}
                       </span>
                     </td>
-                    <td class="text-right justify-content-end d-flex">
-                        <ul class="actionButtonGroup" style="position: relative;">
-                            <li *ngIf="review.reviewStatusTypeCode == '1'" class="hand-cursor" title="Start review">
-                                <a id="start-review-btn" data-bs-toggle="modal"
+                    <td>
+                        <ul class="actionButtonGroup align-items-center d-flex justify-content-center">
+                            <li class="hand-cursor btn-primary-icon py-2 fs-20 m-0" title="Start review">
+                                <a *ngIf="review.reviewStatusTypeCode == '1'" id="start-review-btn" data-bs-toggle="modal"
                                     data-bs-target="#coi-start-review"
                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
                                     <i class="fa fa-play-circle" aria-hidden="true"> </i>
                                 </a>
                             </li>
-                            <li *ngIf="review.reviewStatusTypeCode == '3'" class="hand-cursor" title="Complete Review">
-                                <a id="complete-review-btn" data-bs-toggle="modal"
+                            <li class="hand-cursor btn-primary-icon py-2 fs-20 m-0" title="Complete Review">
+                                <a *ngIf="review.reviewStatusTypeCode == '3'" id="complete-review-btn" data-bs-toggle="modal"
                                     data-bs-target="#CompleteReviewModal"
                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
                                     <i class="fa fa-stop-circle-o" aria-hidden="true">
                                     </i>
                                 </a>
                             </li>
-                            <li class="hand-cursor mx-4 position-relative top-7">
-                                <a (click)="modifyReviewComment(review.coiReviewId)">
-                                    <mat-icon title="Click here to add review comment">rate_review</mat-icon>
-                                </a>
+                            <li class="btn-primary-icon py-2 d-flex m-0" (click)="modifyReviewComment(review.coiReviewId)">
+                                <mat-icon title="Click here to add review comment">rate_review</mat-icon>
                             </li>
 
-                            <li *ngIf="review.reviewStatusTypeCode == '1'">
+                            <li *ngIf="review.reviewStatusTypeCode == '1'" class="hand-cursor ml-0">
                                 <span class="d-inline-block dropdown">
-                                    <button class="btn btn-sm dropdown-toggle icons-toggle more-btn list-more-btn ms-1 fs-15"
+                                    <button class="btn-primary-icon icons-toggle list-more-btn ms-1 py-2 px-3 fs-18"
                                         type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
                                         title="More Actions" aria-expanded="false">
                                         <i aria-hidden="true" class="fa fa-ellipsis-v"></i>
@@ -123,19 +121,19 @@
                                               </a>
                                           </li> -->
                                             <li *ngIf="review.reviewStatusTypeCode == '1'" title="Edit Review" class="hand-cursor">
-                                                <a class="dropdown-item" id="edit-location-btn"
+                                                <a class="dropdown-item fs-14" id="edit-location-btn"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#add-location-modal"
                                                     (click)="editReview(review, index)">
-                                                    <i class="fa fa-pencil me-2 fs-2" aria-hidden="true"></i>
+                                                    <i class="fa fa-pencil me-2" aria-hidden="true"></i>
                                                     <span>Edit Review</span>
                                                 </a>
                                             </li>
                                             <li *ngIf="review.reviewStatusTypeCode == '1'" title="Delete Review" class="hand-cursor">
-                                                <a class="dropdown-item" id="delete-Review-btn"
+                                                <a class="dropdown-item fs-14" id="delete-Review-btn"
                                                     data-bs-toggle="modal" data-bs-target="#deleteReviewModal"
                                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
-                                                    <i class="fa fa-trash-o me-2 fs-2" aria-hidden="true"></i>
+                                                    <i class="fa fa-trash-o me-2" aria-hidden="true"></i>
                                                     <span>Delete Review</span>
                                                 </a>
                                             </li>
@@ -168,7 +166,7 @@
             <div class="modal-footer">
                 <button id="prop-project-close-btn" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                     data-bs-toggle="modal">Cancel</button>
-                <button id="prop-project-team-delete-btn" type="button" class="btn btn-danger"
+                <button id="prop-project-team-delete-btn" type="button" class="btn btn-primary fs-14"
                     (click)="deleteReview()" data-bs-dismiss="modal">Delete</button>
             </div>
         </div>

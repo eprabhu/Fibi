@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CommonService } from '../../../common/services/common.service';
+import { CommonService } from '../../common/services/common.service';
 
 @Injectable()
 export class CoiReviewCommentsService {

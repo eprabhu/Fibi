@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {CountModalService} from "./count-modal.service";	
-import { hideModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 declare var $: any;
 

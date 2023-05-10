@@ -1,4 +1,4 @@
-<div class="card rounded-0 mt-3" id="COI802">
+<!-- <div class="card rounded-0 mt-3" id="COI802">
   <div class="card-header px-4 d-flex align-items-center justify-content-between">
     <h1 class="f-14 font-weight-bold m-0 txt-medium"> <strong> Significant Financial Interest (SFI) </strong> </h1>
 
@@ -11,8 +11,22 @@
             class="fa-large" aria-hidden="true"></i>
     </button>
   </div>
+</div> -->
+
+<div class="main-title" id="COI802">
+    <h3 class="d-flex align-items-center fs-16 mt-4 mb-3"><strong class="mt-4">Significant Financial Interest (SFI) </strong>
+    <span class="d-inline-block mt-3" tabindex="0" data-bs-toggle="tooltip" title="View SFI details." data-bs-placement="top">
+      <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
+    </span>
+    <button class=" updown-arrow mt-3 " (click)="isCollapsed = !isCollapsed">
+        <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
+            class="fa-large" aria-hidden="true"></i>
+    </button>
+    </h3>
+  </div>
+
 <ng-container *ngIf="isCollapsed">
-    <div class="row p-2"
+    <div class="px-2 mb-2"
         *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
         <!-- Main -->
         <div class="border bg-white rounded-3 p-2 d-flex ">
@@ -60,15 +74,15 @@
                 </div>
             </div>
             <!-- 2nd row -->
-            <div class="col-1 bg-white">
-                <div class="align-items-center d-flex py-4">
-                    <button class="align-items-center btn btn-outline-secondary d-flex px-2 py-1 sfi_action_btn "
-                        style="padding: 3px;" id="view-sfi" (click)="openSfiDetails(true, item?.coiFinancialEntityId)">
-                        <mat-icon class=" sfi_action_icon">remove_red_eye</mat-icon>
-                    </button>
-                    <button class="add-activity-button btn btn-sm" id="add-activity" title="Comments" type="button">
-                        <mat-icon class="btn btn-outline-secondary comment-button">rate_review</mat-icon>
-                    </button>
+            <div class="col-1 bg-white d-flex">
+                <div class="align-items-center d-flex mt-3">
+                    <span class="align-items-center btn btn-primary-icon d-flex px-2 py-1 me-2"
+                        id="view-sfi" (click)="openSfiDetails(true, item?.coiFinancialEntityId)">
+                        <mat-icon>remove_red_eye</mat-icon>
+                </span>
+                    <span class="btn btn-primary-icon btn btn-sm d-flex" id="add-activity" title="Comments" type="button">
+                        <mat-icon>rate_review</mat-icon>
+                    </span>
                 </div>
             </div>
         </div>
@@ -77,4 +91,4 @@
         <app-no-information> </app-no-information>
     </div>
 </ng-container>
-</div>
+

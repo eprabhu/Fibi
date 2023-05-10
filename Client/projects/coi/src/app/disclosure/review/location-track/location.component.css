@@ -93,3 +93,21 @@
 /* .updown-arrow:hover{
   color: #007DEC;
 } */
+
+.btn-primary-icon {
+    padding: 0 0.5rem;
+    margin-top: 0;
+}
+
+.comment-icon {
+    transform: scale(.86);
+}
+
+.ml-0 {
+    margin-left: 0 !important;
+}
+
+.btn-primary-icon a:hover {
+    background-color: #E2F1FF;
+    color: #007DEC !important;
+}

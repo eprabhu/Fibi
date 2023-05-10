@@ -16,14 +16,9 @@
         </ng-container>
       </span>
       <span class="align-items-center d-flex">
-        <button class="btn btn-sm add-activity-button p-0 view-icon mr-5" id="add-activity" title="Add Review Comment"
-          type="button">
-          <mat-icon class="btn btn-outline-secondary comment-button me-3">rate_review</mat-icon>
-        </button>
-        <button class="updown-arrow" (click)="isCollapsed = !isCollapsed">
-          <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'" class="fa-large"
-            aria-hidden="true"></i>
-        </button>
+        <button class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
+          <mat-icon>rate_review</mat-icon>
+      </button>
       </span>
     </div>
       <div *ngIf="isCollapsed" class="card-body">
@@ -59,10 +54,10 @@
               <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
               <thead>
                   <tr class="header-border table-light">
-                    <th style="width: 30%;" class="border-end px-3">Significant Financial Interest</th>
-                    <th style="width: 35%;" class="border-end px-3">Define relationship between SFIs and Projects</th>
-                    <th style="width: 15%;" class="border-end px-3">COI Status</th>
-                    <th style="width: 10%;" class="border-end px-3">Actions</th>
+                    <th style="width: 29%;" class="border-end px-3">Significant Financial Interest</th>
+                    <th style="width: 34%;" class="border-end px-3">Define relationship between SFIs and Projects</th>
+                    <th style="width: 14%;" class="border-end px-3">COI Status</th>
+                    <th style="width: 8%;" class="border-end px-3">Actions</th>
                   </tr>
               </thead>
               <tbody class="white-bg" >
@@ -70,18 +65,18 @@
                   <td class="table-data border-end fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.personEntity?.coiEntity?.entityName}}</td>
                   <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.comment?.comments}}</td>
                   <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">
-                    <span class="badge rounded-pill bg-danger mt-2 fs-13" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 3 ">{{test?.coiProjConflictStatusType?.description}}</span>
-                    <span class="badge rounded-pill bg-success mt-2 fs-13" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 1">{{test?.coiProjConflictStatusType?.description}}</span>
-                    <span class="badge rounded-pill bg-warning text-dark mt-2 fs-13" *ngIf="test?.coiProjConflictStatusType?.projectConflictStatusCode == 2">{{test?.coiProjConflictStatusType?.description}}</span>
+                    <span class="{{_commonService.getDisclosureConflictBadge(test?.coiProjConflictStatusType?.projectConflictStatusCode)}} px-3 py-1 rounded-5 ">{{test?.coiProjConflictStatusType?.description}}</span>
                   </td>
-                  <td class="px-3" [class.border-0]="i!= projectRelations?.length-1">
-                    <button type="button" (mouseenter)="isShowHoverWhite[i]= true" (mouseout)="isShowHoverWhite[i]= false" class="btn btn-outline-primary btn-sm action-buttons mr-15"  (click)="isOpenSlider = true">
-                      <img *ngIf= "!isShowHoverWhite[i]" src="{{deployMap}}assets/images/conflict-history.svg">
-                      <img *ngIf= "isShowHoverWhite[i]" src="{{deployMap}}assets/images/conflict-history-hover.svg">
+                  <td class="border-0 d-flex pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
+                    
+                    <button class="btn-primary-icon-svg me-1" type="button"
+                      (mouseenter)="isShowHoverWhite[i]= true" (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true">
+                      <span class="btn-secondary-svg"></span>
                     </button>
-                    <button type="button" class="btn btn-outline-primary btn-sm action-buttons comment-icon p-0">
-                      <mat-icon role="img">rate_review</mat-icon>
-                    </button>
+
+                    <button class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
+                      <mat-icon>rate_review</mat-icon>
+                  </button>
                   </td>
                 </tr>
               </tbody>

@@ -48,6 +48,10 @@ import {CdkMenuModule} from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
 import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
 import { AddSfiComponent } from './add-sfi/add-sfi.component';
+import { CountModalComponent } from './count-modal/count-modal.component';
+import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
+import { ActivityComponent } from '../disclosure/activity-track/activity.component';
+import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
 
 @NgModule({
     imports: [
@@ -69,7 +73,11 @@ import { AddSfiComponent } from './add-sfi/add-sfi.component';
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
         DragNDragDirective, CustomTagRemoverPipe,PaginationComponent,
         AddRelationshipModalComponent,
-        AddSfiComponent],
+        AddSfiComponent,
+        CountModalComponent,
+        CoiReviewCommentsComponent,
+        ActivityComponent,
+        SliderCloseBtnComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -110,7 +118,11 @@ import { AddSfiComponent } from './add-sfi/add-sfi.component';
         CdkMenuModule,
         MatMenuModule,
         AddRelationshipModalComponent,
-        AddSfiComponent
+        AddSfiComponent,
+        CountModalComponent,
+        CoiReviewCommentsComponent,
+        ActivityComponent,
+        SliderCloseBtnComponent
     ],
 
     providers: [

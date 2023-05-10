@@ -4,11 +4,10 @@
 }
 
 .add-activity-button {
-    min-width: 4rem !important;
     position: absolute;
     top: 2px;
     z-index: 2;
-    left: 95%;
+    right: 8px;
 }
 
 .adjust-margin-top {

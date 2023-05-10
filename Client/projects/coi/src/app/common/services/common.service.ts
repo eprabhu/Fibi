@@ -212,7 +212,7 @@ export class CommonService {
             case '1':
                 return 'bg-success text-white';
             case '2':
-                return 'bg-warning text-black'
+                return 'potential-badge'
             case '3':
                 return 'bg-danger text-white';
         }
