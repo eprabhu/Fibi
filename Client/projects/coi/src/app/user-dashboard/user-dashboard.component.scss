@@ -32,6 +32,11 @@ div .active {
   border-bottom: 1px solid #6E2BB0;
 }
 
+.hoverable:hover {
+  background-color: #ECD9FF !important;
+  color: #6E2BB0 !important;
+}
+
 .nav-tip-active {
   position: absolute;
   top: 44px;

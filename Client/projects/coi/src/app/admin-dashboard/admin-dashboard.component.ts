@@ -87,9 +87,9 @@ export class AdminDashboardComponent {
     this.sortMap = {};
     this.coiElastic = this._elasticConfig.getElasticForCoi();
     this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
-    this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
-    this.countrySearchOptions = getEndPointOptionsForCountry();
-    this.EntitySearchOptions = getEndPointOptionsForEntity();
+    this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
+    this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
     this.setAdvanceSearch();
     this.getDashboardCounts();
   }
@@ -97,16 +97,11 @@ export class AdminDashboardComponent {
   setAdvanceSearch() {
     this.isShowAllProposalList = true;
     if (this._coiAdminDashboardService.coiRequestObject.tabName === 'ALL_DISCLOSURES') {
-      // document.getElementById('collapseExample').classList.add('show');
+      document.getElementById('collapseExample').classList.add('show');
       // this.isShowAllProposalList = false;
     } else {
-      // if (this._coiAdminDashboardService.isAdvanceSearch) {
-      //   document.getElementById('collapseExample').classList.add('show');
-      // } else {
-      //   document.getElementById('collapseExample').classList.remove('show');
-      //   this.isShowAllProposalList = true;
-      // }
-
+       document.getElementById('collapseExample').classList.remove('show');
+       this.isShowAllProposalList = true;
     }
   }
 
@@ -124,7 +119,6 @@ export class AdminDashboardComponent {
         this.dashboardCounts = res;
         setTimeout(() => {
           this.getDashboardDetails();
-          this.$coiList.next();
         })
       }));
   }
@@ -136,7 +130,6 @@ export class AdminDashboardComponent {
         this.result = data || [];
         if (this.result) {
           this.coiList = this.result.disclosureViews || [];
-          debugger
           this.coiList.map(ele => {
             ele.numberOfProposals = ele.disclosureStatusCode != 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
             ele.numberOfAwards = ele.disclosureStatusCode != 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
@@ -170,7 +163,9 @@ export class AdminDashboardComponent {
       this.resetAdvanceSearchFields();
       this._coiAdminDashboardService.coiRequestObject.tabName = tabName;
       this.setAdvanceSearch();
-      this.$coiList.next();
+      if(tabName != 'ALL_DISCLOSURES') {
+        this.$coiList.next();
+      }
       return;
     }
     this._coiAdminDashboardService.coiRequestObject.tabName = tabName;
@@ -221,9 +216,7 @@ export class AdminDashboardComponent {
     this._coiAdminDashboardService.coiRequestObject.property6 = parseDateWithoutTimestamp(this.advanceSearchDates.approvalDate);
     this._coiAdminDashboardService.coiRequestObject.property7 = parseDateWithoutTimestamp(this.advanceSearchDates.expirationDate);
     this._coiAdminDashboardService.coiRequestObject.property23 = parseDateWithoutTimestamp(this.advanceSearchDates.certificationDate);
-    this._coiAdminDashboardService.coiRequestObject.property15 =
-      this._coiAdminDashboardService.coiRequestObject.advancedSearch === 'L'
-        ? null : this._coiAdminDashboardService.coiRequestObject.property15;
+    this._coiAdminDashboardService.coiRequestObject.property15 = null;
   }
 
   onLookupSelect(data: any, property: string) {
@@ -246,7 +239,6 @@ export class AdminDashboardComponent {
 
 
   setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId) {
-    debugger
     switch (moduleName) {
       case 'sfi':
         this.selectedModuleCode = 8;

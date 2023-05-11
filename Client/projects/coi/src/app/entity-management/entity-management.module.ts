@@ -31,7 +31,7 @@ const routes: Routes = [
     MatIconModule,
     SharedModule,
     FormsModule,
-    SharedComponentModule
+    SharedComponentModule,
   ],
   exports: [
   ],providers: [ElasticConfigService]

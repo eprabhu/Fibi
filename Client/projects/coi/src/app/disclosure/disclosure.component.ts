@@ -1,16 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {subscriptionHandler} from "../../../../fibi/src/app/common/utilities/subscription-handler";
-import {Subscription} from "rxjs";
-import {SfiService} from './sfi/sfi.service';
-import {COI} from "./coi-interface";
-import {DataStoreService} from "./services/data-store.service";
-import {CoiService} from "./services/coi.service";
-import {Location} from "@angular/common";
-import {deepCloneObject} from "../../../../fibi/src/app/common/utilities/custom-utilities";
-import {ElasticConfigService} from "../../../../fibi/src/app/common/services/elastic-config.service";
-import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../fibi/src/app/app-constants";
-import {CommonService} from "../common/services/common.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { subscriptionHandler } from "../../../../fibi/src/app/common/utilities/subscription-handler";
+import { Subscription } from "rxjs";
+import { SfiService } from './sfi/sfi.service';
+import {ApplicableQuestionnaire, COI, getApplicableQuestionnaireData} from "./coi-interface";
+import { DataStoreService } from "./services/data-store.service";
+import { CoiService } from "./services/coi.service";
+import { Location } from "@angular/common";
+import { deepCloneObject } from "../../../../fibi/src/app/common/utilities/custom-utilities";
+import { ElasticConfigService } from "../../../../fibi/src/app/common/services/elastic-config.service";
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from "../../../../fibi/src/app/app-constants";
+import { CommonService } from "../common/services/common.service";
 
 @Component({
     selector: 'app-disclosure',
@@ -29,6 +29,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     currentStepNumber: 1 | 2 | 3 | 4 = 1;
     tempStepNumber: any;
     clickedOption: any;
+    disclosureDetailsForSFI = {disclosureId: null, disclosureNumber: null};
 
     assignReviewerActionDetails: any = {};
     assignReviewerActionValidation = new Map();
@@ -36,15 +37,25 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     personElasticOptions: any = {};
     categoryClearFiled: String;
     assigneeClearField: String;
+    isShowCountModal = false;
+    selectedModuleCode: any;
+    currentDisclosureId: any;
+    inputType: any;
+    disclosureSequenceStatusCode: any;
+    personId: any;
+    currentDisclosureNumber: any;
+    disclosureType: any
+    coiList = [];
+
 
     constructor(public router: Router,
-                public commonService: CommonService,
-                private _route: ActivatedRoute,
-                private _elasticConfigService: ElasticConfigService,
-                public sfiService: SfiService,
-                public coiService: CoiService,
-                public location: Location,
-                public dataStore: DataStoreService) {
+        public commonService: CommonService,
+        private _route: ActivatedRoute,
+        private _elasticConfigService: ElasticConfigService,
+        public sfiService: SfiService,
+        public coiService: CoiService,
+        public location: Location,
+        public dataStore: DataStoreService) {
         this.isCreateMode = this.router.url.includes('create-disclosure');
         this.setStepFirstTime(this.router.url);
         this.$subscriptions.push(this.router.events.subscribe(event => {
@@ -62,6 +73,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.dataStore.dataChanged = false;
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -74,10 +86,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     routeToAppropriateMode() {
-        if(this.coiData.coiDisclosure.reviewStatusCode == '1' && !this.isCreateMode) {
-            this.router.navigate(['/coi/create-disclosure/screening'], {queryParamsHandling: 'preserve'});
+        if (this.coiData.coiDisclosure.reviewStatusCode == '1' && !this.isCreateMode) {
+            this.router.navigate(['/coi/create-disclosure/screening'], { queryParamsHandling: 'preserve' });
         } else if (this.coiData.coiDisclosure.reviewStatusCode != '1' && this.isCreateMode) {
-            this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
+            this.router.navigate(['/coi/disclosure/summary'], { queryParamsHandling: 'preserve' });
         }
     }
 
@@ -94,40 +106,40 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     goToStep(stepPosition?: any) {
-      if (this.dataStore.dataChanged) {
-        this.tempStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
-        document.getElementById('hidden-validate-button').click();
-      } else {
-        if (!stepPosition && this.currentStepNumber == 4) {
-            return;
+        if (this.dataStore.dataChanged) {
+            this.tempStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
+            document.getElementById('hidden-validate-button').click();
+        } else {
+            if (!stepPosition && this.currentStepNumber == 4) {
+                return;
+            }
+            this.currentStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
+            this.navigateToStep();
         }
-        this.currentStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
-        this.navigateToStep();
-      }
     }
 
     leavePageClicked() {
-      this.dataStore.dataChanged = false;
-      this.coiService.unSavedModules = '';
-      this.currentStepNumber = this.tempStepNumber;
-      this.navigateToStep();
+        this.dataStore.dataChanged = false;
+        this.coiService.unSavedModules = '';
+        this.currentStepNumber = this.tempStepNumber;
+        this.navigateToStep();
     }
 
     stayOnPageClicked() {
-      this.tempStepNumber = this.clickedOption == 'previous' ? this.currentStepNumber + 1 : this.currentStepNumber - 1;
+        this.tempStepNumber = this.clickedOption == 'previous' ? this.currentStepNumber + 1 : this.currentStepNumber - 1;
     }
 
     goBackStep() {
-      if (this.dataStore.dataChanged) {
-        this.tempStepNumber = this.currentStepNumber - 1;
-        document.getElementById('hidden-validate-button').click();
-      } else {
-        if (this.currentStepNumber == 1) {
-            return;
+        if (this.dataStore.dataChanged) {
+            this.tempStepNumber = this.currentStepNumber - 1;
+            document.getElementById('hidden-validate-button').click();
+        } else {
+            if (this.currentStepNumber == 1) {
+                return;
+            }
+            this.currentStepNumber--;
+            this.navigateToStep();
         }
-        this.currentStepNumber--;
-        this.navigateToStep();
-      }
     }
 
     isRouteComplete(possibleActiveRoutes: string[] = []) {
@@ -149,44 +161,83 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     navigateToStep() {
 
-          let nextStepUrl = '';
-          switch (this.currentStepNumber) {
-              case 1:
-                  nextStepUrl = '/coi/create-disclosure/screening';
-                  break;
-              case 2:
-                  nextStepUrl = '/coi/create-disclosure/sfi';
-                  break;
-              case 3:
-                  nextStepUrl = '/coi/create-disclosure/relationship';
-                  break;
-              case 4:
-                  nextStepUrl = '/coi/create-disclosure/certification';
-                  break;
-          }
-          this.router.navigate([nextStepUrl], {queryParamsHandling: 'preserve'})
+        let nextStepUrl = '';
+        switch (this.currentStepNumber) {
+            case 1:
+                nextStepUrl = '/coi/create-disclosure/screening';
+                break;
+            case 2:
+                nextStepUrl = '/coi/create-disclosure/sfi';
+                break;
+            case 3:
+                nextStepUrl = '/coi/create-disclosure/relationship';
+                break;
+            case 4:
+                nextStepUrl = '/coi/create-disclosure/certification';
+                break;
+        }
+        this.router.navigate([nextStepUrl], { queryParamsHandling: 'preserve' })
+    }
+
+    checkQuestionnaireCompletedBeforeCertify() {
+        if (!this.isSaving) {
+            this.isSaving = true;
+            this.coiService.getApplicableQuestionnaire(this.getApplicationQuestionnaireRO())
+                .subscribe((res: getApplicableQuestionnaireData) => {
+                    this.certifyIfQuestionnaireCompleted(res);
+                }, _err => {
+                    this.isSaving = false;
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
+                });
+        }
+    }
+
+    private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
+        if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
+            if (this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
+                this.certifyDisclosure();
+            } else {
+                this.isSaving = false;
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Please complete Screening Questionnaire');
+            }
+        }
+    }
+
+    isAllQuestionnaireCompleted(questionnaires: ApplicableQuestionnaire[]) {
+        return questionnaires.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y');
+    }
+
+    getApplicationQuestionnaireRO() {
+        return {
+            "moduleItemCode": 8,
+            "moduleSubItemCode": 0,
+            "moduleSubItemKey": 0,
+            "moduleItemKey": this.coiData.coiDisclosure.disclosureId,
+            "actionUserId": this.commonService.getCurrentUserDetail('personId'),
+            "actionPersonName": this.commonService.getCurrentUserDetail('fullName'),
+            "questionnaireMode": "ACTIVE_ANSWERED_UNANSWERED"
+        }
     }
 
     certifyDisclosure() {
-        if (!this.isSaving && this.coiService.isCertified) {
-            this.isSaving = true;
-            const REQUESTREPORTDATA = {
-                coiDisclosure: {
-                    disclosureId: this.coiData.coiDisclosure.disclosureId,
-                    certificationText: this.coiData.coiDisclosure.certificationText ? this.coiData.coiDisclosure.certificationText : this.certificationText,
-                    conflictStatusCode: this.dataStore.disclosureStatus
-                }
-            };
-            this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
-                this.dataStore.dataChanged = false;
-                this.dataStore.updateStore(['coiDisclosure'], {coiDisclosure: res});
-                this.isSaving = false;
-                this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
-            }, err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, (err.error) ?
-                    err.error : 'Error in certifying disclosure. Please try again.');
-            }));
-        }
+        const REQUESTREPORTDATA = {
+            coiDisclosure: {
+                disclosureId: this.coiData.coiDisclosure.disclosureId,
+                certificationText: this.coiData.coiDisclosure.certificationText ? this.coiData.coiDisclosure.certificationText : this.certificationText,
+                conflictStatusCode: this.dataStore.disclosureStatus
+            }
+        };
+        this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
+            this.dataStore.dataChanged = false;
+            this.dataStore.updateStore(['coiDisclosure'], { coiDisclosure: res });
+            this.isSaving = false;
+            this.router.navigate(['/coi/disclosure/summary'], { queryParamsHandling: 'preserve' });
+            this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
+        }, err => {
+            this.isSaving = false;
+            this.commonService.showToast(HTTP_ERROR_STATUS, (err.error) ?
+                err.error : 'Error in certifying disclosure. Please try again.');
+        }));
     }
 
     private getDataFromStore() {
@@ -202,6 +253,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 });
             }
         });
+        this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
+        this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
         this.setAdminGroupOptions();
     }
 
@@ -223,7 +276,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             .subscribe((res: any) => {
                 this.updateDisclosureReviewStatus(res);
             }, _err => {
-                if(_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
+                if (_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
                     document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();
                 } else {
                     this.commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
@@ -293,6 +346,33 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.categoryClearFiled = new String('true');
         const isReviewTab = this.router.url.includes('disclosure/review');
         document.getElementById(isReviewTab ?
-            'add-review-modal-trigger':'assign-reviewer-modal-trigger').click();
+            'add-review-modal-trigger' : 'assign-reviewer-modal-trigger').click();
+    }
+
+    openCountModal(moduleName, id, coiNumber, disSeqCode, personId) {
+        switch (moduleName) {
+            case 'sfi':
+                this.selectedModuleCode = 8;
+                break;
+            case 'award':
+                this.selectedModuleCode = 1;
+                break;
+            case 'proposal':
+                this.selectedModuleCode = 3;
+                break;
+            default:
+                this.selectedModuleCode = 0;
+        }
+        this.isShowCountModal = true;
+        this.currentDisclosureId = id;
+        this.currentDisclosureNumber = coiNumber;
+        this.disclosureType = moduleName;
+        this.inputType = 'DISCLOSURE_TAB';
+        this.disclosureSequenceStatusCode = disSeqCode;
+        this.personId = personId;
+
+    }
+    closeModal(event) {
+        this.isShowCountModal = event;
     }
 }

@@ -150,7 +150,7 @@
 								</div>
 							</div>
 							<span class="question-font mb-2">{{question.QUESTION}}</span>
-							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)" class="fa fa-info-circle" aria-hidden="true"></i>
+							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)" class="fa fa-info-circle px-2" aria-hidden="true"></i>
 
 							<div *ngFor=" let option of questionnaire.options"
 								class="answer-options answer-field  p-0 ml-4">

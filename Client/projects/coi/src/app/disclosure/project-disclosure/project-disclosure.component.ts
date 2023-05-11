@@ -163,9 +163,9 @@ export class ProjectDisclosureComponent implements OnInit {
         this.projectDisclosureValidation.clear();
         switch (this.selectedProjectType) {
             case 'Award':
-                return this.projectSearchOptions = getEndPointOptionsForAwardNumber();
+                return this.projectSearchOptions = getEndPointOptionsForAwardNumber(this._commonService.fibiUrl);
             case 'Development Proposal':
-                return this.projectSearchOptions = getEndPointOptionsForProposalDisclosure();
+                return this.projectSearchOptions = getEndPointOptionsForProposalDisclosure(this._commonService.baseUrl);
         }
     }
 

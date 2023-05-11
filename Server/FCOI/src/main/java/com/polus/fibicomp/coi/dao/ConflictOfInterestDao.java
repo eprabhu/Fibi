@@ -33,6 +33,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -528,7 +529,7 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureNumber
 	 * @return
 	 */
-	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(String disclosureNumber);
+	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(Integer disclosureNumber);
 
 	/**
 	 * This method is used for get count of comments
@@ -677,11 +678,11 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 *
-	 * @param devProposalModuleCode
 	 * @param disclosureId
 	 * @param disclosureNumber
+	 * @param personEntityId
 	 */
-	void syncProjectWithDisclosure(Integer devProposalModuleCode, Integer disclosureId, Integer disclosureNumber);
+	void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId);
 	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode);
 
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);
@@ -702,4 +703,13 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureNumber
 	 */
 	void archiveDisclosureOldVersions(Integer disclosureId, Integer disclosureNumber);
+	
+	public Integer fetchMaxPersonEntityId(String personId, Integer entityId);
+	
+	public Integer generateMaxPersonEntityId();
+
+	public void saveOrUpdateDisclComment(DisclComment disclComment);
+
+	public DisclComment getDisclEntProjRelationComment(Integer disclosureDetailsId);
+	
 }

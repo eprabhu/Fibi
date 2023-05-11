@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {CommonService} from '../../../common/services/common.service';
+import {CommonService} from '../../common/services/common.service';
 
 @Injectable()
 export class CountModalService {

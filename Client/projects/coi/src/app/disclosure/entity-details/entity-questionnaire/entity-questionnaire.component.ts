@@ -36,7 +36,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   }
   isShowRelationshipModal = false;
   coiFinancialEntityDetail: EntityDetail = new EntityDetail();
-  isSave = false;
+  isSaving = false;
   relationValidationMap = new Map();
   isEditMode = false;
   $subscriptions: Subscription[] = [];
@@ -113,8 +113,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   }
 
   addRelation() {
-    this.isSave = true;
-    if (this.isSave && this.validateRelationship()) {
+    if (!this.isSaving && this.validateRelationship()) {
+      this.isSaving = true;
       const REQ_BODY = {
         "questionnaireAnsHeaderId": null,
         "personEntityId": this._activatedRoute.snapshot.queryParamMap.get('entityId'),
@@ -125,9 +125,10 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
         this.getQuestionnaire(res);
         this.findRelation(res.validPersonEntityRelType.relationshipTypeCode);
         this.clearRelationModal();
-        this.isSave = false;
+        this.isSaving = false;
         this.updateRelationship.emit(res);
       },_error=>{
+        this.isSaving = false;
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
       }));
     }

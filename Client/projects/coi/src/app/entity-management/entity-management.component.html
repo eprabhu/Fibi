@@ -38,39 +38,39 @@
           [uniqueId]="'btn-entity-elastic'" (selectedResult)="redirectToEntity($event)"></app-elastic>
       </div>
       <div class="ml-15 justify-content-end d-flex mx-3">
-        <button class="btn btn-primary fs-13 d-flex" id="advanced-search" title="Advance search"
+        <button class="btn btn-primary fs-13 d-flex align-items-center" id="advanced-search" title="Advance search"
           (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search" aria-expanded="true"
-          aria-label="Toggle Advanced Search"><mat-icon class="add-icon">tune</mat-icon> Advanced
+          aria-label="Toggle Advanced Search"><mat-icon class="add-icon mt-1">tune</mat-icon> Advanced
           Search
         </button>
       </div>
     </div>
   </div>
-  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow-sm rounded-3" id="view-advance-search">
-    <div class="card-body">
-      <div class="form-row row m-2">
-        <div class="col-3 ml-3">
+  <div *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow-sm rounded-3" id="view-advance-search">
+    <div class="card-body mb-3">
+      <div class="form-row row mx-2">
+        <div class="col-3">
           <label class="fw-bold fs-14 d-block" for="adv-entity-name">Entity Name</label>
           <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
             [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here for entity name'"
             class=" text-secondary fs-13" [uniqueId]="'adv-entity-name'">
           </app-endpoint-search>
         </div>
-        <div class="col-3 ml-3">
+        <div class="col-3">
           <label class="fw-bold fs-14 d-block" for="adv-entity-country">Country</label>
           <app-endpoint-search (onSelect)="selectEntityCountry($event)" [clearField]="advSearchClearField"
             [httpOptions]="countrySearchOptions" class=" text-secondary fs-13"
             [placeHolder]="'Type here for entity country'" [uniqueId]="'adv-entity-country'">
           </app-endpoint-search>
         </div>
-        <div class="col-3 ml-3">
+        <div class="col-3">
           <label class="fw-bold fs-14 d-block">Status</label>
           <app-look-up (selectedResult)="onLookupSelect($event, 'property20')" [options]="statusTypeOptions"
             [selectedLookUpList]="lookupValues['property20']" [externalArray]="entityManagementService.statusCodes" [isExternalArray]="true" class=" text-secondary fs-13"
             [uniqueId]="'adv-disclosure-type'">
           </app-look-up>
         </div>
-        <div class="col-3 ml-3">
+        <div class="col-3">
           <label class="fw-bold fs-14 d-block" for="adv-entity-type">Entity Type</label>
           <app-look-up (selectedResult)="onLookupSelect($event, 'property21')" [options]="entityTypeOptions"
             [selectedLookUpList]="lookupValues['property21']" class=" text-secondary fs-13"
@@ -78,7 +78,7 @@
           </app-look-up>
         </div>
       </div>
-      <div class="form-row row m-2">
+      <div class="form-row row mt-4 mx-2">
         <div class="col-3">
           <label class="fw-bold fs-14 d-block" for="btn-has-sfi">Has SFI</label>
           <div class="activate-btn align-items-center d-flex">
@@ -132,8 +132,8 @@
         </div>
         <div class="col-3 d-flex justify-content-end align-items-end">
           <button class="btn btn-outline-secondary  fs-14 py-2 px-4" id="btn-clear"
-            (click)="clearAdvancedSearch()">Clear</button>
-          <button class="btn btn-primary fs-14" id="btn-search" (click)="advancedSearch()">Search</button>
+            (click)="clearAdvancedSearch()" title="Clear">Clear</button>
+          <button class="btn btn-primary fs-14" id="btn-search" (click)="advancedSearch()" title="Search">Search</button>
         </div>
       </div>
     </div>

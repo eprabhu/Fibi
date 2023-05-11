@@ -10,6 +10,7 @@ import {CommentConfiguration} from "../../../coi-interface";
 export class ConflictManagementSummaryComponent {
 
   commentConfiguration: CommentConfiguration = new CommentConfiguration();
+  isCollapsed = true;
 
   constructor(private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService) {
   }

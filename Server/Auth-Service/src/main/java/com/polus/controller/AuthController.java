@@ -56,6 +56,8 @@ public class AuthController {
 	        			.homeUnit(optionalPerson.get().getHomeUnit())
 	        			.gender(optionalPerson.get().getGender())
 	        			.primaryTitle(optionalPerson.get().getPrimaryTitle())
+                        .isFaculty(optionalPerson.get().getIsFaculty())
+                        .homeUnitName(optionalPerson.get().getUnit() != null ? optionalPerson.get().getUnit().getUnitName() : null)
 	        			.build();
         	LOGGER.info("Token generated succefully.");
         } else {

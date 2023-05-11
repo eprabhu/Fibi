@@ -185,4 +185,74 @@ nav ul li.active {
     }
   }
 }
+// icon color & hovering
+.btn-primary-icon:hover {
+  background-color: #E2F1FF;
+  color: #007DEC!important;
+}
 
+.btn-primary-icon {
+  letter-spacing: normal;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: -8px;
+  letter-spacing: normal;
+  cursor: pointer;
+  background-color: transparent;
+  color: #6A7980!important;
+  border:none;
+  border-radius: 4px;
+}
+
+// svg icon color & hovering
+.btn-primary-icon-svg {
+  margin-top: -8px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 6px 1px 6px;
+}
+
+.btn-primary-icon-svg:hover {
+  background-color: #E2F1FF;
+}
+
+.btn-secondary-svg {
+  display: inline-block;
+  background: url(assets/images/history-icon-with-dark-shade.svg);
+  width: 23px;
+  height: 23px;
+  background-repeat: no-repeat;
+  }
+
+.btn-primary-icon-svg:hover .btn-secondary-svg {
+  background: url(assets/images/history-icon-with-blue-shade.svg);
+  background-repeat: no-repeat;
+  }
+
+.btn-outline-secondary {
+  &:hover {
+    color: #fff;
+    border-color: #007DEC;
+    background-color: #007DEC;
+  }
+}
+
+.bg-white button { 
+  border-color: #6c757d !important;
+  color: #6c757d !important; 
+  background: #fff !important;
+}
+
+.bg-white:hover button { 
+  border-color: #007DEC !important;
+  color: #fff !important;
+  background: #007DEC !important;
+}
+
+.potential-badge {
+  background-color: #997404;
+  color: white;
+  border: #997404;
+}

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { UserDisclosureService } from "./user-disclosure.service";
 import { UserDashboardService } from "../user-dashboard.service";
 import { CommonService } from "../../common/services/common.service";
-import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -22,7 +21,7 @@ export class UserDisclosureComponent {
     dashboardRequestObject = {
         advancedSearch: 'L',
         pageNumber: 200,
-        sort: { 'createTimestamp': 'asc' },
+        sort: { },
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         // filterType = 'All', 'FCOI', 'Project', 'OPA';
@@ -38,10 +37,11 @@ export class UserDisclosureComponent {
     disclosureType: any;
     inputType: string;
     coiList: [];
+    ishover: [] = [];
     disclosureSequenceStatusCode: any;
     personId: any;
-
-
+    onButtonHovering:any = true;
+    index:any
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
         public commonService: CommonService) {
@@ -50,6 +50,9 @@ export class UserDisclosureComponent {
     ngOnInit() {
         this.loadDashboard();
         this.loadDashboardCount();
+       
+
+
     }
 
     loadDashboard() {
@@ -155,6 +158,7 @@ export class UserDisclosureComponent {
         } else if (disclosureCategoryType == 3) {
             return 'Proposal';
         }
+
     }
 
     setTab(tabName) {
@@ -162,23 +166,25 @@ export class UserDisclosureComponent {
         this.dashboardRequestObject.tabName = tabName;
         this.loadDashboard();
     }
-    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId) {
-        switch (moduleName) {
-            case 'sfi':
-                this.selectedModuleCode = 8;
-                break;
+    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId,noOfSfi) {
+        if(noOfSfi>0){
+            switch (moduleName) {
+                case 'sfi':
+                    this.selectedModuleCode = 8;
+                    break;
 
-            default:
-                this.selectedModuleCode = 0;
+                default:
+                    this.selectedModuleCode = 0;
+            }
+            this.isShowCountModal = true;
+            this.currentDisclosureId = id;
+            this.currentDisclosureNumber = coiNumber;
+            this.disclosureType = moduleName;
+            this.inputType = 'DISCLOSURE_TAB';
+            this.disclosureSequenceStatusCode = disSeqCode;
+            this.personId = personId;
         }
-        this.isShowCountModal = true;
-        this.currentDisclosureId = id;
-        this.currentDisclosureNumber = coiNumber;
-        this.disclosureType = moduleName;
-        this.inputType = 'DISCLOSURE_TAB';
-        this.disclosureSequenceStatusCode = disSeqCode;
-        this.personId = personId;
-        openModal('coiCountsViewModal');
+
     }
 
     setFilter(type = 'ALL') {
@@ -190,6 +196,7 @@ export class UserDisclosureComponent {
     filterDashboardData() {
         if (this.currentSelected.filter == 'ALL') {
             this.filteredDisclosureArray = this.disclosureArray;
+            // console.log(this.filteredDisclosureArray)
         } else {
             this.filteredDisclosureArray = this.disclosureArray.filter(disclosure => {
                 switch (this.currentSelected.filter) {
@@ -201,6 +208,11 @@ export class UserDisclosureComponent {
                         return disclosure.fcoiTypeCode == '1';
                 }
             });
+        }
+    }
+    closeModalEvent(event){
+        if(!event){
+            this.isShowCountModal = event;
         }
     }
 }

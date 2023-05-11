@@ -5,11 +5,13 @@
                 <div class="align-self-center flex-fill">
                     <p class="m-0">
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1'">
-                            <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span> [Home Unit : {{coiData?.coiDisclosure?.person?.unit?.unitName}} ]</strong>
+                            <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span
+                                    class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
+                                [Home Unit : {{coiData?.coiDisclosure?.person?.unit?.unitName}} ]</strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                            <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}} : {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} : {{(coiData?.projectDetail?.title)?.length>60 ?
-                                (coiData?.projectDetail?.title | slice:0: 60)+'...' :
+                            <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}} : {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} : {{(coiData?.projectDetail?.title)?.length>50 ?
+                                (coiData?.projectDetail?.title | slice:0: 50)+'...' :
                                 coiData?.projectDetail?.title}} ] By <span class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
                         </ng-container>
                     </p>
@@ -32,7 +34,7 @@
                     <ng-container *ngIf="!isCreateMode">
                         <div class="align-items-center d-flex">
                             <button (click)="isCardExpanded=!isCardExpanded"
-                                    class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                                class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
                                 <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
                             </button>
                         </div>
@@ -60,8 +62,10 @@
                                 <tr>
                                     <td>Disclosure :</td>
                                     <td class="ps-4">
-                                        <span *ngIf="coiData?.coiDisclosure?.coiConflictStatusType?.description" class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
-                                        <span *ngIf="!coiData?.coiDisclosure?.coiConflictStatusType?.description" class="noDataExists fw-normal">-- No Data --</span>
+                                        <span *ngIf="coiData?.coiDisclosure?.coiConflictStatusType?.description"
+                                            class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}} px-3 py-1 rounded-5 ">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                        <span *ngIf="!coiData?.coiDisclosure?.coiConflictStatusType?.description"
+                                            class="noDataExists fw-normal">-- No Data --</span>
                                     </td>
                                 </tr>
                             </table>
@@ -75,48 +79,63 @@
                             <table class="fs-14 fw-medium spaced-table">
                                 <tr>
                                     <td>Create :</td>
-                                    <td>{{coiData?.coiDisclosure?.createTimestamp ? (coiData?.coiDisclosure?.createTimestamp |
+                                    <td class="ps-4" style="padding-right: 86px;">
+                                        {{coiData?.coiDisclosure?.createTimestamp ?
+                                        (coiData?.coiDisclosure?.createTimestamp |
                                         dateFormatterWithTimeZone) : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td>Certification :</td>
-                                    <td>
-                                        <ng-container *ngIf="coiData?.coiDisclosure?.certifiedAt">
-                                            {{coiData?.coiDisclosure?.certifiedAt ?
-                                            (coiData?.coiDisclosure?.certifiedAt | dateFormatter) : ''}}
-                                        </ng-container>
-                                        <span *ngIf="!coiData?.coiDisclosure?.certifiedAt" class="noDataExists fw-normal">-- No Data --</span>
-                                    </td>
+                                    <td class="ps-4" style="padding-right: 86px;">
+                                        {{coiData?.coiDisclosure?.certifiedAt?(coiData?.coiDisclosure?.certifiedAt |
+                                        dateFormatter) : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td>Expiration :</td>
-                                    <td>{{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
+
+                                    <!-- <td>
+                                        <ng-container *ngIf="coiData?.coiDisclosure?.expirationDate">
+                                            {{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
+                                            dateFormatter) : ''}}
+                                        </ng-container>
+                                        <span *ngIf="!coiData?.coiDisclosure?.expirationDate" class="noDataExists fw-normal">-- No Data --</span></td> -->
+                                    
+                                    <td class="ps-4" style="padding-right: 86px;">
+                                        {{coiData?.coiDisclosure?.expirationDate ?
+                                        (coiData?.coiDisclosure?.expirationDate |
                                         dateFormatter) : ''}}</td>
+                                    
                                 </tr>
                             </table>
                         </div>
                     </div>
                 </div>
+
                 <div class="col">
                     <div class="border triple-card rounded-1 position-relative">
                         <span class="status-pill">Relationship with</span>
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
-                                <tr>
-                                    <td><span
-                                            class="bold-blue-color">{{coiData?.numberOfSFI ? coiData?.numberOfSFI : 0}}</span>
+                                <tr class="Cursor-pointer"
+                                    (click)="openCountModal('sfi', coiData?.coiDisclosure?.disclosureId,  coiData?.coiDisclosure?.disclosureNumber, coiData?.coiDisclosure?.disclosureStatusCode, coiData?.coiDisclosure?.personId )">
+                                    <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfSFI?
+                                            coiData?.coiDisclosure?.numberOfSFI : 0}}</span>
                                     </td>
                                     <td class="ps-2">Significant Financial Interest</td>
                                 </tr>
-                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
-                                    <td><span
-                                            class="bold-blue-color">{{coiData?.numberOfProposal ? coiData?.numberOfProposal : 0}}</span>
+                                <tr class="Cursor-pointer"
+                                    (click)="openCountModal('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId)"
+                                    *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
+                                    <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfProposals ?
+                                            coiData?.coiDisclosure?.numberOfProposals : 0}}</span>
                                     </td>
                                     <td class="ps-2">Proposals</td>
                                 </tr>
-                                <tr *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
-                                    <td><span
-                                            class="bold-blue-color">{{coiData?.numberOfAward ? coiData?.numberOfAward : 0}}</span>
+                                <tr class="Cursor-pointer"
+                                    (click)="openCountModal('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId)"
+                                    *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
+                                    <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfAwards ?
+                                            coiData?.coiDisclosure?.numberOfAwards : 0}}</span>
                                     </td>
                                     <td class="ps-2">Awards</td>
                                 </tr>
@@ -129,9 +148,9 @@
 
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress navigation-tabs row">
-                    <div (click)="goToStep(1)" [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
-                         class="col h-100 m-0" queryParamsHandling='merge'
-                         title="Goto step Screening Questionnaire">
+                    <div (click)="goToStep(1)"
+                        [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
+                        class="col h-100 m-0" queryParamsHandling='merge' title="Goto step Screening Questionnaire">
                         Screening Questionnaire
                         <div class="arrow-wrapper">
                             <div class="arrow-cover">
@@ -139,9 +158,10 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(2)" [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
-                         class="col ps-5 text-nowrap" queryParamsHandling='merge'
-                         title="Goto step Significant Financial Interest(SFIs)">
+                    <div (click)="goToStep(2)"
+                        [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
+                        class="col ps-5 text-nowrap" queryParamsHandling='merge'
+                        title="Goto step Significant Financial Interest(SFIs)">
                         Significant Financial Interest(SFIs)
                         <div class="arrow-wrapper">
                             <div class="arrow-cover">
@@ -150,7 +170,7 @@
                         </div>
                     </div>
                     <div (click)="goToStep(3)" [class.complete]="isRouteComplete(['relationship', 'certification'])"
-                         class="col" queryParamsHandling='merge' title="Goto step Relationships">
+                        class="col" queryParamsHandling='merge' title="Goto step Relationships">
                         <span class="align-self-center">Relationships</span>
                         <div class="arrow-wrapper">
                             <div class="arrow-cover">
@@ -158,8 +178,8 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(4)" [class.complete]="isRouteComplete(['certification'])"
-                         class="col" queryParamsHandling='merge' title="Goto step Certification">
+                    <div (click)="goToStep(4)" [class.complete]="isRouteComplete(['certification'])" class="col"
+                        queryParamsHandling='merge' title="Goto step Certification">
                         <span class="align-self-center">Certification</span>
                     </div>
                 </div>
@@ -168,19 +188,19 @@
             <ng-container *ngIf="!isCreateMode">
                 <div class="navigation-tabs d-flex align-items-center">
                     <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge'
-                         role="button">
+                        role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Disclosure</div>
                     </div>
                     <div [routerLink]="['relationship']" class="navigation-box border-end" queryParamsHandling='merge'
-                         role="button">
+                        role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Relationships</div>
                     </div>
                     <div [routerLink]="['conflict-management']" class="navigation-box border-end"
-                         queryParamsHandling='merge' role="button">
+                        queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Conflict Management</div>
                     </div>
                     <div [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
-                         role="button">
+                        role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Reviews</div>
                     </div>
                     <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge' role="button">
@@ -194,41 +214,42 @@
         <div *ngIf="isCreateMode" class="d-flex flex-column p-0 bg-white min-height-189 border-end shadow-sm">
             <div class="flex-fill h-100">
                 <div class="d-flex justify-content-between p-3">
-                    <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-grey pb-0 fs-14 col-2">
+                    <span [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-grey pb-0 fs-14 col-2">
                         <mat-icon>home</mat-icon>
-                    </button>
-                    <button (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1"
-                            class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
+                    </span>
+                    <span (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1"
+                        class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
-                    </button>
-                    <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
-                            class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
+                    </span>
+                    <span (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
+                        class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">redo</mat-icon>
                         Next
-                    </button>
+                    </span>
                 </div>
                 <div class="d-flex justify-content-around px-3 pb-3">
-                    <button (click)="sfiService.isShowSfiNavBar = true"
-                            class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-flex justify-content-center w-100 align-items-center">
+                    <span (click)="sfiService.isShowSfiNavBar = true"
+                        class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">add</mat-icon>
                         Add Significant Financial Interest
-                    </button>
+                    </span>
                 </div>
                 <div *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
-                     class="d-flex justify-content-around px-3 pb-3">
-                    <button (click)="triggerSave()" class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                    class="d-flex justify-content-around px-3 pb-3">
+                    <span (click)="triggerSave()"
+                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">save</mat-icon>
                         Save
-                    </button>
+                    </span>
                 </div>
                 <div *ngIf="router.url.includes('create-disclosure/certification')"
-                     class="d-flex justify-content-around px-3">
-                    <button (click)="certifyDisclosure()" [disabled]="!coiService.isCertified"
-                            class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                    class="d-flex justify-content-around px-3">
+                    <span (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
+                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">done</mat-icon>
                         Submit
-                    </button>
+                    </span>
                 </div>
             </div>
             <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes">
@@ -236,70 +257,76 @@
 
             </div>
             <div>
-                <app-add-sfi></app-add-sfi>
+                <app-add-sfi [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi>
             </div>
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill side-height border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
-                    <button [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-secondary pb-0 fs-14 col-2 me-2">
+                    <span [routerLink]="['/coi/user-dashboard']"
+                        class="btn btn-outline-secondary pb-0 fs-14 col-2 me-2">
                         <mat-icon>home</mat-icon>
-                    </button>
-                    <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
-                            class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
+                    </span>
+                    <span *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
+                        (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
+                        class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
-                    </button>
-                    <button data-bs-target="#coi-activity-modal" data-bs-toggle="modal" *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center me-2">
+                    </span>
+                    <span data-bs-target="#coi-activity-modal" data-bs-toggle="modal"
+                        *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
+                        class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center me-2">
                         <mat-icon class="me-2">rate_review</mat-icon>
                         Comments
-                    </button>
-                    <button  *ngIf="['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" style="white-space: nowrap;" aria-expanded="false"
-                            class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
-                            data-bs-toggle="dropdown" id="moreActionsForComplete" role="button">
+                    </span>
+                    <span *ngIf="['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
+                        style="white-space: nowrap;" aria-expanded="false"
+                        class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
+                        data-bs-toggle="dropdown" id="moreActionsForComplete" role="button">
                         <mat-icon class="me-1">more_vert</mat-icon> More Options
-                    </button>
+                </span>
                     <ul class="border dropdown-menu p-0 rounded-0" style="" aria-labelledby="moreActionsForComplete">
                         <li class="ash-text border-bottom"><span class="dropdown-item fs-15 fw-medium">
-                            <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
+                                <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
                         </li>
                         <li class="ash-text"><span class="dropdown-item fs-15 fw-medium">
-                            <mat-icon class="me-2 ash-text">print</mat-icon> Print</span>
+                                <mat-icon class="me-2 ash-text">print</mat-icon> Print</span>
                         </li>
                     </ul>
                 </div>
                 <div class="d-flex justify-content-around px-3 pb-3">
-                    <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
-                            class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-                            (click)="triggerAssignReviewerModal()"
-                            title="Add Review Location">
+                    <span *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
+                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
+                        (click)="triggerAssignReviewerModal()" title="Add Review Location">
                         <mat-icon class="me-2">person_add</mat-icon>
                         Assign Reviewer
-                    </button>
+                </span>
                 </div>
                 <div class="position-static d-flex justify-content-around px-3">
-                    <button *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
-                            class="me-2 fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center" data-bs-target="#completeReviewModalFromDashboard"
-                            data-bs-toggle="modal">
+                    <span *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
+                        class="me-2 fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+                        data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
                         Complete Review
-                    </button>
-                    <button *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" style="white-space: nowrap;" aria-expanded="false"
-                            class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
-                            data-bs-toggle="dropdown" id="moreActions" role="button">
+                </span>
+                    <span *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
+                        style="white-space: nowrap;" aria-expanded="false"
+                        class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
+                        data-bs-toggle="dropdown" id="moreActions" role="button">
                         <mat-icon class="me-1">more_vert</mat-icon> More Options
-                    </button>
+            </span>
                     <ul class="border dropdown-menu p-0 rounded-0" style="" aria-labelledby="moreActions">
                         <li class="ash-text border-bottom"><span class="dropdown-item fs-15 fw-medium">
-                            <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
+                                <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
                         </li>
                         <li class="ash-text"><span class="dropdown-item fs-15 fw-medium">
-                            <mat-icon class="me-2 ash-text">print</mat-icon> Print</span>
+                                <mat-icon class="me-2 ash-text">print</mat-icon> Print</span>
                         </li>
                     </ul>
                 </div>
                 <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated By :</span>
-                    {{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}
+                    {{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp |
+                    dateFormatterWithTimeZone:'long'}}
                 </div>
             </div>
             <ng-container *ngIf="router.url.includes('/coi/disclosure/summary')">
@@ -316,8 +343,7 @@
                 <h4 class="modal-title">Complete Review
                 </h4>
                 <button aria-label="Close" class="btn-close me-3" data-bs-dismiss="modal" id="dissmiss-btn"
-
-                        type="button">
+                    type="button">
                 </button>
             </div>
             <div class="modal-body">
@@ -328,19 +354,17 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
-                        type="button">Cancel
+                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" type="button">Cancel
                 </button>
-                <button (click)="completeDisclosureReview()" class="btn btn-primary fs-14"
-                        data-bs-dismiss="modal"
-                        type="button">Complete Review
+                <button (click)="completeDisclosureReview()" class="btn btn-primary fs-14" data-bs-dismiss="modal"
+                    type="button">Complete Review
                 </button>
             </div>
         </div>
     </div>
 </div>
 <span class="d-none" id="reviewPendingCompleteReviewErrorModalTrigger"
-      data-bs-target="#completeReviewModalFromDashboardErrorModal" data-bs-toggle="modal"></span>
+    data-bs-target="#completeReviewModalFromDashboardErrorModal" data-bs-toggle="modal"></span>
 <!-- Complete review modal -->
 <div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboardErrorModal" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -362,8 +386,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
-                        type="button">Close
+                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" type="button">Close
                 </button>
             </div>
         </div>
@@ -375,14 +398,16 @@
 <app-coi-review-comment-modal></app-coi-review-comment-modal>
 
 <!--assign reviewer modal start-->
-<div class="modal modal-coi fade mySkinDialog" id="assign-reviewer-modal" role="dialog" aria-labelledby="skippedSchedulesTitle"
-     aria-hidden="true">
+<div class="modal modal-coi fade mySkinDialog" id="assign-reviewer-modal" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Review for {{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by {{coiData?.coiDisclosure?.person?.fullName}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                        (click)="assignReviewerActionDetails = {}">
+                <h5 class="modal-title">Add Review for
+                    {{coiData?.coiDisclosure?.coiDisclosureCategoryType?.description}} by
+                    {{coiData?.coiDisclosure?.person?.fullName}}</h5>
+                <button type="button" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="assignReviewerActionDetails = {}">
                 </button>
             </div>
             <div class="modal-body">
@@ -390,14 +415,14 @@
                     <div id="locationId" class="col-lg-6 col-sm-12 col-12">
                         <label class="d-block">Admin Group</label>
                         <app-autocompleter [completerOptions]="adminGroupsCompleterOptions"
-                                           [clearField]="categoryClearFiled" [placeHolder]="'Search for Admin Group'"
-                                           (onSelect)="adminGroupSelect($event)">
+                            [clearField]="categoryClearFiled" [placeHolder]="'Search for Admin Group'"
+                            (onSelect)="adminGroupSelect($event)">
                         </app-autocompleter>
                     </div>
                     <div class="col-lg-6 col-sm-12 col-12">
                         <label class="d-block">Assignee</label>
                         <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
-                                     [placeHolder]="'Search Assignee'" (selectedResult)="assigneeSelect($event)">
+                            [placeHolder]="'Search Assignee'" (selectedResult)="assigneeSelect($event)">
                         </app-elastic>
                     </div>
                     <div class="ml-2" *ngIf="assignReviewerActionValidation.has('reviewer')">
@@ -408,26 +433,27 @@
                     <div class="col-12">
                         <label class="block-display">
                             Description</label>
-                        <textarea [(ngModel)]="assignReviewerActionDetails.description" appLengthValidator [isShowLimiter]="true" [limit]="2000"
-                                  rows="2" class="form-control"></textarea>
+                        <textarea [(ngModel)]="assignReviewerActionDetails.description" appLengthValidator
+                            [isShowLimiter]="true" [limit]="2000" rows="2" class="form-control"></textarea>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="agreement-approve-close" type="button"
-                        (click)="assignReviewerActionDetails = {}">Close</button>
+                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="agreement-approve-close"
+                    type="button" (click)="assignReviewerActionDetails = {}">Close</button>
                 <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
-                        (click)="saveOrUpdateCoiReview();" type="button">Add</button>
+                    (click)="saveOrUpdateCoiReview();" type="button">Add</button>
             </div>
         </div>
     </div>
 </div>
-<span id="assign-reviewer-modal-trigger" data-bs-target="#assign-reviewer-modal" data-bs-toggle="modal" class="d-none"></span>
+<span id="assign-reviewer-modal-trigger" data-bs-target="#assign-reviewer-modal" data-bs-toggle="modal"
+    class="d-none"></span>
 <!--assign reviewer modal end-->
 
 <!--questionnaire evalution messge start-->
-<span class="d-none" id="questionnaireEvaluationMessageModalTrigger" data-bs-target="#questionnaireEvaluationMessageModal"
-data-bs-toggle="modal"></span>
+<span class="d-none" id="questionnaireEvaluationMessageModalTrigger"
+    data-bs-target="#questionnaireEvaluationMessageModal" data-bs-toggle="modal"></span>
 <div class="modal modal-coi fade mySkinDialog" id="questionnaireEvaluationMessageModal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -438,50 +464,68 @@ data-bs-toggle="modal"></span>
             </div>
             <div class="modal-body">
                 <div class="row mt-2 mb-0">
-                    <div class="col-lg-12">
+                    <!-- <div class="col-lg-12">
                         <p class="fs-15">
                             {{sfiService.isSFIRequired ?
-                            'Dear ' + commonService.getCurrentUserDetail('fullName') + ', based on the answers provided by you to the questions you have to define at least one Significant Financial Interest against an entity before continuing with the disclosure.':
-                            'Dear ' + commonService.getCurrentUserDetail('fullName') + ', based on the answers provided to you to the questions you do not have to define any Significant Financial Interest or relationships against an entity and may submit the disclosure.'}}
+                            'Dear ' + commonService.getCurrentUserDetail('fullName') + ', based on the answers provided
+                            by you to the questions you have to define at least one Significant Financial Interest
+                            against an entity before continuing with the disclosure.':
+                            'Dear ' + commonService.getCurrentUserDetail('fullName') + ', based on the answers provided
+                            to you to the questions you do not have to define any Significant Financial Interest or
+                            relationships against an entity and may submit the disclosure.'}}
+                        </p>
+                    </div> -->
+                    <div class="col-lg-12">
+                        <p class="fs-15">
+                            {{sfiService.isSFIRequired ?'Dear ' + commonService.getCurrentUserDetail('fullName') + ', based on the answers provided by you to the questions you have to define at least one Significant Financial Interest against an entity before continuing with the disclosure.':'Dear ' + commonService.getCurrentUserDetail('fullName') + ', based on the answers provided to you to the questions you do not have to define any Significant Financial Interest or relationships against an entity and may submit the disclosure.'}}
                         </p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
-                        type="button">Close
+                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" type="button">Close
                 </button>
             </div>
         </div>
     </div>
 </div>
 <!--questionnaire evalution messge end-->
-
-
 <!--Unsaved Changes Modal-->
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-validate-button" data-bs-toggle="modal" data-bs-target="#saveAndExitModal"></button>
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-validate-button" data-bs-toggle="modal"
+    data-bs-target="#saveAndExitModal"></button>
 <div class="modal modal-coi fade mySkinDialog" id="saveAndExitModal" role="dialog" aria-labelledby="saveAndExitModal"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Confirmation</h5>
                 <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close" data-bs-dismiss="modal"
-                   aria-label="Close">
+                    aria-label="Close">
                 </button>
             </div>
             <div class="modal-body">
                 <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">You have unsaved changes in
-                  <strong>{{coiService.unSavedModules}}.</strong></p>
-                   <p>Do you want to leave the
-                    <ng-container *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">page without saving</ng-container>
-                    <ng-container *ngIf="coiService.unSavedModules != 'Screening Questionnaire'"><strong>Certification</strong> Page</ng-container>
-                  ?</p>
+                    <strong>{{coiService.unSavedModules}}.</strong>
+                </p>
+                <p>Do you want to leave the
+                    <ng-container *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">page without
+                        saving</ng-container>
+                    <ng-container
+                        *ngIf="coiService.unSavedModules != 'Screening Questionnaire'"><strong>Certification</strong>
+                        Page</ng-container>
+                    ?
+                </p>
             </div>
             <div class="modal-footer mx-2">
-              <button type="button" class="btn btn-primary btn-sm fs-14" (click)="leavePageClicked();" data-bs-dismiss="modal">Leave Page</button>
-              <button type="button" class="btn btn-outline-secondary" (click)="stayOnPageClicked()" data-bs-dismiss="modal">Stay On Page</button>
-          </div>
+                <button type="button" class="btn btn-outline-secondary" (click)="leavePageClicked();"
+                    data-bs-dismiss="modal">Leave Page</button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="stayOnPageClicked()"
+                    data-bs-dismiss="modal">Stay On Page</button>
+            </div>
         </div>
     </div>
 </div>
+<app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
+    [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
+    [inputType]="inputType" [personId]="personId"
+    [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"></app-count-modal>

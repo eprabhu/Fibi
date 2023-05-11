@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService, RelationshipDashboardRequest } from '../entity-management.service';
 import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
@@ -18,7 +18,7 @@ import { DATE_PLACEHOLDER } from '../../../../../fibi/src/app/app-constants';
   styleUrls: ['./entity-details-list.component.scss'],
   animations: [slowSlideInOut]
 })
-export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy {
+export class EntityDetailsListComponent implements OnInit,OnDestroy {
 
   entityDetails: any = [];
   isViewEntityDetails: true;
@@ -68,10 +68,6 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
     this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: event.personEntityId, mode: 'view' } });
   }
 
-  ngOnChanges() {
-
-  }
-
   getRelationshipEntityList() {
     const id = parseInt(this._route.snapshot.queryParamMap.get('entityManageId'));
     this.entityManagementService.relationshipDashboardRequest.id = id;
@@ -92,7 +88,7 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
     this.resetAdvanceSearchFields();
     this.entityManagementService.relationshipDashboardRequest.filterType = tab;
     // this.getRelationshipEntityList();
-    this.$relationshipEntityList.next();
+    // this.$relationshipEntityList.next();
   }
 
 
@@ -113,7 +109,7 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
     this.entityManagementService.relationshipDashboardRequest.property1 = parseDateWithoutTimestamp(this.advanceSearchDates.startDate);
     this.entityManagementService.relationshipDashboardRequest.property2 = parseDateWithoutTimestamp(this.advanceSearchDates.endDate);
     // this.getRelationshipEntityList();
-    this.$relationshipEntityList.next();
+    // this.$relationshipEntityList.next();
 
   }
 
@@ -132,7 +128,7 @@ export class EntityDetailsListComponent implements OnInit, OnChanges, OnDestroy 
   clearAdvanceSearch() {
     this.resetAdvanceSearchFields();
     // this.getRelationshipEntityList();
-    this.$relationshipEntityList.next();
+    // this.$relationshipEntityList.next();
 
   }
 }

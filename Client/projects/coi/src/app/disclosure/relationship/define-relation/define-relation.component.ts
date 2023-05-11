@@ -49,6 +49,7 @@ export class DefineRelationComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   coiData: any;
   clearIndex: any;
+  imgUrl = this.deployMap + 'assets/images/close-black.svg';
 
   @ViewChild('relationShipOverlay', { static: true }) relationShipOverlay: ElementRef;
 
@@ -101,15 +102,15 @@ export class DefineRelationComponent implements OnInit {
         if (!ele.projectConflictStatusCode) {
           ele.projectConflictStatusCode = this.coiStatusCode;
         }
-        // if (!ele.comment.comments) {
-        //   ele.comment.comments = this.coiDescription;
-        // }
+        if (!ele.disclComment.comment) {
+          ele.disclComment.comment = this.coiDescription;
+        }
       });
       this.saveClick();
     }
 
     getEntityList() {
-      this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
+      this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode,this.coiData.coiDisclosure.personId).subscribe((data: any) => {
         this.entityProjectDetails = data.coiDisclEntProjDetails;
         this.selectedProject = this.module;
         this.isShowDetails = true;
@@ -144,7 +145,7 @@ export class DefineRelationComponent implements OnInit {
     clearAll() {
       this.entityProjectDetails.forEach((ele: any) => {
         ele.projectConflictStatusCode = null;
-        // ele.comment.comments = null;
+        ele.disclComment.comment = null;
       });
       this.coiStatusCode = null;
       this.coiDescription = '';
@@ -159,12 +160,13 @@ export class DefineRelationComponent implements OnInit {
       // } else {
         this.entityProjectDetails[this.clearIndex ].projectConflictStatusCode = null;
         // this.entityProjectDetails[this.clearIndex ].comment.comments = null;
-        this.entityProjectDetails[this.clearIndex ].personEntity = this.entityProjectDetails[this.clearIndex ].personEntity.personEntity;
+        this.entityProjectDetails[this.clearIndex ].personEntity = this.entityProjectDetails[this.clearIndex].personEntity;
         this.entityProjectDetails[this.clearIndex ].disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.entityProjectDetails[this.clearIndex ].disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
         this.entityProjectDetails[this.clearIndex ].moduleCode = this.selectedProject.moduleCode;
         this.entityProjectDetails[this.clearIndex ].moduleItemKey = this.selectedProject.moduleItemId;
         // this.getCommentObject(this.entityProjectDetails[this.clearIndex ].comment);
+        this.entityProjectDetails[this.clearIndex].disclComment.comment = null;
         this.entityProjectDetails[this.clearIndex ].coiProjConflictStatusType = this.getStatusObject(this.entityProjectDetails[this.clearIndex ].projectConflictStatusCode);
         this.singleSaveClick(this.entityProjectDetails[this.clearIndex], this.clearIndex);
     }
@@ -201,7 +203,6 @@ export class DefineRelationComponent implements OnInit {
         ele.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
         ele.moduleCode = this.selectedProject.moduleCode;
         ele.moduleItemKey = this.selectedProject.moduleItemId;
-        // this.getCommentObject(ele.comment);
         ele.coiProjConflictStatusType = this.getStatusObject(ele.projectConflictStatusCode);
       });
     }
@@ -218,7 +219,7 @@ export class DefineRelationComponent implements OnInit {
 
     saveClick() {
       this.prepareSaveObject();
-        this._relationShipService.saveEntityProjectRelation(this.entityProjectDetails, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+        this._relationShipService.saveEntityProjectRelation(this.entityProjectDetails, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId,this.coiData.coiDisclosure.personId).subscribe((data: any) => {
           this.entityProjectDetails = data.coiDisclEntProjDetails;
           this.coiDescription = '';
           this.coiStatusCode = null;
@@ -231,7 +232,7 @@ export class DefineRelationComponent implements OnInit {
     }
 
     singleSaveClick(element, index) {
-        this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+        this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId,this.coiData.coiDisclosure.personId).subscribe((data: any) => {
           this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
           this.clearIndex = null;
           this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');

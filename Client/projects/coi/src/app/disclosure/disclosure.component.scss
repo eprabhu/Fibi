@@ -135,7 +135,7 @@ $bg-color: #E4F1FF;
 .bold-blue-color {
   color: #2c77f4;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 table {
@@ -206,4 +206,8 @@ table {
   position: sticky;
   top: 51px;
   z-index: 50;
+}
+
+.Cursor-pointer{
+  cursor: pointer;
 }

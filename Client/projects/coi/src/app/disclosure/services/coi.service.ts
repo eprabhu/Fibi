@@ -68,5 +68,9 @@ export class CoiService {
     loadTravellerTypesLookup() {
         return this._http.get(`${this._commonService.baseUrl}/loadTravellerTypesLookup`);
     }
+
+    getApplicableQuestionnaire(requestObject: any) {
+        return this._http.post(`${this._commonService.baseUrl}/getApplicableQuestionnaire`, requestObject);
+    }
     
 }

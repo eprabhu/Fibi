@@ -1,13 +1,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {UserDisclosureComponent} from './user-disclosure.component';
 import {RouterModule, Routes} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
 import {UserDisclosureService} from "./user-disclosure.service";
 import {SharedComponentModule} from "../../shared-components/shared-component.module";
 import {FormsModule} from "@angular/forms";
-import { CoiSharedModule } from "../../disclosure/shared/shared.module";
 import { SharedModule } from '../../shared/shared.module';
+import { UserDisclosureComponent } from './user-disclosure.component';
 
 const routes: Routes = [{path: '', component: UserDisclosureComponent}];
 
@@ -23,7 +22,6 @@ const routes: Routes = [{path: '', component: UserDisclosureComponent}];
         SharedModule,
         SharedComponentModule,
         FormsModule,
-        CoiSharedModule
     ]
 })
 export class UserDisclosureModule {

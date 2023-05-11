@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CommonService } from '../../../common/services/common.service';
-import { CommentConfiguration } from '../../coi-interface';
-import { CoiService } from '../../services/coi.service';
-import { DataStoreService } from '../../services/data-store.service';
+import { CommonService } from '../../common/services/common.service';
+import { CommentConfiguration } from '../../disclosure/coi-interface';
+import { CoiService } from '../../disclosure/services/coi.service';
+import { DataStoreService } from '../../disclosure/services/data-store.service';
 import { CoiReviewCommentsService } from './coi-review-comments.service';
-import {ElasticConfigService} from "../../../../../../fibi/src/app/common/services/elastic-config.service";
-import {subscriptionHandler} from "../../../../../../fibi/src/app/common/utilities/subscription-handler";
-import {fileDownloader} from "../../../../../../fibi/src/app/common/utilities/custom-utilities";
+import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
+import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+import {fileDownloader} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 
 @Component({
     selector: 'app-coi-review-comments',

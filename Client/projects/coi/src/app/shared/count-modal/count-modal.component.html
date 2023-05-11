@@ -17,7 +17,8 @@
           <thead class="sticky-top">
             <tr class="header-border">
               <th>Entity Name</th>
-              <th>Relationship With</th>
+              <th>Country</th>
+              <th>Entity Type</th>
               <th>Start Date of Involvement</th>
               <th>End Date of Involvement</th>
               <th>Actions</th>
@@ -26,23 +27,15 @@
           <tbody>
             <tr *ngFor="let item of coiFinancialEntityDetails">
               <td>{{ item?.coiEntity?.entityName }}</td>
-              <td>
-                <span *ngFor="let relationship of item?.coiFinancialEntityDetails; let last = last">
-                  
-                  <ng-container *ngIf="!last">{{relationship?.validPersonEntityRelTypes?.description}},</ng-container>
-                  <ng-container *ngIf="last">{{relationship?.validPersonEntityRelTypes?.description}}</ng-container>
-                </span>
-              </td>
-              
+              <td>{{item?.coiEntity?.country?.countryName}}</td>
+              <td>{{item?.coiEntity?.entityType?.description}}</td>
               <td>{{ item?.involvementStartDate |dateFormatter }}</td>
               <td>{{ item?.involvementEndDate |dateFormatter }}</td>
               <td>
-                <!-- btn btn-outline-primary action-buttons p-2  -->
-                <button class="align-items-center btn btn-outline-primary d-flex fs-14 " aria-label="Edit Organization" data-bs-dismiss="modal"
-                  [routerLink]="['/coi/entity-details']"
-                  [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}"
-                  (click)="closeCountModal()" >
-                  <i class="fa fa-eye" aria-hidden="true"><span class="f-12 mx-2">View</span></i>
+                <button class="align-items-center btn-primary-icon d-flex fs-16 m-0 px-3 py-1" title="action"
+                  aria-label="Edit Organization" data-bs-dismiss="modal" [routerLink]="['/coi/entity-details']"
+                  [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}" (click)="closeCountModal()">
+                  <mat-icon>visibility</mat-icon>
                 </button>
               </td>
             </tr>
@@ -62,12 +55,12 @@
       <div class="modal-body" *ngIf="moduleCode === 3 || moduleCode === 1">
         <ul class="subTabs tool-tab mb-0">
           <li [class.active]="currentModalTab == 'Proposal'" class="w-50">
-            <a class="subTabLink" (click)='currentModalTab = "Proposal"; switchTableData()' tabindex="0">
+            <a class="subTabLink textUnderline" (click)='currentModalTab = "Proposal"; switchTableData()' tabindex="0">
               <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Proposals'}}</span>
             </a>
           </li>
           <li [class.active]="currentModalTab == 'Award'" class="w-50">
-            <a (click)='currentModalTab = "Award"; switchTableData()' class="subTabLink " tabindex="0">
+            <a (click)='currentModalTab = "Award"; switchTableData()' class="subTabLink textUnderline" tabindex="0">
               <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Awards related to this SFI' : 'Awards'}}
               </span>
             </a>
@@ -80,7 +73,8 @@
             <tr class="header-border">
               <th style="width: 10%;">{{currentModalTab == 'Proposal' ? 'Proposal #' : 'Award #'}}</th>
               <th style="width: 20%;">Title</th>
-              <th style="width: 10%;">Principal Investigator</th>
+              <th style="width: 20%;">Principal Investigator</th>
+              <th style="width: 20%;">Lead Unit</th>
               <th style="width: 20%;">Sponsor</th>
               <th style="width: 20%;">Prime Sponsor</th>
               <!-- <th style="width: 10%;" *ngIf="inputType === 'SFI_TAB'">Conflict Status</th> -->
@@ -91,24 +85,23 @@
             <tr *ngFor="let name of tableArray">
               <td style="width: 10%;">{{currentModalTab == 'Proposal' ? name.moduleItemId : name.moduleItemKey}}</td>
               <td style="width: 20%;">{{name.title}}</td>
-              <td style="width: 10%;">{{name.principalInvestigator}}</td>
+              <td style="width: 20%;">{{name?.principalInvestigator}}</td>
+              <td style="width: 20%;">{{name?.unitName}} - {{name?.unitNumber}}</td>
               <td style="width: 20%;">{{name.sponsor}}</td>
-              <td style="width: 20%;">{{name.sponsor}}</td>
+              <td style="width: 20%;">{{name.primeSponsor}}</td>
               <!-- <td style="width: 10%;" *ngIf="inputType === 'SFI_TAB'">No Conflict</td> -->
               <td style="width: 10%;" *ngIf="currentModalTab == 'Proposal'">
-                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"  data-bs-dismiss="modal"
-                  [routerLink]="['/fibi/proposal/overview']" [queryParams]={proposalId:name.moduleItemId}
+                <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"  data-bs-dismiss="modal"
+                  [routerLink]="['/fibi/proposal/overview']" [queryParams]="{proposalId:name.moduleItemId}"
                   data-bs-dismiss="modal">
-                  <i class="fa fa-eye" aria-hidden="true"></i>
-                  <span class="f-12">View</span>
+                  <mat-icon>visibility</mat-icon>
                 </button>
               </td>
               <td style="width: 10%;" *ngIf="currentModalTab == 'Award'">
-                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"  data-bs-dismiss="modal"
-                  [routerLink]="['/fibi/award/overview']" [queryParams]={awardId:name.moduleItemId}
+                <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"  data-bs-dismiss="modal"
+                  [routerLink]="['/fibi/award/overview']" [queryParams]= "{awardId:name.moduleItemId}"
                   data-bs-dismiss="modal">
-                  <i class="fa fa-eye" aria-hidden="true"></i>
-                  <span class="f-12">View</span>
+                  <mat-icon>visibility</mat-icon>
                 </button>
               </td>
             </tr>
@@ -175,8 +168,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary mr-0" id="req-attachment-close-btn"
-          data-bs-dismiss="modal" (click)="closeCountModal()">Close</button>
+        <button type="button" class="btn btn-outline-secondary mx-3" id="req-attachment-close-btn" (click)="closeCountModal()">Close</button>
       </div>
     </div>
   </div>

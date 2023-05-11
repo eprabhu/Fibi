@@ -60,7 +60,7 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
     if (this.coiEntityManageId) {
       this.getEntityDetails();
     }
-    this.countrySearchOptions = getEndPointOptionsForCountry();
+    this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
   }
 
   ngOnDestroy() {
@@ -70,14 +70,17 @@ export class AddNewEntityDetailsComponent implements OnInit, OnDestroy {
 
   createEntity() {
     const isValid = this.entityValidation();
-    if (isValid) {
+    if (!this.isSaving && isValid) {
+      this.isSaving = true
       this.$subscriptions.push(this.entityManagementService.
         saveOrUpdateCOIEntity(this.entityDetails).subscribe((res: EntityDetails) => {
           this.entityDetails = res;
           this.isEditEntity ? this.updatedDataStore.emit(true) : this.updateEntityList.emit(true);
           this.entityManagementService.isShowEntityNavBar = false;
+          this.isSaving =false;
           this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity?'Update ':'Created '}Entity Successfully completed.`);
         }, _err => {
+          this.isSaving =false;
           this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
     }

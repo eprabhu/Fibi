@@ -16,7 +16,7 @@ import { switchMap } from 'rxjs/operators';
   selector: 'app-entity-management',
   templateUrl: './entity-management.component.html',
   styleUrls: ['./entity-management.component.scss'],
-  animations: [slideInOut, slowSlideInOut, fadeDown]
+  animations: [slideInOut]
 })
 export class EntityManagementComponent implements OnInit, OnDestroy {
 
@@ -36,10 +36,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   entityList: any = [];
   $subscriptions: Subscription[] = [];
   resultCount: number = 0;
-  $entityDetailsList = new Subject();
   isSearchData = false;
-
-
 
   constructor(public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService, private _router: Router,
@@ -47,8 +44,8 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.coiElastic = this._elasticConfig.getElasticForCoi();
-    this.EntitySearchOptions = getEndPointOptionsForEntity();
-    this.countrySearchOptions = getEndPointOptionsForCountry();
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+    this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
 
   }
@@ -68,9 +65,15 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.resetAdvanceSearchFields();
     this.activeTabName = tabName;
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
-    this.entityList = [];
-    this.isSearchData = false;
-    // this.$entityDetailsList.next()
+    if(this.activeTabName ==='ALL_ENTITIES'){
+      this.isSearchData = false;
+      this.isViewAdvanceSearch = true;
+
+    } else {
+      this.isSearchData = true;
+      this.viewListOfEntity();
+      this.isViewAdvanceSearch = false;
+    }
   }
 
   redirectToEntity(coi: any) {
@@ -79,10 +82,7 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
 
   viewListOfEntity() {
     this.$subscriptions.push(
-      this.$entityDetailsList.pipe(
-        switchMap(() =>
           this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject)
-        ))
         .subscribe((res: any) => {
           this.entityList = res.coiEntityList || [];
           this.resultCount = res.entityCount;
@@ -122,21 +122,20 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
   clearAdvancedSearch() {
     this.resetAdvanceSearchFields();
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
-    this.$entityDetailsList.next();
+    this.viewListOfEntity();
   }
   navigateNextPage(event) {
-    this.$entityDetailsList.next();
+    this.viewListOfEntity();
   }
 
   advancedSearch(){
     this.viewListOfEntity();
-    this.$entityDetailsList.next();
-    this.isSearchData = true
+    this.isSearchData = true;
   }
 
   updateEntityListDashboard(event){
     if(event) {
-      this.$entityDetailsList.next();
+      this.viewListOfEntity();
     }
   }
 }

@@ -50,12 +50,12 @@ export function getEndPointOptionsForSponsorByType(sponsorName, sponsorTypeCode)
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForLeadUnit(defaultValue = '') {
+export function getEndPointOptionsForLeadUnit(defaultValue = '', baseUrl = '') {
     endPointOptions.contextField = 'unitName';
     endPointOptions.formatString = 'unitName';
     // endPointOptions.contextField = LEAD_UNIT_OUTPUT_FORMAT;
     // endPointOptions.formatString = LEAD_UNIT_OUTPUT_FORMAT;
-    endPointOptions.path = 'findLeadUnits';
+    endPointOptions.path = baseUrl + '/' + 'findLeadUnits';
     endPointOptions.defaultValue = defaultValue;
     endPointOptions.params = null;
     endPointOptions.filterFields = 'unitName, unitNumber';
@@ -90,10 +90,10 @@ export function getEndPointOptionsForOrganization() {
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForCountry() {
+export function getEndPointOptionsForCountry(baseUrl = '') {
     endPointOptions.contextField = 'countryName';
     endPointOptions.formatString = 'countryName';
-    endPointOptions.path = 'findCountry';
+    endPointOptions.path = baseUrl + '/' + 'findCountry';
     endPointOptions.defaultValue = '';
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));
@@ -106,10 +106,10 @@ export function getEndPointOptionsForCongressionalDistrict() {
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));
 }
-export function getEndPointOptionsForEntity() {
+export function getEndPointOptionsForEntity(baseUrl= '') {
     endPointOptions.contextField = 'entityName';
     endPointOptions.formatString = 'entityName';
-    endPointOptions.path = 'searchEntity';
+    endPointOptions.path = baseUrl + '/' + 'searchEntity';
     endPointOptions.defaultValue = '';
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));
@@ -212,11 +212,11 @@ export function getEndPointOptionsForExtReviewerKeyWords() {
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForAwardNumber() {
+export function getEndPointOptionsForAwardNumber(baseUrl = '') {
     endPointOptions.contextField = 'awardNumber';
     endPointOptions.formatString =
     ' awardNumber | accountNumber | title | sponsorName | sponsorAwardNumber | unitName | principalInvestigator ';
-    endPointOptions.path =  'findAward';
+    endPointOptions.path = baseUrl + '/' + 'findAward';
     endPointOptions.defaultValue = '';
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));
@@ -312,10 +312,10 @@ export function getEndPointOptionsForPosititonId() {
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForProposalDisclosure() {
+export function getEndPointOptionsForProposalDisclosure(baseUrl = '') {
     endPointOptions.contextField = 'title';
     endPointOptions.formatString = '#moduleItemId - title';
-    endPointOptions.path = 'loadProposalsForDisclosure';
+    endPointOptions.path = baseUrl + '/' + 'loadProposalsForDisclosure';
     endPointOptions.defaultValue = '';
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));
