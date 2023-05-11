@@ -21,7 +21,7 @@ export class UserDisclosureComponent {
     dashboardRequestObject = {
         advancedSearch: 'L',
         pageNumber: 200,
-        sort: { 'createTimestamp': 'asc' },
+        sort: { },
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         // filterType = 'All', 'FCOI', 'Project', 'OPA';
@@ -51,7 +51,8 @@ export class UserDisclosureComponent {
         this.loadDashboard();
         this.loadDashboardCount();
        
-        
+
+
     }
 
     loadDashboard() {
@@ -157,7 +158,7 @@ export class UserDisclosureComponent {
         } else if (disclosureCategoryType == 3) {
             return 'Proposal';
         }
-        
+
     }
 
     setTab(tabName) {
@@ -171,7 +172,7 @@ export class UserDisclosureComponent {
                 case 'sfi':
                     this.selectedModuleCode = 8;
                     break;
-    
+
                 default:
                     this.selectedModuleCode = 0;
             }

@@ -3,41 +3,41 @@
     <app-slider-close-btn (click)="hideSfiNavBar()"></app-slider-close-btn>
     <div class="relationship-content overflow-visible">
       <div class="col-12 d-flex align-items-center" *ngIf="selectedProject?.moduleCode == 3">
-        <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
+        <span class="active-ribbon shadow-sm align-items-center d-flex ps-2"><span class="px-2">Proposal</span></span>
         <p class="entity-title">
-            <strong class=" fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
+            <span class="fw-600 fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </span>
         </p>
       </div>
       <div class="col-12 d-flex align-items-center" *ngIf="selectedProject?.moduleCode == 1">
         <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
         <p class="entity-title">
-            <strong class="fs-18">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
+            <span class=" fw-600 fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </span>
         </p>
       </div>
-        <div class="card outer-card">
+        <div class="card outer-card scrollable-table">
               <div class="row m-2">
-              <div class="col-6">
+              <div class="col-4">
                 <label class="label-text">Principal Investigator :</label>
                 <span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
               </div>
-              <div class="col-6">
+              <div class="col-8">
                 <label class="label-text">Sponsor :</label>
                 <span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
               </div>
-              <div class="col-6">
+              <div class="col-4">
                 <label class="label-text">Period :</label>
                 <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
               </div>
-              <div class="col-6">
+              <div class="col-8">
                 <label class="label-text">Prime Sponsor :</label>
               <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
-              <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">-- No Data --</span>
+              <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">--No Data--</span>
               </div>
-              <div class="col-6">
+              <div class="col-4">
                 <label class="label-text">Proposal Status : </label>
                 <span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
               </div>
-              <div class="col-6">
+              <div class="col-8">
                 <label class="label-text">Lead Unit :</label>
               <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
               <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
@@ -66,14 +66,15 @@
                     </span>
                   </div>
                   <div class="col">
-                    <label for="coi_description" class="fw-500 fs-14">Define relationship between SFIs and Projects
+                    <label for="coi_description" class="fw-500 fs-14">Define Project - SFI Relation
                       <span class="d-inline-block" data-bs-toggle="tooltip" title="Briefly describe the relationship between the project and SFI." data-bs-placement="top">
                         <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon></span>
                     </label>
                     <!-- [(ngModel)]="coiDescription" -->
+
                     <textarea class="form-control comment-text-box textarea-height" id="coi_description"
-                    [(ngModel)]="coiDescription" appAutoGrow rows="1"
-                    placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
+                    [(ngModel)]="coiDescription" appAutoGrow rows="2"
+                    placeholder="Provide your description here" maxlength="2000" spellcheck="false"></textarea>
                   </div>
                   <div class="col-auto button-align" *ngIf="entityProjectDetails?.length > 0">
                     <!-- data-bs-toggle="modal" data-bs-target="#applyToAllConfirmationModal" -->
@@ -82,15 +83,15 @@
                   </div>
                 </div>
               </div>
-              <div class="fixed-header">
-                <table class="table m-2 fs-14 fw-medium" *ngIf="entityProjectDetails?.length > 0">
+              <div class="fixed-header mb-5">
+                <table class="table tableSkin m-2 fs-14 fw-medium " *ngIf="entityProjectDetails?.length > 0">
                   <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                   <thead class="fixed-th">
                       <tr class="header-border table-secondary">
-                        <th style="width: 25%;">Significant Financial Interest</th>
-                        <th style="width: 20%;"> <span class="mandatory">*</span>COI Status</th>
-                        <th style="width: 35%;">Define relationship between SFIs and Projects</th>
-                        <th *ngIf="isEditMode" class="text-center">Actions</th>
+                        <th class="col-4">Significant Financial Interest</th>
+                        <th class="col-2"> <span class="mandatory">*</span>COI Status</th>
+                        <th class="col-3">Define Project - SFI Relation</th>
+                        <th class="col-3"  *ngIf="isEditMode" class="text-center">Actions</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -118,9 +119,9 @@
                       </td>
                       <td class="border-end">
                         <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt"
-                        appAutoGrow
-                        [disabled]="!isEditMode" rows="1"
-                        placeholder="Write your comment here" maxlength="4000" spellcheck="false"></textarea>
+                        appAutoGrow [(ngModel)]="test.disclComment.comment"
+                        [disabled]="!isEditMode" rows="2"
+                        placeholder="Provide your description here" maxlength="2000" spellcheck="false"></textarea>
                       </td>
                       <td *ngIf="isEditMode">
                         <button type="button" class="btn btn-outline-secondary btn-sm mr-10" id="clear {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="openClearModal(i)"
@@ -145,15 +146,15 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body fs-14">
         <p>Do you want to clear all the data entered?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary fs-14" (click)="clearAll()" data-bs-dismiss="modal">Yes</button>
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary fs-14" (click)="clearAll()" data-bs-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>
@@ -164,15 +165,15 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>Do want to update all your Project - SFI relations?</p>
+        <p class="fs-14">Do want to update all your Project - SFI relations?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary fs-14" (click)="applyToAll()" data-bs-dismiss="modal">Yes</button>
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary fs-14" (click)="applyToAll()" data-bs-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>
@@ -183,15 +184,15 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <p>Do you want to clear the data of <strong> {{entityProjectDetails && entityProjectDetails[clearIndex] && entityProjectDetails[clearIndex]?.personEntity?.coiEntity?.entityName}} </strong> values?</p>
+      <div class="modal-body fs-14">
+        <p>Do you want to clear the data of <span class="fw-600"> {{entityProjectDetails && entityProjectDetails[clearIndex] && entityProjectDetails[clearIndex]?.personEntity?.coiEntity?.entityName}} </span> values?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary fs-14" (click)="clearSingleEntity()" data-bs-dismiss="modal">Yes</button>
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary fs-14" (click)="clearSingleEntity()" data-bs-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>
