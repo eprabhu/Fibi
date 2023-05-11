@@ -1,15 +1,17 @@
 .fixed-tree {
   z-index : 1002;
   position: fixed;
-  right   : 27px;
-  top     : 7px;
+  right   : 8px;
+  top     : 0px;
+  width: 80%;
+  height: 100%;
 }
 
 .relationship-content {
   // height: 90vh;
-  width             : 1200px;
+  // width             : 80%;
   z-index           : 5;
-  position          : relative;
+  // position          : relative;
   background        : #fff;
   padding           : 10px;
   border-radius     : 5px;
@@ -90,7 +92,7 @@
 
 .btn-outline-secondary {
     font-size: 1.4rem;
-    min-width: 5em;
+    min-width: max-content  ;
     padding: .5rem 1rem;
     height: 35px;
 }
@@ -162,13 +164,13 @@
 
 .noDataExists {
   color: #9e9e9e !important;
-  font-size: 13px;
+  font-size: 14px;
   margin-left: 8px;
 }
 
-.table-secondary {
-  color : #242424;
-}
+// .table-secondary {
+//   color : #242424;
+// }
 .table-data {
   color: #6A7980;
 }
@@ -218,4 +220,50 @@ table {
       white-space: nowrap;
     }
   }
+}
+
+
+.scrollable-table {
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: auto;
+  overscroll-behavior: contain;
+}
+
+.scrollable-table thead {
+  position: sticky !important;
+  top: 0;
+  z-index: 1;
+}
+
+::-webkit-scrollbar {
+  width: .4em;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: #eee
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc
+}
+
+.disable-scroll {
+    overflow-y: hidden !important;
+}
+
+.textarea-overflow-table{
+  overflow: auto !important;
+  height: 75px !important;
+  position: relative;
+  top: 20px;
+}
+.textarea-overflow{
+  overflow: auto !important;
+  height: 75px !important;
 }
