@@ -6,10 +6,10 @@
 
 	<groupId>com.polus.fibi</groupId>
 	<artifactId>fibi4</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
 
-	<name>fibi4</name>
+	<name>fcoi</name>
 	<description>Fibi Companion Application</description>
 
 	<parent>
@@ -74,13 +74,7 @@
 			<artifactId>mchange-commons-java</artifactId>
 			<version>0.2.3.4</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<optional>true</optional>
-		</dependency>
-
+		
 		<!-- <dependency> <groupId>com.oracle</groupId> <artifactId>ojdbc14</artifactId> 
 			<version>10.2.0.3.0</version> </dependency> -->
 
@@ -380,7 +374,28 @@
 		    <artifactId>commons-io</artifactId>
 		    <version>2.11.0</version>
 		</dependency>
-     
+		
+ 		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+		</dependency>
+		
+	    <dependency>
+		  <groupId>org.springframework.cloud</groupId>
+		  <artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+				
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>7.2</version>
+		</dependency>
+		    
     <!-- END dependency for Microservice -->   
     </dependencies>
     
@@ -397,11 +412,11 @@
 	</dependencyManagement>	
     
 	<build>
-		<finalName>fibi4</finalName>
+		<finalName>fcoi</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<artifactId>spring-boot-maven-plugin</artifactId>				
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -415,7 +430,7 @@
 						<exclude>**/Abstract*.java</exclude>
 					</excludes>
 				</configuration>
-			</plugin>
+			</plugin>	
 		</plugins>
 		<resources>
 			<resource>

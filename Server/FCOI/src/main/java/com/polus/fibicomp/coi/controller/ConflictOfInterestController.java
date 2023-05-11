@@ -45,6 +45,12 @@ public class ConflictOfInterestController {
 	@Qualifier(value = "conflictOfInterestService")
 	private ConflictOfInterestService conflictOfInterestService;
 
+	
+	@GetMapping("hello")
+	public ResponseEntity<String> hello() {
+		return new ResponseEntity<>("Hello from COI", HttpStatus.OK);
+	} 	
+	
 	@PostMapping("/createDisclosure")
 	public ResponseEntity<Object> createDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for createDisclosure");
