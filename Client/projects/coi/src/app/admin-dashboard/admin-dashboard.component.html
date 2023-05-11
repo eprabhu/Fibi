@@ -358,8 +358,8 @@
             </div>
           </div>
           <div class="d-flex justify-content-end">
-            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-outline-secondary px-4 btn-xs fs-14">Clear</button>
-            <button (click)="performAdvanceSearch()" class="btn btn-primary fs-14 ms-3">Search</button>
+            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs fs-14">Clear</button>
+            <button (click)="performAdvanceSearch()" class="btn btn-primary fs-14 ms-3 primary-button">Search</button>
           </div>
         </ng-container>
       </div>
@@ -367,9 +367,9 @@
 
     <ng-container
       *ngIf="isShowAllProposalList">
-      <ng-container *ngFor="let coi of coiList;">
-        <section class="mt-3 shadow-sm coi-card">
-          <div class="bg-white border f-14 pt-3">
+      <ng-container *ngFor="let coi of coiList;let index=index;">
+        <section class="mt-3 shadow-sm coi-card"(mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
+          <div class="bg-white border f-14 pt-3" >
             <div class="border-bottom">
               <div class="row mb-3 px-3">
                 <div class="col d-flex">
@@ -475,7 +475,7 @@
               <div class="row py-2 m-0 bg-white">
                 <div class="col-3 d-flex align-items-center">
                   <div
-                    (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);"
+                    (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId,coi.noOfSfiInPending);"
                     *ngIf="coi?.disclosureStatusCode == 1" class="bold-blue-number pointer">
                     {{coi?.noOfSfiInPending || 0}}
                   </div>
@@ -484,13 +484,13 @@
                     {{coi?.noOfSfiInActive || 0}}
                   </div>
                   <div class="ml-2 mt-1 pointer"
-                    (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">
-                    <label class="label-text">Significant Financial Interest</label> </div>
+                    (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId,coi.noOfSfiInPending );">
+                    <label  [ngClass]="coi?.noOfSfiInActive > 0 ? 'cursor-pointer' : '' " [class.text-decoration-underline]="ishover[index]&& coi?.noOfSfiInActive > 0" class="label-text">Significant Financial Interest</label> </div>
                 </div>
                 <div class="col-3 d-flex align-items-center">
                   <div class="d-flex align-items-center">
                     <div
-                      (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);"
+                      (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId,coi.numberOfProposals);"
                       *ngIf="coi?.numberOfProposals" class="bold-blue-number pointer">
                       {{coi?.numberOfProposals}}
                     </div>
@@ -498,8 +498,8 @@
                       {{coi?.numberOfProposals}}
                     </div>
                     <div class="ml-2 mt-1 pointer"
-                      (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">
-                      <label class="label-text">Proposals</label></div>
+                      (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId,coi.numberOfProposals);">
+                      <label [ngClass]="coi?.numberOfProposals > 0 ? 'cursor-pointer' : '' " [class.text-decoration-underline]="ishover[index]&& coi?.numberOfProposals > 0"class="label-text">Proposals</label></div>
                   </div>
                   <div class="d-flex align-items-center ml-15 pl-5">
                     <div
@@ -510,9 +510,9 @@
                     <div *ngIf="!coi?.numberOfAwards" class="bold-blue-number">
                       {{coi?.numberOfAwards}}
                     </div>
-                    <div class="ml-2 mt-1 pointer"
-                      (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">
-                      <label class="label-text"> Awards</label></div>
+                    <div class="ml-2 mt-1 pointer"       
+                      (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId, coi.numberOfAwards);">
+                      <label  [ngClass]="coi?.numberOfAwards > 0 ? 'cursor-pointer' : '' " [class.text-decoration-underline]="ishover[index]&& coi?.numberOfAwards > 0" class="label-text">Awards</label></div>
                   </div>
                 </div>
                 <div class="col-4 d-flex align-items-center">
@@ -597,5 +597,4 @@
       </div>
     </div>
   </div>
-
 </div>
