@@ -75,6 +75,7 @@ export class AdminDashboardComponent {
   sortCountObj: SortCountObj;
   sortMap: any = {};
   clearField: String;
+  ishover: [] = [];
 
   constructor(public _coiAdminDashboardService: AdminDashboardService,
     private _router: Router,
@@ -238,29 +239,33 @@ export class AdminDashboardComponent {
   }
 
 
-  setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId) {
-    switch (moduleName) {
-      case 'sfi':
-        this.selectedModuleCode = 8;
-        break;
-      case 'award':
-        this.selectedModuleCode = 1;
-        break;
-      case 'proposal':
-        this.selectedModuleCode = 3;
-        break;
-      default:
-        this.selectedModuleCode = 0;
-    }
-    this.isShowCountModal = true;
-    this.currentDisclosureId = id;
-    this.currentDisclosureNumber = coiNumber;
-    this.disclosureType=moduleName;
-    this.inputType = 'DISCLOSURE_TAB';
-    this.disclosureSequenceStatusCode = disSeqCode;
-    this.personId = personId;
-  }
+    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId, count = null) {
+        if (count > 0) {
+            switch (moduleName) {
+                case 'sfi':
+                    this.selectedModuleCode = 8;
+                    break;
+                case 'award':
 
+                    this.selectedModuleCode = 1;
+
+                    break;
+                case 'proposal':
+                    this.selectedModuleCode = 3;
+                    break;
+                default:
+                    this.selectedModuleCode = 0;
+            }
+
+            this.isShowCountModal = true;
+            this.currentDisclosureId = id;
+            this.currentDisclosureNumber = coiNumber;
+            this.disclosureType = moduleName;
+            this.inputType = 'DISCLOSURE_TAB';
+            this.disclosureSequenceStatusCode = disSeqCode;
+            this.personId = personId;
+        }
+    }
   performAdvanceSearch() {
     this._coiAdminDashboardService.coiRequestObject.advancedSearch = 'A';
     this._coiAdminDashboardService.coiRequestObject.currentPage = 1;
