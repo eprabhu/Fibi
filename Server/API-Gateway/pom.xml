@@ -90,6 +90,13 @@
 	      <artifactId>zipkin-reporter-brave</artifactId>
 	    </dependency>
 		
+		
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>7.2</version>
+		</dependency>
+		
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -115,6 +122,19 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<configuration>
+					<from>
+						<image>openjdk:17</image>
+					</from>
+					<to>
+						<image>registry.hub.docker.com/polusdocker/api-gateway</image>
+						<tags>${project.version}</tags>
+					</to>
 				</configuration>
 			</plugin>
 		</plugins>

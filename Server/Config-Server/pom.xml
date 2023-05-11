@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.polus</groupId>
 	<artifactId>config-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>config-server</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -38,6 +38,13 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>7.2</version>
+		</dependency>
+		
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -57,6 +64,19 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<configuration>
+					<from>
+						<image>openjdk:17</image>
+					</from>
+					<to>
+						<image>registry.hub.docker.com/polusdocker/config-server</image>
+						<tags>${project.version}</tags>
+					</to>
+				</configuration>
+			</plugin>			
 		</plugins>
 	</build>
 	<repositories>
