@@ -136,6 +136,17 @@ public class CoiEntity implements Serializable {
 
 	@Transient
 	private String updatedUserFullName;
+	
+	@Transient
+	private String createUserFullName;
+
+	public String getCreateUserFullName() {
+		return createUserFullName;
+	}
+
+	public void setCreateUserFullName(String createUserFullName) {
+		this.createUserFullName = createUserFullName;
+	}
 
 	public Integer getEntityId() {
 		return entityId;

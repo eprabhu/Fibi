@@ -33,6 +33,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -706,4 +707,9 @@ public interface ConflictOfInterestDao {
 	public Integer fetchMaxPersonEntityId(String personId, Integer entityId);
 	
 	public Integer generateMaxPersonEntityId();
+
+	public void saveOrUpdateDisclComment(DisclComment disclComment);
+
+	public DisclComment getDisclEntProjRelationComment(Integer disclosureDetailsId);
+	
 }
