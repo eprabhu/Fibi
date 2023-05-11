@@ -21,6 +21,18 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.polus.fibicomp.agreements.pojo.AdminGroup;
+import com.polus.fibicomp.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
@@ -49,27 +61,13 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.internal.SessionImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.orm.hibernate5.HibernateTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.polus.fibicomp.agreements.pojo.AdminGroup;
-import com.polus.fibicomp.applicationexception.dto.ApplicationException;
-import com.polus.fibicomp.award.pojo.Award;
-import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
-import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -736,7 +734,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<CoiReview> root = query.from(CoiReview.class);
 		Predicate predicate1 = builder.equal(root.get("disclosureId"), disclosureId);
-		Predicate predicate2 = builder.notEqual(root.get("reviewStatusTypeCode"), "3");
+		Predicate predicate2 = builder.notEqual(root.get("reviewStatusTypeCode"), "4");
 		query.select(root.get("coiReviewId"));
 		query.where(builder.and(predicate1,predicate2));
 		return (session.createQuery(query).getResultList().size());
@@ -748,7 +746,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaUpdate<CoiDisclosure> criteriaUpdate = cb.createCriteriaUpdate(CoiDisclosure.class);
 		Root<CoiDisclosure> root = criteriaUpdate.from(CoiDisclosure.class);
-		criteriaUpdate.set("conflictStatusCode", coiDisclosure.getConflictStatusCode());
 		criteriaUpdate.set("dispositionStatusCode", coiDisclosure.getDispositionStatusCode());
 		criteriaUpdate.set("reviewStatusCode", coiDisclosure.getReviewStatusCode());
 		criteriaUpdate.set("versionStatus", coiDisclosure.getVersionStatus());
@@ -1214,8 +1211,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
 				disclosureView.setLastApprovedVersionDate(resultSet.getTimestamp("LAST_APPROVED_DATE"));
 				disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
-				disclosureView.setNoOfProposalInPending(resultSet.getInt("NO_OF_PENDING_PROPOSALS"));
-				disclosureView.setNoOfAwardInPending(resultSet.getInt("NO_OF_PENDING_AWARDS"));
+//				disclosureView.setNoOfProposalInPending(resultSet.getInt("NO_OF_PENDING_PROPOSALS"));
+//				disclosureView.setNoOfAwardInPending(resultSet.getInt("NO_OF_PENDING_AWARDS"));
 				disclosureView.setNoOfProposalInActive(resultSet.getInt("NO_OF_ACTIVE_PROPOSAL"));
 				disclosureView.setNoOfAwardInActive(resultSet.getInt("NO_OF_ACTIVE_AWARD"));
 				disclosureView.setNoOfSfiInActive(resultSet.getInt("NO_OF_SFI_IN_ACTIVE"));
@@ -2460,4 +2457,26 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
             return 1;
         }
 	}
+	
+	@Override
+	public void saveOrUpdateDisclComment(DisclComment disclComment) {
+		hibernateTemplate.saveOrUpdate(disclComment);
+	}
+
+	@Override
+	public DisclComment getDisclEntProjRelationComment(Integer disclosureDetailsId) {
+		DisclComment disclComment = new DisclComment(); 
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<DisclComment> query = builder.createQuery(DisclComment.class);
+			Root<DisclComment> rootDisclComment = query.from(DisclComment.class);
+			query.where(builder.equal(rootDisclComment.get("componentReferenceId"), disclosureDetailsId));
+			disclComment = session.createQuery(query).getSingleResult();
+			return disclComment;
+		} catch (Exception ex) {
+			return disclComment;
+		}
+	}
+	
 }

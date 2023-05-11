@@ -1,4 +1,4 @@
-package com.polus.entity;;
+package com.polus.entity;
 
 import java.io.Serializable;
 

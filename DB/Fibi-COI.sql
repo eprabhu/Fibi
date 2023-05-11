@@ -454,7 +454,7 @@ CREATE TABLE `discl_valid_compnent_atta_ty` (
 DROP TABLE IF EXISTS `discl_comment_type`;
 CREATE TABLE `discl_comment_type` (
   `COMMENT_TYPE` varchar(3) NOT NULL,
-  `DESCRIPTION` varchar(200) DEFAULT NULL,
+  `DESCRIPTION` varchar(2000) DEFAULT NULL,
   `IS_ACTIVE` varchar(1) DEFAULT NULL,
   `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
   `UPDATE_USER` varchar(60) DEFAULT NULL,
@@ -672,6 +672,9 @@ INSERT INTO `coi_conflict_status_type` (`CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS
 INSERT INTO `coi_conflict_status_type` (`CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('2','Potential Conflict','Y',now(),'quickstart');
 INSERT INTO `coi_conflict_status_type` (`CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('3','Conflict Identified','Y',now(),'quickstart');
 INSERT INTO `coi_conflict_status_type` (`CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('4','Pending','Y',now(),'quickstart');
+
+INSERT INTO `discl_component_type` (`COMPONENT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('1', 'Disclosure detail comment', 'Y', now(),'quickstart');
+INSERT INTO `discl_comment_type` (`COMMENT_TYPE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('1', 'Disclosure detail comment', 'Y', now(),'quickstart');
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;

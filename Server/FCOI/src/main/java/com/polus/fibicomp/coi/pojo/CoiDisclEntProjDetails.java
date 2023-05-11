@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -77,6 +78,9 @@ public class CoiDisclEntProjDetails implements Serializable {
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
+	
+	@Transient
+	private DisclComment disclComment;
 
 	public Integer getDisclosureDetailsId() {
 		return disclosureDetailsId;
@@ -196,6 +200,14 @@ public class CoiDisclEntProjDetails implements Serializable {
 
 	public void setUpdateTimestamp(Timestamp updateTimestamp) {
 		this.updateTimestamp = updateTimestamp;
+	}
+
+	public DisclComment getDisclComment() {
+		return disclComment;
+	}
+
+	public void setDisclComment(DisclComment disclComment) {
+		this.disclComment = disclComment;
 	}
 	
 }
