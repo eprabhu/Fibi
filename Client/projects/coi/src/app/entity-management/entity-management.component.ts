@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { slowSlideInOut, slideHorizontal, fadeDown, slideInOut } from '../../../../fibi/src/app/common/utilities/animations';
-import { EntityDashboardRequest, EntityManagementService } from './entity-management.service';
+import { EntityDashDefaultValues, EntityDashboardRequest, EntityManagementService } from './entity-management.service';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { Router } from '@angular/router';
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
@@ -46,13 +46,21 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
     this.coiElastic = this._elasticConfig.getElasticForCoi();
     this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
     this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
-    this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
+    if (!this.entityManagementService.coiRequestObject.tabName) {
+      this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
+    } else {
+      this.activeTabName = this.entityManagementService.coiRequestObject.tabName;
+      this.isViewAdvanceSearch = true;
+      this.EntitySearchOptions.defaultValue = this.entityManagementService.entityDashDefaultValues.entitySearch;
+      this.countrySearchOptions.defaultValue = this.entityManagementService.entityDashDefaultValues.countrySearch;
+      this.generateLookupArrayForDropdown();
+      this.advancedSearch();
+    }
 
   }
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions)
     this.entityManagementService.isShowEntityNavBar = false;
-
   }
 
   selectedEntity(event) {
@@ -100,10 +108,12 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
 
   selectedEvent(event) {
     this.entityManagementService.coiRequestObject.property1 = event ? event.entityName : '';
+    this.entityManagementService.entityDashDefaultValues.entitySearch = event ? event.entityName : '';
   }
 
   selectEntityCountry(country: any) {
     this.entityManagementService.coiRequestObject.property2 = country ? country.countryCode : '';
+    this.entityManagementService.entityDashDefaultValues.countrySearch = country ? country.countryName : '';
   }
 
   onLookupSelect(data: any, property: string) {
@@ -114,8 +124,9 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
 
   resetAdvanceSearchFields() {
     this.entityManagementService.coiRequestObject = new EntityDashboardRequest();
-    this.advSearchClearField = new String('true');
-    this.clearField = new String('true');
+    this.entityManagementService.entityDashDefaultValues = new EntityDashDefaultValues();
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+    this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.lookupValues = [];
   }
 
@@ -138,4 +149,24 @@ export class EntityManagementComponent implements OnInit, OnDestroy {
       this.viewListOfEntity();
     }
   }
+
+  generateLookupArrayForDropdown() {
+		if (this.entityManagementService.coiRequestObject.property20.length !== 0) {
+			this.generateLookupArray(this.entityManagementService.coiRequestObject.property20, 'property20');
+		}
+		if (this.entityManagementService.coiRequestObject.property21.length !== 0) {
+			this.generateLookupArray(this.entityManagementService.coiRequestObject.property21, 'property21');
+		}
+		if (this.entityManagementService.coiRequestObject.property22.length !== 0) {
+			this.generateLookupArray(this.entityManagementService.coiRequestObject.property22, 'property22');
+		}
+	}
+
+	generateLookupArray(property, propertyNumber) {
+		this.lookupValues[propertyNumber] = [];
+		property.forEach(element => {
+			this.lookupValues[propertyNumber].push({ code: element });
+		});
+	}
+
 }

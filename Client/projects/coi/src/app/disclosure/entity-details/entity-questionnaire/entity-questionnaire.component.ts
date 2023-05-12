@@ -53,7 +53,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit'
     this.getDataFromService();
     this.configuration.enableViewMode = !this.isEditMode;
-
   }
 
   ngOnDestroy() {
@@ -98,6 +97,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
      this.$subscriptions.push(this._entityDetailsServices.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
         this.configuration.moduleItemKey = this._entityDetailsServices.entityDetails.entityId;
         this.definedRelationships = res.personEntityRelationships;
+        this.removeExistingRelation();
         resolve(true);
         // this.coiFinancialEntityDetail.coiFinancialEntityId = res.coiFinancialEntity.coiFinancialEntityId;
       },_error=>{
