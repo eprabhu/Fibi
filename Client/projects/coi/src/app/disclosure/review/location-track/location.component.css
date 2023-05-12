@@ -14,7 +14,7 @@
 }
 
 .button-right {
-    margin-right: 40px;
+    margin-right: -40px;
 }
 
 .location-options {
@@ -100,7 +100,7 @@
 }
 
 .comment-icon {
-    transform: scale(.86);
+    width: 75%;
 }
 
 .ml-0 {
@@ -110,4 +110,26 @@
 .btn-primary-icon a:hover {
     background-color: #E2F1FF;
     color: #007DEC !important;
+}
+
+a {
+    color: inherit;
+}
+
+.icons-fa {
+    padding: 0 0.7rem;
+    font-size: 23px !important;
+}
+
+.actionButtonGroup {
+    columns: 3;
+    column-gap: 0px;
+}
+
+.action-button {
+    padding: 7px 15px !important
+}
+
+.button-right {
+    width: 139px;
 }

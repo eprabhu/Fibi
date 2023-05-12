@@ -1,8 +1,6 @@
 <div class="card" #addCommentOverlay>
   <div @enterAnimation class="row fixed-tree" *ngIf="isOpenSlider">
-    <div class="close shadow-medium" (click)="hideSfiNavBar()">
-      <img src="assets/images/close.svg" alt="close button">
-    </div>
+    <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
     <div class="relationship-content">
       <div class="card-header">
         <h4>Project Conflict (Google)</h4>

@@ -70,7 +70,7 @@ export class CoiService {
     }
 
     getApplicableQuestionnaire(requestObject: any) {
-        return this._http.post(`${this._commonService.baseUrl}/getApplicableQuestionnaire`, requestObject);
+        return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
     }
-    
+
 }

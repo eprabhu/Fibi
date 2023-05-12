@@ -16,6 +16,7 @@ export class CommonService {
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
+    fibiWebUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -99,6 +100,7 @@ export class CommonService {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
+        this.fibiWebUrl = configurationData.fibiWebUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -207,45 +209,45 @@ export class CommonService {
         toast.show();
     }
 
-    getDisclosureConflictBadge(statusCode: string) {
+  getDisclosureConflictBadge(statusCode: string) {
         switch (String(statusCode)) {
             case '1':
-                return 'bg-success text-white';
-            case '2':
-                return 'potential-badge'
+                return 'green-badge';
+          case '2':
+                return 'brown-badge';
             case '3':
-                return 'bg-danger text-white';
+                return 'red-badge';
         }
     }
 
     getReviewStatusBadge(statusCode) {
         switch (statusCode) {
             case '1':
-                return 'bg-warning text-black';
+                return 'yellow-badge';
             case '2':
-                return 'bg-info text-white';
+            return 'blue-badge';
             case '3':
-                return 'bg-success text-white';
+            return 'green-badge';
             case '4':
-                return 'bg-success text-white';
+            return 'green-badge';
             default:
-                return 'bg-danger text-white';
+            return 'red-badge';
         }
     }
 
     getDispositionStatusBadge(statusCode) {
         switch (statusCode) {
             case '1':
-                return 'bg-warning text-black';
+            return 'yellow-badge';
             case '2':
             case '4':
             case '5':
-                return 'bg-info text-white';
+                return 'blue-badge';
             case '3':
             case '6':
-                return 'bg-success text-white';
+            return 'green-badge';
             default:
-                return 'bg-warning text-black';
+            return 'yellow-badge';
         }
     }
 

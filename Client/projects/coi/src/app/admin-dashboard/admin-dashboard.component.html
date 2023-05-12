@@ -66,7 +66,7 @@
         <button role="button" class="btn btn-primary d-flex align-items-center primary-button ms-3 fs-14" id="advanced-search" (click)="toggleADSearch()"
         aria-controls="collapseExample"
         aria-expanded="false"
-        aria-label="Toggle Advanced Search"><mat-icon class="me-3">tune</mat-icon>Advanced Search</button>
+        aria-label="Toggle Advanced Search" title="Click here to filter the search with fields"><mat-icon class="me-3">tune</mat-icon>Advanced Search</button>
       </div>
     </div>
 
@@ -358,8 +358,8 @@
             </div>
           </div>
           <div class="d-flex justify-content-end">
-            <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-secondary btn-xs fs-14">Clear</button>
-            <button (click)="performAdvanceSearch()" class="btn btn-primary fs-14 ms-3 primary-button">Search</button>
+            <button (click)="resetAndPerformAdvanceSearch()" title="Click here to clear all the fields" class="btn btn-outline-secondary px-4 btn-xs fs-14">Clear</button>
+            <button (click)="performAdvanceSearch()" title="Initiate Search with/without fields" class="btn btn-primary fs-14 ms-3">Search</button>
           </div>
         </ng-container>
       </div>
@@ -371,7 +371,7 @@
         <section class="mt-3 shadow-sm coi-card"(mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
           <div class="bg-white border f-14 pt-3" >
             <div class="border-bottom">
-              <div class="row mb-3 px-3">
+              <div class="row mb-3 px-3 d-flex align-items-center">
                 <div class="col d-flex">
                   <label for="id" class="label-text">Disclosure # :</label>
                   <span id="id" class="grey-text">{{coi?.coiDisclosureNumber}}</span>
@@ -386,16 +386,16 @@
                   <span *ngIf="coi?.fcoiType" id="type" class="grey-text">{{coi?.fcoiType}}</span>
                   <span *ngIf="!coi?.fcoiType" class="noDataExists">-- No Data --</span>
                 </div>
-                <div class="col d-flex">
+                <div class="col">
                   <label for="status" class="label-text">Disclosure Status :</label>
-                  <div *ngIf="coi?.conflictStatus" class="badge f-13 rounded-pill {{commonService.getDisclosureConflictBadge(coi?.conflictStatusCode)}}"
+                  <span *ngIf="coi?.conflictStatus" class="ms-3 {{commonService.getDisclosureConflictBadge(coi?.conflictStatusCode)}}"
                        id="status">
                     {{coi?.conflictStatus}}
-                  </div>
+                  </span>
                   <div *ngIf="!coi?.conflictStatus" class="noDataExists">-- No Data --</div>
                 </div>
               </div>
-              <div class="row mb-3 px-3">
+              <div class="row mb-3 px-3 d-flex align-items-center">
                 <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label for="event-type" class="label-text">Disclosure Event Type :</label>
                   <span id="event-type" class="grey-text">{{getEventType(coi?.disclosureSequenceStatusCode,
@@ -412,11 +412,11 @@
                   <span *ngIf="!coi?.expirationDate" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.expirationDate" id="event-type" class="grey-text">{{coi?.expirationDate | dateFormatter}}</span>
                 </div>
-                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
+                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label for="disp-status" class="label-text">Disposition Status :</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.dispositionStatus"
-                    class="badge f-13 rounded-pill bg-{{getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
+                    class="ms-3 {{commonService.getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"  [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
                 <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
@@ -424,15 +424,15 @@
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.lastApprovedVersion" id="last-approved-version" class="grey-text">{{coi?.lastApprovedVersion}}</span>
                 </div>
-                <div class="col d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
+                <div class="col" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName != 'PENDING_DISCLOSURES'">
                   <label for="disp-status" class="label-text">Disposition Status :</label>
                   <span *ngIf="!coi?.dispositionStatus" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.dispositionStatus"
-                    class="badge f-13 rounded-pill {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
+                    class="ms-3 {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
                     id="disp-status">{{coi?.dispositionStatus}}</span>
                 </div>
               </div>
-              <div class="row mb-3 px-3">
+              <div class="row mb-3 px-3 d-flex align-self-center">
                <!-- <div class="col-3 d-flex" *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label for="last-approved-version" class="label-text">Last Approved Version :</label>
                   <span *ngIf="!coi?.lastApprovedVersion" class="noDataExists">-- No Data --</span>
@@ -448,18 +448,18 @@
                   <span *ngIf="!coi?.revisionComment" class="noDataExists">-- No Data --</span>
                   <span *ngIf="coi?.revisionComment" id="revision-reason" class="grey-text">{{coi?.revisionComment}}</span>
                 </div>-->
-                <div class="col-9 d-flex align-self-center"
+                <div class="col-9"
                   *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'PENDING_DISCLOSURES'">
                   <label class="m-0" for="last-updated" class="label-text"> Review Status for </label>
                   <!-- <span *ngIf="!coi?.reviewerFullName" class="noDataExists">No disclosure type exist</span> -->
                   <span *ngIf="coi?.reviewerFullName" id="last-updated" class="grey-text"><i class="bold">{{coi?.reviewerFullName}}</i>
                     : <span
-                      class="badge f-13 rounded-pill {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}">{{coi?.reviewerStatus}}</span></span>
+                      class="ms-3 {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}">{{coi?.reviewerStatus}}</span></span>
                 </div>
-                <div class="col-3 align-items-start d-flex">
+                <div class="col-3">
                   <label for="review-status" class="label-text">Review Status :</label>
                   <span *ngIf="!coi?.reviewStatus" class="noDataExists">-- No Data --</span>
-                  <span *ngIf="coi?.reviewStatus" class="badge f-13 rounded-pill {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
+                  <span *ngIf="coi?.reviewStatus" class="ms-3 {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
                     id="review-status">{{coi?.reviewStatus}}</span>
                 </div>
               </div>
@@ -510,7 +510,7 @@
                     <div *ngIf="!coi?.numberOfAwards" class="bold-blue-number">
                       {{coi?.numberOfAwards}}
                     </div>
-                    <div class="ml-2 mt-1 pointer"       
+                    <div class="ml-2 mt-1 pointer"
                       (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId, coi.numberOfAwards);">
                       <label  [ngClass]="coi?.numberOfAwards > 0 ? 'cursor-pointer' : '' " [class.text-decoration-underline]="ishover[index]&& coi?.numberOfAwards > 0" class="label-text">Awards</label></div>
                   </div>
@@ -551,7 +551,6 @@
         </nav>
       </div>
       <div *ngIf="coiList == null || coiList?.length == 0">
-        <app-no-information></app-no-information>
         <!-- <span class="no-data-icon-outer">
           <div class="no-data-icon">
             <i aria-hidden="true" class="fa fa-file-o"></i>

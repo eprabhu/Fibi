@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {CountModalService} from "./count-modal.service";	
+import {CountModalService} from "./count-modal.service";
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { CommonService } from '../../common/services/common.service';
 
 declare var $: any;
 
@@ -26,8 +27,8 @@ export class CountModalComponent implements OnInit {
 	currentModalTab = 'Award';
 	projectDatas: any;
 	coiFinancialEntityDetails: any[] = [];
-    
-	constructor(private _countModalService: CountModalService) { }
+
+	constructor(private _countModalService: CountModalService, private _commonService: CommonService) { }
 
 	ngOnInit() {
 		if (this.moduleCode === 8) {
@@ -85,15 +86,26 @@ export class CountModalComponent implements OnInit {
 		} else if (this.moduleCode === 3 || this.moduleCode === 1) {
 			return `Proposals, Awards and Protocols related to: #${this.disclosureNumber} - ${this.disclosureType}`;
 		}
-		
+
 	}
 
 	closeCountModal() {
-		hideModal('coiCountsViewModal');  
+		hideModal('coiCountsViewModal');
 		this.closeModal.emit(false);
 	}
 	switchTableData() {
 		this.tableArray = this.currentModalTab === 'Proposal' ? this.projectDatas.proposals : this.projectDatas.awards;
-	}
+  }
+
+
+  openProjectMoreDetails(currentModalTab, moduleId) {
+    if (currentModalTab == "Proposal") {
+      let test = this._commonService.fibiWebUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
+      window.open(test, '_blank')
+    } else {
+      let test2 = this._commonService.fibiWebUrl + '#/fibi/award/overview?awardId=' + moduleId;
+      window.open(test2, '_blank')
+    }
+  }
 
 }

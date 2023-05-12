@@ -6,6 +6,7 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
 import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { NavigationService } from '../../common/services/navigation.service';
 
 @Component({
   selector: 'app-view-entity-details',
@@ -18,12 +19,14 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   entityDetails: any = {};
   entityManageId: any;
   $subscriptions: Subscription[] = [];
+  previousURL= '';
 
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
-    private _commonServices: CommonService) {
+    private _commonServices: CommonService,private _navigationService:NavigationService) {
   }
 
   ngOnInit() {
+    this.previousURL = this._navigationService.previousURL;
     this.entityManageId = this._route.snapshot.queryParamMap.get('entityManageId');
     this.getEntityDetails(this.entityManageId);
   }
@@ -35,7 +38,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
   backToList() {
     // this.hideEntityDetails.emit(false);
-    this._router.navigate(['/coi/entity-management']);
+    this._router.navigateByUrl(this.previousURL)
   }
 
   modifyEntity() {
