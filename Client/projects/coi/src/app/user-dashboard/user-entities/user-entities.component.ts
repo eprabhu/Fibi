@@ -79,10 +79,12 @@ removeEntityId() {
 
 
   getRelationshipTypes(relationshipTypes) {
-    return relationshipTypes.split(',').map((type: any) => {
-      const lowercase = type.toLowerCase();
-      return ' ' + lowercase.charAt(0).toUpperCase() + lowercase.slice(1);
-    }).join(',');
+    if(relationshipTypes) {
+      return relationshipTypes.split(',').map((type: any) => {
+        const lowercase = type.toLowerCase();
+        return ' ' + lowercase.charAt(0).toUpperCase() + lowercase.slice(1);
+      }).join(',');
+    }
   }
 
 }

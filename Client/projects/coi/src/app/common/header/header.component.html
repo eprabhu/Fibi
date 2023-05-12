@@ -5,19 +5,19 @@
         </a>
         <ul class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
             <li [routerLink]="['/coi/user-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto home page">Home
+                routerLinkActive="active" title="Goto home page" aria-describedby="Goto home page">Home
                 <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/admin-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto admin dashboard page">Admin Dashboard
+                routerLinkActive="active" title="Goto admin dashboard page" aria-describedby="Goto admin dashboard page">Admin Dashboard
                 <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
-              routerLinkActive="active" title="Goto reviewer dashboard page">Reviewer Dashboard
+              routerLinkActive="active" title="Goto reviewer dashboard page" aria-describedby="Goto reviewer dashboard page">Reviewer Dashboard
               <span *ngIf="_router.url.includes('/coi/reviewer-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/entity-management']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto entity management page">Entity Management
+                routerLinkActive="active" title="Goto entity management page" aria-describedby="Goto entity management page">Entity Management
                 <span *ngIf="_router.url.includes('/coi/entity-management')" class="active-color"></span>
             </li>
         </ul>
@@ -25,17 +25,19 @@
     <div>
         <div class="d-flex align-items-center">
             <div class="align-items-center d-flex mx-4">
-                <mat-icon [attr.title]="'Help'" [routerLink]="['/coi/user/faq']"
+                <mat-icon [attr.title]="'Click to view all the faq'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view all the faq'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     help
                 </mat-icon>
-                <mat-icon [attr.title]="'Notifications'"
+                <mat-icon [attr.title]="'Click to view all the notifications'"
                           [routerLink]="['/coi/expanded-widgets']"
+                          [attr.aria-labelledby]="'Click to view all the notifications'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     notifications
                 </mat-icon>
                 <mat-icon [attr.title]="'Sign out'"
                           [routerLink]="['/login']"
+                          [attr.aria-labelledby]="'Sign out'"
                           class="halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     power_settings_new
                 </mat-icon>
