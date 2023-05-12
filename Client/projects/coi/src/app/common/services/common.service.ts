@@ -55,6 +55,7 @@ export class CommonService {
     toastClass = 'success';
     dashboardModules: any = {};
     previousURL = null;
+    fibiApplicationUrl = '';
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
@@ -108,6 +109,7 @@ export class CommonService {
         this.elasticPassword = configurationData.elasticPassword;
         this.elasticAuthScheme = configurationData.elasticAuthScheme;
         this.elasticConfigService.url = configurationData.elasticIndexUrl;
+        this.fibiApplicationUrl = configurationData.fibiApplicationUrl;
     }
 
     pageScroll(elementId) {

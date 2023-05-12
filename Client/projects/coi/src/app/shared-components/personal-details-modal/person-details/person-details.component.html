@@ -1,0 +1,122 @@
+<div class="row mx-0 mt-3">
+    <div class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle">First Name</label>
+        <span [ngClass]="personValues?.person?.firstName  ? 'dataExists' : 'noDataExists'">
+            {{personValues?.person?.firstName ? personValues?.person?.firstName : 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle   ">Middle Name </label>
+        <span [ngClass]="personValues?.person?.firstName  ? 'dataExists' : 'noDataExists'">
+            {{personValues?.person?.middleName ? personValues?.person?.middleName : 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle  ">Last Name</label>
+        <span [ngClass]="personValues?.person?.firstName  ? 'dataExists' : 'noDataExists'">
+            {{personValues?.person?.lastName ? personValues?.person?.lastName : 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle  ">Full Name</label>
+        <span [ngClass]="personValues?.person?.firstName  ? 'dataExists' : 'noDataExists'">
+            {{personValues?.person?.fullName ? personValues?.person?.fullName : 'No Data'}}</span>
+    </div>
+    <div *ngIf="personValues?.person?.rolodexId" class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle  ">Organization</label>
+        <span *ngIf="personValues?.person?.organizationName !== null"
+            [ngClass]="personValues?.person?.organizationName !== null ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.organizationName !== null ?
+            personValues?.person?.organizationName : 'No Data'}}
+        </span>
+        <span *ngIf="personValues?.person?.organizationName == null"
+            [ngClass]="personValues?.person?.organizationName !== null ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.organizationName !== null ?
+            personValues?.person?.organizationName : 'No Data'}}
+        </span>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle  ">Designation</label>
+        <span *ngIf="personValues?.person?.personId"
+            [ngClass]="personValues?.person?.primaryTitle !== null ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.primaryTitle !== null ? personValues?.person?.primaryTitle : 'No Data'}}
+        </span>
+        <span *ngIf="personValues?.person?.rolodexId"
+            [ngClass]="personValues?.person?.designation !== null ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.designation !== null ? personValues?.person?.designation : 'No Data'}}
+        </span>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle  ">Address Line 1</label>
+        <span [ngClass]="personValues?.person?.addressLine1 ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.addressLine1 ? personValues?.person?.addressLine1 : 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle   ">Address Line 2</label>
+        <span [ngClass]="personValues?.person?.addressLine2 ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.addressLine2 ? personValues?.person?.addressLine2 : 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle  ">Address Line 3</label>
+        <span [ngClass]="personValues?.person?.addressLine3 ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.addressLine3 ? personValues?.person?.addressLine3 : 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle  ">City</label>
+        <span [ngClass]="personValues?.person?.city ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.city ? personValues?.person?.city: 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle ">PostalCode</label>
+        <span [ngClass]="personValues?.person?.postalCode ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.postalCode ? personValues?.person?.postalCode : 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle ">State</label>
+        <span [ngClass]="personValues?.person?.state ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.state ? personValues?.person?.state : 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle ">Country</label>
+        <span *ngIf="personValues?.person?.personId"
+            [ngClass]="personValues?.person?.countryDetails ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.countryDetails ? personValues?.person?.countryDetails?.countryCode + '-' +
+            selectedPersonDetails?.countryDetails.countryName : 'No Data'}}</span>
+        <span *ngIf="personValues?.person?.rolodexId"
+            [ngClass]="selectedPersonDetails.country ?  'dataExists' : 'noDataExists'">
+            {{selectedPersonDetails.country ? selectedPersonDetails?.country?.countryName : 'No Data'}}</span>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle ">Email Address</label>
+        <span [ngClass]="personValues?.person?.emailAddress !== null ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.emailAddress !== null ? personValues?.person?.emailAddress : 'No Data'}}
+        </span>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle ">Phone Number</label>
+        <span *ngIf="personValues?.person?.rolodexId == null"
+            [ngClass]="personValues?.person?.mobileNumber !== null ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.mobileNumber !== null ? personValues?.person?.mobileNumber : 'No Data'}}
+        </span>
+        <span *ngIf="personValues?.person?.rolodexId != null"
+            [ngClass]="personValues?.person?.phoneNumber !== null ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.phoneNumber !== null ? personValues?.person?.phoneNumber : 'No Data'}}
+        </span>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle ">Fax</label>
+        <span [ngClass]="personValues?.person?.faxNumber ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.faxNumber ? personValues?.person?.faxNumber : 'No Data'}}</span>
+    </div>
+    <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle ">Home Unit</label>
+        <span [ngClass]="personValues?.person?.unit?.unitName !== null ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.unit?.unitName !== null ? personValues?.person?.unit?.unitName :
+            'No Data'}}
+        </span>
+    </div>
+    <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-3">
+        <label class="d-block labelStyle ">Directory Title</label>
+        <span [ngClass]="personValues?.person?.directoryTitle !== null ?  'dataExists' : 'noDataExists'">
+            {{personValues?.person?.directoryTitle !== null ? personValues?.person?.directoryTitle :
+            'No Data'}}
+        </span>
+    </div>
+</div>
