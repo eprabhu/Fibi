@@ -37,8 +37,9 @@
             </div>
             <div class="col-8">
               <label class="label-text">Prime Sponsor :</label>
-            <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
-            <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">-- No Data --</span>
+                <app-no-data-label [valueToShow]="selectedProject?.primeSponsor">
+                    <span class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
+                </app-no-data-label>
             </div>
             <div class="col-4">
               <label class="label-text">Proposal Status : </label>
@@ -46,8 +47,9 @@
             </div>
             <div class="col-8">
               <label class="label-text">Lead Unit :</label>
-            <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
-            <span *ngIf="!selectedProject?.unitName" class="noDataExists">-- No Data --</span>
+                <app-no-data-label [valueToShow]="selectedProject?.unitName">
+                    <span class="ml-2 grey-text">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+                </app-no-data-label>
             </div>
             </div>
             <table class="table fs-14 fw-medium" *ngIf="projectRelations.length > 0">

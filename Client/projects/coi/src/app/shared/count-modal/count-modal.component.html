@@ -27,10 +27,21 @@
           <tbody>
             <tr *ngFor="let item of coiFinancialEntityDetails">
               <td>{{ item?.coiEntity?.entityName }}</td>
-              <td>{{item?.coiEntity?.country?.countryName}}</td>
-              <td>{{item?.coiEntity?.entityType?.description}}</td>
-              <td>{{ item?.involvementStartDate |dateFormatter }}</td>
-              <td>{{ item?.involvementEndDate |dateFormatter }}</td>
+              <td>
+                <app-no-data-label [valueToShow]="item?.coiEntity?.country?.countryName"></app-no-data-label>
+              </td>
+              <td>
+                <app-no-data-label [valueToShow]="item?.coiEntity?.entityType?.description"></app-no-data-label>
+              </td>
+              <td>
+                <app-no-data-label [valueToShow]="item?.involvementStartDate">
+                  <span>{{ item?.involvementStartDate |dateFormatter }}</span>
+                </app-no-data-label>
+                </td>
+              <td>
+                <app-no-data-label [valueToShow]="item?.involvementEndDate">
+                  <span>{{ item?.involvementEndDate |dateFormatter }}</span>
+                </app-no-data-label>
               <td>
                 <button class="align-items-center btn-primary-icon d-flex fs-16 m-0 px-3 py-1" title="action"
                   aria-label="Edit Organization" data-bs-dismiss="modal" [routerLink]="['/coi/entity-details']"

@@ -1,6 +1,5 @@
-<div class="card" [class.overlay]="userDashboardService?.isShowTravelDisclosure">
-    <div @enterAnimation *ngIf="userDashboardService?.isShowTravelDisclosure"
-        class="task-right-div card-border d-flex align-items-center">
+<div [class.overlay]="userDashboardService?.isShowTravelDisclosure">
+    <div @enterAnimation *ngIf="userDashboardService?.isShowTravelDisclosure" class="task-right-div card-border d-flex align-items-center">
         <div tabindex="-1" class="close shadow-medium" (click)="clearDisclosureModal()" title='Close'>
             <img src="{{deployMap}}assets/images/close.svg" alt="close button">
         </div>

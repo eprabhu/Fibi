@@ -62,10 +62,10 @@
                                 <tr>
                                     <td>Disclosure :</td>
                                     <td class="ps-4">
-                                        <span *ngIf="coiData?.coiDisclosure?.coiConflictStatusType?.description"
-                                            class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
-                                        <span *ngIf="!coiData?.coiDisclosure?.coiConflictStatusType?.description"
-                                            class="noDataExists fw-normal">-- No Data --</span>
+                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
+                                             <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}">
+                                                 {{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                        </app-no-data-label>
                                     </td>
                                 </tr>
                             </table>
@@ -80,31 +80,26 @@
                                 <tr>
                                     <td>Create :</td>
                                     <td class="ps-4" style="padding-right: 86px;">
-                                        {{coiData?.coiDisclosure?.createTimestamp ?
-                                        (coiData?.coiDisclosure?.createTimestamp |
-                                        dateFormatterWithTimeZone) : ''}}</td>
+                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.createTimestamp">
+                                            <span>{{coiData?.coiDisclosure?.createTimestamp |
+                                                dateFormatterWithTimeZone}}</span>
+                                        </app-no-data-label>
                                 </tr>
                                 <tr>
                                     <td>Certification :</td>
                                     <td class="ps-4" style="padding-right: 86px;">
-                                        {{coiData?.coiDisclosure?.certifiedAt?(coiData?.coiDisclosure?.certifiedAt |
-                                        dateFormatter) : ''}}</td>
+                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
+                                            <span>{{coiData?.coiDisclosure?.certifiedAt |
+                                                dateFormatter}}</span>
+                                        </app-no-data-label>
                                 </tr>
                                 <tr>
                                     <td>Expiration :</td>
-
-                                    <!-- <td>
-                                        <ng-container *ngIf="coiData?.coiDisclosure?.expirationDate">
-                                            {{coiData?.coiDisclosure?.expirationDate ? (coiData?.coiDisclosure?.expirationDate |
-                                            dateFormatter) : ''}}
-                                        </ng-container>
-                                        <span *ngIf="!coiData?.coiDisclosure?.expirationDate" class="noDataExists fw-normal">-- No Data --</span></td> -->
-
                                     <td class="ps-4" style="padding-right: 86px;">
-                                        {{coiData?.coiDisclosure?.expirationDate ?
-                                        (coiData?.coiDisclosure?.expirationDate |
-                                        dateFormatter) : ''}}</td>
-
+                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
+                                            <span>{{coiData?.coiDisclosure?.expirationDate |
+                                                dateFormatter}}</span>
+                                        </app-no-data-label>
                                 </tr>
                             </table>
                         </div>
@@ -189,11 +184,13 @@
                 <div class="navigation-tabs d-flex align-items-center">
                     <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge'
                         role="button">
-                        <div class="navigation-box-content" routerLinkActive="active">Disclosure</div>
+                        <div class="navigation-box-content" routerLinkActive="active"
+                            title="Click to view the disclosure screening form" area-describedby="Click to view the disclosure screening form">Disclosure</div>
                     </div>
                     <div [routerLink]="['relationship']" class="navigation-box border-end" queryParamsHandling='merge'
                         role="button">
-                        <div class="navigation-box-content" routerLinkActive="active">Relationships</div>
+                        <div class="navigation-box-content" routerLinkActive="active"
+                        title="Click to view the relationships" area-describedby="Click to view the relationships">Relationships</div>
                     </div>
                     <!-- <div [routerLink]="['conflict-management']" class="navigation-box border-end"
                         queryParamsHandling='merge' role="button">
@@ -201,7 +198,8 @@
                     </div> -->
                     <div [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                         role="button">
-                        <div class="navigation-box-content" routerLinkActive="active">Reviews</div>
+                        <div class="navigation-box-content" routerLinkActive="active"
+                        title="Click to view the reviews" area-describedby="Click to view the reviews">Reviews</div>
                     </div>
                     <!-- <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active">History</div>
@@ -263,20 +261,20 @@
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill side-height border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
-                    <span [routerLink]="['/coi/user-dashboard']"
+                    <span [routerLink]="['/coi/user-dashboard']" title="Goto home page"
                         class="btn btn-outline-secondary pb-0 fs-14 {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
                         <mat-icon>home</mat-icon>
                     </span>
                     <span *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
                         class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
-                        <mat-icon class="me-2">undo</mat-icon>
+                        <mat-icon class="me-2" title="Goto previous page">undo</mat-icon>
                         Previous
                     </span>
                     <span data-bs-target="#coi-activity-modal" data-bs-toggle="modal"
                         title="Click here to add new review comment"
                         *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
-                        class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center me-2">
+                        class="fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">rate_review</mat-icon>
                         Comments
                     </span>
@@ -305,7 +303,7 @@
                 </div>
                 <div class="position-static d-flex justify-content-around px-3" title="Click here to complete the review process">
                     <span *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
-                        class="me-2 fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+                        class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
                         data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
                         Complete Review
@@ -326,9 +324,10 @@
                         </li>
                     </ul>
                 </div>
-                <div class="px-3 my-3 fs-14 ash-text"><span class="fw-medium me-1">Last Updated By :</span>
-                    {{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp |
-                    dateFormatterWithTimeZone:'long'}}
+                <div class="px-3 my-3 fs-14 ash-text wrapping-text">
+                    <div><span class="fw-medium me-3">Last Updated By :</span></div>
+                    <div>{{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp |
+                        dateFormatterWithTimeZone:'long'}}</div>
                 </div>
             </div>
             <ng-container *ngIf="router.url.includes('/coi/disclosure/summary')">

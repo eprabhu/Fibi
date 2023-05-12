@@ -11,7 +11,7 @@
                         <div [queryParams]={disclosureId:disclosure.disclosureId}
                             [routerLink]="['/coi/disclosure/summary']"
                             class="align-items-center d-flex fs-14 text-secondary" role="button">
-                            <span class="fw-medium">VIEW</span>
+                            <span class="fw-medium" title="Click to view the details" aria-describedby="Click to view the details">VIEW</span>
                             <mat-icon>chevron_right</mat-icon>
                         </div>
                     </div>
@@ -99,19 +99,23 @@
 </div>
 
 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
-    <div (click)="setTab('IN_PROGRESS_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button">
+    <div (click)="setTab('IN_PROGRESS_DISCLOSURES')" class="border-end navigation-icons px-3 py-1"
+        role="button" title="Click to see all the in progress disclosures" aria-describedby="Click to see all the in progress disclosures">
         <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="pb-3 active">
             In Progress Disclosures({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
-    <div (click)="setTab('APPROVED_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button">
+    <div (click)="setTab('APPROVED_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
+        title="Click to see all the approved disclosures" aria-describedby="Click to see all the approved disclosures">
         <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'" class="pb-3">Approved
             Disclosures({{dashboardCount?.approvedDisclosureCount || 0}})</span>
     </div>
-    <div (click)="setTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button">
+    <div (click)="setTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
+        title="Click to see all the travel disclosures" aria-describedby="Click to see all the travel disclosures">
         <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="pb-3">Travel
             Disclosures({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
-    <div (click)="setTab('DISCLOSURE_HISTORY')" class="navigation-icons px-3 py-1" role="button">
+    <div (click)="setTab('DISCLOSURE_HISTORY')" class="navigation-icons px-3 py-1" role="button"
+        title="Click to see all the disclosure history" aria-describedby="Click to see all the disclosure history">
         <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3">Disclosure History
             ({{dashboardCount?.disclosureHistoryCount || 0}})</span>
     </div>
@@ -121,13 +125,16 @@
     <div class="border-end fs-14 p-3">
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Type :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
+            title="Click to filter by all type" area-describedby="Click to filter by all type"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active" role="button">All</span>
         <span (click)="setFilter('FCOI')" [class.filter-active]="currentSelected.filter=='FCOI'"
+            title="Click to filter by FCOI type" area-describedby="Click to filter by FCOI type"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">FCOI</span>
         <span (click)="setFilter('PROJECT')" [class.filter-active]="currentSelected.filter=='PROJECT'"
+            title="Click to filter by project type" area-describedby="Click to filter by project type"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Project</span>
-        <span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>
+        <!--<span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>-->
     </div>
     <div class="d-flex flex-fill">
         <input class="advance-search-input border-0 px-4" id="searchText" type="text" [(ngModel)]="searchText">
@@ -161,9 +168,9 @@
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disclosure Status :</span>
-                    <span *ngIf="disclosure?.conflictStatus"
-                        class="{{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.conflictStatus}}</span>
-                    <span *ngIf="!disclosure?.conflictStatus" class="noDataExists">-- No Data --</span>
+                    <app-no-data-label [valueToShow]="disclosure?.conflictStatus">
+                        <span class="{{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.conflictStatus}}</span>
+                    </app-no-data-label>
                 </div>
             </div>
             <div class="d-flex">
@@ -176,13 +183,15 @@
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Certification Date :</span>
-                    <span *ngIf="disclosure.certifiedAt">{{disclosure?.certifiedAt |dateFormatter}}</span>
-                    <span *ngIf="!disclosure?.certifiedAt" class="noDataExists">-- No Data --</span>
+                    <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
+                        <span>{{disclosure?.certifiedAt |dateFormatter}}</span>
+                    </app-no-data-label>
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Expiration Date :</span>
-                    <span *ngIf="disclosure?.expirationDate">{{disclosure?.expirationDate | dateFormatter}}</span>
-                    <span *ngIf="!disclosure?.expirationDate" class="noDataExists">-- No Data --</span>
+                    <app-no-data-label [valueToShow]="disclosure?.expirationDate">
+                        <span>{{disclosure?.expirationDate | dateFormatter}}</span>
+                    </app-no-data-label>
                 </div>
             </div>
         </div>
@@ -240,7 +249,8 @@
                 </button>
                 <button [queryParams]={disclosureId:disclosure.coiDisclosureId}
                     [routerLink]="['/coi/disclosure/summary']"
-                    class="align-items-center btn btn-outline-primary d-flex fs-14">
+                    class="align-items-center btn btn-outline-primary d-flex fs-14"
+                    title="Click to view details" area-describedby="Click to view details">
                     <mat-icon class="me-1">visibility</mat-icon>
                     View
                 </button>

@@ -1,4 +1,4 @@
-<div class="card" #sfiNavOverlay [class.overlay]="sfiService?.isShowSfiNavBar">
+<div #sfiNavOverlay [class.overlay]="sfiService?.isShowSfiNavBar">
   <div @enterAnimation *ngIf="sfiService?.isShowSfiNavBar"
     class="task-right-div card-height d-flex align-items-center">
     <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
