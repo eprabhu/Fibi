@@ -11,6 +11,8 @@ import { deepCloneObject } from "../../../../fibi/src/app/common/utilities/custo
 import { ElasticConfigService } from "../../../../fibi/src/app/common/services/elastic-config.service";
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from "../../../../fibi/src/app/app-constants";
 import { CommonService } from "../common/services/common.service";
+import { NO_DATA_FOUND_MESSAGE } from '../app-constants';
+import { NavigationService } from '../common/services/navigation.service';
 
 @Component({
     selector: 'app-disclosure',
@@ -30,6 +32,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     tempStepNumber: any;
     clickedOption: any;
     disclosureDetailsForSFI = {disclosureId: null, disclosureNumber: null};
+    NO_DATA_FOUND_MESSAGE = NO_DATA_FOUND_MESSAGE;
 
     assignReviewerActionDetails: any = {};
     assignReviewerActionValidation = new Map();
@@ -46,6 +49,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     currentDisclosureNumber: any;
     disclosureType: any
     coiList = [];
+    prevURL = '';
 
 
     constructor(public router: Router,
@@ -55,7 +59,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         public sfiService: SfiService,
         public coiService: CoiService,
         public location: Location,
-        public dataStore: DataStoreService) {
+        public dataStore: DataStoreService,public navigationService:NavigationService) {
         this.isCreateMode = this.router.url.includes('create-disclosure');
         this.setStepFirstTime(this.router.url);
         this.$subscriptions.push(this.router.events.subscribe(event => {
@@ -70,6 +74,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.routeToAppropriateMode();
         this.listenDataChangeFromStore();
+        this.prevURL =this.navigationService.previousURL;
     }
 
     ngOnDestroy(): void {
@@ -274,7 +279,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.coiService
             .completeDisclosureReview(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureNumber)
             .subscribe((res: any) => {
-                this.updateDisclosureReviewStatus(res);
+                this.updateDisclosureReviewStatus(res.body.coiDisclosure);
             }, _err => {
                 if (_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
                     document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();

@@ -12,7 +12,7 @@
     "secure": false
   },
   "/getCOIDashboard": {
-    "target": "http://192.168.1.189:9090/coi/",
+    "target": "http://192.168.1.189:8083/coi/",
     "secure": false
   },
   "/loadDisclosure": {
@@ -44,15 +44,15 @@
     "secure": false
   },
   "/createDisclosure": {
-    "target": "http://192.168.1.80:9090/coi/",
+    "target": "http://192.168.1.189:8083/coi/",
     "secure": false
   },
   "/getSFIDashboard": {
-    "target": "http://192.168.1.189:9090/coi/",
+    "target": "http://192.168.1.189:8083/coi/",
     "secure": false
   },
   "/getDisclosureRelations": {
-    "target": "http://192.168.1.80:9090/coi/",
+    "target": "http://192.168.1.189:8083/coi/",
     "secure": false
   },
   "/getTabCount": {
@@ -92,7 +92,7 @@
     "secure": false
   },
   "/completeDisclosureReview": {
-    "target": "http://192.168.1.80:9090/coi/",
+    "target": "http://192.168.1.189:8083/coi/",
     "secure": false
   },
   "/evaluateDisclosureQuestionnaire": {
@@ -108,7 +108,7 @@
     "secure": false
   },
   "/certifyDisclosure": {
-    "target": "http://192.168.1.80:9090/coi/",
+    "target": "http://192.168.1.189:8083/coi/",
     "secure": false
   },
   "/getActiveDisclosure": {
@@ -257,15 +257,15 @@
     "secure": false
   },
   "/createCoiTravelDisclosure": {
-    "target": "http://192.168.1.189:9090/coi/",
+    "target": "http://192.168.1.189:8083/coi/",
     "secure": false
   },
   "/loadTravellerTypesLookup": {
-    "target": "http://192.168.1.189:9090/coi/",
+    "target": "http://192.168.1.189:8083/coi/",
     "secure": false
   },
   "/loadTravelStatusTypesLookup": {
-    "target": "http://192.168.1.189:9090/coi/",
+    "target": "http://192.168.1.189:8083/coi/",
     "secure": false
   }
 }

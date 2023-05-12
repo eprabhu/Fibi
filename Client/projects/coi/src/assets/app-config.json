@@ -2,6 +2,7 @@
   "baseUrl": "",
   "fibiUrl": "",
   "authUrl": "/auth",
+  "fibiWebUrl": "http://192.168.1.47:8080/fibi/",
   "enableSSO": false,
   "isElasticAuthentiaction" : false,
   "elasticUserName": "elastic",

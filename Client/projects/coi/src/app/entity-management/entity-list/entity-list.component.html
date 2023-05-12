@@ -11,7 +11,7 @@
         <th class="col-1">Actions</th>
       </tr>
     </thead>
-    <tbody class="bg-white fs-13">
+    <tbody class="tb-bg-color fs-13">
       <tr class="border" *ngFor="let entityListData of entityList;let i=index">
         <td><span *ngIf="entityListData?.statusDescription === 'Unverified'"
             class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2">
@@ -30,11 +30,11 @@
         </td>
         <td>
           <div>
-            <button (click)="isViewEntityDetails = !isViewEntityDetails;viewDetails(entityListData)"
-              class="align-items-center btn btn-outline-primary d-flex fs-14">
+            <span (click)="isViewEntityDetails = !isViewEntityDetails;viewDetails(entityListData)"
+              class="align-items-center btn btn-outline-secondary d-flex fs-14 w-max">
               <mat-icon class="me-1">visibility</mat-icon>
               View
-            </button>
+            </span>
           </div>
           <!-- <button class="btn btn-outline-secondary fs-13 m-1" (click)="modifyEntityDetails(entityListData)"><span><i
                 class="fa fa-pencil" aria-hidden="true"></i></span> Modify</button> -->

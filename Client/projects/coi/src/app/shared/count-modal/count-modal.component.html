@@ -34,7 +34,7 @@
               <td>
                 <button class="align-items-center btn-primary-icon d-flex fs-16 m-0 px-3 py-1" title="action"
                   aria-label="Edit Organization" data-bs-dismiss="modal" [routerLink]="['/coi/entity-details']"
-                  [queryParams]="{entityId:item?.coiFinancialEntityId, mode:'view'}" (click)="closeCountModal()">
+                  [queryParams]="{entityId:item?.personEntityId, mode:'view'}" (click)="closeCountModal()">
                   <mat-icon>visibility</mat-icon>
                 </button>
               </td>
@@ -91,16 +91,14 @@
               <td style="width: 20%;">{{name.primeSponsor}}</td>
               <!-- <td style="width: 10%;" *ngIf="inputType === 'SFI_TAB'">No Conflict</td> -->
               <td style="width: 10%;" *ngIf="currentModalTab == 'Proposal'">
-                <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"  data-bs-dismiss="modal"
-                  [routerLink]="['/fibi/proposal/overview']" [queryParams]="{proposalId:name.moduleItemId}"
-                  data-bs-dismiss="modal">
+                <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"
+                  (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId);closeCountModal()">
                   <mat-icon>visibility</mat-icon>
                 </button>
               </td>
               <td style="width: 10%;" *ngIf="currentModalTab == 'Award'">
-                <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"  data-bs-dismiss="modal"
-                  [routerLink]="['/fibi/award/overview']" [queryParams]= "{awardId:name.moduleItemId}"
-                  data-bs-dismiss="modal">
+                <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"
+                  (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId);closeCountModal()" >
                   <mat-icon>visibility</mat-icon>
                 </button>
               </td>

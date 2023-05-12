@@ -15,14 +15,16 @@
  .status-active-pill {
   background-color: #4CB57D;
   color: white;
-  padding: 3px 19px;
+  padding: 3px 9px;
+  font-weight: 500;
   border-radius: 15px;
 
 }
 .status-inactive-pill {
   background-color: #5f6462;
   color: white;
-  padding: 3px 12px;
+  padding: 3px 9px;
+  font-weight: 500;
   border-radius: 15px;
 }
 .entity-status {
@@ -52,7 +54,13 @@
 th{
   height:45px
 }
-
 td{
   padding-left: 5px !important;
+}
+.tb-bg-color {
+  background-color: white;
+}
+
+.w-max {
+  width: max-content;
 }

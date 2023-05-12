@@ -6,7 +6,7 @@
                     <div class="col"><strong class="fs-15">FCOI Disclosure</strong></div>
                     <div class="col d-flex fs-14 justify-content-between align-items-center">
                         <div><span class="fw-bold text-secondary">Disclosure Status :</span> <span
-                                class="disclosure-active-pill ms-2 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.coiConflictStatusType?.description}}</span>
+                                class="ms-2 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.coiConflictStatusType?.description}}</span>
                         </div>
                         <div [queryParams]={disclosureId:disclosure.disclosureId}
                             [routerLink]="['/coi/disclosure/summary']"
@@ -41,8 +41,7 @@
                         <div>
                             <span class="fw-bold text-secondary">Disposition Status : </span>
                             <span
-                                class="ms-2 disclosure-active-pill
-                                {{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
+                                class="ms-2 {{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
                                 {{disclosure?.coiDispositionStatusType?.description}}</span>
                         </div>
                         <div class="my-2">
@@ -145,7 +144,7 @@
             <div *ngIf="disclosure?.fcoiTypeCode == '2'"><span class="fw-bold">Proposal :</span>
                 #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
             </div>
-            <div *ngIf="disclosure?.fcoiTypeCode == '3'"><span class="fw-bold">Award :</span> 
+            <div *ngIf="disclosure?.fcoiTypeCode == '3'"><span class="fw-bold">Award :</span>
                 #{{disclosure?.awardId}} - {{disclosure?.awardTitle}}
             </div>
             <div class="d-flex my-2">
@@ -154,16 +153,16 @@
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disposition Status :</span> <span
-                        class="badge bg-{{getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} text-{{ getDispositinTextColor(disclosure?.dispositionStatusCode)}} fs-14 pending-status-pill rounded-pill">{{disclosure?.dispositionStatus}}</span>
+                        class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}}">{{disclosure?.dispositionStatus}}</span>
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Review Status :</span> <span
-                        class="badge bg-{{getReviewStatusBadge(disclosure?.reviewStatusCode)}} text-{{ getReviewStatusTextColor(disclosure?.reviewStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.reviewStatus}}</span>
+                        class="{{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}">{{disclosure?.reviewStatus}}</span>
                 </div>
                 <div class="col">
                     <span class="fw-bold me-2">Disclosure Status :</span>
                     <span *ngIf="disclosure?.conflictStatus"
-                        class="badge {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}} fs-14 pending-status-pill rounded-pill ">{{disclosure?.conflictStatus}}</span>
+                        class="{{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.conflictStatus}}</span>
                     <span *ngIf="!disclosure?.conflictStatus" class="noDataExists">-- No Data --</span>
                 </div>
             </div>
@@ -193,12 +192,12 @@
                 <strong class="fs-18 me-2  hand-cursor text-blue-color">{{disclosure?.noOfSfi}}</strong>
                 <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
                 <label class="label-text hand-cursor mt-1">
-                    <strong 
+                    <strong
                     [class.text-decoration-underline]="ishover[index]"
                     (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi);">
                         Significant Financial Interest
                     </strong>
-                </label>    
+                </label>
             </div>
             <div class="col-3 text-secondary fs-14 d-flex">
                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">

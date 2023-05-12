@@ -4,26 +4,26 @@
         <ul class="header-navigation-links d-flex align-items-center m-0 f-15 cursor-pointer p-0 text-secondary">
           <li tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"
             role="tab" (keyup.enter)="entityTabName('ALL_ENTITIES')" (keyup.space)="entityTabName('ALL_ENTITIES')"
-            (click)="entityTabName('ALL_ENTITIES')">All Entities
+            (click)="entityTabName('ALL_ENTITIES')" title="Click to view all the entities">All Entities
           </li>
           <li class="separator px-0"></li>
           <li tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'UNVERIFIED'}"
             role="tab" (keyup.enter)="entityTabName('UNVERIFIED')" (keyup.space)="entityTabName('UNVERIFIED')"
-            (click)="entityTabName('UNVERIFIED')">Unverified Entities
+            (click)="entityTabName('UNVERIFIED')" title="Click to view all the unverified entities">Unverified Entities
           </li>
           <li class="separator px-0"></li>
           <li tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'HIGH_RISK'}"
             role="tab" (keyup.enter)="entityTabName('HIGH_RISK')" (keyup.space)="entityTabName('HIGH_RISK')"
-            (click)="entityTabName('HIGH_RISK')">High Risk Entities
+            (click)="entityTabName('HIGH_RISK')" title="Click to view all the high risk entities">High Risk Entities
           </li>
         </ul>
       </nav>
 
       <div class="align-items-center d-flex justify-content-end">
         <div class="mx-1">
-          <button class="btn btn-primary d-flex fs-13 align-items-center px-4" id="add-new-entity" title="Add new entity"
+          <span class="btn btn-outline-secondary d-flex fs-13 align-items-center px-4" id="add-new-entity" title="Click to add new entity"
             (click)="addNewEntity()"><mat-icon class="add-icon mt-1">add</mat-icon> Add New
-            Entity</button>
+            Entity</span>
         </div>
       </div>
   </div>
@@ -132,8 +132,8 @@
         </div>
         <div class="col-3 d-flex justify-content-end align-items-end">
           <button class="btn btn-outline-secondary  fs-14 py-2 px-4" id="btn-clear"
-            (click)="clearAdvancedSearch()" title="Clear">Clear</button>
-          <button class="btn btn-primary fs-14" id="btn-search" (click)="advancedSearch()" title="Search">Search</button>
+            (click)="clearAdvancedSearch()" title="Click here to clear all the fields">Clear</button>
+          <button class="btn btn-primary fs-14" id="btn-search" (click)="advancedSearch()" title="Initiate Search with/without fields">Search</button>
         </div>
       </div>
     </div>

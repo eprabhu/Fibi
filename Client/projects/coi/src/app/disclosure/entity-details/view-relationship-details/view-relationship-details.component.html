@@ -12,27 +12,31 @@
         <div class="col-3">
           <div class="row">
             <label class="fs-14 fw-500">Start Date Of Involvement</label>
-            <span *ngIf="relationshipsDetails?.involvementStartDate;else noData" class="text-color fs-14">{{relationshipsDetails?.involvementStartDate |
-              dateFormatterWithTimeZone}}</span>
+            <app-no-data-label [valueToShow]="relationshipsDetails?.involvementStartDate">
+              <span class="text-color fs-14">{{relationshipsDetails?.involvementStartDate |
+                      dateFormatterWithTimeZone}}</span>
+            </app-no-data-label>
           </div>
         </div>
         <div class="col-3">
           <div class="row">
             <label class="fs-14 fw-500">Relationship Type</label>
-            <span *ngIf="personEntityRelationships.length>0;else noData" class="text-color  fs-14">{{'Financial'}}</span>
+            <app-no-data-label [valueToShow]="personEntityRelationships.length>0">
+              <span class="text-color  fs-14">{{'Financial'}}</span>
+            </app-no-data-label>
           </div>
         </div>
         <div class="col-3">
           <div class="row">
             <label class="fs-14 fw-500">Relationship With</label>
-            <div class="col" *ngIf="personEntityRelationships.length>0;else noData">
-            <ng-container  *ngFor="let data of personEntityRelationships;let last = last" class="col">
-            <span class="r-title text-color fs-14" *ngIf="!last">{{data?.validPersonEntityRelType?.personEntityRelType?.description +'/'}}
-            </span>
-            <span class="r-title text-color fs-14" *ngIf="last">{{data?.validPersonEntityRelType?.personEntityRelType?.description}}
-            </span>
-            </ng-container>
-          </div>
+            <app-no-data-label [valueToShow]="personEntityRelationships">
+              <ng-container  *ngFor="let data of personEntityRelationships;let last = last" class="col">
+                <span class="r-title text-color fs-14" *ngIf="!last">{{data?.validPersonEntityRelType?.personEntityRelType?.description +'/'}}
+                </span>
+                    <span class="r-title text-color fs-14" *ngIf="last">{{data?.validPersonEntityRelType?.personEntityRelType?.description}}
+                </span>
+              </ng-container>
+            </app-no-data-label>
           </div>
         </div>
       </div>
@@ -41,15 +45,19 @@
       <div class="col-12 mt-3">
         <div class="row">
           <label class="fs-14 fw-500">Relationship With Entity</label>
-          <span *ngIf="relationshipsDetails?.staffInvolvement;else noData" class="text-color fs-14">{{relationshipsDetails?.staffInvolvement}}</span>
+          <app-no-data-label [valueToShow]="relationshipsDetails?.staffInvolvement">
+            <span class="text-color fs-14">{{relationshipsDetails?.staffInvolvement}}</span>
+          </app-no-data-label>
         </div>
       </div>
       <div class="col-12 mt-3">
         <div class="row">
           <label class="fs-14 fw-500">Principal Business Area Of Entity</label>
-          <span *ngIf="relationshipsDetails?.studentInvolvement;else noData" class="text-color fs-14">{{relationshipsDetails?.studentInvolvement}}
-            <!-- <a href="">Read More</a> -->
-          </span>
+          <app-no-data-label [valueToShow]="relationshipsDetails?.studentInvolvement">
+            <span class="text-color fs-14">{{relationshipsDetails?.studentInvolvement}}
+                <!-- <a href="">Read More</a> -->
+            </span>
+          </app-no-data-label>
         </div>
       </div>
       <div class="row">
@@ -57,7 +65,9 @@
           <div class="col-11 mt-3">
             <div class="row">
               <label class="fs-14 fw-500">Relationship Of Entity To Your University Responsibilities</label>
-              <span *ngIf="relationshipsDetails?.instituteResourceInvolvement;else noData" class="text-color fs-14">{{relationshipsDetails?.instituteResourceInvolvement}}</span>
+              <app-no-data-label [valueToShow]="relationshipsDetails?.instituteResourceInvolvement">
+                <span class="text-color fs-14">{{relationshipsDetails?.instituteResourceInvolvement}}</span>
+              </app-no-data-label>
             </div>
           </div>
           <div class="col-1 d-flex justify-content-end mt-3 px-3">
@@ -72,8 +82,3 @@
     </div>
     <!-- </div> -->
   </div>
-  <ng-template #noData>
-    <label class="text-no-data fs-14">
-      -- No Data --
-    </label>
-  </ng-template>
