@@ -73,8 +73,8 @@
                     <!-- [(ngModel)]="coiDescription" -->
 
                     <textarea class="form-control comment-text-box textarea-height" id="coi_description"
-                    [(ngModel)]="coiDescription" appAutoGrow rows="2"
-                    placeholder="Provide your description here" maxlength="2000" spellcheck="false"></textarea>
+                    [(ngModel)]="coiDescription" appAutoGrow  appLengthValidator rows="2"
+                    placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
                   </div>
                   <div class="col-auto button-align" *ngIf="entityProjectDetails?.length > 0">
                     <!-- data-bs-toggle="modal" data-bs-target="#applyToAllConfirmationModal" -->
@@ -118,10 +118,13 @@
                         </div>
                       </td>
                       <td class="border-end">
-                        <textarea class="form-control comment-text-box textarea-height" id="main-panel-comnt"
-                        appAutoGrow [(ngModel)]="test.disclComment.comment"
-                        [disabled]="!isEditMode" rows="2"
-                        placeholder="Provide your description here" maxlength="2000" spellcheck="false"></textarea>
+                        <div class="area-position">
+
+                          <textarea  class="form-control comment-text-box textarea-height" id="main-panel-comnt"
+                          appAutoGrow [(ngModel)]="test.disclComment.comment"
+                          [disabled]="!isEditMode" rows="2" appLengthValidator
+                          placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
+                        </div>
                       </td>
                       <td *ngIf="isEditMode">
                         <button type="button" class="btn btn-outline-secondary btn-sm mr-10" id="clear {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="openClearModal(i)"
