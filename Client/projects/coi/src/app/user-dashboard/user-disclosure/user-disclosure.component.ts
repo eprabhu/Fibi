@@ -21,7 +21,7 @@ export class UserDisclosureComponent {
     dashboardRequestObject = {
         advancedSearch: 'L',
         pageNumber: 200,
-        sort: { 'createTimestamp': 'asc' },
+        sort: {},
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         // filterType = 'All', 'FCOI', 'Project', 'OPA';
