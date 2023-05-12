@@ -476,10 +476,10 @@
                 <div class="col-3 d-flex align-items-center">
                   <div
                     (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId,coi.noOfSfiInPending);"
-                    *ngIf="coi?.disclosureStatusCode == 1" class="bold-blue-number pointer">
+                    *ngIf="coi?.disclosureStatusCode == 1" class="bold-blue-number pointer cursor-auto">
                     {{coi?.noOfSfiInPending || 0}}
                   </div>
-                  <div *ngIf="coi?.disclosureStatusCode != 1" class="bold-blue-number mt-1 pointer"
+                  <div *ngIf="coi?.disclosureStatusCode != 1" class="bold-blue-number mt-1 pointer cursor-auto"
                     (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);">
                     {{coi?.noOfSfiInActive || 0}}
                   </div>
@@ -491,10 +491,10 @@
                   <div class="d-flex align-items-center">
                     <div
                       (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId,coi.numberOfProposals);"
-                      *ngIf="coi?.numberOfProposals" class="bold-blue-number pointer">
+                      *ngIf="coi?.numberOfProposals" class="bold-blue-number cursor-auto">
                       {{coi?.numberOfProposals}}
                     </div>
-                    <div *ngIf="!coi?.numberOfProposals" class="bold-blue-number">
+                    <div *ngIf="!coi?.numberOfProposals" class="bold-blue-number cursor-auto">
                       {{coi?.numberOfProposals}}
                     </div>
                     <div class="ml-2 mt-1 pointer"
@@ -504,10 +504,10 @@
                   <div class="d-flex align-items-center ml-15 pl-5">
                     <div
                       (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId);"
-                      *ngIf="coi?.numberOfAwards" class="bold-blue-number pointer">
+                      *ngIf="coi?.numberOfAwards" class="bold-blue-number pointer cursor-auto">
                       {{coi?.numberOfAwards}}
                     </div>
-                    <div *ngIf="!coi?.numberOfAwards" class="bold-blue-number">
+                    <div *ngIf="!coi?.numberOfAwards" class="bold-blue-number cursor-auto">
                       {{coi?.numberOfAwards}}
                     </div>
                     <div class="ml-2 mt-1 pointer"
