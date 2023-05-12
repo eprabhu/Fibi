@@ -76,6 +76,7 @@ export class AdminDashboardComponent {
   sortMap: any = {};
   clearField: String;
   ishover: [] = [];
+  isViewAdvanceSearch = true;
 
   constructor(public _coiAdminDashboardService: AdminDashboardService,
     private _router: Router,
@@ -98,11 +99,10 @@ export class AdminDashboardComponent {
   setAdvanceSearch() {
     this.isShowAllProposalList = true;
     if (this._coiAdminDashboardService.coiRequestObject.tabName === 'ALL_DISCLOSURES') {
-      document.getElementById('collapseExample').classList.add('show');
-      // this.isShowAllProposalList = false;
+      this.isViewAdvanceSearch = true;
     } else {
-       document.getElementById('collapseExample').classList.remove('show');
        this.isShowAllProposalList = true;
+       this.isViewAdvanceSearch = false;
     }
   }
 
