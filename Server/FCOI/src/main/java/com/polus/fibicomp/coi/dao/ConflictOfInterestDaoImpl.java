@@ -1223,13 +1223,13 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
 				disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
 				disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
-				if (tabName.equals("PENDING_DISCLOSURES")) {
-					disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
-					disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
-					disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
-					disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
-					disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
-				}
+//				if (tabName.equals("PENDING_DISCLOSURES")) {
+//					disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
+//					disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
+//					disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
+//					disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
+//					disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
+//				}
 				disclosureViews.add(disclosureView);
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
@@ -2319,7 +2319,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			statement.setInt(2, disclosureNumber);
 			statement.setString(3, AuthenticatedUser.getLoginPersonId());
 			statement.setString(4, AuthenticatedUser.getLoginUserName());
-			statement.setInt(5, personEntityId);
+			if (personEntityId == null) {
+				statement.setNull(5, Types.INTEGER);
+			} else {
+				statement.setInt(5, personEntityId);
+			}
+//			statement.setInt(5, personEntityId);
 			statement.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
