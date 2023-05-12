@@ -219,3 +219,7 @@ small {
  white-space: nowrap; /* added line */
  width: 1px;
  }
+
+ .cursor-auto {
+    cursor: context-menu !important;
+ }
