@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { subscriptionHandler } from "../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Subscription } from "rxjs";
@@ -7,18 +7,19 @@ import {ApplicableQuestionnaire, COI, getApplicableQuestionnaireData} from "./co
 import { DataStoreService } from "./services/data-store.service";
 import { CoiService } from "./services/coi.service";
 import { Location } from "@angular/common";
-import { deepCloneObject } from "../../../../fibi/src/app/common/utilities/custom-utilities";
+import { deepCloneObject, openModal } from "../../../../fibi/src/app/common/utilities/custom-utilities";
 import { ElasticConfigService } from "../../../../fibi/src/app/common/services/elastic-config.service";
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from "../../../../fibi/src/app/app-constants";
 import { CommonService } from "../common/services/common.service";
 import { NO_DATA_FOUND_MESSAGE } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-
 @Component({
     selector: 'app-disclosure',
     templateUrl: './disclosure.component.html',
-    styleUrls: ['./disclosure.component.scss']
+    styleUrls: ['./disclosure.component.scss'],
 })
+
+
 export class DisclosureComponent implements OnInit, OnDestroy {
 
     isCardExpanded = true;
@@ -50,7 +51,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     disclosureType: any
     coiList = [];
     prevURL = '';
-
+    userDetails: any
+    userId: any;
+    ispersondetailsmodal = false;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -379,5 +382,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
     closeModal(event) {
         this.isShowCountModal = event;
+    }
+
+    openDetailModal(coiData: any): void {
+        this.userDetails = coiData.coiDisclosure.person;
+        this.ispersondetailsmodal = true;
+    }
+    closePersonDetailsModal(event){
+        this.ispersondetailsmodal=event;
+
     }
 }
