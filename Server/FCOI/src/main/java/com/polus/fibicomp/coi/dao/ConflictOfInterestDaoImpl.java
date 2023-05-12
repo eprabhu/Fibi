@@ -1895,7 +1895,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
 				disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
 				disclosureView.setLastApprovedVersionDate(resultSet.getTimestamp("LAST_APPROVED_DATE"));
-				disclosureView.setConflictStatus(resultSet.getString("VERSION_STATUS"));
+				disclosureView.setConflictStatus(resultSet.getString("DISCLOSURE_STATUS"));
+				disclosureView.setConflictStatusCode(resultSet.getString("CONFLICT_STATUS_CODE"));
 				disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 				disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER_FULL_NAME"));
 				disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
@@ -1907,7 +1908,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
 				disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
 				disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
-
 				disclosureViews.add(disclosureView);
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
