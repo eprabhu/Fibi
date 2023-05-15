@@ -66,7 +66,6 @@ export class AdminDashboardComponent {
     reviewCommentsCount: 0
   };
   inputType: any;
-  disclosureSequenceStatusCode: any;
   personId: any;
   comments: any[] = [];
   replyComment: any[] = [];
@@ -239,7 +238,7 @@ export class AdminDashboardComponent {
   }
 
 
-    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId, count = null) {
+    setSelectedModuleCode(moduleName, id, coiNumber, personId, count = null) {
         if (count > 0) {
             switch (moduleName) {
                 case 'sfi':
@@ -262,7 +261,6 @@ export class AdminDashboardComponent {
             this.currentDisclosureNumber = coiNumber;
             this.disclosureType = moduleName;
             this.inputType = 'DISCLOSURE_TAB';
-            this.disclosureSequenceStatusCode = disSeqCode;
             this.personId = personId;
         }
     }
