@@ -1,184 +1,201 @@
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-open-button" data-bs-toggle="modal" data-bs-target="#coiCountsViewModal"></button>
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-open-button" data-bs-toggle="modal"
+    data-bs-target="#coiCountsViewModal"></button>
 
 <div class="modal modal-coi fade mySkinDialog" id="coiCountsViewModal" tabindex="-1" role="dialog"
-  aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">{{getModalHeader()}}</h4>
-        <button type="button" data-bs-dismiss="modal"  class="btn-close fs-12" id="req-doc-popup-dismiss-btn" aria-label="Close"
-          (click)="closeCountModal()">
-        </button>
-      </div>
-      <div class="modal-body" *ngIf="moduleCode === 8 && inputType === 'DISCLOSURE_TAB'">
-        <div class="p-0 w-100 widget-container">
-        <table class="tableSkin" *ngIf="coiFinancialEntityDetails.length > 0">
-          <caption class="sr-only">List of SFIs</caption>
-          <thead class="sticky-top">
-            <tr class="header-border">
-              <th>Entity Name</th>
-              <th>Country</th>
-              <th>Entity Type</th>
-              <th>Start Date of Involvement</th>
-              <th>End Date of Involvement</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of coiFinancialEntityDetails">
-              <td>{{ item?.coiEntity?.entityName }}</td>
-              <td>
-                <app-no-data-label [valueToShow]="item?.coiEntity?.country?.countryName"></app-no-data-label>
-              </td>
-              <td>
-                <app-no-data-label [valueToShow]="item?.coiEntity?.entityType?.description"></app-no-data-label>
-              </td>
-              <td>
-                <app-no-data-label [valueToShow]="item?.involvementStartDate">
-                  <span>{{ item?.involvementStartDate |dateFormatter }}</span>
-                </app-no-data-label>
-                </td>
-              <td>
-                <app-no-data-label [valueToShow]="item?.involvementEndDate">
-                  <span>{{ item?.involvementEndDate |dateFormatter }}</span>
-                </app-no-data-label>
-              <td>
-                <button class="align-items-center btn-primary-icon d-flex fs-16 m-0 px-3 py-1" title="action"
-                  aria-label="Edit Organization" data-bs-dismiss="modal" [routerLink]="['/coi/entity-details']"
-                  [queryParams]="{entityId:item?.personEntityId, mode:'view'}" (click)="closeCountModal()">
-                  <mat-icon>visibility</mat-icon>
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-bs-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{getModalHeader()}}</h4>
+                <button type="button" data-bs-dismiss="modal" class="btn-close fs-12" id="req-doc-popup-dismiss-btn"
+                    aria-label="Close" (click)="closeCountModal()">
                 </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-        <div class="no-data-container" *ngIf="coiFinancialEntityDetails.length == 0">
-          <span class="no-data-icon-outer">
-            <div class="no-data-icon">
-              <i class="fa fa-file-o" aria-hidden="true"></i>
-              <i class="fa fa-times-circle-o" aria-hidden="true"></i>
             </div>
-          </span>
-          <h4>There is no information in this section.</h4>
-        </div>
-      </div>
-      <div class="modal-body" *ngIf="moduleCode === 3 || moduleCode === 1">
-        <ul class="subTabs tool-tab mb-0">
-          <li [class.active]="currentModalTab == 'Proposal'" class="w-50">
-            <a class="subTabLink textUnderline" (click)='currentModalTab = "Proposal"; switchTableData()' tabindex="0">
-              <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Proposals related to this SFI' : 'Proposals'}}</span>
-            </a>
-          </li>
-          <li [class.active]="currentModalTab == 'Award'" class="w-50">
-            <a (click)='currentModalTab = "Award"; switchTableData()' class="subTabLink textUnderline" tabindex="0">
-              <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Awards related to this SFI' : 'Awards'}}
-              </span>
-            </a>
-          </li>
-        </ul>
-        <div class="p-0 w-100 widget-container">
-        <table class="mt-3 tableSkin" *ngIf="tableArray.length>0">
-          <caption class="sr-only">List of Awards/Proposal</caption>
-          <thead class="sticky-top">
-            <tr class="header-border">
-              <th style="width: 10%;">{{currentModalTab == 'Proposal' ? 'Proposal #' : 'Award #'}}</th>
-              <th style="width: 20%;">Title</th>
-              <th style="width: 20%;">Principal Investigator</th>
-              <th style="width: 20%;">Lead Unit</th>
-              <th style="width: 20%;">Sponsor</th>
-              <th style="width: 20%;">Prime Sponsor</th>
-              <!-- <th style="width: 10%;" *ngIf="inputType === 'SFI_TAB'">Conflict Status</th> -->
-              <th style="width: 10%;">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let name of tableArray">
-              <td style="width: 10%;">{{currentModalTab == 'Proposal' ? name.moduleItemId : name.moduleItemKey}}</td>
-              <td style="width: 20%;">{{name.title}}</td>
-              <td style="width: 20%;">{{name?.principalInvestigator}}</td>
-              <td style="width: 20%;">{{name?.unitName}} - {{name?.unitNumber}}</td>
-              <td style="width: 20%;">{{name.sponsor}}</td>
-              <td style="width: 20%;">{{name.primeSponsor}}</td>
-              <!-- <td style="width: 10%;" *ngIf="inputType === 'SFI_TAB'">No Conflict</td> -->
-              <td style="width: 10%;" *ngIf="currentModalTab == 'Proposal'">
-                <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"
-                  (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId);closeCountModal()">
-                  <mat-icon>visibility</mat-icon>
-                </button>
-              </td>
-              <td style="width: 10%;" *ngIf="currentModalTab == 'Award'">
-                <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"
-                  (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId);closeCountModal()" >
-                  <mat-icon>visibility</mat-icon>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-        <div class="no-data-container" *ngIf="tableArray.length == 0">
-          <span class="no-data-icon-outer">
-            <div class="no-data-icon">
-              <i class="fa fa-file-o" aria-hidden="true"></i>
-              <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+            <div class="modal-body" *ngIf="moduleCode === 8 && inputType === 'DISCLOSURE_TAB'">
+                <div class="p-0 w-100 widget-container">
+                    <table class="tableSkin" *ngIf="coiFinancialEntityDetails.length > 0">
+                        <caption class="sr-only">List of SFIs</caption>
+                        <thead class="sticky-top">
+                            <tr class="header-border">
+                                <th>Entity Name</th>
+                                <th>Country</th>
+                                <th>Entity Type</th>
+                                <th>Start Date of Involvement</th>
+                                <th>End Date of Involvement</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row-hover" *ngFor="let item of coiFinancialEntityDetails">
+                                <td>{{ item?.coiEntity?.entityName }}</td>
+                                <td>
+                                    <app-no-data-label
+                                        [valueToShow]="item?.coiEntity?.country?.countryName"></app-no-data-label>
+                                </td>
+                                <td>
+                                    <app-no-data-label
+                                        [valueToShow]="item?.coiEntity?.entityType?.description"></app-no-data-label>
+                                </td>
+                                <td>
+                                    <app-no-data-label [valueToShow]="item?.involvementStartDate">
+                                        <span>{{ item?.involvementStartDate |dateFormatter }}</span>
+                                    </app-no-data-label>
+                                </td>
+                                <td>
+                                    <app-no-data-label [valueToShow]="item?.involvementEndDate">
+                                        <span>{{ item?.involvementEndDate |dateFormatter }}</span>
+                                    </app-no-data-label>
+                                <td>
+                                    <button class="align-items-center btn-primary-icon d-flex fs-16 m-0 px-3 py-1"
+                                        title="action" aria-label="Edit Organization" data-bs-dismiss="modal"
+                                        [routerLink]="['/coi/entity-details']"
+                                        [queryParams]="{entityId:item?.personEntityId, mode:'view'}"
+                                        (click)="closeCountModal()">
+                                        <mat-icon>visibility</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="no-data-container" *ngIf="coiFinancialEntityDetails.length == 0">
+                    <span class="no-data-icon-outer">
+                        <div class="no-data-icon">
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                        </div>
+                    </span>
+                    <h4>There is no information in this section.</h4>
+                </div>
             </div>
-          </span>
-          <h4>There is no information in this section.</h4>
-        </div>
-      </div>
-      <div class="modal-body" *ngIf="moduleCode === 101 && inputType === 'SFI_TAB'">
-        <div class="p-0 w-100 widget-container">
-        <table class="tableSkin" *ngIf="coiFinancialEntityDetails.length > 0">
-          <caption class="sr-only">List of SFIs</caption>
-          <thead class="sticky-top">
-            <tr class="header-border">
-              <th>Disclosure Type</th>
-              <th>Submission Date</th>
-              <th>Disclosure Status</th>
-              <th>Last Modified</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of coiFinancialEntityDetails">
-              <td>
-                <ng-container *ngIf="item?.coiDisclosureCategoryType?.disclosureCategoryTypeCode == 1">
-                  <span class="ml-2" *ngIf="item?.coiDisclosureSequence?.disclosureSequenceStatusCode == 2">Annual</span>
-                  <span class="ml-2" *ngIf="item?.coiDisclosureSequence?.disclosureSequenceStatusCode == 1">Revision</span>
-                </ng-container>
-                <ng-container *ngIf="item?.coiDisclosureCategoryType?.disclosureCategoryTypeCode != 1">
-                  {{ item?.coiDisclosureCategoryType?.description }}
-                </ng-container>
-              </td>
-              <td>{{ item?.createTimestamp |dateFormatter }}</td>
-              <td>{{ item?.coiDisclosureStatus?.description}}</td>
-              <td>By {{ item?.updateUserFullName }} On {{ item?.updateTimestamp |dateFormatterWithTimeZone: 'long' }}</td>
-              <td>
-                <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"
-                  (click)="closeCountModal()"
-                  [routerLink]="['/fibi/coi/screening-questionnaire']" [queryParams]={disclosureId:item.disclosureId}>
-                  <i class="fa fa-eye" aria-hidden="true"></i>
-                  <span class="f-12">View</span>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-        <div class="no-data-container" *ngIf="coiFinancialEntityDetails.length == 0">
-          <span class="no-data-icon-outer">
-            <div class="no-data-icon">
-              <i class="fa fa-file-o" aria-hidden="true"></i>
-              <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+            <div class="modal-body" *ngIf="moduleCode === 3 || moduleCode === 1">
+                <div class="shadow tabSwitch">
+                    <div class="listMargin">
+                        <ul class="sub-Tabs mb-0">
+                            <li [ngClass]="currentModalTab == 'Proposal'?'active':'inActive'"
+                                (click)='currentModalTab = "Proposal"; switchTableData()'>
+                                <span class="pl-2 beforeline">{{inputType === 'SFI_TAB' ? 'Proposals related to this
+                                    SFI' :
+                                    'Proposals'}}</span>
+                            </li>
+                            <li class="separator" ></li>
+                            <li [ngClass]="currentModalTab == 'Award'?'active':'inActive'"
+                                (click)='currentModalTab = "Award"; switchTableData()'>
+                                <span class="pl-2">{{inputType === 'SFI_TAB' ? 'Awards related to this SFI' :
+                                    'Awards'}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="p-0 w-100 widget-container">
+                    <table class=" mt-3 tableSkin" *ngIf="tableArray.length>0">
+                        <caption class="sr-only">List of Awards/Proposal</caption>
+                        <thead class="sticky-top">
+                            <tr class="header-border">
+                                <th style="width: 10%;">{{currentModalTab == 'Proposal' ? 'Proposal #' : 'Award #'}}
+                                </th>
+                                <th style="width: 20%;">Title</th>
+                                <th style="width: 20%;">Principal Investigator</th>
+                                <th style="width: 20%;">Lead Unit</th>
+                                <th style="width: 20%;">Sponsor</th>
+                                <th style="width: 20%;">Prime Sponsor</th>
+                                <th style="width: 10%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row-hover" *ngFor="let name of tableArray">
+                                <td style="width: 10%;">{{currentModalTab == 'Proposal' ? name.moduleItemId :
+                                    name.moduleItemKey}}</td>
+                                <td style="width: 20%;">{{name.title}}</td>
+                                <td style="width: 20%;">{{name?.principalInvestigator}}</td>
+                                <td style="width: 20%;">{{name?.unitName}} - {{name?.unitNumber}}</td>
+                                <td style="width: 20%;">{{name.sponsor}}</td>
+                                <td style="width: 20%;">{{name.primeSponsor}}</td>
+                                <td style="width: 10%;" *ngIf="currentModalTab == 'Proposal'">
+                                    <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"
+                                        (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId);closeCountModal()">
+                                        <mat-icon>visibility</mat-icon>
+                                    </button>
+                                </td>
+                                <td style="width: 10%;" *ngIf="currentModalTab == 'Award'">
+                                    <button class="btn-primary-icon d-flex p-2 m-0" aria-label="Edit Organization"
+                                        (click)="openProjectMoreDetails(currentModalTab, name.moduleItemId);closeCountModal()">
+                                        <mat-icon>visibility</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="no-data-container" *ngIf="tableArray.length == 0">
+                    <span class="no-data-icon-outer">
+                        <div class="no-data-icon">
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                        </div>
+                    </span>
+                    <h4>There is no information in this section.</h4>
+                </div>
             </div>
-          </span>
-          <h4>There is no information in this section.</h4>
+            <div class="modal-body" *ngIf="moduleCode === 101 && inputType === 'SFI_TAB'">
+                <div class="p-0 w-100 widget-container">
+                    <table class="tableSkin" *ngIf="coiFinancialEntityDetails.length > 0">
+                        <caption class="sr-only">List of SFIs</caption>
+                        <thead class="sticky-top">
+                            <tr class="header-border">
+                                <th>Disclosure Type</th>
+                                <th>Submission Date</th>
+                                <th>Disclosure Status</th>
+                                <th>Last Modified</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row-hover" *ngFor="let item of coiFinancialEntityDetails">
+                                <td>
+                                    <ng-container
+                                        *ngIf="item?.coiDisclosureCategoryType?.disclosureCategoryTypeCode == 1">
+                                        <span class="ml-2"
+                                            *ngIf="item?.coiDisclosureSequence?.disclosureSequenceStatusCode == 2">Annual</span>
+                                        <span class="ml-2"
+                                            *ngIf="item?.coiDisclosureSequence?.disclosureSequenceStatusCode == 1">Revision</span>
+                                    </ng-container>
+                                    <ng-container
+                                        *ngIf="item?.coiDisclosureCategoryType?.disclosureCategoryTypeCode != 1">
+                                        {{ item?.coiDisclosureCategoryType?.description }}
+                                    </ng-container>
+                                </td>
+                                <td>{{ item?.createTimestamp |dateFormatter }}</td>
+                                <td>{{ item?.coiDisclosureStatus?.description}}</td>
+                                <td>By {{ item?.updateUserFullName }} On {{ item?.updateTimestamp
+                                    |dateFormatterWithTimeZone: 'long' }}
+                                </td>
+                                <td>
+                                    <button class="btn btn-tertiary action-buttons" aria-label="Edit Organization"
+                                        (click)="closeCountModal()" [routerLink]="['/fibi/coi/screening-questionnaire']"
+                                        [queryParams]={disclosureId:item.disclosureId}>
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                        <span class="f-12">View</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="no-data-container" *ngIf="coiFinancialEntityDetails.length == 0">
+                    <span class="no-data-icon-outer">
+                        <div class="no-data-icon">
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                        </div>
+                    </span>
+                    <h4>There is no information in this section.</h4>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary mx-3" id="req-attachment-close-btn"
+                    (click)="closeCountModal()">Close</button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary mx-3" id="req-attachment-close-btn" (click)="closeCountModal()">Close</button>
-      </div>
     </div>
-  </div>
 </div>
