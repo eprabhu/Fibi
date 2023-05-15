@@ -1,14 +1,5 @@
-.subTabs li.active {
-    font-weight: 500 !important;
-    margin-left: -1px !important;
-    margin-right: -1px !important;
-    box-shadow: none !important;
-    border-bottom: 3px solid #007DEC;
-    color: #007DEC;
-}
-
 .separator {
-    border: 2px solid black;
+    border: .5px solid #c7c7c7;
     margin: 1px 0;
 }
 
@@ -35,7 +26,49 @@
     text-decoration: none;
 }
 
-.navigation-icons.active {
+.navigation-icons .active {
+    padding-bottom: 4px;
     border-bottom: 2px solid #007DEC;
     color: #007DEC;
+}
+
+.user-dashboard-nav {
+    min-height: 42px;
+    color: #7c7c7c;
+}
+
+.active {
+    color: #007DEC;
+    border-bottom: 3px solid #007DEC;
+    padding: 5px 11px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.inActive {
+    color: #48647f;
+    font-size: 15px;
+    padding: 5px 11px;
+    font-weight: bold;
+}
+
+.listMargin {
+    margin-top: -4px
+}
+
+.row-hover:hover {
+    background-color: #f5f5f5;
+}
+
+.tabSwitch {
+    display: inline-block;
+}
+
+.sub-Tabs{
+    color: #443737 !important;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    list-style: none;
+    cursor: pointer;
 }

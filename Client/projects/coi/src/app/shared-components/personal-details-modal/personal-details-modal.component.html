@@ -13,18 +13,16 @@
             </div>
             <div class="modal-body">
                 <div class="shadow tabSwitch ">
-                    <div>
-                        <ul class="subTabs mb-0">
-                            <li (click)="currentTab='PersonfullDetails'"
-                                [ngClass]="currentTab == 'PersonfullDetails'?'test1':'test2'">
-                                <a (click)="currentTab='PersonfullDetails'">Person Details </a>
-                            </li>
-                            <li (click)="currentTab='TrainingDetails'"
-                                [ngClass]="currentTab == 'TrainingDetails'?'test1':'test2'">
-                                <a (click)="currentTab='TrainingDetails'">Training</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="subTabs mb-0">
+                        <li (click)="currentTab='PersonfullDetails'"
+                            [ngClass]="currentTab == 'PersonfullDetails'?'test1':'test2'">
+                            <a (click)="currentTab='PersonfullDetails'">Person Details </a>
+                        </li>
+                        <li (click)="currentTab='TrainingDetails'"
+                            [ngClass]="currentTab == 'TrainingDetails'?'test1':'test2'">
+                            <a (click)="currentTab='TrainingDetails'">Training</a>
+                        </li>
+                    </ul>
                 </div>
                 <app-person-details [personValues]="personValues" [user]="id"
                     *ngIf="currentTab =='PersonfullDetails'"></app-person-details>
