@@ -19,6 +19,9 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
   $subscriptions: Subscription[] = [];
   personEntityRelationships:any = [];
   @Input() updateRelationshipDetails :any;
+  isReadMoreBusinessArea = false;
+  isReadMoreUniversity = false;
+  isReadMoreRelationWith = false;
 
   constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
     private _route:ActivatedRoute,private _commonService: CommonService) { }

@@ -14,6 +14,8 @@ export class EntityDetailsComponent implements OnInit,OnDestroy {
   }
   entityDetails = {};
   updateRelationshipDetails:any;
+  isEnableRelationshipModal = false;
+  isSaveQuestionnaire = false;
   ngOnInit() {
     const isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit'
     if(isEditMode){
@@ -30,5 +32,17 @@ export class EntityDetailsComponent implements OnInit,OnDestroy {
 
   updateRelationship(event){
   this.updateRelationshipDetails = event;
+  }
+
+  addRelationship(event){
+    this.isEnableRelationshipModal = event;
+  }
+
+  closedRelationshipModal(event){
+    this.isEnableRelationshipModal = event;
+  }
+
+  saveQuestionnaire(event){
+    this.isSaveQuestionnaire = event;
   }
 }
