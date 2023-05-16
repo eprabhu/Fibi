@@ -928,7 +928,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
 		Root<CoiDisclEntProjDetails> rootCoiDisclosureDetails = query.from(CoiDisclEntProjDetails.class);
 		query.where(builder.equal(rootCoiDisclosureDetails.get("disclosureId"), disclosureId));
-		query.multiselect(builder.countDistinct(rootCoiDisclosureDetails.get("disclosureDetailsId")));
+		query.multiselect(builder.countDistinct(rootCoiDisclosureDetails.get("personEntityId")));
 		Long numberOfSFI = session.createQuery(query).getSingleResult();
 		return numberOfSFI.intValue();
 	}
