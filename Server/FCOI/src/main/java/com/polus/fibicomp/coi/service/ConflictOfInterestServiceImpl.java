@@ -170,6 +170,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setReviewStatusCode(REVIEW_STATUS_PENDING);
 		coiDisclosure.setRiskCategoryCode(RISK_CATEGORY_LOW);
 		coiDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiDisclosure.setHomeUnit(AuthenticatedUser.getLoginPersonUnit());
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		if(coiDisclosure.getFcoiTypeCode().equals("1")) { // if type is FCOI
