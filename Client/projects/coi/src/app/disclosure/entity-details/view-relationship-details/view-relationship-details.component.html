@@ -1,84 +1,121 @@
-<div class="container-fluid">
-  <div *ngIf="entityDetailsServices.isExpanded" class="card-body border shadow-sm">
-    <div class="relationship fw-bold col-1 shadow-sm">Relationships</div>
-    <div class="row">
-      <div class="col-12 d-flex">
-        <div class="col-3">
-          <div class="row">
-            <label class="fs-14 fw-500">Sponsors Research</label>
-            <span class="text-color fs-14">{{relationshipsDetails?.sponsorsResearch?'Yes':'No'}}</span>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="row">
-            <label class="fs-14 fw-500">Start Date Of Involvement</label>
-            <app-no-data-label [valueToShow]="relationshipsDetails?.involvementStartDate">
-              <span class="text-color fs-14">{{relationshipsDetails?.involvementStartDate |
-                      dateFormatterWithTimeZone}}</span>
-            </app-no-data-label>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="row">
-            <label class="fs-14 fw-500">Relationship Type</label>
-            <app-no-data-label [valueToShow]="personEntityRelationships.length>0">
-              <span class="text-color  fs-14">{{'Financial'}}</span>
-            </app-no-data-label>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="row">
-            <label class="fs-14 fw-500">Relationship With</label>
-            <app-no-data-label [valueToShow]="personEntityRelationships">
-              <ng-container  *ngFor="let data of personEntityRelationships;let last = last" class="col">
-                <span class="r-title text-color fs-14" *ngIf="!last">{{data?.validPersonEntityRelType?.personEntityRelType?.description +'/'}}
-                </span>
-                    <span class="r-title text-color fs-14" *ngIf="last">{{data?.validPersonEntityRelType?.personEntityRelType?.description}}
-                </span>
-              </ng-container>
-            </app-no-data-label>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="col-12 mt-3">
-        <div class="row">
-          <label class="fs-14 fw-500">Relationship With Entity</label>
-          <app-no-data-label [valueToShow]="relationshipsDetails?.staffInvolvement">
-            <span class="text-color fs-14">{{relationshipsDetails?.staffInvolvement}}</span>
-          </app-no-data-label>
-        </div>
-      </div>
-      <div class="col-12 mt-3">
-        <div class="row">
-          <label class="fs-14 fw-500">Principal Business Area Of Entity</label>
-          <app-no-data-label [valueToShow]="relationshipsDetails?.studentInvolvement">
-            <span class="text-color fs-14">{{relationshipsDetails?.studentInvolvement}}
-                <!-- <a href="">Read More</a> -->
-            </span>
-          </app-no-data-label>
-        </div>
-      </div>
+<div class="container-fluid px-4">
+    <div class="card-body border shadow-sm">
+      <div class="relationship fw-bold col-1 shadow-sm">Relationships</div>
       <div class="row">
-        <div class="col-12 d-flex  mt-3 mb-15">
-          <div class="col-11 mt-3">
+        <div class="col-12 d-flex">
+          <div class="col-3">
             <div class="row">
-              <label class="fs-14 fw-500">Relationship Of Entity To Your University Responsibilities</label>
-              <app-no-data-label [valueToShow]="relationshipsDetails?.instituteResourceInvolvement">
-                <span class="text-color fs-14">{{relationshipsDetails?.instituteResourceInvolvement}}</span>
+              <label class="fs-14 fw-500">Relationship Type</label>
+              <app-no-data-label [valueToShow]="personEntityRelationships.length>0">
+                <span class="text-color  fs-14">{{'Financial'}}</span>
               </app-no-data-label>
             </div>
           </div>
-          <div class="col-1 d-flex justify-content-end mt-3 px-3">
-            <div *ngIf="entityDetailsServices.isExpanded"
-              class="toggle-header-btn mt-3  bg-white border btn  p-1 rounded-5 shadow-sm">
+          <div class="col-2">
+            <div class="row">
+              <label class="fs-14 fw-500">Sponsors Research</label>
+              <span class="text-color fs-14">{{relationshipsDetails?.sponsorsResearch?'Yes':'No'}}</span>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="row">
+              <label class="fs-14 fw-500">Start Date Of Involvement</label>
+              <app-no-data-label [valueToShow]="relationshipsDetails?.involvementStartDate">
+                <span class="text-color fs-14">{{relationshipsDetails?.involvementStartDate |
+                        dateFormatterWithTimeZone}}</span>
+              </app-no-data-label>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="row">
+              <label class="fs-14 fw-500">End Date Of Involvement</label>
+              <app-no-data-label [valueToShow]="relationshipsDetails?.involvementEndDate">
+                <span class="text-color fs-14">{{relationshipsDetails?.involvementEndDate |
+                        dateFormatterWithTimeZone}}</span>
+              </app-no-data-label>
+            </div>
+          </div>
+          <div class="col-1 d-flex justify-content-end">
+            <div *ngIf="!entityDetailsServices.isExpanded"
+              class=" toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm">
               <mat-icon
-                (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_less</mat-icon>
+                (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_more</mat-icon>
+            </div>
+          </div>
+          <!-- <div class="col-3">
+            <div class="row">
+              <label class="fs-14 fw-500">Relationship With</label>
+              <app-no-data-label [valueToShow]="personEntityRelationships">
+                <ng-container  *ngFor="let data of personEntityRelationships;let last = last" class="col">
+                  <span class="r-title text-color fs-14" *ngIf="!last">{{data?.validPersonEntityRelType?.personEntityRelType?.description +'/'}}
+                  </span>
+                      <span class="r-title text-color fs-14" *ngIf="last">{{data?.validPersonEntityRelType?.personEntityRelType?.description}}
+                  </span>
+                </ng-container>
+              </app-no-data-label>
+            </div>
+          </div> -->
+        </div>
+      </div>
+      <div *ngIf="entityDetailsServices.isExpanded" class="col">
+        <div class="col-11 mt-3">
+          <div class="row">
+            <label class="fs-14 fw-500">Relationship With Entity</label>
+            <app-no-data-label [valueToShow]="relationshipsDetails?.staffInvolvement">
+              <span *ngIf="!isReadMoreRelationWith;else more1" class="text-color fs-14">{{(relationshipsDetails?.staffInvolvement?.length>200)?(relationshipsDetails?.staffInvolvement|slice:0:165)
+                :relationshipsDetails?.staffInvolvement}}
+                <span *ngIf="relationshipsDetails?.staffInvolvement?.length>200">...<span class="collapse-text fw-medium" (click)="isReadMoreRelationWith =!isReadMoreRelationWith">Read more</span></span>
+              </span>
+              <ng-template #more1>
+                <span  class="text-color text-break fs-14">{{ relationshipsDetails?.studentInvolvement}}
+                </span><span (click)="isReadMoreRelationWith =!isReadMoreRelationWith" class="collapse-text fw-medium fs-14">Show Less</span>
+              </ng-template>
+
+            </app-no-data-label>
+          </div>
+        </div>
+        <div class="col-11 mt-3">
+          <div class="row">
+            <label class="fs-14 fw-500">Principal Business Area Of Entity</label>
+            <app-no-data-label [valueToShow]="relationshipsDetails?.studentInvolvement">
+              <span *ngIf="!isReadMoreBusinessArea;else more2" class="text-color fs-14">
+                {{(relationshipsDetails?.studentInvolvement?.length>200)?(relationshipsDetails?.studentInvolvement|slice:0:165)
+                :relationshipsDetails?.studentInvolvement}}
+                <span *ngIf="relationshipsDetails?.studentInvolvement?.length>200">...<span class="collapse-text fw-medium" (click)="isReadMoreBusinessArea = !isReadMoreBusinessArea">Read more</span></span>
+              </span>
+              <ng-template #more2>
+                <span  class="text-color text-break fs-14">{{ relationshipsDetails?.studentInvolvement}}
+                </span><span (click)="isReadMoreBusinessArea = !isReadMoreBusinessArea" class="collapse-text fs-14 fw-medium">Show Less</span>
+              </ng-template>
+            </app-no-data-label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 d-flex  mt-3 mb-15">
+            <div class="col-11 mt-3">
+              <div class="row">
+                <label class="fs-14 fw-500">Relationship Of Entity To Your University Responsibilities</label>
+                <app-no-data-label [valueToShow]="relationshipsDetails?.instituteResourceInvolvement">
+                  <span *ngIf="!isReadMoreUniversity;else more3" class="text-color fs-14">{{(relationshipsDetails?.instituteResourceInvolvement?.length>200)?(relationshipsDetails?.instituteResourceInvolvement|slice:0:165)
+                    :relationshipsDetails?.instituteResourceInvolvement}}
+                    <span *ngIf="relationshipsDetails?.instituteResourceInvolvement?.length>200">...<span class="collapse-text fw-medium" (click)="isReadMoreUniversity =!isReadMoreUniversity">Read more</span></span>
+                  </span>
+                  <ng-template #more3>
+                    <span  class="text-color text-break fs-14">{{ relationshipsDetails?.studentInvolvement}}
+                    </span><span (click)="isReadMoreUniversity =!isReadMoreUniversity" class="collapse-text fs-14 fw-medium">Show Less</span>
+                  </ng-template>
+                </app-no-data-label>
+              </div>
+            </div>
+            <div class="col-1 d-flex align-items-end justify-content-end mt-3 px-3">
+              <div *ngIf="entityDetailsServices.isExpanded"
+                class="toggle-header-btn mt-3  bg-white border btn  p-1 rounded-5 shadow-sm">
+                <mat-icon
+                  (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_less</mat-icon>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- </div> -->
-  </div>
+</div>

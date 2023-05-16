@@ -1,73 +1,28 @@
-<div class="mt-4">
-  <div  class="container-fluid">
-    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 shadow-sm user-dashboard-nav">
-      <div (click)="currentSelected.tab = 'FINANCIAL';getDataFromService()"
-        [class.bg-active]="currentSelected.tab === 'FINANCIAL'?'active':''"
-        class="left-curve align-items-center d-flex border-end navigation-icons text-secondary px-5" role="button">
-        <span [class.active]="currentSelected.tab === 'FINANCIAL'?'active':''" class=" active">Financial</span>
+<div *ngIf="definedRelationships?.length"  class="mx-4">
+  <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 shadow-sm user-dashboard-nav">
+    <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;let last = last">
+      <div (click)="getQuestionnaire(coiFinancialEntityDetail)"  class="text-secondary {{last?'':'border-end'}}" role="button"
+        [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'navigation-icons':''">
+        <span
+          [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
+          class="active r-title px-3 py-3">
+          {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}</span>
       </div>
-      <!-- <div (click)="currentSelected.tab = 'COMMITMENT';getDataFromService()"
-        [class.bg-active]="currentSelected.tab === 'COMMITMENT'?'active':''"
-        class="align-items-center d-flex border-end navigation-icons text-secondary px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab === 'COMMITMENT'?'active':''" class=" active">Commitment</span>
-      </div>
-      <div (click)="currentSelected.tab = 'TRAVEL';getDataFromService()" [class.bg-active]="currentSelected.tab === 'TRAVEL'?'active':''"
-        class="right-curve align-items-center d-flex navigation-icons text-secondary px-3 py-1" role="button">
-        <span [class.active]="currentSelected.tab === 'TRAVEL'?'active':''" class=" active">Travel</span>
-      </div> -->
-    </nav>
-  </div>
-  <app-add-relationship *ngIf="!definedRelationships?.length && isEditMode"
-    (addRelationShip)="openAddRelationshipModal($event)"></app-add-relationship>
-  <div *ngIf="definedRelationships?.length" class="container-fluid">
-    <div class="card shadow-sm border card-br" >
-      <!-- <div> -->
-      <nav
-        class="align-items-center bg-white border d-flex fs-14 mt-5 shadow-sm user-dashboard-nav mx-4 mr-2 rounded-2 seperator nav-position">
-        <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;">
-          <div (click)="getQuestionnaire(coiFinancialEntityDetail)"
-            class="border-end text-secondary" role="button"
-            [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'navigation-icons':''">
-            <span
-              [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
-              class="active r-title px-3 py-3">
-              {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}</span>
-          </div>
-        </ng-container>
-        <div *ngIf="isEditMode" (click)="activeRelationship = 'add_relationship' " class="px-3 py-1 text-primary"
-          role="button">
-          <span (click)="openAddRelationshipModal('addRelationshipModal')">
-            <mat-icon class="material-icons-outlined pt-2 fs-18">add_circle_outline</mat-icon>
-            <label class="btn-position">Add Relationship</label>
-          </span>
-        </div>
-        <div *ngIf="isEditMode" class="mat-save">
-          <span class="align-items-center d-flex btn btn-primary mt-0 py-1 px-3 h-100 fs-13 pt-1"
-            title="Save questionnaire" (click)="getSaveEvent();">
-            <mat-icon class="fs-16 me-2 material-icons align-items-center d-flex">save</mat-icon>
-            <span class="fs-13">Save</span>
-          </span>
-        </div>
-      </nav>
-      <!-- </div> -->
-      <div *ngIf="definedRelationships?.length" class="container-fluid m-2 scrollable-table">
-        <app-view-questionnaire-list [configuration]="configuration"
-          [questionnaireHeader]="''"
+    </ng-container>
+  </nav>
+</div>
+<div class="ml-15 mr-10 questionnaire-position">
+      <div *ngIf="definedRelationships?.length">
+        <app-view-questionnaire-list *ngIf="definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
           [externalSaveEvent]="$externalSaveEvent" [isShowSave]="false">
         </app-view-questionnaire-list>
-      </div>
-    </div>
-  </div>
-  <div *ngIf="!definedRelationships?.length && !isEditMode" class="mx-2 on-data-position">
-    <div class="mx-1 shadow-sm">
-      <app-no-information></app-no-information>
-    </div>
+        </div>
+</div>
+<div *ngIf="!definedRelationships?.length && !isEditMode" class="mx-4 mt-4 on-data-position">
+  <div class="shadow-sm">
+    <app-no-information></app-no-information>
   </div>
 </div>
-<!-- <app-add-relationship-modal *ngIf="isShowRelationshipModal" [isWithOutRelationship]="false"
- [relationLookup]="[relationLookup]" (relationshipResult)="addEntityToggle($event)"
-  (hideModal)="hideRelationshipModal($event)" (addEntityRelationship)="addRelationship($event)">
-</app-add-relationship-modal> -->
 
 <!-- Modal -->
 <div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
@@ -76,16 +31,18 @@
     <div class="modal-content">
       <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
         <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relations</h3>
-        <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="clearModal()"></button>
+        <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
+          (click)="clearModal()"></button>
       </div>
       <div class="modal-body ">
         <div class="row ">
-          <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
+          <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other
+            than government entities, institution of higher education and affiliated organizations.</p>
         </div>
         <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
           style="margin-top: 26px;margin-bottom: 16px;">
-          <div class=" border "style="padding:28px ;"
-          [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
+          <div class=" border " style="padding:28px ;"
+            [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
             <div style="display: flex; flex-direction: row;">
               <div class="form-check form-check-inline">
                 <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation :
@@ -104,7 +61,8 @@
           </div>
         </div>
         <div *ngIf="relationValidationMap.has('relationRadio')"
-              class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
+          class="invalid-feedback d-block fs-13 justify-content-center d-flex">
+          {{relationValidationMap.get('relationRadio')}}
         </div>
         <ng-template #noData>
           <div class="m-3">
@@ -113,7 +71,8 @@
         </ng-template>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal" (click)="clearModal()">Cancel</button>
+        <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal"
+          (click)="clearModal()">Cancel</button>
         <button type="button" class="btn btn-primary mr-10 fs-14" (click)="addRelation()">Add Relation</button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
@@ -13,7 +13,7 @@ import { HTTP_ERROR_STATUS } from '../../../app-constants';
   templateUrl: './entity-questionnaire.component.html',
   styleUrls: ['./entity-questionnaire.component.scss']
 })
-export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
+export class EntityQuestionnaireComponent implements OnInit, OnDestroy,OnChanges {
 
   $externalSaveEvent = new BehaviorSubject<Boolean>(null);
   configuration: any = {
@@ -41,6 +41,9 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
   isEditMode = false;
   $subscriptions: Subscription[] = [];
   @Output() updateRelationship: EventEmitter<any> = new EventEmitter<any>();
+  @Input() isAddRelationship = false;
+  @Output() isEmitModalClose: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() isSaveQuestionnaire = false;
 
 
 
@@ -54,7 +57,14 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     this.getDataFromService();
     this.configuration.enableViewMode = !this.isEditMode;
   }
-
+  ngOnChanges() {
+    if (this.isAddRelationship) {
+      this.openAddRelationshipModal('addRelationshipModal');
+    }
+    if (this.isSaveQuestionnaire) {
+      this.getSaveEvent();
+    }
+  }
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
     hideModal('addRelationshipModal');
@@ -77,8 +87,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     }));
   }
 
-  getSaveEvent(_event) {
-    // this.relationLookup.length ? this.addRelations() : this.navigateBack();
+  getSaveEvent() {
     this.$externalSaveEvent.next(true);
   }
   addRelations(flag = false) {
@@ -180,6 +189,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
 
   clearModal() {
     this.relationValidationMap.clear();
+    this.isEmitModalClose.emit(false);
   }
 
 }

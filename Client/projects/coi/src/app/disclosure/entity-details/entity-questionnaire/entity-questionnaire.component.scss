@@ -1,9 +1,9 @@
 .navigation-icons {
   .active {
-    border-bottom: 2px solid #007DEC;
+    border-bottom: 3px solid #007DEC;
     color: #007DEC;
     margin-bottom: -0.2rem !important;
-    padding: 7.3px 0px;
+    padding: 8.8px 16px !important;
   }
 }
 
@@ -96,7 +96,6 @@
 }
 
 .btn-close {
-  // color: #48647f;
   color: #000000;
 }
 .form-check-inline {
@@ -157,4 +156,11 @@
 
 .br-bottom{
   border-bottom: 0px !important
+}
+
+.questionnaire-position {
+  position: relative;
+  bottom: 2px;
+  right: 2px;
+  border-radius: 0 3.75px 3.75px 3.75px;
 }

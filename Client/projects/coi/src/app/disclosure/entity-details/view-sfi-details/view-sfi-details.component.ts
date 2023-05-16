@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -18,6 +18,8 @@ export class ViewSfiDetailsComponent implements OnInit, OnDestroy {
   entityDetails: any = {};
   $subscriptions: Subscription[] = [];
   prevURL = '';
+  @Output() emitRelationshipModal: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() saveQuestionnaire: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(public entityDetailsServices: EntityDetailsService, private _router: Router, private _route: ActivatedRoute,
     private _commonService: CommonService, private _navigationService:NavigationService
@@ -53,4 +55,11 @@ export class ViewSfiDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  addNewRelationship(){
+    this.emitRelationshipModal.emit(true);
+  }
+
+  saveRelationship(){
+    this.saveQuestionnaire.emit(true);
+  }
 }

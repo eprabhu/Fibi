@@ -1,123 +1,160 @@
-<div class="container-fluid mt-3">
-  <div class="card shadow-sm border" [ngClass]="entityDetailsServices.isExpanded?'br-bottom':''">
-    <div class="card-header">
-      <div class="row d-flex">
-        <div class="col-12 d-flex">
-          <div class="col-8 d-flex">
-            <span *ngIf="entityDetailsServices.entityDetails"
-              class="entity-status shadow-sm align-items-center d-flex ps-2 mt-2"
-              [ngClass]="!entityDetailsServices.entityDetails?.isActive?'inactive':''">
-              <span class="px-2">{{!entityDetailsServices.entityDetails?.isActive?'Inactive':'Active'}}</span> </span>
-            <h1 class="m-1 fw-bold fs-18"> {{entityDetailsServices.entityDetails?.entityName}}</h1>
+<div class="mt-3 mx-4 row">
+  <div class="col-9 p-0">
+    <div class="border shadow-sm">
+      <div class="body-heading  px-3 d-flex">
+        <div class="col d-flex">
+          <span *ngIf="entityDetailsServices.entityDetails"
+            class="entity-status shadow-sm align-items-center d-flex ps-2 mt-4"
+            [ngClass]="!entityDetailsServices.entityDetails?.isActive?'inactive':''">
+            <span class="px-2">{{!entityDetailsServices.entityDetails?.isActive?'Inactive':'Active'}}</span></span>
+          <h1 class="fw-bold fs-18 mt-3 px-3">{{entityDetailsServices.entityDetails?.entityName}}</h1>
+        </div>
+        <div class="align-items-center d-flex">
+          <div class="badge-height yellow-badge">
+            Relationship Status:Draft
           </div>
-          <!-- </div> -->
-          <!-- <div class="col-6 align-items-center justify-content-end action-bar mt-1 d-flex"> -->
-          <div class="col-4 d-flex justify-content-end">
-            <div class="action-bar mx-3 d-flex">
-              <!-- <button tabindex="0" class="btn m-1 new-line-property text-secondary fs-14-nav action-btn">
-                <mat-icon class="justify-content-center align-items-center fs-4 icon-size">
-                  mode
-                </mat-icon>
-                Modify</button> -->
-              <!-- <button class="btn m-1 action-btn new-line-property text-secondary fs-14-nav">
-                <mat-icon class="justify-content-center align-items-center fs-4 icon-size">schedule</mat-icon>
-                Inactivate
-              </button>
-              <button class="btn m-1 action-btn new-line-property text-secondary fs-14-nav">
-                <mat-icon class="justify-content-center align-items-center fs-4 icon-size">history </mat-icon>
-                History</button> -->
+        </div>
+        <div class="ml-15 align-items-center d-flex">
+          <button tabindex="0" class="btn btn-outline-grey fs-14 justify-content-center d-flex">
+            <mat-icon class="justify-content-center align-items-center align-items-center d-flex">
+              mode
+            </mat-icon>
+            Modify Entity</button>
+        </div>
+      </div>
+      <div class="d-flex p-3 pt-4 pb-4 bg-white">
+        <div class="col">
+          <div class="border triple-card rounded-1 position-relative pr-15">
+            <div class="ps-4 table-negative-margin">
+              <table class="fs-14 fw-medium spaced-table">
+                <tr>
+                  <td class="fw-500 fs-14 col-3">Entity Type :</td>
+                  <td class="text-color fs-14">
+                    <app-no-data-label [valueToShow]="entityDetailsServices.entityDetails?.entityType">
+                      <span class="px-3 py-1 rounded-5">{{entityDetailsServices.entityDetails?.entityType?.description}}</span>
+                    </app-no-data-label>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-500 fs-14 col-3">Country :</td>
+                  <td class="text-color fs-14">
+                    <app-no-data-label [valueToShow]="entityDetailsServices.entityDetails?.country?.countryName">
+                      <span class=" px-3 py-1 rounded-5">{{entityDetailsServices.entityDetails?.country?.countryName}}</span>
+                    </app-no-data-label>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-500 fs-14 col-3">City :</td>
+                  <td class="text-color fs-14">
+                    <app-no-data-label [valueToShow]="entityDetailsServices.entityDetails?.city">
+                      <span class=" px-3 py-1 rounded-5 ">{{entityDetailsServices.entityDetails?.city}}</span>
+                    </app-no-data-label>
+                  </td>
+                </tr>
+              </table>
             </div>
-            <div class="ml-15">
-              <button tabindex="0" type="button" class="btn back-ward" (click)="navigateBack()" title="Back">
-                <i class="fa fa-reply justify-content-center align-items-center fs-14 mt-2"></i>
-                <!-- <label class="fw-medium fs-13 mt-1">Back</label> -->
-              </button>
-            </div>
-
           </div>
+        </div>
+        <div class="col">
+          <div class="border triple-card mx-3 rounded-1 position-relative">
+            <div class="ps-4 table-negative-margin">
+              <table class="fs-14 fw-medium spaced-table">
+                <tr>
+                  <td class="fw-500 fs-14 col-3">Website :</td>
+                  <td class="text-color fs-14">
+                    <app-no-data-label [valueToShow]="entityDetails?.webURL">
+                      <span class="px-3 py-1 rounded-5">
+                        <a class="anchor-link" (click)="redirectUrl(entityDetails?.webURL)">
+                          {{entityDetails?.webURL}}
+                        </a></span>
+                    </app-no-data-label>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-500 fs-14 col-3">Email Address :</td>
+                  <td class="text-color fs-14">
+                    <app-no-data-label [valueToShow]="entityDetailsServices.entityDetails?.emailAddress">
+                      <span class=" px-3 py-1 rounded-5">{{entityDetailsServices.entityDetails?.emailAddress}}</span>
+                    </app-no-data-label>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-500 fs-14 col-3">Phone Number :</td>
+                  <td class="text-color fs-14">
+                    <app-no-data-label [valueToShow]="entityDetailsServices.entityDetails?.phone">
+                      <span class=" px-3 py-1 rounded-5 ">{{entityDetailsServices.entityDetails?.phone}}</span>
+                    </app-no-data-label>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-body px-3 d-flex">
+        <div class="mb-3 align-self-center flex-fill">
+          <label class="fw-500 fs-14 mx-3">Address :</label>
+          <app-no-data-label [valueToShow]="entityDetailsServices.entityDetails?.address">
+            <span class="text-color fs-14 mt-1 pr-15">
+              {{entityDetailsServices.entityDetails?.address}}<span> Zip
+                code:{{entityDetailsServices.entityDetails?.zipCode}}</span>
+            </span>
+          </app-no-data-label>
         </div>
       </div>
     </div>
-    <div class="card-body">
-      <div class="row d-flex">
-        <div class="col-12 d-flex pb-4">
-          <div class="col-2">
-            <div class="row">
-              <label class="fs-14 fw-500">Entity Type</label>
-              <span *ngIf="entityDetailsServices.entityDetails?.entityType;else noData" class="text-color fs-14">
-                {{entityDetailsServices.entityDetails?.entityType?.description}}</span>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="row">
-              <label class="fs-14 fw-500">Country</label>
-              <span *ngIf="entityDetailsServices.entityDetails?.country?.countryName;else noData" class="text-color fs-14">
-                {{entityDetailsServices.entityDetails?.country?.countryName}}</span>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="row">
-              <label class="fs-14 fw-500">City</label>
-              <span *ngIf="entityDetailsServices.entityDetails?.city;else noData" class="text-color fs-14">
-                {{entityDetailsServices.entityDetails?.city}}</span>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="row">
-              <label class="fs-14 fw-500">Website</label>
-              <span *ngIf="entityDetails?.webURL;else noData" class="text-primary fs-14 anchor-link">
-                <a class="anchor-link"  (click)="redirectUrl(entityDetails?.webURL)">
-                  {{entityDetails?.webURL}}
-                </a>
-              </span>
-
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="row">
-              <label class="fs-14 fw-500">Email Address </label>
-              <span *ngIf="entityDetailsServices.entityDetails?.emailAddress" class="text-color fs-14">
-                {{entityDetailsServices.entityDetails?.emailAddress}}</span>
-            </div>
-          </div>
-          <div class="col-1">
-            <div class="row">
-              <label class="fs-14 fw-500">Phone Number</label>
-              <span *ngIf="entityDetailsServices.entityDetails?.phone;else noData" class="text-color fs-14">
-                {{entityDetailsServices.entityDetails?.phone}}</span>
-            </div>
-          </div>
-          <div class="col-1 d-flex justify-content-end">
-            <div *ngIf="!entityDetailsServices.isExpanded"
-              class=" toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm">
-              <mat-icon
-                (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_more</mat-icon>
-            </div>
-          </div>
+  </div>
+  <div class="col-3 px-0">
+    <div class="d-flex flex-column p-0">
+      <div class="flex-fill side-height border-end bg-color shadow-sm">
+        <div class="d-flex justify-content-around mt-3 mx-3">
+          <button class="btn btn-outline-grey pb-0 col-2" title="Go to home page">
+            <mat-icon>home</mat-icon>
+          </button>
+          <button id="btn-modify"
+            class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center mx-3"
+            title="Modify Entity">
+            <mat-icon class="me-2 align-items-center d-flex">mode</mat-icon>
+            Modify SFI
+          </button>
+          <button class="btn btn-outline-grey pb-0 fs-14 col-2" (click)="navigateBack()" title="Back">
+            <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
+          </button>
         </div>
-      </div>
-      <div class="row">
-        <div *ngIf="entityDetailsServices.isExpanded" class="col-12 d-flex pb-4">
-          <div class="col-8">
-            <div class="row">
-              <label class="fs-14 fw-500">Address</label>
-              <span class="text-color fs-14" *ngIf="entityDetailsServices.entityDetails?.address;else noData">
-                {{entityDetailsServices.entityDetails?.address}}<span> Zip code:{{entityDetailsServices.entityDetails?.zipCode}}</span></span>
+        <div class="d-flex justify-content-around mt-3 mx-3">
+          <button id="btn-inactivate"
+            class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+            title="Entity Inactivate">
+            <mat-icon class="me-2 mb-2">schedule</mat-icon>
+            Inactivate
+          </button>
+        </div>
+        <div class="d-flex justify-content-around mt-3 mx-3">
+          <button id="btn-add-relationship" (click)="addNewRelationship()"
+            class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+            title="Add Relationship">
+            <mat-icon class="me-2 mb-2">add</mat-icon>
+            Add Relationship
+          </button>
+        </div>
+        <div class="d-flex justify-content-around mt-3 mx-3">
+          <button id="btn-save-relationship" (click)="saveRelationship()"
+            class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+            title="Save Relationship">
+            <mat-icon class="me-2 mb-2">save</mat-icon>
+            Save Relationship
+          </button>
+        </div>
+        <div class="my-2 mx-3 fs-14 ash-text wrapping-text">
+          <div><span class="fw-medium me-1">Last Updated By :</span></div>
+          <app-no-data-label [valueToShow]="entityDetailsServices.entityDetails?.updatedUserFullName">
+            <div>
+              {{entityDetailsServices.entityDetails?.updatedUserFullName}} On
+            {{(entityDetailsServices.entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')}}
             </div>
-          </div>
-          <div class="col-4 mt-3 text-color">
-            <label class="fw-500 mr-10 fs-14 ">Last Updated By :</label>
-            <span *ngIf="entityDetailsServices.entityDetails?.updatedUserFullName;else noData" class="text-color fs-14">
-              {{entityDetailsServices.entityDetails?.updatedUserFullName}} on {{(entityDetailsServices.entityDetails?.updateTimestamp | dateFormatterWithTimeZone:'long')}}
-            </span>
-          </div>
+          </app-no-data-label>
         </div>
       </div>
     </div>
   </div>
 </div>
-<ng-template #noData>
-  <label class="text-no-data fs-14">
-    -- No Data --
-  </label>
-</ng-template>
