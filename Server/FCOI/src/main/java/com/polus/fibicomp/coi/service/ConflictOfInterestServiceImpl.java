@@ -321,9 +321,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					vo.getDisclosureId(), vo.getDisclosureStatusCode());
 		}
 		for (DisclosureDetailDto disclosureDetail : disclosureDetails) {
-			disclosureDetail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(vo.getDisclosureStatusCode()) ?
-					conflictOfInterestDao.checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, disclosureDetail.getModuleItemId(),
-							vo.getDisclosureId(), vo.getPersonId()) : Boolean.TRUE);
+			disclosureDetail.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, disclosureDetail.getModuleItemId(),
+					vo.getDisclosureId(), vo.getPersonId()));
 			disclosureDetail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.AWARD_MODULE_CODE,
 					disclosureDetail.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
 		}
@@ -387,8 +386,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		} else {
 			personEntities = conflictOfInterestDao.getSFIBasedOnDisclosureId(vo.getDisclosureId());
 		}
-//		personEntities.forEach(personEntity -> personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao
-//				.getValidPersonEntityRelTypes(personEntity.getPersonEntityId())));
+		personEntities.forEach(personEntity -> personEntity.setValidPersonEntityRelTypes(conflictOfInterestDao
+				.getValidPersonEntityRelTypes(personEntity.getPersonEntityId())));
 		vo.setPersonEntities(personEntities);
 		return new ResponseEntity<>(personEntities, HttpStatus.OK);
 	}
