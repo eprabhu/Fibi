@@ -19,9 +19,9 @@
         </ng-template>
     </p>
 </div>
-<div class="card">
+<div class="card mt-3">
     <div class="card-body d-flex justify-content-center">
-        <div class="gridSkin p-15 text-center d-flex mx-5" style="margin-top: 110px; min-height: 460px; max-width: 964px;">
+        <div class="gridSkin p-15 text-center d-flex mx-5 custom-margin">
             <div class="me-3"><input (change)="_coiService.isCertified = !_coiService.isCertified;_dataStore.dataChanged = true"
                                      [checked]="_coiService.isCertified" [disabled]="!isEditMode"
                                      class="certify-box mt-1"

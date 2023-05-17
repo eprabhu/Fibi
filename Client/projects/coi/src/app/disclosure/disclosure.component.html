@@ -341,7 +341,7 @@
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Complete Review
                 </h4>
-                <button aria-label="Close" class="btn-close me-3" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                     type="button">
                 </button>
             </div>
@@ -498,15 +498,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Confirmation</h5>
-                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close" data-bs-dismiss="modal"
+                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
                     aria-label="Close">
                 </button>
             </div>
             <div class="modal-body">
-                <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">You have unsaved changes in
+                <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'" class="fs-14">You have unsaved changes in
                     <strong>{{coiService.unSavedModules}}.</strong>
                 </p>
-                <p>Do you want to leave the
+                <p class="fs-14">Do you want to leave the
                     <ng-container *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">page without
                         saving</ng-container>
                     <ng-container

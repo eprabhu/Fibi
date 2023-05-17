@@ -27,25 +27,23 @@
 <!-- Modal -->
 <div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
   data-mdb-backdrop="true">
-  <div class="modal-dialog modal-lg ">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
+      <div class="modal-header custom-height">
         <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relations</h3>
         <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
           (click)="clearModal()"></button>
       </div>
-      <div class="modal-body ">
-        <div class="row ">
-          <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other
-            than government entities, institution of higher education and affiliated organizations.</p>
+      <div class="modal-body">
+        <div class="row">
+          <p class="fs-13 m-0"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
         </div>
-        <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
-          style="margin-top: 26px;margin-bottom: 16px;">
-          <div class=" border " style="padding:28px ;"
-            [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
-            <div style="display: flex; flex-direction: row;">
+        <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center mb-15 mt-20">
+          <div class="card custom-padding"
+          [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
+            <div class="header-size">
               <div class="form-check form-check-inline">
-                <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation :
+                <label class="form-check-label ps-5 colour-black"><b>Select Relation :
                   </b></label>
               </div>
               <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
