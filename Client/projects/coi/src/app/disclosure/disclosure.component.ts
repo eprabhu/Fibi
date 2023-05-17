@@ -44,16 +44,19 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     isShowCountModal = false;
     selectedModuleCode: any;
     currentDisclosureId: any;
-    inputType: any;
+    inputType: string;
     disclosureSequenceStatusCode: any;
-    personId: any;
-    currentDisclosureNumber: any;
-    disclosureType: any
+    personId: string;
+    currentDisclosureNumber: number;
+    disclosureType: string;
     coiList = [];
     prevURL = '';
     userDetails: any
     userId: any;
     ispersondetailsmodal = false;
+    disclosureId: number;
+    disclosureNumber: number;
+    disclosureStatusCode: string;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -357,7 +360,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             'add-review-modal-trigger' : 'assign-reviewer-modal-trigger').click();
     }
 
-    openCountModal(moduleName, id, coiNumber, disSeqCode, personId) {
+    openCountModal(moduleName, coiData,count = null) {
+      if(count > 0) {     
         switch (moduleName) {
             case 'sfi':
                 this.selectedModuleCode = 8;
@@ -372,14 +376,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.selectedModuleCode = 0;
         }
         this.isShowCountModal = true;
-        this.currentDisclosureId = id;
-        this.currentDisclosureNumber = coiNumber;
+        this.currentDisclosureId = coiData.coiDisclosure.disclosureId;
+        this.currentDisclosureNumber = coiData.coiDisclosure.disclosureNumber;
         this.disclosureType = moduleName;
         this.inputType = 'DISCLOSURE_TAB';
-        this.disclosureSequenceStatusCode = disSeqCode;
-        this.personId = personId;
-
+        this.disclosureSequenceStatusCode = coiData.coiDisclosure.disclosureStatusCode;
+        this.personId = coiData.coiDisclosure.personId;
     }
+}
     closeModal(event) {
         this.isShowCountModal = event;
     }

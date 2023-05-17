@@ -105,29 +105,28 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col">
                     <div class="border triple-card rounded-1 position-relative">
                         <span class="status-pill">Relationship with</span>
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
-                                <tr class="Cursor-pointer"
-                                    (click)="openCountModal('sfi', coiData?.coiDisclosure?.disclosureId,  coiData?.coiDisclosure?.disclosureNumber, coiData?.coiDisclosure?.disclosureStatusCode, coiData?.coiDisclosure?.personId )">
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfSFI > 0" 
+                                    (click)="openCountModal('sfi', coiData, coiData?.coiDisclosure?.numberOfSFI )">
                                     <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfSFI?
                                             coiData?.coiDisclosure?.numberOfSFI : 0}}</span>
                                     </td>
                                     <td class="ps-2">Significant Financial Interest</td>
                                 </tr>
-                                <tr class="Cursor-pointer"
-                                    (click)="openCountModal('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId)"
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfProposals > 0"
+                                    (click)="openCountModal('proposal', coiData, coiData?.coiDisclosure?.numberOfProposals)"
                                     *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
                                     <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfProposals ?
                                             coiData?.coiDisclosure?.numberOfProposals : 0}}</span>
                                     </td>
                                     <td class="ps-2">Proposals</td>
                                 </tr>
-                                <tr class="Cursor-pointer"
-                                    (click)="openCountModal('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId)"
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfProposals > 0"
+                                    (click)="openCountModal('award', coiData, coiData?.coiDisclosure?.numberOfAwards)"
                                     *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
                                     <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfAwards ?
                                             coiData?.coiDisclosure?.numberOfAwards : 0}}</span>
@@ -140,7 +139,6 @@
                     </div>
                 </div>
             </div>
-
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress navigation-tabs row">
                     <div (click)="goToStep(1)"
@@ -315,7 +313,7 @@
                         data-bs-toggle="dropdown" id="moreActions" role="button">
                         <mat-icon class="me-1">more_vert</mat-icon> More Options
             </span> -->
-                    <ul class="border dropdown-menu p-0 rounded-0" style="" aria-labelledby="moreActions">
+                    <ul class="border dropdown-menu p-0 rounded-0" aria-labelledby="moreActions">
                         <li class="ash-text border-bottom"><span class="dropdown-item fs-15 fw-medium">
                                 <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
                         </li>

@@ -199,7 +199,9 @@
         <div class="align-items-center chin d-flex fs-14 mx-3 ">
             <div class="align-items-center col-3 d-flex fs-14">
                 <strong class="fs-18 me-2 text-blue-color"
-                 (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi);">{{disclosure?.noOfSfi}}</strong>
+                 (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi);">
+                  <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}} </label>
+                   </strong>
                 <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
                 <label class="label-text mt-1 ">
                      <strong 
