@@ -894,6 +894,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			CoiDisclosure coiDisclosure = session.createQuery(query).getSingleResult();
 			coiDisclosure.setUpdateUserFullName(coiDisclosure.getPerson().getFullName());
 			coiDisclosure.setNumberOfSFI(getNumberOfSFIBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
+			coiDisclosure.setNumberOfProposals(getNumberOfProposalsBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
+			coiDisclosure.setNumberOfAwards(getNumberOfAwardsBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
 			CoiDisclosures.add(coiDisclosure);
 		} catch (Exception ex) {
 			CoiDisclosures = getPendingFCOIDisclosure(personId);
