@@ -15,7 +15,7 @@ declare var $: any;
 @Component({
     selector: 'app-coi-review-location',
     templateUrl: './location.component.html',
-    styleUrls: ['./location.component.css'],
+    styleUrls: ['./location.component.scss'],
 })
 export class LocationComponent implements OnInit, OnDestroy {
 

@@ -31,7 +31,7 @@
 
 .loading-text {
   text-align: center;
-  color: #47a69a;
+  color: #007DEC;
   font-size: 12px;
   margin-top: 10px;
 }
@@ -44,7 +44,7 @@
 #ld2 div {
   height: 20px;
   width: 5px;
-  background: #26a69a;
+  background: #007DEC;
   margin: 3px;
   border-radius: 25px;
 }
@@ -80,21 +80,21 @@
 @keyframes ld2 {
   0% {
     transform: scaleY(1);
-    background: #47e6d6;
+    background: #007DEC;
   }
   25% {
-    background: #26a69a;
+    background: #007DEC;
   }
   50% {
     transform: scaleY(2);
-    background: #59CD90;
+    background: #007DEC;
   }
   75% {
-    background: #87ece2;
+    background: #007DEC;
   }
   100% {
     transform: scaleY(1);
-    background: #1bebd6;
+    background: #007DEC;
   }
 }
 
