@@ -2,9 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../common/services/common.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
+
 export class EntityManagementService {
 
   constructor(private _commonService: CommonService, private _http: HttpClient) { }
