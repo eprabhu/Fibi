@@ -51,7 +51,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
 
                 if (error.status === 401 || this.isUnAuthorized(error)) {
                     this._commonService.enableSSO ? localStorage.clear() :
-                    ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
+                    this._commonService.removeUserDetailsFromLocalStorage();
                     this._commonService.currentUserDetails = {};
                     this._commonService.enableSSO ? window.location.reload() : this._router.navigate(['/login']);
                 }
