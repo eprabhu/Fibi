@@ -76,10 +76,12 @@ export class CommonService {
                 try {
                     // const SYSTEM_PARAMETERS: any = await this.getRequiredParameters();
                     // this.assignSystemParameters(SYSTEM_PARAMETERS);
+                    await this.fetchPermissions();
+                    resolve(true);
                 } catch (e) {
-                    console.error(e)
+                    console.error(e);
+                    resolve(true);
                 }
-                resolve(true);
             } else {
                 resolve(true);
             }
@@ -196,7 +198,7 @@ export class CommonService {
         if (this.rightsArray.length) {
             return this.rightsArray;
         }
-        this.rightsArray = this._http.get(this.baseUrl + '/getAllSystemRights').toPromise();
+        this.rightsArray = await this._http.get(this.fibiUrl + '/getAllSystemRights').toPromise();
         return this.rightsArray;
     }
 
@@ -255,6 +257,10 @@ export class CommonService {
             default:
             return 'yellow-badge';
         }
+    }
+
+    removeUserDetailsFromLocalStorage() {
+        ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
 
 }

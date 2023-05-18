@@ -3,7 +3,7 @@
         <a class="logo" href="#/fibi/dashboard">
             <img [src]="logo" alt="Logo" class="w-75">
         </a>
-        <ul class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
+        <ul role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
             <li [routerLink]="['/coi/user-dashboard']" class="mr-2 cursor-pointer" role="tab"
                 routerLinkActive="active" title="Goto home page" aria-describedby="Goto home page">Home
                 <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"></span>
@@ -25,7 +25,7 @@
     <div>
         <div class="d-flex align-items-center">
             <div class="align-items-center d-flex mx-4">
-                <mat-icon [attr.title]="'Click to view all the faq'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view all the faq'"
+                <mat-icon [attr.title]="'Click to view all the frequently asked questions'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view all the frequently asked questions'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     help
                 </mat-icon>
@@ -35,9 +35,9 @@
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     notifications
                 </mat-icon>
-                <mat-icon [attr.title]="'Sign out'"
+                <mat-icon [attr.title]="'Click here to sign out'"
                           [routerLink]="['/login']"
-                          [attr.aria-labelledby]="'Sign out'"
+                          [attr.aria-labelledby]="'Click here to sign out'"
                           class="halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     power_settings_new
                 </mat-icon>
