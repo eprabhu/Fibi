@@ -1225,6 +1225,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
 				disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
 				disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
+				disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
+				disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
+				disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
+				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
 //				if (tabName.equals("PENDING_DISCLOSURES")) {
 //					disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
 //					disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
