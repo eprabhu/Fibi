@@ -314,3 +314,19 @@ nav ul li.active {
   flex-wrap: wrap;
   justify-content: flex-start;
 }
+
+.hovering-card:hover  {
+  .btn-outline-secondary{
+    color: #fff;
+    background-color: #007dec;
+    border-color: #007dec;
+}
+}
+
+.hovering-card:hover  {
+  .btn-outline-primary{
+    color: #fff;
+    background-color: #007dec;
+    border-color: #007dec;
+}
+}

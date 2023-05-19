@@ -1,7 +1,5 @@
-<div class="mt-3 mx-0 row">
-</div>
 <div class="mt-1">
-    <div class="row justify-content-center " *ngIf="coiFinancialEntityDetails?.length">
+    <div *ngIf="coiFinancialEntityDetails?.length">
         <div class="form-group searchBox col-lg">
             <input type="text" placeholder="Search by SFI" class="ng-pristine ng-valid ng-touched form-control"
                    [(ngModel)]="searchText ">
@@ -9,82 +7,11 @@
                 <i aria-hidden="true" class="fa fa-search fa-med pt-2 mr-4"></i>
             </a>
         </div>
-        <!-- <div class="col-lg-auto" *ngIf="isEditMode">
-            <button class="btn btn-tertiary mt-0 " title="Add Significant Financial Interest"
-                    [routerLink]="['/fibi/manage-sfi']"
-                    [queryParams]="{mode:'edit', isSFINotAvailable: isSFINotAvailable, dId: disclosureId}">
-                Add New Significant Financial Interest</button>
-            <button class="btn btn-primary mt-0 float-end" title="Proceed to Relationships"
-                    [routerLink]="['/fibi/coi/relationship']" (click)="_coiService.stepTabName = 'relationship'">Proceed to Relationships
-            </button>
-        </div> -->
-
-
-<div class=" row p-2 "
+<div class="margin-left-5">
+<ng-container
     *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.entityName'] ; let i =index">
-    <!-- Main -->
-    <div class="border d-flex px-0 rounded-3 shadow-sm">
-        <div class="col-11 bg-white ">
-            <div class=" mt-2 pb-2 pt-3 px-1" style="height: 77px;">
-                <div class="m-0 mb-2 row">
-                    <div class="col-9 ">
-                        <!-- <span class="inactive-ribbon shadow-sm align-items-center d-flex ps-2">Inactive</span> -->
-                        <p class="entity-title">
-                            <strong>{{item?.coiEntity?.entityName}}</strong>
-                        </p>
-                    </div>
-                    <div class="col-3 text-secondary fs-14">
-                        <span class="fw-bold me-2">Entity Type :</span>{{item?.coiEntity?.entityType?.description.substr(0,20)}}
-                    </div>                </div>
-                <!-- Under -->
-                <div class="align-items-center d-flex fs-14 m-0 row">
-                    <div class="col-6 text-secondary">
-                        <span class="fw-bold me-2">Relationship :</span>
-                        <app-no-data-label [valueToShow]="item?.validPersonEntityRelTypes">
-                            <span *ngIf="item?.validPersonEntityRelTypes?.length" class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
-                            <span  class="fw-medium">Financial :
-                            </span> <em *ngFor="let relationship of item?.validPersonEntityRelTypes;let last = last">
-                                <span class="r-title" *ngIf="!last">{{relationship?.personEntityRelType?.description +','}}
-                                </span>
-                                <span class="r-title" *ngIf="last">{{relationship?.personEntityRelType?.description}}
-                                </span>
-                            </em></span>
-                        </app-no-data-label>
-                    </div>
-
-                    <div class="align-items-center col-3 d-flex justify-content-between text-secondary">
-                        <div>
-                            <span class="fw-bold"> Date of Creation : </span> {{ item?.coiEntity?.createTimestamp
-                            |dateFormatter }}
-                        </div>
-                    </div>
-
-                    <div class="align-items-center col-3 d-flex justify-content-between text-secondary">
-                        <div>
-                            <span class="fw-bold me-2"> Relationship Start Date :</span>{{ item?.involvementStartDate
-                            |dateFormatter }}
-                        </div>
-                        <!-- <div>
-                            <button class="align-items-center btn btn-outline-primary d-flex fs-14">
-                                <mat-icon class="me-1">visibility</mat-icon>
-                                View
-                            </button>
-                        </div> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 2nd row -->
-        <div class="col-1 bg-white">
-            <div class="bg-white mt-2 pb-2 pt-3 px-1" title="Click here to view details">
-                <button class="align-items-center btn btn-outline-primary d-flex fs-14 mt-3 ml-15"
-                    (click)="openSfiDetails(true, item?.personEntityId)">
-                    <mat-icon class="me-1">visibility</mat-icon>
-                    View
-                </button>
-            </div>
-        </div>
-    </div>
+    <app-shared-sfi-card [reqObject] = 'item' [referredFrom]="'SFI_EDIT_MODE'"></app-shared-sfi-card>
+</ng-container>
 </div>
 
 </div>

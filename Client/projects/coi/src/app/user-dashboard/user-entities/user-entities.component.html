@@ -17,38 +17,6 @@
 </div>
 <app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
 <ng-container *ngFor="let entities of filteredEntityArray | SearchFilter: searchText:['coiEntityCountry', 'coiEntityName', 'coiEntityType']">
-    <div class="bg-white border entity mt-2 pb-2 pt-3 px-1 rounded-1 shadow-sm">
-        <div class="m-0 mb-2 row">
-            <div class="col-8 d-flex">
-                <span [ngClass]="entities?.isActive == 'Y' ? 'active-ribbon':'inactive-ribbon'"
-                      class=" shadow-sm align-items-center d-flex ps-2">{{entities?.isActive == 'Y'?'Active':'Inactive'}}</span>
-                <p class="entity-title">
-                    <strong>{{entities?.coiEntityName}}</strong>
-                </p>
-            </div>
-            <div class="col-4 text-secondary fs-14">
-                <span class="fw-bold me-2">Entity Type :</span> {{entities?.coiEntityType}}
-            </div>
-        </div>
-        <div class="align-items-center d-flex fs-14 m-0 row">
-            <div class="col-8 text-secondary">
-                <span class="fw-bold me-3">Relationship : </span>
-                <app-no-data-label [valueToShow]="entities?.relationshipTypes">
-                    <span class="relationship-pill border px-3 py-1 rounded-4 me-2">Financial:<em>{{getRelationshipTypes(entities?.relationshipTypes)}}</em></span>
-                </app-no-data-label>
-            </div>
-            <div class="align-items-center col-4 d-flex justify-content-between text-secondary">
-                <div>
-                    <span class="fw-bold me-2"> Relationship Start Date :</span> {{entities?.involvementStartDate | dateFormatter}}
-                </div>
-                <div>
-                    <button (click)="viewEntityDetails(entities)" class="align-items-center btn btn-outline-primary d-flex fs-14">
-                        <mat-icon class="me-1">visibility</mat-icon>
-                        View
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+  <app-shared-sfi-card [reqObject] = 'entities' [referredFrom]="'ENTITIES_DASHBOARD'"></app-shared-sfi-card>
 </ng-container>
 
