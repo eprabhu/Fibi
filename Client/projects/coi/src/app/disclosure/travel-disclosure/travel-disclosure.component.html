@@ -1,6 +1,7 @@
 <div [class.overlay]="userDashboardService?.isShowTravelDisclosure">
     <div @enterAnimation *ngIf="userDashboardService?.isShowTravelDisclosure" class="task-right-div card-border d-flex align-items-center">
-        <div tabindex="-1" class="close shadow-medium" (click)="clearDisclosureModal()" title='Close'>
+        <div tabindex="-1" class="close shadow-medium" (click)="clearDisclosureModal()" title='Close'
+            title="Click here to close the modal" area-describedby="Click here to close the modal">
             <img src="{{deployMap}}assets/images/close.svg" alt="close button">
         </div>
         <div class="tool-kit-body card-border card-height scrollable-table">
@@ -12,13 +13,15 @@
                             <div class="d-flex align-items-center">
                                 <button
                                     class="align-items-center d-flex btn btn-primary mt-0 py-1 px-3 h-100 fs-14 me-3"
-                                    title="Create Travel Disclosure" (click)="certifyTravelDisclosure();">
+                                    title="Click here to create a travel disclosure" area-describedby="Click here to create a travel disclosure"
+                                    (click)="certifyTravelDisclosure();">
                                     <mat-icon class="fs-4 w-auto h-auto me-2 material-icons">save</mat-icon>
                                     Create
                                 </button>
                                 <button
                                     class="align-items-center d-flex btn btn-outline-primary mt-0 py-1 px-3 h-100 fs-14"
-                                    title="Create & Copy Travel Disclosure" (click)="certifyTravelDisclosure();">
+                                    title="Click here to create and copy the travel disclosure" area-describedby="Click here to create and copy the travel disclosure"
+                                    (click)="certifyTravelDisclosure();">
                                     <mat-icon class="fs-4 w-auto h-auto me-2 material-icons">save</mat-icon>
                                     Create & Copy
                                 </button>

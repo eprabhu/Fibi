@@ -308,3 +308,9 @@ nav ul li.active {
   background-color: #997404;
   color: white;
 }
+
+.wrapping-text {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
