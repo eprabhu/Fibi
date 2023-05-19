@@ -531,3 +531,4 @@
     [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"></app-count-modal>
 
 
+<app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)" [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
