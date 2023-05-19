@@ -259,7 +259,8 @@
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill side-height border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
-                    <span [routerLink]="['/coi/user-dashboard']" title="Goto home page"
+                    <span title="Goto home page"
+                          (click)="goToHomeUrl()"
                         class="btn btn-outline-secondary pb-0 fs-14 {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
                         <mat-icon>home</mat-icon>
                     </span>
@@ -530,4 +531,3 @@
     [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"></app-count-modal>
 
 
-<app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)" [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>

@@ -7,11 +7,16 @@ import {ApplicableQuestionnaire, COI, getApplicableQuestionnaireData} from "./co
 import { DataStoreService } from "./services/data-store.service";
 import { CoiService } from "./services/coi.service";
 import { Location } from "@angular/common";
-import { deepCloneObject, openModal } from "../../../../fibi/src/app/common/utilities/custom-utilities";
+import {deepCloneObject, openModal, pageScroll} from "../../../../fibi/src/app/common/utilities/custom-utilities";
 import { ElasticConfigService } from "../../../../fibi/src/app/common/services/elastic-config.service";
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from "../../../../fibi/src/app/app-constants";
 import { CommonService } from "../common/services/common.service";
-import { NO_DATA_FOUND_MESSAGE } from '../app-constants';
+import {
+    CREATE_DISCLOSURE_ROUTE_URL,
+    NO_DATA_FOUND_MESSAGE,
+    HOME_URL,
+    POST_CREATE_DISCLOSURE_ROUTE_URL
+} from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 @Component({
     selector: 'app-disclosure',
@@ -66,6 +71,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         public coiService: CoiService,
         public location: Location,
         public dataStore: DataStoreService,public navigationService:NavigationService) {
+        window.scrollTo(0,0);
         this.isCreateMode = this.router.url.includes('create-disclosure');
         this.setStepFirstTime(this.router.url);
         this.$subscriptions.push(this.router.events.subscribe(event => {
@@ -85,6 +91,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.dataStore.dataChanged = false;
+        this.dataStore.setStoreData(new COI());
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -98,9 +105,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     routeToAppropriateMode() {
         if (this.coiData.coiDisclosure.reviewStatusCode == '1' && !this.isCreateMode) {
-            this.router.navigate(['/coi/create-disclosure/screening'], { queryParamsHandling: 'preserve' });
+            this.router.navigate([CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
         } else if (this.coiData.coiDisclosure.reviewStatusCode != '1' && this.isCreateMode) {
-            this.router.navigate(['/coi/disclosure/summary'], { queryParamsHandling: 'preserve' });
+            this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
         }
     }
 
@@ -395,5 +402,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     closePersonDetailsModal(event){
         this.ispersondetailsmodal=event;
 
+    }
+
+    goToHomeUrl() {
+        //TODO admin/reviewer/pi based redirect once rights are implemented.
+        const reRouteUrl = this.coiService.previousHomeUrl || HOME_URL;
+        this.router.navigate([reRouteUrl]);
     }
 }

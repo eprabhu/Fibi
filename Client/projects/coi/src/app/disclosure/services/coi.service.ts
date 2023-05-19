@@ -11,6 +11,7 @@ export class CoiService {
     triggerReviewCommentDataUpdate$: Subject<any> = new Subject();
     globalSave$: Subject<any> = new Subject<any>();
     unSavedModules = '';
+    previousHomeUrl = '';
 
     isShowInfo = true;
     isShowSFIInfo = true;

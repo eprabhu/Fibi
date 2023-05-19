@@ -1,5 +1,5 @@
 <div class="row my-4">
-    <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures" >
+    <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
         <div class="col-6 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
             <div class="shadow-sm disclosure-card border rounded">
                 <div class="border-bottom d-flex disclosure-card-heading-blue px-3 py-2 rounded-top-2">
@@ -102,17 +102,17 @@
     <div (click)="setTab('IN_PROGRESS_DISCLOSURES')" class="border-end navigation-icons px-3 py-1"
         role="button" title="Click to see all the in progress disclosures" aria-describedby="Click to see all the in progress disclosures">
         <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="pb-3 active">
-            In Progress Disclosures({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
+            In Progress Disclosures ({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('APPROVED_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
         title="Click to see all the approved disclosures" aria-describedby="Click to see all the approved disclosures">
         <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'" class="pb-3">Approved
-            Disclosures({{dashboardCount?.approvedDisclosureCount || 0}})</span>
+            Disclosures ({{dashboardCount?.approvedDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
         title="Click to see all the travel disclosures" aria-describedby="Click to see all the travel disclosures">
         <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="pb-3">Travel
-            Disclosures({{dashboardCount?.travelDisclosureCount || 0}})</span>
+            Disclosures ({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('DISCLOSURE_HISTORY')" class="navigation-icons px-3 py-1" role="button"
         title="Click to see all the disclosure history" aria-describedby="Click to see all the disclosure history">
@@ -147,7 +147,7 @@
     *ngFor="let disclosure of filteredDisclosureArray | SearchFilter: searchText:['coiDisclosureNumber', 'fcoiType',
         'conflictStatus', 'dispositionStatus', 'proposalTitle', 'updateUser', 'noOfSfiInPending', 'proposalId', 'reviewStatus'] let index = index;">
     <div class="bg-white border mt-2 rounded-1 shadow-sm light-dark-text-color" (mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
-        <div class="border-bottom fs-14 p-3">
+        <div class="border-bottom fs-14 p-3 text-break">
             <div *ngIf="disclosure?.fcoiTypeCode == '2'"><span class="fw-bold">Proposal :</span>
                 #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
             </div>
@@ -197,7 +197,9 @@
         </div>
 
         <div class="align-items-center chin d-flex fs-14 mx-3 ">
-            <div class="align-items-center col-3 d-flex fs-14">
+            <div class="align-items-center col-3 d-flex fs-14"
+                 title="Click here to see the sfi s attached to the disclosure"
+                 area-describedby="Click here to see the sfi s attached to the disclosure">
                 <strong class="fs-18 me-2 text-blue-color"
                  (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi);">
                   <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}} </label>
@@ -249,10 +251,9 @@
                     <mat-icon class="me-1">restart_alt</mat-icon>
                     Revise
                 </button>
-                <button [queryParams]={disclosureId:disclosure.coiDisclosureId}
-                    [routerLink]="['/coi/disclosure/summary']"
-                    class="align-items-center btn btn-outline-primary d-flex fs-14"
-                    title="Click to view details" area-describedby="Click to view details">
+                <button (click)="redirectToDisclosure(disclosure)"
+                        aria-describedby="Click to view details"
+                        class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view details">
                     <mat-icon class="me-1">visibility</mat-icon>
                     View
                 </button>
