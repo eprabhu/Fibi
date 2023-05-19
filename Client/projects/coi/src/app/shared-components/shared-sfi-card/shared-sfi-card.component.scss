@@ -1,0 +1,47 @@
+.inactive-ribbon {
+  color: #fff;
+  width: max-content;
+  height: 27px;
+  background: #949494;
+  position: relative;
+  left: -18px;
+  top: 0;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 0 50px 50px 0;
+  padding: 10px 18px;
+}
+.inactive-ribbon::before {
+    content      : "";
+    position     : absolute;
+    height       : 0;
+    width        : 0;
+    border-bottom: 6px solid #151515;
+    border-left  : 6px solid transparent;
+    top          : -6px;
+    left         : 0;
+  }
+
+  .active-ribbon {
+    color: #fff;
+    width: max-content;
+    height: 27px;
+    background: #54BF5B;
+    position: relative;
+    left: -18px;
+    top: 0;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 0 50px 50px 0;
+    padding: 10px 18px;
+  }
+  .active-ribbon::before {
+      content      : "";
+      position     : absolute;
+      height       : 0;
+      width        : 0;
+      border-bottom: 6px solid #151515;
+      border-left  : 6px solid transparent;
+      top          : -6px;
+      left         : 0;
+    }

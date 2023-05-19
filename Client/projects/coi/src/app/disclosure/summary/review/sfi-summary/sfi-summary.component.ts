@@ -77,8 +77,4 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this._dataStoreAndEventsService.modifyReviewComment(this.commentConfiguration);
     }
 
-    openSfiDetails(condition: boolean, entityId: number) {
-        this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104',mode:'view' }});
-    }
-
 }
