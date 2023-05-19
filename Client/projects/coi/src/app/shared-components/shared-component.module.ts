@@ -6,6 +6,7 @@ import { personalDetailsModalComponent } from './personal-details-modal/personal
 import { personDetailsComponent } from './personal-details-modal/person-details/person-details.component';
 import { trainingDetailsComponent } from './personal-details-modal/Training-details/Training-details.component';
 import { SharedModule } from '../shared/shared.module';
+import { SharedSfiCardComponent } from './shared-sfi-card/shared-sfi-card.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,7 @@ import { SharedModule } from '../shared/shared.module';
     MatIconModule,
     SharedModule
   ],
-  declarations: [NoInformationComponent,personalDetailsModalComponent,personDetailsComponent,trainingDetailsComponent],
-  exports: [NoInformationComponent,personalDetailsModalComponent]
+  declarations: [NoInformationComponent,personalDetailsModalComponent,personDetailsComponent,trainingDetailsComponent, SharedSfiCardComponent],
+  exports: [NoInformationComponent,personalDetailsModalComponent,SharedSfiCardComponent]
 })
-export class SharedComponentModule { } 
+export class SharedComponentModule { }

@@ -266,18 +266,6 @@ nav ul li.active {
   }
 }
 
-.bg-white button {
-  border-color: #6c757d !important;
-  color: #6c757d !important;
-  background: #fff !important;
-}
-
-.bg-white:hover button {
-  border-color: #007DEC !important;
-  color: #fff !important;
-  background: #007DEC !important;
-}
-
 .potential-badge {
   background-color: #997404;
   color: white;
@@ -319,4 +307,26 @@ nav ul li.active {
   @extend .coi-badge;
   background-color: #997404;
   color: white;
+}
+
+.wrapping-text {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.hovering-card:hover  {
+  .btn-outline-secondary{
+    color: #fff;
+    background-color: #007dec;
+    border-color: #007dec;
+}
+}
+
+.hovering-card:hover  {
+  .btn-outline-primary{
+    color: #fff;
+    background-color: #007dec;
+    border-color: #007dec;
+}
 }

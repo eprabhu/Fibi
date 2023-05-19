@@ -105,29 +105,28 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col">
                     <div class="border triple-card rounded-1 position-relative">
                         <span class="status-pill">Relationship with</span>
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
-                                <tr class="Cursor-pointer"
-                                    (click)="openCountModal('sfi', coiData?.coiDisclosure?.disclosureId,  coiData?.coiDisclosure?.disclosureNumber, coiData?.coiDisclosure?.disclosureStatusCode, coiData?.coiDisclosure?.personId )">
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfSFI > 0" 
+                                    (click)="openCountModal('sfi', coiData, coiData?.coiDisclosure?.numberOfSFI )">
                                     <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfSFI?
                                             coiData?.coiDisclosure?.numberOfSFI : 0}}</span>
                                     </td>
                                     <td class="ps-2">Significant Financial Interest</td>
                                 </tr>
-                                <tr class="Cursor-pointer"
-                                    (click)="openCountModal('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId)"
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfProposals > 0"
+                                    (click)="openCountModal('proposal', coiData, coiData?.coiDisclosure?.numberOfProposals)"
                                     *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
                                     <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfProposals ?
                                             coiData?.coiDisclosure?.numberOfProposals : 0}}</span>
                                     </td>
                                     <td class="ps-2">Proposals</td>
                                 </tr>
-                                <tr class="Cursor-pointer"
-                                    (click)="openCountModal('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.disclosureStatusCode, coi.personId)"
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfProposals > 0"
+                                    (click)="openCountModal('award', coiData, coiData?.coiDisclosure?.numberOfAwards)"
                                     *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
                                     <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfAwards ?
                                             coiData?.coiDisclosure?.numberOfAwards : 0}}</span>
@@ -140,7 +139,6 @@
                     </div>
                 </div>
             </div>
-
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress navigation-tabs row">
                     <div (click)="goToStep(1)"
@@ -261,7 +259,8 @@
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill side-height border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
-                    <span [routerLink]="['/coi/user-dashboard']" title="Goto home page"
+                    <span title="Goto home page"
+                          (click)="goToHomeUrl()"
                         class="btn btn-outline-secondary pb-0 fs-14 {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
                         <mat-icon>home</mat-icon>
                     </span>
@@ -315,7 +314,7 @@
                         data-bs-toggle="dropdown" id="moreActions" role="button">
                         <mat-icon class="me-1">more_vert</mat-icon> More Options
             </span> -->
-                    <ul class="border dropdown-menu p-0 rounded-0" style="" aria-labelledby="moreActions">
+                    <ul class="border dropdown-menu p-0 rounded-0" aria-labelledby="moreActions">
                         <li class="ash-text border-bottom"><span class="dropdown-item fs-15 fw-medium">
                                 <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
                         </li>
@@ -343,7 +342,7 @@
             <div class="modal-header pe-0">
                 <h4 class="modal-title">Complete Review
                 </h4>
-                <button aria-label="Close" class="btn-close me-3" data-bs-dismiss="modal" id="dissmiss-btn"
+                <button aria-label="Close" class="btn-close me-3 fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
                     type="button">
                 </button>
             </div>
@@ -500,15 +499,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Confirmation</h5>
-                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close" data-bs-dismiss="modal"
+                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
                     aria-label="Close">
                 </button>
             </div>
             <div class="modal-body">
-                <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">You have unsaved changes in
+                <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'" class="fs-14">You have unsaved changes in
                     <strong>{{coiService.unSavedModules}}.</strong>
                 </p>
-                <p>Do you want to leave the
+                <p class="fs-14">Do you want to leave the
                     <ng-container *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">page without
                         saving</ng-container>
                     <ng-container
