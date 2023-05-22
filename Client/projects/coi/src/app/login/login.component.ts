@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                         // });
                         this.commonService.fetchPermissions().then((res) => {
                             this._router.navigate(['coi/user-dashboard']);
-                        })
+                        });
                     }
                 }
             }, (err: HttpErrorResponse) => {

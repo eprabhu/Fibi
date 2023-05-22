@@ -198,7 +198,7 @@ export class CommonService {
         if (this.rightsArray.length) {
             return this.rightsArray;
         }
-        this.rightsArray = await this._http.get(this.fibiUrl + '/getAllSystemRights').toPromise();
+        this.rightsArray = await this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
         return this.rightsArray;
     }
 
