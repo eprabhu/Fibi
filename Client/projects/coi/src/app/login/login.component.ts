@@ -34,6 +34,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.commonService.removeUserDetailsFromLocalStorage();
+        this.commonService.currentUserDetails = {};
         this.$subscriptions.push(this.commonService.isShowLoader.subscribe(data =>
             setTimeout(() => {
                 this.isShowLoader = data;
@@ -65,7 +67,9 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                         // this.commonService.getRequiredParameters().then(systemParameters => {
                         //     this.commonService.assignSystemParameters(systemParameters);
                         // });
-                        this._router.navigate(['coi/user-dashboard']);
+                        this.commonService.fetchPermissions().then((res) => {
+                            this._router.navigate(['coi/user-dashboard']);
+                        });
                     }
                 }
             }, (err: HttpErrorResponse) => {

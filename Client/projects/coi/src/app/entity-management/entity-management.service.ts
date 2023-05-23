@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../common/services/common.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
+
 export class EntityManagementService {
 
   constructor(private _commonService: CommonService, private _http: HttpClient) { }
 
   coiRequestObject = new EntityDashboardRequest();
+  entityDashDefaultValues = new EntityDashDefaultValues();
   isShowEntityNavBar = false;
   relationshipDashboardRequest = new RelationshipDashboardRequest();
   statusCodes: any = [
@@ -66,4 +66,9 @@ export class RelationshipDashboardRequest{
   currentPage = 1;
   pageNumber = 20;
   id = null;
+}
+
+export class EntityDashDefaultValues {
+  entitySearch = '';
+  countrySearch = ''
 }

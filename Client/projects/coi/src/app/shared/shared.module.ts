@@ -52,6 +52,7 @@ import { CountModalComponent } from './count-modal/count-modal.component';
 import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
 import { ActivityComponent } from '../disclosure/activity-track/activity.component';
 import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
+import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
 
 @NgModule({
     imports: [
@@ -63,7 +64,7 @@ import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.com
         MatNativeDateModule,
         MatIconModule,
         CdkMenuModule,
-        MatMenuModule
+        MatMenuModule,
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective, AppEndpointSearchComponent, CustomElementComponent,
         ViewQuestionnaireComponent, LookUpComponent, LookupFilterPipe,
@@ -77,7 +78,8 @@ import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.com
         CountModalComponent,
         CoiReviewCommentsComponent,
         ActivityComponent,
-        SliderCloseBtnComponent],
+        SliderCloseBtnComponent,
+        NoDataLabelComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -122,7 +124,8 @@ import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.com
         CountModalComponent,
         CoiReviewCommentsComponent,
         ActivityComponent,
-        SliderCloseBtnComponent
+        SliderCloseBtnComponent,
+        NoDataLabelComponent
     ],
 
     providers: [

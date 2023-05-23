@@ -54,6 +54,7 @@ body {
 }
 
 .modal-footer {
+
   .btn-outline-secondary,
   .btn-outline-primary,
   .btn-danger {
@@ -85,37 +86,57 @@ nav ul li.active {
 }
 
 @media (min-width: 576px) {
-  .container, .container-sm {
+
+  .container,
+  .container-sm {
     max-width: 100%
   }
 }
 
 @media (min-width: 768px) {
-  .container, .container-md, .container-sm {
+
+  .container,
+  .container-md,
+  .container-sm {
     max-width: 100%
   }
 }
 
 @media (min-width: 992px) {
-  .container, .container-lg, .container-md, .container-sm {
+
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm {
     max-width: 100%
   }
 }
 
 @media (min-width: 1200px) {
-  .container, .container-lg, .container-md, .container-sm, .container-xl {
+
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
     max-width: 100%
   }
 }
 
 @media (min-width: 1400px) {
-  .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl,
+  .container-xxl {
     max-width: 1600px
   }
 }
 
 .pl-5 {
-  padding-left: 3rem!important;
+  padding-left: 3rem !important;
 }
 
 .bg-success {
@@ -138,7 +159,7 @@ nav ul li.active {
 
 .bg-container {
   height: 100%;
-  background-image: linear-gradient(to right, #587ff5 , #706be5);
+  background-image: linear-gradient(to right, #587ff5, #706be5);
 
   .login-container {
     display: flex;
@@ -152,25 +173,29 @@ nav ul li.active {
     /* box-shadow: 1px 2px 6px 0px rgba(0, 0, 0, 0.2);		 */
     //  border-radius: 15px;
     overflow: hidden;
+
     .login-img-wrapper {
       flex: 1;
       padding: 160px 53px 34px 53px;
-      background-image: url(assets/images/fibiLogo_white.png),url(assets/images/img.jpg);
+      background-image: url(assets/images/fibiLogo_white.png), url(assets/images/img.jpg);
       background-size: 27%, cover;
       background-repeat: no-repeat, no-repeat;
       background-position: center center, 10% center;
+
       .tagline {
         bottom: 26%;
         color: #9e9e9e;
       }
     }
+
     .login-content-wrapper {
       flex: 1;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       background-color: white;
       padding: 15px;
+
       .login-button {
         border: 0;
         color: white;
@@ -179,16 +204,18 @@ nav ul li.active {
         transition: background-color 0.3s ease-in;
         outline: none;
       }
+
       .login-button:hover {
         background-color: #6f6de6;
       }
     }
   }
 }
+
 // icon color & hovering
 .btn-primary-icon:hover {
   background-color: #E2F1FF;
-  color: #007DEC!important;
+  color: #007DEC !important;
 }
 
 .btn-primary-icon {
@@ -199,8 +226,8 @@ nav ul li.active {
   letter-spacing: normal;
   cursor: pointer;
   background-color: transparent;
-  color: #6A7980!important;
-  border:none;
+  color: #6A7980 !important;
+  border: none;
   border-radius: 4px;
 }
 
@@ -224,12 +251,12 @@ nav ul li.active {
   width: 23px;
   height: 23px;
   background-repeat: no-repeat;
-  }
+}
 
 .btn-primary-icon-svg:hover .btn-secondary-svg {
   background: url(assets/images/history-icon-with-blue-shade.svg);
   background-repeat: no-repeat;
-  }
+}
 
 .btn-outline-secondary {
   &:hover {
@@ -239,20 +266,67 @@ nav ul li.active {
   }
 }
 
-.bg-white button { 
-  border-color: #6c757d !important;
-  color: #6c757d !important; 
-  background: #fff !important;
-}
-
-.bg-white:hover button { 
-  border-color: #007DEC !important;
-  color: #fff !important;
-  background: #007DEC !important;
-}
-
 .potential-badge {
   background-color: #997404;
   color: white;
   border: #997404;
+}
+
+.coi-badge {
+  font-weight: 500;
+  padding: 3px 9px;
+  font-size: 14px !important;
+  border-radius: 50rem !important;
+}
+
+.green-badge {
+  @extend .coi-badge;
+  background-color: #4CB57D !important;
+  color: #fff;
+}
+
+.yellow-badge {
+  @extend .coi-badge;
+  background-color: rgba(255, 193, 7, 1) !important;
+  color: rgba(0, 0, 0, 1) !important;
+}
+
+.blue-badge {
+  @extend .coi-badge;
+  background-color: #17a2b8 !important;
+  color: #fff;
+}
+
+.red-badge {
+  @extend .coi-badge;
+  background-color: rgba(220,53,69,1)!important;
+  color: #fff;
+}
+
+.brown-badge {
+  @extend .coi-badge;
+  background-color: #997404;
+  color: white;
+}
+
+.wrapping-text {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.hovering-card:hover  {
+  .btn-outline-secondary{
+    color: #fff;
+    background-color: #007dec;
+    border-color: #007dec;
+}
+}
+
+.hovering-card:hover  {
+  .btn-outline-primary{
+    color: #fff;
+    background-color: #007dec;
+    border-color: #007dec;
+}
 }

@@ -110,7 +110,7 @@ $bg-color: #E4F1FF;
   left: 14px;
   top: -12px;
   background-color: white;
-  border-radius: 1rem !important;
+  border-radius: 2rem !important;
   font-weight: 500 !important;
   padding: 1px 0.5rem;
   border: 1px solid #dee2e6 !important;
@@ -206,8 +206,4 @@ table {
   position: sticky;
   top: 51px;
   z-index: 50;
-}
-
-.Cursor-pointer{
-  cursor: pointer;
 }

@@ -37,8 +37,9 @@
             </div>
             <div class="col-8">
               <label class="label-text">Prime Sponsor :</label>
-            <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
-            <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">-- No Data --</span>
+                <app-no-data-label [valueToShow]="selectedProject?.primeSponsor">
+                    <span class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
+                </app-no-data-label>
             </div>
             <div class="col-4">
               <label class="label-text">Proposal Status : </label>
@@ -46,8 +47,9 @@
             </div>
             <div class="col-8">
               <label class="label-text">Lead Unit :</label>
-            <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
-            <span *ngIf="!selectedProject?.unitName" class="noDataExists">-- No Data --</span>
+                <app-no-data-label [valueToShow]="selectedProject?.unitName">
+                    <span class="ml-2 grey-text">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+                </app-no-data-label>
             </div>
             </div>
             <table class="table fs-14 fw-medium" *ngIf="projectRelations.length > 0">
@@ -64,11 +66,11 @@
                 <tr *ngFor="let test of projectRelations; let i = index" class="tr-hover">
                   <td class="table-data border-end fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.personEntity?.coiEntity?.entityName}}</td>
                   <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.comment?.comments}}</td>
-                  <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">
-                    <span class="{{_commonService.getDisclosureConflictBadge(test?.coiProjConflictStatusType?.projectConflictStatusCode)}} px-3 py-1 rounded-5 ">{{test?.coiProjConflictStatusType?.description}}</span>
+                  <td class="border-end px-3 text-center" [class.border-0]="i != projectRelations?.length-1">
+                    <span class="{{_commonService.getDisclosureConflictBadge(test?.coiProjConflictStatusType?.projectConflictStatusCode)}}">{{test?.coiProjConflictStatusType?.description}}</span>
                   </td>
                   <td class="border-0 d-flex pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
-                    
+
                     <button class="btn-primary-icon-svg me-1" type="button"
                       (mouseenter)="isShowHoverWhite[i]= true" (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true">
                       <span class="btn-secondary-svg"></span>

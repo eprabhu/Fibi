@@ -66,7 +66,6 @@ export class AdminDashboardComponent {
     reviewCommentsCount: 0
   };
   inputType: any;
-  disclosureSequenceStatusCode: any;
   personId: any;
   comments: any[] = [];
   replyComment: any[] = [];
@@ -75,6 +74,8 @@ export class AdminDashboardComponent {
   sortCountObj: SortCountObj;
   sortMap: any = {};
   clearField: String;
+  ishover: [] = [];
+  isViewAdvanceSearch = true;
 
   constructor(public _coiAdminDashboardService: AdminDashboardService,
     private _router: Router,
@@ -97,11 +98,10 @@ export class AdminDashboardComponent {
   setAdvanceSearch() {
     this.isShowAllProposalList = true;
     if (this._coiAdminDashboardService.coiRequestObject.tabName === 'ALL_DISCLOSURES') {
-      document.getElementById('collapseExample').classList.add('show');
-      // this.isShowAllProposalList = false;
+      this.isViewAdvanceSearch = true;
     } else {
-       document.getElementById('collapseExample').classList.remove('show');
        this.isShowAllProposalList = true;
+       this.isViewAdvanceSearch = false;
     }
   }
 
@@ -238,29 +238,32 @@ export class AdminDashboardComponent {
   }
 
 
-  setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId) {
-    switch (moduleName) {
-      case 'sfi':
-        this.selectedModuleCode = 8;
-        break;
-      case 'award':
-        this.selectedModuleCode = 1;
-        break;
-      case 'proposal':
-        this.selectedModuleCode = 3;
-        break;
-      default:
-        this.selectedModuleCode = 0;
-    }
-    this.isShowCountModal = true;
-    this.currentDisclosureId = id;
-    this.currentDisclosureNumber = coiNumber;
-    this.disclosureType=moduleName;
-    this.inputType = 'DISCLOSURE_TAB';
-    this.disclosureSequenceStatusCode = disSeqCode;
-    this.personId = personId;
-  }
+    setSelectedModuleCode(moduleName, id, coiNumber, personId, count = null) {
+        if (count > 0) {
+            switch (moduleName) {
+                case 'sfi':
+                    this.selectedModuleCode = 8;
+                    break;
+                case 'award':
 
+                    this.selectedModuleCode = 1;
+
+                    break;
+                case 'proposal':
+                    this.selectedModuleCode = 3;
+                    break;
+                default:
+                    this.selectedModuleCode = 0;
+            }
+
+            this.isShowCountModal = true;
+            this.currentDisclosureId = id;
+            this.currentDisclosureNumber = coiNumber;
+            this.disclosureType = moduleName;
+            this.inputType = 'DISCLOSURE_TAB';
+            this.personId = personId;
+        }
+    }
   performAdvanceSearch() {
     this._coiAdminDashboardService.coiRequestObject.advancedSearch = 'A';
     this._coiAdminDashboardService.coiRequestObject.currentPage = 1;

@@ -74,6 +74,7 @@ import com.polus.fibicomp.common.service.CommonService;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.DashBoardProfile;
+import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.proposal.pojo.Proposal;
 import com.polus.fibicomp.security.AuthenticatedUser;
 import com.polus.fibicomp.view.DisclosureView;
@@ -894,6 +895,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			CoiDisclosure coiDisclosure = session.createQuery(query).getSingleResult();
 			coiDisclosure.setUpdateUserFullName(coiDisclosure.getPerson().getFullName());
 			coiDisclosure.setNumberOfSFI(getNumberOfSFIBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
+			coiDisclosure.setNumberOfProposals(getNumberOfProposalsBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
+			coiDisclosure.setNumberOfAwards(getNumberOfAwardsBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
 			CoiDisclosures.add(coiDisclosure);
 		} catch (Exception ex) {
 			CoiDisclosures = getPendingFCOIDisclosure(personId);
@@ -928,7 +931,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
 		Root<CoiDisclEntProjDetails> rootCoiDisclosureDetails = query.from(CoiDisclEntProjDetails.class);
 		query.where(builder.equal(rootCoiDisclosureDetails.get("disclosureId"), disclosureId));
-		query.multiselect(builder.countDistinct(rootCoiDisclosureDetails.get("disclosureDetailsId")));
+		query.multiselect(builder.countDistinct(rootCoiDisclosureDetails.get("personEntityId")));
 		Long numberOfSFI = session.createQuery(query).getSingleResult();
 		return numberOfSFI.intValue();
 	}
@@ -1000,7 +1003,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 //				disclosureView.setNoOfAwardInActive(resultSet.getInt("NO_OF_AWARD"));
 				disclosureView.setCreateTimestamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
 				disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
+				disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
 				disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER"));
+				disclosureView.setCreateUser(resultSet.getString("CREATE_USER"));
 //				disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
 				disclosureView.setNoOfSfi(resultSet.getInt("NO_OF_SFI"));
 				disclosureView.setNoOfProposal(resultSet.getInt("NO_OF_PROPOSAL"));
@@ -1009,6 +1014,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
 				disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
 				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
+				Unit unit = new Unit();
+				unit.setUnitNumber(resultSet.getString("UNIT"));
+				unit.setUnitName(resultSet.getString("UNIT_NAME"));
+				unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
+				unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
+				unit.setAcronym(resultSet.getString("ACRONYM"));
+				unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+				disclosureView.setUnit(unit);
 				disclosureViews.add(disclosureView);
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
@@ -1223,13 +1236,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
 				disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
 				disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
-				if (tabName.equals("PENDING_DISCLOSURES")) {
-					disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
-					disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
-					disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
-					disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
-					disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
-				}
+				disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
+				disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
+				disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
+				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
+//				if (tabName.equals("PENDING_DISCLOSURES")) {
+//					disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
+//					disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
+//					disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
+//					disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
+//					disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
+//				}
 				disclosureViews.add(disclosureView);
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
@@ -1724,7 +1741,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(4, endDate);
 				statement.setString(5, personName);
 				statement.setString(6, status != null && !status.isEmpty() ? String.join(",", status) : null);
-
 				statement.setString(7, setCOISortOrder(sort));
 				statement.setInt(8, (currentPage == null ? 0 : currentPage - 1));
 				statement.setInt(9, (pageNumber == null ? 0 : pageNumber));
@@ -1895,7 +1911,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
 				disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
 				disclosureView.setLastApprovedVersionDate(resultSet.getTimestamp("LAST_APPROVED_DATE"));
-				disclosureView.setConflictStatus(resultSet.getString("VERSION_STATUS"));
+				disclosureView.setConflictStatus(resultSet.getString("DISCLOSURE_STATUS"));
+				disclosureView.setConflictStatusCode(resultSet.getString("CONFLICT_STATUS_CODE"));
 				disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 				disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER_FULL_NAME"));
 				disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
@@ -1907,7 +1924,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
 				disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
 				disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
-
 				disclosureViews.add(disclosureView);
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
@@ -2319,7 +2335,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			statement.setInt(2, disclosureNumber);
 			statement.setString(3, AuthenticatedUser.getLoginPersonId());
 			statement.setString(4, AuthenticatedUser.getLoginUserName());
-			statement.setInt(5, personEntityId);
+			if (personEntityId == null) {
+				statement.setNull(5, Types.INTEGER);
+			} else {
+				statement.setInt(5, personEntityId);
+			}
+//			statement.setInt(5, personEntityId);
 			statement.execute();
 		} catch (Exception e) {
 			e.printStackTrace();

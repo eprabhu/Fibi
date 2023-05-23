@@ -1,0 +1,40 @@
+<div class="card-inner mt-3 mx-0">
+    <div class="p-0 w-100 widget-container">
+        <table aria-describedby="Training Status Table" class="tableSkin">
+            <thead class="sticky-top">
+                <tr class="header-border">
+                    <th scope="col" class="w-65">Description</th>
+                    <th scope="col">Completion Date</th>
+                    <th scope="col">Expiration Date</th>
+                    <th scope="col" class="text-center actionThStyle ">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row-hover" *ngFor="let training of traniningDetails">
+                    <td>{{training?.trainingDescription}}</td>
+                    <td>{{training?.dateAcknowledged | dateFormatter}}</td>
+                    <td>{{training?.followupDate | dateFormatter}}</td>
+                    <td class="actionStyle">
+                        <ul class="listStyle d-flex flex-center" data-bs-dismiss="modal" data-bs-toggle="modal">
+                            <li>
+                                <a class="align-items-center btn-primary-icon d-flex fs-16">
+                                    <mat-icon (click)="openInFibi(training.personTrainingId)" aria-hidden="true"
+                                        class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color icon-color iconStyle">visibility</mat-icon></a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr *ngIf="traniningDetails?.length === 0">
+                    <span class="no-data-icon-outer">
+                        <div class="no-data-icon">
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                        </div>
+                    </span>
+                    <h4>There is no information in this section.</h4>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+        </div>
+    </div>

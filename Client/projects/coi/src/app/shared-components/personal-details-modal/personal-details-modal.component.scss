@@ -1,0 +1,38 @@
+.active {
+    border-bottom: 3px solid #007DEC;
+    text-decoration: none;
+    color: #007DEC;
+}
+
+.test1 {
+    color: #007DEC;
+    border-bottom: 3px solid #007DEC;
+    padding: 5px 11px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: "Roboto", sans-serif;
+}
+
+.test2 {
+    color: #48647f;
+    font-size: 15px;
+    padding: 5px 11px;
+    font-weight: bold;
+    font-family: "Roboto", sans-serif;
+}
+
+.userDetail {
+    color: #48647f;
+    font-size: 1.6rem;
+    margin-bottom: 0;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.headerStyle {
+    padding: 0.625rem 0.938rem;
+}
+
+.tabSwitch {
+    display: inline-block;
+}

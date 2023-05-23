@@ -51,14 +51,18 @@
                     <th scope="col">
                         <span>Status</span>
                     </th>
-                    <th scope="col" class="text-right justify-content-center d-flex">Actions</th>
+                    <th scope="col" class="justify-content-center text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let review of reviewList; let index = index">
-                    <td>{{review?.adminGroup?.adminGroupName}}</td>
+                    <td>
+                        <app-no-data-label [valueToShow]="review?.adminGroup?.adminGroupName"></app-no-data-label>
+                    </td>
                     <td>{{review?.assigneePersonName}}</td>
-                    <td>{{review?.description}}</td>
+                    <td>
+                        <app-no-data-label [valueToShow]="review?.description"></app-no-data-label>
+                    </td>
                     <td>{{review?.createTimestamp | dateFormatterWithTimeZone: 'long' }}
                     </td>
                     <td>
@@ -67,29 +71,27 @@
                       </span>
                     </td>
                     <td>
-                        <ul class="actionButtonGroup align-items-center d-flex justify-content-center">
-                            <li class="hand-cursor btn-primary-icon py-2 fs-20 m-0" title="Start review">
-                                <a *ngIf="review.reviewStatusTypeCode == '1'" id="start-review-btn" data-bs-toggle="modal"
-                                    data-bs-target="#coi-start-review"
+                        <ul class="actionButtonGroup button-right">
+                            <li class="hand-cursor btn-primary-icon fs-20 m-0 icons-fa" title="Start review">
+                                <a  *ngIf="review.reviewStatusTypeCode == '1'" id="start-review-btn" data-bs-toggle="modal"
+                                    data-bs-target="#coi-start-review" title="Start review"
                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
                                     <i class="fa fa-play-circle" aria-hidden="true"> </i>
                                 </a>
-                            </li>
-                            <li class="hand-cursor btn-primary-icon py-2 fs-20 m-0" title="Complete Review">
-                                <a *ngIf="review.reviewStatusTypeCode == '3'" id="complete-review-btn" data-bs-toggle="modal"
-                                    data-bs-target="#CompleteReviewModal"
+                               <a  *ngIf="review.reviewStatusTypeCode == '3'" id="complete-review-btn" data-bs-toggle="modal"
+                                    data-bs-target="#CompleteReviewModal" title="Complete Review"
                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
                                     <i class="fa fa-stop-circle-o" aria-hidden="true">
                                     </i>
                                 </a>
                             </li>
-                            <li class="btn-primary-icon py-2 d-flex m-0" (click)="modifyReviewComment(review.coiReviewId)">
+                            <li class="btn-primary-icon d-flex justify-content-around m-0 py-2 comment-icon" (click)="modifyReviewComment(review.coiReviewId)">
                                 <mat-icon title="Click here to add review comment">rate_review</mat-icon>
                             </li>
 
-                            <li *ngIf="review.reviewStatusTypeCode == '1'" class="hand-cursor ml-0">
-                                <span class="d-inline-block dropdown">
-                                    <button class="btn-primary-icon icons-toggle list-more-btn ms-1 py-2 px-3 fs-18"
+                            <li class="hand-cursor ml-0">
+                                <span *ngIf="review.reviewStatusTypeCode == '1'" class="d-inline-block dropdown">
+                                    <button class="btn-primary-icon icons-toggle list-more-btn ms-1 py-2 px-3 fs-18 d-flex mt-1 action-button"
                                         type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
                                         title="More Actions" aria-expanded="false">
                                         <i aria-hidden="true" class="fa fa-ellipsis-v"></i>
@@ -264,11 +266,15 @@
                     <div class="col-lg-6 col-sm-12 col-12">
                         <label class="d-block">Assignee</label>
                         <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
+                                     [isError]="validationMap.has('reviewer')"
                             [placeHolder]="'Search Assignee'" (selectedResult)="assigneeSelect($event)">
                         </app-elastic>
+                        <div *ngIf="validationMap?.has('reviewer')" class="invalid-feedback d-block fs-13">
+                            {{validationMap?.get('reviewer')}}
+                        </div>
                     </div>
-                    <div class="ms-2" *ngIf="validationMap.has('reviewer')">
-                        <span class="mandatory d-inline-block">{{validationMap.get('reviewer')}}</span>
+                    <div class="ms-2" *ngIf="validationMap.has('general')">
+                        <span class="mandatory d-inline-block">{{validationMap.get('general')}}</span>
                     </div>
                 </div>
                 <div class="row mt-2">

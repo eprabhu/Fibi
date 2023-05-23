@@ -1,15 +1,13 @@
 <div class="card" #addCommentOverlay>
   <div @enterAnimation class="row fixed-tree" *ngIf="isOpenSlider">
-    <div class="close shadow-medium" (click)="hideSfiNavBar()">
-      <img src="assets/images/close.svg" alt="close button">
-    </div>
+    <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
     <div class="relationship-content">
       <div class="card-header">
         <h4>Project Conflict (Google)</h4>
       </div>
       <div class="card outer-card mt-20">
         <div class="card-body">
-          <div class="info-card">
+          <div class="info-card fs-14">
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
           </div>
           <div>
@@ -32,7 +30,7 @@
                 </textarea>
               </div>
               <div class="card-footer text-muted">
-                <button type="button" class="btn btn-primary float-end" data-bs-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-primary float-end fs-14" data-bs-dismiss="modal">Save</button>
                 <button type="button" class="btn btn-outline-secondary float-end mr-10" data-bs-dismiss="modal">Cancel</button>
               </div>
             </div>

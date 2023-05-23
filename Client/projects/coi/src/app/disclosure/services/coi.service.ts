@@ -11,6 +11,7 @@ export class CoiService {
     triggerReviewCommentDataUpdate$: Subject<any> = new Subject();
     globalSave$: Subject<any> = new Subject<any>();
     unSavedModules = '';
+    previousHomeUrl = '';
 
     isShowInfo = true;
     isShowSFIInfo = true;
@@ -70,7 +71,7 @@ export class CoiService {
     }
 
     getApplicableQuestionnaire(requestObject: any) {
-        return this._http.post(`${this._commonService.baseUrl}/getApplicableQuestionnaire`, requestObject);
+        return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
     }
-    
+
 }

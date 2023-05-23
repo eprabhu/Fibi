@@ -16,6 +16,7 @@ export class CommonService {
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
+    fibiWebUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -54,6 +55,7 @@ export class CommonService {
     toastClass = 'success';
     dashboardModules: any = {};
     previousURL = null;
+    fibiApplicationUrl = '';
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
@@ -74,10 +76,12 @@ export class CommonService {
                 try {
                     // const SYSTEM_PARAMETERS: any = await this.getRequiredParameters();
                     // this.assignSystemParameters(SYSTEM_PARAMETERS);
+                    await this.fetchPermissions();
+                    resolve(true);
                 } catch (e) {
-                    console.error(e)
+                    console.error(e);
+                    resolve(true);
                 }
-                resolve(true);
             } else {
                 resolve(true);
             }
@@ -99,6 +103,7 @@ export class CommonService {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
+        this.fibiWebUrl = configurationData.fibiWebUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -106,6 +111,7 @@ export class CommonService {
         this.elasticPassword = configurationData.elasticPassword;
         this.elasticAuthScheme = configurationData.elasticAuthScheme;
         this.elasticConfigService.url = configurationData.elasticIndexUrl;
+        this.fibiApplicationUrl = configurationData.fibiApplicationUrl;
     }
 
     pageScroll(elementId) {
@@ -192,7 +198,7 @@ export class CommonService {
         if (this.rightsArray.length) {
             return this.rightsArray;
         }
-        this.rightsArray = this._http.get(this.baseUrl + '/getAllSystemRights').toPromise();
+        this.rightsArray = await this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
         return this.rightsArray;
     }
 
@@ -202,51 +208,59 @@ export class CommonService {
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
         this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' : 'bg-danger';
-        toast_body.innerText =  this.appToastContent;
-        toast._element.classList.add(this.toastClass)
-        toast.show();
+        if(toast && toast_body) {
+            toast_body.innerText =  this.appToastContent;
+            toast._element.classList.add(this.toastClass)
+            toast.show();
+        }
+
+
     }
 
-    getDisclosureConflictBadge(statusCode: string) {
+  getDisclosureConflictBadge(statusCode: string) {
         switch (String(statusCode)) {
             case '1':
-                return 'bg-success text-white';
-            case '2':
-                return 'potential-badge'
+                return 'green-badge';
+          case '2':
+                return 'brown-badge';
             case '3':
-                return 'bg-danger text-white';
+                return 'red-badge';
         }
     }
 
     getReviewStatusBadge(statusCode) {
         switch (statusCode) {
             case '1':
-                return 'bg-warning text-black';
+                return 'yellow-badge';
             case '2':
-                return 'bg-info text-white';
+            return 'blue-badge';
             case '3':
-                return 'bg-success text-white';
+            return 'green-badge';
             case '4':
-                return 'bg-success text-white';
+            return 'green-badge';
             default:
-                return 'bg-danger text-white';
+            return 'red-badge';
         }
     }
 
     getDispositionStatusBadge(statusCode) {
         switch (statusCode) {
             case '1':
-                return 'bg-warning text-black';
+            return 'yellow-badge';
             case '2':
             case '4':
             case '5':
-                return 'bg-info text-white';
+                return 'blue-badge';
             case '3':
             case '6':
-                return 'bg-success text-white';
+            return 'green-badge';
             default:
-                return 'bg-warning text-black';
+            return 'yellow-badge';
         }
+    }
+
+    removeUserDetailsFromLocalStorage() {
+        ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
 
 }

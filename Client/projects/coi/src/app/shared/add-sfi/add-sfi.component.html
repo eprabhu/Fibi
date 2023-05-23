@@ -1,4 +1,4 @@
-<div class="card" #sfiNavOverlay [class.overlay]="sfiService?.isShowSfiNavBar">
+<div #sfiNavOverlay [class.overlay]="sfiService?.isShowSfiNavBar">
   <div @enterAnimation *ngIf="sfiService?.isShowSfiNavBar"
     class="task-right-div card-height d-flex align-items-center">
     <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
@@ -9,6 +9,7 @@
             <div class="justify-content-between d-flex align-items-center">
               <div class="fs-16">Significant Financial Interest </div>
               <button class=" align-items-center d-flex btn btn-primary mt-0 py-1 h-100 fs-16 pt-1"
+                title="Click here to create an sfi" area-describedby="Click here to create an sfi"
                 [queryParams]="{mode:'edit'}" title="Create SFI" (click)="createSFI();">
                 <mat-icon class="fs-4 w-auto h-auto me-2 material-icons">save</mat-icon>
                 Create SFI
@@ -276,7 +277,7 @@
                 <div class="col px-0 mb-4">
                   <textarea appAutoGrow class="form-control" id="releationship-entity"
                     [(ngModel)]="additionalDetails.staffInvolvement"
-                    [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''">
+                    [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator [limit]=2000>
                 </textarea>
                 <div *ngIf="mandatoryList?.has('staff')" class="invalid-feedback d-block fs-13">
                   {{mandatoryList?.get('staff')}}
@@ -299,7 +300,7 @@
                 <div class="col px-0 mb-4">
                   <textarea appAutoGrow class="form-control"
                     [(ngModel)]="additionalDetails.studentInvolvement"
-                    [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''">
+                    [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''" appLengthValidator [limit]=2000>
                 </textarea>
                 <div *ngIf="mandatoryList?.has('student')" class="invalid-feedback d-block fs-13">
                   {{mandatoryList?.get('student')}}
@@ -316,7 +317,7 @@
                 <div class="col px-0 mb-4">
                   <textarea appAutoGrow class="form-control"
                     [(ngModel)]="additionalDetails.instituteResourceInvolvement"
-                    [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''">
+                    [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''" appLengthValidator [limit]=2000>
                 </textarea>
                 <div *ngIf="mandatoryList?.has('resource')" class="invalid-feedback d-block fs-13">
                   {{mandatoryList?.get('resource')}}

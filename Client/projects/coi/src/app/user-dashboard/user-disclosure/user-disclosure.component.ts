@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
-import { UserDisclosureService } from "./user-disclosure.service";
-import { UserDashboardService } from "../user-dashboard.service";
-import { CommonService } from "../../common/services/common.service";
+import {Component} from '@angular/core';
+import {UserDisclosureService} from "./user-disclosure.service";
+import {UserDashboardService} from "../user-dashboard.service";
+import {CommonService} from "../../common/services/common.service";
+import {CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL} from "../../app-constants";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-user-disclosure',
@@ -15,13 +17,11 @@ export class UserDisclosureComponent {
     currentSelected = {
         tab: 'IN_PROGRESS_DISCLOSURES',
         filter: 'ALL',
-
-
     }
     dashboardRequestObject = {
         advancedSearch: 'L',
         pageNumber: 200,
-        sort: { },
+        sort: {},
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         // filterType = 'All', 'FCOI', 'Project', 'OPA';
@@ -43,16 +43,14 @@ export class UserDisclosureComponent {
     onButtonHovering:any = true;
     index:any
     constructor(public userDisclosureService: UserDisclosureService,
-        public userDashboardService: UserDashboardService,
-        public commonService: CommonService) {
+                public userDashboardService: UserDashboardService,
+                public commonService: CommonService,
+                private _router: Router) {
     }
 
     ngOnInit() {
         this.loadDashboard();
         this.loadDashboardCount();
-       
-
-
     }
 
     loadDashboard() {
@@ -69,85 +67,6 @@ export class UserDisclosureComponent {
         })
     }
 
-
-    getDispositionStatusBadge(statusCode) {
-        switch (statusCode) {
-            case '1': return 'warning';
-            case '2':
-            case '3': return 'success';
-            case '4': return 'warning';
-            default: return 'info';
-        }
-    }
-    getDispositionStatusBadgeUpdated(statusCode) {
-        switch (statusCode) {
-            case '1': return 'warning';
-            case 2: return 'success';
-            case 3: return 'danger';
-            case '4': return 'warning';
-            default: return 'info';
-        }
-    }
-    getDispositionStatusTextColor(statusCode) {
-        switch (statusCode) {
-            case '1': return 'black';
-            case 2: return 'white';
-            case 3: return 'white';
-            default: return 'white';
-        }
-    }
-    getDispositinTextColor(statusCode) {
-        switch (statusCode) {
-            case '1': return 'black';
-            case '2':
-            case '3': return 'white';
-            case '4': return 'black';
-            default: return 'white';
-        }
-    }
-
-    getReviewStatusBadge(statusCode) {
-        switch (statusCode) {
-            case '1': return 'warning';
-            case '2': return 'info';
-            case '3': return 'success';
-            case '4': return 'success';
-            default: return 'danger';
-        }
-    }
-    getReviewStatusTextColor(statusCode) {
-        switch (statusCode) {
-            case '1': return 'black';
-            case '2': return 'white';
-            case '3': return 'white';
-            default: return 'white ';
-        }
-    }
-
-
-
-
-    getDisclosureStatusBadge(statusCode) {
-        switch (statusCode) {
-            case 1: return 'warning';
-            case 2:
-            case 4:
-            case 5:
-                return 'info';
-            case 3: case 6: return 'success';
-            default: return 'danger';
-        }
-    }
-    getDisclosureStatusText(statusCode) {
-        switch (statusCode) {
-            case 1: return 'black';
-            case 2:
-            case 4:
-            case 5: case 3: case 6: return 'white';
-            default: return 'black';
-        }
-    }
-
     getEventType(disclosureSequenceStatusCode, disclosureCategoryType) {
         if (disclosureCategoryType == 1) {
             if (disclosureSequenceStatusCode == 2 || disclosureSequenceStatusCode == 1 && !this.isActiveDisclosureAvailable) {
@@ -158,7 +77,6 @@ export class UserDisclosureComponent {
         } else if (disclosureCategoryType == 3) {
             return 'Proposal';
         }
-
     }
 
     setTab(tabName) {
@@ -166,13 +84,19 @@ export class UserDisclosureComponent {
         this.dashboardRequestObject.tabName = tabName;
         this.loadDashboard();
     }
-    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId,noOfSfi) {
-        if(noOfSfi>0){
+
+    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId,noOfcount) {
+        if(noOfcount >0 ){
             switch (moduleName) {
                 case 'sfi':
                     this.selectedModuleCode = 8;
                     break;
-
+                case 'proposal' :
+                    this.selectedModuleCode = 8;
+                    break;
+                case 'Awards' : 
+                    this.selectedModuleCode = 8;  
+                    break;
                 default:
                     this.selectedModuleCode = 0;
             }
@@ -184,7 +108,6 @@ export class UserDisclosureComponent {
             this.disclosureSequenceStatusCode = disSeqCode;
             this.personId = personId;
         }
-
     }
 
     setFilter(type = 'ALL') {
@@ -210,9 +133,17 @@ export class UserDisclosureComponent {
             });
         }
     }
+
     closeModalEvent(event){
         if(!event){
             this.isShowCountModal = event;
         }
+    }
+
+    redirectToDisclosure(disclosure: any) {
+        const redirectUrl = disclosure.reviewStatusCode == '1' ?
+            CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
+        this._router.navigate([redirectUrl],
+            {queryParams: {disclosureId: disclosure.coiDisclosureId}});
     }
 }

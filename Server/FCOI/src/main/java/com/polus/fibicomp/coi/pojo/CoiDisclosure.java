@@ -15,7 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.FetchType;
 
+import com.polus.fibicomp.pojo.Unit;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -42,7 +44,14 @@ public class CoiDisclosure implements Serializable {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE1_FK1"), name = "PERSON_ID", referencedColumnName = "PERSON_ID", insertable = false, updatable = false)
 	private Person person;
-	
+
+	@Column(name = "HOME_UNIT")
+	private String homeUnit;
+
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DIS_HOME_UNIT_FK7"), name = "HOME_UNIT", referencedColumnName = "UNIT_NUMBER", insertable = false, updatable = false)
+	private Unit unit;
+
 	@Column(name = "DISCLOSURE_NUMBER")
 	private Integer disclosureNumber;
 	
@@ -405,5 +414,20 @@ public class CoiDisclosure implements Serializable {
 	public void setCoiProjectTypeCode(String coiProjectTypeCode) {
 		this.coiProjectTypeCode = coiProjectTypeCode;
 	}
-	
+
+	public String getHomeUnit() {
+		return homeUnit;
+	}
+
+	public void setHomeUnit(String homeUnit) {
+		this.homeUnit = homeUnit;
+	}
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
 }

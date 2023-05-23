@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { subscriptionHandler } from "../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Subscription } from "rxjs";
@@ -7,16 +7,24 @@ import {ApplicableQuestionnaire, COI, getApplicableQuestionnaireData} from "./co
 import { DataStoreService } from "./services/data-store.service";
 import { CoiService } from "./services/coi.service";
 import { Location } from "@angular/common";
-import { deepCloneObject } from "../../../../fibi/src/app/common/utilities/custom-utilities";
+import {deepCloneObject, openModal, pageScroll} from "../../../../fibi/src/app/common/utilities/custom-utilities";
 import { ElasticConfigService } from "../../../../fibi/src/app/common/services/elastic-config.service";
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from "../../../../fibi/src/app/app-constants";
 import { CommonService } from "../common/services/common.service";
-
+import {
+    CREATE_DISCLOSURE_ROUTE_URL,
+    NO_DATA_FOUND_MESSAGE,
+    HOME_URL,
+    POST_CREATE_DISCLOSURE_ROUTE_URL
+} from '../app-constants';
+import { NavigationService } from '../common/services/navigation.service';
 @Component({
     selector: 'app-disclosure',
     templateUrl: './disclosure.component.html',
-    styleUrls: ['./disclosure.component.scss']
+    styleUrls: ['./disclosure.component.scss'],
 })
+
+
 export class DisclosureComponent implements OnInit, OnDestroy {
 
     isCardExpanded = true;
@@ -30,6 +38,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     tempStepNumber: any;
     clickedOption: any;
     disclosureDetailsForSFI = {disclosureId: null, disclosureNumber: null};
+    NO_DATA_FOUND_MESSAGE = NO_DATA_FOUND_MESSAGE;
 
     assignReviewerActionDetails: any = {};
     assignReviewerActionValidation = new Map();
@@ -40,13 +49,19 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     isShowCountModal = false;
     selectedModuleCode: any;
     currentDisclosureId: any;
-    inputType: any;
+    inputType: string;
     disclosureSequenceStatusCode: any;
-    personId: any;
-    currentDisclosureNumber: any;
-    disclosureType: any
+    personId: string;
+    currentDisclosureNumber: number;
+    disclosureType: string;
     coiList = [];
-
+    prevURL = '';
+    userDetails: any
+    userId: any;
+    ispersondetailsmodal = false;
+    disclosureId: number;
+    disclosureNumber: number;
+    disclosureStatusCode: string;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -55,7 +70,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         public sfiService: SfiService,
         public coiService: CoiService,
         public location: Location,
-        public dataStore: DataStoreService) {
+        public dataStore: DataStoreService,public navigationService:NavigationService) {
+        window.scrollTo(0,0);
         this.isCreateMode = this.router.url.includes('create-disclosure');
         this.setStepFirstTime(this.router.url);
         this.$subscriptions.push(this.router.events.subscribe(event => {
@@ -70,10 +86,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.routeToAppropriateMode();
         this.listenDataChangeFromStore();
+        this.prevURL =this.navigationService.previousURL;
     }
 
     ngOnDestroy(): void {
         this.dataStore.dataChanged = false;
+        this.dataStore.setStoreData(new COI());
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -87,9 +105,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     routeToAppropriateMode() {
         if (this.coiData.coiDisclosure.reviewStatusCode == '1' && !this.isCreateMode) {
-            this.router.navigate(['/coi/create-disclosure/screening'], { queryParamsHandling: 'preserve' });
+            this.router.navigate([CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
         } else if (this.coiData.coiDisclosure.reviewStatusCode != '1' && this.isCreateMode) {
-            this.router.navigate(['/coi/disclosure/summary'], { queryParamsHandling: 'preserve' });
+            this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
         }
     }
 
@@ -274,7 +292,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.coiService
             .completeDisclosureReview(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureNumber)
             .subscribe((res: any) => {
-                this.updateDisclosureReviewStatus(res);
+                this.updateDisclosureReviewStatus(res.body.coiDisclosure);
             }, _err => {
                 if (_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
                     document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();
@@ -349,7 +367,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             'add-review-modal-trigger' : 'assign-reviewer-modal-trigger').click();
     }
 
-    openCountModal(moduleName, id, coiNumber, disSeqCode, personId) {
+    openCountModal(moduleName, coiData,count = null) {
+      if(count > 0) {     
         switch (moduleName) {
             case 'sfi':
                 this.selectedModuleCode = 8;
@@ -364,15 +383,30 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.selectedModuleCode = 0;
         }
         this.isShowCountModal = true;
-        this.currentDisclosureId = id;
-        this.currentDisclosureNumber = coiNumber;
+        this.currentDisclosureId = coiData.coiDisclosure.disclosureId;
+        this.currentDisclosureNumber = coiData.coiDisclosure.disclosureNumber;
         this.disclosureType = moduleName;
         this.inputType = 'DISCLOSURE_TAB';
-        this.disclosureSequenceStatusCode = disSeqCode;
-        this.personId = personId;
-
+        this.disclosureSequenceStatusCode = coiData.coiDisclosure.disclosureStatusCode;
+        this.personId = coiData.coiDisclosure.personId;
     }
+}
     closeModal(event) {
         this.isShowCountModal = event;
+    }
+
+    openDetailModal(coiData: any): void {
+        this.userDetails = coiData.coiDisclosure.person;
+        this.ispersondetailsmodal = true;
+    }
+    closePersonDetailsModal(event){
+        this.ispersondetailsmodal=event;
+
+    }
+
+    goToHomeUrl() {
+        //TODO admin/reviewer/pi based redirect once rights are implemented.
+        const reRouteUrl = this.coiService.previousHomeUrl || HOME_URL;
+        this.router.navigate([reRouteUrl]);
     }
 }
