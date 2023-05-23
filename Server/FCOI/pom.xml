@@ -374,7 +374,7 @@
 		    <artifactId>commons-io</artifactId>
 		    <version>2.11.0</version>
 		</dependency>
-		
+<!-- 		
  		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
@@ -389,14 +389,21 @@
 		  <groupId>org.springframework.cloud</groupId>
 		  <artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
-				
+	 			
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>7.2</version>
 		</dependency>
-		    
-    <!-- END dependency for Microservice -->   
+ -->		    
+ 
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+   <!-- END dependency for Microservice -->   
     </dependencies>
     
 	<dependencyManagement>

@@ -8,8 +8,17 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "DISCL_FILE_DATA")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class DisclFileData implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -20,43 +29,11 @@ public class DisclFileData implements Serializable {
 
 	@Column(name = "FILE_PATH")
 	private String filePath;
-
-	@Column(name = "UPDATE_TIMESTAMP")
-	private Timestamp updateTimestamp;
-
-	@Column(name = "UPDATE_USER")
-	private String updateUser;
-
-	public String getFileDataId() {
-		return fileDataId;
-	}
-
-	public void setFileDataId(String fileDataId) {
-		this.fileDataId = fileDataId;
-	}
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
+	 
+    @Column(name = "ORIGINAL_FILE_NAME")
+    private String originalFileName;
+    
+    @Column(name = "FILE_NAME")
+    private String fileName;
 	
 }
