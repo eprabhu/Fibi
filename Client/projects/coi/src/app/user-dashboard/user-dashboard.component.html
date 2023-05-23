@@ -3,14 +3,16 @@
         <div class="col pe-0">
             <div class="border pi-info-text p-3 rounded-1">
                 <p class="fs-14 m-0">
-                    <span *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
+                    <span title="Expand Policy Text"  aria-describedby="Expand Policy Text"
+                        *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
                         {{headerInfoText | slice:0:650}}...
                         <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read
                                 More</u></span>
                     </span>
                     <ng-template #showFullInfo>
                         {{headerInfoText}}
-                        <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Show
+                        <span title="Contract Policy Text" aria-describedby="Contract Policy Text"
+                            (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Show
                                 Less</u></span>
                     </ng-template>
                 </p>
@@ -19,23 +21,23 @@
         <div class="col-auto">
             <div class="border pi-quick-links py-2 px-3 shadow-sm fs-15 h-100">
                 <p *ngIf="hasFCOI" data-bs-target="#reviewConfirmationModal" data-bs-toggle="modal"
-                    title="Click here to open create revision popup"
-                    area-describedby="Click here to open create revision popup"
-                    (click)="openReviseModal()" class="m-0 cursor-pointer" role="button" title="Click to Revise FCOI">
+                    title="Click to create new FCOI disclosure"
+                    area-describedby="Click to create new FCOI disclosure"
+                    (click)="openReviseModal()" class="m-0 cursor-pointer" role="button">
                     <u>Create/Revise FCOI</u>
                 </p>
                 <p *ngIf="!hasFCOI" [routerLink]="['/coi/create-disclosure/screening']" class="m-0 cursor-pointer"
-                    role="button"title="Click here to open create/revise fcoi popup"
-                    area-describedby="Click here to open create/revise fcoi popup"><u>Create/Revise FCOI</u></p>
+                    role="button" title="Click to create new Project disclosure"
+                    area-describedby="Click to create new Project disclosure"><u>Create/Revise FCOI</u></p>
                 <p (click)="service.isModalOpen= true" class="m-0 cursor-pointer" role="button"
-                    title="Click to open create project disclosure" area-describedby="Click to open create project disclosure"><u>Create Project
+                    title="Click to create new Project disclosure" area-describedby="Click to create new Project disclosure"><u>Create Project
                         Disclosure</u></p>
                 <p (click)="service.isShowTravelDisclosure = true" class="m-0 cursor-pointer" role="button"
-                    title="Click here to open create travel disclosure popup"
-                    area-describedby="Click here to open create travel disclosure popup"><u>Create Travel
+                    title="Click to create new Travel disclosure"
+                    area-describedby="Click to create new Travel disclosure"><u>Create Travel
                         Disclosure</u></p>
                 <p (click)="sfiService.isShowSfiNavBar = true" class="m-0 cursor-pointer" role="button"
-                    title="Click to open create sfi popup" area-describedby="Click to open up create sfi popup"><u>Create Significant Financial Interest</u></p>
+                    title="Click to create new SFI" area-describedby="Click to create new SFI"><u>Create Significant Financial Interest</u></p>
             </div>
         </div>
     </div>
