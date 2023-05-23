@@ -2,6 +2,8 @@ package com.polus.fibicomp.view;
 
 import java.sql.Timestamp;
 
+import com.polus.fibicomp.pojo.Unit;
+
 public class DisclosureView {
 
 	private Integer coiDisclosureId;
@@ -19,6 +21,7 @@ public class DisclosureView {
 	private Timestamp expirationDate;
 	private Timestamp updateTimeStamp;
 	private String updateUser;
+	private String createUser;
 	private String versionStatus;
 	private String reviewStatus;
 	private Timestamp submittedDate;
@@ -50,6 +53,15 @@ public class DisclosureView {
 	private Integer noOfAward;
 	private Integer noOfProposal;
 	private Timestamp certifiedAt;
+	private Unit unit;
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
 
 	public Timestamp getCertifiedAt() {
 		return certifiedAt;
@@ -417,6 +429,14 @@ public class DisclosureView {
 
 	public void setNoOfProposal(Integer noOfProposal) {
 		this.noOfProposal = noOfProposal;
+	}
+
+	public String getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
 	}
 
 }
