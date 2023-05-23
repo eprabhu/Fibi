@@ -125,6 +125,13 @@ END IF;
 										T1.DISCLOSURE_NUMBER,
 										T1.VERSION_NUMBER,
 										T1.PERSON_ID,
+                                        T1.HOME_UNIT AS UNIT,
+                                        T20.UNIT_NAME,
+                                        T20.ORGANIZATION_ID,
+                                        T20.PARENT_UNIT_NUMBER,
+                                        T20.ACTIVE_FLAG,
+                                        T20.ACRONYM,
+                                        T20.IS_FUNDING_UNIT,
                                         T1.CONFLICT_STATUS_CODE,
 										T2.DESCRIPTION AS DISCLOSURE_STATUS,
                                         T1.DISPOSITION_STATUS_CODE, 
@@ -136,7 +143,9 @@ END IF;
                                         T1.VERSION_STATUS,
 										T1.CERTIFICATION_TEXT, 
 										T1.CERTIFIED_AT,
-										T6.FULL_NAME AS UPDATE_USER,
+										T6.FULL_NAME AS DISCLOSURE_PERSON_FULL_NAME,
+                                        T1.UPDATE_USER,
+                                        T1.CREATE_USER,
 										T1.UPDATE_TIMESTAMP,
                                         T1.CREATE_TIMESTAMP,
 										T1.EXPIRATION_DATE,
@@ -151,7 +160,8 @@ END IF;
 										LEFT JOIN COI_CONFLICT_STATUS_TYPE T2 ON T2.CONFLICT_STATUS_CODE=T1.CONFLICT_STATUS_CODE
 										INNER JOIN COI_DISPOSITION_STATUS_TYPE T3 ON T3.DISPOSITION_STATUS_CODE = T1.DISPOSITION_STATUS_CODE
 										INNER JOIN COI_REVIEW_STATUS_TYPE T4 ON T4.REVIEW_STATUS_CODE = T1.REVIEW_STATUS_CODE
-										LEFT JOIN PERSON T6 ON T6.USER_NAME = T1.UPDATE_USER 
+										LEFT JOIN PERSON T6 ON T6.PERSON_ID = T1.PERSON_ID
+                                        LEFT JOIN UNIT T20 ON T20.UNIT_NUMBER = T1.HOME_UNIT
                                         INNER JOIN COI_DISCLOSURE_FCOI_TYPE T10 ON T10.FCOI_TYPE_CODE = T1.FCOI_TYPE_CODE ',JOIN_CONDITION,' WHERE T1.PERSON_ID = ',AV_PERSON_ID,TAB_QUERY,
 										' GROUP BY T1.DISCLOSURE_ID)T ',LS_FILTER_CONDITION,' ',AV_SORT_TYPE,' ',LS_OFFSET_CONDITION);
 
