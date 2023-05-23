@@ -5,11 +5,14 @@
         </a>
         <ul role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
             <li [routerLink]="['/coi/user-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto home page" aria-describedby="Goto home page">Home
+                routerLinkActive="active"
+                [attr.title]="(_router.url.includes('/coi/user-dashboard')) ? 'Reporter Homepage' : 'Go to Reporter Homepage'"
+                aria-describedby="Goto home page">Home
                 <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/admin-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto admin dashboard page" aria-describedby="Goto admin dashboard page">Admin Dashboard
+                routerLinkActive="active" title="Goto admin dashboard page"
+                aria-describedby="Goto admin dashboard page">Admin Dashboard
                 <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
@@ -25,24 +28,24 @@
     <div>
         <div class="d-flex align-items-center">
             <div class="align-items-center d-flex mx-4">
-                <mat-icon [attr.title]="'Click to view all the frequently asked questions'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view all the frequently asked questions'"
+                <mat-icon [attr.title]="'Click to view COI FAQ'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view COI FAQ'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     help
                 </mat-icon>
-                <mat-icon [attr.title]="'Click to view all the notifications'"
+                <mat-icon [attr.title]="'Click to view COI Notifications'"
                           [routerLink]="['/coi/expanded-widgets']"
-                          [attr.aria-labelledby]="'Click to view all the notifications'"
+                          [attr.aria-labelledby]="'Click to view COI Notifications'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     notifications
                 </mat-icon>
-                <mat-icon [attr.title]="'Click here to sign out'"
+                <mat-icon [attr.title]="'Sign out of COI module'"
                           [routerLink]="['/login']"
-                          [attr.aria-labelledby]="'Click here to sign out'"
+                          [attr.aria-labelledby]="'Sign out of COI module'"
                           class="halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     power_settings_new
                 </mat-icon>
             </div>
-            <div class="align-items-center d-flex ml-5 profile">
+            <div class="align-items-center d-flex ml-5 profile" title="Click to view Person Details" area-describedby="Click to view Person Details">
                 <div class="d-flex mx-4 cursor-pointer" data-bs-toggle="dropdown">
                     <img alt="" src="assets/images/{{isMaleUser ?'user.svg':'user-female.svg'}}">
                 </div>
