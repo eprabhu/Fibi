@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {DataStoreService} from "../services/data-store.service";
-import {CoiService} from "../services/coi.service";
+import {DataStoreService} from "../../disclosure/services/data-store.service";
+import {CoiService} from "../../disclosure/services/coi.service";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 
 @Component({
@@ -45,7 +45,7 @@ export class CertificationComponent implements OnInit, OnDestroy {
     private getDataFromStore() {
         const DATA = this._dataStore.getData(this.dependencies);
         this.coiDisclosure = DATA.coiDisclosure;
-        if (this.coiDisclosure.certifiedBy) {
+        if (this.coiDisclosure && this.coiDisclosure.certifiedBy) {
             this._coiService.isCertified = true;
         }
         // this.isEditMode = this._dataStore.getEditModeForCOI();
