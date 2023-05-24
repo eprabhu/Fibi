@@ -1902,11 +1902,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				DisclosureView disclosureView =  new DisclosureView();
 				disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
 				disclosureView.setCoiDisclosureNumber(resultSet.getString("DISCLOSURE_NUMBER"));
-				disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_NAME"));
+				disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
 				disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
 				disclosureView.setDispositionStatusCode(resultSet.getString("DISPOSITION_STATUS_CODE"));
 				disclosureView.setDispositionStatus(resultSet.getString("DISPOSITION_STATUS"));
 				disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
+				disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
 				disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
 				disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
 				disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
@@ -1924,6 +1925,21 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
 				disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
 				disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
+				disclosureView.setNoOfSfi(resultSet.getInt("NO_OF_SFI"));
+				disclosureView.setNoOfProposal(resultSet.getInt("NO_OF_PROPOSAL"));
+				disclosureView.setNoOfAward(resultSet.getInt("NO_OF_AWARD"));
+				disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
+				disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
+				disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
+				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
+				Unit unit = new Unit();
+				unit.setUnitNumber(resultSet.getString("UNIT"));
+				unit.setUnitName(resultSet.getString("UNIT_NAME"));
+				unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
+				unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
+				unit.setAcronym(resultSet.getString("ACRONYM"));
+				unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+				disclosureView.setUnit(unit);
 				disclosureViews.add(disclosureView);
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
