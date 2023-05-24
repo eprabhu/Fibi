@@ -43,7 +43,11 @@ const routes: Routes = [
             {
                 path:'user',
                 loadChildren: () => import('./user/user.module').then(m => m.UserModule)
-            }
+            },
+            {
+                path: 'travel-disclosure',
+                loadChildren: () => import('./travel-disclosure/travel-disclosure.module').then(m => m.TravelDisclosureModule)
+            },
         ]
     },
     {path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule)}

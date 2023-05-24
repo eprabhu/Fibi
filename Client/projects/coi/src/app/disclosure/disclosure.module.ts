@@ -36,7 +36,7 @@ const routes: Routes = [
             },
             {
                 path: 'certification',
-                loadChildren: () => import('./certification/certification.module').then(m => m.CertificationModule)
+                loadChildren: () => import('../shared-components/certification/certification.module').then(m => m.CertificationModule)
             },
             {
                 path: 'summary', loadChildren: () => import('./summary/summary.module').then(m => m.SummaryModule)

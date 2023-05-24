@@ -54,7 +54,12 @@ export class DataStoreService {
     }
 
     getEditModeForCOI(): boolean {
-        return this.storeData.coiDisclosure.dispositionStatusCode === '1';
+        if(this.storeData.coiDisclosure){
+            return this.storeData.coiDisclosure.dispositionStatusCode === '1';
+        }
+        else{
+            return false;
+        }
     }
 
 }

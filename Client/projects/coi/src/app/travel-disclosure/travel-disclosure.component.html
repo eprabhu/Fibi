@@ -1,0 +1,272 @@
+<div class="border-top-0 mb-3 mx-3 row header-sticky">
+    <div class="col-9 p-0">
+        <div class="border shadow-sm min-height-189 bg-white">
+            <div class="disclosure-heading px-3 d-flex">
+                <div class="align-self-center flex-fill">
+                    <p class="m-0">
+                        <ng-container *ngIf="!isSaved">
+                            <strong>Travel Disclosure By 
+                                <span class="text-primary cursor-pointer">
+                                    <u  (click)="openPersonDetailModal()" style="cursor: pointer;">
+                                        {{userDetails.fullName}}
+                                    </u>
+                                </span>
+                                [ Unit : {{homeUnit}} ]
+                            </strong>
+                        </ng-container>
+                        <ng-container *ngIf="isSaved">
+                            <strong title="">
+                                # : Travel Disclosure For [ : ] By
+                                <span class="text-primary cursor-pointer">
+                                    <u (click)="openPersonDetailModal()">
+                                        {{userDetails.fullName}}
+                                    </u>
+                                </span>
+                            </strong>
+                        </ng-container>
+                    </p>
+                </div>
+                <div class="d-flex">
+                    <ng-container>
+                        <div class="align-items-center d-flex" title="Click here to collapse/un-collapse">
+                            <button (click)="isCardExpanded=!isCardExpanded"
+                                class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                                <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 pb-1 bg-white">
+                <!-- for status box -->
+                <div class="col">
+                    <div class="border triple-card rounded-1 position-relative">
+                        <span class="status-pill">Status</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium spaced-table">
+                                <tr>
+                                    <td>Review</td>
+                                    <td>:</td>
+                                    <td class="ps-4">
+                                        <span class="yellow-badge">
+                                            Pending
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Disclosure</td>
+                                    <td>:</td>
+                                    <td class="ps-4">
+                                        <span class="">
+
+                                        </span>
+                                        <span class="yellow-badge">
+                                            Pending
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- for date box -->
+                <div class="col">
+                    <div class="border triple-card mx-3 rounded-1 position-relative">
+                        <span class="status-pill">Date</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium spaced-table">
+                                <tr>
+                                    <td>Create</td>
+                                    <td>:</td>
+                                    <td class="ps-4" style="padding-right: 86px;">
+                                    </td>
+                                </tr>                                
+                                <tr>
+                                    <td>Certification</td>
+                                    <td>:</td>
+                                    <td class="ps-4" style="padding-right: 86px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Acknowledgment</td>
+                                    <td>:</td>
+                                    <td class="ps-4" style="padding-right: 86px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- for relationship box -->
+                <div class="col">
+                    <div class="border triple-card rounded-1 position-relative">
+                        <span class="status-pill">Relationship with</span>
+                    </div>
+                </div>
+            </div>
+
+            <ng-container>
+                <div class="nav-progress navigation-tabs row mt-1">
+                    <!-- Screening Questionnaire tab -->
+                    <!-- <div class="col h-100 m-0"
+                        [routerLink]="['screening']"
+                        [class.complete]="isRouteComplete(['screening', 'form', 'certification'])"
+                        [class.cursor-pointer]="!isRouteComplete(['screening'])"
+                        queryParamsHandling='merge'
+                        title="Goto step Screening Questionnaire">
+                        Screening Questionnaire
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col h-100 m-0"
+                        [class.complete]="isRouteComplete(['form', 'certification'])"
+                        [routerLink]="['form']"
+                        [class.cursor-pointer]="!isRouteComplete(['form'])"
+                        queryParamsHandling='merge'
+                        title="Goto step Travel Disclosure Form">
+                        Disclosure Form
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col"
+                        [class.complete]="isRouteComplete(['certification'])"
+                        [routerLink]="['certification']"
+                        [class.cursor-pointer]="!isRouteComplete(['certification'])"
+                        queryParamsHandling='merge'
+                        title="Goto step Certification">
+                        <span class="align-self-center">Certification</span>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <!-- right side options -->
+    <div class="col-3 px-0">
+        <div class="d-flex flex-column p-0 bg-white min-height-189 border-end shadow-sm">
+            <div class="flex-fill h-100">
+                <div class="d-flex justify-content-between p-3">
+                    <span [routerLink]="['/coi/user-dashboard']" 
+                        class="btn btn-outline-grey pb-0 fs-14 col-2"
+                        title="Goto home">
+                        <mat-icon>home</mat-icon>
+                    </span>
+                    <span data-bs-target="#coi-activity-modal" data-bs-toggle="modal"
+                        title="Click here to add new review comment"
+                        class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center mx-2">
+                        <mat-icon class="me-2">rate_review</mat-icon>
+                        Comments
+                    </span>
+                    <span title="Click here for more options" style="white-space: nowrap;" aria-expanded="false"
+                        class="align-items-center btn btn-outline-grey col d-flex fs-14 justify-content-center px-3 w-100"
+                        data-bs-toggle="dropdown" id="moreActions" role="button">
+                        <mat-icon class="me-1">more_vert</mat-icon> More Options
+                    </span>
+                </div>
+                <div class="d-flex justify-content-around px-3 pb-3" 
+                    *ngIf="isRouteComplete(['screening', 'form'])"
+                    title="Click here to add a new financial interest">
+                    <span (click)="sfiService.isShowSfiNavBar = true"
+                        class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">add</mat-icon>
+                        Add Significant Financial Interest
+                    </span>
+                </div>
+                <div class="d-flex justify-content-around px-3 pb-3"  (click)="certifyTravelDisclosure()"
+                    *ngIf="isRouteComplete(['screening', 'form'])">
+                    <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">save</mat-icon>
+                        Save
+                    </span>
+                </div>
+                <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100" (click)="certifyTravelDisclosure(); isSaved=true;"
+                    *ngIf="isRouteComplete(['certification']) && !isSaved" [disabled]="!coiService.isCertified">
+                    <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">done</mat-icon>
+                        Certify
+                    </span>
+                </button>
+                <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100" (click)="certifyCopyTravelDisclosure(); isSaved=true;"
+                *ngIf="isRouteComplete(['certification']) && !isSaved" [disabled]="!coiService.isCertified">
+                    <span class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
+                        <i class="me-2 fs-4 fa fa-clipboard"></i>
+                        <!-- <mat-icon class="me-2">file_copy</mat-icon> -->
+                        Certify & Copy
+                    </span>
+                </button>
+                <div class="d-flex justify-content-around px-3 pb-3" (click)="isSaved=false" *ngIf="isRouteComplete(['certification']) && isSaved">
+                    <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">done</mat-icon>
+                        Acknowledge
+                    </span>
+                </div>
+            </div>
+            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes navigation-tabs">
+                Notes & Attachments
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mx-3">
+    <router-outlet></router-outlet>
+</div>
+
+<!--Unsaved Changes Modal-->
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-validate-button" data-bs-toggle="modal"
+    data-bs-target="#saveAndExitModal"></button>
+<div class="modal modal-coi fade mySkinDialog" id="saveAndExitModal" role="dialog" aria-labelledby="saveAndExitModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p *ngIf="coiService.unSavedModules" class="fs-14">You have unsaved changes in
+                    <strong>{{coiService.unSavedModules}}.</strong>
+                </p>
+                <p class="fs-14">Do you want to leave the
+                    <ng-container *ngIf="coiService.unSavedModules">
+                        page without saving
+                    </ng-container>
+                    <ng-container
+                        *ngIf="!coiService.unSavedModules">
+                        <strong>Certification</strong>
+                        Page
+                    </ng-container>
+                    ?
+                </p>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary" (click)="leavePageClicked();"
+                    data-bs-dismiss="modal">Leave Page</button>
+                <button type="button" class="btn btn-primary btn-sm fs-14"
+                    data-bs-dismiss="modal">Stay On Page</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add SFI Slider-->
+<div>
+    <app-add-sfi></app-add-sfi>
+</div>
+
+<!-- review comment Modal-->
+<app-coi-review-comment-modal></app-coi-review-comment-modal>
+
+<!-- personal details Modal-->
+<app-personal-details-modal 
+    *ngIf="ispersondetailsmodal" 
+    (closeModalPersonDetails)="closePersonDetailsModal($event)"
+    [ispersondetailsmodal]="ispersondetailsmodal"
+    [userdetails]="userDetails">
+</app-personal-details-modal>
