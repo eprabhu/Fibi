@@ -1,6 +1,6 @@
 <div class="row my-4">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures" >
-        <div class="col-12 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
+        <div class="light-dark-text-color col-12 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
             <div class="shadow-sm hovering-card disclosure-card-body-blue border rounded" (mouseover)="isFCOIHover = true" (mouseout)="isFCOIHover = false">
                 <div class="border-bottom d-flex px-3 py-2 rounded-top-2">
                     <div class="col"><strong class="fs-15"># {{disclosure?.disclosureId}} : FCOI Disclosure</strong></div>

@@ -61,7 +61,7 @@ $bg-color: #E4F1FF;
     &.complete {
       background-color: $nav-bg-color;
       color: #FFF;
-
+      outline: 1px solid $nav-bg-color;
       .arrow {
         border: $nav-border-width solid $nav-border-color !important;
         background: $nav-bg-color !important;

@@ -15,8 +15,8 @@
                 aria-describedby="Goto admin dashboard page">Admin Dashboard
                 <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
-              routerLinkActive="active" title="Goto reviewer dashboard page" aria-describedby="Goto reviewer dashboard page">Reviewer Dashboard
+            <li *ngIf="commonService.isCoiReviewer" [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active" title="Goto reviewer dashboard page" aria-describedby="Goto reviewer dashboard page">Reviewer Dashboard
               <span *ngIf="_router.url.includes('/coi/reviewer-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/entity-management']" class="mr-2 cursor-pointer" role="tab"

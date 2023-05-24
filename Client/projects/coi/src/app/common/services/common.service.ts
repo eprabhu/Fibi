@@ -41,6 +41,7 @@ export class CommonService {
     isShowAgreementSupport = false;
     isShowAgreementNotifyAction = false;
     isElasticAuthentiaction = false;
+    isCoiReviewer = false;
     elasticUserName = '';
     elasticAuthScheme = '';
     elasticDelimiter = '';
@@ -198,7 +199,11 @@ export class CommonService {
         if (this.rightsArray.length) {
             return this.rightsArray;
         }
-        this.rightsArray = await this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
+        const allRights: any = await this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
+        if(allRights && 'IS_REVIEW_MEMBER' in allRights) {
+            this.isCoiReviewer = allRights.IS_REVIEW_MEMBER;
+            this.rightsArray = allRights.rights || [];
+        }
         return this.rightsArray;
     }
 
