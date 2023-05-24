@@ -273,7 +273,15 @@
       "secure": false
   },
   "/getTrainingDashboard": {
-      "target": "http://192.168.1.189:9090/",
+      "target": "http://192.168.1.189:8070/",
+      "secure": false
+  },
+  "/getDisclosureRelationForSFI": {
+      "target": "http://192.168.1.189:8070/coi/",
+      "secure": false
+  },
+  "/fetchAllCoiRights": {
+      "target": "http://192.168.1.80:9090/coi/",
       "secure": false
   }
 }

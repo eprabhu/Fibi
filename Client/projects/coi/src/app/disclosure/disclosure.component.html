@@ -4,15 +4,24 @@
             <div class="disclosure-heading px-3 d-flex">
                 <div class="align-self-center flex-fill">
                     <p class="m-0">
-                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1'">
+                        <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
                             <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span
-                                    class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
-                                [Home Unit : {{coiData?.coiDisclosure?.person?.unit?.unitName}} ]</strong>
+                                    class="text-primary"><u (click)="openDetailModal(coiData)" style="cursor:pointer;"title="Show the details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
+                                [ Unit : {{unitTitle()}} ]</strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                            <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}} : {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} : {{(coiData?.projectDetail?.title)?.length>40 ?
+                            <strong
+                                title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}}
+                                :
+                                {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
+                                Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} :
+                                {{(coiData?.projectDetail?.title)?.length>40 ?
                                 (coiData?.projectDetail?.title | slice:0: 40)+'...' :
-                                coiData?.projectDetail?.title}} ] By <span class="text-primary"><u (click)="openDetailModal(coiData)" style="cursor: pointer;" title="Show the details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span></strong>
+                                coiData?.projectDetail?.title}} ] By
+                                <span class="text-primary">
+                                    <u (click)="openDetailModal(coiData)" style="cursor:pointer;"title="Show the details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u>
+                                </span>
+                            </strong>
                         </ng-container>
                     </p>
                 </div>
@@ -49,22 +58,21 @@
                             <table class="fs-14 fw-medium spaced-table">
                                 <tr>
                                     <td>Disposition :</td>
-                                    <td class="ps-4"><span
-                                            class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
+                                    <td class="ps-4">
+                                        <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Review :</td>
-                                    <td class="ps-4"><span
-                                            class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
+                                    <td class="ps-4">
+                                        <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Disclosure :</td>
                                     <td class="ps-4">
                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
-                                             <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}">
-                                                 {{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                            <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
                                         </app-no-data-label>
                                     </td>
                                 </tr>
@@ -81,24 +89,21 @@
                                     <td>Create :</td>
                                     <td class="ps-4" style="padding-right: 86px;">
                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.createTimestamp">
-                                            <span>{{coiData?.coiDisclosure?.createTimestamp |
-                                                dateFormatterWithTimeZone}}</span>
+                                            <span>{{coiData?.coiDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
                                         </app-no-data-label>
                                 </tr>
                                 <tr>
                                     <td>Certification :</td>
                                     <td class="ps-4" style="padding-right: 86px;">
                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
-                                            <span>{{coiData?.coiDisclosure?.certifiedAt |
-                                                dateFormatter}}</span>
+                                            <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatter}}</span>
                                         </app-no-data-label>
                                 </tr>
                                 <tr>
                                     <td>Expiration :</td>
                                     <td class="ps-4" style="padding-right: 86px;">
                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
-                                            <span>{{coiData?.coiDisclosure?.expirationDate |
-                                                dateFormatter}}</span>
+                                            <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatter}}</span>
                                         </app-no-data-label>
                                 </tr>
                             </table>
@@ -110,12 +115,12 @@
                         <span class="status-pill">Relationship with</span>
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
-                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfSFI > 0" 
-                                    (click)="openCountModal('sfi', coiData, coiData?.coiDisclosure?.numberOfSFI )">
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfSFI > 0"
+                                    (click)="openCountModal('sfi',  coiData, coiData?.coiDisclosure?.numberOfSFI)">
                                     <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfSFI?
                                             coiData?.coiDisclosure?.numberOfSFI : 0}}</span>
                                     </td>
-                                    <td class="ps-2">Significant Financial Interest</td>
+                                    <td class="ps-2">Significant Financial Interest test</td>
                                 </tr>
                                 <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfProposals > 0"
                                     (click)="openCountModal('proposal', coiData, coiData?.coiDisclosure?.numberOfProposals)"
@@ -183,12 +188,14 @@
                     <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge'
                         role="button">
                         <div class="navigation-box-content" routerLinkActive="active"
-                            title="Click to view the disclosure screening form" area-describedby="Click to view the disclosure screening form">Disclosure</div>
+                            title="Click to view the disclosure screening form"
+                            area-describedby="Click to view the disclosure screening form">Disclosure</div>
                     </div>
                     <div [routerLink]="['relationship']" class="navigation-box border-end" queryParamsHandling='merge'
                         role="button">
                         <div class="navigation-box-content" routerLinkActive="active"
-                        title="Click to view the relationships" area-describedby="Click to view the relationships">Relationships</div>
+                            title="Click to view the relationships" area-describedby="Click to view the relationships">
+                            Relationships</div>
                     </div>
                     <!-- <div [routerLink]="['conflict-management']" class="navigation-box border-end"
                         queryParamsHandling='merge' role="button">
@@ -196,8 +203,8 @@
                     </div> -->
                     <div [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                         role="button">
-                        <div class="navigation-box-content" routerLinkActive="active"
-                        title="Click to view the reviews" area-describedby="Click to view the reviews">Reviews</div>
+                        <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
+                            area-describedby="Click to view the reviews">Reviews</div>
                     </div>
                     <!-- <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active">History</div>
@@ -259,8 +266,7 @@
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill side-height border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
-                    <span title="Goto home page"
-                          (click)="goToHomeUrl()"
+                    <span title="Goto home page" (click)="goToHomeUrl()"
                         class="btn btn-outline-secondary pb-0 fs-14 {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
                         <mat-icon>home</mat-icon>
                     </span>
@@ -283,7 +289,7 @@
                         data-bs-toggle="dropdown" id="moreActionsForComplete" role="button">
                         <mat-icon class="me-1">more_vert</mat-icon> More Options
                 </span> -->
-                    <ul class="border dropdown-menu p-0 rounded-0" style="" aria-labelledby="moreActionsForComplete">
+                    <ul class="border dropdown-menu p-0 rounded-0" aria-labelledby="moreActionsForComplete">
                         <li class="ash-text border-bottom"><span class="dropdown-item fs-15 fw-medium">
                                 <mat-icon class="me-2 ash-text">notifications</mat-icon> Notify</span>
                         </li>
@@ -298,15 +304,16 @@
                         (click)="triggerAssignReviewerModal()" title="Click here to assign a new reviewer">
                         <mat-icon class="me-2">person_add</mat-icon>
                         Assign Reviewer
-                </span>
+                    </span>
                 </div>
-                <div class="position-static d-flex justify-content-around px-3" title="Click here to complete the review process">
+                <div class="position-static d-flex justify-content-around px-3"
+                    title="Click here to complete the review process">
                     <span *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
                         class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
                         data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
                         Complete Review
-                </span>
+                    </span>
                     <!-- <span *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         title="Click here for more options"
                         style="white-space: nowrap;" aria-expanded="false"
@@ -477,7 +484,12 @@
                     </div> -->
                     <div class="col-lg-12">
                         <p class="fs-15">
-                            {{sfiService.isSFIRequired ?'Dear ' + commonService.getCurrentUserDetail('fullName') + ', based on the answers provided by you to the questions you have to define at least one Significant Financial Interest against an entity before continuing with the disclosure.':'Dear ' + commonService.getCurrentUserDetail('fullName') + ', based on the answers provided to you to the questions you do not have to define any Significant Financial Interest or relationships against an entity and may submit the disclosure.'}}
+                            {{sfiService.isSFIRequired ?'Dear ' + commonService.getCurrentUserDetail('fullName') + ',
+                            based on the answers provided by you to the questions you have to define at least one
+                            Significant Financial Interest against an entity before continuing with the
+                            disclosure.':'Dear ' + commonService.getCurrentUserDetail('fullName') + ', based on the
+                            answers provided to you to the questions you do not have to define any Significant Financial
+                            Interest or relationships against an entity and may submit the disclosure.'}}
                         </p>
                     </div>
                 </div>
@@ -504,7 +516,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'" class="fs-14">You have unsaved changes in
+                <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'" class="fs-14">You have unsaved changes
+                    in
                     <strong>{{coiService.unSavedModules}}.</strong>
                 </p>
                 <p class="fs-14">Do you want to leave the
@@ -527,8 +540,9 @@
 </div>
 <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
-    [inputType]="inputType" [personId]="personId"
-    [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"></app-count-modal>
+    [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
+    [disfullData]="coiData" [fcoiTypeCode]="fcoiTypeCode"></app-count-modal>
 
 
-<app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)" [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
+<app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
+    [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
