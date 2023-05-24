@@ -22,8 +22,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
     personId: any;
     fullName: string = '';
     clearField: String = '';
-    loginPerson = this._commonService.getCurrentUserDetail('externalReviewerRight');
-    isMaleUser = this._commonService.getCurrentUserDetail('gender') === 'M';
+    loginPerson = this.commonService.getCurrentUserDetail('externalReviewerRight');
+    isMaleUser = this.commonService.getCurrentUserDetail('gender') === 'M';
     isAdmin = true;
     resetPassword = new ChangePassword();
     showReEnterPassword = false;
@@ -33,12 +33,12 @@ export class HeaderComponent implements OnInit,OnDestroy {
     $subscriptions: Subscription[] = [];
 
 
-    constructor(public _router: Router, private _commonService: CommonService) {
+    constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
     }
 
     ngOnInit() {
-        this.fullName = this._commonService.getCurrentUserDetail('fullName');
+        this.fullName = this.commonService.getCurrentUserDetail('fullName');
     }
 
     ngOnDestroy(): void {
