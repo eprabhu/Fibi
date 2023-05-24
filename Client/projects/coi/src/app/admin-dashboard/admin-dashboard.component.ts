@@ -240,7 +240,6 @@ export class AdminDashboardComponent {
         this.isShowCountModal = event;
     }
 
-
     setSelectedModuleCode(moduleName, id, coiNumber, personId, count = null, coi) {
         if (count > 0) {
             switch (moduleName) {
@@ -259,12 +258,12 @@ export class AdminDashboardComponent {
             this.adminData = coi;
             this.fcoiTypeCode = coi?.fcoiTypeCode
             this.isShowCountModal = true;
-            this.currentDisclosureId = id;
-            this.currentDisclosureNumber = coiNumber;
+            this.currentDisclosureId = coi.coiDisclosureId;
+            this.currentDisclosureNumber =  coi.coiDisclosureNumber;
             this.disclosureType = moduleName;
             this.inputType = 'DISCLOSURE_TAB';
-            this.personId = personId;
-            console.log("admin Data: ",this.adminData);
+            this.personId = coi.personId;
+
         }
     }
     performAdvanceSearch() {

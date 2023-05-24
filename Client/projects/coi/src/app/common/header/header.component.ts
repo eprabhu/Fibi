@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {CommonService} from "../services/common.service";
 import {Subscription} from "rxjs";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+
 class ChangePassword {
     password = '';
     reEnterPassword = '';
@@ -31,7 +32,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     passwordValidation = new Map();
     timer: any = {password: null, confirmPassword: null};
     $subscriptions: Subscription[] = [];
-
+    rightList:any[]=[];
 
     constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -39,6 +40,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
+        this.rights();
     }
 
     ngOnDestroy(): void {
@@ -47,6 +49,13 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
     logout() {
         this._router.navigate(['/logout']);
+    }
+    rights() {
+         this.commonService.fetchPermissions().then((right:any)=>{
+            this.rightList=right;
+
+        })
+        
     }
 
     changePassword() {
@@ -87,6 +96,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
             this.passwordValidation.set('password-length', true);
         }
     }
+      
 
     checkSamePassword() {
         this.resetPassword.reEnterPassword = this.resetPassword.reEnterPassword.trim();
@@ -104,4 +114,13 @@ export class HeaderComponent implements OnInit,OnDestroy {
             this.passwordValidation.set('same-password', true);
         }
     }
+  
+    rightsCheck():boolean {
+        if (this.rightList.includes('MANAGEENTITY') || this.rightList.includes('VIEWENTITY'))  {
+            return true; 
+        } else {
+            return false;  
+        }
+    }
+    
 }

@@ -16,6 +16,7 @@ import {AppHttpInterceptor} from './common/services/http-interceptor';
 import {DashboardGuardService} from "./common/services/dashboard-guard.service";
 import { ElasticConfigService } from '../../../fibi/src/app/common/services/elastic-config.service';
 import { NavigationService } from './common/services/navigation.service';
+import { EntityManagementGuardService } from './entity-management/entity-management-guard.service';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -39,6 +40,7 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
     providers: [CommonService,
         DashboardGuardService,
         ElasticConfigService,
+        EntityManagementGuardService,
         {
             provide: APP_INITIALIZER,
             useFactory: getappConfiguration,

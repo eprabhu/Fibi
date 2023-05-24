@@ -5,14 +5,11 @@
         </a>
         <ul role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
             <li [routerLink]="['/coi/user-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active"
-                [attr.title]="(_router.url.includes('/coi/user-dashboard')) ? 'Reporter Homepage' : 'Go to Reporter Homepage'"
-                aria-describedby="Goto home page">Home
+                routerLinkActive="active" title="Goto home page" aria-describedby="Goto home page">Home
                 <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/admin-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto admin dashboard page"
-                aria-describedby="Goto admin dashboard page">Admin Dashboard
+                routerLinkActive="active" title="Goto admin dashboard page" aria-describedby="Goto admin dashboard page">Admin Dashboard
                 <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"></span>
             </li>
             <li *ngIf="commonService.isCoiReviewer" [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
@@ -20,6 +17,7 @@
               <span *ngIf="_router.url.includes('/coi/reviewer-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/entity-management']" class="mr-2 cursor-pointer" role="tab"
+               *ngIf="rightsCheck()"
                 routerLinkActive="active" title="Goto entity management page" aria-describedby="Goto entity management page">Entity Management
                 <span *ngIf="_router.url.includes('/coi/entity-management')" class="active-color"></span>
             </li>
@@ -28,24 +26,24 @@
     <div>
         <div class="d-flex align-items-center">
             <div class="align-items-center d-flex mx-4">
-                <mat-icon [attr.title]="'Click to view COI FAQ'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view COI FAQ'"
+                <mat-icon [attr.title]="'Click to view all the frequently asked questions'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view all the frequently asked questions'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     help
                 </mat-icon>
-                <mat-icon [attr.title]="'Click to view COI Notifications'"
+                <mat-icon [attr.title]="'Click to view all the notifications'"
                           [routerLink]="['/coi/expanded-widgets']"
-                          [attr.aria-labelledby]="'Click to view COI Notifications'"
+                          [attr.aria-labelledby]="'Click to view all the notifications'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     notifications
                 </mat-icon>
-                <mat-icon [attr.title]="'Sign out of COI module'"
+                <mat-icon [attr.title]="'Click here to sign out'"
                           [routerLink]="['/login']"
-                          [attr.aria-labelledby]="'Sign out of COI module'"
+                          [attr.aria-labelledby]="'Click here to sign out'"
                           class="halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     power_settings_new
                 </mat-icon>
             </div>
-            <div class="align-items-center d-flex ml-5 profile" title="Click to view Person Details" area-describedby="Click to view Person Details">
+            <div class="align-items-center d-flex ml-5 profile">
                 <div class="d-flex mx-4 cursor-pointer" data-bs-toggle="dropdown">
                     <img alt="" src="assets/images/{{isMaleUser ?'user.svg':'user-female.svg'}}">
                 </div>
@@ -76,5 +74,4 @@
         </div>
     </div>
 </header>
-
 

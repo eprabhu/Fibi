@@ -12,14 +12,18 @@ import { AddNewEntityDetailsComponent } from './add-new-entity-details/add-new-e
 import { FormsModule } from '@angular/forms';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { EntityManagementService } from './entity-management.service';
+import { EntityManagementGuardService } from './entity-management-guard.service';
+
 
 const routes: Routes = [
   {
-    path: '', component: EntityManagementComponent,
+    path: '', component: EntityManagementComponent ,canActivate: [EntityManagementGuardService],
     children: [
       { path: '', redirectTo: 'entity-list', pathMatch: 'full' },
       { path: 'entity-details', component: EntityDetailsListComponent },
-      { path: 'entity-list', component: EntityListComponent }]
+      { path: 'entity-list', component: EntityListComponent },
+     
+    ]
   },
 ];
 
@@ -40,7 +44,7 @@ const routes: Routes = [
     SharedComponentModule,
   ],
   exports: [
-  ],providers: [ElasticConfigService]
+  ],providers: [ElasticConfigService,EntityManagementGuardService]
 })
 export class EntityManagementModule {
 }
