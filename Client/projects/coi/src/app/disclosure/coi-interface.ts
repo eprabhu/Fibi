@@ -76,6 +76,7 @@ export class CoiDisclosure {
     updateTimestamp: number;
     updateUser: string;
     isDisclosureQuestionnaire: boolean;
+    person:any;
 }
 export interface UnitAdministratorType {
     code: string;

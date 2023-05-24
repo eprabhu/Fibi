@@ -1,7 +1,3 @@
-export interface TravelDisclosureInterface {
-    
-}
-
 export class CoiTravelDisclosure {
     travelDisclosureId: number;
     travelNumber: number;

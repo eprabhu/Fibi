@@ -1,12 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserDashboardService} from "./user-dashboard.service";
-import {subscriptionHandler} from "../../../../fibi/src/app/common/utilities/subscription-handler";
-import {Router} from "@angular/router";
-import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../fibi/src/app/app-constants";
-import {CommonService} from "../common/services/common.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UserDashboardService } from "./user-dashboard.service";
+import { subscriptionHandler } from "../../../../fibi/src/app/common/utilities/subscription-handler";
+import { Router } from "@angular/router";
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from "../../../../fibi/src/app/app-constants";
+import { CommonService } from "../common/services/common.service";
 import { SfiService } from '../disclosure/sfi/sfi.service';
-import {hideModal, openModal} from "../../../../fibi/src/app/common/utilities/custom-utilities";
-import {environment} from "../../environments/environment";
+import { hideModal, openModal } from "../../../../fibi/src/app/common/utilities/custom-utilities";
+import { environment } from "../../environments/environment";
 
 declare var $: any;
 
@@ -22,7 +22,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     hasFCOI: any;
     hasActiveFCOI = false;
     isModalOpen = false;
-    reviseObject: any = {revisionComment: null, disclosureId: null};
+    reviseObject: any = { revisionComment: null, disclosureId: null };
     isReadMore = false;
     headerInfoText = `University policy requires that university officers, faculty, and staff and others acting on its 
     behalf avoid ethical, legal, financial, and other conflicts of interest and ensure that their activities and 
@@ -38,7 +38,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     $subscriptions = [];
 
     constructor(public service: UserDashboardService, private _router: Router, public commonService: CommonService,
-                public sfiService: SfiService, public router: Router) {
+        public sfiService: SfiService, public router: Router) {
     }
 
     ngOnInit(): void {
@@ -70,23 +70,23 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     }
 
     openReviseModal() {
-        this.reviseObject = {revisionComment: null, disclosureId: null};
+        this.reviseObject = { revisionComment: null, disclosureId: null };
         this.reviseObject.disclosureId = this.hasFCOI.disclosureId;
         this.reviseObject.revisionComment = '';
-       //  openModal('reviewConfirmationModal');
+        //  openModal('reviewConfirmationModal');
     }
 
     reviseDisclosure() {
         document.getElementById('triggerReviseModal').click();
         this.$subscriptions.push(this.service.reviseDisclosure(this.reviseObject)
             .subscribe((data: any) => {
-                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'New version of disclosure created.');
-                    this._router.navigate(['/coi/disclosure/summary'], {
-                        queryParams: {
-                            disclosureId: data.coiDisclosure.disclosureId
-                        }
-                    });
-                },
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'New version of disclosure created.');
+                this._router.navigate(['/coi/disclosure/summary'], {
+                    queryParams: {
+                        disclosureId: data.coiDisclosure.disclosureId
+                    }
+                });
+            },
                 err => {
                     this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
                         err.error.errorMessage : 'Error in creating new version. Please try again.');

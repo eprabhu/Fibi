@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {UserDisclosureService} from "./user-disclosure.service";
-import {UserDashboardService} from "../user-dashboard.service";
-import {CommonService} from "../../common/services/common.service";
-import {CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL} from "../../app-constants";
-import {Router} from "@angular/router";
+import { Component } from '@angular/core';
+import { UserDisclosureService } from "./user-disclosure.service";
+import { UserDashboardService } from "../user-dashboard.service";
+import { CommonService } from "../../common/services/common.service";
+import { CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from "../../app-constants";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-user-disclosure',
@@ -40,12 +40,14 @@ export class UserDisclosureComponent {
     ishover: [] = [];
     disclosureSequenceStatusCode: any;
     personId: any;
-    onButtonHovering:any = true;
-    index:any
+    onButtonHovering: any = true;
+    index: any;
+    fcoiTypeCode: any;
+    disclosures: any;
     constructor(public userDisclosureService: UserDisclosureService,
-                public userDashboardService: UserDashboardService,
-                public commonService: CommonService,
-                private _router: Router) {
+        public userDashboardService: UserDashboardService,
+        public commonService: CommonService,
+        private _router: Router) {
     }
 
     ngOnInit() {
@@ -85,21 +87,23 @@ export class UserDisclosureComponent {
         this.loadDashboard();
     }
 
-    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId,noOfcount) {
-        if(noOfcount >0 ){
+    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId, noOfcount, disclosure) {
+        if (noOfcount > 0) {
             switch (moduleName) {
                 case 'sfi':
                     this.selectedModuleCode = 8;
                     break;
-                case 'proposal' :
-                    this.selectedModuleCode = 8;
+                case 'proposal':
+                    this.selectedModuleCode = 3;
                     break;
-                case 'Awards' : 
-                    this.selectedModuleCode = 8;  
+                case 'Awards':
+                    this.selectedModuleCode = 1;
                     break;
                 default:
                     this.selectedModuleCode = 0;
             }
+            this.disclosures = disclosure;
+            this.fcoiTypeCode = disclosure?.fcoiTypeCode;
             this.isShowCountModal = true;
             this.currentDisclosureId = id;
             this.currentDisclosureNumber = coiNumber;
@@ -119,7 +123,6 @@ export class UserDisclosureComponent {
     filterDashboardData() {
         if (this.currentSelected.filter == 'ALL') {
             this.filteredDisclosureArray = this.disclosureArray;
-            // console.log(this.filteredDisclosureArray)
         } else {
             this.filteredDisclosureArray = this.disclosureArray.filter(disclosure => {
                 switch (this.currentSelected.filter) {
@@ -134,8 +137,9 @@ export class UserDisclosureComponent {
         }
     }
 
-    closeModalEvent(event){
-        if(!event){
+
+    closeModalEvent(event) {
+        if (!event) {
             this.isShowCountModal = event;
         }
     }
@@ -144,6 +148,6 @@ export class UserDisclosureComponent {
         const redirectUrl = disclosure.reviewStatusCode == '1' ?
             CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         this._router.navigate([redirectUrl],
-            {queryParams: {disclosureId: disclosure.coiDisclosureId}});
+            { queryParams: { disclosureId: disclosure.coiDisclosureId } });
     }
 }

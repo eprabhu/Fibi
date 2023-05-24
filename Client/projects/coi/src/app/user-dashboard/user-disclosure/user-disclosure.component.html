@@ -1,5 +1,6 @@
 <div class="row my-4">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures" >
+
         <div class="light-dark-text-color col-12 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
             <div class="shadow-sm hovering-card disclosure-card-body-blue border rounded" (mouseover)="isFCOIHover = true" (mouseout)="isFCOIHover = false">
                 <div class="border-bottom d-flex px-3 py-2 rounded-top-2">
@@ -57,7 +58,7 @@
                        (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI);">{{disclosure?.numberOfSFI}}</strong>
                       <label class="label-text mt-1" >
                            <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfSFI > 0"
-                            [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfSFI > 0" (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI);">
+                            [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfSFI > 0" (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI,disclosure);">
                               Significant Financial Interest
                          </strong>
                       </label>
@@ -67,12 +68,12 @@
                           <div class="align-items-center col d-flex fs-14"
                             [ngClass]="disclosure?.numberOfProposals > 0 ? 'cursor-pointer' : '' "
                             [attr.title]="disclosure?.numberOfProposals > 0 ? 'Click to view Proposal list' : '' " area-describedby="Click to view Proposal list">
-                                <strong class="fs-18 me-2 text-blue-color " (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals);">{{disclosure?.numberOfProposals}}</strong>
+                                <strong class="fs-18 me-2 text-blue-color " (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals,disclosure);">{{disclosure?.numberOfProposals}}</strong>
                                   <label class="label-text mt-1" >
                                 <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfProposals > 0"
                                     [attr.title]="disclosure?.numberOfProposals > 0 ? 'Click to view Proposal list' : '' "
                                     area-describedby="Click to view Proposal list"
-                                  [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfProposals > 0" (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals);">
+                                  [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfProposals > 0" (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals,disclosure);">
                                   Proposals
                                 </strong>
                               </label>
@@ -81,10 +82,10 @@
                             [ngClass]="disclosure?.numberOfAwards > 0 ? 'cursor-pointer' : '' "
                             [attr.title]="disclosure?.numberOfAwards > 0 ? 'Click to view Award list' : '' " area-describedby="Click to view Award list">
                               <strong class="fs-18 me-2 text-blue-color "
-                              (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards);">{{disclosure?.numberOfAwards}}</strong>
+                              (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards,disclosure);">{{disclosure?.numberOfAwards}}</strong>
                              <label class="label-text mt-1 ">
                                  <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfAwards > 0"
-                                   [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfAwards > 0"  (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards);">
+                                   [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfAwards > 0"  (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards,disclosure);">
                                   Awards
                                  </strong>
                             </label>
@@ -182,7 +183,8 @@
                 <div class="col">
                     <span class="fw-bold me-2">Disclosure Status :</span>
                     <app-no-data-label [valueToShow]="disclosure?.conflictStatus">
-                        <span class="{{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.conflictStatus}}</span>
+                        <span
+                            class="{{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.conflictStatus}}</span>
                     </app-no-data-label>
                 </div>
             </div>
@@ -215,17 +217,17 @@
                 [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list">
                 <strong class="fs-18 me-2 text-blue-color"
                 [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list"
-                 (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi);">
-                  <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}} </label>
-                   </strong>
+                    (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi,disclosure);">
+                    <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}} </label>
+                </strong>
                 <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
                 <label class="label-text mt-1 ">
-                     <strong
-                        [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' " [class.text-decoration-underline]="ishover[index]&& disclosure?.noOfSfi > 0"
-                        (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi);">
+                    <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                        [class.text-decoration-underline]="ishover[index]&& disclosure?.noOfSfi > 0"
+                        (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi,disclosure);">
                         Significant Financial Interest
-                   </strong>
-                </label>    
+                    </strong>
+                </label>
             </div>
             <div class="col-3 text-secondary fs-14 d-flex">
                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
@@ -235,28 +237,26 @@
                           <strong class="fs-18 me-2 text-blue-color "
                             [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " area-describedby="Click to view Proposal list"
                             [class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
-                            (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}</strong>
-                            <label class="label-text mt-1 ">
-                          <strong [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
-                              [class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
-                              (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal);">
-                            Proposals
-                          </strong>
+                            (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal,disclosure);">{{disclosure?.noOfProposal}}</strong>
+                        <label class="label-text mt-1 ">
+                            <strong [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "[class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
+                                (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal,disclosure);">
+                                Proposals
+                            </strong>
                         </label>
                     </div>
                     <div class="align-items-center col d-flex fs-14"
                         [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                         [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' " area-describedby="Click to view Award list">
                         <strong class="fs-18 me-2 text-blue-color "
-                        [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
-                        (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward);">{{disclosure?.noOfAward}}</strong>
-                       <label class="label-text mt-1 ">
-                           <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
-                                [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
-                                (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward);">
-                            Awards
-                           </strong>
-                      </label>
+                            [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
+                            (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward,disclosure);">{{disclosure?.noOfAward}}</strong>
+                        <label class="label-text mt-1 ">
+                            <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "[class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
+                                (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward,disclosure);">
+                                Awards
+                            </strong>
+                        </label>
                     </div>
                 </ng-container>
             </div>
@@ -282,9 +282,7 @@
 
 </ng-container>
 
-
-
-<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId"
+<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
-    (closeModal)="closeModalEvent($event)"></app-count-modal>
+    (closeModal)="closeModalEvent($event)" [fcoiTypeCode]="fcoiTypeCode" [disclosures]="disclosures"></app-count-modal>
