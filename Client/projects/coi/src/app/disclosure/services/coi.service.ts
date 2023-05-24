@@ -10,6 +10,8 @@ export class CoiService {
     triggerAddReviewComment$: Subject<any> = new Subject();
     triggerReviewCommentDataUpdate$: Subject<any> = new Subject();
     globalSave$: Subject<any> = new Subject<any>();
+    unSavedModules = '';
+    previousHomeUrl = '';
 
     isShowInfo = true;
     isShowSFIInfo = true;
@@ -40,8 +42,8 @@ export class CoiService {
         return this._http.post(this._commonService.baseUrl + '/evaluateDisclosureQuestionnaire', params);
     }
 
-    completeDisclosureReview(disclosureId: any) {
-        return this._http.post(`${this._commonService.baseUrl}/completeDisclosureReview/${disclosureId}`, {});
+    completeDisclosureReview(disclosureId: any, disclosureNumber: any) {
+        return this._http.post(`${this._commonService.baseUrl}/completeDisclosureReview/${disclosureId}/${disclosureNumber}`, {});
     }
 
     triggerCommentModal(data: any) {
@@ -55,4 +57,21 @@ export class CoiService {
     getCoiProjectTypes() {
         return this._http.get(this._commonService.baseUrl + '/getCoiProjectTypes');
     }
+
+    createCoiTravelDisclosure(obj: object) {
+        return this._http.post(`${this._commonService.baseUrl}/createCoiTravelDisclosure`, obj);
+    }
+
+    loadTravelStatusTypesLookup() {
+        return this._http.get(`${this._commonService.baseUrl}/loadTravelStatusTypesLookup`);
+    }
+
+    loadTravellerTypesLookup() {
+        return this._http.get(`${this._commonService.baseUrl}/loadTravellerTypesLookup`);
+    }
+
+    getApplicableQuestionnaire(requestObject: any) {
+        return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
+    }
+
 }

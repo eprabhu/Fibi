@@ -146,7 +146,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
 
     getApplicableQuestionnaire(requestObject) {
         requestObject = JSON.parse(JSON.stringify(requestObject));
-        return this._http.post(this._commonService.baseUrl + '/getApplicableQuestionnaire', requestObject)
+        return this._http.post(this._commonService.fibiUrl + '/getApplicableQuestionnaire', requestObject)
     }
 
     combineQuestionnaireList(newList) {
@@ -255,7 +255,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
                 subModuleCode: this.activeQuestionnaire.MODULE_SUB_ITEM_CODE,
                 subModuleItemKey: this.configuration.moduleSubItemKey,
                 questionnaireMode: this.getQuestionnaireMode(this.activeQuestionnaire.MODULE_SUB_ITEM_CODE),
-                personId: this._commonService.getCurrentUserDetail('personID'),
+                personId: this._commonService.getCurrentUserDetail('personId'),
                 exportType: docType === 'excel' ? 'xlsx' : docType === 'pdf' ? 'pdf' : '',
                 userName: this._commonService.getCurrentUserDetail('userName'),
                 questionnaireId: this.activeQuestionnaire.QUESTIONNAIRE_ID,

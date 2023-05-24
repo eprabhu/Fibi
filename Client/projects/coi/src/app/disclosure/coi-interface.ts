@@ -9,6 +9,7 @@ export class COI {
     adminGroup: AdminGroup[];
     coiSections: any[];
     proposalIdlinkedInDisclosure: any;
+    projectDetail: any;
 }
 
 export interface CoiConflictStatusType {
@@ -75,6 +76,43 @@ export class CoiDisclosure {
     updateTimestamp: number;
     updateUser: string;
     isDisclosureQuestionnaire: boolean;
+}
+
+export class CoiTravelDisclosure {
+    travelDisclosureId: number;
+    travelNumber: number;
+    versionNumber: number;
+    versionStatus = 'ACTIVE';
+    personId:string
+    entityId: number;
+    entityNumber: number;
+    travelStatusCode: string;
+    isSponsoredTravel: boolean;
+    travelTitle: string;
+    purposeOfTheTrip: string;
+    travelAmount: number;
+    travelStartDate: any;
+    noOfDays: number;
+    destinationCity: string;
+    destinationCountry: string;
+    relationshipToYourResearch: string;
+    travelState: string;
+    travelEndDate: any;
+    acknowledgeBy: string;
+    acknowledgeAt: string;
+    travelTravellerId: string;
+    travellerTypeCode: Array<string> = [];
+    isInternationalTravel: boolean;
+}
+
+export interface TravelDisclosureTraveller {
+    description: string;
+    isActive: boolean;
+    isChecked?: boolean;
+    travelerTypeCode?: string;
+    travelStatusCode?: string;
+    updateTimestamp: number;
+    updateUser: string;
 }
 
 export interface UnitAdministratorType {
@@ -263,4 +301,67 @@ export class SFIDashboardRequestObject {
     property17 = null;
     property18 = null;
     property19 = null;
+}
+
+export interface getApplicableQuestionnaireData {
+    applicableQuestionnaire: ApplicableQuestionnaire[]
+    questionnaireId: any
+    moduleItemKey: string
+    moduleSubItemKey: string
+    moduleItemCode: number
+    moduleSubItemCode: number
+    questionnaireAnswerHeaderId: any
+    questionnaireAnsAttachmentId: any
+    questionnaireCompleteFlag: any
+    actionUserId: string
+    actionPersonId: any
+    actionPersonName: string
+    acType: any
+    questionnaireName: any
+    newQuestionnaireVersion: boolean
+    questionEditted: boolean
+    questionnaireList: any
+    questionnaireGroup: any
+    header: any
+    questionnaire: any
+    usage: any
+    fileName: any
+    fileContent: any
+    length: any
+    remaining: any
+    fileTimestamp: any
+    contentType: any
+    personId: any
+    multipartFile: any
+    moduleList: any
+    isInserted: any
+    updateTimestamp: any
+    copyModuleItemKey: any
+    questionnaireNumbers: any[]
+    lookUpDetails: any
+    newQuestionnaireId: any
+    moduleSubItemCodes: any[]
+    questionnaireBusinessRules: any
+    ruleId: any
+    rulePassed: any
+    questionnaireMode: string
+}
+
+export interface ApplicableQuestionnaire {
+    NEW_QUESTIONNAIRE_LABEL: any
+    MODULE_SUB_ITEM_KEY: any
+    QUESTIONNAIRE_ANS_HEADER_ID: any
+    QUESTIONNAIRE_COMPLETED_FLAG: any
+    MODULE_SUB_ITEM_CODE: number
+    MODULE_ITEM_CODE: number
+    QUESTIONNAIRE_LABEL: string
+    NEW_QUESTIONNAIRE: any
+    IS_NEW_VERSION: string
+    VERSION_NUMBER: number
+    QUESTIONNAIRE_NUMBER: number
+    QUESTIONNAIRE_ID: number
+    QUESTIONNAIRE: string
+    ANSWERED_VERSION_NUMBER: any
+    NEW_QUESTIONNAIRE_ID: any
+    IS_MANDATORY: string
 }

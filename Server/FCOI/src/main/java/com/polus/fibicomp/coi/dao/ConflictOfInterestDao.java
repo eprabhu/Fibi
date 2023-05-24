@@ -12,9 +12,11 @@ import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiFileData;
+import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
 import com.polus.fibicomp.coi.pojo.CoiProjectType;
@@ -31,6 +33,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -526,7 +529,7 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureNumber
 	 * @return
 	 */
-	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(String disclosureNumber);
+	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(Integer disclosureNumber);
 
 	/**
 	 * This method is used for get count of comments
@@ -662,6 +665,51 @@ public interface ConflictOfInterestDao {
 	
 	public List<ValidPersonEntityRelType> getValidPersonEntityRelTypes(Integer personEntityId);
 
-	public CoiDisclosure getMasterDisclosureByPersonId(String personId);
+	public Integer getAllSystemEntityListCount(CoiDashboardVO vo);
 
+	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
+
+	/**
+	 *
+	 * @param enitityId
+	 * @return
+	 */
+	boolean checkEntityAdded(Integer enitityId);
+
+	/**
+	 *
+	 * @param disclosureId
+	 * @param disclosureNumber
+	 * @param personEntityId
+	 */
+	void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId);
+	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode);
+
+	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);
+
+	public Integer getNumberOfProposalsBasedOnDisclosureId(Integer disclosureId);
+
+	public Integer getNumberOfAwardsBasedOnDisclosureId(Integer disclosureId);
+
+	public boolean isSFIDefined(String personId);
+
+	public boolean isRelationshipDefined(Integer disclosureId);
+
+	public boolean isMasterDisclosurePresent(String personId);
+
+	/**
+	 *
+	 * @param disclosureId
+	 * @param disclosureNumber
+	 */
+	void archiveDisclosureOldVersions(Integer disclosureId, Integer disclosureNumber);
+	
+	public Integer fetchMaxPersonEntityId(String personId, Integer entityId);
+	
+	public Integer generateMaxPersonEntityId();
+
+	public void saveOrUpdateDisclComment(DisclComment disclComment);
+
+	public DisclComment getDisclEntProjRelationComment(Integer disclosureDetailsId);
+	
 }

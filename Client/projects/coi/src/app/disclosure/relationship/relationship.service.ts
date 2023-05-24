@@ -15,7 +15,7 @@ getProjectRelations(id, status) {
   });
 }
 
-getEntityList(moduleCode, moduleId, id, status) {
+getEntityList(moduleCode, moduleId, id, status,personId) {
   if (moduleCode == 3) {
     return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
       'disclosureId': id,
@@ -23,7 +23,7 @@ getEntityList(moduleCode, moduleId, id, status) {
       'disclosureStatusCode': status,
       'moduleCode': moduleCode,
       'moduleItemId': moduleId,
-      'personId': "10000000001",
+      'personId': personId,
     });
   } else {
     return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
@@ -31,26 +31,30 @@ getEntityList(moduleCode, moduleId, id, status) {
       'disclosureStatusCode': status,
       'moduleCode': moduleCode,
       'moduleItemId': moduleId,
-      'personId': "10000000001"
+      'personId': personId
     });
   }
 }
 
-saveEntityProjectRelation(params, moduleCode, moduleItemId, did) {
+saveEntityProjectRelation(params, moduleCode, moduleItemId, disclosureId,personId) {
   return this._http.post(this._commonService.baseUrl + '/saveEntityProjectRelation',
-  {'coiDisclosureDetails': params,
+  {'coiDisclEntProjDetails': params,
   'moduleCode': moduleCode,
   'moduleItemId': moduleItemId,
-   'disclosureId': did,
+  'disclosureId': disclosureId,
+  'personId': personId
+
 });
 }
 
-singleEntityProjectRelation(params, moduleCode, moduleItemId, did) {
+singleEntityProjectRelation(params, moduleCode, moduleItemId, did,personId) {
   return this._http.post(this._commonService.baseUrl + '/singleEntityProjectRelation',
-  {'coiDisclosureDetail': params,
+  {'coiDisclEntProjDetail': params,
   'moduleCode': moduleCode,
   'moduleItemId': moduleItemId,
-   'disclosureId': did,});
+   'disclosureId': did,
+   'personId': personId
+  });
 }
 
 }

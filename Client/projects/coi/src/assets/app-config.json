@@ -1,7 +1,14 @@
 {
   "baseUrl": "",
-  "fibiUrl": "http://192.168.1.20:1111/",
-  "COIUrl": "http://192.168.1.20:2222/",
+  "fibiUrl": "",
+  "authUrl": "/auth",
+  "fibiWebUrl": "http://192.168.1.47:8080/fibi/",
   "enableSSO": false,
-  "elasticIndexUrl": "http://192.168.1.47:9200/"
+  "isElasticAuthentiaction" : false,
+  "elasticUserName": "elastic",
+  "elasticDelimiter": ":",
+  "elasticPassword":"changeme",
+  "elasticAuthScheme": "Basic",
+  "elasticIndexUrl": "http://192.168.1.47:9200/",
+  "fibiApplicationUrl":"http://192.168.1.47:8080/fibi"
 }

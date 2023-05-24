@@ -1,10 +1,10 @@
 <div>
   <app-view-entity-details></app-view-entity-details>
-  <div class="fw-bold ml-15 mt-3">Relationships</div>
-  <div class="ml-15 mr-15 shadow">
+  <div class="fw-bold ml-15 mt-4 mb-2 px-1 fs-16">Relationships</div>
+  <div class="ml-15 mr-15 shadow-sm">
     <!-- [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"  -->
     <nav
-      class="align-items-center bg-white border d-flex fs-14 fw-medium mt-3 py-1 user-dashboard-nav bg-body-emphasis">
+      class="align-items-center bg-white border d-flex fs-14 fw-medium mt-1 py-1 user-dashboard-nav bg-body-emphasis">
       <div (click)="currentTab('Person')" class="border-end navigation-icons text-secondary py-1" role="button"
         id="btn-person" title="Person" (keyup.enter)="currentTab('Person')" (keyup.space)="currentTab('Person')">
         <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Person'}" class="px-5 ">Person</span>
@@ -44,13 +44,15 @@
       <div class="ml-15 justify-content-end d-flex">
         <button class="btn btn-primary fs-13 d-flex" id="advanced-search" title="Advance search"
           (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search" aria-expanded="true"
-          aria-label="Toggle Advanced Search"><mat-icon class="add-icon">tune</mat-icon> Advanced
-          Search
+          aria-label="Toggle Advanced Search"><mat-icon class="add-icon">tune</mat-icon>
+          <label class="fs-13 mt-1">
+            Advanced Search
+          </label>
         </button>
       </div>
     </div>
   </div>
-  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 shadow border ml-15 mr-15">
+  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 shadow-sm border ml-15 mr-15">
     <div class="card-body">
       <div class="form-row row m-2">
         <div class="col-3 ml-3">
@@ -71,13 +73,13 @@
         <div class="col-3 ml-3">
           <label class="fw-bold fs-14 d-block" for="adv-title">Title</label>
           <input type="text" class="form-control text-secondary fs-13" placeholder="Type here Title" id="adv-title">
-          <!-- [(ngModel)]="entityManagementService.coiRequestObject.property3" -->
+                    <!-- [(ngModel)]="entityManagementService.coiRequestObject.property3" -->
         </div>
         <div class="col-3 ml-3">
           <label class="fw-bold fs-14 d-block" for="start-date-involvement">Start Date of Involvement</label>
           <span class="dateField">
             <input matInput [matDatepicker]="startDate" id="start-date-involvement" (click)="startDate.open()"
-              class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy"
+              class="form-control text-secondary fs-13" placeholder="{{datePlaceHolder}}"
               [(ngModel)]="advanceSearchDates.startDate">
             <i (click)="startDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
             <mat-datepicker #startDate>
@@ -90,7 +92,7 @@
           <label class="fw-bold fs-14 d-block" for="end-date-involvement">End Date of Involvement</label>
           <span class="dateField">
             <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
-              class="form-control text-secondary fs-13" placeholder="dd/MM/yyyy"
+              class="form-control text-secondary fs-13"  placeholder="{{datePlaceHolder}}"
               [(ngModel)]="advanceSearchDates.endDate">
             <i (click)="endDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
             <mat-datepicker #endDate>
@@ -105,14 +107,14 @@
           </app-look-up>
         </div>
         <div class="col-6 d-flex justify-content-end align-items-end">
-          <button class="btn btn-outline-secondary  fs-13 py-2 px-4 mr-10" id="btn-clear"
-            (click)="clearAdvanceSearch()">Clear</button>
-          <button class="btn btn-primary fs-13" (click)="advanceSearchRelationships()" id="btn-search">Search</button>
+          <button class="btn btn-outline-secondary  fs-14 py-2 px-4 mr-10" id="btn-clear"
+            (click)="clearAdvanceSearch()" title="Clear">Clear</button>
+          <button class="btn btn-primary fs-14" (click)="advanceSearchRelationships()" id="btn-search" title="Search">Search</button>
         </div>
       </div>
     </div>
   </div>
-  <div *ngIf="entityDetails.length > 0;else noData" class="mt-2 ml-15 mr-15 border-1 shadow-medium">
+  <div *ngIf="entityDetails.length > 0;else noData" class="mt-2 ml-15 mr-15 border-1 shadow-sm">
     <table class="table tableSkin">
       <thead class="border bg-light">
         <tr>
@@ -127,12 +129,12 @@
       </thead>
       <tbody class="bg-white">
         <tr class="border" *ngFor="let entityListData of entityDetails;let i=index">
-          <td class="fs-13 text-primary"><u>{{entityListData?.personFullName}}</u></td>
-          <td class="fs-13 text-secondary">{{entityListData?.person?.unit?.unitName}}</td>
-          <td class="fs-13 text-secondary">{{entityListData?.coiEntity?.entityName}}</td>
-          <td class="fs-13 text-secondary">{{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}</td>
-          <td class="fs-13 text-secondary">{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</td>
-          <td class="fs-13 text-secondary"><span
+          <td class="fs-14 text-primary"><u>{{entityListData?.personFullName}}</u></td>
+          <td class="fs-14 text-secondary">{{entityListData?.person?.unit?.unitName}}</td>
+          <td class="fs-14 text-secondary">{{entityListData?.coiEntity?.entityName}}</td>
+          <td class="fs-14 text-secondary">{{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}</td>
+          <td class="fs-14 text-secondary">{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</td>
+          <td class="fs-14 text-secondary"><span
               [ngClass]="entityListData.isRelationshipActive?'status-active-pill':'status-inactive-pill'">
               {{entityListData?.isRelationshipActive?'Active':'Inactive'}}
             </span>

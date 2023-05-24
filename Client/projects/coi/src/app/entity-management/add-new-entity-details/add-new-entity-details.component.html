@@ -1,15 +1,13 @@
 <div class="card" #entityNavOverlay [class.overlay]="entityManagementService.isShowEntityNavBar">
   <div *ngIf="entityManagementService.isShowEntityNavBar" @enterAnimation
     class="task-right-div card-height d-flex align-items-center" id="task-nav-bar">
-    <div tabindex="0" class="close shadow-medium" (click)="hideEntityNavBar()" id="btn-close" title="Close button">
-      <img src="{{deployMap}}assets/images/close.svg" alt="close button">
-    </div>
+    <app-slider-close-btn tabindex="0" (click)="hideEntityNavBar()"></app-slider-close-btn>
     <div class="tool-kit-body card-height scrollable-table">
-      <div class="card mb-3 card-height">
+      <div class=" mb-3 card-height">
         <div class="card-header px-4 card-border">
           <h5 class="card-title review-title">
             <div class="justify-content-between d-flex align-items-center">
-              <div class="fs-16"><span>{{isEditEntity?'Modify':'Add New'}}</span> Entity</div>
+              <div class="fs-16"><span>{{isEditEntity?'Modify':'Add New'}}</span> Entity : </div>
               <button class="align-items-center d-flex btn btn-primary mt-0 py-1 px-3 h-100 fs-13 pt-1"
                 [title]="isEditEntity?'Update Entity':'Create Entity'" (click)="createEntity();"
                 [id]="isEditEntity?'btn-update':'btn-create'">
@@ -19,16 +17,17 @@
             </div>
           </h5>
         </div>
-        <div class="container-fluid">
-          <div class="card shadow-sm border mt-2 card-size" tabindex="-1">
-            <div class="row mx-2  mt-3">
+        <div class="container-fluid card-color">
+          <div class="card shadow-sm border mt-2 pb-3" tabindex="-1">
+
+            <div class="row px-4">
               <div class="col-custom d-flex mt-2">
-                <label class="d-block fw-500 fs-14" for="entity-name">Entity Name<span class="mandatory px-2">*</span>
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="entity-name">Entity Name : <span
+                    class="mandatory px-2">*</span>
                 </label>
               </div>
               <div class="col mt-3">
-                <input type="text" class="form-control fs-13" placeholder="Please Enter Entity Name"
-                  [(ngModel)]="entityDetails.coiEntity.entityName"
+                <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.entityName"
                   [ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''" id="entity-name">
                 <span *ngIf="(mandatoryList?.has('entityName'))" class="invalid-feedback d-block fs-14-nav">
                   {{(mandatoryList?.get('entityName'))}}
@@ -42,15 +41,16 @@
                 </span>
               </div>
             </div>
-            <div class="row mx-2">
-              <div class="col-custom d-flex  mt-2">
-                <label class="d-block  fw-500 fs-14" for="country">Country<span class="mandatory">*</span>
+
+            <div class="row px-4">
+              <div class="col-custom d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="country">Country : <span class="mandatory px-2">*</span>
                 </label>
               </div>
-              <div class="col  mt-3">
+              <div class="col mt-3">
                 <app-endpoint-search [clearField]="clearCountryField" [httpOptions]="countrySearchOptions"
                   [isError]="(mandatoryList?.has('country'))" (onSelect)="selectedCountryEvent($event)"
-                  [placeHolder]="'Please Enter Your Country'" class="w-100 mt-4 fs-13" [uniqueId]="'country'">
+                  class="w-100 mt-4 fs-13" [uniqueId]="'country'">
                 </app-endpoint-search>
                 <span *ngIf="(mandatoryList?.has('country'))" class="invalid-feedback d-block fs-14-nav">
                   {{(mandatoryList?.get('country'))}}
@@ -59,104 +59,122 @@
                   <p class="new-line-property text-secondary fs-14-nav mt-2">Select country from search bar.</p>
                 </span>
               </div>
-              <div class="col-2 fs-15  d-flex mt-2 ">
-                <label class="d-block px-3 fw-500 fs-14 px-5" for="city">City
-                </label>
-              </div>
-              <div class="col-lg-4 mt-3">
-                <input type="text" class="form-control fs-13" placeholder="Please Enter Your City"
-                  [(ngModel)]="entityDetails.coiEntity.city" id="city">
-                <span class="col fs-13">
-                  <p class="new-line-property text-secondary fs-14-nav mt-2">Select a city from the available
-                    options.</p>
-                </span>
-              </div>
-            </div>
-            <div class="row mx-2">
-              <div class="col-custom d-flex mt-2">
-                <label class="d-block fw-500 fs-14" for="address">Address<span class="mandatory px-2">*</span>
+              <div class="col-2 fs-15 pl-85 d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="city">City :
                 </label>
               </div>
               <div class="col mt-3">
-                <!-- <input type="text" class="form-control" placeholder="Please Enter Your Address" row="3"
-                  [(ngModel)]="entityDetails.coiEntity.address"
+                <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.city" id="city">
+                <span class="col fs-13">
+                  <p class="new-line-property text-secondary fs-14-nav mt-2">Type in the city of the business or
+                    organization you want to report</p>
+                </span>
+              </div>
+            </div>
+            <div class="row px-4">
+              <div class="col-custom d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="address">Address :<span class="mandatory px-2">*</span>
+                </label>
+              </div>
+              <div class="col mt-3">
+                <input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.address"
                   [ngClass]="(mandatoryList?.has('address')) ? 'is-invalid d-block' : ''" id="address">
-                -->
-                <textarea class="form-control h-auto fs-13" placeholder="Please Enter Your Address" row="3"
+
+                <!-- <textarea class="form-control h-auto fs-13" placeholder="Please Enter Your Address" row="3"
                   [(ngModel)]="entityDetails.coiEntity.address"
-                  [ngClass]="(mandatoryList?.has('address')) ? 'is-invalid d-block' : ''" id="address"></textarea>
+                  [ngClass]="(mandatoryList?.has('address')) ? 'is-invalid d-block' : ''" id="address"></textarea> -->
                 <span *ngIf="(mandatoryList?.has('address'))" class="invalid-feedback d-block fs-13">
                   {{(mandatoryList?.get('address'))}}
                 </span>
                 <span class="col fs-13">
-                  <p class="new-line-property text-secondary fs-14-nav mt-2">Enter the address of your organization.</p>
+                  <p class="new-line-property text-secondary fs-14-nav mt-2">Type in the address of the business or
+                    organization you want to report.</p>
                 </span>
               </div>
             </div>
-            <div class="row mx-2">
+            <div class="row px-4">
               <div class="col-custom d-flex mt-2">
-                <label class="d-block fw-500 fs-14" for="Phone">Phone<span class="mandatory px-2">*</span>
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="phone-number">Phone : <span
+                    class="mandatory px-2">*</span>
                 </label>
               </div>
-              <div class="col  mt-3">
-                <input type="text" class="form-control fs-13" placeholder="Please Enter Your Phone Number"
-                  [(ngModel)]="entityDetails.coiEntity.phone"
-                  [ngClass]="(mandatoryList?.has('phoneNumber')) ? 'is-invalid d-block' : ''"
-                  (keypress)="phoneNumberValidation($event)" id="phone-number">
+              <div class="col mt-3">
+                <div>
+                  <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.phone"
+                    [ngClass]="(mandatoryList?.has('phoneNumber')) ? 'is-invalid d-block' : ''"
+                    (keypress)="inputRestriction($event)"
+                    (ngModelChange)="phoneNumberValidation($event)" id="phone-number">
+                </div>
                 <span *ngIf="(mandatoryList?.has('phoneNumber'))" class="invalid-feedback d-block fs-14-nav">
                   {{(mandatoryList?.get('phoneNumber'))}}
                 </span>
                 <span class="col fs-13">
-                  <p class="new-line-property text-secondary fs-14-nav mt-2">Type phone number.</p>
+                  <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type in the phone number of the
+                    business or organization you want to report.</p>
                 </span>
               </div>
-              <div class="col-custom d-flex mt-2 ">
-                <label class="d-block fw-500 fs-14 px-5" for="website">Website<span class="mandatory px-2">*</span>
+              <div class="col-2 fs-15 pl-85 d-flex mt-2">
+                <label class="d-block fw-500 fs-14 pt-2" for="zip-code">Zip Code : <span
+                    class="mandatory px-2">*</span>
                 </label>
               </div>
               <div class="col mt-3">
-                <input type="text" class="form-control fs-13" placeholder="Please Enter Your Website"
-                  [(ngModel)]="entityDetails.coiEntity.webURL"
+                <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.zipCode"
+                (keypress)="inputRestriction($event)"
+                  [ngClass]="(mandatoryList?.has('zipCode')) ? 'is-invalid d-block' : ''" id="zip-code">
+                <span *ngIf="(mandatoryList?.has('zipCode'))" class="invalid-feedback d-block fs-14-nav">
+                  {{(mandatoryList?.get('zipCode'))}}
+                </span>
+                <span class="col fs-13">
+                  <p class="new-line-property text-secondary fs-14-nav mt-2">Type in the zip code of the business or
+                    organization you want to report.</p>
+                </span>
+              </div>
+            </div>
+            <div class="row px-4">
+              <div class="col-custom d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="website">Website : <span class="mandatory px-2">*</span>
+                </label>
+              </div>
+              <div class="col mt-3">
+                <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.webURL"
                   [ngClass]="(mandatoryList?.has('website')) ? 'is-invalid d-block' : ''" id="website">
                 <span *ngIf="(mandatoryList?.has('website'))" class="invalid-feedback d-block fs-14-nav">
                   {{(mandatoryList?.get('website'))}}
                 </span>
                 <span class="col fs-13">
-                  <p class="new-line-property text-secondary fs-14-nav mt-2">Type the website name of the business or
+                  <p class="new-line-property text-secondary fs-14-nav mt-2">Type in the website of the business or
                     organization
                     you need to report.</p>
                 </span>
               </div>
-            </div>
-            <div class="row mx-2">
-              <div class="col-custom d-flex mt-2">
-                <label class="d-block fw-500 fs-14 " for="email-address">Email Address<span
+              <div class="col-2 fs-15 pl-85 d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="email-address">Email Address : <span
                     class="mandatory px-2">*</span>
                 </label>
               </div>
-              <div class="col  mt-3">
-                <input type="text" class="form-control fs-13" placeholder="Please Enter Your Email Address"
-                  [(ngModel)]="entityDetails.coiEntity.emailAddress"
+              <div class="col mt-3">
+                <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.emailAddress"
                   [ngClass]="(mandatoryList?.has('email')) ? 'is-invalid d-block' : ''" id="email-address">
                 <span *ngIf="(mandatoryList?.has('email'))" class="invalid-feedback d-block fs-14-nav">
                   {{(mandatoryList?.get('email'))}}
                 </span>
                 <span class="col fs-13">
-                  <p class="new-line-property text-secondary fs-14-nav mt-2">Type the email address of the business
-                    or organization
-                    you need to report.</p>
+                  <p class="new-line-property text-secondary fs-14-nav mt-2">Type in the email address of the business
+                    or organization you want to report.</p>
                 </span>
               </div>
-              <div class="col-custom d-flex mt-2 ">
-                <label class="d-block fw-500 fs-14 px-5" for="entity-type">Entity Type<span
-                    class="mandatory px-2">*</span>
+            </div>
+            <div class="row px-4">
+              <div class="col-custom d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="entity-type">Entity Type : <span class="mandatory px-2">*</span>
                 </label>
               </div>
               <div class="col mt-3">
-                <select class="form-select text-secondary fw-medium fs-13"
+                <select class="form-select text-secondary fs-14"
                   [(ngModel)]="entityDetails.coiEntity.entityTypeCode" (ngModelChange)="setEntityTypeObj()"
                   [ngClass]="(mandatoryList?.has('entityType')) ? 'is-invalid d-block' : ''" id="entity-type">
-                  <option [value]="null">--Select--</option>
+                  <option [value]="null">--Select Type--</option>
                   <ng-container *ngFor="let entityType of entityTypeList">
                     <option [value]="entityType?.entityTypeCode">{{entityType?.description}}</option>
                   </ng-container>
@@ -167,6 +185,28 @@
                   <p class="new-line-property text-secondary fs-14-nav mt-2">Select type from the available
                     options.</p>
                 </span>
+              </div>
+              <div class="col-2 fs-15 pl-85 d-flex mt-2">
+                <label class="d-block fw-500 fs-14 px-1 pt-2" for="risk-level">Risk Level :
+                </label>
+              </div>
+              <div class="col mt-3">
+                <select class="form-select text-secondary fs-14"
+                  [(ngModel)]="entityDetails.coiEntity.riskCategoryCode" (ngModelChange)="setEntityRiskCategoryObj()"
+                  id="risk-level">
+                  <!-- [ngClass]="(mandatoryList?.has('riskLevel')) ? 'is-invalid d-block' : ''"> -->
+                  <option [value]="null">--Select--</option>
+                  <ng-container *ngFor="let riskLevel of riskLevelLookup">
+                    <option [value]="riskLevel?.riskCategoryCode">{{riskLevel?.description}}</option>
+                  </ng-container>
+                </select>
+                <span class="col fs-13">
+                  <p class="new-line-property text-secondary fs-14-nav mt-2">Select risk level from the available
+                    options.</p>
+                </span>
+                <!-- <span *ngIf="(mandatoryList?.has('riskLevel'))" class="invalid-feedback d-block fs-13">
+                        {{(mandatoryList?.get('riskLevel'))}}
+                      </span> -->
               </div>
             </div>
           </div>

@@ -22,6 +22,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
     coiDetails: any = {};
     searchText: string;
+    isCollapsed = true;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
@@ -74,10 +75,6 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this.commentConfiguration.isSubSectionComment = isSubSectionComment;
         this.commentConfiguration.coiSubSectionsId = subSectionCode;
         this._dataStoreAndEventsService.modifyReviewComment(this.commentConfiguration);
-    }
-
-    openSfiDetails(condition: boolean, entityId: number) {
-        this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: '104',mode:'view' }});
     }
 
 }

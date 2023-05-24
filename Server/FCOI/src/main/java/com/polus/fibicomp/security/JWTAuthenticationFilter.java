@@ -2,6 +2,7 @@ package com.polus.fibicomp.security;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,8 @@ import com.polus.fibicomp.roles.dao.RolesManagementDao;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -128,23 +131,23 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String response = new ObjectMapper().writeValueAsString(personDTO);
 		res.getWriter().write(response);
 	}
-
-	public String generateToken(String username, String personId, String unitNumber, String fullName, boolean isExternalUser) {
+	
+	public String generateToken(String username, String personId, String unitNumber, String fullName,
+			boolean isExternalUser) {
 		Claims claims = Jwts.claims().setSubject(username);
-	    claims.put(Constants.LOGIN_PERSON_ID, personId);
-	    claims.put(Constants.LOGIN_PERSON_UNIT, unitNumber);
-	    claims.put(Constants.LOGIN_USER_FULL_NAME, fullName);
-	    claims.put(Constants.IS_EXTERNAL_USER, isExternalUser);
+		claims.put(Constants.LOGIN_PERSON_ID, personId);
+		claims.put(Constants.LOGIN_PERSON_UNIT, unitNumber);
+		claims.put(Constants.LOGIN_USER_FULL_NAME, fullName);
+		claims.put(Constants.IS_EXTERNAL_USER, isExternalUser);
 		Date now = new Date();
-		Date expiryDate = new Date(now.getTime() 
-				+ Constants.EXPIRATION_TIME
-				);
-		return Jwts.builder()
-			.setClaims(claims)
-	        .setIssuedAt(now)
-	        .setExpiration(expiryDate)
-	        .signWith(SignatureAlgorithm.HS512, Constants.SECRET)
-	        .compact();
+		Date expiryDate = new Date(now.getTime() + Constants.EXPIRATION_TIME);
+		return Jwts.builder().setClaims(claims).setIssuedAt(now).setExpiration(expiryDate)
+				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+	} 
+	
+	private Key getSignKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(Constants.SECRET);
+		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
 }

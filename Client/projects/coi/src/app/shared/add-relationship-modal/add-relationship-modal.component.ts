@@ -30,7 +30,7 @@ export class AddRelationshipModalComponent implements OnInit {
     moduleSubitemCodes: [801],
     moduleItemKey: '',
     moduleSubItemKey: '',
-    actionUserId: this._commonService.getCurrentUserDetail('personID'),
+    actionUserId: this._commonService.getCurrentUserDetail('personId'),
     actionPersonName: this._commonService.getCurrentUserDetail('fullName'),
     enableViewMode: false,
     isChangeWarning: true,
@@ -58,13 +58,14 @@ export class AddRelationshipModalComponent implements OnInit {
     }));
   }
 
-  addRelation() {
-    this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode ? this.addRelationAPI() : this.navigateToSFI();
-  }
+  // addRelation() {
+  //   this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode ? this.addRelationAPI() : this.navigateToSFI();
+  // }
 
-  addRelationAPI() {
-    this.isSaving = true;
-    if (this.isSaving ) {
+  addRelation() {
+    this.relationValidationMap.clear();
+    if (!this.isSaving && this.validateRelationship()) {
+      this.isSaving = true;
       const REQ_BODY = {
         "questionnaireAnsHeaderId": null,
         "personEntityId": this.personEntityId,
@@ -76,26 +77,28 @@ export class AddRelationshipModalComponent implements OnInit {
         this.isSaving = false;
         this.navigateToSFI();
       }));
-    } 
+    }
   }
 
   private navigateToSFI() {
     this.relationshipResult.emit('addRelationshipModal');
     this.hideModal.emit(false);
+    this._sfiService.isShowSfiNavBar = false;
     this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: this.personEntityId, mode: 'edit' } });
   }
 
-  validateRelationship() {
+  validateRelationship() { 
     this.relationValidationMap.clear();
-    if (!this.entityDetail.validPersonEntityRelTypes.validPersonEntityRelTypeCode) {
+    if (!this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode) {
       this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
     }
     return this.relationValidationMap.size === 0 ? true : false;
   }
 
   continueWithoutRelation() {
-    this._sfiService.$addSfi.next(true);
-    hideModal('addRelationshipModal');
+    this.clearRelationModal();
+    this.closeModal();
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: this.personEntityId, mode: 'edit' } })
     this._sfiService.isShowSfiNavBar = false;
   }
 
@@ -117,4 +120,11 @@ export class AddRelationshipModalComponent implements OnInit {
     this.entityDetail.validPersonEntityRelTypes.validPersonEntityRelTypeCode = null;
   }
 
+  closeRelationModal() {
+    this._sfiService.$addSfi.next(true);
+    this.clearRelationModal();
+    this.closeModal();
+    this._sfiService.isShowSfiNavBar = false;
+    this.relationValidationMap.clear();
+  }
 }

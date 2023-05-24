@@ -3,9 +3,7 @@
 }
 
 .disclosure-card-body-blue {
-  background-color: #F0FFFE;
-  min-height: 100px;
-  max-height: 100px;
+  background-color: #F0FFFE !important;
 }
 
 .disclosure-card-heading-green {
@@ -14,8 +12,6 @@
 
 .disclosure-card-body-green {
   background-color: #F0FFF1;
-  min-height: 100px;
-  max-height: 100px;
 }
 
 .disclosure-active-pill {
@@ -88,9 +84,12 @@
   border-radius: 15px;
 }
 .bg-success{
-  background-color: #4CB57D !important; 
+  background-color: #4CB57D !important;
 }
 
 .text-blue-color {
   color: #007DEC;
+}
+.cursor {
+  cursor: context-menu !important;
 }

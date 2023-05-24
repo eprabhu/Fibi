@@ -219,9 +219,10 @@ public interface ConflictOfInterestService {
 	/**
 	 * This method is used for complete Disclosure
 	 * @param disclosureId
+	 * @param disclosureNumber
 	 * @return Disclosure details
 	 */
-	ResponseEntity<Object> completeDisclosureReview(Integer disclosureId);
+	ResponseEntity<Object> completeDisclosureReview(Integer disclosureId, Integer disclosureNumber);
 
 	/**
 	 * This method is used for update ProjectConflictStatus
@@ -339,4 +340,12 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> loadTravellerTypesLookup();
 	
 	ResponseEntity<Object> loadTravelStatusTypesLookup();
+
+	/**
+	 * This method is used to check a enitity is added againt a person or not
+	 *
+	 * @param entityId Entity Id
+	 * @return
+	 */
+	Object checkEntityAdded(Integer entityId);
 }

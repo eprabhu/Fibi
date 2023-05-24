@@ -273,21 +273,21 @@ select option {
 .disable-scroll {
       overflow-y: hidden !important;
 }
-        
+
 small {
     margin-left: 8px;
     margin-top: 5px;
     display: inline-block;
     font-weight: 700;
     color: #fff !important;
-} 
+}
 
 .deactivate-text {
     color: #fff !important;
 }
 
-.pl-7 {
-    padding-left: 7rem;
+.pl-85 {
+    padding-left: 8.5rem;
 }
 
 .col-custom {
@@ -302,17 +302,23 @@ small {
 
 .col-entity-type {
     flex: 0 0 auto;
-    width: 38.333333%;
+    width: 35.8%;
 }
 
 .mr-1rem {
     margin-right: 1rem;
 }
 
-.font {
-font-weight: 500;
-}
-
 .card-color {
     background-color: #FBFBFF;
+}
+
+.right-align {
+    padding-left: 11rem;
+}
+
+.date-field-error {
+    right: 28px;
+    position: absolute;
+    top: 8px;
 }

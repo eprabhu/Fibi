@@ -7,10 +7,9 @@
 		<span class="d-block" aria-hidden="true">&times;</span>
 	</button>
 </div>
-<div class="text-right fs-12 p-1">
-	<span *ngIf="result?.header?.ANS_PERSON_FULL_NAME"><em> Last updated by
-			{{result?.header?.ANS_PERSON_FULL_NAME}} on
-			{{result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long'}}</em></span>
+<div class="d-flex justify-content-end fs-12 p-1">
+	<span *ngIf="result?.header?.ANS_PERSON_FULL_NAME"><em> Last Updated By {{result?.header?.ANS_PERSON_FULL_NAME}} On
+		{{result?.header?.ANS_UPDATE_TIMESTAMP | dateFormatterWithTimeZone: 'long'}}</em></span>
 </div>
 <div class="col-md-12 users-list-tbl mb-3 px-0"
 	*ngIf="questionnaire?.questions != undefined && questionnaire?.questions != null">
@@ -150,7 +149,7 @@
 								</div>
 							</div>
 							<span class="question-font mb-2">{{question.QUESTION}}</span>
-							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)" class="fa fa-info-circle" aria-hidden="true"></i>
+							<i *ngIf="question.DESCRIPTION || question.HELP_LINK"(click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)" class="fa fa-info-circle px-2" aria-hidden="true"></i>
 
 							<div *ngFor=" let option of questionnaire.options"
 								class="answer-options answer-field  p-0 ml-4">
@@ -498,8 +497,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="AttachmentModalTitle">Add Attachment</h5>
-				<button type="button" class="close btn m-0" data-bs-dismiss="modal" aria-label="Close" (click)="tempFiles = [];">
-					<span aria-hidden="true">&times;</span>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="tempFiles = [];">
 				</button>
 			</div>
 			<div class="modal-body">

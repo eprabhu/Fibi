@@ -1,20 +1,21 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ReviewService } from '../review.service';
-import { CommonService } from '../../../common/services/common.service';
-import { environment } from '../../../../environments/environment';
-import { DataStoreService } from '../../services/data-store.service';
-import { AdminGroup, CoiDisclosure, CommentConfiguration } from '../../coi-interface';
-import { CoiService } from '../../services/coi.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {ReviewService} from '../review.service';
+import {CommonService} from '../../../common/services/common.service';
+import {environment} from '../../../../environments/environment';
+import {DataStoreService} from '../../services/data-store.service';
+import {AdminGroup, CoiDisclosure, CommentConfiguration} from '../../coi-interface';
+import {CoiService} from '../../services/coi.service';
 import {ElasticConfigService} from "../../../../../../fibi/src/app/common/services/elastic-config.service";
 import {subscriptionHandler} from "../../../../../../fibi/src/app/common/utilities/subscription-handler";
+import {deepCloneObject} from "../../../../../../fibi/src/app/common/utilities/custom-utilities";
 
 declare var $: any;
 
 @Component({
     selector: 'app-coi-review-location',
     templateUrl: './location.component.html',
-    styleUrls: ['./location.component.css'],
+    styleUrls: ['./location.component.scss'],
 })
 export class LocationComponent implements OnInit, OnDestroy {
 
@@ -70,7 +71,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     private getDataFromStore() {
         const DATA = this._dataStore.getData(this.dependencies);
         this.coiDisclosure = DATA.coiDisclosure;
-        this.adminGroups = DATA.adminGroup;
+        this.adminGroups = DATA.adminGroup || [];
         this.disclosurePerson = DATA.person;
         this.commentConfiguration.disclosureId = this.coiDisclosure.disclosureId;
         this.getCoiReview();
@@ -111,7 +112,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     editReview(review: any, index: number): void {
         this.clearReviewModal();
-        this.reviewDetails = review;
+        this.reviewDetails = deepCloneObject(review);
         this.modifyIndex = index;
         this.personElasticOptions.defaultValue = review.assigneePersonName;
         this.assigneeClearField = new String(false);
@@ -194,16 +195,32 @@ export class LocationComponent implements OnInit, OnDestroy {
     validateReview() {
         this.validationMap.clear();
         if (!this.reviewDetails.assigneePersonId && !this.reviewDetails.adminGroupId) {
-            this.validationMap.set('reviewer', 'Please select an admin group or assignee.');
+            this.validationMap.set('general', 'Please select an admin group or assignee.');
+        }
+        if (this.reviewDetails.assigneePersonId) {
+            this.isDuplicateReviewerValidation();
         }
         return this.validationMap.size === 0;
+    }
+
+    isDuplicateReviewerValidation() {
+        const isEditMode = this.modifyIndex != -1;
+
+        if (this.reviewList.find((reviewer, index) => {
+            const isSelectedReviewer = reviewer.assigneePersonId == this.reviewDetails.assigneePersonId
+            return isEditMode ? (isSelectedReviewer && index != this.modifyIndex) : isSelectedReviewer;
+        })) {
+            this.validationMap.set('reviewer', 'Reviewer already added.');
+        }
     }
 
     getReviewStatusBadge(statusCode: any) {
         switch (statusCode) {
             case '1': return 'warning';
             case '2': return 'info';
-            case '3': return 'success';
+            case '3': return 'info';
+            case '5': return 'warning';
+            case '4': return 'success';
             default: return 'danger';
         }
     }

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +36,7 @@ import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 @RestController
+@RequestMapping("/coi")
 public class ConflictOfInterestController {
 
 	protected static Logger logger = LogManager.getLogger(ConflictOfInterestController.class.getName());
@@ -42,6 +45,12 @@ public class ConflictOfInterestController {
 	@Qualifier(value = "conflictOfInterestService")
 	private ConflictOfInterestService conflictOfInterestService;
 
+	
+	@GetMapping("hello")
+	public ResponseEntity<String> hello() {
+		return new ResponseEntity<>("Hello from COI", HttpStatus.OK);
+	} 	
+	
 	@PostMapping("/createDisclosure")
 	public ResponseEntity<Object> createDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for createDisclosure");
@@ -213,10 +222,11 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.downloadCoiReviewAttachment(attachmentId);
 	}
 
-	@PostMapping("/completeDisclosureReview/{disclosureId}")
-	public ResponseEntity<Object> completeDisclosureReview(@PathVariable("disclosureId") Integer disclosureId) {
+	@PostMapping("/completeDisclosureReview/{disclosureId}/{disclosureNumber}")
+	public ResponseEntity<Object> completeDisclosureReview(@PathVariable("disclosureId") Integer disclosureId,
+														   @PathVariable("disclosureNumber") Integer disclosureNumber) {
 		logger.info("Request for completeDisclosureReview");
-		return conflictOfInterestService.completeDisclosureReview(disclosureId);
+		return conflictOfInterestService.completeDisclosureReview(disclosureId, disclosureNumber);
 	}
 
 	@PostMapping("/updateProjectConflictStatus")
@@ -396,5 +406,9 @@ public class ConflictOfInterestController {
 		logger.info("Requesting for loadTravelStatusTypesLookup");
 		return conflictOfInterestService.loadTravelStatusTypesLookup();
 	}
-	
+
+	@GetMapping("/checkEntity/{entityId}/added")
+	public ResponseEntity<Object> checkEntityAdded(@PathVariable("entityId") Integer entityId) {
+		return new ResponseEntity<>(conflictOfInterestService.checkEntityAdded(entityId), HttpStatus.OK);
+	}
 }

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.polus</groupId>
 	<artifactId>API-Gateway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1 </version>
 	<name>API-Gateway</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -64,6 +64,39 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+				
+	    <dependency>
+	      <groupId>io.micrometer</groupId>
+	      <artifactId>micrometer-tracing-bridge-brave</artifactId>
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>io.zipkin.reporter2</groupId>
+	      <artifactId>zipkin-reporter-brave</artifactId>
+	    </dependency>
+		
+		
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>7.2</version>
+		</dependency>
+		
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -89,6 +122,19 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<configuration>
+					<from>
+						<image>openjdk:17</image>
+					</from>
+					<to>
+						<image>registry.hub.docker.com/polusdocker/api-gateway</image>
+						<tags>${project.version}</tags>
+					</to>
 				</configuration>
 			</plugin>
 		</plugins>

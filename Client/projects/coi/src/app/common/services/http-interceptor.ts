@@ -33,8 +33,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
      * creates new header with auth-key
     */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // this.AuthToken = this._commonService.getCurrentUserDetail('Authorization');
-        this.AuthToken = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3aWxsc21pdGgiLCJwZXJzb25JZCI6IjEwMDAwMDAwMDAxIiwidW5pdE51bWJlciI6IjAwMDAwMSIsImZ1bGxOYW1lIjoiU21pdGgsIFdpbGwiLCJpc0V4dGVybmFsVXNlciI6ZmFsc2UsImlhdCI6MTY4MjY1NTAxNCwiZXhwIjoxNjgyNjk4MjE0fQ.ovBSueAX0qToEn_7MmaQHxt7ggZpIfQjjYaejCCIUmr0LMXAVwYuclPzg9d7N66kWVNHnAwWTfSIQ-hW01W_JA';
+        this.AuthToken = this._commonService.getCurrentUserDetail('Authorization');
 
         if (this.AuthToken) {
             req = req.clone({ headers: req.headers.set('Authorization', this.AuthToken) });
@@ -49,9 +48,10 @@ export class AppHttpInterceptor implements HttpInterceptor {
                     this._commonService.appLoaderContent = 'Loading...';
                     this._commonService.isShowOverlay = false;
                 }
-                if (error.status === 401) {
+
+                if (error.status === 401 || this.isUnAuthorized(error)) {
                     this._commonService.enableSSO ? localStorage.clear() :
-                    ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
+                    this._commonService.removeUserDetailsFromLocalStorage();
                     this._commonService.currentUserDetails = {};
                     this._commonService.enableSSO ? window.location.reload() : this._router.navigate(['/login']);
                 }
@@ -74,5 +74,9 @@ export class AppHttpInterceptor implements HttpInterceptor {
                     this._commonService.isShowOverlay = false;
                 }
             })) as any;
+    }
+
+    isUnAuthorized(error: HttpErrorResponse) {
+        return error && error.error && error.error.message == "missing authorization header";
     }
 }

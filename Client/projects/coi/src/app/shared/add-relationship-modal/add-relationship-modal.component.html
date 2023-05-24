@@ -3,9 +3,9 @@
 <div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-mdb-backdrop="true">
   <div class="modal-dialog modal-lg ">
       <div class="modal-content">
-          <div class="modal-header" style=" height: 48px;background-color:#EEEEEE;">
-              <h1 class="modal-title f-16" id="exampleModalLabel">Add Relations</h1>
-              <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+          <div class="modal-header add-relationship">
+              <h1 class="modal-title f-16" id="exampleModalLabel">Add Relationship</h1>
+              <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="closeRelationModal();"></button>
           </div>
         <div class="modal-body ">
             <!-- Paragraph -->
@@ -13,26 +13,28 @@
                 <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than
                     government entities, institution of higher education and affiliated organizations.</p>
             </div>
-            <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center  "
-                style="margin-top: 26px;margin-bottom: 16px;">
-                <div class=" border " style="padding: 25px ; padding-left:0px ;">
-                    <div style="display: flex; flex-direction: row; ">
+            <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center">
+                <div class="card custom-padding mt-15 mb-15"
+                [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
+                    <div class="custom-size">
                         <div class="form-check form-check-inline">
-                            <label style="font-size: 14px; color: rgb(0,0,0);" class="form-check-label ps-5"><b>Select Relation:
+                            <label class="form-check-label ps-5 color-black"><b>Select Relation:
                                 </b></label>
                         </div>
                         <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
                             <input type="radio" name="relation" class="form-check-input text-secondary"
                                 [value]="relation?.relationshipTypeCode"
                                 [(ngModel)]="entityDetail.validPersonEntityRelTypes.relationshipTypeCode"
-                                (ngModelChange)="setRelationship()"
-                                [ngClass]="relationValidationMap.has('relationRadio')?'is-invalid d-block' : ''">
+                                (ngModelChange)="setRelationship()">
                             <label class="text-secondary r-title fs-14">
                                 {{relation?.description}}
                             </label>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div *ngIf="relationValidationMap.has('relationRadio')"
+              class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
             </div>
             <ng-template #noData>
                 <div class="no-data-container">
@@ -42,19 +44,16 @@
                             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                         </div>
                     </span>
-                    <h4>There are no relations.</h4>
+                    <h4>There are no relationships.</h4>
                 </div>
             </ng-template>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary fs-14 py-2" data-dismiss="modal"
-                (click)="closeModal()">Cancel
-            </button>
             <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-14 py-2"
-                data-dismiss="modal" (click)="continueWithoutRelation()">Continue without selecting Relation
+                data-dismiss="modal" (click)="continueWithoutRelation()">Continue without Relationship
             </button>
-            <button id="add-review-btn" type="button" class="btn btn-primary btn-sm" data-dismiss="modal"
-                (click)="addRelation()">Add Relation
+            <button id="add-review-btn" type="button" class="btn btn-primary btn-sm fs-14" data-dismiss="modal"
+                (click)="addRelation()">Add Relationship
             </button>
         </div>
       </div>

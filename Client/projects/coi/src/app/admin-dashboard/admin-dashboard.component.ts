@@ -2,10 +2,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { DEFAULT_DATE_FORMAT, HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../../../fibi/src/app/app-constants';
+import { DEFAULT_DATE_FORMAT, HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, DATE_PLACEHOLDER } from '../../../../fibi/src/app/app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
-import { isEmptyObject, setFocusToElement } from '../../../../fibi/src/app/common/utilities/custom-utilities';
+import {
+  deepCloneObject,
+  isEmptyObject,
+  setFocusToElement
+} from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
@@ -20,7 +24,7 @@ import { AdminDashboardService, CoiDashboardRequest, SortCountObj } from './admi
 export class AdminDashboardComponent {
 
   setFocusToElement = setFocusToElement;
-  DEFAULT_DATE_FORMAT = DEFAULT_DATE_FORMAT;
+  DEFAULT_DATE_FORMAT =DATE_PLACEHOLDER;
   currentTab = 'ALL';
   coiElastic = null;
   isShowAllProposalList = false;
@@ -32,7 +36,8 @@ export class AdminDashboardComponent {
   selectedModuleCode: any;
   currentDisclosureId: any;
   currentDisclosureNumber: any;
-  datePlaceHolder = DEFAULT_DATE_FORMAT;
+  disclosureType:any
+  datePlaceHolder = DATE_PLACEHOLDER;
   advancedSearch = { hasSFI: true };
   conflictStatusOptions = 'coi_disc_det_status#DISC_DET_STATUS_CODE#true#true';
   disclosureStatusOptions = 'coi_disclosure_status#DISCLOSURE_STATUS_CODE#true#true';
@@ -61,7 +66,6 @@ export class AdminDashboardComponent {
     reviewCommentsCount: 0
   };
   inputType: any;
-  disclosureSequenceStatusCode: any;
   personId: any;
   comments: any[] = [];
   replyComment: any[] = [];
@@ -70,6 +74,8 @@ export class AdminDashboardComponent {
   sortCountObj: SortCountObj;
   sortMap: any = {};
   clearField: String;
+  ishover: [] = [];
+  isViewAdvanceSearch = true;
 
   constructor(public _coiAdminDashboardService: AdminDashboardService,
     private _router: Router,
@@ -81,28 +87,21 @@ export class AdminDashboardComponent {
     this.sortCountObj = new SortCountObj();
     this.sortMap = {};
     this.coiElastic = this._elasticConfig.getElasticForCoi();
-    this.getDashboardDetails();
-    this.getDashboardCounts();
     this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
-    this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
-    this.countrySearchOptions = getEndPointOptionsForCountry();
-    this.EntitySearchOptions = getEndPointOptionsForEntity();
-    this.$coiList.next();
+    this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
+    this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
     this.setAdvanceSearch();
+    this.getDashboardCounts();
   }
 
   setAdvanceSearch() {
+    this.isShowAllProposalList = true;
     if (this._coiAdminDashboardService.coiRequestObject.tabName === 'ALL_DISCLOSURES') {
-      document.getElementById('collapseExample').classList.add('show');
-      this.isShowAllProposalList = false;
+      this.isViewAdvanceSearch = true;
     } else {
-      // if (this._coiAdminDashboardService.isAdvanceSearch) {
-      //   document.getElementById('collapseExample').classList.add('show');
-      // } else {
-        document.getElementById('collapseExample').classList.remove('show');
-        this.isShowAllProposalList = true;
-      // }
-
+       this.isShowAllProposalList = true;
+       this.isViewAdvanceSearch = false;
     }
   }
 
@@ -118,6 +117,9 @@ export class AdminDashboardComponent {
     this.$subscriptions.push(this._coiAdminDashboardService.loadDisclosureAdminDashboardCounts()
       .subscribe((res: any) => {
         this.dashboardCounts = res;
+        setTimeout(() => {
+          this.getDashboardDetails();
+        })
       }));
   }
 
@@ -161,19 +163,21 @@ export class AdminDashboardComponent {
       this.resetAdvanceSearchFields();
       this._coiAdminDashboardService.coiRequestObject.tabName = tabName;
       this.setAdvanceSearch();
-      this.$coiList.next();
+      if(tabName != 'ALL_DISCLOSURES') {
+        this.$coiList.next();
+      }
       return;
     }
     this._coiAdminDashboardService.coiRequestObject.tabName = tabName;
   }
 
   isAdvanceSearchTab(tabName) {
-    return ['ALL_DISCLOSURES', 'PENDING_DISCLOSURES', 'NEW_SUBMISSIONS', 'MY_REVIEWS', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES'].includes(tabName);
+    return ['ALL_DISCLOSURES', 'PENDING_DISCLOSURES', 'NEW_SUBMISSIONS', 'PENDING_DISCLOSURES', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES'].includes(tabName);
   }
 
   fetchMentionedComments() {
     this.$subscriptions.push(this._coiAdminDashboardService.loadCoiReviewComments({
-      personId: this.commonService.getCurrentUserDetail('personID'),
+      personId: this.commonService.getCurrentUserDetail('personId'),
       disclosureId: null,
       coiSubSectionsId: null,
       coiSectionsTypeCode: null,
@@ -212,9 +216,7 @@ export class AdminDashboardComponent {
     this._coiAdminDashboardService.coiRequestObject.property6 = parseDateWithoutTimestamp(this.advanceSearchDates.approvalDate);
     this._coiAdminDashboardService.coiRequestObject.property7 = parseDateWithoutTimestamp(this.advanceSearchDates.expirationDate);
     this._coiAdminDashboardService.coiRequestObject.property23 = parseDateWithoutTimestamp(this.advanceSearchDates.certificationDate);
-    this._coiAdminDashboardService.coiRequestObject.property15 =
-      this._coiAdminDashboardService.coiRequestObject.advancedSearch === 'L'
-        ? null : this._coiAdminDashboardService.coiRequestObject.property15;
+    this._coiAdminDashboardService.coiRequestObject.property15 = null;
   }
 
   onLookupSelect(data: any, property: string) {
@@ -236,28 +238,32 @@ export class AdminDashboardComponent {
   }
 
 
-  setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId) {
-    switch (moduleName) {
-      case 'sfi':
-        this.selectedModuleCode = 8;
-        break;
-      case 'award':
-        this.selectedModuleCode = 1;
-        break;
-      case 'proposal':
-        this.selectedModuleCode = 3;
-        break;
-      default:
-        this.selectedModuleCode = 0;
-    }
-    this.isShowCountModal = true;
-    this.currentDisclosureId = id;
-    this.currentDisclosureNumber = coiNumber;
-    this.inputType = 'DISCLOSURE_TAB';
-    this.disclosureSequenceStatusCode = disSeqCode;
-    this.personId = personId;
-  }
+    setSelectedModuleCode(moduleName, id, coiNumber, personId, count = null) {
+        if (count > 0) {
+            switch (moduleName) {
+                case 'sfi':
+                    this.selectedModuleCode = 8;
+                    break;
+                case 'award':
 
+                    this.selectedModuleCode = 1;
+
+                    break;
+                case 'proposal':
+                    this.selectedModuleCode = 3;
+                    break;
+                default:
+                    this.selectedModuleCode = 0;
+            }
+
+            this.isShowCountModal = true;
+            this.currentDisclosureId = id;
+            this.currentDisclosureNumber = coiNumber;
+            this.disclosureType = moduleName;
+            this.inputType = 'DISCLOSURE_TAB';
+            this.personId = personId;
+        }
+    }
   performAdvanceSearch() {
     this._coiAdminDashboardService.coiRequestObject.advancedSearch = 'A';
     this._coiAdminDashboardService.coiRequestObject.currentPage = 1;
@@ -322,42 +328,32 @@ export class AdminDashboardComponent {
 
   getReviewStatusBadge(statusCode) {
     switch (statusCode) {
-      case '1':
-        return 'warning';
-      case '2':
-        return 'info';
-      case '3':
-        return 'success';
-      default:
-        return 'danger';
+      case '1': return 'warning';
+      case '2': return 'info';
+      case '3': return 'success';
+      case '4': return 'success';
+      default: return 'danger';
     }
   }
 
   getDisclosureStatusBadge(statusCode) {
     switch (statusCode) {
-      case 1:
-        return 'warning';
-      case 2:
-      case 4:
-      case 5:
+      case '1': return 'warning';
+      case '2':
+      case '4':
+      case '5':
         return 'info';
-      case 3:
-      case 6:
-        return 'success';
-      default:
-        return 'danger';
+      case '3': case '6': return 'success';
+      default: return 'danger';
     }
   }
 
   getDispositionStatusBadge(statusCode) {
     switch (statusCode) {
-      case 1:
-        return 'warning';
-      case 2:
-      case 3:
-        return 'success';
-      default:
-        return 'info';
+      case '1': return 'warning';
+      case 2: return 'success';
+      case 3: return 'danger';
+      default: return 'info';
     }
   }
 
@@ -435,7 +431,7 @@ export class AdminDashboardComponent {
       this.sortCountObj[sortFieldBy] = 0;
       delete this.sortMap[sortFieldBy];
     }
-    this._coiAdminDashboardService.coiRequestObject.sort = this.sortMap;
+    this._coiAdminDashboardService.coiRequestObject.sort = deepCloneObject(this.sortMap);
     this.$coiList.next();
   }
 
@@ -444,7 +440,7 @@ export class AdminDashboardComponent {
   }
 
   isActive(colName) {
-    if (!isEmptyObject(this._coiAdminDashboardService.coiRequestObject.sort) && Object.keys(this._coiAdminDashboardService.coiRequestObject.sort).includes(colName)) {
+    if (!isEmptyObject(this._coiAdminDashboardService.coiRequestObject.sort) && colName in this._coiAdminDashboardService.coiRequestObject.sort) {
       return true;
     } else {
       return false;

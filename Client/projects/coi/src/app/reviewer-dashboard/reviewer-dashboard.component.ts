@@ -7,6 +7,7 @@ import { getEndPointOptionsForEntity, getEndPointOptionsForLeadUnit } from '../.
 import { isEmptyObject } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { ReviewerDashboardRequest, ReviewerDashboardService, SortCountObj } from './reviewer-dashboard.service';
+import {CommonService} from "../common/services/common.service";
 
 @Component({
   selector: 'app-reviewer-dashboard',
@@ -39,6 +40,7 @@ export class ReviewerDashboardComponent implements OnInit {
   isActiveDisclosureAvailable: boolean;
 
   constructor(public reviewerDashboardService: ReviewerDashboardService,
+    public commonService: CommonService,
     private _router: Router, private _elasticConfig: ElasticConfigService) { }
 
 
@@ -47,7 +49,7 @@ export class ReviewerDashboardComponent implements OnInit {
     this.getCount();
     this.getDashboardDetails();
     this.coiElastic = this._elasticConfig.getElasticForCoi();
-    this.EntitySearchOptions = getEndPointOptionsForEntity();
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
     this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
     this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
     this.$coiList.next();
@@ -79,7 +81,6 @@ export class ReviewerDashboardComponent implements OnInit {
 
   getCount() {
     this.$subscriptions.push(this.reviewerDashboardService.loadDisclosureReviewerQuickCardCounts().subscribe((data:any) => {
-      console.log(data);
     }));
   }
 

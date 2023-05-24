@@ -7,7 +7,7 @@ export class QuestionnaireListService {
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
     getApplicableQuestionnaire(params) {
-        return this._http.post(this._commonService.baseUrl + '/getApplicableQuestionnaire', params);
+        return this._http.post(this._commonService.fibiUrl + '/getApplicableQuestionnaire', params);
     }
     generateQuestionnaireReport(params) {
         return this._http.post(this._commonService.baseUrl + '/generateQuestionnaireReport', params, {

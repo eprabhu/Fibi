@@ -13,8 +13,14 @@ export class EntityDetailsComponent implements OnInit,OnDestroy {
     this.clearSfiNavBarStyle();
   }
   entityDetails = {};
+  updateRelationshipDetails:any;
+  isEnableRelationshipModal = false;
+  isSaveQuestionnaire = false;
   ngOnInit() {
-
+    const isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit'
+    if(isEditMode){
+      this.entityDetailService.isExpanded = false;
+    }
   }
 
   ngOnDestroy(): void {
@@ -23,5 +29,20 @@ export class EntityDetailsComponent implements OnInit,OnDestroy {
    clearSfiNavBarStyle() {
     document.body.style.removeProperty('overflow');
   }
-  isExpanded: any
+
+  updateRelationship(event){
+  this.updateRelationshipDetails = event;
+  }
+
+  addRelationship(event){
+    this.isEnableRelationshipModal = event;
+  }
+
+  closedRelationshipModal(event){
+    this.isEnableRelationshipModal = event;
+  }
+
+  saveQuestionnaire(event){
+    this.isSaveQuestionnaire = event;
+  }
 }

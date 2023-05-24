@@ -113,7 +113,6 @@ export class AddFaqComponent implements OnInit, OnChanges {
         for (const file of this.uploadedFile) {
           formData.append('files', file, file.name);
         }
-        console.log("faq list: ",this.faqList,"File list: ",this.fileList);
         formData.append('formDataJson', JSON.stringify({ 'faqdtls': this.faqList, 'newFaqAttachment': this.fileList }));
         this.$subscriptions.push(this._addFaqService.saveFaq(formData).subscribe((data: any) => {
           this.newdata.emit("Data Faqdtls: "+data.faqdtls);
@@ -134,7 +133,7 @@ export class AddFaqComponent implements OnInit, OnChanges {
   async submitFaqWaf() {
     const requestForWaf: any = {
       faqdtls: this.faqList,
-      personId: this._commonService.getCurrentUserDetail('personID'),
+      personId: this._commonService.getCurrentUserDetail('personId'),
     };
     const requestSetAtRemaining = {
       newFaqAttachment: this.fileList

@@ -9,11 +9,11 @@ import { DataStoreService } from '../services/data-store.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {deepCloneObject} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 import {HTTP_ERROR_STATUS} from "../../../../../fibi/src/app/app-constants";
-
+import {SfiService} from "../sfi/sfi.service";
 @Component({
     selector: 'app-screening-questionnaire',
     template: `
-        <div>
+        <div id="screening-questionnaire-coi">
             <app-view-questionnaire-list
                     [isShowExportButton]="false"
                     [configuration]="configuration"
@@ -21,7 +21,8 @@ import {HTTP_ERROR_STATUS} from "../../../../../fibi/src/app/app-constants";
                     [questionnaireHeader]="''"
                     [isShowSave]="false"
                     [saveButtonLabel]="'Save and Continue'"
-                    (QuestionnaireSaveEvent)="getSaveEvent($event)">
+                    (QuestionnaireSaveEvent)="getSaveEvent($event)"
+                    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)">
             </app-view-questionnaire-list>
         </div>
     `
@@ -37,7 +38,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
         moduleSubitemCodes: [0],
         moduleItemKey: '',
         moduleSubItemKey: 0,
-        actionUserId: this._commonService.getCurrentUserDetail('personID'),
+        actionUserId: this._commonService.getCurrentUserDetail('personId'),
         actionPersonName: this._commonService.getCurrentUserDetail('fullName'),
         enableViewMode: false,
         isChangeWarning: true,
@@ -47,6 +48,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
     constructor(
         private _commonService: CommonService,
         private _dataStore: DataStoreService,
+        private _sfiService: SfiService,
         private _router: Router,
         public coiService: CoiService
     ) { }
@@ -79,7 +81,11 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
     }
 
     getSaveEvent(_event: any) {
-        this.evaluateDisclosureQuestionnaire();
+        this._dataStore.dataChanged = false;
+        this.coiService.unSavedModules = '';
+        if (_event.QUESTIONNAIRE_COMPLETED_FLAG == 'Y') {
+            this.evaluateDisclosureQuestionnaire();
+        }
     }
 
     private evaluateDisclosureQuestionnaire() {
@@ -90,6 +96,8 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
                 moduleItemId : this.configuration.moduleItemKey
             }).subscribe((data: boolean) => {
                 this.coiDisclosure.isDisclosureQuestionnaire = data;
+                this._sfiService.isSFIRequired = data;
+                document.getElementById('questionnaireEvaluationMessageModalTrigger').click();
                 this._dataStore.updateStore(['coiDisclosure'], this);
                 const NEXT_STEP = data ? '/coi/create-disclosure/sfi' : '/coi/create-disclosure/certification';
                 this._router.navigate([NEXT_STEP], { queryParamsHandling: 'preserve' });
@@ -98,6 +106,11 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in evaluating disclosure.');
             })
         );
+    }
+
+    markQuestionnaireAsEdited(changeStatus: boolean): void {
+      this.coiService.unSavedModules = 'Screening Questionnaire';
+      this._dataStore.dataChanged = changeStatus;
     }
 
 }

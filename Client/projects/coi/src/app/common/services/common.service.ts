@@ -5,9 +5,7 @@ import {environment} from "../../../environments/environment";
 import {getFromLocalStorage, setIntoLocalStorage} from "../../../../../fibi/src/app/common/utilities/user-service";
 import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
 import {Toast} from "bootstrap";
-import {HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
-
-declare var $: any;
+import { HTTP_SUCCESS_STATUS } from '../../app-constants';
 
 @Injectable()
 export class CommonService {
@@ -17,6 +15,8 @@ export class CommonService {
     isShowOverlay = false;
     baseUrl = '';
     fibiUrl = '';
+    authUrl = '';
+    fibiWebUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -49,13 +49,13 @@ export class CommonService {
     generalFileType = 'pdf';
     appLoaderContent = '';
     isEnableLock = false;
-    isDevelopment = false;
     isPreventDefaultLoader = false;
     timer: any;
     appToastContent = '';
     toastClass = 'success';
     dashboardModules: any = {};
     previousURL = null;
+    fibiApplicationUrl = '';
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
@@ -67,7 +67,6 @@ export class CommonService {
         return new Promise(async (resolve, reject) => {
             const CONFIG_DATA: any = await this.readConfigFile();
             this.assignConfigurationValues(CONFIG_DATA);
-            setIntoLocalStorage(JSON.parse('{"personID":"10000000001","firstName":"Will","lastName":"Smith","fullName":"Smith, Will","email":"","roleNumber":null,"userName":"willsmith","unitNumber":"000001","jwtRoles":[],"unitAdmin":true,"login":true,"superUser":true,"externalUser":false}'));
             if (this.enableSSO) {
                 const USER_DATA = await this.loginWithCurrentUser();
                 this.isValidUser = USER_DATA.body['login'];
@@ -75,12 +74,14 @@ export class CommonService {
             }
             if (this.currentUserDetails && this.currentUserDetails.Authorization) {
                 try {
-                    const SYSTEM_PARAMETERS: any = await this.getRequiredParameters();
-                    this.assignSystemParameters(SYSTEM_PARAMETERS);
+                    // const SYSTEM_PARAMETERS: any = await this.getRequiredParameters();
+                    // this.assignSystemParameters(SYSTEM_PARAMETERS);
+                    await this.fetchPermissions();
+                    resolve(true);
                 } catch (e) {
-                    console.error(e)
+                    console.error(e);
+                    resolve(true);
                 }
-                resolve(true);
             } else {
                 resolve(true);
             }
@@ -101,9 +102,16 @@ export class CommonService {
     assignConfigurationValues(configurationData) {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
+        this.authUrl = configurationData.authUrl;
+        this.fibiWebUrl = configurationData.fibiWebUrl;
         this.enableSSO = configurationData.enableSSO;
-        this.isDevelopment = configurationData.isDevelopment;
+        this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
+        this.elasticUserName = configurationData.elasticUserName;
+        this.elasticDelimiter = configurationData.elasticDelimiter;
+        this.elasticPassword = configurationData.elasticPassword;
+        this.elasticAuthScheme = configurationData.elasticAuthScheme;
         this.elasticConfigService.url = configurationData.elasticIndexUrl;
+        this.fibiApplicationUrl = configurationData.fibiApplicationUrl;
     }
 
     pageScroll(elementId) {
@@ -121,7 +129,7 @@ export class CommonService {
     }
 
     loginWithCurrentUser() {
-        return this._http.post(this.baseUrl + '/login', {}, {observe: 'response'}).toPromise();
+        return this._http.post(this.baseUrl + '/auth/login', {}, {observe: 'response'}).toPromise();
     }
 
     /**
@@ -187,30 +195,72 @@ export class CommonService {
     }
 
     async fetchPermissions() {
-        if(this.rightsArray.length) {
+        if (this.rightsArray.length) {
             return this.rightsArray;
         }
-        this.rightsArray = this._http.get(this.baseUrl + '/getAllSystemRights').toPromise();
+        this.rightsArray = await this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
         return this.rightsArray;
     }
 
     showToast(status = HTTP_SUCCESS_STATUS, toastContent = '') {
-        let toast = new Toast(document.getElementById('coi-bootstrap-toast'));
+        let toast: any = new Toast(document.getElementById('coi-bootstrap-toast'));
+        let toast_body: any = document.getElementById('coi-bootstrap-toast-body');
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
-        this.toastClass = status === HTTP_SUCCESS_STATUS ? 'success' : 'danger';
-        toast.show();
+        this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' : 'bg-danger';
+        if(toast && toast_body) {
+            toast_body.innerText =  this.appToastContent;
+            toast._element.classList.add(this.toastClass)
+            toast.show();
+        }
+
+
     }
 
-    getDisclosureConflictStatus(statusCode: string) {
-        switch(String(statusCode)) {
+  getDisclosureConflictBadge(statusCode: string) {
+        switch (String(statusCode)) {
             case '1':
-                return 'bg-success text-white';
-            case '2':
+                return 'green-badge';
+          case '2':
+                return 'brown-badge';
             case '3':
-            case '4':
-                return 'bg-warning text-black';
+                return 'red-badge';
         }
+    }
+
+    getReviewStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1':
+                return 'yellow-badge';
+            case '2':
+            return 'blue-badge';
+            case '3':
+            return 'green-badge';
+            case '4':
+            return 'green-badge';
+            default:
+            return 'red-badge';
+        }
+    }
+
+    getDispositionStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1':
+            return 'yellow-badge';
+            case '2':
+            case '4':
+            case '5':
+                return 'blue-badge';
+            case '3':
+            case '6':
+            return 'green-badge';
+            default:
+            return 'yellow-badge';
+        }
+    }
+
+    removeUserDetailsFromLocalStorage() {
+        ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
 
 }

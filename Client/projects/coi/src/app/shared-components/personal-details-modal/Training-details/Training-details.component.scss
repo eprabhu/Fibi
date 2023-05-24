@@ -1,0 +1,25 @@
+.listStyle {
+    list-style: none;
+}
+
+.widget-container {
+    max-height: 400px;
+    overflow: auto;
+}
+
+.row-hover:hover {
+    background-color: #f5f5f5;
+}
+
+.actionStyle {
+    display: flex text-center;
+}
+
+.actionThStyle {
+    width: 10%;
+    padding-left: 27px;
+}
+
+.iconStyle {
+    padding-top: 0.25rem;
+}

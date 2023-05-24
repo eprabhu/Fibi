@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -52,7 +53,7 @@ public class CoiDisclEntProjDetails implements Serializable {
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCL_ENT_PROJ_DETAILS_FK3"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
-	private CoiEntity CoiEntity;
+	private CoiEntity coiEntity;
 	
 	@Column(name = "ENTITY_NUMBER")
 	private Integer entityNumber;
@@ -77,6 +78,9 @@ public class CoiDisclEntProjDetails implements Serializable {
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
+	
+	@Transient
+	private DisclComment disclComment;
 
 	public Integer getDisclosureDetailsId() {
 		return disclosureDetailsId;
@@ -135,11 +139,11 @@ public class CoiDisclEntProjDetails implements Serializable {
 	}
 
 	public CoiEntity getCoiEntity() {
-		return CoiEntity;
+		return coiEntity;
 	}
 
-	public void setCoiEntity(CoiEntity CoiEntity) {
-		this.CoiEntity = CoiEntity;
+	public void setCoiEntity(CoiEntity coiEntity) {
+		this.coiEntity = coiEntity;
 	}
 
 	public Integer getEntityNumber() {
@@ -196,6 +200,14 @@ public class CoiDisclEntProjDetails implements Serializable {
 
 	public void setUpdateTimestamp(Timestamp updateTimestamp) {
 		this.updateTimestamp = updateTimestamp;
+	}
+
+	public DisclComment getDisclComment() {
+		return disclComment;
+	}
+
+	public void setDisclComment(DisclComment disclComment) {
+		this.disclComment = disclComment;
 	}
 	
 }

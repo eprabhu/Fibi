@@ -5,7 +5,8 @@ import { SfiService } from './sfi.service';
 import { DataStoreService } from '../services/data-store.service';
 import { CoiService } from '../services/coi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { CommonService } from '../../common/services/common.service';
 
 @Component({
     selector: 'app-sfi',
@@ -28,8 +29,8 @@ export class SfiComponent implements OnInit, OnDestroy {
         private _sfiService: SfiService,
         private _dataStore: DataStoreService,
         public _coiService: CoiService,
-        private _router: Router
-    ) { }
+        private _router: Router) {
+    }
 
     ngOnInit() {
         this._coiService.isShowSFIInfo = true;
@@ -91,10 +92,6 @@ export class SfiComponent implements OnInit, OnDestroy {
 
     closeSFIInfo() {
         this._coiService.isShowSFIInfo = false;
-    }
-
-    openSfiDetails(condition: boolean, entityId: number) {
-        this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entityId ,mode:'view' }});
     }
 
 }

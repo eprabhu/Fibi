@@ -1,12 +1,12 @@
 .disclosure-heading {
-  height: 45px;
+  height: 40px;;
   background-color: #E8E8E8;
 }
 
 .triple-card {
-  .col {
-    height: 110px;
-  }
+
+    height: 96px;
+
 }
 
 .navigation-tabs {
@@ -106,11 +106,11 @@ $bg-color: #E4F1FF;
 }
 
 .status-pill {
-  position: relative;
+  position: absolute;
   left: 14px;
   top: -12px;
   background-color: white;
-  border-radius: 1rem !important;
+  border-radius: 2rem !important;
   font-weight: 500 !important;
   padding: 1px 0.5rem;
   border: 1px solid #dee2e6 !important;
@@ -121,16 +121,21 @@ $bg-color: #E4F1FF;
   margin-top: -10px;
 }
 
+.side-height {
+  height:  198px;
+}
+
 .spaced-table {
+  margin-top: 25px;
   border-collapse: separate;
-  border-spacing: 0 5px;
+  border-spacing: 0 2px;
   color: #6A7980;
 }
 
 .bold-blue-color {
   color: #2c77f4;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 table {
@@ -175,8 +180,8 @@ table {
 }
 
 .min-height-189 {
-  min-height: 220px;
-  max-height: 232px;
+  min-height: 200px;
+  max-height: 200px;
 }
 
 .btn-outline-grey {
@@ -194,5 +199,11 @@ table {
 }
 
 .bg-success{
-  background-color: #4CB57D !important; 
+  background-color: #4CB57D !important;
+}
+
+.header-sticky {
+  position: sticky;
+  top: 51px;
+  z-index: 50;
 }

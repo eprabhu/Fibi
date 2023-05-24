@@ -13,9 +13,10 @@ import {CoiService} from "./services/coi.service";
 import {DataStoreService} from "./services/data-store.service";
 import {RouterGuardService} from "./services/router-guard.service";
 import {SharedModule} from "../shared/shared.module";
-import { SfiModule } from './sfi/sfi.module';
-import {CoiSharedModule} from "./shared/shared.module";
 import { FormsModule } from '@angular/forms';
+import { CommonService } from '../common/services/common.service';
+import { SfiModule } from './sfi/sfi.module';
+import { SharedComponentModule } from '../shared-components/shared-component.module';
 
 
 const routes: Routes = [
@@ -58,6 +59,14 @@ const routes: Routes = [
         DisclosureComponent,
         SearchFieldComponent
     ],
+    providers: [
+        SfiService,
+        ResolveServiceService,
+        DataStoreService,
+        CoiService,
+        RouterGuardService,
+    ],
+    exports: [],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
@@ -65,17 +74,9 @@ const routes: Routes = [
         MatButtonModule,
         SharedModule,
         SfiModule,
-        CoiSharedModule,
-        FormsModule
-    ],
-    providers: [
-        SfiService,
-        ResolveServiceService,
-        DataStoreService,
-        CoiService,
-        RouterGuardService
-    ],
-    exports:[]
+        FormsModule,
+        SharedComponentModule
+    ]
 })
 export class DisclosureModule {
 }

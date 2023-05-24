@@ -11,6 +11,7 @@ import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiProjConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiProjectAward;
 import com.polus.fibicomp.coi.pojo.CoiProjectProposal;
 import com.polus.fibicomp.coi.pojo.CoiProjectType;
@@ -133,7 +134,7 @@ public class ConflictOfInterestVO {
 
 	private String proposalIdlinkedInDisclosure;
 
-	private String disclosureNumber;
+	private Integer disclosureNumber;
 
 	private Boolean proposalDisclosureWithNoSfi;
 	
@@ -234,6 +235,26 @@ public class ConflictOfInterestVO {
 	private List<String> travellerTypeCode;
 	
 	private String reviewStatus;
+	
+	private Integer entityCount;
+	
+	private List<CoiProjConflictStatusType> coiProjConflictStatusTypes;
+
+	public List<CoiProjConflictStatusType> getCoiProjConflictStatusTypes() {
+		return coiProjConflictStatusTypes;
+	}
+
+	public void setCoiProjConflictStatusTypes(List<CoiProjConflictStatusType> coiProjConflictStatusTypes) {
+		this.coiProjConflictStatusTypes = coiProjConflictStatusTypes;
+	}
+
+	public Integer getEntityCount() {
+		return entityCount;
+	}
+
+	public void setEntityCount(Integer entityCount) {
+		this.entityCount = entityCount;
+	}
 
 	public String getReviewStatus() {
 		return reviewStatus;
@@ -866,11 +887,11 @@ public class ConflictOfInterestVO {
 		this.proposalIdlinkedInDisclosure = proposalIdlinkedInDisclosure;
 	}
 
-	public String getDisclosureNumber() {
+	public Integer getDisclosureNumber() {
 		return disclosureNumber;
 	}
 
-	public void setDisclosureNumber(String disclosureNumber) {
+	public void setDisclosureNumber(Integer disclosureNumber) {
 		this.disclosureNumber = disclosureNumber;
 	}
 

@@ -30,7 +30,7 @@ const routes: Routes = [{path: '', component: RelationshipComponent}];
         MatFormFieldModule,
         MatSnackBarModule,
         SharedComponentModule,
-        SharedModule
+        SharedModule,
     ],
     providers: [
         RelationshipService

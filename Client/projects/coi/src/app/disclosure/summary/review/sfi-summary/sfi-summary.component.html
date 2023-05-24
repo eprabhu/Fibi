@@ -1,76 +1,39 @@
-<div class="card rounded-0 mt-3" id="COI802">
+<!-- <div class="card rounded-0 mt-3" id="COI802">
   <div class="card-header px-4 d-flex align-items-center justify-content-between">
     <h1 class="f-14 font-weight-bold m-0 txt-medium"> <strong> Significant Financial Interest (SFI) </strong> </h1>
-    <button class="btn btn-sm add-activity-button p-0" id="add-activity" title="Add Review Comment"
+
+    <button class="btn btn-sm add-activity-button p-0 view-icon mr-5" id="add-activity" title="Add Review Comment"
             type="button" (click)="modifyReviewComment()">
-            <mat-icon class="btn btn-outline-secondary comment-button">rate_review</mat-icon>
+            <mat-icon class="btn btn-outline-secondary comment-button me-3">rate_review</mat-icon>
+    </button>
+    <button class=" updown-arrow mt-3 " (click)="isCollapsed = !isCollapsed">
+        <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
+            class="fa-large" aria-hidden="true"></i>
     </button>
   </div>
+</div> -->
 
-  <div class=" row p-2 "
-  *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
-  <!-- Main -->
-  <div class="border bg-white rounded-3 p-2 d-flex ">
-      <div class="col-11 bg-white ">
-          <div class=" mt-2 pb-2 pt-3 px-1" style="height: 77px;">
-              <div class="m-0 mb-2 row">
-                  <div class="col-9">
-                      <p class="entity-title">
-                          <strong>{{item?.coiEntity?.coiEntityName }}</strong>
-                      </p>
-                  </div>
-                  <div class="col-3 text-secondary fs-14">
-                      <span class="fw-bold me-2">Entity
-                          Type:</span>{{item?.coiEntity?.entityType?.description.substr(0, 10)}}
-                  </div>
-              </div>
-              <!-- Under -->
-              <div class="align-items-center d-flex fs-14 m-0 row">
-                  <div class="col-6 text-secondary">
-                      <span class="fw-bold me-3">Relationship:</span>
-                      <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color"><span
-                              class="fw-medium">Financial:
-                          </span> <em *ngFor="let relationship of item?.coiFinancialEntityDetails;let last = last">
-                              <span *ngIf="!last">{{relationship?.coiFinancialEntityRelType?.description}},
-                              </span>
-                              <span *ngIf="last">{{relationship?.coiFinancialEntityRelType?.description}}
-                              </span>
-                          </em></span>
-                      <!-- <span class="relationship-pill border px-3 py-1 me-2 rounded-4 fw-medium pill-color">Travel</span>
-                      <span class="relationship-pill border px-3 py-1 rounded-4 fw-medium pill-color">Commitment</span> -->
-                  </div>
+<div class="main-title" id="COI802">
+  <h3 class="d-flex align-items-center fs-16 mt-4 mb-3"><strong class="mt-4">Significant Financial Interest (SFI)
+    </strong>
+    <span class="d-inline-block mt-3" tabindex="0" data-bs-toggle="tooltip" title="View SFI details."
+      data-bs-placement="top">
+      <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
+    </span>
+    <button class=" updown-arrow mt-3 " (click)="isCollapsed = !isCollapsed">
+      <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'" class="fa-large"
+        aria-hidden="true"></i>
+    </button>
+  </h3>
+</div>
 
-                  <div class="align-items-center col-3 d-flex justify-content-between text-secondary">
-                      <div>
-                          <span class="fw-bold me-2"> Date of creation: </span> {{ item?.coiEntity?.createTimestamp
-                          |dateFormatter }}
-                      </div>
-                  </div>
-
-                  <div class="align-items-center col-3 d-flex justify-content-between text-secondary">
-                      <div>
-                          <span class="fw-bold me-2"> Relationship Start Date:</span>{{ item?.involvementStartDate
-                          |dateFormatter }}
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <!-- 2nd row -->
-      <div class="col-1 bg-white">
-          <div class="align-items-center d-flex py-4">
-              <button class="align-items-center btn btn-outline-secondary d-flex px-2 py-1 sfi_action_btn " style="padding: 3px;" id="view-sfi"
-              (click)="openSfiDetails(true, item?.coiFinancialEntityId)">
-                  <mat-icon class=" sfi_action_icon">remove_red_eye</mat-icon>
-              </button>
-              <button class="add-activity-button btn btn-sm" id="add-activity" title="Comments" type="button">
-                <mat-icon class="btn btn-outline-secondary comment-button">rate_review</mat-icon>
-              </button>
-          </div>
-      </div>
+<ng-container *ngIf="isCollapsed">
+  <div class="px-2 mb-2 mt-3"
+    *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
+    <app-shared-sfi-card [reqObject] = 'item' [referredFrom]="'SFI_SUMMARY'"></app-shared-sfi-card>
   </div>
-</div>
-<div *ngIf="!coiFinancialEntityDetails.length">
-    <app-no-information> </app-no-information>
-</div>
-</div>
+    <div *ngIf="!coiFinancialEntityDetails.length">
+      <app-no-information> </app-no-information>
+    </div>
+
+</ng-container>

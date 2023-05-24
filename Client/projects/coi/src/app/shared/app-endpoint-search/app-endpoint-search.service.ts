@@ -11,7 +11,7 @@ export class AppEndpointSearchService {
     const searchParams: any = {};
     searchParams.searchString = searchString;
 
-    this.endpointUrl = this._commonService.baseUrl + '/' + servicePath;
+    this.endpointUrl = servicePath;
     if (params) {
       Object.keys(params).forEach(key => {
         searchParams[key] = params[key];

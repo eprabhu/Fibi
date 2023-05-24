@@ -10,6 +10,7 @@ export class ReviewComponent implements OnInit {
 
     isToolkitVisible = true;
     coiDetails: any = {};
+    isRelationCollapsed = true;
 
     constructor(
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService

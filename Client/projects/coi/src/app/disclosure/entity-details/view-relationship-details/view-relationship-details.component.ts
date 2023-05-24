@@ -1,36 +1,55 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
+import { HTTP_ERROR_STATUS } from '../../../app-constants';
+import { CommonService } from '../../../common/services/common.service';
 
 @Component({
   selector: 'app-view-relationship-details',
   templateUrl: './view-relationship-details.component.html',
   styleUrls: ['./view-relationship-details.component.scss']
 })
-export class ViewRelationshipDetailsComponent implements OnInit, OnDestroy {
+export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
 
 
   isExpanded = true;
   relationshipsDetails: any = {};
   $subscriptions: Subscription[] = [];
+  personEntityRelationships:any = [];
+  @Input() updateRelationshipDetails :any;
+  isReadMoreBusinessArea = false;
+  isReadMoreUniversity = false;
+  isReadMoreRelationWith = false;
 
   constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
-    private _route:ActivatedRoute) { }
+    private _route:ActivatedRoute,private _commonService: CommonService) { }
 
-  ngOnInit() {
-    const ENTITY_ID = this._route.snapshot.queryParamMap.get('entityId');
-    this.getEntityDetails(ENTITY_ID);
-    // this.sfiServices.isShowSfiNavBar
-  }
+  // ngOnInit() {
+  //   const ENTITY_ID = this._route.snapshot.queryParamMap.get('entityId');
+  //   this.getEntityDetails(ENTITY_ID);
+  //   // this.sfiServices.isShowSfiNavBar
+  // }
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions)
+  }
+
+  ngOnChanges() {
+    const ENTITY_ID = this._route.snapshot.queryParamMap.get('entityId');
+    this.getEntityDetails(ENTITY_ID);
+    if(this.updateRelationshipDetails) {
+      this.personEntityRelationships.push(this.updateRelationshipDetails);
+    }
   }
 
   getEntityDetails(personEntityId) {
     this.$subscriptions.push(this.entityDetailsServices.getRelationshipEntityDetails(personEntityId).subscribe((res: any) => {
       this.relationshipsDetails = res.personEntity;
+      this.personEntityRelationships = res.personEntityRelationships;
+    },_error=>{
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+
     }));
   }
 

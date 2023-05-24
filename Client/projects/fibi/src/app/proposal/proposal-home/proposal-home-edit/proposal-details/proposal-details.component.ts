@@ -5,7 +5,7 @@ import { Router , ActivatedRoute } from '@angular/router';
 import { ProposalHomeService } from '../../proposal-home.service';
 import { CommonService } from '../../../../common/services/common.service';
 import { ElasticConfigService } from '../../../../common/services/elastic-config.service';
-import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, EDITOR_CONFIURATION } from '../../../../app-constants';
+import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, EDITOR_CONFIURATION, DATE_PLACEHOLDER } from '../../../../app-constants';
 import { ProposalService } from '../../../services/proposal.service';
 import {
     compareDates, getCurrentTimeStamp, getDateObjectFromTimeStamp, getDuration,
@@ -71,7 +71,7 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
     personDetails: any = {};
     fundingScheme: string;
     fundingSourceTypeCode: string;
-    datePlaceHolder = DEFAULT_DATE_FORMAT;
+    datePlaceHolder = DATE_PLACEHOLDER;
     setFocusToElement = setFocusToElement;
     $subscriptions: Subscription[] = [];
     isEmployeeFlag = true;

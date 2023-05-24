@@ -1,6 +1,6 @@
-<div class="advance-search-area border d-flex mt-2 rounded-1">
+<div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;">
     <div class="border-end fs-14 p-3">
-        <span class="fs-14 fw-medium me-2 text-secondary">Filter by Status:</span>
+        <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
               class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active"
               role="button">All</span>
@@ -12,44 +12,11 @@
     <div class="d-flex flex-fill">
         <input class="advance-search-input border-0 px-4" type="text" id="searchText" [(ngModel)]="searchText">
         <label for="searchText" class="fs-15 ml-15 mt-3" *ngIf="!searchText">
-            <mat-icon class="me-2">search</mat-icon> Search Portfolio; Ex: RegenBio</label>
+            <mat-icon class="me-2">search</mat-icon> Search Entity Name</label>
     </div>
 </div>
 <app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
 <ng-container *ngFor="let entities of filteredEntityArray | SearchFilter: searchText:['coiEntityCountry', 'coiEntityName', 'coiEntityType']">
-    <div class="bg-white border entity mt-2 pb-2 pt-3 px-1 rounded-1 shadow-sm">
-        <div class="m-0 mb-2 row">
-            <div class="col-8 d-flex">
-                <span [ngClass]="entities?.isActive == 'Y' ? 'active-ribbon':'inactive-ribbon'"
-                      class=" shadow-sm align-items-center d-flex ps-2">{{entities?.isActive == 'Y'?'Active':'Inactive'}}</span>
-                <p class="entity-title">
-                    <strong>{{entities?.coiEntityName}}</strong>
-                </p>
-            </div>
-            <div class="col-4 text-secondary fs-14">
-                <span class="fw-bold me-2">Entity Type:</span> {{entities?.coiEntityType}}
-            </div>
-        </div>
-        <div class="align-items-center d-flex fs-14 m-0 row">
-            <div class="col-8 text-secondary">
-                <span class="fw-bold me-3">Relationship:</span>
-                <span class="relationship-pill border px-3 py-1 rounded-4 me-2"><span
-                        class="fw-medium">Financial: </span><em>Self, Spouse, Dependent</em></span>
-                <span class="relationship-pill border px-3 py-1 me-2 rounded-4 fw-medium">Travel</span>
-                <span class="relationship-pill border px-3 py-1 rounded-4 fw-medium">Commitment</span>
-            </div>
-            <div class="align-items-center col-4 d-flex justify-content-between text-secondary">
-                <div>
-                    <span class="fw-bold me-2"> Relationship Start Date:</span> {{entities?.involvementStartDate | dateFormatter}}
-                </div>
-                <div>
-                    <button (click)="viewEntityDetails(entities)" class="align-items-center btn btn-outline-primary d-flex fs-14">
-                        <mat-icon class="me-1">visibility</mat-icon>
-                        View
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+  <app-shared-sfi-card [reqObject] = 'entities' [referredFrom]="'ENTITIES_DASHBOARD'"></app-shared-sfi-card>
 </ng-container>
 

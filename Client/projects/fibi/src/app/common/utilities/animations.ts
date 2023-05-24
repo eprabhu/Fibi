@@ -94,6 +94,18 @@ export const slideHorizontal = trigger(
     ])
   ]);
 
+  export const slideHorizontalFast = trigger(
+    'enterAnimation', [
+    transition(':enter', [
+      style({ transform: 'translateX(100%)', opacity: 0 }),
+      animate('600ms', style({ transform: 'translateX(0)', opacity: 1 }))
+    ]),
+    transition(':leave', [
+      style({ transform: 'translateX(0)', opacity: 1 }),
+      animate('700ms', style({ transform: 'translateX(100%)', opacity: 0 }))
+    ])
+  ]);
+
   export const easeIn =  trigger('items', [
     transition(':enter', [
       animate('1s ease-in', keyframes([

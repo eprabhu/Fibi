@@ -26,7 +26,6 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonServices: CommonService) {
-    this.getPreviousURL();
   }
 
   ngOnInit(): void {
@@ -43,7 +42,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   }
 
   viewEntityDetails(entities) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entities.coiFinancialEntityId, mode: 'edit' } })
+    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entities.coiFinancialEntityId, mode: 'view' } })
   }
 
   setFilter(type = 'ALL') {
@@ -78,12 +77,14 @@ removeEntityId() {
     })
   }
 
-  getPreviousURL() {
-    this.$subscriptions.push(this._router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this._commonServices.previousURL = event.url;
-      }
-    }));
+
+  getRelationshipTypes(relationshipTypes) {
+    if(relationshipTypes) {
+      return relationshipTypes.split(',').map((type: any) => {
+        const lowercase = type.toLowerCase();
+        return ' ' + lowercase.charAt(0).toUpperCase() + lowercase.slice(1);
+      }).join(',');
+    }
   }
 
 }

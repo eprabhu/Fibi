@@ -1221,7 +1221,7 @@ input:checked+.slider:before {
 }
 .mySkinDialog .modal-content {
     background-color: #fff;
-	border-left: 6px solid #aaa;
+	/* border-left: 6px solid #aaa; */
 }
 .actionButtonGroup {
 	list-style: none;

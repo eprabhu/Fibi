@@ -21,6 +21,7 @@ export class RelationshipSummaryComponent implements OnInit {
     $subscriptions: Subscription[] = [];
     projectRelations: any = [];
     isOpenSlider = false;
+    isShowHoverWhite = [];
     // selectedProject: any = {};
     deployMap = environment.deployUrl;
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
@@ -30,13 +31,14 @@ export class RelationshipSummaryComponent implements OnInit {
     conflictIndex = -1;
     coiDetails: any = {};
     conflictHistory: any = [];
+    isCollapsed = true;
 
     projectConflictValidationMap = new Map();
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _commonService: CommonService
+        public _commonService: CommonService
     ) { }
 
     ngOnInit() {
@@ -77,8 +79,8 @@ export class RelationshipSummaryComponent implements OnInit {
         this.$subscriptions.push(
             this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
                Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode).subscribe((data: any) => {
-                if (data && data.coiDisclosureDetails?.length > 0) {
-                    this.projectRelations = data.coiDisclosureDetails;
+                if (data && data.coiDisclEntProjDetails?.length > 0) {
+                    this.projectRelations = data.coiDisclEntProjDetails;
                 }
                 // if (data && this.selectedProject.proposalIdlinkedInDisclosure && data.proposals.length) {
                 //     this.selectedProject = data.proposals[0];

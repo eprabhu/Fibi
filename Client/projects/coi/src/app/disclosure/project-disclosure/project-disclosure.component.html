@@ -5,16 +5,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Create Project Disclosure</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" id="support-dissmiss-btn"  aria-label="Close"
-                    (click)="clearDisclosureModal()">
-                    <!-- <span aria-hidden="true">&times;</span> -->
+                <button type="button" class="btn-close m-0 p-0" data-bs-dismiss="modal" id="support-dissmiss-btn"  aria-label="Close"
+                    (click)="clearDisclosureModal()" title="Click to close the modal" area-describedby="Click to close the modal">
                 </button>
             </div>
             <div class="modal-body modal-body-style pt-2">
-                <div class="my-3 mx-0 row">
+                <div class="my-3 mx-0 row"  *ngIf="!isSearchExternalProject">
                     <div class="col-12 pt-2 grey-info font" style="background-color:#EEEEEE;">
-                        <p class="fs-13">Please search your project from the list or manually enter the proposal details to continue
-                            with the proposal disclosure.</p>
+                        <p class="fs-13">Please search your project from the list or manually enter the project details to continue with the disclosure creation.</p>
                     </div>
                 </div>
                 <div>
@@ -25,7 +23,7 @@
                                 <input [(ngModel)]="selectedProjectType" (ngModelChange)="changeProjectType()"
                                        [value]="type.description" class="me-2 cursor-pointer"
                                        type="radio" name="project-type" id="{{type?.description}}">
-                                <label class="cursor-pointer" for="{{type?.description}}">{{type?.description}}</label>
+                                <label class="cursor-pointer fw-normal" for="{{type?.description}}">{{type?.description}}</label>
                             </li>
                         </ul>
                         <div *ngIf="projectDisclosureValidation?.has('projectSelect')" class="invalid-feedback d-block">
@@ -49,12 +47,9 @@
                         {{projectDisclosureValidation?.get('proposalSearch')}}
                     </div>
                     <div *ngIf="isShowResultCard" class="col-lg-12 col-12 mb-4 mt-2 shadow-lg resultCard px-0">
-                        <button class="closeResultCard ontop bg-danger text-white" (click)="clearSearchFields()">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </button>
                         <div class="row">
                             <div class="col-12">
-                                <label class="f-14 mt-2 mb-2 pe-2">{{selectedProjectType}} Title : </label>
+                                <label class="f-14 mt-2 mb-2 pe-2">Title : </label>
                                 <span class="ml-2">{{manualProjectAddDetails?.title}}</span>
                             </div>
                             <div class="col-6 mt-2 mb-2 ">
@@ -84,7 +79,7 @@
                                [(ngModel)]="manualProjectAddDetails.moduleItemId" class="form-control" />
                     </div>
                     <div class="col-8">
-                        <label class="f-14">{{selectedProjectType}} Title</label>
+                        <label class="f-14">Title</label>
                         <input type="text" id="proposal-no" placeholder="{{this.selectedProjectType}} Title" autocomplete="off"
                                [(ngModel)]="manualProjectAddDetails.title" class="form-control" />
                     </div>
@@ -93,7 +88,7 @@
                         <app-elastic [options]="piElasticSearchOptions" [clearField]="clearPIField"
                             [placeHolder]="'Type here for Principal Investigator'">
                         </app-elastic>
-            
+
                     </div>
                     <div class="col-4">
                         <label class="f-14">Lead Unit</label>
@@ -108,18 +103,20 @@
                         </app-endpoint-search>
                     </div>
                 </div>
-                <div *ngIf="selectedProjectType" class="fs-14-nav mt-4 text-primary" style="text-decoration: underline;cursor: pointer;" >
+                <!--<div *ngIf="selectedProjectType" class="fs-14-nav mt-4 text-primary" style="text-decoration: underline;cursor: pointer;" >
                     <a *ngIf="!isSearchExternalProject"
                         (click)="switchExternalProject(true);"  >Unable to find your <span class="fw-500">{{selectedProjectType}}</span>  from
                         the List?</a>
                     <a *ngIf="isSearchExternalProject"
                         (click)="switchExternalProject(false);">Back to <span class="fw-500">{{selectedProjectType}}</span> search list</a>
-                </div>
+                </div>-->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary fs-15" data-bs-dismiss="modal"
-                    (click)="clearDisclosureModal(); isSearchExternalProject = false">Cancel</button>
-                <button type="button" class="btn btn-primary fs-15 " (click)="createProjectDisclosureAPI();">
+                    (click)="clearDisclosureModal(); isSearchExternalProject = false"
+                    title="Click to cancel the project disclosure" area-describedby="Click to cancel the project disclosure">Cancel</button>
+                <button type="button" class="btn btn-primary fs-15 " (click)="createProjectDisclosureAPI();"
+                    title="Click here to continue with creating the project disclosure" area-describedby="Click here to continue with creating the project disclosure">
                     Continue with Project Disclosure
                 </button>
             </div>

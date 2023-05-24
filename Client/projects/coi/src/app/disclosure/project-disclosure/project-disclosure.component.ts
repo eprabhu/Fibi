@@ -111,7 +111,7 @@ export class ProjectDisclosureComponent implements OnInit {
             return {coiDisclosure:{
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this._commonService.getCurrentUserDetail('personID'),
+                    personId: this._commonService.getCurrentUserDetail('personId'),
                 },[this.selectedProjectType == 'Award' ? 'coiProjectAward':'coiProjectProposal']: {
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     ...this.getCreateDisclosureRO()
@@ -121,7 +121,7 @@ export class ProjectDisclosureComponent implements OnInit {
             return {coiDisclosure:{
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
-                    personId: this._commonService.getCurrentUserDetail('personID'),
+                    personId: this._commonService.getCurrentUserDetail('personId'),
 
                 }}
         }
@@ -163,9 +163,9 @@ export class ProjectDisclosureComponent implements OnInit {
         this.projectDisclosureValidation.clear();
         switch (this.selectedProjectType) {
             case 'Award':
-                return this.projectSearchOptions = getEndPointOptionsForAwardNumber();
+                return this.projectSearchOptions = getEndPointOptionsForAwardNumber(this._commonService.fibiUrl);
             case 'Development Proposal':
-                return this.projectSearchOptions = getEndPointOptionsForProposalDisclosure();
+                return this.projectSearchOptions = getEndPointOptionsForProposalDisclosure(this._commonService.baseUrl);
         }
     }
 
