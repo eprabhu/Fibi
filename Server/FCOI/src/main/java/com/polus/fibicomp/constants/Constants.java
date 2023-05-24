@@ -1613,4 +1613,11 @@ public interface Constants {
 	String SFI ="2";
 	String PROJECT_RELATIONSHIP ="3";
 
+    Integer COI_MODULE_CODE = 8;
+    Integer COI_SUBMODULE_CODE = 0;
+
+    String TYPE_FCOI = "F";
+    String TYPE_PROJECT_DISCLOSURE = "P";
+    String TYPE_REVISE_FCOI = "RF";
+    String TYPE_SFI = "S";
 }

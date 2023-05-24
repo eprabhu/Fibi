@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.service.GeneralService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class ConflictOfInterestController {
 	@Autowired
 	@Qualifier(value = "conflictOfInterestService")
 	private ConflictOfInterestService conflictOfInterestService;
+
+	@Autowired
+	private GeneralService generalService;
 
 	
 	@GetMapping("hello")
@@ -405,6 +409,11 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> loadTravelStatusTypesLookup() {
 		logger.info("Requesting for loadTravelStatusTypesLookup");
 		return conflictOfInterestService.loadTravelStatusTypesLookup();
+	}
+
+	@GetMapping("/fetchAllCoiRights")
+	public ResponseEntity<Object> fetchAllCoiRights(){
+		return generalService.fetchAllCoiRights();
 	}
 
 	@GetMapping("/checkEntity/{entityId}/added")
