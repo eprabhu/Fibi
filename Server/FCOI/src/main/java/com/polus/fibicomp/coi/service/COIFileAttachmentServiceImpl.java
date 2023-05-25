@@ -36,7 +36,8 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 	@Override
 	@Transactional(rollbackFor = {COIFileAttachmentException.class, IOException.class})
 	public String saveFileAttachment(COIFileRequestDto request) {
-			
+	
+	FileManagementOutputDto fileOutput	= null;
 	try {
 	
 		FileManagmentInputDto input = FileManagmentInputDto.builder()
@@ -45,7 +46,7 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 														   .moduleNumber(request.getComponentReferenceNumber())
 														   .build();
 		
-		FileManagementOutputDto fileOutput =  fileManagementService.saveFile(input);
+		fileOutput =  fileManagementService.saveFile(input);
 		
 		request.setFileDataId(fileOutput.getFileDataId());
 				
@@ -53,6 +54,9 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 		coiFileAttachmentDao.saveDisclosureAttachmentDetail(request);
 		
 		}catch(Exception e) {
+			
+			fileManagementService.removeFileOnException(fileOutput.getFilePath(), fileOutput.getFileName());
+			
 			throw new COIFileAttachmentException("Exception in saveFileAttachment in COIFileAttachmentService, "+ e);
 		}
 		//AuthenticatedUser.getLoginUserName()

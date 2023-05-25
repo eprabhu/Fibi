@@ -1,33 +1,30 @@
 package com.polus.fibicomp.filemanagement;
 
-import java.io.OutputStream;
-import java.util.UUID;
-
-import javax.annotation.PostConstruct;
-
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileManagementService {
-	
-	    private FileStorageService fileStorageService;
-	   
-	    public FileManagementService(FileStorageService fileStorageService) {
-	    	this.fileStorageService = fileStorageService;
-	    }	   
-	    
-	    public FileManagementOutputDto saveFile(FileManagmentInputDto fileManagementInputDto) throws FileStorageException{
-	    	return fileStorageService.saveFile(fileManagementInputDto);
-	    }
 
-	    public OutputStream loadFile(String filename) {
-	        return fileStorageService.downloadFile(filename);
-	    }
+	private FileStorageService fileStorageService;
 
-	    public void deleteFile(String filename) {
-	    	fileStorageService.deleteFile(filename);
-	    }
-	    
-	   
+	public FileManagementService(FileStorageService fileStorageService) {
+		this.fileStorageService = fileStorageService;
+	}
+
+	public FileManagementOutputDto saveFile(FileManagmentInputDto fileManagementInputDto) throws FileStorageException {
+		return fileStorageService.saveFile(fileManagementInputDto);
+	}
+
+	public FileManagementOutputDto downloadFile(String moduleCode, String fileDataId) {
+		return fileStorageService.downloadFile(moduleCode, fileDataId);
+	}
+
+	public void deleteFile(String moduleCode, String fileDataId) {
+		fileStorageService.deleteFile(moduleCode, fileDataId);
+	}
+
+	public void removeFileOnException(String filePath, String fileName) {
+		fileStorageService.removeFileOnException(filePath, fileName);
+	}
+
 }
