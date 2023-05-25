@@ -3,7 +3,7 @@ export class CoiTravelDisclosure {
     travelNumber: number;
     versionNumber: number;
     versionStatus = 'ACTIVE';
-    personId:string
+    personId: string
     entityId: number;
     entityNumber: number;
     travelStatusCode: string;

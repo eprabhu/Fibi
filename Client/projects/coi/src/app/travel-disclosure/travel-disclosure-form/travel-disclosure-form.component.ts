@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'projects/admin-dashboard/src/environments/environment';
 import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/fibi/src/app/app-constants';
@@ -19,9 +19,10 @@ declare var $: any;
     styleUrls: ['./travel-disclosure-form.component.scss']
 })
 export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
-    deployMap = environment.deployUrl;
-    datePlaceHolder = DATE_PLACEHOLDER;
-    EntitySearchOptions: any;
+
+    deployMap: string = environment.deployUrl;
+    datePlaceHolder: string = DATE_PLACEHOLDER;
+    entitySearchOptions: any;
     countrySearchOptions: any;
     $subscriptions: Subscription[] = [];
     clearField: String;
@@ -29,23 +30,32 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     entityName: String;
     mandatoryList = new Map();
     dateValidationList = new Map();
-    isCopyTravelDisclosure = false;
-    @Input() travelDisclosureRO = new CoiTravelDisclosure();
+    isCopyTravelDisclosure: boolean = false;
+    travelDisclosureRO = new CoiTravelDisclosure();
     travellerType: Array<TravelDisclosureTraveller>;
     travelStatusType: Array<TravelDisclosureTraveller>;
     destination: 'Domestic' | 'International' = 'Domestic';
     travelStatusDescription: 'Pending' | 'Submitted' | 'Approved' = 'Pending';
-    @Output() certify: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor(public coiService: CoiService, public commonService: CommonService,
-        public router: Router, public service: TravelDisclosureService,
+    constructor(public coiService: CoiService,
+        public commonService: CommonService,
+        public router: Router,
+        public service: TravelDisclosureService,
         private _dataStore: DataStoreService) { }
 
     ngOnInit(): void {
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.loadTravellerTypesLookup();
         this.loadTravelStatusTypesLookup();
+        this.handleTravelDisclosureSubmission();
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
+    }
+
+    private handleTravelDisclosureSubmission(): void {
         this.service.travelDisclosureSubject.subscribe((event) => {
             if (event == 'certify') {
                 this.certifyTravelDisclosure();
@@ -54,11 +64,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-    ngOnDestroy(): void {
-        subscriptionHandler(this.$subscriptions);
-    }
-
     private loadTravelStatusTypesLookup(): void {
         this.$subscriptions.push(this.service.loadTravelStatusTypesLookup()
             .subscribe((data: any) => {
@@ -178,9 +183,9 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    markTravelFormAsEdited(): void {
+    triggerConfirmationModal(): void {
         this._dataStore.dataChanged = true;
-        this.coiService.unSavedModules = 'Disclosure Form';
+        this.coiService.unSavedModules = 'Travel Details';
     }
 
     validateDates(): boolean {
@@ -201,7 +206,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     clearDisclosureModal(): void {
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.clearField = new String('true');
         this.countryClearField = new String('true');
@@ -212,7 +217,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     certifyTravelDisclosure(): void {
-        this.certify.emit(true);
         this.getAllTravelDisclosureValues(this.travelDisclosureRO);
         if (this.validateForm()) {
             this.$subscriptions.push(this.service.createCoiTravelDisclosure(this.travelDisclosureRO)
@@ -238,7 +242,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.isCopyTravelDisclosure = true;
         this.certifyTravelDisclosure();
     }
-
 }
 
 

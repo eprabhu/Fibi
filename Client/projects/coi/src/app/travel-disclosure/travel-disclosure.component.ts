@@ -41,24 +41,10 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.userDetails.fullName = this._commonService.getCurrentUserDetail('fullName');
         this.userDetails.personId = this._commonService.getCurrentUserDetail('personId');
         this.homeUnit = `${this._commonService.getCurrentUserDetail('homeUnit')} - ${this._commonService.getCurrentUserDetail('homeUnitName')}`;
-        this.getDataFromStore();
-        this.listenDataChangeFromStore();
     }
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
-    }
-
-    private listenDataChangeFromStore(): void {
-        this.$subscriptions.push(
-            this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
-                this.getDataFromStore();
-            })
-        );
-    }
-
-    private getDataFromStore(): void {
-
     }
 
     certifyTravelDisclosure(): void {
@@ -73,12 +59,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         return possibleActiveRoutes.some(paths => this.router.url.includes(paths));
     }
 
-    closePersonDetailsModal(event: any) {
+    closePersonDetailsModal(event: any): void {
         this.ispersondetailsmodal = event;
-    }
-
-    openPersonDetailModal(): void {
-        this.ispersondetailsmodal = true;
     }
 
     leavePageClicked(): void {

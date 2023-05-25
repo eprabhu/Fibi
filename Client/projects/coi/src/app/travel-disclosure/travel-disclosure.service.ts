@@ -6,15 +6,15 @@ import { CommonService } from '../common/services/common.service';
 @Injectable()
 export class TravelDisclosureService {
 
-    public travelDisclosureSubject = new Subject();
+    travelDisclosureSubject = new Subject();
 
     constructor(
         private _http: HttpClient,
         private _commonService: CommonService
     ) { }
     
-    createCoiTravelDisclosure(obj: object) {
-        return this._http.post(`${this._commonService.baseUrl}/createCoiTravelDisclosure`, obj);
+    createCoiTravelDisclosure(travelDisclosureRO: object) {
+        return this._http.post(`${this._commonService.baseUrl}/createCoiTravelDisclosure`, travelDisclosureRO);
     }
 
     loadTravelStatusTypesLookup() {

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { DataStoreService } from './data-store.service';
 
 @Injectable()
 export class RouterGuardService  {
 
-    constructor(private _dataStore: DataStoreService, private _router: Router) { }
+    constructor(private _dataStore: DataStoreService) { }
 
     canActivate(): boolean {
         return true;
