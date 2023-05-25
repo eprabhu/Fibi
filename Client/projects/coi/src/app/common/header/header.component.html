@@ -12,11 +12,12 @@
                 routerLinkActive="active" title="Goto admin dashboard page" aria-describedby="Goto admin dashboard page">Admin Dashboard
                 <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
-              routerLinkActive="active" title="Goto reviewer dashboard page" aria-describedby="Goto reviewer dashboard page">Reviewer Dashboard
+            <li *ngIf="commonService.isCoiReviewer" [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active" title="Goto reviewer dashboard page" aria-describedby="Goto reviewer dashboard page">Reviewer Dashboard
               <span *ngIf="_router.url.includes('/coi/reviewer-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/entity-management']" class="mr-2 cursor-pointer" role="tab"
+               *ngIf="rightsCheck()"
                 routerLinkActive="active" title="Goto entity management page" aria-describedby="Goto entity management page">Entity Management
                 <span *ngIf="_router.url.includes('/coi/entity-management')" class="active-color"></span>
             </li>
@@ -73,5 +74,4 @@
         </div>
     </div>
 </header>
-
 

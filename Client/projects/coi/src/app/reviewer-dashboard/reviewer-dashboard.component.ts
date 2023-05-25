@@ -7,7 +7,7 @@ import { getEndPointOptionsForEntity, getEndPointOptionsForLeadUnit } from '../.
 import { isEmptyObject } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { ReviewerDashboardRequest, ReviewerDashboardService, SortCountObj } from './reviewer-dashboard.service';
-import {CommonService} from "../common/services/common.service";
+import { CommonService } from "../common/services/common.service";
 
 @Component({
   selector: 'app-reviewer-dashboard',
@@ -38,7 +38,17 @@ export class ReviewerDashboardComponent implements OnInit {
   sortMap: any = {};
   sortCountObj: any = {};
   isActiveDisclosureAvailable: boolean;
-
+  //modal => setSelectModuloCode
+  selectedModuleCode: any;
+  reviewerData: any;
+  disclosureType; any;
+  currentDisclosureId: any;
+  currentDisclosureNumber: any;
+  personId: any;
+  fcoiTypeCode: any;
+  isShowCountModal = false;
+  inputType: any;
+  ishover: [] = [];
   constructor(public reviewerDashboardService: ReviewerDashboardService,
     public commonService: CommonService,
     private _router: Router, private _elasticConfig: ElasticConfigService) { }
@@ -80,7 +90,7 @@ export class ReviewerDashboardComponent implements OnInit {
   }
 
   getCount() {
-    this.$subscriptions.push(this.reviewerDashboardService.loadDisclosureReviewerQuickCardCounts().subscribe((data:any) => {
+    this.$subscriptions.push(this.reviewerDashboardService.loadDisclosureReviewerQuickCardCounts().subscribe((data: any) => {
     }));
   }
 
@@ -112,7 +122,7 @@ export class ReviewerDashboardComponent implements OnInit {
   }
 
   redirectToDisclosure(coi: any) {
-    this._router.navigate(['fibi/coi'], {queryParams: {disclosureId: coi.disclosure_id}});
+    this._router.navigate(['fibi/coi'], { queryParams: { disclosureId: coi.disclosure_id } });
   }
 
   selectPersonName(person: any) {
@@ -176,7 +186,7 @@ export class ReviewerDashboardComponent implements OnInit {
 
 
   toggleADSearch() {
-    if(document.getElementById('collapseExample').classList.contains('show')) {
+    if (document.getElementById('collapseExample').classList.contains('show')) {
       document.getElementById('collapseExample').classList.remove('show');
     } else {
       document.getElementById('collapseExample').classList.add('show');
@@ -239,5 +249,38 @@ export class ReviewerDashboardComponent implements OnInit {
   setEventTypeFlag() {
     this.isActiveDisclosureAvailable = !!this.coiList.find((ele: any) => ele.disclosureSequenceStatusCode == '2');
   }
+
+  setSelectedModuleCode(moduleName, id, coiNumber, personId, count = null, coi) {
+    if (count > 0) {
+      switch (moduleName) {
+        case 'sfi':
+          this.selectedModuleCode = 8;
+          break;
+        case 'award':
+          this.selectedModuleCode = 1;
+          break;
+        case 'proposal':
+          this.selectedModuleCode = 3;
+          break;
+        default:
+          this.selectedModuleCode = 0;
+      }
+      this.disclosureType = moduleName;
+      this.currentDisclosureId = id;
+      this.currentDisclosureNumber = coiNumber;
+      this.personId = personId;
+      this.reviewerData = coi
+      this.fcoiTypeCode = coi?.fcoiTypeCode
+      this.isShowCountModal = true;
+      this.inputType = 'DISCLOSURE_TAB';
+    }
+
+  }
+  closeModalEvent(event) {
+    if (!event) {
+        this.isShowCountModal = event;
+    }
+}
+
 
 }

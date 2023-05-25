@@ -8,7 +8,7 @@
                     <button *ngIf="coiDisclosure?.reviewStatusCode == '2'" (click)="clearReviewModal()" class="btn btn-tertiary btn-sm mt-0 button-right justify-content-center d-flex align-items-center" data-bs-toggle="modal"
                         title="Add Review Location" data-bs-target="#add-location-modal">
                         <mat-icon class="me-2">person_add</mat-icon>
-                          Assign Reviewer
+                        Assign Reviewer
                     </button>
                 </div> -->
                 <button class=" updown-arrow mt-1" (click)="isCollapsed = !isCollapsed">
@@ -65,6 +65,7 @@
                     </td>
                     <td>{{review?.createTimestamp | dateFormatterWithTimeZone: 'long' }}
                     </td>
+
                     <td>
                       <span [class.text-black]="review?.reviewStatusTypeCode == '1'" class="fw-medium badge bg-{{getReviewStatusBadge(review?.coiReviewStatus?.reviewStatusCode)}} fs-14 rounded-5">
                       {{review?.coiReviewStatus?.description}}
@@ -76,12 +77,12 @@
                                 <a  *ngIf="review.reviewStatusTypeCode == '1'" id="start-review-btn" data-bs-toggle="modal"
                                     data-bs-target="#coi-start-review" title="Start review"
                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
-                                    <i class="fa fa-play-circle" aria-hidden="true"> </i>
+                                    <i class="fa fa-play-circle btn-color" aria-hidden="true"> </i>
                                 </a>
                                <a  *ngIf="review.reviewStatusTypeCode == '3'" id="complete-review-btn" data-bs-toggle="modal"
                                     data-bs-target="#CompleteReviewModal" title="Complete Review"
                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
-                                    <i class="fa fa-stop-circle-o" aria-hidden="true">
+                                    <i class="fa fa-stop-circle-o btn-color " aria-hidden="true">
                                     </i>
                                 </a>
                             </li>
@@ -94,12 +95,12 @@
                                     <button class="btn-primary-icon icons-toggle list-more-btn ms-1 py-2 px-3 fs-18 d-flex mt-1 action-button"
                                         type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
                                         title="More Actions" aria-expanded="false">
-                                        <i aria-hidden="true" class="fa fa-ellipsis-v"></i>
+                                        <i class="btn-color" aria-hidden="true" class="fa fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right action-dropdown-menu"
                                         aria-labelledby="dropdownMenuButton">
                                         <ul class="location-options">
-                                          <!-- <li *ngIf="review.reviewStatusTypeCode == '1'" class="hand-cursor" title="Start Review">
+                                            <!-- <li *ngIf="review.reviewStatusTypeCode == '1'" class="hand-cursor" title="Start Review">
                                                 <a class="dropdown-item" data-bs-toggle="modal"
                                                     data-bs-target="#coi-start-review"
                                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
@@ -122,18 +123,19 @@
                                                   <span>Complete Review</span>
                                               </a>
                                           </li> -->
-                                            <li *ngIf="review.reviewStatusTypeCode == '1'" title="Edit Review" class="hand-cursor">
-                                                <a class="dropdown-item fs-14" id="edit-location-btn"
-                                                    data-bs-toggle="modal"
+                                            <li *ngIf="review.reviewStatusTypeCode == '1'" title="Edit Review"
+                                                class="hand-cursor">
+                                                <a class="dropdown-item" id="edit-location-btn" data-bs-toggle="modal"
                                                     data-bs-target="#add-location-modal"
                                                     (click)="editReview(review, index)">
                                                     <i class="fa fa-pencil me-2" aria-hidden="true"></i>
                                                     <span>Edit Review</span>
                                                 </a>
                                             </li>
-                                            <li *ngIf="review.reviewStatusTypeCode == '1'" title="Delete Review" class="hand-cursor">
-                                                <a class="dropdown-item fs-14" id="delete-Review-btn"
-                                                    data-bs-toggle="modal" data-bs-target="#deleteReviewModal"
+                                            <li *ngIf="review.reviewStatusTypeCode == '1'" title="Delete Review"
+                                                class="hand-cursor">
+                                                <a class="dropdown-item" id="delete-Review-btn" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteReviewModal"
                                                     (click)="modifyIndex = index;reviewActionConfirmation = review">
                                                     <i class="fa fa-trash-o me-2" aria-hidden="true"></i>
                                                     <span>Delete Review</span>
@@ -152,14 +154,14 @@
 </div>
 <!-- Review Ends-->
 <!-- DELETE MEMBER WARNING MODAL -->
-<div class="modal modal-coi modal-coi fade mySkinDialog modal-opacity" tabindex="-1" id="deleteReviewModal" tabindex="-1" role="dialog"
-    aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal modal-coi modal-coi fade mySkinDialog modal-opacity" tabindex="-1" id="deleteReviewModal"
+    tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Delete Review</h5>
                 <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
-                        type="button">
+                    type="button">
                 </button>
             </div>
             <div class="modal-body">
@@ -180,10 +182,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Complete Review By {{reviewActionConfirmation?.assigneePersonName ? reviewActionConfirmation?.assigneePersonName : reviewActionConfirmation?.adminGroup?.adminGroupName}}
+                <h4 class="modal-title">Complete Review By {{reviewActionConfirmation?.assigneePersonName ?
+                    reviewActionConfirmation?.assigneePersonName :
+                    reviewActionConfirmation?.adminGroup?.adminGroupName}}
                 </h4>
                 <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
-                        type="button">
+                    type="button">
                 </button>
             </div>
             <div class="modal-body">
@@ -215,10 +219,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Start Review by {{reviewActionConfirmation?.assigneePersonName ? reviewActionConfirmation?.assigneePersonName : reviewActionConfirmation?.adminGroup?.adminGroupName}}
+                <h4 class="modal-title">Start Review by {{reviewActionConfirmation?.assigneePersonName ?
+                    reviewActionConfirmation?.assigneePersonName :
+                    reviewActionConfirmation?.adminGroup?.adminGroupName}}
                 </h4>
                 <button aria-label="Close" class="btn-close fs-12" data-bs-dismiss="modal" id="dissmiss-btn"
-                        type="button">
+                    type="button">
                 </button>
             </div>
             <div class="modal-body">
@@ -244,12 +250,13 @@
     </div>
 </div>
 
-<div class="modal modal-coi fade mySkinDialog" id="add-location-modal" role="dialog" aria-labelledby="skippedSchedulesTitle"
-    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal modal-coi fade mySkinDialog" id="add-location-modal" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review' : 'Add Review' }} for {{coiDisclosure?.coiDisclosureFcoiType?.description}} by {{disclosurePerson?.fullName}}</h5>
+                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review' : 'Add Review' }} for
+                    {{coiDisclosure?.coiDisclosureFcoiType?.description}} by {{disclosurePerson?.fullName}}</h5>
                 <button type="button" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
                     (click)="reviewDetails = {}">
                 </button>
@@ -281,14 +288,14 @@
                     <div class="col-12">
                         <label class="block-display">
                             Description</label>
-                        <textarea [(ngModel)]="reviewDetails.description" appLengthValidator [isShowLimiter]="true" [limit]="2000"
-                            rows="2" class="form-control"></textarea>
+                        <textarea [(ngModel)]="reviewDetails.description" appLengthValidator [isShowLimiter]="true"
+                            [limit]="2000" rows="2" class="form-control"></textarea>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="agreement-approve-close" type="button"
-                    (click)="clearReviewModal();">Close</button>
+                <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="agreement-approve-close"
+                    type="button" (click)="clearReviewModal();">Close</button>
                 <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
                     (click)="saveOrUpdateCoiReview();" type="button">
                     {{ modifyIndex != -1 ? 'Update' : 'Add' }}
@@ -297,4 +304,5 @@
         </div>
     </div>
 </div>
-<span (click)="clearReviewModal()" id="add-review-modal-trigger" data-bs-target="#add-location-modal" data-bs-toggle="modal" class="d-none"></span>
+<span (click)="clearReviewModal()" id="add-review-modal-trigger" data-bs-target="#add-location-modal"
+    data-bs-toggle="modal" class="d-none"></span>

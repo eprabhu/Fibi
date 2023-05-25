@@ -12,7 +12,6 @@ export class CoiService {
     globalSave$: Subject<any> = new Subject<any>();
     unSavedModules = '';
     previousHomeUrl = '';
-
     isShowInfo = true;
     isShowSFIInfo = true;
     isShowCertifyInfo = true;
@@ -56,18 +55,6 @@ export class CoiService {
 
     getCoiProjectTypes() {
         return this._http.get(this._commonService.baseUrl + '/getCoiProjectTypes');
-    }
-
-    createCoiTravelDisclosure(obj: object) {
-        return this._http.post(`${this._commonService.baseUrl}/createCoiTravelDisclosure`, obj);
-    }
-
-    loadTravelStatusTypesLookup() {
-        return this._http.get(`${this._commonService.baseUrl}/loadTravelStatusTypesLookup`);
-    }
-
-    loadTravellerTypesLookup() {
-        return this._http.get(`${this._commonService.baseUrl}/loadTravellerTypesLookup`);
     }
 
     getApplicableQuestionnaire(requestObject: any) {

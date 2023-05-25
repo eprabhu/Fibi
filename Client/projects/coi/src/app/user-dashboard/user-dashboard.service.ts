@@ -7,7 +7,6 @@ export class UserDashboardService {
 
   activeDisclosures = [];
   isModalOpen = false;
-  isShowTravelDisclosure=false;
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 

@@ -1,14 +1,17 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AppRouterComponent} from "./common/app-router/app-router.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AppRouterComponent } from "./common/app-router/app-router.component";
 import { DashboardGuardService } from './common/services/dashboard-guard.service';
+import { EntityManagementGuardService } from './entity-management/entity-management-guard.service';
 
 const routes: Routes = [
     // {path: '', redirectTo: 'coi/user-dashboard/disclosures', pathMatch: 'full'}
-    {path: '', redirectTo: 'coi', pathMatch: 'full'},
+    {
+        path: '', redirectTo: 'coi', pathMatch: 'full'
+    },
     {
         path: 'coi', component: AppRouterComponent, canActivate: [DashboardGuardService], children: [
-            {path: '', redirectTo: 'user-dashboard', pathMatch: 'full'},
+            { path: '', redirectTo: 'user-dashboard', pathMatch: 'full' },
             {
                 path: 'disclosure',
                 loadChildren: () => import('./disclosure/disclosure.module').then(m => m.DisclosureModule)
@@ -18,8 +21,8 @@ const routes: Routes = [
                 loadChildren: () => import('./disclosure/disclosure.module').then(m => m.DisclosureModule)
             },
             {
-              path: 'reviewer-dashboard',
-              loadChildren: () => import('./reviewer-dashboard/reviewer-dashboard.module').then(m => m.ReviewerDashboardModule)
+                path: 'reviewer-dashboard',
+                loadChildren: () => import('./reviewer-dashboard/reviewer-dashboard.module').then(m => m.ReviewerDashboardModule)
             },
             {
                 path: 'user-dashboard',
@@ -31,22 +34,31 @@ const routes: Routes = [
             },
             {
                 path: 'entity-management',
-                loadChildren: () => import('./entity-management/entity-management.module').then(m => m.EntityManagementModule)
+                loadChildren: () => import('./entity-management/entity-management.module').then(m => m.EntityManagementModule),
+
             },
             {
-              path:'entity-details', loadChildren:() => import ('../app/disclosure/entity-details/entity-details.module').then(m =>m.EntityDetailsModule)
+                path: 'entity-details', loadChildren: () => import('../app/disclosure/entity-details/entity-details.module').then(m => m.EntityDetailsModule)
             },
             {
                 path: 'expanded-widgets',
                 loadChildren: () => import('./common/header/expanded-widgets/expanded-action-list/expanded-widgets.module').then(m => m.ExpandedActionListModule)
             },
             {
-                path:'user',
+                path: 'user',
                 loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+            },
+            {
+                path: 'travel-disclosure',
+                loadChildren: () => import('./travel-disclosure/travel-disclosure.module').then(m => m.TravelDisclosureModule)
+            },
+            {
+                path: 'error-handler',
+                loadChildren: () => import('./error-handler/error-handler.module').then(m => m.ErrorHandlerModule)
             }
-        ]
+]
     },
-    {path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule)}
+{ path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
 ];
 
 @NgModule({

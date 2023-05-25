@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {CommonService} from "../services/common.service";
 import {Subscription} from "rxjs";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+
 class ChangePassword {
     password = '';
     reEnterPassword = '';
@@ -22,8 +23,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
     personId: any;
     fullName: string = '';
     clearField: String = '';
-    loginPerson = this._commonService.getCurrentUserDetail('externalReviewerRight');
-    isMaleUser = this._commonService.getCurrentUserDetail('gender') === 'M';
+    loginPerson = this.commonService.getCurrentUserDetail('externalReviewerRight');
+    isMaleUser = this.commonService.getCurrentUserDetail('gender') === 'M';
     isAdmin = true;
     resetPassword = new ChangePassword();
     showReEnterPassword = false;
@@ -32,13 +33,12 @@ export class HeaderComponent implements OnInit,OnDestroy {
     timer: any = {password: null, confirmPassword: null};
     $subscriptions: Subscription[] = [];
 
-
-    constructor(public _router: Router, private _commonService: CommonService) {
+    constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
     }
 
     ngOnInit() {
-        this.fullName = this._commonService.getCurrentUserDetail('fullName');
+        this.fullName = this.commonService.getCurrentUserDetail('fullName');
     }
 
     ngOnDestroy(): void {
@@ -48,6 +48,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     logout() {
         this._router.navigate(['/logout']);
     }
+    
 
     changePassword() {
         if(this.isValidPassword()) {
@@ -87,6 +88,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
             this.passwordValidation.set('password-length', true);
         }
     }
+      
 
     checkSamePassword() {
         this.resetPassword.reEnterPassword = this.resetPassword.reEnterPassword.trim();
@@ -104,4 +106,13 @@ export class HeaderComponent implements OnInit,OnDestroy {
             this.passwordValidation.set('same-password', true);
         }
     }
+  
+    rightsCheck():boolean {
+        if (this.commonService.rightsArray.includes('MANAGE_ENTITY') || this.commonService.rightsArray.includes('VIEW_ENTITY'))  {
+            return true; 
+        } else {
+            return false;  
+        }
+    }
+    
 }

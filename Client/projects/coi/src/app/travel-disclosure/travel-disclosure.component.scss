@@ -1,0 +1,162 @@
+.disclosure-heading {
+  height: 40px;
+  background-color: #E8E8E8;
+}
+
+.triple-card {
+  height: 96px;
+}
+
+.navigation-tabs {
+  height: 43px;
+  background-color: #E4F1FF;
+}
+
+.notes {
+  height: 43px;
+  margin-top: -51px;
+  background-color: #DBDBDB;
+}
+
+$primary-color: #3F79CC;
+$nav-border-color: rgb(219, 219, 219);
+$nav-border-width: 8px;
+$nav-bg-color: #3F79CC;
+$bg-color: #E4F1FF;
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin rotate($deg) {
+  -webkit-transform: rotate($deg);
+  -moz-transform: rotate($deg);
+  -ms-transform: rotate($deg);
+  -o-transform: rotate($deg);
+  transform: rotate($deg);
+}
+
+.nav-progress {
+  overflow: hidden;
+  margin: 0;
+  width: 100%;
+  height: 43px;
+  background-color: $bg-color;
+
+  >div {
+    font-size: 14px;
+    position: relative;
+    display: table-cell;
+    padding: 14px 0;
+    color: #666667;
+    text-align: center;
+    line-height: 1.250em;
+    font-weight: 500;
+
+    &.complete {
+      background-color: $nav-bg-color;
+      color: #FFF;
+
+      .arrow {
+        border: $nav-border-width solid $nav-border-color !important;
+        background: $nav-bg-color !important;
+      }
+    }
+
+    &.active {
+      background-color: $primary-color;
+      color: #FFF;
+
+      .arrow {
+        background: $primary-color !important;
+      }
+    }
+  }
+}
+
+.arrow-wrapper {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+
+  .arrow-cover {
+    position: absolute;
+    overflow: hidden;
+    width: 35px;
+    height: 50px;
+
+    .arrow {
+      position: absolute;
+      left: -22px;
+      z-index: 2;
+      width: 45px;
+      height: 45px;
+      border: $nav-border-width solid $nav-border-color;
+      background: transparent;
+      @include border-radius(0px);
+      @include rotate(45deg);
+    }
+  }
+}
+
+.status-pill {
+  position: absolute;
+  left: 14px;
+  top: -12px;
+  background-color: white;
+  border-radius: 2rem !important;
+  font-weight: 500 !important;
+  padding: 1px 0.5rem;
+  border: 1px solid #dee2e6 !important;
+  font-size: 14px;
+}
+
+.table-negative-margin {
+  margin-top: -10px;
+}
+
+.spaced-table {
+  margin-top: 25px;
+  border-collapse: separate;
+  border-spacing: 0 2px;
+  color: #6A7980;
+}
+
+table {
+  color: #6A7980;
+}
+
+.toggle-header-btn {
+  width: 30px;
+  color: #A64040;
+  height: 30px;
+
+  mat-icon {
+    transform: scale(1.2);
+  }
+}
+
+.min-height-189 {
+  min-height: 200px;
+  max-height: 200px;
+}
+
+.btn-outline-grey {
+  color: #48647F;
+  border: 1px solid #48647F;
+  background-color: white;
+
+  &:hover {
+    background-color: #007DEC;
+    color: white;
+    border: 1px solid #007DEC;
+  }
+}
+
+.header-sticky {
+  position: sticky;
+  top: 51px;
+  z-index: 50;
+}

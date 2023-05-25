@@ -1,9 +1,10 @@
 <div class="row my-4">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures" >
-        <div class="col-12 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
+
+        <div class="light-dark-text-color col-12 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
             <div class="shadow-sm hovering-card disclosure-card-body-blue border rounded" (mouseover)="isFCOIHover = true" (mouseout)="isFCOIHover = false">
                 <div class="border-bottom d-flex px-3 py-2 rounded-top-2">
-                    <div class="col"><strong class="fs-15"># {{disclosure?.disclosureId}} : FCOI Disclosure</strong></div>
+                    <div class="col"><strong class="fs-15">#{{disclosure?.disclosureNumber}} : FCOI Disclosure</strong></div>
                 </div>
                 <div class="border-bottom fs-14 p-3 rounded-bottom-2">
                   <div class="row">
@@ -49,33 +50,42 @@
                   </div>
                 </div>
                 <div class="align-items-center chin d-flex fs-14 mx-3 ">
-                  <div class="align-items-center col-3 d-flex fs-14">
-                      <strong class="fs-18 me-2 text-blue-color"
+                  <div class="align-items-center col-3 d-flex fs-14"
+                    [ngClass]="disclosure?.numberOfSFI > 0 ? 'cursor-pointer' : '' "
+                    [attr.title]="disclosure?.numberOfSFI > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list">
+                      <strong class="fs-18 me-2 text-blue-color" [ngClass]="disclosure?.numberOfSFI > 0 ? 'cursor-pointer' : '' "
+                        [attr.title]="disclosure?.numberOfSFI > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list"
                        (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI);">{{disclosure?.numberOfSFI}}</strong>
-                      <label class="label-text mt-1">
+                      <label class="label-text mt-1" >
                            <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfSFI > 0"
-                            [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfSFI > 0" (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI);">
+                            [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfSFI > 0" (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI,disclosure);">
                               Significant Financial Interest
                          </strong>
                       </label>
                   </div>
                   <div class="col-3 text-secondary fs-14 d-flex">
                       <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
-                          <div class="align-items-center col d-flex fs-14">
-                                <strong class="fs-18 me-2 text-blue-color " (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals);">{{disclosure?.numberOfProposals}}</strong>
-                                  <label class="label-text mt-1 ">
+                          <div class="align-items-center col d-flex fs-14"
+                            [ngClass]="disclosure?.numberOfProposals > 0 ? 'cursor-pointer' : '' "
+                            [attr.title]="disclosure?.numberOfProposals > 0 ? 'Click to view Proposal list' : '' " area-describedby="Click to view Proposal list">
+                                <strong class="fs-18 me-2 text-blue-color " (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals,disclosure);">{{disclosure?.numberOfProposals}}</strong>
+                                  <label class="label-text mt-1" >
                                 <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfProposals > 0"
-                                  [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfProposals > 0" (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals);">
+                                    [attr.title]="disclosure?.numberOfProposals > 0 ? 'Click to view Proposal list' : '' "
+                                    area-describedby="Click to view Proposal list"
+                                  [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfProposals > 0" (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals,disclosure);">
                                   Proposals
                                 </strong>
                               </label>
                           </div>
-                          <div class="align-items-center col d-flex fs-14">
+                          <div class="align-items-center col d-flex fs-14"
+                            [ngClass]="disclosure?.numberOfAwards > 0 ? 'cursor-pointer' : '' "
+                            [attr.title]="disclosure?.numberOfAwards > 0 ? 'Click to view Award list' : '' " area-describedby="Click to view Award list">
                               <strong class="fs-18 me-2 text-blue-color "
-                              (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards);">{{disclosure?.numberOfAwards}}</strong>
+                              (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards,disclosure);">{{disclosure?.numberOfAwards}}</strong>
                              <label class="label-text mt-1 ">
                                  <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfAwards > 0"
-                                   [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfAwards > 0"  (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards);">
+                                   [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfAwards > 0"  (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards,disclosure);">
                                   Awards
                                  </strong>
                             </label>
@@ -91,7 +101,7 @@
                       <button [queryParams]={disclosureId:disclosure.disclosureId}
                           [routerLink]="['/coi/disclosure/summary']"
                           class="align-items-center btn btn-outline-secondary d-flex fs-14"
-                          title="Click to view details" area-describedby="Click to view details">
+                          title="Click to view FCOI Disclosure details" area-describedby="Click to view FCOI Disclosure details">
                           <mat-icon class="me-1">visibility</mat-icon>
                           View
                       </button>
@@ -104,22 +114,22 @@
 
 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
     <div (click)="setTab('IN_PROGRESS_DISCLOSURES')" class="border-end navigation-icons px-3 py-1"
-        role="button" title="Click to see all the in progress disclosures" aria-describedby="Click to see all the in progress disclosures">
+        role="button" title="Click to view your In Progress Disclosures" aria-describedby="Click to view your In Progress Disclosures">
         <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="pb-3 active">
             In Progress Disclosures ({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('APPROVED_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
-        title="Click to see all the approved disclosures" aria-describedby="Click to see all the approved disclosures">
+        title="Click to view your Approved Disclosures" aria-describedby="Click to view your Approved Disclosures">
         <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'" class="pb-3">Approved
             Disclosures ({{dashboardCount?.approvedDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
-        title="Click to see all the travel disclosures" aria-describedby="Click to see all the travel disclosures">
+        title="Click to view your Travel Disclosures" aria-describedby="Click to view your Travel Disclosures">
         <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="pb-3">Travel
             Disclosures ({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('DISCLOSURE_HISTORY')" class="navigation-icons px-3 py-1" role="button"
-        title="Click to see all the disclosure history" aria-describedby="Click to see all the disclosure history">
+        title="Click to view your Disclosure History" aria-describedby="Click to view your Disclosure History">
         <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3">Disclosure History
             ({{dashboardCount?.disclosureHistoryCount || 0}})</span>
     </div>
@@ -129,13 +139,13 @@
     <div class="border-end fs-14 p-3">
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Type :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
-            title="Click to filter by all type" area-describedby="Click to filter by all type"
+            title="Click to filter by type: All" area-describedby="Click to filter by type: All"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active" role="button">All</span>
         <span (click)="setFilter('FCOI')" [class.filter-active]="currentSelected.filter=='FCOI'"
-            title="Click to filter by FCOI type" area-describedby="Click to filter by FCOI type"
+            title="Click to filter by type: FCOI" area-describedby="Click to filter by type: FCOI"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">FCOI</span>
         <span (click)="setFilter('PROJECT')" [class.filter-active]="currentSelected.filter=='PROJECT'"
-            title="Click to filter by project type" area-describedby="Click to filter by project type"
+            title="Click to filter by type: Project" area-describedby="Click to filter by type: Project"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Project</span>
         <!--<span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>-->
@@ -173,7 +183,8 @@
                 <div class="col">
                     <span class="fw-bold me-2">Disclosure Status :</span>
                     <app-no-data-label [valueToShow]="disclosure?.conflictStatus">
-                        <span class="{{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.conflictStatus}}</span>
+                        <span
+                            class="{{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.conflictStatus}}</span>
                     </app-no-data-label>
                 </div>
             </div>
@@ -202,46 +213,50 @@
 
         <div class="align-items-center chin d-flex fs-14 mx-3 ">
             <div class="align-items-center col-3 d-flex fs-14"
-                 title="Click here to see the sfi s attached to the disclosure"
-                 area-describedby="Click here to see the sfi s attached to the disclosure">
+                [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list">
                 <strong class="fs-18 me-2 text-blue-color"
-                 (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi);">
-                  <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}} </label>
-                   </strong>
+                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list"
+                    (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi,disclosure);">
+                    <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}} </label>
+                </strong>
                 <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
                 <label class="label-text mt-1 ">
-                     <strong 
-                        [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' " [class.text-decoration-underline]="ishover[index]&& disclosure?.noOfSfi > 0"
-                        (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi);">
+                    <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                        [class.text-decoration-underline]="ishover[index]&& disclosure?.noOfSfi > 0"
+                        (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi,disclosure);">
                         Significant Financial Interest
-                   </strong>
-                </label>    
+                    </strong>
+                </label>
             </div>
             <div class="col-3 text-secondary fs-14 d-flex">
                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
-                    <div class="align-items-center col d-flex fs-14">
+                    <div class="align-items-center col d-flex fs-14"
+                        [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
+                        [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " area-describedby="Click to view Proposal list">
                           <strong class="fs-18 me-2 text-blue-color "
+                            [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " area-describedby="Click to view Proposal list"
                             [class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
-                            (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}</strong>
-                            <label class="label-text mt-1 ">
-                          <strong 
-                              [class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
-                              (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal);">
-                            Proposals
-                          </strong>
+                            (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal,disclosure);">{{disclosure?.noOfProposal}}</strong>
+                        <label class="label-text mt-1 ">
+                            <strong [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "[class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
+                                (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal,disclosure);">
+                                Proposals
+                            </strong>
                         </label>
                     </div>
-                    <div class="align-items-center col d-flex fs-14">
+                    <div class="align-items-center col d-flex fs-14"
+                        [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
+                        [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' " area-describedby="Click to view Award list">
                         <strong class="fs-18 me-2 text-blue-color "
-                        [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
-                        (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward);">{{disclosure?.noOfAward}}</strong>
-                       <label class="label-text mt-1 ">
-                           <strong 
-                                [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
-                                (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward);">
-                            Awards
-                           </strong>
-                      </label>
+                            [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
+                            (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward,disclosure);">{{disclosure?.noOfAward}}</strong>
+                        <label class="label-text mt-1 ">
+                            <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "[class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
+                                (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward,disclosure);">
+                                Awards
+                            </strong>
+                        </label>
                     </div>
                 </ng-container>
             </div>
@@ -256,8 +271,8 @@
                     Revise
                 </button>
                 <button (click)="redirectToDisclosure(disclosure)"
-                        aria-describedby="Click to view details"
-                        class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view details">
+                        aria-describedby="Click to view Disclosure details"
+                        class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view Disclosure details">
                     <mat-icon class="me-1">visibility</mat-icon>
                     View
                 </button>
@@ -267,9 +282,7 @@
 
 </ng-container>
 
-
-
-<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId"
+<app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
-    (closeModal)="closeModalEvent($event)"></app-count-modal>
+    (closeModal)="closeModalEvent($event)" [fcoiTypeCode]="fcoiTypeCode" [disclosures]="disclosures"></app-count-modal>

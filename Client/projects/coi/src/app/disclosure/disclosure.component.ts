@@ -3,11 +3,11 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { subscriptionHandler } from "../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Subscription } from "rxjs";
 import { SfiService } from './sfi/sfi.service';
-import {ApplicableQuestionnaire, COI, getApplicableQuestionnaireData} from "./coi-interface";
+import { ApplicableQuestionnaire, COI, getApplicableQuestionnaireData } from "./coi-interface";
 import { DataStoreService } from "./services/data-store.service";
 import { CoiService } from "./services/coi.service";
 import { Location } from "@angular/common";
-import {deepCloneObject, openModal, pageScroll} from "../../../../fibi/src/app/common/utilities/custom-utilities";
+import { deepCloneObject, openModal, pageScroll } from "../../../../fibi/src/app/common/utilities/custom-utilities";
 import { ElasticConfigService } from "../../../../fibi/src/app/common/services/elastic-config.service";
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from "../../../../fibi/src/app/app-constants";
 import { CommonService } from "../common/services/common.service";
@@ -18,6 +18,7 @@ import {
     POST_CREATE_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
+import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities';
 @Component({
     selector: 'app-disclosure',
     templateUrl: './disclosure.component.html',
@@ -37,7 +38,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     currentStepNumber: 1 | 2 | 3 | 4 = 1;
     tempStepNumber: any;
     clickedOption: any;
-    disclosureDetailsForSFI = {disclosureId: null, disclosureNumber: null};
+    disclosureDetailsForSFI = { disclosureId: null, disclosureNumber: null };
     NO_DATA_FOUND_MESSAGE = NO_DATA_FOUND_MESSAGE;
 
     assignReviewerActionDetails: any = {};
@@ -62,6 +63,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     disclosureId: number;
     disclosureNumber: number;
     disclosureStatusCode: string;
+    fcoiTypeCode: any;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -70,8 +72,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         public sfiService: SfiService,
         public coiService: CoiService,
         public location: Location,
-        public dataStore: DataStoreService,public navigationService:NavigationService) {
-        window.scrollTo(0,0);
+        public dataStore: DataStoreService, public navigationService: NavigationService) {
+        window.scrollTo(0, 0);
         this.isCreateMode = this.router.url.includes('create-disclosure');
         this.setStepFirstTime(this.router.url);
         this.$subscriptions.push(this.router.events.subscribe(event => {
@@ -86,7 +88,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.routeToAppropriateMode();
         this.listenDataChangeFromStore();
-        this.prevURL =this.navigationService.previousURL;
+        this.prevURL = this.navigationService.previousURL;
     }
 
     ngOnDestroy(): void {
@@ -250,7 +252,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.dataStore.updateStore(['coiDisclosure'], { coiDisclosure: res });
             this.isSaving = false;
             this.router.navigate(['/coi/disclosure/summary'], { queryParamsHandling: 'preserve' });
-            this.router.navigate(['/coi/disclosure/summary'], {queryParamsHandling: 'preserve'});
+            this.router.navigate(['/coi/disclosure/summary'], { queryParamsHandling: 'preserve' });
         }, err => {
             this.isSaving = false;
             this.commonService.showToast(HTTP_ERROR_STATUS, (err.error) ?
@@ -367,30 +369,31 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             'add-review-modal-trigger' : 'assign-reviewer-modal-trigger').click();
     }
 
-    openCountModal(moduleName, coiData,count = null) {
-      if(count > 0) {     
-        switch (moduleName) {
-            case 'sfi':
-                this.selectedModuleCode = 8;
-                break;
-            case 'award':
-                this.selectedModuleCode = 1;
-                break;
-            case 'proposal':
-                this.selectedModuleCode = 3;
-                break;
-            default:
-                this.selectedModuleCode = 0;
+    openCountModal(moduleName, coiData, count = null) {
+        if (count > 0) {
+            switch (moduleName) {
+                case 'sfi':
+                    this.selectedModuleCode = 8;
+                    break;
+                case 'award':
+                    this.selectedModuleCode = 1;
+                    break;
+                case 'proposal':
+                    this.selectedModuleCode = 3;
+                    break;
+                default:
+                    this.selectedModuleCode = 0;
+            }
+            this.fcoiTypeCode = coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode;
+            this.isShowCountModal = true;
+            this.currentDisclosureId = coiData?.coiDisclosure?.disclosureId;
+            this.currentDisclosureNumber = coiData?.coiDisclosure?.disclosureNumber;
+            this.disclosureType = moduleName;
+            this.inputType = 'DISCLOSURE_TAB';
+            this.disclosureSequenceStatusCode = coiData?.coiDisclosure?.disclosureStatusCode;
+            this.personId = coiData?.coiDisclosure?.person?.personId;
         }
-        this.isShowCountModal = true;
-        this.currentDisclosureId = coiData.coiDisclosure.disclosureId;
-        this.currentDisclosureNumber = coiData.coiDisclosure.disclosureNumber;
-        this.disclosureType = moduleName;
-        this.inputType = 'DISCLOSURE_TAB';
-        this.disclosureSequenceStatusCode = coiData.coiDisclosure.disclosureStatusCode;
-        this.personId = coiData.coiDisclosure.personId;
     }
-}
     closeModal(event) {
         this.isShowCountModal = event;
     }
@@ -399,8 +402,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.userDetails = coiData.coiDisclosure.person;
         this.ispersondetailsmodal = true;
     }
-    closePersonDetailsModal(event){
-        this.ispersondetailsmodal=event;
+    closePersonDetailsModal(event) {
+        this.ispersondetailsmodal = event;
 
     }
 
@@ -408,5 +411,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         //TODO admin/reviewer/pi based redirect once rights are implemented.
         const reRouteUrl = this.coiService.previousHomeUrl || HOME_URL;
         this.router.navigate([reRouteUrl]);
+    }
+    unitTitle(){
+        return getSponsorSearchDefaultValue(this.coiData.coiDisclosure.person.unit);
     }
 }
