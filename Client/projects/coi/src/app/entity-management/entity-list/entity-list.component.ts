@@ -115,7 +115,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   addNewEntity() {
     this.entityManageId = null;
     this.isCoiEditEntity = false;
-    this.entityManagementService.isShowEntityNavBar = true;
+    this.sfiService.isShowSfiNavBar = true;
   }
 
   selectedEvent(event) {
