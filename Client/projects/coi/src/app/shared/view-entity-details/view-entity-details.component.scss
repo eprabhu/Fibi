@@ -4,8 +4,8 @@
   height: 27px;
   background: #54BF5B;
   position: relative;
-  left: -18px;
-  top: -10px;
+  left: -17px;
+  top: -8px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -36,6 +36,7 @@ h1 {
 .inactive {
   background-color: #dbdbdb;
   color: black;
+
   &:before {
     content: "";
     border-bottom: 6px solid #949494;
@@ -51,20 +52,22 @@ h1 {
 }
 
 .body-heading {
-  height: 44px;;
+  height: 44px;
+  ;
   background-color: #f3f7fb;
   border-bottom: 1px solid #dee2e6;
 
 }
 
-.footer-body{
-  height: 55px;;
+.footer-body {
+  height: 55px;
+  ;
   background-color: #f3f7fb;
   border-top: 1px solid #dee2e6;
 }
 
 .triple-card {
-    height: 96px;
+  height: 96px;
 }
 
 .status-pill {
@@ -84,11 +87,11 @@ h1 {
 }
 
 .side-height {
-  height:  226px;
+  height: 216px;
 }
 
 .spaced-table {
-  margin-top: 25px;
+  margin-top: 19px;
   border-collapse: separate;
   border-spacing: 0 2px;
   color: #6A7980;
@@ -102,35 +105,104 @@ table {
   color: #48647F;
   border: 1px solid #48647F;
   background-color: white;
+
   &:hover {
     background-color: #007DEC;
     color: white;
     border: 1px solid #007DEC;
   }
 }
-.bg-color{
+
+.bg-color {
   background-color: white;
 }
-.badge-height{
+
+.badge-height {
   height: 26px;
 }
+
 .ash-text {
   color: #48647F !important;
 }
- .svg-icon {
+
+.svg-icon {
   height: 18px;
   width: 24px;
   filter: invert(38%) sepia(10%) saturate(1446%) hue-rotate(168deg) brightness(95%) contrast(95%);
- }
-.btn-outline-grey:hover img  {
-    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(106%);
+  position: relative;
+  right: 7px;
+
 }
-mat-icon{
+
+.btn-outline-grey:hover img {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(106%);
+}
+
+mat-icon {
   height: 18px;
   overflow: initial;
 }
-.pencil{
+
+.pencil {
   position: relative;
-  left: 1px;
-  bottom: 2px;
+  right: 0.6rem;
+  // bottom: 2px;
+  font-size: 2rem;
+}
+
+.icon-schedule-position {
+  position: relative;
+  right: 1.5625rem
+}
+
+.icon-approve-position {
+  position: relative;
+  right: 0.2rem;
+}
+
+.btn-approve-position {
+  position: relative;
+  left:  0.4rem;
+}
+
+.btn-save-content {
+  position: relative;
+  left: 1.4rem;
+}
+
+.icon-save {
+  position: relative;
+  left: 1.4rem
+}
+.btn-add-content {
+  position: relative;
+  left: 1.1rem;
+}
+
+.icon-add {
+  position: relative;
+  left: 1.01rem
+}
+
+.btn-inactivate-content {
+  position: relative;
+  right: 1.1rem;
+}
+
+.btn-content-position{
+  position: relative;
+  right: 0.2rem;
+}
+.pencil-sfi{
+  position: relative;
+  right: 1.2rem;
+  font-size: 2rem;
+}
+.btn-sfi-position{
+  position: relative;
+      right: 0.6rem;;
+}
+.btn-entity-position{
+  position: relative;
+  right: 0.1rem;
 }

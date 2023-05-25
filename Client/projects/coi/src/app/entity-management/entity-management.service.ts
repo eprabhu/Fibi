@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../common/services/common.service';
 
-@Injectable()
+@Injectable(
+  {providedIn: 'root'}
+  )
 
 export class EntityManagementService {
 
@@ -59,9 +61,9 @@ export class RelationshipDashboardRequest{
   property2 = null;
   property3 = null;
   property4 = []
-  // property5 = null;
-  // sort: any = {};
-  // sortBy:'updateTimeStamp'
+  property5 = null;
+  sort: any = {
+  };
   filterType = null;
   currentPage = 1;
   pageNumber = 20;

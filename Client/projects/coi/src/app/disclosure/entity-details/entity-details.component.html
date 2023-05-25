@@ -1,5 +1,5 @@
 <div>
-  <app-view-sfi-details (emitRelationshipModal)="addRelationship($event)" (saveQuestionnaire)="saveQuestionnaire($event)"> </app-view-sfi-details>
+  <app-view-entity-sfi-details (emitRelationshipModal)="addRelationship($event)" (saveQuestionnaire)="saveQuestionnaire($event)"></app-view-entity-sfi-details>
   <app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails"></app-view-relationship-details>
   <app-entity-questionnaire (updateRelationship)="updateRelationship($event)" (isEmitModalClose)="closedRelationshipModal($event)" [isAddRelationship]="isEnableRelationshipModal" [isSaveQuestionnaire]="isSaveQuestionnaire"></app-entity-questionnaire>
 </div>

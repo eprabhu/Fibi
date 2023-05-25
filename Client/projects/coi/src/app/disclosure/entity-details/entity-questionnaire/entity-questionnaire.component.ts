@@ -104,7 +104,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy,OnChanges
     }
     return new Promise<boolean>((resolve) => {
      this.$subscriptions.push(this._entityDetailsServices.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
-        this.configuration.moduleItemKey = this._entityDetailsServices.entityDetails.entityId;
+        this.configuration.moduleItemKey = this._entityDetailsServices.entityDetailsId;
         this.definedRelationships = res.personEntityRelationships;
         this.removeExistingRelation();
         resolve(true);

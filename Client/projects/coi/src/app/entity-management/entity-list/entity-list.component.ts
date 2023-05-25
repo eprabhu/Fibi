@@ -8,6 +8,7 @@ import { slideInOut } from '../../../../../fibi/src/app/common/utilities/animati
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { SfiService } from '../../disclosure/sfi/sfi.service';
 
 @Component({
   selector: 'app-entity-list',
@@ -41,7 +42,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   constructor(private _router: Router,
     public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService,
-    private _commonService: CommonService) { }
+    private _commonService: CommonService,public sfiService: SfiService) { }
 
   ngOnInit() {
     this.coiElastic = this._elasticConfig.getElasticForCoi();
@@ -210,4 +211,8 @@ export class EntityListComponent implements OnDestroy, OnInit {
     }
   }
 
+  actionsOnPageChange(event) {
+    this.entityManagementService.coiRequestObject.currentPage = event;
+    this.viewListOfEntity();
+  }
 }
