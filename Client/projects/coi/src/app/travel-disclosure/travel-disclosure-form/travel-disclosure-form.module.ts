@@ -7,22 +7,22 @@ import { SharedComponentModule } from '../../shared-components/shared-component.
 import { SharedModule } from '../../shared/shared.module';
 
 const routes: Routes = [
-  {
-    path: '', component: TravelDisclosureFormComponent,
-  }
+    {
+        path: '', component: TravelDisclosureFormComponent,
+    }
 ];
 @NgModule({
-  declarations: [
-    TravelDisclosureFormComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    FormsModule,
-    RouterModule.forChild(routes),
-    SharedComponentModule
-  ],
-  providers: [ ],
-  exports: [ ]
+    declarations: [
+        TravelDisclosureFormComponent
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        FormsModule,
+        RouterModule.forChild(routes),
+        SharedComponentModule
+    ],
+    providers: [],
+    exports: []
 })
 export class TravelDisclosureFormModule { }
