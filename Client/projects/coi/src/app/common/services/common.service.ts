@@ -57,6 +57,7 @@ export class CommonService {
     dashboardModules: any = {};
     previousURL = null;
     fibiApplicationUrl = '';
+    
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }

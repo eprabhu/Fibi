@@ -32,7 +32,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
     passwordValidation = new Map();
     timer: any = {password: null, confirmPassword: null};
     $subscriptions: Subscription[] = [];
-    rightList:any[]=[];
 
     constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -40,7 +39,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
-        this.rights();
     }
 
     ngOnDestroy(): void {
@@ -50,13 +48,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     logout() {
         this._router.navigate(['/logout']);
     }
-    rights() {
-         this.commonService.fetchPermissions().then((right:any)=>{
-            this.rightList=right;
-
-        })
-        
-    }
+    
 
     changePassword() {
         if(this.isValidPassword()) {
@@ -116,7 +108,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     }
   
     rightsCheck():boolean {
-        if (this.rightList.includes('MANAGEENTITY') || this.rightList.includes('VIEWENTITY'))  {
+        if (this.commonService.rightsArray.includes('MANAGE_ENTITY') || this.commonService.rightsArray.includes('VIEW_ENTITY'))  {
             return true; 
         } else {
             return false;  

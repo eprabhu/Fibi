@@ -57,6 +57,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
       this.generateLookupArrayForDropdown();
       this.advancedSearch();
     }
+    this.rights()
   }
 
   ngOnDestroy() {
@@ -188,21 +189,21 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   allEntitiesrightCheck() {
-    if (this._commonService.rightList.includes('MANAGE_ENTITY') || this._commonService.rightList.includes('VIEW_ENTITY')) {
+    if (this.rightList.includes('MANAGE_ENTITY') || this.rightList.includes('VIEW_ENTITY')) {
       return true;
     } else {
       return false;
     }
   }
   unverifiedEntitiesrightCheck() {
-    if (this._commonService.rightList.includes('MANAGE_ENTITY') || this._commonService.rightList.includes('VIEW_ENTITY')) {
+    if (this.rightList.includes('MANAGE_ENTITY') || this.rightList.includes('VIEW_ENTITY')) {
       return true;
     } else {
       return false;
     }
   }
   highRiskEntitiesrightCheck() {
-    if (this._commonService.rightList.includes('MANAGE_ENTITY') || this._commonService.rightList.includes('VIEW_ENTITY')) {
+    if (this.rightList.includes('MANAGE_ENTITY') || this.rightList.includes('VIEW_ENTITY')) {
       return true;
     } else {
       return false;
