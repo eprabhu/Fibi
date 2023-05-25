@@ -3,17 +3,15 @@ import { CommonModule } from '@angular/common';
 import { EntityManagementComponent } from './entity-management.component';
 import { RouterModule, Routes } from "@angular/router";
 import { EntityListComponent } from './entity-list/entity-list.component';
-import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
 import { MatIconModule } from '@angular/material/icon';
 import { EntityDetailsListComponent } from './entity-details-list/entity-details-list.component';
 import { SharedModule } from '../shared/shared.module';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
-import { AddNewEntityDetailsComponent } from './add-new-entity-details/add-new-entity-details.component';
 import { FormsModule } from '@angular/forms';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { EntityManagementService } from './entity-management.service';
 import { EntityManagementGuardService } from './entity-management-guard.service';
-
+import { SfiService } from '../disclosure/sfi/sfi.service';
 
 const routes: Routes = [
   {
@@ -22,7 +20,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'entity-list', pathMatch: 'full' },
       { path: 'entity-details', component: EntityDetailsListComponent },
       { path: 'entity-list', component: EntityListComponent },
-     
+
     ]
   },
 ];
@@ -31,9 +29,7 @@ const routes: Routes = [
   declarations: [
     EntityManagementComponent,
     EntityListComponent,
-    ViewEntityDetailsComponent,
     EntityDetailsListComponent,
-    AddNewEntityDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +40,7 @@ const routes: Routes = [
     SharedComponentModule,
   ],
   exports: [
-  ],providers: [ElasticConfigService,EntityManagementGuardService]
+  ],providers: [ElasticConfigService,EntityManagementGuardService,SfiService]
 })
 export class EntityManagementModule {
 }

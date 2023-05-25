@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivityService } from '../../../../../fibi/src/app/agreement/agreement-shared/activity-track/activity.service';
 import { slideHorizontalFast } from './../../../../../fibi/src/app/common/utilities/animations';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
@@ -9,7 +9,8 @@ import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-u
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { compareDates, getDateObjectFromTimeStamp, removeTimeZoneFromDateObject } from '../../../../../fibi/src/app/common/utilities/date-utilities';
-import { DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
+import { EntityDetails } from '../../entity-management/entity-details-interface';
 
 export interface EndpointOptions {
   contextField: string;
@@ -27,13 +28,11 @@ export interface EndpointOptions {
 })
 export class AddSfiComponent implements OnInit {
 
-  @Input() disclosureDetails: {disclosureId: any, disclosureNumber: any} = {disclosureId: null, disclosureNumber: null};
+  @Input() disclosureDetails: { disclosureId: any, disclosureNumber: any } = { disclosureId: null, disclosureNumber: null };
 
   isSaving = false;
   scrollHeight: number;
-  coiEntity: any = {
-    entityTypeCode: null
-  };
+  entityDetails: EntityDetails = new EntityDetails();
   additionalDetails: any = {
     sponsorsResearch: false
   };
@@ -55,15 +54,42 @@ export class AddSfiComponent implements OnInit {
   sfiLookUpList: any = {};
   isExpandedAdditionalDetails = true;
   isResultFromSearch = false;
+  riskLevelLookup = [
+    {
+      'description': 'High',
+      'riskCategoryCode': '1'
+    },
+    {
+      'description': 'Medium',
+      'riskCategoryCode': '2'
+    },
+    {
+      'description': 'Low',
+      'riskCategoryCode': '3'
+    }
+  ]
+  isEntityManagement = false;
+  @Input() coiEntityManageId: any = null;
+  @Input() isEditEntity = false;
+  @Output() updatedDataStore = new EventEmitter<boolean>();
+  @Output() updateEntityList = new EventEmitter<boolean>();
+  heading: string;
+  buttonName: string;
+  btnTitle: string;
 
   constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
-    ngOnInit(): void {
-      this.getSFILookup();
-      this.showSfiNavBar();
-      this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
-      this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+  ngOnInit(): void {
+    this.isEntityManagement = this._router.url.includes('entity-management');
+    this.setHeader();
+    this.getSFILookup();
+    this.showSfiNavBar();
+    if (this.coiEntityManageId) {
+      this.getEntityDetails();
     }
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+    this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+  }
 
   getSFILookup() {
     this.$subscriptions.push(this.sfiService.addSFILookUp().subscribe((res: any) => {
@@ -79,8 +105,8 @@ export class AddSfiComponent implements OnInit {
   }
 
   setEntityTypeObj() {
-    this.coiEntity.entityType = this.sfiLookUpList.entityType.find(ele =>
-      this.coiEntity.entityTypeCode == ele.entityTypeCode);
+    this.entityDetails.coiEntity.entityType = this.sfiLookUpList.entityType.find(ele =>
+      this.entityDetails.coiEntity.entityTypeCode == ele.entityTypeCode);
   }
 
   hideSfiNavBar() {
@@ -89,9 +115,7 @@ export class AddSfiComponent implements OnInit {
       this.showSfiNavBar();
       this.removeEntityId();
       this.mandatoryList.clear();
-      this.coiEntity = {
-        entityTypeCode: null
-      };
+      this.entityDetails.coiEntity.entityTypeCode = null;
       this.additionalDetails = {
         sponsorsResearch: false
       }
@@ -124,49 +148,64 @@ export class AddSfiComponent implements OnInit {
     if (!this.checkMandatoryFilled() && !this.isSaving) {
       return null;
     }
-    this.coiEntity.entityId ? this.saveAdditionalDetails() : this.saveEntityDetails()
+    this.entityDetails.coiEntity.entityId && !this.isEntityManagement ?
+      this.saveAdditionalDetails() : this.saveEntityDetails();
   }
 
   saveEntityDetails() {
-    this.$subscriptions.push(this.sfiService.saveOrUpdateCoiEntity({ coiEntity: this.coiEntity }).subscribe((data: any) => {
-      this.coiEntity = data.coiEntity;
-      this.saveAdditionalDetails();
+    this.$subscriptions.push(this.sfiService.saveOrUpdateCoiEntity(this.entityDetails).subscribe((data: EntityDetails) => {
+      this.entityDetails = data;
+      this.entityDetails.coiEntity.entityId && !this.isEntityManagement ?
+        this.saveAdditionalDetails() : this.updateDetails();
+    }, _err => {
+      this.isSaving = false;
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
     }));
+  }
+
+  updateDetails() {
+    this.isEditEntity ? this.updatedDataStore.emit(true) : this.updateEntityList.emit(true);
+    this.sfiService.isShowSfiNavBar = false;
+    this.isSaving = false;
+    this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity ? 'Update ' : 'Created '}Entity Successfully completed.`);
   }
 
   saveAdditionalDetails() {
     this.$subscriptions.push(this.sfiService.createSFI(
       {
         personEntity: {
-          entityId: this.coiEntity.entityId,
-          entityNumber: this.coiEntity.entityNumber,
+          entityId: this.entityDetails.coiEntity.entityId,
+          entityNumber: this.entityDetails.coiEntity.entityNumber,
           ...this.additionalDetails
         },
         ...this.disclosureDetails
-    }).subscribe((data: any) => {
-      this.additionalDetails = data.personEntity;
-      this.isSaving = false;
-      this.showRelationshipModal= true;
-      this.additionalDetails.involvementStartDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementStartDate);
-      this.additionalDetails.involvementEndDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementEndDate);
-    }));
+      }).subscribe((data: any) => {
+        this.additionalDetails = data.personEntity;
+        this.isSaving = false;
+        this.showRelationshipModal = true;
+        this.additionalDetails.involvementStartDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementStartDate);
+        this.additionalDetails.involvementEndDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementEndDate);
+      }, _err => {
+        this.isSaving = false;
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+      }));
   }
 
   selectNewEntity(event) {
-    this.coiEntity.entityName = event.searchString;
+    this.entityDetails.coiEntity.entityName = event.searchString;
   }
 
   selectedEvent(event) {
     if (event) {
       this.isResultFromSearch = true;
-      this.coiEntity = event;
+      this.entityDetails.coiEntity = event;
       if (event.country) {
         this.countrySearchOptions.defaultValue = event.country.countryName;
         this.selectedCountryEvent(event.country);
       }
       this.clearCountryField = new String('false');
     } else {
-      this.coiEntity = {};
+      this.entityDetails = new EntityDetails();
       this.clearCountryField = new String('true');
       this.clearSFIFields();
     }
@@ -174,15 +213,15 @@ export class AddSfiComponent implements OnInit {
 
   selectedCountryEvent(event) {
     if (event) {
-      this.coiEntity.countryCode = event.countryCode;
+      this.entityDetails.coiEntity.countryCode = event.countryCode;
       this.countrySearchOptions.defaultValue = event.countryName;
     } else {
-      this.coiEntity.countryCode = null;
+      this.entityDetails.coiEntity.countryCode = null;
     }
   }
 
   clearSFIFields() {
-    this.coiEntity = {};
+    this.entityDetails = new EntityDetails();
     this.additionalDetails = {
       sponsorsResearch: false
     };
@@ -196,53 +235,63 @@ export class AddSfiComponent implements OnInit {
 
   checkMandatoryFilled() {
     this.mandatoryList.clear();
-    if (!this.coiEntity.entityName) {
-      this.mandatoryList.set('name', 'Please choose an entity name.');
+    if (!this.entityDetails.coiEntity.entityName) {
+      this.mandatoryList.set('entityName', 'Please choose an entity name.');
     }
-    if (!this.coiEntity.entityId) {
-      if (!this.coiEntity.countryCode) {
-        this.mandatoryList.set('country', 'Please choose a country.');
-      }
-      if (!this.coiEntity.entityTypeCode || this.coiEntity.entityTypeCode === 'null') {
-        this.mandatoryList.set('type', 'Please choose an entity type.');
-      }
-      if (!this.coiEntity.emailAddress) {
-        this.mandatoryList.set('email', 'Please enter a email address.');
-      }
-      if (!this.coiEntity.address) {
-        this.mandatoryList.set('address', 'Please enter an address.');
-      }
-      if (!this.coiEntity.phone) {
-        this.mandatoryList.set('phone', 'Please enter phone number.');
-      }
-      this.emailValidation();
-      if (!this.coiEntity.zipCode) {
-        this.mandatoryList.set('zipCode', 'Please enter a zipCode.');
+    if (!this.entityDetails.coiEntity.entityId && !this.isEntityManagement) {
+      this.entityDetailsValidation();
+    } else if (this.isEntityManagement) {
+      this.entityDetailsValidation();
+      if (!this.entityDetails.coiEntity.webURL) {
+        this.mandatoryList.set('website', '* Please enter a entity website.')
       }
     }
-    if (!this.additionalDetails.involvementStartDate) {
-      this.mandatoryList.set('date', 'Please enter a start date.');
+    if (!this.isEntityManagement) {
+      if (!this.additionalDetails.involvementStartDate) {
+        this.mandatoryList.set('date', 'Please enter a start date.');
+      }
+      if (!this.additionalDetails.staffInvolvement) {
+        this.mandatoryList.set('staff', 'Please enter Relationship with Entity details.');
+      }
+      if (!this.additionalDetails.studentInvolvement) {
+        this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity details.');
+      }
+      if (!this.additionalDetails.instituteResourceInvolvement) {
+        this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
+      }
+      this.endDateValidation();
     }
-    if (!this.additionalDetails.staffInvolvement) {
-      this.mandatoryList.set('staff', 'Please enter Relationship with Entity details.');
-    }
-    if (!this.additionalDetails.studentInvolvement) {
-      this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity details.');
-    }
-    if (!this.additionalDetails.instituteResourceInvolvement) {
-      this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
-    }
-    this.endDateValidation();
     return this.mandatoryList.size !== 0 || this.emailWarningMsg ? false : true;
   }
 
+  entityDetailsValidation() {
+    if (!this.entityDetails.coiEntity.countryCode) {
+      this.mandatoryList.set('country', 'Please choose a country.');
+    }
+    if (!this.entityDetails.coiEntity.entityTypeCode || this.entityDetails.coiEntity.entityTypeCode === 'null') {
+      this.mandatoryList.set('entityType', 'Please choose an entity type.');
+    }
+    if (!this.entityDetails.coiEntity.emailAddress) {
+      this.mandatoryList.set('email', 'Please enter a email address.');
+    }
+    if (!this.entityDetails.coiEntity.address) {
+      this.mandatoryList.set('address', 'Please enter an address.');
+    }
+    if (!this.entityDetails.coiEntity.phone) {
+      this.mandatoryList.set('phone', 'Please enter phone number.');
+    }
+    this.emailValidation();
+    if (!this.entityDetails.coiEntity.zipCode) {
+      this.mandatoryList.set('zipCode', 'Please enter a zipCode.');
+    }
+  }
   emailValidation() {
     this.emailWarningMsg = null;
-    if (this.coiEntity.emailAddress) {
-      this.coiEntity.emailAddress = this.coiEntity.emailAddress.trim();
-      if (this.coiEntity.emailAddress !== undefined && this.coiEntity.emailAddress !== '') {
+    if (this.entityDetails.coiEntity.emailAddress) {
+      this.entityDetails.coiEntity.emailAddress = this.entityDetails.coiEntity.emailAddress.trim();
+      if (this.entityDetails.coiEntity.emailAddress !== undefined && this.entityDetails.coiEntity.emailAddress !== '') {
         const email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)| (".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!(email.test(String(this.coiEntity.emailAddress).toLowerCase()))) {
+        if (!(email.test(String(this.entityDetails.coiEntity.emailAddress).toLowerCase()))) {
           this.emailWarningMsg = 'Please select a valid email address.';
         } else {
           this.emailWarningMsg = null;
@@ -278,9 +327,40 @@ export class AddSfiComponent implements OnInit {
   endDateValidation(): void {
     this.mandatoryList.delete('endDate');
     if (this.additionalDetails.involvementStartDate && this.additionalDetails.involvementEndDate &&
-        (compareDates(this.additionalDetails.involvementStartDate, this.additionalDetails.involvementEndDate) === 1)) {
-        this.mandatoryList.set('endDate', 'Please provide a valid date.');
+      (compareDates(this.additionalDetails.involvementStartDate, this.additionalDetails.involvementEndDate) === 1)) {
+      this.mandatoryList.set('endDate', 'Please provide a valid date.');
     }
   }
 
+  setHeader() {
+    if (this.isEntityManagement) {
+      if (this.isEditEntity) {
+        this.buttonName = 'Update Entity';
+        this.btnTitle = 'Click here to update an entity';
+        this.heading = this.entityDetails.coiEntity.entityName;
+      } else {
+        this.heading = 'Add New Entity';
+        this.buttonName = 'Create Entity'
+        this.btnTitle = 'Click here to create an entity';
+      }
+    } else {
+      this.heading = 'Significant Financial Interest';
+      this.buttonName = 'Create SFI'
+      this.btnTitle = 'Click here to create a sfi';
+    }
+  }
+  getEntityDetails() {
+    this.$subscriptions.push(this.sfiService.getEntityDetails(this.coiEntityManageId).subscribe((res: EntityDetails) => {
+      this.entityDetails = res;
+      this.heading = this.entityDetails.coiEntity.entityName;
+      this.clearCountryField = new String('false');
+      this.countrySearchOptions.defaultValue = this.entityDetails.coiEntity.country.countryName;
+      this.selectedCountryEvent(res.coiEntity.country)
+    }));
+  }
+
+  setEntityRiskCategoryObj() {
+    this.entityDetails.coiEntity.entityRiskCategory = this.riskLevelLookup.find(ele =>
+      this.entityDetails.coiEntity.riskCategoryCode === ele.riskCategoryCode);
+  }
 }

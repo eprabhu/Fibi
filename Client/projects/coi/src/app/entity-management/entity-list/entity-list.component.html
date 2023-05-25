@@ -35,10 +35,10 @@
       </div>
     </div>
   </div>
-  <div *ngIf="entityManagementService.isShowEntityNavBar" class="task-nav-div" id="task-navigation-bar">
-    <app-add-new-entity-details [coiEntityManageId]="entityManageId"
+  <div *ngIf="sfiService.isShowSfiNavBar" class="task-nav-div" id="task-navigation-bar">
+    <app-add-sfi [coiEntityManageId]="entityManageId"
       (updateEntityList)="updateEntityListDashboard($event)"
-      [isEditEntity]="isCoiEditEntity"></app-add-new-entity-details>
+      [isEditEntity]="isCoiEditEntity"></app-add-sfi>
   </div>
   <div class="row mt-1">
     <div class="col-12 d-flex mt-1">
@@ -153,10 +153,11 @@
       </div>
     </div>
   </div>
-  <!-- <app-entity-list *ngIf="isSearchData" [entityActiveTabName]="activeTabName" (entityListResult)="addEntityList($event)"
+  <!-- <app-entity-list  [entityActiveTabName]="activeTabName" (entityListResult)="addEntityList($event)"
     (modifyEntityId)="selectedEntity($event); isViewAdvanceSearch = false" (navNextPage)="navigateNextPage($event)"
     [entityList]="entityList" [resultCount]="resultCount"></app-entity-list> -->
-  <div *ngIf="entityList.length; else noData">
+  <ng-container *ngIf="isSearchData">
+    <div *ngIf="entityList.length; else noData">
     <table class="table tableSkin mt-2">
       <thead class="border bg-light fs-14">
         <tr class="form-row">
@@ -210,4 +211,5 @@
   <ng-template #noData>
     <app-no-information></app-no-information>
   </ng-template>
+  </ng-container>
 </div>

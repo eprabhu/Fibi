@@ -53,6 +53,8 @@ import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-com
 import { ActivityComponent } from '../disclosure/activity-track/activity.component';
 import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
 import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
+import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
+import { SfiService } from '../disclosure/sfi/sfi.service';
 
 @NgModule({
     imports: [
@@ -79,7 +81,7 @@ import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
         CoiReviewCommentsComponent,
         ActivityComponent,
         SliderCloseBtnComponent,
-        NoDataLabelComponent],
+        NoDataLabelComponent,ViewEntityDetailsComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -125,7 +127,8 @@ import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
         CoiReviewCommentsComponent,
         ActivityComponent,
         SliderCloseBtnComponent,
-        NoDataLabelComponent
+        NoDataLabelComponent,
+        ViewEntityDetailsComponent
     ],
 
     providers: [
@@ -145,7 +148,7 @@ import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
         SafeHtmlPipe,
         DecimalPipe,
         CustomNumberPipe,
-        CustomTagRemoverPipe
+        CustomTagRemoverPipe,SfiService
     ],
 
 })

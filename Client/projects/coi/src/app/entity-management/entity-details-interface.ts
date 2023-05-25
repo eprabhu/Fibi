@@ -58,7 +58,7 @@ export class CoiEntity {
   versionNumber: string;
   versionStatus: string;
   emailAddress: string;
-  webURL: string;
+  webURL?: string;
   createTimestamp: number;
   createUser: string;
   updateTimestamp: number;
@@ -66,6 +66,7 @@ export class CoiEntity {
   approvedTimestamp?: number;
   approvedUser?: string;
   isActive: boolean;
+  entityNumber?: number
 }
 
 export class EntityDetails {

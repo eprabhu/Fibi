@@ -244,7 +244,7 @@ select option {
     max-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    height: auto;
+    height: 100%;
     overscroll-behavior: contain;
 }
 

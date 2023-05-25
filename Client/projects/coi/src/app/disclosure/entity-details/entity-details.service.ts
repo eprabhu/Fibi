@@ -10,8 +10,8 @@ export class EntityDetailsService {
 
   previousURL = '';
   lookups: any;
-  entityDetails:any;
   $entityDetailsTest = new BehaviorSubject<object>({});
+  entityDetailsId:any;
 
   $relationshipsDetails = new BehaviorSubject<object>({});
   isExpanded = true;

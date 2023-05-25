@@ -12,7 +12,6 @@ export class EntityDetailsComponent implements OnInit,OnDestroy {
   constructor(public entityDetailService:EntityDetailsService,private _route:ActivatedRoute) {
     this.clearSfiNavBarStyle();
   }
-  entityDetails = {};
   updateRelationshipDetails:any;
   isEnableRelationshipModal = false;
   isSaveQuestionnaire = false;
