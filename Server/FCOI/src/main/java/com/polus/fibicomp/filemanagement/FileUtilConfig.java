@@ -11,21 +11,20 @@ import org.springframework.core.env.Environment;
 public class FileUtilConfig {
 
 	@Autowired
-    private Environment environment;
+	private Environment environment;
 
-    @Bean
-    public FileStorageService fileStorageService() {
-    	
-        String storageType = environment.getProperty("app.filemanagement.storage.type");
+	@Bean
+	public FileStorageService fileStorageService() {
 
-        if ("filesystem".equalsIgnoreCase(storageType)) {
-            return new FileSystemFileStorageService();
-        } else if ("database".equalsIgnoreCase(storageType)) {
-            return new DatabaseFileStorageService();
-        } else {
-            throw new IllegalArgumentException("Invalid storage type");
-        }
-    }	
-	
-	
+		String storageType = environment.getProperty("app.filemanagement.storage.type");
+
+		if ("filesystem".equalsIgnoreCase(storageType)) {
+			return new FileSystemFileStorageService();
+		} else if ("database".equalsIgnoreCase(storageType)) {
+			return new DatabaseFileStorageService();
+		} else {
+			throw new IllegalArgumentException("Invalid storage type");
+		}
+	}
+
 }

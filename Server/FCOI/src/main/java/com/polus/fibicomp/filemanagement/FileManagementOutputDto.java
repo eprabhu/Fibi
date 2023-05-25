@@ -21,5 +21,9 @@ public class FileManagementOutputDto {
 	
 	private String originalFileName;
 	
+	private byte[] data;
+	
+	private String updateUser;
+	
 	
 }

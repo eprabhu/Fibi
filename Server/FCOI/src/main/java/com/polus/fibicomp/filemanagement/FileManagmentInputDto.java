@@ -19,5 +19,5 @@ public class FileManagmentInputDto {
 	
 	private MultipartFile file;
 	
-
+	private String updateUser;
 }
