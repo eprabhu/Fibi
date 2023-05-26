@@ -78,21 +78,12 @@ export class ResolveServiceService {
     private getHttpRequests(route: ActivatedRouteSnapshot): Observable<any>[] {
         const HTTP_REQUESTS = [];
         const MODULE_ID = route.queryParamMap.get('disclosureId');
-        MODULE_ID ? HTTP_REQUESTS.push(this.loadDisclosure(MODULE_ID)) :
-            HTTP_REQUESTS.push(this.createDisclosure());
+        if (MODULE_ID) HTTP_REQUESTS.push(this.loadDisclosure(MODULE_ID));
         return HTTP_REQUESTS;
     }
 
     private loadDisclosure(disclosureId: string) {
         return this._coiService.loadDisclosure(disclosureId).pipe((catchError(error => this.redirectOnError(error))));
-    }
-
-    private createDisclosure() {
-        return this._coiService.createDisclosure({
-            coiDisclosure: {
-                fcoiTypeCode: 1, personId: this._commonService.getCurrentUserDetail('personId')
-            }
-        }).pipe((catchError(error => this.redirectOnError(error))));
     }
 
     private hideManualLoader() {
@@ -105,7 +96,7 @@ export class ResolveServiceService {
                 error.error : 'Something went wrong. Please try again.');
         if (error.status === 403 && error.error !== 'DISCLOSURE_EXISTS') {
             this._commonService.forbiddenModule = '8';
-            this._router.navigate(['/fibi/error/403']);
+            this._router.navigate(['/coi/error-handler/403']);
             return new Observable(null);
         } else {
             this._router.navigate([HOME_URL]);

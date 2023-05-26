@@ -7,14 +7,17 @@ import { personDetailsComponent } from './personal-details-modal/person-details/
 import { trainingDetailsComponent } from './personal-details-modal/Training-details/Training-details.component';
 import { SharedModule } from '../shared/shared.module';
 import { SharedSfiCardComponent } from './shared-sfi-card/shared-sfi-card.component';
+import { DisclosureCreateModalComponent } from './disclosure-create-modal/disclosure-create-modal.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     MatIconModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
-  declarations: [NoInformationComponent,personalDetailsModalComponent,personDetailsComponent,trainingDetailsComponent, SharedSfiCardComponent],
-  exports: [NoInformationComponent,personalDetailsModalComponent,SharedSfiCardComponent]
+  declarations: [NoInformationComponent,personalDetailsModalComponent,personDetailsComponent,trainingDetailsComponent, SharedSfiCardComponent, DisclosureCreateModalComponent],
+  exports: [NoInformationComponent,personalDetailsModalComponent,SharedSfiCardComponent,DisclosureCreateModalComponent]
 })
 export class SharedComponentModule { }

@@ -19,6 +19,7 @@ import {
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities';
+import { environment } from '../../environments/environment';
 @Component({
     selector: 'app-disclosure',
     templateUrl: './disclosure.component.html',
@@ -64,6 +65,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     disclosureNumber: number;
     disclosureStatusCode: string;
     fcoiTypeCode: any;
+    deployMap = environment.deployUrl;
 
     constructor(public router: Router,
         public commonService: CommonService,

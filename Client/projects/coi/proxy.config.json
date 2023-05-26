@@ -283,5 +283,9 @@
   "/fetchAllCoiRights": {
       "target": "http://192.168.1.80:9090/coi/",
       "secure": false
+  },
+  "/validate/*" : {
+    "target": "http://192.168.1.80:9090/coi/",
+    "secure": false
   }
 }

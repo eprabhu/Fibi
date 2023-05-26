@@ -20,7 +20,8 @@ export class ForbiddenComponent implements OnInit {
       14: { name: 'Claim', path: '#/fibi/dashboard/claim-list', class: 'info-badge' },
       15: { name: 'Grant Call', path: '#/fibi/dashboard/grantCall', class: 'info-badge'},
       16: { name: 'Progress Report', path: '#/fibi/dashboard/progressReportList', class: 'info-badge'},
-      20: { name: 'Service Request', path: '#/fibi/dashboard/serviceRequestList', class: 'info-badge'}
+      20: { name: 'Service Request', path: '#/fibi/dashboard/serviceRequestList', class: 'info-badge'},
+      8: { name: 'COI', path: '#/coi/user-dashboard', class: 'info-badge'}
     }
 
   };
@@ -33,7 +34,7 @@ export class ForbiddenComponent implements OnInit {
    */
   navigateBack() {
     window.location.hash = this._commonService.forbiddenModule ? this.pathConfig.paths[this._commonService.forbiddenModule].path
-      : '#/fibi/dashboard/researchSummary';
+      : '#/coi/user-dashboard';
   }
 
 }

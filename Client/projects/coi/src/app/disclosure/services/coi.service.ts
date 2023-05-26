@@ -29,10 +29,6 @@ export class CoiService {
         return this._http.get(`${this._commonService.baseUrl}/loadDisclosure/${disclosureId}`);
     }
 
-    createDisclosure(params: any) {
-        return this._http.post(`${this._commonService.baseUrl}/createDisclosure`, params);
-    }
-
     certifyDisclosure(params: any) {
         return this._http.patch(this._commonService.baseUrl + '/certifyDisclosure', params);
     }

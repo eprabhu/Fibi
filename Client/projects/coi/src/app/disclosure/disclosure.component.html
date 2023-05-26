@@ -6,8 +6,8 @@
                     <p class="m-0">
                         <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
                             <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span
-                                    class="text-primary"><u (click)="openDetailModal(coiData)" style="cursor:pointer;"title="Show the details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
-                                [ Unit : {{unitTitle()}} ]</strong>
+                                    class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
+                            </strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
                             <strong
@@ -26,7 +26,7 @@
                     </p>
                 </div>
                 <div class="d-flex">
-                    <ng-container *ngIf="isCreateMode">
+                    <!-- <ng-container *ngIf="isCreateMode">
                         <div class="align-items-center d-flex">
                             <mat-icon class="green-label">bookmark</mat-icon>
                         </div>
@@ -38,7 +38,7 @@
                                 <p class="mb-0 fs-14 negative-three-pixel-margin">Expiration Date: 23/02/2024</p>
                             </div>
                         </div>
-                    </ng-container>
+                    </ng-container> -->
 
                     <ng-container *ngIf="!isCreateMode">
                         <div class="align-items-center d-flex" title="Click here to collapse/un-collapse">
@@ -53,29 +53,35 @@
             <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 pb-1 bg-white">
                 <div class="col">
                     <div class="border triple-card rounded-1 position-relative">
-                        <span class="status-pill">Status</span>
+                        <!-- <span class="status-pill">Relationship with</span> -->
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
                                 <tr>
-                                    <td>Disposition :</td>
-                                    <td class="ps-4">
-                                        <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Review :</td>
-                                    <td class="ps-4">
-                                        <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Disclosure :</td>
-                                    <td class="ps-4">
-                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
-                                            <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                    <td><i aria-hidden="true" class="fa fa-home mr-2"></i>Unit : </td>
+                                    <td class="ps-2">
+                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.unit">
+                                            <div class="text-overflow" [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</div>
                                         </app-no-data-label>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><i class="fa fa-user-o mr-2" aria-hidden="true"></i>Administrator : </td>
+                                    <td class="ps-2">
+                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminPersonId">
+                                            <span>{{coiData?.coiDisclosure?.adminPersonId}}</span>
+                                        </app-no-data-label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img class="activity-icon mr-2" src="{{deployMap}}assets/images/multiple-admin-1.svg"
+                                        alt="add-adminGroup icon">Admin Group : </td>
+                                    <td class="ps-2">
+                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminGroupId">
+                                            <span>{{coiData?.coiDisclosure?.adminGroupId}}</span>
+                                        </app-no-data-label>
+                                    </td>
+                                </tr>
+
                             </table>
                         </div>
                     </div>
@@ -112,6 +118,35 @@
                 </div>
                 <div class="col">
                     <div class="border triple-card rounded-1 position-relative">
+                        <span class="status-pill">Status</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium spaced-table">
+                                <tr>
+                                    <td>Disposition :</td>
+                                    <td class="ps-4">
+                                        <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Review :</td>
+                                    <td class="ps-4">
+                                        <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Disclosure :</td>
+                                    <td class="ps-4">
+                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
+                                            <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                        </app-no-data-label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col">
+                    <div class="border triple-card rounded-1 position-relative">
                         <span class="status-pill">Relationship with</span>
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
@@ -142,7 +177,7 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress navigation-tabs row">
@@ -268,7 +303,7 @@
                 <div class="d-flex justify-content-between p-3">
                     <span title="Goto home page" (click)="goToHomeUrl()"
                         class="btn btn-outline-secondary pb-0 fs-14 {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
-                        <mat-icon>home</mat-icon>
+                        <mat-icon class="mr-2">home</mat-icon>
                     </span>
                     <span *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"

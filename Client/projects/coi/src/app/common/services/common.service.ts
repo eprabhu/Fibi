@@ -212,7 +212,8 @@ export class CommonService {
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
         this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' : 'bg-danger';
-        if (toast && toast_body) {
+        if(toast && toast_body) {
+            toast._element.classList.remove(this.toastClass)
             toast_body.innerText =  this.appToastContent;
             toast._element.classList.add(this.toastClass);
             toast.show();
