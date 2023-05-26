@@ -10,7 +10,7 @@
                 aria-describedby="Goto home page">My COI
                 <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/admin-dashboard']" class="mr-2 cursor-pointer" role="tab"
+            <li *ngIf="isShowAdminDashboard" [routerLink]="['/coi/admin-dashboard']" class="mr-2 cursor-pointer" role="tab"
                 routerLinkActive="active" title="Goto Disclosures page"
                 aria-describedby="Goto Disclosures page">Disclosures
                 <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"></span>

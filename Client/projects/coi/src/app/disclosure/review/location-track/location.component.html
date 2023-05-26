@@ -36,29 +36,23 @@
             <caption class="sr-only">Review</caption>
             <thead>
                 <tr>
-                    <th scope="col">
-                        <span>Admin Group</span>
+                    <th scope="col-2" class="px-3">
+                        Reviewers
                     </th>
-                    <th scope="col">
-                        <span>Reviewers</span>
+                    <th scope="col-3" style="width:30%" class="px-3">
+                        Description
                     </th>
-                    <th scope="col" style="width:30%">
-                        <span>Description</span>
+                    <th scope="col-2" class="px-3">
+                        Assigned On
                     </th>
-                    <th scope="col">
-                        <span>Assigned On</span>
+                    <th scope="col-2" class="px-3">
+                        Status
                     </th>
-                    <th scope="col">
-                        <span>Status</span>
-                    </th>
-                    <th scope="col" class="justify-content-center text-center">Actions</th>
+                    <th scope="col-2" class="justify-content-center text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let review of reviewList; let index = index">
-                    <td>
-                        <app-no-data-label [valueToShow]="review?.adminGroup?.adminGroupName"></app-no-data-label>
-                    </td>
                     <td>{{review?.assigneePersonName}}</td>
                     <td>
                         <app-no-data-label [valueToShow]="review?.description"></app-no-data-label>
@@ -250,9 +244,9 @@
     </div>
 </div>
 
-<div class="modal modal-coi fade mySkinDialog" id="add-location-modal" role="dialog"
-    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg">
+<div class="modal modal-coi fade mySkinDialog" id="add-location-modal" role="dialog" aria-labelledby="skippedSchedulesTitle"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review' : 'Add Review' }} for
@@ -263,14 +257,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div id="locationId" class="col-lg-6 col-sm-12 col-12">
-                        <label class="d-block">Admin Group</label>
-                        <app-autocompleter [completerOptions]="adminGroupsCompleterOptions"
-                            [clearField]="categoryClearFiled" [placeHolder]="'Search for Admin Group'"
-                            (onSelect)="adminGroupSelect($event)">
-                        </app-autocompleter>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 col-12">
+                    <div class="col-sm-12 col-12">
                         <label class="d-block">Assignee</label>
                         <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
                                      [isError]="validationMap.has('reviewer')"
