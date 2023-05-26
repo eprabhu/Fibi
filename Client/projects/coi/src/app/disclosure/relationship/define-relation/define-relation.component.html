@@ -1,5 +1,5 @@
 <div class="card" #relationShipOverlay [class.overlay]="isShowDetails">
-  <div @enterAnimation *ngIf="isShowDetails" class="row fixed-tree">
+  <div @enterAnimation *ngIf="isShowDetails" class="fixed-tree">
     <app-slider-close-btn (click)="hideSfiNavBar()"></app-slider-close-btn>
     <div class="relationship-content overflow-visible">
       <div class="col-12 d-flex align-items-center" *ngIf="selectedProject?.moduleCode == 3">
