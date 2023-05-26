@@ -1,23 +1,23 @@
 <div>
 <div class="py-2 px-3" [@slideInOut]>
-  <div class="row bg-white mx-0 d-flex py-1 pb-2 align-items-center border ">
+  <div *ngIf="isManageEntity" class="row bg-white mx-0 d-flex py-1 pb-2 align-items-center border ">
     <nav class="coi-admin-dash mx-0 borderlist">
       <ul class="header-navigation-links d-flex align-items-center m-0 f-15 cursor-pointer p-0 text-secondary">
-        <li *ngIf="allEntitiesrightCheck()" tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}" role="tab"
+        <li *ngIf="isManageEntity"  tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}" role="tab"
           (keyup.enter)="entityTabName('ALL_ENTITIES')" (keyup.space)="entityTabName('ALL_ENTITIES')"
           (click)="entityTabName('ALL_ENTITIES')" title="Click to view all the entities"
           title="Click to view the list of all entities" area-describedby="Click to view the list of all entities">All
           Entities
         </li>
         <li class="separator px-0"></li>
-        <li  *ngIf="unverifiedEntitiesrightCheck()" tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'UNVERIFIED'}" role="tab"
+        <li  *ngIf="isManageEntity"  tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'UNVERIFIED'}" role="tab"
           (keyup.enter)="entityTabName('UNVERIFIED')" (keyup.space)="entityTabName('UNVERIFIED')"
           (click)="entityTabName('UNVERIFIED')" title="Click to view all the unverified entities"
           title="Click to view the list of all unverified entities"
           area-describedby="Click to view the list of all unverified entities">Unverified Entities
         </li>
         <li class="separator px-0"></li>
-        <li  *ngIf="highRiskEntitiesrightCheck()" tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'HIGH_RISK'}" role="tab"
+        <li  *ngIf="isManageEntity"  tabindex="0" class="cursor-pointer" [ngClass]="{'active': activeTabName === 'HIGH_RISK'}" role="tab"
           (keyup.enter)="entityTabName('HIGH_RISK')" (keyup.space)="entityTabName('HIGH_RISK')"
           (click)="entityTabName('HIGH_RISK')" title="Click to view all the high risk entities"
           title="Click to view the list of all high risk entities"
@@ -46,7 +46,7 @@
         <app-elastic [options]="coiElastic" [placeHolder]="'Entity Name, Country etc.'"
           [uniqueId]="'btn-entity-elastic'" (selectedResult)="redirectToEntity($event)"></app-elastic>
       </div>
-      <div class="ml-15 justify-content-end d-flex mx-3">
+      <div *ngIf="isManageEntity" class="ml-15 justify-content-end d-flex mx-3">
         <button class="btn btn-primary fs-13 d-flex align-items-center" id="advanced-search"
           (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search" aria-expanded="true"
           aria-label="Toggle Advanced Search"><mat-icon class="add-icon mt-1"
@@ -58,7 +58,7 @@
     </div>
   </div>
   <div *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow-sm rounded-3" id="view-advance-search">
-    <div class="card-body mb-3">
+    <div *ngIf="isManageEntity" class="card-body mb-3">
       <div class="form-row row mx-2">
         <div class="col-3">
           <label class="fw-bold fs-14 d-block" for="adv-entity-name">Entity Name</label>

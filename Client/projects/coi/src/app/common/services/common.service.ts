@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject} from 'rxjs';
-import {environment} from "../../../environments/environment";
-import {getFromLocalStorage, setIntoLocalStorage} from "../../../../../fibi/src/app/common/utilities/user-service";
-import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
-import {Toast} from "bootstrap";
+import {environment} from '../../../environments/environment';
+import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
+import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
+import {Toast} from 'bootstrap';
 import { HTTP_SUCCESS_STATUS } from '../../app-constants';
 
 @Injectable()
@@ -57,8 +57,6 @@ export class CommonService {
     dashboardModules: any = {};
     previousURL = null;
     fibiApplicationUrl = '';
-    
-
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
 
@@ -201,7 +199,7 @@ export class CommonService {
             return this.rightsArray;
         }
         const allRights: any = await this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
-        if(allRights && 'IS_REVIEW_MEMBER' in allRights) {
+        if (allRights && 'IS_REVIEW_MEMBER' in allRights) {
             this.isCoiReviewer = allRights.IS_REVIEW_MEMBER;
             this.rightsArray = allRights.rights || [];
         }
@@ -209,15 +207,15 @@ export class CommonService {
     }
 
     showToast(status = HTTP_SUCCESS_STATUS, toastContent = '') {
-        let toast: any = new Toast(document.getElementById('coi-bootstrap-toast'));
-        let toast_body: any = document.getElementById('coi-bootstrap-toast-body');
+        const toast: any = new Toast(document.getElementById('coi-bootstrap-toast'));
+        const toast_body: any = document.getElementById('coi-bootstrap-toast-body');
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
         this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' : 'bg-danger';
         if(toast && toast_body) {
             toast._element.classList.remove(this.toastClass)
             toast_body.innerText =  this.appToastContent;
-            toast._element.classList.add(this.toastClass)
+            toast._element.classList.add(this.toastClass);
             toast.show();
         }
 
@@ -270,4 +268,7 @@ export class CommonService {
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
 
+    hasRight(right: string): boolean {
+        return this.rightsArray.includes(right);
+    }
 }
