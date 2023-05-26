@@ -207,3 +207,15 @@ table {
   top: 51px;
   z-index: 50;
 }
+
+.activity-icon {
+  width: 1.5rem;
+}
+
+.text-overflow {
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    width: 15rem;
+    height: 1.2em; 
+    white-space: nowrap;
+}
