@@ -33,16 +33,17 @@ export class EntityListComponent implements OnDestroy, OnInit {
   statusTypeOptions = 'EMPTY#EMPTY#true#true';
   entityList: any = [];
   $subscriptions: Subscription[] = [];
-  resultCount: number = 0;
+  resultCount = 0;
   isSearchData = false;
   showEntityList = false;
   isShowAllProposalList = false;
   rightList: string;
+  isManageEntity: boolean;
 
   constructor(private _router: Router,
     public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService,
-    private _commonService: CommonService,public sfiService: SfiService) { }
+    private _commonService: CommonService, public sfiService: SfiService) { }
 
   ngOnInit() {
     this.coiElastic = this._elasticConfig.getElasticForCoi();
@@ -58,7 +59,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
       this.generateLookupArrayForDropdown();
       this.advancedSearch();
     }
-    this.rights()
+    this.checkUserHasRight();
   }
 
   ngOnDestroy() {
@@ -88,12 +89,6 @@ export class EntityListComponent implements OnDestroy, OnInit {
       this.isViewAdvanceSearch = false;
       this.isShowAllProposalList = true;
     }
-  }
-  rights() {
-    this._commonService.fetchPermissions().then((right: any) => {
-      this.rightList = right;
-    }).catch((error) => {
-    })
   }
 
   redirectToEntity(coi: any) {
@@ -186,33 +181,15 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   viewDetails(entityListData) {
-    this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityListData.entityId } })
-  }
-
-  allEntitiesrightCheck() {
-    if (this.rightList.includes('MANAGE_ENTITY') || this.rightList.includes('VIEW_ENTITY')) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  unverifiedEntitiesrightCheck() {
-    if (this.rightList.includes('MANAGE_ENTITY') || this.rightList.includes('VIEW_ENTITY')) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  highRiskEntitiesrightCheck() {
-    if (this.rightList.includes('MANAGE_ENTITY') || this.rightList.includes('VIEW_ENTITY')) {
-      return true;
-    } else {
-      return false;
-    }
+    this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityListData.entityId } });
   }
 
   actionsOnPageChange(event) {
     this.entityManagementService.coiRequestObject.currentPage = event;
     this.viewListOfEntity();
+  }
+
+  checkUserHasRight(): void {
+    this.isManageEntity = this._commonService.hasRight('MANAGE_ENTITY') ||  this._commonService.hasRight('MANAGE_ENTITY');
   }
 }
