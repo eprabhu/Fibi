@@ -237,6 +237,8 @@ public class ConflictOfInterestVO {
 	private String reviewStatus;
 	
 	private Integer entityCount;
+
+	private String homeUnit;
 	
 	private List<CoiProjConflictStatusType> coiProjConflictStatusTypes;
 
@@ -1077,5 +1079,13 @@ public class ConflictOfInterestVO {
 
 	public void setProjectDetail(DisclosureDetailDto projectDetail) {
 		this.projectDetail = projectDetail;
+	}
+
+	public String getHomeUnit() {
+		return homeUnit;
+	}
+
+	public void setHomeUnit(String homeUnit) {
+		this.homeUnit = homeUnit;
 	}
 }

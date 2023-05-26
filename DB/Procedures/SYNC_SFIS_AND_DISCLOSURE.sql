@@ -1,0 +1,165 @@
+DELIMITER //
+CREATE PROCEDURE `SYNC_SFIS_AND_DISCLOSURE`(
+AV_DISCLOSURE_ID   	     INT(30),
+AV_DISCLOSURE_NUMBER   	 INT(30),
+AV_PERSON_ID             VARCHAR(45),
+AV_UPDATE_USER           VARCHAR(45),
+AV_PERSON_ENTITY_ID      VARCHAR(30),
+AV_MODULE_CODE           INT(3),
+AV_MODULE_ITEM_KEY       VARCHAR(30),
+AV_TYPE                  VARCHAR(3)
+)
+BEGIN
+
+/**
+    AV_TYPE = F //Create FCOI
+    AV_TYPE = RF //Revise FCOI
+    AV_TYPE = P //Project Disclosure
+*/
+
+DECLARE LI_PERSON_ENTITY_ID     VARCHAR(30);
+DECLARE LI_ENTITY_ID            VARCHAR(30);
+DECLARE LI_ENTITY_NUMBER        VARCHAR(30);
+DECLARE LI_MODULE_CODE          VARCHAR(30);
+DECLARE LI_MODULE_ITEM_KEY      VARCHAR(30);
+DECLARE LI_IS_VALUE             INT DEFAULT 0;
+
+    BEGIN 
+        /**
+            For FCOI creation this check has been done. AlL the active SFIs against a person will sync with the proposals and awards
+        */
+        IF AV_TYPE = 'F' AND AV_PERSON_ENTITY_ID IS NULL AND AV_MODULE_ITEM_KEY IS NULL AND AV_DISCLOSURE_ID IS NOT NULL THEN
+            BEGIN 
+                DECLARE DONE1 INT DEFAULT FALSE;
+                                            
+                DECLARE CUR_ENTITIES CURSOR FOR SELECT DISTINCT PERSON_ENTITY_ID, ENTITY_ID, ENTITY_NUMBER FROM PERSON_ENTITY WHERE VERSION_STATUS='Active' AND PERSON_ID = AV_PERSON_ID;
+
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE1 = TRUE;
+                                
+                OPEN CUR_ENTITIES;
+                ENTITIES_LOOP: LOOP 
+                FETCH CUR_ENTITIES INTO  LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER;
+
+                    IF DONE1 THEN
+                        IF LI_IS_VALUE = 0 THEN
+                            SELECT FN_SYNC_SFI_WITH_FCOI_DISC(1, AV_PERSON_ID, AV_UPDATE_USER, AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, null, null, null);
+                            SELECT FN_SYNC_SFI_WITH_FCOI_DISC(3, AV_PERSON_ID, AV_UPDATE_USER, AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, null, null, null);
+                        END IF;
+                        LEAVE ENTITIES_LOOP;
+                    END IF;
+                    SET LI_IS_VALUE = 1;
+                    SELECT FN_SYNC_SFI_WITH_FCOI_DISC(1, AV_PERSON_ID, AV_UPDATE_USER, AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER);
+                    SELECT FN_SYNC_SFI_WITH_FCOI_DISC(3, AV_PERSON_ID, AV_UPDATE_USER, AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER);
+            
+                END LOOP;
+                CLOSE CUR_ENTITIES;
+            END;
+        /**
+            This check is to sync the not added SFIs on revise fcoi
+        */
+        ELSEIF AV_TYPE = 'RF' AND AV_PERSON_ENTITY_ID IS NULL AND AV_MODULE_ITEM_KEY IS NULL AND AV_DISCLOSURE_ID IS NOT NULL THEN
+
+            BEGIN 
+                DECLARE DONE1 INT DEFAULT FALSE;
+                                            
+                DECLARE CUR_ENTITIES CURSOR FOR SELECT DISTINCT PERSON_ENTITY_ID, ENTITY_ID, ENTITY_NUMBER FROM PERSON_ENTITY 
+                    WHERE VERSION_STATUS='Active' AND PERSON_ID = AV_PERSON_ID AND PERSON_ENTITY_ID NOT IN (SELECT DISTINCT PERSON_ENTITY_ID FROM COI_DISCL_ENT_PROJ_DETAILS 
+                     WHERE PERSON_ENTITY_ID IS NOT null AND DISCLOSURE_ID = AV_DISCLOSURE_ID);
+
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE1 = TRUE;
+                                
+                OPEN CUR_ENTITIES;
+                ENTITIES_LOOP: LOOP 
+                FETCH CUR_ENTITIES INTO  LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER;
+
+                    IF DONE1 THEN
+                        LEAVE ENTITIES_LOOP;
+                    END IF;
+                    
+                    SELECT FN_SYNC_SFI_WITH_FCOI_DISC(1, AV_PERSON_ID, AV_UPDATE_USER, AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER);
+                    SELECT FN_SYNC_SFI_WITH_FCOI_DISC(3, AV_PERSON_ID, AV_UPDATE_USER, AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER);
+            
+                END LOOP;
+                CLOSE CUR_ENTITIES;
+            END;
+
+        /**
+            This check is cretate new project disclosure, for project disclosre creation AV_MODULE_ITEM_KEY will not be null
+        */
+        ELSEIF AV_TYPE = 'P' AND AV_PERSON_ENTITY_ID IS NULL AND AV_MODULE_ITEM_KEY IS NOT NULL AND AV_DISCLOSURE_ID IS NOT NULL THEN
+
+            BEGIN 
+                DECLARE DONE1 INT DEFAULT FALSE;
+                                            
+                DECLARE CUR_ENTITIES CURSOR FOR SELECT DISTINCT PERSON_ENTITY_ID, ENTITY_ID, ENTITY_NUMBER FROM PERSON_ENTITY WHERE VERSION_STATUS='Active' AND PERSON_ID = AV_PERSON_ID;
+
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE1 = TRUE;
+                                
+                OPEN CUR_ENTITIES;
+                ENTITIES_LOOP: LOOP 
+                FETCH CUR_ENTITIES INTO  LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER;
+
+                    IF DONE1 THEN
+                        IF LI_IS_VALUE = 0 THEN
+                            INSERT INTO COI_DISCL_ENT_PROJ_DETAILS(`DISCLOSURE_ID`, `DISCLOSURE_NUMBER`, `MODULE_CODE`, `MODULE_ITEM_KEY`, 
+                                `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES(AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, AV_MODULE_CODE,
+                                AV_MODULE_ITEM_KEY, now(), AV_UPDATE_USER);
+                        END IF;
+                        LEAVE ENTITIES_LOOP;
+                    END IF;
+                    SET LI_IS_VALUE = 1;
+                    INSERT INTO COI_DISCL_ENT_PROJ_DETAILS(`DISCLOSURE_ID`, `DISCLOSURE_NUMBER`, `PERSON_ENTITY_ID`, `ENTITY_ID`, `ENTITY_NUMBER`, `MODULE_CODE`, `MODULE_ITEM_KEY`, 
+                            `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES(AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER, AV_MODULE_CODE,
+                            AV_MODULE_ITEM_KEY, now(), AV_UPDATE_USER);
+                END LOOP;
+                CLOSE CUR_ENTITIES;
+            END;
+
+        /**
+            Sync a SFI with projects on a disclosure(for add new SFI on a disclosure)
+        */
+        ELSEIF AV_PERSON_ENTITY_ID <> '' AND AV_DISCLOSURE_ID IS NOT NULL THEN
+
+        BEGIN
+            DECLARE DONE1 INT DEFAULT FALSE;
+                                        
+            DECLARE CUR_ENTITIES CURSOR FOR SELECT DISTINCT PERSON_ENTITY_ID, ENTITY_ID, ENTITY_NUMBER FROM PERSON_ENTITY WHERE VERSION_STATUS='Active' AND PERSON_ENTITY_ID = AV_PERSON_ENTITY_ID;
+
+            DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE1 = TRUE;
+                            
+            OPEN CUR_ENTITIES;
+            ENTITIES_LOOP: LOOP 
+            FETCH CUR_ENTITIES INTO  LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER;
+
+                IF DONE1 THEN
+                    LEAVE ENTITIES_LOOP;
+                END IF;
+
+                BEGIN
+                    DECLARE DONE2 INT DEFAULT FALSE;
+                    
+                    DECLARE CUR_PROJECTS CURSOR FOR SELECT DISTINCT MODULE_ITEM_KEY, MODULE_CODE FROM COI_DISCL_ENT_PROJ_DETAILS WHERE DISCLOSURE_ID = AV_DISCLOSURE_ID;
+                    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE2 = TRUE;
+                                
+                    OPEN CUR_PROJECTS;
+                    PROJECTS_LOOP: LOOP 
+                    FETCH CUR_PROJECTS INTO  LI_MODULE_ITEM_KEY, LI_MODULE_CODE;
+            
+                        IF DONE2 THEN
+                            LEAVE PROJECTS_LOOP;
+                        END IF;
+
+                        INSERT INTO COI_DISCL_ENT_PROJ_DETAILS(`DISCLOSURE_ID`, `DISCLOSURE_NUMBER`, `PERSON_ENTITY_ID`, `ENTITY_ID`, `ENTITY_NUMBER`, `MODULE_CODE`, `MODULE_ITEM_KEY`, 
+                            `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES(AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, LI_PERSON_ENTITY_ID, LI_ENTITY_ID, LI_ENTITY_NUMBER, LI_MODULE_CODE,
+                            LI_MODULE_ITEM_KEY, now(), AV_UPDATE_USER);
+
+                    END LOOP;
+                    CLOSE CUR_PROJECTS;
+                END;
+            END LOOP;
+            CLOSE CUR_ENTITIES;
+            END;
+        END IF;	
+	END;
+END
+//

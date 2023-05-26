@@ -6,7 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.service.GeneralService;
+import com.polus.fibicomp.constants.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +52,9 @@ public class ConflictOfInterestController {
 	@Autowired
 	private GeneralService generalService;
 
-	
+	@Autowired
+	private UserDocumentAuthorization documentAuthorization;
+
 	@GetMapping("hello")
 	public ResponseEntity<String> hello() {
 		return new ResponseEntity<>("Hello from COI", HttpStatus.OK);
@@ -64,6 +69,9 @@ public class ConflictOfInterestController {
 	@GetMapping("/loadDisclosure/{disclosureId}")
 	public ResponseEntity<Object> loadDisclosure(@PathVariable("disclosureId") Integer disclosureId) {
 		logger.info("Request for loadDisclosure");
+		if (!documentAuthorization.isAuthorized(Constants.COI_MODULE_CODE, disclosureId.toString(), AuthenticatedUser.getLoginPersonId())) {
+			return new ResponseEntity<>("Not Authorized to view this Disclosure",HttpStatus.FORBIDDEN);
+		}
 		return conflictOfInterestService.loadDisclosure(disclosureId);
 	}
 
@@ -419,5 +427,21 @@ public class ConflictOfInterestController {
 	@GetMapping("/checkEntity/{entityId}/added")
 	public ResponseEntity<Object> checkEntityAdded(@PathVariable("entityId") Integer entityId) {
 		return new ResponseEntity<>(conflictOfInterestService.checkEntityAdded(entityId), HttpStatus.OK);
+	}
+
+	@GetMapping("/validate/{moduleCode}/disclosure/{moduleItemId}")
+	public ResponseEntity<Object> validateDisclosure(@PathVariable("moduleCode") Integer moduleCode,
+												   @PathVariable("moduleItemId") String moduleItemId) {
+		return conflictOfInterestService.validateDisclosure(moduleCode, moduleItemId);
+	}
+
+	@PatchMapping("/disclosure/assignAdmin")
+	public ResponseEntity<Object> assignDisclosureAdmin(@RequestBody CoiDisclosureDto dto) {
+		return conflictOfInterestService.assignDisclosureAdmin(dto);
+	}
+
+	@GetMapping("/adminGroup/adminPersons")
+	public ResponseEntity<Object> fetchAdminGroupsAndPersons() {
+		return generalService.fetchAdminGroupsAndPersons();
 	}
 }

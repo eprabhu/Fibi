@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
@@ -348,4 +349,24 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	Object checkEntityAdded(Integer entityId);
+
+	/**
+	 * Validate
+	 * 1) If selected project expired date passed
+	 * 2) Is part of any pending project disclosure
+	 * 3) If the selected project is part of any active/ pending  FCOi disclosure
+	 *
+	 * @param moduleCode
+	 * @param moduleItemId
+	 * @return
+	 */
+    ResponseEntity<Object> validateDisclosure(Integer moduleCode, String moduleItemId);
+
+	/**
+	 * This method is used to assign admin group or admin person
+	 *
+	 * @param dto
+	 * @return
+	 */
+	ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto);
 }

@@ -681,8 +681,13 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureId
 	 * @param disclosureNumber
 	 * @param personEntityId
+	 * @param moduleCode
+	 * @param moduleItemKey
+	 * @param type
 	 */
-	void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId);
+	void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId,
+								   Integer moduleCode, String moduleItemKey, String type);
+
 	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode);
 
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);
@@ -711,5 +716,34 @@ public interface ConflictOfInterestDao {
 	public void saveOrUpdateDisclComment(DisclComment disclComment);
 
 	public DisclComment getDisclEntProjRelationComment(Integer disclosureDetailsId);
-	
+
+	/**
+	 * This method is used to validate
+	 * 1) If selected project expired date passed
+	 * 2) Is part of any pending project disclosure
+	 * 3) If the selected project is part of any active/ pending  FCOi disclosure
+	 *
+	 * @param personId personId
+	 * @param moduleCode moduleCode
+	 * @param moduleItemKey moduleItemKey
+	 * @return Map of validated values
+	 */
+	Map<String, Object> validateProjectDisclosure(String personId, Integer moduleCode, String moduleItemKey);
+
+	/**
+	 * This method is used for get sfi details by a person id or disclosure id
+	 *
+	 * @param personId
+	 * @param disclosureId
+	 * @return
+	 */
+	List<PersonEntity> getSFIOfDisclosure(String personId, Integer disclosureId);
+
+	/**
+	 *
+	 * @param adminGroupId
+	 * @param adminPersonId
+	 * @param disclosureId
+	 */
+    void assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId);
 }
