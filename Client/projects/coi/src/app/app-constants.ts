@@ -10,4 +10,5 @@ export const POST_CREATE_DISCLOSURE_ROUTE_URL = '/coi/disclosure/summary';
 export const HOME_URL = '/coi/user-dashboard';
 export const DEFAULT_UNIT_FORMAT = 'unitNumber - unitName';
 
-
+export const ADMIN_DASHBOARD_RIGHTS = new Set(['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE','MANAGE_PROJECT_DISCLOSURE',
+    'VIEW_PROJECT_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE']);

@@ -4,12 +4,12 @@ import {Router} from "@angular/router";
 import {CommonService} from "../services/common.service";
 import {Subscription} from "rxjs";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+import { ADMIN_DASHBOARD_RIGHTS } from '../../app-constants';
 
 class ChangePassword {
     password = '';
     reEnterPassword = '';
 }
-
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -32,6 +32,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     passwordValidation = new Map();
     timer: any = {password: null, confirmPassword: null};
     $subscriptions: Subscription[] = [];
+    isShowAdminDashboard = false;
 
     constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -39,6 +40,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
+        this.getPermissions();
     }
 
     ngOnDestroy(): void {
@@ -114,5 +116,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
             return false;  
         }
     }
-    
+
+    async getPermissions() {
+        const rightsArray = await this.commonService.fetchPermissions();
+        this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+    }
 }

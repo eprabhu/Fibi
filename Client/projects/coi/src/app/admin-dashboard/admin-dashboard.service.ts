@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -42,6 +42,21 @@ export class AdminDashboardService {
       formData.append('formDataJson', JSON.stringify(params));
       return this._http.post(this._commonService.baseUrl + '/addCOIReviewComment', formData);
   }
+
+  assignAdmin(params) {
+    return this._http.patch(this._commonService.baseUrl + '/disclosure/assignAdmin', params);
+}
+
+getPersonGroup (personId) {
+  return this._http.get(this._commonService.baseUrl + '/getPersonGroup', {
+    headers: new HttpHeaders().set('personId', personId.toString())
+  });
+}
+
+getAdminDetails() {
+  return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons');
+}
+
 }
 
 export class CoiDashboardRequest {

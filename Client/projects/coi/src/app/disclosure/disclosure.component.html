@@ -407,7 +407,7 @@
 <!--assign reviewer modal start-->
 <div class="modal modal-coi fade mySkinDialog" id="assign-reviewer-modal" role="dialog"
     aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Review for
@@ -419,14 +419,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div id="locationId" class="col-lg-6 col-sm-12 col-12">
-                        <label class="d-block">Admin Group</label>
-                        <app-autocompleter [completerOptions]="adminGroupsCompleterOptions"
-                            [clearField]="categoryClearFiled" [placeHolder]="'Search for Admin Group'"
-                            (onSelect)="adminGroupSelect($event)">
-                        </app-autocompleter>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 col-12">
+                    <div class="col-sm-12 col-12">
                         <label class="d-block">Assignee</label>
                         <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
                             [placeHolder]="'Search Assignee'" (selectedResult)="assigneeSelect($event)">

@@ -2,10 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRouterComponent } from "./common/app-router/app-router.component";
 import { DashboardGuardService } from './common/services/dashboard-guard.service';
-import { EntityManagementGuardService } from './entity-management/entity-management-guard.service';
+import { AdminRouteGuardService } from './common/services/guards/admin-route-guard.service';
 
 const routes: Routes = [
-    // {path: '', redirectTo: 'coi/user-dashboard/disclosures', pathMatch: 'full'}
     {
         path: '', redirectTo: 'coi', pathMatch: 'full'
     },
@@ -30,7 +29,9 @@ const routes: Routes = [
             },
             {
                 path: 'admin-dashboard',
-                loadChildren: () => import('./admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule)
+                loadChildren: () => import('./admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule),
+                canActivate: [AdminRouteGuardService]
+
             },
             {
                 path: 'entity-management',
