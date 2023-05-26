@@ -5,21 +5,27 @@
         </a>
         <ul role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
             <li [routerLink]="['/coi/user-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto home page" aria-describedby="Goto home page">Home
+                routerLinkActive="active"
+                title="Goto My COI"
+                aria-describedby="Goto home page">My COI
                 <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/admin-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto admin dashboard page" aria-describedby="Goto admin dashboard page">Admin Dashboard
+                routerLinkActive="active" title="Goto Disclosures page"
+                aria-describedby="Goto Disclosures page">Disclosures
                 <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"></span>
             </li>
             <li *ngIf="commonService.isCoiReviewer" [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto reviewer dashboard page" aria-describedby="Goto reviewer dashboard page">Reviewer Dashboard
+                routerLinkActive="active" title="Goto Review Disclosures page" aria-describedby="Goto Review Disclosures page">Review Disclosures
               <span *ngIf="_router.url.includes('/coi/reviewer-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/entity-management']" class="mr-2 cursor-pointer" role="tab"
-               *ngIf="rightsCheck()"
-                routerLinkActive="active" title="Goto entity management page" aria-describedby="Goto entity management page">Entity Management
+                *ngIf="rightsCheck()" routerLinkActive="active" title="Goto Manage Entity page" aria-describedby="Goto Manage Entity page">Manage Entity
                 <span *ngIf="_router.url.includes('/coi/entity-management')" class="active-color"></span>
+            </li>
+            <li [routerLink]="['/coi/configuration']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active" title="Goto COI Configurations page" aria-describedby="Goto COI Configurations page">COI Configurations
+                <span *ngIf="_router.url.includes('/coi/configuration')" class="active-color"></span>
             </li>
         </ul>
     </div>

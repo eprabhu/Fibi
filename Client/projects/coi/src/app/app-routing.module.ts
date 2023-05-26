@@ -55,8 +55,12 @@ const routes: Routes = [
             {
                 path: 'error-handler',
                 loadChildren: () => import('./error-handler/error-handler.module').then(m => m.ErrorHandlerModule)
+            },
+            {
+              path: 'configuration',
+              loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)
             }
-]
+          ]
     },
 { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
 ];
