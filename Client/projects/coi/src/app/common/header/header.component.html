@@ -20,7 +20,7 @@
               <span *ngIf="_router.url.includes('/coi/reviewer-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/entity-management']" class="mr-2 cursor-pointer" role="tab"
-                *ngIf="rightsCheck()" routerLinkActive="active" title="Goto Manage Entity page" aria-describedby="Goto Manage Entity page">Manage Entity
+              *ngIf="isManageEntity" routerLinkActive="active" title="Goto Manage Entity page" aria-describedby="Goto Manage Entity page">Manage Entity
                 <span *ngIf="_router.url.includes('/coi/entity-management')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/configuration']" class="mr-2 cursor-pointer" role="tab"
