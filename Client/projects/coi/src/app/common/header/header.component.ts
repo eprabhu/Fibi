@@ -4,12 +4,12 @@ import {Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { ADMIN_DASHBOARD_RIGHTS } from '../../app-constants';
 
 class ChangePassword {
     password = '';
     reEnterPassword = '';
 }
-
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     timer: any = {password: null, confirmPassword: null};
     $subscriptions: Subscription[] = [];
     isManageEntity = false;
+    isShowAdminDashboard = false;
 
     constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -41,6 +42,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
         this.checkUserHasRight();
+        this.getPermissions();
     }
 
     ngOnDestroy(): void {
@@ -108,5 +110,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     checkUserHasRight(): void {
         this.isManageEntity = this.commonService.hasRight('MANAGE_ENTITY') || this.commonService.hasRight('MANAGE_ENTITY');
+    }
+
+    async getPermissions() {
+        const rightsArray = await this.commonService.fetchPermissions();
+        this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
     }
 }

@@ -2,19 +2,21 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { DEFAULT_DATE_FORMAT, HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, DATE_PLACEHOLDER } from '../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../../fibi/src/app/app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
     deepCloneObject,
+    hideModal,
     isEmptyObject,
     setFocusToElement
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
-import { DataStoreService } from '../disclosure/services/data-store.service';
 import { AdminDashboardService, CoiDashboardRequest, SortCountObj } from './admin-dashboard.service';
+import { CompleterOptions } from '../../../../fibi/src/app/service-request/service-request.interface';
+import { ADMIN_DASHBOARD_RIGHTS } from '../app-constants';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -40,10 +42,10 @@ export class AdminDashboardComponent {
     datePlaceHolder = DATE_PLACEHOLDER;
     advancedSearch = { hasSFI: true };
     conflictStatusOptions = 'coi_disc_det_status#DISC_DET_STATUS_CODE#true#true';
-    disclosureStatusOptions = 'coi_disclosure_status#DISCLOSURE_STATUS_CODE#true#true';
-    disclosureTypeOptions = 'coi_disclosure_category_type#DISCLOSURE_CATEGORY_TYPE_CODE#true#true';
-    disPositionOptions = 'coi_disposition_status#DISPOSITION_STATUS_TYPE_CODE#true#true';
-    coiReviewStatusOptions = 'COI_REVIEW_STATUS#REVIEW_STATUS_TYPE_CODE#true#true';
+    disclosureStatusOptions = 'COI_CONFLICT_STATUS_TYPE#CONFLICT_STATUS_CODE#true#true';
+    disclosureTypeOptions = 'COI_DISCLOSURE_FCOI_TYPE#FCOI_TYPE_CODE#true#true';
+    disPositionOptions = 'COI_DISPOSITION_STATUS_TYPE#DISPOSITION_STATUS_CODE#true#true';
+    coiReviewStatusOptions = 'COI_REVIEW_STATUS_TYPE#REVIEW_STATUS_CODE#true#true';
     $subscriptions: Subscription[] = [];
     result: any = { disclosureCount: 0 };
     $coiList = new Subject();
@@ -70,14 +72,25 @@ export class AdminDashboardComponent {
     comments: any[] = [];
     replyComment: any[] = [];
     searchText: any;
-    EntitySearchOptions: any = {};
+    entitySearchOptions: any = {};
     sortCountObj: SortCountObj;
     sortMap: any = {};
     clearField: String;
     ishover: [] = [];
     isViewAdvanceSearch = true;
+    adminGroupSearchOptions: any = {};
+    clearAdminGroupField: any;
+    isShowWarningMessage = false;
+    warningMessage: any;
+    adminSearchOptions: any = {};
+    isAssignToMe = false;
+    assignAdminMap = new Map();
+    addAdmin: any = {}
     adminData: any;
     fcoiTypeCode: any
+    adminGroupsCompleterOptions: CompleterOptions = new CompleterOptions();
+    isShowAdminDashboard = false;
+    hasTravelDisclosureRights = false;
 
     constructor(public _coiAdminDashboardService: AdminDashboardService,
         private _router: Router,
@@ -92,10 +105,12 @@ export class AdminDashboardComponent {
         this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
         this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
         this.setAdvanceSearch();
         this.getDashboardCounts();
-        
+        this.getAdminDetails();
+        this.getPermissions();
+        this.checkTravelDisclosureRights();
     }
 
     setAdvanceSearch() {
@@ -175,7 +190,7 @@ export class AdminDashboardComponent {
     }
 
     isAdvanceSearchTab(tabName) {
-        return ['ALL_DISCLOSURES', 'PENDING_DISCLOSURES', 'NEW_SUBMISSIONS', 'PENDING_DISCLOSURES', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES'].includes(tabName);
+        return ['ALL_DISCLOSURES', 'PENDING_DISCLOSURES', 'NEW_SUBMISSIONS', 'NEW_SUBMISSIONS_WITHOUT_SFI', 'PENDING_DISCLOSURES', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES'].includes(tabName);
     }
 
     fetchMentionedComments() {
@@ -259,7 +274,7 @@ export class AdminDashboardComponent {
             this.fcoiTypeCode = coi?.fcoiTypeCode
             this.isShowCountModal = true;
             this.currentDisclosureId = coi.coiDisclosureId;
-            this.currentDisclosureNumber =  coi.coiDisclosureNumber;
+            this.currentDisclosureNumber = coi.coiDisclosureNumber;
             this.disclosureType = moduleName;
             this.inputType = 'DISCLOSURE_TAB';
             this.personId = coi.personId;
@@ -295,8 +310,8 @@ export class AdminDashboardComponent {
     completeDisclosureReview() {
         this.$subscriptions.push(this._coiAdminDashboardService
             .completeCOIReview(this.selectedStartReviewCoiId)
-            .subscribe(async (_res: any) => {
-                // await this._router.navigate(['fibi/coi/summary'], { queryParams: { disclosureId: this.selectedStartReviewCoiId }});
+            .subscribe( (_res: any) => {
+                // this._router.navigate(['fibi/coi/summary'], { queryParams: { disclosureId: this.selectedStartReviewCoiId }});
                 // this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
                 this.finishReviewRequest();
                 this.$coiList.next();
@@ -447,6 +462,137 @@ export class AdminDashboardComponent {
         } else {
             return false;
         }
+    }
+
+    assignAdministrator() {
+        if (!this.isSaving && this.validateAdmin()) {
+            this.isSaving = true;
+            this.$subscriptions.push(this._coiAdminDashboardService.assignAdmin(
+                this.addAdmin
+            ).subscribe((data: any) => {
+                this.isAssignToMe = false;
+                this.isShowWarningMessage = false;
+                this.addAdmin = {};
+                this.isSaving = false;
+                hideModal('assign-to-admin-modal');
+            }, err => {
+                this.isSaving = false;
+            }));
+        }
+    }
+
+    adminSelectFunction(event: any) {
+        if (event) {
+            this.getAdminGroupDetails(event.personId);
+            this.addAdmin.adminPersonId = event.personId;
+            this.isAssignToMe = this.setAssignToMeCheckBox();
+            this.assignAdminMap.clear();
+        } else {
+            this.addAdmin.adminGroupId = null;
+            this.addAdmin.adminPersonId = null;
+            this.clearAdminGroupField = new String('true');
+            this.isAssignToMe = false;
+            this.isShowWarningMessage = false;
+        }
+    }
+
+    getAdminDetails() {
+        this.$subscriptions.push(this._coiAdminDashboardService.getAdminDetails().subscribe((data: any) => {
+            this.setAdminGroupOptions(data);
+            this.setCompleterOptions(this.adminSearchOptions, data.persons, 'fullName');
+        }));
+    }
+
+    getAdminGroupDetails(personId) {
+        this.$subscriptions.push(this._coiAdminDashboardService.getPersonGroup(personId).subscribe((data: any) => {
+            if (data.adminGroupId) {
+                this.clearAdminGroupField = new String('false');
+                this.addAdmin.adminGroupId = data.adminGroupId;
+                this.isShowWarningMessage = false;
+            } else {
+                this.isShowWarningMessage = true;
+                this.warningMessage = data;
+            }
+        }));
+    }
+
+    setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: string) {
+        searchOption.defaultValue = '';
+        searchOption.arrayList = arrayList || [];
+        searchOption.contextField = searchShowField;
+        searchOption.filterFields = searchShowField;
+        searchOption.formatString = searchShowField;
+    }
+
+    setAssignToMeCheckBox() {
+        return this.addAdmin.adminPersonId === this.commonService.getCurrentUserDetail('personID') ? true : false;
+    }
+
+    assignToMeEvent(checkBoxEvent: any) {
+        if (checkBoxEvent.target.checked) {
+            this.adminSearchOptions.defaultValue = this.commonService.getCurrentUserDetail('fullName');
+            this.clearField = new String('false');
+            this.addAdmin.adminPersonId = this.commonService.getCurrentUserDetail('personID');
+            this.getAdminGroupDetails(this.commonService.getCurrentUserDetail('personID'));
+            this.isAssignToMe = true;
+            this.assignAdminMap.clear();
+        } else {
+            this.clearField = new String('true');
+            this.clearAdminGroupField = new String('true');
+            this.addAdmin.adminPersonId = null;
+            this.isAssignToMe = false;
+        }
+    }
+
+    adminGroupSelectFunction(event) {
+        if (event) {
+            this.isShowWarningMessage = false;
+            this.addAdmin.adminGroupId = event.adminGroupId;
+        } else {
+            this.addAdmin.adminGroupId = null;
+        }
+    }
+
+    validateAdmin() {
+        this.assignAdminMap.clear();
+        if (!this.addAdmin.adminPersonId) {
+            this.assignAdminMap.set('adminName', 'adminName');
+        }
+        return this.assignAdminMap.size > 0 ? false : true;
+    }
+
+    private setAdminGroupOptions(data): void {
+        this.adminGroupsCompleterOptions = {
+            arrayList: this.getActiveAdminGroups(data),
+            contextField: 'adminGroupName',
+            filterFields: 'adminGroupName',
+            formatString: 'adminGroupName',
+            defaultValue: ''
+        };
+    }
+
+    private getActiveAdminGroups(data) {
+        return data.adminGroups.filter(element => element.isActive === 'Y');
+    }
+
+    clearAssignFields(id) {
+        this.clearField = new String('true');
+        this.addAdmin.disclosureId = id;
+        this.clearAdminGroupField = new String('true');
+        this.addAdmin.adminPersonId = null;
+        this.addAdmin.adminGroupId = null;
+        this.assignAdminMap.clear();
+        this.isShowWarningMessage = false;
+    }
+
+    async getPermissions() {
+        const rightsArray = await this.commonService.fetchPermissions();
+        this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+    }
+
+    async checkTravelDisclosureRights() {
+        const rightsArray = await this.commonService.fetchPermissions();
+        this.hasTravelDisclosureRights = rightsArray.some((right) => ['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'].includes(right));
     }
 
 }

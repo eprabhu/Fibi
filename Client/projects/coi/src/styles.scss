@@ -69,6 +69,10 @@ body {
   margin-right: 0.5rem !important;
 }
 
+.ml-2 {
+  margin-left: 0.5rem !important;
+}
+
 .font-weight-normal {
   font-weight: 100 !important;
 }
@@ -329,4 +333,9 @@ nav ul li.active {
     background-color: #007dec;
     border-color: #007dec;
 }
+}
+.success-banner {
+  color: #151313;
+  background-color: #F3F3F3;
+  font-size: 1.4rem;
 }
