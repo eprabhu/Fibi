@@ -1612,7 +1612,7 @@ public interface Constants {
 	String SUBMITTED_FOR_REVIEW = "2";
 	String SFI ="2";
 	String PROJECT_RELATIONSHIP ="3";
-
+    /** COI */
     Integer COI_MODULE_CODE = 8;
     Integer COI_SUBMODULE_CODE = 0;
 
@@ -1620,4 +1620,6 @@ public interface Constants {
     String TYPE_PROJECT_DISCLOSURE = "P";
     String TYPE_REVISE_FCOI = "RF";
     String TYPE_SFI = "S";
+    Integer COI_ADMINISTRATOR = 1335;
+    Integer VIEW_ADMIN_GROUP_COI = 1356;
 }
