@@ -51,90 +51,97 @@
                 </div>
             </div>
             <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 pb-1 bg-white">
-                <div class="col">
-                    <div class="border triple-card rounded-1 position-relative">
+                <div class="col mr-15">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
                         <!-- <span class="status-pill">Relationship with</span> -->
-                        <div class="ps-4 table-negative-margin">
-                            <table class="fs-14 fw-medium spaced-table">
-                                <tr>
-                                    <td><i aria-hidden="true" class="fa fa-home mr-2"></i>Unit : </td>
-                                    <td class="ps-2">
-                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.unit">
-                                            <div class="text-overflow" [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</div>
-                                        </app-no-data-label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fa fa-user-o mr-2" aria-hidden="true"></i>Administrator : </td>
-                                    <td class="ps-2">
-                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminPersonId">
-                                            <span>{{coiData?.coiDisclosure?.adminPersonId}}</span>
-                                        </app-no-data-label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><img class="activity-icon mr-2" src="{{deployMap}}assets/images/multiple-admin-1.svg"
-                                        alt="add-adminGroup icon">Admin Group : </td>
-                                    <td class="ps-2">
-                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminGroupId">
-                                            <span>{{coiData?.coiDisclosure?.adminGroupId}}</span>
-                                        </app-no-data-label>
-                                    </td>
-                                </tr>
-
-                            </table>
+                        <div  class="row mt-2">
+                            <div  class="col d-flex">
+                                <label  class="label-text"><i aria-hidden="true" class="fa fa-home right-margin"></i>Unit : </label>
+                                <span  class="grey-text ml-2"> 
+                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.unit">
+                                        <div class="text-overflow" [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</div>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div  class="row mt-2">
+                            <div  class="col d-flex">
+                                <label  class="label-text"><i class="fa fa-user-o fw-700 right-margin" aria-hidden="true"></i>Administrator : </label>
+                                <span  class="grey-text ml-2"> 
+                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminPersonId">
+                                        <span>{{coiData?.coiDisclosure?.adminPersonId}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div  class="row mt-2">
+                            <div  class="col d-flex">
+                                <label  class="label-text left-margin">
+                                    <img class="activity-icon" src="{{deployMap}}assets/images/multiple-admin-1.svg"
+                                    alt="add-adminGroup icon">Admin Group : </label>
+                                <span  class="grey-text ml-2"> 
+                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminGroupId">
+                                        <span>{{coiData?.coiDisclosure?.adminGroupId}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="border triple-card mx-3 rounded-1 position-relative">
+                <div class="col-auto mr-15">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
                         <span class="status-pill">Date</span>
-                        <div class="ps-4 table-negative-margin">
-                            <table class="fs-14 fw-medium spaced-table">
-                                <tr>
-                                    <td>Create :</td>
-                                    <td class="ps-4" style="padding-right: 86px;">
-                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.createTimestamp">
-                                            <span>{{coiData?.coiDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
-                                        </app-no-data-label>
-                                </tr>
-                                <tr>
-                                    <td>Certification :</td>
-                                    <td class="ps-4" style="padding-right: 86px;">
-                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
-                                            <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatter}}</span>
-                                        </app-no-data-label>
-                                </tr>
-                                <tr>
-                                    <td>Expiration :</td>
-                                    <td class="ps-4" style="padding-right: 86px;">
-                                        <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
-                                            <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatter}}</span>
-                                        </app-no-data-label>
-                                </tr>
-                            </table>
+                        <div  class="row mt-2">
+                            <div  class="col d-flex">
+                                <label  class="label-text">Create : </label>
+                                <span  class="grey-text ml-2"> 
+                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.createTimestamp">
+                                        <span>{{coiData?.coiDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div  class="row mt-2">
+                            <div  class="col d-flex">
+                                <label  class="label-text">Certification :</label>
+                                <span  class="grey-text ml-2"> 
+                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
+                                        <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatter}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div  class="row mt-2">
+                            <div  class="col d-flex">
+                                <label  class="label-text">Expiration : </label>
+                                <span  class="grey-text ml-2"> 
+                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
+                                        <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatter}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-auto status-card-width">
                     <div class="border triple-card rounded-1 position-relative">
                         <span class="status-pill">Status</span>
                         <div class="ps-4 table-negative-margin">
                             <table class="fs-14 fw-medium spaced-table">
                                 <tr>
-                                    <td>Disposition :</td>
+                                    <td class="fw-600">Disposition :</td>
                                     <td class="ps-4">
                                         <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Review :</td>
+                                    <td class="fw-600">Review :</td>
                                     <td class="ps-4">
                                         <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Disclosure :</td>
+                                    <td class="fw-600">Disclosure :</td>
                                     <td class="ps-4">
                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
                                             <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
@@ -301,9 +308,11 @@
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill side-height border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
-                    <span title="Goto home page" (click)="goToHomeUrl()"
-                        class="btn btn-outline-secondary pb-0 fs-14 {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
+                    <span title="Goto home page" (click)="goToHomeUrl()" 
+                        [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
+                        class="btn btn-outline-secondary pb-0 {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
                         <mat-icon class="mr-2">home</mat-icon>
+                        <span class="mt-1" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4">Home</span>
                     </span>
                     <span *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
