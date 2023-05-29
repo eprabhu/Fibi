@@ -125,11 +125,15 @@ $bg-color: #E4F1FF;
   height:  198px;
 }
 
-.spaced-table {
-  margin-top: 25px;
-  border-collapse: separate;
-  border-spacing: 0 2px;
+.label-text{
   color: #6A7980;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.grey-text{
+  color: #6A7980;
+  font-size: 14px;
 }
 
 .bold-blue-color {
@@ -152,6 +156,12 @@ table {
 
 .green-label {
   color: #54BF5B;
+}
+
+.spaced-table {
+  margin-top: 25px;
+  border-collapse: separate;
+  border-spacing: 0 2px;
 }
 
 .navigation-box {
@@ -210,12 +220,26 @@ table {
 
 .activity-icon {
   width: 1.5rem;
+  margin-right: 7px;
 }
 
 .text-overflow {
     text-overflow: ellipsis;
     overflow: hidden; 
-    width: 15rem;
+    width: 37rem;
     height: 1.2em; 
     white-space: nowrap;
 }
+
+.status-card-width {
+  width: 280px;
+}
+
+.right-margin {
+  margin-right: 9px;
+}
+
+.left-margin {
+  margin-left: -1px;
+}
+
