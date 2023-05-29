@@ -1,6 +1,7 @@
 package com.polus.fibicomp.view;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import com.polus.fibicomp.pojo.Unit;
 
@@ -54,6 +55,96 @@ public class DisclosureView {
 	private Integer noOfProposal;
 	private Timestamp certifiedAt;
 	private Unit unit;
+	private Integer travelDisclosureId;
+	private String travelVersionStatus;
+	private Date travelStartDate;
+	private Date travelEndDate;
+	private Date travelSubmissionDate;
+	private String lastUpdatedBy;
+	private String acknowledgeBy;
+	private String travelEntityName;
+	private String travellerName;
+	private String travelDisclosurestatus;
+
+	public String getAcknowledgeBy() {
+		return acknowledgeBy;
+	}
+
+	public void setAcknowledgeBy(String acknowledgeBy) {
+		this.acknowledgeBy = acknowledgeBy;
+	}
+
+	public Integer getTravelDisclosureId() {
+		return travelDisclosureId;
+	}
+
+	public String getTravelVersionStatus() {
+		return travelVersionStatus;
+	}
+
+	public void setTravelVersionStatus(String travelVersionStatus) {
+		this.travelVersionStatus = travelVersionStatus;
+	}
+
+	public String getTravelEntityName() {
+		return travelEntityName;
+	}
+
+	public void setTravelEntityName(String travelEntityName) {
+		this.travelEntityName = travelEntityName;
+	}
+
+	public void setTravelDisclosureId(Integer travelDisclosureId) {
+		this.travelDisclosureId = travelDisclosureId;
+	}
+
+	public String getTravellerName() {
+		return travellerName;
+	}
+
+	public void setTravellerName(String travellerName) {
+		this.travellerName = travellerName;
+	}
+
+	public String getTravelDisclosurestatus() {
+		return travelDisclosurestatus;
+	}
+
+	public void setTravelDisclosurestatus(String travelDisclosurestatus) {
+		this.travelDisclosurestatus = travelDisclosurestatus;
+	}
+
+	public Date getTravelStartDate() {
+		return travelStartDate;
+	}
+
+	public void setTravelStartDate(Date travelStartDate) {
+		this.travelStartDate = travelStartDate;
+	}
+
+	public Date getTravelEndDate() {
+		return travelEndDate;
+	}
+
+	public void setTravelEndDate(Date travelEndDate) {
+		this.travelEndDate = travelEndDate;
+	}
+
+	public Date getTravelSubmissionDate() {
+		return travelSubmissionDate;
+	}
+
+	public void setTravelSubmissionDate(Date travelSubmissionDate) {
+		this.travelSubmissionDate = travelSubmissionDate;
+	}
+
+	public String getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(String lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
+	}
 
 	public Unit getUnit() {
 		return unit;

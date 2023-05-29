@@ -241,6 +241,16 @@ public class ConflictOfInterestVO {
 	private String homeUnit;
 	
 	private List<CoiProjConflictStatusType> coiProjConflictStatusTypes;
+	
+	private Date travelSubmissionDate;
+
+	public Date getTravelSubmissionDate() {
+		return travelSubmissionDate;
+	}
+
+	public void setTravelSubmissionDate(Date travelSubmissionDate) {
+		this.travelSubmissionDate = travelSubmissionDate;
+	}
 
 	public List<CoiProjConflictStatusType> getCoiProjConflictStatusTypes() {
 		return coiProjConflictStatusTypes;
