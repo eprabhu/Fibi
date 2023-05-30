@@ -4,7 +4,6 @@ import {UserDashboardComponent} from './user-dashboard.component';
 import {RouterModule, Routes} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
 import { CoiService } from '../disclosure/services/coi.service';
-import { DataStoreService } from '../disclosure/services/data-store.service';
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import { SfiService } from '../disclosure/sfi/sfi.service';
@@ -36,7 +35,7 @@ const routes: Routes = [
         FormsModule,
         SharedComponentModule
     ],
-    providers: [CoiService, DataStoreService, SfiService]
+    providers: [CoiService, SfiService]
 })
 export class UserDashboardModule {
 }
