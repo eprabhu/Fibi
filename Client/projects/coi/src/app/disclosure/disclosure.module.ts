@@ -1,22 +1,21 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DisclosureComponent} from './disclosure.component';
-import {RouterModule, Routes} from "@angular/router";
-import {MatButtonModule} from "@angular/material/button";
-import {MatIconModule} from "@angular/material/icon";
+import {RouterModule, Routes} from '@angular/router';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
 
 import {SfiService} from './sfi/sfi.service';
 import {SearchFieldComponent} from './sfi/search-field/search-field.component';
 
-import {ResolveServiceService} from "./services/resolve-service.service";
-import {CoiService} from "./services/coi.service";
-import {DataStoreService} from "./services/data-store.service";
-import {RouterGuardService} from "./services/router-guard.service";
-import {SharedModule} from "../shared/shared.module";
+import {ResolveServiceService} from './services/resolve-service.service';
+import {CoiService} from './services/coi.service';
+import {RouterGuardService} from './services/router-guard.service';
+import {SharedModule} from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
-import { CommonService } from '../common/services/common.service';
 import { SfiModule } from './sfi/sfi.module';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
+import {DataStoreService} from "./services/data-store.service";
 
 
 const routes: Routes = [
@@ -61,8 +60,8 @@ const routes: Routes = [
     ],
     providers: [
         SfiService,
-        ResolveServiceService,
         DataStoreService,
+        ResolveServiceService,
         CoiService,
         RouterGuardService,
     ],

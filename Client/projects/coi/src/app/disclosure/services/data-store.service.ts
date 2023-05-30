@@ -11,9 +11,6 @@ export class DataStoreService {
     private storeData: COI = new COI();
     disclosureStatus: any;
     dataChanged = false;
-    currentDashboardTab = 'CURRENT_DISCLOSURES';
-
-    entityDetails = [];
 
     dataEvent = new Subject();
 
@@ -54,10 +51,9 @@ export class DataStoreService {
     }
 
     getEditModeForCOI(): boolean {
-        if(this.storeData.coiDisclosure){
+        if (this.storeData.coiDisclosure) {
             return this.storeData.coiDisclosure.dispositionStatusCode === '1';
-        }
-        else{
+        } else {
             return false;
         }
     }

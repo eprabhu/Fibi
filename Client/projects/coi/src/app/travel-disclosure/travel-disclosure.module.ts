@@ -43,7 +43,6 @@ const routes: Routes = [
     ],
     providers: [
         SfiService,
-        DataStoreService,
         CoiService,
         TravelDisclosureService,
         travelRouteGuardService

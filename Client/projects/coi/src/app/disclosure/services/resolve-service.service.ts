@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
 import {forkJoin, Observable, Subscriber} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -11,8 +11,8 @@ import {
     HTTP_ERROR_STATUS,
     HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL
-} from "../../app-constants";
-import {NavigationService} from "../../common/services/navigation.service";
+} from '../../app-constants';
+import {NavigationService} from '../../common/services/navigation.service';
 
 @Injectable()
 export class ResolveServiceService {
@@ -29,14 +29,6 @@ export class ResolveServiceService {
     canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
         this._coiService.previousHomeUrl = this.setPreviousUrlPath(this._navigationService.navigationGuardUrl);
         return new Observable<boolean>((observer: Subscriber<boolean>) => {
-            const coiData = this._dataStore.getData();
-            if(coiData && coiData.coiDisclosure && coiData.coiDisclosure.disclosureId
-                == route.queryParamMap.get('disclosureId')) {
-                this.rerouteIfWrongPath(_state.url, coiData.coiDisclosure.reviewStatusCode, route)
-                observer.next(true);
-                observer.complete();
-                return;
-            }
             forkJoin(this.getHttpRequests(route)).subscribe((res: any[]) => {
                 if (res.length > 1) {
                     this.hideManualLoader();
@@ -57,13 +49,13 @@ export class ResolveServiceService {
 
     rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route) {
         let reRoutePath;
-        if(reviewStatusCode == '1' && !currentPath.includes('create-disclosure')) {
+        if (reviewStatusCode === '1' && !currentPath.includes('create-disclosure')) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
-        } else if (reviewStatusCode != '1' && currentPath.includes('create-disclosure')) {
+        } else if (reviewStatusCode !== '1' && currentPath.includes('create-disclosure')) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
-        if(reRoutePath) {
-            this._router.navigate([reRoutePath], {queryParams:{disclosureId: route.queryParamMap.get('disclosureId')}});
+        if (reRoutePath) {
+            this._router.navigate([reRoutePath], {queryParams: {disclosureId: route.queryParamMap.get('disclosureId')}});
         }
     }
 
@@ -78,7 +70,7 @@ export class ResolveServiceService {
     private getHttpRequests(route: ActivatedRouteSnapshot): Observable<any>[] {
         const HTTP_REQUESTS = [];
         const MODULE_ID = route.queryParamMap.get('disclosureId');
-        if (MODULE_ID) HTTP_REQUESTS.push(this.loadDisclosure(MODULE_ID));
+        if (MODULE_ID) { HTTP_REQUESTS.push(this.loadDisclosure(MODULE_ID)); }
         return HTTP_REQUESTS;
     }
 
