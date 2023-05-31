@@ -256,7 +256,7 @@ export class CommentRequest {
 
 export class SFIDashboardRequestObject {
     advancedSearch = 'L';
-    pageNumber = 30;
+    pageNumber = 20;
     sort = {};
     isDownload = false;
     property16 = '';
@@ -264,6 +264,8 @@ export class SFIDashboardRequestObject {
     property17 = null;
     property18 = null;
     property19 = null;
+    currentPage = '1';
+    filterType = 'ALL';
 }
 
 export interface getApplicableQuestionnaireData {

@@ -32,7 +32,7 @@ export class SharedSfiCardComponent implements OnInit {
 
   private updateSFIObject(): void {
     if (this.reqObject) {
-      this.SFIObject.isActive = this.isTriggeredFromDashboard() ? this.reqObject.isActive : this.getValuesFormCOIEntityObj('isActive');
+      this.SFIObject.isActive = this.isTriggeredFromDashboard() ?  this.getActiveStatus() : this.getValuesFormCOIEntityObj('isActive');
       this.SFIObject.entityId = this.isTriggeredFromDashboard() ? this.reqObject.coiFinancialEntityId : this.reqObject.personEntityId;
       this.SFIObject.entityType = this.getEntityDescription();
       this.SFIObject.countryName = this.getCountryName();
@@ -41,6 +41,10 @@ export class SharedSfiCardComponent implements OnInit {
       this.SFIObject.validPersonEntityRelTypes = this.isTriggeredFromDashboard() ? this.reqObject.relationshipTypes : this.reqObject.validPersonEntityRelTypes;
       this.SFIObject.entityName = this.isTriggeredFromDashboard() ? this.reqObject.coiEntityName : this.getValuesFormCOIEntityObj('entityName');
     }
+  }
+
+  private getActiveStatus(): boolean {
+    return this.reqObject.versionStatus === 'Active' ? true : false;
   }
 
   private getEntityDescription(): string|null {
