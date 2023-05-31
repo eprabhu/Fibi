@@ -16,7 +16,6 @@ export class CommonService {
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
-    fibiWebUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -57,6 +56,7 @@ export class CommonService {
     dashboardModules: any = {};
     previousURL = null;
     fibiApplicationUrl = '';
+
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
 
@@ -103,7 +103,6 @@ export class CommonService {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
-        this.fibiWebUrl = configurationData.fibiWebUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;

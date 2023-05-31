@@ -262,16 +262,16 @@
                     <span [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-grey pb-0 fs-14 col-2">
                         <mat-icon>home</mat-icon>
                     </span>
-                    <span (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1"
+                    <button (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1"
                         class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
-                    </span>
-                    <span (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
+                    </button>
+                    <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
                         class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">redo</mat-icon>
                         Next
-                    </span>
+                    </button>
                 </div>
                 <div class="d-flex justify-content-around px-3 pb-3" title="Click here to add a new financial interest">
                     <span (click)="sfiService.isShowSfiNavBar = true"
@@ -290,16 +290,15 @@
                 </div>
                 <div *ngIf="router.url.includes('create-disclosure/certification')"
                     class="d-flex justify-content-around px-3">
-                    <span (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
+                    <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">done</mat-icon>
                         Submit
-                    </span>
+                    </button>
                 </div>
             </div>
             <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes">
                 Notes & Attachments
-
             </div>
             <div>
                 <app-add-sfi [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi>
@@ -314,12 +313,12 @@
                         <mat-icon class="mr-2">home</mat-icon>
                         <span class="mt-1" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4">Home</span>
                     </span>
-                    <span *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
+                    <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
                         class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2" title="Goto previous page">undo</mat-icon>
                         Previous
-                    </span>
+                    </button>
                     <span data-bs-target="#coi-activity-modal" data-bs-toggle="modal"
                         title="Click here to add new review comment"
                         *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
@@ -380,8 +379,6 @@
                         dateFormatterWithTimeZone:'long'}}</div>
                 </div>
             </div>
-            <ng-container *ngIf="router.url.includes('/coi/disclosure/summary')">
-            </ng-container>
         </div>
     </div>
 </div>
