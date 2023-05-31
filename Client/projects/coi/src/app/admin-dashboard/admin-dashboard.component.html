@@ -470,41 +470,40 @@
                         <div class="row py-2 m-0 bg-white">
                             <div class="col-3 d-flex align-items-center">
                                 <div class="bold-blue-number mt-1 pointer cursor-auto"
-                                    (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.personId,coi?.noOfSfiInActive,coi);">
+                                    (click)="setSelectedModuleCode('sfi',coi, coi?.noOfSfiInActive );">
                                     <label [class.cursor-pointer]="coi?.noOfSfiInActive > 0">{{coi?.noOfSfiInActive ||
                                         0}}</label>
                                 </div>
-                                <div class="ml-2 mt-1 pointer"
-                                    (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.personId,coi.noOfSfiInPending,coi );">
+                                <div class="ml-2 mt-1 pointer">               
                                     <label [class.cursor-pointer]="coi?.noOfSfiInActive > 0"
-                                        [class.text-decoration-underline]="ishover[index]&& coi?.noOfSfiInActive > 0"
-                                        class="label-text">Significant Financial Interest</label>
+                                        [class.text-decoration-underline]="ishover[index]&& coi?.noOfSfiInActive > 0" (click)="setSelectedModuleCode('sfi',coi, coi?.noOfSfiInActive );"          
+                                        class="label-text">Significant Financial Interest</label>    
                                 </div>
                             </div>
                             <div class="col-3 d-flex align-items-center">
                                 <ng-container *ngIf="coi?.fcoiTypeCode == 'fcoi'">
                                     <div class="d-flex align-items-center">
-                                        <div (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.personId,coi.numberOfProposals,coi);"
+                                        <div (click)="setSelectedModuleCode('proposal',coi, coi?.numberOfProposals );"
                                             class="bold-blue-number cursor-auto">
                                             <label
                                                 [class.cursor-pointer]="coi?.numberOfProposals > 0"> {{coi?.numberOfProposals
                                                 || 0}} </label>
                                         </div>
                                         <div class="ml-2 mt-1 pointer"
-                                            (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.personId,coi.numberOfProposals,coi);">
+                                            (click)="setSelectedModuleCode('proposal',coi, coi?.numberOfProposals);">
                                             <label [class.cursor-pointer]="coi?.numberOfProposals > 0"
                                                 [class.text-decoration-underline]="ishover[index]&& coi?.numberOfProposals> 0"
                                                 class="label-text">Proposals</label>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center ml-15 pl-5">
-                                        <div (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.personId, coi.numberOfAwards,coi);"
+                                        <div (click)="setSelectedModuleCode('award',coi, coi?.numberOfAwards);"
                                             class="bold-blue-number pointer cursor-auto">
                                             <label [class.cursor-pointer]="coi?.numberOfAwards > 0">{{coi?.numberOfAwards ||
                                                 0}} </label>
                                         </div>
                                         <div class="ml-2 mt-1 pointer"
-                                            (click)="setSelectedModuleCode('award', coi.coiDisclosureId, coi.coiDisclosureNumber, coi.personId, coi.numberOfAwards,coi);">
+                                            (click)="setSelectedModuleCode('award',coi, coi?.numberOfAwards);">
                                             <label [class.cursor-pointer]="coi?.numberOfProposals > 0"
                                                 [class.text-decoration-underline]="ishover[index] && coi?.numberOfAwards > 0"
                                                 class="label-text">Awards</label>

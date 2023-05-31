@@ -4,7 +4,8 @@ import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DATE_PLACEHOLDER } from '../../../../fibi/src/app/app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
-import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
+import { getEndPointOptionsForLeadUnit,
+    getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
     deepCloneObject,
     hideModal,
@@ -33,12 +34,12 @@ export class AdminDashboardComponent {
     currentSelected = {
         tab: 'IN_PROGRESS',
         filter: 'did'
-    }
+    };
     isShowCountModal = false;
     selectedModuleCode: any;
     currentDisclosureId: any;
     currentDisclosureNumber: any;
-    disclosureType: any
+    disclosureType: any;
     datePlaceHolder = DATE_PLACEHOLDER;
     advancedSearch = { hasSFI: true };
     conflictStatusOptions = 'coi_disc_det_status#DISC_DET_STATUS_CODE#true#true';
@@ -255,7 +256,7 @@ export class AdminDashboardComponent {
         this.isShowCountModal = event;
     }
 
-    setSelectedModuleCode(moduleName, id, coiNumber, personId, count = null, coi) {
+    setSelectedModuleCode(moduleName, coi, count = null) {
         if (count > 0) {
             switch (moduleName) {
                 case 'sfi':
@@ -271,7 +272,7 @@ export class AdminDashboardComponent {
                     this.selectedModuleCode = 0;
             }
             this.adminData = coi;
-            this.fcoiTypeCode = coi?.fcoiTypeCode
+            this.fcoiTypeCode = coi?.fcoiTypeCode;
             this.isShowCountModal = true;
             this.currentDisclosureId = coi.coiDisclosureId;
             this.currentDisclosureNumber = coi.coiDisclosureNumber;
