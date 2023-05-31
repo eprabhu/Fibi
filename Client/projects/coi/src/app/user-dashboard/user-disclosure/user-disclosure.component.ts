@@ -20,14 +20,13 @@ export class UserDisclosureComponent {
     }
     dashboardRequestObject = {
         advancedSearch: 'L',
-        pageNumber: 200,
+        pageNumber: 20,
         sort: {},
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
-        // filterType = 'All', 'FCOI', 'Project', 'OPA';
-        filterType: 'ALL'
+        filterType: 'ALL',
+        currentPage: '1',
     };
-    disclosureArray: any[] = [];
     filteredDisclosureArray: any[] = [];
     dashboardCount: any;
     isActiveDisclosureAvailable = false;
@@ -44,6 +43,8 @@ export class UserDisclosureComponent {
     index: any;
     fcoiTypeCode: any;
     disclosures: any;
+    result: any;
+    
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
         public commonService: CommonService,
@@ -57,10 +58,15 @@ export class UserDisclosureComponent {
 
     loadDashboard() {
         this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject).subscribe((res: any) => {
-            this.disclosureArray = res.disclosureViews ? res.disclosureViews : [];
+            this.result = res;      
+            this.filteredDisclosureArray =  res.disclosureViews ? res.disclosureViews : [];
             this.searchText = '';
-            this.setFilter();
         })
+    }
+
+    actionsOnPageChange(event) {
+        this.dashboardRequestObject.currentPage = event;
+        this.loadDashboard();
     }
 
     loadDashboardCount() {
@@ -84,6 +90,9 @@ export class UserDisclosureComponent {
     setTab(tabName) {
         this.currentSelected.tab = tabName;
         this.dashboardRequestObject.tabName = tabName;
+        this.dashboardRequestObject.currentPage = '1';
+        this.dashboardRequestObject.filterType = 'ALL';
+        this.currentSelected.filter = 'ALL';
         this.loadDashboard();
     }
 
@@ -117,26 +126,9 @@ export class UserDisclosureComponent {
     setFilter(type = 'ALL') {
         this.currentSelected.filter = type;
         this.dashboardRequestObject.filterType = type;
-        this.filterDashboardData();
+        this.dashboardRequestObject.currentPage = '1';
+        this.loadDashboard();
     }
-
-    filterDashboardData() {
-        if (this.currentSelected.filter == 'ALL') {
-            this.filteredDisclosureArray = this.disclosureArray;
-        } else {
-            this.filteredDisclosureArray = this.disclosureArray.filter(disclosure => {
-                switch (this.currentSelected.filter) {
-                    case 'PROJECT':
-                        return ['3', '2'].includes(disclosure.fcoiTypeCode);
-                    case 'OPA':
-                        return disclosure.fcoiTypeCode == '5';
-                    case 'FCOI':
-                        return disclosure.fcoiTypeCode == '1';
-                }
-            });
-        }
-    }
-
 
     closeModalEvent(event) {
         if (!event) {

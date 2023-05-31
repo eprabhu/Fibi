@@ -261,7 +261,7 @@
                 </ng-container>
             </div>
             <div class="col-4">
-                <div><span class="fw-bold ">Last Updated By : </span> {{disclosure?.updateUser}} On
+                <div><span class="fw-bold ">Last Updated By : </span> {{disclosure?.updateUserFullName}} On
                     {{disclosure?.updateTimeStamp | dateFormatterWithTimeZone:'long'}}</div>
             </div>
             <div class="col-auto ms-auto d-flex justify-content-end">
@@ -279,8 +279,16 @@
             </div>
         </div>
     </div>
-
 </ng-container>
+
+ <!-- Pagination -->
+ <div *ngIf="filteredDisclosureArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+    <nav aria-label="pagination section" class="pagination justify-content-end">
+        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
+            [totalCount]="result.totalServiceRequest">
+        </app-pagination>
+    </nav>
+</div>
 
 <app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
