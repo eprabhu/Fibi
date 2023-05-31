@@ -48,8 +48,8 @@ class Disclosure {
 class RevisionObject {
     revisionComment: null;
     disclosureId: null;
-    homeUnit: null
-};
+    homeUnit: null;
+}
 
 @Component({
     selector: 'app-disclosure-create-modal',
@@ -136,8 +136,8 @@ export class DisclosureCreateModalComponent implements OnInit {
         if (event) {
             this.projectDisclosureValidation.clear();
             this.mandatoryList.clear();
-            let selectedModuleCode = this.selectedProjectType == 'Award' ? '1' : '3';
-            let moduleItemId = event ? this.selectedProjectType == 'Award' ? event.awardId : event.moduleItemId : null;
+            const selectedModuleCode = this.selectedProjectType === 'Award' ? '1' : '3';
+            const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.awardId : event.moduleItemId : null;
             this._disclosureCreateModalService.checkIfDisclosureAvailable(selectedModuleCode, moduleItemId).subscribe((data: any) => {
                 if (data) {
                     if (data.pendingProject != null) {
@@ -148,6 +148,10 @@ export class DisclosureCreateModalComponent implements OnInit {
                         this.assignSelectedProject(event);
                     }
                 }
+            }, err => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
+                    err.error.errorMessage : 'Error in selecting ' + this.selectedProjectType + '. Please try again.');
+                this.changeProjectType();
             });
         } else {
             this.changeProjectType();
@@ -200,7 +204,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                 [this.selectedProjectType == 'Award' ? 'coiProjectAward' : 'coiProjectProposal']: {
                     coiProjectTypeCode: this.getCoiProjectTypeFromCode(), ...this.getCreateDisclosureRO()
                 }
-            }
+            };
         } else {
             return {
                 coiDisclosure: {
@@ -210,17 +214,17 @@ export class DisclosureCreateModalComponent implements OnInit {
                     moduleItemKey: this.manualProjectAddDetails.moduleItemId,
                     personId: this.commonService.getCurrentUserDetail('personId')
                 }
-            }
+            };
         }
     }
 
     createFCOIDisclosure(): void {
-        let fcoiDisclosureObj = {
+        const fcoiDisclosureObj = {
             fcoiTypeCode: '1',
             homeUnit: this.reviseObject.homeUnit,
             revisionComment: this.reviseObject.revisionComment,
             personId: this.commonService.getCurrentUserDetail('personId')
-        }
+        };
         if (this.validateForm()) {
             this._disclosureCreateModalService.createDisclosure({'coiDisclosure': fcoiDisclosureObj}).subscribe((data: any) => {
                 this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
@@ -228,7 +232,7 @@ export class DisclosureCreateModalComponent implements OnInit {
             }, err => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
                     err.error.errorMessage : 'Error in creating new FCOI. Please try again.');
-            })
+            });
         }
     }
 
