@@ -1024,6 +1024,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 					disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
 					disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER"));
+					disclosureView.setUpdateUserFullName(resultSet.getString("UPDATE_USER_FULL_NAME"));
 					disclosureView.setCreateUser(resultSet.getString("CREATE_USER"));
 //					disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
 					disclosureView.setNoOfSfi(resultSet.getInt("NO_OF_SFI"));
@@ -1130,6 +1131,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					sortOrder = (sortOrder == null ? "T.ENTITY_TYPE " + mapElement.getValue() : sortOrder + ",T.ENTITY_TYPE " + mapElement.getValue());
 				} else if (mapElement.getKey().equals("riskLevel")) {
 					sortOrder = (sortOrder == null ? "T.RISK_LEVEL " + mapElement.getValue() : sortOrder + ", T.RISK_LEVEL " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("certificationDate")) {
+				sortOrder = (sortOrder == null ? "T.CERTIFIED_AT " + mapElement.getValue() : sortOrder + ", T.CERTIFIED_AT " + mapElement.getValue());
 				}
 			}
 		}
@@ -1395,10 +1398,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		String hasProposalFlag = vo.getProperty18() != null ? (vo.getProperty18().equals(Boolean.TRUE) ? "YES" : "NO" ) : null;
 		String hasAwardFlag = vo.getProperty19() != null ? (vo.getProperty19().equals(Boolean.TRUE) ? "YES" : "NO" ) : null;
 		Map<String, String> sort = vo.getSort();
+		String filterType = vo.getFilterType();
 		String personId = vo.getPersonId();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_SFI_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_SFI_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?)}");
 				statement.setString(1, personId);
 				statement.setString(2, null);
 				statement.setInt(3, (currentPage == null ? 0 : currentPage - 1));
@@ -1410,11 +1414,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(9, hasDisclosureFlag);
 				statement.setString(10, hasProposalFlag);
 				statement.setString(11, hasAwardFlag);
+				statement.setString(12, filterType);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_SFI_DASHBOARD";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, personId);
@@ -1428,6 +1433,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(10, hasDisclosureFlag);
 				statement.setString(11, hasProposalFlag);
 				statement.setString(12, hasAwardFlag);
+				statement.setString(13, filterType);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
@@ -1448,6 +1454,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				coiFinancialEntityDto.setCoiEntityCountry(resultSet.getString("COUNTRY_NAME"));
 				coiFinancialEntityDto.setCoiEntityEmail(resultSet.getString("EMAIL_ADDRESS"));
 				coiFinancialEntityDto.setRelationshipTypes(resultSet.getString("RELATIONSHIP_TYPES"));
+				coiFinancialEntityDto.setVersionStatus(resultSet.getString("VERSION_STATUS"));
 				coiFinancialEntityDtos.add(coiFinancialEntityDto);
 			}
 			dashBoardProfile.setCoiFinancialEntityList(coiFinancialEntityDtos);
@@ -1466,49 +1473,40 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CallableStatement statement = null;
 		ResultSet resultSet = null;
 		Integer count = 0;
-		Integer currentPage = vo.getCurrentPage();
-		Integer pageNumber = vo.getPageNumber();
 		String isAdvancedSearch = vo.getAdvancedSearch();
-		Boolean isDownload = vo.getIsDownload();
-		Map<String, String> sort = vo.getSort();
 		String entityName = vo.getProperty8();
 		String entityId = vo.getProperty16();
 		String hasDisclosureFlag = vo.getProperty17() != null ? (vo.getProperty17().equals(Boolean.TRUE) ? "YES" : "NO" ) : null;
 		String hasProposalFlag = vo.getProperty18() != null ? (vo.getProperty18().equals(Boolean.TRUE) ? "YES" : "NO" ) : null;
 		String hasAwardFlag = vo.getProperty19() != null ? (vo.getProperty19().equals(Boolean.TRUE) ? "YES" : "NO" ) : null;
 		String personId = vo.getPersonId();
+		String filterType = vo.getFilterType();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_SFI_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_SFI_DASHBOARD_COUNT(?,?,?,?,?,?,?,?)}");
 				statement.setString(1, personId);
-				statement.setString(2, null);
-				statement.setInt(3, (currentPage == null ? 0 : currentPage - 1));
-				statement.setInt(4, (pageNumber == null ? 0 : pageNumber));
-				statement.setBoolean(5, isDownload);
-				statement.setString(6, isAdvancedSearch);
-				statement.setString(7, entityName);
-				statement.setString(8, entityId);
-				statement.setString(9, hasDisclosureFlag);
-				statement.setString(10, hasProposalFlag);
-				statement.setString(11, hasAwardFlag);
+				statement.setString(2, isAdvancedSearch);
+				statement.setString(3, entityName);
+				statement.setString(4, entityId);
+				statement.setString(5, hasDisclosureFlag);
+				statement.setString(6, hasProposalFlag);
+				statement.setString(7, hasAwardFlag);
+				statement.setString(8, filterType);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_SFI_DASHBOARD_COUNT";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, personId);
-				statement.setString(3, null);
-				statement.setInt(4, (currentPage == null ? 0 : currentPage - 1));
-				statement.setInt(5, (pageNumber == null ? 0 : pageNumber));
-				statement.setBoolean(6, Boolean.TRUE);
-				statement.setString(7, isAdvancedSearch);
-				statement.setString(8, entityName);
-				statement.setString(9, entityId);
-				statement.setString(10, hasDisclosureFlag);
-				statement.setString(11, hasProposalFlag);
-				statement.setString(12, hasAwardFlag);
+				statement.setString(3, isAdvancedSearch);
+				statement.setString(4, entityName);
+				statement.setString(5, entityId);
+				statement.setString(6, hasDisclosureFlag);
+				statement.setString(7, hasProposalFlag);
+				statement.setString(8, hasAwardFlag);
+				statement.setString(9, filterType);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
@@ -2633,6 +2631,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				personEntity.setEntityNumber(rset.getInt("ENTITY_NUMBER"));
 				personEntity.setInvolvementStartDate(rset.getDate("INVOLVEMENT_START_DATE"));
 				personEntity.setInvolvementEndDate(rset.getDate("INVOLVEMENT_END_DATE"));
+				personEntity.setVersionStatus(rset.getString("VERSION_STATUS"));
 				personEntity.setCoiEntity(new CoiEntity());
 				personEntity.getCoiEntity().setEntityId(rset.getInt("ENTITY_ID"));
 				personEntity.getCoiEntity().setEntityNumber(rset.getInt("ENTITY_NUMBER"));
