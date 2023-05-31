@@ -142,6 +142,17 @@ public class CoiTravelDisclosure implements Serializable {
 	
 	@Transient
 	private List<String> coiTravellerTypeCodeList;
+	
+	@Column(name = "SUBMISSION_DATE")
+	private Date travelSubmissionDate;
+
+	public Date getTravelSubmissionDate() {
+		return travelSubmissionDate;
+	}
+
+	public void setTravelSubmissionDate(Date travelSubmissionDate) {
+		this.travelSubmissionDate = travelSubmissionDate;
+	}
 
 	public List<String> getCoiTravellerTypeCodeList() {
 		return coiTravellerTypeCodeList;
