@@ -10,7 +10,8 @@ CREATE PROCEDURE `GET_SFI_DASHBOARD`(
         AV_PERSON_ENTITY_ID      VARCHAR(20),
         AV_HAS_DISCLOSURE_FLAG          VARCHAR(3),
         AV_HAS_PROPOSAL_FLAG            VARCHAR(3),
-        AV_HAS_AWARD_FLAG               VARCHAR(3)
+        AV_HAS_AWARD_FLAG               VARCHAR(3),
+		AV_FILTER_TYPE					VARCHAR(10)
 )
 BEGIN
 DECLARE LS_DYN_SQL LONGTEXT;
@@ -29,6 +30,21 @@ SET SELECTED_FIELD_LIST= '';
 SET TAB_QUERY = '';
 
 SET SELECTED_FIELD_LIST= CONCAT(SELECTED_FIELD_LIST,' , ');
+
+IF AV_FILTER_TYPE = 'ALL' THEN
+	
+	SET TAB_QUERY = CONCAT(TAB_QUERY, '');
+	
+ELSEIF AV_FILTER_TYPE = 'ACTIVE' THEN
+	
+	SET TAB_QUERY = CONCAT(TAB_QUERY, ' AND T1.VERSION_STATUS = ''Active''');
+	
+ELSEIF AV_FILTER_TYPE = 'PENDING' THEN
+	
+	SET TAB_QUERY = CONCAT(TAB_QUERY, ' AND T1.VERSION_STATUS = ''Pending''');
+
+
+END IF;
 
 IF AV_TYPE IS NOT NULL AND AV_TYPE <> '' AND  AV_TYPE = 'A' THEN 
 	IF AV_ENTITY_NAME IS NOT NULL  AND AV_ENTITY_NAME <> '' THEN
@@ -89,6 +105,7 @@ END IF;
                                         T1.UPDATE_TIMESTAMP,
                                         T1.CREATE_TIMESTAMP, 
                                         T1.IS_RELATIONSHIP_ACTIVE, 
+										T1.VERSION_STATUS,
                                         T1.INVOLVEMENT_END_DATE, 
                                         T6.DESCRIPTION AS ENTITY_TYPE, 
                                         T2.EMAIL_ADDRESS, 

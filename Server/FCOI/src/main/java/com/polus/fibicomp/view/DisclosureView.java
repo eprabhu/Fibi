@@ -22,6 +22,7 @@ public class DisclosureView {
 	private Timestamp expirationDate;
 	private Timestamp updateTimeStamp;
 	private String updateUser;
+	private String updateUserFullName;
 	private String createUser;
 	private String versionStatus;
 	private String reviewStatus;
@@ -530,4 +531,11 @@ public class DisclosureView {
 		this.createUser = createUser;
 	}
 
+	public String getUpdateUserFullName() {
+		return updateUserFullName;
+	}
+
+	public void setUpdateUserFullName(String updateUserFullName) {
+		this.updateUserFullName = updateUserFullName;
+	}
 }

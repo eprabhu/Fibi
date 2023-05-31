@@ -574,6 +574,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		copyDisclosure.setPersonId(AuthenticatedUser.getLoginPersonId());
 		copyDisclosure.setDisclosureNumber(disclosure.getDisclosureNumber());
 		copyDisclosure.setExpirationDate(disclosure.getExpirationDate());
+		copyDisclosure.setCreateUser(AuthenticatedUser.getLoginUserName());
+		copyDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		return conflictOfInterestDao.saveOrUpdateCoiDisclosure(copyDisclosure);
 	}
 
