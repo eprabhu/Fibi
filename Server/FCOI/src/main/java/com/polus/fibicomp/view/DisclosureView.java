@@ -66,6 +66,12 @@ public class DisclosureView {
 	private String travelEntityName;
 	private String travellerName;
 	private String travelDisclosurestatus;
+	private String destination;
+	private String purpose;
+	private Date certificationDate;
+	private Date acknowledgeDate;
+	private String travelDisclosureNumber;
+	private String description;
 
 	public String getAcknowledgeBy() {
 		return acknowledgeBy;
@@ -538,4 +544,53 @@ public class DisclosureView {
 	public void setUpdateUserFullName(String updateUserFullName) {
 		this.updateUserFullName = updateUserFullName;
 	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+
+	public String getPurpose() {
+		return purpose;
+	}
+
+	public void setPurpose(String purpose) {
+		this.purpose = purpose;
+	}
+
+	public Date getCertificationDate() {
+		return certificationDate;
+	}
+
+	public void setCertificationDate(Date certificationDate) {
+		this.certificationDate = certificationDate;
+	}
+
+	public Date getAcknowledgeDate() {
+		return acknowledgeDate;
+	}
+
+	public void setAcknowledgeDate(Date acknowledgeDate) {
+		this.acknowledgeDate = acknowledgeDate;
+	}
+
+	public String getTravelDisclosureNumber() {
+		return travelDisclosureNumber;
+	}
+
+	public void setTravelDisclosureNumber(String travelDisclosureNumber) {
+		this.travelDisclosureNumber = travelDisclosureNumber;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 }
