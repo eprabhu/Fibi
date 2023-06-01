@@ -34,6 +34,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -746,4 +747,14 @@ public interface ConflictOfInterestDao {
 	 * @param disclosureId
 	 */
     void assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId);
+
+    /**
+	 * This method is used for updating review status of disclosure
+	 *
+	 * @param disclosureId
+	 * @param review status code
+	 */
+	public void updateReviewStatus(Integer disclosureId, String disclosureReviewInProgress);
+
+	public List<EntityRiskCategory> fetchEntityRiskCategory();
 }
