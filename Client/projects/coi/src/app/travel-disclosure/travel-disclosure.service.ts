@@ -7,12 +7,15 @@ import { CommonService } from '../common/services/common.service';
 export class TravelDisclosureService {
 
     travelDisclosureSubject = new Subject();
+    travelDataChanged = false;
+    isTravelCertified = false;
+    unSavedTabName = '';
 
     constructor(
         private _http: HttpClient,
         private _commonService: CommonService
     ) { }
-    
+
     createCoiTravelDisclosure(travelDisclosureRO: object) {
         return this._http.post(`${this._commonService.baseUrl}/createCoiTravelDisclosure`, travelDisclosureRO);
     }

@@ -1,31 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from "@angular/router";
-import { FormsModule } from "@angular/forms";
 import { TravelDisclosureComponent } from './travel-disclosure.component';
-import { CoiService } from '../disclosure/services/coi.service';
-import { DataStoreService } from '../disclosure/services/data-store.service';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { SharedModule } from '../shared/shared.module';
 import { TravelDisclosureService } from './travel-disclosure.service';
 import { SfiService } from '../disclosure/sfi/sfi.service';
-import { travelRouteGuardService } from './travel-route-guard.service';
+import { TravelRouteGuardService } from './travel-route-guard.service';
+import { FormsModule } from '@angular/forms';
+import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
     {
-        path: '', component: TravelDisclosureComponent,
+        path: '', component: TravelDisclosureComponent, canActivate: [TravelRouteGuardService],
         children: [
             {
-                path: 'travel-details', canDeactivate: [travelRouteGuardService],
+                path: 'travel-details', canDeactivate: [TravelRouteGuardService],
                 loadChildren: () => import('./travel-disclosure-form/travel-disclosure-form.module').then(m => m.TravelDisclosureFormModule)
             },
             {
-                path: 'certification', canDeactivate: [travelRouteGuardService],
-                loadChildren: () => import('../shared-components/certification/certification.module').then(m => m.CertificationModule)
+                path: 'certification', canDeactivate: [TravelRouteGuardService],
+                loadChildren: () => import('./travel-certification/travel-certification.module').then(m => m.TravelCertificationModule)
             },
             {
-                path: 'screening', canDeactivate: [travelRouteGuardService],
-                loadChildren: () => import('./screening-questionnaire/screening-questionnaire.module').then(m => m.ScreeningQuestionnaireModule)
+                path: 'screening', canDeactivate: [TravelRouteGuardService],
+                loadChildren: () => import('./travel-questionnaire/travel-questionnaire.module')
+                .then(m => m.TravelQuestionnaireModule)
             }
         ]
     }
@@ -43,9 +42,8 @@ const routes: Routes = [
     ],
     providers: [
         SfiService,
-        CoiService,
         TravelDisclosureService,
-        travelRouteGuardService
+        TravelRouteGuardService
     ],
     exports: []
 })

@@ -9,8 +9,6 @@ import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../travel-disclosure.service';
 import { CoiTravelDisclosure, TravelDisclosureTraveller } from '../travel-disclosure-interface';
 import { CommonService } from '../../common/services/common.service';
-import { CoiService } from '../../disclosure/services/coi.service';
-import { DataStoreService } from '../../disclosure/services/data-store.service';
 
 declare var $: any;
 @Component({
@@ -22,26 +20,24 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     deployMap: string = environment.deployUrl;
     datePlaceHolder: string = DATE_PLACEHOLDER;
-    entitySearchOptions: any;
-    countrySearchOptions: any;
+    entitySearchOptions: any = {};
+    countrySearchOptions: any = {};
     $subscriptions: Subscription[] = [];
     clearField: String;
     countryClearField: String;
     entityName: String;
     mandatoryList = new Map();
     dateValidationList = new Map();
-    isCopyTravelDisclosure: boolean = false;
+    isCopyTravelDisclosure = false;
     travelDisclosureRO = new CoiTravelDisclosure();
     travellerType: Array<TravelDisclosureTraveller>;
     travelStatusType: Array<TravelDisclosureTraveller>;
     destination: 'Domestic' | 'International' = 'Domestic';
     travelStatusDescription: 'Pending' | 'Submitted' | 'Approved' = 'Pending';
 
-    constructor(public coiService: CoiService,
-        public commonService: CommonService,
-        public router: Router,
-        public service: TravelDisclosureService,
-        private _dataStore: DataStoreService) { }
+    constructor(public commonService: CommonService,
+                public router: Router,
+                public service: TravelDisclosureService) { }
 
     ngOnInit(): void {
         this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
@@ -56,10 +52,10 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     private handleTravelDisclosureSubmission(): void {
-        this.service.travelDisclosureSubject.subscribe((event) => {
-            if (event == 'certify') {
+        this.service.travelDisclosureSubject.subscribe((event: string) => {
+            if (event === 'certify') {
                 this.certifyTravelDisclosure();
-            } else if (event == 'certifycopy') {
+            } else if (event === 'certifycopy') {
                 this.certifyCopyTravelDisclosure();
             }
         });
@@ -83,13 +79,13 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     private setCheckBoxValue(): void {
-        for (let details of this.travellerType) {
+        for (const details of this.travellerType) {
             details.isChecked = false;
         }
         if (this.travelDisclosureRO.travellerTypeCode.length > 0) {
-            for (let type of this.travelDisclosureRO.travellerTypeCode) {
-                for (let details of this.travellerType) {
-                    if (type == details.travelerTypeCode) {
+            for (const type of this.travelDisclosureRO.travellerTypeCode) {
+                for (const details of this.travellerType) {
+                    if (type === details.travelerTypeCode) {
                         details.isChecked = true;
                     }
                 }
@@ -98,14 +94,14 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     private getTravelStatusCode(): void {
-        for (let details of this.travelStatusType) {
-            if (details.description == this.travelStatusDescription) {
+        for (const details of this.travelStatusType) {
+            if (details.description === this.travelStatusDescription) {
                 this.travelDisclosureRO.travelStatusCode = details.travelStatusCode;
             }
         }
     }
 
-    private getAllTravelDisclosureValues(requestObject: any): any {
+    private getAllTravelDisclosureValues(requestObject: CoiTravelDisclosure): CoiTravelDisclosure {
         this.getTravellerTypeCode();
         this.getTravelStatusCode();
         this.setValuesForDestinationType();
@@ -142,7 +138,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         if (!this.travelDisclosureRO.travelAmount) {
             this.mandatoryList.set('amount', 'Please enter the amount.');
         }
-        if (this.destination == 'Domestic') {
+        if (this.destination === 'Domestic') {
             if (!this.travelDisclosureRO.travelState) {
                 this.mandatoryList.set('state', 'Please enter the state.');
             }
@@ -166,15 +162,15 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     getTravellerTypeCode(): void {
         this.travelDisclosureRO.travellerTypeCode = [];
-        for (let details of this.travellerType) {
-            if (details.isChecked == true) {
+        for (const details of this.travellerType) {
+            if (details.isChecked === true) {
                 this.travelDisclosureRO.travellerTypeCode.push(details.travelerTypeCode);
             }
         }
     }
 
     setValuesForDestinationType(): void {
-        if (this.destination == 'Domestic') {
+        if (this.destination === 'Domestic') {
             this.travelDisclosureRO.destinationCountry = '';
             this.travelDisclosureRO.isInternationalTravel = false;
         } else {
@@ -184,8 +180,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     triggerConfirmationModal(): void {
-        this._dataStore.dataChanged = true;
-        this.coiService.unSavedModules = 'Travel Details';
+        this.service.travelDataChanged = true;
+        this.service.unSavedTabName = 'Travel Details';
     }
 
     validateDates(): boolean {
@@ -223,13 +219,13 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
                 .subscribe((res: any) => {
                     if (res) {
                         this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Saved Successfully');
-                        this.coiService.unSavedModules = '';
-                        this._dataStore.dataChanged = false;
+                        this.service.unSavedTabName = '';
+                        this.service.travelDataChanged = false;
                     }
                 }, (err) => {
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Saving Travel Disclosure');
-                }))
-            if (this.isCopyTravelDisclosure == true) {
+                }));
+            if (this.isCopyTravelDisclosure === true) {
                 this.isCopyTravelDisclosure = false;
             } else {
                 this.clearDisclosureModal();

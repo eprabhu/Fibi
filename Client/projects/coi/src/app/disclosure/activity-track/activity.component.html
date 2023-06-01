@@ -1,23 +1,26 @@
-<div class="modal modal-coi fade mySkinDialog" data-backdrop="static" data-keyboard="false" id="coi-activity-modal" tabindex="-1" role="dialog"
-    aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
+<div class="modal modal-coi fade mySkinDialog" data-bs-backdrop="static" data-keyboard="false" id="coi-activity-modal"
+    tabindex="-1" role="dialog" aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header pe-0">
                 <h5 class="modal-title" id="skippedSchedulesLongTitle">Review Comments</h5>
-                <button data-bs-dismiss="modal" type="button" id="agreement-approve-dismiss-btn" (click)="clearModal()" class="btn-close fs-12 m-0 px-4" aria-label="Close">
+                <button data-bs-dismiss="modal" type="button" id="agreement-approve-dismiss-btn" (click)="clearModal()"
+                    class="btn-close fs-12 m-0 px-4" aria-label="Close">
                 </button>
             </div>
             <div class="modal-body pt-3">
                 <div class="mb-4">
                     <ul class="subTabs mb-0">
-                      <li [ngClass]="{active:(commentTab == 'MODIFY')}" (click)="commentTab = 'MODIFY'" tabindex="0">
-                        <span class="subTabLink">{{editIndex != -1 ? 'Update Comment':'Add Comment'}}</span>
-                      </li>
-                      <li [ngClass]="{active:(commentTab == 'VIEW')}" (click)="commentTab = 'VIEW'; addComments()" tabindex="0">
-                        <span class="subTabLink">View Comments</span>
-                      </li>
+                        <li (click)="commentTab = 'MODIFY'" tabindex="0" class="subLink fs-14 px-3 py-2 fw-bold"
+                            [class.active]="commentTab == 'MODIFY'">
+                            <span>{{editIndex != -1 ? 'Update Comment':'Add Comment'}}</span>
+                        </li>
+                        <li (click)="commentTab = 'VIEW'" tabindex="0" class="subLink fs-14 px-3 py-2 fw-bold"
+                            [class.active]="commentTab == 'VIEW'">
+                            <span>View Comments</span>
+                        </li>
                     </ul>
-                  </div>
+                </div>
 
                 <div *ngIf="commentTab == 'MODIFY'" class="row">
                     <div class="mb-3" [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
@@ -30,8 +33,8 @@
                                 <select class="form-control" [(ngModel)]="reviewCommentObject.coiSectionsTypeCode"
                                     [ngClass]="validationMap.has('coiSectionsTypeCode') ? 'is-invalid d-block' : ''">
                                     <option value="null">--Select--</option>
-                                    <option *ngFor="let section of coiSection"
-                                        [hidden]="section.isActive != true" [value]="section.coiSectionsTypeCode">
+                                    <option *ngFor="let section of coiSection" [hidden]="section.isActive != true"
+                                        [value]="section.coiSectionsTypeCode">
                                         {{section?.description}}
                                     </option>
                                 </select>
@@ -41,7 +44,8 @@
                             <span class="mandatory">{{validationMap.get('coiSectionsTypeCode')}}</span>
                         </div>
                     </div>
-                    <div *ngIf="modalConfiguration.isSubSectionComment" [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
+                    <div *ngIf="modalConfiguration.isSubSectionComment"
+                        [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
                         <label class="block-display">Sub Section</label>
                         <span>
                             <div>
@@ -57,15 +61,17 @@
                     </div>
                     <div [ngClass]="modalConfiguration.isSubSectionComment ? 'col-6' : 'col'">
                         <label class="d-block">Person</label>
-                        <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField" [placeHolder]="'Search Assignee'"
-                            (selectedResult)="selectPerson($event)">
+                        <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
+                            [placeHolder]="'Search Assignee'" (selectedResult)="selectPerson($event)">
                         </app-elastic>
                         <ng-container *ngIf="reviewCommentObject?.coiReviewCommentTag?.length">
-                            <ng-container *ngFor="let tag of reviewCommentObject.coiReviewCommentTag; let groupIndex = index">
+                            <ng-container
+                                *ngFor="let tag of reviewCommentObject.coiReviewCommentTag; let groupIndex = index">
                                 <div *ngIf="tag.tagPersonId" class="fileChips regularFont">
                                     <span class="px-2">
                                         {{ tag.tagPersonFullName }}
-                                        <i aria-hidden="true" class="fa fa-times badge-icon ml-1 hand-cursor" title="Delete {{tag.tagPersonFullName}}"
+                                        <i aria-hidden="true" class="fa fa-times badge-icon ml-1 hand-cursor"
+                                            title="Delete {{tag.tagPersonFullName}}"
                                             (click)="removeReviewer(groupIndex)">
                                         </i>
                                     </span>
@@ -80,12 +86,13 @@
                             (onSelect)="adminGroupSelect($event)">
                         </app-autocompleter>
                         <ng-container *ngIf="reviewCommentObject?.coiReviewCommentTag?.length">
-                            <ng-container *ngFor="let tag of reviewCommentObject.coiReviewCommentTag; let groupIndex = index">
+                            <ng-container
+                                *ngFor="let tag of reviewCommentObject.coiReviewCommentTag; let groupIndex = index">
                                 <div *ngIf="tag.tagGroupId" class="fileChips regularFont">
                                     <span class="px-2">
                                         {{ tag.tagGroupName }}
-                                        <i aria-hidden="true" class="fa fa-times badge-icon ml-1 hand-cursor" title="Delete {{tag.tagGroupName}}"
-                                            (click)="removeReviewer(groupIndex)">
+                                        <i aria-hidden="true" class="fa fa-times badge-icon ml-1 hand-cursor"
+                                            title="Delete {{tag.tagGroupName}}" (click)="removeReviewer(groupIndex)">
                                         </i>
                                     </span>
                                 </div>
@@ -127,7 +134,8 @@
                 </div>
             </div>
             <div *ngIf="commentTab != 'VIEW'" class="modal-footer">
-                <button (click)="clearModal()" class="btn btn-outline-secondary fs-14">Cancel</button>
+                <button data-bs-dismiss="modal" (click)="clearModal()"
+                    class="btn btn-outline-secondary fs-14">Cancel</button>
                 <button class="btn btn-primary fs-14" (click)="addComments()">
                     {{editIndex != -1 ? 'Update Comment':'Add Comment'}}</button>
             </div>

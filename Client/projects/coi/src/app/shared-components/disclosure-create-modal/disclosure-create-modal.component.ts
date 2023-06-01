@@ -44,11 +44,11 @@ class Disclosure {
     versionStatus: any;
     type: null;
 }
-
 class RevisionObject {
     revisionComment: null;
     disclosureId: null;
     homeUnit: null;
+    homeUnitName: null;
 }
 
 @Component({
@@ -123,6 +123,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     selectedUnitEvent(event): void {
         if (event) {
             this.reviseObject.homeUnit = event.unitNumber;
+            this.reviseObject.homeUnitName = event.unitName;
         } else {
             this.reviseObject.homeUnit = null;
         }
@@ -188,6 +189,32 @@ export class DisclosureCreateModalComponent implements OnInit {
                 this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
                     err.error.errorMessage : 'Error in creating project disclosure. Please try again.');
             }));
+        }
+    }
+
+    private validateTravelDisclosure(): boolean {
+        if (!this.reviseObject.homeUnit) {
+            this.mandatoryList.set('homeUnit', 'Please enter a valid unit to create a Travel disclosure.');
+        }
+        return this.mandatoryList.size === 0 ? true : false;
+    }
+
+    private getCreateTravelRequestObject(): void {
+        sessionStorage.setItem('travelDisclosureRO', JSON.stringify(
+            {
+                homeUnit: this.reviseObject.homeUnit ? this.reviseObject.homeUnit : null,
+                description: this.reviseObject.revisionComment,
+                personId: this.commonService.getCurrentUserDetail('personId'),
+                homeUnitName: this.reviseObject.homeUnitName
+            }
+        ));
+    }
+
+    navigateToTravelDisclosure(): void {
+        if (this.validateTravelDisclosure()) {
+            this.getCreateTravelRequestObject();
+            this._router.navigate(['/coi/travel-disclosure/travel-details']);
+            this.clearModal();
         }
     }
 
@@ -326,6 +353,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     private setSearchOptions(): void {
         this.unitSearchOptions = getEndPointOptionsForLeadUnit(this.commonService.currentUserDetails.homeUnit + '-' + this.commonService.currentUserDetails.homeUnitName, this.commonService.baseUrl, 'unitNumber - unitName');
         this.reviseObject.homeUnit = this.commonService.currentUserDetails.homeUnit;
+        this.reviseObject.homeUnitName = this.commonService.currentUserDetails.homeUnitName;
         this.piElasticSearchOptions = this._elasticConfig.getElasticForPerson();
         this.unitHttpOptions = getEndPointOptionsForDepartment();
         this.sponsorSearchOptions = getEndPointOptionsForSponsor();

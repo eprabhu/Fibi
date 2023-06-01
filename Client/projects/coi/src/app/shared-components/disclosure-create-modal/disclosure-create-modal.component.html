@@ -4,11 +4,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" *ngIf="!isShowExistingDisclosure">
-                    <ng-container *ngIf="hasFCOI && triggeredFrom != 'PROJECT_DISCLOSURE'">Revise
+                    <ng-container *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">Revise
                         Disclosure : #{{disclosureNumber}}</ng-container>
-                    <ng-container *ngIf="!hasFCOI && triggeredFrom != 'PROJECT_DISCLOSURE'">Create FCOI
+                    <ng-container *ngIf="!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">Create FCOI
                         Disclosure</ng-container>
-                    <ng-container *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'">Create Project Disclosure</ng-container>
+                    <ng-container *ngIf="triggeredFrom != 'FCOI_DISCLOSURE'">Create {{ triggeredFrom == 'PROJECT_DISCLOSURE' ? 'Project' : 'Travel' }} Disclosure</ng-container>
                 </h5>
                 <h5 class="modal-title" *ngIf="isShowExistingDisclosure">Navigate to Disclosure :
                     #{{disclosureNumber}}
@@ -52,7 +52,7 @@
                     </p>
                 </div>
                 <div class="row margin-top-home-unit"
-                    *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'PROJECT_DISCLOSURE'">
+                    *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'PROJECT_DISCLOSURE' || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                     <div class="col-8">
                         <label for="desc-award"><span class="mandatory fs-14 fw-600">*</span> Disclose at Unit :
                         </label>
@@ -68,11 +68,13 @@
                                 [uniqueId]="'create-disclosure-home-unit-name'" autocomplete="off"
                                 [isError]="(mandatoryList?.has('homeUnit'))? true: false" class="w-100">
                             </app-endpoint-search>
-                            <span class="btn btn-primary-icon btn-sm mt-0 margin-left-1 px-3 py-0"
+                            <button class="btn btn-primary-icon btn-sm mt-0 border fw-normal
+                                margin-left-1 px-3 d-flex justify-content-center align-items-center"
                                 *ngIf="!isHideEndpointSearch" (click)="resetHomeUnit()" id="edit-home-unit"
-                                title="Cancel edit unit" type="button">
-                                <mat-icon class=" fs-16 mt-2 close-line-height">close</mat-icon>
-                            </span>
+                                title="Cancel edit unit" [class.reset-highlight]="!reviseObject.homeUnit">
+                                <span class="fa fa-rotate-left"></span>
+                                <span class="ms-2">Reset</span>
+                            </button>
                         </span>
                         <span *ngIf="mandatoryList?.has('homeUnit')" class="fs-13 invalid-feedback d-block">
                             {{mandatoryList?.get('homeUnit')}}
@@ -80,12 +82,12 @@
                     </div>
                 </div>
                 <div class="form-row mt-2"
-                    *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'PROJECT_DISCLOSURE'">
+                    *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'PROJECT_DISCLOSURE' || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                     <div class="col-12">
                         <label for="desc-award" *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
                             <span class="fs-14 fw-600 mandatory">*</span>Revision Reason
                         </label>
-                        <label for="desc-award" *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') ">
+                        <label for="desc-award" *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                             Description
                         </label>
                         <textarea [(ngModel)]="reviseObject.revisionComment" [isShowLimiter]='true' [limit]=2000
@@ -339,6 +341,13 @@
                     title="Click here to continue with creating the project disclosure"
                     area-describedby="Click here to continue with creating the project disclosure">
                     Continue with Project Disclosure
+                </button>
+                <button type="button" class="btn btn-primary fs-15"
+                    *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'"
+                    (click)="navigateToTravelDisclosure();"
+                    title="Click here to continue with creating the travel disclosure"
+                    area-describedby="Click here to continue with creating the travel disclosure">
+                    Create Travel Disclosure
                 </button>
                 <button type="button" class="btn btn-primary fs-15" *ngIf="isShowExistingDisclosure"
                     (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);" title="View disclosure"
