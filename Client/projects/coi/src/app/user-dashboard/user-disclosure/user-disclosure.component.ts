@@ -1,23 +1,22 @@
-import { Component } from '@angular/core';
-import { UserDisclosureService } from "./user-disclosure.service";
-import { UserDashboardService } from "../user-dashboard.service";
-import { CommonService } from "../../common/services/common.service";
-import { CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from "../../app-constants";
-import { Router } from "@angular/router";
-
+import { Component, OnInit } from '@angular/core';
+import { UserDisclosureService } from './user-disclosure.service';
+import { UserDashboardService } from '../user-dashboard.service';
+import { CommonService } from '../../common/services/common.service';
+import { CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-user-disclosure',
     templateUrl: './user-disclosure.component.html',
     styleUrls: ['./user-disclosure.component.scss']
 })
 
-export class UserDisclosureComponent {
+export class UserDisclosureComponent implements OnInit {
     isShowCountModal = false;
     searchText = '';
     currentSelected = {
         tab: 'IN_PROGRESS_DISCLOSURES',
         filter: 'ALL',
-    }
+    };
     dashboardRequestObject = {
         advancedSearch: 'L',
         pageNumber: 20,
@@ -44,7 +43,6 @@ export class UserDisclosureComponent {
     fcoiTypeCode: any;
     disclosures: any;
     result: any;
-    
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
         public commonService: CommonService,
@@ -58,10 +56,10 @@ export class UserDisclosureComponent {
 
     loadDashboard() {
         this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject).subscribe((res: any) => {
-            this.result = res;      
+            this.result = res;
             this.filteredDisclosureArray =  res.disclosureViews ? res.disclosureViews : [];
             this.searchText = '';
-        })
+        });
     }
 
     actionsOnPageChange(event) {
@@ -72,7 +70,7 @@ export class UserDisclosureComponent {
     loadDashboardCount() {
         this.userDisclosureService.getCOIDashboardCount(this.dashboardRequestObject).subscribe((res: any) => {
             this.dashboardCount = res;
-        })
+        });
     }
 
     getEventType(disclosureSequenceStatusCode, disclosureCategoryType) {

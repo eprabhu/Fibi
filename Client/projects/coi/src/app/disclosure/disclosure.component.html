@@ -6,7 +6,7 @@
                     <p class="m-0">
                         <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
                             <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span
-                                    class="text-primary"><u>{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
+                                    class="text-primary"><u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Show the details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
                             </strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
@@ -18,8 +18,8 @@
                                 {{(coiData?.projectDetail?.title)?.length>40 ?
                                 (coiData?.projectDetail?.title | slice:0: 40)+'...' :
                                 coiData?.projectDetail?.title}} ] By
-                                <span class="text-primary">
-                                    <u (click)="openDetailModal(coiData)" style="cursor:pointer;"title="Show the details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u>
+                                <span class="text-primary ">
+                                    <u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Show the details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u>
                                 </span>
                             </strong>
                         </ng-container>

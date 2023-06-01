@@ -21,7 +21,7 @@ constructor(private _http: HttpClient,
 }
 
 loadDisclosureReviewerQuickCardCounts() {
-  return this._http.get(this._commonService.baseUrl + '/loadDisclosureReviewerQuickCardCounts')
+  return this._http.get(this._commonService.baseUrl + '/loadDisclosureReviewerQuickCardCounts');
 }
 }
 
@@ -51,4 +51,4 @@ export class SortCountObj {
    expirationDate = 0;
    updateTimeStamp = 0;
    certificationDate = 0;
-};
+}

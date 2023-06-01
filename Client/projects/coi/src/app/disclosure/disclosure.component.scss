@@ -1,12 +1,10 @@
 .disclosure-heading {
-  height: 40px;;
+  height: 40px;
   background-color: #E8E8E8;
 }
 
 .triple-card {
-
-    height: 96px;
-
+  height: 96px;
 }
 
 .navigation-tabs {
@@ -47,7 +45,7 @@ $bg-color: #E4F1FF;
   height: 43px;
   background-color: $bg-color;
 
-  > div {
+  >div {
     font-size: 14px;
     position: relative;
     display: table-cell;
@@ -62,6 +60,7 @@ $bg-color: #E4F1FF;
       background-color: $nav-bg-color;
       color: #FFF;
       outline: 1px solid $nav-bg-color;
+
       .arrow {
         border: $nav-border-width solid $nav-border-color !important;
         background: $nav-bg-color !important;
@@ -122,7 +121,7 @@ $bg-color: #E4F1FF;
 }
 
 .side-height {
-  height:  198px;
+  height: 198px;
 }
 
 .label-text{
@@ -174,6 +173,7 @@ table {
 .navigation-box-content {
   padding: 10px 0;
   border-bottom: 2px solid transparent;
+
   &.active {
     color: #007DEC;
     border-bottom: 2px solid #007DEC;
@@ -184,6 +184,7 @@ table {
   width: 30px;
   color: #A64040;
   height: 30px;
+
   mat-icon {
     transform: scale(1.2);
   }
@@ -198,17 +199,19 @@ table {
   color: #48647F;
   border: 1px solid #48647F;
   background-color: white;
+
   &:hover {
     background-color: #007DEC;
     color: white;
     border: 1px solid #007DEC;
   }
 }
+
 .ash-text {
   color: #48647F !important;
 }
 
-.bg-success{
+.bg-success {
   background-color: #4CB57D !important;
 }
 

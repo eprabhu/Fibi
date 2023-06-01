@@ -10,7 +10,7 @@ import { HTTP_ERROR_STATUS } from '../../../app-constants';
     templateUrl: './Training-details.component.html',
     styleUrls: ['./Training-details.component.scss']
 })
-export class trainingDetailsComponent implements OnInit {
+export class TrainingDetailsComponent implements OnInit {
     @Input() userdetails: any;
     $subscriptions: Subscription[] = [];
     traniningDetails: [];
@@ -21,7 +21,7 @@ export class trainingDetailsComponent implements OnInit {
         this.loadTrainigDetails();
     }
 
-    loadTrainigDetails():void {
+    loadTrainigDetails(): void {
         const requestObject = new TrainingDashboardRequest(this.userdetails.personId);
         this.$subscriptions.push(this._personDetailService.loadPersonTrainingList(requestObject).subscribe((res: any) => {
             this.traniningDetails = res.trainings;
@@ -29,8 +29,8 @@ export class trainingDetailsComponent implements OnInit {
         error => this._commonservice.showToast(HTTP_ERROR_STATUS, 'Fetching training details failed. Please try again.')));
     }
 
-    openInFibi(personTrainingId):void {
-        const url = this._commonservice.fibiApplicationUrl + `#/fibi/training-maintenance/person-detail?personTrainingId=${personTrainingId}`
+    openInFibi(personTrainingId: number): void {
+        const url = this._commonservice.fibiApplicationUrl + `#/fibi/training-maintenance/person-detail?personTrainingId=${personTrainingId}`;
         window.open(url);
     }
 

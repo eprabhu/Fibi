@@ -1,111 +1,132 @@
 <div class="row my-4">
-    <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures" >
+    <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
 
-        <div class="light-dark-text-color col-12 pe-0" *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
-            <div class="shadow-sm hovering-card disclosure-card-body-blue border rounded" (mouseover)="isFCOIHover = true" (mouseout)="isFCOIHover = false">
+        <div class="light-dark-text-color col-12 "
+            *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
+            <div class="shadow-sm hovering-card disclosure-card-body-blue border rounded"
+                (mouseover)="isFCOIHover = true" (mouseout)="isFCOIHover = false">
                 <div class="border-bottom d-flex px-3 py-2 rounded-top-2">
-                    <div class="col"><strong class="fs-15">#{{disclosure?.disclosureNumber}} : FCOI Disclosure</strong></div>
+                    <div class="col"><strong class="fs-15">#{{disclosure?.disclosureNumber}} : FCOI Disclosure</strong>
+                    </div>
                 </div>
                 <div class="border-bottom fs-14 p-3 rounded-bottom-2">
-                  <div class="row">
-                    <div class="col-4">
-                      <span class="fw-bold text-secondary">Disposition Status : </span>
-                      <span
-                          class="ms-2 {{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
-                          {{disclosure?.coiDispositionStatusType?.description}}</span>
+                    <div class="row">
+                        <div class="col-4">
+                            <span class="fw-bold text-secondary">Disposition Status : </span>
+                            <span
+                                class="ms-2 {{commonService.getDispositionStatusBadge(disclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">
+                                {{disclosure?.coiDispositionStatusType?.description}}</span>
+                        </div>
+                        <div class="col-4">
+                            <span class="fw-bold text-secondary">Review Status : </span>
+                            <span
+                                class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}">{{disclosure?.coiReviewStatusType?.description}}</span>
+                        </div>
+                        <div class="col-4">
+                            <span class="fw-bold text-secondary">Disclosure Status : </span>
+                            <app-no-data-label [valueToShow]="disclosure?.conflictStatusCode">
+                                <span
+                                    class="ms-2 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.coiConflictStatusType?.description}}</span>
+                            </app-no-data-label>
+                        </div>
                     </div>
-                    <div class="col-4">
-                      <span class="fw-bold text-secondary">Review Status : </span>
-                      <span
-                      class="{{commonService.getReviewStatusBadge(disclosure?.coiReviewStatusType?.reviewStatusCode)}}">{{disclosure?.coiReviewStatusType?.description}}</span>
+                    <div class="row mt-2">
+                        <div class="my-2 col-4">
+                            <span class="fw-bold text-secondary">Create Date : </span>
+                            <app-no-data-label [valueToShow]="disclosure?.createTimestamp">
+                                <span class="ps-2 span-data-color"> {{disclosure?.createTimestamp|
+                                    dateFormatter}}</span>
+                            </app-no-data-label>
+                        </div>
+                        <div class="my-2 col-4">
+                            <span class="fw-bold text-secondary">Certification Date : </span>
+                            <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
+                                <span class="ps-2 span-data-color"> {{disclosure?.certifiedAt
+                                    | dateFormatter}}</span>
+                            </app-no-data-label>
+                        </div>
+                        <div class="my-2 col-4">
+                            <span class="fw-bold text-secondary">Expiration Date : </span>
+                            <app-no-data-label [valueToShow]="disclosure?.expirationDate">
+                                <span class="ps-2 span-data-color">{{disclosure?.expirationDate | dateFormatter}}</span>
+                            </app-no-data-label>
+                        </div>
                     </div>
-                    <div class="col-4">
-                      <span class="fw-bold text-secondary">Disclosure Status : </span>
-                      <app-no-data-label [valueToShow]="disclosure?.conflictStatusCode">
-                      <span
-                      class="ms-2 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.coiConflictStatusType?.description}}</span>
-                      </app-no-data-label>
-                    </div>
-                  </div>
-                  <div class="row mt-2">
-                    <div class="my-2 col-4">
-                      <span class="fw-bold text-secondary">Create Date : </span>
-                      <app-no-data-label [valueToShow]="disclosure?.createTimestamp">
-                      <span class="ps-2 span-data-color"> {{disclosure?.createTimestamp| dateFormatter}}</span>
-                      </app-no-data-label>
-                    </div>
-                    <div class="my-2 col-4">
-                      <span class="fw-bold text-secondary">Certification Date : </span>
-                      <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                      <span class="ps-2 span-data-color"> {{disclosure?.certifiedAt
-                          | dateFormatter}}</span>
-                      </app-no-data-label>
-                    </div>
-                    <div class="my-2 col-4">
-                      <span class="fw-bold text-secondary">Expiration Date : </span>
-                      <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                      <span class="ps-2 span-data-color">{{disclosure?.expirationDate | dateFormatter}}</span>
-                      </app-no-data-label>
-                    </div>
-                  </div>
                 </div>
                 <div class="align-items-center chin d-flex fs-14 mx-3 ">
-                  <div class="align-items-center col-3 d-flex fs-14"
-                    [ngClass]="disclosure?.numberOfSFI > 0 ? 'cursor-pointer' : '' "
-                    [attr.title]="disclosure?.numberOfSFI > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list">
-                      <strong class="fs-18 me-2 text-blue-color" [ngClass]="disclosure?.numberOfSFI > 0 ? 'cursor-pointer' : '' "
-                        [attr.title]="disclosure?.numberOfSFI > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list"
-                       (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI);">{{disclosure?.numberOfSFI}}</strong>
-                      <label class="label-text mt-1" >
-                           <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfSFI > 0"
-                            [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfSFI > 0" (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI,disclosure);">
-                              Significant Financial Interest
-                         </strong>
-                      </label>
-                  </div>
-                  <div class="col-3 text-secondary fs-14 d-flex">
-                      <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
-                          <div class="align-items-center col d-flex fs-14"
-                            [ngClass]="disclosure?.numberOfProposals > 0 ? 'cursor-pointer' : '' "
-                            [attr.title]="disclosure?.numberOfProposals > 0 ? 'Click to view Proposal list' : '' " area-describedby="Click to view Proposal list">
-                                <strong class="fs-18 me-2 text-blue-color " (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals,disclosure);">{{disclosure?.numberOfProposals}}</strong>
-                                  <label class="label-text mt-1" >
-                                <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfProposals > 0"
-                                    [attr.title]="disclosure?.numberOfProposals > 0 ? 'Click to view Proposal list' : '' "
-                                    area-describedby="Click to view Proposal list"
-                                  [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfProposals > 0" (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals,disclosure);">
-                                  Proposals
+                    <div class="align-items-center col-3 d-flex fs-14"
+                        [ngClass]="disclosure?.numberOfSFI > 0 ? 'cursor-pointer' : '' "
+                        [attr.title]="disclosure?.numberOfSFI > 0 ? 'Click to view SFI list' : '' "
+                        area-describedby="Click to view SFI list">
+                        <strong class="fs-18 me-2 text-blue-color"
+                            [ngClass]="disclosure?.numberOfSFI > 0 ? 'cursor-pointer' : '' "
+                            [attr.title]="disclosure?.numberOfSFI > 0 ? 'Click to view SFI list' : '' "
+                            area-describedby="Click to view SFI list"
+                            (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI);">{{disclosure?.numberOfSFI}}</strong>
+                        <div >
+                            <label class="label-text margin-top-3px">
+                                <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfSFI > 0"
+                                    [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfSFI > 0"
+                                    (click)="setSelectedModuleCode('sfi', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfSFI,disclosure);">
+                                    Significant Financial Interest
                                 </strong>
-                              </label>
-                          </div>
-                          <div class="align-items-center col d-flex fs-14"
-                            [ngClass]="disclosure?.numberOfAwards > 0 ? 'cursor-pointer' : '' "
-                            [attr.title]="disclosure?.numberOfAwards > 0 ? 'Click to view Award list' : '' " area-describedby="Click to view Award list">
-                              <strong class="fs-18 me-2 text-blue-color "
-                              (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards,disclosure);">{{disclosure?.numberOfAwards}}</strong>
-                             <label class="label-text mt-1 ">
-                                 <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfAwards > 0"
-                                   [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfAwards > 0"  (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards,disclosure);">
-                                  Awards
-                                 </strong>
                             </label>
-                          </div>
-                      </ng-container>
-                  </div>
-                  <div class="col-4">
-                      <div><span class="fw-bold ">Last Updated By : </span>
-                        {{disclosure?.updateUserFullName}} On
-                        {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</div>
-                  </div>
-                  <div class="col-auto ms-auto d-flex justify-content-end">
-                      <button [queryParams]={disclosureId:disclosure.disclosureId}
-                          [routerLink]="['/coi/disclosure/summary']"
-                          class="align-items-center btn btn-outline-secondary d-flex fs-14"
-                          title="Click to view FCOI Disclosure details" area-describedby="Click to view FCOI Disclosure details">
-                          <mat-icon class="me-1">visibility</mat-icon>
-                          View
-                      </button>
-                  </div>
+                        </div>
+                            
+                    </div>
+                    <div class="col-3 text-secondary fs-14 d-flex">
+                        <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
+                            <div class="align-items-center col d-flex fs-14"
+                                [ngClass]="disclosure?.numberOfProposals > 0 ? 'cursor-pointer' : '' "
+                                [attr.title]="disclosure?.numberOfProposals > 0 ? 'Click to view Proposal list' : '' "
+                                area-describedby="Click to view Proposal list">
+                                <strong class="fs-18 me-2 text-blue-color "
+                                    (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals,disclosure);">{{disclosure?.numberOfProposals}}</strong>
+                                <div >
+                                    <label class="label-text margin-top-3px">
+                                        <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfProposals > 0"
+                                            [attr.title]="disclosure?.numberOfProposals > 0 ? 'Click to view Proposal list' : '' "
+                                            area-describedby="Click to view Proposal list"
+                                            [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfProposals > 0"
+                                            (click)="setSelectedModuleCode('proposal', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfProposals,disclosure);">
+                                            Proposals
+                                        </strong>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="align-items-center col d-flex fs-14"
+                                [ngClass]="disclosure?.numberOfAwards > 0 ? 'cursor-pointer' : '' "
+                                [attr.title]="disclosure?.numberOfAwards > 0 ? 'Click to view Award list' : '' "
+                                area-describedby="Click to view Award list">
+                                <strong class="fs-18 me-2 text-blue-color "
+                                    (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards,disclosure);">{{disclosure?.numberOfAwards}}</strong>
+                                <div  >
+                                    <label class="label-text margin-top-3px">
+                                        <strong [class.cursor-pointer]="isFCOIHover && disclosure?.numberOfAwards > 0"
+                                            [class.text-decoration-underline]="isFCOIHover && disclosure?.numberOfAwards > 0"
+                                            (click)="setSelectedModuleCode('Awards', disclosure?.disclosureId, disclosure?.disclosureNumber, disclosure?.conflictStatusCode, disclosure?.personId, disclosure?.numberOfAwards,disclosure);">
+                                            Awards
+                                        </strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="col-4">
+                        <div><span class="fw-bold ">Last Updated By : </span>
+                            {{disclosure?.updateUserFullName}} On
+                            {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</div>
+                    </div>
+                    <div class="col-auto ms-auto d-flex justify-content-end">
+                        <button [queryParams]={disclosureId:disclosure.disclosureId}
+                            [routerLink]="['/coi/disclosure/summary']"
+                            class="align-items-center btn btn-outline-secondary d-flex fs-14"
+                            title="Click to view FCOI Disclosure details"
+                            area-describedby="Click to view FCOI Disclosure details">
+                            <mat-icon class="me-1">visibility</mat-icon>
+                            View
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,8 +134,9 @@
 </div>
 
 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
-    <div (click)="setTab('IN_PROGRESS_DISCLOSURES')" class="border-end navigation-icons px-3 py-1"
-        role="button" title="Click to view your In Progress Disclosures" aria-describedby="Click to view your In Progress Disclosures">
+    <div (click)="setTab('IN_PROGRESS_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
+        title="Click to view your In Progress Disclosures"
+        aria-describedby="Click to view your In Progress Disclosures">
         <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="pb-3 active">
             In Progress Disclosures ({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
@@ -160,7 +182,8 @@
 <ng-container
     *ngFor="let disclosure of filteredDisclosureArray | SearchFilter: searchText:['coiDisclosureNumber', 'fcoiType',
         'conflictStatus', 'dispositionStatus', 'proposalTitle', 'updateUser', 'noOfSfiInPending', 'proposalId', 'reviewStatus'] let index = index;">
-    <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color" (mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
+    <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
+        (mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
         <div class="border-bottom fs-14 p-3 text-break">
             <div *ngIf="disclosure?.fcoiTypeCode == '2'"><span class="fw-bold">Proposal :</span>
                 #{{disclosure?.proposalId}} - {{disclosure?.proposalTitle}}
@@ -214,49 +237,60 @@
         <div class="align-items-center chin d-flex fs-14 mx-3 ">
             <div class="align-items-center col-3 d-flex fs-14"
                 [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list">
+                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
+                area-describedby="Click to view SFI list">
                 <strong class="fs-18 me-2 text-blue-color"
-                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " area-describedby="Click to view SFI list"
+                    [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
+                    area-describedby="Click to view SFI list"
                     (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi,disclosure);">
                     <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}} </label>
                 </strong>
                 <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
-                <label class="label-text mt-1 ">
-                    <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                        [class.text-decoration-underline]="ishover[index]&& disclosure?.noOfSfi > 0"
-                        (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi,disclosure);">
-                        Significant Financial Interest
-                    </strong>
-                </label>
+                <div >
+                    <label class="label-text margin-top-3px">
+                        <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                            [class.text-decoration-underline]="ishover[index]&& disclosure?.noOfSfi > 0"
+                            (click)="setSelectedModuleCode('sfi', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfSfi,disclosure);">
+                            Significant Financial Interest
+                        </strong>
+                    </label>
+                </div>
             </div>
             <div class="col-3 text-secondary fs-14 d-flex">
                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
                     <div class="align-items-center col d-flex fs-14"
                         [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
-                        [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " area-describedby="Click to view Proposal list">
-                          <strong class="fs-18 me-2 text-blue-color "
-                            [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' " area-describedby="Click to view Proposal list"
-                            [class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
+                        [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                        area-describedby="Click to view Proposal list">
+                        <strong class="fs-18 me-2 text-blue-color "
+                            [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                            area-describedby="Click to view Proposal list"
                             (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal,disclosure);">{{disclosure?.noOfProposal}}</strong>
-                        <label class="label-text mt-1 ">
-                            <strong [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "[class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
-                                (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal,disclosure);">
-                                Proposals
-                            </strong>
-                        </label>
+                        <div >
+                            <label class="label-text margin-top-3px">
+                                <strong [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
+                                    [class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
+                                    (click)="setSelectedModuleCode('proposal', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfProposal,disclosure);">
+                                    Proposals
+                                </strong>
+                            </label>
+                        </div>
                     </div>
                     <div class="align-items-center col d-flex fs-14"
                         [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
-                        [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' " area-describedby="Click to view Award list">
+                        [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
+                        area-describedby="Click to view Award list">
                         <strong class="fs-18 me-2 text-blue-color "
-                            [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
                             (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward,disclosure);">{{disclosure?.noOfAward}}</strong>
-                        <label class="label-text mt-1 ">
-                            <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "[class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
-                                (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward,disclosure);">
-                                Awards
-                            </strong>
-                        </label>
+                        <div >
+                            <label class="label-text margin-top-3px">
+                                <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
+                                    [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
+                                    (click)="setSelectedModuleCode('Awards', disclosure?.coiDisclosureId, disclosure?.coiDisclosureNumber, disclosure?.disclosureStatusCode, disclosure?.personId, disclosure?.noOfAward,disclosure);">
+                                    Awards
+                                </strong>
+                            </label>
+                        </div>
                     </div>
                 </ng-container>
             </div>
@@ -270,9 +304,9 @@
                     <mat-icon class="me-1">restart_alt</mat-icon>
                     Revise
                 </button>
-                <button (click)="redirectToDisclosure(disclosure)"
-                        aria-describedby="Click to view Disclosure details"
-                        class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view Disclosure details">
+                <button (click)="redirectToDisclosure(disclosure)" aria-describedby="Click to view Disclosure details"
+                    class="align-items-center btn btn-outline-primary d-flex fs-14"
+                    title="Click to view Disclosure details">
                     <mat-icon class="me-1">visibility</mat-icon>
                     View
                 </button>
