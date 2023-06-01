@@ -12,7 +12,9 @@
                                         {{userDetails.fullName}}
                                     </u>
                                 </span>
-                                [ Unit : {{homeUnit}} ]
+                                [ Unit :
+                                {{travelDisclosureRO.homeUnit}} - {{travelDisclosureRO.homeUnitName}}
+                                ]
                             </strong>
                         </ng-container>
                         <ng-container *ngIf="isSaved">
@@ -40,32 +42,9 @@
                 </div>
             </div>
             <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 pb-1 bg-white">
-                <!-- for status box -->
+                <!-- for relationship box -->
                 <div class="col">
                     <div class="border triple-card rounded-1 position-relative">
-                        <span class="status-pill fs-14">Status</span>
-                        <div class="ps-4 table-negative-margin">
-                            <table class="fs-14 fw-medium spaced-table">
-                                <tr>
-                                    <td>Review</td>
-                                    <td>:</td>
-                                    <td class="ps-4">
-                                        <span class="yellow-badge">
-                                            Pending
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Disclosure</td>
-                                    <td>:</td>
-                                    <td class="ps-4">
-                                        <span class="yellow-badge">
-                                            Pending
-                                        </span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
                     </div>
                 </div>
                 <!-- for date box -->
@@ -105,9 +84,32 @@
                         </div>
                     </div>
                 </div>
-                <!-- for relationship box -->
+                <!-- for status box -->
                 <div class="col">
                     <div class="border triple-card rounded-1 position-relative">
+                        <span class="status-pill fs-14">Status</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium spaced-table">
+                                <tr>
+                                    <td>Review</td>
+                                    <td>:</td>
+                                    <td class="ps-4">
+                                        <span class="yellow-badge">
+                                            Pending
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Disclosure</td>
+                                    <td>:</td>
+                                    <td class="ps-4">
+                                        <span class="yellow-badge">
+                                            Pending
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -188,7 +190,7 @@
                 </div>
                 <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100"
                     (click)="certifyTravelDisclosure(); isSaved=true;"
-                    *ngIf="isRouteComplete(['certification']) && !isSaved" [disabled]="!coiService.isCertified">
+                    *ngIf="isRouteComplete(['certification']) && !isSaved" [disabled]="!service.isTravelCertified">
                     <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">done</mat-icon>
                         Certify
@@ -196,7 +198,7 @@
                 </button>
                 <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100"
                     (click)="certifyCopyTravelDisclosure(); isSaved=true;"
-                    *ngIf="isRouteComplete(['certification']) && !isSaved" [disabled]="!coiService.isCertified">
+                    *ngIf="isRouteComplete(['certification']) && !isSaved" [disabled]="!service.isTravelCertified">
                     <span class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
                         <i class="me-2 fs-4 fa fa-clipboard"></i>
                         Certify & Copy
@@ -234,15 +236,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p *ngIf="coiService.unSavedModules" class="fs-14">
+                <p *ngIf="service.unSavedTabName" class="fs-14">
                     You have unsaved changes in
-                    <strong>{{coiService.unSavedModules}}.</strong>
+                    <strong>{{service.unSavedTabName}}.</strong>
                 </p>
                 <p class="fs-14">Do you want to leave the
-                    <ng-container *ngIf="coiService.unSavedModules">
+                    <ng-container *ngIf="service.unSavedTabName">
                         page without saving
                     </ng-container>
-                    <ng-container *ngIf="!coiService.unSavedModules">
+                    <ng-container *ngIf="!service.unSavedTabName">
                         <strong>Certification </strong>
                         Page
                     </ng-container>
@@ -268,7 +270,7 @@
 </div>
 
 <!-- review comment Modal-->
-<app-coi-review-comment-modal></app-coi-review-comment-modal>
+<!-- <app-coi-review-comment-modal></app-coi-review-comment-modal> -->
 
 <!-- personal details Modal-->
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"

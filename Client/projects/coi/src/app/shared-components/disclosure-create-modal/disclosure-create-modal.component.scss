@@ -1,9 +1,9 @@
 .grey-info {
-    background : #EEEEEE;
-    color      : #202c2e;
-    font-size  : 16px;
+    background: #EEEEEE;
+    color: #202c2e;
+    font-size: 16px;
     font-weight: 400;
-    border     : 1px solid #caced2;
+    border: 1px solid #caced2;
 }
 
 .badge {
@@ -12,7 +12,7 @@
 
 .resultCard::before {
     border-left: none;
-    box-shadow : 0 0 7px -4px #ededed;
+    box-shadow: 0 0 7px -4px #ededed;
 }
 
 .hover .numbers {
@@ -57,12 +57,17 @@
 }
 
 .project-types {
-    display        : flex;
-    padding        : 0;
+    display: flex;
+    padding: 0;
     list-style-type: none;
 }
 
 .project-types-label {
     font-weight: 500;
-    font-size  : 14px;
+    font-size: 14px;
+}
+
+.reset-highlight {
+    background-color: #E2F1FF !important;
+    color: #007DEC !important;
 }

@@ -87,4 +87,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         this.isShowCreateOrReviseModal = true;
     }
 
+    openTravelDisclosure(): void {
+        this.triggeredFrom = 'TRAVEL_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
+    }
+
 }

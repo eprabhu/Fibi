@@ -3,8 +3,6 @@ import { slideHorizontal } from 'projects/fibi/src/app/common/utilities/animatio
 import { Router } from '@angular/router';
 import { TravelDisclosureService } from './travel-disclosure.service';
 import { CommonService } from '../common/services/common.service';
-import { CoiService } from '../disclosure/services/coi.service';
-import { DataStoreService } from '../disclosure/services/data-store.service';
 import { Subscription } from 'rxjs';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { NavigationService } from '../common/services/navigation.service';
@@ -18,41 +16,40 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
 export class TravelDisclosureComponent implements OnInit, OnDestroy {
     isCardExpanded = true;
     $subscriptions: Subscription[] = [];
-    isCreateMode: boolean;
+    isCreateMode = false;
     isSaved = false;
-    currentUser: string;
-    homeUnit: string;
-    ispersondetailsmodal: boolean = false;
+    currentUser = '';
+    ispersondetailsmodal = false;
     userDetails = {
         fullName: '',
         personId: ''
     };
+    travelDisclosureRO;
 
-    constructor(public coiService: CoiService,
-        private _commonService: CommonService,
-        public router: Router,
-        public sfiService: SfiService,
-        private _service: TravelDisclosureService,
-        private _navigationService: NavigationService,
-        private _dataStore: DataStoreService) {
+    constructor(private _commonService: CommonService,
+                public router: Router,
+                public sfiService: SfiService,
+                public service: TravelDisclosureService,
+                private _navigationService: NavigationService) {
     }
 
     ngOnInit(): void {
+        this.travelDisclosureRO = JSON.parse(sessionStorage.getItem('travelDisclosureRO'));
         this.userDetails.fullName = this._commonService.getCurrentUserDetail('fullName');
-        this.userDetails.personId = this._commonService.getCurrentUserDetail('personId');
-        this.homeUnit = `${this._commonService.getCurrentUserDetail('homeUnit')} - ${this._commonService.getCurrentUserDetail('homeUnitName')}`;
+        this.userDetails.personId = this.travelDisclosureRO.personId;
     }
 
     ngOnDestroy(): void {
+        sessionStorage.removeItem('travelDisclosureRO');
         subscriptionHandler(this.$subscriptions);
     }
 
     certifyTravelDisclosure(): void {
-        this._service.travelDisclosureSubject.next("certify")
+        this.service.travelDisclosureSubject.next('certify');
     }
 
     certifyCopyTravelDisclosure(): void {
-        this._service.travelDisclosureSubject.next("certifycopy")
+        this.service.travelDisclosureSubject.next('certifycopy');
     }
 
     isRouteComplete(possibleActiveRoutes: string[] = []): boolean {
@@ -64,8 +61,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     leavePageClicked(): void {
-        this._dataStore.dataChanged = false;
-        this.coiService.unSavedModules = '';
+        this.service.travelDataChanged = false;
+        this.service.unSavedTabName = '';
         this.redirectBasedOnQueryParam();
     }
 
