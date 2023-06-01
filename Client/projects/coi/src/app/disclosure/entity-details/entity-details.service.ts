@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../../app/common/services/common.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,9 @@ export class EntityDetailsService {
   previousURL = '';
   lookups: any;
   $entityDetailsTest = new BehaviorSubject<object>({});
-  entityDetailsId:any;
+  entityDetailsId: any;
+  globalSave$: Subject<any> = new Subject<any>();
+
 
   $relationshipsDetails = new BehaviorSubject<object>({});
   isExpanded = true;
@@ -37,8 +39,8 @@ export class EntityDetailsService {
     return this._http.get(`${this._commonService.baseUrl}/getPersonEntityDetails/${personEntityId}`);
   }
 
-  getPersonEntityRelationship(params){
-    return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship',params)
+  getPersonEntityRelationship(params) {
+    return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship', params);
   }
 
 }
