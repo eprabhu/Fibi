@@ -404,6 +404,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestVO.setEntityStatus(conflictOfInterestDao.fetchEntityStatus());
 		conflictOfInterestVO.setEntityType(conflictOfInterestDao.fetchEntityType());
 		conflictOfInterestVO.setPersonEntityRelType(conflictOfInterestDao.fetchPersonEntityRelType());
+		conflictOfInterestVO.setEntityRiskCategories(conflictOfInterestDao.fetchEntityRiskCategory());
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
 	}
 
@@ -1344,6 +1345,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto) {
 		conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId());
+		conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(),DISCLOSURE_REVIEW_IN_PROGRESS);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 }

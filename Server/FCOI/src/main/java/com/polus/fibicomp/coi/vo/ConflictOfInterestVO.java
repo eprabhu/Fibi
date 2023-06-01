@@ -22,6 +22,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -244,6 +245,8 @@ public class ConflictOfInterestVO {
 	
 	private Date travelSubmissionDate;
 
+	private List<EntityRiskCategory> entityRiskCategories;
+	
 	public Date getTravelSubmissionDate() {
 		return travelSubmissionDate;
 	}
@@ -1098,4 +1101,13 @@ public class ConflictOfInterestVO {
 	public void setHomeUnit(String homeUnit) {
 		this.homeUnit = homeUnit;
 	}
+
+	public List<EntityRiskCategory> getEntityRiskCategories() {
+		return entityRiskCategories;
+	}
+
+	public void setEntityRiskCategories(List<EntityRiskCategory> entityRiskCategories) {
+		this.entityRiskCategories = entityRiskCategories;
+	}
+	
 }

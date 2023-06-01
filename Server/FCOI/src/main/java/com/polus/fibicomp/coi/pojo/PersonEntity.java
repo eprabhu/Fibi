@@ -14,6 +14,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.polus.fibicomp.person.pojo.Person;
+import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
@@ -98,6 +99,15 @@ public class PersonEntity implements Serializable {
 
 	@Transient
 	private  String personFullName;
+	
+	@Transient
+	private  Unit unit;
+	
+	@Transient
+	private  String relationshipTypes;
+	
+	@Transient
+	private  String designation;
 
 	public Integer getPersonEntityId() {
 		return personEntityId;
@@ -273,6 +283,30 @@ public class PersonEntity implements Serializable {
 
 	public void setValidPersonEntityRelTypes(List<ValidPersonEntityRelType> validPersonEntityRelTypes) {
 		this.validPersonEntityRelTypes = validPersonEntityRelTypes;
+	}
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+
+	public String getRelationshipTypes() {
+		return relationshipTypes;
+	}
+
+	public void setRelationshipTypes(String relationshipTypes) {
+		this.relationshipTypes = relationshipTypes;
+	}
+
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
 	}
 	
 }
