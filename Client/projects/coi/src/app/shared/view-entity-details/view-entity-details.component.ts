@@ -7,10 +7,11 @@ import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { NavigationService } from '../../common/services/navigation.service';
-import { environment } from "../../../environments/environment";
+import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 
+declare var $: any;
 @Component({
   selector: 'app-view-entity-sfi-details',
   templateUrl: './view-entity-details.component.html',
@@ -28,10 +29,16 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   isEntityManagement = false;
   isModifyEntity = false;
   @Output() emitRelationshipModal: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() saveQuestionnaire: EventEmitter<boolean> = new EventEmitter<boolean>();
+  valueOfModify = '';
+  mandatoryList = new Map();
+  changeType = '';
+  modifyDescription = '';
 
-  constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
-    private _commonServices: CommonService, private _navigationService: NavigationService, public entityDetailsServices: EntityDetailsService, public sfiService: SfiService) {
+  constructor(private _router: Router, private _route: ActivatedRoute,
+    public entityManagementService: EntityManagementService,
+    private _commonServices: CommonService,
+    private _navigationService: NavigationService,
+    public entityDetailsServices: EntityDetailsService, public sfiService: SfiService) {
   }
 
   ngOnInit() {
@@ -101,7 +108,44 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   }
 
   saveRelationship() {
-    this.saveQuestionnaire.emit(true);
+    this.entityDetailsServices.globalSave$.next();
   }
 
+  setDesignDiv(): string {
+    return ((this.isEntityManagement && this.isModifyEntity) || !this.isEntityManagement) ? 'd-flex justify-content-around' : '';
+  }
+
+  openConfirmationModal() {
+      $('#modifyEntityConfirmationModal').modal('show');
+  }
+
+  modifyEntity() {
+    this.mandatoryList.clear();
+    if (this.validationCheck()) {
+      $('#modifyEntityConfirmationModal').modal('hide');
+      this.sfiService.isShowSfiNavBar = true;
+      this.changeType = this.valueOfModify;
+      if (this.sfiService.isShowSfiNavBar) {
+        this.valueOfModify = '';
+        this.modifyDescription = '';
+      }
+    }
+  }
+
+  validationCheck(): boolean {
+    if (!this.valueOfModify) {
+      this.mandatoryList.set('change', '*Please choose an action');
+    }
+    if (!this.modifyDescription) {
+      this.mandatoryList.set('description', 'Please enter the description for why you want to modify the entity.');
+    }
+    return this.mandatoryList.size === 0 ? true : false;
+  }
+
+  closeModal() {
+   this.mandatoryList.clear();
+   this.valueOfModify = '';
+   this.modifyDescription = '';
+   $('#modifyEntityConfirmationModal').modal('hide');
+  }
 }

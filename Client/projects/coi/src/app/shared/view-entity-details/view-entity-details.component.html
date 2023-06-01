@@ -8,14 +8,14 @@
             <span class="px-2">{{!entityDetails?.isActive?'Inactive':'Active'}}</span></span>
           <h1 class="fw-bold fs-18 mt-3 px-3">{{entityDetails?.entityName}}</h1>
         </div>
-        <div *ngIf="isEntityManagement " class="align-items-center d-flex">
+        <div *ngIf="isEntityManagement && entityDetails?.statusDescription" class="align-items-center d-flex">
           <div class="badge-height yellow-badge">
             Unverified
           </div>
         </div>
         <div *ngIf="entityDetails?.entityRiskCategory?.description ==='High' && isEntityManagement " class="d-flex">
           <div class="align-items-center d-flex ml-15">
-            <label class="fw-500 fs-14">Risk Level :</label>
+            <label class="fw-500 fs-14">Risk :</label>
             <div class="text-color fs-14 d-flex">
               <mat-icon *ngIf="entityDetails?.entityRiskCategory?.description ==='High'"
                 class="invalid material-icons-round">warning</mat-icon>
@@ -30,7 +30,7 @@
             Relationship Status:Draft
           </div>
         </div>
-        <div *ngIf="!isEntityManagement" class="ml-15 align-items-center d-flex">
+        <div *ngIf="!isEntityManagement && isModifyEntity" class="ml-15 align-items-center d-flex">
           <button tabindex="0" class="btn btn-outline-grey fs-14 justify-content-center d-flex">
             <mat-icon class="justify-content-center align-items-center align-items-center d-flex fs-18">
               mode
@@ -153,8 +153,8 @@
         <div class="align-self-center flex-fill" [ngClass]="{'mb-10':!isEntityManagement}">
           <label class="fw-500 fs-14 mx-3">Address :</label>
           <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.address">
-                      <span class="text-color fs-14 mt-1 pr-15">
-                        {{entityDetails?.address}}</span>
+                      <span class="text-color fs-14 mt-1 pr-15" [title]="entityDetails?.address">
+                        {{entityDetails?.address?.length>100 ? (entityDetails?.address |slice:0:80) +'...' :entityDetails?.address}}</span>
           </app-no-data-label>
         </div>
       </div>
@@ -163,11 +163,20 @@
   <div class="col-3 px-0">
     <div class="d-flex flex-column p-0">
       <div class="flex-fill side-height border-end bg-color shadow-sm">
-        <div class="{{isModifyEntity?'d-flex justify-content-around':''}} mt-3 mx-3">
-          <button class="btn btn-outline-grey pb-0 {{isModifyEntity?'col-2':'col-12'}}" title="Go to home page">
+        <div class="mt-3 mx-3 {{setDesignDiv()}}">
+          <button *ngIf="(isEntityManagement && isModifyEntity) || !isEntityManagement;else noRightDesign2"
+            class="btn btn-outline-grey pb-0 col-2" title="Go to home page"
+            [routerLink]="isEntityManagement?['/coi/user-dashboard']:['/coi/user-dashboard/entities']">
             <mat-icon class="mb-2">home</mat-icon>
           </button>
-          <button *ngIf="isEntityManagement && isModifyEntity" (click)="sfiService.isShowSfiNavBar = true" id="btn-modify"
+          <ng-template #noRightDesign2>
+            <button class="btn btn-outline-grey pb-0 col-12" title="Go to home page" [routerLink]="isEntityManagement?['/coi/user-dashboard']:
+                        ['/coi/user-dashboard/entities']">
+              <mat-icon class="mb-2">home</mat-icon>
+              <span class="fs-14 mx-1 btn-content-home">Home</span>
+            </button>
+          </ng-template>
+          <button *ngIf="isEntityManagement && isModifyEntity"  (click)="openConfirmationModal()"  id="btn-modify"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center mx-3"
             title="Modify Entity">
             <mat-icon class="mb-2 mx-1 pencil">mode</mat-icon>
@@ -179,12 +188,18 @@
             <mat-icon class="mb-2 pencil-sfi">mode</mat-icon>
             <span class="btn-sfi-position">Modify SFI</span>
           </button>
-          <button class="btn btn-outline-grey pb-0 fs-14 {{isModifyEntity?'col-2':'col-12'}}" (click)="navigateBack()" title="Back">
+          <button *ngIf="(isEntityManagement && isModifyEntity) || !isEntityManagement;else noRightDesign3" class="btn btn-outline-grey fs-14 col-2 pb-0" (click)="navigateBack()" title="Back">
             <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
           </button>
+          <ng-template #noRightDesign3>
+            <button class="btn btn-outline-grey fs-14 col-12 mt-2 py-2" (click)="navigateBack()" title="Back">
+              <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
+              <span class="fs-14 mx-2 btn-content-back">Back</span>
+            </button>
+          </ng-template>
         </div>
-        <div class="d-flex justify-content-around mt-3 mx-3">
-          <button *ngIf="isModifyEntity" id="btn-inactivate"
+        <div *ngIf="isModifyEntity" class="d-flex justify-content-around mt-3 mx-3">
+          <button id="btn-inactivate"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
             title="Entity Inactivate">
             <mat-icon class="mx-1 mb-2 icon-schedule-position">schedule</mat-icon>
@@ -238,8 +253,74 @@
     </div>
   </div>
   <div *ngIf="sfiService.isShowSfiNavBar && isEntityManagement " id="task-navigation-bar">
-    <app-add-sfi [coiEntityManageId]="entityId" [isEditEntity]="true"
+    <app-add-sfi [coiEntityManageId]="entityId" [isEditEntity]="true" [changeType]="changeType"
       (updatedDataStore)="updatedEntityDetails($event)"></app-add-sfi>
+  </div>
+</div>
+
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="modifyEntityConfirmationModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header ct-footer-padding">
+        <h4 class="modal-title">{{entityDetails?.entityName}}</h4>
+        <button type="button" class="btn-close fs-12 " (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body ct-modal-padding">
+        <div class="row ">
+          <div class="col-lg-12">
+            <div class="help-text row">
+              <div class="col-12 py-2 grey-info font">
+              <ol type="1" class="fs-13 text-secondary">
+                <li><span class="fw-bold">Minor modification</span> -  Select for minor corrections like typos.</li>
+                <li><span class="fw-bold">Major modification</span> - Select for major corrections like
+                  changes in the company name, ownership type,
+                  and permanent change in entity address that reflects in entity country.</li>
+                <li><span class="fw-bold">
+                    Description
+                  </span>
+                  - Provide any description or comments on why you want to modify the entity.
+                </li>
+
+              </ol>
+              </div>
+            </div>
+            <div class="fs-14 fw-bold mx-1">
+              Change Type :<span class="mandatory px-2">*</span>
+            </div>
+            <div class="fs-14 text-secondary d-flex justify-content-start my-3 px-3">
+              <span class="pr-25 d-flex">
+                <input type="radio" class="form-check-input" [(ngModel)]="valueOfModify" value="1"> <span
+                  class="px-3">Minor
+                  modification</span>
+              </span>
+              <span class="d-flex">
+                <input type="radio" class="form-check-input" [(ngModel)]="valueOfModify" value="2"> <span
+                  class="px-3">Major
+                  modification</span>
+              </span>
+            </div>
+            <span *ngIf="mandatoryList.has('change')" class="invalid-feedback d-block fs-13 px-4">
+              {{mandatoryList.get('change')}}
+            </span>
+            <div class="mx-1">
+              <span class="fs-14 fw-bold ">Description <span class="mandatory px-1">*</span></span>
+              <textarea [(ngModel)]="modifyDescription" placeholder="Please enter a description" [isShowLimiter]='true' [limit]=2000
+                [ngClass]="mandatoryList.has('description')?'invalid-border':'' " appLengthValidator class="form-control mt-1"
+                id="description"></textarea>
+                <span class="invalid-feedback d-block fs-13" *ngIf="mandatoryList.has('description')">
+                  {{mandatoryList.get('description')}}
+                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ct-footer-padding">
+        <button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" (click)="closeModal()"
+          type="button">Cancel
+        </button>
+        <button (click)="modifyEntity()" class="btn btn-primary btn-sm fs-14" type="button">Submit</button>
+      </div>
+    </div>
   </div>
 </div>
 

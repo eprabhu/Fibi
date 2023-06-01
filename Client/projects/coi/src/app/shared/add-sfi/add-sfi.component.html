@@ -9,7 +9,7 @@
             <div class="justify-content-between d-flex align-items-center">
               <div class="fs-16">{{heading}}</div>
               <button class=" align-items-center d-flex btn btn-primary mt-0 py-1 h-100 fs-16 pt-1"
-                [title]="btnTitle" area-describedby="{{btnTitle}}" (click)="createSFI();">
+                [title]="btnTitle" area-describedby="{{btnTitle}}" (click)="submitEntity();">
                 <mat-icon class="fs-4 w-auto h-auto me-2 material-icons">save</mat-icon>
                 {{buttonName}}
               </button>
@@ -33,7 +33,7 @@
             </app-endpoint-search>
             <ng-template #textBox>
               <input type="text" class="form-control fs-13" [(ngModel)]="entityDetails.coiEntity.entityName"
-              [ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''" id="entity-name" (ngModelChange)="setHeader()">
+              [ngClass]="(mandatoryList?.has('entityName')) ? 'is-invalid d-block' : ''" id="entity-name" (ngModelChange)="setHeader();">
             </ng-template>
             <div *ngIf="mandatoryList?.has('entityName')" class="invalid-feedback d-block fs-13">
               {{mandatoryList?.get('entityName')}}
@@ -56,7 +56,7 @@
           <div class="col mt-3">
             <app-endpoint-search [clearField]="clearCountryField" [httpOptions]="countrySearchOptions"
               (onSelect)="selectedCountryEvent($event)"
-              [isDisabled]="isResultFromSearch || isViewMode" class="w-100 mt-4"
+              [isDisabled]="isResultFromSearch || isViewMode ||changeType ==='1'" class="w-100 mt-4"
               [isError]="mandatoryList?.has('country')">
             </app-endpoint-search>
             <div *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block fs-13">
@@ -136,11 +136,11 @@
         </div>
         <div class="row px-4 pt-4">
           <div class="col-custom d-flex mt-2">
-            <label class="d-block fw-500 fs-14 px-1 pt-2" for="Country">Website : <span *ngIf="isEntityManagement " class="mandatory px-2">*</span>
+            <label class="d-block fw-500 fs-14 px-1 pt-2" for="website">Website : <span *ngIf="isEntityManagement " class="mandatory px-2">*</span>
             </label>
           </div>
           <div class="col mt-3">
-            <input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.webURL"
+            <input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.webURL" id="website"
               [ngClass]="(mandatoryList?.has('website')) ? 'is-invalid d-block' : ''"
               [disabled]="isResultFromSearch || isViewMode">
               <span *ngIf="(mandatoryList?.has('website'))" class="invalid-feedback d-block fs-14-nav">
@@ -180,7 +180,7 @@
           <div class="col-entity-type">
             <select class="form-control mt-2 form-select" id="entity-type" [(ngModel)]="entityDetails.coiEntity.entityTypeCode"
               (ngModelChange)="setEntityTypeObj();" [ngClass]="(mandatoryList?.has('entityType')) ? 'is-invalid d-block' : ''"
-              [disabled]="isResultFromSearch || isViewMode">
+              [disabled]="isResultFromSearch || isViewMode || changeType ==='1'">
               <option [value]="null">--Select Type--</option>
               <option *ngFor="let type of sfiLookUpList?.entityType" [value]="type?.entityTypeCode"
                 [hidden]="type?.isActive != true">
@@ -200,7 +200,7 @@
           </div>
           <div *ngIf="isEntityManagement " class="col mt-2">
             <select class="form-select form-control fs-14"
-              [(ngModel)]="entityDetails.coiEntity.riskCategoryCode" (ngModelChange)="setEntityRiskCategoryObj()"
+              [(ngModel)]="entityDetails.coiEntity.riskCategoryCode" [disabled]="changeType ==='1'" (ngModelChange)="setEntityRiskCategoryObj()"
               id="risk-level">
               <option [value]="null">--Select--</option>
               <ng-container *ngFor="let riskLevel of riskLevelLookup">
@@ -361,3 +361,13 @@
     (relationshipResult)="addEntityToggle($event)" (hideModal)="hideRelationshipModal($event)">
   </app-add-relationship-modal>
 </div>
+
+
+ <!-- this commented method need for modify entity -->
+<!-- <app-action-confirmation-modal (isUpdateChanges)="updateChanges($event)" [header]="'Confirmation'"
+  [description]="'Do you want to create a new version for'"
+  [contentName]="entityDetails.coiEntity.entityName +'?'" [buttonFormat]="'yesOrNo'"></app-action-confirmation-modal> -->
+
+  <!-- <app-action-confirmation-modal *ngIf="isLeaveConfirmation" (isUpdateChanges)="updateChanges($event)" [header]="'Confirmation'"
+  [description]="'You have unsaved changes, do you want to save your progress?'"></app-action-confirmation-modal> -->
+  <!-- / this commented method need for modify entity -->

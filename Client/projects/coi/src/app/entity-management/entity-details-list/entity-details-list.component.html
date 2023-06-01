@@ -2,43 +2,48 @@
   <app-view-entity-sfi-details></app-view-entity-sfi-details>
   <div class="fw-bold ml-15 mt-4 mb-2 px-1 fs-16">Relationships</div>
   <div class="ml-15 mr-15 shadow-sm">
-    <!-- [ngClass]="{'active': activeTabName === 'ALL_ENTITIES'}"  -->
     <nav
       class="align-items-center bg-white border d-flex fs-14 fw-medium mt-1 py-1 user-dashboard-nav bg-body-emphasis">
-      <div (click)="currentTab('Person')" class="border-end navigation-icons text-secondary py-1" role="button"
-        id="btn-person" title="Person" (keyup.enter)="currentTab('Person')" (keyup.space)="currentTab('Person')">
-        <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Person'}" class="px-5 ">Person</span>
-        <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Person'" class="active-color"></span> -->
-        <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Person'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span> -->
+      <div (click)="currentTab('PERSON')" class="border-end navigation-icons text-secondary py-1" role="button"
+        id="btn-person" title="Person" (keyup.enter)="currentTab('PERSON')" (keyup.space)="currentTab('PERSON')">
+        <span tabindex="0" [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'PERSON'"
+          class="px-5 ">Person</span>
       </div>
-      <div (click)="currentTab('Institutional')" class="border-end navigation-icons text-secondary py-1"
-        role="button" id="btn-institutional" title="Institutional" (keyup.enter)="currentTab('Institutional')"
-        (keyup.space)="currentTab('Institutional')">
-        <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Institutional'}" class="px-5">Institutional</span>
-        <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Institutional'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span> -->
+      <!-- <div (click)="currentTab('DEPARTMENT')" class="border-end navigation-icons text-secondary py-1" role="button"
+        id="btn-department" title="Department" (keyup.enter)="currentTab('DEPARTMENT')"
+        (keyup.space)="currentTab('DEPARTMENT')">
+        <span tabindex="0"
+          [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'DEPARTMENT'"
+          class="px-5">Department</span>
       </div>
-      <div (click)="currentTab('Other_Entities')" class="border-end navigation-icons text-secondary py-1"
-        role="button" id="btn-other-entities" title="Other Entities" (keyup.enter)="currentTab('Other_Entities')"
-        (keyup.space)="currentTab('Other_Entities')">
-        <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Other_Entities'}" class="px-5">Other Entities</span>
-        <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Other_Entities'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span> -->
+      <div (click)="currentTab('OTHER_ENTITIES')" class="border-end navigation-icons text-secondary py-1" role="button"
+        id="btn-other-entities" title="Other Entities" (keyup.enter)="currentTab('OTHER_ENTITIES')"
+        (keyup.space)="currentTab('OTHER_ENTITIES')">
+        <span tabindex="0"
+          [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'OTHER_ENTITIES'"
+          class="px-5">Other Entities</span>
+      </div>-->
+      <div (click)="currentTab('FINANCIAL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1"
+        role="button" id="btn-disclosure" title="Financial Disclosures"
+        (keyup.enter)="currentTab('FINANCIAL_DISCLOSURES')" (keyup.space)="currentTab('FINANCIAL_DISCLOSURES')">
+        <span tabindex="0"
+          [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'FINANCIAL_DISCLOSURES'"
+          class="px-5">Financial Disclosures</span>
       </div>
-      <div  (click)="currentTab('Disclosures')" class="border-end navigation-icons text-secondary py-1" role="button"
-        id="btn-disclosure" title="Disclosures" (keyup.enter)="currentTab('Disclosures')"
-        (keyup.space)="currentTab('Disclosures')">
-        <span tabindex="0" [ngClass]="{'active':entityManagementService.relationshipDashboardRequest.filterType === 'Disclosures'}" class="px-5">Disclosures</span>
-        <!-- <span *ngIf="entityManagementService.relationshipDashboardRequest.filterType === 'Disclosures'"
-              class="active-color"><mat-icon>arrow_drop_down</mat-icon></span> -->
+      <div (click)="currentTab('TRAVEL_DISCLOSURES')" class="navigation-icons text-secondary py-1" role="button"
+        id="btn-travel-disclosure" title="Travel Disclosures" (keyup.enter)="currentTab('TRAVEL_DISCLOSURES')"
+        (keyup.space)="currentTab('TRAVEL_DISCLOSURES')">
+        <span tabindex="0"
+          [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'TRAVEL_DISCLOSURES'"
+          class="px-5">Travel Disclosures</span>
       </div>
     </nav>
   </div>
-  <div class="row m-3 mb-0 mt-3">
+  <!-- Advanced Search -->
+  <!-- <div class="row m-3 mb-0 mt-3">
     <div class="col-12 d-flex">
       <div class="col">
-        <app-elastic [options]="coiElastic" [placeHolder]="'Person Name, Department etc.'"
+        <app-elastic [options]="coiElastic" [placeHolder]="'Person, Department etc.'"
           [uniqueId]="'btn-entity-elastic'" (selectedResult)="redirectToEntity($event)"></app-elastic>
       </div>
       <div class="ml-15 justify-content-end d-flex">
@@ -51,20 +56,108 @@
         </button>
       </div>
     </div>
-  </div>
-  <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 shadow-sm border ml-15 mr-15">
-    <div class="card-body">
+  </div> -->
+  <!-- <div *ngIf="entityDetails.length > 0 && (entityManagementService.relationshipDashboardRequest.filterType == 'PERSON' ||
+    entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES')
+    " class="sort-div border mt-2 py-3 mr-15 ml-15">
+    <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
+    <span (click)="sortResult('personName')" (keydown.enter)="sortResult('personName')"
+      [class.filter-active]="isActive('personName')" tabindex="0" title="Click to sort by name"
+      area-describedby="Click to sort by name"
+      class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
+      <div class="d-inline-flex align-items-center">
+        <label>Name</label>
+        <mat-icon *ngIf="!entityManagementService.relationshipDashboardRequest.sort['personName']"
+          class="text-secondary arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['personName'] === 'asc'"
+          class="arrow selected-arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['personName'] === 'desc'"
+          class="arrow selected-arrow">arrow_upward</mat-icon>
+      </div>
+    </span>
+    <span (click)="sortResult('department')" (keydown.enter)="sortResult('department')"
+      [class.filter-active]="isActive('department')" tabindex="0" title="Click to sort by department"
+      area-describedby="Click to sort by department"
+      class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
+      <div class="d-inline-flex align-items-center">
+        <label>Department</label>
+        <mat-icon *ngIf="!entityManagementService.relationshipDashboardRequest.sort['department']"
+          class="text-secondary arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['department'] === 'asc'"
+          class="arrow selected-arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['department'] === 'desc'"
+          class="arrow selected-arrow">arrow_upward</mat-icon>
+      </div>
+    </span>
+    <span (click)="sortResult('title')" (keydown.enter)="sortResult('title')" [class.filter-active]="isActive('title')"
+      tabindex="0" title="Click to sort by title" area-describedby="Click to sort by title"
+      class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
+      <div class="d-inline-flex align-items-center">
+        <label>Title</label>
+        <mat-icon *ngIf="!entityManagementService.relationshipDashboardRequest.sort['title']"
+          class="text-secondary arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['title'] === 'asc'"
+          class="arrow selected-arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['title'] === 'desc'"
+          class="arrow selected-arrow">arrow_upward</mat-icon>
+      </div>
+    </span>
+    <span (click)="sortResult('startDateOfInvolvement')" (keydown.enter)="sortResult('startDateOfInvolvement')"
+      [class.filter-active]="isActive('startDateOfInvolvement')" title="Click to sort by start date of involvement"
+      area-describedby="Click to sort by start date of involvement"
+      class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
+      <div class="d-inline-flex align-items-center">
+        <label>Start Date of Involvement</label>
+        <mat-icon *ngIf="!entityManagementService.relationshipDashboardRequest.sort['startDateOfInvolvement']"
+          class="text-secondary arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['startDateOfInvolvement'] === 'asc'"
+          class="arrow selected-arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['startDateOfInvolvement'] === 'desc'"
+          class="arrow selected-arrow">arrow_upward</mat-icon>
+      </div>
+    </span>
+    <span (click)="sortResult('endDateOfInvolvement')" (keydown.enter)="sortResult('endDateOfInvolvement')"
+      [class.filter-active]="isActive('endDateOfInvolvement')" tabindex="0"
+      title="Click to sort by end date of involvement" area-describedby="Click to sort by end date of involvement"
+      class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
+      <div class="d-inline-flex align-items-center">
+        <label>End Date of Involvement</label>
+        <mat-icon *ngIf="!entityManagementService.relationshipDashboardRequest.sort['endDateOfInvolvement']"
+          class="text-secondary arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['endDateOfInvolvement'] === 'asc'"
+          class="arrow selected-arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['endDateOfInvolvement'] === 'desc'"
+          class="arrow selected-arrow">arrow_upward</mat-icon>
+      </div>
+    </span>
+    <span (click)="sortResult('relationshipStatus')" (keydown.enter)="sortResult('relationshipStatus')"
+      [class.filter-active]="isActive('relationshipStatus')" tabindex="0" title="Click to sort by relationship status"
+      area-describedby="Click to sort by relationship status"
+      class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
+      <div class="d-inline-flex align-items-center">
+        <label>Relationship Status</label>
+        <mat-icon *ngIf="!entityManagementService.relationshipDashboardRequest.sort['relationshipStatus']"
+          class="text-secondary arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['relationshipStatus'] === 'asc'"
+          class="arrow selected-arrow">arrow_downward</mat-icon>
+        <mat-icon *ngIf="entityManagementService.relationshipDashboardRequest.sort['relationshipStatus'] === 'desc'"
+          class="arrow selected-arrow">arrow_upward</mat-icon>
+      </div>
+    </span>
+  </div> -->
+  <!-- <div [@slowSlideInOut] *ngIf="isViewAdvanceSearch" class="card mt-2 shadow-sm border ml-15 mr-15">
+    <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON' ||
+    entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'" class="card-body">
       <div class="form-row row m-2">
         <div class="col-3 ml-3">
-          <label class="fw-bold fs-14 d-block" id="adv-person-name">Person Name</label>
+          <label class="fw-bold fs-14 d-block" id="adv-person-name">Person</label>
           <app-elastic (selectedResult)="selectPersonName($event)" [clearField]="advSearchClearField"
-            [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person Name'"
+            [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person'"
             [uniqueId]="'adv-person-name'">
           </app-elastic>
         </div>
         <div class="col-3 ml-3">
           <label class="fw-bold fs-14 d-block" for="adv-department-name">Department</label>
-          <!-- <input type="text" class="form-control text-secondary fs-13" placeholder="Department"> -->
           <app-endpoint-search (onSelect)="leadUnitChangeFunction($event)" [clearField]="advSearchClearField"
             [httpOptions]="leadUnitSearchOptions" [placeHolder]="'Type here for Department Name'"
             [uniqueId]="'adv-department-name'">
@@ -73,7 +166,6 @@
         <div class="col-3 ml-3">
           <label class="fw-bold fs-14 d-block" for="adv-title">Title</label>
           <input type="text" class="form-control text-secondary fs-13" placeholder="Type here Title" id="adv-title">
-                    <!-- [(ngModel)]="entityManagementService.coiRequestObject.property3" -->
         </div>
         <div class="col-3 ml-3">
           <label class="fw-bold fs-14 d-block" for="start-date-involvement">Start Date of Involvement</label>
@@ -92,7 +184,7 @@
           <label class="fw-bold fs-14 d-block" for="end-date-involvement">End Date of Involvement</label>
           <span class="dateField">
             <input matInput [matDatepicker]="endDate" id="end-date-involvement" (click)="endDate.open()"
-              class="form-control text-secondary fs-13"  placeholder="{{datePlaceHolder}}"
+              class="form-control text-secondary fs-13" placeholder="{{datePlaceHolder}}"
               [(ngModel)]="advanceSearchDates.endDate">
             <i (click)="endDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
             <mat-datepicker #endDate>
@@ -102,55 +194,429 @@
         <div class="col-3">
           <label class="fw-bold fs-14 d-block" for="adv-status-type">Status</label>
           <app-look-up (selectedResult)="onLookupSelect($event, 'property4')" [options]="statusTypeOptions"
-            [selectedLookUpList]="lookupValues['property4']" [externalArray]="entityManagementService.statusCodes" [isExternalArray]="true" class=" text-secondary fs-13"
-            [uniqueId]="'adv-status-type'">
+            [selectedLookUpList]="lookupValues['property4']" [externalArray]="entityManagementService.statusCodes"
+            [isExternalArray]="true" class=" text-secondary fs-13" [uniqueId]="'adv-status-type'">
           </app-look-up>
         </div>
         <div class="col-6 d-flex justify-content-end align-items-end">
-          <button class="btn btn-outline-secondary  fs-14 py-2 px-4 mr-10" id="btn-clear"
-            (click)="clearAdvanceSearch()" title="Clear">Clear</button>
-          <button class="btn btn-primary fs-14" (click)="advanceSearchRelationships()" id="btn-search" title="Search">Search</button>
+          <button class="btn btn-outline-secondary  fs-14 py-2 px-4 mr-10" id="btn-clear" (click)="clearAdvanceSearch()"
+            title="Clear">Clear</button>
+          <button class="btn btn-primary fs-14" (click)="advanceSearchRelationships()" id="btn-search"
+            title="Search">Search</button>
         </div>
       </div>
     </div>
-  </div>
-  <div *ngIf="entityDetails.length > 0;else noData" class="mt-2 ml-15 mr-15 border-1 shadow-sm">
-    <table class="table tableSkin">
-      <thead class="border bg-light">
-        <tr>
-          <th class="text-secondary fs-14" scope="col">Name</th>
-          <th class="text-secondary fs-14" scope="col">Department</th>
-          <th class="text-secondary fs-14" scope="col">Title</th>
-          <th class="text-secondary fs-14" scope="col">Start Date of Involvement</th>
-          <th class="text-secondary fs-14" scope="col">End Date of Involvement</th>
-          <th class="text-secondary fs-14" scope="col">Relationship Status</th>
-          <th class="text-secondary fs-14" scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="bg-white">
-        <tr class="border" *ngFor="let entityListData of entityDetails;let i=index">
-          <td class="fs-14 text-primary"><u>{{entityListData?.personFullName}}</u></td>
-          <td class="fs-14 text-secondary">{{entityListData?.person?.unit?.unitName}}</td>
-          <td class="fs-14 text-secondary">{{entityListData?.coiEntity?.entityName}}</td>
-          <td class="fs-14 text-secondary">{{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}</td>
-          <td class="fs-14 text-secondary">{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</td>
-          <td class="fs-14 text-secondary"><span
-              [ngClass]="entityListData.isRelationshipActive?'status-active-pill':'status-inactive-pill'">
-              {{entityListData?.isRelationshipActive?'Active':'Inactive'}}
-            </span>
-          </td>
-          <td>
-            <div>
-              <button (click)="isViewEntityDetails = !isViewEntityDetails;viewDetails(entityListData)"
-                class="align-items-center btn btn-outline-primary d-flex fs-14">
+    <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'DEPARTMENT' ||
+    entityManagementService.relationshipDashboardRequest.filterType == 'FINANCIAL_DISCLOSURES'" class="card-body">
+      <div class="form-row row m-2">
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block" id="adv-person-name">Disposition Status</label>
+          <app-look-up (selectedResult)="onLookupSelect($event, 'property4')" [options]="statusTypeOptions"
+          [selectedLookUpList]="lookupValues['property4']" [externalArray]="entityManagementService.statusCodes"
+          [isExternalArray]="true" class=" text-secondary fs-13" [uniqueId]="'adv-status-type'">
+        </app-look-up>
+        </div>
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block" for="adv-department-name">
+            Review Status</label>
+            <app-look-up (selectedResult)="onLookupSelect($event, 'property4')" [options]="statusTypeOptions"
+            [selectedLookUpList]="lookupValues['property4']" [externalArray]="entityManagementService.statusCodes"
+            [isExternalArray]="true" class=" text-secondary fs-13" [uniqueId]="'adv-status-type'">
+          </app-look-up>
+        </div>
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block" for="adv-title">
+            Disclosure Status</label>
+            <app-look-up (selectedResult)="onLookupSelect($event, 'property4')" [options]="statusTypeOptions"
+            [selectedLookUpList]="lookupValues['property4']" [externalArray]="entityManagementService.statusCodes"
+            [isExternalArray]="true" class=" text-secondary fs-13" [uniqueId]="'adv-status-type'">
+          </app-look-up>
+        </div>
+        <div class="col-3 ml-3">
+          <label class="fw-bold fs-14 d-block" for="create-date-involvement">Create Date</label>
+          <span class="dateField">
+            <input matInput [matDatepicker]="createDate" id="create-date-involvement" (click)="createDate.open()"
+              class="form-control text-secondary fs-13" placeholder="{{datePlaceHolder}}"
+              [(ngModel)]="advanceSearchDates.createDate">
+            <i (click)="createDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
+            <mat-datepicker #createDate>
+            </mat-datepicker>
+          </span>
+        </div>
+      </div>
+      <div class="form-row row m-2">
+        <div class="col-3">
+          <label class="fw-bold fs-14 d-block" for="end-date-involvement">Certification Date</label>
+          <span class="dateField">
+            <input matInput [matDatepicker]="certificationDate" id="certification-date-involvement" (click)="certificationDate.open()"
+              class="form-control text-secondary fs-13" placeholder="{{datePlaceHolder}}"
+              [(ngModel)]="advanceSearchDates.certificationDate">
+            <i (click)="certificationDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
+            <mat-datepicker #certificationDate>
+            </mat-datepicker>
+          </span>
+        </div>
+        <div class="col-3">
+          <label class="fw-bold fs-14 d-block" for="adv-status-type">Expiration Date </label>
+          <input matInput [matDatepicker]="expirationDate" id="expiration-date-involvement" (click)="expirationDate.open()"
+              class="form-control text-secondary fs-13" placeholder="{{datePlaceHolder}}"
+              [(ngModel)]="advanceSearchDates.expirationDate">
+            <i (click)="expirationDate.open()" class="fa fa-calendar text-secondary fa-large insidePicker hand-cursor"></i>
+            <mat-datepicker #expirationDate>
+            </mat-datepicker>
+        </div>
+        <div class="col-6 d-flex justify-content-end align-items-end">
+          <button class="btn btn-outline-secondary  fs-14 py-2 px-4 mr-10" id="btn-clear" (click)="clearAdvanceSearch()"
+            title="Clear">Clear</button>
+          <button class="btn btn-primary fs-14" (click)="advanceSearchRelationships()" id="btn-search"
+            title="Search">Search</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Advanced Search end -->
+
+  <div *ngIf="entityDetails.length > 0;else noData" class="mt-2 ml-15 mr-15 border-1">
+    <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON' ||
+      entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'">
+      <div *ngFor="let entityListData of entityDetails;let i=index"
+        class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
+        (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
+        <div class="p-3 text-break">
+          <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON'" class="d-flex my-2">
+            <!-- <div class="col-1">
+                <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-4"
+                  [ngClass]="entityListData?.isRelationshipActive ?'':'inactive'">
+                  <span class="px-2">{{!entityListData?.isRelationshipActive?'Inactive':'Active'}}</span></span>
+              </div> -->
+            <div class="col-4 fs-16 fw-bold">
+              <app-no-data-label [valueToShow]="entityListData?.personFullName" [classesToApply]="'fs-14'">
+                <!-- class="title-custom-position" -->
+                <span>
+                  {{entityListData?.personFullName}}
+                </span>
+              </app-no-data-label>
+            </div>
+            <div class="col-4 text-secondary fs-14">
+              <span class="fw-bold">Department : </span>
+              <app-no-data-label [valueToShow]="entityListData?.unit?.unitName">
+                <span>{{entityListData?.unit?.unitNumber}}</span> -
+                <span>
+                  {{entityListData?.unit?.unitName}}
+                </span>
+              </app-no-data-label>
+            </div>
+            <div class="col-3 fs-14 text-secondary">
+              <span class="fw-bold">Designation : </span>
+              <app-no-data-label [valueToShow]="entityListData?.designation">
+                <span>
+                  {{entityListData?.designation}}
+                </span>
+              </app-no-data-label>
+            </div>
+          </div>
+          <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'"
+            class="d-flex my-2">
+            <div class="col-1 col-height">
+              <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-4"
+                [ngClass]="entityListData?.isRelationshipActive ?'':'inactive'">
+                <span class="px-2">{{!entityListData?.isRelationshipActive?'Inactive':'Active'}}</span></span>
+            </div>
+            <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'"
+              class="col-6 fs-16 fw-bold title-custom-position">
+              Polus Software Pvt Ltd
+            </div>
+            <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'"
+              class="col-4 text-secondary fs-14">
+              <span class="fw-bold">Entity Type : </span>
+              <app-no-data-label [valueToShow]="'Private'">
+                <span>
+                  Private
+                </span>
+              </app-no-data-label>
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'">
+              <div class="col-7 text-secondary fs-14">
+                <span class="fw-bold ">Country :</span>
+              </div>
+            </ng-container>
+            <div class="text-secondary fs-14"
+              [ngClass]="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'?'col':'col-4'">
+              <span class="fw-bold ">Relationship :</span>
+              <app-no-data-label [valueToShow]="entityListData?.relationshipTypes">
+                <span class="px-2">{{entityListData?.relationshipTypes}}</span>
+              </app-no-data-label>
+            </div>
+            <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON'">
+              <div class="col-4 text-secondary fs-14">
+                <span class="fw-bold ">Start Date of Involvement :</span>
+                <app-no-data-label [valueToShow]="entityListData?.involvementStartDate">
+                  <span>
+                    {{entityListData?.involvementStartDate | dateFormatterWithTimeZone}}
+                  </span>
+                </app-no-data-label>
+              </div>
+              <div class="col-3 text-secondary fs-14">
+                <span class="fw-bold">End Date of Involvement :</span>
+                <app-no-data-label [valueToShow]="entityListData?.involvementEndDate">
+                  <span>{{entityListData?.involvementEndDate | dateFormatterWithTimeZone}}</span>
+                </app-no-data-label>
+              </div>
+            </ng-container>
+            <div *ngIf="isViewPersonalEntities" class="col-auto ms-auto d-flex justify-content-end">
+              <button (click)="viewDetails(entityListData)" aria-describedby="Click to view details"
+                class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view details">
                 <mat-icon class="me-1">visibility</mat-icon>
                 View
               </button>
             </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'FINANCIAL_DISCLOSURES' ||
+  entityManagementService.relationshipDashboardRequest.filterType == 'DEPARTMENT'">
+      <div *ngFor="let disclosureList of entityDetails;let i=index"
+        class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
+        (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
+        <div class="p-3 text-break">
+          <div class="d-flex mb-3">
+            <div class="col text-secondary fs-14 d-flex">
+              <div class="col-height">
+                <span class="shadow-sm align-items-center d-flex ps-2 mt-4"
+                  [ngClass]="disclosureList?.fcoiTypeCode === '1'? 'fcoi-status': (disclosureList?.fcoiTypeCode === '2'?'proposal-status':'award-status')">
+                  <span class="px-2">{{disclosureList?.fcoiType}}</span></span>
+              </div>
+              <div class="col">
+                <span class="fw-bold">#{{disclosureList?.coiDisclosureNumber}} : {{disclosureList?.fcoiTypeCode === '1'
+                  ?'FCOI' : 'Project'}} Disclosure By
+                  {{disclosureList?.disclosurePersonFullName}}</span>
+              </div>
+            </div>
+            <div class="col-3 text-secondary fs-14">
+              <span class="fw-bold pr-05 me-2">
+                Disclosure Status :</span>
+              <app-no-data-label [valueToShow]="disclosureList?.conflictStatusCode">
+                <span
+                  class="{{commonService.getDisclosureConflictBadge(disclosureList?.conflictStatusCode)}}">{{disclosureList?.conflictStatus}}</span>
+              </app-no-data-label>
+            </div>
+          </div>
+          <div class="d-flex my-2">
+            <div class="col text-secondary fs-14">
+              <div class="d-flex">
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05 me-2">
+                    Department :</span>
+                    <app-no-data-label [valueToShow]="disclosureList?.unit?.unitNumber">
+                      <span *ngIf="disclosureList?.unit?.unitNumber" [title]="disclosureList?.unit?.unitDetail?.length>30?disclosureList?.unit?.unitDetail:''"
+                      [ngClass]="{'hand-cursor':disclosureList?.unit?.unitDetail.length>30}">{{(disclosureList?.unit?.unitDetail.length>30) ?
+                        (disclosureList?.unit?.unitDetail|slice:0:27)+'...':disclosureList?.unit?.unitDetail}}</span>
+                    </app-no-data-label>
+                </div>
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold me-2">Certification Date :</span>
+                  <app-no-data-label [valueToShow]="disclosureList?.certifiedAt">
+                    <span>{{disclosureList?.certifiedAt | dateFormatterWithTimeZone}}</span>
+                  </app-no-data-label>
+                </div>
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold me-2">Expiration Date :</span>
+                  <app-no-data-label [valueToShow]="disclosureList?.expirationDate">
+                    <span>{{disclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
+                  </app-no-data-label>
+                </div>
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05 me-2">
+                    Disposition Status :</span>
+                  <span *ngIf="disclosureList?.dispositionStatusCode"
+                    class="{{commonService.getDispositionStatusBadge(disclosureList?.dispositionStatusCode)}}">{{disclosureList?.dispositionStatus}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex my-2 align-items-center">
+            <div *ngIf="disclosureList?.fcoiTypeCode === '1'" class="col-3 text-secondary fs-14">
+              <span class="fw-bold ">
+                Description :</span>
+              <app-no-data-label [valueToShow]="disclosureList?.description">
+                <span [title]="disclosureList?.description.length>30? disclosureList?.description:''"
+                  [ngClass]="{'hand-cursor':disclosureList?.description.length>30}">
+                  {{(disclosureList?.description.length>30)?(disclosureList?.description|slice:0:27)+'...':disclosureList?.description}}
+                </span>
+              </app-no-data-label>
+            </div>
+            <div *ngIf="disclosureList?.fcoiTypeCode === '2' || disclosureList?.fcoiTypeCode === '3'"  class="col-3 text-secondary fs-14">
+              <span class="fw-bold ">
+                Project :</span>
+              <app-no-data-label [valueToShow]="disclosureList?.fcoiTypeCode === '2'? disclosureList?.proposalId : disclosureList?.awardId">
+                <span *ngIf="disclosureList?.fcoiTypeCode === '2'" [title]="disclosureList?.proposalTitle.length>30? disclosureList?.proposalTitle:''"
+                  [ngClass]="{'hand-cursor':disclosureList?.proposalTitle.length>30}">
+                 #{{disclosureList?.proposalId}} - {{(disclosureList?.proposalTitle.length>30) ? (disclosureList?.proposalTitle|slice:0:27)+'...':disclosureList?.proposalTitle}}
+                </span>
+                <span *ngIf="disclosureList?.fcoiTypeCode === '3'" [title]="disclosureList?.awardTitle.length>30? disclosureList?.awardTitle:''"
+                  [ngClass]="{'hand-cursor':disclosureList?.awardTitle.length>30}">
+                  #{{disclosureList?.awardId}} - {{(disclosureList?.awardTitle.length>30)?(disclosureList?.awardTitle|slice:0:27)+'...':disclosureList?.awardTitle}}
+                </span>
+              </app-no-data-label>
+            </div>
+            <div class="col-3 text-secondary fs-14">
+              <span class="fw-bold me-2">Administrator :</span>
+              <app-no-data-label [valueToShow]="disclosureList?.purpose">
+                <span></span>
+              </app-no-data-label>
+            </div>
+            <div class="col-3 text-secondary fs-14">
+              <span class="fw-bold me-2">Admin Group :</span>
+              <app-no-data-label [valueToShow]="disclosureList?.purpose">
+                <span></span>
+              </app-no-data-label>
+            </div>
+            <div class="col text-secondary fs-14">
+              <span class="fw-bold pr-05 me-2">
+                Review Status :</span>
+                <app-no-data-label [valueToShow]="disclosureList?.reviewStatusCode">
+                  <span
+                    class="{{commonService.getReviewStatusBadge(disclosureList?.reviewStatusCode)}}">{{disclosureList?.reviewStatus}}</span>
+                </app-no-data-label>
+            </div>
+            <div *ngIf="isViewProjectDisclosure || isViewFcoiDisclosure "
+              class="col-auto ms-auto d-flex justify-content-end">
+              <button (click)="redirectToDisclosure(disclosureList)" aria-describedby="Click to view details"
+                class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view details">
+                <mat-icon class="me-1">visibility</mat-icon>
+                View
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'TRAVEL_DISCLOSURES'">
+      <div *ngFor="let travelDisclosureList of entityDetails;let i=index"
+        class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
+        (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
+        <div class="p-3 text-break">
+          <div class="d-flex">
+            <div class="col-height">
+              <span class="travel-status shadow-sm align-items-center d-flex ps-2 mt-4">
+                <span class="px-2">Travel</span></span>
+            </div>
+            <div class="col text-secondary fs-14">
+              <span class="fw-bold">#{{travelDisclosureList?.travelDisclosureNumber}} : Travel Disclosure By
+                {{travelDisclosureList?.travellerName}}</span>
+            </div>
+            <div class="col-3 text-secondary fs-14">
+              <span class="fw-bold pr-05 me-2">
+                Disclosure Status :</span>
+              <app-no-data-label [valueToShow]="travelDisclosureList?.travelDisclosurestatus">
+                <span
+                  class="{{commonService.getDisclosureConflictBadge('1')}}">{{convertDisclosureStatus(travelDisclosureList?.travelDisclosurestatus)}}</span>
+              </app-no-data-label>
+            </div>
+          </div>
+          <div class="d-flex my-2">
+            <div class="col text-secondary fs-14">
+              <div class="d-flex">
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05">
+                    Department :</span>
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.unit">
+                    <span>{{travelDisclosureList?.unit?.unitDetail}}</span>
+                  </app-no-data-label>
+                </div>
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05">
+                    Entity :</span><app-no-data-label [valueToShow]="travelDisclosureList?.travelEntityName">
+                    <span>{{travelDisclosureList?.travelEntityName}}</span>
+                  </app-no-data-label>
+                </div>
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05">
+                    Traveller :</span>
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.travellerName">
+                    <span>{{travelDisclosureList?.travellerName}}</span>
+                  </app-no-data-label>
+                </div>
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05 me-2">
+                    Review Status :</span>
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.reviewerStatus">
+                    <span
+                      class="{{commonService.getReviewStatusBadge(travelDisclosureList?.reviewerStatusCode)}}">{{travelDisclosureList?.reviewerStatus}}</span>
+                  </app-no-data-label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex pt-2">
+            <div class="col text-secondary fs-14">
+              <div class="d-flex">
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05">
+                    Destination :</span>
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.destination">
+                    <span>{{travelDisclosureList?.destination}}</span>
+                  </app-no-data-label>
+                </div>
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05">
+                    Certification Date :</span>
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.certificationDate">
+                    <span>{{travelDisclosureList?.certificationDate}}</span>
+                  </app-no-data-label>
+                </div>
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05">
+                    Acknowledge Date :</span>
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.acknowledgeDate">
+                    <span>{{travelDisclosureList?.acknowledgeDate}}</span>
+                  </app-no-data-label>
+                </div>
+                <div class="col-3 text-secondary fs-14">
+                  <span class="fw-bold pr-05">
+                    Expiration Date :</span>
+                  <app-no-data-label [valueToShow]="travelDisclosureList?.expirationDate">
+                    <span>{{travelDisclosureList?.expirationDate}}</span>
+                  </app-no-data-label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex my-2 align-items-center">
+            <div class="col-6 text-secondary fs-14">
+              <span class="fw-bold pr-05">
+                Purpose :</span>
+              <app-no-data-label [valueToShow]="travelDisclosureList?.purpose">
+                <span>{{travelDisclosureList?.purpose}}</span>
+              </app-no-data-label>
+            </div>
+            <div class="col-3 text-secondary fs-14">
+              <span class="fw-bold pr-05">Start Date :</span>
+              <app-no-data-label [valueToShow]="travelDisclosureList?.travelStartDate">
+                <span>{{travelDisclosureList?.travelStartDate | dateFormatterWithTimeZone}}</span>
+              </app-no-data-label>
+            </div>
+            <div class="col text-secondary fs-14">
+              <span class="fw-bold pr-05">End Date :</span>
+              <app-no-data-label [valueToShow]="travelDisclosureList?.travelEndDate">
+                <span>{{travelDisclosureList?.travelEndDate | dateFormatterWithTimeZone}}</span>
+              </app-no-data-label>
+            </div>
+            <div *ngIf="isViewTravelDisclosure" class="col-auto ms-auto d-flex justify-content-end">
+              <button (click)="redirectToDisclosure(travelDisclosureList)" aria-describedby="Click to view details"
+                class="align-items-center btn btn-outline-primary d-flex fs-14" title="Click to view details">
+                <mat-icon class="me-1">visibility</mat-icon>
+                View
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </div>
   <ng-template #noData>
     <div class="m-4">
