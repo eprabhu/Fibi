@@ -186,23 +186,34 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     navigateToStep() {
-
         let nextStepUrl = '';
         switch (this.currentStepNumber) {
             case 1:
                 nextStepUrl = '/coi/create-disclosure/screening';
+                this.router.navigate([nextStepUrl], { queryParamsHandling: 'preserve' });
+                this.tempStepNumber = null;
                 break;
             case 2:
                 nextStepUrl = '/coi/create-disclosure/sfi';
+                this.router.navigate([nextStepUrl], { queryParamsHandling: 'preserve' });
+                this.tempStepNumber = null;
                 break;
             case 3:
                 nextStepUrl = '/coi/create-disclosure/relationship';
+                this.router.navigate([nextStepUrl], { queryParamsHandling: 'preserve' });
+                this.tempStepNumber = null;
                 break;
             case 4:
                 nextStepUrl = '/coi/create-disclosure/certification';
+                this.router.navigate([nextStepUrl], { queryParamsHandling: 'preserve' });
+                this.tempStepNumber = null;
+                break;
+            default:
+                nextStepUrl = this.navigationService.navigationGuardUrl;
+                this.router.navigateByUrl(this.navigationService.navigationGuardUrl);
+                this.tempStepNumber = null;
                 break;
         }
-        this.router.navigate([nextStepUrl], { queryParamsHandling: 'preserve' });
     }
 
     checkQuestionnaireCompletedBeforeCertify() {

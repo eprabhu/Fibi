@@ -23,32 +23,35 @@ const routes: Routes = [
         path: '', component: DisclosureComponent, canActivate: [ResolveServiceService],
         children: [
             {
-                path: 'screening',
+                path: 'screening', canDeactivate: [RouterGuardService],
                 loadChildren: () => import('./screening-questionnaire/screening-questionnaire.module').then(m => m.ScreeningQuestionnaireModule)
             },
             {
-                path: 'sfi', loadChildren: () => import('./sfi/sfi.module').then(m => m.SfiModule)
+                path: 'sfi', canDeactivate: [RouterGuardService], loadChildren: () => import('./sfi/sfi.module').then(m => m.SfiModule)
             },
             {
-                path: 'relationship',
+                path: 'relationship', canDeactivate: [RouterGuardService],
                 loadChildren: () => import('./relationship/relationship.module').then(m => m.RelationshipModule)
             },
             {
-                path: 'certification',
+                path: 'certification', canDeactivate: [RouterGuardService],
                 loadChildren: () => import('./certification/certification.module').then(m => m.CertificationModule)
             },
             {
-                path: 'summary', loadChildren: () => import('./summary/summary.module').then(m => m.SummaryModule)
+                path: 'summary', canDeactivate: [RouterGuardService],
+                loadChildren: () => import('./summary/summary.module').then(m => m.SummaryModule)
             },
             {
-                path: 'conflict-management',
+                path: 'conflict-management', canDeactivate: [RouterGuardService],
                 loadChildren: () => import('./attachment/attachment.module').then(m => m.AttachmentModule)
             },
             {
-                path: 'review', loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)
+                path: 'review', canDeactivate: [RouterGuardService],
+                loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)
             },
             {
-                path: 'history', loadChildren: () => import('./history/history.module').then(m => m.HistoryModule)
+                path: 'history', canDeactivate: [RouterGuardService],
+                loadChildren: () => import('./history/history.module').then(m => m.HistoryModule)
             }
         ]
     }];
