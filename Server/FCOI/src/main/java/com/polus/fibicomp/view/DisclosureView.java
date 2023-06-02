@@ -72,6 +72,15 @@ public class DisclosureView {
 	private Date acknowledgeDate;
 	private String travelDisclosureNumber;
 	private String description;
+	private String disclosurestatus;
+
+	public String getDisclosurestatus() {
+		return disclosurestatus;
+	}
+
+	public void setDisclosurestatus(String disclosurestatus) {
+		this.disclosurestatus = disclosurestatus;
+	}
 
 	public String getAcknowledgeBy() {
 		return acknowledgeBy;

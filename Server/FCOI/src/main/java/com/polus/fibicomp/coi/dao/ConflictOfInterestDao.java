@@ -44,6 +44,7 @@ import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.DashBoardProfile;
+import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.proposal.pojo.Proposal;
 
 @Transactional
@@ -757,4 +758,11 @@ public interface ConflictOfInterestDao {
 	public void updateReviewStatus(Integer disclosureId, String disclosureReviewInProgress);
 
 	public List<EntityRiskCategory> fetchEntityRiskCategory();
+	
+	 /**
+	 *
+	 * @param unitNumber
+	 * This method is used to fetch the entire row(Unit details) from unit table against the input unit number
+	 */
+	public Unit getUnitFromUnitNumber(String unitNumber);
 }
