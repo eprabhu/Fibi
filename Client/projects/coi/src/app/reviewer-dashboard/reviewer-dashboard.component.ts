@@ -16,7 +16,6 @@ import { CommonService } from '../common/services/common.service';
 })
 export class ReviewerDashboardComponent implements OnInit {
 
-    coiElastic: any;
     dashboardCounts = {
         conflictIdentifiedCount: 0,
         pendingEntityApproval: 0
@@ -56,7 +55,6 @@ export class ReviewerDashboardComponent implements OnInit {
         this.sortCountObj = new SortCountObj();
         this.getCount();
         this.getDashboardDetails();
-        this.coiElastic = this._elasticConfig.getElasticForCoi();
         this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
         this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
         this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
@@ -120,10 +118,6 @@ export class ReviewerDashboardComponent implements OnInit {
             parseDateWithoutTimestamp(this.advanceSearchDates.certificationDate);
         this.reviewerDashboardService.reviewerRequestObject.property7 =
             parseDateWithoutTimestamp(this.advanceSearchDates.expirationDate);
-    }
-
-    redirectToDisclosure(coi: any) {
-        this._router.navigate(['fibi/coi'], { queryParams: { disclosureId: coi.disclosure_id } });
     }
 
     selectPersonName(person: any) {

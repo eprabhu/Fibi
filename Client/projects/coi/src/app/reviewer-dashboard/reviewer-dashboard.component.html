@@ -15,8 +15,8 @@
   </section> -->
 
     <section class="section-card">
-        <nav class="coi-admin-dash mb-2 mx-0 row border">
-            <div class="bg-white list">
+        <nav class=" bg-white coi-admin-dash mb-2 mx-0 row border">
+            <div class="list col">
                 <ul class="m-0 p-0">
                     <li (click)="changeTab('NEW_SUBMISSIONS')" tabindex="0" (keyup.enter)="changeTab('NEW_SUBMISSIONS')"
                         (keyup.space)="changeTab('NEW_SUBMISSIONS')"
@@ -52,21 +52,117 @@
                     </li>
                 </ul>
             </div>
-        </nav>
-        <div class="d-flex mb-2">
-            <div class="form-group col position-relative">
-                <app-elastic [options]="coiElastic" style="width: 1400px"
-                    [placeHolder]="'Search : Person, Department, Entity, Disclosure#'"
-                    (selectedResult)="redirectToDisclosure($event)"></app-elastic>
+            <div class="col-auto">
+                    <button role="button" class="btn btn-tertiary d-flex align-items-center mt-2 ms-auto fs-14"
+                        id="advanced-search" (click)="toggleADSearch()" aria-controls="collapseExample"
+                        aria-expanded="false" title="Click here to collapse/un-collapse advanced search"
+                        area-describedby="Click here to collapse/un-collapse advanced search"
+                        aria-label="Toggle Advanced Search"><mat-icon class="me-3">tune</mat-icon>
+                        Advanced Search
+                    </button>
             </div>
-            <div class="form-group col-auto">
-                <button role="button" class="btn btn-primary d-flex align-items-center primary-button ms-3 fs-14"
-                    id="advanced-search" (click)="toggleADSearch()" aria-controls="collapseExample"
-                    aria-expanded="false" title="Click here to collapse/un-collapse advanced search"
-                    area-describedby="Click here to collapse/un-collapse advanced search"
-                    aria-label="Toggle Advanced Search"><mat-icon class="me-3">tune</mat-icon>
-                    Advanced Search
-                </button>
+        </nav>
+
+        <div class="card collapse border mt-2" id="collapseExample">
+            <div class="card-body">
+                <div class="form-row row">
+                    <!-- Disclosure # -->
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                        <label class="d-block" for="reviewer-adv-disclosure-number">
+                            Disclosure
+                        </label>
+                        <input [(ngModel)]="reviewerDashboardService.reviewerRequestObject.property1"
+                            class="form-control" placeholder="Disclosure Number" type="text"
+                            id="reviewer-adv-disclosure-number" />
+                    </div>
+                    <!-- Entity Name -->
+                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+                        <label class="d-block" for="reviewer-adv-entity-name">Entity</label>
+                        <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
+                            [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here'" class="w-100 mt-4"
+                            [uniqueId]="'reviewer-adv-entity-name'">
+                        </app-endpoint-search>
+                    </div>
+                    <!-- Person Name -->
+                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+                        <label class="d-block" for="reviewer-adv-person-name">Person Name</label>
+                        <app-elastic (selectedResult)="selectPersonName($event)" [clearField]="advSearchClearField"
+                            [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person Name'"
+                            [uniqueId]="'reviewer-adv-person-name'">
+                        </app-elastic>
+                    </div>
+                    <!-- Disclosure Type -->
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                        <label class="d-block" for="reviewer-adv-disclosure-type">
+                            Disclosure Type
+                        </label>
+                        <app-look-up (selectedResult)="onLookupSelect($event, 'property5')"
+                            [options]="disclosureTypeOptions" [selectedLookUpList]="lookupValues['property5']"
+                            [uniqueId]="'reviewer-adv-disclosure-type'">
+                        </app-look-up>
+                    </div>
+                </div>
+                <div class="form-row row mt-3">
+                    <!-- Disclosure Status -->
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                        <label class="d-block" for="reviewer-adv-disclosure-status">
+                            Disclosure Status
+                        </label>
+                        <app-look-up (selectedResult)="onLookupSelect($event, 'property4')"
+                            [options]="disclosureStatusOptions" [selectedLookUpList]="lookupValues['property4']"
+                            [uniqueId]="'reviewer-adv-disclosure-status'">
+                        </app-look-up>
+                    </div>
+                    <!-- Certification Date -->
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                        <label class="d-block" for="reviewer-adv-certification-date">
+                            Certification Date
+                        </label>
+                        <span class="dateField">
+                            <input matInput (keypress)="certificationDate.open()" [matDatepicker]="certificationDate"
+                                id="reviewer-adv-certification-date" (click)="certificationDate.open()"
+                                class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.certificationDate"
+                                placeholder="dd/MM/yyyy">
+                            <i (click)="certificationDate.open()"
+                                class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                            <mat-datepicker #certificationDate></mat-datepicker>
+                        </span>
+                    </div>
+                    <!-- End Date -->
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                        <label class="d-block" for="reviewer-adv-expiration-date">
+                            Expiration Date
+                        </label>
+                        <span class="dateField">
+                            <input matInput [matDatepicker]="expirationDate" id="reviewer-adv-expiration-date"
+                                (keypress)="expirationDate.open()" (click)="expirationDate.open()"
+                                class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.expirationDate"
+                                placeholder="dd/MM/yyyy">
+                            <i (click)="expirationDate.open()"
+                                class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                            <mat-datepicker #expirationDate></mat-datepicker>
+                        </span>
+                    </div>
+                    <!-- Department Name -->
+                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+                        <label class="d-block" for="reviewer-adv-department-name">
+                            Department Name
+                        </label>
+                        <app-endpoint-search (onSelect)="leadUnitChangeFunction($event)"
+                            [clearField]="advSearchClearField" [httpOptions]="leadUnitSearchOptions"
+                            [placeHolder]="'Type here for Department Name'" [uniqueId]="'reviewer-adv-department-name'">
+                        </app-endpoint-search>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3 pr-0">
+                        <button (click)="resetAndPerformAdvanceSearch()" title="Click here to clear all the fields"
+                            area-describedby="Click here to clear all the fields"
+                            class=" btn btn-outline-secondary btn-xs fs-14 px-4">Clear</button>
+                        <button (click)="performAdvanceSearch()"
+                            title="Click here to get the search results with/without fields"
+                            area-describedby="Click here to get the search results with/without fields"
+                            class="btn btn-primary mx-3 fs-14">Search</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -179,113 +275,10 @@
             </span>
         </div>
 
-        <div class="card mb-3 collapse border mt-2" id="collapseExample">
-            <div class="card-body">
-                <div class="form-row row">
-                    <!-- Disclosure # -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
-                        <label class="d-block" for="reviewer-adv-disclosure-number">
-                            Disclosure
-                        </label>
-                        <input [(ngModel)]="reviewerDashboardService.reviewerRequestObject.property1"
-                            class="form-control" placeholder="Disclosure Number" type="text"
-                            id="reviewer-adv-disclosure-number" />
-                    </div>
-                    <!-- Entity Name -->
-                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
-                        <label class="d-block" for="reviewer-adv-entity-name">Entity</label>
-                        <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
-                            [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here'" class="w-100 mt-4"
-                            [uniqueId]="'reviewer-adv-entity-name'">
-                        </app-endpoint-search>
-                    </div>
-                    <!-- Person Name -->
-                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
-                        <label class="d-block" for="reviewer-adv-person-name">Person Name</label>
-                        <app-elastic (selectedResult)="selectPersonName($event)" [clearField]="advSearchClearField"
-                            [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person Name'"
-                            [uniqueId]="'reviewer-adv-person-name'">
-                        </app-elastic>
-                    </div>
-                    <!-- Disclosure Type -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
-                        <label class="d-block" for="reviewer-adv-disclosure-type">
-                            Disclosure Type
-                        </label>
-                        <app-look-up (selectedResult)="onLookupSelect($event, 'property5')"
-                            [options]="disclosureTypeOptions" [selectedLookUpList]="lookupValues['property5']"
-                            [uniqueId]="'reviewer-adv-disclosure-type'">
-                        </app-look-up>
-                    </div>
-                </div>
-                <div class="form-row row mt-3">
-                    <!-- Disclosure Status -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
-                        <label class="d-block" for="reviewer-adv-disclosure-status">
-                            Disclosure Status
-                        </label>
-                        <app-look-up (selectedResult)="onLookupSelect($event, 'property4')"
-                            [options]="disclosureStatusOptions" [selectedLookUpList]="lookupValues['property4']"
-                            [uniqueId]="'reviewer-adv-disclosure-status'">
-                        </app-look-up>
-                    </div>
-                    <!-- Certification Date -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
-                        <label class="d-block" for="reviewer-adv-certification-date">
-                            Certification Date
-                        </label>
-                        <span class="dateField">
-                            <input matInput (keypress)="certificationDate.open()" [matDatepicker]="certificationDate"
-                                id="reviewer-adv-certification-date" (click)="certificationDate.open()"
-                                class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.certificationDate"
-                                placeholder="dd/MM/yyyy">
-                            <i (click)="certificationDate.open()"
-                                class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
-                            <mat-datepicker #certificationDate></mat-datepicker>
-                        </span>
-                    </div>
-                    <!-- End Date -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
-                        <label class="d-block" for="reviewer-adv-expiration-date">
-                            Expiration Date
-                        </label>
-                        <span class="dateField">
-                            <input matInput [matDatepicker]="expirationDate" id="reviewer-adv-expiration-date"
-                                (keypress)="expirationDate.open()" (click)="expirationDate.open()"
-                                class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.expirationDate"
-                                placeholder="dd/MM/yyyy">
-                            <i (click)="expirationDate.open()"
-                                class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
-                            <mat-datepicker #expirationDate></mat-datepicker>
-                        </span>
-                    </div>
-                    <!-- Department Name -->
-                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
-                        <label class="d-block" for="reviewer-adv-department-name">
-                            Department Name
-                        </label>
-                        <app-endpoint-search (onSelect)="leadUnitChangeFunction($event)"
-                            [clearField]="advSearchClearField" [httpOptions]="leadUnitSearchOptions"
-                            [placeHolder]="'Type here for Department Name'" [uniqueId]="'reviewer-adv-department-name'">
-                        </app-endpoint-search>
-                    </div>
-                    <div class="d-flex justify-content-end mt-3 pr-0">
-                        <button (click)="resetAndPerformAdvanceSearch()" title="Click here to clear all the fields"
-                            area-describedby="Click here to clear all the fields"
-                            class=" btn btn-outline-secondary btn-xs fs-14 px-4">Clear</button>
-                        <button (click)="performAdvanceSearch()"
-                            title="Click here to get the search results with/without fields"
-                            area-describedby="Click here to get the search results with/without fields"
-                            class="btn btn-primary mx-3 fs-14">Search</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <ng-container *ngIf="isShowAllProposalList">
             <ng-container *ngIf="coiList.length > 0;else noData">
                 <ng-container *ngFor="let coi of coiList;let index = index">
-                    <section class="mt-3 shadow-sm coi-card">
+                    <section class="shadow-sm coi-card">
                         <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
                             (mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
                             <div class="border-bottom p-3">
