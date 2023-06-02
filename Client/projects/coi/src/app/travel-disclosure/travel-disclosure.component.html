@@ -12,9 +12,6 @@
                                         {{userDetails.fullName}}
                                     </u>
                                 </span>
-                                [ Unit :
-                                {{travelDisclosureRO.homeUnit}} - {{travelDisclosureRO.homeUnitName}}
-                                ]
                             </strong>
                         </ng-container>
                         <ng-container *ngIf="isSaved">
@@ -42,57 +39,101 @@
                 </div>
             </div>
             <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 pb-1 bg-white">
-                <!-- for relationship box -->
-                <div class="col">
-                    <div class="border triple-card rounded-1 position-relative">
+                <!-- user details -->
+                <div class="col mr-15">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">
+                                    <i aria-hidden="true" class="fa fa-home mr-2"></i>
+                                    Unit :
+                                </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label
+                                        [valueToShow]="travelCreateModalDetails.homeUnit">
+                                        <div [title]="travelCreateModalDetails.homeUnit">
+                                            {{travelCreateModalDetails.homeUnit}} -
+                                            {{travelCreateModalDetails.homeUnitName.length>40 ?
+                                            (travelCreateModalDetails.homeUnitName | slice:0: 40)+'...' :
+                                            travelCreateModalDetails.homeUnitName}}
+                                        </div>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">
+                                    <i class="fa fa-user-o fw-700 mr-2" aria-hidden="true"></i>
+                                    Administrator :
+                                </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]=null>
+                                        <span></span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">
+                                    <img class="activity-icon" src="{{deployMap}}assets/images/multiple-admin-1.svg"
+                                        alt="add-adminGroup icon">
+                                    Admin Group :
+                                </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]=null>
+                                        <span></span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- for date box -->
-                <div class="col">
-                    <div class="border triple-card mx-3 rounded-1 position-relative">
-                        <span class="status-pill fs-14">Date</span>
-                        <div class="ps-4 table-negative-margin">
-                            <table class="fs-14 fw-medium spaced-table">
-                                <tr>
-                                    <td>Create</td>
-                                    <td class="semicolon-padding">:</td>
-                                    <td>
-                                        <app-no-data-label [valueToShow]="null">
-                                            <span></span>
-                                        </app-no-data-label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Certification</td>
-                                    <td class="semicolon-padding">:</td>
-                                    <td>
-                                        <app-no-data-label [valueToShow]="null">
-                                            <span></span>
-                                        </app-no-data-label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Acknowledgment</td>
-                                    <td class="semicolon-padding">:</td>
-                                    <td>
-                                        <app-no-data-label [valueToShow]="null">
-                                            <span></span>
-                                        </app-no-data-label>
-                                    </td>
-                                </tr>
-                            </table>
+                <div class="col-auto mr-15">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                        <span class="status-pill">Date</span>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">Create : </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]=null>
+                                        <span></span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">Certification :</label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]=null>
+                                        <span></span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600">Acknowledgment : </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]=null>
+                                        <span></span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- for status box -->
-                <div class="col">
+                <div class="col-auto status-card-width">
                     <div class="border triple-card rounded-1 position-relative">
-                        <span class="status-pill fs-14">Status</span>
+                        <span class="status-pill">Status</span>
                         <div class="ps-4 table-negative-margin">
-                            <table class="fs-14 fw-medium spaced-table">
+                            <table class="fs-14 fw-medium spaced-table grey-text">
                                 <tr>
-                                    <td>Review</td>
-                                    <td>:</td>
+                                    <td class="fw-600">Review :</td>
                                     <td class="ps-4">
                                         <span class="yellow-badge">
                                             Pending
@@ -100,8 +141,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Disclosure</td>
-                                    <td>:</td>
+                                    <td class="fw-600">Disclosure :</td>
                                     <td class="ps-4">
                                         <span class="yellow-badge">
                                             Pending
@@ -129,7 +169,7 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="col h-100 m-0 fs-14"
+                    <div class="col h-100 m-0 fs-14" (click)="service.isChildRouting = true"
                         [class.complete]="isRouteComplete(['travel-details', 'certification'])"
                         [routerLink]="['travel-details']" queryParamsHandling='merge'
                         [class.cursor-pointer]="!isRouteComplete(['travel-details'])"
@@ -141,11 +181,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col fs-14" [class.complete]="isRouteComplete(['certification'])"
-                        [routerLink]="['certification']" queryParamsHandling='merge'
-                        [class.cursor-pointer]="!isRouteComplete(['certification'])"
+                    <div class="col fs-14" (click)="service.isChildRouting = true"
+                        [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
+                        queryParamsHandling='merge' [class.cursor-pointer]="!isRouteComplete(['certification'])"
                         [title]="isRouteComplete(['certification'])? 'Certification' : 'Goto step Certification'">
-                        <span class="align-self-center">Certification</span>
+                        Certification
                     </div>
                 </div>
             </ng-container>
@@ -236,15 +276,18 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p *ngIf="service.unSavedTabName" class="fs-14">
+                <p *ngIf="service.unSavedTabName != 'Certification'" class="fs-14">
                     You have unsaved changes in
+                    <ng-container *ngIf="!service.unSavedTabName">
+                        <strong>Travel Disclosure Creation</strong>
+                    </ng-container>
                     <strong>{{service.unSavedTabName}}.</strong>
                 </p>
                 <p class="fs-14">Do you want to leave the
-                    <ng-container *ngIf="service.unSavedTabName">
+                    <ng-container *ngIf="service.unSavedTabName != 'Certification'">
                         page without saving
                     </ng-container>
-                    <ng-container *ngIf="!service.unSavedTabName">
+                    <ng-container *ngIf="service.unSavedTabName == 'Certification'">
                         <strong>Certification </strong>
                         Page
                     </ng-container>

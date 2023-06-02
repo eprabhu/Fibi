@@ -200,7 +200,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     private getCreateTravelRequestObject(): void {
-        sessionStorage.setItem('travelDisclosureRO', JSON.stringify(
+        sessionStorage.setItem('travelCreateModalDetails', JSON.stringify(
             {
                 homeUnit: this.reviseObject.homeUnit ? this.reviseObject.homeUnit : null,
                 description: this.reviseObject.revisionComment,

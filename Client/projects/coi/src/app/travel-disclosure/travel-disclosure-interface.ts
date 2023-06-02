@@ -2,7 +2,9 @@ export class CoiTravelDisclosure {
     travelDisclosureId: number;
     travelNumber: number;
     versionNumber: number;
-    versionStatus = 'ACTIVE';
+    versionStatus: 'ACTIVE' | 'PENDING' | 'DRAFT' = 'PENDING';
+    disclosureStatus: 'Pending' | 'Submitted' | 'Acknowledged' = 'Pending';
+    reviewStatus: 'completed ' | 'Pending' = 'Pending';
     personId: string;
     entityId: number;
     entityNumber: number;
@@ -23,6 +25,8 @@ export class CoiTravelDisclosure {
     travelTravellerId: string;
     travellerTypeCode: Array<string> = [];
     isInternationalTravel: boolean;
+    homeUnit: string;
+    description: string;
 }
 
 export interface TravelDisclosureTraveller {
@@ -33,4 +37,11 @@ export interface TravelDisclosureTraveller {
     travelStatusCode?: string;
     updateTimestamp: number;
     updateUser: string;
+}
+
+export interface TravelCreateModalDetails {
+    homeUnit: null;
+    description: string;
+    personId: string;
+    homeUnitName: null;
 }

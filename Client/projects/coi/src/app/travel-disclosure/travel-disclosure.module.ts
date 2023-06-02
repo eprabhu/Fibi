@@ -11,7 +11,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
     {
-        path: '', component: TravelDisclosureComponent, canActivate: [TravelRouteGuardService],
+        path: '', component: TravelDisclosureComponent, canActivate: [TravelRouteGuardService], canDeactivate: [TravelRouteGuardService],
         children: [
             {
                 path: 'travel-details', canDeactivate: [TravelRouteGuardService],
