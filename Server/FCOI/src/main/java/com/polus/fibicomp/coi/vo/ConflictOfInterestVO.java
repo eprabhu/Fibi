@@ -30,6 +30,7 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.person.pojo.Person;
+import com.polus.fibicomp.pojo.Unit;
 
 public class ConflictOfInterestVO {
 
@@ -246,7 +247,47 @@ public class ConflictOfInterestVO {
 	private Date travelSubmissionDate;
 
 	private List<EntityRiskCategory> entityRiskCategories;
+
+	private String description;
 	
+	private Unit travellerUnitDetails;
+	
+	private String disclosureStatus;
+	
+	private String dispositionStatus;
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Unit getTravellerUnitDetails() {
+		return travellerUnitDetails;
+	}
+
+	public void setTravellerUnitDetails(Unit travellerUnitDetails) {
+		this.travellerUnitDetails = travellerUnitDetails;
+	}
+
+	public String getDisclosureStatus() {
+		return disclosureStatus;
+	}
+
+	public void setDisclosureStatus(String disclosureStatus) {
+		this.disclosureStatus = disclosureStatus;
+	}
+
+	public String getDispositionStatus() {
+		return dispositionStatus;
+	}
+
+	public void setDispositionStatus(String dispositionStatus) {
+		this.dispositionStatus = dispositionStatus;
+	}
+
 	public Date getTravelSubmissionDate() {
 		return travelSubmissionDate;
 	}

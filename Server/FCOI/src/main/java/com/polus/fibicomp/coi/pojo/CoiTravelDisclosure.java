@@ -26,6 +26,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.polus.fibicomp.person.pojo.Person;
+import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
@@ -143,8 +144,74 @@ public class CoiTravelDisclosure implements Serializable {
 	@Transient
 	private List<String> coiTravellerTypeCodeList;
 	
+	@Column(name = "HOME_UNIT")
+	private String travellerHomeUnit;
+	
+	@Column(name = "DESCRIPTION")
+	private String description;
+	
 	@Column(name = "SUBMISSION_DATE")
 	private Date travelSubmissionDate;
+	
+	@Column(name = "TRAVEL_DISCLOSURE_STATUS")
+	private String disclosureStatus;
+	
+	@Column(name = "DISPOSITION_STATUS")
+	private String dispositionStatus;
+	
+	@Column(name = "REVIEW_STATUS")
+	private String reviewStatus;
+	
+	@Transient
+	private Unit travellerUnitDetails;
+
+	public String getDisclosureStatus() {
+		return disclosureStatus;
+	}
+
+	public void setDisclosureStatus(String disclosureStatus) {
+		this.disclosureStatus = disclosureStatus;
+	}
+
+	public String getDispositionStatus() {
+		return dispositionStatus;
+	}
+
+	public void setDispositionStatus(String dispositionStatus) {
+		this.dispositionStatus = dispositionStatus;
+	}
+
+	public String getReviewStatus() {
+		return reviewStatus;
+	}
+
+	public void setReviewStatus(String reviewStatus) {
+		this.reviewStatus = reviewStatus;
+	}
+
+	public Unit getTravellerUnitDetails() {
+		return travellerUnitDetails;
+	}
+
+	public void setTravellerUnitDetails(Unit travellerUnitDetails) {
+		this.travellerUnitDetails = travellerUnitDetails;
+	}
+
+	public String getTravellerHomeUnit() {
+		return travellerHomeUnit;
+	}
+
+	public void setTravellerHomeUnit(String travellerHomeUnit) {
+		this.travellerHomeUnit = travellerHomeUnit;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public Date getTravelSubmissionDate() {
 		return travelSubmissionDate;

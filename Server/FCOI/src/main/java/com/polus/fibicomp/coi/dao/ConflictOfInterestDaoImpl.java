@@ -1000,7 +1000,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
 					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
-					disclosureView.setTravelDisclosurestatus(resultSet.getString("TRAVEL_DISCLOSURE_STATUS"));
+					disclosureView.setDisclosurestatus(resultSet.getString("TRAVEL_DISCLOSURE_STATUS"));
+					disclosureView.setDispositionStatus(resultSet.getString("DISPOSITION_STATUS"));
+					disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
+					disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
 					disclosureViews.add(disclosureView);
 				} else {
 					DisclosureView disclosureView =  new DisclosureView();
@@ -2763,6 +2766,16 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public List<EntityRiskCategory> fetchEntityRiskCategory() {
 		return hibernateTemplate.loadAll(EntityRiskCategory.class);
+	}
+	
+	@Override
+	public Unit getUnitFromUnitNumber(String unitNumber) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Unit> query = builder.createQuery(Unit.class);
+		Root<Unit> rootDisclComment = query.from(Unit.class);
+		query.where(builder.equal(rootDisclComment.get("unitNumber"), unitNumber));
+		return session.createQuery(query).getSingleResult();
 	}
 
 }

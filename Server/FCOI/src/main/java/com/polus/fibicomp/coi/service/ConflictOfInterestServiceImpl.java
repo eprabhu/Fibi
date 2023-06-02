@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.Calendar;
 import java.util.stream.Collectors;
 
+import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
@@ -62,6 +63,7 @@ import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.pojo.DashBoardProfile;
+import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.proposal.dao.ProposalDao;
 import com.polus.fibicomp.proposal.pojo.Proposal;
 import com.polus.fibicomp.proposal.pojo.ProposalPerson;
@@ -1259,6 +1261,22 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setIsInterNationalTravel(vo.getIsInternationalTravel());
 		coiTravelDisclosure.setTravelNumber(conflictOfInterestDao.generateMaxTravelNumber());
 		coiTravelDisclosure.setPersonId(vo.getPersonId());
+		coiTravelDisclosure.setDescription(vo.getDescription());
+		coiTravelDisclosure.setCreateUser(AuthenticatedUser.getLoginUserName());
+		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiTravelDisclosure.setDispositionStatus(vo.getDispositionStatus());
+		coiTravelDisclosure.setDisclosureStatus(vo.getDisclosureStatus());
+		coiTravelDisclosure.setReviewStatus(vo.getReviewStatus());
+		try {
+			Unit unitDetails = conflictOfInterestDao.getUnitFromUnitNumber(vo.getHomeUnit());
+			if (unitDetails != null) {
+				coiTravelDisclosure.setTravellerHomeUnit(vo.getHomeUnit());
+				coiTravelDisclosure.setTravellerUnitDetails(unitDetails);
+			}
+		} catch (NoResultException e) {
+			coiTravelDisclosure.setTravellerHomeUnit("000001");
+			coiTravelDisclosure.setTravellerUnitDetails(conflictOfInterestDao.getUnitFromUnitNumber("000001"));
+		}
 		if (vo.getPersonId() != null && vo.getEntityId() != null) {
 			Integer personEntityId;
 			personEntityId = conflictOfInterestDao.fetchMaxPersonEntityId(vo.getPersonId(), vo.getEntityId());
