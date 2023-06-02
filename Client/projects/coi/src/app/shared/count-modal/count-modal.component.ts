@@ -1,9 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {CountModalService} from './count-modal.service';
-import {hideModal} from '../../../../../fibi/src/app/common/utilities/custom-utilities';
-import {CommonService} from '../../common/services/common.service';
-import {getSponsorSearchDefaultValue} from '../../common/utlities/custom-utlities';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { CountModalService } from './count-modal.service';
+import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { CommonService } from '../../common/services/common.service';
+import { getSponsorSearchDefaultValue } from '../../common/utlities/custom-utlities';
 
 @Component({
     selector: 'app-count-modal',
@@ -52,7 +52,7 @@ export class CountModalComponent implements OnInit {
             .subscribe((data: any) => {
                 this.coiFinancialEntityDetails = data;
                 document.getElementById('hidden-open-button').click();
-        }));
+            }));
     }
 
     getProjectDatas() {
@@ -64,9 +64,9 @@ export class CountModalComponent implements OnInit {
                     this.currentModalTab = this.moduleCode === 1 ? 'Award' : 'Proposal';
                     this.switchTableData();
                     document.getElementById('hidden-open-button').click();
-            }, err => {
-                this.closeCountModal();
-            }));
+                }, err => {
+                    this.closeCountModal();
+                }));
         } else {
             this.$subscriptions.push(this._countModalService
                 .getAwardProposalSFIList(this.disclosureId).subscribe((data: any) => {
@@ -74,9 +74,9 @@ export class CountModalComponent implements OnInit {
                     this.currentModalTab = this.moduleCode === 1 ? 'Award' : 'Proposal';
                     this.switchTableData();
                     document.getElementById('hidden-open-button').click();
-            }, err => {
-                this.closeCountModal();
-            }));
+                }, err => {
+                    this.closeCountModal();
+                }));
         }
     }
 
@@ -89,16 +89,16 @@ export class CountModalComponent implements OnInit {
 
     modalHeader() {
         if (this.fcoiTypeCode == 1) {
-            if (this.moduleCode === 8) {
+            if (this.moduleCode == 8) {
                 return `SFIs Attached to #${this.disclosureNumber}: FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
-            } else if (this.moduleCode === 1 || this.moduleCode === 3) {
+            } else if (this.moduleCode == 1 || this.moduleCode == 3) {
                 return `Projects Related to #${this.disclosureNumber}: FCOI Disclosure By ${this.getFcoiFullName()} [ Unit : ${this.getFcoiUnitName()} ]`;
             }
         } else {
             if (this.fcoiTypeCode == 2 || this.fcoiTypeCode == 3) {
-                if (this.moduleCode === 8) {
+                if (this.moduleCode == 8) {
                     return `SFIs Attached to #${this.disclosureNumber}: ${this.getType()} Disclosure For [ ${this.gettitle()} ] By ${this.getFullName()}`;
-                } else if (this.moduleCode === 1 || this.moduleCode === 3) {
+                } else if (this.moduleCode == 1 || this.moduleCode == 3) {
                     return `Projects Related to ${this.gettitle()} `;
                 }
             }
