@@ -550,6 +550,10 @@ CREATE TABLE `coi_travel_disclosure` (
   `SUBMISSION_DATE` DATE,
   `DESCRIPTION` varchar(2000),
   `HOME_UNIT` varchar(2000),
+  `REVIEW_STATUS` varchar(2000),
+  `EXPIRATION_DATE` DATE,
+  `TRAVEL_DISCLOSURE_STATUS` varchar(2000),
+  `DISPOSITION_STATUS` varchar(2000),
   PRIMARY KEY (`TRAVEL_DISCLOSURE_ID`),
   KEY `COI_TRAVEL_DISCLOSURE_FK1_idx` (`PERSON_ENTITY_ID`),
   KEY `COI_TRAVEL_DISCLOSURE_FK2_idx` (`ENTITY_ID`),
@@ -611,6 +615,13 @@ ALTER TABLE `coi_disclosure` ADD COLUMN `HOME_UNIT` VARCHAR(8) DEFAULT NULL;
 
 ALTER TABLE `coi_disclosure` ADD CONSTRAINT `COI_DIS_HOME_UNIT_FK7` FOREIGN KEY (`HOME_UNIT`) REFERENCES `unit` (`UNIT_NUMBER`);
 
+CREATE TABLE coi_travel_disclosure_status_type (
+		TRAVEL_DISCLOSURE_STATUS_CODE varchar(3) primary key not null,
+		DESCRIPTION varchar(200),
+		IS_ACTIVE varchar(1),
+		UPDATE_TIMESTAMP datetime,
+		UPDATE_USER varchar(50)
+);
 
 SET FOREIGN_KEY_CHECKS=1; 
 
@@ -697,6 +708,9 @@ INSERT INTO `rights` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `U
 INSERT INTO `rights` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `UPDATE_TIMESTAMP`, `RIGHTS_TYPE_CODE`) VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), 'MANAGE_ENTITY', 'To manage all actions against a Entity', 'quickstart', now(), '2');
 INSERT INTO `rights` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `UPDATE_TIMESTAMP`, `RIGHTS_TYPE_CODE`) VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), 'VIEW_ENTITY', 'To view any  Entities', 'quickstart', now(), '2');
 
+insert into coi.coi_travel_disclosure_status_type values('1', 'Draft', 'Y', now(), 'admin');
+insert into coi.coi_travel_disclosure_status_type values('2', 'Acknowledged', 'Y', now(), 'admin');
+insert into coi.coi_travel_disclosure_status_type values('3', 'Risk', 'Y', now(), 'admin');
 
 
 ALTER TABLE `coi_disclosure` 
