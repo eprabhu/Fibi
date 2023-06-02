@@ -21,6 +21,20 @@
   height: 96px;
 }
 
+.activity-icon {
+  width: 1.5rem;
+  margin-right: 4px;
+  margin-left: -1px;
+}
+
+.status-card-width {
+  width: 280px;
+}
+
+.grey-text {
+  color: #6A7980;
+}
+
 .notes {
   height: 43px;
   margin-top: -51px;
@@ -35,6 +49,7 @@
   background-color: #E4F1FF;
 
   >div {
+    font-size: 1.4rem;
     position: relative;
     display: table-cell;
     padding: 14px 0;
@@ -98,6 +113,7 @@
   font-weight: 500 !important;
   padding: 1px 0.5rem;
   border: 1px solid #dee2e6 !important;
+  font-size: 1.4rem;
 }
 
 .table-negative-margin {
@@ -108,11 +124,6 @@
   margin-top: 25px;
   border-collapse: separate;
   border-spacing: 0 2px;
-  color: #6A7980;
-}
-
-table {
-  color: #6A7980;
 }
 
 .toggle-header-btn {
@@ -146,8 +157,4 @@ table {
   position: sticky;
   top: 51px;
   z-index: 50;
-}
-
-.semicolon-padding {
-  padding-right: 25px;
 }

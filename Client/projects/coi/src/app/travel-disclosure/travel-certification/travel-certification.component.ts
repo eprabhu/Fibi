@@ -35,10 +35,12 @@ export class TravelCertificationComponent implements OnDestroy {
 
     ngOnDestroy(): void {
         this.travelService.isTravelCertified = false;
+        this.travelService.unSavedTabName = '';
     }
 
     certifyTravelDisclosure(): void {
         this.travelService.travelDataChanged = true;
         this.travelService.isTravelCertified = true;
+        this.travelService.unSavedTabName = 'Certification';
     }
 }

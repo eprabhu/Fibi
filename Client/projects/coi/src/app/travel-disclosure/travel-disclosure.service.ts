@@ -6,10 +6,11 @@ import { CommonService } from '../common/services/common.service';
 @Injectable()
 export class TravelDisclosureService {
 
-    travelDisclosureSubject = new Subject();
+    saveOrCopySubject = new Subject();
     travelDataChanged = false;
     isTravelCertified = false;
     unSavedTabName = '';
+    isChildRouting = false;
 
     constructor(
         private _http: HttpClient,

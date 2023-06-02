@@ -23,12 +23,11 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     entitySearchOptions: any = {};
     countrySearchOptions: any = {};
     $subscriptions: Subscription[] = [];
-    clearField: String;
-    countryClearField: String;
-    entityName: String;
+    clearField = new String('true');
+    countryClearField = new String('true');
+    entityName = '';
     mandatoryList = new Map();
     dateValidationList = new Map();
-    isCopyTravelDisclosure = false;
     travelDisclosureRO = new CoiTravelDisclosure();
     travellerType: Array<TravelDisclosureTraveller>;
     travelStatusType: Array<TravelDisclosureTraveller>;
@@ -52,7 +51,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     private handleTravelDisclosureSubmission(): void {
-        this.service.travelDisclosureSubject.subscribe((event: string) => {
+        this.service.saveOrCopySubject.subscribe((event: string) => {
             if (event === 'certify') {
                 this.certifyTravelDisclosure();
             } else if (event === 'certifycopy') {
@@ -101,12 +100,19 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    private getTravelCreateModalDetails(): void {
+        const travelCreateModalDetails = JSON.parse(sessionStorage.getItem('travelCreateModalDetails'));
+        this.travelDisclosureRO.homeUnit = travelCreateModalDetails.homeUnit;
+        this.travelDisclosureRO.description = travelCreateModalDetails.description;
+        this.travelDisclosureRO.personId = travelCreateModalDetails.personId;
+    }
+
     private getAllTravelDisclosureValues(requestObject: CoiTravelDisclosure): CoiTravelDisclosure {
+        this.getTravelCreateModalDetails();
         this.getTravellerTypeCode();
         this.getTravelStatusCode();
         this.setValuesForDestinationType();
         requestObject.isSponsoredTravel = true;
-        requestObject.personId = this.commonService.getCurrentUserDetail('personId');
         requestObject.travelAmount = (Number(requestObject.travelAmount)) ? Number(requestObject.travelAmount) : null;
         requestObject.travelStartDate = parseDateWithoutTimestamp(requestObject.travelStartDate);
         requestObject.travelEndDate = parseDateWithoutTimestamp(requestObject.travelEndDate);
@@ -221,21 +227,16 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
                         this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Saved Successfully');
                         this.service.unSavedTabName = '';
                         this.service.travelDataChanged = false;
+                        this.clearDisclosureModal();
                     }
                 }, (err) => {
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Saving Travel Disclosure');
                 }));
-            if (this.isCopyTravelDisclosure === true) {
-                this.isCopyTravelDisclosure = false;
-            } else {
-                this.clearDisclosureModal();
-            }
             $('#createTravelDisclosureModal').modal('hide');
         }
     }
 
     certifyCopyTravelDisclosure(): void {
-        this.isCopyTravelDisclosure = true;
         this.certifyTravelDisclosure();
     }
 }
