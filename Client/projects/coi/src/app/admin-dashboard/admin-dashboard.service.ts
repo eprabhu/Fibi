@@ -8,7 +8,7 @@ import { CommonService } from '../common/services/common.service';
 export class AdminDashboardService {
 
   coiRequestObject = new CoiDashboardRequest();
-
+  
   constructor(private _http: HttpClient,
               private _commonService: CommonService) {
   }
@@ -82,9 +82,12 @@ export class CoiDashboardRequest {
   property23 = null;
   pageNumber = 20;
   sort: any = {};
-  tabName = 'ALL_DISCLOSURES';
+  tabName = '';
   advancedSearch = 'L';
   currentPage = 1;
+  constructor(tabName?) {
+    this.tabName = tabName ? tabName : 'MY_REVIEWS';
+  }
 }
 
 export class SortCountObj {
