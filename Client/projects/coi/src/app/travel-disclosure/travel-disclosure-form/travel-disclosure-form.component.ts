@@ -192,13 +192,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    amountInputOnPaste(event: ClipboardEvent) {
-        event.preventDefault();
-        const pastedText = event.clipboardData?.getData('text/plain');
-        const filteredText = pastedText.replace(/[^0-9]/g, '');
-        document.execCommand('insertText', false, filteredText);
-    }
-
     triggerConfirmationModal(): void {
         this.service.travelDataChanged = true;
         this.service.unSavedTabName = 'Travel Details';

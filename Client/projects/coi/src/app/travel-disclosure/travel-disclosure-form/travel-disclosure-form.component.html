@@ -184,7 +184,7 @@
             </label>
             <div class="col-7">
                 <input appCurrencyFormat class="form-control" type="text"
-                    (keypress)="amountInputRestriction($event)" (paste)="amountInputOnPaste($event)"
+                    (keypress)="amountInputRestriction($event)"
                     [(ngModel)]="travelDisclosureRO.travelAmount" [initialValue]="travelDisclosureRO.travelAmount"
                     id="travelDisclosure-estimation" autocomplete="off" (ngModelChange)="triggerConfirmationModal();"
                     [ngClass]="(mandatoryList?.get('amount')) ? 'invalid-border' : ''">
