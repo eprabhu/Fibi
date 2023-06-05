@@ -21,6 +21,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.pojo.Country;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -2743,7 +2744,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId ");
+		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, c.reviewStatusCode = 3 ");
 		hqlQuery.append("WHERE c.disclosureId = : disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("adminGroupId", adminGroupId);
@@ -2778,4 +2779,34 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		return session.createQuery(query).getSingleResult();
 	}
 
+
+	@Override
+	public CoiConflictStatusTypeDto validateConflicts(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		try {
+			CallableStatement statement = connection.prepareCall("{call COI_VALIDATE_DISCLOSURE_CONFLICTS(?,?,?)}");
+			statement.setInt(1, disclosureId);
+			statement.setString(2, AuthenticatedUser.getLoginPersonId());
+			statement.setString(3, AuthenticatedUser.getLoginUserName());
+			statement.execute();
+			ResultSet rset = statement.getResultSet();
+			if (rset != null && rset.next()) {
+				CoiConflictStatusTypeDto  conflictStatusTypeDto = new CoiConflictStatusTypeDto();
+				conflictStatusTypeDto.setConflictStatusCode(rset.getString(1));
+				conflictStatusTypeDto.setDescription(rset.getString(2));
+				return conflictStatusTypeDto;
+			}
+		} catch (Exception e) {
+			logger.error("Exception on validateConflicts {}", e.getMessage());
+			throw new ApplicationException("error in validate conflicts ", e, Constants.DB_FN_ERROR);
+		}
+		return null;
+	}
+
+	@Override
+	public CoiConflictStatusType loadCoiConflictStatusType(String conflictStatusCode) {
+		return hibernateTemplate.load(CoiConflictStatusType.class, conflictStatusCode);
+	}
 }

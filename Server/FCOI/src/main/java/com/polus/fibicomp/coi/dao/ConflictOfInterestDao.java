@@ -3,6 +3,7 @@ package com.polus.fibicomp.coi.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -742,6 +743,7 @@ public interface ConflictOfInterestDao {
 	List<PersonEntity> getSFIOfDisclosure(String personId, Integer disclosureId);
 
 	/**
+	 *This method updates the assign admin/group and changes the disclosure status to 3 review in progress
 	 *
 	 * @param adminGroupId
 	 * @param adminPersonId
@@ -758,11 +760,27 @@ public interface ConflictOfInterestDao {
 	public void updateReviewStatus(Integer disclosureId, String disclosureReviewInProgress);
 
 	public List<EntityRiskCategory> fetchEntityRiskCategory();
-	
+
 	 /**
 	 *
 	 * @param unitNumber
 	 * This method is used to fetch the entire row(Unit details) from unit table against the input unit number
 	 */
 	public Unit getUnitFromUnitNumber(String unitNumber);
+
+	/**
+	 * This method is used to validate conflicts and update
+	 *
+	 * @param disclosureId disclosureId
+	 * @return CoiConflictStatusType
+	 */
+	CoiConflictStatusTypeDto validateConflicts(Integer disclosureId);
+
+	/**
+	 * This method is used to load CoiConflictStatusType
+	 *
+	 * @param coiConflictStatusCode Coi Conflict Status Code
+	 * @return CoiConflictStatusType
+	 */
+	CoiConflictStatusType loadCoiConflictStatusType(String coiConflictStatusCode);
 }
