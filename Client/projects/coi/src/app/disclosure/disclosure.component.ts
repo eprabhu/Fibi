@@ -261,8 +261,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             coiDisclosure: {
                 disclosureId: this.coiData.coiDisclosure.disclosureId,
                 certificationText: this.coiData.coiDisclosure.certificationText ?
-                    this.coiData.coiDisclosure.certificationText : this.certificationText,
-                conflictStatusCode: this.dataStore.disclosureStatus
+                    this.coiData.coiDisclosure.certificationText : this.certificationText
             }
         };
         this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {

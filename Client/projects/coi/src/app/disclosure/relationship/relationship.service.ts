@@ -57,6 +57,10 @@ singleEntityProjectRelation(params, moduleCode, moduleItemId, did,personId) {
   });
 }
 
+updateConflictStatus(params) {
+  return this._http.get(`${this._commonService.baseUrl}/validateConflicts/${params}`);
+}
+
 }
 
 

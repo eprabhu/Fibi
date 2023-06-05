@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../environments/environment';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
@@ -35,6 +36,7 @@ export class RelationshipComponent {
     this.isShowRelation = false;
     this.moduleCode = null;
     this.moduleId = null;
+    this.updateConflictStatus();
     this.loadProjectRelations();
   }
 
@@ -50,16 +52,28 @@ export class RelationshipComponent {
     }
   }
 
+  private updateConflictStatus(): void {
+    this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+      if(data) {
+        this.coiData.coiDisclosure.coiConflictStatusType = data;
+        this.coiData.coiDisclosure.conflictStatusCode = data.conflictStatusCode;
+        this._dataStore.updateStore(['coiDisclosure'],  this.coiData);
+      }
+    }, err => {
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating status');
+    });
+  }
+
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
     this.isEditMode = this.coiData.coiDisclosure.reviewStatusCode == '1';
-}
+  }
+
   loadProjectRelations() {
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       this.proposalArray = data.awards;
       data.proposals.every(ele => this.proposalArray.push(ele));
       this.coiStatusList = data.coiProjConflictStatusTypes;
-      this._dataStore.disclosureStatus = this.getDisclosureStatus();
     });
   }
 
