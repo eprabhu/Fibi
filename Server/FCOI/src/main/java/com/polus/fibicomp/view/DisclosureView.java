@@ -81,6 +81,10 @@ public class DisclosureView {
 	public void setDisclosurestatus(String disclosurestatus) {
 		this.disclosurestatus = disclosurestatus;
 	}
+	private String homeUnitName;
+	private String homeUnit;
+	private String adminGroupName;
+	private String administrator;
 
 	public String getAcknowledgeBy() {
 		return acknowledgeBy;
@@ -601,5 +605,37 @@ public class DisclosureView {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+
+	public String getHomeUnitName() {
+		return homeUnitName;
+	}
+
+	public void setHomeUnitName(String homeUnitName) {
+		this.homeUnitName = homeUnitName;
+	}
+
+	public String getHomeUnit() {
+		return homeUnit;
+	}
+
+	public void setHomeUnit(String homeUnit) {
+		this.homeUnit = homeUnit;
+	}
+
+	public String getAdminGroupName() {
+		return adminGroupName;
+	}
+
+	public void setAdminGroupName(String adminGroupName) {
+		this.adminGroupName = adminGroupName;
+	}
+
+	public String getAdministrator() {
+		return administrator;
+	}
+
+	public void setAdministrator(String administrator) {
+		this.administrator = administrator;
+	}
 }

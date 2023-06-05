@@ -444,4 +444,10 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> fetchAdminGroupsAndPersons() {
 		return generalService.fetchAdminGroupsAndPersons();
 	}
+
+	@GetMapping("/validateConflicts/{disclosureId}")
+	public ResponseEntity<Object> validateConflicts(@PathVariable("disclosureId") Integer disclosureId) {
+		logger.info("Requesting for validateConflicts");
+		return conflictOfInterestService.validateConflicts(disclosureId);
+	}
 }

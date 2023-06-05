@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
@@ -460,6 +461,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		cal.add(Calendar.DAY_OF_MONTH, -1);
 		coiDisclosure.setExpirationDate(cal.getTime());
 		conflictOfInterestDao.certifyDisclosure(coiDisclosure);
+		conflictOfInterestDao.validateConflicts(coiDisclosure.getDisclosureId());
 		CoiDisclosure coiDisclosureObj = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
 		coiDisclosureObj.setCreateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getCreateUser()));
 		coiDisclosureObj.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getUpdateUser()));
@@ -1364,5 +1366,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId());
 		conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(),DISCLOSURE_REVIEW_IN_PROGRESS);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> validateConflicts(Integer disclosureId) {
+		CoiConflictStatusTypeDto statusCode = conflictOfInterestDao.validateConflicts(disclosureId);
+		return new ResponseEntity<>(statusCode, HttpStatus.OK);
 	}
 }

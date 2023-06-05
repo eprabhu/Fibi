@@ -21,6 +21,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.pojo.Country;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -1175,9 +1176,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		List<String> dispositionStatusCodes = vo.getProperty20();
 		List<String> reviewStatusCodes = vo.getProperty21();
 		List<String> conflictStatusCodes = vo.getProperty4();
+		String certificationDate = vo.getProperty23();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 				statement.setString(1, disclosureId);
 				statement.setString(2, disclosurePersonId);
 				statement.setString(3, homeUnit);
@@ -1201,11 +1203,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(21, hasSFIFlag);
 				statement.setString(22, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
 				statement.setString(23, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
+				statement.setString(24, certificationDate);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_COI_DISCLOSURE_ADMIN_DASHBOARD";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, disclosureId);
@@ -1231,6 +1234,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(22, hasSFIFlag);
 				statement.setString(23, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
 				statement.setString(24, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
+				statement.setString(25, certificationDate);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
@@ -1251,6 +1255,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
 				disclosureView.setLastApprovedVersionDate(resultSet.getTimestamp("LAST_APPROVED_DATE"));
 				disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
+				disclosureView.setDisclosureVersionNumber(resultSet.getInt("VERSION_NUMBER"));
 //				disclosureView.setNoOfProposalInPending(resultSet.getInt("NO_OF_PENDING_PROPOSALS"));
 //				disclosureView.setNoOfAwardInPending(resultSet.getInt("NO_OF_PENDING_AWARDS"));
 				disclosureView.setNoOfProposalInActive(resultSet.getInt("NO_OF_ACTIVE_PROPOSAL"));
@@ -1265,8 +1270,13 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
 				disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
 				disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
-				disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
+				disclosureView.setAwardId(resultSet.getString("AWARD_NUMBERS"));
 				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
+				disclosureView.setHomeUnit(resultSet.getString("HOME_UNIT"));
+				disclosureView.setHomeUnitName(resultSet.getString("HOME_UNIT_NAME"));
+				disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
+				disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
+
 //				if (tabName.equals("PENDING_DISCLOSURES")) {
 //					disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
 //					disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
@@ -1313,9 +1323,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		List<String> dispositionStatusCodes = vo.getProperty20();
 		List<String> reviewStatusCodes = vo.getProperty21();
 		String personId = AuthenticatedUser.getLoginPersonId();
+		String certificationDate = vo.getProperty23();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 				statement.setString(1, disclosureId);
 				statement.setString(2, disclosurePersonId);
 				statement.setString(3, homeUnit);
@@ -1339,11 +1350,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(21, hasSFIFlag);
 				statement.setString(22, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
 				statement.setString(23, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
+				statement.setString(24, certificationDate);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, disclosureId);
@@ -1369,7 +1381,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(22, hasSFIFlag);
 				statement.setString(23, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
 				statement.setString(24, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
-
+				statement.setString(25, certificationDate);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
@@ -1378,7 +1390,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			}
 		} catch (Exception e) {
 			logger.error("Error in getCOIAdminDashboardCount {}", e.getMessage());
-			throw new ApplicationException("Error in getCOIAdminDashboardCount {}", e, Constants.JAVA_ERROR);
+			throw new ApplicationException("Unable to fetch data {}", e, Constants.DB_PROC_ERROR);
 		}
 		return count;
 	}
@@ -2475,7 +2487,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			statement.setString(8, type);
 			statement.execute();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ApplicationException("error in sync projects", e, Constants.DB_FN_ERROR);
 		}
 	}
@@ -2743,7 +2754,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId ");
+		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, c.reviewStatusCode = 3 ");
 		hqlQuery.append("WHERE c.disclosureId = : disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("adminGroupId", adminGroupId);
@@ -2751,7 +2762,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("disclosureId", disclosureId);
 		query.executeUpdate();
 	}
-	
+
 	@Override
 	public void updateReviewStatus(Integer disclosureId, String disclosureReviewInProgress) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -2767,7 +2778,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public List<EntityRiskCategory> fetchEntityRiskCategory() {
 		return hibernateTemplate.loadAll(EntityRiskCategory.class);
 	}
-	
+
 	@Override
 	public Unit getUnitFromUnitNumber(String unitNumber) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
@@ -2778,4 +2789,34 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		return session.createQuery(query).getSingleResult();
 	}
 
+
+	@Override
+	public CoiConflictStatusTypeDto validateConflicts(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		try {
+			CallableStatement statement = connection.prepareCall("{call COI_VALIDATE_DISCLOSURE_CONFLICTS(?,?,?)}");
+			statement.setInt(1, disclosureId);
+			statement.setString(2, AuthenticatedUser.getLoginPersonId());
+			statement.setString(3, AuthenticatedUser.getLoginUserName());
+			statement.execute();
+			ResultSet rset = statement.getResultSet();
+			if (rset != null && rset.next()) {
+				CoiConflictStatusTypeDto  conflictStatusTypeDto = new CoiConflictStatusTypeDto();
+				conflictStatusTypeDto.setConflictStatusCode(rset.getString(1));
+				conflictStatusTypeDto.setDescription(rset.getString(2));
+				return conflictStatusTypeDto;
+			}
+		} catch (Exception e) {
+			logger.error("Exception on validateConflicts {}", e.getMessage());
+			throw new ApplicationException("error in validate conflicts ", e, Constants.DB_FN_ERROR);
+		}
+		return null;
+	}
+
+	@Override
+	public CoiConflictStatusType loadCoiConflictStatusType(String conflictStatusCode) {
+		return hibernateTemplate.load(CoiConflictStatusType.class, conflictStatusCode);
+	}
 }

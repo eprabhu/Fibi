@@ -369,4 +369,12 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto);
+
+	/**
+	 * This method is used to validate conflicts and update
+	 *
+	 * @param disclosureId
+	 * @return
+	 */
+    ResponseEntity<Object> validateConflicts(Integer disclosureId);
 }
