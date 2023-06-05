@@ -185,6 +185,20 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    amountInputRestriction(event: any): void {
+        const pattern = /[0-9\+\-\/\ ]/;
+        if (!pattern.test(String.fromCharCode(event.charCode))) {
+            event.preventDefault();
+        }
+    }
+
+    amountInputOnPaste(event: ClipboardEvent) {
+        event.preventDefault();
+        const pastedText = event.clipboardData?.getData('text/plain');
+        const filteredText = pastedText.replace(/[^0-9]/g, '');
+        document.execCommand('insertText', false, filteredText);
+    }
+
     triggerConfirmationModal(): void {
         this.service.travelDataChanged = true;
         this.service.unSavedTabName = 'Travel Details';
