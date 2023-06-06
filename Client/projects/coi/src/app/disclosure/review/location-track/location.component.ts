@@ -20,7 +20,7 @@ declare var $: any;
 export class LocationComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
-    dependencies = ['coiDisclosure', 'adminGroup', 'person'];
+    dependencies = ['coiDisclosure', 'adminGroup', 'person', 'projectDetail'];
     coiDisclosure: CoiDisclosure = new CoiDisclosure();
     adminGroups: any = [];
     deployMap = environment.deployUrl;
@@ -39,6 +39,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     reviewActionConfirmation: any = {};
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
+    projectDetail: any = {};
 
     constructor(
         private _elasticConfigService: ElasticConfigService,
@@ -73,6 +74,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.coiDisclosure = DATA.coiDisclosure;
         this.adminGroups = DATA.adminGroup || [];
         this.disclosurePerson = DATA.person;
+        this.projectDetail = DATA.projectDetail;
         this.commentConfiguration.disclosureId = this.coiDisclosure.disclosureId;
         this.getCoiReview();
         this.setAdminGroupOptions();
