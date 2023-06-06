@@ -57,22 +57,149 @@ public class DisclosureView {
 	private Timestamp certifiedAt;
 	private Unit unit;
 	private Integer travelDisclosureId;
-	private String travelVersionStatus;
 	private Date travelStartDate;
 	private Date travelEndDate;
-	private Date travelSubmissionDate;
-	private String lastUpdatedBy;
 	private String acknowledgeBy;
-	private String travelEntityName;
-	private String travellerName;
-	private String travelDisclosurestatus;
 	private String destination;
 	private String purpose;
-	private Date certificationDate;
 	private Date acknowledgeDate;
 	private String travelDisclosureNumber;
 	private String description;
 	private String disclosurestatus;
+	private String homeUnitName;
+	private String homeUnit;
+	private String adminGroupName;
+	private String administrator;
+	private String department;
+	private String travelDisclosureStatus;
+	private String travelEntityName;
+	private String travellerName;
+	private Integer travelAmount;
+	private String travelReviewStatus;
+	private Date travelSubmissionDate;
+	private Date travelExpirationDate;
+	private String travelPurpose;
+	private Date certificationDate;
+	private Unit unitDetails;
+	private String travelCity;
+	private String travelCountry;
+	private String travelState;
+	private String travellerTypeCode;
+	private String travellerTypeDescription;
+	private String travelDisclosureStatusCode;
+	private String travelDisclosureStatusDescription;
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public String getTravelDisclosureStatus() {
+		return travelDisclosureStatus;
+	}
+
+	public void setTravelDisclosureStatus(String travelDisclosureStatus) {
+		this.travelDisclosureStatus = travelDisclosureStatus;
+	}
+
+	public Integer getTravelAmount() {
+		return travelAmount;
+	}
+
+	public void setTravelAmount(Integer travelAmount) {
+		this.travelAmount = travelAmount;
+	}
+
+	public String getTravelReviewStatus() {
+		return travelReviewStatus;
+	}
+
+	public void setTravelReviewStatus(String travelReviewStatus) {
+		this.travelReviewStatus = travelReviewStatus;
+	}
+
+	public Date getTravelExpirationDate() {
+		return travelExpirationDate;
+	}
+
+	public void setTravelExpirationDate(Date travelExpirationDate) {
+		this.travelExpirationDate = travelExpirationDate;
+	}
+
+	public String getTravelPurpose() {
+		return travelPurpose;
+	}
+
+	public void setTravelPurpose(String travelPurpose) {
+		this.travelPurpose = travelPurpose;
+	}
+
+	public Unit getUnitDetails() {
+		return unitDetails;
+	}
+
+	public void setUnitDetails(Unit unitDetails) {
+		this.unitDetails = unitDetails;
+	}
+
+	public String getTravelCity() {
+		return travelCity;
+	}
+
+	public void setTravelCity(String travelCity) {
+		this.travelCity = travelCity;
+	}
+
+	public String getTravelCountry() {
+		return travelCountry;
+	}
+
+	public void setTravelCountry(String travelCountry) {
+		this.travelCountry = travelCountry;
+	}
+
+	public String getTravelState() {
+		return travelState;
+	}
+
+	public void setTravelState(String travelState) {
+		this.travelState = travelState;
+	}
+
+	public String getTravellerTypeCode() {
+		return travellerTypeCode;
+	}
+
+	public void setTravellerTypeCode(String travellerTypeCode) {
+		this.travellerTypeCode = travellerTypeCode;
+	}
+
+	public String getTravellerTypeDescription() {
+		return travellerTypeDescription;
+	}
+
+	public void setTravellerTypeDescription(String travellerTypeDescription) {
+		this.travellerTypeDescription = travellerTypeDescription;
+	}
+
+	public String getTravelDisclosureStatusCode() {
+		return travelDisclosureStatusCode;
+	}
+
+	public void setTravelDisclosureStatusCode(String travelDisclosureStatusCode) {
+		this.travelDisclosureStatusCode = travelDisclosureStatusCode;
+	}
+
+	public String getTravelDisclosureStatusDescription() {
+		return travelDisclosureStatusDescription;
+	}
+
+	public void setTravelDisclosureStatusDescription(String travelDisclosureStatusDescription) {
+		this.travelDisclosureStatusDescription = travelDisclosureStatusDescription;
+	}
 
 	public String getDisclosurestatus() {
 		return disclosurestatus;
@@ -81,10 +208,6 @@ public class DisclosureView {
 	public void setDisclosurestatus(String disclosurestatus) {
 		this.disclosurestatus = disclosurestatus;
 	}
-	private String homeUnitName;
-	private String homeUnit;
-	private String adminGroupName;
-	private String administrator;
 
 	public String getAcknowledgeBy() {
 		return acknowledgeBy;
@@ -96,14 +219,6 @@ public class DisclosureView {
 
 	public Integer getTravelDisclosureId() {
 		return travelDisclosureId;
-	}
-
-	public String getTravelVersionStatus() {
-		return travelVersionStatus;
-	}
-
-	public void setTravelVersionStatus(String travelVersionStatus) {
-		this.travelVersionStatus = travelVersionStatus;
 	}
 
 	public String getTravelEntityName() {
@@ -124,14 +239,6 @@ public class DisclosureView {
 
 	public void setTravellerName(String travellerName) {
 		this.travellerName = travellerName;
-	}
-
-	public String getTravelDisclosurestatus() {
-		return travelDisclosurestatus;
-	}
-
-	public void setTravelDisclosurestatus(String travelDisclosurestatus) {
-		this.travelDisclosurestatus = travelDisclosurestatus;
 	}
 
 	public Date getTravelStartDate() {
@@ -156,14 +263,6 @@ public class DisclosureView {
 
 	public void setTravelSubmissionDate(Date travelSubmissionDate) {
 		this.travelSubmissionDate = travelSubmissionDate;
-	}
-
-	public String getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(String lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
 	public Unit getUnit() {

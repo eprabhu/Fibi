@@ -1622,4 +1622,10 @@ public interface Constants {
     String TYPE_SFI = "S";
     Integer COI_ADMINISTRATOR = 1335;
     Integer VIEW_ADMIN_GROUP_COI = 1356;
+    
+    String TRAVEL_STATUS_CODE = "1";
+    String TRAVEL_DISPOSITION_STATUS_CODE = "1";
+    String TRAVEL_DISCLOSURE_STATUS_CODE = "1";
+    String TRAVEL_REVIEW_STATUS_CODE = "1";
+    String TRAVEL_VERSION_STATUS_CODE = "1";
 }

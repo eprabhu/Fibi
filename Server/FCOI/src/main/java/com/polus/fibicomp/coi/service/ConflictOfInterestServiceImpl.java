@@ -51,7 +51,9 @@ import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -1259,7 +1261,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setRelationshipToYourResearch(vo.getRelationshipToYourResearch());
 		coiTravelDisclosure.setTravelStartDate(vo.getTravelStartDate());
 		coiTravelDisclosure.setTravelEndDate(vo.getTravelEndDate());
-		coiTravelDisclosure.setTravelStatusCode(vo.getTravelStatusCode());
+		coiTravelDisclosure.setTravelStatusCode(Constants.TRAVEL_STATUS_CODE);
 		coiTravelDisclosure.setIsSponsoredTravel(vo.getIsSponsoredTravel());
 		coiTravelDisclosure.setTravelAmount(vo.getTravelAmount());
 		coiTravelDisclosure.setDestinationCountry(vo.getDestinationCountry());
@@ -1270,9 +1272,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setDescription(vo.getDescription());
 		coiTravelDisclosure.setCreateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
-		coiTravelDisclosure.setDispositionStatus(vo.getDispositionStatus());
-		coiTravelDisclosure.setDisclosureStatus(vo.getDisclosureStatus());
-		coiTravelDisclosure.setReviewStatus(vo.getReviewStatus());
+		coiTravelDisclosure.setDispositionStatusCode(Constants.TRAVEL_DISPOSITION_STATUS_CODE);
+		coiTravelDisclosure.setDisclosureStatusCode(Constants.TRAVEL_DISCLOSURE_STATUS_CODE);
+		coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE);
+		CoiReviewStatusType coiReviewStatusType = conflictOfInterestDao.getReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE);
+		coiTravelDisclosure.setCoiReviewStatusTypeDetalis(coiReviewStatusType);
+		CoiTravelDisclosureStatusType travelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(Constants.TRAVEL_DISCLOSURE_STATUS_CODE);
+		coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(travelDisclosureStatusType);
 		try {
 			Unit unitDetails = conflictOfInterestDao.getUnitFromUnitNumber(vo.getHomeUnit());
 			if (unitDetails != null) {
@@ -1296,14 +1302,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				personEntity.setEntityNumber(vo.getEntityNumber());
 				personEntity.setPersonEntityId(personEntityId);
 				personEntity.setVersionNumber(vo.getVersionNumber());
-				personEntity.setVersionStatus(vo.getVersionStatus());
+				personEntity.setVersionStatus("PENDING");
 				personEntity.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 				personEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
 				personEntity.setCreateTimestamp(commonDao.getCurrentTimestamp());
 				personEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
 			}
 		}
-		coiTravelDisclosure.setVersionStatus(vo.getVersionStatus());
+		coiTravelDisclosure.setVersionStatusCode(Constants.TRAVEL_VERSION_STATUS_CODE);
 		coiTravelDisclosure.setIsInterNationalTravel(vo.getIsInternationalTravel());
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
@@ -1315,6 +1321,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiTravelDisclosureTraveller.setTravelDisclosureId(coiTravelDisclosure.getTravelDisclosureId());
 			coiTravelDisclosureTraveller.setUpdateUser(AuthenticatedUser.getLoginUserName());
 			coiTravelDisclosureTraveller.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+			coiTravelDisclosureTraveller.setTravelerTypeCode(typeCode);
 			conflictOfInterestDao.saveOrUpdateCoiTravelDisclosureTraveller(coiTravelDisclosureTraveller);
 			travellerTypeCodeList.add(typeCode);;
 		});

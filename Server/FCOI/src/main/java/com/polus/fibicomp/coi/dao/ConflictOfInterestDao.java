@@ -31,6 +31,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
@@ -783,4 +784,14 @@ public interface ConflictOfInterestDao {
 	 * @return CoiConflictStatusType
 	 */
 	CoiConflictStatusType loadCoiConflictStatusType(String coiConflictStatusCode);
+	
+	/**
+	 * This method is used to fetch the review status object based on status code
+	 */
+	public CoiReviewStatusType getReviewStatusDetails(String reviewStatusCode);
+	
+	/**
+	 * This method is used to fetch the travel disclosure status object based on status code
+	 */
+	public CoiTravelDisclosureStatusType getTravelDisclosureStatusDetails(String travelDisclosureStatusCode);
 }
