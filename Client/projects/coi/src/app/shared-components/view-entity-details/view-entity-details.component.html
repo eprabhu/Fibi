@@ -253,17 +253,18 @@
     </div>
   </div>
   <div *ngIf="sfiService.isShowSfiNavBar && isEntityManagement " id="task-navigation-bar">
-    <app-add-sfi [coiEntityManageId]="entityId" [isEditEntity]="true" [changeType]="changeType"
-      (updatedDataStore)="updatedEntityDetails($event)"></app-add-sfi>
+    <app-add-sfi-slider [coiEntityManageId]="entityId" [isEditEntity]="true" [changeType]="changeType"
+      (updatedDataStore)="updatedEntityDetails($event)" [isSlider]="true"></app-add-sfi-slider>
   </div>
 </div>
 
-<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="modifyEntityConfirmationModal" role="dialog">
-  <div class="modal-dialog">
+<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog" data-bs-backdrop="static"
+    id="modifyEntityConfirmationModal" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header ct-footer-padding">
         <h4 class="modal-title">{{entityDetails?.entityName}}</h4>
-        <button type="button" class="btn-close fs-12 " (click)="closeModal()" aria-label="Close"></button>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
       </div>
       <div class="modal-body ct-modal-padding">
         <div class="row ">
@@ -323,4 +324,3 @@
     </div>
   </div>
 </div>
-

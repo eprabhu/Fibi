@@ -46,10 +46,6 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="sfiService.isShowSfiNavBar" class="task-nav-div" id="task-navigation-bar">
-            <app-add-sfi [coiEntityManageId]="entityManageId" (updateEntityList)="updateEntityListDashboard($event)"
-                [isEditEntity]="isCoiEditEntity"></app-add-sfi>
-        </div>
         <div class="row mt-1">
             <div class="col-12 d-flex mt-1">
                 <!-- <div class="col">

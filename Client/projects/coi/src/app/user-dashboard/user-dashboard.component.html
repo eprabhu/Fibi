@@ -36,7 +36,7 @@
                     title="Click to create new Travel disclosure"
                     area-describedby="Click to create new Travel disclosure"><u>Create Travel
                         Disclosure</u></p>
-                <p (click)="sfiService.isShowSfiNavBar = true" class="m-0 cursor-pointer" role="button"
+                <p (click)="openCreateSFI()"class="m-0 cursor-pointer" role="button"
                     title="Click to create new SFI" area-describedby="Click to create new SFI"><u>Create Significant Financial Interest</u></p>
             </div>
         </div>
@@ -117,5 +117,3 @@
 [activeDisclosures]="service.activeDisclosures" 
 (emitCreateOrRevise)="outputEventAction($event)">
 </app-disclosure-create-modal>
-
-<app-add-sfi></app-add-sfi>

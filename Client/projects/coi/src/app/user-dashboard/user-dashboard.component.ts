@@ -91,5 +91,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         this.triggeredFrom = 'TRAVEL_DISCLOSURE';
         this.isShowCreateOrReviseModal = true;
     }
+    
+    openCreateSFI() {
+        this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
+    }
 
 }

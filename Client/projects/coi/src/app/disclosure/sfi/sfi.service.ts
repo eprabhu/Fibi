@@ -30,6 +30,10 @@ export class SfiService {
         return this._http.get(`${this._commonService.baseUrl}/getSFIDetails/${coiFinancialEntityId}`)
     }
 
+    isEntityAdded(entityId) {
+        return this._http.get(`${this._commonService.baseUrl}/checkEntity/${entityId}/added`)
+    }
+
     addSFILookUp() {
         return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
     }
