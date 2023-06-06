@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Transient;
+
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
@@ -19,8 +21,10 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
@@ -256,6 +260,56 @@ public class ConflictOfInterestVO {
 	
 	private String dispositionStatus;
 	
+	private String reviewStatusCode;
+	
+	private String versionStatusCode;
+	
+	private String dispositionStatusCode;
+	
+	private CoiReviewStatusType coiReviewStatusTypeDetalis;
+	
+	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusDetails;
+
+	public CoiReviewStatusType getCoiReviewStatusTypeDetalis() {
+		return coiReviewStatusTypeDetalis;
+	}
+
+	public void setCoiReviewStatusTypeDetalis(CoiReviewStatusType coiReviewStatusTypeDetalis) {
+		this.coiReviewStatusTypeDetalis = coiReviewStatusTypeDetalis;
+	}
+
+	public CoiTravelDisclosureStatusType getCoiTravelDisclosureStatusDetails() {
+		return coiTravelDisclosureStatusDetails;
+	}
+
+	public void setCoiTravelDisclosureStatusDetails(CoiTravelDisclosureStatusType coiTravelDisclosureStatusDetails) {
+		this.coiTravelDisclosureStatusDetails = coiTravelDisclosureStatusDetails;
+	}
+
+	public String getDispositionStatusCode() {
+		return dispositionStatusCode;
+	}
+
+	public void setDispositionStatusCode(String dispositionStatusCode) {
+		this.dispositionStatusCode = dispositionStatusCode;
+	}
+
+	public String getVersionStatusCode() {
+		return versionStatusCode;
+	}
+
+	public void setVersionStatusCode(String versionStatusCode) {
+		this.versionStatusCode = versionStatusCode;
+	}
+
+	public String getReviewStatusCode() {
+		return reviewStatusCode;
+	}
+
+	public void setReviewStatusCode(String reviewStatusCode) {
+		this.reviewStatusCode = reviewStatusCode;
+	}
+
 	public String getDescription() {
 		return description;
 	}

@@ -60,6 +60,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
@@ -993,18 +994,33 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				if (tabName.equals("TRAVEL_DISCLOSURES")) {
 					DisclosureView disclosureView =  new DisclosureView();
 					disclosureView.setTravelDisclosureId(resultSet.getInt("TRAVEL_DISCLOSURE_ID"));
+					Unit unit = new Unit();
+					unit.setUnitNumber(resultSet.getString("UNIT"));
+					unit.setUnitName(resultSet.getString("UNIT_NAME"));
+					disclosureView.setUnitDetails(unit);
+					disclosureView.setTravelDisclosureStatusCode(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_CODE"));
+					disclosureView.setTravelDisclosureStatusDescription("TRAVEL_DISCLOSURE_STATUS_DESCRIPTION");
+					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
+					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
+					disclosureView.setTravelAmount(resultSet.getInt("TRAVEL_AMOUNT"));
+					disclosureView.setTravelSubmissionDate(resultSet.getDate("SUBMISSION_DATE"));
+					disclosureView.setAcknowledgeDate(resultSet.getDate("ACKNOWLEDGE_DATE"));
+					disclosureView.setTravelExpirationDate(resultSet.getDate("EXPIRATION_DATE"));
+					disclosureView.setTravelPurpose(resultSet.getString("PURPOSE_OF_THE_TRIP"));
+					disclosureView.setTravelCity(resultSet.getString("DESTINATION_CITY"));
+					disclosureView.setTravelCountry(resultSet.getString("DESTINATION_COUNTRY"));
+					disclosureView.setTravelState(resultSet.getString("STATE"));
+					disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
+					disclosureView.setReviewDescription(resultSet.getString("REVIEW_STATUS_DESCRIPTION"));
+					disclosureView.setTravellerTypeCode(resultSet.getString("TRAVELER_TYPE_CODE"));
+					disclosureView.setTravellerTypeDescription(resultSet.getString("TRAVELER_TYPE_DESCRIPTION"));
+					disclosureView.setTravelDisclosureStatusDescription(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_DESCRIPTION"));
 					disclosureView.setTravelStartDate(resultSet.getDate("TRAVEL_START_DATE"));
 					disclosureView.setTravelEndDate(resultSet.getDate("TRAVEL_END_DATE"));
 					disclosureView.setTravelSubmissionDate(resultSet.getDate("SUBMISSION_DATE"));
-					disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER"));
-					disclosureView.setAcknowledgeBy(resultSet.getString("ACKNOWLEDGE_BY"));
 					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
 					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
-					disclosureView.setDisclosurestatus(resultSet.getString("TRAVEL_DISCLOSURE_STATUS"));
-					disclosureView.setDispositionStatus(resultSet.getString("DISPOSITION_STATUS"));
-					disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
-					disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
 					disclosureViews.add(disclosureView);
 				} else {
 					DisclosureView disclosureView =  new DisclosureView();
@@ -1880,9 +1896,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
 					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
-					disclosureView.setTravelDisclosurestatus(resultSet.getString("TRAVEL_DISCLOSURE_STATUS"));
+					disclosureView.setTravelDisclosureStatus(resultSet.getString("TRAVEL_DISCLOSURE_STATUS"));
 					disclosureView.setDestination(resultSet.getString("DESTINATION"));
-					disclosureView.setPurpose(resultSet.getString("PURPOSE_OF_THE_TRIP"));
+					disclosureView.setTravelPurpose(resultSet.getString("PURPOSE_OF_THE_TRIP"));
 					disclosureView.setCertificationDate(resultSet.getDate("CERTIFICATION_DATE"));
 					disclosureView.setAcknowledgeDate(resultSet.getDate("ACKNOWLEDGE_DATE"));
 					disclosureView.setTravelDisclosureNumber(resultSet.getString("TRAVEL_NUMBER"));
@@ -2823,5 +2839,25 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public CoiConflictStatusType loadCoiConflictStatusType(String conflictStatusCode) {
 		return hibernateTemplate.load(CoiConflictStatusType.class, conflictStatusCode);
+	}
+	
+	@Override
+	public CoiReviewStatusType getReviewStatusDetails(String reviewStatusCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiReviewStatusType> query = builder.createQuery(CoiReviewStatusType.class);
+		Root<CoiReviewStatusType> rootDisclComment = query.from(CoiReviewStatusType.class);
+		query.where(builder.equal(rootDisclComment.get("reviewStatusCode"), reviewStatusCode));
+		return session.createQuery(query).getSingleResult();
+	}
+	
+	@Override
+	public CoiTravelDisclosureStatusType getTravelDisclosureStatusDetails(String travelDisclosureStatusCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelDisclosureStatusType> query = builder.createQuery(CoiTravelDisclosureStatusType.class);
+		Root<CoiTravelDisclosureStatusType> rootDisclComment = query.from(CoiTravelDisclosureStatusType.class);
+		query.where(builder.equal(rootDisclComment.get("travelDisclosureStatusCode"), travelDisclosureStatusCode));
+		return session.createQuery(query).getSingleResult();
 	}
 }

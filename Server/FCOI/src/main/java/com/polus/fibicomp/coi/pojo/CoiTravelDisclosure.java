@@ -47,8 +47,8 @@ public class CoiTravelDisclosure implements Serializable {
 	@Column(name = "VERSION_NUMBER")
 	private Integer versionNumber;
 	
-	@Column(name = "VERSION_STATUS")
-	private String versionStatus;
+	@Column(name = "VERSION_STATUS_CODE")
+	private String versionStatusCode;
 	
 	@Column(name = "PERSON_ENTITY_ID")
 	private Integer personEntityId;
@@ -153,40 +153,93 @@ public class CoiTravelDisclosure implements Serializable {
 	@Column(name = "SUBMISSION_DATE")
 	private Date travelSubmissionDate;
 	
-	@Column(name = "TRAVEL_DISCLOSURE_STATUS")
-	private String disclosureStatus;
+	@Column(name = "TRAVEL_DISCLOSURE_STATUS_CODE")
+	private String disclosureStatusCode;
 	
-	@Column(name = "DISPOSITION_STATUS")
-	private String dispositionStatus;
+	@Column(name = "DISPOSITION_STATUS_CODE")
+	private String dispositionStatusCode;
 	
-	@Column(name = "REVIEW_STATUS")
-	private String reviewStatus;
+	@Column(name = "REVIEW_STATUS_CODE")
+	private String reviewStatusCode;
+	
+	@Column(name = "TRAVELER_TYPE_CODE")
+	private String travellerTypeCode;
 	
 	@Transient
 	private Unit travellerUnitDetails;
-
-	public String getDisclosureStatus() {
-		return disclosureStatus;
+	
+	@Transient
+	private CoiReviewStatusType coiReviewStatusTypeDetalis;
+	
+	@Transient
+	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusTypeDetalis;
+	
+	public String getTravellerTypeCode() {
+		return travellerTypeCode;
 	}
 
-	public void setDisclosureStatus(String disclosureStatus) {
-		this.disclosureStatus = disclosureStatus;
+	public void setTravellerTypeCode(String travellerTypeCode) {
+		this.travellerTypeCode = travellerTypeCode;
 	}
 
-	public String getDispositionStatus() {
-		return dispositionStatus;
+	public CoiTravelDisclosureStatusType getCoiTravelDisclosureStatusTypeDetalis() {
+		return coiTravelDisclosureStatusTypeDetalis;
 	}
 
-	public void setDispositionStatus(String dispositionStatus) {
-		this.dispositionStatus = dispositionStatus;
+	public void setCoiTravelDisclosureStatusTypeDetalis(
+			CoiTravelDisclosureStatusType coiTravelDisclosureStatusTypeDetalis) {
+		this.coiTravelDisclosureStatusTypeDetalis = coiTravelDisclosureStatusTypeDetalis;
 	}
 
-	public String getReviewStatus() {
-		return reviewStatus;
+	public CoiReviewStatusType getCoiReviewStatusTypeDetalis() {
+		return coiReviewStatusTypeDetalis;
 	}
 
-	public void setReviewStatus(String reviewStatus) {
-		this.reviewStatus = reviewStatus;
+	public void setCoiReviewStatusTypeDetalis(CoiReviewStatusType coiReviewStatusTypeDetalis) {
+		this.coiReviewStatusTypeDetalis = coiReviewStatusTypeDetalis;
+	}
+
+	@Transient
+	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusList;
+
+	public CoiTravelDisclosureStatusType getCoiTravelDisclosureStatusList() {
+		return coiTravelDisclosureStatusList;
+	}
+
+	public void setCoiTravelDisclosureStatusList(CoiTravelDisclosureStatusType coiTravelDisclosureStatusList) {
+		this.coiTravelDisclosureStatusList = coiTravelDisclosureStatusList;
+	}
+
+	public String getVersionStatusCode() {
+		return versionStatusCode;
+	}
+
+	public void setVersionStatusCode(String versionStatusCode) {
+		this.versionStatusCode = versionStatusCode;
+	}
+
+	public String getDisclosureStatusCode() {
+		return disclosureStatusCode;
+	}
+
+	public void setDisclosureStatusCode(String disclosureStatusCode) {
+		this.disclosureStatusCode = disclosureStatusCode;
+	}
+
+	public String getDispositionStatusCode() {
+		return dispositionStatusCode;
+	}
+
+	public void setDispositionStatusCode(String dispositionStatusCode) {
+		this.dispositionStatusCode = dispositionStatusCode;
+	}
+
+	public String getReviewStatusCode() {
+		return reviewStatusCode;
+	}
+
+	public void setReviewStatusCode(String reviewStatusCode) {
+		this.reviewStatusCode = reviewStatusCode;
 	}
 
 	public Unit getTravellerUnitDetails() {
@@ -267,14 +320,6 @@ public class CoiTravelDisclosure implements Serializable {
 
 	public void setVersionNumber(Integer versionNumber) {
 		this.versionNumber = versionNumber;
-	}
-
-	public String getVersionStatus() {
-		return versionStatus;
-	}
-
-	public void setVersionStatus(String versionStatus) {
-		this.versionStatus = versionStatus;
 	}
 
 	public Integer getPersonEntityId() {
