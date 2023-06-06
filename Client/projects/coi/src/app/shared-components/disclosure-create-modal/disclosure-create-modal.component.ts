@@ -48,7 +48,6 @@ class RevisionObject {
     revisionComment: null;
     disclosureId: null;
     homeUnit: null;
-    homeUnitName: null;
 }
 
 @Component({
@@ -91,6 +90,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     disclosureNumber: any;
     hasFCOI: any;
     canReviseFCOI: any;
+    homeUnitName: null;
 
     constructor(public commonService: CommonService, private _disclosureCreateModalService: DisclosureCreateModalService,
                 private _router: Router, private _elasticConfig: ElasticConfigService) {
@@ -123,9 +123,10 @@ export class DisclosureCreateModalComponent implements OnInit {
     selectedUnitEvent(event): void {
         if (event) {
             this.reviseObject.homeUnit = event.unitNumber;
-            this.reviseObject.homeUnitName = event.unitName;
+            this.homeUnitName = event.unitName;
         } else {
             this.reviseObject.homeUnit = null;
+            this.homeUnitName = null;
         }
     }
 
@@ -205,7 +206,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                 homeUnit: this.reviseObject.homeUnit ? this.reviseObject.homeUnit : null,
                 description: this.reviseObject.revisionComment,
                 personId: this.commonService.getCurrentUserDetail('personId'),
-                homeUnitName: this.reviseObject.homeUnitName
+                homeUnitName: this.homeUnitName
             }
         ));
     }
@@ -353,7 +354,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     private setSearchOptions(): void {
         this.unitSearchOptions = getEndPointOptionsForLeadUnit(this.commonService.currentUserDetails.homeUnit + '-' + this.commonService.currentUserDetails.homeUnitName, this.commonService.baseUrl, 'unitNumber - unitName');
         this.reviseObject.homeUnit = this.commonService.currentUserDetails.homeUnit;
-        this.reviseObject.homeUnitName = this.commonService.currentUserDetails.homeUnitName;
+        this.homeUnitName = this.commonService.currentUserDetails.homeUnitName;
         this.piElasticSearchOptions = this._elasticConfig.getElasticForPerson();
         this.unitHttpOptions = getEndPointOptionsForDepartment();
         this.sponsorSearchOptions = getEndPointOptionsForSponsor();

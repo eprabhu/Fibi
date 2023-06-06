@@ -92,14 +92,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private getTravelStatusCode(): void {
-        for (const details of this.travelStatusType) {
-            if (details.description === this.travelStatusDescription) {
-                this.travelDisclosureRO.travelStatusCode = details.travelStatusCode;
-            }
-        }
-    }
-
     private getTravelCreateModalDetails(): void {
         const travelCreateModalDetails = JSON.parse(sessionStorage.getItem('travelCreateModalDetails'));
         this.travelDisclosureRO.homeUnit = travelCreateModalDetails.homeUnit;
@@ -107,10 +99,10 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.travelDisclosureRO.personId = travelCreateModalDetails.personId;
     }
 
+
     private getAllTravelDisclosureValues(requestObject: CoiTravelDisclosure): CoiTravelDisclosure {
         this.getTravelCreateModalDetails();
         this.getTravellerTypeCode();
-        this.getTravelStatusCode();
         this.setValuesForDestinationType();
         requestObject.isSponsoredTravel = true;
         requestObject.travelAmount = (Number(requestObject.travelAmount)) ? Number(requestObject.travelAmount) : null;
@@ -182,13 +174,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         } else {
             this.travelDisclosureRO.travelState = '';
             this.travelDisclosureRO.isInternationalTravel = true;
-        }
-    }
-
-    amountInputRestriction(event: any): void {
-        const pattern = /[0-9\+\-\/\ ]/;
-        if (!pattern.test(String.fromCharCode(event.charCode))) {
-            event.preventDefault();
         }
     }
 
