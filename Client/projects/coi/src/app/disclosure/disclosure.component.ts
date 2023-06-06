@@ -280,6 +280,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         const coiData = this.dataStore.getData();
         if (isEmptyObject(coiData)) { return; }
         this.coiData = coiData;
+        this.getCoiReview();
         this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
         this.setAdminGroupOptions();
@@ -423,4 +424,27 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     unitTitle() {
         return getSponsorSearchDefaultValue(this.coiData.coiDisclosure.person.unit);
     }
+
+    closeAssignAdministratorModal(event) {
+      if (event.adminPersonId || event.adminGroupId) {
+        this.coiData.coiDisclosure.adminPersonId = event.adminPersonId;
+        this.coiData.coiDisclosure.adminPersonName = event.adminPersonName;
+        this.coiData.coiDisclosure.adminGroupId = event.adminGroupId;
+        this.coiData.coiDisclosure.adminGroupName = event.adminGroupName;
+        this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = event.reviewStatusCode;
+        this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
+        this.dataStore.updateStore(['coiDisclosure'], this.coiData);
+      }
+    }
+    getCoiReview() {
+      this.$subscriptions.push(this.coiService.getCoiReview(this.coiData.coiDisclosure.disclosureId).subscribe((res: any) => {
+           this.coiService.$reviewList.next(res);
+           this.coiService.isReviewActionCompleted = this.completeReviewAction(res);
+      }, _err => {
+        this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+      }));
+  }
+  private completeReviewAction (data: any): boolean {
+    return data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
+  }
 }

@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 import { CommonService } from '../../common/services/common.service';
 
@@ -19,6 +19,8 @@ export class CoiService {
     isShowAttachmentInfo = true;
     stepTabName = '';
     isCertified = false;
+    isReviewActionCompleted = false;
+    $reviewList = new BehaviorSubject<any>([]);
 
     constructor(
         private _http: HttpClient,
@@ -57,4 +59,21 @@ export class CoiService {
         return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
     }
 
+    getAdminDetails() {
+      return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons');
+    }
+
+    getPersonGroup (personId) {
+      return this._http.get(this._commonService.baseUrl + '/getPersonGroup', {
+        headers: new HttpHeaders().set('personId', personId.toString())
+      });
+    }
+
+    assignAdmin(params) {
+        return this._http.patch(this._commonService.baseUrl + '/disclosure/assignAdmin', params);
+    }
+
+    getCoiReview(disclosureId: number) {
+      return this._http.get(`${this._commonService.baseUrl}/getCoiReview/${disclosureId}`);
+  }
 }

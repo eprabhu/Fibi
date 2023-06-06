@@ -3,14 +3,14 @@
     <div class="card-header px-4 py-2 ">
         <h4 class="card-title review-title">
             <div class="justify-content-between row">
-                <div class="col-auto">Reviewers</div>
-                <!-- <div class="col-auto me-2">
-                    <button *ngIf="coiDisclosure?.reviewStatusCode == '2'" (click)="clearReviewModal()" class="btn btn-tertiary btn-sm mt-0 button-right justify-content-center d-flex align-items-center" data-bs-toggle="modal"
+                <div class="col-auto">Assign Review</div>
+                <div *ngIf="coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" class="col-auto me-5">
+                    <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center" data-bs-toggle="modal"
                         title="Add Review Location" data-bs-target="#add-location-modal">
                         <mat-icon class="me-2">person_add</mat-icon>
                         Assign Reviewer
                     </button>
-                </div> -->
+                </div>
                 <button class=" updown-arrow mt-1" (click)="isCollapsed = !isCollapsed">
                     <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
                         class="fa-large" aria-hidden="true"></i>
@@ -246,22 +246,25 @@
 
 <div class="modal modal-coi fade mySkinDialog" id="add-location-modal" role="dialog" aria-labelledby="skippedSchedulesTitle"
     aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review' : 'Add Review' }} for
-                    {{coiDisclosure?.coiDisclosureFcoiType?.description}} by {{disclosurePerson?.fullName}}</h5>
-                <button type="button" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
+                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Reviewer' : 'Assign Reviewer' }} for
+                   #{{coiDisclosure?.disclosureNumber}} : {{coiDisclosure?.coiDisclosureFcoiType?.description}} Disclosure [{{coiDisclosure?.moduleItemKey}} :
+                                {{(coiDisclosure?.title)?.length>40 ?
+                                (coiDisclosure?.title | slice:0: 40)+'...' :
+                                coiDisclosure?.title}}] by {{coiDisclosure?.person?.fullName}}</h5>
+                <button type="button" title="Close" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
                     (click)="reviewDetails = {}">
                 </button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12 col-12">
-                        <label class="d-block">Assignee</label>
+                        <label class="d-block">Reviewer</label>
                         <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
                                      [isError]="validationMap.has('reviewer')"
-                            [placeHolder]="'Search Assignee'" (selectedResult)="assigneeSelect($event)">
+                            [placeHolder]="'Search Reviewer'" (selectedResult)="assigneeSelect($event)">
                         </app-elastic>
                         <div *ngIf="validationMap?.has('reviewer')" class="invalid-feedback d-block fs-13">
                             {{validationMap?.get('reviewer')}}
@@ -282,10 +285,10 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal" id="agreement-approve-close"
-                    type="button" (click)="clearReviewModal();">Close</button>
+                    type="button" title="Close" (click)="clearReviewModal();">Close</button>
                 <button id="agreement-approve-disapprove-btn" class="btn btn-primary fs-14"
-                    (click)="saveOrUpdateCoiReview();" type="button">
-                    {{ modifyIndex != -1 ? 'Update' : 'Add' }}
+                    (click)="saveOrUpdateCoiReview();" type="button" [title]="modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer'">
+                    {{ modifyIndex != -1 ? 'Update Reviewer' : 'Add Reviewer' }}
                 </button>
             </div>
         </div>

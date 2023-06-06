@@ -77,6 +77,12 @@ export class CoiDisclosure {
     updateUser: string;
     isDisclosureQuestionnaire: boolean;
     person:any;
+    adminPersonId: string;
+    adminPersonName: string;
+    adminGroupId: number;
+    adminGroupName: string;
+    moduleItemKey: string;
+    title: string;
 }
 export interface UnitAdministratorType {
     code: string;

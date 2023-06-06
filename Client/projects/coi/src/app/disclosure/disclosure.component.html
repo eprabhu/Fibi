@@ -57,7 +57,7 @@
                         <div  class="row mt-2">
                             <div  class="col d-flex">
                                 <label  class="label-text"><i aria-hidden="true" class="fa fa-home right-margin"></i>Unit : </label>
-                                <span  class="grey-text ml-2"> 
+                                <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.unit">
                                         <div class="text-overflow" [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</div>
                                     </app-no-data-label>
@@ -67,9 +67,9 @@
                         <div  class="row mt-2">
                             <div  class="col d-flex">
                                 <label  class="label-text"><i class="fa fa-user-o fw-700 right-margin" aria-hidden="true"></i>Administrator : </label>
-                                <span  class="grey-text ml-2"> 
-                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminPersonId">
-                                        <span>{{coiData?.coiDisclosure?.adminPersonId}}</span>
+                                <span  class="grey-text ml-2">
+                                    <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminPersonName">
+                                        <span>{{coiData?.coiDisclosure?.adminPersonName}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -79,9 +79,9 @@
                                 <label  class="label-text left-margin">
                                     <img class="activity-icon" src="{{deployMap}}assets/images/multiple-admin-1.svg"
                                     alt="add-adminGroup icon">Admin Group : </label>
-                                <span  class="grey-text ml-2"> 
+                                <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.adminGroupId">
-                                        <span>{{coiData?.coiDisclosure?.adminGroupId}}</span>
+                                        <span>{{coiData?.coiDisclosure?.adminGroupName}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -94,7 +94,7 @@
                         <div  class="row mt-2">
                             <div  class="col d-flex">
                                 <label  class="label-text">Create : </label>
-                                <span  class="grey-text ml-2"> 
+                                <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.createTimestamp">
                                         <span>{{coiData?.coiDisclosure?.createTimestamp | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
@@ -104,7 +104,7 @@
                         <div  class="row mt-2">
                             <div  class="col d-flex">
                                 <label  class="label-text">Certification :</label>
-                                <span  class="grey-text ml-2"> 
+                                <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
                                         <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatter}}</span>
                                     </app-no-data-label>
@@ -114,7 +114,7 @@
                         <div  class="row mt-2">
                             <div  class="col d-flex">
                                 <label  class="label-text">Expiration : </label>
-                                <span  class="grey-text ml-2"> 
+                                <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
                                         <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatter}}</span>
                                     </app-no-data-label>
@@ -307,7 +307,7 @@
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill side-height border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
-                    <span title="Goto home page" (click)="goToHomeUrl()" 
+                    <span title="Goto home page" (click)="goToHomeUrl()"
                         [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
                         class="btn btn-outline-secondary pb-0 {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
                         <mat-icon class="mr-2">home</mat-icon>
@@ -341,18 +341,19 @@
                         </li>
                     </ul>
                 </div>
-                <div class="d-flex justify-content-around px-3 pb-3">
-                    <span *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
-                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
-                        (click)="triggerAssignReviewerModal()" title="Click here to assign a new reviewer">
-                        <mat-icon class="me-2">person_add</mat-icon>
-                        Assign Reviewer
-                    </span>
+                <div *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode !='4'" class="d-flex justify-content-around px-3 pb-3">
+                    <button  title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                      class="fs-14   d-flex justify-content-center w-100 align-items-center" data-bs-toggle="modal"
+                      data-bs-target="#assign-to-admin-modal"
+                      [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn btn-outline-grey':'btn btn-primary'">
+                      <mat-icon class="me-1">group_add</mat-icon>
+                      Assign Admin
+                    </button>
                 </div>
                 <div class="position-static d-flex justify-content-around px-3"
                     title="Click here to complete the review process">
-                    <span *ngIf="isCOIAdministrator && coiData?.coiDisclosure?.reviewStatusCode == '2'"
-                        class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+                    <span *ngIf="isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3'"
+                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                         data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
                         Complete Review
@@ -580,3 +581,5 @@
 
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
+
+<app-assign-administrator-modal  (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
