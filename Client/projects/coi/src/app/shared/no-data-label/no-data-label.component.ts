@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {NO_DATA_FOUND_MESSAGE} from "../../app-constants";
+import {NO_DATA_FOUND_MESSAGE} from '../../app-constants';
 
 @Component({
   selector: 'app-no-data-label',
@@ -9,11 +9,11 @@ import {NO_DATA_FOUND_MESSAGE} from "../../app-constants";
 export class NoDataLabelComponent {
 
   @Input() valueToShow: string | number | any[] = '';
-  @Input() classesToApply: string = '';
+  @Input() classesToApply = 'ms-2 fs-14';
   @Input() customNoDataFoundMessage = NO_DATA_FOUND_MESSAGE;
 
 
   isArrayAndEmpty(value) {
-    return Array.isArray(value) ? value.length > 0: (value != null || value == 0);
+    return Array.isArray(value) ? value.length > 0 : (value != null || value === 0);
   }
 }
