@@ -28,6 +28,7 @@ public class CoiDisclosureDto {
 	private String createUserFullName;
 	private Integer adminGroupId;
 	private String adminPersonId;
+	private String disclosurePersonFullName;
 
 	public Integer getDisclosureId() {
 		return disclosureId;
@@ -195,5 +196,13 @@ public class CoiDisclosureDto {
 
 	public void setAdminPersonId(String adminPersonId) {
 		this.adminPersonId = adminPersonId;
+	}
+
+	public String getDisclosurePersonFullName() {
+		return disclosurePersonFullName;
+	}
+
+	public void setDisclosurePersonFullName(String disclosurePersonFullName) {
+		this.disclosurePersonFullName = disclosurePersonFullName;
 	}
 }
