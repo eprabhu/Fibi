@@ -213,7 +213,7 @@ export function getEndPointOptionsForExtReviewerKeyWords() {
 }
 
 export function getEndPointOptionsForAwardNumber(baseUrl = '') {
-    endPointOptions.contextField = 'awardNumber';
+    endPointOptions.contextField = 'title';
     endPointOptions.formatString =
     ' awardNumber | accountNumber | title | sponsorName | sponsorAwardNumber | unitName | principalInvestigator ';
     endPointOptions.path = baseUrl + '/' + 'findAward';
