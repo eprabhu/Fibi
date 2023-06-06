@@ -47,13 +47,10 @@ import {MatMenuModule} from '@angular/material/menu';
 import {CdkMenuModule} from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
 import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
-import { AddSfiComponent } from './add-sfi/add-sfi.component';
 import { CountModalComponent } from './count-modal/count-modal.component';
 import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
 import { ActivityComponent } from '../disclosure/activity-track/activity.component';
-import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
 import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
-import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 
 @NgModule({
@@ -66,7 +63,7 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
         MatNativeDateModule,
         MatIconModule,
         CdkMenuModule,
-        MatMenuModule,
+        MatMenuModule    
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective, AppEndpointSearchComponent, CustomElementComponent,
         ViewQuestionnaireComponent, LookUpComponent, LookupFilterPipe,
@@ -76,12 +73,10 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
         DragNDragDirective, CustomTagRemoverPipe,PaginationComponent,
         AddRelationshipModalComponent,
-        AddSfiComponent,
         CountModalComponent,
         CoiReviewCommentsComponent,
         ActivityComponent,
-        SliderCloseBtnComponent,
-        NoDataLabelComponent,ViewEntityDetailsComponent],
+        NoDataLabelComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -122,13 +117,10 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
         CdkMenuModule,
         MatMenuModule,
         AddRelationshipModalComponent,
-        AddSfiComponent,
         CountModalComponent,
         CoiReviewCommentsComponent,
         ActivityComponent,
-        SliderCloseBtnComponent,
         NoDataLabelComponent,
-        ViewEntityDetailsComponent
     ],
 
     providers: [

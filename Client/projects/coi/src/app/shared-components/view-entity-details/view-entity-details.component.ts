@@ -56,11 +56,13 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
   navigateBack() {
     if (this.isEntityManagement) {
-      this._navigationService.previousURL ? this._router.navigateByUrl(this._navigationService.previousURL) :
-        this._router.navigate(['/coi/entity-management']);
+      this._navigationService.previousURL ? this._navigationService.previousURL.includes('create-sfi/create') 
+      ?  this._router.navigate(['/coi/entity-management']) : this._router.navigateByUrl(this._navigationService.previousURL)
+      :  this._router.navigate(['/coi/entity-management']);
     } else {
-      this._navigationService.previousURL ? this._router.navigateByUrl(this._navigationService.previousURL) :
-        this._router.navigate(['/coi/user-dashboard/entities']);
+      this._navigationService.previousURL ? this._navigationService.previousURL.includes('create-sfi/create') 
+      ? this._router.navigate(['/coi/user-dashboard/entities']) : this._router.navigateByUrl(this._navigationService.previousURL)
+      :this._router.navigate(['/coi/user-dashboard/entities']);
     }
   }
 

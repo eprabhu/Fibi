@@ -10,13 +10,17 @@ import { SharedSfiCardComponent } from './shared-sfi-card/shared-sfi-card.compon
 import { DisclosureCreateModalComponent } from './disclosure-create-modal/disclosure-create-modal.component';
 import { FormsModule } from '@angular/forms';
 import { AssignAdministratorModalComponent } from './assign-administrator-modal/assign-administrator-modal.component';
-
+import { AddSfiModule } from '../add-sfi/add-sfi.module';
+import { AddSfiSliderComponent } from './add-sfi-slider/add-sfi-slider.component';
+import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
+import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
 @NgModule({
   imports: [
     CommonModule,
     MatIconModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    AddSfiModule
   ],
   declarations: [
     NoInformationComponent,
@@ -26,13 +30,19 @@ import { AssignAdministratorModalComponent } from './assign-administrator-modal/
     SharedSfiCardComponent,
     DisclosureCreateModalComponent,
     AssignAdministratorModalComponent,
+    AddSfiSliderComponent,
+    ViewEntityDetailsComponent,
+    SliderCloseBtnComponent
   ],
   exports: [
     NoInformationComponent,
     PersonalDetailsModalComponent,
     SharedSfiCardComponent,
     DisclosureCreateModalComponent,
-    AssignAdministratorModalComponent
+    AssignAdministratorModalComponent,
+    AddSfiSliderComponent,
+    ViewEntityDetailsComponent,
+    SliderCloseBtnComponent
   ]
 })
 export class SharedComponentModule { }

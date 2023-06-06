@@ -60,6 +60,10 @@ const routes: Routes = [
             {
               path: 'configuration',
               loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)
+            },
+            {
+                path: 'create-sfi',
+                loadChildren: () => import('./add-sfi/add-sfi.module').then(m => m.AddSfiModule)
             }
           ]
     },

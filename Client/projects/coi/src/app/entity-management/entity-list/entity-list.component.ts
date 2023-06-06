@@ -18,7 +18,6 @@ import { SfiService } from '../../disclosure/sfi/sfi.service';
 })
 export class EntityListComponent implements OnDestroy, OnInit {
 
-  entityManageId = null;
   activeTabName = 'ALL_ENTITIES';
   isViewAdvanceSearch = true;
   coiElastic = null;
@@ -67,8 +66,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.entityManagementService.isShowEntityNavBar = false;
   }
 
-  selectedEntity(event) {
-    this.entityManageId = event;
+  selectedEntity() {
     this.isCoiEditEntity = true;
     this.entityManagementService.isShowEntityNavBar = true;
   }
@@ -108,9 +106,8 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   addNewEntity() {
-    this.entityManageId = null;
     this.isCoiEditEntity = false;
-    this.sfiService.isShowSfiNavBar = true;
+    this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'ENTITY' } });
   }
 
   selectedEvent(event) {
@@ -151,11 +148,6 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.isShowAllProposalList = true;
   }
 
-  updateEntityListDashboard(event) {
-    if (event) {
-      this.viewListOfEntity();
-    }
-  }
 
   generateLookupArrayForDropdown() {
     if (this.entityManagementService.coiRequestObject.property20.length !== 0) {
