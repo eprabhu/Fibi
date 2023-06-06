@@ -277,4 +277,25 @@ export class ReviewerDashboardComponent implements OnInit {
             this.isShowCountModal = event;
         }
     }
+
+    modalHeader(coi) {
+        if (coi.fcoiTypeCode == 1) {
+            return `#${coi.coiDisclosureNumber}: FCOI Disclosure By ${coi.disclosurePersonFullName}`;
+        } else if (coi.fcoiTypeCode == 2 || coi.fcoiTypeCode == 3) {
+            return `#${coi.coiDisclosureNumber}: Project Disclosure By ${coi.disclosurePersonFullName}`;
+        }
+    }
+
+    getColorBadges(moduleName) {
+        switch (moduleName) {
+            case '1':
+                return 'bg-fcoi-clip';
+            case '2':
+                return 'bg-proposal-clip';
+            case '3':
+                return 'bg-award-clip';
+            default:
+                return;
+        }
+    }
 }
