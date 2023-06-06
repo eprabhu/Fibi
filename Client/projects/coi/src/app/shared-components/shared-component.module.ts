@@ -9,6 +9,7 @@ import { SharedModule } from '../shared/shared.module';
 import { SharedSfiCardComponent } from './shared-sfi-card/shared-sfi-card.component';
 import { DisclosureCreateModalComponent } from './disclosure-create-modal/disclosure-create-modal.component';
 import { FormsModule } from '@angular/forms';
+import { AssignAdministratorModalComponent } from './assign-administrator-modal/assign-administrator-modal.component';
 
 @NgModule({
   imports: [
@@ -23,13 +24,15 @@ import { FormsModule } from '@angular/forms';
     PersonDetailsComponent,
     TrainingDetailsComponent,
     SharedSfiCardComponent,
-    DisclosureCreateModalComponent
+    DisclosureCreateModalComponent,
+    AssignAdministratorModalComponent,
   ],
   exports: [
     NoInformationComponent,
     PersonalDetailsModalComponent,
     SharedSfiCardComponent,
-    DisclosureCreateModalComponent
+    DisclosureCreateModalComponent,
+    AssignAdministratorModalComponent
   ]
 })
 export class SharedComponentModule { }
