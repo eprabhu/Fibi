@@ -97,7 +97,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
             }).subscribe((data: boolean) => {
                 this.coiDisclosure.isDisclosureQuestionnaire = data;
                 this._sfiService.isSFIRequired = data;
-                document.getElementById('questionnaireEvaluationMessageModalTrigger').click();
+                // document.getElementById('questionnaireEvaluationMessageModalTrigger').click();
                 this._dataStore.updateStore(['coiDisclosure'], this);
                 const NEXT_STEP = data ? '/coi/create-disclosure/sfi' : '/coi/create-disclosure/certification';
                 this._router.navigate([NEXT_STEP], { queryParamsHandling: 'preserve' });
