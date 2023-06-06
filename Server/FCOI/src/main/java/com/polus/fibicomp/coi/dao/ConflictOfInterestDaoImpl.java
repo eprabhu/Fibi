@@ -185,7 +185,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Root<CoiEntity> rootEntityName = query.from(CoiEntity.class);
 		query.where(builder.like(builder.lower(rootEntityName.get("entityName")), "%" + searchString.toLowerCase() + "%"));
 		query.orderBy(builder.asc(rootEntityName.get("entityName")));
-		return session.createQuery(query).getResultList();
+		return session.createQuery(query).setMaxResults(50).list();
 	}
 
 	@Override
