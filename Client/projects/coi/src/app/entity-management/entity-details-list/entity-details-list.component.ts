@@ -93,7 +93,8 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   currentTab(tab) {
     this.resetAdvanceSearchFields();
     this.entityManagementService.relationshipDashboardRequest.filterType = tab;
-    this.entityManagementService.relationshipDashboardRequest.id =  parseInt(this._route.snapshot.queryParamMap.get('entityManageId'))
+    this.entityManagementService.relationshipDashboardRequest.id =  parseInt(this._route.snapshot.queryParamMap.get('entityManageId'));
+    this.entityDetails = [];
     this.getPermissions();
     // this.getRelationshipEntityList();
     this.$relationshipEntityList.next();

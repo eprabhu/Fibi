@@ -134,33 +134,3 @@ th{
   height: 22px;
 }
 
-.travel-status {
-  background: #dc3545;
-   &:before {
-    content: "";
-    border-bottom: 6px solid #8d0d0d;
-  }
-}
-
-.fcoi-status {
-  background: #bfa454;
-   &:before {
-    content: "";
-    border-bottom: 6px solid #957c32;
-  }
-}
-.proposal-status {
-  background:#9ebf54;
-   &:before {
-    content: "";
-    border-bottom: 6px solid #5c702e;
-  }
-}
-
-.award-status {
-  background:#54BF5B;
-   &:before {
-    content: "";
-    border-bottom: 6px solid #01830A;
-  }
-}

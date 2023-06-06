@@ -387,7 +387,7 @@
             <div class="col text-secondary fs-14 d-flex">
               <div class="col-height">
                 <span class="shadow-sm align-items-center d-flex ps-2 mt-4"
-                  [ngClass]="disclosureList?.fcoiTypeCode === '1'? 'fcoi-status': (disclosureList?.fcoiTypeCode === '2'?'proposal-status':'award-status')">
+                  [ngClass]="disclosureList?.fcoiTypeCode === '1'? 'bg-fcoi-clip': (disclosureList?.fcoiTypeCode === '2'?'bg-proposal-clip':'bg-award-clip')">
                   <span class="px-2">{{disclosureList?.fcoiType}}</span></span>
               </div>
               <div class="col">
@@ -502,7 +502,7 @@
         <div class="p-3 text-break">
           <div class="d-flex">
             <div class="col-height">
-              <span class="travel-status shadow-sm align-items-center d-flex ps-2 mt-4">
+              <span class="bg-travel-clip shadow-sm align-items-center d-flex ps-2 mt-4">
                 <span class="px-2">Travel</span></span>
             </div>
             <div class="col text-secondary fs-14">
