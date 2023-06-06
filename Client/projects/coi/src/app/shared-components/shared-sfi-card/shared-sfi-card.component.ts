@@ -32,7 +32,7 @@ export class SharedSfiCardComponent implements OnInit {
 
   private updateSFIObject(): void {
     if (this.reqObject) {
-      this.SFIObject.isActive = this.isTriggeredFromDashboard() ?  this.getActiveStatus() : this.getValuesFormCOIEntityObj('isActive');
+      this.SFIObject.isActive = this.isTriggeredFromDashboard() ?  this.getActiveStatus() : this.reqObject.versionStatus;
       this.SFIObject.entityId = this.isTriggeredFromDashboard() ? this.reqObject.coiFinancialEntityId : this.reqObject.personEntityId;
       this.SFIObject.entityType = this.getEntityDescription();
       this.SFIObject.countryName = this.getCountryName();

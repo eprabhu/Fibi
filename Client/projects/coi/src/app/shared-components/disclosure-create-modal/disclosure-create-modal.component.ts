@@ -9,7 +9,7 @@ import {
     getEndPointOptionsForProposalDisclosure,
     getEndPointOptionsForSponsor
 } from '../../../../../fibi/src/app/common/services/end-point.config';
-import {deepCloneObject} from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import {deepCloneObject, hideModal} from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {
     CREATE_DISCLOSURE_ROUTE_URL,
@@ -42,7 +42,9 @@ class Disclosure {
     updateUserFullName: any;
     versionNumber: any;
     versionStatus: any;
-    type: null;
+    type: any;
+    disclosurePersonFullName: any;
+    disclosureType: any;
 }
 class RevisionObject {
     revisionComment: null;
@@ -143,7 +145,7 @@ export class DisclosureCreateModalComponent implements OnInit {
             this._disclosureCreateModalService.checkIfDisclosureAvailable(selectedModuleCode, moduleItemId).subscribe((data: any) => {
                 if (data) {
                     if (data.pendingProject != null) {
-                        this.setExistingDisclosureDetails('PROJECT', data.pendingProject);
+                        this.setExistingDisclosureDetails('Project', data.pendingProject);
                     } else if (data.fcoiProject != null) {
                         this.setExistingDisclosureDetails('FCOI', data.fcoiProject);
                     } else {
@@ -183,6 +185,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         if (this.validateProject()) {
             this.$subscriptions.push(this._disclosureCreateModalService.createDisclosure(this.getCreateProjectRequestObject()).subscribe((data: any) => {
                 if (data) {
+                    hideModal('reviseOrCreateDisclosureModal');
                     this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
                     this.clearModal();
                 }
@@ -214,6 +217,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     navigateToTravelDisclosure(): void {
         if (this.validateTravelDisclosure()) {
             this.getCreateTravelRequestObject();
+            hideModal('reviseOrCreateDisclosureModal');
             this._router.navigate(['/coi/travel-disclosure/travel-details']);
             this.clearModal();
         }
@@ -255,6 +259,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         };
         if (this.validateForm()) {
             this._disclosureCreateModalService.createDisclosure({'coiDisclosure': fcoiDisclosureObj}).subscribe((data: any) => {
+                hideModal('reviseOrCreateDisclosureModal');
                 this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
                 this.clearModal();
             }, err => {
@@ -344,6 +349,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     navigateToDisclosure(disclosureId): void {
+        hideModal('reviseOrCreateDisclosureModal');
         this._router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], {
             queryParams: {
                 disclosureId: disclosureId
@@ -396,6 +402,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                 this.$subscriptions.push(this._disclosureCreateModalService.reviseDisclosure(this.reviseObject)
                     .subscribe((data: any) => {
                         this.commonService.showToast(HTTP_SUCCESS_STATUS, 'New version of disclosure created.');
+                        hideModal('reviseOrCreateDisclosureModal');
                         this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL],
                             {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
                         this.clearModal();
@@ -411,6 +418,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     private setReviseDisclosure(): void {
+        this.existingDisclosureDetails.disclosureType = 'FCOI';
         this.existingDisclosureDetails.adminGroupId = this.canReviseFCOI.adminGroupId;
         this.existingDisclosureDetails.adminPersonId = this.canReviseFCOI.adminPersonId;
         this.existingDisclosureDetails.certifiedAt = this.canReviseFCOI.certifiedAt;
@@ -432,15 +440,18 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.existingDisclosureDetails.updateUserFullName = this.canReviseFCOI.updateUserFullName;
         this.existingDisclosureDetails.versionNumber = this.canReviseFCOI.versionNumber;
         this.existingDisclosureDetails.versionStatus = this.canReviseFCOI.versionStatus;
+        this.existingDisclosureDetails.disclosurePersonFullName = this.canReviseFCOI.disclosurePersonFullName;
     }
 
     private setExistingDisclosureDetails(type: string, data: any): void {
         this.isShowExistingDisclosure = true;
         this.disclosureNumber = data.disclosureNumber;
         this.existingDisclosureDetails = deepCloneObject(data);
-        if (type == 'PROJECT') {
+        this.existingDisclosureDetails['disclosureType'] = type;
+        if (type == 'Project') {
             this.existingDisclosureDetails['type'] = this.selectedProjectType;
         }
+        this.resetHomeUnit();
         this.isShowResultCard = true;
     }
 
