@@ -22,6 +22,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.pojo.Country;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -102,6 +103,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Autowired
 	private CommonService commonService;
+
+	@Autowired
+	private PersonDao personDao;
 
 	@Override
 	public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure coiDisclosure) {
@@ -904,10 +908,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				coiDisclosure.setNumberOfSFI(getNumberOfSFIBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
 				coiDisclosure.setNumberOfProposals(getNumberOfProposalsBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
 				coiDisclosure.setNumberOfAwards(getNumberOfAwardsBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
+				coiDisclosure.setDisclosurePersonFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
 				coiDisclosures.add(coiDisclosure);
 			}
 			CoiDisclosure coiDisclosure = getPendingFCOIDisclosure(personId);
 			if (coiDisclosure != null) {
+				coiDisclosure.setDisclosurePersonFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
 				coiDisclosures.add(coiDisclosure);
 			}
 		} catch (Exception ex) {
