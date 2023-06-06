@@ -29,6 +29,8 @@ public class CoiDisclosureDto {
 	private Integer adminGroupId;
 	private String adminPersonId;
 	private String disclosurePersonFullName;
+	private String adminGroupName;
+	private String adminPersonName;
 
 	public Integer getDisclosureId() {
 		return disclosureId;
@@ -205,4 +207,21 @@ public class CoiDisclosureDto {
 	public void setDisclosurePersonFullName(String disclosurePersonFullName) {
 		this.disclosurePersonFullName = disclosurePersonFullName;
 	}
+
+	public String getAdminGroupName() {
+		return adminGroupName;
+	}
+
+	public void setAdminGroupName(String adminGroupName) {
+		this.adminGroupName = adminGroupName;
+	}
+
+	public String getAdminPersonName() {
+		return adminPersonName;
+	}
+
+	public void setAdminPersonName(String adminPersonName) {
+		this.adminPersonName = adminPersonName;
+	}
+	
 }

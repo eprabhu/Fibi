@@ -278,6 +278,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
 		coiDisclosure.setCoiDisclosureFcoiType(conflictOfInterestDao.getCoiDisclosureFcoiTypeByCode(coiTypeCode));
 		coiDisclosure.setPerson(personDao.getPersonDetailById(coiDisclosure.getPersonId()));
+		coiDisclosure.setAdminGroupName(coiDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(coiDisclosure.getAdminGroupId()).getAdminGroupName() : null);
+		coiDisclosure.setAdminPersonName(coiDisclosure.getAdminPersonId() != null ? personDao.getPersonFullNameByPersonId(coiDisclosure.getAdminPersonId()) : null);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiSectionsType(conflictOfInterestDao.fetchCoiSections());
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
@@ -1368,7 +1370,16 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto) {
 		conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId());
-		conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(),DISCLOSURE_REVIEW_IN_PROGRESS);
+		conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
+		dto.setAdminGroupName(dto.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(dto.getAdminGroupId()).getAdminGroupName() : null);
+		dto.setAdminPersonName(personDao.getPersonFullNameByPersonId(dto.getAdminPersonId()));
+		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(dto.getDisclosureId());
+		dto.setConflictStatus(disclosure.getCoiConflictStatusType() != null ? disclosure.getCoiConflictStatusType().getDescription() : null);
+		dto.setConflictStatusCode(disclosure.getConflictStatusCode());
+		dto.setDispositionStatusCode(disclosure.getDispositionStatusCode());
+		dto.setDispositionStatus(disclosure.getCoiDispositionStatusType().getDescription());
+		dto.setReviewStatusCode(disclosure.getReviewStatusCode());
+		dto.setReviewStatus(disclosure.getCoiReviewStatusType().getDescription());
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 

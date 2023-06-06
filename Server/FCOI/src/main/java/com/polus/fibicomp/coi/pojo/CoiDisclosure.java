@@ -156,6 +156,12 @@ public class CoiDisclosure implements Serializable {
 	
 	@Transient
 	private String coiProjectTypeCode;
+	
+	@Transient
+	private String adminGroupName;
+
+	@Transient
+	private String adminPersonName;
 
 	public Integer getNumberOfProposals() {
 		return numberOfProposals;
@@ -452,4 +458,21 @@ public class CoiDisclosure implements Serializable {
 	public void setAdminPersonId(String adminPersonId) {
 		this.adminPersonId = adminPersonId;
 	}
+
+	public String getAdminGroupName() {
+		return adminGroupName;
+	}
+
+	public void setAdminGroupName(String adminGroupName) {
+		this.adminGroupName = adminGroupName;
+	}
+
+	public String getAdminPersonName() {
+		return adminPersonName;
+	}
+
+	public void setAdminPersonName(String adminPersonName) {
+		this.adminPersonName = adminPersonName;
+	}
+	
 }

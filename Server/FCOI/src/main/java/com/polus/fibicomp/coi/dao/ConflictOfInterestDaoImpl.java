@@ -1110,6 +1110,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		}
 		return count;
 	}
+	
 	private String setCOISortOrder(Map<String, String> sort) {
 		String sortOrder = null;
 		if (!sort.isEmpty()) {
@@ -1119,7 +1120,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				} else if (mapElement.getKey().equals("coiDisclosureNumber")) {
 					sortOrder = (sortOrder == null ? "T.DISCLOSURE_ID " + mapElement.getValue() : sortOrder + ", T.DISCLOSURE_ID " + mapElement.getValue());
 				} else if (mapElement.getKey().equals("disclosurePersonFullName")) {
-					sortOrder = (sortOrder == null ? "T.DISCLOSURE_PERSON_NAME " + mapElement.getValue() : sortOrder + ", T.DISCLOSURE_PERSON_NAME " + mapElement.getValue());
+					sortOrder = (sortOrder == null ? "T.DISCLOSURE_PERSON_FULL_NAME " + mapElement.getValue() : sortOrder + ", T.DISCLOSURE_PERSON_FULL_NAME " + mapElement.getValue());
 				} else if (mapElement.getKey().equals("disclosureCategoryType")) {
 					sortOrder = (sortOrder == null ? "T.DISCLOSURE_CATEGORY_TYPE " + mapElement.getValue() : sortOrder + ", T.DISCLOSURE_CATEGORY_TYPE " + mapElement.getValue());
 				} else if (mapElement.getKey().equals("disclosureStatus")) {
@@ -1856,6 +1857,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
 					disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
 					disclosureView.setDescription(resultSet.getString("DESCRIPTION"));
+					disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
+					disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
 					Unit unit = new Unit();
 					unit.setUnitNumber(resultSet.getString("UNIT"));
 					unit.setUnitName(resultSet.getString("UNIT_NAME"));
@@ -2050,6 +2053,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
 				disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
 				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
+				disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
+				disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
 				Unit unit = new Unit();
 				unit.setUnitNumber(resultSet.getString("UNIT"));
 				unit.setUnitName(resultSet.getString("UNIT_NAME"));
