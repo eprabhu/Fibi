@@ -74,13 +74,13 @@ export class UserDisclosureComponent implements OnInit {
     }
 
     getEventType(disclosureSequenceStatusCode, disclosureCategoryType) {
-        if (disclosureCategoryType == 1) {
-            if (disclosureSequenceStatusCode == 2 || disclosureSequenceStatusCode == 1 && !this.isActiveDisclosureAvailable) {
+        if (disclosureCategoryType === 1) {
+            if (disclosureSequenceStatusCode === 2 || disclosureSequenceStatusCode === 1 && !this.isActiveDisclosureAvailable) {
                 return 'Active';
-            } else if (disclosureSequenceStatusCode == 1 && this.isActiveDisclosureAvailable) {
+            } else if (disclosureSequenceStatusCode === 1 && this.isActiveDisclosureAvailable) {
                 return 'Revision';
             }
-        } else if (disclosureCategoryType == 3) {
+        } else if (disclosureCategoryType === 3) {
             return 'Proposal';
         }
     }
@@ -94,7 +94,7 @@ export class UserDisclosureComponent implements OnInit {
         this.loadDashboard();
     }
 
-    setSelectedModuleCode(moduleName, id, coiNumber, disSeqCode, personId, noOfcount, disclosure) {
+    setSelectedModuleCode(moduleName, id, disclosure, noOfcount) {
         if (noOfcount > 0) {
             switch (moduleName) {
                 case 'sfi':
@@ -113,11 +113,11 @@ export class UserDisclosureComponent implements OnInit {
             this.fcoiTypeCode = disclosure?.fcoiTypeCode;
             this.isShowCountModal = true;
             this.currentDisclosureId = id;
-            this.currentDisclosureNumber = coiNumber;
+            this.currentDisclosureNumber = disclosure.disclosureNumber;
             this.disclosureType = moduleName;
             this.inputType = 'DISCLOSURE_TAB';
-            this.disclosureSequenceStatusCode = disSeqCode;
-            this.personId = personId;
+            this.disclosureSequenceStatusCode = disclosure.dispositionStatusCode;
+            this.personId = disclosure.personId;
         }
     }
 
@@ -135,9 +135,31 @@ export class UserDisclosureComponent implements OnInit {
     }
 
     redirectToDisclosure(disclosure: any) {
-        const redirectUrl = disclosure.reviewStatusCode == '1' ?
+        const redirectUrl = disclosure.reviewStatusCode === '1' ?
             CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         this._router.navigate([redirectUrl],
             { queryParams: { disclosureId: disclosure.coiDisclosureId } });
     }
+
+    modalHeader(disclosure) {
+        if (disclosure.fcoiTypeCode === 1) {
+            return `#${disclosure.coiDisclosureNumber}: FCOI Disclosure By ${disclosure.disclosurePersonFullName}`;
+        } else if (disclosure.fcoiTypeCode === 2 || disclosure.fcoiTypeCode === 3) {
+            return `#${disclosure.coiDisclosureNumber}: Project Disclosure By ${disclosure.disclosurePersonFullName}`;
+        }
+    }
+
+    getColorBadges(moduleName) {
+        switch (moduleName) {
+            case '1':
+                return 'bg-fcoi-clip';
+            case '2':
+                return 'bg-proposal-clip';
+            case '3':
+                return 'bg-award-clip';
+            default:
+                return;
+        }
+    }
+
 }
