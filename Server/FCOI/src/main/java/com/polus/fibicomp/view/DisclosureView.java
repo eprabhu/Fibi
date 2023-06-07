@@ -1,5 +1,6 @@
 package com.polus.fibicomp.view;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -74,7 +75,7 @@ public class DisclosureView {
 	private String travelDisclosureStatus;
 	private String travelEntityName;
 	private String travellerName;
-	private Integer travelAmount;
+	private BigDecimal travelAmount;
 	private String travelReviewStatus;
 	private Date travelSubmissionDate;
 	private Date travelExpirationDate;
@@ -88,6 +89,14 @@ public class DisclosureView {
 	private String travellerTypeDescription;
 	private String travelDisclosureStatusCode;
 	private String travelDisclosureStatusDescription;
+
+	public BigDecimal getTravelAmount() {
+		return travelAmount;
+	}
+
+	public void setTravelAmount(BigDecimal travelAmount) {
+		this.travelAmount = travelAmount;
+	}
 
 	public String getDepartment() {
 		return department;
@@ -103,14 +112,6 @@ public class DisclosureView {
 
 	public void setTravelDisclosureStatus(String travelDisclosureStatus) {
 		this.travelDisclosureStatus = travelDisclosureStatus;
-	}
-
-	public Integer getTravelAmount() {
-		return travelAmount;
-	}
-
-	public void setTravelAmount(Integer travelAmount) {
-		this.travelAmount = travelAmount;
 	}
 
 	public String getTravelReviewStatus() {

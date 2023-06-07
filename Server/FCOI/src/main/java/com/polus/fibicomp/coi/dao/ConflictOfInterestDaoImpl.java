@@ -1005,10 +1005,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					unit.setUnitName(resultSet.getString("UNIT_NAME"));
 					disclosureView.setUnitDetails(unit);
 					disclosureView.setTravelDisclosureStatusCode(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_CODE"));
-					disclosureView.setTravelDisclosureStatusDescription("TRAVEL_DISCLOSURE_STATUS_DESCRIPTION");
+					disclosureView.setTravelDisclosureStatusDescription(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_DESCRIPTION"));
 					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
 					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
-					disclosureView.setTravelAmount(resultSet.getInt("TRAVEL_AMOUNT"));
+					disclosureView.setTravelAmount(resultSet.getBigDecimal("TRAVEL_AMOUNT"));
 					disclosureView.setTravelSubmissionDate(resultSet.getDate("SUBMISSION_DATE"));
 					disclosureView.setAcknowledgeDate(resultSet.getDate("ACKNOWLEDGE_DATE"));
 					disclosureView.setTravelExpirationDate(resultSet.getDate("EXPIRATION_DATE"));

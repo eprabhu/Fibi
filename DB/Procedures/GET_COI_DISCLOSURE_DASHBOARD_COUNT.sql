@@ -77,7 +77,7 @@ ELSEIF AV_TAB_TYPE = 'TRAVEL_DISCLOSURES' THEN
 
                 /* SET TAB_QUERY = CONCAT(' AND T1.FCOI_TYPE_CODE = 4 AND T1.VERSION_STATUS IN (''Active'',''Pending'') '); */
                 IF AV_FILTER_TYPE = 'ALL' THEN
-					SET TAB_QUERY = CONCAT(' AND T21.VERSION_STATUS_CODE IN (''1'',''2'') ');
+					SET TAB_QUERY = CONCAT(' AND T21.VERSION_STATUS IN (''DRAFT'',''ACTIVE'') ');
             
 				END IF;
 								
