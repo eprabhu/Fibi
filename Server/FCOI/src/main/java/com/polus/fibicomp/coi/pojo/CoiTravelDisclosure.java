@@ -47,8 +47,8 @@ public class CoiTravelDisclosure implements Serializable {
 	@Column(name = "VERSION_NUMBER")
 	private Integer versionNumber;
 	
-	@Column(name = "VERSION_STATUS_CODE")
-	private String versionStatusCode;
+	@Column(name = "VERSION_STATUS")
+	private String versionStatus;
 	
 	@Column(name = "PERSON_ENTITY_ID")
 	private Integer personEntityId;
@@ -164,7 +164,7 @@ public class CoiTravelDisclosure implements Serializable {
 	
 	@Column(name = "TRAVELER_TYPE_CODE")
 	private String travellerTypeCode;
-	
+
 	@Transient
 	private Unit travellerUnitDetails;
 	
@@ -174,6 +174,14 @@ public class CoiTravelDisclosure implements Serializable {
 	@Transient
 	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusTypeDetalis;
 	
+	public String getVersionStatus() {
+		return versionStatus;
+	}
+
+	public void setVersionStatus(String versionStatus) {
+		this.versionStatus = versionStatus;
+	}
+
 	public String getTravellerTypeCode() {
 		return travellerTypeCode;
 	}
@@ -208,14 +216,6 @@ public class CoiTravelDisclosure implements Serializable {
 
 	public void setCoiTravelDisclosureStatusList(CoiTravelDisclosureStatusType coiTravelDisclosureStatusList) {
 		this.coiTravelDisclosureStatusList = coiTravelDisclosureStatusList;
-	}
-
-	public String getVersionStatusCode() {
-		return versionStatusCode;
-	}
-
-	public void setVersionStatusCode(String versionStatusCode) {
-		this.versionStatusCode = versionStatusCode;
 	}
 
 	public String getDisclosureStatusCode() {

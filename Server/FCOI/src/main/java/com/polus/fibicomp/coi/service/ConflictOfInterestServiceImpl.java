@@ -1312,7 +1312,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				personEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
 			}
 		}
-		coiTravelDisclosure.setVersionStatusCode(Constants.TRAVEL_VERSION_STATUS_CODE);
+		coiTravelDisclosure.setVersionStatus("DRAFT");
 		coiTravelDisclosure.setIsInterNationalTravel(vo.getIsInternationalTravel());
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
