@@ -46,15 +46,15 @@
                             <div class="col d-flex">
                                 <label class="grey-text fw-600 fs-14">
                                     <i aria-hidden="true" class="fa fa-home mr-2"></i>
-                                    Unit :
+                                    Department :
                                 </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label
                                         [valueToShow]="travelCreateModalDetails.homeUnit">
                                         <div [title]="travelCreateModalDetails.homeUnit">
                                             {{travelCreateModalDetails.homeUnit}} -
-                                            {{travelCreateModalDetails.homeUnitName.length>40 ?
-                                            (travelCreateModalDetails.homeUnitName | slice:0: 40)+'...' :
+                                            {{travelCreateModalDetails.homeUnitName.length>33 ?
+                                            (travelCreateModalDetails.homeUnitName | slice:0: 33)+'...' :
                                             travelCreateModalDetails.homeUnitName}}
                                         </div>
                                     </app-no-data-label>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col d-flex">
-                                <label class="grey-text fw-600 fs-14">Certification :</label>
+                                <label class="grey-text fw-600 fs-14">Certification : </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]=null>
                                         <span></span>
@@ -116,7 +116,7 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col d-flex">
-                                <label class="grey-text fw-600">Acknowledgment : </label>
+                                <label class="grey-text fw-600 fs-14">Approved : </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]=null>
                                         <span></span>
@@ -134,7 +134,7 @@
                             <table class="fs-14 fw-medium spaced-table grey-text">
                                 <tr>
                                     <td class="fw-600">Review :</td>
-                                    <td class="ps-4">
+                                    <td>
                                         <span class="yellow-badge">
                                             Pending
                                         </span>
@@ -142,7 +142,7 @@
                                 </tr>
                                 <tr>
                                     <td class="fw-600">Disclosure :</td>
-                                    <td class="ps-4">
+                                    <td>
                                         <span class="yellow-badge">
                                             Pending
                                         </span>
