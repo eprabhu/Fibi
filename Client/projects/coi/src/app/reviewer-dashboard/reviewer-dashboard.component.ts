@@ -135,11 +135,11 @@ export class ReviewerDashboardComponent implements OnInit {
 
     resetAndPerformAdvanceSearch() {
         this.resetAdvanceSearchFields();
-        this.$coiList.next();
     }
 
     private resetAdvanceSearchFields() {
-        this.reviewerDashboardService.reviewerRequestObject = new ReviewerDashboardRequest();
+        this.reviewerDashboardService.reviewerRequestObject =
+            new ReviewerDashboardRequest(this.reviewerDashboardService.reviewerRequestObject.tabName);
         this.advanceSearchDates = { certificationDate: null, expirationDate: null };
         this.advSearchClearField = new String('true');
         this.clearField = new String('true');

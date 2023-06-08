@@ -349,9 +349,7 @@
                         <label for="review-status" class="label-text">Review Status :</label>
                         <app-no-data-label id="review-status" [valueToShow]="disclosure?.reviewDescription">
                             <span [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
-                                class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}">
-                                {{disclosure?.reviewDescription}}
-                            </span>
+                                class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}">{{disclosure?.reviewDescription}}</span>
                         </app-no-data-label>
                     </div>
                 </div>
