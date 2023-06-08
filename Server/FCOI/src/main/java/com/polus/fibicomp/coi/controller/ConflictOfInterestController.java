@@ -127,7 +127,6 @@ public class ConflictOfInterestController {
 	@PostMapping("/getEntityProjectRelations")
 	public String getEntityProjectRelations(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for getEntityProjectRelations");
-		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
 		return conflictOfInterestService.getEntityProjectRelations(vo);
 	}
 
