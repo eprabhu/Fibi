@@ -188,9 +188,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<CoiEntity> query = builder.createQuery(CoiEntity.class);
 		Root<CoiEntity> rootEntityName = query.from(CoiEntity.class);
-		query.where(builder.like(builder.lower(rootEntityName.get("entityName")), "%" + searchString.toLowerCase() + "%"));
-		query.orderBy(builder.asc(rootEntityName.get("entityName")));
-		return session.createQuery(query).setMaxResults(50).list();
+		Predicate exactMatch = builder.equal(builder.lower(rootEntityName.get("entityName")), searchString.toLowerCase());
+		Predicate partialMatch = builder.like(builder.lower(rootEntityName.get("entityName")), "%" + searchString.toLowerCase() + "%");
+		query.where(builder.or(exactMatch, partialMatch));
+		query.orderBy(builder.asc(builder.selectCase().when(exactMatch, 0).otherwise(1)), builder.asc(rootEntityName.get("entityName")));
+		return session.createQuery(query).setMaxResults(50).getResultList();
 	}
 
 	@Override
