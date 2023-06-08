@@ -208,7 +208,6 @@
             <select class="form-select form-control fs-14"
               [(ngModel)]="entityDetails.coiEntity.riskCategoryCode" [disabled]="changeType ==='1'" (ngModelChange)="setEntityRiskCategoryObj()"
               id="risk-level">
-              <option [value]="null">--Select--</option>
               <ng-container *ngFor="let riskLevel of riskLevelLookup">
                 <option [value]="riskLevel?.riskCategoryCode">{{riskLevel?.description}}</option>
               </ng-container>

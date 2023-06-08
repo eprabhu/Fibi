@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import { Router} from '@angular/router';
+import { NavigationService } from '../../common/services/navigation.service';
 
 @Component({
   selector: 'app-not-found',
@@ -8,13 +9,13 @@ import {Router} from '@angular/router';
 })
 export class NotFoundComponent implements OnInit {
 
-  constructor(public router: Router) {}
+  constructor(public router: Router, private _navigationService: NavigationService) {}
 
   ngOnInit() {
   }
 
     navigateBack() {
-        window.location.hash = '#/fibi/dashboard/researchSummary';
+      this.router.navigateByUrl(this._navigationService.previousURL);
     }
 
 }
