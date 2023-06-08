@@ -4,7 +4,7 @@
         <h4 class="card-title review-title">
             <div class="justify-content-between row">
                 <div class="col-auto">Assign Review</div>
-                <div *ngIf="coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" class="col-auto me-5">
+                <div *ngIf="coiService.isCOIAdministrator && coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" class="col-auto me-5">
                     <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center" data-bs-toggle="modal"
                         title="Add Review Location" data-bs-target="#add-location-modal">
                         <mat-icon class="me-2">person_add</mat-icon>

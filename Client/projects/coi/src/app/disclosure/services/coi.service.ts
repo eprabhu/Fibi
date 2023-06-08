@@ -21,6 +21,7 @@ export class CoiService {
     isCertified = false;
     isReviewActionCompleted = false;
     $reviewList = new BehaviorSubject<any>([]);
+    isCOIAdministrator = false;
 
     constructor(
         private _http: HttpClient,
