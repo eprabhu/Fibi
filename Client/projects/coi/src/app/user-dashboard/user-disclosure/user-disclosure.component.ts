@@ -141,16 +141,11 @@ export class UserDisclosureComponent implements OnInit {
             { queryParams: { disclosureId: disclosure.coiDisclosureId } });
     }
 
-    modalHeader(disclosure) {
-        if (disclosure.fcoiTypeCode === 1) {
-            return `#${disclosure.coiDisclosureNumber}: FCOI Disclosure By ${disclosure.disclosurePersonFullName}`;
-        } else if (disclosure.fcoiTypeCode === 2 || disclosure.fcoiTypeCode === 3) {
-            return `#${disclosure.coiDisclosureNumber}: Project Disclosure By ${disclosure.disclosurePersonFullName}`;
+    getColorBadges(disclosure) {
+        if (disclosure?.travelDisclosureId) {
+            return 'bg-travel-clip';
         }
-    }
-
-    getColorBadges(moduleName) {
-        switch (moduleName) {
+        switch (disclosure.fcoiTypeCode) {
             case '1':
                 return 'bg-fcoi-clip';
             case '2':
@@ -160,6 +155,20 @@ export class UserDisclosureComponent implements OnInit {
             default:
                 return;
         }
+    }
+
+    modalHeader(disclosure) {
+        if (disclosure.fcoiTypeCode === '1') {
+            return `#${disclosure.coiDisclosureNumber}: FCOI Disclosure By ${disclosure.disclosurePersonFullName}`;
+        } else if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
+            return `#${disclosure.coiDisclosureNumber}: Project Disclosure By ${disclosure.disclosurePersonFullName}`;
+        } else if (disclosure.travelDisclosureId) {
+            return `#${disclosure.travelDisclosureId}: ${disclosure.travelEntityName}`;
+        }
+    }
+
+    formatTravellerTypes(travellerTypes: string): string {
+        return travellerTypes ? (travellerTypes.split(',').map(travellerType => travellerType.trim()).join(', ')) : '';
     }
 
 }
