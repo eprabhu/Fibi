@@ -38,9 +38,12 @@ export class ReviewerDashboardRequest {
   property9 = null;
   pageNumber = 20;
   sort: any = {};
-  tabName = 'NEW_SUBMISSIONS';
+  tabName = '';
   advancedSearch = 'L';
   currentPage = 1;
+  constructor(tabname?) {
+    this.tabName = tabname ? tabname : 'NEW_SUBMISSIONS';
+  }
 }
 
 export class SortCountObj {
