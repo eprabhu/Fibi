@@ -78,7 +78,8 @@ export class RelationshipSummaryComponent implements OnInit {
     getEntityProjectRelations() {
         this.$subscriptions.push(
             this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
-               Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode).subscribe((data: any) => {
+               Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode, this.coiDetails.personId)
+                .subscribe((data: any) => {
                 if (data && data.coiDisclEntProjDetails?.length > 0) {
                     this.projectRelations = data.coiDisclEntProjDetails;
                 }
