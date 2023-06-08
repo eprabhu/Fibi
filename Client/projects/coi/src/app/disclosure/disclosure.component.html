@@ -309,9 +309,9 @@
                 <div class="d-flex justify-content-between p-3">
                     <span title="Goto home page" (click)="goToHomeUrl()"
                         [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
-                        class="btn btn-outline-secondary pb-0 {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
-                        <mat-icon class="mr-2">home</mat-icon>
-                        <span class="mt-1" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4">Home</span>
+                        class="btn btn-outline-secondary {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
+                        <mat-icon>home</mat-icon>
+                        <span class="mt-1 ms-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4">Home</span>
                     </span>
                     <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
