@@ -46,7 +46,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         private _reviewService: ReviewService,
         private _dataStore: DataStoreService,
         private _commonService: CommonService,
-        private _coiService: CoiService
+        public coiService: CoiService
     ) { }
 
     ngOnDestroy() {
@@ -95,9 +95,9 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     getCoiReview() {
-        this.$subscriptions.push(this._coiService.$reviewList.subscribe((res: any) => {
+        this.$subscriptions.push(this.coiService.$reviewList.subscribe((res: any) => {
             this.reviewList = res;
-             this._coiService.isReviewActionCompleted = this.completeReviewAction();
+             this.coiService.isReviewActionCompleted = this.completeReviewAction();
         }, _err => {
            // this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
         }));
@@ -140,7 +140,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     addReviewToList(review: any) {
         this.reviewList.push(review);
-         this._coiService.isReviewActionCompleted = this.completeReviewAction();
+         this.coiService.isReviewActionCompleted = this.completeReviewAction();
     }
 
     updateReview(review: any) {
@@ -167,7 +167,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             assigneePersonName: this.reviewActionConfirmation.assigneePersonName
         }).subscribe((res: any) => {
             this.updateReview(res);
-             this._coiService.isReviewActionCompleted = this.completeReviewAction();
+             this.coiService.isReviewActionCompleted = this.completeReviewAction();
             //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             this.clearActionData();
         }, _err => {
@@ -184,7 +184,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     deleteReview() {
         this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.coiReviewId).subscribe((_res: any) => {
             this.reviewList.splice(this.modifyIndex, 1);
-             this._coiService.isReviewActionCompleted = this.completeReviewAction();
+             this.coiService.isReviewActionCompleted = this.completeReviewAction();
             //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
@@ -195,7 +195,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     modifyReviewComment(coiReviewId) {
         this.commentConfiguration.coiReviewId = coiReviewId;
-        this._coiService.triggerCommentModal(this.commentConfiguration);
+        this.coiService.triggerCommentModal(this.commentConfiguration);
     }
 
     validateReview() {

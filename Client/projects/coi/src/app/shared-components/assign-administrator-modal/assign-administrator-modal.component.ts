@@ -3,6 +3,7 @@ import { CompleterOptions } from '../../../../../fibi/src/app/service-request/se
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { CoiService } from '../../disclosure/services/coi.service';
+import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 declare var $: any;
 @Component({
@@ -14,7 +15,7 @@ export class AssignAdministratorModalComponent implements OnChanges {
 
   isAssignToMe = false;
   adminSearchOptions: any = {};
-  clearField: String;
+  clearAdministratorField: String;
   assignAdminMap = new Map();
   addAdmin: any = {};
   adminGroupsCompleterOptions: CompleterOptions = new CompleterOptions();
@@ -65,13 +66,13 @@ setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: s
   public assignToMe(checkBoxEvent: any) {
     if (checkBoxEvent.target.checked) {
       this.adminSearchOptions.defaultValue = this._commonService.getCurrentUserDetail('fullName');
-      this.clearField = new String('false');
+      this.clearAdministratorField = new String('false');
       this.addAdmin.adminPersonId = this._commonService.getCurrentUserDetail('personId');
       this.getAdminGroupDetails(this._commonService.getCurrentUserDetail('personId'));
       this.isAssignToMe = true;
       this.assignAdminMap.clear();
     } else {
-      this.clearField = new String('true');
+      this.clearAdministratorField = new String('true');
       this.clearAdminGroupField = new String('true');
       this.addAdmin.adminPersonId = null;
       this.isAssignToMe = false;
@@ -105,6 +106,7 @@ setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: s
   public assignAdministrator() {
     if (!this.isSaving && this.validateAdmin()) {
       this.isSaving = true;
+      this.addAdmin.disclosureId = this.disclosureId;
       this.$subscriptions.push(this._coiService.assignAdmin(
         this.addAdmin
       ).subscribe((data: any) => {
@@ -113,7 +115,7 @@ setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: s
         this.addAdmin = {};
         this.isSaving = false;
         this.closeModal.emit(data);
-        $('#assign-to-admin-modal').modal('hide');
+        document.getElementById('hide-assign-admin').click();
       }, err => {
         this.isSaving = false;
       }));
@@ -141,7 +143,15 @@ setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: s
     }));
   }
 
-  private setAssignToMe(): boolean {
-    return this.addAdmin.adminPersonId === this._commonService.getCurrentUserDetail('personId') ? true : false;
-  }
+    private setAssignToMe(): boolean {
+        return this.addAdmin.adminPersonId === this._commonService.getCurrentUserDetail('personId') ? true : false;
+    }
+
+    public clearData() {
+        this.isAssignToMe = false;
+        this.addAdmin = {};
+        this.isShowWarningMessage = false;
+        this.clearAdminGroupField = new String('true');
+        this.clearAdministratorField = new String('true');
+    }
 }

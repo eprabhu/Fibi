@@ -17,6 +17,10 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   isEnableRelationshipModal = false;
 
   ngOnInit() {
+    const isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
+    if (isEditMode) {
+      this.entityDetailService.isExpanded = false;
+    }
   }
 
   ngOnDestroy(): void {

@@ -69,6 +69,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     disclosureStatusCode: string;
     fcoiTypeCode: any;
     deployMap = environment.deployUrl;
+    isCOIReviewer = false;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -90,6 +91,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
+        this.coiService.isCOIAdministrator = this.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.prevURL = this.navigationService.previousURL;
@@ -108,6 +110,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.dataStore.dataChanged = false;
+        this.coiService.isCOIAdministrator = false;
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -446,5 +449,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
   }
   private completeReviewAction (data: any): boolean {
     return data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
+  }
+
+  getAvailableRight(rights): boolean {
+    return Array.isArray(rights) ?
+      rights.some((right) => this.commonService.rightsArray.includes(right)) : this.commonService.rightsArray.includes(rights);
   }
 }

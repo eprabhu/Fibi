@@ -56,7 +56,7 @@
                         <!-- <span class="status-pill">Relationship with</span> -->
                         <div  class="row mt-2">
                             <div  class="col d-flex">
-                                <label  class="label-text"><i aria-hidden="true" class="fa fa-home right-margin"></i>Unit : </label>
+                                <label  class="label-text"><i aria-hidden="true" class="fa fa-home right-margin"></i>Department : </label>
                                 <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.unit">
                                         <div class="text-overflow" [title]="coiData?.coiDisclosure?.unit?.unitDetail">{{coiData?.coiDisclosure?.unit?.unitDetail}}</div>
@@ -341,7 +341,7 @@
                         </li>
                     </ul>
                 </div>
-                <div *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode !='4'" class="d-flex justify-content-around px-3 pb-3">
+                <div *ngIf="coiService.isCOIAdministrator && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode !='4'" class="d-flex justify-content-around px-3 pb-3">
                     <button  title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
                       class="fs-14   d-flex justify-content-center w-100 align-items-center" data-bs-toggle="modal"
                       data-bs-target="#assign-to-admin-modal"
@@ -350,9 +350,16 @@
                       Assign Admin
                     </button>
                 </div>
+                <!-- <div *ngIf="isCOIReviewer && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" class="d-flex justify-content-around px-3 pb-3">
+                  <button  title="Click to Start Review" area-describedby="Click to start review"
+                    class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                    <i class="mr-10 fs-20 fa fa-play-circle btn-color" aria-hidden="true"> </i>
+                    Start Review
+                  </button>
+              </div> -->
                 <div class="position-static d-flex justify-content-around px-3"
                     title="Click here to complete the review process">
-                    <span *ngIf="isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3'"
+                    <span *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3'"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                         data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
