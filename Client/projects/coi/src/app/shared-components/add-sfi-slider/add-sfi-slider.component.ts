@@ -22,7 +22,7 @@ export class AddSfiSliderComponent implements OnInit {
     @Input() coiEntityManageId: any = null;
     @Input() isEditEntity = false;
     @Input() changeType = '';
-    @Output() updatedDataStore = new EventEmitter<boolean>();
+    @Output() updatedDataStore = new EventEmitter<number>();
 
     constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
@@ -46,9 +46,9 @@ export class AddSfiSliderComponent implements OnInit {
         }
     }
 
-    emitEvent() {
+    emitEvent(event) {
         if (this.isEditEntity) {
-            this.updatedDataStore.emit(true);
+            this.updatedDataStore.emit(event);
         }
     }
 
