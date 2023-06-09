@@ -347,6 +347,9 @@ CREATE TABLE `coi_disclosure` (
   `UPDATE_USER` varchar(60) DEFAULT NULL,
   `CREATE_USER` varchar(60) DEFAULT NULL,
   `CREATE_TIMESTAMP` datetime DEFAULT NULL,
+  `HOME_UNIT` VARCHAR(8) DEFAULT NULL,
+  `ADMIN_GROUP_ID` INT(3) NULL,
+  `ADMIN_PERSON_ID` VARCHAR(45) NULL,
   PRIMARY KEY (`DISCLOSURE_ID`),
   KEY `COI_DISCLOSURE1_FK1_idx` (`PERSON_ID`),
   KEY `COI_DISCLOSURE1_FK2_idx` (`FCOI_TYPE_CODE`),
@@ -359,7 +362,8 @@ CREATE TABLE `coi_disclosure` (
   CONSTRAINT `COI_DISCLOSURE1_FK3` FOREIGN KEY (`CONFLICT_STATUS_CODE`) REFERENCES `coi_conflict_status_type` (`CONFLICT_STATUS_CODE`),
   CONSTRAINT `COI_DISCLOSURE1_FK4` FOREIGN KEY (`DISPOSITION_STATUS_CODE`) REFERENCES `coi_disposition_status_type` (`DISPOSITION_STATUS_CODE`),
   CONSTRAINT `COI_DISCLOSURE1_FK5` FOREIGN KEY (`REVIEW_STATUS_CODE`) REFERENCES `coi_review_status_type` (`REVIEW_STATUS_CODE`),
-  CONSTRAINT `COI_DISCLOSURE1_FK6` FOREIGN KEY (`RISK_CATEGORY_CODE`) REFERENCES `coi_risk_category` (`RISK_CATEGORY_CODE`)
+  CONSTRAINT `COI_DISCLOSURE1_FK6` FOREIGN KEY (`RISK_CATEGORY_CODE`) REFERENCES `coi_risk_category` (`RISK_CATEGORY_CODE`),
+  CONSTRAINT `COI_DIS_HOME_UNIT_FK7` FOREIGN KEY (`HOME_UNIT`) REFERENCES `unit` (`UNIT_NUMBER`) 
 );
 
 DROP TABLE IF EXISTS `coi_proj_conflict_status_type`;
@@ -611,10 +615,7 @@ CREATE TABLE `discl_attachment` (
   CONSTRAINT `DISCL_ATTACHMENT_FK5` FOREIGN KEY (`FILE_DATA_ID`) REFERENCES `discl_file_data` (`FILE_DATA_ID`)
 );
 
-ALTER TABLE `coi_disclosure` ADD COLUMN `HOME_UNIT` VARCHAR(8) DEFAULT NULL;
-
-ALTER TABLE `coi_disclosure` ADD CONSTRAINT `COI_DIS_HOME_UNIT_FK7` FOREIGN KEY (`HOME_UNIT`) REFERENCES `unit` (`UNIT_NUMBER`);
-
+DROP TABLE IF EXISTS `coi_travel_disclosure_status_type`;
 CREATE TABLE `coi_travel_disclosure_status_type` (
 		TRAVEL_DISCLOSURE_STATUS_CODE varchar(3) primary key not null,
 		DESCRIPTION varchar(200),
@@ -712,11 +713,6 @@ INSERT INTO `coi_travel_disclosure_status_type` VALUES('1', 'Draft', 'Y', now(),
 INSERT INTO `coi_travel_disclosure_status_type` VALUES('2', 'Acknowledged', 'Y', now(), 'admin');
 INSERT INTO `coi_travel_disclosure_status_type` VALUES('3', 'Risk', 'Y', now(), 'admin');
 
-
-ALTER TABLE `coi_disclosure` 
-ADD COLUMN `ADMIN_GROUP_ID` INT(3) NULL,
-ADD COLUMN `ADMIN_PERSON_ID` VARCHAR(45) NULL;
-
 INSERT INTO `RIGHTS` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `UPDATE_TIMESTAMP`, `RIGHTS_TYPE_CODE`) 
 VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), 'VIEW_ADMIN_GROUP_COI', 'Allow to view coi based on admin group', 'quickstart', now(), '1');
 
@@ -747,7 +743,7 @@ DROP PROCEDURE IF EXISTS GET_ALL_RIGHTS_FOR_A_MODULE;
 DROP PROCEDURE IF EXISTS SYNC_SFIS_AND_DISCLOSURE;
 DROP PROCEDURE IF EXISTS VALIDATE_PROJECT_DISCLOSURE;
 DROP PROCEDURE IF EXISTS GET_PERSON_ENTITIES;
-DROP PROCEDURE IF EXISTS FN_PERSON_HAS_AUTHORIZATION;
+DROP FUNCTION IF EXISTS FN_PERSON_HAS_AUTHORIZATION;
 DROP PROCEDURE IF EXISTS COI_VALIDATE_DISCLOSURE_CONFLICTS;
 
 \. ./Procedures/GET_COI_DISCLOSURE_DASHBOARD.sql
@@ -767,13 +763,14 @@ DROP PROCEDURE IF EXISTS COI_VALIDATE_DISCLOSURE_CONFLICTS;
 \. ./Procedures/GET_QUICK_CARD_COUNTS.sql
 \. ./Functions/FN_SYNC_SFI_WITH_FCOI_DISC.sql
 \. ./Procedures/GET_ALL_RIGHTS_FOR_A_MODULE.sql
-\. ./Procedures/SYNC_SFIS_AND_DISCLOSURE.sql;
-\. ./Procedures/VALIDATE_PROJECT_DISCLOSURE.sql;
-\. ./Procedures/GET_PERSON_ENTITIES.sql;
-\. ./Functions/FN_PERSON_HAS_AUTHORIZATION.sql;
-\. ./Procedures/COI_VALIDATE_DISCLOSURE_CONFLICTS.sql;
+\. ./Procedures/SYNC_SFIS_AND_DISCLOSURE.sql
+\. ./Procedures/VALIDATE_PROJECT_DISCLOSURE.sql
+\. ./Procedures/GET_PERSON_ENTITIES.sql
+\. ./Functions/FN_PERSON_HAS_AUTHORIZATION.sql
+\. ./Procedures/COI_VALIDATE_DISCLOSURE_CONFLICTS.sql
 
-
+DROP VIEW IF EXISTS `coi_project_award_v`;
 CREATE VIEW `coi_project_award_v` AS select NULL AS `ID`,`t1`.`AWARD_ID` AS `EXTERNAL_SYSTEM_REF_ID`,'1' AS `COI_PROJECT_TYPE_CODE`,`t1`.`AWARD_NUMBER` AS `AWARD_NUMBER`,`t1`.`TITLE` AS `TITLE`,`t5`.`PERSON_ID` AS `PI_PERSON_ID`,`t7`.`FULL_NAME` AS `PI_NAME`,`t6`.`DESCRIPTION` AS `AWARD_STATUS`,`t4`.`SPONSOR_NAME` AS `SPONSOR_NAME`,`t40`.`SPONSOR_NAME` AS `PRIME_SPONSOR_NAME`,`t1`.`BEGIN_DATE` AS `AWARD_START_DATE`,`t1`.`FINAL_EXPIRATION_DATE` AS `AWARD_END_DATE`,`t1`.`LEAD_UNIT_NUMBER` AS `LEAD_UNIT_NUMBER`,`t3`.`unit_name` AS `LEAD_UNIT_NAME` from ((((((`award` `t1` join `unit` `t3` on((`t3`.`UNIT_NUMBER` = `t1`.`LEAD_UNIT_NUMBER`))) join `sponsor` `t4` on((`t4`.`SPONSOR_CODE` = `t1`.`SPONSOR_CODE`))) left join `sponsor` `t40` on((`t40`.`SPONSOR_CODE` = `t1`.`PRIME_SPONSOR_CODE`))) join `award_persons` `t5` on((`t5`.`AWARD_ID` = `t1`.`AWARD_ID`))) join `award_status` `t6` on((`t6`.`STATUS_CODE` = `t1`.`STATUS_CODE`))) join `person` `t7` on((`t5`.`PERSON_ID` = `t7`.`PERSON_ID`))) where (((`t1`.`AWARD_SEQUENCE_STATUS` = 'ACTIVE') or ((`t1`.`AWARD_SEQUENCE_STATUS` = 'PENDING') and (`t1`.`AWARD_DOCUMENT_TYPE_CODE` = 1))) and (`t5`.`PI_FLAG` = 'Y')) union all select `coi_project_award`.`ID` AS `ID`,`coi_project_award`.`EXTERNAL_SYSTEM_REF_ID` AS `EXTERNAL_SYSTEM_REF_ID`,`coi_project_award`.`COI_PROJECT_TYPE_CODE` AS `COI_PROJECT_TYPE_CODE`,`coi_project_award`.`AWARD_NUMBER` AS `AWARD_NUMBER`,`coi_project_award`.`TITLE` AS `TITLE`,`coi_project_award`.`PI_PERSON_ID` AS `PI_PERSON_ID`,`coi_project_award`.`PI_NAME` AS `PI_NAME`,NULL AS `AWARD_STATUS`,`coi_project_award`.`SPONSOR_NAME` AS `SPONSOR_NAME`,`coi_project_award`.`PRIME_SPONSOR_NAME` AS `PRIME_SPONSOR_NAME`,`coi_project_award`.`AWARD_START_DATE` AS `AWARD_START_DATE`,`coi_project_award`.`AWARD_END_DATE` AS `AWARD_END_DATE`,NULL AS `LEAD_UNIT_NUMBER`,`coi_project_award`.`LEAD_UNIT_NAME` AS `LEAD_UNIT_NAME` from `coi_project_award` where (`coi_project_award`.`COI_PROJECT_TYPE_CODE` = 2);
 
+DROP VIEW IF EXISTS `coi_project_proposal_v`;
 CREATE VIEW `coi_project_proposal_v` AS select NULL AS `ID`,`t1`.`PROPOSAL_ID` AS `EXTERNAL_SYSTEM_REF_ID`,'3' AS `COI_PROJECT_TYPE_CODE`,`t1`.`PROPOSAL_ID` AS `PROPOSAL_NUMBER`,`t1`.`TITLE` AS `TITLE`,`t6`.`PERSON_ID` AS `PI_PERSON_ID`,`t7`.`FULL_NAME` AS `PI_NAME`,`t3`.`DESCRIPTION` AS `PROPOSAL_STATUS`,`t4`.`SPONSOR_NAME` AS `SPONSOR_NAME`,`t5`.`SPONSOR_NAME` AS `PRIME_SPONSOR_NAME`,`t1`.`START_DATE` AS `PROPOSAL_START_DATE`,`t1`.`END_DATE` AS `PROPOSAL_END_DATE`,`t1`.`HOME_UNIT_NUMBER` AS `LEAD_UNIT_NUMBER`,`t1`.`HOME_UNIT_NAME` AS `LEAD_UNIT_NAME` from (((((`eps_proposal` `t1` join `eps_proposal_status` `t3` on((`t3`.`STATUS_CODE` = `t1`.`STATUS_CODE`))) join `sponsor` `t4` on((`t4`.`SPONSOR_CODE` = `t1`.`SPONSOR_CODE`))) left join `sponsor` `t5` on((`t5`.`SPONSOR_CODE` = `t1`.`PRIME_SPONSOR_CODE`))) join `eps_proposal_persons` `t6` on((`t6`.`PROPOSAL_ID` = `t1`.`PROPOSAL_ID`))) join `person` `t7` on((`t6`.`PERSON_ID` = `t7`.`PERSON_ID`))) where ((`t1`.`DOCUMENT_STATUS_CODE` <> 3) and (`t1`.`STATUS_CODE` not in (1,29,35,9,22,20,24,30,3,12,11)) and (`t6`.`PROP_PERSON_ROLE_ID` = 3) and (`t6`.`PI_FLAG` = 'Y') and (`t1`.`DOCUMENT_STATUS_CODE` <> 3)) union all select `coi_project_proposal`.`ID` AS `ID`,`coi_project_proposal`.`EXTERNAL_SYSTEM_REF_ID` AS `EXTERNAL_SYSTEM_REF_ID`,`coi_project_proposal`.`COI_PROJECT_TYPE_CODE` AS `COI_PROJECT_TYPE_CODE`,`coi_project_proposal`.`PROPOSAL_NUMBER` AS `PROPOSAL_NUMBER`,`coi_project_proposal`.`TITLE` AS `TITLE`,`coi_project_proposal`.`PI_PERSON_ID` AS `PI_PERSON_ID`,`coi_project_proposal`.`PI_NAME` AS `PI_NAME`,NULL AS `PROPOSAL_STATUS`,`coi_project_proposal`.`SPONSOR_NAME` AS `SPONSOR_NAME`,`coi_project_proposal`.`PRIME_SPONSOR_NAME` AS `PRIME_SPONSOR_NAME`,`coi_project_proposal`.`PROPOSAL_START_DATE` AS `PROPOSAL_START_DATE`,`coi_project_proposal`.`PROPOSAL_END_DATE` AS `PROPOSAL_END_DATE`,NULL AS `LEAD_UNIT_NUMBER`,`coi_project_proposal`.`LEAD_UNIT_NAME` AS `LEAD_UNIT_NAME` from `coi_project_proposal` where (`coi_project_proposal`.`COI_PROJECT_TYPE_CODE` = 4);
