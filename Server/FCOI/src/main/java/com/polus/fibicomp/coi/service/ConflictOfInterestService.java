@@ -5,13 +5,16 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 
 import org.springframework.http.ResponseEntity;
@@ -309,7 +312,7 @@ public interface ConflictOfInterestService {
 
 	ResponseEntity<Object> getAllCoiTravelDisclosureList();
 
-	CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId);
+	ResponseEntity<Object> loadTravelDisclosure(Integer travelDisclosureId);
 
 	ResponseEntity<Object> getCoiProjectTypes();
 
@@ -377,4 +380,12 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
     ResponseEntity<Object> validateConflicts(Integer disclosureId);
+    
+    /**
+	 * This method is used to assign admin group or admin person for travel disclosures
+	 *
+	 * @param dto
+	 * @return
+	 */
+	ResponseEntity<Object> assignTravelDisclosureAdmin(CoiAssignTravelDisclosureAdminDto dto);
 }
