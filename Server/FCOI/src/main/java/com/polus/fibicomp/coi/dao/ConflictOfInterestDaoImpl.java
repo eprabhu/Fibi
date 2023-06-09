@@ -1027,6 +1027,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setTravelStartDate(resultSet.getDate("TRAVEL_START_DATE"));
 					disclosureView.setTravelEndDate(resultSet.getDate("TRAVEL_END_DATE"));
 					disclosureView.setTravelSubmissionDate(resultSet.getDate("SUBMISSION_DATE"));
+					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
 					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
 					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
