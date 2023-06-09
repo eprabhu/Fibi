@@ -1127,12 +1127,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		Integer approvedDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
 		conflictOfInterestVO.setApprovedDisclosureCount(approvedDisclosureCount);
 		vo.setTabName("TRAVEL_DISCLOSURES");
-//		Integer travelDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
-		Integer travelDisclosureCount = 0;
+		Integer travelDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
+//		Integer travelDisclosureCount = 0;
 		conflictOfInterestVO.setTravelDisclosureCount(travelDisclosureCount);
 		vo.setTabName("DISCLOSURE_HISTORY");
-//		Integer disclosureHistoryCount = conflictOfInterestDao.getCOIDashboardCount(vo);
-		Integer disclosureHistoryCount = 0;
+		Integer disclosureHistoryCount = conflictOfInterestDao.getCOIDashboardCount(vo);
+//		Integer disclosureHistoryCount = 0;
 		conflictOfInterestVO.setDisclosureHistoryCount(disclosureHistoryCount);
 		return commonDao.convertObjectToJSON(conflictOfInterestVO);
 	}
