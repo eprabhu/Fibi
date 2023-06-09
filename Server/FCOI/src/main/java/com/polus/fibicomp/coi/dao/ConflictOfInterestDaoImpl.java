@@ -190,7 +190,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Root<CoiEntity> rootEntityName = query.from(CoiEntity.class);
 		Predicate exactMatch = builder.equal(builder.lower(rootEntityName.get("entityName")), searchString.toLowerCase());
 		Predicate partialMatch = builder.like(builder.lower(rootEntityName.get("entityName")), "%" + searchString.toLowerCase() + "%");
-		query.where(builder.or(exactMatch, partialMatch));
+		Predicate condVersionStatus = builder.notEqual(rootEntityName.get("versionStatus"), "ARCHIVED");
+		query.where(builder.and(condVersionStatus, builder.or(exactMatch, partialMatch)));
 		query.orderBy(builder.asc(builder.selectCase().when(exactMatch, 0).otherwise(1)), builder.asc(rootEntityName.get("entityName")));
 		return session.createQuery(query).setMaxResults(50).getResultList();
 	}
@@ -2476,14 +2477,18 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public boolean checkEntityAdded(Integer entityId) {
+	public boolean checkEntityAdded(Integer entityId, String personId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("select (CASE WHEN count(pe.personEntityId) > 0 THEN true ELSE false END) from PersonEntity pe where " +
-				"pe.entityId = :entityId AND pe.personId = :personId");
+		hqlQuery.append("select (CASE WHEN count(pe.personEntityId) > 0 THEN true ELSE false END) from PersonEntity pe where pe.entityId = :entityId");
+		if (personId != null) {
+			hqlQuery.append(" AND pe.personId = :personId");
+		}
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("entityId", entityId);
-		query.setParameter("personId", AuthenticatedUser.getLoginPersonId());
+		if (personId != null) {
+			query.setParameter("personId", personId);
+		}
 		return (Boolean) query.getSingleResult();
 	}
 
@@ -2867,5 +2872,27 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Root<CoiTravelDisclosureStatusType> rootDisclComment = query.from(CoiTravelDisclosureStatusType.class);
 		query.where(builder.equal(rootDisclComment.get("travelDisclosureStatusCode"), travelDisclosureStatusCode));
 		return session.createQuery(query).getSingleResult();
+	}
+
+	@Override
+	public void archiveEntity(Integer entityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiEntity pe SET pe.versionStatus = :versionStatus, pe.updateUser = :updateUser where pe.entityId = :entityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("versionStatus", Constants.COI_ARCHIVE_STATUS);
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.executeUpdate();
+	}
+
+	@Override
+	public Integer getMaxEntityVersionNumber(Integer entityNumber) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT MAX(e.versionNumber) FROM CoiEntity e WHERE e.entityNumber = :entityNumber");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityNumber", entityNumber);
+		return (Integer) query.getSingleResult();
 	}
 }
