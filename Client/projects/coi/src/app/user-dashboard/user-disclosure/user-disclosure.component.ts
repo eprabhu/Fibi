@@ -4,6 +4,7 @@ import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
 import { CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { Router } from '@angular/router';
+import { ActiveDisclosure , UserDisclosure } from './user-disclosure-interface';
 @Component({
     selector: 'app-user-disclosure',
     templateUrl: './user-disclosure.component.html',
@@ -26,7 +27,7 @@ export class UserDisclosureComponent implements OnInit {
         filterType: 'ALL',
         currentPage: '1',
     };
-    filteredDisclosureArray: any[] = [];
+    filteredDisclosureArray: UserDisclosure[] = [];
     dashboardCount: any;
     isActiveDisclosureAvailable = false;
     selectedModuleCode: number;
@@ -113,7 +114,7 @@ export class UserDisclosureComponent implements OnInit {
             this.fcoiTypeCode = disclosure?.fcoiTypeCode;
             this.isShowCountModal = true;
             this.currentDisclosureId = id;
-            this.currentDisclosureNumber = disclosure.disclosureNumber;
+            this.currentDisclosureNumber = disclosure.disclosureNumber || disclosure.coiDisclosureNumber;
             this.disclosureType = moduleName;
             this.inputType = 'DISCLOSURE_TAB';
             this.disclosureSequenceStatusCode = disclosure.dispositionStatusCode;
@@ -134,14 +135,14 @@ export class UserDisclosureComponent implements OnInit {
         }
     }
 
-    redirectToDisclosure(disclosure: any) {
+    redirectToDisclosure(disclosure: UserDisclosure) {
         const redirectUrl = disclosure.reviewStatusCode === '1' ?
             CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         this._router.navigate([redirectUrl],
             { queryParams: { disclosureId: disclosure.coiDisclosureId } });
     }
 
-    getColorBadges(disclosure) {
+    getColorBadges(disclosure: UserDisclosure) {
         if (disclosure?.travelDisclosureId) {
             return 'bg-travel-clip';
         }
@@ -157,7 +158,7 @@ export class UserDisclosureComponent implements OnInit {
         }
     }
 
-    modalHeader(disclosure) {
+    modalHeader(disclosure: UserDisclosure) {
         if (disclosure.fcoiTypeCode === '1') {
             return `#${disclosure.coiDisclosureNumber}: FCOI Disclosure By ${disclosure.disclosurePersonFullName}`;
         } else if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
