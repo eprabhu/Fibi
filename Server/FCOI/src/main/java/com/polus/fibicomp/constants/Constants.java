@@ -1615,6 +1615,9 @@ public interface Constants {
     /** COI */
     Integer COI_MODULE_CODE = 8;
     Integer COI_SUBMODULE_CODE = 0;
+    String COI_ACTIVE_STATUS = "ACTIVE";
+    String COI_ARCHIVE_STATUS = "ARCHIVED";
+    Integer COI_INITIAL_VERSION_NUMBER = 1;
 
     String TYPE_FCOI = "F";
     String TYPE_PROJECT_DISCLOSURE = "P";

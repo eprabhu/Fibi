@@ -674,11 +674,13 @@ public interface ConflictOfInterestDao {
 	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
 
 	/**
+	 * This method is used to check the sfi is created with this entity
 	 *
 	 * @param enitityId
+	 * @param personId
 	 * @return
 	 */
-	boolean checkEntityAdded(Integer enitityId);
+	boolean checkEntityAdded(Integer enitityId, String personId);
 
 	/**
 	 *
@@ -794,4 +796,17 @@ public interface ConflictOfInterestDao {
 	 * This method is used to fetch the travel disclosure status object based on status code
 	 */
 	public CoiTravelDisclosureStatusType getTravelDisclosureStatusDetails(String travelDisclosureStatusCode);
+
+	/**
+	 * This method is used to archive an entity
+	 * @param entityId
+	 */
+	public void archiveEntity(Integer entityId);
+
+	/**
+	 * This method is used to get maximum of version number of coi entity
+	 * @param entityNumber
+	 * @return versionNumber
+	 */
+	public Integer getMaxEntityVersionNumber(Integer entityNumber);
 }

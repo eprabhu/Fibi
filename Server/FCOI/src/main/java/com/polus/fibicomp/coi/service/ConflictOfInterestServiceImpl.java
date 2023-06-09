@@ -132,6 +132,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String DISCLOSURE_REVIEW_IN_PROGRESS = "3";
 	private static final String DISCLOSURE_REVIEW_COMPLETED = "4";
 	private static final String SFI_DEFAULT_STATUS = "Active";
+	private static final String RISK_CAT_CODE_LOW = "3";
+	private static final String RISK_CAT_CODE_HIGH = "1";
 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
@@ -1053,20 +1055,28 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 	
 	@Override
-	//TODO update & versioning is pending
 	public ResponseEntity<Object> saveOrUpdateCoiEntity(ConflictOfInterestVO vo) {
 		CoiEntity coiEntity = vo.getCoiEntity();
 		coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
-		if (coiEntity.getEntityId() == null) {
+		if (coiEntity.getEntityId() == null) { // on creation
 			coiEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
-			coiEntity.setEntityStatusCode("3"); //Unverified
 			coiEntity.setIsActive(true); // Y
-			coiEntity.setVersionStatus("Active");
-			coiEntity.setVersionNumber(1);
+			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
+			coiEntity.setVersionNumber(Constants.COI_INITIAL_VERSION_NUMBER);
+			coiEntity.setRiskCategoryCode(RISK_CAT_CODE_LOW);
 			coiEntity.setEntityNumber(conflictOfInterestDao.generateMaxCoiEntityNumber());
+		} else { // on update or patch
+			Integer entityId = coiEntity.getEntityId();
+			if (conflictOfInterestDao.checkEntityAdded(entityId, null)) { // checks the entity is linked to a SFI or not
+				coiEntity.setIsActive(true); // N
+				conflictOfInterestDao.archiveEntity(entityId);
+				coiEntity.setEntityId(null);
+				coiEntity.setVersionNumber(conflictOfInterestDao.getMaxEntityVersionNumber(coiEntity.getEntityNumber()) + 1);
+			}
+			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 		}
 		conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
-		return new ResponseEntity<>(vo, HttpStatus.OK);
+		return new ResponseEntity<>(coiEntity, HttpStatus.OK);
 	}
 
 	@Override
@@ -1344,7 +1354,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public Object checkEntityAdded(Integer entityId) {
-		return conflictOfInterestDao.checkEntityAdded(entityId);
+		return conflictOfInterestDao.checkEntityAdded(entityId, AuthenticatedUser.getLoginPersonId());
 	}
 
 	@Override
