@@ -93,7 +93,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
   updatedEntityDetails(event) {
     if (event) {
+      this.entityId = event;
       this.getEntityDetails();
+      this._router.navigate(['/coi/entity-management/entity-details'],{ queryParams: { entityManageId: this.entityId }, queryParamsHandling: 'merge'});
     }
   }
 

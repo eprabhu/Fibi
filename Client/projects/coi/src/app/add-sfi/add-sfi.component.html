@@ -142,16 +142,12 @@
         </div>
         <div class="row px-4 pt-4">
           <div class="col-custom d-flex mt-2">
-            <label class="d-block fw-500 fs-14 px-1 pt-2" for="website">Website : <span *ngIf="isEntityManagement " class="mandatory px-2">*</span>
+            <label class="d-block fw-500 fs-14 px-1 pt-2" for="website">Website :
             </label>
           </div>
           <div class="col mt-3">
             <input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.webURL" id="website"
-              [ngClass]="(mandatoryList?.has('website')) ? 'is-invalid d-block' : ''"
               [disabled]="isResultFromSearch || isViewMode">
-              <span *ngIf="(mandatoryList?.has('website'))" class="invalid-feedback d-block fs-14-nav">
-                {{(mandatoryList?.get('website'))}}
-              </span>
             <span class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type in the website of the business or organization you want to report.</p>
             </span>
