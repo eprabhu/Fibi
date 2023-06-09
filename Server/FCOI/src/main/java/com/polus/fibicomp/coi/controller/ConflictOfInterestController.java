@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
+import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.service.GeneralService;
 import com.polus.fibicomp.constants.Constants;
 import org.apache.logging.log4j.LogManager;
@@ -400,12 +402,6 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getAllCoiTravelDisclosureList();
 	}
 
-	@GetMapping(value = "/getCoiTravelDisclosureDetailsById/{travelDisclosureId}")
-	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
-		logger.info("Request for getCoiTravelDisclosureById");
-		return conflictOfInterestService.getCoiTravelDisclosureDetailsById(travelDisclosureId);
-	}
-
 	@GetMapping("/loadTravellerTypesLookup")
 	public ResponseEntity<Object> loadTravellerTypesLookup() {
 		logger.info("Requesting for loadTravellerTypesLookup");
@@ -437,6 +433,17 @@ public class ConflictOfInterestController {
 	@PatchMapping("/disclosure/assignAdmin")
 	public ResponseEntity<Object> assignDisclosureAdmin(@RequestBody CoiDisclosureDto dto) {
 		return conflictOfInterestService.assignDisclosureAdmin(dto);
+	}
+	
+	@GetMapping(value = "/loadTravelDisclosure/{travelDisclosureId}")
+	public ResponseEntity<Object> loadTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Request for loadTravelDisclosureById");
+		return conflictOfInterestService.loadTravelDisclosure(travelDisclosureId);
+	}
+
+	@PatchMapping("/travelDisclosure/assignAdmin")
+	public ResponseEntity<Object> assignTravelDisclosureAdmin(@RequestBody CoiAssignTravelDisclosureAdminDto dto) {
+		return conflictOfInterestService.assignTravelDisclosureAdmin(dto);
 	}
 
 	@GetMapping("/adminGroup/adminPersons")

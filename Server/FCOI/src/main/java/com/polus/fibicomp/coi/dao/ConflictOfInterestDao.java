@@ -611,7 +611,7 @@ public interface ConflictOfInterestDao {
 
 	public List<CoiTravelDisclosure> getAllCoiTravelDisclosureList(ConflictOfInterestVO vo);
 
-	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId);
+	public CoiTravelDisclosure loadTravelDisclosure(Integer travelDisclosureId);
 
 	public List<CoiProjectType> getCoiProjectTypes();
 
@@ -809,4 +809,17 @@ public interface ConflictOfInterestDao {
 	 * @return versionNumber
 	 */
 	public Integer getMaxEntityVersionNumber(Integer entityNumber);
+	
+	/**
+	 *This method updates the assign admin/group and changes the disclosure status to 3 review in progress
+	 *
+	 * @param adminGroupId
+	 * @param adminPersonId
+	 * @param disclosureId
+	 */
+    void assignTravelDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId);
+    
+    public List<CoiTravelDisclosureTraveler> getEntriesFromTravellerTable(Integer travelDisclosureId);
+    
+    public CoiEntity getEntityDetails(Integer entityId);
 }

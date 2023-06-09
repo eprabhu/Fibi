@@ -164,6 +164,12 @@ public class CoiTravelDisclosure implements Serializable {
 	
 	@Column(name = "TRAVELER_TYPE_CODE")
 	private String travellerTypeCode;
+	
+	@Column(name = "ADMIN_GROUP_ID")
+	private Integer adminGroupId;
+	
+	@Column(name = "ADMIN_PERSON_ID")
+	private String adminPersonId;
 
 	@Transient
 	private Unit travellerUnitDetails;
@@ -173,7 +179,64 @@ public class CoiTravelDisclosure implements Serializable {
 	
 	@Transient
 	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusTypeDetalis;
+
+	@Transient
+	private String adminGroupName;
+
+	@Transient
+	private String adminPersonName;
 	
+	@Transient
+	private List<String> travellerTypeCodeList;
+	
+	public String getAdminPersonId() {
+		return adminPersonId;
+	}
+
+	public void setAdminPersonId(String adminPersonId) {
+		this.adminPersonId = adminPersonId;
+	}
+
+	public List<String> getTravellerTypeCodeList() {
+		return travellerTypeCodeList;
+	}
+
+	public void setTravellerTypeCodeList(List<String> travellerTypeCodeList) {
+		this.travellerTypeCodeList = travellerTypeCodeList;
+	}
+
+	public Integer getAdminGroupId() {
+		return adminGroupId;
+	}
+
+	public void setAdminGroupId(Integer adminGroupId) {
+		this.adminGroupId = adminGroupId;
+	}
+
+	public String getAdminPersnId() {
+		return adminPersonId;
+	}
+
+	public void setAdminPersnId(String adminPersnId) {
+		this.adminPersonId = adminPersnId;
+	}
+
+	public String getAdminGroupName() {
+		return adminGroupName;
+	}
+
+	public void setAdminGroupName(String adminGroupName) {
+		this.adminGroupName = adminGroupName;
+	}
+
+	public String getAdminPersonName() {
+		return adminPersonName;
+	}
+
+	public void setAdminPersonName(String adminPersonName) {
+		this.adminPersonName = adminPersonName;
+	}
+
 	public String getVersionStatus() {
 		return versionStatus;
 	}

@@ -1766,7 +1766,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId) {
+	public CoiTravelDisclosure loadTravelDisclosure(Integer travelDisclosureId) {
 		return hibernateTemplate.get(CoiTravelDisclosure.class, travelDisclosureId);
 	}
 	
@@ -2894,5 +2894,39 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("entityNumber", entityNumber);
 		return (Integer) query.getSingleResult();
+	}
+	
+	@Override
+	public void assignTravelDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiTravelDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId ");
+		hqlQuery.append("WHERE c.travelDisclosureId = : travelDisclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("adminGroupId", adminGroupId);
+		query.setParameter("adminPersonId", adminPersonId);
+		query.setParameter("travelDisclosureId", travelDisclosureId);
+		query.executeUpdate();
+		
+	}
+	
+	@Override
+	public List<CoiTravelDisclosureTraveler> getEntriesFromTravellerTable(Integer travelDisclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelDisclosureTraveler> query = builder.createQuery(CoiTravelDisclosureTraveler.class);
+		Root<CoiTravelDisclosureTraveler> rootDisclComment = query.from(CoiTravelDisclosureTraveler.class);
+		query.where(builder.equal(rootDisclComment.get("travelDisclosureId"), travelDisclosureId));
+		return session.createQuery(query).getResultList();
+	}
+	
+	@Override
+	public CoiEntity getEntityDetails(Integer entityId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiEntity> query = builder.createQuery(CoiEntity.class);
+		Root<CoiEntity> rootDisclComment = query.from(CoiEntity.class);
+		query.where(builder.equal(rootDisclComment.get("entityId"), entityId));
+		return session.createQuery(query).getSingleResult();
 	}
 }
