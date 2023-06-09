@@ -225,10 +225,12 @@ export class CommonService {
         switch (String(statusCode)) {
             case '1':
                 return 'green-badge';
-          case '2':
+            case '2':
                 return 'brown-badge';
             case '3':
                 return 'red-badge';
+            case '4':
+                return 'green-badge';
         }
     }
 
@@ -270,4 +272,5 @@ export class CommonService {
     hasRight(right: string): boolean {
         return this.rightsArray.includes(right);
     }
+
 }
