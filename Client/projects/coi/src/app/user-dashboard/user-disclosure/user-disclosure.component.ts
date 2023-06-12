@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
-import { CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { CREATE_DISCLOSURE_ROUTE_URL, CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { Router } from '@angular/router';
 import { ActiveDisclosure , UserDisclosure } from './user-disclosure-interface';
 @Component({
@@ -136,10 +136,10 @@ export class UserDisclosureComponent implements OnInit {
     }
 
     redirectToDisclosure(disclosure: UserDisclosure) {
-        const redirectUrl = disclosure.reviewStatusCode === '1' ?
-            CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
+        const redirectUrl = disclosure.travelDisclosureId ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : (disclosure.reviewStatusCode === '1' ?
+            CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL);
         this._router.navigate([redirectUrl],
-            { queryParams: { disclosureId: disclosure.coiDisclosureId } });
+            { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId } });
     }
 
     getColorBadges(disclosure: UserDisclosure) {

@@ -7,6 +7,7 @@ export const NO_DATA_FOUND_MESSAGE = '-- No Data --';
 
 export const CREATE_DISCLOSURE_ROUTE_URL = '/coi/create-disclosure/screening';
 export const POST_CREATE_DISCLOSURE_ROUTE_URL = '/coi/disclosure/summary';
+export const CREATE_TRAVEL_DISCLOSURE_ROUTE_URL = '/coi/travel-disclosure/travel-details';
 export const HOME_URL = '/coi/user-dashboard';
 export const DEFAULT_UNIT_FORMAT = 'unitNumber - unitName';
 

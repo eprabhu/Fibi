@@ -24,7 +24,7 @@
             <label class="fw-500 fs-14 col-custom" for="travel-disclosure-traveller">Traveller:</label>
             <div class="col-10">
                 <div class="divCenter">
-                    <span *ngFor="let details of travellerType; let i = index" id="travel-disclosure-traveller"
+                    <span *ngFor="let details of travellerTypeLookup; let i = index" id="travel-disclosure-traveller"
                         class="mt-2 me-5">
                         <input class="travelDisclosure-radio-checkbox ms-1 me-3 hand-cursor border-secondary"
                             type="checkbox" value={{details.description}} id="traveller-checkbox{{i}}"
@@ -48,7 +48,7 @@
         <div class="row d-flex mt-5 px-0 pt-3">
             <label for="travelDisclosure-title" class="fw-500 fs-14 col-custom">Trip Title:</label>
             <div class="col">
-                <textarea id="travelDisclosure-title" appLengthValidator [isShowLimiter]='true' [limit]=200
+                <textarea id="travelDisclosure-title" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=200
                     class="form-control fs-14" autocomplete="off" [(ngModel)]="travelDisclosureRO.travelTitle"
                     (ngModelChange)="triggerConfirmationModal();"
                     [ngClass]="(mandatoryList?.get('title')) ? 'invalid-border':''">
@@ -82,7 +82,7 @@
         </div>
 
         <!-- country/state/city -->
-        <div class="row mt-5 pt-2 px-0 d-flex justify-content-between">
+        <div class="row mt-4 px-0 d-flex justify-content-between">
             <!-- Country list -->
             <div class="row col-6" *ngIf="destination=='International'">
                 <label class="fw-500 fs-14 col-custom" for="travelDisclosure-countryList">Country:</label>
@@ -142,7 +142,7 @@
                 Purpose of the Trip:
             </label>
             <div class="col">
-                <textarea id="travelDisclosure-tripPurpose" appLengthValidator [isShowLimiter]='true' [limit]=500
+                <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
                     class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.purposeOfTheTrip"
                     (ngModelChange)="triggerConfirmationModal();"
                     [ngClass]="(mandatoryList?.get('purpose')) ? 'invalid-border':''">
@@ -162,7 +162,7 @@
                 Relationship to Your Research:
             </label>
             <div class="col">
-                <textarea id="travelDisclosure-relationship" appLengthValidator [isShowLimiter]='true' [limit]=500
+                <textarea id="travelDisclosure-relationship" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
                     class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.relationshipToYourResearch"
                     (ngModelChange)="triggerConfirmationModal();"
                     [ngClass]="(mandatoryList?.get('relationship')) ? 'invalid-border':''">

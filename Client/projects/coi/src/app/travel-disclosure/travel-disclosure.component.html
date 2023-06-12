@@ -4,7 +4,7 @@
             <div class="disclosure-heading px-3 d-flex">
                 <div class="align-self-center flex-fill">
                     <p class="m-0">
-                        <ng-container *ngIf="!isSaved">
+                        <ng-container *ngIf="!service.coiTravelDisclosure?.travelDisclosureId">
                             <strong>Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
                                     <u (click)="this.ispersondetailsmodal = true;"
@@ -14,9 +14,9 @@
                                 </span>
                             </strong>
                         </ng-container>
-                        <ng-container *ngIf="isSaved">
+                        <ng-container *ngIf="service.coiTravelDisclosure?.travelDisclosureId">
                             <strong title="">
-                                # : Travel Disclosure For [ : ] By
+                                #{{responseObject.travelDisclosureId}} : Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
                                     <u (click)="this.ispersondetailsmodal = true;"
                                         title="Show the details of {{userDetails.fullName}}">
@@ -48,17 +48,15 @@
                                     <i aria-hidden="true" class="fa fa-home mr-2"></i>
                                     Department :
                                 </label>
-                                <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label
-                                        [valueToShow]="travelCreateModalDetails.homeUnit">
-                                        <div [title]="travelCreateModalDetails.homeUnit">
-                                            {{travelCreateModalDetails.homeUnit}} -
-                                            {{travelCreateModalDetails.homeUnitName.length>33 ?
-                                            (travelCreateModalDetails.homeUnitName | slice:0: 33)+'...' :
-                                            travelCreateModalDetails.homeUnitName}}
-                                        </div>
-                                    </app-no-data-label>
-                                </span>
+                                <app-no-data-label class="grey-text fs-14 ml-2"
+                                    [valueToShow]="userDetails.homeUnit || userDetails.homeUnitName">
+                                    <div title="{{userDetails.homeUnit}} - {{userDetails.homeUnitName}}">
+                                        {{userDetails.homeUnit}} -
+                                        {{userDetails.homeUnitName.length>35 ?
+                                        (userDetails.homeUnitName | slice:0: 35)+'...' :
+                                        userDetails.homeUnitName}}
+                                    </div>
+                                </app-no-data-label>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -69,7 +67,11 @@
                                 </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]=null>
-                                        <span></span>
+                                        <div title="{{responseObject?.adminPersonId}} - {{responseObject?.adminPersonName}}">
+                                            {{responseObject?.adminPersonId}}
+                                            <span *ngIf="responseObject?.adminPersonId && responseObject?.adminPersonName">-</span>
+                                            {{responseObject?.adminPersonName}}
+                                        </div>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -82,8 +84,12 @@
                                     Admin Group :
                                 </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]=null>
-                                        <span></span>
+                                    <app-no-data-label [valueToShow]="responseObject?.adminGroupId || responseObject?.adminGroupName">
+                                        <div title="{{responseObject?.adminGroupId}} - {{responseObject?.adminGroupName}}">
+                                            {{responseObject?.adminGroupId}}
+                                            <span *ngIf="responseObject?.adminGroupId && responseObject?.adminGroupName">-</span>
+                                            {{responseObject?.adminGroupName}}
+                                        </div>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -98,8 +104,8 @@
                             <div class="col d-flex">
                                 <label class="grey-text fw-600 fs-14">Create : </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]=null>
-                                        <span></span>
+                                    <app-no-data-label [valueToShow]="responseObject?.createTimestamp">
+                                        <span>{{responseObject?.createTimestamp | dateFormatter}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -108,8 +114,8 @@
                             <div class="col d-flex">
                                 <label class="grey-text fw-600 fs-14">Certification : </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]=null>
-                                        <span></span>
+                                    <app-no-data-label [valueToShow]="responseObject?.certifiedAt">
+                                        <span>{{responseObject?.certifiedAt | dateFormatter}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -118,8 +124,8 @@
                             <div class="col d-flex">
                                 <label class="grey-text fw-600 fs-14">Approved : </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]=null>
-                                        <span></span>
+                                    <app-no-data-label [valueToShow]="responseObject?.acknowledgeAt">
+                                        <span>{{responseObject?.acknowledgeAt | dateFormatter}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -135,17 +141,17 @@
                                 <tr>
                                     <td class="fw-600">Review :</td>
                                     <td>
-                                        <span class="yellow-badge">
-                                            Pending
-                                        </span>
+                                        <app-no-data-label [valueToShow]="responseObject?.reviewStatus">
+                                            <span class="{{commonService.getReviewStatusBadge(responseObject?.reviewStatusCode)}}">{{responseObject?.reviewStatus}}</span>
+                                        </app-no-data-label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-600">Disclosure :</td>
                                     <td>
-                                        <span class="yellow-badge">
-                                            Pending
-                                        </span>
+                                        <app-no-data-label [valueToShow]="responseObject?.travelDisclosureStatus">
+                                            <span class="{{commonService.getDispositionStatusBadge(responseObject?.travelDisclosureStatusCode)}}">{{responseObject?.travelDisclosureStatus}}</span>
+                                        </app-no-data-label>
                                     </td>
                                 </tr>
                             </table>
@@ -221,7 +227,7 @@
                         Add Significant Financial Interest
                     </span>
                 </div>
-                <div class="d-flex justify-content-around px-3 pb-3" (click)="certifyTravelDisclosure()"
+                <div class="d-flex justify-content-around px-3 pb-3" (click)="handleTravelDisclosureSubmission('SAVE_DISCLOSURE')"
                     *ngIf="isRouteComplete(['screening', 'travel-details'])">
                     <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">save</mat-icon>
@@ -229,7 +235,7 @@
                     </span>
                 </div>
                 <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100"
-                    (click)="certifyTravelDisclosure(); isSaved=true;"
+                    (click)="handleTravelDisclosureSubmission('CERTIFY_DISCLOSURE'); isSaved=true;"
                     *ngIf="isRouteComplete(['certification']) && !isSaved" [disabled]="!service.isTravelCertified">
                     <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">done</mat-icon>
@@ -237,7 +243,7 @@
                     </span>
                 </button>
                 <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100"
-                    (click)="certifyCopyTravelDisclosure(); isSaved=true;"
+                    (click)="handleTravelDisclosureSubmission('CERTIFY_COPY_DISCLOSURE'); isSaved=true;"
                     *ngIf="isRouteComplete(['certification']) && !isSaved" [disabled]="!service.isTravelCertified">
                     <span class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
                         <i class="me-2 fs-4 fa fa-clipboard"></i>
