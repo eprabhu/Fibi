@@ -1299,8 +1299,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
 				disclosureView.setAwardId(resultSet.getString("AWARD_NUMBERS"));
 				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
-				disclosureView.setHomeUnit(resultSet.getString("HOME_UNIT"));
-				disclosureView.setHomeUnitName(resultSet.getString("HOME_UNIT_NAME"));
+				Unit unit = new Unit();
+				unit.setUnitNumber(resultSet.getString("HOME_UNIT"));
+				unit.setUnitName(resultSet.getString("HOME_UNIT_NAME"));
+				unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
+				unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
+				unit.setAcronym(resultSet.getString("ACRONYM"));
+				unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+				disclosureView.setUnit(unit);
 				disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
 				disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
 
