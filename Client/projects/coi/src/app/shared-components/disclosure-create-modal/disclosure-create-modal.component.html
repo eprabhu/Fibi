@@ -91,7 +91,7 @@
                             Description
                         </label>
                         <textarea [(ngModel)]="reviseObject.revisionComment" [isShowLimiter]='true' [limit]=2000
-                                  appLengthValidator class="form-control" id="desc-award"
+                                  appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"
                                   [ngClass]="(mandatoryList?.get('reviseComment')) ? 'invalid-border':''">
                         </textarea>
                         <span *ngIf="mandatoryList?.has('reviseComment')" class="fs-13 invalid-feedback d-block">

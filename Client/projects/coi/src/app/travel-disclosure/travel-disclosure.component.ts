@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { NavigationService } from '../common/services/navigation.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
-import { TravelCreateModalDetails } from './travel-disclosure-interface';
+import { TravelCreateModalDetails, TravelDisclosureResponseObject } from './travel-disclosure-interface';
 import { environment } from '../../environments/environment';
 @Component({
     selector: 'app-travel-disclosure',
@@ -19,17 +19,18 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     isCardExpanded = true;
     $subscriptions: Subscription[] = [];
     travelCreateModalDetails: TravelCreateModalDetails;
-    isCreateMode = false;
+    responseObject = new TravelDisclosureResponseObject();
     isSaved = false;
-    currentUser = '';
     ispersondetailsmodal = false;
     userDetails = {
         fullName: '',
-        personId: ''
+        personId: '',
+        homeUnit: null,
+        homeUnitName: null
     };
     deployMap = environment.deployUrl;
 
-    constructor(public _commonService: CommonService,
+    constructor(public commonService: CommonService,
                 public router: Router,
                 public sfiService: SfiService,
                 public service: TravelDisclosureService,
@@ -37,22 +38,42 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.travelCreateModalDetails = JSON.parse(sessionStorage.getItem('travelCreateModalDetails'));
-        this.userDetails.fullName = this._commonService.getCurrentUserDetail('fullName');
-        this.userDetails.personId = this.travelCreateModalDetails.personId;
+        this.loadDisclosureDetails();
     }
 
     ngOnDestroy(): void {
-        sessionStorage.removeItem('travelCreateModalDetails');
+        this.clearAllDetails();
         subscriptionHandler(this.$subscriptions);
     }
 
-    certifyTravelDisclosure(): void {
-        this.service.saveOrCopySubject.next('certify');
+    private clearAllDetails(): void {
+        sessionStorage.removeItem('travelCreateModalDetails');
+        this.service.coiTravelDisclosure = new TravelDisclosureResponseObject();
+        this.responseObject = new TravelDisclosureResponseObject();
     }
 
-    certifyCopyTravelDisclosure(): void {
-        this.service.saveOrCopySubject.next('certifycopy');
+    private loadDisclosureDetails(): void {
+        if (this.service.coiTravelDisclosure.travelDisclosureId) {
+            this.responseObject = this.service.coiTravelDisclosure;
+            this.setUserDetails();
+        } else {
+            this.travelCreateModalDetails = JSON.parse(sessionStorage.getItem('travelCreateModalDetails'));
+            this.userDetails.fullName = this.commonService.getCurrentUserDetail('fullName');
+            this.userDetails.personId = this.travelCreateModalDetails.personId;
+            this.userDetails.homeUnit = this.travelCreateModalDetails.homeUnit;
+            this.userDetails.homeUnitName = this.travelCreateModalDetails.homeUnitName;
+        }
+    }
+
+    private setUserDetails(): void {
+        this.userDetails.homeUnit = this.responseObject.homeUnitNumber;
+        this.userDetails.homeUnitName = this.responseObject.homeUnitName;
+        this.userDetails.fullName = this.responseObject.personFullName;
+        this.userDetails.personId = this.responseObject.personId;
+    }
+
+    handleTravelDisclosureSubmission(purpose: string): void {
+        this.service.saveOrCopySubject.next(purpose);
     }
 
     isRouteComplete(possibleActiveRoutes: string[] = []): boolean {

@@ -31,7 +31,9 @@ export class TravelCertificationComponent implements OnDestroy {
     to disclose and maintain your Significant Financial Interests; identify potential areas of concern related to your
     proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
-    constructor(public travelService: TravelDisclosureService) { }
+    constructor(public travelService: TravelDisclosureService) {
+        window.scrollTo(0, 0);
+    }
 
     ngOnDestroy(): void {
         this.travelService.isTravelCertified = false;
