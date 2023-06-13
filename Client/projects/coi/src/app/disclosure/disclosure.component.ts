@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 import {
     deepCloneObject,
     isEmptyObject,
+    openModal,
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../fibi/src/app/app-constants';
@@ -70,6 +71,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     fcoiTypeCode: any;
     deployMap = environment.deployUrl;
     isCOIReviewer = false;
+    error = '';
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -238,7 +240,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.certifyDisclosure();
             } else {
                 this.isSaving = false;
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Please complete Screening Questionnaire');
+                this.error = 'Please complete Screening Questionnaire';
+                openModal('disclosureErrorModal');
+                return false;
             }
         }
     }
@@ -274,8 +278,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
         }, err => {
             this.isSaving = false;
-            this.commonService.showToast(HTTP_ERROR_STATUS, (err.error) ?
-                err.error : 'Error in certifying disclosure. Please try again.');
+            this.error = err.error ?  err.error : 'Error in certifying disclosure. Please try again.';
+            openModal('disclosureErrorModal');
         }));
     }
 
@@ -455,4 +459,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     return Array.isArray(rights) ?
       rights.some((right) => this.commonService.rightsArray.includes(right)) : this.commonService.rightsArray.includes(rights);
   }
+   onclicking() {
+    document.getElementById('prop-saveExit-dismiss-btn').click();
+    }
 }
