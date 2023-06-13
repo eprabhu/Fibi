@@ -120,9 +120,6 @@ export class AddSfiComponent implements OnInit {
 			this.entityDetails.coiEntity = data;
 			this.entityDetails.coiEntity.entityId && !this.isEntityManagement ?
 				this.saveAdditionalDetails() : this.updateDetails();
-			if (!this.isSlider) {
-				this._router.navigate(['/coi/entity-management/entity-details'],{ queryParams: { entityManageId: this.entityDetails.coiEntity.entityId }});
-			}
 		}, _err => {
 			this.isSaving = false;
 			this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
@@ -161,6 +158,9 @@ export class AddSfiComponent implements OnInit {
 		// if (this.changeType === '2') {
 		//   $('#actionConfirmationModal').modal('hide');
 		// }
+		if (!this.isSlider) {
+			this._router.navigate(['/coi/entity-management/entity-details'],{ queryParams: { entityManageId: this.entityDetails.coiEntity.entityId }});
+		}
 		this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity ? 'Update ' : 'Created '}Entity Successfully completed.`);
 	}
 
