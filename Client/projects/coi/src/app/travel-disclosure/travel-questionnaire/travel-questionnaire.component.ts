@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { CoiDisclosure } from '../../disclosure/coi-interface';
-import { TravelDisclosureService } from '../travel-disclosure.service';
+import { TravelDisclosureService } from '../services/travel-disclosure.service';
 
 @Component({
     selector: 'app-travel-questionnaire',
@@ -15,7 +15,7 @@ import { TravelDisclosureService } from '../travel-disclosure.service';
                     [isShowSave]="false"
                     [saveButtonLabel]="'Save and Continue'"
                     (QuestionnaireSaveEvent)="getSaveEvent($event)"
-                    (QuestionnaireEditEvent) = "triggerConfirmationModal($event)">
+                    (QuestionnaireEditEvent) = "setUnSavedChanges($event)">
             </app-view-questionnaire-list>
         </div>
     `
@@ -48,7 +48,7 @@ export class TravelQuestionnaireComponent {
         }
     }
 
-    triggerConfirmationModal(changeStatus: boolean): void {
+    setUnSavedChanges(changeStatus: boolean): void {
         this._service.unSavedTabName = 'Screening Questionnaire';
         this._service.travelDataChanged = changeStatus;
     }

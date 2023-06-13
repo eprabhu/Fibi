@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { TravelDisclosureService } from '../travel-disclosure.service';
+import { TravelDisclosureService } from '../services/travel-disclosure.service';
 
 @Component({
     selector: 'app-travel-certification',
@@ -36,13 +36,11 @@ export class TravelCertificationComponent implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.travelService.isTravelCertified = false;
-        this.travelService.unSavedTabName = '';
+        this.travelService.setUnSavedChanges(false, '');
     }
 
     certifyTravelDisclosure(): void {
-        this.travelService.travelDataChanged = true;
+        this.travelService.setUnSavedChanges(true, 'Certification');
         this.travelService.isTravelCertified = true;
-        this.travelService.unSavedTabName = 'Certification';
     }
 }

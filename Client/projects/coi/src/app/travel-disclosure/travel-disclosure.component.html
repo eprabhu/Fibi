@@ -4,21 +4,21 @@
             <div class="disclosure-heading px-3 d-flex">
                 <div class="align-self-center flex-fill">
                     <p class="m-0">
-                        <ng-container *ngIf="!service.coiTravelDisclosure?.travelDisclosureId">
+                        <ng-container *ngIf="!responseObject?.travelDisclosureId">
                             <strong>Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="this.ispersondetailsmodal = true;"
+                                    <u (click)="ispersondetailsmodal = true;"
                                         title="Show the details of {{userDetails.fullName}}">
                                         {{userDetails.fullName}}
                                     </u>
                                 </span>
                             </strong>
                         </ng-container>
-                        <ng-container *ngIf="service.coiTravelDisclosure?.travelDisclosureId">
+                        <ng-container *ngIf="responseObject?.travelDisclosureId">
                             <strong title="">
-                                #{{responseObject.travelDisclosureId}} : Travel Disclosure By
+                                #{{responseObject?.travelDisclosureId}} : Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="this.ispersondetailsmodal = true;"
+                                    <u (click)="ispersondetailsmodal = true;"
                                         title="Show the details of {{userDetails.fullName}}">
                                         {{userDetails.fullName}}
                                     </u>
