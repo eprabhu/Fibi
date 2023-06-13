@@ -358,7 +358,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     private setSearchOptions(): void {
-        this.unitSearchOptions = getEndPointOptionsForLeadUnit(this.commonService.currentUserDetails.homeUnit + '-' + this.commonService.currentUserDetails.homeUnitName, this.commonService.baseUrl, 'unitNumber - unitName');
+        this.unitSearchOptions = getEndPointOptionsForLeadUnit(this.commonService.currentUserDetails.homeUnit + '-' + this.commonService.currentUserDetails.homeUnitName, this.commonService.fibiUrl, 'unitNumber - unitName');
         this.reviseObject.homeUnit = this.commonService.currentUserDetails.homeUnit;
         this.homeUnitName = this.commonService.currentUserDetails.homeUnitName;
         this.piElasticSearchOptions = this._elasticConfig.getElasticForPerson();
