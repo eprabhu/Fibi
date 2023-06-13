@@ -580,6 +580,39 @@
         </div>
     </div>
 </div>
+<div class="modal fade mySkinDialog" tabindex="-1" id="disclosureErrorModal" tabindex="-1" role="dialog"
+    data-backdrop="static" data-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Validation</h5>
+                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
+                  aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 ">
+                        <div>
+                            <ng-container >
+                                <div class="alert alert-danger" role="alert">
+                                    <i class="fa fa-exclamation-circle icon text-danger fw-400" aria-hidden="true"></i>
+                                    <strong class="fw-500 fs-14">Error : </strong>
+                                    <span class="fw-400 fs-13">{{error}}</span>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <ng-container>
+                    <button class=" btn btn-outline-secondary fs-14 px-4" data-bs-dismiss="modal" id="prop-saveExit-dismiss-btn">Close</button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
 <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
