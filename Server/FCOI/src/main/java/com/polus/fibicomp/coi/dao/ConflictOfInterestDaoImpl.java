@@ -1031,6 +1031,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
 					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
 					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
+					disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
 					disclosureViews.add(disclosureView);
 				} else {
 					DisclosureView disclosureView =  new DisclosureView();

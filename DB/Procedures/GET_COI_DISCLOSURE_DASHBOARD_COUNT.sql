@@ -146,6 +146,7 @@ IF AV_TAB_TYPE = 'TRAVEL_DISCLOSURES' THEN
 							T21.DESTINATION_CITY,
                             T21.DESTINATION_COUNTRY,
                             T21.CREATE_TIMESTAMP,
+                            T21.VERSION_STATUS,
                             T21.STATE ' ,SELECTED_FIELD_LIST,'
 							FROM COI_TRAVEL_DISCLOSURE T21
 							LEFT JOIN ENTITY T22 ON T22.ENTITY_ID=T21.ENTITY_ID

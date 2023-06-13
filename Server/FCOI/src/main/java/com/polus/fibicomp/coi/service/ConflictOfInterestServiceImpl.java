@@ -1259,8 +1259,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	
 	@Override
 	public ResponseEntity<Object> createCoiTravelDisclosure(ConflictOfInterestVO vo) {
-		CoiTravelDisclosure coiTravelDisclosure = new CoiTravelDisclosure();
-		coiTravelDisclosure.setTravelDisclosureId(vo.getTravelDisclosureId());
+		CoiTravelDisclosure coiTravelDisclosure =
+				vo.getTravelDisclosureId() != null ? conflictOfInterestDao.loadTravelDisclosure(vo.getTravelDisclosureId()) : new CoiTravelDisclosure();
 		coiTravelDisclosure.setVersionNumber(1);
 		coiTravelDisclosure.setEntityId(vo.getEntityId());
 		coiTravelDisclosure.setEntityNumber(vo.getEntityNumber());
@@ -1410,6 +1410,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setTravelSubmissionDate(coiTravelDisclosure.getTravelSubmissionDate());
 		dto.setCreateUser(coiTravelDisclosure.getCreateUser());
 		dto.setUpdateUser(coiTravelDisclosure.getUpdateUser());
+		dto.setPersonId(coiTravelDisclosure.getPersonId());
+		dto.setPersonFullName(personDao.getPersonFullNameByPersonId(dto.getPersonId()));
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
    	
