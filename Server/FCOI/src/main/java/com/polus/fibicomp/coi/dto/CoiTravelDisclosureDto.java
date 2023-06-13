@@ -46,7 +46,24 @@ public class CoiTravelDisclosureDto {
 	private String homeUnitName;
 	private Boolean isInterNationalTravel;
 	private List<String> travellerTypeCodeList;
-	
+	private String personId;
+	private String personFullName;
+
+	public String getPersonFullName() {
+		return personFullName;
+	}
+
+	public void setPersonFullName(String personFullName) {
+		this.personFullName = personFullName;
+	}
+
+	public String getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(String personId) {
+		this.personId = personId;
+	}
 
 	public Boolean getIsInterNationalTravel() {
 		return isInterNationalTravel;
