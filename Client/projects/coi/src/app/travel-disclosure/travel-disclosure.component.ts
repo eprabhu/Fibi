@@ -10,6 +10,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
 import { TravelCreateModalDetails, TravelDisclosureResponseObject } from './travel-disclosure-interface';
 import { environment } from '../../environments/environment';
 import { TravelDataStoreService } from './services/travel-data-store.service';
+import { HOME_URL } from '../app-constants';
 @Component({
     selector: 'app-travel-disclosure',
     templateUrl: './travel-disclosure.component.html',
@@ -42,13 +43,23 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.navigateToHome();
     }
 
     ngOnDestroy(): void {
         this.clearAllDetails();
         subscriptionHandler(this.$subscriptions);
     }
-
+    private navigateToHome() {
+        this._route.queryParams.subscribe(params => {
+            const MODULE_ID = params['disclosureId'];
+            const travelCreateModalDetails: TravelCreateModalDetails = this._dataStore.getCreateModalDetails();
+            const homeUnit = (travelCreateModalDetails && travelCreateModalDetails.homeUnit) || null;
+            if (!homeUnit && !MODULE_ID) {
+                this.router.navigate([HOME_URL]);
+            }
+        });
+    }
     private clearAllDetails(): void {
         this.responseObject = new TravelDisclosureResponseObject();
         this._dataStore.setStoreData(this.responseObject);
