@@ -48,7 +48,7 @@ export class AdminDashboardService {
 }
 
 getPersonGroup (personId) {
-  return this._http.get(this._commonService.baseUrl + '/getPersonGroup', {
+  return this._http.get(this._commonService.fibiUrl + '/getPersonGroup', {
     headers: new HttpHeaders().set('personId', personId.toString())
   });
 }
