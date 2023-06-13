@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { CommonService } from '../common/services/common.service';
-import { TravelDisclosureResponseObject } from './travel-disclosure-interface';
+import { CommonService } from '../../common/services/common.service';
+import { TravelDisclosureResponseObject } from '../travel-disclosure-interface';
 
 
 @Injectable()
@@ -15,8 +15,12 @@ export class TravelDisclosureService {
     unSavedTabName = '';
     isChildRouting = false;
 
-    constructor(private _http: HttpClient,
-                private _commonService: CommonService) { }
+    constructor(private _http: HttpClient, private _commonService: CommonService) { }
+
+    setUnSavedChanges(dataChange: boolean, tabName: string): void {
+        this.unSavedTabName = tabName;
+        this.travelDataChanged = dataChange;
+    }
 
     createCoiTravelDisclosure(travelDisclosureRO: object) {
         return this._http.post(`${this._commonService.baseUrl}/createCoiTravelDisclosure`, travelDisclosureRO);

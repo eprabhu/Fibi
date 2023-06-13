@@ -1,33 +1,40 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot } from '@angular/router';
 import { TravelDisclosureService } from './travel-disclosure.service';
-import { TravelCreateModalDetails, TravelDisclosureResponseObject } from './travel-disclosure-interface';
-import { Observable, Subscriber, forkJoin } from 'rxjs';
+import { TravelCreateModalDetails, TravelDisclosureResponseObject } from '../travel-disclosure-interface';
+import { Observable, Subscriber } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { CommonService } from '../common/services/common.service';
-import { HOME_URL, HTTP_ERROR_STATUS } from '../app-constants';
+import { CommonService } from '../../common/services/common.service';
+import { HOME_URL, HTTP_ERROR_STATUS } from '../../app-constants';
+import { TravelDataStoreService } from './travel-data-store.service';
 
 @Injectable()
 export class TravelRouteGuardService implements CanActivate, CanDeactivate<boolean> {
 
     constructor(private _service: TravelDisclosureService,
         private _commonService: CommonService,
-        private _router: Router) { }
+        private _router: Router,
+        private _dataStore: TravelDataStoreService) { }
 
     canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot):  boolean | Observable<boolean> {
-        this._service.coiTravelDisclosure = new TravelDisclosureResponseObject();
         const MODULE_ID = route.queryParamMap.get('disclosureId');
-        if (this.getHomeAndPersonId()) {
-            return true;
-        } else if (MODULE_ID) {
+        if (MODULE_ID) {
             return new Observable<boolean>((observer: Subscriber<boolean>) => {
                 this.loadTravelDisclosure(MODULE_ID).subscribe((res: TravelDisclosureResponseObject) => {
-                    this._service.coiTravelDisclosure = res;
-                    observer.next(true);
-                    observer.complete();
+                    if (res) {
+                        this.updateTravelDataStore(res);
+                        observer.next(true);
+                        observer.complete();
+                    } else {
+                        observer.next(false);
+                        observer.complete();
+                    }
                 });
             });
+        } else if (this.getHomeAndPersonId()) {
+            return true;
         } else {
+            this._router.navigate([HOME_URL]);
             return false;
         }
     }
@@ -45,14 +52,18 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
     }
 
     private getHomeAndPersonId(): boolean {
-        const travelCreateModalDetails: TravelCreateModalDetails = JSON.parse(sessionStorage.getItem('travelCreateModalDetails'));
-        const homeUnit = travelCreateModalDetails?.homeUnit || null;
-        const personId = travelCreateModalDetails?.personId || null;
+        const travelCreateModalDetails: TravelCreateModalDetails = this._dataStore.getCreateModalDetails();
+        const homeUnit = (travelCreateModalDetails && travelCreateModalDetails.homeUnit) || null;
+        const personId = (travelCreateModalDetails && travelCreateModalDetails.personId) || null;
         return (homeUnit && personId) ? true : false;
     }
 
     private loadTravelDisclosure(disclosureId: string): Observable<TravelDisclosureResponseObject> {
         return this._service.loadTravelDisclosure(disclosureId).pipe((catchError(error => this.redirectOnError(error))));
+    }
+
+    private updateTravelDataStore(data: TravelDisclosureResponseObject): void {
+        this._dataStore.setStoreData(data);
     }
 
     private redirectOnError(error): Observable<any> {

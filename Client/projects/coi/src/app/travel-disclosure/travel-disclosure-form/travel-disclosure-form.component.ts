@@ -6,11 +6,11 @@ import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from 'proje
 import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
-import { TravelDisclosureService } from '../travel-disclosure.service';
-import { CoiTravelDisclosure, EndpointOptions, TravelDisclosureResponseObject, TravelDisclosureTraveller } from '../travel-disclosure-interface';
+import { TravelDisclosureService } from '../services/travel-disclosure.service';
+import { CoiTravelDisclosure, EndpointOptions, TravelCreateModalDetails, TravelDisclosureResponseObject, TravelDisclosureTraveller } from '../travel-disclosure-interface';
 import { CommonService } from '../../common/services/common.service';
 import { convertToValidAmount } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { TravelDataStoreService } from '../services/travel-data-store.service';
 
 declare var $: any;
 @Component({
@@ -34,11 +34,11 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
     destination: 'Domestic' | 'International' = 'Domestic';
-    travelStatusDescription: 'Pending' | 'Submitted' | 'Approved' = 'Pending';
 
     constructor(public commonService: CommonService,
                 private _router: Router,
-                private _service: TravelDisclosureService) {
+                private _service: TravelDisclosureService,
+                private _dataStore: TravelDataStoreService) {
         window.scrollTo(0, 0);
     }
 
@@ -46,6 +46,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.loadDisclosureDetails();
+        this.listenDataChangeFromStore();
         this.loadTravellerTypesLookup();
         this.loadTravelStatusTypesLookup();
         this.handleTravelDisclosureSubmission();
@@ -56,8 +57,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     private loadDisclosureDetails(): void {
-        if (this._service.coiTravelDisclosure.travelDisclosureId) {
-            this.setDisclosureDetails(this._service.coiTravelDisclosure);
+        if (this._dataStore.getData().travelDisclosureId) {
+            this.setDisclosureDetails(this._dataStore.getData());
         }
     }
 
@@ -125,18 +126,25 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     private setCheckBoxValue(): void {
         if (this.travelDisclosureRO.travellerTypeCode.length > 0) {
             for (const type of this.travelDisclosureRO.travellerTypeCode) {
-                for (const details of this.travellerTypeLookup) {
-                    if (type === details.travelerTypeCode) {
-                        details.isChecked = true;
-                    }
+                const matchingDetail = this.travellerTypeLookup.find(details => details.travelerTypeCode === type);
+                if (matchingDetail) {
+                    matchingDetail.isChecked = true;
                 }
             }
         }
     }
 
+    private listenDataChangeFromStore() {
+        this.$subscriptions.push(
+            this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
+                this.loadDisclosureDetails();
+            })
+        );
+    }
+
     private getTravelCreateModalDetails(): void {
-        if (!this._service.coiTravelDisclosure.travelDisclosureId) {
-            const travelCreateModalDetails = JSON.parse(sessionStorage.getItem('travelCreateModalDetails'));
+        if (!this._dataStore.getData().travelDisclosureId) {
+            const travelCreateModalDetails: TravelCreateModalDetails = this._dataStore.getCreateModalDetails();
             this.travelDisclosureRO.homeUnit = travelCreateModalDetails.homeUnit;
             this.travelDisclosureRO.description = travelCreateModalDetails.description;
             this.travelDisclosureRO.personId = travelCreateModalDetails.personId;
@@ -210,6 +218,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     setValuesForDestinationType(): void {
+        this.setUnSavedChanges();
         if (this.destination === 'Domestic') {
             this.travelDisclosureRO.destinationCountry = '';
             this.travelDisclosureRO.isInternationalTravel = false;
@@ -220,9 +229,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    triggerConfirmationModal(): void {
-        this._service.travelDataChanged = true;
-        this._service.unSavedTabName = 'Travel Details';
+    setUnSavedChanges(): void {
+        this._service.setUnSavedChanges(true, 'Travel Details');
     }
 
     validateDates(): boolean {
@@ -249,16 +257,30 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
                 .subscribe((res: any) => {
                     if (res) {
                         this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Saved Successfully');
-                        this._service.unSavedTabName = '';
-                        this._service.travelDataChanged = false;
-                        this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
-                            { queryParams: { disclosureId: res.travelDisclosureId } });
+                        this._service.setUnSavedChanges(false, '');
+                        this.loadTravelDisclosure(res.travelDisclosureId);
                     }
                 }, (err) => {
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Saving Travel Disclosure');
                 })
             );
         }
+    }
+
+    private loadTravelDisclosure(travelDisclosureId: string): void {
+        this._service.loadTravelDisclosure(travelDisclosureId)
+        .subscribe((responseObject: TravelDisclosureResponseObject) => {
+            if (responseObject) {
+                this._dataStore.removeCreateModalDetails();
+                this._dataStore.manualDataUpdate(responseObject);
+                this._router.navigate([], {
+                    queryParams: {
+                        disclosureId: responseObject.travelDisclosureId
+                    },
+                    queryParamsHandling: 'merge',
+                });
+            }
+        });
     }
 }
 

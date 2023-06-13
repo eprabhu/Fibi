@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { TravelDisclosureComponent } from './travel-disclosure.component';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { SharedModule } from '../shared/shared.module';
-import { TravelDisclosureService } from './travel-disclosure.service';
+import { TravelDisclosureService } from './services/travel-disclosure.service';
 import { SfiService } from '../disclosure/sfi/sfi.service';
-import { TravelRouteGuardService } from './travel-route-guard.service';
+import { TravelRouteGuardService } from './services/travel-route-guard.service';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
+import { TravelDataStoreService } from './services/travel-data-store.service';
 
 const routes: Routes = [
     {
@@ -43,7 +44,8 @@ const routes: Routes = [
     providers: [
         SfiService,
         TravelDisclosureService,
-        TravelRouteGuardService
+        TravelRouteGuardService,
+        TravelDataStoreService
     ],
     exports: []
 })
