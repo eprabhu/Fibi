@@ -119,35 +119,38 @@ export class CountModalComponent implements OnInit {
     }
 
     // title
-    gettitle() {
+    gettitle(): string {
         if (this.disclosures?.fcoiType) {
             if (this.disclosures?.fcoiType === 'Proposal') {
-                return this.disclosures?.proposalTitle;
+                return this.reduceTitleLength(this.disclosures?.proposalTitle);
             } else {
-                return this.disclosures?.awardTitle;
+                return this.reduceTitleLength(this.disclosures?.awardTitle);
             }
         } else if (this.disfullData?.projectDetail?.title) {
-            return this.disfullData?.projectDetail?.title;
+            return this.reduceTitleLength(this.disfullData?.projectDetail?.title);
         } else if (this.adminData?.fcoiType) {
             if (this.adminData?.fcoiType === 'Award') {
-                return this.adminData?.awardTitle;
+                return this.reduceTitleLength(this.adminData.awardTitle);
             } else {
-                return this.adminData?.proposalTitle;
+                return this.reduceTitleLength(this.adminData.proposalTitle);
             }
         } else if (this.reviewerData?.fcoiType) {
             if (this.reviewerData?.fcoiType === 'Award') {
-                return this.reviewerData?.awardTitle;
+                return this.reduceTitleLength(this.reviewerData.awardTitle);
             } else {
-                return this.reviewerData?.proposalTitle;
+                return this.reduceTitleLength(this.reviewerData?.proposalTitle);
             }
         }
     }
 
+    reduceTitleLength(title: string): string {
+        return title.length > 90 ? title.slice(0, 90) + '...' : title;
+    }
+
     // FullName
-    getFullName() {
+    getFullName(): string {
         if (this.disclosures?.disclosurePersonFullName) {
             return this.disclosures?.disclosurePersonFullName;
-            // full name @@
         } else if (this.disfullData?.coiDisclosure?.person?.fullName) {
             return this.disfullData?.coiDisclosure?.person?.fullName;
         } else if (this.adminData?.disclosurePersonFullName) {
@@ -158,13 +161,13 @@ export class CountModalComponent implements OnInit {
     }
 
     // FCOI FullName
-    getFcoiFullName() {
+    getFcoiFullName(): string {
         if (this.disfullData?.coiDisclosure?.person?.fullName) {
             return this.disfullData?.coiDisclosure?.person?.fullName;
+        } else if (this.adminData?.disclosurePersonFullName) {
+            return this.adminData?.disclosurePersonFullName;
         } else if (this.disclosures?.disclosurePersonFullName) {
             return this.disclosures?.disclosurePersonFullName;
-        } else if (this.disclosures?.person?.fullName) {
-            return this.disclosures?.person?.fullName;
         }
     }
 
@@ -172,8 +175,8 @@ export class CountModalComponent implements OnInit {
     getFcoiUnitName() {
         if (this.disfullData?.coiDisclosure?.person?.unit) {
             return getSponsorSearchDefaultValue(this.disfullData?.coiDisclosure?.person?.unit);
-        } else if (this.disclosures?.unit) {
-            return getSponsorSearchDefaultValue(this.disclosures?.unit);
+        } else if (this.adminData?.unit) {
+            return getSponsorSearchDefaultValue(this.adminData?.unit);
         } else if (this.disclosures?.unit) {
             return getSponsorSearchDefaultValue(this.disclosures?.unit);
         }
