@@ -190,7 +190,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Root<CoiEntity> rootEntityName = query.from(CoiEntity.class);
 		Predicate exactMatch = builder.equal(builder.lower(rootEntityName.get("entityName")), searchString.toLowerCase());
 		Predicate partialMatch = builder.like(builder.lower(rootEntityName.get("entityName")), "%" + searchString.toLowerCase() + "%");
-		Predicate condVersionStatus = builder.notEqual(rootEntityName.get("versionStatus"), "ARCHIVED");
+		Predicate condVersionStatus = builder.notEqual(rootEntityName.get("versionStatus"), Constants.COI_ARCHIVE_STATUS);
 		query.where(builder.and(condVersionStatus, builder.or(exactMatch, partialMatch)));
 		query.orderBy(builder.asc(builder.selectCase().when(exactMatch, 0).otherwise(1)), builder.asc(rootEntityName.get("entityName")));
 		return session.createQuery(query).setMaxResults(50).getResultList();
@@ -903,7 +903,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			Root<CoiDisclosure> rootCoiDisclosure = query.from(CoiDisclosure.class);
 			query.where(builder.and(builder.equal(rootCoiDisclosure.get("personId"), personId),
 					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1"),
-					builder.equal(rootCoiDisclosure.get("versionStatus"), "Active")));
+					builder.equal(rootCoiDisclosure.get("versionStatus"), Constants.COI_ACTIVE_STATUS)));
 			List<CoiDisclosure> disclData = session.createQuery(query).getResultList();
 			if (disclData != null && !disclData.isEmpty()) {
 				CoiDisclosure coiDisclosure = disclData.get(0);
@@ -1270,7 +1270,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				DisclosureView disclosureView =  new DisclosureView();
 				disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
 				disclosureView.setCoiDisclosureNumber(resultSet.getString("DISCLOSURE_NUMBER"));
-				disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_NAME"));
+				disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
 				disclosureView.setConflictStatusCode(resultSet.getString("CONFLICT_STATUS_CODE"));
 				disclosureView.setConflictStatus(resultSet.getString("DISCLOSURE_STATUS"));
 				disclosureView.setDispositionStatusCode(resultSet.getString("DISPOSITION_STATUS_CODE"));
@@ -1581,7 +1581,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		subQuery.select(personEntity.get("entityId")).where(builder.and(predicate1));
 		if (vo.getFilterType() == null || vo.getFilterType().isEmpty()) {
 			outerQuery.select(coiEntity).where(builder.in(coiEntity.get("entityId")).value(subQuery));
-		} else if (vo.getFilterType().equals("active")) {
+		} else if (vo.getFilterType().equals(Constants.COI_ACTIVE_STATUS)) {
 			outerQuery.select(coiEntity).where(builder.and(builder.in(coiEntity.get("entityId")).value(subQuery),
 					builder.equal(coiEntity.get("isActive"), true)));
 		} else if (vo.getFilterType().equals("inactive")) {
@@ -2619,7 +2619,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			query.select(builder.count(rootCoiDisclosure));
 			query.where(builder.and(builder.equal(rootCoiDisclosure.get("personId"), personId),
 					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1"),
-					builder.equal(rootCoiDisclosure.get("versionStatus"), "Active")));
+					builder.equal(rootCoiDisclosure.get("versionStatus"), Constants.COI_ACTIVE_STATUS)));
 			Long count = session.createQuery(query).getSingleResult();
 			return count > 0 ? true : false;
 		} catch (Exception ex) {
@@ -2633,7 +2633,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE CoiDisclosure SET versionStatus = :archived where disclosureId != :disclosureId AND disclosureNumber = :disclosureNumber");
 		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("archived", "Archived"); // set old disclosure to archived
+		query.setParameter("archived", Constants.COI_ARCHIVE_STATUS); // set old disclosure to archived
 		query.setParameter("disclosureId", disclosureId);
 		query.setParameter("disclosureNumber", disclosureNumber);
 		query.executeUpdate();

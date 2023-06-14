@@ -107,8 +107,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private QuestionnaireService questionnaireService;
 
 	private static final Integer DISCLOSURE_VERSION_NUMBER = 1;
-	private static final String DISCLOSURE_VERSION_STATUS_ACTIVE = "Active";
-	private static final String DISCLOSURE_VERSION_STATUS_PENDING = "Pending";
 	private static final String DISCLOSURE_PENDING_CONFLICT_STATUS_CODE = "4";
 	private static final String DISPOSITION_STATUS_TYPE_CODE = "1";
 	private static final String DISPOSITION_STATUS_PENDING = "1";
@@ -130,10 +128,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String APPROVED = "3";
 	private static final String REVIEW_STATUS_COMPLETE = "4";
 	private static final String DISCLOSURE_NO_CONFLICT_STATUS_CODE = "1";
-	private static final String DISCLOSURE_VERSION_STATUS = "Active";
 	private static final String DISCLOSURE_REVIEW_IN_PROGRESS = "3";
 	private static final String DISCLOSURE_REVIEW_COMPLETED = "4";
-	private static final String SFI_DEFAULT_STATUS = "Active";
 	private static final String RISK_CAT_CODE_LOW = "3";
 	private static final String RISK_CAT_CODE_HIGH = "1";
 
@@ -176,7 +172,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiDisclosure.setDisclosureNumber(conflictOfInterestDao.generateMaxDisclosureNumber());
 		}
 		coiDisclosure.setVersionNumber(1);
-		coiDisclosure.setVersionStatus(DISCLOSURE_VERSION_STATUS_PENDING);
+		coiDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
 		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
 		coiDisclosure.setReviewStatusCode(REVIEW_STATUS_PENDING);
 		coiDisclosure.setRiskCategoryCode(RISK_CATEGORY_LOW);
@@ -587,7 +583,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		copyDisclosure.setFcoiTypeCode(disclosure.getFcoiTypeCode());
 		copyDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_TYPE_CODE);
 		copyDisclosure.setReviewStatusCode(REVIEW_STATUS_TYPE_CODE);
-		copyDisclosure.setVersionStatus(DISCLOSURE_VERSION_STATUS_PENDING);
+		copyDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
 		copyDisclosure.setVersionNumber(disclosure.getVersionNumber() + 1);
 		copyDisclosure.setPersonId(AuthenticatedUser.getLoginPersonId());
 		copyDisclosure.setDisclosureNumber(disclosure.getDisclosureNumber());
@@ -977,7 +973,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiDisclosure.setDisclosureId(disclosureId);
 			coiDisclosure.setDispositionStatusCode(APPROVED);
 			coiDisclosure.setReviewStatusCode(REVIEW_STATUS_COMPLETE);
-			coiDisclosure.setVersionStatus(DISCLOSURE_VERSION_STATUS);
+			coiDisclosure.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 			conflictOfInterestDao.completeDisclosureReview(coiDisclosure);
 			CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(disclosureId);
 			if (disclosure.getFcoiTypeCode().equals("1")) {
