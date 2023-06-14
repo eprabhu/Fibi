@@ -1618,6 +1618,7 @@ public interface Constants {
     String COI_ACTIVE_STATUS = "ACTIVE";
     String COI_ARCHIVE_STATUS = "ARCHIVED";
     Integer COI_INITIAL_VERSION_NUMBER = 1;
+    String COI_PENDING_STATUS = "PENDING";
 
     String TYPE_FCOI = "F";
     String TYPE_PROJECT_DISCLOSURE = "P";
