@@ -20,14 +20,14 @@
             <div class="modal-body">
                 <div class="info-card-margin row">
                     <div class="col-12 pt-2 grey-info font" *ngIf="!isShowExistingDisclosure">
-                        <p class="fs-13 pb-0 pt-1 left-padding-info-text"
+                        <p class="fs-14 pb-0 pt-1 left-padding-info-text"
                             *ngIf="!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE'">
                             1. For disclosing at any other unit please click on the ‘Edit’ icon near the unit field to
                             proceed to disclosure creation
                             <br>2. For reverting to the original unit click on the 'Reset' icon.
                             <br>3. For adding any additional description/comment, please use the “Description“ field.
                         </p>
-                        <p class="fs-13 pb-0 pt-1 left-padding-info-text" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
+                        <p class="fs-14 pb-0 pt-1 left-padding-info-text" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
                             <span>
                                 1. For disclosing at any other unit please click on the ‘Edit’ icon near the unit field
                                 to proceed to disclosure creation.
@@ -37,7 +37,7 @@
                             </span>
                         </p>
                     </div>
-                    <p class="fs-13 alert alert-danger" *ngIf="isShowExistingDisclosure">
+                    <p class="fs-14 alert alert-danger" *ngIf="isShowExistingDisclosure">
                         <ng-container *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'">
                             The {{selectedProjectType}} you are trying to add is already listed in the
                             {{this.existingDisclosureDetails?.type
@@ -56,7 +56,7 @@
                     <div class="col-8">
                         <label for="desc-award"><span class="mandatory fs-14 fw-600">*</span> Disclose at Unit :
                         </label>
-                        <span class="margin-left-2 d-flex mt-2 pointer" *ngIf="isHideEndpointSearch" (click)="isHideEndpointSearch = false">
+                        <span class="margin-left-2 d-flex mt-2 pointer fs-14" *ngIf="isHideEndpointSearch" (click)="isHideEndpointSearch = false">
                             <span>{{commonService.currentUserDetails.homeUnit}} - {{commonService.currentUserDetails.homeUnitName}}</span>
                             <span class="btn btn-primary-icon btn-sm margin-left-1 px-2 py-0" id="close-edit-home-unit" title="Edit Unit" type="button">
                                 <mat-icon class=" fs-16 mt-1 close-line-height">edit</mat-icon>
@@ -84,10 +84,10 @@
                 <div class="form-row mt-2"
                     *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                     <div class="col-12">
-                        <label for="desc-award" *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
+                        <label for="desc-award mb-2" *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
                             <span class="fs-14 fw-600 mandatory">*</span>Revision Reason
                         </label>
-                        <label for="desc-award" *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE'">
+                        <label for="desc-award mb-2" *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                             Description
                         </label>
                         <textarea [(ngModel)]="reviseObject.revisionComment" [isShowLimiter]='true' [limit]=2000
@@ -180,8 +180,8 @@
                             {{projectDisclosureValidation?.get('projectSelect')}}
                         </div>
                     </div>
-                    <div *ngIf="selectedProjectType && !isSearchExternalProject">
-                        <label for="proposal-disclosure" class="f-14 mb-3" *ngIf="!isShowExistingDisclosure">{{selectedProjectType}} Search</label>
+                    <div *ngIf="selectedProjectType && !isSearchExternalProject" class="mt-3">
+                        <label for="proposal-disclosure" class="f-14 mb-2" *ngIf="!isShowExistingDisclosure">{{selectedProjectType}} Search</label>
                         <div class="form-row justify-content-center">
                             <div class="col-12 searchBox mb-0">
                                 <app-endpoint-search id="proposal-search" [httpOptions]="projectSearchOptions"

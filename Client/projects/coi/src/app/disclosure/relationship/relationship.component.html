@@ -27,26 +27,34 @@
                 <strong class="fs-16">#{{test?.moduleItemKey}} - {{test?.title}} </strong>
             </p>
           </div>
-           <div class="row">
-              <div class=" col-6">
-                 <label class="label-text">{{test?.moduleCode == 1 ? 'Award Status :' : 'Proposal Status :'}}</label>
-                 <span class="grey-text">{{test?.moduleStatus}} </span>
-             </div>
-             <div class=" col-6">
-                 <label class="label-text">Principal Investigator :</label>
-                 <span class="grey-text">{{test?.principalInvestigator}} </span>
-          </div>
-          </div>
-          <div>
+          <div class="row m-2">
+            <div class="col-6">
+              <label class="label-text">Principal Investigator :</label>
+              <span class="ml-2 grey-text">{{test?.principalInvestigator}}</span>
+            </div>
+            <div class="col-6">
               <label class="label-text">Sponsor :</label>
-              <span class="grey-text">{{test?.sponsor}} </span>
-          </div>
-          <div>
+              <span class="ml-2 grey-text">{{test?.sponsor}}</span>
+            </div>
+            <div class="col-6">
+              <label class="label-text">Period :</label>
+              <span class="ml-2 grey-text">{{test?.startDate | dateFormatter}} - {{test?.endDate | dateFormatter}}</span>
+            </div>
+            <div class="col-6">
               <label class="label-text">Prime Sponsor :</label>
-              <app-no-data-label [valueToShow]="test?.primeSponsor">
-                <span class="grey-text">{{test?.primeSponsor}}</span>
-              </app-no-data-label>
-          </div>
+            <span *ngIf="test?.primeSponsor" class="ml-2 grey-text">{{test?.primeSponsor}}</span>
+            <span *ngIf="!test?.primeSponsor" class="noDataExists">--No Data--</span>
+            </div>
+            <div class="col-6">
+              <label class="label-text">{{test.moduleCode == 3 ? 'Proposal' : 'Award'}} Status : </label>
+              <span class="ml-2 grey-text">{{test?.moduleStatus}}</span>
+            </div>
+            <div class="col-6">
+              <label class="label-text">Lead Unit :</label>
+            <span class="ml-2 grey-text" *ngIf="test?.unitName">{{test?.unitNumber}} - {{test?.unitName}}</span>
+            <span *ngIf="!test?.unitName" class="noDataExists">No Lead Unit exist</span>
+            </div>
+            </div>
         </div>
         <div class="col-4 p-10">
           <div class="border h-100 rounded-1 table-bg-color position-relative">

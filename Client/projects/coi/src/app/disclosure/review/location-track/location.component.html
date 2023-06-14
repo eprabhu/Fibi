@@ -53,7 +53,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let reviewer of reviewerList; let index = index">
-                    <td>{{reviewer?.assigneePersonName}}</td>
+                    <td class="table-data fw-600">{{reviewer?.assigneePersonName}}</td>
                     <td>
                         <app-no-data-label [valueToShow]="reviewer?.description"></app-no-data-label>
                     </td>
