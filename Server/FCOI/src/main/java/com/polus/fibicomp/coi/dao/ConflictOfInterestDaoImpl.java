@@ -2633,7 +2633,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE CoiDisclosure SET versionStatus = :archived where disclosureId != :disclosureId AND disclosureNumber = :disclosureNumber");
 		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("archived", Constants.COI_ARCHIVE_STATUS); // set old disclosure to archived
+		query.setParameter("archived", Constants.COI_ARCHIVE_STATUS); // set old disclosure to archive
 		query.setParameter("disclosureId", disclosureId);
 		query.setParameter("disclosureNumber", disclosureNumber);
 		query.executeUpdate();
