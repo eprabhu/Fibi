@@ -4,13 +4,11 @@ import {ReviewService} from '../review.service';
 import {CommonService} from '../../../common/services/common.service';
 import {environment} from '../../../../environments/environment';
 import {DataStoreService} from '../../services/data-store.service';
-import {AdminGroup, CoiDisclosure, CommentConfiguration} from '../../coi-interface';
+import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../coi-interface';
 import {CoiService} from '../../services/coi.service';
-import {ElasticConfigService} from "../../../../../../fibi/src/app/common/services/elastic-config.service";
-import {subscriptionHandler} from "../../../../../../fibi/src/app/common/utilities/subscription-handler";
-import {deepCloneObject} from "../../../../../../fibi/src/app/common/utilities/custom-utilities";
-
-declare var $: any;
+import {ElasticConfigService} from '../../../../../../fibi/src/app/common/services/elastic-config.service';
+import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import {deepCloneObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-coi-review-location',
@@ -20,14 +18,14 @@ declare var $: any;
 export class LocationComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
-    dependencies = ['coiDisclosure', 'adminGroup', 'person', 'projectDetail'];
+    dependencies = ['coiDisclosure', 'adminGroup', 'person', 'projectDetail', 'coiReviewerList'];
     coiDisclosure: CoiDisclosure = new CoiDisclosure();
     adminGroups: any = [];
     deployMap = environment.deployUrl;
 
     isCollapsed = true;
     modifyIndex = -1;
-    reviewList: any = [];
+    reviewerList: any = [];
     validationMap = new Map();
     disclosurePerson: any = {};
 
@@ -40,6 +38,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     reviewActionConfirmation: any = {};
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
     projectDetail: any = {};
+    isMangeReviewAction = false;
 
     constructor(
         private _elasticConfigService: ElasticConfigService,
@@ -54,6 +53,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.isMangeReviewAction = this._commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE', 'MANAGE_DISCLOSURE_REVIEW']);
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.getDataFromStore();
         this.listenDataChangeFromStore();
@@ -95,12 +95,18 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     getCoiReview() {
-        this.$subscriptions.push(this.coiService.$reviewList.subscribe((res: any) => {
-            this.reviewList = res;
-             this.coiService.isReviewActionCompleted = this.completeReviewAction();
+      const DATA = this._dataStore.getData(['coiReviewerList']);
+      this.reviewerList = DATA.coiReviewerList || [];
+      if (this.coiDisclosure.coiReviewStatusType?.reviewStatusCode !== '3') {
+        this.$subscriptions.push(this.coiService.getCoiReview(this.coiDisclosure.disclosureId).subscribe((res: any) => {
+            this.reviewerList = res;
+            if (this.reviewerList.length) {
+              this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
+            }
         }, _err => {
            // this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
         }));
+      }
     }
 
     adminGroupSelect(event: any): void {
@@ -139,42 +145,18 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     addReviewToList(review: any) {
-        this.reviewList.push(review);
-         this.coiService.isReviewActionCompleted = this.completeReviewAction();
+        this.reviewerList.push(review);
+        this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
+        this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+        this.coiService.isReviewActionCompleted = this.completeReviewAction();
     }
 
     updateReview(review: any) {
-        this.reviewList.splice(this.modifyIndex, 1, review);
+        this.reviewerList.splice(this.modifyIndex, 1, review);
+        this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
+        this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
     }
 
-    startCOIReview() {
-        this.$subscriptions.push(this._reviewService.startCOIReview({
-            coiReviewId: this.reviewActionConfirmation.coiReviewId,
-            assigneePersonName: this.reviewActionConfirmation.assigneePersonName
-        }).subscribe((res: any) => {
-            this.updateReview(res);
-            //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review started successfully.`);
-            this.clearActionData();
-        }, _err => {
-            this.clearActionData();
-            //this._commonService.showToast(HTTP_ERROR_STATUS, `Error in starting review.`);
-        }));
-    }
-
-    completeReview() {
-        this.$subscriptions.push(this._reviewService.completeReview({
-            coiReviewId: this.reviewActionConfirmation.coiReviewId,
-            assigneePersonName: this.reviewActionConfirmation.assigneePersonName
-        }).subscribe((res: any) => {
-            this.updateReview(res);
-             this.coiService.isReviewActionCompleted = this.completeReviewAction();
-            //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
-            this.clearActionData();
-        }, _err => {
-            this.clearActionData();
-            //this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
-        }));
-    }
 
     private clearActionData() {
         this.reviewActionConfirmation = {};
@@ -183,8 +165,10 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     deleteReview() {
         this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.coiReviewId).subscribe((_res: any) => {
-            this.reviewList.splice(this.modifyIndex, 1);
+            this.reviewerList.splice(this.modifyIndex, 1);
+            this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
              this.coiService.isReviewActionCompleted = this.completeReviewAction();
+             this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
             //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
@@ -201,7 +185,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     validateReview() {
         this.validationMap.clear();
         if (!this.reviewDetails.assigneePersonId && !this.reviewDetails.adminGroupId) {
-            this.validationMap.set('general', 'Please select an admin group or assignee.');
+            this.validationMap.set('general', 'Please select a reviewer.');
         }
         if (this.reviewDetails.assigneePersonId) {
             this.isDuplicateReviewerValidation();
@@ -212,7 +196,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     isDuplicateReviewerValidation() {
         const isEditMode = this.modifyIndex != -1;
 
-        if (this.reviewList.find((reviewer, index) => {
+        if (this.reviewerList.find((reviewer, index) => {
             const isSelectedReviewer = reviewer.assigneePersonId == this.reviewDetails.assigneePersonId
             return isEditMode ? (isSelectedReviewer && index != this.modifyIndex) : isSelectedReviewer;
         })) {
@@ -240,7 +224,21 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
   private completeReviewAction (): boolean {
-    return this.reviewList.every(value => value.coiReviewStatus.reviewStatusCode === '4');
+    return this.reviewerList.every(value => value.coiReviewStatus.reviewStatusCode === '4');
   }
 
+
+
+  updateCoiReviewStage(index, reviewer, modalType: ModalType) {
+    this.modifyIndex = index;
+    this.coiService.triggerStartOrCompleteCoiReview(modalType);
+    this.coiService.$SelectedReviewerDetails.next(reviewer);
+    this.coiService.isEnableReviewActionModal = true;
+  }
+
+    private startReviewIfLoggingPerson(): any {
+        return this.reviewerList.find(ele =>
+            ele.assigneePersonId === this._commonService.currentUserDetails.personId
+            && ele.reviewStatusTypeCode === '1');
+    }
 }

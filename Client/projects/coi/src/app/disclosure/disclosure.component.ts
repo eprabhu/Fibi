@@ -24,6 +24,7 @@ import {
 import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities';
 import { environment } from '../../environments/environment';
+import { ModalType} from '../disclosure/coi-interface';
 @Component({
     selector: 'app-disclosure',
     templateUrl: './disclosure.component.html',
@@ -72,6 +73,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     deployMap = environment.deployUrl;
     isCOIReviewer = false;
     error = '';
+    canShowReviewerTab = false;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -93,7 +95,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
-        this.coiService.isCOIAdministrator = this.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
+        this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
+        this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.prevURL = this.navigationService.previousURL;
@@ -278,7 +281,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
         }, err => {
             this.isSaving = false;
-            this.error = err.error ?  err.error : 'Error in certifying disclosure. Please try again.';
+            this.error = err.error ? err.error : 'Error in certifying disclosure. Please try again.';
             openModal('disclosureErrorModal');
         }));
     }
@@ -287,7 +290,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         const coiData = this.dataStore.getData();
         if (isEmptyObject(coiData)) { return; }
         this.coiData = coiData;
-        this.getCoiReview();
         this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
         this.setAdminGroupOptions();
@@ -342,12 +344,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.assignReviewerActionDetails.disclosureId = this.coiData.coiDisclosure.disclosureId;
             this.$subscriptions.push(this.coiService
                 .saveOrUpdateCoiReview({ coiReview: this.assignReviewerActionDetails }).subscribe((res: any) => {
-                this.assignReviewerActionDetails = {};
-                this.triggerAssignReviewerModal();
-                this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review added successfully.`);
-            }, _err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in adding review.`);
-            }));
+                    this.assignReviewerActionDetails = {};
+                    this.triggerAssignReviewerModal();
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review added successfully.`);
+                }, _err => {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in adding review.`);
+                }));
         }
     }
 
@@ -433,33 +435,24 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     closeAssignAdministratorModal(event) {
-      if (event.adminPersonId || event.adminGroupId) {
-        this.coiData.coiDisclosure.adminPersonId = event.adminPersonId;
-        this.coiData.coiDisclosure.adminPersonName = event.adminPersonName;
-        this.coiData.coiDisclosure.adminGroupId = event.adminGroupId;
-        this.coiData.coiDisclosure.adminGroupName = event.adminGroupName;
-        this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = event.reviewStatusCode;
-        this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
-        this.dataStore.updateStore(['coiDisclosure'], this.coiData);
-      }
+        if (event.adminPersonId || event.adminGroupId) {
+            this.coiData.coiDisclosure.adminPersonId = event.adminPersonId;
+            this.coiData.coiDisclosure.adminPersonName = event.adminPersonName;
+            this.coiData.coiDisclosure.adminGroupId = event.adminGroupId;
+            this.coiData.coiDisclosure.adminGroupName = event.adminGroupName;
+            this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = event.reviewStatusCode;
+            this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
+            this.dataStore.updateStore(['coiDisclosure'], this.coiData);
+        }
     }
-    getCoiReview() {
-      this.$subscriptions.push(this.coiService.getCoiReview(this.coiData.coiDisclosure.disclosureId).subscribe((res: any) => {
-           this.coiService.$reviewList.next(res);
-           this.coiService.isReviewActionCompleted = this.completeReviewAction(res);
-      }, _err => {
-        this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-      }));
-  }
-  private completeReviewAction (data: any): boolean {
-    return data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
-  }
 
-  getAvailableRight(rights): boolean {
-    return Array.isArray(rights) ?
-      rights.some((right) => this.commonService.rightsArray.includes(right)) : this.commonService.rightsArray.includes(rights);
-  }
-   onclicking() {
-    document.getElementById('prop-saveExit-dismiss-btn').click();
+    public updateCoiReview(modalType: ModalType) {
+        const reviewerInfo = this.coiData.coiReviewerList.find(ele =>
+            ele.assigneePersonId === this.commonService.currentUserDetails.personId);
+        if (reviewerInfo) {
+            this.coiService.$SelectedReviewerDetails.next(reviewerInfo);
+            this.coiService.triggerStartOrCompleteCoiReview(modalType);
+            this.coiService.isEnableReviewActionModal = true;
+        }
     }
 }

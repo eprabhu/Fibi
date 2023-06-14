@@ -19,13 +19,6 @@ export class ReviewService {
         return this._http.get(`${this._commonService.baseUrl}/getCoiReview/${disclosureId}`);
     }
 
-    startCOIReview(params: any) {
-        return this._http.post(`${this._commonService.baseUrl}/startCOIReview`, {coiReview: params});
-    }
-
-    completeReview(params: any) {
-        return this._http.post(`${this._commonService.baseUrl}/completeCOIReview`, {coiReview: params});
-    }
 
     deleteReview(coiReviewId: any) {
         return this._http.delete(`${this._commonService.baseUrl}/deleteReview/${coiReviewId}`);
