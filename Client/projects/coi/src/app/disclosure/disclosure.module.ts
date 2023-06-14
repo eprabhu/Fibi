@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { SfiModule } from './sfi/sfi.module';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import {DataStoreService} from "./services/data-store.service";
+import { SharedDisclosureModule } from './shared-disclosure/shared-disclosure.module';
 
 
 const routes: Routes = [
@@ -77,7 +78,8 @@ const routes: Routes = [
         SharedModule,
         SfiModule,
         FormsModule,
-        SharedComponentModule
+        SharedComponentModule,
+        SharedDisclosureModule
     ]
 })
 export class DisclosureModule {

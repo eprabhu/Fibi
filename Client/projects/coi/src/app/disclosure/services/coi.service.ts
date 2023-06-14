@@ -20,8 +20,13 @@ export class CoiService {
     stepTabName = '';
     isCertified = false;
     isReviewActionCompleted = false;
-    $reviewList = new BehaviorSubject<any>([]);
+    $SelectedReviewerDetails = new BehaviorSubject<any>({});
     isCOIAdministrator = false;
+    isStartReview = false;
+    isCompleteReview = false;
+    isDisclosureReviewer = false;
+    isEnableReviewActionModal = false;
+    actionButtonId = null;
 
     constructor(
         private _http: HttpClient,
@@ -76,5 +81,17 @@ export class CoiService {
 
     getCoiReview(disclosureId: number) {
       return this._http.get(`${this._commonService.baseUrl}/getCoiReview/${disclosureId}`);
+  }
+
+  startCOIReview(params: any) {
+    return this._http.post(`${this._commonService.baseUrl}/startCOIReview`, {coiReview: params});
+  }
+
+  completeReview(params: any) {
+    return this._http.post(`${this._commonService.baseUrl}/completeCOIReview`, {coiReview: params});
+  }
+
+  triggerStartOrCompleteCoiReview(modalType: string) {
+    this.actionButtonId = modalType === 'START' ? 'coi-start-reviewer-review-modal-trigger' : 'coi-complete-reviewer-review-modal-trigger';
   }
 }

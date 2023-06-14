@@ -243,7 +243,7 @@
                         queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Conflict Management</div>
                     </div> -->
-                    <div [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
+                    <div *ngIf="canShowReviewerTab || coiService.isCOIAdministrator" [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
                         role="button">
                         <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
                             area-describedby="Click to view the reviews">Reviews</div>
@@ -350,13 +350,24 @@
                       Assign Admin
                     </button>
                 </div>
-                <!-- <div *ngIf="isCOIReviewer && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" class="d-flex justify-content-around px-3 pb-3">
-                  <button  title="Click to Start Review" area-describedby="Click to start review"
+                <div *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" class="d-flex justify-content-around px-3 pb-3">
+                  <button title="Click to start review" area-describedby="Click to start review" (click)="updateCoiReview('START')"
+                    id="start-review-btn"
                     class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                    <i class="mr-10 fs-20 fa fa-play-circle btn-color" aria-hidden="true"> </i>
+                    <mat-icon class="material-icons-outlined mr-10 mb-1">play_circle_filled</mat-icon>
                     Start Review
                   </button>
-              </div> -->
+              </div>
+              <div *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" class="d-flex justify-content-around px-3 pb-3">
+                <button title="Click to complete review" area-describedby="Click to complete review" (click)="updateCoiReview('COMPLETE')"
+                  id="complete-review-btn"
+                  class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                  <mat-icon class="mr-2 material-icons-outlined">stop_circle</mat-icon>
+
+                  <!-- <i class="mr-10 fs-20 fa fa-stop-circle-o btn-color" aria-hidden="true"> </i> -->
+                  Complete Review
+                </button>
+            </div>
                 <div class="position-static d-flex justify-content-around px-3"
                     title="Click here to complete the review process">
                     <span *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3'"
@@ -623,3 +634,5 @@
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
 
 <app-assign-administrator-modal  (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
+
+<app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>

@@ -7,6 +7,7 @@ import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/
 import {Toast} from 'bootstrap';
 import { HTTP_SUCCESS_STATUS } from '../../app-constants';
 
+type Method = 'SOME' | 'EVERY';
 @Injectable()
 export class CommonService {
 
@@ -273,4 +274,12 @@ export class CommonService {
         return this.rightsArray.includes(right);
     }
 
+    getAvailableRight(rights: string | string[], method: Method = 'SOME'): boolean {
+      const rightsArray = Array.isArray(rights) ? rights : [rights];
+      if (method === 'EVERY') {
+        return rightsArray.every((right) => this.rightsArray.includes(right));
+      } else {
+        return rightsArray.some((right) => this.rightsArray.includes(right));
+      }
+    }
 }
