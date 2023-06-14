@@ -427,13 +427,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> createSFI(ConflictOfInterestVO vo) {
 		PersonEntity personEntity = vo.getPersonEntity();
-		personEntity.setVersionNumber(1);
+		personEntity.setVersionNumber(Constants.COI_INITIAL_VERSION_NUMBER);
 		if (vo.getDisclosureId() != null && vo.getDisclosureNumber() != null) {
-			personEntity.setVersionStatus(SFI_DEFAULT_STATUS); //TODO currently for demo purpose
+			personEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS); //TODO currently for demo purpose
 		} else {
 			personEntity.setVersionStatus("Pending"); //TODO currently for demo purpose
 		}
-		personEntity.setIsRelationshipActive(true);
+		personEntity.setIsRelationshipActive(true); // Y
 		personEntity.setPersonId(AuthenticatedUser.getLoginPersonId());
 		conflictOfInterestDao.saveOrUpdateSFI(personEntity);
 		if (vo.getDisclosureId() != null && vo.getDisclosureNumber() != null) {

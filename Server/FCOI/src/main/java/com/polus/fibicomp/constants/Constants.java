@@ -1616,7 +1616,7 @@ public interface Constants {
     Integer COI_MODULE_CODE = 8;
     Integer COI_SUBMODULE_CODE = 0;
     String COI_ACTIVE_STATUS = "ACTIVE";
-    String COI_ARCHIVE_STATUS = "ARCHIVED";
+    String COI_ARCHIVE_STATUS = "ARCHIVE";
     Integer COI_INITIAL_VERSION_NUMBER = 1;
     String COI_PENDING_STATUS = "PENDING";
 
