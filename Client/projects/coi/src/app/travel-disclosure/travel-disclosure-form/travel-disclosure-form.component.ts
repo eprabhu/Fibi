@@ -45,7 +45,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
-        this.loadDisclosureDetails();
+        this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.loadTravellerTypesLookup();
         this.loadTravelStatusTypesLookup();
@@ -56,7 +56,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         subscriptionHandler(this.$subscriptions);
     }
 
-    private loadDisclosureDetails(): void {
+    private getDataFromStore(): void {
         if (this._dataStore.getData().travelDisclosureId) {
             this.setDisclosureDetails(this._dataStore.getData());
         }
@@ -137,7 +137,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
             this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
-                this.loadDisclosureDetails();
+                this.getDataFromStore();
             })
         );
     }

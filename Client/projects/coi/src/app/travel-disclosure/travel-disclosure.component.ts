@@ -22,6 +22,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     responseObject = new TravelDisclosureResponseObject();
     isSaved = false;
+    isCreateMode = true;
     ispersondetailsmodal = false;
     userDetails = {
         fullName: '',
@@ -44,12 +45,14 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.navigateToHome();
+        this.isCreateMode = this._dataStore.getEditModeForDisclosure();
     }
 
     ngOnDestroy(): void {
         this.clearAllDetails();
         subscriptionHandler(this.$subscriptions);
     }
+
     private navigateToHome() {
         this._route.queryParams.subscribe(params => {
             const MODULE_ID = params['disclosureId'];
@@ -60,6 +63,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     private clearAllDetails(): void {
         this.responseObject = new TravelDisclosureResponseObject();
         this._dataStore.setStoreData(this.responseObject);
@@ -123,5 +127,16 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl(this._navigationService.navigationGuardUrl);
     }
 
+    closeAssignAdministratorModal(event) {
+        if (event.adminPersonId || event.adminGroupId) {
+          this.responseObject.adminPersonId = event.adminPersonId;
+          this.responseObject.adminPersonName = event.adminPersonName;
+          this.responseObject.adminGroupId = event.adminGroupId;
+          this.responseObject.adminGroupName = event.adminGroupName;
+          this.responseObject.reviewStatusCode = event.reviewStatusCode;
+          this.responseObject.reviewStatus = event.reviewStatus;
+          this._dataStore.manualDataUpdate(this.responseObject);
+        }
+      }
 }
 

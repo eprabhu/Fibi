@@ -158,3 +158,29 @@
   top: 51px;
   z-index: 50;
 }
+
+.navigation-tabs {
+  height: 43px;
+  background-color: #E4F1FF;
+}
+
+.navigation-box {
+  padding: 0 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #606060;
+}
+
+.ash-text {
+  color: #48647F !important;
+}
+
+.navigation-box-content {
+  padding: 10px 0;
+  border-bottom: 2px solid transparent;
+
+  &.active {
+    color: #007DEC;
+    border-bottom: 2px solid #007DEC;
+  }
+}

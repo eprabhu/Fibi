@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -16,14 +16,19 @@ import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/s
 import { CommonService } from '../common/services/common.service';
 import { AdminDashboardService, CoiDashboardRequest, SortCountObj } from './admin-dashboard.service';
 import { CompleterOptions } from '../../../../fibi/src/app/service-request/service-request.interface';
-import { ADMIN_DASHBOARD_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
+import { ADMIN_DASHBOARD_RIGHTS,
+        HTTP_ERROR_STATUS,
+        HTTP_SUCCESS_STATUS,
+        POST_CREATE_DISCLOSURE_ROUTE_URL,
+        POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
+} from '../app-constants';
 
 @Component({
     selector: 'app-admin-dashboard',
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.scss']
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     setFocusToElement = setFocusToElement;
     DEFAULT_DATE_FORMAT = DATE_PLACEHOLDER;
@@ -594,8 +599,11 @@ export class AdminDashboardComponent {
         this.hasTravelDisclosureRights = rightsArray.some((right) => ['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'].includes(right));
     }
 
-    getColorBadges(moduleName) {
-        switch (moduleName) {
+    getColorBadges(disclosure) {
+        if (disclosure?.travelDisclosureId) {
+            return 'bg-travel-clip';
+        }
+        switch (disclosure.fcoiTypeCode) {
             case '1':
                 return 'bg-fcoi-clip';
             case '2':
@@ -608,6 +616,9 @@ export class AdminDashboardComponent {
     }
 
     modalHeader(disclosure) {
+        if (disclosure.travelDisclosureId) {
+            return `#${disclosure.travelDisclosureId}: Travel Disclosure By ${disclosure.travellerName}`;
+        }
         if (disclosure.fcoiTypeCode == 1) {
             return `#${disclosure.coiDisclosureNumber}: FCOI Disclosure By ${disclosure.disclosurePersonFullName}`;
         } else if (disclosure.fcoiTypeCode == 2 || disclosure.fcoiTypeCode == 3) {
@@ -615,5 +626,14 @@ export class AdminDashboardComponent {
         }
     }
 
+    formatTravellerListValues(travellerTypes: string): string {
+        return travellerTypes ? travellerTypes.split(',').map(value => value.trim()).join(', ') : '';
+    }
+
+    redirectToDisclosure(coi) {
+        const redirectUrl = coi.travelDisclosureId ? POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
+        this._router.navigate([redirectUrl],
+            { queryParams: { disclosureId: coi.travelDisclosureId || coi.coiDisclosureId } });
+    }
 }
 

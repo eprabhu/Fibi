@@ -120,7 +120,7 @@
 
             <!-- City list -->
             <div class="row col-6">
-                <label for="travelDisclosure-cityList" class="fw-500 fs-14 col-custom-city">City:</label>
+                <label for="travelDisclosure-cityList" class="fw-500 fs-14 col-custom">City:</label>
                 <div class="col">
                     <input type="text" id="travelDisclosure-cityList" autocomplete="off"
                         [(ngModel)]="travelDisclosureRO.destinationCity" class="form-control"
@@ -133,64 +133,6 @@
                         Type city.
                     </span>
                 </div>
-            </div>
-        </div>
-
-        <!-- Trip purpose -->
-        <div class="row d-flex mt-5 pt-2 px-0">
-            <label for="travelDisclosure-tripPurpose" class="fw-500 fs-14 col-custom">
-                Purpose of the Trip:
-            </label>
-            <div class="col">
-                <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
-                    class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.purposeOfTheTrip"
-                    (ngModelChange)="setUnSavedChanges();"
-                    [ngClass]="(mandatoryList?.get('purpose')) ? 'invalid-border':''">
-                  </textarea>
-                <span *ngIf="mandatoryList?.has('purpose')" class="fs-13 invalid-feedback d-block">
-                    {{mandatoryList?.get('purpose')}}
-                </span>
-                <span class="position-absolute fs-13 col text-secondary mb-0">
-                    Type purpose of the trip.
-                </span>
-            </div>
-        </div>
-
-        <!-- relationship with research -->
-        <div class="row px-0 pt-2 mt-5">
-            <label for="travelDisclosure-relationship" class="fw-500 fs-14 col-custom">
-                Relationship to Your Research:
-            </label>
-            <div class="col">
-                <textarea id="travelDisclosure-relationship" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
-                    class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.relationshipToYourResearch"
-                    (ngModelChange)="setUnSavedChanges();"
-                    [ngClass]="(mandatoryList?.get('relationship')) ? 'invalid-border':''">
-                  </textarea>
-                <span *ngIf="mandatoryList?.has('relationship')" class="fs-13 invalid-feedback d-block">
-                    {{mandatoryList?.get('relationship')}}
-                </span>
-                <span class="position-absolute fs-13 col text-secondary mb-0">
-                    Type relationship to your research.
-                </span>
-            </div>
-        </div>
-
-        <!-- Estimated amount -->
-        <div class="row px-0 mt-5 pt-2 justify-content-between d-flex align-items-center">
-            <label for="travelDisclosure-estimation" class="fw-500 fs-14 col-5">
-                Actual U.S. dollar amount reimbursed and/or paid on your behalf
-                (estimate if the amount is unknown):
-            </label>
-            <div class="col-7">
-                <input appCurrencyFormat class="form-control" type="text"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0(?=[^.])/g, '0');"
-                    [(ngModel)]="travelDisclosureRO.travelAmount" [initialValue]="travelDisclosureRO.travelAmount"
-                    id="travelDisclosure-estimation" autocomplete="off" (ngModelChange)="setUnSavedChanges();"
-                    [ngClass]="(mandatoryList?.get('amount')) ? 'invalid-border' : ''">
-                <span *ngIf="(mandatoryList?.get('amount'))" class="fs-13 invalid-feedback d-block">
-                    {{mandatoryList?.get('amount')}}
-                </span>
             </div>
         </div>
 
@@ -215,12 +157,15 @@
                     <span *ngIf="(dateValidationList.get('startDate'))" class="fs-13 invalid-feedback d-block">
                         {{dateValidationList.get('startDate')}}
                     </span>
+                    <span class="position-absolute fs-13 col text-secondary mb-0">
+                        Type your travel start date.
+                    </span>
                 </div>
             </div>
 
             <!-- end date -->
             <div class="row col-6">
-                <label for="travelDisclosure-endDate" class="fw-500 fs-14 col-custom-endDate">
+                <label for="travelDisclosure-endDate" class="fw-500 fs-14 col-custom">
                     End Date:
                 </label>
                 <div class="col">
@@ -237,8 +182,69 @@
                     <span *ngIf="(dateValidationList.get('endDate'))" class="fs-13 invalid-feedback d-block">
                         {{dateValidationList.get('endDate')}}
                     </span>
+                    <span class="position-absolute fs-13 col text-secondary mb-0">
+                        Type your travel end date.
+                    </span>
                 </div>
             </div>
         </div>
+
+        <!-- Trip purpose -->
+        <div class="row mt-5 px-0">
+            <label for="travelDisclosure-tripPurpose" class="fw-500 fs-14 col-custom">
+                Purpose of the Trip:
+            </label>
+            <div class="col">
+                <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
+                    class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.purposeOfTheTrip"
+                    (ngModelChange)="setUnSavedChanges();"
+                    [ngClass]="(mandatoryList?.get('purpose')) ? 'invalid-border':''">
+                    </textarea>
+                <span *ngIf="mandatoryList?.has('purpose')" class="fs-13 invalid-feedback d-block">
+                    {{mandatoryList?.get('purpose')}}
+                </span>
+                <span class="position-absolute fs-13 col text-secondary mb-0">
+                    Type purpose of the trip.
+                </span>
+            </div>
+        </div>
+
+        <!-- relationship with research -->
+        <div class="row px-0 mt-5">
+            <label for="travelDisclosure-relationship" class="fw-500 fs-14 col-custom">
+                Relationship to Your Research:
+            </label>
+            <div class="col">
+                <textarea id="travelDisclosure-relationship" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
+                    class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.relationshipToYourResearch"
+                    (ngModelChange)="setUnSavedChanges();"
+                    [ngClass]="(mandatoryList?.get('relationship')) ? 'invalid-border':''">
+                  </textarea>
+                <span *ngIf="mandatoryList?.has('relationship')" class="fs-13 invalid-feedback d-block">
+                    {{mandatoryList?.get('relationship')}}
+                </span>
+                <span class="position-absolute fs-13 col text-secondary mb-0">
+                    Type relationship to your research.
+                </span>
+            </div>
+        </div>
+
+        <!-- Estimated amount -->
+        <div class="row px-0 mt-3 justify-content-between d-flex align-items-center">
+            <label for="travelDisclosure-estimation" class="fw-500 fs-14 col-3">
+                Actual U.S. dollar amount reimbursed and/or paid on your behalf:
+            </label>
+            <div class="col">
+                <input appCurrencyFormat class="form-control" type="text"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0(?=[^.])/g, '0');"
+                    [(ngModel)]="travelDisclosureRO.travelAmount" [initialValue]="travelDisclosureRO.travelAmount"
+                    id="travelDisclosure-estimation" autocomplete="off" (ngModelChange)="setUnSavedChanges();"
+                    [ngClass]="(mandatoryList?.get('amount')) ? 'invalid-border' : ''">
+                <span *ngIf="(mandatoryList?.get('amount'))" class="fs-13 invalid-feedback d-block">
+                    {{mandatoryList?.get('amount')}}
+                </span>
+            </div>
+        </div>
+
     </div>
 </div>
