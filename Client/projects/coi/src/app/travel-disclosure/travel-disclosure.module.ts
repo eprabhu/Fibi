@@ -9,6 +9,7 @@ import { TravelRouteGuardService } from './services/travel-route-guard.service';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { TravelDataStoreService } from './services/travel-data-store.service';
+import { CoiService } from '../disclosure/services/coi.service';
 
 const routes: Routes = [
     {
@@ -26,6 +27,11 @@ const routes: Routes = [
                 path: 'screening', canDeactivate: [TravelRouteGuardService],
                 loadChildren: () => import('./travel-questionnaire/travel-questionnaire.module')
                 .then(m => m.TravelQuestionnaireModule)
+            },
+            {
+                path: 'summary', canDeactivate: [],
+                loadChildren: () => import('./travel-summary/travel-summary.module')
+                .then(m => m.TravelSummaryModule)
             }
         ]
     }
@@ -39,13 +45,14 @@ const routes: Routes = [
         SharedModule,
         FormsModule,
         RouterModule.forChild(routes),
-        SharedComponentModule
+        SharedComponentModule,
     ],
     providers: [
         SfiService,
         TravelDisclosureService,
         TravelRouteGuardService,
-        TravelDataStoreService
+        TravelDataStoreService,
+        CoiService
     ],
     exports: []
 })

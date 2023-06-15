@@ -5,7 +5,7 @@ import { TravelCreateModalDetails, TravelDisclosureResponseObject } from '../tra
 import { Observable, Subscriber } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CommonService } from '../../common/services/common.service';
-import { HOME_URL, HTTP_ERROR_STATUS } from '../../app-constants';
+import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, HOME_URL, HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { TravelDataStoreService } from './travel-data-store.service';
 
 @Injectable()
@@ -23,6 +23,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
                 this.loadTravelDisclosure(MODULE_ID).subscribe((res: TravelDisclosureResponseObject) => {
                     if (res) {
                         this.updateTravelDataStore(res);
+                        this.reRouteIfWrongPath(_state.url, res.travelDisclosureStatusCode, route);
                         observer.next(true);
                         observer.complete();
                     } else {
@@ -64,6 +65,18 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
 
     private updateTravelDataStore(data: TravelDisclosureResponseObject): void {
         this._dataStore.setStoreData(data);
+    }
+
+    private reRouteIfWrongPath(currentPath: string, travelDisclosureStatusCode: string, route) {
+        let reRoutePath;
+        if (travelDisclosureStatusCode === '1' && !currentPath.includes('create-travel-disclosure')) {
+            reRoutePath = CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
+        } else if (travelDisclosureStatusCode !== '1' && currentPath.includes('create-travel-disclosure')) {
+            reRoutePath = POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
+        }
+        if (reRoutePath) {
+            this._router.navigate([reRoutePath], {queryParams: {disclosureId: route.queryParamMap.get('disclosureId')}});
+        }
     }
 
     private redirectOnError(error): Observable<any> {

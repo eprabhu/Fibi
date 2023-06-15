@@ -59,7 +59,7 @@ export class TravelDataStoreService {
         if (this.storeData.travelDisclosureId) {
             return this.storeData.travelDisclosureStatusCode === '1';
         } else {
-            return false;
+            return true;
         }
     }
 }

@@ -67,9 +67,11 @@
                                 </label>
                                 <span class="grey-text fs-14 ml-2">
                                     <app-no-data-label [valueToShow]=null>
-                                        <div title="{{responseObject?.adminPersonId}} - {{responseObject?.adminPersonName}}">
+                                        <div
+                                            title="{{responseObject?.adminPersonId}} - {{responseObject?.adminPersonName}}">
                                             {{responseObject?.adminPersonId}}
-                                            <span *ngIf="responseObject?.adminPersonId && responseObject?.adminPersonName">-</span>
+                                            <span
+                                                *ngIf="responseObject?.adminPersonId && responseObject?.adminPersonName">-</span>
                                             {{responseObject?.adminPersonName}}
                                         </div>
                                     </app-no-data-label>
@@ -84,10 +86,13 @@
                                     Admin Group :
                                 </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="responseObject?.adminGroupId || responseObject?.adminGroupName">
-                                        <div title="{{responseObject?.adminGroupId}} - {{responseObject?.adminGroupName}}">
+                                    <app-no-data-label
+                                        [valueToShow]="responseObject?.adminGroupId || responseObject?.adminGroupName">
+                                        <div
+                                            title="{{responseObject?.adminGroupId}} - {{responseObject?.adminGroupName}}">
                                             {{responseObject?.adminGroupId}}
-                                            <span *ngIf="responseObject?.adminGroupId && responseObject?.adminGroupName">-</span>
+                                            <span
+                                                *ngIf="responseObject?.adminGroupId && responseObject?.adminGroupName">-</span>
                                             {{responseObject?.adminGroupName}}
                                         </div>
                                     </app-no-data-label>
@@ -134,32 +139,34 @@
                 </div>
                 <!-- for status box -->
                 <div class="col-auto status-card-width">
-                    <div class="border triple-card rounded-1 position-relative">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
                         <span class="status-pill">Status</span>
-                        <div class="ps-4 table-negative-margin">
-                            <table class="fs-14 fw-medium spaced-table grey-text">
-                                <tr>
-                                    <td class="fw-600">Review :</td>
-                                    <td>
-                                        <app-no-data-label [valueToShow]="responseObject?.reviewStatus">
-                                            <span class="{{commonService.getReviewStatusBadge(responseObject?.reviewStatusCode)}}">{{responseObject?.reviewStatus}}</span>
-                                        </app-no-data-label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-600">Disclosure :</td>
-                                    <td>
-                                        <app-no-data-label [valueToShow]="responseObject?.travelDisclosureStatus">
-                                            <span class="{{commonService.getDispositionStatusBadge(responseObject?.travelDisclosureStatusCode)}}">{{responseObject?.travelDisclosureStatus}}</span>
-                                        </app-no-data-label>
-                                    </td>
-                                </tr>
-                            </table>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14 col-4">Review : </label>
+                                <span class="grey-text fs-14 ms-3 col">
+                                    <app-no-data-label [valueToShow]="responseObject?.reviewStatusCode">
+                                        <span
+                                            class="fs-14 {{commonService.getReviewStatusBadge(responseObject?.reviewStatusCode)}}">{{responseObject?.reviewStatus}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14 col-4">Disclosure : </label>
+                                <span class="grey-text fs-14 ms-3 col">
+                                    <app-no-data-label [valueToShow]="responseObject?.travelDisclosureStatus">
+                                        <span
+                                            class="fs-14 {{commonService.getDispositionStatusBadge(responseObject?.travelDisclosureStatusCode)}}">{{responseObject?.travelDisclosureStatus}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <ng-container>
+            <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress row mt-1">
                     <!-- Screening Questionnaire tab -->
                     <!-- <div class="col h-100 m-0 fs-14"
@@ -195,6 +202,16 @@
                     </div>
                 </div>
             </ng-container>
+            <ng-container *ngIf="!isCreateMode">
+                <div class="navigation-tabs d-flex align-items-center">
+                    <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge'
+                        role="button">
+                        <div class="navigation-box-content" routerLinkActive="active" title="" area-describedby="">
+                            Disclosure
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
         </div>
     </div>
     <!-- right side options -->
@@ -218,6 +235,21 @@
                         <mat-icon class="me-1">more_vert</mat-icon> More Options
                     </span>
                 </div>
+                <div class="d-flex justify-content-between px-3 pb-3" *ngIf="!isCreateMode">
+                    <button title="Click to Assign Administrator/Admin Group"
+                        area-describedby="Click to assign administrator"
+                        class="fs-14   d-flex justify-content-center w-100 align-items-center" data-bs-toggle="modal"
+                        data-bs-target="#assign-to-admin-modal"
+                        [ngClass]="(responseObject?.adminGroupId || responseObject?.adminPersonId)?'btn btn-outline-grey':'btn btn-primary'">
+                        <mat-icon class="me-1">group_add</mat-icon>
+                        Assign Admin
+                    </button>
+                </div>
+                <div class="px-3 my-3 fs-14 ash-text wrapping-text" *ngIf="!isCreateMode">
+                    <div><span class="fw-medium me-3">Last Updated By :</span></div>
+                    <div>{{responseObject?.personFullName}} On {{responseObject?.updateTimestamp |
+                        dateFormatterWithTimeZone:'long'}}</div>
+                </div>
                 <div class="d-flex justify-content-around px-3 pb-3"
                     *ngIf="isRouteComplete(['screening', 'travel-details'])"
                     title="Click here to add a new financial interest">
@@ -227,7 +259,8 @@
                         Add Significant Financial Interest
                     </span>
                 </div>
-                <div class="d-flex justify-content-around px-3 pb-3" (click)="handleTravelDisclosureSubmission('SAVE_DISCLOSURE')"
+                <div class="d-flex justify-content-around px-3 pb-3"
+                    (click)="handleTravelDisclosureSubmission('SAVE_DISCLOSURE')"
                     *ngIf="isRouteComplete(['screening', 'travel-details'])">
                     <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">save</mat-icon>
@@ -258,7 +291,7 @@
                     </span>
                 </div>
             </div>
-            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes navigation-tabs">
+            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes" *ngIf="isCreateMode">
                 Notes & Attachments
             </div>
         </div>
@@ -325,3 +358,6 @@
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails">
 </app-personal-details-modal>
+
+<app-assign-administrator-modal (closeModal)="closeAssignAdministratorModal($event)"
+    [disclosureId]="responseObject?.travelDisclosureId"></app-assign-administrator-modal>

@@ -458,7 +458,9 @@
                 <div class="col-4">
                     <label for="purpose" class="label-text">Purpose :</label>
                     <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
-                        <span class="grey-text">{{disclosure?.travelPurpose}}</span>
+                        <span class="grey-text" [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose.length>45 ?
+                            (disclosure?.travelPurpose | slice:0: 45)+'...' :
+                            disclosure?.travelPurpose}}</span>
                     </app-no-data-label>
                 </div>
                 <div class="col">
