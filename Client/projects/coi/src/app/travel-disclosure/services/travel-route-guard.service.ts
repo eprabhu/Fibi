@@ -17,6 +17,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
         private _dataStore: TravelDataStoreService) { }
 
     canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot):  boolean | Observable<boolean> {
+        this._dataStore.setStoreData(new TravelDisclosureResponseObject());
         const MODULE_ID = route.queryParamMap.get('disclosureId');
         if (MODULE_ID) {
             return new Observable<boolean>((observer: Subscriber<boolean>) => {
