@@ -1364,7 +1364,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		List<String> travellerTypeCodeList = new ArrayList<>();
 		if (entries.size() > 0) {
 			entries.forEach(entry -> {
-				travellerTypeCodeList.add(entry.getTravelerTypeCode());
+				if (!travellerTypeCodeList.contains(entry.getTravelerTypeCode())) {
+					travellerTypeCodeList.add(entry.getTravelerTypeCode());
+				}
 			});
 		}
 		CoiEntity entityDetails = conflictOfInterestDao.getEntityDetails(coiTravelDisclosure.getEntityId());
