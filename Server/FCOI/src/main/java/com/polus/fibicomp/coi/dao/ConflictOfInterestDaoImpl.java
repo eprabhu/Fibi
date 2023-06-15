@@ -2992,4 +2992,22 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.where(builder.equal(rootDisclComment.get("entityId"), entityId));
 		return session.createQuery(query).getSingleResult();
 	}
+	
+	/**
+	 * Use     -> To delete all the entries from COI_TRAVEL_DISCLOSURE_TRAVELLER table against a travel disclosure id. 
+	 * Purpose -> While creating a travel disclosure with traveler type(Self, Spouse, Dependent), an entry is saving on
+	 *            COI_TRAVEL_DISCLOSURE_TRAVELLER table against the created travel disclosure id.
+	 *            So hence while modifying any particular travel disclosure by updating the traveler type values,
+	 *            the previous data was not clearing from the COI_TRAVEL_DISCLOSURE_TRAVELLER table.
+	 *            Hence results in fetching all the values on refresh
+	 */
+	@Override
+	public void deleteEntriesFromTraveller(Integer travelDisclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaDelete<CoiTravelDisclosureTraveler> query = builder.createCriteriaDelete(CoiTravelDisclosureTraveler.class);
+		Root<CoiTravelDisclosureTraveler> root = query.from(CoiTravelDisclosureTraveler.class);
+		query.where(builder.equal(root.get("travelDisclosureId"), travelDisclosureId));
+		session.createQuery(query).executeUpdate();
+	}
 }

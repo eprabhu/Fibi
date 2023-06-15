@@ -822,4 +822,6 @@ public interface ConflictOfInterestDao {
     public List<CoiTravelDisclosureTraveler> getEntriesFromTravellerTable(Integer travelDisclosureId);
     
     public CoiEntity getEntityDetails(Integer entityId);
+    
+    public void deleteEntriesFromTraveller(Integer travelDisclosureId);
 }

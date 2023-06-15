@@ -1320,7 +1320,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		System.out.println(coiTravelDisclosure.getTravellerTypeCode());
 		List<String> travellerTypeCodeList = new ArrayList<>();
+		if (vo.getTravelDisclosureId() != null) {
+			conflictOfInterestDao.deleteEntriesFromTraveller(vo.getTravelDisclosureId());
+		}
 		vo.getTravellerTypeCode().forEach(typeCode -> {
 			CoiTravelDisclosureTraveler coiTravelDisclosureTraveller = new CoiTravelDisclosureTraveler();
 			coiTravelDisclosureTraveller.setTravelTravelerId(vo.getTravelTravellerId());
