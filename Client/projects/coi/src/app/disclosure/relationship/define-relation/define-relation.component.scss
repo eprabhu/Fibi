@@ -8,7 +8,7 @@
 }
 
 .relationship-content {
-  // height: 90vh;
+  min-height: 100%;
   // width             : 80%;
   z-index           : 5;
   // position          : relative;
@@ -74,16 +74,15 @@
 }
 
 .label-text {
-  font-weight: 500;
-  color      : #48647f;
+  font-weight: 700;
+  color      : #6A7980;
   font-size  : 14px;
 }
 
 .grey-text {
   font-size: 14px;
-  color: #6a7980;
+  color: #48647F;
   margin-left: 8px;
-  font-weight: 500;
 }
 
 .table {
@@ -150,13 +149,26 @@
   top     : -1px;
 }
 
+.info-text{
+  // font-style: italic;
+    margin-left: 27px;
+}
+
+.margin-top-23 {
+  margin-top: -33px;
+}
+
+.pl-6 {
+  padding-left: 6px;
+}
+
 .info-icon {
   margin-top : -7px;
   height     : 22px;
   width      : 22px;
   font-size  : 16px;
   position   : absolute;
-  top        : 17px;
+  top: 10px;  
   margin-left: 2px;
   color      : #6f7395;
   cursor     : pointer;
@@ -206,9 +218,7 @@ table {
     color: #48647f;
   }
   thead {
-    tr:first-child {
       outline: 1px solid #dddddd;
-    }
   }
   tr {
     border-style: hidden;
@@ -222,13 +232,19 @@ table {
   }
 }
 
+  .grey-info {
+    background: #EEEEEE;
+    color: #202c2e;
+    font-size: 16px;
+    font-weight: 400;
+    border: 1px solid #caced2;
+}
+
 
 .scrollable-table {
-  max-height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  max-height: 603px;
   height: auto;
-  overscroll-behavior: contain;
+  overflow-x: hidden;
 }
 
 .scrollable-table thead {
@@ -274,4 +290,13 @@ table {
 .area-position{
   position: relative;
   top: 9px;
+}
+
+.btn-primary {
+  height: 33px;
+}
+
+.tableSkin th {
+  padding-top: 0;
+  padding-bottom: 0;
 }
