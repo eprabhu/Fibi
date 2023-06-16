@@ -67,7 +67,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   }
 
   async getDataFromService() {
-    this.getRelationshipLookUp();
+    this.relationLookup = await this.getRelationshipLookUp();
     await this.getDefinedRelationships();
     if (this.definedRelationships.length > 0) {
       this.getQuestionnaire(this.definedRelationships[0]);
@@ -75,12 +75,13 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
     this.removeExistingRelation();
   }
 
-  getRelationshipLookUp() {
-    this.$subscriptions.push(this.entityDetailsServices.addSFILookUp(this.currentSelected.tab).subscribe((res: any) => {
-      this.relationLookup = res.validPersonEntityRelTypes;
-    }, _error => {
+  async getRelationshipLookUp(): Promise<any> {
+    try {
+      const response = await this.entityDetailsServices.addSFILookUp(this.currentSelected.tab);
+      return response.validPersonEntityRelTypes;
+    } catch (error) {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-    }));
+    }
   }
 
   addRelations(flag = false) {

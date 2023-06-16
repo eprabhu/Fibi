@@ -90,7 +90,7 @@ th{
   color: #52bf5a;
 }
 
-.entity-status,.travel-status,.fcoi-status,.award-status,.proposal-status {
+.status-pill {
   color: white;
   width: max-content;
   height: 27px;
@@ -109,7 +109,7 @@ th{
     position: absolute;
     height: 0;
     width: 0;
-    border-bottom: 6px solid #01830A;
+    border-bottom: 6px solid #151515;
     border-left: 6px solid transparent;
     top: -5px;
     left: 0;

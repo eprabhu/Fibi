@@ -319,7 +319,7 @@
           <div *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'"
             class="d-flex my-2">
             <div class="col-1 col-height">
-              <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-4"
+              <span class="status-pill shadow-sm align-items-center d-flex ps-2 mt-4"
                 [ngClass]="entityListData?.isRelationshipActive ?'':'inactive'">
                 <span class="px-2">{{!entityListData?.isRelationshipActive?'Inactive':'Active'}}</span></span>
             </div>
@@ -386,7 +386,7 @@
           <div class="d-flex mb-3">
             <div class="col text-secondary fs-14 d-flex">
               <div class="col-height">
-                <span class="shadow-sm align-items-center d-flex ps-2 mt-4"
+                <span class="shadow-sm align-items-center d-flex ps-2 mt-4 status-pill"
                   [ngClass]="disclosureList?.fcoiTypeCode === '1'? 'bg-fcoi-clip': (disclosureList?.fcoiTypeCode === '2'?'bg-proposal-clip':'bg-award-clip')">
                   <span class="px-2">{{disclosureList?.fcoiType}}</span></span>
               </div>
@@ -465,14 +465,14 @@
             </div>
             <div class="col-3 text-secondary fs-14">
               <span class="fw-bold me-2">Administrator :</span>
-              <app-no-data-label [valueToShow]="disclosureList?.purpose">
-                <span></span>
+              <app-no-data-label [valueToShow]="disclosureList?.administrator">
+                <span>{{disclosureList?.administrator}}</span>
               </app-no-data-label>
             </div>
             <div class="col-3 text-secondary fs-14">
               <span class="fw-bold me-2">Admin Group :</span>
-              <app-no-data-label [valueToShow]="disclosureList?.purpose">
-                <span></span>
+              <app-no-data-label [valueToShow]="disclosureList?.adminGroupName">
+                <span>{{disclosureList?.adminGroupName}}</span>
               </app-no-data-label>
             </div>
             <div class="col text-secondary fs-14">
@@ -502,7 +502,7 @@
         <div class="p-3 text-break">
           <div class="d-flex">
             <div class="col-height">
-              <span class="bg-travel-clip shadow-sm align-items-center d-flex ps-2 mt-4">
+              <span class="status-pill bg-travel-clip shadow-sm align-items-center d-flex ps-2 mt-4">
                 <span class="px-2">Travel</span></span>
             </div>
             <div class="col text-secondary fs-14">
@@ -566,21 +566,21 @@
                   <span class="fw-bold pr-05">
                     Certification Date :</span>
                   <app-no-data-label [valueToShow]="travelDisclosureList?.certificationDate">
-                    <span>{{travelDisclosureList?.certificationDate}}</span>
+                    <span>{{travelDisclosureList?.certificationDate | dateFormatterWithTimeZone}}</span>
                   </app-no-data-label>
                 </div>
                 <div class="col-3 text-secondary fs-14">
                   <span class="fw-bold pr-05">
                     Acknowledge Date :</span>
                   <app-no-data-label [valueToShow]="travelDisclosureList?.acknowledgeDate">
-                    <span>{{travelDisclosureList?.acknowledgeDate}}</span>
+                    <span>{{travelDisclosureList?.acknowledgeDate | dateFormatterWithTimeZone}}</span>
                   </app-no-data-label>
                 </div>
                 <div class="col-3 text-secondary fs-14">
                   <span class="fw-bold pr-05">
                     Expiration Date :</span>
                   <app-no-data-label [valueToShow]="travelDisclosureList?.expirationDate">
-                    <span>{{travelDisclosureList?.expirationDate}}</span>
+                    <span>{{travelDisclosureList?.expirationDate | dateFormatterWithTimeZone}}</span>
                   </app-no-data-label>
                 </div>
               </div>
