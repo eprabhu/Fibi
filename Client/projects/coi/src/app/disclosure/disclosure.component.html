@@ -6,7 +6,7 @@
                     <p class="m-0">
                         <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
                             <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span
-                                    class="text-primary"><u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Show the details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
+                                    class="text-primary"><u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
                             </strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
@@ -19,7 +19,7 @@
                                 (coiData?.projectDetail?.title | slice:0: 40)+'...' :
                                 coiData?.projectDetail?.title}} ] By
                                 <span class="text-primary ">
-                                    <u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Show the details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u>
+                                    <u class="cursor-pointer" (click)="openDetailModal(coiData)" title="click to view person details">{{coiData?.coiDisclosure?.person?.fullName}}</u>
                                 </span>
                             </strong>
                         </ng-container>
@@ -188,9 +188,9 @@
             </div>
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress navigation-tabs row">
-                    <div (click)="goToStep(1)"
+                    <div (click)="goToStep(1);"
                         [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
-                        class="col h-100 m-0" queryParamsHandling='merge' title="Goto step Screening Questionnaire">
+                        class="col h-100 m-0" queryParamsHandling='merge' title="Go to Screening Questionnaire section">
                         Screening Questionnaire
                         <div class="arrow-wrapper">
                             <div class="arrow-cover">
@@ -198,10 +198,10 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(2)"
+                    <div (click)="goToStep(2);"
                         [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
                         class="col ps-5 text-nowrap" queryParamsHandling='merge'
-                        title="Goto step Significant Financial Interest(SFIs)">
+                        title="Go to SFI section">
                         Significant Financial Interest(SFIs)
                         <div class="arrow-wrapper">
                             <div class="arrow-cover">
@@ -209,8 +209,8 @@
                             </div>
                         </div>
                     </div>
-                    <div (click)="goToStep(3)" [class.complete]="isRouteComplete(['relationship', 'certification'])"
-                        class="col" queryParamsHandling='merge' title="Goto step Relationships">
+                    <div (click)="goToStep(3);" [class.complete]="isRouteComplete(['relationship', 'certification'])"
+                        class="col" queryParamsHandling='merge' title="Go to Relationships section">
                         <span class="align-self-center">Relationships</span>
                         <div class="arrow-wrapper">
                             <div class="arrow-cover">
@@ -219,7 +219,7 @@
                         </div>
                     </div>
                     <div (click)="goToStep(4)" [class.complete]="isRouteComplete(['certification'])" class="col"
-                        queryParamsHandling='merge' title="Goto step Certification">
+                        queryParamsHandling='merge' title="Go to Certification section">
                         <span class="align-self-center">Certification</span>
                     </div>
                 </div>
@@ -259,15 +259,15 @@
         <div *ngIf="isCreateMode" class="d-flex flex-column p-0 bg-white min-height-189 border-end shadow-sm">
             <div class="flex-fill h-100">
                 <div class="d-flex justify-content-between p-3">
-                    <span [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-grey pb-0 fs-14 col-2">
+                    <span title="Go to COI home page" [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-grey pb-0 fs-14 col-2">
                         <mat-icon>home</mat-icon>
                     </span>
-                    <button (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1"
+                    <button (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1" 
                         class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">undo</mat-icon>
                         Previous
                     </button>
-                    <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4"
+                    <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4" 
                         class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
                         <mat-icon class="me-2">redo</mat-icon>
                         Next
@@ -280,7 +280,7 @@
                         Add Significant Financial Interest
                     </span>
                 </div>
-                <div *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
+                <div title="Click to save your progress" *ngIf="router.url.includes('create-disclosure/screening') && dataStore.getEditModeForCOI()"
                     class="d-flex justify-content-around px-3 pb-3">
                     <span (click)="triggerSave()"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
@@ -307,16 +307,16 @@
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill side-height border-end bg-white shadow-sm">
                 <div class="d-flex justify-content-between p-3">
-                    <span title="Goto home page" (click)="goToHomeUrl()"
+                    <span title="Go to COI home page" (click)="goToHomeUrl()"
                         [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
-                        class="btn btn-outline-secondary {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
+                        class="btn btn-outline-secondary home-btn-center {{coiData?.coiDisclosure?.reviewStatusCode != '4'?'col-2':'col'}} me-2">
                         <mat-icon>home</mat-icon>
                         <span class="mt-1 ms-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4">Home</span>
                     </span>
                     <button *ngIf="[1].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         (click)="location.back()" [disabled]="router.url.includes('coi/disclosure/summary')"
                         class="mx-2 fs-14 align-items-center btn btn-outline-secondary d-flex pb-0 pt-0 col justify-content-center">
-                        <mat-icon class="me-2" title="Goto previous page">undo</mat-icon>
+                        <mat-icon class="me-2" title="Go to previous page">undo</mat-icon>
                         Previous
                     </button>
                     <span data-bs-target="#coi-activity-modal" data-bs-toggle="modal"
