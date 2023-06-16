@@ -177,10 +177,13 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer mx-2">
-        <button type="button" (click)="openProjectMoreDetails(selectedProjectForView.moduleItemId, selectedProjectForView.moduleCode);selectedProjectForView= null;" class="btn btn-primary fs-14" data-bs-dismiss="modal">More Details</button>
-        <button type="button" (click)="selectedProjectForView= null" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-    </div>
+      <div class="modal-footer">
+        <button title="Click to close the popup" type="button" (click)="selectedProjectForView= null"
+          class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" title="Click to view project details page"
+          (click)="openProjectMoreDetails(selectedProjectForView.moduleItemId, selectedProjectForView.moduleCode);selectedProjectForView= null;"
+          class="btn btn-primary fs-14" data-bs-dismiss="modal">More Details</button>
+      </div>
     </div>
   </div>
 </div>

@@ -94,7 +94,7 @@
                             [ngClass]="disclosure?.numberOfSFI > 0 ? 'cursor-pointer' : '' "
                             [attr.title]="disclosure?.numberOfSFI > 0 ? 'Click to view SFI list' : '' "
                             area-describedby="Click to view SFI list">
-                            <strong class="fs-18 me-1 text-blue-color  mb-4px"
+                            <strong class="fs-18 me-1 text-blue-color"
                                 [ngClass]="disclosure?.numberOfSFI > 0 ? 'cursor-pointer' : '' "
                                 [attr.title]="disclosure?.numberOfSFI > 0 ? 'Click to view SFI list' : '' "
                                 area-describedby="Click to view SFI list"
@@ -115,7 +115,7 @@
                                     [ngClass]="disclosure?.numberOfProposals > 0 ? 'cursor-pointer' : '' "
                                     [attr.title]="disclosure?.numberOfProposals > 0 ? 'Click to view Proposal list' : '' "
                                     area-describedby="Click to view Proposal list">
-                                    <strong class="fs-18 me-2 text-blue-color mb-4px"
+                                    <strong class="fs-18 me-2 text-blue-color"
                                         (click)="setSelectedModuleCode('proposal',disclosure?.disclosureId, disclosure, disclosure?.numberOfProposals);">{{disclosure?.numberOfProposals}}</strong>
                                     <div>
                                         <label class="label-text margin-top-3px">
@@ -134,7 +134,7 @@
                                     [ngClass]="disclosure?.numberOfAwards > 0 ? 'cursor-pointer' : '' "
                                     [attr.title]="disclosure?.numberOfAwards > 0 ? 'Click to view Award list' : '' "
                                     area-describedby="Click to view Award list">
-                                    <strong class="fs-18 me-2 text-blue-color mb-4px"
+                                    <strong class="fs-18 me-2 text-blue-color"
                                         (click)="setSelectedModuleCode('Awards',disclosure?.disclosureId, disclosure, disclosure?.numberOfAwards);">{{disclosure?.numberOfAwards}}</strong>
                                     <div>
                                         <label class="label-text margin-top-3px">
@@ -152,11 +152,11 @@
                     </div>
                     <div class="col-7 d-flex align-items-center">
                         <div class="col">
-                            <div class="update-details"><span class="fw-bold ">Last Updated By : </span>
+                            <div><span class="fw-bold ">Last Updated By : </span>
                                 {{disclosure?.updateUserFullName}} On
                                 {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</div>
                         </div>
-                        <div class="col-auto d-flex justify-content-end">
+                        <div class="col-auto d-flex justify-content-end mr-7">
                             <button [queryParams]={disclosureId:disclosure.disclosureId}
                                 [routerLink]="['/coi/disclosure/summary']"
                                 class="align-items-center btn btn-outline-secondary d-flex fs-14"
@@ -391,7 +391,7 @@
                         [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
                         [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
                         area-describedby="Click to view SFI list">
-                        <strong class="fs-18 me-2 text-blue-color  mb-4px"
+                        <strong class="fs-18 me-2 text-blue-color"
                             [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
                             area-describedby="Click to view SFI list"
                             (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
@@ -414,7 +414,7 @@
                                 [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
                                 [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
                                 area-describedby="Click to view Proposal list">
-                                <strong class="fs-18 me-2 text-blue-color  mb-4px"
+                                <strong class="fs-18 me-2 text-blue-color"
                                     [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
                                     area-describedby="Click to view Proposal list"
                                     (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}</strong>
@@ -432,7 +432,7 @@
                                 [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                                 [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
                                 area-describedby="Click to view Award list">
-                                <strong class="fs-18 me-2 text-blue-color mb-4px"
+                                <strong class="fs-18 me-2 text-blue-color"
                                     (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">{{disclosure?.noOfAward}}</strong>
                                 <div>
                                     <label class="label-text margin-top-3px">
