@@ -1,7 +1,7 @@
 <div class="row my-4">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
         <div class="light-dark-text-color col-12 "
-            *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'Pending'">
+            *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'PENDING'">
             <div class="shadow-sm hovering-card disclosure-card-body-blue border rounded"
                 (mouseover)="isFCOIHover = true" (mouseout)="isFCOIHover = false">
                 <div class="row me-2">

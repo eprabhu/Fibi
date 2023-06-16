@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { ADMIN_DASHBOARD_RIGHTS } from '../../app-constants';
+import {ADMIN_DASHBOARD_RIGHTS} from '../../app-constants';
 
 class ChangePassword {
     password = '';
@@ -34,6 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     isManageEntity = false;
     isShowAdminDashboard = false;
+    canViewAdminDashboard = false;
 
     constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -108,8 +109,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.passwordValidation.set('same-password', true);
         }
     }
+
     checkUserHasRight(): void {
-        this.isManageEntity = this.commonService.hasRight('MANAGE_ENTITY') || this.commonService.hasRight('MANAGE_ENTITY');
+        this.isManageEntity = this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME');
+        this.canViewAdminDashboard = this.commonService.getAvailableRight(['APPLICATION_ADMINISTRATOR',
+                'MAINTAIN_QUESTIONNAIRE', 'MAINTAIN_USER_ROLES', 'MAINTAIN_ROLE', 'MAINTAIN_PERSON', 'MAINTAIN_TRAINING',
+                'VIEW_KEY_PERSON_TIMESHEET', 'MAINTAIN_KEY_PERSON_TIMESHEET', 'MAINTAIN_DELEGATION', 'MAINTAIN_ORCID_WORKS'],
+            'SOME');
     }
 
     async getPermissions() {

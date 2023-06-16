@@ -23,7 +23,7 @@
               *ngIf="isManageEntity" routerLinkActive="active" title="Goto Manage Entity page" aria-describedby="Goto Manage Entity page">Manage Entity
                 <span *ngIf="_router.url.includes('/coi/entity-management')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/configuration']" class="mr-2 cursor-pointer" role="tab"
+            <li *ngIf="canViewAdminDashboard" [routerLink]="['/coi/configuration']" class="mr-2 cursor-pointer" role="tab"
                 routerLinkActive="active" title="Goto COI Configurations page" aria-describedby="Goto COI Configurations page">COI Configurations
                 <span *ngIf="_router.url.includes('/coi/configuration')" class="active-color"></span>
             </li>

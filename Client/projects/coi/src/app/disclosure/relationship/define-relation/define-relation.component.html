@@ -80,7 +80,7 @@
                             Define Project - SFI Relation
                             <textarea *ngIf="isEditMode" class="form-control comment-text-box textarea-height" id="coi_description"
                             [(ngModel)]="coiDescription" appAutoGrow  appLengthValidator rows="2"
-                            placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
+                            placeholder="Describe the Project SFI relationship" [limit]=2000 spellcheck="false"></textarea>
                           </div>
                         </th>
                         <th class="col-3" style="width: 9%;"*ngIf="isEditMode" class="text-center">
@@ -117,7 +117,7 @@
                           <textarea  class="form-control comment-text-box textarea-height" id="main-panel-comnt"
                           appAutoGrow [(ngModel)]="test.disclComment.comment"
                           [disabled]="!isEditMode" rows="2" appLengthValidator
-                          placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
+                          placeholder="Describe the Project SFI relationship" [limit]=2000 spellcheck="false"></textarea>
                         </div>
                       </td>
                       <td *ngIf="isEditMode">

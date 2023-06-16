@@ -19,10 +19,12 @@ export class PersonalDetailsModalComponent implements OnInit {
     currentTab = 'PERSON_DETAILS';
     $subscriptions: Subscription[] = [];
     personValues: any;
+    canShowPersonDetails = false;
 
     ngOnInit() {
         document.getElementById('persondetailsTrigger').click();
         this.persondetails(this.userdetails);
+        this.setPersonBtnRights();
     }
 
     addnewvalue(value): void {
@@ -39,6 +41,11 @@ export class PersonalDetailsModalComponent implements OnInit {
     viewPersoDetails(personTrainingId: string): void {
         const url = this._commonservice.fibiApplicationUrl + `#/fibi/person/person-details?personId=${personTrainingId}`;
         window.open(url);
+    }
+
+    setPersonBtnRights() {
+        const isLoggedInPerson = this.userdetails.personId == this._commonservice.currentUserDetails.personId;
+        this.canShowPersonDetails = (isLoggedInPerson || this._commonservice.getAvailableRight('MAINTAIN_PERSON'));
     }
 
 }
