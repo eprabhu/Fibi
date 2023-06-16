@@ -198,12 +198,34 @@ export class CommonService {
         if (this.rightsArray.length) {
             return this.rightsArray;
         }
-        const allRights: any = await this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
-        if (allRights && 'IS_REVIEW_MEMBER' in allRights) {
-            this.isCoiReviewer = allRights.IS_REVIEW_MEMBER;
-            this.rightsArray = allRights.rights || [];
-        }
+        const {fibiRights, coiRights} = await this.getAllSystemRights();
+        this.assignFibiBasedRights(fibiRights);
+        this.assignCOIBasedRights(coiRights);
         return this.rightsArray;
+    }
+
+    private assignCOIBasedRights(coiRights) {
+        if (coiRights) {
+            if ('IS_REVIEW_MEMBER' in coiRights) {
+                this.isCoiReviewer = coiRights.IS_REVIEW_MEMBER;
+            }
+            if (Array.isArray(coiRights.rights)) {
+                this.rightsArray = [...this.rightsArray, ...coiRights.rights];
+            }
+        }
+    }
+
+    private assignFibiBasedRights(fibiRights) {
+        if (fibiRights.length) {
+            this.rightsArray = fibiRights;
+        }
+    }
+
+    private async getAllSystemRights() {
+        const fibiRightsAPI = this._http.get(this.fibiUrl + '/getAllSystemRights').toPromise();
+        const coiRightsAPI = this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
+        const [fibiRights, coiRights]: any = await Promise.all([fibiRightsAPI, coiRightsAPI]);
+        return {fibiRights, coiRights};
     }
 
     showToast(status = HTTP_SUCCESS_STATUS, toastContent = '') {
@@ -268,10 +290,6 @@ export class CommonService {
 
     removeUserDetailsFromLocalStorage() {
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
-    }
-
-    hasRight(right: string): boolean {
-        return this.rightsArray.includes(right);
     }
 
     getAvailableRight(rights: string | string[], method: Method = 'SOME'): boolean {

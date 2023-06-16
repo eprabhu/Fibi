@@ -182,6 +182,6 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   checkUserHasRight(): void {
-    this.isManageEntity = this._commonService.hasRight('MANAGE_ENTITY') ||  this._commonService.hasRight('MANAGE_ENTITY');
+    this.isManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME');
   }
 }
