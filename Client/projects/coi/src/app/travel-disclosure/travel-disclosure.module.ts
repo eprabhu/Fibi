@@ -32,6 +32,11 @@ const routes: Routes = [
                 path: 'summary', canDeactivate: [],
                 loadChildren: () => import('./travel-summary/travel-summary.module')
                 .then(m => m.TravelSummaryModule)
+            },
+            {
+                path: 'history', canDeactivate: [],
+                loadChildren: () => import('./travel-history/travel-history.module')
+                .then(m => m.TravelHistoryModule)
             }
         ]
     }

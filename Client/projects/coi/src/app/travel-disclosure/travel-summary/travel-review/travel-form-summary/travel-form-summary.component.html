@@ -3,7 +3,7 @@
         <strong class="mt-4 ms-1">Travel Details</strong>
         <span class="d-inline-block mt-3" tabindex="0" data-bs-toggle="tooltip" title="View Travel Details"
             data-bs-placement="top">
-            <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
+            <mat-icon class="me-2 info-icon fs-16" data-bs-toggle="tooltip">info</mat-icon>
         </span>
         <button class="updown-arrow" (click)="isCollapsed = !isCollapsed">
             <i [ngClass]="!isCollapsed?'fa fa-angle-double-down':'fa fa-angle-double-up'" class="fa-large"
@@ -13,105 +13,89 @@
 </div>
 
 <div class="card row py-4 px-4 d-flex align-items-center shadow mx-1 mt-3" *ngIf="isCollapsed">
-    <div class="d-flex align-items-center col-12 mt-1 px-3 mb-3 py-2">
-        <label class="fw-500 fs-14 col-custom" for="travel-disclosure-entity-name">Entity Name:</label>
-        <span class="fw-400 fs-13 col"
-            for="travel-disclosure-entity-name">{{travelDisclosureData?.travelEntityName}}</span>
+    <div class="col-12 mb-3 py-2 px-0">
+        <app-shared-sfi-card [reqObject] = "entityDetails" [referredFrom]="'TRAVEL_DISCLOSURE'"></app-shared-sfi-card>
     </div>
 
     <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
-        <label class="fw-500 fs-14 col-custom" for="travel-disclosure-title">Trip Title:</label>
-        <span class="fw-400 fs-13 col"
-            for="travel-disclosure-title">{{travelDisclosureData?.travelTitle}}</span>
-    </div>
+        <!-- <div class="d-flex align-items-center col-6">
+            <label class="fw-500 fs-14 col-custom me-3" for="travel-disclosure-entity-name">Entity Name</label>
+            <span class="fs-14 text-color col"
+                for="travel-disclosure-entity-name">{{travelDisclosureData?.travelEntityName}}</span>
+        </div> -->
 
-    <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
-        <span class="col-6 d-flex align-items-center">
-            <label class="fw-500 fs-14 col-custom" for="travel-disclosure-destination">Destination:</label>
-            <div class="ms-1 col" id="travel-disclosure-destination">
-                <label class="form-check-label fw-400 fs-13"
-                    *ngIf="!travelDisclosureData?.isInterNationalTravel">
-                    Domestic
-                </label>
-                <label class="form-check-label fw-400 fs-13"
-                    *ngIf="travelDisclosureData?.isInterNationalTravel">
-                    International
-                </label>
-            </div>
-        </span>
-
-        <span class="col-6 d-flex align-items-center">
-            <label class="fw-500 fs-14 col-custom-city" for="travel-disclosure-traveller">Traveller:</label>
-            <div class="d-flex align-items-center col">
-                <span *ngFor="let details of travellerTypeLookup; let index = index;" id="travel-disclosure-traveller"
-                    class="mt-2"><label class="form-check-label fw-400 fs-13 me-2" for="traveller-checkbox{{i}}"
-                        *ngIf="details.isChecked">
-                        {{details.description}}<ng-container
-                            *ngIf="index != travelDisclosureData?.travellerTypeCodeList.length-1">, </ng-container>
-                    </label>
-                </span>
-            </div>
+        <span class="col-4">
+            <label class="fw-500 fs-14 col-12 me-3" for="travel-disclosure-title">Trip Title</label>
+            <span class="fs-14 text-color col-12"
+                for="travel-disclosure-title">{{travelDisclosureData?.travelTitle}}</span>
         </span>
     </div>
 
     <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
-        <span class="col-6 d-flex align-items-center" *ngIf="!travelDisclosureData?.isInterNationalTravel">
-            <label class="fw-500 fs-14 col-custom" for="travel-disclosure-state">State:</label>
-            <span class="fw-400 fs-13 col"
-                for="travel-disclosure-state">{{travelDisclosureData?.travelState}}</span>
+        <span class="col-4">
+            <label class="fw-500 fs-14 col-12" for="travel-disclosure-destination">Destination</label>
+            <span class="col-12 fs-14 text-color">{{travelDisclosureData?.isInterNationalTravel?
+                'International' : 'Domestic'}}
+            </span>
         </span>
 
-        <span class="col-6 d-flex align-items-center" *ngIf="travelDisclosureData?.isInterNationalTravel">
-            <label class="fw-500 fs-14 col-custom" for="travel-disclosure-country">Country:</label>
-            <span class="fw-400 fs-13 col"
-                for="travel-disclosure-country">{{travelDisclosureData?.destinationCountry}}</span>
+        <span class="col-4" *ngIf="!travelDisclosureData?.isInterNationalTravel">
+            <label class="fw-500 fs-14 col-12" for="travel-disclosure-state">State</label>
+            <span class="fs-14 text-color col-12" for="travel-disclosure-state">{{travelDisclosureData?.travelState}}</span>
         </span>
 
-        <span class="col-6 d-flex align-items-center">
-            <label class="fw-500 fs-14 col-custom-city" for="travel-disclosure-city">City:</label>
-            <span class="fw-400 fs-13 col"
-                for="travel-disclosure-city">{{travelDisclosureData?.destinationCity}}</span>
+        <span class="col-4" *ngIf="travelDisclosureData?.isInterNationalTravel">
+            <label class="fw-500 fs-14 col-12" for="travel-disclosure-country">Country</label>
+            <span class="fs-14 text-color col-12" for="travel-disclosure-country">{{travelDisclosureData?.destinationCountry}}</span>
         </span>
+
+        <span class="col-4">
+            <label class="fw-500 fs-14 col-12" for="travel-disclosure-city">City</label>
+            <span class="fs-14 text-color col-12" for="travel-disclosure-city">{{travelDisclosureData?.destinationCity}}</span>
+        </span>   
     </div>
 
     <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
-        <span class="col-6 d-flex align-items-center">
-            <label class="fw-500 fs-14 col-custom" for="travel-disclosure-startDate">Start Date:</label>
+        <span class="col-4">
+            <label class="fw-500 fs-14 col-12" for="travel-disclosure-traveller">Traveller</label>
+            <span class="fs-14 text-color col-12">{{traveller}}</span>
+        </span>
+        
+        <span class="col-4">
+            <label class="fw-500 fs-14 col-12" for="travel-disclosure-startDate">Start Date</label>
             <app-no-data-label [valueToShow]="travelDisclosureData?.travelStartDate">
-                <span class="fw-400 fs-13 col"
+                <span class="fs-14 text-color col-12"
                     for="travel-disclosure-startDate">{{travelDisclosureData?.travelStartDate |
                     dateFormatter}}</span>
             </app-no-data-label>
         </span>
 
-        <span class="col-6 d-flex align-items-center">
-            <label class="fw-500 fs-14 col-custom-city" for="travel-disclosure-endDate">End Date:</label>
+        <span class="col-4">
+            <label class="fw-500 fs-14 col-12" for="travel-disclosure-endDate">End Date</label>
             <app-no-data-label [valueToShow]="travelDisclosureData?.travelEndDate">
-                <span class="fw-400 fs-13 col"
-                    for="travel-disclosure-endDate">{{travelDisclosureData?.travelEndDate |
+                <span class="fs-14 text-color col-12" for="travel-disclosure-endDate">{{travelDisclosureData?.travelEndDate
+                    |
                     dateFormatter}}</span>
             </app-no-data-label>
         </span>
     </div>
 
-    <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
-        <label class="fw-500 fs-14 col-6" for="travel-disclosure-amount">Actual U.S. dollar amount reimbursed
-            and/or paid on your behalf:</label>
-        <span class="fw-400 fs-13 col-custom-city"
+    <div class="px-3 mb-3 py-2">
+        <label class="fw-500 fs-14 col-12" for="travel-disclosure-purpose">Purpose of the Trip</label>
+        <span for="travel-disclosure-relationship" class="fs-14 text-color col-12">{{travelDisclosureData?.purposeOfTheTrip}}</span>
+    </div>
+
+    <div class="px-3 mb-3 py-2">
+        <label class="fw-500 fs-14 col-12" for="travel-disclosure-relationship">Relationship to Your
+            Research</label>
+        <span for="travel-disclosure-relationship" class="fs-14 text-color col-12">{{travelDisclosureData?.relationshipToYourResearch}}</span>
+    </div>
+
+    <div class="px-3 mb-3 py-2">
+        <label class="fw-500 fs-14 col-12" for="travel-disclosure-amount">Actual U.S. dollar amount reimbursed
+            and/or paid on your behalf</label>
+        <span class="fs-14 text-color col-custom me-3"
             for="travel-disclosure-amount">${{travelDisclosureData?.travelAmount}}</span>
-    </div>
-
-    <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
-        <label class="fw-500 fs-14 col-custom" for="travel-disclosure-relationship">Relationship to Your
-            Research:</label>
-        <span class="fw-400 fs-13 col"
-            for="travel-disclosure-relationship">{{travelDisclosureData?.relationshipToYourResearch}}</span>
-    </div>
-
-    <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
-        <label class="fw-500 fs-14 col-custom" for="travel-disclosure-purpose">Purpose of the Trip:</label>
-        <span class="fw-400 fs-13 col"
-            for="travel-disclosure-purpose">{{travelDisclosureData?.purposeOfTheTrip}}</span>
     </div>
 
 </div>

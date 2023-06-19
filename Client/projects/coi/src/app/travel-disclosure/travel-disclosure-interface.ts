@@ -79,7 +79,7 @@ export class TravelDisclosureResponseObject {
     travellerTypeCodeList: string[];
     personId: string;
     personFullName: string;
-  }
+}
 
 export interface EndpointOptions {
     contextField: string;
@@ -87,4 +87,15 @@ export interface EndpointOptions {
     path: string;
     defaultValue: string;
     params: string;
+}
+
+export class EntityDetails {
+    isActive: boolean;
+    entityNumber = '';
+    entityType = '';
+    involvementStartDate: string | number;
+    involvementEndDate: string | number;
+    countryName = '';
+    entityId: string | number;
+    entityName = '';
 }

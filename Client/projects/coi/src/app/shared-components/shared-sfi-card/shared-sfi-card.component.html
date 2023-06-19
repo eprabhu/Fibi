@@ -1,7 +1,7 @@
 <div class="border bg-white rounded-3 p-2 mt-2 hovering-card">
   <div class="m-0 mb-2 row">
     <span class="align-items-center d-flex">
-      <span class="shadow-sm align-items-center d-flex ps-2"
+      <span class="shadow-sm align-items-center d-flex ps-3"
         [ngClass]="SFIObject.isActive ? 'active-ribbon' : 'inactive-ribbon'">{{SFIObject?.isActive ?
         'Active' : 'Inactive'}}</span>
       <p class="entity-title mt-3">
@@ -30,9 +30,11 @@
         </span>
       </app-no-data-label>
     </div>
-    <div class="col-4 text-secondary fs-14">
-      <span class="fw-bold me-2">Entity Type
-        :</span>{{SFIObject?.entityType}}
+    <div class="col-4 text-secondary">
+      <span class="fw-bold me-2 fs-14">Entity Type :</span>
+      <app-no-data-label [valueToShow]="SFIObject?.entityType">
+        <span> {{SFIObject?.entityType}}</span>
+      </app-no-data-label>
     </div>
   </div>
   <div class="fs-14 mx-0 row" [class.pb-2]="referredFrom === 'SFI_SUMMARY'"

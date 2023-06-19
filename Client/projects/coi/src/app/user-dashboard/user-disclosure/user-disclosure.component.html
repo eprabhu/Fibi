@@ -242,7 +242,7 @@
                     </span>
                 </app-no-data-label>
                 <app-no-data-label [valueToShow]="disclosure?.travelDisclosureStatusDescription" *ngIf="disclosure?.travelDisclosureId">
-                    <span class="ms-3 {{commonService.getDispositionStatusBadge(disclosure?.travelDisclosureStatusCode)}}"
+                    <span class="ms-3 {{commonService.getDisclosureConflictBadge(disclosure?.travelDisclosureStatusCode)}}"
                         id="status">{{disclosure?.travelDisclosureStatusDescription}}
                     </span>
                 </app-no-data-label>
@@ -322,12 +322,13 @@
             </ng-container>
             <ng-container *ngIf="disclosure?.travelDisclosureId">
                 <div class="row mb-3 px-3 mt-2">
-                    <div class="col-4">
-                        <label for="department-id" class="label-text">Department :</label>
-                        <app-no-data-label id="department-id" [valueToShow]="disclosure?.travelEntityName">
-                            <span class="grey-text">#{{disclosure?.unitDetails?.unitDetail.length>45 ? (disclosure?.unitDetails?.unitDetail |
-                                slice: 0: 45)+'...' : disclosure?.unitDetails?.unitDetail}}</span>
-                        </app-no-data-label>
+                    <div class="col-4 d-flex">
+                        <label for="department-id" class="label-text col-custom-travel">Department :</label>
+                        <span class="col">
+                            <app-no-data-label id="department-id" class="" [valueToShow]="disclosure?.travelEntityName">
+                                <span class="grey-text text-slice">#{{disclosure?.unitDetails?.unitDetail}}</span>
+                            </app-no-data-label>
+                        </span>
                     </div>
                     <div class="col">
                         <label for="destination" class="label-text">Destination :</label>
@@ -455,13 +456,13 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="disclosure?.travelDisclosureId">
-                <div class="col-4">
-                    <label for="purpose" class="label-text">Purpose :</label>
-                    <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
-                        <span class="grey-text" [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose.length>45 ?
-                            (disclosure?.travelPurpose | slice:0: 45)+'...' :
-                            disclosure?.travelPurpose}}</span>
-                    </app-no-data-label>
+                <div class="col-4 d-flex">
+                    <label for="purpose" class="label-text col-custom-travel">Purpose :</label>
+                    <span class="col">
+                        <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
+                            <span class="grey-text text-slice" [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose}}</span>
+                        </app-no-data-label>
+                    </span>
                 </div>
                 <div class="col">
                     <label for="start-date" class="label-text">Start Date :</label>

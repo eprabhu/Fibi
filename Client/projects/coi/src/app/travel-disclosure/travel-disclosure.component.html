@@ -66,13 +66,13 @@
                                     Administrator :
                                 </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]=null>
+                                    <app-no-data-label [valueToShow]="responseObject?.adminPersonName">
                                         <div
-                                            title="{{responseObject?.adminPersonId}} - {{responseObject?.adminPersonName}}">
-                                            {{responseObject?.adminPersonId}}
-                                            <span
-                                                *ngIf="responseObject?.adminPersonId && responseObject?.adminPersonName">-</span>
+                                            title="{{responseObject?.adminPersonName}}">
                                             {{responseObject?.adminPersonName}}
+                                            <!-- <span
+                                                *ngIf="responseObject?.adminPersonId && responseObject?.adminPersonName">-</span>
+                                            {{responseObject?.adminPersonName}} -->
                                         </div>
                                     </app-no-data-label>
                                 </span>
@@ -158,6 +158,17 @@
                                 <span class="grey-text fs-14 ms-3 col">
                                     <app-no-data-label [valueToShow]="responseObject?.travelDisclosureStatus">
                                         <span
+                                            class="fs-14 {{commonService.getDisclosureConflictBadge(responseObject?.travelDisclosureStatusCode)}}">{{responseObject?.travelDisclosureStatus}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14 col-4">Document : </label>
+                                <span class="grey-text fs-14 ms-3 col">
+                                    <app-no-data-label [valueToShow]="null">
+                                        <span
                                             class="fs-14 {{commonService.getDispositionStatusBadge(responseObject?.travelDisclosureStatusCode)}}">{{responseObject?.travelDisclosureStatus}}</span>
                                     </app-no-data-label>
                                 </span>
@@ -204,10 +215,14 @@
             </ng-container>
             <ng-container *ngIf="!isCreateMode">
                 <div class="navigation-tabs d-flex align-items-center">
-                    <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge'
-                        role="button">
+                    <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active" title="" area-describedby="">
                             Disclosure
+                        </div>
+                    </div>
+                    <div [routerLink]="['history']" class="navigation-box border-end" queryParamsHandling='merge' role="button">
+                        <div class="navigation-box-content" routerLinkActive="active" title="" area-describedby="">
+                            Travel History
                         </div>
                     </div>
                 </div>
@@ -287,7 +302,7 @@
                     *ngIf="isRouteComplete(['certification']) && isSaved">
                     <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">done</mat-icon>
-                        Acknowledge
+                        Approve
                     </span>
                 </div>
             </div>
