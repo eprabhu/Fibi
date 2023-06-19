@@ -7,7 +7,6 @@ import { ElasticConfigService } from '../../../../fibi/src/app/common/services/e
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
     deepCloneObject,
-    hideModal,
     isEmptyObject,
     setFocusToElement
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
@@ -15,7 +14,6 @@ import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
 import { AdminDashboardService, CoiDashboardRequest, NameObject, SortCountObj } from './admin-dashboard.service';
-import { CompleterOptions } from '../../../../fibi/src/app/service-request/service-request.interface';
 import { ADMIN_DASHBOARD_RIGHTS,
         HTTP_ERROR_STATUS,
         HTTP_SUCCESS_STATUS,
@@ -81,20 +79,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     clearField: String;
     isHover: [] = [];
     isViewAdvanceSearch = true;
-    adminGroupSearchOptions: any = {};
-    clearAdminGroupField: any;
-    isShowWarningMessage = false;
-    warningMessage: any;
-    adminSearchOptions: any = {};
-    isAssignToMe = false;
-    assignAdminMap = new Map();
-    addAdmin: any = {};
     adminData: any;
-    fcoiTypeCode: any
-    adminGroupsCompleterOptions: CompleterOptions = new CompleterOptions();
+    fcoiTypeCode: any;
     isShowAdminDashboard = false;
     hasTravelDisclosureRights = false;
     disclosureTypes: any;
+    addAdmin: any = {};
     localCOIRequestObject: CoiDashboardRequest = new CoiDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
 
@@ -111,7 +101,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.setSearchOptions();
         this.setAdvanceSearch();
         this.getDashboardCounts();
-        this.getAdminDetails();
         this.getPermissions();
         this.checkForSort();
         this.checkForAdvanceSearch();
@@ -575,126 +564,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    assignAdministrator() {
-        if (this.validateAdmin()) {
-            this.$subscriptions.push(this._coiAdminDashboardService.assignAdmin(this.addAdmin).subscribe(
-                (data: any) => {
-                    this.isAssignToMe = false;
-                    this.isShowWarningMessage = false;
-                    this.addAdmin = {};
-                    hideModal('assign-to-admin-modal');
-                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Administrator assigned successfully.');
-                    this.$coiList.next();
-                }, err => {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in assigning Administrator.');
-                }));
-        }
-    }
-
-    adminSelectFunction(event: any) {
-        if (event) {
-            this.getAdminGroupDetails(event.personId);
-            this.addAdmin.adminPersonId = event.personId;
-            this.isAssignToMe = this.setAssignToMeCheckBox();
-            this.assignAdminMap.clear();
-        } else {
-            this.addAdmin.adminGroupId = null;
-            this.addAdmin.adminPersonId = null;
-            this.clearAdminGroupField = new String('true');
-            this.isAssignToMe = false;
-            this.isShowWarningMessage = false;
-        }
-    }
-
-    getAdminDetails() {
-        this.$subscriptions.push(this._coiAdminDashboardService.getAdminDetails().subscribe((data: any) => {
-            this.setAdminGroupOptions(data);
-            this.setCompleterOptions(this.adminSearchOptions, data.persons, 'fullName');
-        }));
-    }
-
-    getAdminGroupDetails(personId) {
-        this.$subscriptions.push(this._coiAdminDashboardService.getPersonGroup(personId).subscribe((data: any) => {
-            if (data.adminGroupId) {
-                this.clearAdminGroupField = new String('false');
-                this.addAdmin.adminGroupId = data.adminGroupId;
-                this.isShowWarningMessage = false;
-            } else {
-                this.isShowWarningMessage = true;
-                this.warningMessage = data;
-            }
-        }));
-    }
-
-    setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: string) {
-        searchOption.defaultValue = '';
-        searchOption.arrayList = arrayList || [];
-        searchOption.contextField = searchShowField;
-        searchOption.filterFields = searchShowField;
-        searchOption.formatString = searchShowField;
-    }
-
-    setAssignToMeCheckBox() {
-        return this.addAdmin.adminPersonId === this.commonService.getCurrentUserDetail('personID') ? true : false;
-    }
-
-    assignToMeEvent(checkBoxEvent: any) {
-        if (checkBoxEvent.target.checked) {
-            this.adminSearchOptions.defaultValue = this.commonService.getCurrentUserDetail('fullName');
-            this.clearField = new String('false');
-            this.addAdmin.adminPersonId = this.commonService.getCurrentUserDetail('personID');
-            this.getAdminGroupDetails(this.commonService.getCurrentUserDetail('personID'));
-            this.isAssignToMe = true;
-            this.assignAdminMap.clear();
-        } else {
-            this.clearField = new String('true');
-            this.clearAdminGroupField = new String('true');
-            this.addAdmin.adminPersonId = null;
-            this.isAssignToMe = false;
-        }
-    }
-
-    adminGroupSelectFunction(event) {
-        if (event) {
-            this.isShowWarningMessage = false;
-            this.addAdmin.adminGroupId = event.adminGroupId;
-        } else {
-            this.addAdmin.adminGroupId = null;
-        }
-    }
-
-    validateAdmin() {
-        this.assignAdminMap.clear();
-        if (!this.addAdmin.adminPersonId) {
-            this.assignAdminMap.set('adminName', 'adminName');
-        }
-        return this.assignAdminMap.size > 0 ? false : true;
-    }
-
-    private setAdminGroupOptions(data): void {
-        this.adminGroupsCompleterOptions = {
-            arrayList: this.getActiveAdminGroups(data),
-            contextField: 'adminGroupName',
-            filterFields: 'adminGroupName',
-            formatString: 'adminGroupName',
-            defaultValue: ''
-        };
-    }
-
-    private getActiveAdminGroups(data) {
-        return data.adminGroups.filter(element => element.isActive === 'Y');
-    }
-
-    clearAssignFields(id) {
-        this.clearField = new String('true');
-        this.addAdmin.disclosureId = id;
-        this.clearAdminGroupField = new String('true');
-        this.addAdmin.adminPersonId = null;
-        this.addAdmin.adminGroupId = null;
-        this.assignAdminMap.clear();
-        this.isShowWarningMessage = false;
-    }
-
     async getPermissions() {
         const rightsArray = await this.commonService.fetchPermissions();
         this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
@@ -809,5 +678,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this._coiAdminDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;
 	}
 
+    closeAssignAdminModal(event) {
+        if (event) {
+            this.addAdmin.disclosureId = null;
+            this.$coiList.next();
+        } 
+    }
 }
 

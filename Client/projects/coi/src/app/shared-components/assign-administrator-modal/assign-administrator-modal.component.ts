@@ -2,14 +2,14 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { CompleterOptions } from '../../../../../fibi/src/app/service-request/service-request.interface';
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
-import { CoiService } from '../../disclosure/services/coi.service';
-import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { AssignAdministratorModalService } from './assign-administrator-modal.service';
 
 declare var $: any;
 @Component({
   selector: 'app-assign-administrator-modal',
   templateUrl: './assign-administrator-modal.component.html',
-  styleUrls: ['./assign-administrator-modal.component.scss']
+  styleUrls: ['./assign-administrator-modal.component.scss'],
+  providers: [AssignAdministratorModalService]
 })
 export class AssignAdministratorModalComponent implements OnChanges {
 
@@ -28,7 +28,8 @@ export class AssignAdministratorModalComponent implements OnChanges {
   @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
 
 
-  constructor(private _commonService: CommonService, private  _coiService: CoiService) { }
+  constructor( private _commonService: CommonService, 
+               private _assignAdminService: AssignAdministratorModalService ) { }
 
   ngOnChanges() {
     this.getAdminDetails();
@@ -36,7 +37,7 @@ export class AssignAdministratorModalComponent implements OnChanges {
   }
 
   getAdminDetails() {
-    this.$subscriptions.push(this._coiService.getAdminDetails().subscribe((data: any) => {
+    this.$subscriptions.push(this._assignAdminService.getAdminDetails().subscribe((data: any) => {
         this.setAdminGroupOptions(data);
         this.setCompleterOptions(this.adminSearchOptions, data.persons, 'fullName');
     }));
@@ -107,13 +108,14 @@ setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: s
     if (!this.isSaving && this.validateAdmin()) {
       this.isSaving = true;
       this.addAdmin.disclosureId = this.disclosureId;
-      this.$subscriptions.push(this._coiService.assignAdmin(
+      this.$subscriptions.push(this._assignAdminService.assignAdmin(
         this.addAdmin
       ).subscribe((data: any) => {
         this.isAssignToMe = false;
         this.isShowWarningMessage = false;
         this.addAdmin = {};
         this.isSaving = false;
+        this.clearAdministratorField = new String('true');
         this.closeModal.emit(data);
         document.getElementById('hide-assign-admin').click();
       }, err => {
@@ -131,7 +133,7 @@ setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: s
   }
 
   private getAdminGroupDetails(personId) {
-    this.$subscriptions.push(this._coiService.getPersonGroup(personId).subscribe((data: any) => {
+    this.$subscriptions.push(this._assignAdminService.getPersonGroup(personId).subscribe((data: any) => {
       if (data.adminGroupId) {
         this.clearAdminGroupField = new String('false');
         this.addAdmin.adminGroupId = data.adminGroupId;
