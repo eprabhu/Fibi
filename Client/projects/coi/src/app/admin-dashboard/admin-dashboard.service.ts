@@ -47,20 +47,6 @@ export class AdminDashboardService {
       return this._http.post(this._commonService.baseUrl + '/addCOIReviewComment', formData);
   }
 
-  assignAdmin(params) {
-    return this._http.patch(this._commonService.baseUrl + '/disclosure/assignAdmin', params);
-}
-
-getPersonGroup (personId) {
-  return this._http.get(this._commonService.fibiUrl + '/getPersonGroup', {
-    headers: new HttpHeaders().set('personId', personId.toString())
-  });
-}
-
-getAdminDetails() {
-  return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons');
-}
-
 }
 
 export class CoiDashboardRequest {

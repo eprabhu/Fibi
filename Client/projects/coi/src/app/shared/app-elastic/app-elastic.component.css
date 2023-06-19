@@ -60,3 +60,8 @@ ul.sb-results-dropdown-menu > li:last-child {
   }
   .elastic-outer{ position: relative;}
   /* .sb-seachresults{z-index: 999;} */
+
+  .search-icon-invalid {
+      right: 28px;
+  }
+  
