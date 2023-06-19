@@ -1165,7 +1165,15 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				} else if (mapElement.getKey().equals("riskLevel")) {
 					sortOrder = (sortOrder == null ? "T.RISK_LEVEL " + mapElement.getValue() : sortOrder + ", T.RISK_LEVEL " + mapElement.getValue());
 				} else if (mapElement.getKey().equals("certificationDate")) {
-				sortOrder = (sortOrder == null ? "T.CERTIFIED_AT " + mapElement.getValue() : sortOrder + ", T.CERTIFIED_AT " + mapElement.getValue());
+					sortOrder = (sortOrder == null ? "T.CERTIFIED_AT " + mapElement.getValue() : sortOrder + ", T.CERTIFIED_AT " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("reviewStatusCode")) {
+					sortOrder = (sortOrder == null ? "T.REVIEW_STATUS_CODE " + mapElement.getValue() : sortOrder + ", T.REVIEW_STATUS_CODE " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("dispositionStatusCode")) {
+					sortOrder = (sortOrder == null ? "T.DISPOSITION_STATUS_CODE " + mapElement.getValue() : sortOrder + ", T.DISPOSITION_STATUS_CODE " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("reviewStatus")) {
+					sortOrder = (sortOrder == null ? "T.REVIEW_STATUS " + mapElement.getValue() : sortOrder + ", T.REVIEW_STATUS " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("dispositionStatus")) {
+					sortOrder = (sortOrder == null ? "T.DISPOSITION_STATUS " + mapElement.getValue() : sortOrder + ", T.DISPOSITION_STATUS " + mapElement.getValue());
 				}
 			}
 		}
