@@ -8,6 +8,10 @@ import { CommonService } from '../common/services/common.service';
 export class AdminDashboardService {
 
   coiRequestObject = new CoiDashboardRequest();
+  isAdvanceSearch: any;
+  searchDefaultValues: NameObject = new NameObject();
+  sortCountObject: SortCountObj = new SortCountObj();
+  sort: any;
   
   constructor(private _http: HttpClient,
               private _commonService: CommonService) {
@@ -64,8 +68,8 @@ export class CoiDashboardRequest {
   property1 = null;
   property2 = null;
   property3 = null;
-  property4 = null;
-  property5 = null;
+  property4 = [];
+  property5 = [];
   property6 = null;
   property7 = null;
   property8 = null;
@@ -75,13 +79,13 @@ export class CoiDashboardRequest {
   property12 = null;
   property13 = null;
   property14 = null;
-  property15 = false;
-  property20 = null;
-  property21 = null;
+  property15 = null;
+  property20 = [];
+  property21 = [];
   property22 = null;
   property23 = null;
   pageNumber = 20;
-  sort: any = {};
+  sort: any = {'updateTimeStamp': 'desc'};
   tabName = '';
   advancedSearch = 'L';
   currentPage = 1;
@@ -95,7 +99,15 @@ export class SortCountObj {
   disclosurePersonFullName = 0;
   disclosureCategoryType = 0;
   disclosureStatus = 0;
+  dispositionStatus = 0;
+  reviewStatus = 0;
   expirationDate = 0;
   certificationDate = 0;
-  updateTimeStamp = 0;
+  updateTimeStamp = 2;
 };
+
+export class NameObject {
+  entityName = '';
+  personName = '';
+  departmentName = '';
+}
