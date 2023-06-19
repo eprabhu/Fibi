@@ -356,3 +356,12 @@ nav ul li.active {
   background: #bf975a !important;
 }
 
+// for slicing text in single line
+.text-slice {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}

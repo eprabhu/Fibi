@@ -59,6 +59,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     private getDataFromStore(): void {
         if (this._dataStore.getData().travelDisclosureId) {
             this.setDisclosureDetails(this._dataStore.getData());
+        } else {
+            this.getTravelCreateModalDetails();
         }
     }
 
@@ -143,16 +145,14 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     private getTravelCreateModalDetails(): void {
-        if (!this._dataStore.getData().travelDisclosureId) {
-            const travelCreateModalDetails: TravelCreateModalDetails = this._dataStore.getCreateModalDetails();
-            this.travelDisclosureRO.homeUnit = travelCreateModalDetails.homeUnit;
-            this.travelDisclosureRO.description = travelCreateModalDetails.description;
-            this.travelDisclosureRO.personId = travelCreateModalDetails.personId;
-        }
+        const travelCreateModalDetails: TravelCreateModalDetails = this._dataStore.getCreateModalDetails();
+        this.travelDisclosureRO.homeUnit = travelCreateModalDetails.homeUnit;
+        this.travelDisclosureRO.description = travelCreateModalDetails.description;
+        this.travelDisclosureRO.purposeOfTheTrip = travelCreateModalDetails.description;
+        this.travelDisclosureRO.personId = travelCreateModalDetails.personId;
     }
 
     private getAllTravelDisclosureValues(requestObject: CoiTravelDisclosure): CoiTravelDisclosure {
-        this.getTravelCreateModalDetails();
         this.getTravellerTypeCode();
         this.setValuesForDestinationType();
         requestObject.isSponsoredTravel = true;
@@ -269,18 +269,18 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     private loadTravelDisclosure(travelDisclosureId: string): void {
         this._service.loadTravelDisclosure(travelDisclosureId)
-        .subscribe((responseObject: TravelDisclosureResponseObject) => {
-            if (responseObject) {
-                this._dataStore.removeCreateModalDetails();
-                this._dataStore.manualDataUpdate(responseObject);
-                this._router.navigate([], {
-                    queryParams: {
-                        disclosureId: responseObject.travelDisclosureId
-                    },
-                    queryParamsHandling: 'merge',
-                });
-            }
-        });
+            .subscribe((responseObject: TravelDisclosureResponseObject) => {
+                if (responseObject) {
+                    this._dataStore.removeCreateModalDetails();
+                    this._dataStore.manualDataUpdate(responseObject);
+                    this._router.navigate([], {
+                        queryParams: {
+                            disclosureId: responseObject.travelDisclosureId
+                        },
+                        queryParamsHandling: 'merge',
+                    });
+                }
+            });
     }
 }
 

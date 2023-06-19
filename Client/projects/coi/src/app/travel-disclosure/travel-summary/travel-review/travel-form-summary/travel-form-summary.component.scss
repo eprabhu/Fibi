@@ -1,23 +1,22 @@
 .col-custom {
-    width: 150px !important;
-  }
-  
-  .col-custom-city {
-    width: 100px !important;
-    margin-left: 10px !important;
-  }
-  
-  .info-icon {
-    margin-top : -7px;
-    height     : 22px;
-    width      : 22px;
-    font-size  : 16px;
-    position   : absolute;
-    margin-left: 2px;
-    color      : #6f7395;
-    cursor     : pointer;
-  }
-  
-  .main-title {
-    border-bottom: 1px solid #dbdbdb;
-  }
+  width: max-content;
+}
+
+
+.info-icon {
+  margin-top: -7px;
+  height: 22px;
+  width: 22px;
+  position: absolute;
+  margin-left: 2px;
+  color: #6f7395;
+  cursor: pointer;
+}
+
+.main-title {
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.text-color {
+  color: #6A7980;
+}
