@@ -5,7 +5,7 @@
     <nav
       class="align-items-center bg-white border d-flex fs-14 fw-medium mt-1 py-1 user-dashboard-nav bg-body-emphasis">
       <div (click)="currentTab('PERSON')" class="border-end navigation-icons text-secondary py-1" role="button"
-        id="btn-person" title="Person" (keyup.enter)="currentTab('PERSON')" (keyup.space)="currentTab('PERSON')">
+        id="btn-person" title="Click to view Person details" (keyup.enter)="currentTab('PERSON')" (keyup.space)="currentTab('PERSON')">
         <span tabindex="0" [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'PERSON'"
           class="px-5 ">Person</span>
       </div>
@@ -24,14 +24,14 @@
           class="px-5">Other Entities</span>
       </div>-->
       <div (click)="currentTab('FINANCIAL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1"
-        role="button" id="btn-disclosure" title="Financial Disclosures"
+        role="button" id="btn-disclosure" title="Click to view Financial relations"
         (keyup.enter)="currentTab('FINANCIAL_DISCLOSURES')" (keyup.space)="currentTab('FINANCIAL_DISCLOSURES')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'FINANCIAL_DISCLOSURES'"
           class="px-5">Financial Disclosures</span>
       </div>
       <div (click)="currentTab('TRAVEL_DISCLOSURES')" class="navigation-icons text-secondary py-1" role="button"
-        id="btn-travel-disclosure" title="Travel Disclosures" (keyup.enter)="currentTab('TRAVEL_DISCLOSURES')"
+        id="btn-travel-disclosure" title="Click to view Travel relations" (keyup.enter)="currentTab('TRAVEL_DISCLOSURES')"
         (keyup.space)="currentTab('TRAVEL_DISCLOSURES')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'TRAVEL_DISCLOSURES'"

@@ -237,7 +237,7 @@
                         <div *ngIf="isExpandedAdditionalDetails" class="card-body mr-1rem pt-0">
                             <div class="row px-4 py-3">
                                 <div class="col-additional-details d-flex">
-                                    <label class="d-block fw-500 fs-14 px-1 pt-2 row mt-2"
+                                    <label class="d-block fw-500 fs-14 px-1 pt-2 row mt-2" title="Click to select date"
                                         for="Start date of involvement">Start Date of Involvement :<span
                                             class="mandatory px-2">*</span>
                                     </label>
@@ -253,7 +253,7 @@
                                             [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''" />
                                         <i (click)="startDate.open()"
                                             [class.date-field-error]="mandatoryList?.has('date')"
-                                            class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                                            class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click to select date"></i>
                                         <mat-datepicker #startDate [pickerType]="'calendar'">
                                         </mat-datepicker>
                                     </span>
@@ -262,7 +262,7 @@
                                     </div>
                                 </div>
                                 <div class="col-additional-details pl-5 d-flex">
-                                    <label class="d-block fw-500 fs-14 px-1 pt-2 row mt-2"
+                                    <label class="d-block fw-500 fs-14 px-1 pt-2 row mt-2" title="Clcik to select date"
                                         for="End date of involvement">End Date of Involvement :
                                     </label>
                                 </div>
@@ -276,7 +276,7 @@
                                             (ngModelChange)="endDateValidation()"
                                             (keypress)="_commonService._keyPress($event, 'date')" />
                                         <i (click)="endDate.open()"
-                                            class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                                            class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click to select end date"></i>
                                         <mat-datepicker #endDate [pickerType]="'calendar'">
                                         </mat-datepicker>
                                     </span>
@@ -288,7 +288,7 @@
                                 <div class="col-additional-details d-flex pl-5">
                                     <label class="d-block fw-500 fs-14 px-1 pt-2 row">Sponsors Research :</label>
                                 </div>
-                                <div class="col d-flex mt-3">
+                                <div class="col d-flex mt-3" title="Click to toggle Yes/No">
                                     <span class="mt-2" aria-label="Disclosures_has_sfi" role="switch">
                                         <a *ngIf="additionalDetails.sponsorsResearch" class="pl-2">
                                             <label class="switch" (click)="additionalDetails.sponsorsResearch = false">

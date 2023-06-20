@@ -318,17 +318,17 @@ export class AddSfiComponent implements OnInit {
 		if (this.isEntityManagement) {
 			if (this.isEditEntity) {
 				this.buttonName = 'Update Entity';
-				this.btnTitle = 'Click here to update an entity';
+				this.btnTitle = 'Click to update entity';
 				this.heading = `Entity ${this.entityDetails.coiEntity.entityName}`;
 			} else {
 				this.heading = 'Add New Entity';
 				this.buttonName = 'Create Entity';
-				this.btnTitle = 'Click here to create an entity';
+				this.btnTitle = 'Click to create entity';
 			}
 		} else {
 			this.heading = 'Significant Financial Interest';
 			this.buttonName = 'Create SFI';
-			this.btnTitle = 'Click here to create a sfi';
+			this.btnTitle = 'Click to Create SFI';
 		}
 	}
 

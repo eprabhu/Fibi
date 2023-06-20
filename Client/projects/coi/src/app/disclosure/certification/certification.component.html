@@ -2,11 +2,11 @@
     <p class="fs-14 m-0">
             <span *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
                 {{headerInfoText | slice:0:650}}...
-                <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read More</u></span>
+                <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u title="Expand COI policy text">Read More</u></span>
             </span>
         <ng-template #showFullInfo>
             {{headerInfoText}}
-            <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Show Less</u></span>
+            <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u title="Collapse COI policy text">Show Less</u></span>
         </ng-template>
     </p>
 </div>

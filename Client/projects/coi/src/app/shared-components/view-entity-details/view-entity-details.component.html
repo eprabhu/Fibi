@@ -30,7 +30,7 @@
             Relationship Status:Draft
           </div>
         </div>
-        <div *ngIf="!isEntityManagement && isModifyEntity" class="ml-15 align-items-center d-flex">
+        <div *ngIf="!isEntityManagement && isModifyEntity" class="ml-15 align-items-center d-flex" title="Click to Modify entity">
           <button tabindex="0" class="btn btn-outline-grey fs-14 justify-content-center d-flex">
             <mat-icon class="justify-content-center align-items-center align-items-center d-flex fs-18">
               mode
@@ -165,24 +165,24 @@
       <div class="flex-fill side-height border-end bg-color shadow-sm">
         <div class="mt-3 mx-3 {{setDesignDiv()}}">
           <button *ngIf="(isEntityManagement && isModifyEntity) || !isEntityManagement;else noRightDesign2"
-            class="btn btn-outline-grey pb-0 col-2" title="Go to home page" (click)="goToHome()">
+            class="btn btn-outline-grey pb-0 col-2" title="Go to COI home page" (click)="goToHome()">
             <mat-icon class="mb-2">home</mat-icon>
           </button>
           <ng-template #noRightDesign2>
-            <button class="btn btn-outline-grey pb-0 col-12" title="Go to home page" (click)="goToHome()">
+            <button class="btn btn-outline-grey pb-0 col-12" title="Go to COI home page" (click)="goToHome()">
               <mat-icon class="mb-2">home</mat-icon>
               <span class="fs-14 mx-1 btn-content-home">Home</span>
             </button>
           </ng-template>
           <button *ngIf="isEntityManagement && isModifyEntity"  (click)="openConfirmationModal()"  id="btn-modify"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center mx-3"
-            title="Modify Entity">
+            title="Click to Modify Entity">
             <mat-icon class="mb-2 mx-1 pencil">mode</mat-icon>
             <span class="btn-entity-position">Modify Entity</span>
           </button>
           <button *ngIf="!isEntityManagement" id="btn-sfi-modify"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center mx-3"
-            title="Modify Sfi">
+            title="Click to Modify SFI">
             <mat-icon class="mb-2 pencil-sfi">mode</mat-icon>
             <span class="btn-sfi-position">Modify SFI</span>
           </button>
@@ -190,7 +190,7 @@
             <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
           </button>
           <ng-template #noRightDesign3>
-            <button class="btn btn-outline-grey fs-14 col-12 mt-2 py-2" (click)="navigateBack()" title="Back">
+            <button class="btn btn-outline-grey fs-14 col-12 mt-2 py-2" (click)="navigateBack()" title="Click to go back to Entity list">
               <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
               <span class="fs-14 mx-2 btn-content-back">Back</span>
             </button>
@@ -199,7 +199,7 @@
         <div *ngIf="isModifyEntity" class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-inactivate"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-            title="Entity Inactivate">
+            [attr.title]="isEntityManagement ? 'Click to Inactivate Entity' : 'Click to inactivate SFI'">
             <mat-icon class="mx-1 mb-2 icon-schedule-position">schedule</mat-icon>
             <span class="btn-inactivate-content">
               Inactivate
@@ -209,7 +209,7 @@
         <div *ngIf="isEntityManagement && isModifyEntity" class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-approve-entity"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-            title="Approve Entity">
+            title="Click to access entity verification">
             <mat-icon class="mx-1 mb-2 icon-approve-position">check_circle_outline</mat-icon>
             <span class="btn-approve-position">Approve Entity</span>
           </button>
@@ -225,7 +225,7 @@
         <div *ngIf="!isEntityManagement " class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-add-relationship" (click)="addNewRelationship()"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-            title="Add Relationship">
+            title="Click to add new relationship">
           <mat-icon class="me-2 mb-2 icon-add">add</mat-icon>
            <span class="btn-add-content">Add Relationship</span>
           </button>
@@ -233,7 +233,7 @@
         <div *ngIf="!isEntityManagement " class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-save-relationship" (click)="saveRelationship()"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-            title="Save Relationship">
+            title="Click to save relationship">
             <mat-icon class="me-2 mb-2 icon-save">save</mat-icon>
             <span class="btn-save-content">Save Relationship</span>
           </button>

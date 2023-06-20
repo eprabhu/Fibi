@@ -38,7 +38,7 @@
           <div class="col-1 d-flex justify-content-end">
             <div *ngIf="!entityDetailsServices.isExpanded"
               class=" toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm">
-              <mat-icon
+              <mat-icon title="Click to expand Relationships"
                 (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_more</mat-icon>
             </div>
           </div>
@@ -110,7 +110,7 @@
             <div class="col-1 d-flex align-items-end justify-content-end mt-3 px-3">
               <div *ngIf="entityDetailsServices.isExpanded"
                 class="toggle-header-btn mt-3  bg-white border btn  p-1 rounded-5 shadow-sm">
-                <mat-icon
+                <mat-icon title="Click to collapse Relationships"
                   (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_less</mat-icon>
               </div>
             </div>

@@ -470,14 +470,14 @@
 			<div class="mt-0 text-center pt-3">
 				<a *ngIf="uniqueIdFromUnAnsweredQuestions.length > 0" (click)="moveToNextUnansweredQuestion('LEFT')"
 					class="page-link btn btn-tertiary arrow-btn d-inline-block mr-2 hover-arrow-color"
-					aria-label="Previous" title="move to previous unanswered question">
+					aria-label="Previous" title="Go to Previous Unanswered question">
 					<span aria-hidden="true"><i class="fa fa-angle-double-left" aria-hidden="true"></i></span>
 					<span class="sr-only"></span>
 				</a>
 				<a *ngIf="uniqueIdFromUnAnsweredQuestions.length > 0"
 					class="page-link btn btn-tertiary arrow-btn d-inline-block mr-4 hover-arrow-color"
 					(click)="moveToNextUnansweredQuestion('RIGHT')" aria-label="Next"
-					title="move to next unanswered question">
+					title="Go to Next Unanswered question">
 					<span aria-hidden="true"><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
 					<span class="sr-only"></span>
 				</a>

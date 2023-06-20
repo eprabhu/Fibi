@@ -5,7 +5,7 @@
       <div class="modal-content">
           <div class="modal-header add-relationship">
               <h1 class="modal-title f-16" id="exampleModalLabel">Add Relationship</h1>
-              <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="closeRelationModal();"></button>
+              <button type="button" title="Click to close the relationship button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="closeRelationModal();"></button>
           </div>
         <div class="modal-body ">
             <!-- Paragraph -->
@@ -25,8 +25,8 @@
                             <input type="radio" name="relation" class="form-check-input text-secondary"
                                 [value]="relation?.relationshipTypeCode"
                                 [(ngModel)]="entityDetail.validPersonEntityRelTypes.relationshipTypeCode"
-                                (ngModelChange)="setRelationship()">
-                            <label class="text-secondary r-title fs-14">
+                                (ngModelChange)="setRelationship()" title = "Click to select {{relation?.description}} relation">
+                            <label  class="text-secondary r-title fs-14">
                                 {{relation?.description}}
                             </label>
                         </div>
@@ -49,11 +49,11 @@
             </ng-template>
         </div>
         <div class="modal-footer">
-            <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-14 py-2"
+            <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-14 py-2" title="Click to Add Relationship"
                 data-dismiss="modal" (click)="continueWithoutRelation()">Continue without Relationship
             </button>
             <button id="add-review-btn" type="button" class="btn btn-primary btn-sm fs-14" data-dismiss="modal"
-                (click)="addRelation()">Add Relationship
+                (click)="addRelation()" title="Click to Continue without Relationship">Add Relationship
             </button>
         </div>
       </div>
