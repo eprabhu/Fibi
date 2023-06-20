@@ -2,14 +2,8 @@
   display: flex;
   align-items: center;
   min-height: 45px;
-  &:hover {
-    background-color: white;
-  }
   input {
     background-color: #F5F5F5;
-    &:hover {
-      background-color: white;
-    }
   }
   label {
     position: absolute;

@@ -161,6 +161,7 @@
                                 [routerLink]="['/coi/disclosure/summary']"
                                 class="align-items-center btn btn-outline-secondary d-flex fs-14"
                                 title="Click to view FCOI Disclosure details"
+                                [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                 area-describedby="Click to view FCOI Disclosure details">
                                 <mat-icon class="me-1">visibility</mat-icon>
                                 View
@@ -175,23 +176,23 @@
 
 <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
     <div (click)="setTab('IN_PROGRESS_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
-        title="Click to view your In Progress Disclosures"
-        aria-describedby="Click to view your In Progress Disclosures">
+        title="Click to view In Progress Disclosures"
+        aria-describedby="Click to view In Progress Disclosures">
         <span [class.active]="currentSelected.tab=='IN_PROGRESS_DISCLOSURES'" class="pb-3 active">
             In Progress Disclosures ({{dashboardCount?.inProgressDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('APPROVED_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
-        title="Click to view your Approved Disclosures" aria-describedby="Click to view your Approved Disclosures">
+        title="Click to view Approved Disclosures" aria-describedby="Click to view Approved Disclosures">
         <span [class.active]="currentSelected.tab=='APPROVED_DISCLOSURES'" class="pb-3">Approved
             Disclosures ({{dashboardCount?.approvedDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons px-3 py-1" role="button"
-        title="Click to view your Travel Disclosures" aria-describedby="Click to view your Travel Disclosures">
+        title="Click to view Travel Disclosures" aria-describedby="Click to view Travel Disclosures">
         <span [class.active]="currentSelected.tab=='TRAVEL_DISCLOSURES'" class="pb-3">Travel
             Disclosures ({{dashboardCount?.travelDisclosureCount || 0}})</span>
     </div>
     <div (click)="setTab('DISCLOSURE_HISTORY')" class="navigation-icons px-3 py-1" role="button"
-        title="Click to view your Disclosure History" aria-describedby="Click to view your Disclosure History">
+        title="Click to view Disclosure History" aria-describedby="Click to view Disclosure History">
         <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3">Disclosure History
             ({{dashboardCount?.disclosureHistoryCount || 0}})</span>
     </div>
@@ -486,7 +487,7 @@
                 </button> -->
                 <button (click)="redirectToDisclosure(disclosure)" aria-describedby="Click to view Disclosure details"
                     class="d-flex align-items-center btn btn-outline-primary  fs-14"
-                    title="Click to view Disclosure details">
+                    [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : 'Click to view Project Disclosure details'">
                     <mat-icon class="me-1">visibility</mat-icon>
                     View
                 </button>

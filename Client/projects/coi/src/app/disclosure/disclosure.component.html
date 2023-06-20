@@ -19,7 +19,7 @@
                                 (coiData?.projectDetail?.title | slice:0: 40)+'...' :
                                 coiData?.projectDetail?.title}} ] By
                                 <span class="text-primary ">
-                                    <u class="cursor-pointer" (click)="openDetailModal(coiData)" title="click to view person details">{{coiData?.coiDisclosure?.person?.fullName}}</u>
+                                    <u class="cursor-pointer" (click)="openDetailModal(coiData)" title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u>
                                 </span>
                             </strong>
                         </ng-container>
@@ -262,9 +262,9 @@
                     <span title="Go to COI home page" [routerLink]="['/coi/user-dashboard']" class="btn btn-outline-grey pb-0 fs-14 col-2">
                         <mat-icon>home</mat-icon>
                     </span>
-                    <button (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1" 
-                        class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
-                        <mat-icon class="me-2">undo</mat-icon>
+                    <button (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1"  
+                    class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
+                    <mat-icon class="me-2">undo</mat-icon>
                         Previous
                     </button>
                     <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4" 
@@ -291,7 +291,7 @@
                 <div *ngIf="router.url.includes('create-disclosure/certification')"
                     class="d-flex justify-content-around px-3">
                     <button (click)="checkQuestionnaireCompletedBeforeCertify()" [disabled]="!coiService.isCertified"
-                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center" title="Click to submit your disclosure">
                         <mat-icon class="me-2">done</mat-icon>
                         Submit
                     </button>
