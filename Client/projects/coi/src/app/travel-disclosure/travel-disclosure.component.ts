@@ -129,14 +129,14 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
 
     closeAssignAdministratorModal(event) {
         if (event.adminPersonId || event.adminGroupId) {
-          this.responseObject.adminPersonId = event.adminPersonId;
-          this.responseObject.adminPersonName = event.adminPersonName;
-          this.responseObject.adminGroupId = event.adminGroupId;
-          this.responseObject.adminGroupName = event.adminGroupName;
-          this.responseObject.reviewStatusCode = event.reviewStatusCode;
-          this.responseObject.reviewStatus = event.reviewStatus;
-          this._dataStore.manualDataUpdate(this.responseObject);
+            this.responseObject.adminPersonId = event.adminPersonId;
+            this.responseObject.adminPersonName = event.adminPersonName;
+            this.responseObject.adminGroupId = event.adminGroupId;
+            this.responseObject.adminGroupName = event.adminGroupName;
+            this.responseObject.reviewStatusCode = event.reviewStatusCode;
+            this.responseObject.reviewStatus = event.reviewStatus;
+            this._dataStore.manualDataUpdate(this.responseObject);
         }
-      }
+    }
 }
 
