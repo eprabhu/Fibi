@@ -5,10 +5,9 @@ import { CommonService } from '../../../common/services/common.service';
 import { COISection, Section } from '../coi-comparison-constants';
 import { CoiSummaryEventsAndStoreService } from '../coi-summary-events-and-store.service';
 import { CoiSummaryService } from '../coi-summary.service';
-import {slideHorizontal} from "../../../../../../fibi/src/app/common/utilities/animations";
-import { scrollIntoView } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import {subscriptionHandler} from "../../../../../../fibi/src/app/common/utilities/subscription-handler";
-import {HTTP_ERROR_STATUS} from "../../../../../../fibi/src/app/app-constants";
+import {slideHorizontal} from '../../../../../../fibi/src/app/common/utilities/animations';
+import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import {HTTP_ERROR_STATUS} from '../../../../../../fibi/src/app/app-constants';
 
 @Component({
     selector: 'app-tool-kit',
@@ -21,7 +20,6 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     isCurrentReviewTab = 'SECTION';
     isToolkitVisible = true;
     sections: Array<Section> = COISection;
-    scrollIntoView = scrollIntoView;
     projectList: any = [];
     activeProject = 1;
     coiDetails: any = {};
@@ -95,7 +93,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         }).subscribe((data: any) => {
             this.projectList = data;
             this._dataStoreAndEventsService.conflictStatusList = data.coiDisclosureDetailStatuses;
-            this._dataStoreAndEventsService.concatenatedProjectList = [...data.awards,...data.proposals];
+            this._dataStoreAndEventsService.concatenatedProjectList = [...data.awards, ...data.proposals];
             if (this.projectList.proposals.length || this.projectList.awards.length) {
                 this.openProjectRelationships(this.projectList.awards[0] ?
                   this.projectList.awards[0] : this.projectList.proposals[0], 0);
@@ -108,6 +106,11 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     openProjectRelationships(projectDetails: any, index) {
         this.activeProject = index;
         this._dataStoreAndEventsService.$projectDetails.next({...projectDetails, INDEX: index});
+    }
+
+    jumpToSection(section) {
+        const sectionHeight = document.getElementById(section).offsetTop - 250;
+        window.scrollTo({ top: sectionHeight, behavior: 'smooth' });
     }
 
 }
