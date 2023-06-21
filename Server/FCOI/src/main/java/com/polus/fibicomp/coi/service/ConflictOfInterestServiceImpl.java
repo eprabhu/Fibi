@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
@@ -16,6 +17,8 @@ import javax.validation.Valid;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureCertifyDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
@@ -24,6 +27,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.convert.DtoInstantiatingConverter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -57,6 +61,9 @@ import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
+import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
+import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
+import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
@@ -67,6 +74,7 @@ import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.person.pojo.Person;
+import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.proposal.dao.ProposalDao;
@@ -554,6 +562,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		externalReviewVO.setUnassignedCount(5);
 		externalReviewVO.setPendingEntityApproval(2);
 		externalReviewVO.setReviewCommentsCount(conflictOfInterestDao.getReviewCommentsCount());
+//		externalReviewVO.setTravelDisclosureCount(conflictOfInterestDao.getCOIAdminDashboardCount());
 		return new ResponseEntity<>(externalReviewVO, HttpStatus.OK);
 	}
 
@@ -1278,13 +1287,16 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setDescription(vo.getDescription());
 		coiTravelDisclosure.setCreateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
-		coiTravelDisclosure.setDispositionStatusCode(Constants.TRAVEL_DISPOSITION_STATUS_CODE);
-		coiTravelDisclosure.setDisclosureStatusCode(Constants.TRAVEL_DISCLOSURE_STATUS_CODE);
-		coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE);
-		CoiReviewStatusType coiReviewStatusType = conflictOfInterestDao.getReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE);
-		coiTravelDisclosure.setCoiReviewStatusTypeDetalis(coiReviewStatusType);
-		CoiTravelDisclosureStatusType travelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(Constants.TRAVEL_DISCLOSURE_STATUS_CODE);
-		coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(travelDisclosureStatusType);
+//		coiTravelDisclosure.setDispositionStatusCode(Constants.TRAVEL_DISPOSITION_STATUS_CODE);
+//		coiTravelDisclosure.setDisclosureStatusCode(Constants.TRAVEL_DISCLOSURE_STATUS_CODE);
+		coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_PENDING);
+		CoiTravelReviewStatusType coiTravelReviewStatusType = conflictOfInterestDao.getTravelReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE_PENDING);
+		coiTravelDisclosure.setCoiTravelReviewStatusTypeDetails(coiTravelReviewStatusType);
+		coiTravelDisclosure.setDocumentStatusCode(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+		CoiTravelDocumentStatusType coiTravelDocumentStatusType = conflictOfInterestDao.getDocumentStatusDetails(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+		coiTravelDisclosure.setCoiDocumentStatusTypeDetalis(coiTravelDocumentStatusType);
+//		CoiTravelDisclosureStatusType travelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(Constants.TRAVEL_DISCLOSURE_STATUS_CODE);
+//		coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(travelDisclosureStatusType);
 		try {
 			Unit unitDetails = conflictOfInterestDao.getUnitFromUnitNumber(vo.getHomeUnit());
 			if (unitDetails != null) {
@@ -1315,7 +1327,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				personEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
 			}
 		}
-		coiTravelDisclosure.setVersionStatus("DRAFT");
+		coiTravelDisclosure.setVersionStatus(Constants.TRAVEL_VERSION_STATUS_PENDING);
 		coiTravelDisclosure.setIsInterNationalTravel(vo.getIsInternationalTravel());
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
@@ -1341,52 +1353,84 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> assignTravelDisclosureAdmin(CoiAssignTravelDisclosureAdminDto dto) {
 		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(dto.getTravelDisclosureId());
 		conflictOfInterestDao.assignTravelDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getTravelDisclosureId());
-		coiTravelDisclosure.setAdminGroupId(dto.getAdminGroupId());
+		if (dto.getAdminGroupId() != null) {
+			coiTravelDisclosure.setAdminGroupId(dto.getAdminGroupId());
+		}
 		coiTravelDisclosure.setAdminPersnId(dto.getAdminPersonId());
+		coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_INPROGRESS);
+		CoiTravelReviewStatusType coiTravelReviewStatusType = conflictOfInterestDao.getTravelReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE_INPROGRESS);
+		coiTravelDisclosure.setReviewStatusCode(coiTravelReviewStatusType.getReviewStatusCode());
+		dto.setReviewStatus(coiTravelReviewStatusType.getDescription());
+		dto.setReviewStatusCode(coiTravelReviewStatusType.getReviewStatusCode());
 		dto.setAdminGroupName(dto.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(dto.getAdminGroupId()).getAdminGroupName() : null);
 		dto.setAdminPersonName(personDao.getPersonFullNameByPersonId(dto.getAdminPersonId()));
-		CoiTravelDisclosureStatusType travelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(Constants.TRAVEL_DISCLOSURE_STATUS_CODE);
+		dto.setVersionStatus(Constants.TRAVEL_VERSION_STATUS_PENDING);
+		coiTravelDisclosure.setDocumentStatusCode(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+		CoiTravelDocumentStatusType coiTravelDocumentStatusType = conflictOfInterestDao.getDocumentStatusDetails(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+		coiTravelDisclosure.setCoiDocumentStatusTypeDetalis(coiTravelDocumentStatusType);
+		dto.setDocumentStatus(coiTravelDocumentStatusType.getDescription());
+		dto.setDocumentStatusCode(coiTravelDocumentStatusType.getDocumentStatusCode());
+		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	private Map<String, String> getTravellerTypeWithDescription(List<CoiTravelDisclosureTraveler> entries) {
+		if (entries != null && !entries.isEmpty()) {
+			List<String> travelerTypeCode = new ArrayList<>();
+			entries.forEach(entry -> {
+				travelerTypeCode.add(entry.getTravelerTypeCode());
+			});
+			List<CoiTravelerType> coiTravellerType = conflictOfInterestDao.getEntriesFromTravellerTypeTable(travelerTypeCode);
+			return coiTravellerType.stream().collect(Collectors.toMap(x -> x.getTravelerTypeCode(), x -> x.getDescription()));
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unused")
+	private void setAdminDetailsToDto(CoiTravelDisclosureDto dto, CoiTravelDisclosure coiTravelDisclosure,
+			Integer travelDisclosureId) {
+		dto.setTravelDisclosureId(travelDisclosureId);
+		dto.setAdminGroupId(coiTravelDisclosure.getAdminGroupId());
+		dto.setAdminGroupName(coiTravelDisclosure.getAdminGroupId() != null ?
+				commonDao.getAdminGroupByGroupId(dto.getAdminGroupId()).getAdminGroupName() : null);
+		dto.setAdminPersonId(coiTravelDisclosure.getAdminPersonId());
+		dto.setAdminPersonName(personDao.getPersonFullNameByPersonId(coiTravelDisclosure.getAdminPersonId()));
+	}
+	
+	private void setAllStatusToDto(CoiTravelDisclosureDto dto, CoiTravelDisclosure coiTravelDisclosure) {
+		CoiTravelReviewStatusType coiTravelReviewStatusType =
+				conflictOfInterestDao.getTravelReviewStatusDetails(coiTravelDisclosure.getReviewStatusCode());
+		dto.setReviewStatusCode(coiTravelReviewStatusType.getReviewStatusCode());
+		dto.setReviewStatus(coiTravelReviewStatusType.getDescription());
+		CoiTravelDisclosureStatusType travelDisclosureStatusType =
+				conflictOfInterestDao.getTravelDisclosureStatusDetails(Constants.TRAVEL_DISCLOSURE_STATUS_CODE);
 		dto.setTravelDisclosureStatusCode(travelDisclosureStatusType.getTravelDisclosureStatusCode());
 		dto.setTravelDisclosureStatus(travelDisclosureStatusType.getDescription());
-		CoiReviewStatusType coiReviewStatusType = conflictOfInterestDao.getReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE);
-		dto.setReviewStatusCode(coiReviewStatusType.getReviewStatusCode());
-		dto.setReviewStatus(coiReviewStatusType.getDescription());
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		dto.setVersionStatus(coiTravelDisclosure.getVersionStatus());
+		CoiTravelDocumentStatusType coiTravelDocumentStatusType = conflictOfInterestDao.getDocumentStatusDetails(coiTravelDisclosure.getDocumentStatusCode());
+		dto.setDocumentStatus(coiTravelDocumentStatusType.getDescription());
+		dto.setDocumentStatusCode(coiTravelDocumentStatusType.getDocumentStatusCode());
 	}
 
 	@Override
 	public ResponseEntity<Object> loadTravelDisclosure(Integer travelDisclosureId) {
 		CoiTravelDisclosureDto dto = new CoiTravelDisclosureDto();
 		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(travelDisclosureId);
-		dto.setTravelDisclosureId(travelDisclosureId);
-		dto.setAdminGroupId(coiTravelDisclosure.getAdminGroupId());
-		dto.setAdminGroupName(coiTravelDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(dto.getAdminGroupId()).getAdminGroupName() : null);
-		dto.setAdminPersonId(coiTravelDisclosure.getAdminPersonId());
-		dto.setAdminPersonName(personDao.getPersonFullNameByPersonId(coiTravelDisclosure.getAdminPersonId()));
+		setAdminDetailsToDto(dto, coiTravelDisclosure, travelDisclosureId);
 		List<CoiTravelDisclosureTraveler> entries = conflictOfInterestDao.getEntriesFromTravellerTable(coiTravelDisclosure.getTravelDisclosureId());
-		List<String> travellerTypeCodeList = new ArrayList<>();
-		if (entries.size() > 0) {
-			entries.forEach(entry -> {
-				if (!travellerTypeCodeList.contains(entry.getTravelerTypeCode())) {
-					travellerTypeCodeList.add(entry.getTravelerTypeCode());
-				}
-			});
-		}
+		Map<String, String> travellerTypeCodeList = getTravellerTypeWithDescription(entries);
 		CoiEntity entityDetails = conflictOfInterestDao.getEntityDetails(coiTravelDisclosure.getEntityId());
 		dto.setEntityId(entityDetails.getEntityId());
+		dto.setEntityTypeCode(entityDetails.getEntityTypeCode());
 		dto.setEntityNumber(entityDetails.getEntityNumber());
 		dto.setTravelEntityName(entityDetails.getEntityName());
+		Country countryDetails = conflictOfInterestDao.getCountryDetailsByCountryCode(entityDetails.getCountryCode());
+		dto.setCountryCode(countryDetails.getCountryCode());
+		dto.setCountry(countryDetails.getCountryName());
 		dto.setTravellerTypeCodeList(travellerTypeCodeList);
 		dto.setIsInterNationalTravel(coiTravelDisclosure.getIsInterNationalTravel());
-		dto.setDispositionStatusCode(Constants.TRAVEL_DISPOSITION_STATUS_CODE);
-		CoiReviewStatusType coiReviewStatusType = conflictOfInterestDao.getReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE);
-		dto.setReviewStatusCode(coiReviewStatusType.getReviewStatusCode());
-		dto.setReviewStatus(coiReviewStatusType.getDescription());
+		setAllStatusToDto(dto, coiTravelDisclosure);
 		dto.setTravelSubmissionDate(coiTravelDisclosure.getTravelSubmissionDate());
-		CoiTravelDisclosureStatusType travelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(Constants.TRAVEL_DISCLOSURE_STATUS_CODE);
-		dto.setTravelDisclosureStatusCode(travelDisclosureStatusType.getTravelDisclosureStatusCode());
-		dto.setTravelDisclosureStatus(travelDisclosureStatusType.getDescription());
-		dto.setVersionStatus(coiTravelDisclosure.getVersionStatus());
 		dto.setTravelTitle(coiTravelDisclosure.getTravelTitle());
 		dto.setPurposeOfTheTrip(coiTravelDisclosure.getPurposeOfTheTrip());
 		dto.setEntityId(coiTravelDisclosure.getEntityId());
@@ -1409,10 +1453,110 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setHomeUnitName(unitDetails.getUnitName());
 		dto.setTravellerHomeUnit(coiTravelDisclosure.getTravellerHomeUnit());
 		dto.setTravelSubmissionDate(coiTravelDisclosure.getTravelSubmissionDate());
-		dto.setCreateUser(coiTravelDisclosure.getCreateUser());
-		dto.setUpdateUser(coiTravelDisclosure.getUpdateUser());
 		dto.setPersonId(coiTravelDisclosure.getPersonId());
 		dto.setPersonFullName(personDao.getPersonFullNameByPersonId(dto.getPersonId()));
+		dto.setCertifiedAt(coiTravelDisclosure.getCertifiedAt());
+		dto.setCertifiedBy(coiTravelDisclosure.getCertifiedBy());
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	/** On Certifying travel disclosure, certifying person id and certified date is saving to database */
+	@Override
+	public ResponseEntity<Object> certifyTravelDisclosure(ConflictOfInterestVO vo) {
+		CoiTravelDisclosureCertifyDto certifyDto = new CoiTravelDisclosureCertifyDto();
+		String personId = AuthenticatedUser.getLoginPersonId() != null ? AuthenticatedUser.getLoginPersonId() : vo.getPersonId();
+		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(vo.getTravelDisclosureId());
+		coiTravelDisclosure.setCertifiedBy(personId);
+		coiTravelDisclosure.setCertifiedAt(commonDao.getCurrentTimestamp());
+		certifyDto.setCertifiedAt(coiTravelDisclosure.getCertifiedAt());
+		certifyDto.setCertifiedBy(personId);
+		conflictOfInterestDao.certifyTravelDisclosure(coiTravelDisclosure);
+		return new ResponseEntity<>(certifyDto, HttpStatus.OK);
+	}
+
+	/** On Submitting travel disclosure, Review Status -> Submitted, Document Status -> Draft and Version Status -> PENDING */
+	@Override
+	public ResponseEntity<Object> submitTravelDisclosure(ConflictOfInterestVO vo) {
+		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(vo.getTravelDisclosureId());
+		coiTravelDisclosure.setTravelSubmissionDate(commonDao.getCurrentTimestamp());
+		coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_SUBMITTED);
+		CoiTravelReviewStatusType coiTravelReviewStatusType = conflictOfInterestDao.getTravelReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE_SUBMITTED);
+		coiTravelDisclosure.setCoiTravelReviewStatusTypeDetails(coiTravelReviewStatusType);
+		coiTravelDisclosure.setDocumentStatusCode(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+		CoiTravelDocumentStatusType coiTravelDocumentStatusType = conflictOfInterestDao.getDocumentStatusDetails(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+		coiTravelDisclosure.setCoiDocumentStatusTypeDetalis(coiTravelDocumentStatusType);
+		coiTravelDisclosure.setVersionStatus(Constants.TRAVEL_VERSION_STATUS_PENDING);
+		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		CoiTravelDisclosure coiTravelDosclosureObject = conflictOfInterestDao.loadTravelDisclosure(coiTravelDisclosure.getTravelDisclosureId());
+		return new ResponseEntity<>(coiTravelDosclosureObject, HttpStatus.OK);
+	}
+
+	/** On withdrawing travel disclosure, Review Status -> Withdrawn, Document Status -> Draft and Version Status -> PENDING */
+	@Override
+	public ResponseEntity<Object> withdrawTravelDisclosure(Integer travelDisclosureId) {
+		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(travelDisclosureId);
+		CoiTravelDisclosureActionsDto dto = new CoiTravelDisclosureActionsDto();
+		if (coiTravelDisclosure.getReviewStatusCode().equalsIgnoreCase("2")) {
+			coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_WITHDRAWN);
+			CoiTravelReviewStatusType coiTravelReviewStatusType = conflictOfInterestDao.getTravelReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE_WITHDRAWN);
+			coiTravelDisclosure.setCoiTravelReviewStatusTypeDetails(coiTravelReviewStatusType);
+			dto.setReviewStatusCode(coiTravelReviewStatusType.getReviewStatusCode());
+			dto.setReviewStatus(coiTravelReviewStatusType.getDescription());
+			coiTravelDisclosure.setDocumentStatusCode(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+			CoiTravelDocumentStatusType coiTravelDocumentStatusType = conflictOfInterestDao.getDocumentStatusDetails(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+			coiTravelDisclosure.setCoiDocumentStatusTypeDetalis(coiTravelDocumentStatusType);
+			dto.setDocumentStatusCode(coiTravelDocumentStatusType.getDocumentStatusCode());
+			dto.setDocumentStatus(coiTravelDocumentStatusType.getDescription());
+			coiTravelDisclosure.setVersionStatus(Constants.TRAVEL_VERSION_STATUS_PENDING);
+			dto.setVersionStatus(Constants.TRAVEL_VERSION_STATUS_PENDING);
+			conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+			return new ResponseEntity<>(dto, HttpStatus.OK);
+		}
+		return null;
+	}
+
+	/** On approving travel disclosure, Review Status -> Approved, Document Status -> Approved and Version Status -> ACTIVE */
+	@Override
+	public ResponseEntity<Object> approveTravelDisclosure(Integer travelDisclosureId) {
+		CoiTravelDisclosureActionsDto dto = new CoiTravelDisclosureActionsDto();
+		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(travelDisclosureId);
+		coiTravelDisclosure.setAcknowledgeAt(commonDao.getCurrentTimestamp());
+		coiTravelDisclosure.setAcknowledgeBy(AuthenticatedUser.getLoginPersonId() != null ? AuthenticatedUser.getLoginPersonId() : coiTravelDisclosure.getAcknowledgeBy());
+		coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_APPROVED);
+		CoiTravelReviewStatusType coiTravelReviewStatusType = conflictOfInterestDao.getTravelReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE_APPROVED);
+		coiTravelDisclosure.setCoiTravelReviewStatusTypeDetails(coiTravelReviewStatusType);
+		dto.setReviewStatusCode(coiTravelReviewStatusType.getReviewStatusCode());
+		dto.setReviewStatus(coiTravelReviewStatusType.getDescription());
+		coiTravelDisclosure.setDocumentStatusCode(Constants.TRAVEL_DOCUMENT_STATUS_CODE_APPROVED);
+		CoiTravelDocumentStatusType coiTravelDocumentStatusType = conflictOfInterestDao.getDocumentStatusDetails(Constants.TRAVEL_DOCUMENT_STATUS_CODE_APPROVED);
+		coiTravelDisclosure.setCoiDocumentStatusTypeDetalis(coiTravelDocumentStatusType);
+		dto.setDocumentStatusCode(coiTravelDocumentStatusType.getDocumentStatusCode());
+		dto.setDocumentStatus(coiTravelDocumentStatusType.getDescription());
+		coiTravelDisclosure.setVersionStatus(Constants.TRAVE_VERSION_STATUS_ACTIVE);
+		dto.setVersionStatus(Constants.TRAVE_VERSION_STATUS_ACTIVE);
+		dto.setAcknowledgeAt(commonDao.getCurrentTimestamp());
+		dto.setAcknowledgeBy(AuthenticatedUser.getLoginPersonId() != null ? AuthenticatedUser.getLoginPersonId() : coiTravelDisclosure.getAcknowledgeBy());
+		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	/** On returning travel disclosure, Review Status -> Returned, Document Status -> Draft and Version Status -> PENDING */
+	@Override
+	public ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId) {
+		CoiTravelDisclosureActionsDto dto = new CoiTravelDisclosureActionsDto();
+		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(travelDisclosureId);
+		coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_RETURNED_TO_PI);
+		CoiTravelReviewStatusType coiTravelReviewStatusType = conflictOfInterestDao.getTravelReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE_RETURNED_TO_PI);
+		coiTravelDisclosure.setCoiTravelReviewStatusTypeDetails(coiTravelReviewStatusType);
+		dto.setReviewStatusCode(coiTravelReviewStatusType.getReviewStatusCode());
+		dto.setReviewStatus(coiTravelReviewStatusType.getDescription());
+		coiTravelDisclosure.setDocumentStatusCode(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+		CoiTravelDocumentStatusType coiTravelDocumentStatusType = conflictOfInterestDao.getDocumentStatusDetails(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
+		coiTravelDisclosure.setCoiDocumentStatusTypeDetalis(coiTravelDocumentStatusType);
+		dto.setDocumentStatusCode(coiTravelDocumentStatusType.getDocumentStatusCode());
+		dto.setDocumentStatus(coiTravelDocumentStatusType.getDescription());
+		coiTravelDisclosure.setVersionStatus(Constants.TRAVEL_VERSION_STATUS_PENDING);
+		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
    	
@@ -1482,4 +1626,5 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		CoiConflictStatusTypeDto statusCode = conflictOfInterestDao.validateConflicts(disclosureId);
 		return new ResponseEntity<>(statusCode, HttpStatus.OK);
 	}
+
 }

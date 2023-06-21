@@ -2,6 +2,7 @@ package com.polus.fibicomp.coi.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,8 @@ import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
+import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
+import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
@@ -45,6 +48,7 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.proposal.pojo.Proposal;
@@ -172,6 +176,12 @@ public interface ConflictOfInterestDao {
 	 * @param coiDisclosure
 	 */
 	public void certifyDisclosure(CoiDisclosure coiDisclosure);
+	
+	/**
+	 * This method is used for certify disclosure
+	 * @param coiTravelDisclosure
+	 */
+	public void certifyTravelDisclosure(CoiTravelDisclosure coiTravelDisclosure);
 
 	/**
 	 * 
@@ -824,4 +834,16 @@ public interface ConflictOfInterestDao {
     public CoiEntity getEntityDetails(Integer entityId);
     
     public void deleteEntriesFromTraveller(Integer travelDisclosureId);
+    
+    public CoiTravelDocumentStatusType getDocumentStatusDetails(String documentStatusCode);
+    
+    public CoiTravelReviewStatusType getTravelReviewStatusDetails(String reviewStatusCode);
+    
+    public Country getCountryDetailsByCountryCode(String countryCode);
+    
+    public CoiTravelerType getEntryFromTravellerTypeTable(String travellerTypeCode);
+
+	List<CoiTravelerType> getEntriesFromTravellerTypeTable(List<String> travellerTypeCode);
+    
+//    public Integer getCOIAdminDashboardCount(CoiDashboardVO vo);
 }

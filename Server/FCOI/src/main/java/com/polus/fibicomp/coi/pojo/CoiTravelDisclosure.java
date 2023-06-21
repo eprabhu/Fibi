@@ -123,8 +123,8 @@ public class CoiTravelDisclosure implements Serializable {
 	private String acknowledgeBy;
 	
 	@Column(name = "ACKNOWLEDGE_AT")
-	private String acknowledgeAt;
-
+	private Timestamp acknowledgeAt;
+	
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
@@ -170,12 +170,18 @@ public class CoiTravelDisclosure implements Serializable {
 	
 	@Column(name = "ADMIN_PERSON_ID")
 	private String adminPersonId;
+	
+	@Column(name = "CERTIFIED_BY")
+	private String certifiedBy;
+	
+	@Column(name = "CERTIFIED_AT")
+	private Timestamp certifiedAt;
+	
+	@Column(name = "DOCUMENT_STATUS_CODE")
+	private String documentStatusCode;
 
 	@Transient
 	private Unit travellerUnitDetails;
-	
-	@Transient
-	private CoiReviewStatusType coiReviewStatusTypeDetalis;
 	
 	@Transient
 	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusTypeDetalis;
@@ -188,6 +194,64 @@ public class CoiTravelDisclosure implements Serializable {
 	
 	@Transient
 	private List<String> travellerTypeCodeList;
+	
+	@Transient
+	private CoiTravelDocumentStatusType coiDocumentStatusTypeDetalis;
+	
+	@Transient
+	private CoiTravelReviewStatusType coiTravelReviewStatusTypeDetails;
+
+	public Timestamp getAcknowledgeAt() {
+		return acknowledgeAt;
+	}
+
+	public void setAcknowledgeAt(Timestamp acknowledgeAt) {
+		this.acknowledgeAt = acknowledgeAt;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public CoiTravelReviewStatusType getCoiTravelReviewStatusTypeDetails() {
+		return coiTravelReviewStatusTypeDetails;
+	}
+
+	public void setCoiTravelReviewStatusTypeDetails(CoiTravelReviewStatusType coiTravelReviewStatusTypeDetails) {
+		this.coiTravelReviewStatusTypeDetails = coiTravelReviewStatusTypeDetails;
+	}
+
+	public CoiTravelDocumentStatusType getCoiDocumentStatusTypeDetalis() {
+		return coiDocumentStatusTypeDetalis;
+	}
+
+	public void setCoiDocumentStatusTypeDetalis(CoiTravelDocumentStatusType coiDocumentStatusTypeDetalis) {
+		this.coiDocumentStatusTypeDetalis = coiDocumentStatusTypeDetalis;
+	}
+
+	public String getDocumentStatusCode() {
+		return documentStatusCode;
+	}
+
+	public void setDocumentStatusCode(String documentStatusCode) {
+		this.documentStatusCode = documentStatusCode;
+	}
+
+	public String getCertifiedBy() {
+		return certifiedBy;
+	}
+
+	public void setCertifiedBy(String certifiedBy) {
+		this.certifiedBy = certifiedBy;
+	}
+
+	public Timestamp getCertifiedAt() {
+		return certifiedAt;
+	}
+
+	public void setCertifiedAt(Timestamp certifiedAt) {
+		this.certifiedAt = certifiedAt;
+	}
 	
 	public String getAdminPersonId() {
 		return adminPersonId;
@@ -260,14 +324,6 @@ public class CoiTravelDisclosure implements Serializable {
 	public void setCoiTravelDisclosureStatusTypeDetalis(
 			CoiTravelDisclosureStatusType coiTravelDisclosureStatusTypeDetalis) {
 		this.coiTravelDisclosureStatusTypeDetalis = coiTravelDisclosureStatusTypeDetalis;
-	}
-
-	public CoiReviewStatusType getCoiReviewStatusTypeDetalis() {
-		return coiReviewStatusTypeDetalis;
-	}
-
-	public void setCoiReviewStatusTypeDetalis(CoiReviewStatusType coiReviewStatusTypeDetalis) {
-		this.coiReviewStatusTypeDetalis = coiReviewStatusTypeDetalis;
 	}
 
 	@Transient
@@ -543,14 +599,6 @@ public class CoiTravelDisclosure implements Serializable {
 
 	public void setAcknowledgeBy(String acknowledgeBy) {
 		this.acknowledgeBy = acknowledgeBy;
-	}
-
-	public String getAcknowledgeAt() {
-		return acknowledgeAt;
-	}
-
-	public void setAcknowledgeAt(String acknowledgeAt) {
-		this.acknowledgeAt = acknowledgeAt;
 	}
 
 	public Timestamp getUpdateTimestamp() {

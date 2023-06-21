@@ -388,4 +388,24 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> assignTravelDisclosureAdmin(CoiAssignTravelDisclosureAdminDto dto);
+	
+	/**
+	 * This method is used to certifyTravelDisclosure
+	 * @param coiTravelDisclosure
+	 * @return vo
+	 */
+	ResponseEntity<Object> submitTravelDisclosure(ConflictOfInterestVO vo);
+	
+	/**
+	 * This method is used to certifyDisclosure
+	 * @param coiDisclosure
+	 * @return vo
+	 */
+	ResponseEntity<Object> certifyTravelDisclosure(ConflictOfInterestVO vo);
+	
+	ResponseEntity<Object> withdrawTravelDisclosure(Integer travelDisclosureId);
+	
+	ResponseEntity<Object> approveTravelDisclosure(Integer travelDisclosureId);
+	
+	ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId);
 }

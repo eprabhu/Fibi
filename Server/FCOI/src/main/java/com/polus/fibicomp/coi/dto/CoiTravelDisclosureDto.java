@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 
@@ -24,7 +26,7 @@ public class CoiTravelDisclosureDto {
 	private String travelState;
 	private String relationshipToYourResearch;
 	private String acknowledgeBy;
-	private String acknowledgeAt;
+	private Timestamp acknowledgeAt;
 	private Timestamp updateTimestamp;
 	private String updateUser;
 	private String createUser;
@@ -45,9 +47,97 @@ public class CoiTravelDisclosureDto {
 	private String homeUnitNumber;
 	private String homeUnitName;
 	private Boolean isInterNationalTravel;
-	private List<String> travellerTypeCodeList;
+	Map<String, String> travellerTypeCodeList;
 	private String personId;
 	private String personFullName;
+	private String entityTypeCode;
+	private String entityType;
+	private String countryCode;
+	private String country;
+	private String certifiedBy;
+	private Timestamp certifiedAt;
+	private String documentStatusCode;
+	private String documentStatus;
+
+	public Timestamp getAcknowledgeAt() {
+		return acknowledgeAt;
+	}
+
+	public void setAcknowledgeAt(Timestamp acknowledgeAt) {
+		this.acknowledgeAt = acknowledgeAt;
+	}
+
+	public String getDocumentStatusCode() {
+		return documentStatusCode;
+	}
+
+	public void setDocumentStatusCode(String documentStatusCode) {
+		this.documentStatusCode = documentStatusCode;
+	}
+
+	public String getDocumentStatus() {
+		return documentStatus;
+	}
+
+	public void setDocumentStatus(String documentStatus) {
+		this.documentStatus = documentStatus;
+	}
+
+	public String getCertifiedBy() {
+		return certifiedBy;
+	}
+
+	public void setCertifiedBy(String certifiedBy) {
+		this.certifiedBy = certifiedBy;
+	}
+
+	public Timestamp getCertifiedAt() {
+		return certifiedAt;
+	}
+
+	public void setCertifiedAt(Timestamp certifiedAt) {
+		this.certifiedAt = certifiedAt;
+	}
+
+	public Map<String, String> getTravellerTypeCodeList() {
+		return travellerTypeCodeList;
+	}
+
+	public void setTravellerTypeCodeList(Map<String, String> travellerTypeCodeList) {
+		this.travellerTypeCodeList = travellerTypeCodeList;
+	}
+
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getEntityTypeCode() {
+		return entityTypeCode;
+	}
+
+	public void setEntityTypeCode(String entityTypeCode) {
+		this.entityTypeCode = entityTypeCode;
+	}
+
+	public String getEntityType() {
+		return entityType;
+	}
+
+	public void setEntityType(String entityType) {
+		this.entityType = entityType;
+	}
 
 	public String getPersonFullName() {
 		return personFullName;
@@ -79,14 +169,6 @@ public class CoiTravelDisclosureDto {
 
 	public void setTravelEntityName(String travelEntityName) {
 		this.travelEntityName = travelEntityName;
-	}
-
-	public List<String> getTravellerTypeCodeList() {
-		return travellerTypeCodeList;
-	}
-
-	public void setTravellerTypeCodeList(List<String> travellerTypeCodeList) {
-		this.travellerTypeCodeList = travellerTypeCodeList;
 	}
 
 	public String getHomeUnitNumber() {
@@ -263,14 +345,6 @@ public class CoiTravelDisclosureDto {
 
 	public void setAcknowledgeBy(String acknowledgeBy) {
 		this.acknowledgeBy = acknowledgeBy;
-	}
-
-	public String getAcknowledgeAt() {
-		return acknowledgeAt;
-	}
-
-	public void setAcknowledgeAt(String acknowledgeAt) {
-		this.acknowledgeAt = acknowledgeAt;
 	}
 
 	public Timestamp getUpdateTimestamp() {

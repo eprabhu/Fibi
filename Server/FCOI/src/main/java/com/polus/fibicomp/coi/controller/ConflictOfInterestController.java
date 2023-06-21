@@ -446,6 +446,36 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.assignTravelDisclosureAdmin(dto);
 	}
 
+	@PostMapping("/certifyTravelDisclosure")
+	public ResponseEntity<Object> certifyTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for certifyTravelDisclosure");
+		return conflictOfInterestService.certifyTravelDisclosure(vo);
+	}
+
+	@PostMapping("/submitTravelDisclosure")
+	public ResponseEntity<Object> submitTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for submitting TravelDisclosure");
+		return conflictOfInterestService.submitTravelDisclosure(vo);
+	}
+	
+	@GetMapping(value = "/withdrawTravelDisclosure/{travelDisclosureId}")
+	public ResponseEntity<Object> withdrawTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Requesting for withdrawing TravelDisclosure");
+		return conflictOfInterestService.withdrawTravelDisclosure(travelDisclosureId);
+	}
+	
+	@GetMapping(value = "/approveTravelDisclosure/{travelDisclosureId}")
+	public ResponseEntity<Object> approveTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Requesting for approving TravelDisclosure");
+		return conflictOfInterestService.approveTravelDisclosure(travelDisclosureId);
+	}
+	
+	@GetMapping(value = "/returnTravelDisclosure/{travelDisclosureId}")
+	public ResponseEntity<Object> returnTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Requesting for returning TravelDisclosure");
+		return conflictOfInterestService.returnTravelDisclosure(travelDisclosureId);
+	}
+
 	@GetMapping("/adminGroup/adminPersons")
 	public ResponseEntity<Object> fetchAdminGroupsAndPersons() {
 		return generalService.fetchAdminGroupsAndPersons();
