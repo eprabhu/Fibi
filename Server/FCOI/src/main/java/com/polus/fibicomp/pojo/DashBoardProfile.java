@@ -126,8 +126,18 @@ public class DashBoardProfile {
 	private Integer coiFinancialEntityListCount;
 
 	private Integer count;
+	
+	private Integer travelDisclosureCount;
 
 	private List<Object> data;
+
+	public Integer getTravelDisclosureCount() {
+		return travelDisclosureCount;
+	}
+
+	public void setTravelDisclosureCount(Integer travelDisclosureCount) {
+		this.travelDisclosureCount = travelDisclosureCount;
+	}
 
 	public DashBoardProfile() {
 	}

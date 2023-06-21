@@ -628,6 +628,25 @@ CREATE TABLE `coi_travel_disclosure_status_type` (
 
 SET FOREIGN_KEY_CHECKS=1; 
 
+DROP TABLE IF EXISTS `coi_travel_review_status_type`;
+CREATE TABLE `coi_travel_review_status_type`(
+		REVIEW_STATUS_CODE VARCHAR(3) not null,
+		DESCRIPTION VARCHAR(200),
+		IS_ACTIVE VARCHAR(1),
+		UPDATE_TIMESTAMP DATETIME,
+		UPDATE_USER VARCHAR(60)
+);
+
+DROP TABLE IF EXISTS `coi_travel_document_status_type`;
+CREATE TABLE `coi_travel_document_status_type`(
+		DOCUMENT_STATUS_CODE VARCHAR(3) not null,
+		DESCRIPTION VARCHAR(200),
+		IS_ACTIVE VARCHAR(1),
+		UPDATE_TIMESTAMP DATETIME,
+		UPDATE_USER VARCHAR(60)
+);
+
+
 INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('1','Publicly Owned','Y',now(),'quickstart');
 INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('2','Private','Y',now(),'quickstart');
 INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('3','Non-Profit','Y',now(),'quickstart');
@@ -723,6 +742,31 @@ VALUES ((SELECT A.ID FROM (SELECT MAX(ROLE_RIGHTS_ID) + 1 AS ID FROM ROLE_RIGHTS
 
 INSERT INTO `PERSON_ROLES` (`PERSON_ROLES_ID`, `PERSON_ID`, `ROLE_ID`, `UNIT_NUMBER`, `DESCEND_FLAG`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ((SELECT A.ID FROM (SELECT MAX(PERSON_ROLES_ID) + 1 AS ID FROM PERSON_ROLES ) AS A), '10000000001', '1335', '000001', 'N', now(), 'quikstart');
+
+ALTER TABLE `coi_travel_disclosure` MODIFY COLUMN `PURPOSE_OF_THE_TRIP` varchar(500);
+ALTER TABLE `coi_travel_disclosure` MODIFY COLUMN `RELATIONSHIP_TO_YOUR_RESEARCH` varchar(500);
+ALTER TABLE `coi_travel_disclosure` ADD COLUMN `CERTIFIED_BY` VARCHAR(45) NULL;
+ALTER TABLE `coi_travel_disclosure` ADD COLUMN `CERTIFIED_AT` datetime NULL;
+ALTER TABLE `coi_travel_disclosure` ADD COLUMN `DOCUMENT_STATUS_CODE` varchar(3);
+ALTER TABLE `coi_travel_disclosure` MODIFY COLUMN `REVIEW_STATUS_CODE` varchar(3);
+ALTER TABLE `coi_travel_disclosure` MODIFY COLUMN `TRAVEL_DISCLOSURE_STATUS_CODE` varchar(3);
+ALTER TABLE `coi_travel_disclosure` MODIFY COLUMN ACKNOWLEDGE_AT TIMESTAMP;
+
+INSERT INTO `coi_travel_disclosure_status_type` VALUES ('4', 'Conflict Managed', 'Y', now(), 'admin');
+INSERT INTO `coi_travel_review_status_type` VALUES ('1', 'Pending', 'Y', now(), 'admin');
+INSERT INTO `coi_travel_review_status_type` VALUES ('2', 'Submitted', 'Y', now(), 'admin');
+INSERT INTO `coi_travel_review_status_type` VALUES ('3', 'Review In progress', 'Y', now(), 'admin');
+INSERT INTO `coi_travel_review_status_type` VALUES ('4', 'Returned to PI', 'Y', now(), 'admin');
+INSERT INTO `coi_travel_review_status_type` VALUES ('5', 'Withdrawn', 'Y', now(), 'admin');
+INSERT INTO `coi_travel_review_status_type` VALUES ('6', 'Completed', 'Y', now(), 'admin');
+INSERT INTO `coi_travel_review_status_type` VALUES ('7', 'Approved/Acknowledge', 'Y', now(), 'admin');
+INSERT INTO `coi_travel_document_status_type` VALUES ('1', 'Draft', 'Y', now(), 'admin');
+INSERT INTO `coi_travel_document_status_type` VALUES ('2', 'Approved [Acknowkledged]', 'Y', now(), 'admin');
+	
+UPDATE coi_travel_disclosure SET VERSION_STATUS = 'PENDING' WHERE VERSION_STATUS = 'DRAFT';
+UPDATE `coi_travel_disclosure_status_type` SET DESCRIPTION = 'No Conflict' WHERE TRAVEL_DISCLOSURE_STATUS_CODE = '1';
+UPDATE `coi_travel_disclosure_status_type` SET DESCRIPTION = 'Potential Conflict' WHERE TRAVEL_DISCLOSURE_STATUS_CODE = '2';
+UPDATE `coi_travel_disclosure_status_type` SET DESCRIPTION = 'Conflict Identified' WHERE TRAVEL_DISCLOSURE_STATUS_CODE = '3';
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;

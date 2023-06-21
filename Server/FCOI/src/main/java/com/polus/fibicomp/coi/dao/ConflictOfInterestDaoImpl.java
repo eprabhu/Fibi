@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -63,6 +65,8 @@ import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
+import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
+import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
@@ -265,6 +269,18 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		criteriaUpdate.set("updateUser", AuthenticatedUser.getLoginUserName());
 		criteriaUpdate.set("expirationDate",coiDisclosure.getExpirationDate());
 		criteriaUpdate.where(cb.equal(root.get("disclosureId"), coiDisclosure.getDisclosureId()));
+		session.createQuery(criteriaUpdate).executeUpdate();
+	}
+
+	@Override
+	public void certifyTravelDisclosure(CoiTravelDisclosure coiTravelDisclosure) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaUpdate<CoiTravelDisclosure> criteriaUpdate = cb.createCriteriaUpdate(CoiTravelDisclosure.class);
+		Root<CoiTravelDisclosure> root = criteriaUpdate.from(CoiTravelDisclosure.class);
+		criteriaUpdate.set("certifiedAt", coiTravelDisclosure.getCertifiedAt());
+		criteriaUpdate.set("certifiedBy", coiTravelDisclosure.getCertifiedBy());
+		criteriaUpdate.where(cb.equal(root.get("travelDisclosureId"), coiTravelDisclosure.getTravelDisclosureId()));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
 
@@ -1385,6 +1401,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
 			dashBoardProfile.setDisclosureCount(getCOIAdminDashboardCount(vo));
+			dashBoardProfile.setTravelDisclosureCount(getCOIAdminDashboardCount(vo));
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error in getCOIAdminDashboard {}", e.getMessage());
@@ -1421,35 +1438,68 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		List<String> reviewStatusCodes = vo.getProperty21();
 		String personId = AuthenticatedUser.getLoginPersonId();
 		String certificationDate = vo.getProperty23();
+		Integer currentPage = vo.getCurrentPage();
+		Integer pageNumber = vo.getPageNumber();
+		Boolean isDownload = vo.getIsDownload();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-				statement.setString(1, disclosureId);
-				statement.setString(2, disclosurePersonId);
-				statement.setString(3, homeUnit);
-				statement.setString(4, conflictStatusCode != null && !conflictStatusCode.isEmpty() ? String.join(",", conflictStatusCode) : null);
-				statement.setString(5, disclosureCategoryTypeCodes != null && !disclosureCategoryTypeCodes.isEmpty() ? String.join(",", disclosureCategoryTypeCodes) : null);
-				statement.setString(6, startDate);
-				statement.setString(7, endDate);
-				statement.setString(8, entityName);
-				statement.setString(9, entityCountry);
-				statement.setString(10, proposalId);
-				statement.setString(11, title);
-				statement.setString(12, awardId);
-				statement.setString(13, personId);
-				statement.setString(14, null);
-				statement.setInt(15, 0);
-				statement.setInt(16, 0);
-				statement.setString(17, tabName);
-				statement.setBoolean(18, true);
-				statement.setString(19, isAdvancedSearch);
-				statement.setString(20, projectTypeCode);
-				statement.setString(21, hasSFIFlag);
-				statement.setString(22, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
-				statement.setString(23, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
-				statement.setString(24, certificationDate);
-				statement.execute();
-				resultSet = statement.getResultSet();
+				if (tabName.equals("TRAVEL_DISCLOSURES")) {
+					statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+					statement.setNull(1, Types.INTEGER);
+					statement.setString(2, personId);
+					statement.setNull(3, Types.VARCHAR);
+					statement.setInt(4, Types.VARCHAR);
+					statement.setNull(5, Types.VARCHAR);
+					statement.setNull(6, Types.VARCHAR);
+					statement.setNull(7, Types.VARCHAR);
+					statement.setNull(8, Types.VARCHAR);
+					statement.setNull(9, Types.VARCHAR);
+					statement.setNull(10, Types.VARCHAR);
+					statement.setNull(11, Types.VARCHAR);
+					statement.setNull(12, Types.VARCHAR);
+					statement.setString(13, personId);
+					statement.setString(14, setCOISortOrder(sort));
+					statement.setInt(15, (currentPage == null ? 0 : currentPage - 1));
+					statement.setInt(16, (pageNumber == null ? 0 : pageNumber));
+					statement.setString(17, tabName);
+					statement.setBoolean(18, isDownload);
+					statement.setString(19, isAdvancedSearch);
+					statement.setNull(20, Types.VARCHAR);
+					statement.setNull(21, Types.VARCHAR);
+					statement.setNull(22, Types.VARCHAR);
+					statement.setNull(23, Types.VARCHAR);
+					statement.setNull(24, Types.VARCHAR);
+					statement.execute();
+					resultSet = statement.getResultSet();
+				} else {
+					statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+					statement.setString(1, disclosureId);
+					statement.setString(2, disclosurePersonId);
+					statement.setString(3, homeUnit);
+					statement.setString(4, conflictStatusCode != null && !conflictStatusCode.isEmpty() ? String.join(",", conflictStatusCode) : null);
+					statement.setString(5, disclosureCategoryTypeCodes != null && !disclosureCategoryTypeCodes.isEmpty() ? String.join(",", disclosureCategoryTypeCodes) : null);
+					statement.setString(6, startDate);
+					statement.setString(7, endDate);
+					statement.setString(8, entityName);
+					statement.setString(9, entityCountry);
+					statement.setString(10, proposalId);
+					statement.setString(11, title);
+					statement.setString(12, awardId);
+					statement.setString(13, personId);
+					statement.setString(14, null);
+					statement.setInt(15, 0);
+					statement.setInt(16, 0);
+					statement.setString(17, tabName);
+					statement.setBoolean(18, true);
+					statement.setString(19, isAdvancedSearch);
+					statement.setString(20, projectTypeCode);
+					statement.setString(21, hasSFIFlag);
+					statement.setString(22, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
+					statement.setString(23, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
+					statement.setString(24, certificationDate);
+					statement.execute();
+					resultSet = statement.getResultSet();
+				}
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT";
 				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
@@ -3017,5 +3067,56 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Root<CoiTravelDisclosureTraveler> root = query.from(CoiTravelDisclosureTraveler.class);
 		query.where(builder.equal(root.get("travelDisclosureId"), travelDisclosureId));
 		session.createQuery(query).executeUpdate();
+	}
+	
+	@Override
+	public CoiTravelDocumentStatusType getDocumentStatusDetails(String documentStatusCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelDocumentStatusType> query = builder.createQuery(CoiTravelDocumentStatusType.class);
+		Root<CoiTravelDocumentStatusType> rootDisclComment = query.from(CoiTravelDocumentStatusType.class);
+		query.where(builder.equal(rootDisclComment.get("documentStatusCode"), documentStatusCode));
+		return session.createQuery(query).getSingleResult();
+	}
+	
+	@Override
+	public CoiTravelReviewStatusType getTravelReviewStatusDetails(String reviewStatusCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelReviewStatusType> query = builder.createQuery(CoiTravelReviewStatusType.class);
+		Root<CoiTravelReviewStatusType> rootDisclComment = query.from(CoiTravelReviewStatusType.class);
+		query.where(builder.equal(rootDisclComment.get("reviewStatusCode"), reviewStatusCode));
+		return session.createQuery(query).getSingleResult();
+	}
+	
+	@Override
+	public Country getCountryDetailsByCountryCode(String countryCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Country> query = builder.createQuery(Country.class);
+		Root<Country> rootDisclComment = query.from(Country.class);
+		query.where(builder.equal(rootDisclComment.get("countryCode"), countryCode));
+		return session.createQuery(query).getSingleResult();
+	}
+	
+	@Override
+	public CoiTravelerType getEntryFromTravellerTypeTable(String travellerTypeCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelerType> query = builder.createQuery(CoiTravelerType.class);
+		Root<CoiTravelerType> rootDisclComment = query.from(CoiTravelerType.class);
+		query.where(builder.equal(rootDisclComment.get("travelerTypeCode"), travellerTypeCode));
+		return session.createQuery(query).getSingleResult();
+	}
+
+	@Override
+	public List<CoiTravelerType> getEntriesFromTravellerTypeTable(List<String> travellerTypeCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelerType> query = builder.createQuery(CoiTravelerType.class);
+		Root<CoiTravelerType> rootDisclComment = query.from(CoiTravelerType.class);
+		query.where(rootDisclComment.get("travelerTypeCode").in(travellerTypeCode));
+		return session.createQuery(query).getResultList();
+	
 	}
 }

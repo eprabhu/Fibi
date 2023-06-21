@@ -15,6 +15,33 @@ public class CoiAssignTravelDisclosureAdminDto {
 	private String reviewStatusCode;
 	private String dispositionStatus;
 	private String dispositionStatusCode;
+	private String documentStatusCode;
+	private String documentStatus;
+	private String versionStatus;
+
+	public String getDocumentStatusCode() {
+		return documentStatusCode;
+	}
+
+	public void setDocumentStatusCode(String documentStatusCode) {
+		this.documentStatusCode = documentStatusCode;
+	}
+
+	public String getDocumentStatus() {
+		return documentStatus;
+	}
+
+	public void setDocumentStatus(String documentStatus) {
+		this.documentStatus = documentStatus;
+	}
+
+	public String getVersionStatus() {
+		return versionStatus;
+	}
+
+	public void setVersionStatus(String versionStatus) {
+		this.versionStatus = versionStatus;
+	}
 
 	public Integer getTravelDisclosureId() {
 		return travelDisclosureId;
