@@ -34,8 +34,6 @@ public class CoiTravelDisclosureDto {
 	private String travellerHomeUnit;
 	private String description;
 	private Date travelSubmissionDate;
-	private String travelDisclosureStatus;
-	private String travelDisclosureStatusCode;
 	private String dispositionStatus;
 	private String dispositionStatusCode;
 	private String reviewStatus;
@@ -58,6 +56,15 @@ public class CoiTravelDisclosureDto {
 	private Timestamp certifiedAt;
 	private String documentStatusCode;
 	private String documentStatus;
+	private String riskLevel;
+
+	public String getRiskLevel() {
+		return riskLevel;
+	}
+
+	public void setRiskLevel(String riskLevel) {
+		this.riskLevel = riskLevel;
+	}
 
 	public Timestamp getAcknowledgeAt() {
 		return acknowledgeAt;
@@ -203,14 +210,6 @@ public class CoiTravelDisclosureDto {
 		this.adminGroupName = adminGroupName;
 	}
 
-	public String getTravelDisclosureStatusCode() {
-		return travelDisclosureStatusCode;
-	}
-
-	public void setTravelDisclosureStatusCode(String travelDisclosureStatusCode) {
-		this.travelDisclosureStatusCode = travelDisclosureStatusCode;
-	}
-
 	public String getDispositionStatusCode() {
 		return dispositionStatusCode;
 	}
@@ -225,14 +224,6 @@ public class CoiTravelDisclosureDto {
 
 	public void setReviewStatusCode(String reviewStatusCode) {
 		this.reviewStatusCode = reviewStatusCode;
-	}
-
-	public String getTravelDisclosureStatus() {
-		return travelDisclosureStatus;
-	}
-
-	public void setTravelDisclosureStatus(String travelDisclosureStatus) {
-		this.travelDisclosureStatus = travelDisclosureStatus;
 	}
 
 	public Integer getTravelDisclosureId() {

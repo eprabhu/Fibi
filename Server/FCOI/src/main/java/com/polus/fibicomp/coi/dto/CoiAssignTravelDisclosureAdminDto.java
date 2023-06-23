@@ -1,7 +1,5 @@
 package com.polus.fibicomp.coi.dto;
 
-import java.util.List;
-
 public class CoiAssignTravelDisclosureAdminDto {
 
 	private Integer travelDisclosureId;

@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "COI_TRAVEL_DOCUMENT_STATUS_TYPE")
+@Table(name = "COI_TRAVEL_DOCUMENT_STATUS")
 public class CoiTravelDocumentStatusType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

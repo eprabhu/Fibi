@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -191,15 +192,48 @@ public class CoiTravelDisclosure implements Serializable {
 
 	@Transient
 	private String adminPersonName;
+
+	@Transient
+	private String personFullName;
 	
 	@Transient
-	private List<String> travellerTypeCodeList;
+	Map<String, String> travellerTypeCodeList;
 	
 	@Transient
 	private CoiTravelDocumentStatusType coiDocumentStatusTypeDetalis;
 	
 	@Transient
 	private CoiTravelReviewStatusType coiTravelReviewStatusTypeDetails;
+
+	@Transient
+	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusList;
+	
+	@Transient
+	private CoiEntity entityDetails;
+
+	public CoiEntity getEntityDetails() {
+		return entityDetails;
+	}
+
+	public void setEntityDetails(CoiEntity entityDetails) {
+		this.entityDetails = entityDetails;
+	}
+
+	public String getPersonFullName() {
+		return personFullName;
+	}
+
+	public Map<String, String> getTravellerTypeCodeList() {
+		return travellerTypeCodeList;
+	}
+
+	public void setTravellerTypeCodeList(Map<String, String> travellerTypeCodeList) {
+		this.travellerTypeCodeList = travellerTypeCodeList;
+	}
+
+	public void setPersonFullName(String personFullName) {
+		this.personFullName = personFullName;
+	}
 
 	public Timestamp getAcknowledgeAt() {
 		return acknowledgeAt;
@@ -261,28 +295,12 @@ public class CoiTravelDisclosure implements Serializable {
 		this.adminPersonId = adminPersonId;
 	}
 
-	public List<String> getTravellerTypeCodeList() {
-		return travellerTypeCodeList;
-	}
-
-	public void setTravellerTypeCodeList(List<String> travellerTypeCodeList) {
-		this.travellerTypeCodeList = travellerTypeCodeList;
-	}
-
 	public Integer getAdminGroupId() {
 		return adminGroupId;
 	}
 
 	public void setAdminGroupId(Integer adminGroupId) {
 		this.adminGroupId = adminGroupId;
-	}
-
-	public String getAdminPersnId() {
-		return adminPersonId;
-	}
-
-	public void setAdminPersnId(String adminPersnId) {
-		this.adminPersonId = adminPersnId;
 	}
 
 	public String getAdminGroupName() {
@@ -325,9 +343,6 @@ public class CoiTravelDisclosure implements Serializable {
 			CoiTravelDisclosureStatusType coiTravelDisclosureStatusTypeDetalis) {
 		this.coiTravelDisclosureStatusTypeDetalis = coiTravelDisclosureStatusTypeDetalis;
 	}
-
-	@Transient
-	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusList;
 
 	public CoiTravelDisclosureStatusType getCoiTravelDisclosureStatusList() {
 		return coiTravelDisclosureStatusList;

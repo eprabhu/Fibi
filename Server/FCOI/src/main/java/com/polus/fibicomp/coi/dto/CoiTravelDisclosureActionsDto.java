@@ -13,6 +13,24 @@ public class CoiTravelDisclosureActionsDto {
 	private String travelDisclosureStatusCode;
 	private String acknowledgeBy;
 	private Timestamp acknowledgeAt;
+	private String certifiedBy;
+	private Timestamp certifiedAt;
+
+	public String getCertifiedBy() {
+		return certifiedBy;
+	}
+
+	public void setCertifiedBy(String certifiedBy) {
+		this.certifiedBy = certifiedBy;
+	}
+
+	public Timestamp getCertifiedAt() {
+		return certifiedAt;
+	}
+
+	public void setCertifiedAt(Timestamp certifiedAt) {
+		this.certifiedAt = certifiedAt;
+	}
 
 	public String getAcknowledgeBy() {
 		return acknowledgeBy;
