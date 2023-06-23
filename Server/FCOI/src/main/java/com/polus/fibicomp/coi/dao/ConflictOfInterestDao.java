@@ -848,4 +848,11 @@ public interface ConflictOfInterestDao {
 	public EntityType getEntityTypeDetails(String entityTypeCode);
 
 	public EntityRiskCategory getEntityRiskDetails(String riskCategoryCode);
+
+	public void updateCoiDisclEntProjDetails(String projectConflictStatusCode, Integer disclosureDetailsId);
+
+	public String getProjectConflictStatusCode(Integer disclosureDetailsId);
+
+	public String getCoiConflictStatusByStatusCode(String conflictStatusCode);
+
 }

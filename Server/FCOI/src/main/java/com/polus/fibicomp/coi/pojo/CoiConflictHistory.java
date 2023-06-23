@@ -6,12 +6,9 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -31,18 +28,17 @@ public class CoiConflictHistory implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer coiConflictHistoryId;
 
-	@Column(name = "DISC_DET_STATUS_CODE")
-	private String coiDetStatusCode;
-	
-//	@ManyToOne(optional = true)
-//	@JoinColumn(foreignKey = @ForeignKey(name = "COI_CONFLICT_HISTORY_FK1"), name = "DISC_DET_STATUS_CODE", referencedColumnName = "DISC_DET_STATUS_CODE", insertable = false, updatable = false)
-//	private CoiDisclosureOldDetailsStatus coiDisclosureOldDetailsStatus;
-
 	@Column(name = "DISCLOSURE_DETAILS_ID")
 	private Integer disclosureDetailsId;
 	
+	@Column(name = "DISCLOSURE_ID")
+	private Integer disclosureId;
+	
 	@Column(name = "COMMENT")
 	private String comment;
+	
+	@Column(name = "CONFLICT_STATUS_CODE")
+	private String conflictStatusCode;
 
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")
@@ -54,6 +50,9 @@ public class CoiConflictHistory implements Serializable {
 	
 	@Transient
 	private String updateUserFullName;
+	
+	@Transient
+	private String conflictStatusDescription;
 
 	public Integer getCoiConflictHistoryId() {
 		return coiConflictHistoryId;
@@ -62,15 +61,6 @@ public class CoiConflictHistory implements Serializable {
 	public void setCoiConflictHistoryId(Integer coiConflictHistoryId) {
 		this.coiConflictHistoryId = coiConflictHistoryId;
 	}
-
-	public String getCoiDetStatusCode() {
-		return coiDetStatusCode;
-	}
-
-	public void setCoiDetStatusCode(String coiDetStatusCode) {
-		this.coiDetStatusCode = coiDetStatusCode;
-	}
-
 
 	public Integer getDisclosureDetailsId() {
 		return disclosureDetailsId;
@@ -110,6 +100,30 @@ public class CoiConflictHistory implements Serializable {
 
 	public void setUpdateUserFullName(String updateUserFullName) {
 		this.updateUserFullName = updateUserFullName;
+	}
+
+	public Integer getDisclosureId() {
+		return disclosureId;
+	}
+
+	public void setDisclosureId(Integer disclosureId) {
+		this.disclosureId = disclosureId;
+	}
+
+	public String getConflictStatusCode() {
+		return conflictStatusCode;
+	}
+
+	public void setConflictStatusCode(String conflictStatusCode) {
+		this.conflictStatusCode = conflictStatusCode;
+	}
+
+	public String getConflictStatusDescription() {
+		return conflictStatusDescription;
+	}
+
+	public void setConflictStatusDescription(String conflictStatusDescription) {
+		this.conflictStatusDescription = conflictStatusDescription;
 	}
 
 }
