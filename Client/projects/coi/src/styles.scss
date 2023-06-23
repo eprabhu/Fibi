@@ -313,6 +313,18 @@ nav ul li.active {
   color: white;
 }
 
+.orange-badge {
+  @extend .coi-badge;
+  background-color: #FF4500 !important;
+  color: #fff;
+}
+
+.bright-red-badge {
+  @extend .coi-badge;
+  background-color: #e80202 !important;
+  color: #fff;
+}
+
 .wrapping-text {
   display: flex;
   flex-wrap: wrap;

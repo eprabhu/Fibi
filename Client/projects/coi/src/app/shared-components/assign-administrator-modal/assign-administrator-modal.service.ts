@@ -17,8 +17,8 @@ export class AssignAdministratorModalService {
         });
     }
 
-    assignAdmin(params) {
-        return this._http.patch(this._commonService.baseUrl + '/disclosure/assignAdmin', params);
+    assignAdmin(path: string, params) {
+        return this._http.patch(this._commonService.baseUrl + `/${path}/assignAdmin`, params);
     }
-    
+
 }

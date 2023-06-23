@@ -518,13 +518,13 @@
                                         </app-no-data-label>
                                     </div>
                                     <div class="col-3">
-                                        <label for="review-status" class="label-text">Review Status :</label>
-                                        <app-no-data-label id="review-status" [valueToShow]="coi?.reviewDescription">
+                                        <label for="review-status" class="label-text">Document Status :</label>
+                                        <app-no-data-label id="review-status" [valueToShow]="coi?.documentStatusDescription">
                                             <span
-                                                [class.text-dark]="commonService.getReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
-                                                class="ms-3 {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
+                                                [class.text-dark]="commonService.getDocumentStatusBadge(coi?.documentStatusCode) === 'warning'"
+                                                class="ms-3 {{commonService.getDocumentStatusBadge(coi?.documentStatusCode)}}"
                                                 id="disp-status">
-                                                {{coi?.reviewDescription}}
+                                                {{coi?.documentStatusDescription}}
                                             </span>
                                         </app-no-data-label>
                                     </div>
@@ -544,17 +544,21 @@
                                         </app-no-data-label>
                                     </div>
                                     <div class="col">
-                                        <label for="approved-date" class="label-text">Approved Date :</label>
-                                        <app-no-data-label id="approved-date" [valueToShow]="coi?.acknowledgeAt">
-                                            <span class="grey-text">{{coi?.acknowledgeAt |
-                                                dateFormatter}}</span>
-                                        </app-no-data-label>
-                                    </div>
-                                    <div class="col-3">
                                         <label for="expiration-date" class="label-text">Expiration Date :</label>
                                         <app-no-data-label id="expiration-date" [valueToShow]="coi?.expirationDate">
                                             <span class="grey-text">{{coi?.expirationDate |
                                                 dateFormatter}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="review-status" class="label-text">Review Status :</label>
+                                        <app-no-data-label id="review-status" [valueToShow]="coi?.reviewDescription">
+                                            <span
+                                                [class.text-dark]="commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
+                                                class="ms-3 {{commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode)}}"
+                                                id="disp-status">
+                                                {{coi?.reviewDescription}}
+                                            </span>
                                         </app-no-data-label>
                                     </div>
                                 </div>

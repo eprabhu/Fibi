@@ -5,6 +5,13 @@ import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
 
 declare var $: any;
+
+class AssignAdminRO {
+  adminPersonId: '';
+  adminGroupId: '';
+  travelDisclosureId?: '';
+  disclosureId?: '';
+}
 @Component({
   selector: 'app-assign-administrator-modal',
   templateUrl: './assign-administrator-modal.component.html',
@@ -17,23 +24,24 @@ export class AssignAdministratorModalComponent implements OnChanges {
   adminSearchOptions: any = {};
   clearAdministratorField: String;
   assignAdminMap = new Map();
-  addAdmin: any = {};
+  addAdmin = new AssignAdminRO();
   adminGroupsCompleterOptions: CompleterOptions = new CompleterOptions();
   clearAdminGroupField: any;
   isShowWarningMessage = false;
   warningMessage: any;
   $subscriptions: Subscription[] = [];
   isSaving = false;
+  @Input() path: 'disclosure' | 'travelDisclosure' = 'disclosure';
   @Input() disclosureId = null;
   @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
 
 
-  constructor( private _commonService: CommonService, 
+  constructor( private _commonService: CommonService,
                private _assignAdminService: AssignAdministratorModalService ) { }
 
   ngOnChanges() {
     this.getAdminDetails();
-    this.addAdmin.disclosureId = this.disclosureId ;
+    this.setDisclosureId();
   }
 
   getAdminDetails() {
@@ -41,6 +49,14 @@ export class AssignAdministratorModalComponent implements OnChanges {
         this.setAdminGroupOptions(data);
         this.setCompleterOptions(this.adminSearchOptions, data.persons, 'fullName');
     }));
+}
+
+private setDisclosureId() {
+  if (this.path === 'travelDisclosure') {
+    this.addAdmin.travelDisclosureId = this.disclosureId;
+   } else {
+    this.addAdmin.disclosureId = this.disclosureId;
+  }
 }
 
 private setAdminGroupOptions(data): void {
@@ -107,13 +123,12 @@ setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: s
   public assignAdministrator() {
     if (!this.isSaving && this.validateAdmin()) {
       this.isSaving = true;
-      this.addAdmin.disclosureId = this.disclosureId;
-      this.$subscriptions.push(this._assignAdminService.assignAdmin(
-        this.addAdmin
-      ).subscribe((data: any) => {
+      this.setDisclosureId();
+      this.$subscriptions.push(this._assignAdminService.assignAdmin(this.path, this.addAdmin)
+      .subscribe((data: any) => {
         this.isAssignToMe = false;
         this.isShowWarningMessage = false;
-        this.addAdmin = {};
+        this.addAdmin = new AssignAdminRO();
         this.isSaving = false;
         this.clearAdministratorField = new String('true');
         this.closeModal.emit(data);
@@ -151,7 +166,7 @@ setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: s
 
     public clearData() {
         this.isAssignToMe = false;
-        this.addAdmin = {};
+        this.addAdmin = new AssignAdminRO();
         this.isShowWarningMessage = false;
         this.clearAdminGroupField = new String('true');
         this.clearAdministratorField = new String('true');

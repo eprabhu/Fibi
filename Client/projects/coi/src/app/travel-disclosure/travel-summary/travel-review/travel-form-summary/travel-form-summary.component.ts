@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TravelDataStoreService } from '../../../services/travel-data-store.service';
 import { TravelDisclosureService } from '../../../services/travel-disclosure.service';
-import { EntityDetails, TravelDisclosureResponseObject, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
+import { EntityData, TravelDisclosureResponseObject, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
 
 @Component({
     selector: 'app-travel-form-summary',
@@ -18,7 +18,8 @@ export class TravelFormSummaryComponent implements OnInit {
     traveller = '';
     isReadMorePurpose = false;
     isReadMoreRelation = false;
-    entityDetails = new EntityDetails();
+    entityData = new EntityData();
+    travellerTypeCodeList = [];
 
     constructor(private _dataStore: TravelDataStoreService, private _service: TravelDisclosureService) { }
 
@@ -29,19 +30,15 @@ export class TravelFormSummaryComponent implements OnInit {
 
     private getDataFromStore(): void {
         this.travelDisclosureData = this._dataStore.getData();
-        this.setEntityDetails();
-        this.loadTravellerTypesLookup();
+        this.setEntityData();
+        this.setTravellerType();
     }
 
-    private setEntityDetails(): void {
-        this.entityDetails.countryName = null;
-        this.entityDetails.entityId = this.travelDisclosureData.entityId || null;
-        this.entityDetails.entityName = this.travelDisclosureData.travelEntityName || null;
-        this.entityDetails.entityNumber = this.travelDisclosureData.entityNumber || null;
-        this.entityDetails.involvementEndDate = this.travelDisclosureData.travelEndDate || null;
-        this.entityDetails.involvementStartDate = this.travelDisclosureData.travelStartDate || null;
-        this.entityDetails.isActive = true;
-        this.entityDetails.entityType = null;
+    private setEntityData(): void {
+        this.entityData.country = this.travelDisclosureData.country;
+        this.entityData.entityId = this.travelDisclosureData.entityId;
+        this.entityData.entityName = this.travelDisclosureData.travelEntityName;
+        this.entityData.entityType = this.travelDisclosureData.entityType;
     }
 
     private listenDataChangeFromStore(): void {
@@ -52,24 +49,12 @@ export class TravelFormSummaryComponent implements OnInit {
         );
     }
 
-    private loadTravellerTypesLookup(): void {
-        this.$subscriptions.push(this._service.loadTravellerTypesLookup()
-            .subscribe((data: any) => {
-                if (data) {
-                    this.travellerTypeLookup = data;
-                    this.setTravellerType();
-                }
-            }));
-    }
-
     private setTravellerType(): void {
-        if (this.travelDisclosureData.travellerTypeCodeList.length > 0) {
-            for (const type of this.travelDisclosureData.travellerTypeCodeList) {
-                const matchingDetail = this.travellerTypeLookup.find(details => details.travelerTypeCode === type);
-                if (matchingDetail) {
-                    this.traveller += this.traveller === '' ? matchingDetail.description : `, ${matchingDetail.description}`;
-                }
-            }
+        if (this.travelDisclosureData.travellerTypeCodeList) {
+            Object.keys(this.travelDisclosureData.travellerTypeCodeList).forEach((typeCode: any) => {
+                const travellerType = this.travelDisclosureData.travellerTypeCodeList[typeCode];
+                this.traveller += this.traveller === '' ? travellerType : `, ${travellerType}`;
+            });
         }
     }
 }

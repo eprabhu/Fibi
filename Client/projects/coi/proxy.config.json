@@ -259,18 +259,6 @@
     "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
-  "/createCoiTravelDisclosure": {
-    "target": "http://192.168.1.189:8070/coi",
-    "secure": false
-  },
-  "/loadTravellerTypesLookup": {
-    "target": "http://192.168.1.189:8070/coi",
-    "secure": false
-  },
-  "/loadTravelStatusTypesLookup": {
-    "target": "http://192.168.1.189:8070/coi",
-    "secure": false
-  },
   "/getPersonDetailById": {
     "target": "http://192.168.1.189:8070/",
     "secure": false
@@ -307,10 +295,6 @@
     "target": "http://192.168.1.80:9090/coi/",
     "secure": false
   },
-  "/loadTravelDisclosure/*": {
-    "target": "http://192.168.1.149/coi",
-    "secure": false
-  },
   "/getProjConflictStatusType": {
     "target": "http://192.168.1.149/coi",
     "secure": false
@@ -323,13 +307,52 @@
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
-  "/entity/activateInactivate/*" : {
+  "/entity/activateInactivate/*": {
     "target": "http://192.168.1.149/coi/",
     "secure": false
   },
-  "/personEntity/activateInactivate" : {
+  "/personEntity/activateInactivate": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/loadTravellerTypesLookup": {
+    "target": "http://192.168.1.149/coi",
+    "secure": false
+  },
+  "/loadTravelStatusTypesLookup": {
+    "target": "http://192.168.1.149/coi",
+    "secure": false
+  },
+  "/createCoiTravelDisclosure": {
+    "target": "http://192.168.1.149/coi",
+    "secure": false
+  },
+  "/loadTravelDisclosure/*": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/certifyTravelDisclosure": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/submitTravelDisclosure": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/travelDisclosure/assignAdmin": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/withdrawTravelDisclosure/*": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/approveTravelDisclosure/*": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/returnTravelDisclosure/*": {
     "target": "http://192.168.1.149/coi/",
     "secure": false
   }
-  
 }

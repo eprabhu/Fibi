@@ -262,29 +262,60 @@ export class CommonService {
             case '1':
                 return 'yellow-badge';
             case '2':
-            return 'blue-badge';
+                return 'blue-badge';
             case '3':
-            return 'green-badge';
+                return 'green-badge';
             case '4':
-            return 'green-badge';
+                return 'green-badge';
             default:
-            return 'red-badge';
+                return 'red-badge';
         }
     }
 
     getDispositionStatusBadge(statusCode) {
         switch (statusCode) {
             case '1':
-            return 'yellow-badge';
+                return 'yellow-badge';
             case '2':
             case '4':
             case '5':
                 return 'blue-badge';
             case '3':
             case '6':
-            return 'green-badge';
+                return 'green-badge';
             default:
-            return 'yellow-badge';
+                return 'yellow-badge';
+        }
+    }
+
+    getTravelReviewStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1':
+                return 'yellow-badge';
+            case '2':
+                return 'blue-badge';
+            case '3':
+                return 'green-badge';
+            case '4':
+                return 'orange-badge';
+            case '5':
+                return 'bright-red-badge';
+            case '6':
+            case '7':
+                return 'green-badge';
+            default:
+                return 'red-badge';
+        }
+    }
+
+    getDocumentStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1':
+                return 'yellow-badge';
+            case '2':
+                return 'green-badge';
+            default:
+                return 'yellow-badge';
         }
     }
 

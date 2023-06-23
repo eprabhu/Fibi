@@ -1,5 +1,4 @@
 export class CoiTravelDisclosure {
-    versionNumber: string;
     travellerTypeCode: Array<string> = [];
     entityId: number;
     entityNumber: number;
@@ -40,10 +39,10 @@ export interface TravelCreateModalDetails {
 }
 
 export class TravelDisclosureResponseObject {
-    travelDisclosureId: any;
+    travelDisclosureId: number;
     versionStatus: string;
     entityId: number;
-    entityNumber: any;
+    entityNumber: number;
     travelEntityName: string;
     travelTitle: string;
     purposeOfTheTrip: string;
@@ -54,31 +53,41 @@ export class TravelDisclosureResponseObject {
     destinationCountry: string;
     travelState: string;
     relationshipToYourResearch: string;
-    acknowledgeBy: any;
-    acknowledgeAt: any;
+    acknowledgeBy: string;
+    acknowledgeAt: number;
     updateTimestamp: number;
     updateUser: string;
     createUser: string;
     createTimestamp: number;
     travellerHomeUnit: string;
     description: any;
-    travelSubmissionDate: any;
+    travelSubmissionDate: number;
     travelDisclosureStatus: string;
     travelDisclosureStatusCode: string;
     dispositionStatus: any;
-    dispositionStatusCode: string;
+    dispositionStatusCode: any;
     reviewStatus: string;
     reviewStatusCode: string;
     adminPersonId: string;
-    adminGroupId: number;
-    adminPersonName: any;
+    adminGroupId: any;
+    adminPersonName: string;
     adminGroupName: any;
     homeUnitNumber: string;
     homeUnitName: string;
     isInterNationalTravel: boolean;
-    travellerTypeCodeList: string[];
+    travellerTypeCodeList: {};
     personId: string;
     personFullName: string;
+    entityTypeCode: string;
+    entityType: any;
+    countryCode: string;
+    country: string;
+    certifiedBy: string;
+    certifiedAt: number;
+    documentStatusCode: string;
+    documentStatus: string;
+    disclosureStatus: string;
+    disclosureStatusCode: string;
 }
 
 export interface EndpointOptions {
@@ -89,13 +98,9 @@ export interface EndpointOptions {
     params: string;
 }
 
-export class EntityDetails {
-    isActive: boolean;
-    entityNumber = '';
-    entityType = '';
-    involvementStartDate: string | number;
-    involvementEndDate: string | number;
-    countryName = '';
+export class EntityData {
+    country: string;
     entityId: string | number;
-    entityName = '';
+    entityType: string;
+    entityName: string;
 }

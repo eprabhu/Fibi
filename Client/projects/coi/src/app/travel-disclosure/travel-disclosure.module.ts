@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { TravelDataStoreService } from './services/travel-data-store.service';
 import { CoiService } from '../disclosure/services/coi.service';
+import { UnsavedChangesWarningComponent } from './unsaved-changes-warning/unsaved-changes-warning.component';
 
 const routes: Routes = [
     {
@@ -43,7 +44,8 @@ const routes: Routes = [
 ];
 @NgModule({
     declarations: [
-        TravelDisclosureComponent
+        TravelDisclosureComponent,
+        UnsavedChangesWarningComponent
     ],
     imports: [
         CommonModule,
