@@ -28,6 +28,9 @@ public class PersonEntity implements Serializable {
 	@Column(name = "PERSON_ENTITY_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer personEntityId;
+
+	@Column(name = "PERSON_ENTITY_NUMBER")
+	private Integer personEntityNumber;
 	
 	@Column(name = "PERSON_ID")
 	private String personId;
@@ -39,7 +42,7 @@ public class PersonEntity implements Serializable {
 	@Column(name = "ENTITY_ID")
 	private Integer entityId;
 	
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true, cascade = CascadeType.REFRESH)
 	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ENTITY_FK2"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
 	private CoiEntity coiEntity;
 	
@@ -90,6 +93,9 @@ public class PersonEntity implements Serializable {
 	@CreatedDate
 	@Column(name = "CREATE_TIMESTAMP")
 	private Timestamp createTimestamp;
+
+	@Column(name = "REVISION_REASON")
+	private String revisionReason;
 
 	@Transient
 	private List<PersonEntityRelationship> personEntityRelationships;
@@ -308,5 +314,20 @@ public class PersonEntity implements Serializable {
 	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
-	
+
+	public Integer getPersonEntityNumber() {
+		return personEntityNumber;
+	}
+
+	public void setPersonEntityNumber(Integer personEntityNumber) {
+		this.personEntityNumber = personEntityNumber;
+	}
+
+	public String getRevisionReason() {
+		return revisionReason;
+	}
+
+	public void setRevisionReason(String revisionReason) {
+		this.revisionReason = revisionReason;
+	}
 }

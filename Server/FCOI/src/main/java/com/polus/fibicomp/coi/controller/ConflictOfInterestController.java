@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.service.GeneralService;
 import com.polus.fibicomp.constants.Constants;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
@@ -505,4 +508,14 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.updateProjectRelationship(vo);
 	}
 
+
+	@PutMapping("/entity/activateInactivate")
+	public ResponseEntity<Object> activateOrInactivateEntity(@RequestBody CoiEntityDto coiEntityDto) {
+		return conflictOfInterestService.activateOrInactivateEntity(coiEntityDto);
+	}
+
+	@PutMapping("/personEntity/activateInactivate")
+	public ResponseEntity<Object> activateOrInactivatePersonEntity(@RequestBody PersonEntityDto personEntityDto) {
+		return conflictOfInterestService.activateOrInactivatePersonEntity(personEntityDto);
+	}
 }

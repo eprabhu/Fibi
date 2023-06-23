@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -657,7 +659,7 @@ public interface ConflictOfInterestDao {
 
 	CoiEntity getCoiEntityDetailsByEntityId(Integer personEntityId);
 
-	public PersonEntity getPersonEntityDetailsByEntityId(Integer personEntityId);
+	public PersonEntity getPersonEntityDetailsById(Integer personEntityId);
 
 	public List<ValidPersonEntityRelType> getRelatioshipDetails(String tabName);
 
@@ -768,7 +770,7 @@ public interface ConflictOfInterestDao {
 	 * This method is used for updating review status of disclosure
 	 *
 	 * @param disclosureId
-	 * @param review status code
+	 * @param disclosureReviewInProgress status code
 	 */
 	public void updateReviewStatus(Integer disclosureId, String disclosureReviewInProgress);
 
@@ -855,4 +857,48 @@ public interface ConflictOfInterestDao {
 
 	public String getCoiConflictStatusByStatusCode(String conflictStatusCode);
 
+	/**
+	 * This method is used to activate/inactive entity
+	 * @param coiEntityDto
+	 */
+	void activateOrInactivateEntity(CoiEntityDto coiEntityDto);
+
+	/**
+	 * This method is used to fetch SFIs of disclosure
+	 * @param vo
+	 * @return
+	 */
+	Integer getSFIOfDisclosureCount(ConflictOfInterestVO vo);
+
+	/**
+	 * This method is used to activate/inactive  person entity
+	 * @param personEntityDto
+	 */
+	void activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
+
+	/**
+	 * This method is used to archive person entity
+	 * @param personEntityId
+	 */
+	void archivePersonEntity(Integer personEntityId);
+
+	/**
+	 * This method is used to get the max of version number
+	 * @param personEntityNumber
+	 * @return
+	 */
+	Integer getMaxPersonEntityVersionNumber(Integer personEntityNumber);
+
+	/**
+	 * This method is used to check the person entity is linked to disclosure/travel
+	 * @param personEntityId
+	 * @return
+	 */
+	boolean checkPersonEntityAdded(Integer personEntityId);
+
+	/**
+	 * This method is used to get Person Entity maximum Person Entity number
+	 * @return
+	 */
+	Integer getMaxPersonEntityNumber();
 }
