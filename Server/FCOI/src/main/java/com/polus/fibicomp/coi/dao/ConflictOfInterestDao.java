@@ -844,6 +844,8 @@ public interface ConflictOfInterestDao {
     public CoiTravelerType getEntryFromTravellerTypeTable(String travellerTypeCode);
 
 	List<CoiTravelerType> getEntriesFromTravellerTypeTable(List<String> travellerTypeCode);
-    
-//    public Integer getCOIAdminDashboardCount(CoiDashboardVO vo);
+
+	public EntityType getEntityTypeDetails(String entityTypeCode);
+
+	public EntityRiskCategory getEntityRiskDetails(String riskCategoryCode);
 }

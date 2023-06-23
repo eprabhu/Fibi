@@ -89,6 +89,24 @@ public class DisclosureView {
 	private String travellerTypeDescription;
 	private String travelDisclosureStatusCode;
 	private String travelDisclosureStatusDescription;
+	private String documentStatusCode;
+	private String documentStatusDescription;
+
+	public String getDocumentStatusCode() {
+		return documentStatusCode;
+	}
+
+	public void setDocumentStatusCode(String documentStatusCode) {
+		this.documentStatusCode = documentStatusCode;
+	}
+
+	public String getDocumentStatusDescription() {
+		return documentStatusDescription;
+	}
+
+	public void setDocumentStatusDescription(String documentStatusDescription) {
+		this.documentStatusDescription = documentStatusDescription;
+	}
 
 	public BigDecimal getTravelAmount() {
 		return travelAmount;
