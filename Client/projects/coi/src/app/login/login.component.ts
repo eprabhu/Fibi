@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                         // this.commonService.getRequiredParameters().then(systemParameters => {
                         //     this.commonService.assignSystemParameters(systemParameters);
                         // });
-                        this.commonService.fetchPermissions().then((res) => {
+                        this.commonService.fetchPermissions(true).then((res) => {
                             this._router.navigate(['coi/user-dashboard']);
                         });
                     }
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (err.status == 403) {
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'The username or password that you have entered is incorrect');
                 } else {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
                 }
             }));
         }
