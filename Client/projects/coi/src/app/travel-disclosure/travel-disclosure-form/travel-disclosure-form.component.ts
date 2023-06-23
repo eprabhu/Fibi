@@ -31,14 +31,15 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     mandatoryList = new Map();
     dateValidationList = new Map();
     travelDisclosureRO = new CoiTravelDisclosure();
+    travelResObject = new TravelDisclosureResponseObject();
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
     destination: 'Domestic' | 'International' = 'Domestic';
 
     constructor(public commonService: CommonService,
-                private _router: Router,
-                private _service: TravelDisclosureService,
-                private _dataStore: TravelDataStoreService) {
+        private _router: Router,
+        private _service: TravelDisclosureService,
+        private _dataStore: TravelDataStoreService) {
         window.scrollTo(0, 0);
     }
 
@@ -49,7 +50,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.listenDataChangeFromStore();
         this.loadTravellerTypesLookup();
         this.loadTravelStatusTypesLookup();
-        this.handleTravelDisclosureSubmission();
+        this.handleTravelDisclosureSave();
     }
 
     ngOnDestroy(): void {
@@ -67,41 +68,15 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     private setDisclosureDetails(responseObject: TravelDisclosureResponseObject): void {
         this.entitySearchOptions.defaultValue = responseObject.travelEntityName;
         this.entityName = responseObject.travelEntityName;
-        this.travelDisclosureRO.entityId = responseObject.entityId;
-        this.travelDisclosureRO.entityNumber = responseObject.entityNumber;
-        this.travelDisclosureRO.travellerTypeCode = responseObject.travellerTypeCodeList;
-        this.travelDisclosureRO.travelTitle = responseObject.travelTitle;
-        this.travelDisclosureRO.isInternationalTravel = responseObject.isInterNationalTravel;
-        this.travelDisclosureRO.travelState = responseObject.travelState;
-        this.travelDisclosureRO.destinationCountry = responseObject.destinationCountry;
         this.countrySearchOptions.defaultValue = responseObject.destinationCountry;
-        this.destination = this.travelDisclosureRO.destinationCountry ? 'International' : 'Domestic';
-        this.travelDisclosureRO.destinationCity = responseObject.destinationCity;
-        this.travelDisclosureRO.purposeOfTheTrip = responseObject.purposeOfTheTrip;
-        this.travelDisclosureRO.relationshipToYourResearch = responseObject.relationshipToYourResearch;
-        this.travelDisclosureRO.travelAmount = !responseObject.travelAmount ? null : convertToValidAmount(responseObject.travelAmount);
-        this.travelDisclosureRO.travelStartDate = parseDateWithoutTimestamp(responseObject.travelStartDate);
-        this.travelDisclosureRO.travelEndDate = parseDateWithoutTimestamp(responseObject.travelEndDate);
-        this.travelDisclosureRO.travelDisclosureId = responseObject.travelDisclosureId;
-        this.travelDisclosureRO.homeUnit = responseObject.homeUnitNumber;
-        this.travelDisclosureRO.description = responseObject.description;
-        this.travelDisclosureRO.personId = responseObject.personId;
+        this.destination = responseObject.destinationCountry ? 'International' : 'Domestic';
+        this.travelDisclosureRO = this._dataStore.getTravelDisclosureRO();
     }
 
-    private handleTravelDisclosureSubmission(): void {
+    private handleTravelDisclosureSave(): void {
         this.$subscriptions.push(this._service.saveOrCopySubject.subscribe((event: string) => {
-            switch (event) {
-                case 'CERTIFY_DISCLOSURE':
-                    this.saveTravelDisclosure();
-                    break;
-                case 'CERTIFY_COPY_DISCLOSURE':
-                    this.saveTravelDisclosure();
-                    break;
-                case 'SAVE_DISCLOSURE':
-                    this.saveTravelDisclosure();
-                    break;
-                default:
-                    break;
+            if (event) {
+                this.saveTravelDisclosure();
             }
         }));
     }
@@ -160,7 +135,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         requestObject.travelStartDate = parseDateWithoutTimestamp(requestObject.travelStartDate);
         requestObject.travelEndDate = parseDateWithoutTimestamp(requestObject.travelEndDate);
         requestObject.noOfDays = getTotalNoOfDays(requestObject.travelStartDate, requestObject.travelEndDate);
-        requestObject.versionNumber = '1';
         return requestObject;
     }
 
@@ -258,7 +232,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
                     if (res) {
                         this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Saved Successfully');
                         this._service.setUnSavedChanges(false, '');
-                        this.loadTravelDisclosure(res.travelDisclosureId);
+                        this._dataStore.removeCreateModalDetails();
+                        this.updateTravelDataStore(res);
                     }
                 }, (err) => {
                     this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Saving Travel Disclosure');
@@ -267,20 +242,31 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private loadTravelDisclosure(travelDisclosureId: string): void {
-        this._service.loadTravelDisclosure(travelDisclosureId)
-            .subscribe((responseObject: TravelDisclosureResponseObject) => {
-                if (responseObject) {
-                    this._dataStore.removeCreateModalDetails();
-                    this._dataStore.manualDataUpdate(responseObject);
-                    this._router.navigate([], {
-                        queryParams: {
-                            disclosureId: responseObject.travelDisclosureId
-                        },
-                        queryParamsHandling: 'merge',
-                    });
-                }
-            });
+    private updateTravelDataStore(response: any) {
+        this.travelResObject = response;
+        this.travelResObject.homeUnitName = response.travellerUnitDetails.unitName;
+        this.travelResObject.homeUnitNumber = response.travellerUnitDetails.unitNumber;
+        this.travelResObject.travelEntityName = response.entityDetails.entityName;
+        this.travelResObject.entityType = response.entityDetails.entityType.description;
+        this.travelResObject.entityTypeCode = response.entityDetails.entityType.entityTypeCode;
+        this.travelResObject.countryCode = response.entityDetails.country.countryCode;
+        this.travelResObject.country = response.entityDetails.country.countryName;
+        this.travelResObject.reviewStatus = response.coiTravelReviewStatusTypeDetails.description;
+        this.travelResObject.reviewStatusCode = response.coiTravelReviewStatusTypeDetails.reviewStatusCode;
+        this.travelResObject.documentStatus = response.coiDocumentStatusTypeDetalis.description;
+        this.travelResObject.documentStatusCode = response.coiDocumentStatusTypeDetalis.documentStatusCode;
+        this.travelResObject.adminGroupId = response.adminGroupId;
+        this.travelResObject.adminGroupName = response.adminGroupName;
+        this.travelResObject.adminPersonId = response.adminPersonId;
+        this.travelResObject.adminPersonName = response.adminPersonName;
+        this.travelResObject.travelState = response.travelstate;
+        this._dataStore.manualDataUpdate(this.travelResObject);
+        this._router.navigate([], {
+            queryParams: {
+                disclosureId: this.travelResObject.travelDisclosureId
+            },
+            queryParamsHandling: 'merge',
+        });
     }
 }
 

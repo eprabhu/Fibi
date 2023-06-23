@@ -21,21 +21,13 @@ class SFI_OBJECT {
 export class SharedSfiCardComponent implements OnInit {
 
   @Input() reqObject: any;
-  @Input() referredFrom: 'SFI_SUMMARY' | 'ENTITIES_DASHBOARD' | 'SFI_EDIT_MODE' | 'TRAVEL_DISCLOSURE';
+  @Input() referredFrom: 'SFI_SUMMARY' | 'ENTITIES_DASHBOARD' | 'SFI_EDIT_MODE';
   SFIObject = new SFI_OBJECT();
 
   constructor(private _router: Router) { }
 
     ngOnInit() {
-        if (this.referredFrom === 'TRAVEL_DISCLOSURE') {
-            this.updateTravelObject();
-        } else {
-            this.updateSFIObject();
-        }
-    }
-
-    private updateTravelObject(): void {
-        this.SFIObject = this.reqObject;
+      this.updateSFIObject();
     }
 
   private updateSFIObject(): void {

@@ -18,13 +18,14 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
 
     canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot):  boolean | Observable<boolean> {
         this._dataStore.setStoreData(new TravelDisclosureResponseObject());
+        this._service.isAdminDashboard = this._router.url.includes('admin-dashboard');
         const MODULE_ID = route.queryParamMap.get('disclosureId');
         if (MODULE_ID) {
             return new Observable<boolean>((observer: Subscriber<boolean>) => {
                 this.loadTravelDisclosure(MODULE_ID).subscribe((res: TravelDisclosureResponseObject) => {
                     if (res) {
                         this.updateTravelDataStore(res);
-                        this.reRouteIfWrongPath(_state.url, res.travelDisclosureStatusCode, route);
+                        this.reRouteIfWrongPath(_state.url, res.reviewStatusCode, route);
                         observer.next(true);
                         observer.complete();
                     } else {
@@ -60,7 +61,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
         return (homeUnit && personId) ? true : false;
     }
 
-    private loadTravelDisclosure(disclosureId: string): Observable<TravelDisclosureResponseObject> {
+    private loadTravelDisclosure(disclosureId): Observable<TravelDisclosureResponseObject> {
         return this._service.loadTravelDisclosure(disclosureId).pipe((catchError(error => this.redirectOnError(error))));
     }
 
@@ -68,11 +69,12 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
         this._dataStore.setStoreData(data);
     }
 
-    private reRouteIfWrongPath(currentPath: string, travelDisclosureStatusCode: string, route) {
+    private reRouteIfWrongPath(currentPath: string, reviewStatusCode: string, route) {
         let reRoutePath;
-        if (travelDisclosureStatusCode === '1' && !currentPath.includes('create-travel-disclosure')) {
+        const isCreateMode = ['1', '4', '5'].includes(reviewStatusCode);
+        if (isCreateMode && !currentPath.includes('create-travel-disclosure')) {
             reRoutePath = CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
-        } else if (travelDisclosureStatusCode !== '1' && currentPath.includes('create-travel-disclosure')) {
+        } else if (!isCreateMode && currentPath.includes('create-travel-disclosure')) {
             reRoutePath = POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
         }
         if (reRoutePath) {

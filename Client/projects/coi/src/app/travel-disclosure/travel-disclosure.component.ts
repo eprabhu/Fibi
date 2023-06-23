@@ -7,10 +7,18 @@ import { Subscription } from 'rxjs';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { NavigationService } from '../common/services/navigation.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
-import { TravelCreateModalDetails, TravelDisclosureResponseObject } from './travel-disclosure-interface';
+import { CoiTravelDisclosure, TravelCreateModalDetails, TravelDisclosureResponseObject } from './travel-disclosure-interface';
 import { environment } from '../../environments/environment';
 import { TravelDataStoreService } from './services/travel-data-store.service';
-import { HOME_URL } from '../app-constants';
+import {
+    ADMIN_DASHBOARD_URL,
+    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL,
+    HOME_URL,
+    HTTP_ERROR_STATUS,
+    HTTP_SUCCESS_STATUS,
+    POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
+} from '../app-constants';
+
 @Component({
     selector: 'app-travel-disclosure',
     templateUrl: './travel-disclosure.component.html',
@@ -18,41 +26,45 @@ import { HOME_URL } from '../app-constants';
     animations: [slideHorizontal]
 })
 export class TravelDisclosureComponent implements OnInit, OnDestroy {
-    isCardExpanded = true;
+
+    deployMap = environment.deployUrl;
     $subscriptions: Subscription[] = [];
     responseObject = new TravelDisclosureResponseObject();
-    isSaved = false;
-    isCreateMode = true;
-    ispersondetailsmodal = false;
-    userDetails = {
-        fullName: '',
-        personId: '',
-        homeUnit: null,
-        homeUnitName: null
-    };
-    deployMap = environment.deployUrl;
 
-    constructor(public commonService: CommonService,
-                public router: Router,
-                private _route: ActivatedRoute,
-                public sfiService: SfiService,
-                public service: TravelDisclosureService,
-                private _dataStore: TravelDataStoreService,
-                private _navigationService: NavigationService) {
+    isCreateMode = true;
+    isCardExpanded = true;
+    ispersondetailsmodal = false;
+    isTravelAdministrator = false;
+
+    currentPersonId = '';
+    userDetails = { fullName: '', personId: '', homeUnit: null, homeUnitName: null };
+
+    constructor(
+        public router: Router,
+        public sfiService: SfiService,
+        private _route: ActivatedRoute,
+        public commonService: CommonService,
+        public service: TravelDisclosureService,
+        private _dataStore: TravelDataStoreService,
+        private _navigationService: NavigationService) {
     }
 
     ngOnInit(): void {
+        this.navigateToHome();
+        this.fetchTravelRights();
         this.getDataFromStore();
         this.listenDataChangeFromStore();
-        this.navigateToHome();
         this.isCreateMode = this._dataStore.getEditModeForDisclosure();
     }
 
     ngOnDestroy(): void {
         this.clearAllDetails();
-        subscriptionHandler(this.$subscriptions);
     }
 
+    private fetchTravelRights() {
+        this.currentPersonId = this.commonService.getCurrentUserDetail('personId');
+        this.isTravelAdministrator = this.commonService.getAvailableRight('MANAGE_TRAVEL_DISCLOSURE');
+    }
     private navigateToHome() {
         this._route.queryParams.subscribe(params => {
             const MODULE_ID = params['disclosureId'];
@@ -69,15 +81,16 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this._dataStore.setStoreData(this.responseObject);
         this._dataStore.removeCreateModalDetails();
         this.service.setUnSavedChanges(false, '');
+        subscriptionHandler(this.$subscriptions);
     }
 
     private getDataFromStore(): void {
         if (this._dataStore.getData().travelDisclosureId) {
             this.responseObject = this._dataStore.getData();
+            this.userDetails.personId = this.responseObject.personId;
+            this.userDetails.fullName = this.responseObject.personFullName;
             this.userDetails.homeUnit = this.responseObject.homeUnitNumber;
             this.userDetails.homeUnitName = this.responseObject.homeUnitName;
-            this.userDetails.fullName = this.responseObject.personFullName;
-            this.userDetails.personId = this.responseObject.personId;
         } else {
             this.setUserDetails();
         }
@@ -85,10 +98,10 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
 
     private setUserDetails(): void {
         const travelCreateModalDetails: TravelCreateModalDetails = this._dataStore.getCreateModalDetails();
-        this.userDetails.fullName = this.commonService.getCurrentUserDetail('fullName');
         this.userDetails.personId = travelCreateModalDetails.personId;
         this.userDetails.homeUnit = travelCreateModalDetails.homeUnit;
         this.userDetails.homeUnitName = travelCreateModalDetails.homeUnitName;
+        this.userDetails.fullName = this.commonService.getCurrentUserDetail('fullName');
     }
 
     private listenDataChangeFromStore() {
@@ -99,8 +112,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         );
     }
 
-    handleTravelDisclosureSubmission(purpose: string): void {
-        this.service.saveOrCopySubject.next(purpose);
+    SaveTravelDisclosure(): void {
+        this.service.saveOrCopySubject.next('SAVE_DISCLOSURE');
     }
 
     isRouteComplete(possibleActiveRoutes: string[] = []): boolean {
@@ -111,20 +124,21 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.ispersondetailsmodal = event;
     }
 
-    leavePageClicked(): void {
-        this.service.setUnSavedChanges(false, '');
-        this.handleChildRouting();
-        this.redirectBasedOnQueryParam();
-    }
-
-    private handleChildRouting(): void {
-        if (!this.service.isChildRouting) {
-            this._dataStore.removeCreateModalDetails();
+    navigateBack(): void {
+        if (this.service.isAdminDashboard) {
+            this._navigationService.previousURL ? (this._navigationService.previousURL.includes('travel-disclosure')
+                ? this.router.navigate([ADMIN_DASHBOARD_URL]) : this.router.navigateByUrl(this._navigationService.previousURL))
+                : this.router.navigate([ADMIN_DASHBOARD_URL]);
+        } else {
+            this._navigationService.previousURL ? this._navigationService.previousURL.includes('travel-disclosure')
+                ? this.router.navigate([HOME_URL]) : this.router.navigateByUrl(this._navigationService.previousURL)
+                : this.router.navigate([HOME_URL]);
         }
     }
 
-    private redirectBasedOnQueryParam(): void {
-        this.router.navigateByUrl(this._navigationService.navigationGuardUrl);
+    checkReviewStatusCode(statusCode: string[] | string): boolean {
+        const statusArray = Array.isArray(statusCode) ? statusCode : [statusCode];
+        return statusArray.every((status) => status.includes(this.responseObject.reviewStatusCode));
     }
 
     closeAssignAdministratorModal(event) {
@@ -137,6 +151,78 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             this.responseObject.reviewStatus = event.reviewStatus;
             this._dataStore.manualDataUpdate(this.responseObject);
         }
+    }
+
+    submitTravelDisclosure(): void {
+        const reqObject: CoiTravelDisclosure = this._dataStore.getTravelDisclosureRO();
+        this.$subscriptions.push(this.service.submitTravelDisclosure(reqObject)
+            .subscribe((res: any) => {
+                if (res) {
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Submitted Successfully');
+                    this.service.setUnSavedChanges(false, '');
+                    this.router.navigate([POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
+                        { queryParams: { disclosureId: this.responseObject.travelDisclosureId } });
+                }
+            }, (err) => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Submitting Travel Disclosure');
+            })
+        );
+    }
+
+    approveTravelDisclosure(): void {
+        this.$subscriptions.push(this.service.approveTravelDisclosure(this.responseObject.travelDisclosureId)
+            .subscribe((res: any) => {
+                if (res) {
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Approved Successfully');
+                    this.service.setUnSavedChanges(false, '');
+                    this.setApprovalChangesToDisclosure(res);
+                }
+            }, (err) => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Approving Travel Disclosure');
+            })
+        );
+    }
+
+    private setApprovalChangesToDisclosure(resObject) {
+        this.responseObject.reviewStatus = resObject.reviewStatus;
+        this.responseObject.reviewStatusCode = resObject.reviewStatusCode;
+        this.responseObject.disclosureStatus = resObject.disclosureStatus;
+        this.responseObject.disclosureStatusCode = resObject.disclosureStatusCode;
+        this.responseObject.documentStatus = resObject.documentStatus;
+        this.responseObject.documentStatusCode = resObject.documentStatusCode;
+        this.responseObject.acknowledgeAt = resObject.acknowledgeAt;
+        this.responseObject.acknowledgeBy = resObject.acknowledgeBy;
+        this._dataStore.manualDataUpdate(this.responseObject);
+    }
+
+    withdrawTravelDisclosure(): void {
+        this.$subscriptions.push(this.service.withdrawTravelDisclosure(this.responseObject.travelDisclosureId)
+            .subscribe((res: any) => {
+                if (res) {
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Withdrawed Successfully');
+                    this.service.setUnSavedChanges(false, '');
+                    this.router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
+                        { queryParams: { disclosureId: this.responseObject.travelDisclosureId } });
+                }
+            }, (err) => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Withdrawing Travel Disclosure');
+            })
+        );
+    }
+
+    returnTravelDisclosure(): void {
+        this.$subscriptions.push(this.service.returnTravelDisclosure(this.responseObject.travelDisclosureId)
+            .subscribe((res: any) => {
+                if (res) {
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Returned Successfully');
+                    this.service.setUnSavedChanges(false, '');
+                    this.router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
+                        { queryParams: { disclosureId: this.responseObject.travelDisclosureId } });
+                }
+            }, (err) => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Returning Travel Disclosure');
+            })
+        );
     }
 }
 

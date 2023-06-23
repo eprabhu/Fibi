@@ -348,10 +348,10 @@
                         </app-no-data-label>
                     </div>
                     <div class="col-3">
-                        <label for="review-status" class="label-text">Review Status :</label>
-                        <app-no-data-label id="review-status" [valueToShow]="disclosure?.reviewDescription">
-                            <span [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
-                                class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}">{{disclosure?.reviewDescription}}</span>
+                        <label for="review-status" class="label-text">Document Status :</label>
+                        <app-no-data-label id="review-status" [valueToShow]="disclosure?.documentStatusDescription">
+                            <span [class.text-dark]="commonService.getDocumentStatusBadge(disclosure?.documentStatusCode) === 'warning'"
+                                class="ms-3 {{commonService.getDocumentStatusBadge(disclosure?.documentStatusCode)}}">{{disclosure?.documentStatusDescription}}</span>
                         </app-no-data-label>
                     </div>
                 </div>
@@ -370,17 +370,17 @@
                         </app-no-data-label>
                     </div>
                     <div class="col">
-                        <label for="approved-date" class="label-text">Approved Date :</label>
-                        <app-no-data-label id="approved-date" [valueToShow]="disclosure?.acknowledgeAt">
-                            <span class="grey-text">{{disclosure?.acknowledgeAt |
-                                dateFormatter}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col-3">
                         <label for="expiration-date" class="label-text">Expiration Date :</label>
                         <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.expirationDate">
                             <span class="grey-text">{{disclosure?.expirationDate |
                                 dateFormatter}}</span>
+                        </app-no-data-label>
+                    </div>
+                    <div class="col-3">
+                        <label for="review-status" class="label-text">Review Status :</label>
+                        <app-no-data-label id="review-status" [valueToShow]="disclosure?.reviewDescription">
+                            <span [class.text-dark]="commonService.getTravelReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
+                                class="ms-3 {{commonService.getTravelReviewStatusBadge(disclosure?.reviewStatusCode)}}">{{disclosure?.reviewDescription}}</span>
                         </app-no-data-label>
                     </div>
                 </div>

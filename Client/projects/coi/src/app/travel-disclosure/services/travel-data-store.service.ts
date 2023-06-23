@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { TravelCreateModalDetails, TravelDisclosureResponseObject } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, TravelCreateModalDetails, TravelDisclosureResponseObject } from '../travel-disclosure-interface';
 import { Subject } from 'rxjs';
+import { convertToValidAmount } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { getTotalNoOfDays, parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 
 @Injectable()
 export class TravelDataStoreService {
@@ -30,6 +32,32 @@ export class TravelDataStoreService {
         return this.structuredClone(data);
     }
 
+    getTravelDisclosureRO(): CoiTravelDisclosure {
+        const data = this.getData();
+        const travellerTypeCode = data.travellerTypeCodeList ? Object.keys(data.travellerTypeCodeList) : [];
+        return {
+            'entityId': data.entityId,
+            'entityNumber': data.entityNumber,
+            'travellerTypeCode': travellerTypeCode,
+            'travelTitle': data.travelTitle,
+            'isInternationalTravel': data.isInterNationalTravel,
+            'travelState': data.travelState,
+            'destinationCountry': data.destinationCountry,
+            'destinationCity': data.destinationCity,
+            'purposeOfTheTrip': data.purposeOfTheTrip,
+            'relationshipToYourResearch': data.relationshipToYourResearch,
+            'travelAmount': !data.travelAmount ? null : convertToValidAmount(data.travelAmount),
+            'travelStartDate': parseDateWithoutTimestamp(data.travelStartDate),
+            'travelEndDate': parseDateWithoutTimestamp(data.travelEndDate),
+            'travelDisclosureId': data.travelDisclosureId,
+            'homeUnit': data.homeUnitNumber,
+            'description': data.description,
+            'personId': data.personId,
+            'isSponsoredTravel': true,
+            'noOfDays': getTotalNoOfDays(data.travelStartDate, data.travelEndDate)
+        };
+    }
+
     updateStore(updatedData: string[], variable): void {
         const UPDATED_DATA = {};
         updatedData.forEach(element => {
@@ -57,7 +85,7 @@ export class TravelDataStoreService {
 
     getEditModeForDisclosure(): boolean {
         if (this.storeData.travelDisclosureId) {
-            return this.storeData.travelDisclosureStatusCode === '1';
+            return ['1', '4', '5'].includes(this.storeData.reviewStatusCode);
         } else {
             return true;
         }

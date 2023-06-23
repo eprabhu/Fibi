@@ -14,8 +14,8 @@
     <div class="card-body d-flex justify-content-center">
         <div class="gridSkin p-15 text-center d-flex mx-5 custom-margin">
             <div class="me-3">
-                <input type="checkbox" (change)="certifyTravelDisclosure();" [checked]="travelService.isTravelCertified"
-                    [disabled]="!isEditMode" class="certify-box mt-1">
+                <input type="checkbox" (change)="certify();" [checked]="travelService.isTravelCertified"
+                [disabled]="!isEditMode" class="certify-box mt-1">
             </div>
             <p>
                 I agree to abide by the University COI policy guidelines and certify that the information provided for

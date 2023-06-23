@@ -13,6 +13,7 @@ import {deepCloneObject, hideModal} from '../../../../../fibi/src/app/common/uti
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {
     CREATE_DISCLOSURE_ROUTE_URL,
+    CREATE_TRAVEL_DISCLOSURE_ROUTE_URL,
     HTTP_ERROR_STATUS,
     HTTP_SUCCESS_STATUS,
     POST_CREATE_DISCLOSURE_ROUTE_URL
@@ -218,7 +219,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         if (this.validateTravelDisclosure()) {
             this.getCreateTravelRequestObject();
             hideModal('reviseOrCreateDisclosureModal');
-            this._router.navigate(['/coi/travel-disclosure/travel-details']);
+            this._router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL]);
             this.clearModal();
         }
     }
