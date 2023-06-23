@@ -1,10 +1,12 @@
 package com.polus.fibicomp.coi.dao;
 
+import java.math.BigInteger;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -87,6 +89,8 @@ import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.proposal.pojo.Proposal;
 import com.polus.fibicomp.security.AuthenticatedUser;
 import com.polus.fibicomp.view.DisclosureView;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 
 import oracle.jdbc.OracleTypes;
 
@@ -2367,7 +2371,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public PersonEntity getPersonEntityDetailsByEntityId(Integer personEntityId) {
+	public PersonEntity getPersonEntityDetailsById(Integer personEntityId) {
 		PersonEntity personEntity = new PersonEntity();
 		personEntity = hibernateTemplate.get(PersonEntity.class, personEntityId);
 		personEntity.setCoiEntity(null);
@@ -2603,16 +2607,23 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public boolean checkEntityAdded(Integer entityId, String personId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("select (CASE WHEN count(pe.personEntityId) > 0 THEN true ELSE false END) from PersonEntity pe where pe.entityId = :entityId");
+		hqlQuery.append("select count(ENTITY_ID) from (SELECT pe.ENTITY_ID FROM " +
+				"PERSON_ENTITY pe where pe.ENTITY_ID = :entityId ");
 		if (personId != null) {
-			hqlQuery.append(" AND pe.personId = :personId");
+			hqlQuery.append(" AND pe.PERSON_ID = :personId )T1");
+		} else {
+			hqlQuery.append(" UNION SELECT t.ENTITY_ID FROM COI_TRAVEL_DISCLOSURE t WHERE t.ENTITY_ID = :entityId ) T1");
 		}
-		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("entityId", entityId);
+		org.hibernate.query.Query<BigInteger> value = session.createSQLQuery(hqlQuery.toString());
+		value.setParameter("entityId", entityId);
 		if (personId != null) {
-			query.setParameter("personId", personId);
+			value.setParameter("personId", personId);
 		}
-		return (Boolean) query.getSingleResult();
+		if (value.getSingleResult().intValue() > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -2622,8 +2633,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Connection connection = sessionImpl.connection();
 		try {
 			CallableStatement statement = connection.prepareCall("{call SYNC_SFIS_AND_DISCLOSURE(?,?,?,?,?,?,?,?)}");
-			statement.setInt(1, disclosureId);
-			statement.setInt(2, disclosureNumber);
+			if (disclosureId == null) {
+				statement.setNull(1, Types.INTEGER);
+			} else {
+				statement.setInt(1, disclosureId);
+			}
+			if (disclosureNumber == null) {
+				statement.setNull(2, Types.INTEGER);
+			} else {
+				statement.setInt(2, disclosureNumber);
+			}
+
 			statement.setString(3, AuthenticatedUser.getLoginPersonId());
 			statement.setString(4, AuthenticatedUser.getLoginUserName());
 			if (personEntityId == null) {
@@ -3177,6 +3197,80 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			return session.createQuery(query).getSingleResult();
 		} catch (Exception e) {
 			return null;
+		}
+	}
+
+	@Override
+	public void activateOrInactivateEntity(CoiEntityDto coiEntityDto) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiEntity e SET e.isActive = :isActive , e.revisionReason = :revisionReason, e.updateTimestamp = now(), e.updateUser = :updateUser ");
+		hqlQuery.append("WHERE e.entityId = : entityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("isActive", coiEntityDto.getActive());
+		query.setParameter("entityId", coiEntityDto.getEntityId());
+		query.setParameter("revisionReason", coiEntityDto.getRevisionReason());
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.executeUpdate();
+	}
+
+	@Override
+	public void activateOrInactivatePersonEntity(PersonEntityDto personEntityDto) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE PersonEntity e SET e.isRelationshipActive = :isRelationshipActive , e.updateTimestamp = now(), e.updateUser = :updateUser ");
+		hqlQuery.append("WHERE e.personEntityId = : personEntityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("isRelationshipActive", personEntityDto.getIsRelationshipActive());
+		query.setParameter("personEntityId", personEntityDto.getPersonEntityId());
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.executeUpdate();
+	}
+
+	@Override
+	public void archivePersonEntity(Integer personEntityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE PersonEntity pe SET pe.versionStatus = :versionStatus, pe.updateUser = :updateUser where pe.personEntityId = :personEntityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personEntityId", personEntityId);
+		query.setParameter("versionStatus", Constants.COI_ARCHIVE_STATUS);
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.executeUpdate();
+	}
+
+	@Override
+	public Integer getMaxPersonEntityVersionNumber(Integer personEntityNumber) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT MAX(e.versionNumber) FROM PersonEntity e WHERE e.personEntityNumber = :personEntityNumber");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personEntityNumber", personEntityNumber);
+		return (Integer) query.getSingleResult();
+	}
+
+	@Override
+	public Integer getMaxPersonEntityNumber() {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT MAX(e.personEntityNumber) FROM PersonEntity e ");
+		Query query = session.createQuery(hqlQuery.toString());
+		return (Integer) query.getSingleResult();
+	}
+
+	@Override
+	public boolean checkPersonEntityAdded(Integer personEntityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("select (CASE WHEN count(PERSON_ENTITY_ID) > 0 THEN true ELSE false END) from (SELECT pe.PERSON_ENTITY_ID FROM " +
+				"COI_DISCL_ENT_PROJ_DETAILS pe where pe.PERSON_ENTITY_ID = :personEntityId UNION SELECT t.PERSON_ENTITY_ID FROM COI_TRAVEL_DISCLOSURE t " +
+				"WHERE t.ENTITY_ID = :personEntityId ) T1");
+		org.hibernate.query.Query<BigInteger> value = session.createSQLQuery(hqlQuery.toString());
+		value.setParameter("personEntityId", personEntityId);
+		if (value.getSingleResult().intValue() > 0) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	

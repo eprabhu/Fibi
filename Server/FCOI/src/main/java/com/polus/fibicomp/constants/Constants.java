@@ -1615,6 +1615,8 @@ public interface Constants {
     /** COI */
     Integer COI_MODULE_CODE = 8;
     Integer COI_SUBMODULE_CODE = 0;
+    Integer COI_SFI_SUBMODULE_CODE = 801;
+
     String COI_ACTIVE_STATUS = "ACTIVE";
     String COI_ARCHIVE_STATUS = "ARCHIVE";
     Integer COI_INITIAL_VERSION_NUMBER = 1;
@@ -1624,6 +1626,7 @@ public interface Constants {
     String TYPE_PROJECT_DISCLOSURE = "P";
     String TYPE_REVISE_FCOI = "RF";
     String TYPE_SFI = "S";
+    String TYPE_INACTIVATE_SFI = "IS";
     Integer COI_ADMINISTRATOR = 1335;
     Integer VIEW_ADMIN_GROUP_COI = 1356;
     
@@ -1631,7 +1634,7 @@ public interface Constants {
     String TRAVEL_DOCUMENT_STATUS_CODE_DRAFT = "1";
     String TRAVEL_DOCUMENT_STATUS_CODE_APPROVED = "2";
     String TRAVEL_DISCLOSURE_STATUS_CODE = "1";
-    
+
     String TRAVEL_REVIEW_STATUS_CODE_PENDING = "1";
     String TRAVEL_REVIEW_STATUS_CODE_SUBMITTED = "2";
     String TRAVEL_REVIEW_STATUS_CODE_INPROGRESS = "3";

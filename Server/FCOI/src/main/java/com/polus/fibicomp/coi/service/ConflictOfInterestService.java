@@ -7,7 +7,8 @@ import javax.validation.Valid;
 
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
-import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
@@ -391,14 +392,14 @@ public interface ConflictOfInterestService {
 	
 	/**
 	 * This method is used to certifyTravelDisclosure
-	 * @param coiTravelDisclosure
+	 * @param vo
 	 * @return vo
 	 */
 	ResponseEntity<Object> submitTravelDisclosure(ConflictOfInterestVO vo);
 	
 	/**
 	 * This method is used to certifyDisclosure
-	 * @param coiDisclosure
+	 * @param vo
 	 * @return vo
 	 */
 	ResponseEntity<Object> certifyTravelDisclosure(ConflictOfInterestVO vo);
@@ -418,6 +419,21 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> evaluateValidation(Integer disclosureId);
 
 	ResponseEntity<Object> getProjConflictStatusType();
+
+	/**
+	 *This method is used to activate/inactive entity by checking the entity is used anywhere.
+	 * If entity is linked on a SFI new version will be created
+	 * @param coiEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> activateOrInactivateEntity(CoiEntityDto coiEntityDto);
+
+	/**
+	 *This method is used to activate/inactive  person entity
+	 * @param personEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
 
 	ResponseEntity<Object> updateProjectRelationship(ConflictOfInterestVO vo);
 
