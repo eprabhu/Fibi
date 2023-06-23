@@ -820,9 +820,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaQuery<CoiConflictHistory> query = builder.createQuery(CoiConflictHistory.class);
 		Root<CoiConflictHistory> root = query.from(CoiConflictHistory.class);
 		query.where(root.get("disclosureDetailsId").in(disclosureDetailsId));
+		query.orderBy(builder.desc(root.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
-
 
 	@Override
 	public String getProposalIdLinkedInDisclosure(Integer disclosureId) {
@@ -2716,11 +2716,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			Root<CoiDisclEntProjDetails> rootCoiDisclEntProjDetails = query.from(CoiDisclEntProjDetails.class);
 			query.select(builder.count(rootCoiDisclEntProjDetails));
 			query.where(builder.and(builder.equal(rootCoiDisclEntProjDetails.get("disclosureId"), disclosureId),
-					builder.isNotNull(rootCoiDisclEntProjDetails.get("projectConflictStatusCode"))));
+					builder.isNull(rootCoiDisclEntProjDetails.get("projectConflictStatusCode")),
+					builder.isNotNull(rootCoiDisclEntProjDetails.get("personEntityId"))));
 			Long count = session.createQuery(query).getSingleResult();
-			return count.intValue() > 0 ? true : false;
+			return count.intValue() == 0;
 		} catch (Exception e) {
-			return false;
+			return true;
 		}
 	}
 
@@ -3141,4 +3142,42 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.where(builder.equal(rootDisclComment.get("riskCategoryCode"), riskCategoryCode));
 		return session.createQuery(query).getSingleResult();
 	}
+	
+	@Override
+	public void updateCoiDisclEntProjDetails(String projectConflictStatusCode, Integer disclosureDetailsId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaUpdate<CoiDisclEntProjDetails> criteriaUpdate = cb.createCriteriaUpdate(CoiDisclEntProjDetails.class);
+		Root<CoiDisclEntProjDetails> root = criteriaUpdate.from(CoiDisclEntProjDetails.class);
+		criteriaUpdate.set("projectConflictStatusCode", projectConflictStatusCode);
+		criteriaUpdate.where(cb.equal(root.get("disclosureDetailsId"), disclosureDetailsId));
+		session.createQuery(criteriaUpdate).executeUpdate();
+	}
+
+	@Override
+	public String getProjectConflictStatusCode(Integer disclosureDetailsId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<String> query = builder.createQuery(String.class);
+		Root<CoiDisclEntProjDetails> rootCoiDisclEntProjDetails = query.from(CoiDisclEntProjDetails.class);
+		query.where(builder.equal(rootCoiDisclEntProjDetails.get("disclosureDetailsId"), disclosureDetailsId));
+		query.select(rootCoiDisclEntProjDetails.get("projectConflictStatusCode"));
+		return session.createQuery(query).getSingleResult();
+	}
+
+	@Override
+	public String getCoiConflictStatusByStatusCode(String conflictStatusCode) {
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<String> query = builder.createQuery(String.class);
+			Root<CoiConflictStatusType> rootCoiConflictStatusType = query.from(CoiConflictStatusType.class);
+			query.where(builder.equal(rootCoiConflictStatusType.get("conflictStatusCode"), conflictStatusCode));
+			query.select(rootCoiConflictStatusType.get("description"));
+			return session.createQuery(query).getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 }

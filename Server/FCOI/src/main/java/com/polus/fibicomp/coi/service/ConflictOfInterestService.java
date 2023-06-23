@@ -408,4 +408,17 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> approveTravelDisclosure(Integer travelDisclosureId);
 	
 	ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId);
+	
+	/**
+	 * This method is used to evaluate validation conditions:
+	 * 1.If SFI has to be defined based on questionnaire evaluation.
+	 * 2.Is there any SFI's with relationship not defined.
+	 * 3.Is there any SFI in draft status 
+	 */
+	ResponseEntity<Object> evaluateValidation(Integer disclosureId);
+
+	ResponseEntity<Object> getProjConflictStatusType();
+
+	ResponseEntity<Object> updateProjectRelationship(ConflictOfInterestVO vo);
+
 }
