@@ -194,8 +194,8 @@ export class CommonService {
         this.isEnableLock = parameters.isEnableLock;
     }
 
-    async fetchPermissions() {
-        if (this.rightsArray.length) {
+    async fetchPermissions(hardRefresh = false) {
+        if (!hardRefresh && this.rightsArray.length) {
             return this.rightsArray;
         }
         const {fibiRights, coiRights} = await this.getAllSystemRights();
