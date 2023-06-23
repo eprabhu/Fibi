@@ -486,4 +486,23 @@ public class ConflictOfInterestController {
 		logger.info("Requesting for validateConflicts");
 		return conflictOfInterestService.validateConflicts(disclosureId);
 	}
+
+	@GetMapping("/evaluateValidation/{disclosureId}")
+	public ResponseEntity<Object> evaluateValidation(@PathVariable("disclosureId") Integer disclosureId) {
+		logger.info("Requesting for evaluateValidation");
+		return conflictOfInterestService.evaluateValidation(disclosureId);
+	}
+
+	@GetMapping("/getProjConflictStatusType")
+	public ResponseEntity<Object> getProjConflictStatusType() {
+		logger.info("Requesting for getProjConflictStatusType");
+		return conflictOfInterestService.getProjConflictStatusType();
+	}
+
+	@PostMapping(value = "/updateProjectRelationship")
+	public ResponseEntity<Object> updateProjectRelationship(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Request for updateProjectRelationship");
+		return conflictOfInterestService.updateProjectRelationship(vo);
+	}
+
 }

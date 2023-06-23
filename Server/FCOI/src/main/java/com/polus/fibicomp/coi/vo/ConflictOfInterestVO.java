@@ -270,6 +270,14 @@ public class ConflictOfInterestVO {
 	
 	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusDetails;
 
+	private String conflictStatusCode;
+
+	private String Comment;
+
+	private Integer disclosureDetailsId;
+
+	private String documentOwnerPersonId;
+
 	public CoiReviewStatusType getCoiReviewStatusTypeDetalis() {
 		return coiReviewStatusTypeDetalis;
 	}
@@ -1203,6 +1211,38 @@ public class ConflictOfInterestVO {
 
 	public void setEntityRiskCategories(List<EntityRiskCategory> entityRiskCategories) {
 		this.entityRiskCategories = entityRiskCategories;
+	}
+
+	public String getComment() {
+		return Comment;
+	}
+
+	public void setComment(String comment) {
+		Comment = comment;
+	}
+
+	public Integer getDisclosureDetailsId() {
+		return disclosureDetailsId;
+	}
+
+	public void setDisclosureDetailsId(Integer disclosureDetailsId) {
+		this.disclosureDetailsId = disclosureDetailsId;
+	}
+
+	public String getDocumentOwnerPersonId() {
+		return documentOwnerPersonId;
+	}
+
+	public void setDocumentOwnerPersonId(String documentOwnerPersonId) {
+		this.documentOwnerPersonId = documentOwnerPersonId;
+	}
+
+	public String getConflictStatusCode() {
+		return conflictStatusCode;
+	}
+
+	public void setConflictStatusCode(String conflictStatusCode) {
+		this.conflictStatusCode = conflictStatusCode;
 	}
 	
 }
