@@ -14,6 +14,7 @@ import { AddSfiModule } from '../add-sfi/add-sfi.module';
 import { AddSfiSliderComponent } from './add-sfi-slider/add-sfi-slider.component';
 import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
 import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
+import { ActivateInactivateSfiModalComponent } from './activate-inactivate-sfi-modal/activate-inactivate-sfi-modal.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -32,7 +33,8 @@ import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.com
     AssignAdministratorModalComponent,
     AddSfiSliderComponent,
     ViewEntityDetailsComponent,
-    SliderCloseBtnComponent
+    SliderCloseBtnComponent,
+    ActivateInactivateSfiModalComponent
   ],
   exports: [
     NoInformationComponent,
@@ -42,7 +44,8 @@ import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.com
     AssignAdministratorModalComponent,
     AddSfiSliderComponent,
     ViewEntityDetailsComponent,
-    SliderCloseBtnComponent
+    SliderCloseBtnComponent,
+    ActivateInactivateSfiModalComponent
   ]
 })
 export class SharedComponentModule { }

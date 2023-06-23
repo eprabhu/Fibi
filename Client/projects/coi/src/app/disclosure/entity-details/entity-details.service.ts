@@ -11,7 +11,6 @@ export class EntityDetailsService {
   previousURL = '';
   lookups: any;
   $entityDetailsTest = new BehaviorSubject<object>({});
-  entityDetailsId: any;
   globalSave$: Subject<any> = new Subject<any>();
 
 

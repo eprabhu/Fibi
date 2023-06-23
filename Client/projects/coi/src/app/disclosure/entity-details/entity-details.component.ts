@@ -15,10 +15,12 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   }
   updateRelationshipDetails: any;
   isEnableRelationshipModal = false;
+  sfiRelationStatus: any = {};
+  isEditMode = false;
 
   ngOnInit() {
-    const isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
-    if (isEditMode) {
+    this.isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
+    if (this.isEditMode) {
       this.entityDetailService.isExpanded = false;
     }
   }
@@ -46,5 +48,9 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
     if (event) {
       scrollIntoView('focusQuestionnaire');
     }
+  }
+
+  getRelationshipDetails(event) {
+    this.sfiRelationStatus = event;
   }
 }

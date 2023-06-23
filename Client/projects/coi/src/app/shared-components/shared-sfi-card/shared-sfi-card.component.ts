@@ -57,13 +57,13 @@ export class SharedSfiCardComponent implements OnInit {
 
   private getEntityDescription(): string|null {
     return this.isTriggeredFromDashboard() ? this.reqObject.coiEntityType
-                                           : this.getValuesFormCOIEntityObj('entityType') 
+                                           : this.getValuesFormCOIEntityObj('entityType')
                                            ? this.getValuesFormCOIEntityObj('entityType').description : null;
   }
 
   private getCountryName(): string|null {
     return this.isTriggeredFromDashboard() ? this.reqObject.coiEntityCountry
-                                           : this.getValuesFormCOIEntityObj('country') 
+                                           : this.getValuesFormCOIEntityObj('country')
                                            ? this.getValuesFormCOIEntityObj('country').countryName : null;
   }
 
@@ -76,7 +76,7 @@ export class SharedSfiCardComponent implements OnInit {
   }
 
   openSfiDetails(entityId: number, mode: string): void {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entityId, mode: mode } });
+    this._router.navigate(['/coi/entity-details'], { queryParams: { personEntityId: entityId, mode: mode } });
   }
 
 }
