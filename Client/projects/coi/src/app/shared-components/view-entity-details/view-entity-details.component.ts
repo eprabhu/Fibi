@@ -1,11 +1,11 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
 import { EntityManagementService } from '../../entity-management/entity-management.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { NavigationService } from '../../common/services/navigation.service';
 import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
@@ -18,14 +18,13 @@ declare var $: any;
   styleUrls: ['./view-entity-details.component.scss'],
   // animations: [slowSlideInOut]
 })
-export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
+export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
 
   entityDetails: any = {};
   entityId: any;
   $subscriptions: Subscription[] = [];
   previousURL = '';
   deployMap = environment.deployUrl;
-  imgURl = this.deployMap + 'assets/images/code-branch-solid.svg';
   isEntityManagement = false;
   isModifyEntity = false;
   @Output() emitRelationshipModal: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -33,6 +32,14 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   mandatoryList = new Map();
   changeType = '';
   modifyDescription = '';
+  inactivateReason = '';
+  reasonValidateMapEntity = new Map();
+  isEnableActivateInactivateSfiModal = false;
+  @Input() sfiRelationStatus: any = {};
+  isRelationshipActive = false;
+  sfiStatus = '';
+  canMangeSfi = false;
+  @Input() isEditMode = false;
 
   constructor(private _router: Router, private _route: ActivatedRoute,
     public entityManagementService: EntityManagementService,
@@ -44,9 +51,17 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isEntityManagement = this._router.url.includes('entity-management');
     this.isModifyEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
-    this.entityId = this.isEntityManagement ? this._route.snapshot.queryParamMap.get('entityManageId') :
-      this._route.snapshot.queryParamMap.get('entityId');
-    this.getEntityDetails();
+    this.$subscriptions.push(this._route.queryParams.subscribe(params => {
+      this.entityId = this.isEntityManagement ? params.entityManageId : params.personEntityId;
+      this.getEntityDetails();
+    }));
+  }
+
+  ngOnChanges() {
+    if (!this.isEntityManagement) {
+      this.sfiStatus =  this.getSfiStatus();
+      this.canMangeSfi = this.sfiRelationStatus.personId === this._commonServices.currentUserDetails.personId ? true : false;
+    }
   }
 
   ngOnDestroy() {
@@ -56,13 +71,19 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
   navigateBack() {
     if (this.isEntityManagement) {
-      this._navigationService.previousURL ? this._navigationService.previousURL.includes('create-sfi/create')
-      ?  this._router.navigate(['/coi/entity-management']) : this._router.navigateByUrl(this._navigationService.previousURL)
-      :  this._router.navigate(['/coi/entity-management']);
+      if (this._navigationService.previousURL.includes('entityManageId') ||
+        this._navigationService.previousURL.includes('entity-details') || this._navigationService.previousURL === '') {
+        this._router.navigate(['/coi/entity-management']);
+      } else {
+        this._router.navigateByUrl(this._navigationService.previousURL);
+      }
     } else {
-      this._navigationService.previousURL ? this._navigationService.previousURL.includes('create-sfi/create')
-      ? this._router.navigate(['/coi/user-dashboard/entities']) : this._router.navigateByUrl(this._navigationService.previousURL)
-      :this._router.navigate(['/coi/user-dashboard/entities']);
+      if (this._navigationService.previousURL.includes('personEntityId') ||
+        this._navigationService.previousURL.includes('create-sfi/create') || this._navigationService.previousURL === '') {
+        this._router.navigate(['/coi/user-dashboard/entities']);
+      } else {
+        this._router.navigateByUrl(this._navigationService.previousURL);
+      }
     }
   }
 
@@ -85,7 +106,6 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   getSfiEntityDetails() {
     this.$subscriptions.push(this.entityDetailsServices.getCoiEntityDetails(this.entityId).subscribe((res: any) => {
       this.entityDetails = res.coiEntity;
-      this.entityDetailsServices.entityDetailsId = res.coiEntity.entityId;
     }, _error => {
       this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
     }));
@@ -155,5 +175,81 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   goToHome() {
     this.isEntityManagement ? this._router.navigate(['/coi/user-dashboard'])
       : this._router.navigate(['/coi/user-dashboard/entities']);
+  }
+
+  activateInactivateEntityOrSfi(moduleName: string) {
+    if (moduleName === 'ENTITY') {
+      document.getElementById('inactivate-confirm-message').click();
+    } else {
+      this.isEnableActivateInactivateSfiModal = true;
+    }
+  }
+
+  entityRiskLevel(description): string {
+    switch (description) {
+      case 'High': return 'invalid';
+      case 'Medium': return 'medium-risk';
+      case 'Low': return 'low-risk';
+      default: return 'low-risk';
+    }
+  }
+
+  activateAndInactivateEntity() {
+    this.reasonValidateMapEntity.clear();
+    if (this.validForActivateAndInactivateEntity()) {
+      const REQ_BODY = {
+        entityId: this.entityId,
+        active: !this.entityDetails.isActive,
+        revisionReason: this.inactivateReason
+      };
+      this.$subscriptions.push(this.entityManagementService.activateInactivate(REQ_BODY).subscribe((res: any) => {
+        this.inactivateReason = '';
+        document.getElementById('hide-inactivate-modal').click();
+        this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity ${this.entityDetails.isActive ? 'inactivate' : 'activate '} successfully completed `);
+        const entityId = Number(this.entityId);
+        entityId === res.entityId ? this.updateEntityDetails(res) :
+          this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: res.entityId } });
+      }, error => {
+        this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+      }));
+    }
+  }
+
+  validForActivateAndInactivateEntity(): boolean {
+    if (!this.inactivateReason && this.entityDetails.isActive) {
+      this.reasonValidateMapEntity.set('reason', '*Please enter the reason for inactivation.');
+    }
+    return this.reasonValidateMapEntity.size === 0 ? true : false;
+  }
+
+  updateEntityDetails(data) {
+    this.entityId = data.entityId;
+    this.viewEntityDetails();
+  }
+
+  closeActivateInactivateSfiModal(event) {
+    if (event) {
+      this.sfiRelationStatus.isRelationshipActive = event.isRelationshipActive;
+      if (event.versionStatus) {
+        this.sfiRelationStatus.versionStatus = event.versionStatus;
+      }
+      this.sfiStatus = this.getSfiStatus();
+      this.isEnableActivateInactivateSfiModal = false;
+      if (this.entityId !== event.personEntityId) {
+        this._router.navigate(['/coi/entity-details'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
+      }
+    } else {
+      this.isEnableActivateInactivateSfiModal = false;
+    }
+  }
+
+  getSfiStatus(): string {
+    if (this.sfiRelationStatus.isRelationshipActive && this.sfiRelationStatus.versionStatus === 'ACTIVE') {
+      return 'Active';
+    } else if (!this.sfiRelationStatus.isRelationshipActive && this.sfiRelationStatus.versionStatus === 'ACTIVE') {
+      return 'Inactive';
+    } else if (this.sfiRelationStatus.versionStatus === 'PENDING') {
+      return 'Draft';
+    }
   }
 }

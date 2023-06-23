@@ -52,7 +52,9 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
 
   ngOnInit() {
     this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit';
-    this.getDataFromService();
+    this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
+      this.getDataFromService();
+    }));
     this.configuration.enableViewMode = !this.isEditMode;
   }
   ngOnChanges() {
@@ -94,11 +96,11 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   getDefinedRelationships() {
     const REQ_BODY = {
       'tabName': this.currentSelected.tab,
-      'personEntityId': this._activatedRoute.snapshot.queryParamMap.get('entityId')
+      'personEntityId': this._activatedRoute.snapshot.queryParamMap.get('personEntityId')
     };
     return new Promise<boolean>((resolve) => {
       this.$subscriptions.push(this.entityDetailsServices.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
-        this.configuration.moduleItemKey = this.entityDetailsServices.entityDetailsId;
+        this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId');
         this.definedRelationships = res.personEntityRelationships;
         (this.isEditMode && this.definedRelationships.length > 0) ? this.positionsToView.emit(true) : this.positionsToView.emit(false);
         this.removeExistingRelation();
@@ -120,7 +122,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
       this.isSaving = true;
       const REQ_BODY = {
         'questionnaireAnsHeaderId': null,
-        'personEntityId': this._activatedRoute.snapshot.queryParamMap.get('entityId'),
+        'personEntityId': this._activatedRoute.snapshot.queryParamMap.get('personEntityId'),
         'validPersonEntityRelTypeCode': this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode
       };
       this.$subscriptions.push(this.entityDetailsServices.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {

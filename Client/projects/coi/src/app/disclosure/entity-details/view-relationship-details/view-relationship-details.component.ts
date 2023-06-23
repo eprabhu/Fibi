@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -22,6 +22,7 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
   isReadMoreBusinessArea = false;
   isReadMoreUniversity = false;
   isReadMoreRelationWith = false;
+  @Output() sfiRelationshipDetails: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
     private _route:ActivatedRoute,private _commonService: CommonService) { }
@@ -36,7 +37,7 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
   }
 
   ngOnChanges() {
-    const ENTITY_ID = this._route.snapshot.queryParamMap.get('entityId');
+    const ENTITY_ID = this._route.snapshot.queryParamMap.get('personEntityId');
     this.getEntityDetails(ENTITY_ID);
     if(this.updateRelationshipDetails) {
       this.personEntityRelationships.push(this.updateRelationshipDetails);
@@ -47,6 +48,12 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
     this.$subscriptions.push(this.entityDetailsServices.getRelationshipEntityDetails(personEntityId).subscribe((res: any) => {
       this.relationshipsDetails = res.personEntity;
       this.personEntityRelationships = res.personEntityRelationships;
+      const relationSFiStatus = {
+        isRelationshipActive: this.relationshipsDetails.isRelationshipActive,
+        versionStatus: this.relationshipsDetails.versionStatus,
+        personId : this.relationshipsDetails.personId
+      };
+      this.sfiRelationshipDetails.emit(relationSFiStatus);
     },_error=>{
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
 

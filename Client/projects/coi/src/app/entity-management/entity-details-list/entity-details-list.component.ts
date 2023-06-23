@@ -56,10 +56,12 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.entityManagementService.relationshipDashboardRequest.filterType = 'PERSON';
     this.getPermissions();
-    this.getRelationshipEntityList();
     this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
     this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit();
-    this.$relationshipEntityList.next();
+    this.$subscriptions.push(this._route.queryParams.subscribe(params => {
+      this.getRelationshipEntityList();
+      this.$relationshipEntityList.next();
+    }));
   }
 
   ngOnDestroy() {
@@ -67,11 +69,11 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   }
 
   viewDetails(data) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: data.personEntityId, mode: 'view' } });
+    this._router.navigate(['/coi/entity-details'], { queryParams: { personEntityId: data.personEntityId, mode: 'view' } });
   }
 
   redirectToEntity(event) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: event.personEntityId, mode: 'view' } });
+    this._router.navigate(['/coi/entity-details'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
   }
 
   getRelationshipEntityList() {

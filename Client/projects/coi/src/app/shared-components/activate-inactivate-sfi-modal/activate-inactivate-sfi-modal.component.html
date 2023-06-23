@@ -1,0 +1,50 @@
+<button id="activate-inactivate-show-btn" data-bs-target="#activateInactivateSfiModal" data-bs-toggle="modal"
+  class="d-none"></button>
+
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="activateInactivateSfiModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header ct-footer-padding">
+        <h4 class="modal-title">{{isRelationshipActive?'Inactivate':'Activate'}} {{sfiDetails?.entityName}}</h4>
+        <button type="button" class="btn-close fs-12 " title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="closeSfiActivateAndInactivateModal(false)"></button>
+      </div>
+      <div class="modal-body ct-modal-padding">
+        <div class="help-text">
+          <div class="col-12 py-2 grey-info font px-3">
+            <span *ngIf="isRelationshipActive" class="fs-13 text-secondary">
+                <ol type="1">
+                  <li>Please provide a reason for inactivation in the field provided.</li>
+                  <li>The current date is marked as the end date of involvement,
+                    you may edit and update the date if required.</li>
+                </ol>
+            </span>
+            <span *ngIf="!isRelationshipActive" class="fs-13  text-secondary">
+              <ol type="1">
+                <li>Provide the reason for Activation in the field provided.</li>
+                <li>Click on Activate button to activate the entity.</li>
+              </ol>
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <span class="block-display fw-bold fs-14">Reason for {{isRelationshipActive?'Inactivation' :'Reactivation'}} :<span *ngIf="isRelationshipActive" class="mandatory px-1">*</span></span>
+            <textarea placeholder="Please enter the reason."  [(ngModel)]="activateInactivateReason" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
+              appAutoGrow appLengthValidator [ngClass]="{'invalid-border':reasonValidateMapSfi.has('reason')}"></textarea>
+            <span *ngIf="reasonValidateMapSfi.has('reason')" class="invalid-feedback d-block fs-13">
+              {{reasonValidateMapSfi.get('reason')}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ct-footer-padding">
+        <button class="btn btn-outline-secondary fs-14 btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+         type="button" title="Cancel" (click)="closeSfiActivateAndInactivateModal(false)">Cancel
+        </button>
+        <button class="btn btn-primary fs-14 btn-sm" id="claim-sumbit-no-btn" type="button" data-bs-dismiss="modal" [attr.title]="isRelationshipActive?'Click to inactivate sfi':'Click to activate sfi'" (click)="activateAndInactivateSfi()">
+          {{isRelationshipActive?'Inactivate' : 'Activate'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -19,8 +19,8 @@ export class EntityManagementService {
     {code: 'N', description: 'Inactive'}
   ];
 
-  getAllSystemEntityList(prams) {
-    return this._http.post(this._commonService.baseUrl+'/getAllSystemEntityList',prams);
+  getAllSystemEntityList(params) {
+    return this._http.post(this._commonService.baseUrl + '/getAllSystemEntityList', params);
   }
 
   getEntityDetails(entityId) {
@@ -31,12 +31,16 @@ export class EntityManagementService {
     return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
   }
 
-  saveOrUpdateCOIEntity(prams) {
-    return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiEntity', prams)
+  saveOrUpdateCOIEntity(params) {
+    return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiEntity', params);
   }
 
-  getPersonEntityDashboard(prams) {
-    return this._http.post(this._commonService.baseUrl + '/getPersonEntityDashboard', prams)
+  getPersonEntityDashboard(params) {
+    return this._http.post(this._commonService.baseUrl + '/getPersonEntityDashboard', params);
+  }
+
+  activateInactivate(params) {
+    return this._http.put(this._commonService.baseUrl + '/entity/activateInactivate', params);
   }
 }
 export class EntityDashboardRequest {
@@ -56,11 +60,11 @@ export class EntityDashboardRequest {
   currentPage = 1;
   pageNumber = 20;
 }
-export class RelationshipDashboardRequest{
+export class RelationshipDashboardRequest {
   property1 = null;
   property2 = null;
   property3 = null;
-  property4 = []
+  property4 = [];
   property5 = null;
   sort: any = {
   };
@@ -72,5 +76,5 @@ export class RelationshipDashboardRequest{
 
 export class EntityDashDefaultValues {
   entitySearch = '';
-  countrySearch = ''
+  countrySearch = '';
 }
