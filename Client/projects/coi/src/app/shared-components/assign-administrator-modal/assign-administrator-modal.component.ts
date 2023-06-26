@@ -8,7 +8,7 @@ declare var $: any;
 
 class AssignAdminRO {
   adminPersonId: '';
-  adminGroupId: '';
+  adminGroupId = null;
   travelDisclosureId?: '';
   disclosureId?: '';
 }

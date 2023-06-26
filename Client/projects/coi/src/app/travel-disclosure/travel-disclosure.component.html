@@ -232,9 +232,9 @@
                         [ngClass]="(responseObject?.reviewStatusCode != '2' && !isCreateMode && responseObject?.reviewStatusCode != '7') ? 'col-2' : 'w-100'"
                         class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3">
                         <mat-icon
-                            [class.me-2]="isCreateMode || checkReviewStatusCode(['7']) || checkReviewStatusCode(['2'])">home</mat-icon>
+                            [class.me-2]="showHomeButton()">home</mat-icon>
                         <span
-                            *ngIf="isCreateMode || checkReviewStatusCode(['7']) || checkReviewStatusCode(['2'])">Home</span>
+                            *ngIf="showHomeButton()">Home</span>
                     </button>
 
                     <!-- Comments -->
@@ -255,11 +255,10 @@
 
                         <div class="dropdown-menu w-100 p-0">
                             <!-- assigned admin -->
-                            <ng-container *ngIf="responseObject?.adminGroupId || responseObject?.adminPersonId">
-                                <button title="Click to Reassign Administrator/Admin Group"
-                                    area-describedby="Click to assign administrator"
+                            <ng-container *ngIf="responseObject?.adminPersonId">
+                                <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
                                     class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center"
-                                    *ngIf="isTravelAdministrator && (checkReviewStatusCode(['2']) || checkReviewStatusCode(['3']))"
+                                    *ngIf="isTravelAdministrator && checkReviewStatusCode(['2', '3'], 'SOME')"
                                     data-bs-toggle="modal" data-bs-target="#assign-to-admin-modal">
                                     <mat-icon class="me-2">group_add</mat-icon>
                                     Reassign Admin
@@ -267,9 +266,8 @@
                             </ng-container>
 
                             <!-- Withdraw disclosure -->
-                            <button title="Click to Withdraw Travel Disclosure"
-                                class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center"
-                                (click)="withdrawTravelDisclosure();"
+                            <button title="Click to Withdraw Travel Disclosure" (click)="withdrawTravelDisclosure();"
+                                class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center" 
                                 *ngIf="checkReviewStatusCode(['2']) && responseObject?.personId == currentPersonId">
                                 <mat-icon class="me-2">undo</mat-icon>
                                 Withdraw
@@ -289,7 +287,7 @@
 
                 <div class="px-3" *ngIf="!isCreateMode">
                     <!-- assign admin -->
-                    <ng-container *ngIf="!(responseObject?.adminGroupId || responseObject?.adminPersonId)">
+                    <ng-container *ngIf="!(responseObject?.adminPersonId)">
                         <button title="Click to Assign Administrator/Admin Group"
                             area-describedby="Click to assign administrator"
                             class="btn btn-primary fs-14 d-flex justify-content-center mb-3 w-100 align-items-center"
@@ -299,12 +297,10 @@
                             Assign Admin
                         </button>
                     </ng-container>
-                    <ng-container
-                        *ngIf="isTravelAdministrator && (checkReviewStatusCode(['3']) || (checkReviewStatusCode(['2']) && (responseObject?.adminGroupId || responseObject?.adminPersonId)))">
+                    <ng-container *ngIf="showReturnOrApproveButton()">
                         <!-- return to pi -->
-                        <button title="Click to Return Travel Disclosure"
-                            class="btn btn-outline-grey fs-14 d-flex justify-content-center w-100 align-items-center mb-3"
-                            (click)="returnTravelDisclosure();">
+                        <button title="Click to Return Travel Disclosure" (click)="returnTravelDisclosure();"
+                            class="btn btn-outline-grey fs-14 d-flex justify-content-center w-100 align-items-center mb-3">
                             <span class="d-flex justify-content-center w-100 align-items-center">
                                 <mat-icon class="me-2">description</mat-icon>
                                 Return
@@ -312,9 +308,8 @@
                         </button>
 
                         <!-- approve disclosure -->
-                        <button title="Click to Approve Travel Disclosure"
-                            class="btn btn-primary fs-14 d-flex justify-content-center mb-3 w-100 align-items-center"
-                            (click)="approveTravelDisclosure();">
+                        <button title="Click to Approve Travel Disclosure" (click)="approveTravelDisclosure();"
+                            class="btn btn-primary fs-14 d-flex justify-content-center mb-3 w-100 align-items-center">
                             <span class="d-flex justify-content-center w-100 align-items-center">
                                 <mat-icon class="me-2">check_circle</mat-icon>
                                 Approve
@@ -386,5 +381,5 @@
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails">
 </app-personal-details-modal>
 
-<app-assign-administrator-modal *ngIf="checkReviewStatusCode(['2']) || checkReviewStatusCode(['3'])" [path]="'travelDisclosure'" (closeModal)="closeAssignAdministratorModal($event)"
+<app-assign-administrator-modal *ngIf="checkReviewStatusCode(['2','3'], 'SOME')" [path]="'travelDisclosure'" (closeModal)="closeAssignAdministratorModal($event)"
     [disclosureId]="responseObject?.travelDisclosureId"></app-assign-administrator-modal>

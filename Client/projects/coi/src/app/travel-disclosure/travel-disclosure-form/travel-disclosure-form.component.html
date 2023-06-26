@@ -19,7 +19,7 @@
                 <span *ngIf="mandatoryList?.has('entity')" class="fs-13 invalid-feedback d-block">
                     {{mandatoryList?.get('entity')}}
                 </span>
-                <span class="position-absolute fs-13 col text-secondary mb-0">
+                <span *ngIf="!mandatoryList?.has('entity')" class="position-absolute fs-13 col text-secondary mb-0">
                     Type in the official name of the business or organization you need to report.
                     Entities to report include foreign, domestic, public or private entities, but not federal agencies.
                 </span>
@@ -45,7 +45,7 @@
                 <span *ngIf="mandatoryList?.has('traveller')" class="fs-13 invalid-feedback d-block col">
                     {{mandatoryList?.get('traveller')}}
                 </span>
-                <span class="position-absolute fs-13 col text-secondary mb-0">
+                <span *ngIf="!mandatoryList?.has('traveller')" class="position-absolute fs-13 col text-secondary mb-0">
                     Select the traveller (can choose multiple options)
                 </span>
             </div>
@@ -63,7 +63,7 @@
                 <span *ngIf="mandatoryList?.has('title')" class="fs-13 invalid-feedback d-block">
                     {{mandatoryList?.get('title')}}
                 </span>
-                <span class="position-absolute fs-13 col text-secondary mb-0">
+                <span *ngIf="!mandatoryList?.has('title')" class="position-absolute fs-13 col text-secondary mb-0">
                     Type the title of your trip.
                 </span>
             </div>
@@ -102,7 +102,7 @@
                     <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-feedback d-block">
                         {{mandatoryList?.get('country')}}
                     </span>
-                    <span class="position-absolute fs-13 col text-secondary mb-0">
+                    <span *ngIf="!mandatoryList?.has('country')" class="position-absolute fs-13 col text-secondary mb-0">
                         Select country from search bar.
                     </span>
                 </div>
@@ -119,7 +119,7 @@
                     <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-feedback d-block">
                         {{mandatoryList?.get('state')}}
                     </span>
-                    <span class="position-absolute fs-13 col text-secondary mb-0">
+                    <span *ngIf="!mandatoryList?.has('state')" class="position-absolute fs-13 col text-secondary mb-0">
                         Type the state you traveled to.
                     </span>
                 </div>
@@ -136,7 +136,7 @@
                     <span *ngIf="mandatoryList?.has('city')" class="fs-13 invalid-feedback d-block">
                         {{mandatoryList?.get('city')}}
                     </span>
-                    <span class="position-absolute fs-13 col text-secondary mb-0">
+                    <span *ngIf="!mandatoryList?.has('city')" class="position-absolute fs-13 col text-secondary mb-0">
                         Type city.
                     </span>
                 </div>
@@ -164,7 +164,7 @@
                     <span *ngIf="(dateValidationList.get('startDate'))" class="fs-13 invalid-feedback d-block">
                         {{dateValidationList.get('startDate')}}
                     </span>
-                    <span class="position-absolute fs-13 col text-secondary mb-0">
+                    <span *ngIf="!dateValidationList?.has('startDate')" class="position-absolute fs-13 col text-secondary mb-0">
                         Type your travel start date.
                     </span>
                 </div>
@@ -189,7 +189,7 @@
                     <span *ngIf="(dateValidationList.get('endDate'))" class="fs-13 invalid-feedback d-block">
                         {{dateValidationList.get('endDate')}}
                     </span>
-                    <span class="position-absolute fs-13 col text-secondary mb-0">
+                    <span *ngIf="!dateValidationList?.has('endDate')" class="position-absolute fs-13 col text-secondary mb-0">
                         Type your travel end date.
                     </span>
                 </div>
@@ -210,7 +210,7 @@
                 <span *ngIf="mandatoryList?.has('purpose')" class="fs-13 invalid-feedback d-block">
                     {{mandatoryList?.get('purpose')}}
                 </span>
-                <span class="position-absolute fs-13 col text-secondary mb-0">
+                <span *ngIf="!mandatoryList?.has('purpose')" class="position-absolute fs-13 col text-secondary mb-0">
                     Type purpose of the trip.
                 </span>
             </div>
@@ -230,7 +230,7 @@
                 <span *ngIf="mandatoryList?.has('relationship')" class="fs-13 invalid-feedback d-block">
                     {{mandatoryList?.get('relationship')}}
                 </span>
-                <span class="position-absolute fs-13 col text-secondary mb-0">
+                <span *ngIf="!mandatoryList?.has('relationship')" class="position-absolute fs-13 col text-secondary mb-0">
                     Type relationship to your research.
                 </span>
             </div>
@@ -247,8 +247,11 @@
                     [(ngModel)]="travelDisclosureRO.travelAmount" [initialValue]="travelDisclosureRO.travelAmount"
                     id="travelDisclosure-estimation" autocomplete="off" (ngModelChange)="setUnSavedChanges();"
                     [ngClass]="(mandatoryList?.get('amount')) ? 'invalid-border' : ''">
-                <span *ngIf="(mandatoryList?.get('amount'))" class="fs-13 invalid-feedback d-block">
+                <span *ngIf="mandatoryList?.has('amount')" class="fs-13 invalid-feedback d-block">
                     {{mandatoryList?.get('amount')}}
+                </span>
+                <span *ngIf="!mandatoryList?.has('amount')" class="position-absolute fs-13 col text-secondary mb-0">
+                    Type your travel amount.
                 </span>
             </div>
         </div>

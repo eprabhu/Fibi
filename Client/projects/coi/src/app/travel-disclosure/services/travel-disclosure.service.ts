@@ -15,6 +15,7 @@ export class TravelDisclosureService {
     unSavedTabName = '';
     isChildRouting = false;
     isAdminDashboard = false;
+    PREVIOUS_MODULE_URL = '';
 
     constructor(private _http: HttpClient,
                 private _commonService: CommonService) { }
