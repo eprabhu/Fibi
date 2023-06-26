@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanDeactivate,
+         NavigationEnd, Router, RouterStateSnapshot } from '@angular/router';
 import { TravelDisclosureService } from './travel-disclosure.service';
 import { TravelCreateModalDetails, TravelDisclosureResponseObject } from '../travel-disclosure-interface';
 import { Observable, Subscriber } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CommonService } from '../../common/services/common.service';
-import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, HOME_URL, HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, HOME_URL, HTTP_ERROR_STATUS,
+         POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { TravelDataStoreService } from './travel-data-store.service';
+import { NavigationService } from '../../common/services/navigation.service';
 
 @Injectable()
 export class TravelRouteGuardService implements CanActivate, CanDeactivate<boolean> {
@@ -14,7 +17,9 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
     constructor(private _service: TravelDisclosureService,
         private _commonService: CommonService,
         private _router: Router,
-        private _dataStore: TravelDataStoreService) { }
+        private _dataStore: TravelDataStoreService,
+        private _navigationService: NavigationService) {
+        }
 
     canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot):  boolean | Observable<boolean> {
         this._dataStore.setStoreData(new TravelDisclosureResponseObject());
@@ -26,6 +31,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
                     if (res) {
                         this.updateTravelDataStore(res);
                         this.reRouteIfWrongPath(_state.url, res.reviewStatusCode, route);
+                        this.setPreviousModuleUrl();
                         observer.next(true);
                         observer.complete();
                     } else {
@@ -59,6 +65,10 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
         const homeUnit = (travelCreateModalDetails && travelCreateModalDetails.homeUnit) || null;
         const personId = (travelCreateModalDetails && travelCreateModalDetails.personId) || null;
         return (homeUnit && personId) ? true : false;
+    }
+
+    private setPreviousModuleUrl() {
+        this._service.PREVIOUS_MODULE_URL = this._navigationService.navigationGuardUrl;
     }
 
     private loadTravelDisclosure(disclosureId): Observable<TravelDisclosureResponseObject> {

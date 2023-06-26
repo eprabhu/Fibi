@@ -44,6 +44,7 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.travelService.setUnSavedChanges(false, '');
+        this.travelService.isTravelCertified = false;
     }
 
     // private listenDataChangeFromStore() {
@@ -88,15 +89,15 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
             this.travelReqObject.isInternationalTravel ? 'travelState' : 'destinationCountry'
         ];
 
-        const hasEmptyValue = Object.keys(this.travelReqObject).some(key => {
+        const hasEmptyTravelReqObject = Object.keys(this.travelReqObject).some(key => {
             if (!excludedVariables.includes(key as keyof CoiTravelDisclosure)) {
-                const value = this.travelReqObject[key as keyof CoiTravelDisclosure];
-                return value === null || value === undefined || value === '';
+                const travelReqObjectValue = this.travelReqObject[key as keyof CoiTravelDisclosure];
+                return travelReqObjectValue === null || travelReqObjectValue === undefined || travelReqObjectValue === '';
             }
             return false;
         });
 
-        if (hasEmptyValue) {
+        if (hasEmptyTravelReqObject) {
             this.travelService.isTravelCertified = false;
         } else {
             this.travelService.isTravelCertified = true;
