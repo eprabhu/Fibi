@@ -1418,6 +1418,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiTravelDisclosure.setAdminGroupId(dto.getAdminGroupId());
 			coiTravelDisclosure.setAdminGroupName(commonDao.getAdminGroupByGroupId(dto.getAdminGroupId()).getAdminGroupName());
 			dto.setAdminGroupName(coiTravelDisclosure.getAdminGroupName());
+		} else {
+			coiTravelDisclosure.setAdminGroupId(null);
+			coiTravelDisclosure.setAdminGroupName(null);
+			dto.setAdminGroupName(null);
+			dto.setAdminGroupId(null);
 		}
 		if (dto.getAdminPersonId() != null) {
 			coiTravelDisclosure.setAdminPersonId(dto.getAdminPersonId());
@@ -1451,7 +1456,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		if (coiTravelDisclosure.getAdminPersonId() != null) {
 			coiTravelDisclosure.setAdminPersonName(personDao.getPersonFullNameByPersonId(coiTravelDisclosure.getAdminPersonId()));
-			dto.setAdminPersonId(dto.getAdminPersonId());
+			dto.setAdminPersonId(coiTravelDisclosure.getAdminPersonId());
 			dto.setAdminPersonName(coiTravelDisclosure.getAdminPersonName());
 		}
 		dto.setTravelDisclosureId(travelDisclosureId);
