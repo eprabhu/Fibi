@@ -17,8 +17,8 @@ import {ConflictManagementSummaryComponent} from './review/conflict-management-s
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {AddCommentSliderComponent} from './review/relationship-summary/add-comment-slider/add-comment-slider.component';
 import {SharedComponentModule} from "../../shared-components/shared-component.module";
+import { AddConflictSliderComponent } from './review/relationship-summary/add-conflict-slider/add-conflict-slider.component';
 
 @NgModule({
     imports: [
@@ -40,7 +40,7 @@ import {SharedComponentModule} from "../../shared-components/shared-component.mo
         RelationshipSummaryComponent,
         CertifySummaryComponent,
         ConflictManagementSummaryComponent,
-        AddCommentSliderComponent
+        AddConflictSliderComponent
     ],
     providers: [
         CoiSummaryEventsAndStoreService,
