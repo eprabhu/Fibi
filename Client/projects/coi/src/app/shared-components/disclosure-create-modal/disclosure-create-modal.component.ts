@@ -452,7 +452,6 @@ export class DisclosureCreateModalComponent implements OnInit {
         if (type == 'Project') {
             this.existingDisclosureDetails['type'] = this.selectedProjectType;
         }
-        this.resetHomeUnit();
         this.isShowResultCard = true;
     }
 
