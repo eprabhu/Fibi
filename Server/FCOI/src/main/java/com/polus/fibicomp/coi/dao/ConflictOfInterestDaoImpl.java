@@ -285,6 +285,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Root<CoiTravelDisclosure> root = criteriaUpdate.from(CoiTravelDisclosure.class);
 		criteriaUpdate.set("certifiedAt", coiTravelDisclosure.getCertifiedAt());
 		criteriaUpdate.set("certifiedBy", coiTravelDisclosure.getCertifiedBy());
+		criteriaUpdate.set("updateTimestamp", commonDao.getCurrentTimestamp());
+		criteriaUpdate.set("updateUser", AuthenticatedUser.getLoginUserName());
 		criteriaUpdate.where(cb.equal(root.get("travelDisclosureId"), coiTravelDisclosure.getTravelDisclosureId()));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
@@ -385,6 +387,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaUpdate<CoiDisclosure> criteriaUpdate = cb.createCriteriaUpdate(CoiDisclosure.class);
 		Root<CoiDisclosure> root = criteriaUpdate.from(CoiDisclosure.class);
 		criteriaUpdate.set("isDisclosureQuestionnaire",isDisclosureQuestionnaire);
+		criteriaUpdate.set("updateTimestamp", commonDao.getCurrentTimestamp());
+		criteriaUpdate.set("updateUser", AuthenticatedUser.getLoginUserName());
 		criteriaUpdate.where(cb.equal(root.get("disclosureId"),disclosureId));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
@@ -3015,12 +3019,15 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, c.reviewStatusCode = 3 ");
+		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, c.reviewStatusCode = 3, ");
+		hqlQuery.append("c.updateTimestamp = :updateTimestamp, c.updateUser = :updateUser ");
 		hqlQuery.append("WHERE c.disclosureId = : disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("adminGroupId", adminGroupId);
 		query.setParameter("adminPersonId", adminPersonId);
 		query.setParameter("disclosureId", disclosureId);
+		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.executeUpdate();
 	}
 
@@ -3105,11 +3112,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public void archiveEntity(Integer entityId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE CoiEntity pe SET pe.versionStatus = :versionStatus, pe.updateUser = :updateUser where pe.entityId = :entityId");
+		hqlQuery.append("UPDATE CoiEntity pe SET pe.versionStatus = :versionStatus, pe.updateTimestamp = :updateTimestamp, pe.updateUser = :updateUser where pe.entityId = :entityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("entityId", entityId);
 		query.setParameter("versionStatus", Constants.COI_ARCHIVE_STATUS);
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
 		query.executeUpdate();
 	}
 
@@ -3127,12 +3135,15 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public void assignTravelDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE CoiTravelDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId ");
+		hqlQuery.append("UPDATE CoiTravelDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, ");
+		hqlQuery.append("c.updateTimestamp = :updateTimestamp, c.updateUser = :updateUser ");
 		hqlQuery.append("WHERE c.travelDisclosureId = : travelDisclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("adminGroupId", adminGroupId);
 		query.setParameter("adminPersonId", adminPersonId);
 		query.setParameter("travelDisclosureId", travelDisclosureId);
+		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.executeUpdate();
 		
 	}
@@ -3264,6 +3275,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Root<CoiDisclEntProjDetails> root = criteriaUpdate.from(CoiDisclEntProjDetails.class);
 		criteriaUpdate.set("projectConflictStatusCode", projectConflictStatusCode);
 		criteriaUpdate.set("updateUser", AuthenticatedUser.getLoginUserName());
+		criteriaUpdate.set("updateTimestamp", commonDao.getCurrentTimestamp());
 		criteriaUpdate.where(cb.equal(root.get("disclosureDetailsId"), disclosureDetailsId));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
@@ -3378,7 +3390,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public List<COIValidateDto> evaluateValidation(Integer disclosureId, String personId) {
 		List<COIValidateDto> coiValidateDtoList = new ArrayList<>();
@@ -3413,5 +3425,39 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.select(rootCoiDisclEntProjDetails.get("updateUser"));
 		return session.createQuery(query).getSingleResult();
 	}
-	
+
+
+	@Override
+	public void updateDisclosureUpdateDetails(Integer disclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiDisclosure cd SET cd.updateTimestamp = :updateTimestamp, cd.updateUser = :updateUser where cd.disclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.executeUpdate();
+	}
+
+	@Override
+	public CoiReviewComments loadCoiReviewCommentById(Integer coiReviewCommentId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT rc CoiReviewComments rc where rc.coiReviewCommentId = :coiReviewCommentId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("coiReviewCommentId", coiReviewCommentId);
+		return (CoiReviewComments) query.getResultList().get(0);
+	}
+
+	@Override
+	public void updatePersonEntityUpdateDetails(Integer personEntityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE PersonEntity pe SET pe.updateTimestamp = :updateTimestamp, pe.updateUser = :updateUser where pe.personEntityId = :personEntityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personEntityId", personEntityId);
+		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.executeUpdate();
+	}
 }

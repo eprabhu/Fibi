@@ -599,6 +599,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			copyDisclosureDetail.setCoiDisclosure(copyDisclosure);
 			copyDisclosureDetail.setDisclosureId(copyDisclosure.getDisclosureId());
 			copyDisclosureDetail.setDisclosureNumber(copyDisclosure.getDisclosureNumber());
+			copyDisclosureDetail.setUpdateUser(AuthenticatedUser.getLoginUserName());
+			copyDisclosureDetail.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 //			copyComment.setCoiDisclosureOldDetails(copyDisclosureDetail);
 //			copyDisclosureDetail.setComment(copyComment);
 			conflictOfInterestDao.saveOrUpdateCoiDisclEntProjDetails(copyDisclosureDetail);
@@ -723,6 +725,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		 coiReview.setCoiReviewStatus(conflictOfInterestDao.getReviewStatus(REVIEW_STATUS_TYPE_CODE));
 		}
 		conflictOfInterestDao.saveOrUpdateCoiReview(vo.getCoiReview());
+		conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 		/*Need clarification*/
 		coiReviewAssigneeHistory.setAdminGroupId(coiReview.getAdminGroupId());
 		coiReviewAssigneeHistory.setAssigneePersonId(coiReview.getAssigneePersonId());
@@ -757,6 +760,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiReviewAssigneeHistory.setCoiReviewId(coiReview.getCoiReviewId());
 		coiReviewAssigneeHistory.setCoiReviewActivityId(START_ACTIVIVITY);
 		conflictOfInterestDao.saveOrUpdateCoiReviewAssigneeHistory(coiReviewAssigneeHistory);
+		conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 		return coiReview;
 	}
 	
@@ -777,6 +781,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		    coiReviewComment.setCoiReviewCommentTag(coiReviewCommentTag);
 		    List<CoiReviewCommentAttachment> coiReviewCommentAttachments = addReviewAttachment(files, vo.getCoiReviewComment().getCoiReviewCommentId());
 		    vo.setCoiReviewCommentAttachment(coiReviewCommentAttachments);
+			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReviewComment.getDisclosureId());
 		} catch (Exception e) {
 			throw new ApplicationException("error in saveOrUpdateCoiReviewComments", e, Constants.JAVA_ERROR);
 		}
@@ -876,12 +881,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiReviewAssigneeHistory.setCoiReviewId(coiReview.getCoiReviewId());
 		coiReviewAssigneeHistory.setCoiReviewActivityId(COMPLETE_ACTIVIVITY);
 		conflictOfInterestDao.saveOrUpdateCoiReviewAssigneeHistory(coiReviewAssigneeHistory);
+		conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 		return coiReview;
 	}
 
 	@Override
 	public String deleteReview(Integer coiReviewId){
 		try {
+			CoiReview coiReview = conflictOfInterestDao.loadCoiReview(coiReviewId);
 			conflictOfInterestDao.deleteReviewAssigneeHistory(coiReviewId);
 			List<CoiReviewCommentAttachment> coiReviewCommentAttachments = conflictOfInterestDao.fetchReviewAttachmentByReviewId(coiReviewId);
 			coiReviewCommentAttachments.forEach(coiReviewCommentAttachment -> {
@@ -891,6 +898,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			conflictOfInterestDao.deleteReviewCommentAttachment(coiReviewId);
 			conflictOfInterestDao.deleteReviewComment(coiReviewId);
 			conflictOfInterestDao.deleteReview(coiReviewId);
+			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 			return commonDao.convertObjectToJSON(DELETE_MSG);
 		} catch(Exception e) {
 			throw new ApplicationException("deleteCoiReview",e, Constants.JAVA_ERROR);
@@ -900,6 +908,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public String deleteReviewComment(Integer coiReviewCommentId){
 		try {
+			CoiReviewComments coiReviewComment = conflictOfInterestDao.loadCoiReviewCommentById(coiReviewCommentId);
 			List<CoiReviewCommentAttachment> coiReviewCommentAttachments = conflictOfInterestDao.fetchReviewAttachmentByCommentId(coiReviewCommentId);
 			coiReviewCommentAttachments.forEach(coiReviewCommentAttachment -> {
 				conflictOfInterestDao.deleteFileData(conflictOfInterestDao.getFileDataById(coiReviewCommentAttachment.getFileDataId()));
@@ -907,6 +916,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			conflictOfInterestDao.deleteReviewTagByCommentId(coiReviewCommentId);
 			conflictOfInterestDao.deleteReviewAttachmentByCommentId(coiReviewCommentId);
 			conflictOfInterestDao.deleteReviewCommentByCommentId(coiReviewCommentId);
+			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReviewComment.getDisclosureId());
 			return commonDao.convertObjectToJSON(DELETE_MSG);
 		}  catch(Exception e) {
 			throw new ApplicationException("deleteCoiReviewComment",e, Constants.JAVA_ERROR);
@@ -972,6 +982,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 //		coiConflictHistory.setCoiDetStatusCode(disclEntProjDetails.getCoiReviewerStatusCode());
 		coiConflictHistory.setDisclosureDetailsId(disclEntProjDetails.getDisclosureDetailsId());
 		conflictOfInterestDao.saveOrUpdateCoiConflictHistory(coiConflictHistory);
+		conflictOfInterestDao.updateDisclosureUpdateDetails(disclEntProjDetails.getDisclosureId());
 		return conflictOfInterestDao.getProjectRelationship(disclEntProjDetails.getDisclosureDetailsId());
 	} 
 
@@ -1024,7 +1035,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			disclComment.setIsPrivate(false);
 			disclComment.setComponentReferenceId(entityProjectRelation.getDisclosureDetailsId());
 			disclComment.setUpdateUser(AuthenticatedUser.getLoginUserName());
+			disclComment.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 			conflictOfInterestDao.saveOrUpdateDisclComment(disclComment);
+			conflictOfInterestDao.updateDisclosureUpdateDetails(entityProjectRelation.getDisclosureId());
 			vo.setCoiDisclEntProjDetail(entityProjectRelation);
 		} catch (Exception e) {
 			logger.error("saveSingleEntityProjectRelation : {}", e.getMessage());
@@ -1039,6 +1052,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		if (coiEntity.getEntityId() == null) { // on creation
 			coiEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
+			coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
 			coiEntity.setIsActive(true); // Y
 			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 			coiEntity.setVersionNumber(Constants.COI_INITIAL_VERSION_NUMBER);
@@ -1051,7 +1065,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				conflictOfInterestDao.archiveEntity(entityId);
 				coiEntity.setEntityId(null);
 				coiEntity.setVersionNumber(conflictOfInterestDao.getMaxEntityVersionNumber(coiEntity.getEntityNumber()) + 1);
+				coiEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
+				coiEntity.setCreateTimestamp(commonDao.getCurrentTimestamp());
 			}
+			coiEntity.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+			coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
 			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 		}
 		conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
@@ -1515,6 +1533,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setCertifiedAt(commonDao.getCurrentTimestamp());
 		coiTravelDisclosure.setCertifiedAt(coiTravelDisclosure.getCertifiedAt());
 		coiTravelDisclosure.setCertifiedBy(personId);
+		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		CoiTravelDisclosure coiTravelDosclosureObject = conflictOfInterestDao.loadTravelDisclosure(coiTravelDisclosure.getTravelDisclosureId());
 		return new ResponseEntity<>(coiTravelDosclosureObject, HttpStatus.OK);
@@ -1544,6 +1564,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiTravelDisclosure.setCertifiedAt(null);
 			dto.setCertifiedAt(null);
 			dto.setCertifiedBy("");
+			coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
+			coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 			conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		}
@@ -1573,6 +1595,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setVersionStatus(Constants.TRAVE_VERSION_STATUS_ACTIVE);
 		dto.setAcknowledgeAt(commonDao.getCurrentTimestamp());
 		dto.setAcknowledgeBy(AuthenticatedUser.getLoginPersonId() != null ? AuthenticatedUser.getLoginPersonId() : coiTravelDisclosure.getAcknowledgeBy());
+		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
@@ -1599,6 +1623,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setCertifiedBy("");
 		dto.setCertifiedAt(null);
 		dto.setCertifiedBy("");
+		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
@@ -1798,6 +1824,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiConflictHistory.setDisclosureDetailsId(vo.getDisclosureDetailsId());
 		coiConflictHistory.setUpdateUser(conflictOfInterestDao.getConflictStatusUpdateUser(vo.getDisclosureDetailsId()));
 		conflictOfInterestDao.saveOrUpdateCoiConflictHistory(coiConflictHistory);
+		conflictOfInterestDao.updateDisclosureUpdateDetails(vo.getDisclosureId());
 	}
 
 	@Override

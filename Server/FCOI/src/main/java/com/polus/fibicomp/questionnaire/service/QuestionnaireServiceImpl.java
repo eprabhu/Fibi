@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.questionnaire.pojo.QuestTableAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -74,6 +75,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
 	@Autowired
 	private GeneralInformationDao generalInformationDao;
+
+	@Autowired
+	private ConflictOfInterestDao conflictOfInterestDao;
 
 	private static final String RADIO = "Radio";
 	private static final String CHECKBOX = "Checkbox";
@@ -214,7 +218,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 				return new ResponseEntity<>(commonDao.convertObjectToJSON(questionnaireDataBus), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		setDocumentUpdateUserAndTimestamp(moduleCode, Integer.parseInt(moduleItemKey), updateUser);
+		setDocumentUpdateUserAndTimestamp(moduleCode,moduleSubItemCode, Integer.parseInt(moduleItemKey), updateUser);
 		return new ResponseEntity<>(commonDao.convertObjectToJSON(questionnaireDataBus), HttpStatus.OK);
 	}
 
@@ -1202,9 +1206,13 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		}
 	}
 
-	private void setDocumentUpdateUserAndTimestamp(Integer moduleCode, Integer moduleItemKey, String updateUser) {
+	private void setDocumentUpdateUserAndTimestamp(Integer moduleCode, Integer subModuleCode, Integer moduleItemKey, String updateUser) {
 		if (moduleCode.equals(Constants.MODULE_CODE_AWARD)) {
 			awardService.updateAwardDocumentUpdateUserAndTimestamp(moduleItemKey, updateUser);
+		} else if (moduleCode == Constants.COI_MODULE_CODE && subModuleCode == Constants.COI_SUBMODULE_CODE) {
+			conflictOfInterestDao.updateDisclosureUpdateDetails(moduleItemKey);
+		} else if(moduleCode == Constants.COI_MODULE_CODE && subModuleCode == Constants.COI_SFI_SUBMODULE_CODE) {
+			conflictOfInterestDao.updatePersonEntityUpdateDetails(moduleItemKey);
 		}
 	}
 
