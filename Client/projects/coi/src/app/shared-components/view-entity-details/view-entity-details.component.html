@@ -260,10 +260,10 @@
       </div>
     </div>
   </div>
-  <div *ngIf="sfiService.isShowSfiNavBar && isEntityManagement " id="task-navigation-bar">
-    <app-add-sfi-slider [coiEntityManageId]="entityId" [isEditEntity]="true" [changeType]="changeType"
-      (updatedDataStore)="updatedEntityDetails($event)" [isSlider]="true"></app-add-sfi-slider>
-  </div>
+</div>
+<div *ngIf="sfiService.isShowSfiNavBar && isEntityManagement " id="task-navigation-bar">
+  <app-add-sfi-slider [coiEntityManageId]="entityId" [isEditEntity]="true" [changeType]="changeType"
+    (updatedDataStore)="updatedEntityDetails($event)" [isSlider]="true"></app-add-sfi-slider>
 </div>
 
 <div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog" data-bs-backdrop="static"
