@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-
 import { CommonService } from '../../common/services/common.service';
 
 @Injectable()
@@ -27,10 +26,12 @@ export class CoiService {
     isDisclosureReviewer = false;
     isEnableReviewActionModal = false;
     actionButtonId = null;
+    certificationResponseErrors = [];
+    submitResponseErrors = [];
 
     constructor(
         private _http: HttpClient,
-        private _commonService: CommonService
+        private _commonService: CommonService,
     ) { }
 
     loadDisclosure(disclosureId: string) {
@@ -93,5 +94,9 @@ export class CoiService {
 
   triggerStartOrCompleteCoiReview(modalType: string) {
     this.actionButtonId = modalType === 'START' ? 'coi-start-reviewer-review-modal-trigger' : 'coi-complete-reviewer-review-modal-trigger';
+  }
+
+  givecoiID(disclosureId: number) {
+    return this._http.get(`${this._commonService.baseUrl}/evaluateValidation/${disclosureId}`);
   }
 }

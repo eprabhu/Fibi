@@ -74,6 +74,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     isCOIReviewer = false;
     error = '';
     canShowReviewerTab = false;
+    showConfirmation = false;
+    relationshipError: any;
+    questionnaireError: any;
+
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -98,6 +102,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
         this.getDataFromStore();
+        // this.validateRelationship();
+        // this.certifyIfQuestionnaireCompleted(res:)
         this.listenDataChangeFromStore();
         this.prevURL = this.navigationService.previousURL;
         this._route.queryParams.subscribe(params => {
@@ -240,11 +246,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
         if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
             if (this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-                this.certifyDisclosure();
+                this.validateRelationship();
             } else {
                 this.isSaving = false;
-                this.error = 'Please complete Screening Questionnaire';
-                openModal('disclosureErrorModal');
+                this.error = 'Please complete the following mandatory Questionnaire(s) in the Screening Questionniare section.';
+                this.coiService.submitResponseErrors.push(this.error);
+                this.validateRelationship();
                 return false;
             }
         }
@@ -281,11 +288,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
         }, err => {
             this.isSaving = false;
-            this.error = err.error ? err.error : 'Error in certifying disclosure. Please try again.';
-            openModal('disclosureErrorModal');
         }));
     }
-
+    validateRelationship() {
+        this.$subscriptions.push(this.coiService.givecoiID(this.coiData.coiDisclosure.disclosureId).subscribe((res: any) => {
+            res.map((error) => {
+                this.coiService.submitResponseErrors.push( error.validationMessage) ;
+            });
+            this.errorCheck();
+        }));
+    }
     private getDataFromStore() {
         const coiData = this.dataStore.getData();
         if (isEmptyObject(coiData)) { return; }
@@ -455,4 +467,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.coiService.isEnableReviewActionModal = true;
         }
     }
+
+    errorCheck() {
+        if (this.coiService.submitResponseErrors.length) {
+            openModal('ValidateAwardModal');
+        } else {
+            openModal('confirmModal');
+        }
+    }
+
+
 }

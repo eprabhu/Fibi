@@ -1,3 +1,4 @@
+
 {
   "/login": {
     "target": "http://192.168.1.189:8070/coi",
@@ -48,7 +49,7 @@
     "secure": false
   },
   "/createDisclosure": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/getSFIDashboard": {
@@ -64,7 +65,7 @@
     "secure": false
   },
   "/getActiveDisclosures": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/saveEntityProjectRelation": {
@@ -104,7 +105,7 @@
     "secure": false
   },
   "/reviseDisclosure": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/saveQuestionnaire": {
@@ -268,11 +269,11 @@
     "secure": false
   },
   "/getDisclosureRelationForSFI": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/validate/*": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/adminGroup": {
@@ -296,63 +297,67 @@
     "secure": false
   },
   "/getProjConflictStatusType": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/updateProjectRelationship": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/loadProjectConflictHistory": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/entity/activateInactivate/*": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://192.168.1.189:8070/coi/",
     "secure": false
   },
   "/personEntity/activateInactivate": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://192.168.1.189:8070/coi/",
     "secure": false
   },
   "/loadTravellerTypesLookup": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/loadTravelStatusTypesLookup": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/createCoiTravelDisclosure": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://192.168.1.189:8070/coi",
     "secure": false
   },
   "/loadTravelDisclosure/*": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://192.168.1.189:8070/coi/",
     "secure": false
   },
   "/certifyTravelDisclosure": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://192.168.1.189:8070/coi/",
     "secure": false
   },
   "/submitTravelDisclosure": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://192.168.1.189:8070/coi/",
     "secure": false
   },
   "/travelDisclosure/assignAdmin": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://192.168.1.189:8070/coi/",
     "secure": false
   },
   "/withdrawTravelDisclosure/*": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://192.168.1.189:8070/coi/",
     "secure": false
   },
   "/approveTravelDisclosure/*": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://192.168.1.189:8070/coi/",
     "secure": false
   },
   "/returnTravelDisclosure/*": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://192.168.1.189:8070/coi/",
+    "secure": false
+  },
+  "/evaluateValidation/*" : {
+    "target": "http://192.168.1.189:8070/coi/",
     "secure": false
   }
 }

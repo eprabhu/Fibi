@@ -35,7 +35,7 @@ const routes: Routes = [
                 loadChildren: () => import('./relationship/relationship.module').then(m => m.RelationshipModule)
             },
             {
-                path: 'certification', canDeactivate: [RouterGuardService],
+                path: 'certification', canActivate: [RouterGuardService], canDeactivate: [RouterGuardService],
                 loadChildren: () => import('./certification/certification.module').then(m => m.CertificationModule)
             },
             {
@@ -79,7 +79,7 @@ const routes: Routes = [
         SfiModule,
         FormsModule,
         SharedComponentModule,
-        SharedDisclosureModule
+        SharedDisclosureModule,
     ]
 })
 export class DisclosureModule {
