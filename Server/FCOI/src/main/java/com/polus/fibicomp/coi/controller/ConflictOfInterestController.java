@@ -502,6 +502,11 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getProjConflictStatusType();
 	}
 
+	@DeleteMapping("/personEntity/{personEntityId}")
+	public ResponseEntity<Object>deletePersonEntity(@PathVariable("personEntityId") Integer personEntityId) {
+		return conflictOfInterestService.deletePersonEntity(personEntityId);
+	}
+
 	@PostMapping(value = "/updateProjectRelationship")
 	public ResponseEntity<Object> updateProjectRelationship(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for updateProjectRelationship");
