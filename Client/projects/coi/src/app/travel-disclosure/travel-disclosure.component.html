@@ -27,7 +27,7 @@
                         </ng-container>
                     </p>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex" *ngIf="!isCreateMode">
                     <ng-container>
                         <div class="align-items-center d-flex" title="Click here to collapse/un-collapse">
                             <button (click)="isCardExpanded=!isCardExpanded;"
@@ -224,105 +224,130 @@
     </div>
     <!-- right side options -->
     <div class="col-3 px-0">
-        <div class="d-flex flex-column p-0 bg-white min-height-189 border-end shadow-sm">
-            <div class="flex-fill h-100">
-                <div class="d-flex justify-content-between p-3 pb-3">
-                    <!-- home -->
-                    <button (click)="navigateBack()" title="Go to home"
-                        [ngClass]="(responseObject?.reviewStatusCode != '2' && !isCreateMode && responseObject?.reviewStatusCode != '7') ? 'col-2' : 'w-100'"
-                        class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3">
-                        <mat-icon
-                            [class.me-2]="showHomeButton()">home</mat-icon>
-                        <span
-                            *ngIf="showHomeButton()">Home</span>
-                    </button>
+        <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm" [ngClass]="isCardExpanded? 'min-height-189' : 'collapse-right-tab'">
+            <div  class="row m-0 py-3 px-3">
+                <!-- home -->
+                <button (click)="navigateBack()" title="Go to home"
+                    [ngClass]="(responseObject?.reviewStatusCode != '2' && !isCreateMode && responseObject?.reviewStatusCode != '7') ? 'col-2' : 'col'"
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14">
+                    <mat-icon>home</mat-icon>
+                    <span class="ms-2" *ngIf="showHomeButton() && isCardExpanded">Home</span>
+                </button>
 
-                    <!-- Comments -->
-                    <button title="Click to add new review commments" aria-expanded="false"
-                        *ngIf="!isCreateMode && checkReviewStatusCode(['3'])"
-                        class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 w-100 ms-2"
-                        data-bs-target="#coi-review-comment" data-bs-toggle="modal" role="button">
-                        <mat-icon class="me-2">rate_review</mat-icon> Comments
-                    </button>
+                <!-- Comments -->
+                <button title="Click to add new review commments" aria-expanded="false"
+                    *ngIf="!isCreateMode && checkReviewStatusCode(['3'])"
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col 0 ms-2"
+                    data-bs-target="#coi-review-comment" data-bs-toggle="modal" role="button">
+                    <mat-icon>rate_review</mat-icon>
+                    <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
+                </button>
 
-                    <!-- more option -->
-                    <div class="dropdown ms-2 w-100" *ngIf="!isCreateMode">
-                        <button title="Click for More Actions" aria-expanded="false"
-                            class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 w-100"
-                            data-bs-toggle="dropdown" type="button" id="moreActions" role="button">
-                            <mat-icon class="me-1">more_vert</mat-icon> More Actions
+                <!-- more option button for expanded card-->
+                <button title="Click for More Actions" *ngIf="!isCreateMode && isCardExpanded"
+                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2"
+                    data-bs-toggle="dropdown" type="button" id="moreActions" role="button">
+                    <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                    <span>More Actions</span>
+                </button>
+                <!-- more options -->
+                <div class="dropdown-menu dropdown-card p-0">
+                    <!-- reassigned admin -->
+                    <ng-container *ngIf="responseObject?.adminPersonId">
+                        <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                            class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2"
+                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2', '3'], 'SOME')"
+                            data-bs-toggle="modal" data-bs-target="#assign-to-admin-modal">
+                            <mat-icon class="me-2">group_add</mat-icon>
+                            Reassign Admin
                         </button>
+                    </ng-container>
 
-                        <div class="dropdown-menu w-100 p-0">
-                            <!-- assigned admin -->
-                            <ng-container *ngIf="responseObject?.adminPersonId">
-                                <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
-                                    class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center"
-                                    *ngIf="isTravelAdministrator && checkReviewStatusCode(['2', '3'], 'SOME')"
-                                    data-bs-toggle="modal" data-bs-target="#assign-to-admin-modal">
-                                    <mat-icon class="me-2">group_add</mat-icon>
-                                    Reassign Admin
-                                </button>
-                            </ng-container>
+                    <!-- Withdraw disclosure -->
+                    <button title="Click to Withdraw Travel Disclosure" (click)="withdrawTravelDisclosure();"
+                        class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2" 
+                        *ngIf="checkReviewStatusCode(['2']) && responseObject?.personId == currentPersonId">
+                        <mat-icon class="me-2">logout</mat-icon>
+                        Withdraw
+                    </button>
 
-                            <!-- Withdraw disclosure -->
-                            <button title="Click to Withdraw Travel Disclosure" (click)="withdrawTravelDisclosure();"
-                                class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center" 
-                                *ngIf="checkReviewStatusCode(['2']) && responseObject?.personId == currentPersonId">
-                                <mat-icon class="me-2">undo</mat-icon>
-                                Withdraw
-                            </button>
-
-                            <!-- notify -->
-                            <button title="Click to Notify"
-                                class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center">
-                                <span class="d-flex justify-content-start w-100 align-items-center">
-                                    <mat-icon class="me-2">notifications</mat-icon>
-                                    Notify
-                                </span>
-                            </button>
-                        </div>
-                    </div>
+                    <!-- notify -->
+                    <button title="Click to Notify"
+                        class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 py-2 align-items-center">
+                        <mat-icon class="me-2">notifications</mat-icon>
+                        Notify
+                    </button>
                 </div>
 
-                <div class="px-3" *ngIf="!isCreateMode">
+                <ng-container *ngIf="!isCreateMode">
                     <!-- assign admin -->
                     <ng-container *ngIf="!(responseObject?.adminPersonId)">
                         <button title="Click to Assign Administrator/Admin Group"
                             area-describedby="Click to assign administrator"
-                            class="btn btn-primary fs-14 d-flex justify-content-center mb-3 w-100 align-items-center"
+                            [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                            class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
                             *ngIf="isTravelAdministrator && checkReviewStatusCode(['2'])" data-bs-toggle="modal"
                             data-bs-target="#assign-to-admin-modal">
-                            <mat-icon class="me-1">group_add</mat-icon>
-                            Assign Admin
+                            <mat-icon>group_add</mat-icon>
+                            <span class="ms-2" *ngIf="isCardExpanded">Assign Admin</span>
                         </button>
                     </ng-container>
+
                     <ng-container *ngIf="showReturnOrApproveButton()">
                         <!-- return to pi -->
-                        <button title="Click to Return Travel Disclosure" (click)="returnTravelDisclosure();"
-                            class="btn btn-outline-grey fs-14 d-flex justify-content-center w-100 align-items-center mb-3">
-                            <span class="d-flex justify-content-center w-100 align-items-center">
-                                <mat-icon class="me-2">description</mat-icon>
-                                Return
-                            </span>
+                        <button title="Click to Return Travel Disclosure"
+                            (click)="returnTravelDisclosure();"
+                            [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                            class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
+                            <mat-icon class="returnIcon">refresh</mat-icon>
+                            <span class="ms-1" *ngIf="isCardExpanded">Return</span>
                         </button>
 
                         <!-- approve disclosure -->
-                        <button title="Click to Approve Travel Disclosure" (click)="approveTravelDisclosure();"
-                            class="btn btn-primary fs-14 d-flex justify-content-center mb-3 w-100 align-items-center">
-                            <span class="d-flex justify-content-center w-100 align-items-center">
-                                <mat-icon class="me-2">check_circle</mat-icon>
-                                Approve
-                            </span>
+                        <button title="Click to Approve Travel Disclosure"
+                            (click)="approveTravelDisclosure();"
+                            [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
+                            class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
+                            <mat-icon>check_circle_outline</mat-icon>
+                            <span class="ms-2" *ngIf="isCardExpanded">Approve</span>
                         </button>
                     </ng-container>
-                </div>
-                <div class="px-3 my-3 fs-14 ash-text wrapping-text" *ngIf="!isCreateMode">
-                    <div><span class="fw-medium me-3">Last Updated By :</span></div>
+                </ng-container>
+
+                <ng-container *ngIf="isCreateMode">
+                    <!-- save -->
+                    <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
+                        class="col-12 mt-3  fs-14 btn btn-primary d-flex justify-content-center align-items-center"
+                        (click)="SaveTravelDisclosure()" title="Click to Save Travel Disclosure">
+                        <mat-icon class="me-2">save</mat-icon>
+                        Save
+                    </button>
+
+                    <!-- submit -->
+                    <button class="col-12 mt-3 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
+                        (click)="submitTravelDisclosure();" *ngIf="isRouteComplete(['certification'])"
+                        [disabled]="!service.isTravelCertified" title="Click to Submit Travel Disclosure">
+                        <mat-icon class="me-2">done</mat-icon>
+                        Submit
+                    </button>
+                </ng-container>
+
+                <!-- more option for expanded card-->
+                <button title="Click for More Actions" *ngIf="!isCreateMode && !isCardExpanded"
+                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col ms-2"
+                    data-bs-toggle="dropdown" type="button" id="moreActions" role="button">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <!-- last update date -->
+                <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'my-3' : 'mt-1'">
+                    <div class="fw-medium me-3">Last Updated By :</div>
                     <div>{{responseObject?.personFullName}} On {{responseObject?.updateTimestamp |
                         dateFormatterWithTimeZone:'long'}}</div>
                 </div>
-                <!-- <div class="d-flex justify-content-around px-3 pb-2"
+            </div>            
+                
+            <!-- <div class="d-flex justify-content-around px-3 pb-2"
                     *ngIf="isRouteComplete(['screening', 'travel-details'])"
                     title="Click here to add a new financial interest">
                     <button (click)="sfiService.isShowSfiNavBar = true"
@@ -330,32 +355,17 @@
                         <mat-icon class="me-2">add</mat-icon>
                         Add Significant Financial Interest
                     </button>
-                </div> -->
-                <div class="d-flex justify-content-around px-3 pb-2"
-                    *ngIf="isRouteComplete(['screening', 'travel-details'])">
-                    <button (click)="SaveTravelDisclosure()" title="Click to Save Travel Disclosure"
-                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                        <mat-icon class="me-2">save</mat-icon>
-                        Save
-                    </button>
                 </div>
+                
                 <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100"
-                    (click)="submitTravelDisclosure();" *ngIf="isRouteComplete(['certification'])"
-                    [disabled]="!service.isTravelCertified" title="Click to Submit Travel Disclosure">
-                    <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
-                        <mat-icon class="me-2">done</mat-icon>
-                        Submit
-                    </span>
-                </button>
-                <!-- <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100"
                     *ngIf="isRouteComplete(['certification'])" [disabled]="!service.isTravelCertified">
                     <span class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
                         <i class="me-2 fs-4 fa fa-clipboard"></i>
                         Certify & Copy
                     </span>
                 </button> -->
-            </div>
-            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes" *ngIf="isCreateMode">
+
+            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes w-100" *ngIf="isCreateMode">
                 Notes & Attachments
             </div>
         </div>
