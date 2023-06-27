@@ -440,21 +440,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> certifyDisclosure(CoiDisclosure coiDisclosure) {
-		Boolean isDisclosureQuestionnaire = conflictOfInterestDao.evaluateDisclosureQuestionnaire(8,0,coiDisclosure.getDisclosureId());
-		COIValidateDto coiValidateDto = new COIValidateDto();
-		List <COIValidateDto>coiValidateDtoList = new ArrayList<>();
-		if (isDisclosureQuestionnaire && !conflictOfInterestDao.isSFIDefined(conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId()).getPersonId())) {
-			coiValidateDto.setValidationMessage(
-					"You have not added any SFI(s). Based on your screening questionnaire you have to add atleast one SFI to continue with disclosure creation.");
-			coiValidateDtoList.add(coiValidateDto);
-		}
-		if(!conflictOfInterestDao.isRelationshipDefined(coiDisclosure.getDisclosureId())) {
-			coiValidateDto.setValidationMessage("You have undefined Project-SFI relationships. Kindly complete the Relationships section to certify the disclosure.");
-			coiValidateDtoList.add(coiValidateDto);
-		}
-		if(!coiValidateDtoList.isEmpty()) {
-			return new ResponseEntity<>(coiValidateDtoList, HttpStatus.OK);
-		}
 		coiDisclosure.setCertifiedBy(AuthenticatedUser.getLoginPersonId());
 		coiDisclosure.setCertifiedAt(commonDao.getCurrentTimestamp());
 		coiDisclosure.setReviewStatusCode(SUBMITTED_FOR_REVIEW);
@@ -1687,19 +1672,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	
 	@Override
 	public ResponseEntity<Object> evaluateValidation(Integer disclosureId) {
-		COIValidateDto coiValidateDto = new COIValidateDto();
-		List <COIValidateDto>coiValidateDtoList = new ArrayList<>();
-		Boolean isDisclosureQuestionnaire = conflictOfInterestDao.evaluateDisclosureQuestionnaire(8,0,disclosureId);
-		if (isDisclosureQuestionnaire && !conflictOfInterestDao.isSFIDefined(conflictOfInterestDao.loadDisclosure(disclosureId).getPersonId())) {
-			coiValidateDto.setValidationMessage(
-					"You have not added any SFI(s). Based on your screening questionnaire you have to add atleast one SFI to continue with disclosure creation.");
-			coiValidateDtoList.add(coiValidateDto);
-		}
-		if(!conflictOfInterestDao.isRelationshipDefined(disclosureId)) {
-			coiValidateDto.setValidationMessage("You have undefined Project-SFI relationships. Kindly complete the Relationships section to certify the disclosure.");
-			coiValidateDtoList.add(coiValidateDto);
-		}
 		/*validation of draft SFI to be added */
+		List <COIValidateDto>coiValidateDtoList = new ArrayList<>();
+		String personId = conflictOfInterestDao.loadDisclosure(disclosureId).getPersonId();
+		coiValidateDtoList = conflictOfInterestDao.evaluateValidation(disclosureId, personId);
 		return new ResponseEntity<>(coiValidateDtoList, HttpStatus.OK);
 	}
 
@@ -1820,7 +1796,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiConflictHistory.setComment(disclComment.getComment());
 		coiConflictHistory.setDisclosureId(vo.getDisclosureId());
 		coiConflictHistory.setDisclosureDetailsId(vo.getDisclosureDetailsId());
-		coiConflictHistory.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiConflictHistory.setUpdateUser(conflictOfInterestDao.getConflictStatusUpdateUser(vo.getDisclosureDetailsId()));
 		conflictOfInterestDao.saveOrUpdateCoiConflictHistory(coiConflictHistory);
 	}
 
