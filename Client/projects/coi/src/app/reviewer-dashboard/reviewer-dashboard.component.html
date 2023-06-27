@@ -18,9 +18,9 @@
         <nav class=" bg-white coi-admin-dash mb-2 mx-0 row border">
             <div class="list col">
                 <ul class="m-0 p-0">
-                    <li (click)="changeTab('NEW_SUBMISSIONS')" tabindex="0" (keyup.enter)="changeTab('NEW_SUBMISSIONS')"
+                    <li (click)="changeTab('NEW_SUBMISSIONS');" tabindex="0" (keyup.enter)="changeTab('NEW_SUBMISSIONS')"
                         (keyup.space)="changeTab('NEW_SUBMISSIONS')"
-                        title="Click to view the list of all newly submitted disclosures"
+                        title="Click to view New Submissions"
                         area-describedby="Click to view the list of all newly submitted disclosures"
                         [class.active]="reviewerDashboardService.reviewerRequestObject.tabName=='NEW_SUBMISSIONS'"
                         class="p-3 position-relative text-center ml-3">
@@ -31,7 +31,7 @@
                         (keyup.space)="changeTab('MY_REVIEWS')"
                         [class.active]="reviewerDashboardService.reviewerRequestObject.tabName=='MY_REVIEWS'"
                         class="p-3 position-relative text-center"
-                        title="Click to view the list of all disclosures under my review"
+                        title="Click to view My Reviews"
                         area-describedby="Click to view the list of all disclosures under my review">
                         My Reviews
                     </li>
@@ -46,7 +46,7 @@
                         (keyup.space)="changeTab('HISTORY')"
                         [class.active]="reviewerDashboardService.reviewerRequestObject.tabName=='HISTORY'"
                         class="p-3 position-relative text-center"
-                        title="Click to view the list of all disclosures under review history"
+                        title="Click to view Review History"
                         area-describedby="Click to view the list of all disclosures under review history">
                         Review History
                     </li>
@@ -54,29 +54,27 @@
             </div>
             <div class="col-auto">
                 <button role="button" class="btn btn-tertiary d-flex align-items-center mt-2 ms-auto fs-14"
-                    id="advanced-search" (click)="toggleADSearch()" aria-controls="collapseExample"
-                    aria-expanded="false" title="Click here to collapse/un-collapse advanced search"
-                    area-describedby="Click here to collapse/un-collapse advanced search"
+                    id="advanced-search" (click)="toggleAdvanceSearch()" aria-controls="collapseExample"
+                    aria-expanded="false" title="Click here to expand / collapse Advanced Search fields"
                     aria-label="Toggle Advanced Search"><mat-icon class="me-3">tune</mat-icon>
                     Advanced Search
                 </button>
             </div>
         </nav>
-
-        <div class="card collapse border mt-2" id="collapseExample">
+        <div *ngIf="isViewAdvanceSearch" class="card border mt-2" id="collapseExample">
             <div class="card-body">
                 <div class="form-row row">
                     <!-- Disclosure # -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Disclosure Number">
                         <label class="d-block" for="reviewer-adv-disclosure-number">
                             Disclosure #
                         </label>
-                        <input [(ngModel)]="reviewerDashboardService.reviewerRequestObject.property1"
+                        <input [(ngModel)]="localCOIRequestObject.property1"
                             class="form-control" placeholder="Search by Disclosure #" type="text"
                             id="reviewer-adv-disclosure-number" />
                     </div>
                     <!-- Person Name -->
-                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Person Name">
                         <label class="d-block" for="reviewer-adv-person-name">Person</label>
                         <app-elastic (selectedResult)="selectPersonName($event)" [clearField]="advSearchClearField"
                             [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person'"
@@ -84,7 +82,7 @@
                         </app-elastic>
                     </div>
                     <!-- Department Name -->
-                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Departement Name">
                         <label class="d-block" for="reviewer-adv-department-name">
                             Department
                         </label>
@@ -94,7 +92,7 @@
                         </app-endpoint-search>
                     </div>
                     <!-- Entity Name -->
-                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Entity Name">
                         <label class="d-block" for="reviewer-adv-entity-name">Entity</label>
                         <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
                             [httpOptions]="EntitySearchOptions" [placeHolder]="'Search by Type'" class="w-100 mt-4"
@@ -104,7 +102,7 @@
                 </div>
                 <div class="form-row row mt-3">
                     <!-- Disclosure Type -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Disclosure Type">
                         <label class="d-block" for="reviewer-adv-disclosure-type">
                             Disclosure Type
                         </label>
@@ -114,7 +112,7 @@
                         </app-look-up>
                     </div>
                     <!-- Disclosure Status -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Disclosure Status">
                         <label class="d-block" for="reviewer-adv-disclosure-status">
                             Disclosure Status
                         </label>
@@ -124,7 +122,7 @@
                         </app-look-up>
                     </div>
                     <!-- End Date -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Expiration Date">
                         <label class="d-block" for="reviewer-adv-expiration-date">
                             Expiration Date
                         </label>
@@ -138,7 +136,7 @@
                         </span>
                     </div>
                     <!-- Certification Date -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Certification Date">
                         <label class="d-block" for="reviewer-adv-certification-date">
                             Certification Date
                         </label>
@@ -155,8 +153,7 @@
                         <button (click)="resetAndPerformAdvanceSearch()" title="Click here to clear all the fields"
                             area-describedby="Click here to clear all the fields"
                             class=" btn btn-outline-secondary btn-xs fs-14 px-4">Clear</button>
-                        <button (click)="performAdvanceSearch()"
-                            title="Click here to get the search results with/without fields"
+                        <button (click)="performAdvanceSearch()" title="Click here to Initiate Search"
                             area-describedby="Click here to get the search results with/without fields"
                             class="btn btn-primary mx-3 fs-14">Search</button>
                     </div>
@@ -164,36 +161,32 @@
             </div>
         </div>
 
-        <div class="sort-div border mt-2" *ngIf="isShowAllProposalList && coiList.length">
+        <div class="sort-div border mt-2" *ngIf="isShowDisclosureList && coiList.length">
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
-            <span tabindex="0" (keydown.enter)="sortResult('coiDisclosureNumber')"
-                (click)="sortResult('coiDisclosureNumber')" [class.filter-active]="isActive('coiDisclosureNumber')"
-                title="Click to sort by disclosure number" area-describedby="Click to sort by disclosure number"
+            <span tabindex="0" (keydown.enter)="sortResult('coiDisclosureNumber')" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']"    
+            (click)="sortResult('coiDisclosureNumber')" [class.filter-active]="isActive('coiDisclosureNumber')"
+                title="Click to sort by Disclosure Number" area-describedby="Click to sort by disclosure number"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 ml-15 border rounded-5 bg-white" role="button">
-                <div class="d-inline-flex align-items-center">
-                    <label>Disclosure#
+                <div class="d-inline-flex align-items-center" >
+                    <label>Disclosure# 
                         <ngContainer hidden="true">sorting in
                             {{reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']=== 'asc'?
                             'Ascending Order':
                             'Descending Order'}}</ngContainer>
                     </label>
-                    <mat-icon class="text-secondary arrow"
-                        *ngIf="!reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']=== 'asc' ">arrow_downward</mat-icon>
+                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']=== 'asc'">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
                         *ngIf="reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']=== 'desc' ">arrow_upward</mat-icon>
                 </div>
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('disclosurePersonFullName')"
-                title="Click to sort by person name" area-describedby="Click to sort by person name"
-                (click)="sortResult('disclosurePersonFullName')"
+                title="Click to sort by Person Name" area-describedby="Click to sort by person name"
+                (click)="sortResult('disclosurePersonFullName')" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['disclosurePersonFullName']"
                 [class.filter-active]="isActive('disclosurePersonFullName')"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label>Person</label>
-                    <mat-icon class="text-secondary arrow"
-                        *ngIf="!reviewerDashboardService.reviewerRequestObject.sort['disclosurePersonFullName']">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
                         *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosurePersonFullName']=== 'asc' ">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
@@ -201,14 +194,12 @@
                 </div>
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('disclosureCategoryType')"
-                (click)="sortResult('disclosureCategoryType')"
-                [class.filter-active]="isActive('disclosureCategoryType')" title="Click to sort by disclosure type"
-                area-describedby="Click to sort by disclosure type"
+                (click)="sortResult('disclosureCategoryType')" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['disclosureCategoryType']"
+                [class.filter-active]="isActive('disclosureCategoryType')" title="Click to sort by Disclosure Type"
+                area-describedby="Click to sort by Disclosure Type"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label>Disclosure Type</label>
-                    <mat-icon class="text-secondary arrow"
-                        *ngIf="!reviewerDashboardService.reviewerRequestObject.sort['disclosureCategoryType']">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
                         *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosureCategoryType']=== 'asc' ">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
@@ -216,13 +207,11 @@
                 </div>
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('disclosureStatus')" (click)="sortResult('disclosureStatus')"
-                [class.filter-active]="isActive('disclosureStatus')" title="Click to sort by disclosure status"
-                area-describedby="Click to sort by disclosure status"
+                [class.filter-active]="isActive('disclosureStatus')" title="Click to sort by Disclosure Status"
+                area-describedby="Click to sort by disclosure status" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['disclosureStatus']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label>Disclosure Status</label>
-                    <mat-icon class="text-secondary arrow"
-                        *ngIf="!reviewerDashboardService.reviewerRequestObject.sort['disclosureStatus']">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
                         *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosureStatus']=== 'asc' ">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
@@ -230,13 +219,11 @@
                 </div>
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('certifiedAt')" (click)="sortResult('certifiedAt')"
-                [class.filter-active]="isActive('certifiedAt')" title="Click to sort by certification date"
-                area-describedby="Click to sort by certification date"
+                [class.filter-active]="isActive('certifiedAt')" title="Click to sort by Certification Date"
+                area-describedby="Click to sort by certification date" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['certifiedAt']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label>Certification Date</label>
-                    <mat-icon class="text-secondary arrow"
-                        *ngIf="!reviewerDashboardService.reviewerRequestObject.sort['certifiedAt']">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
                         *ngIf="reviewerDashboardService.reviewerRequestObject.sort['certifiedAt']=== 'asc' ">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
@@ -244,13 +231,11 @@
                 </div>
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('expirationDate')" (click)="sortResult('expirationDate')"
-                [class.filter-active]="isActive('expirationDate')" title="Click to sort by expiration date"
-                area-describedby="Click to sort by expiration date"
+                [class.filter-active]="isActive('expirationDate')" title="Click to sort by Expiration Date"
+                area-describedby="Click to sort by expiration date" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['expirationDate']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label>Expiration Date</label>
-                    <mat-icon class="text-secondary arrow"
-                        *ngIf="!reviewerDashboardService.reviewerRequestObject.sort['expirationDate']">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
                         *ngIf="reviewerDashboardService.reviewerRequestObject.sort['expirationDate']=== 'asc' ">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
@@ -258,22 +243,20 @@
                 </div>
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('updateTimeStamp')" (click)="sortResult('updateTimeStamp')"
-                [class.filter-active]="isActive('updateTimeStamp')" title="Click to sort by last updated"
-                area-describedby="Click to sort by last updated"
+                [class.filter-active]="isActive('updateTimeStamp')" title="Click to sort by Last Updated"
+                area-describedby="Click to sort by Last Updated By" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['updateTimeStamp']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label>Last Updated</label>
-                    <mat-icon class="text-secondary arrow"
-                        *ngIf="!reviewerDashboardService.reviewerRequestObject.sort['updateTimeStamp']">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['updateTimeStamp']=== 'asc' ">arrow_downward</mat-icon>
+                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['updateTimeStamp']=== 'asc'">arrow_downward</mat-icon>
                     <mat-icon class="arrow selected-arrow"
                         *ngIf="reviewerDashboardService.reviewerRequestObject.sort['updateTimeStamp']=== 'desc' ">arrow_upward</mat-icon>
                 </div>
             </span>
         </div>
 
-        <ng-container *ngIf="isShowAllProposalList">
+        <ng-container *ngIf="isShowDisclosureList">
             <ng-container *ngIf="coiList.length > 0;else noData">
                 <ng-container *ngFor="let coi of coiList;let index = index">
                     <section class="shadow-sm coi-card">
@@ -375,7 +358,7 @@
                                 </div>
                             </div>
                             <div class="row py-2 m-0 bg-white">
-                                <div class="col-2 d-flex align-items-center">
+                                <div class="col-3 d-flex align-items-center">
                                     <div (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber,coi.personId,coi?.noOfSfi,coi);"
                                         *ngIf="coi?.disclosureStatusCode == 1"
                                         [ngClass]="coi?.noOfSfi > 0 ? 'cursor-pointer' : '' " class="bold-blue-number">
@@ -393,7 +376,7 @@
                                             class="label-text label-align mx-0">Significant Financial Interest</label>
                                     </div>
                                 </div>
-                                <div class="col-3 d-flex align-items-center padding-left-67px">
+                                <div class="col-2 d-flex align-items-center">
                                     <ng-container *ngIf="coi?.fcoiTypeCode == 1">
                                         <div class="d-flex align-items-center">
                                             <div (click)="setSelectedModuleCode('proposal', coi.coiDisclosureId, coi.coiDisclosureNumber,coi.personId,coi?.noOfProposal,coi);"
