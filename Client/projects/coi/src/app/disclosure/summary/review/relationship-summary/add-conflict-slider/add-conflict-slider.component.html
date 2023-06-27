@@ -129,9 +129,9 @@
         </h3>
       </div>
       <ng-container *ngIf="conflictHistory.length > 0;else noData">
-        <ng-container *ngFor="let historyEntry of conflictHistory;let index = index;let last = last;let first=first">
+        <ng-container *ngFor="let historyEntry of conflictHistory;let index = index;let last = last;">
           <div class="row mx-2">
-            <div class="col-1 time-line mr-15" style="position: relative">
+            <div class="col-1 mr-15" [class.time-line]="!last" style="position: relative">
               <span
                 class="badge rounded-pill badge-width {{_commonService.getDisclosureConflictBadge(historyEntry?.conflictStatusCode)}}">{{historyEntry?.conflictStatusDescription}}</span>
             </div>
