@@ -912,4 +912,23 @@ public interface ConflictOfInterestDao {
 
 	public String getConflictStatusUpdateUser(Integer disclosureDetailsId);
 	
+
+	/**
+	 * This method is used to update disclosure header update details
+	 * @param disclosureId
+	 */
+	void updateDisclosureUpdateDetails(Integer disclosureId);
+
+	/**
+	 * This method is to load CoiReviewComment By Id
+	 * @param coiReviewCommentId
+	 * @return
+	 */
+	CoiReviewComments loadCoiReviewCommentById(Integer coiReviewCommentId);
+
+	/**
+	 * This method is used to update PersonEntity header update details
+	 * @param personEntityId
+	 */
+	void updatePersonEntityUpdateDetails(Integer personEntityId);
 }
