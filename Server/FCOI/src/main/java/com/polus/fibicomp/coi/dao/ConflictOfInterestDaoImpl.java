@@ -42,6 +42,7 @@ import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
+import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
@@ -3262,6 +3263,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaUpdate<CoiDisclEntProjDetails> criteriaUpdate = cb.createCriteriaUpdate(CoiDisclEntProjDetails.class);
 		Root<CoiDisclEntProjDetails> root = criteriaUpdate.from(CoiDisclEntProjDetails.class);
 		criteriaUpdate.set("projectConflictStatusCode", projectConflictStatusCode);
+		criteriaUpdate.set("updateUser", AuthenticatedUser.getLoginUserName());
 		criteriaUpdate.where(cb.equal(root.get("disclosureDetailsId"), disclosureDetailsId));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
@@ -3375,6 +3377,41 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		} else {
 			return false;
 		}
+	}
+	
+	@Override
+	public List<COIValidateDto> evaluateValidation(Integer disclosureId, String personId) {
+		List<COIValidateDto> coiValidateDtoList = new ArrayList<>();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		try {
+			CallableStatement statement = connection.prepareCall("{call COI_EVALUATE_VALIDATION(?,?)}");
+			statement.setInt(1, disclosureId);
+			statement.setString(2, personId);
+			statement.execute();
+			ResultSet resultSet = statement.getResultSet();
+			while (resultSet.next()) {
+				COIValidateDto coiValidateDto = new COIValidateDto();
+				coiValidateDto.setValidationMessage(resultSet.getString(1));
+				coiValidateDtoList.add(coiValidateDto);
+			}
+			return coiValidateDtoList;
+		} catch (Exception e) {
+			logger.error("Exception on evaluateValidation {}", e.getMessage());
+			throw new ApplicationException("error in evaluateValidation ", e, Constants.DB_PROC_ERROR);
+		}
+	}
+
+	@Override
+	public String getConflictStatusUpdateUser(Integer disclosureDetailsId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<String> query = builder.createQuery(String.class);
+		Root<CoiDisclEntProjDetails> rootCoiDisclEntProjDetails = query.from(CoiDisclEntProjDetails.class);
+		query.where(builder.equal(rootCoiDisclEntProjDetails.get("disclosureDetailsId"), disclosureDetailsId));
+		query.select(rootCoiDisclEntProjDetails.get("updateUser"));
+		return session.createQuery(query).getSingleResult();
 	}
 	
 }

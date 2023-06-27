@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
@@ -906,4 +907,9 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	Integer getMaxPersonEntityNumber();
+	
+	public List<COIValidateDto> evaluateValidation(Integer disclosureId, String personId);
+
+	public String getConflictStatusUpdateUser(Integer disclosureDetailsId);
+	
 }
