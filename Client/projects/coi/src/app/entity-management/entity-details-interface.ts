@@ -66,7 +66,10 @@ export class CoiEntity {
   approvedTimestamp?: number;
   approvedUser?: string;
   isActive: boolean;
-  entityNumber?: number
+  entityNumber?: number;
+  revisionReason?: string;
+  majorVersion?: boolean;
+
 }
 
 export class EntityDetails {

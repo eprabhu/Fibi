@@ -57,7 +57,7 @@
           </div> -->
         </div>
       </div>
-      <div *ngIf="entityDetailsServices.isExpanded || (!this.personEntityRelationships.length && !this.entityDetailsServices.isExpanded)" class="col">
+      <div *ngIf="entityDetailsServices.isExpanded || (!this.personEntityRelationships.length && this.entityDetailsServices.isExpanded)" class="col">
         <div class="col-11 mt-3">
           <div class="row">
             <label class="fs-14 fw-500">Relationship With Entity</label>

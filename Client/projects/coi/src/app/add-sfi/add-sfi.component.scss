@@ -31,12 +31,17 @@
     /* background-color: #d1d0d0; */
 }
 
-.card-header {
+.card-header-slider {
     position: sticky;
     top: 0;
     z-index: 2;
 }
 
+.card-header-page {
+  position: sticky;
+  top: 51px;
+  z-index: 2;
+}
 // select {
 //     background-color: #eef5ff;
 // }
@@ -321,4 +326,8 @@ small {
     right: 28px;
     position: absolute;
     top: 8px;
+}
+
+.btn-primary-submit {
+  height: 35px
 }

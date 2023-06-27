@@ -21,8 +21,9 @@ export class AddSfiSliderComponent implements OnInit {
     @ViewChild('sfiNavOverlay', { static: true }) sfiNavOverlay: ElementRef;
     @Input() coiEntityManageId: any = null;
     @Input() isEditEntity = false;
-    @Input() changeType = '';
+    @Input() modifyType = '';
     @Output() updatedDataStore = new EventEmitter<number>();
+    @Input() revisionReason = '';
 
     constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 

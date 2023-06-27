@@ -227,7 +227,7 @@
         <div *ngIf="isEntityManagement && isModifyEntity && entityDetails?.entityStatus?.entityStatusCode === '3'" class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-approve-entity"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-            title="Click to access entity verification">
+            title="Click to access entity verification" data-bs-toggle="modal" data-bs-target="#approve-entity-modal">
             <mat-icon class="mx-1 mb-2 icon-approve-position">check_circle_outline</mat-icon>
             <span class="btn-approve-position">Approve Entity</span>
           </button>
@@ -262,7 +262,7 @@
   </div>
 </div>
 <div *ngIf="sfiService.isShowSfiNavBar && isEntityManagement " id="task-navigation-bar">
-  <app-add-sfi-slider [coiEntityManageId]="entityId" [isEditEntity]="true" [changeType]="changeType"
+  <app-add-sfi-slider [coiEntityManageId]="entityId" [isEditEntity]="true" [modifyType]="modifyType" [revisionReason]="revisionReason"
     (updatedDataStore)="updatedEntityDetails($event)" [isSlider]="true"></app-add-sfi-slider>
 </div>
 
@@ -293,8 +293,7 @@
               </ol>
               </div>
             </div>
-            <div class="fs-14 fw-bold mx-1">
-              Change Type :<span class="mandatory px-2">*</span>
+            <div class="fs-14 fw-bold mx-1"><span class="mandatory px-1">*</span>Modify Type :
             </div>
             <div class="fs-14 text-secondary d-flex justify-content-start my-3 px-3">
               <span class="pr-25 d-flex">
@@ -312,10 +311,10 @@
               {{mandatoryList.get('change')}}
             </span>
             <div class="mx-1">
-              <span class="fs-14 fw-bold ">Description <span class="mandatory px-1">*</span></span>
+              <span class="fs-14 fw-bold "><span class="mandatory px-1">*</span> Description :</span>
               <textarea [(ngModel)]="modifyDescription" placeholder="Please enter a description" [isShowLimiter]='true' [limit]=2000
                 [ngClass]="mandatoryList.has('description')?'invalid-border':'' " appLengthValidator appAutoGrow class="form-control mt-1"
-                id="description"></textarea>
+                id="description" rows="1"></textarea>
                 <span class="invalid-feedback d-block fs-13" *ngIf="mandatoryList.has('description')">
                   {{mandatoryList.get('description')}}
                 </span>
@@ -368,7 +367,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <span class="block-display fw-bold fs-14">Reason for {{entityDetails.isActive?'Inactivation' :'Reactivation'}} :<span *ngIf="entityDetails.isActive" class="mandatory px-1">*</span></span>
+            <span class="block-display fw-bold fs-14"><span *ngIf="entityDetails.isActive" class="mandatory px-1">*</span>Reason for {{entityDetails.isActive?'Inactivation' :'Activation'}} :</span>
             <textarea placeholder="Please enter the reason."  [(ngModel)]="inactivateReason" [isShowLimiter]="true" [limit]="2000" rows="1" class="form-control"
               appAutoGrow appLengthValidator [ngClass]="{'invalid-border':reasonValidateMapEntity.has('reason')}"></textarea>
             <span *ngIf="reasonValidateMapEntity.has('reason')" class="invalid-feedback d-block fs-13">
@@ -392,3 +391,71 @@
 <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityDetails.entityName"
   [personEntityId]="entityId" [isRelationshipActive]="sfiRelationStatus.isRelationshipActive" (closeModal)="closeActivateInactivateSfiModal($event)">
 </app-activate-inactivate-sfi-modal>
+
+
+<!-- Approve Entity modal -->
+
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hide-approve-entity-modal" data-bs-toggle="modal"
+  data-bs-target="#approve-entity-modal"></button>
+
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="approve-entity-modal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header ct-footer-padding">
+        <h4 class="modal-title">Approve Entity {{entityDetails?.entityName}}</h4>
+        <button type="button" class="btn-close fs-12 " title="Close" data-bs-dismiss="modal"
+          aria-label="Close" (click)="clearApproveEntityFiled()"></button>
+      </div>
+      <div class="modal-body ct-modal-padding">
+        <div class="help-text">
+          <div class="col-12 py-2 grey-info font px-3">
+            <span class="fs-13 text-secondary">
+              <ol type="1">
+                <li>Mark any of the entity interrelations using the fields provided below.</li>
+                <li>You may mark multiple entity relations.</li>
+                <li>Complete entity verification by marking any relationships and clicking on Verify Entity button.</li>
+              </ol>
+            </span>
+          </div>
+        </div>
+        <div>
+          <div class="row fs-14">
+            <div class="col-5 pt-2 pb-4">
+              <label class="fw-bold" for="select-entity-relationship"><span class="mandatory px-1">*</span>Entity Relationship</label>
+              <select id="select-entity-relationship" class="form-control form-select" [(ngModel)]="entityRelationshipValue"
+              (ngModelChange)="selectEntityRelationship()" [ngClass]="(approveEntityValidateMap?.has('relationship')) ? 'is-invalid d-block' : ''">
+                <option [value]="null"> --Select-- </option>
+                <option *ngFor="let relationship of entityRelationships" [value]="relationship?.value">
+                  {{relationship?.description}}</option>
+              </select>
+              <span *ngIf="approveEntityValidateMap?.has('relationship')" class="invalid-feedback d-block fs-13">
+                {{approveEntityValidateMap?.get('relationship')}}
+              </span>
+            </div>
+          </div>
+          <div *ngIf="entityRelationshipValue && entityRelationshipValue !== '1'" class="row fs-14">
+            <div class="col pt-2 pb-4">
+              <label class="fw-bold" for="search-entity-name"><span class="mandatory px-1">*</span>Entity Search</label>
+            <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField" [httpOptions]="EntitySearchOptions"
+              [placeHolder]="'Type here for entity'" class=" text-secondary fs-13" [uniqueId]="'search-entity-name'"
+              [isError]="approveEntityValidateMap?.has('entityName')">
+            </app-endpoint-search>
+            <span *ngIf="approveEntityValidateMap?.has('entityName')" class="invalid-feedback d-block fs-13">
+              {{approveEntityValidateMap?.get('entityName')}}
+            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ct-footer-padding">
+        <button class="btn btn-outline-secondary fs-14 btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+          type="button" title="Cancel" (click)="clearApproveEntityFiled()">Cancel
+        </button>
+        <button class="btn btn-primary fs-14 btn-sm" id="claim-sumbit-no-btn" type="button"
+          title="Click here for approve entity" (click)="approveEntity()">
+          Approve Entity
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
