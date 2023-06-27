@@ -751,11 +751,10 @@ public interface ConflictOfInterestDao {
 	/**
 	 * This method is used for get sfi details by a person id or disclosure id
 	 *
-	 * @param personId
-	 * @param disclosureId
+	 * @param vo ConflictOfInterestVO
 	 * @return
 	 */
-	List<PersonEntity> getSFIOfDisclosure(String personId, Integer disclosureId);
+	List<PersonEntity> getSFIOfDisclosure(ConflictOfInterestVO vo);
 
 	/**
 	 *This method updates the assign admin/group and changes the disclosure status to 3 review in progress
@@ -827,7 +826,7 @@ public interface ConflictOfInterestDao {
 	 *
 	 * @param adminGroupId
 	 * @param adminPersonId
-	 * @param disclosureId
+	 * @param travelDisclosureId
 	 */
     void assignTravelDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId);
     
@@ -854,6 +853,12 @@ public interface ConflictOfInterestDao {
 	public void updateCoiDisclEntProjDetails(String projectConflictStatusCode, Integer disclosureDetailsId);
 
 	public String getProjectConflictStatusCode(Integer disclosureDetailsId);
+
+	/**
+	 * This method is used to delete Person entity
+	 * @param personEntityId
+	 */
+	void deletePersonEntity(Integer personEntityId);
 
 	public String getCoiConflictStatusByStatusCode(String conflictStatusCode);
 

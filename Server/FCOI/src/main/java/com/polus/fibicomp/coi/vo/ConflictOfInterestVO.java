@@ -278,6 +278,12 @@ public class ConflictOfInterestVO {
 
 	private String documentOwnerPersonId;
 
+	private Integer pageNumber;
+
+	private Integer currentPage;
+
+	private Integer count;
+
 	public CoiReviewStatusType getCoiReviewStatusTypeDetalis() {
 		return coiReviewStatusTypeDetalis;
 	}
@@ -1244,5 +1250,29 @@ public class ConflictOfInterestVO {
 	public void setConflictStatusCode(String conflictStatusCode) {
 		this.conflictStatusCode = conflictStatusCode;
 	}
-	
+
+
+	public Integer getPageNumber() {
+		return pageNumber;
+	}
+
+	public void setPageNumber(Integer pageNumber) {
+		this.pageNumber = pageNumber;
+	}
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
 }
