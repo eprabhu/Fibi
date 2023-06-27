@@ -10,8 +10,9 @@ import { RelationshipService } from './relationship.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { SearchFilterPipe } from './directives/search-filter.pipe';
-import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { SharedModule } from '../../shared/shared.module';
+import { SharedComponentModule } from '../../shared-components/shared-component.module';
+
 
 const routes: Routes = [{path: '', component: RelationshipComponent}];
 
@@ -29,8 +30,8 @@ const routes: Routes = [{path: '', component: RelationshipComponent}];
         MatInputModule,
         MatFormFieldModule,
         MatSnackBarModule,
-        SharedComponentModule,
         SharedModule,
+        SharedComponentModule
     ],
     providers: [
         RelationshipService

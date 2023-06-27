@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EntityDetailsService } from './entity-details.service';
 import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
@@ -9,8 +9,10 @@ import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/cus
   styleUrls: ['./entity-details.component.scss']
 })
 export class EntityDetailsComponent implements  OnInit, OnDestroy {
+  @Input() entityId: any;
+  isTriggeredFromSlider = false;
 
-  constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute) {
+  constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router) {
     this.clearSfiNavBarStyle();
   }
   updateRelationshipDetails: any;
@@ -20,6 +22,8 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
 
   ngOnInit() {
     this.isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
+    this.entityId = this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId;
+    this.isTriggeredFromSlider = this._router.url.includes('create-disclosure') ? true : false;
     if (this.isEditMode) {
       this.entityDetailService.isExpanded = false;
     }

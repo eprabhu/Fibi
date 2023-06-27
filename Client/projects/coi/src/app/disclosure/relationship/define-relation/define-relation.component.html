@@ -1,6 +1,6 @@
 
 <div class="slider-base">
-  <app-slider-close-btn (click)="hideSfiNavBar()"></app-slider-close-btn>
+  <app-slider-close-btn (closeAction)="hideSfiNavBar($event)"></app-slider-close-btn>
   <div class="slider-container">
       <div class="relationship-details-box card" id="relationship-details-box">
         <div class="col-12 d-flex">

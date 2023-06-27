@@ -11,7 +11,7 @@ import { SharedComponentModule } from '../../shared-components/shared-component.
 import { ViewRelationshipDetailsComponent } from './view-relationship-details/view-relationship-details.component';
 import { SfiService } from '../sfi/sfi.service';
 
-const routes: Routes = [{ path: '', component:EntityDetailsComponent }]
+const routes: Routes = [{ path: 'entity', component:EntityDetailsComponent }]
 
 @NgModule({
   imports: [
@@ -30,6 +30,7 @@ const routes: Routes = [{ path: '', component:EntityDetailsComponent }]
   ],
   providers:[
     EntityDetailsService,
-    ]
+    ], 
+  exports : [EntityDetailsComponent]
 })
 export class EntityDetailsModule { }

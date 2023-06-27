@@ -13,9 +13,13 @@ export class SfiService {
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-    getSfiDetails(id, reviewStatusCode, personId) {
+    getSfiDetails(id, reviewStatusCode, personId, filterType, currentPage) {
         return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure',
-            {'disclosureId': id, 'reviewStatus': reviewStatusCode, 'personId': personId});
+            {'disclosureId': id, 'reviewStatusCode': reviewStatusCode, 'personId': personId, 'filterType': filterType, 'currentPage': currentPage, 'pageNumber': 10});
+    }
+
+    deleteSFI(params) {
+        return this._http.delete(`${this._commonService.baseUrl}/personEntity/${params}`);
     }
 
     createSFI(params) {

@@ -5,7 +5,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header ct-footer-padding">
-        <h4 class="modal-title">{{isRelationshipActive?'Inactivate':'Activate'}} {{sfiDetails?.entityName}}</h4>
+        <h4 class="modal-title">{{isRelationshipActive?'Inactivate':'Activate'}} {{entityName}}</h4>
         <button type="button" class="btn-close fs-12 " title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="closeSfiActivateAndInactivateModal(false)"></button>
       </div>
       <div class="modal-body ct-modal-padding">
@@ -28,9 +28,9 @@
         </div>
         <div class="row">
           <div class="col">
-            <span class="block-display fw-bold fs-14">Reason for {{isRelationshipActive?'Inactivation' :'Reactivation'}} :<span *ngIf="isRelationshipActive" class="mandatory px-1">*</span></span>
+            <span class="block-display fw-bold fs-14"><span *ngIf="isRelationshipActive" class="mandatory px-1">*</span>Reason for {{isRelationshipActive?'Inactivation' :'Activation'}} :</span>
             <textarea placeholder="Please enter the reason."  [(ngModel)]="activateInactivateReason" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
-              appAutoGrow appLengthValidator [ngClass]="{'invalid-border':reasonValidateMapSfi.has('reason')}"></textarea>
+              appAutoGrow appLengthValidator [class.invalid-border]="reasonValidateMapSfi.has('reason')"></textarea>
             <span *ngIf="reasonValidateMapSfi.has('reason')" class="invalid-feedback d-block fs-13">
               {{reasonValidateMapSfi.get('reason')}}
             </span>
@@ -41,7 +41,7 @@
         <button class="btn btn-outline-secondary fs-14 btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
          type="button" title="Cancel" (click)="closeSfiActivateAndInactivateModal(false)">Cancel
         </button>
-        <button class="btn btn-primary fs-14 btn-sm" id="claim-sumbit-no-btn" type="button" data-bs-dismiss="modal" [attr.title]="isRelationshipActive?'Click to inactivate sfi':'Click to activate sfi'" (click)="activateAndInactivateSfi()">
+        <button class="btn btn-primary fs-14 btn-sm" id="claim-sumbit-no-btn" type="button" [attr.title]="isRelationshipActive?'Click to inactivate sfi':'Click to activate sfi'" (click)="activateAndInactivateSfi()">
           {{isRelationshipActive?'Inactivate' : 'Activate'}}
         </button>
       </div>
