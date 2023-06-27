@@ -10,6 +10,7 @@ import { NavigationService } from '../../common/services/navigation.service';
 import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
+import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 
 declare var $: any;
 @Component({
@@ -17,7 +18,7 @@ declare var $: any;
   templateUrl: './view-entity-details.component.html',
   styleUrls: ['./view-entity-details.component.scss']
 })
-export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
+export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges {
 
   entityDetails: any = {};
   entityId: any;
@@ -31,7 +32,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
   @Output() emitRelationshipModal: EventEmitter<boolean> = new EventEmitter<boolean>();
   valueOfModify = '';
   mandatoryList = new Map();
-  changeType = '';
+  modifyType = '';
   modifyDescription = '';
   inactivateReason = '';
   reasonValidateMapEntity = new Map();
@@ -41,6 +42,22 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
   sfiStatus = '';
   canMangeSfi = false;
   @Input() isEditMode = false;
+  revisionReason = '';
+  entityRelationships = [
+    {value: 1, description: 'New'},
+    {value: 2, description: 'Duplicate'},
+    {value: 3, description: 'Subsidiary'},
+    {value: 4, description: 'Parent'}
+  ];
+  entityRelationshipValue = null;
+  clearField: String;
+  EntitySearchOptions: any = {};
+  approveEntityValidateMap = new Map();
+  relationshipEntityName: String = '';
+  relationshipEntityId = null;
+  entityRelationshipDescription = '';
+
+
 
   constructor(private _router: Router, private _route: ActivatedRoute,
     public entityManagementService: EntityManagementService,
@@ -119,6 +136,8 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
 
   updatedEntityDetails(event) {
     if (event) {
+      this.revisionReason = '';
+      this.modifyType = '';
       this.entityId = event;
       this.getEntityDetails();
       this._router.navigate(['/coi/entity-management/entity-details'],{ queryParams: { entityManageId: this.entityId }, queryParamsHandling: 'merge'});
@@ -154,7 +173,8 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
     if (this.validationCheck()) {
       $('#modifyEntityConfirmationModal').modal('hide');
       this.sfiService.isShowSfiNavBar = true;
-      this.changeType = this.valueOfModify;
+      this.modifyType = this.valueOfModify;
+      this.revisionReason = this.modifyDescription;
       if (this.sfiService.isShowSfiNavBar) {
         this.valueOfModify = '';
         this.modifyDescription = '';
@@ -257,5 +277,56 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
     } else if (this.sfiRelationStatus.versionStatus === 'PENDING') {
       return 'Draft';
     }
+  }
+
+  selectEntityRelationship() {
+    if (this.entityRelationshipValue) {
+      this.entityRelationshipDescription = this.entityRelationships.find(ele =>
+        Number(this.entityRelationshipValue) === ele.value).description;
+    }
+    if (this.entityRelationshipValue !== '1') {
+      this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl);
+    }
+  }
+
+  approveEntity() {
+    this.approveEntityValidateMap.clear();
+    if (this.validateApproveEntity()) {
+      //  approve entity api call pending
+      const REQ_BODY = {
+        entityId : this.entityId,
+        entityRelationshipValue : this.entityRelationshipValue,
+        entityRelationshipDescription : this.entityRelationshipDescription,
+        relationshipEntityId : this.relationshipEntityId,
+        relationshipEntityName : this.relationshipEntityName
+      };
+      // after response
+      document.getElementById('hide-approve-entity-modal').click();
+      this.clearApproveEntityFiled();
+    }
+  }
+
+  selectedEvent(event) {
+    this.relationshipEntityName = event ? event.entityName : '';
+    this.relationshipEntityId = event ? event.entityId : null;
+  }
+
+  validateApproveEntity(): boolean {
+    if (!this.entityRelationshipValue) {
+      this.approveEntityValidateMap.set('relationship', '*Please select entity relationship.');
+    }
+    if (this.entityRelationshipValue && this.entityRelationshipValue !== '1'  && !this.relationshipEntityName) {
+      this.approveEntityValidateMap.set('entityName', '*Please choose an entity name.');
+    }
+    return this.approveEntityValidateMap.size === 0 ? true : false;
+  }
+
+  clearApproveEntityFiled() {
+    this.entityRelationshipValue = null;
+    this.entityRelationshipDescription = '';
+    this.clearField = new String('true');
+    this.relationshipEntityId = null;
+    this.relationshipEntityName = '';
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl);
   }
 }

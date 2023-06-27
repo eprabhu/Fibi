@@ -3,8 +3,8 @@
     class="task-right-div card-height d-flex align-items-center">
     <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
     <div class="tool-kit-body card-height scrollable-table">
-      <app-add-sfi *ngIf="sfiService?.isShowSfiNavBar" [coiEntityManageId]="coiEntityManageId" 
-      [isEditEntity]="isEditEntity" [isSlider]="true" [changeType]="changeType"
+      <app-add-sfi *ngIf="sfiService?.isShowSfiNavBar" [coiEntityManageId]="coiEntityManageId"
+      [isEditEntity]="isEditEntity" [isSlider]="true" [modifyType]="modifyType" [revisionReason]="revisionReason"
       [disclosureDetails]="disclosureDetails" (emitUpdateEvent)="emitEvent($event)"></app-add-sfi>
     </div>
   </div>
