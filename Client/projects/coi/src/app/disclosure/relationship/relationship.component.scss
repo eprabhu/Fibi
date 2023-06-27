@@ -235,3 +235,58 @@ label {
     color: white;
   }
 }
+
+.grey-info {
+  background : #EEEEEE;
+  color      : #202c2e;
+  font-size  : 16px;
+  font-weight: 400;
+  border     : 1px solid #caced2;
+}
+
+.info-text {
+  margin-bottom: 5px;
+  margin-left  : 27px;
+}
+
+.info-icon {
+  top: 7px; 
+  height     : 22px;
+  width      : 22px;
+  font-size  : 16px;
+  position   : absolute;
+  margin-left: 2px;
+  color      : #6f7395;
+  cursor     : pointer;
+}
+
+.count {
+  font-weight     : 600;
+  font-size       : 14px;
+  border-radius   : 50%;
+  background-color: #b5d6f3;
+  color           : #007DEC;
+}
+
+.toggle-down {
+  position: absolute;
+    bottom: 7px;
+    right: 22px;
+}
+
+.toggle-up {
+  position: absolute;
+    bottom: -4px;;
+    right: 22px;
+    padding: 5px;
+}
+
+.toggle-header-btn {
+  width: 30px;
+  color: #A64040;
+  height: 30px;
+  background-color:  #fff5f5 !important;
+  mat-icon {
+    transform: scale(1.2);
+  }
+}

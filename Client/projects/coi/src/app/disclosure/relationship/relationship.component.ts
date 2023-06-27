@@ -28,7 +28,8 @@ export class RelationshipComponent implements OnInit {
   selectedProjectForView: any;
   isEditMode: boolean = true;
   collapseViewMore = {};
-
+  expandInfo = true;
+  
   constructor(private _relationShipService: RelationshipService,private _route: ActivatedRoute,
     private _dataStore: DataStoreService,public _router: Router, private _commonService: CommonService) { }
 
@@ -36,8 +37,10 @@ export class RelationshipComponent implements OnInit {
     this.isShowRelation = false;
     this.moduleCode = null;
     this.moduleId = null;
-    this.updateConflictStatus();
-    this.loadProjectRelations();
+    if(this.isEditMode) {
+      this.updateConflictStatus();
+      this.loadProjectRelations(); 
+    }
   }
 
   ngOnInit() {

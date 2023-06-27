@@ -1,12 +1,18 @@
-.help-text{
+.help-text {
   margin: 0 -15px 0 -15px;
   position: relative;
   bottom: 0.6rem;
 }
+
 .grey-info {
   background: #EEEEEE;
   color: #202c2e;
   font-size: 16px;
   font-weight: 400;
   border: 1px solid #caced2;
+}
+
+
+.invalid-border {
+  border-color: #dc3545 !important;
 }

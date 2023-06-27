@@ -73,7 +73,7 @@ export class DefineRelationComponent implements OnInit {
     slider.classList.add('slider-opened');
   }
 
-  hideSfiNavBar() {
+  hideSfiNavBar(event) {
     let slider = document.querySelector('.slider-base');
     slider.classList.remove('slider-opened');
     setTimeout(() => {

@@ -1,10 +1,43 @@
-<div class="form-group col-lg-12 col-md-12 col-12 d-flex mx-auto" *ngIf="proposalArray.length>1">
+<div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode">
+  <span data-bs-toggle="tooltip" title="Update your conflict status." data-bs-placement="top" class="d-inline-block">
+    <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+  </span>
+  <div class="info-text fs-14">
+    <div class="mt-2">
+      <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>Projects will be displayed against your Active SFIs, allowing you to mark the relevant conflict status and provide a supporting description for your decision. 
+    </div>
+    <ng-container *ngIf="expandInfo">
+      <div class="mt-2">
+        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>If any of the active SFIs are missing ,please cross-check and make necessary corrections to the SFI list in the SFI section.
+      </div>
+      <div class="mt-2">
+        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>Before proceeding to the next step, ensure that all your Project-SFI relationships have been marked.
+      </div>
+    </ng-container>
+  </div>
+  <div class="toggle-down mr-2" *ngIf="expandInfo">
+    <div (click) = "expandInfo = false"
+      class="toggle-header-btn mt-3  bg-white border btn  p-1 rounded-5 shadow-sm">
+      <mat-icon title="Click to collapse Relationships  help text">expand_less</mat-icon>
+    </div>
+  </div>
+
+  <div class="toggle-up mr-2" *ngIf="!expandInfo">
+    <div  (click) = "expandInfo = true"
+      class="toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm">
+      <mat-icon title="Click to expand Relationships help text"
+       >expand_more</mat-icon>
+    </div>
+  </div>
+</div>
+
+<div class="form-group col-lg-12 col-md-12 col-12 d-flex mx-auto mt-2" *ngIf="proposalArray.length>1">
   <input type="text" placeholder="Search by Module Id, Module Name, PI, Status, Sponsor, Prime Sponsor  "
       class="searchInput form-control" [(ngModel)]="searchText">
       <a class="searchButton">
         <mat-icon class="mat-icon material-icons" aria-hidden="true" data-mat-icon-type="font">search</mat-icon></a>
 </div>
-  <ng-container *ngIf="(proposalArray| SearchFilter : searchText:
+<ng-container *ngIf="(proposalArray| SearchFilter : searchText:
 ['title', 'moduleItemId', 'moduleItemKey', 'moduleStatus', 'principalInvestigator', 'sponsor', 'primeSponsor']) as searchResult; let i = index">
 <ng-container *ngFor="let test of searchResult;let i = index">
   <div class="card outer-card">

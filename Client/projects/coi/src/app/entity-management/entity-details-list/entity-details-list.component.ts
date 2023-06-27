@@ -69,11 +69,11 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   }
 
   viewDetails(data) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { personEntityId: data.personEntityId, mode: 'view' } });
+    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: data.personEntityId, mode: 'view' } });
   }
 
   redirectToEntity(event) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
+    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
   }
 
   getRelationshipEntityList() {

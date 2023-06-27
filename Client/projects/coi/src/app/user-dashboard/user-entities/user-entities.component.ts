@@ -44,7 +44,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   }
 
   viewEntityDetails(entities) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { personEntityId: entities.coiFinancialEntityId, mode: 'view' } })
+    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entities.coiFinancialEntityId, mode: 'view' } })
   }
 
   setFilter(type = 'ALL') {

@@ -44,6 +44,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   @Input() isAddRelationship = false;
   @Output() isEmitModalClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() positionsToView: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() entityId: any;
 
   constructor(private _commonService: CommonService, private _router: Router,
     public entityDetailsServices: EntityDetailsService,
@@ -96,11 +97,11 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   getDefinedRelationships() {
     const REQ_BODY = {
       'tabName': this.currentSelected.tab,
-      'personEntityId': this._activatedRoute.snapshot.queryParamMap.get('personEntityId')
+      'personEntityId': this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId
     };
     return new Promise<boolean>((resolve) => {
       this.$subscriptions.push(this.entityDetailsServices.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
-        this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId');
+        this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;
         this.definedRelationships = res.personEntityRelationships;
         (this.isEditMode && this.definedRelationships.length > 0) ? this.positionsToView.emit(true) : this.positionsToView.emit(false);
         this.removeExistingRelation();

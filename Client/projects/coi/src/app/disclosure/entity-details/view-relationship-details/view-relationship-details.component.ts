@@ -19,6 +19,7 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
   $subscriptions: Subscription[] = [];
   personEntityRelationships:any = [];
   @Input() updateRelationshipDetails :any;
+  @Input() entityId :any;
   isReadMoreBusinessArea = false;
   isReadMoreUniversity = false;
   isReadMoreRelationWith = false;
@@ -27,21 +28,19 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
   constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
     private _route:ActivatedRoute,private _commonService: CommonService) { }
 
-  // ngOnInit() {
-  //   const ENTITY_ID = this._route.snapshot.queryParamMap.get('entityId');
-  //   this.getEntityDetails(ENTITY_ID);
-  //   // this.sfiServices.isShowSfiNavBar
-  // }
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions)
   }
 
-  ngOnChanges() {
-    const ENTITY_ID = this._route.snapshot.queryParamMap.get('personEntityId');
-    this.getEntityDetails(ENTITY_ID);
+  ngOnChanges() {;
+    this.getEntityDetails(this.getEntityId());
     if(this.updateRelationshipDetails) {
       this.personEntityRelationships.push(this.updateRelationshipDetails);
     }
+  }
+
+  getEntityId() {
+    return this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId;
   }
 
   getEntityDetails(personEntityId) {
@@ -62,7 +61,6 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
 
   navigateBack() {
     this._router.navigate(['/coi/user-dashboard/entities'])
-    // this._router.navigateByUrl(this.entityDetailsServices.previousURL);
   }
 }
 

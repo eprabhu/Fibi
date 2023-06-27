@@ -282,6 +282,21 @@ mat-icon {
 }
 
 .draft-pill {
-    color: black;
-    background: #ffc107;
+    color: #000;
+    background: #9fc5f8;
+}
+.sticky-0 {
+  top:0;
+  z-index:1;
+  position: sticky;
+}
+
+.sticky-top-50 {
+  top:52px;
+  z-index:1;
+  position: sticky;
+}
+
+.fa-bolt {
+  margin-right: 23px;
 }

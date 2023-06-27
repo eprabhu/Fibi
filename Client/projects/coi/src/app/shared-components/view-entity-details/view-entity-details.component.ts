@@ -15,8 +15,7 @@ declare var $: any;
 @Component({
   selector: 'app-view-entity-sfi-details',
   templateUrl: './view-entity-details.component.html',
-  styleUrls: ['./view-entity-details.component.scss'],
-  // animations: [slowSlideInOut]
+  styleUrls: ['./view-entity-details.component.scss']
 })
 export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
 
@@ -27,6 +26,8 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
   deployMap = environment.deployUrl;
   isEntityManagement = false;
   isModifyEntity = false;
+  @Input() entityIdFromSlider: boolean = false;
+  @Input() isTriggeredFromSlider: boolean = false;
   @Output() emitRelationshipModal: EventEmitter<boolean> = new EventEmitter<boolean>();
   valueOfModify = '';
   mandatoryList = new Map();
@@ -51,8 +52,13 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
   ngOnInit() {
     this.isEntityManagement = this._router.url.includes('entity-management');
     this.isModifyEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
+    this.getEntityID();
+  }
+
+  getEntityID() {
     this.$subscriptions.push(this._route.queryParams.subscribe(params => {
       this.entityId = this.isEntityManagement ? params.entityManageId : params.personEntityId;
+      this.entityId = this.entityId ? this.entityId : this.entityIdFromSlider;
       this.getEntityDetails();
     }));
   }
@@ -236,7 +242,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy,OnChanges {
       this.sfiStatus = this.getSfiStatus();
       this.isEnableActivateInactivateSfiModal = false;
       if (this.entityId !== event.personEntityId) {
-        this._router.navigate(['/coi/entity-details'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
       }
     } else {
       this.isEnableActivateInactivateSfiModal = false;
