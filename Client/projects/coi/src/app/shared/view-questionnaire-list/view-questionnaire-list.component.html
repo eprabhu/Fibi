@@ -85,7 +85,7 @@
     </div>
     <div *ngIf="this.questionnaireList.length != 0 && isShowQuestionnaire" class="tab-pane">
         <div class=" my-2 mb-3 mx-3">
-            <div class="card-body pt-0">
+            <div class="pt-0">
                 <app-view-questionnaire [questionnaireDetails]="activeQuestionnaire"
                     (questionnaireSaveEvent)="updateParentData($event)" [isViewMode]="isViewMode"
                     (questionnaireEditEvent)="markQuestionnaireAsEdited($event)" [isViewMode]="isViewMode"

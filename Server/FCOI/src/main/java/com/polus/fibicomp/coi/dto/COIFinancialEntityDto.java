@@ -35,6 +35,8 @@ public class COIFinancialEntityDto {
 
 	private String relationshipTypes;
 
+	private String versionStatus;
+
 	public Integer getCoiFinancialEntityId() {
 		return coiFinancialEntityId;
 	}
@@ -153,5 +155,13 @@ public class COIFinancialEntityDto {
 
 	public void setRelationshipTypes(String relationshipTypes) {
 		this.relationshipTypes = relationshipTypes;
+	}
+
+	public String getVersionStatus() {
+		return versionStatus;
+	}
+
+	public void setVersionStatus(String versionStatus) {
+		this.versionStatus = versionStatus;
 	}
 }

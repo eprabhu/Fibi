@@ -84,10 +84,10 @@ export class AddRelationshipModalComponent implements OnInit {
     this.relationshipResult.emit('addRelationshipModal');
     this.hideModal.emit(false);
     this._sfiService.isShowSfiNavBar = false;
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: this.personEntityId, mode: 'edit' } });
+    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.personEntityId, mode: 'edit' } });
   }
 
-  validateRelationship() { 
+  validateRelationship() {
     this.relationValidationMap.clear();
     if (!this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode) {
       this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
@@ -98,7 +98,7 @@ export class AddRelationshipModalComponent implements OnInit {
   continueWithoutRelation() {
     this.clearRelationModal();
     this.closeModal();
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: this.personEntityId, mode: 'edit' } })
+    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.personEntityId, mode: 'edit' } })
     this._sfiService.isShowSfiNavBar = false;
   }
 

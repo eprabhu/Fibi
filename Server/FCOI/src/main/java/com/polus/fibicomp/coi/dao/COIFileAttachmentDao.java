@@ -47,7 +47,7 @@ public class COIFileAttachmentDao {
 		}	
 		
 		
-	}
+	} 
     
     private Integer getNextAttachmentNumber() {
 		

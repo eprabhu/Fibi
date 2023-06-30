@@ -5,7 +5,7 @@
         <ng-container *ngIf="selectedProject?.moduleCode == 3">
           <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
           <p class="entity-title mt-3">
-            <strong class="fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
+            <strong class="fs-16">#{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
           </p>
         </ng-container>
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
@@ -57,25 +57,38 @@
               <thead>
                   <tr class="header-border table-light">
                     <th style="width: 29%;" class="border-end px-3">Significant Financial Interest</th>
-                    <th style="width: 34%;" class="border-end px-3">Define relationship between SFIs and Projects</th>
+                    <th style="width: 34%;" class="border-end px-3">Relationship between SFIs and Projects</th>
                     <th style="width: 14%;" class="border-end px-3">COI Status</th>
                     <th style="width: 8%;" class="border-end px-3">Actions</th>
                   </tr>
               </thead>
               <tbody class="white-bg" >
-                <tr *ngFor="let test of projectRelations; let i = index" class="tr-hover">
-                  <td class="table-data border-end fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.personEntity?.coiEntity?.entityName}}</td>
-                  <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">{{test?.comment?.comments}}</td>
+                <tr *ngFor="let relation of projectRelations; let i = index" class="tr-hover" id="{{relation.disclosureDetailsId}}">
+                  <td class="table-data border-end fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{relation?.personEntity?.coiEntity?.entityName}}</td>
+                  <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">
+                    <div class="p-3 person-card fs-13 grey-text">
+                      <span *ngIf="!isReadMore[i] && relation?.disclComment?.comment?.length > 60; else showFullInfo">
+                        <span> {{(relation?.disclComment?.comment | slice:0:60)}}</span>
+                        <span (click)="isReadMore[i] = !isReadMore[i]" class="hand-cursor">... <strong><u>Read more</u></strong>
+                        </span>
+                      </span>
+                      <ng-template #showFullInfo>
+                        <span>{{relation?.disclComment?.comment}}</span>
+                        <span *ngIf="relation?.disclComment?.comment?.length > 60" (click)="isReadMore[i] = !isReadMore[i]"
+                          aria-hidden="true" class="hand-cursor"> <strong><u>Show Less</u></strong>
+                        </span>
+                      </ng-template>
+                    </div>
+                  </td>
                   <td class="border-end px-3 text-center" [class.border-0]="i != projectRelations?.length-1">
-                    <span class="{{_commonService.getDisclosureConflictBadge(test?.coiProjConflictStatusType?.projectConflictStatusCode)}}">{{test?.coiProjConflictStatusType?.description}}</span>
+                    <span class="{{_commonService.getDisclosureConflictBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}">{{relation?.coiProjConflictStatusType?.description}}</span>
                   </td>
                   <td class="border-0 d-flex pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
-
-                    <button class="btn-primary-icon-svg me-1" type="button"
-                      (mouseenter)="isShowHoverWhite[i]= true" (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true">
+                    <button *ngIf="coiDetails.reviewStatusCode== 3 && coiDetails.dispositionStatusCode == 1"
+                      class="btn-primary-icon-svg me-1" type="button" (mouseenter)="isShowHoverWhite[i]= true"
+                      (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
                       <span class="btn-secondary-svg"></span>
                     </button>
-
                     <button class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
                       <mat-icon>rate_review</mat-icon>
                   </button>
@@ -89,107 +102,5 @@
       </div>
 </div>
 
-<app-add-comment-slider *ngIf="isOpenSlider" (closePage)="closePage()" [isOpenSlider]="isOpenSlider"></app-add-comment-slider>
-<!-- Reviewer Conflict Modal -->
-<div class="modal modal-coi fade mySkinDialog" id="reviewer-conflict-modal" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Project Conflict Review
-                </h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" id="dissmiss-btn" aria-label="Close" (click)="clearConflictModal()">
-                </button>
-            </div>
-            <div class="modal-body pt-0">
-                <div class="my-3 mx-0 row">
-                    <div class="col-12 p-3 highlight-node font">
-                      <p>Reviewers can update the conflict status of each project’s relationship with the SFIs. Please note that the system will overwrite the latest conflict status captured in the disclosure. Use the History button next to the conflict status to track the conflict data changes.</p>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-12">
-                        <label for="Conflict Status"><span class="mandatory">*</span> Conflict Status</label>
-                        <select [(ngModel)]="reviewerConflict.coiReviewerStatusCode" class="form-control"
-                            [ngClass]="projectConflictValidationMap?.has('coiReviewerStatusCode') ? 'is-invalid d-block' : ''">
-                            <option value=undefined>--Select--</option>
-                            <option *ngFor="let status of _dataStoreAndEventsService.conflictStatusList"
-                                [value]="status.discDetStatusCode">
-                                {{status?.description}}
-                            </option>
-                        </select>
-                        <div *ngIf="projectConflictValidationMap?.has('coiReviewerStatusCode')" class="invalid-feedback d-block">
-                            {{projectConflictValidationMap?.get('coiReviewerStatusCode')}}
-                        </div>
-                    </div>
-                    <div class="col-12 my-0">
-                        <label><span class="mandatory">*</span> Comments</label>
-                        <textarea class="form-control" appLengthValidator [isShowLimiter]="true"
-                            [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
-                            [limit]="4000" [(ngModel)]="reviewerConflict.comment.comments"></textarea>
-                        <div *ngIf="projectConflictValidationMap?.has('comment')" class="invalid-feedback d-block">
-                            {{projectConflictValidationMap?.get('comment')}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="nego-sumbit-no-btn" type="button" class="btn btn-secondary btn-sm"
-                    data-dismiss="modal" (click)="clearConflictModal()">Cancel</button>
-                <button type="button" class="btn btn-primary-sub btn-sm" (click)="updateProjectConflictStatus()">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Reviewer Conflict History Modal -->
-<div class="modal modal-coi fade mySkinDialog" id="conflict-history-modal" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Reviewer Conflict History
-                </h4>
-                <button type="button" class="btn-close" data-dismiss="modal" id="dissmiss-btn" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <div *ngIf="conflictHistory?.length; else noHistory" class="p-0 w-100 widget-container">
-                    <table class="tableSkin">
-                        <caption class="sr-only">List of Reviewer Conflict History</caption>
-                        <thead class="sticky-top">
-                            <tr class="header-border">
-                                <th>Name</th>
-                                <th>Conflict Status</th>
-                                <th style="width: 30%">Comment</th>
-                                <th>Last Updated On</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let conflict of conflictHistory">
-                                <td>{{conflict?.updateUserFullName}}</td>
-                                <td>{{conflict?.coiDisclosureDetailsStatus?.description}}</td>
-                                <td>{{conflict?.comment}}</td>
-                                <td>{{conflict?.updateTimestamp | dateFormatterWithTimeZone: 'long' }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <ng-template #noHistory>
-                    <div class="no-data-container">
-                        <span class="no-data-icon-outer">
-                            <div class="no-data-icon">
-                                <i class="fa fa-file-o" aria-hidden="true"></i>
-                                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                            </div>
-                        </span>
-                        <h4>There are no reviewer conflicts.</h4>
-                    </div>
-                </ng-template>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm"
-                    data-dismiss="modal">close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+<app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider"
+  [entityDetails]="entityDetails"></app-add-conflict-slider>

@@ -9,20 +9,22 @@ import { CommonService } from '../../common/services/common.service';
     templateUrl: './personal-details-modal.component.html',
     styleUrls: ['./personal-details-modal.component.scss']
 })
-export class personalDetailsModalComponent implements OnInit {
+export class PersonalDetailsModalComponent implements OnInit {
 
-    constructor(private _personservice:Person_details_modalService, private _commonservice:CommonService) { }
+    constructor(private _personservice: Person_details_modalService, private _commonservice: CommonService) { }
 
     @Input() userdetails: any;
     @Output() closeModalPersonDetails: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    currentTab = 'PersonfullDetails';
+    currentTab = 'PERSON_DETAILS';
     $subscriptions: Subscription[] = [];
     personValues: any;
+    canShowPersonDetails = false;
 
     ngOnInit() {
         document.getElementById('persondetailsTrigger').click();
         this.persondetails(this.userdetails);
+        this.setPersonBtnRights();
     }
 
     addnewvalue(value): void {
@@ -36,5 +38,14 @@ export class personalDetailsModalComponent implements OnInit {
         error => this._commonservice.showToast(HTTP_ERROR_STATUS, 'Fetching training details failed. Please try again.')));
     }
 
+    viewPersoDetails(personTrainingId: string): void {
+        const url = this._commonservice.fibiApplicationUrl + `#/fibi/person/person-details?personId=${personTrainingId}`;
+        window.open(url);
+    }
+
+    setPersonBtnRights() {
+        const isLoggedInPerson = this.userdetails.personId == this._commonservice.currentUserDetails.personId;
+        this.canShowPersonDetails = (isLoggedInPerson || this._commonservice.getAvailableRight('MAINTAIN_PERSON'));
+    }
 
 }

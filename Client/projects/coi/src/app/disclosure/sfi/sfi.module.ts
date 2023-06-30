@@ -5,6 +5,9 @@ import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
+import { MatIconButton } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { EntityDetailsModule } from '../entity-details/entity-details.module';
 
 const routes: Routes = [{path: '', component: SfiComponent}];
 @NgModule({
@@ -16,7 +19,9 @@ const routes: Routes = [{path: '', component: SfiComponent}];
         SharedModule,
         FormsModule,
         RouterModule.forChild(routes),
-        SharedComponentModule
+        SharedComponentModule,
+        MatIconModule,
+        EntityDetailsModule
     ]
 })
 export class SfiModule  {

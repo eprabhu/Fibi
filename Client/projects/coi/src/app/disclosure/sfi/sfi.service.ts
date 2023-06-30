@@ -13,9 +13,13 @@ export class SfiService {
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-    getSfiDetails(id, reviewStatusCode, personId) {
+    getSfiDetails(id, reviewStatusCode, personId, filterType, currentPage) {
         return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure',
-            {'disclosureId': id, 'reviewStatus': reviewStatusCode, 'personId': personId});
+            {'disclosureId': id, 'reviewStatusCode': reviewStatusCode, 'personId': personId, 'filterType': filterType, 'currentPage': currentPage, 'pageNumber': 10});
+    }
+
+    deleteSFI(params) {
+        return this._http.delete(`${this._commonService.baseUrl}/personEntity/${params}`);
     }
 
     createSFI(params) {
@@ -30,6 +34,10 @@ export class SfiService {
         return this._http.get(`${this._commonService.baseUrl}/getSFIDetails/${coiFinancialEntityId}`)
     }
 
+    isEntityAdded(entityId) {
+        return this._http.get(`${this._commonService.baseUrl}/checkEntity/${entityId}/added`)
+    }
+
     addSFILookUp() {
         return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
     }
@@ -37,5 +45,7 @@ export class SfiService {
     saveOrUpdateCoiFinancialEntityDetails(params) {
         return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
     }
-    
+    getEntityDetails(entityId) {
+      return this._http.get(`${this._commonService.baseUrl}/getEntityDetails/${entityId}`);
+    }
 }

@@ -14,8 +14,11 @@ import {FooterComponent} from "./common/footer/footer.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AppHttpInterceptor} from './common/services/http-interceptor';
 import {DashboardGuardService} from "./common/services/dashboard-guard.service";
-import { ElasticConfigService } from '../../../fibi/src/app/common/services/elastic-config.service';
-import { NavigationService } from './common/services/navigation.service';
+import {ElasticConfigService} from '../../../fibi/src/app/common/services/elastic-config.service';
+import {NavigationService} from './common/services/navigation.service';
+import {EntityManagementGuardService} from './entity-management/entity-management-guard.service';
+import {AdminRouteGuardService} from './common/services/guards/admin-route-guard.service';
+import {DataStoreService} from "./disclosure/services/data-store.service";
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -39,6 +42,7 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
     providers: [CommonService,
         DashboardGuardService,
         ElasticConfigService,
+        EntityManagementGuardService,
         {
             provide: APP_INITIALIZER,
             useFactory: getappConfiguration,
@@ -49,7 +53,10 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
             provide: HTTP_INTERCEPTORS,
             useClass: AppHttpInterceptor,
             multi: true
-        }, {provide: LocationStrategy, useClass: HashLocationStrategy},NavigationService],
+        }, {
+            provide: LocationStrategy,
+            useClass: HashLocationStrategy
+        }, NavigationService, AdminRouteGuardService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

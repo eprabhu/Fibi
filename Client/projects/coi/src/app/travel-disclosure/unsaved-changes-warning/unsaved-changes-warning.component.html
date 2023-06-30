@@ -1,0 +1,43 @@
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-validate-button" data-bs-toggle="modal"
+    data-bs-target="#saveAndExitModal"></button>
+<div class="modal modal-coi fade mySkinDialog" id="saveAndExitModal" role="dialog" aria-labelledby="saveAndExitModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p *ngIf="service.unSavedTabName != 'Certification'" class="fs-14">
+                    You have unsaved changes in
+                    <ng-container *ngIf="!service.unSavedTabName">
+                        <strong>Travel Disclosure Creation</strong>
+                    </ng-container>
+                    <strong>{{service.unSavedTabName}}.</strong>
+                </p>
+                <p class="fs-14">Do you want to leave the
+                    <ng-container *ngIf="service.unSavedTabName != 'Certification'">
+                        page without saving
+                    </ng-container>
+                    <ng-container *ngIf="service.unSavedTabName == 'Certification'">
+                        <strong>Certification </strong>
+                        Page
+                    </ng-container>
+                    ?
+                </p>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary" (click)="leavePageClicked();"
+                    data-bs-dismiss="modal">
+                    Leave Page
+                </button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" data-bs-dismiss="modal">
+                    Stay On Page
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,12 +5,17 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 
 import org.springframework.http.ResponseEntity;
@@ -308,7 +313,7 @@ public interface ConflictOfInterestService {
 
 	ResponseEntity<Object> getAllCoiTravelDisclosureList();
 
-	CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId);
+	ResponseEntity<Object> loadTravelDisclosure(Integer travelDisclosureId);
 
 	ResponseEntity<Object> getCoiProjectTypes();
 
@@ -348,4 +353,97 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	Object checkEntityAdded(Integer entityId);
+
+	/**
+	 * Validate
+	 * 1) If selected project expired date passed
+	 * 2) Is part of any pending project disclosure
+	 * 3) If the selected project is part of any active/ pending  FCOi disclosure
+	 *
+	 * @param moduleCode
+	 * @param moduleItemId
+	 * @return
+	 */
+    ResponseEntity<Object> validateDisclosure(Integer moduleCode, String moduleItemId);
+
+	/**
+	 * This method is used to assign admin group or admin person
+	 *
+	 * @param dto
+	 * @return
+	 */
+	ResponseEntity<Object> assignDisclosureAdmin(CoiDisclosureDto dto);
+
+	/**
+	 * This method is used to validate conflicts and update
+	 *
+	 * @param disclosureId
+	 * @return
+	 */
+    ResponseEntity<Object> validateConflicts(Integer disclosureId);
+    
+    /**
+	 * This method is used to assign admin group or admin person for travel disclosures
+	 *
+	 * @param dto
+	 * @return
+	 */
+	ResponseEntity<Object> assignTravelDisclosureAdmin(CoiAssignTravelDisclosureAdminDto dto);
+	
+	/**
+	 * This method is used to certifyTravelDisclosure
+	 * @param vo
+	 * @return vo
+	 */
+	ResponseEntity<Object> submitTravelDisclosure(ConflictOfInterestVO vo);
+	
+	/**
+	 * This method is used to certifyDisclosure
+	 * @param vo
+	 * @return vo
+	 */
+	ResponseEntity<Object> certifyTravelDisclosure(ConflictOfInterestVO vo);
+	
+	ResponseEntity<Object> withdrawTravelDisclosure(Integer travelDisclosureId);
+	
+	ResponseEntity<Object> approveTravelDisclosure(Integer travelDisclosureId);
+	
+	ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId);
+
+	/**
+	 * This method is used to evaluate validation conditions:
+	 * 1.If SFI has to be defined based on questionnaire evaluation.
+	 * 2.Is there any SFI's with relationship not defined.
+	 * 3.Is there any SFI in draft status
+	 */
+	ResponseEntity<Object> evaluateValidation(Integer disclosureId);
+
+	ResponseEntity<Object> getProjConflictStatusType();
+
+	/**
+	 *This method is used to activate/inactive entity by checking the entity is used anywhere.
+	 * If entity is linked on a SFI new version will be created
+	 * @param coiEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> activateOrInactivateEntity(CoiEntityDto coiEntityDto);
+
+	/**
+	 *This method is used to activate/inactive  person entity
+	 * @param personEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
+
+	ResponseEntity<Object> updateProjectRelationship(ConflictOfInterestVO vo);
+
+
+
+
+	/**
+	 * This method is used to delete Person entity
+	 * @param personEntityId
+	 * @return
+	 */
+	ResponseEntity<Object> deletePersonEntity(Integer personEntityId);
 }

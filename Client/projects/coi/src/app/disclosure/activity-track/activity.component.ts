@@ -106,7 +106,9 @@ export class ActivityComponent implements OnInit, OnDestroy {
     clearModal() {
         this.modal.hide();
         this.uploadedFile = [];
+        this.validationMap.clear();
         this.reviewCommentObject = new CommentRequest();
+        this.editIndex = -1;
     }
 
     addComments() {
@@ -181,6 +183,7 @@ export class ActivityComponent implements OnInit, OnDestroy {
                 this.editIndex = this.modalConfiguration.modifyIndex;
                 this.modal.show();
                 this.commentTab = 'MODIFY';
+                this.validationMap.clear();
             }
         }));
     }

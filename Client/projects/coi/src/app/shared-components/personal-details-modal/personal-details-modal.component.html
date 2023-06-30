@@ -14,25 +14,27 @@
             <div class="modal-body">
                 <div class="shadow tabSwitch ">
                     <ul class="subTabs mb-0">
-                        <li (click)="currentTab='PersonfullDetails'"
-                            [ngClass]="currentTab == 'PersonfullDetails'?'test1':'test2'">
-                            <a (click)="currentTab='PersonfullDetails'">Person Details </a>
+                        <li (click)="currentTab='PERSON_DETAILS'"
+                            [ngClass]="currentTab == 'PERSON_DETAILS'?'active':'inactive'">
+                            <a (click)="currentTab='PERSON_DETAILS'">Person Details </a>
                         </li>
-                        <li (click)="currentTab='TrainingDetails'"
-                            [ngClass]="currentTab == 'TrainingDetails'?'test1':'test2'">
-                            <a (click)="currentTab='TrainingDetails'">Training</a>
+                        <li (click)="currentTab='TRAINING_DETAILS'"
+                            [ngClass]="currentTab == 'TRAINING_DETAILS'?'active':'inactive'">
+                            <a (click)="currentTab='TRAINING_DETAILS'">Training</a>
                         </li>
                     </ul>
                 </div>
                 <app-person-details [personValues]="personValues" [user]="id"
-                    *ngIf="currentTab =='PersonfullDetails'"></app-person-details>
+                    *ngIf="currentTab =='PERSON_DETAILS'"></app-person-details>
                 <app-Training-details [userdetails]="userdetails"
-                    *ngIf="currentTab == 'TrainingDetails'"></app-Training-details>
+                    *ngIf="currentTab == 'TRAINING_DETAILS'"></app-Training-details>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary fs-15 m-3" (click)="addnewvalue(false)"
+                <button type="button" class="btn btn-outline-secondary fs-15" (click)="addnewvalue(false)"
                     data-bs-dismiss="modal">Close</button>
+                <button *ngIf="(currentTab == 'PERSON_DETAILS') || canShowPersonDetails" (click)="viewPersoDetails(userdetails?.personId)" class="btn btn-primary fs-15" >View Person Details</button>
             </div>
         </div>
     </div>
 </div>
+<!-- PersonfullDetails,  TrainingDetails -->

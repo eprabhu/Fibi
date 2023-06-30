@@ -8,6 +8,7 @@ import { ReviewService } from './review.service';
 import { LocationComponent } from './location-track/location.component';
 import { GeneralCommentsComponent } from './general-comments/general-comments.component';
 import {SharedModule} from "../../shared/shared.module";
+import { SharedDisclosureModule } from '../shared-disclosure/shared-disclosure.module';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import {SharedModule} from "../../shared/shared.module";
         RouterModule.forChild([{ path: '', component: ReviewComponent }]),
         FormsModule,
         SharedModule,
-    ],
+        SharedDisclosureModule
+      ],
     declarations: [
         ReviewComponent,
         LocationComponent,

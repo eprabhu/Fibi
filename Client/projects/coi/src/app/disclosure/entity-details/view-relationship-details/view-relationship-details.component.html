@@ -6,7 +6,7 @@
           <div class="col-3">
             <div class="row">
               <label class="fs-14 fw-500">Relationship Type</label>
-              <app-no-data-label [valueToShow]="personEntityRelationships.length>0">
+              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="personEntityRelationships.length>0">
                 <span class="text-color  fs-14">{{'Financial'}}</span>
               </app-no-data-label>
             </div>
@@ -20,7 +20,7 @@
           <div class="col-3">
             <div class="row">
               <label class="fs-14 fw-500">Start Date Of Involvement</label>
-              <app-no-data-label [valueToShow]="relationshipsDetails?.involvementStartDate">
+              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementStartDate">
                 <span class="text-color fs-14">{{relationshipsDetails?.involvementStartDate |
                         dateFormatterWithTimeZone}}</span>
               </app-no-data-label>
@@ -29,7 +29,7 @@
           <div class="col-3">
             <div class="row">
               <label class="fs-14 fw-500">End Date Of Involvement</label>
-              <app-no-data-label [valueToShow]="relationshipsDetails?.involvementEndDate">
+              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementEndDate">
                 <span class="text-color fs-14">{{relationshipsDetails?.involvementEndDate |
                         dateFormatterWithTimeZone}}</span>
               </app-no-data-label>
@@ -38,14 +38,14 @@
           <div class="col-1 d-flex justify-content-end">
             <div *ngIf="!entityDetailsServices.isExpanded"
               class=" toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm">
-              <mat-icon
+              <mat-icon title="Click to expand Relationships"
                 (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_more</mat-icon>
             </div>
           </div>
           <!-- <div class="col-3">
             <div class="row">
               <label class="fs-14 fw-500">Relationship With</label>
-              <app-no-data-label [valueToShow]="personEntityRelationships">
+              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="personEntityRelationships">
                 <ng-container  *ngFor="let data of personEntityRelationships;let last = last" class="col">
                   <span class="r-title text-color fs-14" *ngIf="!last">{{data?.validPersonEntityRelType?.personEntityRelType?.description +'/'}}
                   </span>
@@ -57,11 +57,11 @@
           </div> -->
         </div>
       </div>
-      <div *ngIf="entityDetailsServices.isExpanded" class="col">
+      <div *ngIf="entityDetailsServices.isExpanded || (!this.personEntityRelationships.length && this.entityDetailsServices.isExpanded)" class="col">
         <div class="col-11 mt-3">
           <div class="row">
             <label class="fs-14 fw-500">Relationship With Entity</label>
-            <app-no-data-label [valueToShow]="relationshipsDetails?.staffInvolvement">
+            <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.staffInvolvement">
               <span *ngIf="!isReadMoreRelationWith;else more1" class="text-color fs-14">{{(relationshipsDetails?.staffInvolvement?.length>200)?(relationshipsDetails?.staffInvolvement|slice:0:165)
                 :relationshipsDetails?.staffInvolvement}}
                 <span *ngIf="relationshipsDetails?.staffInvolvement?.length>200">...<span class="collapse-text fw-medium" (click)="isReadMoreRelationWith =!isReadMoreRelationWith">Read more</span></span>
@@ -77,7 +77,7 @@
         <div class="col-11 mt-3">
           <div class="row">
             <label class="fs-14 fw-500">Principal Business Area Of Entity</label>
-            <app-no-data-label [valueToShow]="relationshipsDetails?.studentInvolvement">
+            <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.studentInvolvement">
               <span *ngIf="!isReadMoreBusinessArea;else more2" class="text-color fs-14">
                 {{(relationshipsDetails?.studentInvolvement?.length>200)?(relationshipsDetails?.studentInvolvement|slice:0:165)
                 :relationshipsDetails?.studentInvolvement}}
@@ -95,7 +95,7 @@
             <div class="col-11 mt-3">
               <div class="row">
                 <label class="fs-14 fw-500">Relationship Of Entity To Your University Responsibilities</label>
-                <app-no-data-label [valueToShow]="relationshipsDetails?.instituteResourceInvolvement">
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.instituteResourceInvolvement">
                   <span *ngIf="!isReadMoreUniversity;else more3" class="text-color fs-14">{{(relationshipsDetails?.instituteResourceInvolvement?.length>200)?(relationshipsDetails?.instituteResourceInvolvement|slice:0:165)
                     :relationshipsDetails?.instituteResourceInvolvement}}
                     <span *ngIf="relationshipsDetails?.instituteResourceInvolvement?.length>200">...<span class="collapse-text fw-medium" (click)="isReadMoreUniversity =!isReadMoreUniversity">Read more</span></span>
@@ -110,7 +110,7 @@
             <div class="col-1 d-flex align-items-end justify-content-end mt-3 px-3">
               <div *ngIf="entityDetailsServices.isExpanded"
                 class="toggle-header-btn mt-3  bg-white border btn  p-1 rounded-5 shadow-sm">
-                <mat-icon
+                <mat-icon title="Click to collapse Relationships"
                   (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_less</mat-icon>
               </div>
             </div>

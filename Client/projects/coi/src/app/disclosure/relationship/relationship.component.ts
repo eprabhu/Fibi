@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component,Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../environments/environment';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
@@ -12,7 +13,7 @@ import { RelationshipService } from './relationship.service';
   styleUrls: ['./relationship.component.scss'],
   animations: [slideHorizontal],
 })
-export class RelationshipComponent {
+export class RelationshipComponent implements OnInit {
   isShowRelation = false;
   proposalArray = [];
   coiStatusList = [];
@@ -27,7 +28,8 @@ export class RelationshipComponent {
   selectedProjectForView: any;
   isEditMode: boolean = true;
   collapseViewMore = {};
-
+  expandInfo = true;
+  
   constructor(private _relationShipService: RelationshipService,private _route: ActivatedRoute,
     private _dataStore: DataStoreService,public _router: Router, private _commonService: CommonService) { }
 
@@ -35,7 +37,10 @@ export class RelationshipComponent {
     this.isShowRelation = false;
     this.moduleCode = null;
     this.moduleId = null;
-    this.loadProjectRelations();
+    if(this.isEditMode) {
+      this.updateConflictStatus();
+      this.loadProjectRelations(); 
+    }
   }
 
   ngOnInit() {
@@ -50,16 +55,28 @@ export class RelationshipComponent {
     }
   }
 
+  private updateConflictStatus(): void {
+    this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+      if(data) {
+        this.coiData.coiDisclosure.coiConflictStatusType = data;
+        this.coiData.coiDisclosure.conflictStatusCode = data.conflictStatusCode;
+        this._dataStore.updateStore(['coiDisclosure'],  this.coiData);
+      }
+    }, err => {
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating status');
+    });
+  }
+
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
     this.isEditMode = this.coiData.coiDisclosure.reviewStatusCode == '1';
-}
+  }
+
   loadProjectRelations() {
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       this.proposalArray = data.awards;
       data.proposals.every(ele => this.proposalArray.push(ele));
       this.coiStatusList = data.coiProjConflictStatusTypes;
-      this._dataStore.disclosureStatus = this.getDisclosureStatus();
     });
   }
 
@@ -91,12 +108,12 @@ export class RelationshipComponent {
 
   openProjectMoreDetails(moduleId, moduleCode) {
     if (moduleCode == 3) {
-      let test = this._commonService.fibiUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
-      window.open (test, '_blank')
+      const redirectToProposal = this._commonService.fibiApplicationUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
+      window.open (redirectToProposal);
       // this._router.navigate([test,{ queryParams: { proposalId:  moduleId}}]);
     } else {
-      let test2 = this._commonService.fibiUrl + '#/fibi/award/overview?awardId=' + moduleId;
-      window.open (test2, '_blank')
+      const redirectToAward = this._commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
+      window.open (redirectToAward);
       // this._router.navigate([test2,{ queryParams: { awardId:  moduleId}}]);
     }
   }
