@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {DataStoreService} from "../services/data-store.service";
-import {CoiService} from "../services/coi.service";
+import {DataStoreService} from "../../disclosure/services/data-store.service";
+import {CoiService} from "../../disclosure/services/coi.service";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+import { CommonService } from '../../common/services/common.service';
 
 @Component({
     selector: 'app-certification',
@@ -30,7 +31,7 @@ export class CertificationComponent implements OnInit, OnDestroy {
     to disclose and maintain your Significant Financial Interests; identify potential areas of concern related to your
      proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
-    constructor(public _dataStore: DataStoreService, public _coiService: CoiService) { }
+    constructor(public _dataStore: DataStoreService, public _coiService: CoiService, public commonService: CommonService) { }
 
     ngOnInit() {
         this._coiService.isShowCertifyInfo = true;
@@ -45,7 +46,7 @@ export class CertificationComponent implements OnInit, OnDestroy {
     private getDataFromStore() {
         const DATA = this._dataStore.getData(this.dependencies);
         this.coiDisclosure = DATA.coiDisclosure;
-        if (this.coiDisclosure.certifiedBy) {
+        if (this.coiDisclosure && this.coiDisclosure.certifiedBy) {
             this._coiService.isCertified = true;
         }
         // this.isEditMode = this._dataStore.getEditModeForCOI();

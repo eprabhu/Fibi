@@ -85,6 +85,7 @@ export class NavigationService {
         const awardSubTabName = sessionStorage.getItem('currentAwardDashboardTab');
         const agreementSubTab = sessionStorage.getItem('currentAgreementDashboardTab');
         const serviceRequestSubTab = sessionStorage.getItem('currentServiceRequestTab');
+        const coiAdminTab = sessionStorage.getItem('currentCOIAdminTab');
         this.removeCurrentTab();
         if (this.awardModulePermission(event) && awardSubTabName) {
             sessionStorage.setItem('currentAwardDashboardTab', awardSubTabName);
@@ -94,6 +95,8 @@ export class NavigationService {
             sessionStorage.setItem('currentAgreementDashboardTab', agreementSubTab);
         } else if (this.serviceRequestModulePermission(event) && serviceRequestSubTab) {
             sessionStorage.setItem('currentServiceRequestTab', serviceRequestSubTab);
+        } else if (this.coiPermissionList(event) && coiAdminTab) {
+            sessionStorage.setItem('currentCOIAdminTab', coiAdminTab);
         }
     }
 
@@ -105,6 +108,7 @@ export class NavigationService {
         sessionStorage.removeItem('currentAwardDashboardTab');
         sessionStorage.removeItem('currentAgreementDashboardTab');
         sessionStorage.removeItem('currentServiceRequestTab');
+        sessionStorage.removeItem('currentCOIAdminTab');
     }
 
     /**
@@ -136,6 +140,13 @@ export class NavigationService {
      */
      serviceRequestModulePermission(event) {
         return event.url.split(/[/?]/).includes('service-request') || event.url.split('/').includes('serviceRequestList') ? true : false;
+    }
+     /**
+     * @param  {} event
+     * check whether the current url has 'coi' or 'coiList'
+     */
+     coiPermissionList(event) {
+        return event.url.split(/[/?]/).includes('disclosure') || event.url.split('/').includes('admin-dashboard') ? true : false;
     }
     /**
      * @param  {} pathDetails

@@ -13,7 +13,7 @@
 }
 
 .header-navigation-links li.active,
-.header-navigation-links li:focus{
+.header-navigation-links li:focus {
   color: #007DEC;
   font-weight: bold;
   border-bottom: 3px solid #007DEC;
@@ -80,7 +80,7 @@
       width: 16px;
       left: 5px;
       bottom: 4px;
-      background-color: white;
+      background-color: #fff;
       -webkit-transition: .4s;
       transition: .4s;
     }
@@ -120,12 +120,15 @@ input:checked+.slider:before {
   transform: translateX(24px);
 }
 
-.position{
-    position: relative;
-    left: 95px;
+.position {
+  position: relative;
+  left: 95px;
 }
-#add-new-entity,#advanced-search{
+
+#add-new-entity,
+#advanced-search {
   width: 145px;
+  height: 33px;
 }
 
 .border-nav {
@@ -134,24 +137,25 @@ input:checked+.slider:before {
   position: relative;
   top: 5px;
 }
+
 #btn-clear {
   width: 7rem;
   height: 3.5rem;
 }
 
-small{
-  color: white;
+small {
+  color: #fff;
 }
 
-.add-icon{
+.add-icon {
   position: relative;
   top: 1px;
-  font-size: 18px;
-  right:2px;
+  font-size: 1.8rem;
+  right: 2px;
 }
 
-.border:focus{
-  border: 2px solid #54BF5B !important;
+.border:focus {
+  border: 2px solid #54bf5b !important;
 }
 
 .coi-admin-dash {
@@ -164,7 +168,8 @@ small{
   border: 1px solid #ededed;
   margin: 1px 0;
 }
-.coi-table{
+
+.coi-table {
   padding: 20px;
   width: 100%;
   display: flex;
@@ -172,61 +177,146 @@ small{
   align-items: center;
 
 }
-.invalid{
-position: relative;
-top: 6px;
-color: red;
+
+.invalid {
+  position: relative;
+  top: 6px;
+  color: #ff0000;
+}
+
+.medium-risk {
+  position: relative;
+  top: 6px;
+  color: #ff8c00;
+}
+
+.low-risk {
+  position: relative;
+  top: 6px;
+  color: rgb(26, 172, 62);
 }
 
 .status-active-pill {
-background-color: #4CB57D;
-color: white;
-padding: 3px 9px;
-font-weight: 500;
-border-radius: 15px;
+  background-color: #4cb57d;
+  color: #fff;
+  padding: 3px 9px;
+  font-weight: 500;
+  border-radius: 15px;
 
 }
+
 .status-inactive-pill {
-background-color: #5f6462;
-color: white;
-padding: 3px 9px;
-font-weight: 500;
-border-radius: 15px;
+  background-color: #5f6462;
+  color: #fff;
+  padding: 3px 9px;
+  font-weight: 500;
+  border-radius: 15px;
 }
-.entity-status {
-color: white;
-width: 90px;
-height: 27px;
-background: #ed5151;
-position: relative;
-left: -12px;
-top: 0px;
-font-size: 14px;
-font-weight: 500;
-border-radius: 0 50px 50px 0;
+
+.entity-status-pill {
+  background-color: #ffc107;
+  color: #080808;
+  padding: 3px 9px;
+  font-weight: 500;
+  border-radius: 15px;
+}
+
+.entity-status-active {
+  color: #fff;
+  width: 70px;
+  height: 27px;
+  background: #54bf5b;
+  position: relative;
+  left: -11px;
+  top: 0px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 0 50px 50px 0;
+  padding: 4px 0px;
+
+  &:before {
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-bottom: 6px solid #030303;
+    border-left: 6px solid transparent;
+    top: -6px;
+    left: 0;
+  }
+}
+
+th {
+  height: 45px
+}
+
+td {
+  padding-left: 5px !important;
+}
+
+.tb-bg-color {
+  background-color: #fff;
+}
+
+.w-max {
+  width: max-content;
+}
+
+.entity-status-inactive {
+  color: #fff;
+  width: 70px;
+  height: 27px;
+  background: #949494;
+  position: relative;
+  left: -12px;
+  top: 0px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  border-radius: 0 50px 50px 0;
+  padding: 4px 0px;
 
 &:before {
   content: "";
   position: absolute;
   height: 0;
   width: 0;
-  border-bottom: 6px solid #ed5151;
+  border-bottom: 6px solid #151515;
   border-left: 6px solid transparent;
   top: -6px;
   left: 0;
 }
 }
 
-th{
-height:45px
-}
-td{
-padding-left: 5px !important;
-}
-.tb-bg-color {
-background-color: white;
+.pill {
+  border: 1px solid #ffc107;
+  border-radius: 25px;
+  padding: 2px 10px 0px 4px;
+  font-weight: 500;
+  width: max-content;
+  height: auto;
 }
 
-.w-max {
-width: max-content;
+.cross-wrapper {
+  display: inline-grid;
+  place-items: center;
+  background-color: #ffc107;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 1.3rem;
+}
+
+.cross-wrapper>i {
+  color: #fff;
+}
+
+.text {
+  margin-left: 5px;
+  color: #c39200;
+  font-size: 1.3rem;
+}
+
+.advanced-search-row {
+  display: flex;
+  justify-content: space-between;
 }

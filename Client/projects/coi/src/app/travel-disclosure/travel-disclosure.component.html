@@ -1,0 +1,395 @@
+<div class="border-top-0 mb-3 mx-3 row header-sticky">
+    <div class="col-9 p-0">
+        <div class="border shadow-sm bg-white" [class.min-height-189]="isCardExpanded">
+            <div class="disclosure-heading px-3 d-flex">
+                <div class="align-self-center flex-fill">
+                    <p class="m-0">
+                        <ng-container *ngIf="!responseObject?.travelDisclosureId">
+                            <strong>Travel Disclosure By
+                                <span class="text-primary cursor-pointer">
+                                    <u (click)="ispersondetailsmodal = true;"
+                                        title="Show the details of {{userDetails.fullName}}">
+                                        {{userDetails.fullName}}
+                                    </u>
+                                </span>
+                            </strong>
+                        </ng-container>
+                        <ng-container *ngIf="responseObject?.travelDisclosureId">
+                            <strong title="">
+                                #{{responseObject?.travelDisclosureId}} : Travel Disclosure By
+                                <span class="text-primary cursor-pointer">
+                                    <u (click)="ispersondetailsmodal = true;"
+                                        title="Show the details of {{userDetails.fullName}}">
+                                        {{userDetails.fullName}}
+                                    </u>
+                                </span>
+                            </strong>
+                        </ng-container>
+                    </p>
+                </div>
+                <div class="d-flex" *ngIf="!isCreateMode">
+                    <ng-container>
+                        <div class="align-items-center d-flex" title="Click here to collapse/un-collapse">
+                            <button (click)="isCardExpanded=!isCardExpanded;"
+                                class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                                <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 pb-1 bg-white">
+                <!-- user details -->
+                <div class="col mr-15">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">
+                                    <i aria-hidden="true" class="fa fa-home mr-2"></i>
+                                    Department :
+                                </label>
+                                <app-no-data-label class="grey-text fs-14 ml-2"
+                                    [valueToShow]="userDetails.homeUnit || userDetails.homeUnitName">
+                                    <div title="{{userDetails.homeUnit}} - {{userDetails.homeUnitName}}">
+                                        {{userDetails.homeUnit}} -
+                                        {{userDetails.homeUnitName.length>35 ?
+                                        (userDetails.homeUnitName | slice:0: 35)+'...' :
+                                        userDetails.homeUnitName}}
+                                    </div>
+                                </app-no-data-label>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">
+                                    <i class="fa fa-user-o fw-700 mr-2" aria-hidden="true"></i>
+                                    Administrator :
+                                </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]="responseObject?.adminPersonName">
+                                        <div title="{{responseObject?.adminPersonName}}">
+                                            {{responseObject?.adminPersonName}}
+                                        </div>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">
+                                    <img class="activity-icon" src="{{deployMap}}assets/images/multiple-admin-1.svg"
+                                        alt="add-adminGroup icon">
+                                    Admin Group :
+                                </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]="responseObject?.adminGroupName">
+                                        <div title="{{responseObject?.adminGroupName}}">
+                                            {{responseObject?.adminGroupName}}
+                                        </div>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- for date box -->
+                <div class="col-auto mr-15">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                        <span class="status-pill">Date</span>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">Create : </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]="responseObject?.createTimestamp">
+                                        <span>{{responseObject?.createTimestamp | dateFormatter}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">Certification : </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]="responseObject?.certifiedAt">
+                                        <span>{{responseObject?.certifiedAt | dateFormatter}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14">Approved : </label>
+                                <span class="grey-text fs-14 ml-2">
+                                    <app-no-data-label [valueToShow]="responseObject?.acknowledgeAt">
+                                        <span>{{responseObject?.acknowledgeAt | dateFormatter}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- for status box -->
+                <div class="col-auto status-card-width">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                        <span class="status-pill">Status</span>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14 col-4">Document : </label>
+                                <span class="grey-text fs-14 ms-3 col">
+                                    <app-no-data-label [valueToShow]="responseObject?.documentStatusCode">
+                                        <span
+                                            class="fs-14 {{commonService.getDocumentStatusBadge(responseObject?.documentStatusCode)}}">{{responseObject?.documentStatus}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14 col-4">Review : </label>
+                                <span class="grey-text fs-14 ms-3 col">
+                                    <app-no-data-label [valueToShow]="responseObject?.reviewStatusCode">
+                                        <span
+                                            class="fs-14 {{commonService.getTravelReviewStatusBadge(responseObject?.reviewStatusCode)}}">{{responseObject?.reviewStatus}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="grey-text fw-600 fs-14 col-4">Disclosure : </label>
+                                <span class="grey-text fs-14 ms-3 col">
+                                    <app-no-data-label [valueToShow]="responseObject?.disclosureStatusCode">
+                                        <span
+                                            class="fs-14 {{commonService.getDisclosureConflictBadge(responseObject?.disclosureStatusCode)}}">{{responseObject?.disclosureStatus}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="isCreateMode">
+                <div class="nav-progress row mt-1">
+                    <!-- Screening Questionnaire tab -->
+                    <!-- <div class="col h-100 m-0 fs-14"
+                        [routerLink]="['screening']"
+                        [class.complete]="isRouteComplete(['screening', 'travel-details', 'certification'])"
+                        [class.cursor-pointer]="!isRouteComplete(['screening'])"
+                        queryParamsHandling='merge'
+                        title="Go to step Screening Questionnaire">
+                        Screening Questionnaire
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col h-100 m-0 fs-14" (click)="service.isChildRouting = true"
+                        [class.complete]="isRouteComplete(['travel-details', 'certification'])"
+                        [routerLink]="['travel-details']" queryParamsHandling='merge'
+                        [class.cursor-pointer]="!isRouteComplete(['travel-details'])"
+                        [title]="isRouteComplete(['travel-details'])? 'Travel Details' : 'Go to step Travel Details'">
+                        Travel Details
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col fs-14" (click)="service.isChildRouting = true"
+                        [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
+                        queryParamsHandling='merge' [class.cursor-pointer]="!isRouteComplete(['certification'])"
+                        [title]="isRouteComplete(['certification'])? 'Certification' : 'Go to step Certification'">
+                        Certification
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!isCreateMode">
+                <div class="navigation-tabs d-flex align-items-center">
+                    <button [routerLink]="['summary']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
+                        role="button" [title]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'">
+                        <div class="navigation-box-content" routerLinkActive="active" area-describedby="">
+                            Disclosure
+                        </div>
+                    </button>
+                    <button [routerLink]="['history']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
+                        role="button" [title]="isRouteComplete(['history'])? 'Travel History' : 'Go to step Travel History'">
+                        <div class="navigation-box-content" routerLinkActive="active" area-describedby="">
+                            Travel History
+                        </div>
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <!-- right side options -->
+    <div class="col-3 px-0">
+        <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm" [ngClass]="isCardExpanded? 'min-height-189' : 'collapse-right-tab'">
+            <div  class="row m-0 py-3 px-3">
+                <!-- home -->
+                <button (click)="navigateBack()" title="Go to home"
+                    [ngClass]="(responseObject?.reviewStatusCode != '2' && !isCreateMode && responseObject?.reviewStatusCode != '7') ? 'col-2' : 'col'"
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14">
+                    <mat-icon>home</mat-icon>
+                    <span class="ms-2" *ngIf="showHomeButton() && isCardExpanded">Home</span>
+                </button>
+
+                <!-- Comments -->
+                <button title="Click to add new review commments" aria-expanded="false"
+                    *ngIf="!isCreateMode && checkReviewStatusCode(['3'])"
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col 0 ms-2"
+                    data-bs-target="#coi-review-comment" data-bs-toggle="modal" role="button">
+                    <mat-icon>rate_review</mat-icon>
+                    <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
+                </button>
+
+                <!-- more option button for expanded card-->
+                <button title="Click for More Actions" *ngIf="!isCreateMode && isCardExpanded"
+                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2"
+                    data-bs-toggle="dropdown" type="button" id="moreActions" role="button">
+                    <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                    <span>More Actions</span>
+                </button>
+                <!-- more options -->
+                <div class="dropdown-menu dropdown-card p-0">
+                    <!-- reassigned admin -->
+                    <ng-container *ngIf="responseObject?.adminPersonId">
+                        <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                            class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2"
+                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2', '3'], 'SOME')"
+                            data-bs-toggle="modal" data-bs-target="#assign-to-admin-modal">
+                            <mat-icon class="me-2">group_add</mat-icon>
+                            Reassign Admin
+                        </button>
+                    </ng-container>
+
+                    <!-- Withdraw disclosure -->
+                    <button title="Click to Withdraw Travel Disclosure" (click)="withdrawTravelDisclosure();"
+                        class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2" 
+                        *ngIf="checkReviewStatusCode(['2']) && responseObject?.personId == currentPersonId">
+                        <mat-icon class="me-2">logout</mat-icon>
+                        Withdraw
+                    </button>
+
+                    <!-- notify -->
+                    <button title="Click to Notify"
+                        class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 py-2 align-items-center">
+                        <mat-icon class="me-2">notifications</mat-icon>
+                        Notify
+                    </button>
+                </div>
+
+                <ng-container *ngIf="!isCreateMode">
+                    <!-- assign admin -->
+                    <ng-container *ngIf="!(responseObject?.adminPersonId)">
+                        <button title="Click to Assign Administrator/Admin Group"
+                            area-describedby="Click to assign administrator"
+                            [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                            class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
+                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2'])" data-bs-toggle="modal"
+                            data-bs-target="#assign-to-admin-modal">
+                            <mat-icon>group_add</mat-icon>
+                            <span class="ms-2" *ngIf="isCardExpanded">Assign Admin</span>
+                        </button>
+                    </ng-container>
+
+                    <ng-container *ngIf="showReturnOrApproveButton()">
+                        <!-- return to pi -->
+                        <button title="Click to Return Travel Disclosure"
+                            (click)="returnTravelDisclosure();"
+                            [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                            class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
+                            <mat-icon class="returnIcon">refresh</mat-icon>
+                            <span class="ms-1" *ngIf="isCardExpanded">Return</span>
+                        </button>
+
+                        <!-- approve disclosure -->
+                        <button title="Click to Approve Travel Disclosure"
+                            (click)="approveTravelDisclosure();"
+                            [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
+                            class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
+                            <mat-icon>check_circle_outline</mat-icon>
+                            <span class="ms-2" *ngIf="isCardExpanded">Approve</span>
+                        </button>
+                    </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="isCreateMode">
+                    <!-- save -->
+                    <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
+                        class="col-12 mt-3  fs-14 btn btn-primary d-flex justify-content-center align-items-center"
+                        (click)="SaveTravelDisclosure()" title="Click to Save Travel Disclosure">
+                        <mat-icon class="me-2">save</mat-icon>
+                        Save
+                    </button>
+
+                    <!-- submit -->
+                    <button class="col-12 mt-3 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
+                        (click)="submitTravelDisclosure();" *ngIf="isRouteComplete(['certification'])"
+                        [disabled]="!service.isTravelCertified" title="Click to Submit Travel Disclosure">
+                        <mat-icon class="me-2">done</mat-icon>
+                        Submit
+                    </button>
+                </ng-container>
+
+                <!-- more option for expanded card-->
+                <button title="Click for More Actions" *ngIf="!isCreateMode && !isCardExpanded"
+                    class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col ms-2"
+                    data-bs-toggle="dropdown" type="button" id="moreActions" role="button">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <!-- last update date -->
+                <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'my-3' : 'mt-1'">
+                    <div class="fw-medium me-3">Last Updated By :</div>
+                    <div>{{responseObject?.personFullName}} On {{responseObject?.updateTimestamp |
+                        dateFormatterWithTimeZone:'long'}}</div>
+                </div>
+            </div>            
+                
+            <!-- <div class="d-flex justify-content-around px-3 pb-2"
+                    *ngIf="isRouteComplete(['screening', 'travel-details'])"
+                    title="Click here to add a new financial interest">
+                    <button (click)="sfiService.isShowSfiNavBar = true"
+                        class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">add</mat-icon>
+                        Add Significant Financial Interest
+                    </button>
+                </div>
+                
+                <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100"
+                    *ngIf="isRouteComplete(['certification'])" [disabled]="!service.isTravelCertified">
+                    <span class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
+                        <i class="me-2 fs-4 fa fa-clipboard"></i>
+                        Certify & Copy
+                    </span>
+                </button> -->
+
+            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes w-100" *ngIf="isCreateMode">
+                Notes & Attachments
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mx-3">
+    <router-outlet></router-outlet>
+</div>
+
+<!--Unsaved Changes Modal-->
+<app-unsaved-changes-warning></app-unsaved-changes-warning>
+
+<!-- Add SFI Slider-->
+<div>
+    <app-add-sfi-slider></app-add-sfi-slider>
+</div>
+
+<!-- review comment Modal-->
+<!-- <app-coi-review-comment-modal></app-coi-review-comment-modal> -->
+
+<!-- personal details Modal-->
+<app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
+    [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails">
+</app-personal-details-modal>
+
+<app-assign-administrator-modal *ngIf="checkReviewStatusCode(['2','3'], 'SOME')" [path]="'travelDisclosure'" (closeModal)="closeAssignAdministratorModal($event)"
+    [disclosureId]="responseObject?.travelDisclosureId"></app-assign-administrator-modal>

@@ -23,6 +23,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   entityArray = [];
   filteredEntityArray = [];
   searchText = '';
+  result: any;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonServices: CommonService) {
@@ -34,30 +35,23 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
   }
+
   private fetchMyEntities() {
     this.$subscriptions.push(this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject).subscribe((data: any) => {
-      this.entityArray = data.coiFinancialEntityList || [];
-      this.setFilter();
+      this.result = data;
+      this.filteredEntityArray = data.coiFinancialEntityList || [];
     }));
   }
 
   viewEntityDetails(entities) {
-    this._router.navigate(['/coi/entity-details'], { queryParams: { entityId: entities.coiFinancialEntityId, mode: 'view' } })
+    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entities.coiFinancialEntityId, mode: 'view' } })
   }
 
   setFilter(type = 'ALL') {
     this.currentSelected.filter = type;
-    this.filterDashboardData();
-  }
-
-  filterDashboardData() {
-    if (this.currentSelected.filter == 'ALL') {
-      this.filteredEntityArray = this.entityArray;
-    } else {
-      this.filteredEntityArray = this.entityArray.filter(entity => {
-        return this.currentSelected.filter == 'Active' ? entity.isActive == 'Y':entity.isActive == 'N'
-      });
-    }
+    this.sfiDashboardRequestObject.filterType = type;
+    this.sfiDashboardRequestObject.currentPage = '1';
+    this.fetchMyEntities();
   }
 
   listenForAdd() {
@@ -86,5 +80,11 @@ removeEntityId() {
       }).join(',');
     }
   }
+
+  actionsOnPageChangeEvent(event) {
+    this.sfiDashboardRequestObject.currentPage = event;
+    this.fetchMyEntities();
+  }
+
 
 }

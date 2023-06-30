@@ -48,7 +48,7 @@ public class CoiDisclosure implements Serializable {
 	@Column(name = "HOME_UNIT")
 	private String homeUnit;
 
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DIS_HOME_UNIT_FK7"), name = "HOME_UNIT", referencedColumnName = "UNIT_NUMBER", insertable = false, updatable = false)
 	private Unit unit;
 
@@ -116,6 +116,12 @@ public class CoiDisclosure implements Serializable {
 	
 	@Column(name = "REVISION_COMMENT")
 	private String revisionComment;
+
+	@Column(name = "ADMIN_GROUP_ID")
+	private Integer adminGroupId;
+
+	@Column(name = "ADMIN_PERSON_ID")
+	private String adminPersonId;
 	
 	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")
@@ -150,6 +156,15 @@ public class CoiDisclosure implements Serializable {
 	
 	@Transient
 	private String coiProjectTypeCode;
+
+	@Transient
+	private String adminGroupName;
+
+	@Transient
+	private String adminPersonName;
+
+	@Transient
+	private String disclosurePersonFullName;
 
 	public Integer getNumberOfProposals() {
 		return numberOfProposals;
@@ -429,5 +444,46 @@ public class CoiDisclosure implements Serializable {
 
 	public void setUnit(Unit unit) {
 		this.unit = unit;
+	}
+
+	public Integer getAdminGroupId() {
+		return adminGroupId;
+	}
+
+	public void setAdminGroupId(Integer adminGroupId) {
+		this.adminGroupId = adminGroupId;
+	}
+
+	public String getAdminPersonId() {
+		return adminPersonId;
+	}
+
+	public void setAdminPersonId(String adminPersonId) {
+		this.adminPersonId = adminPersonId;
+	}
+
+	public String getAdminGroupName() {
+		return adminGroupName;
+	}
+
+	public void setAdminGroupName(String adminGroupName) {
+		this.adminGroupName = adminGroupName;
+	}
+
+	public String getAdminPersonName() {
+		return adminPersonName;
+	}
+
+	public void setAdminPersonName(String adminPersonName) {
+		this.adminPersonName = adminPersonName;
+	}
+
+
+	public String getDisclosurePersonFullName() {
+		return disclosurePersonFullName;
+	}
+
+	public void setDisclosurePersonFullName(String disclosurePersonFullName) {
+		this.disclosurePersonFullName = disclosurePersonFullName;
 	}
 }

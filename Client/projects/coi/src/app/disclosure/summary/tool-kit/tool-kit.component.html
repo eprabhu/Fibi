@@ -1,22 +1,22 @@
 <div *ngIf="isToolkitVisible" [@enterAnimation]>
     <div class="Details of Disclosureborder shadow-sm">
         <div class="align-items-center d-flex f-15 fw-bold px-3 side-bar-title">
-            Navigation to
+            Navigate to
         </div>
         <div class="bg-white p-3 scrollable-section">
-            <div (click)="scrollIntoView('COI801', 'start');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Screening
+            <div (click)="jumpToSection('COI801');" title="Go to Screening Questionnaire Section" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Screening
                 Questionnaire
             </div>
-            <div (click)="scrollIntoView('COI802', 'start');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Significant Financial
+            <div (click)="jumpToSection('COI802');" title="Go to SFI's section" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Significant Financial
                 Interest
             </div>
             <div class="fs-15 mb-2 p-3 sub-navigation-to-tabs">
-                <div class="fw-bold" (click)="scrollIntoView('COI803', 'start')">Relationships</div>
+                <div class="fw-bold cursor-pointer" (click)="jumpToSection('COI803')" title="Go to Relationships section">Relationships</div>
                 <div *ngIf="projectList?.awards?.length">
                   <div class="fw-medium py-1">Awards</div>
                   <div class="bg-sub-goto border fw-medium p-2 rounded-1">
-                      <ng-container *ngFor="let award of projectList?.awards">
-                        <div (click)="scrollIntoView(award?.moduleItemId, 'start'); openProjectRelationships(award, i)" title="{{award?.title}}" class="sub-goto bg-white border mb-1 p-1">
+                      <ng-container *ngFor="let award of projectList?.awards; let i = index">
+                        <div (click)="jumpToSection(award?.moduleItemId); openProjectRelationships(award, i)" title="{{award?.title}}" class="sub-goto bg-white border mb-1 p-1">
                           {{award?.moduleItemKey}} {{award?.title}}
                         </div>
                       </ng-container>
@@ -30,7 +30,7 @@
                     <div class="fw-medium py-1">Proposals</div>
                     <div class="bg-sub-goto border fw-medium p-2 rounded-1">
                         <ng-container *ngFor="let proposals of projectList?.proposals; let i = index">
-                            <div (click)="scrollIntoView(proposals?.moduleItemId, 'start'); openProjectRelationships(proposals, i)" title="{{proposals?.title}}" class="sub-goto bg-white border mb-1 p-1">
+                            <div (click)="jumpToSection(proposals?.moduleItemId); openProjectRelationships(proposals, i)" title="{{proposals?.title}}" class="sub-goto bg-white border mb-1 p-1">
                                 {{proposals?.moduleItemId}} {{proposals?.title}}
                             </div>
                         </ng-container>
@@ -41,9 +41,9 @@
                     </div>
                 </div>
             </div>
-            <!--<div (click)="scrollIntoView('COI805', 'start');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Conflict Management
+            <!--<div (click)="jumpToSection('COI805');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Conflict Management
             </div>-->
-            <div (click)="scrollIntoView('COI804', 'start');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Certify</div>
+            <div (click)="jumpToSection('COI804');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Certify</div>
         </div>
     </div>
 </div>

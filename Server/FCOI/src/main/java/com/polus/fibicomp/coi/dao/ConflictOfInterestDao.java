@@ -2,7 +2,12 @@ package com.polus.fibicomp.coi.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.polus.fibicomp.coi.dto.COIValidateDto;
+import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,10 +35,14 @@ import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
+import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
+import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -42,7 +51,9 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
+import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.proposal.pojo.Proposal;
 
 @Transactional
@@ -168,6 +179,12 @@ public interface ConflictOfInterestDao {
 	 * @param coiDisclosure
 	 */
 	public void certifyDisclosure(CoiDisclosure coiDisclosure);
+	
+	/**
+	 * This method is used for certify disclosure
+	 * @param coiTravelDisclosure
+	 */
+	public void certifyTravelDisclosure(CoiTravelDisclosure coiTravelDisclosure);
 
 	/**
 	 * 
@@ -607,7 +624,7 @@ public interface ConflictOfInterestDao {
 
 	public List<CoiTravelDisclosure> getAllCoiTravelDisclosureList(ConflictOfInterestVO vo);
 
-	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(Integer travelDisclosureId);
+	public CoiTravelDisclosure loadTravelDisclosure(Integer travelDisclosureId);
 
 	public List<CoiProjectType> getCoiProjectTypes();
 
@@ -643,7 +660,7 @@ public interface ConflictOfInterestDao {
 
 	CoiEntity getCoiEntityDetailsByEntityId(Integer personEntityId);
 
-	public PersonEntity getPersonEntityDetailsByEntityId(Integer personEntityId);
+	public PersonEntity getPersonEntityDetailsById(Integer personEntityId);
 
 	public List<ValidPersonEntityRelType> getRelatioshipDetails(String tabName);
 
@@ -670,19 +687,26 @@ public interface ConflictOfInterestDao {
 	public List<CoiProjConflictStatusType> getProjConflictStatusTypes();
 
 	/**
+	 * This method is used to check the sfi is created with this entity
 	 *
 	 * @param enitityId
+	 * @param personId
 	 * @return
 	 */
-	boolean checkEntityAdded(Integer enitityId);
+	boolean checkEntityAdded(Integer enitityId, String personId);
 
 	/**
 	 *
 	 * @param disclosureId
 	 * @param disclosureNumber
 	 * @param personEntityId
+	 * @param moduleCode
+	 * @param moduleItemKey
+	 * @param type
 	 */
-	void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId);
+	void syncProjectWithDisclosure(Integer disclosureId, Integer disclosureNumber, Integer personEntityId,
+								   Integer moduleCode, String moduleItemKey, String type);
+
 	public CoiDisclosureFcoiType getCoiDisclosureFcoiTypeByCode(String coiTypeCode);
 
 	public List<PersonEntityRelationship> getPersonEntityRelationshipByPersonEntityId(Integer personEntityId);
@@ -711,5 +735,200 @@ public interface ConflictOfInterestDao {
 	public void saveOrUpdateDisclComment(DisclComment disclComment);
 
 	public DisclComment getDisclEntProjRelationComment(Integer disclosureDetailsId);
+
+	/**
+	 * This method is used to validate
+	 * 1) If selected project expired date passed
+	 * 2) Is part of any pending project disclosure
+	 * 3) If the selected project is part of any active/ pending  FCOi disclosure
+	 *
+	 * @param personId personId
+	 * @param moduleCode moduleCode
+	 * @param moduleItemKey moduleItemKey
+	 * @return Map of validated values
+	 */
+	Map<String, Object> validateProjectDisclosure(String personId, Integer moduleCode, String moduleItemKey);
+
+	/**
+	 * This method is used for get sfi details by a person id or disclosure id
+	 *
+	 * @param vo ConflictOfInterestVO
+	 * @return
+	 */
+	List<PersonEntity> getSFIOfDisclosure(ConflictOfInterestVO vo);
+
+	/**
+	 *This method updates the assign admin/group and changes the disclosure status to 3 review in progress
+	 *
+	 * @param adminGroupId
+	 * @param adminPersonId
+	 * @param disclosureId
+	 */
+    void assignDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer disclosureId);
+
+    /**
+	 * This method is used for updating review status of disclosure
+	 *
+	 * @param disclosureId
+	 * @param disclosureReviewInProgress status code
+	 */
+	public void updateReviewStatus(Integer disclosureId, String disclosureReviewInProgress);
+
+	public List<EntityRiskCategory> fetchEntityRiskCategory();
+
+	 /**
+	 *
+	 * @param unitNumber
+	 * This method is used to fetch the entire row(Unit details) from unit table against the input unit number
+	 */
+	public Unit getUnitFromUnitNumber(String unitNumber);
+
+	/**
+	 * This method is used to validate conflicts and update
+	 *
+	 * @param disclosureId disclosureId
+	 * @return CoiConflictStatusType
+	 */
+	CoiConflictStatusTypeDto validateConflicts(Integer disclosureId);
+
+	/**
+	 * This method is used to load CoiConflictStatusType
+	 *
+	 * @param coiConflictStatusCode Coi Conflict Status Code
+	 * @return CoiConflictStatusType
+	 */
+	CoiConflictStatusType loadCoiConflictStatusType(String coiConflictStatusCode);
 	
+	/**
+	 * This method is used to fetch the review status object based on status code
+	 */
+	public CoiReviewStatusType getReviewStatusDetails(String reviewStatusCode);
+	
+	/**
+	 * This method is used to fetch the travel disclosure status object based on status code
+	 */
+	public CoiTravelDisclosureStatusType getTravelDisclosureStatusDetails(String travelDisclosureStatusCode);
+
+	/**
+	 * This method is used to archive an entity
+	 * @param entityId
+	 */
+	public void archiveEntity(Integer entityId);
+
+	/**
+	 * This method is used to get maximum of version number of coi entity
+	 * @param entityNumber
+	 * @return versionNumber
+	 */
+	public Integer getMaxEntityVersionNumber(Integer entityNumber);
+	
+	/**
+	 *This method updates the assign admin/group and changes the disclosure status to 3 review in progress
+	 *
+	 * @param adminGroupId
+	 * @param adminPersonId
+	 * @param travelDisclosureId
+	 */
+    void assignTravelDisclosureAdmin(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId);
+    
+    public List<CoiTravelDisclosureTraveler> getEntriesFromTravellerTable(Integer travelDisclosureId);
+    
+    public CoiEntity getEntityDetails(Integer entityId);
+    
+    public void deleteEntriesFromTraveller(Integer travelDisclosureId);
+    
+    public CoiTravelDocumentStatusType getDocumentStatusDetails(String documentStatusCode);
+    
+    public CoiTravelReviewStatusType getTravelReviewStatusDetails(String reviewStatusCode);
+    
+    public Country getCountryDetailsByCountryCode(String countryCode);
+    
+    public CoiTravelerType getEntryFromTravellerTypeTable(String travellerTypeCode);
+
+	List<CoiTravelerType> getEntriesFromTravellerTypeTable(List<String> travellerTypeCode);
+
+	public EntityType getEntityTypeDetails(String entityTypeCode);
+
+	public EntityRiskCategory getEntityRiskDetails(String riskCategoryCode);
+
+	public void updateCoiDisclEntProjDetails(String projectConflictStatusCode, Integer disclosureDetailsId);
+
+	public String getProjectConflictStatusCode(Integer disclosureDetailsId);
+
+	/**
+	 * This method is used to delete Person entity
+	 * @param personEntityId
+	 */
+	void deletePersonEntity(Integer personEntityId);
+
+	public String getCoiConflictStatusByStatusCode(String conflictStatusCode);
+
+	/**
+	 * This method is used to activate/inactive entity
+	 * @param coiEntityDto
+	 */
+	void activateOrInactivateEntity(CoiEntityDto coiEntityDto);
+
+	/**
+	 * This method is used to fetch SFIs of disclosure
+	 * @param vo
+	 * @return
+	 */
+	Integer getSFIOfDisclosureCount(ConflictOfInterestVO vo);
+
+	/**
+	 * This method is used to activate/inactive  person entity
+	 * @param personEntityDto
+	 */
+	void activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
+
+	/**
+	 * This method is used to archive person entity
+	 * @param personEntityId
+	 */
+	void archivePersonEntity(Integer personEntityId);
+
+	/**
+	 * This method is used to get the max of version number
+	 * @param personEntityNumber
+	 * @return
+	 */
+	Integer getMaxPersonEntityVersionNumber(Integer personEntityNumber);
+
+	/**
+	 * This method is used to check the person entity is linked to disclosure/travel
+	 * @param personEntityId
+	 * @return
+	 */
+	boolean checkPersonEntityAdded(Integer personEntityId);
+
+	/**
+	 * This method is used to get Person Entity maximum Person Entity number
+	 * @return
+	 */
+	Integer getMaxPersonEntityNumber();
+	
+	public List<COIValidateDto> evaluateValidation(Integer disclosureId, String personId);
+
+	public String getConflictStatusUpdateUser(Integer disclosureDetailsId);
+	
+
+	/**
+	 * This method is used to update disclosure header update details
+	 * @param disclosureId
+	 */
+	void updateDisclosureUpdateDetails(Integer disclosureId);
+
+	/**
+	 * This method is to load CoiReviewComment By Id
+	 * @param coiReviewCommentId
+	 * @return
+	 */
+	CoiReviewComments loadCoiReviewCommentById(Integer coiReviewCommentId);
+
+	/**
+	 * This method is used to update PersonEntity header update details
+	 * @param personEntityId
+	 */
+	void updatePersonEntityUpdateDetails(Integer personEntityId);
 }

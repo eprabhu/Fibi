@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject} from 'rxjs';
-import {environment} from "../../../environments/environment";
-import {getFromLocalStorage, setIntoLocalStorage} from "../../../../../fibi/src/app/common/utilities/user-service";
-import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
-import {Toast} from "bootstrap";
+import {environment} from '../../../environments/environment';
+import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
+import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
+import {Toast} from 'bootstrap';
 import { HTTP_SUCCESS_STATUS } from '../../app-constants';
 
+type Method = 'SOME' | 'EVERY';
 @Injectable()
 export class CommonService {
 
@@ -16,7 +17,6 @@ export class CommonService {
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
-    fibiWebUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -41,6 +41,7 @@ export class CommonService {
     isShowAgreementSupport = false;
     isShowAgreementNotifyAction = false;
     isElasticAuthentiaction = false;
+    isCoiReviewer = false;
     elasticUserName = '';
     elasticAuthScheme = '';
     elasticDelimiter = '';
@@ -103,7 +104,6 @@ export class CommonService {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
-        this.fibiWebUrl = configurationData.fibiWebUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -194,23 +194,50 @@ export class CommonService {
         this.isEnableLock = parameters.isEnableLock;
     }
 
-    async fetchPermissions() {
-        if (this.rightsArray.length) {
+    async fetchPermissions(hardRefresh = false) {
+        if (!hardRefresh && this.rightsArray.length) {
             return this.rightsArray;
         }
-        this.rightsArray = await this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
+        const {fibiRights, coiRights} = await this.getAllSystemRights();
+        this.assignFibiBasedRights(fibiRights);
+        this.assignCOIBasedRights(coiRights);
         return this.rightsArray;
     }
 
+    private assignCOIBasedRights(coiRights) {
+        if (coiRights) {
+            if ('IS_REVIEW_MEMBER' in coiRights) {
+                this.isCoiReviewer = coiRights.IS_REVIEW_MEMBER;
+            }
+            if (Array.isArray(coiRights.rights)) {
+                this.rightsArray = [...this.rightsArray, ...coiRights.rights];
+            }
+        }
+    }
+
+    private assignFibiBasedRights(fibiRights) {
+        if (fibiRights.length) {
+            this.rightsArray = fibiRights;
+        }
+    }
+
+    private async getAllSystemRights() {
+        const fibiRightsAPI = this._http.get(this.fibiUrl + '/getAllSystemRights').toPromise();
+        const coiRightsAPI = this._http.get(this.baseUrl + '/fetchAllCoiRights').toPromise();
+        const [fibiRights, coiRights]: any = await Promise.all([fibiRightsAPI, coiRightsAPI]);
+        return {fibiRights, coiRights};
+    }
+
     showToast(status = HTTP_SUCCESS_STATUS, toastContent = '') {
-        let toast: any = new Toast(document.getElementById('coi-bootstrap-toast'));
-        let toast_body: any = document.getElementById('coi-bootstrap-toast-body');
+        const toast: any = new Toast(document.getElementById('coi-bootstrap-toast'));
+        const toast_body: any = document.getElementById('coi-bootstrap-toast-body');
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
         this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' : 'bg-danger';
         if(toast && toast_body) {
+            ['bg-success', 'bg-danger'].forEach(className => toast._element.classList.remove(className));
             toast_body.innerText =  this.appToastContent;
-            toast._element.classList.add(this.toastClass)
+            toast._element.classList.add(this.toastClass);
             toast.show();
         }
 
@@ -221,10 +248,12 @@ export class CommonService {
         switch (String(statusCode)) {
             case '1':
                 return 'green-badge';
-          case '2':
+            case '2':
                 return 'brown-badge';
             case '3':
                 return 'red-badge';
+            case '4':
+                return 'green-badge';
         }
     }
 
@@ -233,29 +262,60 @@ export class CommonService {
             case '1':
                 return 'yellow-badge';
             case '2':
-            return 'blue-badge';
+                return 'blue-badge';
             case '3':
-            return 'green-badge';
+                return 'green-badge';
             case '4':
-            return 'green-badge';
+                return 'green-badge';
             default:
-            return 'red-badge';
+                return 'red-badge';
         }
     }
 
     getDispositionStatusBadge(statusCode) {
         switch (statusCode) {
             case '1':
-            return 'yellow-badge';
+                return 'yellow-badge';
             case '2':
             case '4':
             case '5':
                 return 'blue-badge';
             case '3':
             case '6':
-            return 'green-badge';
+                return 'green-badge';
             default:
-            return 'yellow-badge';
+                return 'yellow-badge';
+        }
+    }
+
+    getTravelReviewStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1':
+                return 'yellow-badge';
+            case '2':
+                return 'blue-badge';
+            case '3':
+                return 'green-badge';
+            case '4':
+                return 'orange-badge';
+            case '5':
+                return 'bright-red-badge';
+            case '6':
+            case '7':
+                return 'green-badge';
+            default:
+                return 'red-badge';
+        }
+    }
+
+    getDocumentStatusBadge(statusCode) {
+        switch (statusCode) {
+            case '1':
+                return 'yellow-badge';
+            case '2':
+                return 'green-badge';
+            default:
+                return 'yellow-badge';
         }
     }
 
@@ -263,4 +323,12 @@ export class CommonService {
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
 
+    getAvailableRight(rights: string | string[], method: Method = 'SOME'): boolean {
+      const rightsArray = Array.isArray(rights) ? rights : [rights];
+      if (method === 'EVERY') {
+        return rightsArray.every((right) => this.rightsArray.includes(right));
+      } else {
+        return rightsArray.some((right) => this.rightsArray.includes(right));
+      }
+    }
 }

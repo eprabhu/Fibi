@@ -5,7 +5,7 @@
     (keydown.arrowup) = "upArrowEvent($event);" (keydown.enter) = "enterKeyEvent();" [disabled]="isDisabled"
     [(ngModel)]="searchText" (keypress)="getElasticResult()" (paste)="getElasticResult()" (keydown.backspace)="backSpaceEvent()"
     class = "app-elastic-search form-control pr-25" autocomplete="off"/>
-  <a class="searchButton" >
+  <a class="searchButton" [class.search-icon-invalid]="isError">
     <i aria-hidden="true" *ngIf = "searchText == ''" class="fa fa-search fa-med pt-2"></i>
     <i aria-hidden="true"  *ngIf="searchText != '' && !isDisabled" class="fa fa-times fa-med pt-2" (click)="emitSelectedObject(null);"></i>
   </a>

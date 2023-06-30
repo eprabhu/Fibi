@@ -44,7 +44,8 @@
     z-index: 1;
     position: relative;
 }
-.row > div {
+
+.row>div {
     margin-bottom: 1.4rem;
 }
 
@@ -53,10 +54,11 @@
     padding: 1rem;
     border: 1px dashed#1e847b;
 } */
-.info-box-dashed a > i {
+.info-box-dashed a>i {
     margin-right: 1rem;
 }
-.info-box-dashed a > i:hover {
+
+.info-box-dashed a>i:hover {
     color: #1e847b;
 }
 
@@ -65,7 +67,11 @@
     overflow: auto;
 }
 
-li.active {
+.active {
     color: #007DEC !important;
-    border-bottom: 2px solid #007DEC;
+    border-bottom: 3px solid #007DEC !important;
+}
+
+.subLink {
+    color: #48647f;
 }

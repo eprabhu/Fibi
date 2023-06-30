@@ -15,7 +15,7 @@ export class CoiSummaryService {
         return this._http.post(`${this._commonService.baseUrl}/getDisclosureRelations`, params);
     }
 
-    getEntityProjectRelations(moduleCode, moduleId, id, status) {
+    getEntityProjectRelations(moduleCode, moduleId, id, status, personId) {
       if (moduleCode == 3) {
         return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
           'disclosureId': id,
@@ -23,7 +23,7 @@ export class CoiSummaryService {
           'disclosureStatusCode': status,
           'moduleCode': moduleCode,
           'moduleItemId': moduleId,
-          'personId': "10000000001",
+          'personId': personId,
         });
       } else {
         return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
@@ -31,7 +31,7 @@ export class CoiSummaryService {
           'disclosureStatusCode': status,
           'moduleCode': moduleCode,
           'moduleItemId': moduleId,
-          'personId': "10000000001"
+          'personId': personId
         });
       }
     }

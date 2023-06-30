@@ -50,9 +50,9 @@ export function getEndPointOptionsForSponsorByType(sponsorName, sponsorTypeCode)
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForLeadUnit(defaultValue = '', baseUrl = '') {
-    endPointOptions.contextField = 'unitName';
-    endPointOptions.formatString = 'unitName';
+export function getEndPointOptionsForLeadUnit(defaultValue = '', baseUrl = '', formatString = 'unitName') {
+    endPointOptions.contextField = formatString;
+    endPointOptions.formatString = formatString;
     // endPointOptions.contextField = LEAD_UNIT_OUTPUT_FORMAT;
     // endPointOptions.formatString = LEAD_UNIT_OUTPUT_FORMAT;
     endPointOptions.path = baseUrl + '/' + 'findLeadUnits';
@@ -213,7 +213,7 @@ export function getEndPointOptionsForExtReviewerKeyWords() {
 }
 
 export function getEndPointOptionsForAwardNumber(baseUrl = '') {
-    endPointOptions.contextField = 'awardNumber';
+    endPointOptions.contextField = 'title';
     endPointOptions.formatString =
     ' awardNumber | accountNumber | title | sponsorName | sponsorAwardNumber | unitName | principalInvestigator ';
     endPointOptions.path = baseUrl + '/' + 'findAward';

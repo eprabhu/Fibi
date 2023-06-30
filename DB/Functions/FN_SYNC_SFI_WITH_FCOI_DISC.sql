@@ -16,6 +16,8 @@ AV_ENTITY_NUMBER         VARCHAR(30)
         DECLARE LI_AWARD_NUMBER         VARCHAR(30);
         DECLARE LI_PROPOSAL_ID          VARCHAR(30);
 
+        /** IN AV_MODULE_CODE future this should be configurable using table*/
+
             IF AV_MODULE_CODE = 1 THEN
                 BEGIN
                 DECLARE DONE2 INT DEFAULT FALSE;

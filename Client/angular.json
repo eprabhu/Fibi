@@ -84,7 +84,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "fibi:build:production",
+              "browserTarget": "fibi:build:production"
             },
             "development": {
               "browserTarget": "fibi:build:development",
@@ -118,6 +118,18 @@
               "projects/fibi/src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -210,7 +222,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "coi:build:production",
+              "browserTarget": "coi:build:production"
             },
             "development": {
               "browserTarget": "coi:build:development",
@@ -244,6 +256,18 @@
               "projects/coi/src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -317,7 +341,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "admin-dashboard:build:production",
+              "browserTarget": "admin-dashboard:build:production"
             },
             "development": {
               "browserTarget": "admin-dashboard:build:development",
@@ -351,6 +375,18 @@
               "projects/admin-dashboard/src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -437,7 +473,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "home:build:production",
+              "browserTarget": "home:build:production"
             },
             "development": {
               "browserTarget": "home:build:development",
@@ -472,6 +508,18 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
         }
       }
     },
@@ -503,9 +551,21 @@
             "tsConfig": "projects/shared/tsconfig.spec.json",
             "karmaConfig": "projects/shared/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
         }
       }
     }
-  },
+  }
   "defaultProject": "coi"
 }

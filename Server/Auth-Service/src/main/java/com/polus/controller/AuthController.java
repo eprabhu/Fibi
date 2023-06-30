@@ -2,6 +2,8 @@ package com.polus.controller;
 
 import java.util.Optional;
 
+import com.polus.entity.Unit;
+import com.polus.service.UnitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private UnitService unitService;
+
     
     private static final Logger LOGGER
     = LoggerFactory.getLogger(AuthController.class);
@@ -53,12 +58,18 @@ public class AuthController {
 	        			.personId(optionalPerson.get().getPersonId())
 	        			.userName(optionalPerson.get().getPrincipalName())
 	        			.fullName(optionalPerson.get().getFullName())
-	        			.homeUnit(optionalPerson.get().getHomeUnit())
 	        			.gender(optionalPerson.get().getGender())
 	        			.primaryTitle(optionalPerson.get().getPrimaryTitle())
                         .isFaculty(optionalPerson.get().getIsFaculty())
-                        .homeUnitName(optionalPerson.get().getUnit() != null ? optionalPerson.get().getUnit().getUnitName() : null)
 	        			.build();
+            if (optionalPerson.get().getUnit() == null) {
+                Unit unit = unitService.getRootUnit();
+                response.setHomeUnit(unit.getUnitNumber());
+                response.setHomeUnitName(unit.getUnitName());
+            } else {
+                response.setHomeUnit(optionalPerson.get().getUnit().getUnitNumber());
+                response.setHomeUnitName(optionalPerson.get().getUnit().getUnitName());
+            }
         	LOGGER.info("Token generated succefully.");
         } else {
             throw new RuntimeException("invalid access");

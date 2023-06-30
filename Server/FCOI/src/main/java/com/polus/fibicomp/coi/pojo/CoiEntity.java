@@ -121,6 +121,9 @@ public class CoiEntity implements Serializable {
 	
 	@Column(name = "APPROVED_TIMESTAMP")
 	private Timestamp approvedTimestamp;
+
+	@Column(name = "REVISION_REASON")
+	private String revisionReason;
 	
 	@Transient
 	private String countryDescription;
@@ -394,5 +397,13 @@ public class CoiEntity implements Serializable {
 
 	public void setUpdatedUserFullName(String updatedUserFullName) {
 		this.updatedUserFullName = updatedUserFullName;
+	}
+
+	public String getRevisionReason() {
+		return revisionReason;
+	}
+
+	public void setRevisionReason(String revisionReason) {
+		this.revisionReason = revisionReason;
 	}
 }

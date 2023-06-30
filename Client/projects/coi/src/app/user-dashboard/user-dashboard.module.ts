@@ -3,14 +3,11 @@ import {CommonModule} from '@angular/common';
 import {UserDashboardComponent} from './user-dashboard.component';
 import {RouterModule, Routes} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
-import { ProjectDisclosureComponent } from '../disclosure/project-disclosure/project-disclosure.component';
 import { CoiService } from '../disclosure/services/coi.service';
-import { DataStoreService } from '../disclosure/services/data-store.service';
 import {SharedModule} from "../shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import { SfiService } from '../disclosure/sfi/sfi.service';
-import { DisclosureModule } from '../disclosure/disclosure.module';
-import { TravelDisclosureComponent } from '../disclosure/travel-disclosure/travel-disclosure.component';
+import { SharedComponentModule } from '../shared-components/shared-component.module';
 
 const routes: Routes = [
     // {path: '', redirectTo: 'disclosures', pathMatch: 'full'},
@@ -28,18 +25,17 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
-        UserDashboardComponent,
-        ProjectDisclosureComponent,
-        TravelDisclosureComponent
+        UserDashboardComponent
     ],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
         MatIconModule,
         SharedModule,
-        FormsModule
+        FormsModule,
+        SharedComponentModule
     ],
-    providers: [CoiService, DataStoreService, SfiService]
+    providers: [CoiService, SfiService]
 })
 export class UserDashboardModule {
 }

@@ -69,6 +69,10 @@ body {
   margin-right: 0.5rem !important;
 }
 
+.ml-2 {
+  margin-left: 0.5rem !important;
+}
+
 .font-weight-normal {
   font-weight: 100 !important;
 }
@@ -309,6 +313,18 @@ nav ul li.active {
   color: white;
 }
 
+.orange-badge {
+  @extend .coi-badge;
+  background-color: #FF4500 !important;
+  color: #fff;
+}
+
+.bright-red-badge {
+  @extend .coi-badge;
+  background-color: #e80202 !important;
+  color: #fff;
+}
+
 .wrapping-text {
   display: flex;
   flex-wrap: wrap;
@@ -329,4 +345,44 @@ nav ul li.active {
     background-color: #007dec;
     border-color: #007dec;
 }
+}
+.success-banner {
+  color: #151313;
+  background-color: #F3F3F3;
+  font-size: 1.4rem;
+}
+
+.bg-fcoi-clip {
+  background: #5897bc !important;
+}
+
+.bg-proposal-clip {
+  background: #7d9e33 !important;
+}
+
+.bg-award-clip {
+  background: #c9a742 !important;
+}
+
+.bg-travel-clip {
+  background: #bf975a !important;
+}
+
+// for slicing text in single line
+.text-slice {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
+// for help text card
+.help-text-card {
+  background: #EEEEEE;
+  color: #202c2e;
+  border: 1px solid #caced2;
+  font-size: 1.4rem;
+  font-weight: 400;
 }

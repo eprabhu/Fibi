@@ -6,7 +6,8 @@ import { CommonService } from '../../../../common/services/common.service';
 import { CommentConfiguration } from '../../../coi-interface';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
 import { CoiSummaryService } from '../../coi-summary.service';
-import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../../../fibi/src/app/app-constants";
+import { HTTP_ERROR_STATUS } from "../../../../../../../fibi/src/app/app-constants";
+import { DataStoreService } from '../../../services/data-store.service';
 
 declare var $: any;
 
@@ -22,7 +23,6 @@ export class RelationshipSummaryComponent implements OnInit {
     projectRelations: any = [];
     isOpenSlider = false;
     isShowHoverWhite = [];
-    // selectedProject: any = {};
     deployMap = environment.deployUrl;
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
 
@@ -32,13 +32,15 @@ export class RelationshipSummaryComponent implements OnInit {
     coiDetails: any = {};
     conflictHistory: any = [];
     isCollapsed = true;
-
+    entityDetails: any = null;
+    isReadMore: boolean[] = [];
     projectConflictValidationMap = new Map();
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        public _commonService: CommonService
+        public _commonService: CommonService,
+        private _dataStore: DataStoreService,
     ) { }
 
     ngOnInit() {
@@ -78,7 +80,8 @@ export class RelationshipSummaryComponent implements OnInit {
     getEntityProjectRelations() {
         this.$subscriptions.push(
             this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
-               Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode).subscribe((data: any) => {
+               Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode, this.coiDetails.personId)
+                .subscribe((data: any) => {
                 if (data && data.coiDisclEntProjDetails?.length > 0) {
                     this.projectRelations = data.coiDisclEntProjDetails;
                 }
@@ -91,58 +94,35 @@ export class RelationshipSummaryComponent implements OnInit {
         }));
     }
 
-    modifyReviewComment(isSubSectionComment = false, subSectionCode = null) {
-        this.commentConfiguration.isSubSectionComment = isSubSectionComment;
-        this.commentConfiguration.coiSubSectionsId = subSectionCode;
-        this._dataStoreAndEventsService.modifyReviewComment(this.commentConfiguration);
-    }
-
-    projectConflictValidation() {
-        this.projectConflictValidationMap.clear();
-        if (this.reviewerConflict.coiReviewerStatusCode === 'null' || !this.reviewerConflict.coiReviewerStatusCode) {
-            this.projectConflictValidationMap.set('coiReviewerStatusCode', 'Please select conflict status.');
-        }
-        if (!this.reviewerConflict.comment.comments) {
-            this.projectConflictValidationMap.set('comment', 'Please add a comment.');
-        }
-        return this.projectConflictValidationMap.size === 0 ? true : false;
-    }
-
-    updateProjectConflictStatus() {
-        if (this.projectConflictValidation()) {
-            this.reviewerConflict.disclosureDetailsId = this.projectDetails.disclosureDetailsId;
-            this.$subscriptions.push(
-                this._coiSummaryService.updateProjectConflictStatus({
-                    coiDisclosureDetail: this.reviewerConflict
-                }).subscribe((data: any) => {
-                    this.projectRelations[this.conflictIndex].coiReviewerStatusCode = data.coiReviewerStatusCode;
-                    this.projectRelations[this.conflictIndex].coiReviewerStatus = data.coiReviewerStatus;
-                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict status updated successfully.');
-                    $('#reviewer-conflict-modal').modal('hide');
-                    this.clearConflictModal();
-                }, _err => {
-                   this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
-                }));
+    closePage(event) {
+        this.isOpenSlider = false;
+        this.entityDetails = null;
+        this.getEntityProjectRelations();
+        if (event) {
+            this.updateDisclosureConflictStatus(event);
         }
     }
 
-    loadProjectConflictHistory(disclosureDetailsId) {
-        this.$subscriptions.push(
-            this._coiSummaryService.loadProjectConflictHistory(disclosureDetailsId).subscribe((data: any) => {
-                this.conflictHistory = data;
-                $('#conflict-history-modal').modal('show');
-            }, _err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching conflict status history. Please try again.');
-            }));
+    setEntityDetails(entity, index) {
+        this.entityDetails = {
+            disclosureDetailsId: entity.disclosureDetailsId,
+            entityName: entity.personEntity?.coiEntity?.entityName,
+            index: index,
+            personId: this.coiDetails.personId,
+            moduleItemKey: this.selectedProject.moduleItemKey,
+            moduleItemId: this.selectedProject.moduleItemId,
+            moduleCode: this.selectedProject.moduleCode,
+            title: this.selectedProject.title,
+            coiProjConflictStatusType: entity.coiProjConflictStatusType,
+            disclosureId: this.coiDetails.disclosureId,
+            comment:entity.disclComment.comment
+        }
     }
 
-    clearConflictModal() {
-        this.projectConflictValidationMap.clear();
-        this.reviewerConflict = { comment: {comments: ''}};
-    }
-
-    closePage() {
-      this.isOpenSlider = false;
+    private updateDisclosureConflictStatus(status): void {
+        this.coiDetails.coiConflictStatusType = status;
+        this.coiDetails.conflictStatusCode = status.conflictStatusCode;
+        this._dataStore.updateStore(['coiDisclosure'], { coiDisclosure: this.coiDetails });
     }
 
 }

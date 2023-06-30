@@ -5,10 +5,7 @@ import { Component, Input } from '@angular/core';
     templateUrl: './person-details.component.html',
     styleUrls: ['./person-details.component.scss']
 })
-export class personDetailsComponent {
-
+export class PersonDetailsComponent {
     @Input() personValues: any;
-
     constructor() { }
-
 }

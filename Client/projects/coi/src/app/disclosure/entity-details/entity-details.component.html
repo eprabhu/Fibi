@@ -1,5 +1,6 @@
 <div>
-  <app-view-sfi-details (emitRelationshipModal)="addRelationship($event)" (saveQuestionnaire)="saveQuestionnaire($event)"> </app-view-sfi-details>
-  <app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails"></app-view-relationship-details>
-  <app-entity-questionnaire (updateRelationship)="updateRelationship($event)" (isEmitModalClose)="closedRelationshipModal($event)" [isAddRelationship]="isEnableRelationshipModal" [isSaveQuestionnaire]="isSaveQuestionnaire"></app-entity-questionnaire>
+  <app-view-entity-sfi-details (emitRelationshipModal)="addRelationship($event)" [entityIdFromSlider]="entityId" [isTriggeredFromSlider]="isTriggeredFromSlider" 
+  [sfiRelationStatus]="sfiRelationStatus" [isEditMode]="isEditMode"></app-view-entity-sfi-details>
+  <app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"  (sfiRelationshipDetails)="getRelationshipDetails($event)"></app-view-relationship-details>
+  <app-entity-questionnaire  [entityId]="entityId" id="focusQuestionnaire" (updateRelationship)="updateRelationship($event)" (isEmitModalClose)="closedRelationshipModal($event)" [isAddRelationship]="isEnableRelationshipModal" (positionsToView)="scrollPosition($event)"></app-entity-questionnaire>
 </div>

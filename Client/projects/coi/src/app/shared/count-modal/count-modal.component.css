@@ -72,3 +72,27 @@
     list-style: none;
     cursor: pointer;
 }
+
+.title-width{
+    width: 20%;
+}
+
+.pi-width{
+    width: 10%;
+}
+
+.leadunit-width{
+    width: 9%;
+}
+
+.sponsor-width{
+    width: 13%;
+}
+
+.primesponsor-width{
+    width: 13%;
+}
+
+.action-width{
+    width: 1%;
+}

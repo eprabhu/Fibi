@@ -52,10 +52,13 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this._coiSummaryService.getSfiDetails({
             disclosureId: Number(this.coiDetails.disclosureId),
             disclosureStatusCode: this.coiDetails.disclosureStatusCode,
-            personId: this.coiDetails.personId
+            personId: this.coiDetails.personId,
+            filterType: '',
+            currentPage: 0,
+            pageNumber: 0
         }).subscribe((data: any) => {
             if (data) {
-                this.coiFinancialEntityDetails = data;
+                this.coiFinancialEntityDetails = data.personEntities;
                 this.setSubSectionList();
             }
         }));

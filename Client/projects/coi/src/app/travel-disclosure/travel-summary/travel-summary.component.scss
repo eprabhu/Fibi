@@ -1,0 +1,18 @@
+.left-container{
+    margin-top: 6px;
+    width: 75%;
+    display: inline-block;
+    transition: width 1.2s ease-in-out;
+}
+.right-container{
+    margin-top: 6px;
+    display: inline-block;
+    width: 24%;
+    position: fixed;
+    margin-left: 3px;
+}
+
+
+@media (min-width: 1600px) {
+  .right-container {width: 395px;}
+}
