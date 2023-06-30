@@ -80,6 +80,8 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -2377,9 +2379,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId) {
-		PersonEntity personEntity = new PersonEntity();
-		personEntity = hibernateTemplate.get(PersonEntity.class, personEntityId);
+		PersonEntity personEntity = hibernateTemplate.get(PersonEntity.class, personEntityId);
 		personEntity.setCoiEntity(null);
+		personEntity.setUpdateUserFullName(personDao.getUserFullNameByUserName(personEntity.getUpdateUser()));
 		return personEntity;
 	}
 
@@ -3325,13 +3327,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public void activateOrInactivatePersonEntity(PersonEntityDto personEntityDto) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE PersonEntity e SET e.isRelationshipActive = :isRelationshipActive , e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser ");
-		hqlQuery.append("WHERE e.personEntityId = : personEntityId");
+		hqlQuery.append("UPDATE PersonEntity e SET e.isRelationshipActive = :isRelationshipActive , e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser, ");
+		hqlQuery.append("e.versionStatus = :versionStatus WHERE e.personEntityId = : personEntityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("isRelationshipActive", personEntityDto.getIsRelationshipActive());
 		query.setParameter("personEntityId", personEntityDto.getPersonEntityId());
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("versionStatus", Constants.COI_ACTIVE_STATUS);
 		query.executeUpdate();
 	}
 
@@ -3443,7 +3446,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public CoiReviewComments loadCoiReviewCommentById(Integer coiReviewCommentId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT rc CoiReviewComments rc where rc.coiReviewCommentId = :coiReviewCommentId");
+		hqlQuery.append("SELECT rc FROM CoiReviewComments rc where rc.coiReviewCommentId = :coiReviewCommentId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("coiReviewCommentId", coiReviewCommentId);
 		return (CoiReviewComments) query.getResultList().get(0);
@@ -3459,5 +3462,34 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.executeUpdate();
+	}
+
+	@Override
+	public List<EntityRelationshipType> fetchAllRelationshipTypes() {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT rt FROM EntityRelationshipType rt");
+		Query query = session.createQuery(hqlQuery.toString());
+		return query.getResultList();
+	}
+
+	@Override
+	public void approveEntity(Integer entityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiEntity e SET e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser, ");
+		hqlQuery.append("e.approvedUser = :updateUser, e.approvedTimestamp = :updateTimestamp, e.entityStatusCode = :entityStatusCode  ");
+		hqlQuery.append("where e.entityId = :entityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.setParameter("entityStatusCode", Constants.COI_ENTITY_STATUS_ACTIVE);
+		query.executeUpdate();
+	}
+
+	@Override
+	public void saveOrUpdateEntityRelationship(EntityRelationship entityRelationship) {
+		hibernateTemplate.saveOrUpdate(entityRelationship);
 	}
 }

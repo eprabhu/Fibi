@@ -115,6 +115,9 @@ public class PersonEntity implements Serializable {
 	@Transient
 	private  String designation;
 
+	@Transient
+	private String updateUserFullName;
+
 	public Integer getPersonEntityId() {
 		return personEntityId;
 	}
@@ -329,5 +332,13 @@ public class PersonEntity implements Serializable {
 
 	public void setRevisionReason(String revisionReason) {
 		this.revisionReason = revisionReason;
+	}
+
+	public String getUpdateUserFullName() {
+		return updateUserFullName;
+	}
+
+	public void setUpdateUserFullName(String updateUserFullName) {
+		this.updateUserFullName = updateUserFullName;
 	}
 }

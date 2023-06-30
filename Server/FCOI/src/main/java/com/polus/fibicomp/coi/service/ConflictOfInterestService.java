@@ -14,8 +14,8 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 
 import org.springframework.http.ResponseEntity;
@@ -437,13 +437,23 @@ public interface ConflictOfInterestService {
 
 	ResponseEntity<Object> updateProjectRelationship(ConflictOfInterestVO vo);
 
-
-
-
 	/**
 	 * This method is used to delete Person entity
 	 * @param personEntityId
 	 * @return
 	 */
 	ResponseEntity<Object> deletePersonEntity(Integer personEntityId);
+
+	/**
+	 * This method is used to fetch all entity relationship types
+	 * @return
+	 */
+	ResponseEntity<Object> fetchAllRelationshipTypes();
+
+	/**
+	 * This method is used to approve Entity
+	 * @param entityRelationship
+	 * @return
+	 */
+	ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship);
 }

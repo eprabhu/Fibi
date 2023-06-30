@@ -37,7 +37,7 @@ import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
@@ -522,5 +522,15 @@ public class ConflictOfInterestController {
 	@PutMapping("/personEntity/activateInactivate")
 	public ResponseEntity<Object> activateOrInactivatePersonEntity(@RequestBody PersonEntityDto personEntityDto) {
 		return conflictOfInterestService.activateOrInactivatePersonEntity(personEntityDto);
+	}
+
+	@GetMapping("/entity/relationshipTypes")
+	public ResponseEntity<Object> fetchAllRelationshipTypes() {
+		return conflictOfInterestService.fetchAllRelationshipTypes();
+	}
+
+	@PutMapping("/entity/approval")
+	public ResponseEntity<Object> approveEntity(@RequestBody EntityRelationship entityRelationship) {
+		return conflictOfInterestService.approveEntity(entityRelationship);
 	}
 }
