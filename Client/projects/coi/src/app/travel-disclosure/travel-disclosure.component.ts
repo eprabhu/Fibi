@@ -6,7 +6,7 @@ import { CommonService } from '../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
-import { CoiTravelDisclosure, TravelCreateModalDetails, TravelDisclosureResponseObject } from './travel-disclosure-interface';
+import { CoiTravelDisclosure, TravelCreateModalDetails, TravelDisclosureResponseObject, TravelHistoryRO } from './travel-disclosure-interface';
 import { environment } from '../../environments/environment';
 import { TravelDataStoreService } from './services/travel-data-store.service';
 import {
@@ -126,6 +126,13 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this._dataStore.manualDataUpdate(this.responseObject);
     }
 
+    private getTravelHistoryRO(): TravelHistoryRO {
+        return {
+            'personId' : this.responseObject.personId,
+            'entityNumber' : this.responseObject.entityNumber
+        };
+    }
+
     navigateBack(): void {
         const PREVIOUS_MODULE_URL = this.service.PREVIOUS_MODULE_URL;
         const ROUTE_URL = this.service.isAdminDashboard ? ADMIN_DASHBOARD_URL : HOME_URL;
@@ -134,7 +141,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     SaveTravelDisclosure(): void {
-        this.service.saveOrCopySubject.next('SAVE_DISCLOSURE');
+        this.service.saveSubject.next('SAVE_DISCLOSURE');
     }
 
     isRouteComplete(possibleActiveRoutes: string[] = []): boolean {
@@ -237,5 +244,17 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             })
         );
     }
+
+    loadTravelDisclosureHistory(): void {
+        this.service.loadTravelDisclosureHistory(this.getTravelHistoryRO())
+            .subscribe((res: any) => {
+                if (res) {
+                    this.service.setUnSavedChanges(false, '');
+                }
+            }, (err) => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Loading Travel Disclosure History');
+            });
+    }
+
 }
 

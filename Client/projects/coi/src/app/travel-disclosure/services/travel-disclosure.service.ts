@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { TravelDisclosureResponseObject } from '../travel-disclosure-interface';
+import { TravelDisclosureResponseObject, TravelHistoryRO } from '../travel-disclosure-interface';
 
 
 @Injectable()
 export class TravelDisclosureService {
 
     coiTravelDisclosure = new TravelDisclosureResponseObject();
-    saveOrCopySubject = new Subject();
+    saveSubject = new Subject();
     travelDataChanged = false;
     isTravelCertified = false;
     unSavedTabName = '';
@@ -58,5 +58,9 @@ export class TravelDisclosureService {
 
     returnTravelDisclosure(travelDisclosureId: number) {
         return this._http.get(`${this._commonService.baseUrl}/returnTravelDisclosure/${travelDisclosureId}`);
+    }
+
+    loadTravelDisclosureHistory(travelHistoryRO: TravelHistoryRO) {
+        return this._http.post(`${this._commonService.baseUrl}/loadTravelDisclosureHistory`, travelHistoryRO);
     }
 }
