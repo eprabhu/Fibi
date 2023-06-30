@@ -52,7 +52,7 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
         versionStatus: this.relationshipsDetails.versionStatus,
         personId : this.relationshipsDetails.personId
       };
-      this.sfiRelationshipDetails.emit(relationSFiStatus);
+      this.sfiRelationshipDetails.emit({relationSFiStatus: relationSFiStatus, personEntityRelationships: this.personEntityRelationships, personEntity: this.relationshipsDetails});
     },_error=>{
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
 
