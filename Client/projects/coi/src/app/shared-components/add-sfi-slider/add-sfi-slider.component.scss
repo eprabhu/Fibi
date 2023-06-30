@@ -1,315 +1,42 @@
-.task-right-div{
-    width: 80%;
-    top: 0;
-    display: block;
-    right: 1px;
-    position: fixed;
-    height: 100%;
-    z-index: 10610;
-}
-
-.tool-kit-body {
-    background: #FFF;
-    width: 100%;
-    top: 0;
-    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
-    position: absolute;
-    z-index: 10;
-    height: 100%;
-    float: right;
-}
-
-.btn-close-task-nav {
-    color: #9e9e9e;
-    background-color: #FFF;
-    border: none;
-    outline: none;
-}
-
-.btn-close-task-nav:hover {
-    color: rgb(87, 87, 87);
-}
-
-.card-header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-}
-
-select option {
-    background-color: #fff;
-}
-
-.task-list {
-    margin: 0;
-}
-
-.task-list:hover {
-    background-color: #f6faff;
-}
-
-.rounded-icon {
-    padding: 3px 8px;
-    height: 23px;
-}
-
-.btn-primary, .btn-outline-danger {
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    height: 25px;
-}
 
 .overlay {
-  position: fixed; /* Sit on top of the page content */
-  width: 100%; /* Full width (cover the whole page) */
-  height: 100%; /* Full height (cover the whole page) */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgb(128 128 128 / 16%);
-  z-index: 9999; /* Specify a stack order in case you're using a different order for other elements */
-  overflow: hidden;
-}
-
-.task-list-scroll {
-    height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.modal {
-    z-index: 1062;
-}
-
-.success-toast {
-    color: #155724 !important;
-    background-color: #d4edda !important;
-    border-color: #c3e6cb !important;
-}
-
-.success-toast i {
-    color: #155724 !important;
-}
-
-.danger-toast {
-    color: #dc3545 !important;
-    background-color: #f8d7da !important;
-    border-color: #fccfd3 !important;
-}
-
-.danger-toast i {
-    color: #dc3545 !important;
-}
-.toast-invisible {
-    display: none;
-}
-.toast-visible {
-    display: block;
-}
-
-.card-height {
-    border-radius:10px 0px 0px 10px;
-}
-
-.close-btn {
-    color: #a92034;
-    font-size: 1.5rem;
-    padding: 0;
-    background: none;
-    right: 5px !important;
-    top: -10px !important;
-}
-
-.close {
-    position: absolute;
-    top: 35px;
-    color: grey;
-    background: #ffffff;
-    z-index: 1500;
-    padding: 1.2rem 1.3rem;
-    border-radius: 50%;
-    left: -17px;
-    opacity: 1;
-    width: 35px;
-    height: 35px;
-    font-size: 14px;
-}
-
-.close img {
-    width: 17px;
-    position: absolute;
-    top: 50%;
-    right: 50%;
-    transform: translate(50%,-50%);
-}
-
-.br-12 {
-    border-radius: 12px;
-}
-
-.cmnt-color {
-    background-color: #fafafa;
-}
-
-.tab-color {
-    padding: 2px 8px;
-    color: #f8f5f5fd;
-}
-
-.border-color {
-    border: #54bf5b 1.6px solid !important;
-    border-radius: 8px;
-    background: #f5fef5;
-    color: #5a5a5a;
-}
-
-.btn-size {
-    height: 100%!important;
-}
-
-.card-col {
-    background: #fafafc;
-}
-
-.attch {
-    background: #ffffff;
-    border: #b9bdb9 1.6px solid !important;
-    border-radius: 4px;
-    color: #5a5a5a;
-    outline: 0;
-}
-
-.btn-color {
-    background: #ffffff;
-    border: #b9bdb9 1.6px solid !important;
-    border-radius: 12px;
-}
-
-.border-left-line {
-    border-left: solid 1px #80808054;
-    width: 35%;
-}
-
-.date {
-   color: #98989e;
-}
-
-.comment-inner-body {
-    background: #d3e1ed;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-
-.collapse-description {
-    display: flex;
-    align-items: center;
-}
-
-.collapse-description::after {
-    content: '';
-    flex: 1;
-    margin-left: 1rem;
-    height: 1px;
-    background-color: #cacdd1;
-}
-
-.mandatory {
-    color: #a92034;
-}
-
-.searchButton {
-	position: absolute;
-    left: 184px;
-    top: 80px;
-    font-size: 1.5rem;
-    color: #9E9E9E;
-    cursor: pointer;
-}
-
-.searchInput {
-    padding-left: 40px !important;
-}
-
-.scrollable-table {
-    max-height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 100%;
-    overscroll-behavior: contain;
-}
-
-.scrollable-table thead {
-    position: sticky !important;
+    position: fixed; /* Sit on top of the page content */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
     top: 0;
-    z-index: 1;
-}
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:rgb(74 74 74 / 32%);
+    z-index: 50; /* Specify a stack order in case you're using a different order for other elements */
+  }
 
-::-webkit-scrollbar {
-    width: .4em;
-}
-
-::-webkit-scrollbar-button {
-    display: none;
-}
-
-::-webkit-scrollbar-track-piece {
-    background: #eee
-}
-
-::-webkit-scrollbar-thumb {
-    background: #ccc
-}
-
-.disable-scroll {
-      overflow-y: hidden !important;
-}
-
-small {
-    margin-left: 8px;
-    margin-top: 5px;
-    display: inline-block;
-    font-weight: 700;
-    color: #fff !important;
-}
-
-.deactivate-text {
-    color: #fff !important;
-}
-
-.pl-85 {
-    padding-left: 8.5rem;
-}
-
-.col-custom {
-    flex: 0 0 auto;
-    width: 11.666667%;
-}
-
-.col-additional-details {
-    flex: 0 0 auto;
-    width: 12.666667%;
-}
-
-.col-entity-type {
-    flex: 0 0 auto;
-    width: 35.8%;
-}
-
-.mr-1rem {
-    margin-right: 1rem;
-}
-
-.card-color {
-    background-color: #FBFBFF;
-}
-
-.right-align {
-    padding-left: 11rem;
-}
-
-.date-field-error {
-    right: 28px;
-    position: absolute;
-    top: 8px;
-}
+.slider-base {
+    position: fixed;
+    z-index: 51;
+    top: 0;
+    right: -83%;
+    width: 80%;
+    height: 100%;
+    padding-left: 0;
+    background-color: #ffecec85;
+    box-shadow: -1px 0px 6px 1px rgba(0, 0, 0, 0.12);
+    transition: right 600ms cubic-bezier(.42, .8, .67, 1.06);
+  }
+  
+  .slider-opened {
+    right: 0 !important;
+  }
+  
+  .slider-container {
+    background-color: #fff;
+    height: 100vh;
+    padding: 0px 10px 10px 10px;
+    overflow: auto;
+  }
+  
+  .btn-container {
+    position: relative;
+    margin-left: -10px;
+    margin-right: -10px;
+  }

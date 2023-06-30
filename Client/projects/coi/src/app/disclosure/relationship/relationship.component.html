@@ -1,10 +1,11 @@
 <div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode">
-  <span data-bs-toggle="tooltip" title="Update your conflict status." data-bs-placement="top" class="d-inline-block">
+  <span data-bs-toggle="tooltip" title="Relationship Help Text." data-bs-placement="top" class="d-inline-block">
     <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
   </span>
   <div class="info-text fs-14">
     <div class="mt-2">
       <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>Projects will be displayed against your Active SFIs, allowing you to mark the relevant conflict status and provide a supporting description for your decision. 
+      <span *ngIf="!expandInfo" (click) = "expandInfo = true" class="fw-700 cursor-pointer">...<u title="Expand Relationship help text" class="fw-700">Read More</u></span>
     </div>
     <ng-container *ngIf="expandInfo">
       <div class="mt-2">
@@ -12,22 +13,9 @@
       </div>
       <div class="mt-2">
         <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>Before proceeding to the next step, ensure that all your Project-SFI relationships have been marked.
+        <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse Relationship help text">Show Less</u></span>
       </div>
     </ng-container>
-  </div>
-  <div class="toggle-down mr-2" *ngIf="expandInfo">
-    <div (click) = "expandInfo = false"
-      class="toggle-header-btn mt-3  bg-white border btn  p-1 rounded-5 shadow-sm">
-      <mat-icon title="Click to collapse Relationships  help text">expand_less</mat-icon>
-    </div>
-  </div>
-
-  <div class="toggle-up mr-2" *ngIf="!expandInfo">
-    <div  (click) = "expandInfo = true"
-      class="toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm">
-      <mat-icon title="Click to expand Relationships help text"
-       >expand_more</mat-icon>
-    </div>
   </div>
 </div>
 

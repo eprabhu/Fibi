@@ -1,75 +1,61 @@
-    <div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode">
-        <span data-bs-toggle="tooltip" title="Update your conflict status." data-bs-placement="top" class="d-inline-block">
-          <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-        </span>
-       
-        <div class="info-text fs-14">
-          <div class="mt-2">
-            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-            The current list of all your Active, Inactive  and Draft SFI(s) are displayed below. You may filter the SFI list according to your need.
-          </div>
-          <ng-container *ngIf= "expandInfo">
-            <div class="mt-2">
-              <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-              Draft SFI should either be activated or deleted prior to establishing the Project-SFI relationship(s).
-            </div>
-            <div class="mt-2">
-              <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-              For making any corrections /inactivating an existing Active SFI,navigate to the SFI page and amend the details.
-            </div>
-            <div class="mt-2">
-              <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-              For making any corrections /activating an  Inactive SFI,navigate to the SFI page and amend the details.
-            </div>
-            <div class="mt-2">
-              <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-              Only “Active SFI(s)“ are listed in the Relationships page. Please ensure that you have the updated list of Active SFI(s) before you proceed to the next step.
-            </div>
-          </ng-container>
-        </div>
-
-        <div class="toggle-down mr-2" *ngIf="expandInfo">
-          <div (click) = "expandInfo = false"
-            class="toggle-header-btn mt-3  bg-white border btn  p-1 rounded-5 shadow-sm">
-            <mat-icon title="Click to collapse SFI help text">expand_less</mat-icon>
-          </div>
-        </div>
-
-        <div class="toggle-up mr-2" *ngIf="!expandInfo">
-          <div  (click) = "expandInfo = true"
-            class="toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm">
-            <mat-icon title="Click to expand SFI help text"
-             >expand_more</mat-icon>
-          </div>
-        </div>
+<div class="mt-2 d-flex grey-info align-items-center position-relative" *ngIf="isEditMode">
+    <span data-bs-toggle="tooltip" title="SFI Help Text." data-bs-placement="top" class="d-inline-block">
+      <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+    </span>
+    <div class="info-text fs-14">
+      <div class="mt-2">
+        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+        The current list of all your Active, Inactive  and Draft SFI(s) are displayed below. You may filter the SFI list according to your need.
+        <span *ngIf="!expandInfo" (click) = "expandInfo = true" class="fw-700 cursor-pointer">...<u title="Expand SFI help text" class="fw-700">Read More</u></span>
       </div>
-        <div class="advance-search-area border d-flex mt-2 rounded-1">
-            <div class="border-end fs-14 p-3">
-                <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
-                <span (click)="setFilter('ALL')" [class.filter-active]="filterType=='ALL'"
-                    title="Click to filter by type: All" area-describedby="Click to filter by type: All"
-                    class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white filter-active" role="button">All</span>
-                <span (click)="setFilter('ACTIVE')" [class.filter-active]="filterType=='ACTIVE'"
-                    title="Click to filter by type: Active" area-describedby="Click to filter by type: Active"
-                    class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">Active</span>
-                <span (click)="setFilter('INACTIVE')" [class.filter-active]="filterType=='INACTIVE'"
-                    title="Click to filter by type: Inactive" area-describedby="Click to filter by type: Inactive"
-                    class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Inactive</span>
-                <span (click)="setFilter('DRAFT')" [class.filter-active]="filterType=='DRAFT'"
-                    title="Click to filter by type: Draft" area-describedby="Click to filter by type: Draft"
-                    class="shadow-sm fw-medium px-3 py-1 mx-1 border rounded-5 bg-white" role="button">Draft</span>
-            </div>
-            <div class="d-flex flex-fill position-relative">
-                <input type="text" placeholder="Search by SFI" class="advance-search-input form-control"
-                [(ngModel)]="searchText ">
-                <a class="searchButton me-3" *ngIf="!searchText">
-                    <i aria-hidden="true" class="fa fa-search fa-med pt-2 mr-4"></i>
-                </a>
-                <a class="searchButton me-3" *ngIf="searchText" (click)="searchText = ''">
-                  <i aria-hidden="true" class="fa fa-times fa-med pt-2 mr-4"></i>
-                </a>
-            </div>
+      <ng-container *ngIf= "expandInfo">
+        <div class="mt-2">
+          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+          Draft SFI should either be activated or deleted prior to establishing the Project-SFI relationship(s).
         </div>
+        <div class="mt-2">
+          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+          For making any corrections /inactivating an existing Active SFI,navigate to the SFI page and amend the details.
+        </div>
+        <div class="mt-2">
+          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+          For making any corrections /activating an  Inactive SFI,navigate to the SFI page and amend the details.
+        </div>
+        <div class="mt-2">
+          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+          Only “Active SFI(s)“ are listed in the Relationships page. Please ensure that you have the updated list of Active SFI(s) before you proceed to the next step.
+          <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Show Less</u></span>
+        </div>
+      </ng-container>
+    </div>
+</div>
+<div class="advance-search-area border d-flex mt-2 rounded-1">
+    <div class="border-end fs-14 p-3">
+        <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
+        <span (click)="setFilter('ACTIVE')" [class.filter-active]="filterType=='ACTIVE'"
+            title="Click to filter by type: Active" area-describedby="Click to filter by type: Active"
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">Active</span>
+        <span (click)="setFilter('DRAFT')" [class.filter-active]="filterType=='DRAFT'"
+            title="Click to filter by type: Draft" area-describedby="Click to filter by type: Draft"
+            class="shadow-sm fw-medium px-3 py-1 mx-1 border rounded-5 bg-white" role="button">Draft</span>
+        <span (click)="setFilter('INACTIVE')" [class.filter-active]="filterType=='INACTIVE'"
+            title="Click to filter by type: Inactive" area-describedby="Click to filter by type: Inactive"
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">Inactive</span>
+        <span (click)="setFilter('ALL')" [class.filter-active]="filterType=='ALL'"
+            title="Click to filter by type: All" area-describedby="Click to filter by type: All"
+            class="shadow-sm fw-medium px-3 py-1 mx-1 border rounded-5 bg-white filter-active" role="button">All</span>
+    </div>
+    <div class="d-flex flex-fill position-relative">
+        <input type="text" placeholder="Search by SFI" class="advance-search-input form-control"
+        [(ngModel)]="searchText ">
+        <a class="searchButton me-3" *ngIf="!searchText">
+            <i aria-hidden="true" class="fa fa-search fa-med pt-2 mr-4"></i>
+        </a>
+        <a class="searchButton me-3" *ngIf="searchText" (click)="searchText = ''">
+          <i aria-hidden="true" class="fa fa-times fa-med pt-2 mr-4"></i>
+        </a>
+    </div>
+</div>
 <div class="margin-left-5">
 <ng-container *ngIf="(coiFinancialEntityDetails| SearchFilter : searchText:
 ['coiEntity.entityName']) as searchResult;">
@@ -90,16 +76,14 @@
 </ng-container>
 </div>
 
-
-<div #sfiNewOverlay [class.overlay]="showSlider">
-    <div @enterAnimation *ngIf="showSlider"
-      class="task-right-div card-height d-flex align-items-center">
-      <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
-      <div class="tool-kit-body card-height scrollable-table">
+<div #viewSFIDetailsOverlay [class.overlay]="showSlider">
+<div class="slider-base" *ngIf="showSlider">
+  <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
+  <div class="slider-container">
        <app-entity-details [entityId]="entityId"></app-entity-details>
-      </div>
     </div>
-  </div>
+</div>
+</div>
 
 <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
   [personEntityId]="personEntityId" [isRelationshipActive]="isRelationshipActive" (closeModal)="closeActivateInactivateSfiModal($event)">
