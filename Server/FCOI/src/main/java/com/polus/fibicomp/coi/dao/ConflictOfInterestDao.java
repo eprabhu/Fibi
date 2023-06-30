@@ -49,6 +49,8 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.Country;
@@ -931,4 +933,23 @@ public interface ConflictOfInterestDao {
 	 * @param personEntityId
 	 */
 	void updatePersonEntityUpdateDetails(Integer personEntityId);
+
+	/**
+	 * This method is used to fetch all entity relationship types
+	 * @return
+	 */
+	List<EntityRelationshipType> fetchAllRelationshipTypes();
+
+	/**
+	 * This method is used to approve Entity
+	 * @param entityId
+	 * @return
+	 */
+	void approveEntity(Integer entityId);
+
+	/**
+	 * Save or Update Entity Relationship
+	 * @param entityRelationship
+	 */
+	void saveOrUpdateEntityRelationship(EntityRelationship entityRelationship);
 }

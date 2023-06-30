@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.ForeignKey;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "ENTITY_RELATIONSHIP")
@@ -40,15 +41,71 @@ public class EntityRelationship implements Serializable {
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "ENTITY_RELATIONSHIP_FK2"), name = "ENTITY_REL_TYPE_CODE", referencedColumnName = "ENTITY_REL_TYPE_CODE", insertable = false, updatable = false)
 	private EntityRelationshipType entityRelationshipType;
-	
-	@Column(name = "ENTITY_ID")
-	private Integer entityId;
 
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
+
+	@Transient
+	private Integer entityId;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getEntityNumber() {
+		return entityNumber;
+	}
+
+	public void setEntityNumber(Integer entityNumber) {
+		this.entityNumber = entityNumber;
+	}
+
+	public Integer getNodeTypeCode() {
+		return nodeTypeCode;
+	}
+
+	public void setNodeTypeCode(Integer nodeTypeCode) {
+		this.nodeTypeCode = nodeTypeCode;
+	}
+
+	public EntityRelNodeType getEntityRelNodeType() {
+		return entityRelNodeType;
+	}
+
+	public void setEntityRelNodeType(EntityRelNodeType entityRelNodeType) {
+		this.entityRelNodeType = entityRelNodeType;
+	}
+
+	public Integer getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(Integer nodeId) {
+		this.nodeId = nodeId;
+	}
+
+	public Integer getEntityRelTypeCode() {
+		return entityRelTypeCode;
+	}
+
+	public void setEntityRelTypeCode(Integer entityRelTypeCode) {
+		this.entityRelTypeCode = entityRelTypeCode;
+	}
+
+	public EntityRelationshipType getEntityRelationshipType() {
+		return entityRelationshipType;
+	}
+
+	public void setEntityRelationshipType(EntityRelationshipType entityRelationshipType) {
+		this.entityRelationshipType = entityRelationshipType;
+	}
 
 	public Timestamp getUpdateTimestamp() {
 		return updateTimestamp;
@@ -66,4 +123,11 @@ public class EntityRelationship implements Serializable {
 		this.updateUser = updateUser;
 	}
 
+	public Integer getEntityId() {
+		return entityId;
+	}
+
+	public void setEntityId(Integer entityId) {
+		this.entityId = entityId;
+	}
 }
