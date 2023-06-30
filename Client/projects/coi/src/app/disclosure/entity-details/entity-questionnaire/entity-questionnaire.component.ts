@@ -190,4 +190,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
     this.isEmitModalClose.emit(false);
   }
 
+  questionnaireSaveAction(event) {
+    this.entityDetailsServices.$saveQuestionnaireAction.next(event);
+  }
+
 }

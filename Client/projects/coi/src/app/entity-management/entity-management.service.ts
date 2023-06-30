@@ -42,10 +42,15 @@ export class EntityManagementService {
   activateInactivate(params) {
     return this._http.put(this._commonService.baseUrl + '/entity/activateInactivate', params);
   }
+
+  getApplicableQuestionnaire(requestObject: any) {
+    return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
+}
+
 }
 export class EntityDashboardRequest {
-  isDownload = false;
   property1 = '';
+  isDownload = false;
   property2 = '';
   property20 = [];
   property21 = [];

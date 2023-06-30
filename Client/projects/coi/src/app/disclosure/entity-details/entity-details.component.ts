@@ -19,6 +19,8 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   isEnableRelationshipModal = false;
   sfiRelationStatus: any = {};
   isEditMode = false;
+  personEntityRelationships = [];
+  personEntity = {};
 
   ngOnInit() {
     this.isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
@@ -37,7 +39,7 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   }
 
   updateRelationship(event) {
-  this.updateRelationshipDetails = event;
+    this.updateRelationshipDetails = event;
   }
 
   addRelationship(event) {
@@ -55,6 +57,9 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   }
 
   getRelationshipDetails(event) {
-    this.sfiRelationStatus = event;
+    this.sfiRelationStatus = event.relationSFiStatus;
+    this.personEntityRelationships = event.personEntityRelationships;
+    this.personEntity = event.personEntity;
   }
+
 }
