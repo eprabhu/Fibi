@@ -23,6 +23,7 @@ export class DefineRelationComponent implements OnInit {
   @Input() moduleCode: any;
   @Input() module: any;
   @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
+  @ViewChild('defineRelationOverlay', { static: true }) defineRelationOverlay: ElementRef;
 
   isMaximized: boolean = false;
   deployMap = environment.deployUrl;
@@ -53,7 +54,6 @@ export class DefineRelationComponent implements OnInit {
   imgUrl = this.deployMap + 'assets/images/close-black.svg';
   debounceTimer: any;
   $triggerEvent = new Subject();
-  @ViewChild('relationShipOverlay', { static: true }) relationShipOverlay: ElementRef;
 
   constructor(private _relationShipService: RelationshipService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
 
@@ -69,11 +69,13 @@ export class DefineRelationComponent implements OnInit {
   }
 
   showTaskNavBar() {
+    document.body.classList.add('overflow-hidden');
     const slider = document.querySelector('.slider-base');
     slider.classList.add('slider-opened');
   }
 
   hideSfiNavBar(event) {
+    this.addBodyScroll();
     let slider = document.querySelector('.slider-base');
     slider.classList.remove('slider-opened');
     setTimeout(() => {
@@ -302,7 +304,13 @@ export class DefineRelationComponent implements OnInit {
     ));
   }
 
+  addBodyScroll() {
+      document.body.classList.remove('overflow-hidden');
+      document.body.classList.add('overflow-auto');
+  }
+
   ngOnDestroy() {
+    this.addBodyScroll();
     subscriptionHandler(this.$subscriptions);
   }
 

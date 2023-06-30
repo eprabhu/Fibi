@@ -300,7 +300,7 @@
             <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes">
                 Notes & Attachments
             </div>
-            <div>
+            <div *ngIf="sfiService.isShowSfiNavBar">
                 <app-add-sfi-slider [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi-slider>
             </div>
         </div>

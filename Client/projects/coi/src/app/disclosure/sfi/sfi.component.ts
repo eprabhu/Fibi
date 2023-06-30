@@ -5,18 +5,18 @@ import { SfiService } from './sfi.service';
 import { DataStoreService } from '../services/data-store.service';
 import { CoiService } from '../services/coi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
-import { slideHorizontalFast } from '../../../../../fibi/src/app/common/utilities/animations';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
     selector: 'app-sfi',
     templateUrl: './sfi.component.html',
-    styleUrls: ['./sfi.component.scss'],
-    animations: [slideHorizontalFast]
+    styleUrls: ['./sfi.component.scss']
 })
 export class SfiComponent implements OnInit, OnDestroy {
+
+    @ViewChild('viewSFIDetailsOverlay', { static: true }) viewSFIDetailsOverlay: ElementRef;
     $subscriptions: Subscription[] = [];
     coiFinancialEntityDetails: any[] = [];
     searchText: string;
@@ -28,7 +28,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     personId: any;
     isSFINotAvailable = false;
     reviewStatus: any;
-    filterType = 'ALL';
+    filterType = 'ACTIVE';
     currentPage = 1;
     count: any;
     showSlider = false;
@@ -39,8 +39,6 @@ export class SfiComponent implements OnInit, OnDestroy {
     isRelationshipActive: false;
     entityDetails: any;
     expandInfo = true;
-
-    @ViewChild('sfiNewOverlay', { static: true }) sfiNewOverlay: ElementRef;
     isEnableActivateInactivateSfiModal: boolean;
     
     constructor(
@@ -60,6 +58,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.addBodyScroll();
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -106,7 +105,11 @@ export class SfiComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
-        this.showSfiNavBar();
+        document.body.classList.add('overflow-hidden');
+        setTimeout(() => {
+            const slider = document.querySelector('.slider-base');
+            slider.classList.add('slider-opened');
+        });
     }
 
     setFilter(filterType) {
@@ -136,19 +139,17 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     hideSfiNavBar() {
-        this.showSlider = false;
-        this.showSfiNavBar();
+        this.addBodyScroll();
+        let slider = document.querySelector('.slider-base');
+        slider.classList.remove('slider-opened');        
+        setTimeout(() => {
+            this.showSlider = false;
+        },500);
     }
 
-    showSfiNavBar() {
-        if (this.showSlider) {
-            this.scrollHeight = document.documentElement.scrollTop;
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.top = - this.scrollHeight + 'px';
-        } else {
-            document.body.style.overflow = 'auto';
-            document.documentElement.scrollTop = this.scrollHeight;
-        }
+    addBodyScroll() {
+        document.body.classList.remove('overflow-hidden');
+        document.body.classList.add('overflow-auto');
     }
 
     deleteSFIConfirmation(event, i) {
@@ -180,4 +181,5 @@ export class SfiComponent implements OnInit, OnDestroy {
             this.getSfiDetails();
           }
       }
+
 }
