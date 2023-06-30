@@ -74,7 +74,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     private handleTravelDisclosureSave(): void {
-        this.$subscriptions.push(this._service.saveOrCopySubject.subscribe((event: string) => {
+        this.$subscriptions.push(this._service.saveSubject.subscribe((event: string) => {
             if (event) {
                 this.saveTravelDisclosure();
             }
