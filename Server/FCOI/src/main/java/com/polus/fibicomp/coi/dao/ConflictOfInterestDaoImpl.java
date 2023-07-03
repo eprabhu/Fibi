@@ -3492,4 +3492,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public void saveOrUpdateEntityRelationship(EntityRelationship entityRelationship) {
 		hibernateTemplate.saveOrUpdate(entityRelationship);
 	}
+	
+	@Override
+	public List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber) { 
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelDisclosure> queryCoiDisclosureOld = builder.createQuery(CoiTravelDisclosure.class);
+		Root<CoiTravelDisclosure> rootCoiTravelDisclosureOld = queryCoiDisclosureOld.from(CoiTravelDisclosure.class);
+		Predicate predicate1 = rootCoiTravelDisclosureOld.get("personId").in(personId);
+		Predicate predicate2 = rootCoiTravelDisclosureOld.get("entityNumber").in(entityNumber);
+		Predicate predicate3 = rootCoiTravelDisclosureOld.get("documentStatusCode").in(Constants.TRAVEL_DOCUMENT_STATUS_CODE_APPROVED);
+		queryCoiDisclosureOld.where(builder.and(predicate1, predicate2, predicate3));
+		return session.createQuery(queryCoiDisclosureOld).getResultList();
+	}
 }

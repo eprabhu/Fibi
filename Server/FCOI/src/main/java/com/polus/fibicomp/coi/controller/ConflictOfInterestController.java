@@ -12,6 +12,7 @@ import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.service.GeneralService;
 import com.polus.fibicomp.constants.Constants;
 import org.apache.logging.log4j.LogManager;
@@ -37,6 +38,7 @@ import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
@@ -532,5 +534,11 @@ public class ConflictOfInterestController {
 	@PutMapping("/entity/approval")
 	public ResponseEntity<Object> approveEntity(@RequestBody EntityRelationship entityRelationship) {
 		return conflictOfInterestService.approveEntity(entityRelationship);
+	}
+	
+	@PostMapping(value = "/loadTravelDisclosureHistory")
+	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Request for loadTravelDisclosureHistory");
+		return conflictOfInterestService.loadTravelDisclosureHistory(vo.getPersonId(), vo.getEntityNumber());
 	}
 }

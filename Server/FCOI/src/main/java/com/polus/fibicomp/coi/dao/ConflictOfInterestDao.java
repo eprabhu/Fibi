@@ -952,4 +952,6 @@ public interface ConflictOfInterestDao {
 	 * @param entityRelationship
 	 */
 	void saveOrUpdateEntityRelationship(EntityRelationship entityRelationship);
+	
+	List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 }

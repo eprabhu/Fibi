@@ -8,9 +8,11 @@ import javax.validation.Valid;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
@@ -456,4 +458,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship);
+	
+	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 }
