@@ -13,6 +13,7 @@ export class TravelDisclosureService {
     travelDataChanged = false;
     isTravelCertified = false;
     unSavedTabName = '';
+    modalActionBtnName = '';
     isChildRouting = false;
     isAdminDashboard = false;
     PREVIOUS_MODULE_URL = '';

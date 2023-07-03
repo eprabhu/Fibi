@@ -8,8 +8,8 @@
                             <strong>Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
                                     <u (click)="ispersondetailsmodal = true;"
-                                        title="Show the details of {{userDetails.fullName}}">
-                                        {{userDetails.fullName}}
+                                        title="Show the details of {{userDetails?.fullName}}">
+                                        {{userDetails?.fullName}}
                                     </u>
                                 </span>
                             </strong>
@@ -19,8 +19,8 @@
                                 #{{responseObject?.travelDisclosureId}} : Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
                                     <u (click)="ispersondetailsmodal = true;"
-                                        title="Show the details of {{userDetails.fullName}}">
-                                        {{userDetails.fullName}}
+                                        title="Show the details of {{userDetails?.fullName}}">
+                                        {{userDetails?.fullName}}
                                     </u>
                                 </span>
                             </strong>
@@ -49,10 +49,10 @@
                                     Department :
                                 </label>
                                 <app-no-data-label class="text-slice grey-text fs-14 ml-2"
-                                    [valueToShow]="userDetails.homeUnit || userDetails.homeUnitName">
-                                    <div title="{{userDetails.homeUnit}} - {{userDetails.homeUnitName}}">
-                                        {{userDetails.homeUnit}} -
-                                        {{userDetails.homeUnitName}}
+                                    [valueToShow]="userDetails?.homeUnit || userDetails?.homeUnitName">
+                                    <div title="{{userDetails?.homeUnit}} - {{userDetails?.homeUnitName}}">
+                                        {{userDetails?.homeUnit}} -
+                                        {{userDetails?.homeUnitName}}
                                     </div>
                                 </app-no-data-label>
                             </div>
@@ -207,8 +207,7 @@
                         </div>
                     </button>
                     <button [routerLink]="['history']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
-                        role="button" [title]="isRouteComplete(['history'])? 'Travel History' : 'Go to step Travel History'"
-                        (click)="loadTravelDisclosureHistory()">
+                        role="button" [title]="isRouteComplete(['history'])? 'Travel History' : 'Go to step Travel History'">
                         <div class="navigation-box-content" routerLinkActive="active" area-describedby="">
                             Travel History
                         </div>
@@ -260,7 +259,7 @@
                     </ng-container>
 
                     <!-- Withdraw disclosure -->
-                    <button title="Click to Withdraw Travel Disclosure" (click)="withdrawTravelDisclosure();"
+                    <button title="Click to Withdraw Travel Disclosure" (click)="openConfirmationModal('Withdraw')"
                         class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3" 
                         *ngIf="checkReviewStatusCode(['2']) && responseObject?.personId == currentPersonId">
                         <mat-icon>logout</mat-icon>
@@ -292,7 +291,7 @@
                     <ng-container *ngIf="showReturnOrApproveButton()">
                         <!-- return to pi -->
                         <button title="Click to Return Travel Disclosure"
-                            (click)="returnTravelDisclosure();"
+                            (click)="openConfirmationModal('Return');"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
                             <mat-icon class="returnIcon">refresh</mat-icon>
@@ -301,7 +300,7 @@
 
                         <!-- approve disclosure -->
                         <button title="Click to Approve Travel Disclosure"
-                            (click)="approveTravelDisclosure();"
+                            (click)="openConfirmationModal('Approve');"
                             [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
                             class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
                             <mat-icon>check_circle_outline</mat-icon>
@@ -314,14 +313,14 @@
                     <!-- save -->
                     <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
                         class="col-12 mt-3  fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        (click)="SaveTravelDisclosure()" title="Click to Save Travel Disclosure">
+                        (click)="openConfirmationModal('Save')" title="Click to Save Travel Disclosure">
                         <mat-icon class="me-2">save</mat-icon>
                         Save
                     </button>
 
                     <!-- submit -->
                     <button class="col-12 mt-3 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        (click)="submitTravelDisclosure();" *ngIf="isRouteComplete(['certification'])"
+                        (click)="openConfirmationModal('Submit');" *ngIf="isRouteComplete(['certification'])"
                         [disabled]="!service.isTravelCertified" title="Click to Submit Travel Disclosure">
                         <mat-icon class="me-2">done</mat-icon>
                         Submit
@@ -373,6 +372,10 @@
 
 <!--Unsaved Changes Modal-->
 <app-unsaved-changes-warning></app-unsaved-changes-warning>
+
+<!--Confirmation Modal-->
+<app-confirmation-modal (btnAction)="performDisclosureAction()" [createUser]="userDetails?.fullName"
+    [disclosureId]="responseObject?.travelDisclosureId"></app-confirmation-modal>
 
 <!-- Add SFI Slider-->
 <!-- <div>
