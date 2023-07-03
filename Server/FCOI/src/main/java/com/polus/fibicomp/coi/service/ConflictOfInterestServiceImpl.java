@@ -21,6 +21,7 @@ import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureCertifyDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
@@ -1325,6 +1326,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		coiTravelDisclosure.setCoiEntity(entityDetails);
 		addEntryToTraveller(coiTravelDisclosure, vo);
 		List<CoiTravelDisclosureTraveler> entries = conflictOfInterestDao.getEntriesFromTravellerTable(coiTravelDisclosure.getTravelDisclosureId());
 		Map<String, String> travellerTypeCodeList = getTravellerTypeWithDescription(entries);
@@ -1848,5 +1850,30 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			conflictOfInterestDao.saveOrUpdateEntityRelationship(entityRelationship);
 		}
 		return new ResponseEntity<>(entityRelationship, HttpStatus.OK);
+	}
+	
+	@Override
+	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber) {
+		List<CoiTravelHistoryDto> travelHistories = new ArrayList<>();
+		List<CoiTravelDisclosure> historyList = conflictOfInterestDao.loadTravelDisclosureHistory(personId, entityNumber);
+		historyList.forEach(history -> {
+			CoiTravelHistoryDto travelHistoryDto = new CoiTravelHistoryDto();
+			travelHistoryDto.setTravelDisclosureId(history.getTravelDisclosureId());
+			List<CoiTravelDisclosureTraveler> entries = conflictOfInterestDao.getEntriesFromTravellerTable(history.getTravelDisclosureId());
+			Map<String, String> travellerTypeCodeList = getTravellerTypeWithDescription(entries);
+			travelHistoryDto.setTravelEntityName(history.getCoiEntity().getEntityName());
+			travelHistoryDto.setTravellerTypeCodeList(travellerTypeCodeList);
+			travelHistoryDto.setEntityType(history.getCoiEntity().getEntityType().getDescription());
+			travelHistoryDto.setDestinationCountry(history.getDestinationCountry());
+			travelHistoryDto.setTravelTitle(history.getTravelTitle());
+			travelHistoryDto.setPurposeOfTheTrip(history.getPurposeOfTheTrip());
+			travelHistoryDto.setDestinationCity(history.getDestinationCity());
+			travelHistoryDto.setDestinationState(history.getTravelstate());
+			travelHistoryDto.setTravelAmount(history.getTravelAmount());
+			travelHistoryDto.setTravelStartDate(history.getTravelStartDate());
+			travelHistoryDto.setTravelEndDate(history.getTravelEndDate());
+			travelHistories.add(travelHistoryDto);
+		});
+		return travelHistories;
 	}
 }
