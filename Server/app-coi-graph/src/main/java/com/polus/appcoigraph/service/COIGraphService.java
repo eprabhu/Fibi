@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import com.polus.appcoigraph.entity.Country;
 import com.polus.appcoigraph.entity.Disclosure;
+import com.polus.appcoigraph.dao.COIEntityGraphDao;
 import com.polus.appcoigraph.entity.Award;
 import com.polus.appcoigraph.entity.COIEntity;
 import com.polus.appcoigraph.entity.EntityTest;
@@ -38,6 +39,7 @@ import com.polus.appcoigraph.entity.Sponsor;
 import com.polus.appcoigraph.entity.TravelDisclosure;
 import com.polus.appcoigraph.entity.Unit;
 import com.polus.appcoigraph.model.Link;
+import com.polus.appcoigraph.model.RequestDTO;
 import com.polus.appcoigraph.model.ResponseDTO;
 import com.polus.appcoigraph.repository.AwardRepository;
 import com.polus.appcoigraph.repository.COIDisclosureRepository;
@@ -97,6 +99,9 @@ public class COIGraphService {
 
 	@Autowired
 	 private Driver driver;
+	
+	@Autowired
+	private COIEntityGraphDao coiEntityGraphDao;
 	
 	private static final String schema = "neo4j";
     
@@ -550,7 +555,7 @@ public class COIGraphService {
 	
 				String cypherQuery = "	MATCH (proposal:Proposal {proposal_id: '"+ resultSet.getString("PROPOSAL_ID") +"' })\r\n"
 						+ "MATCH (entity:Entity {entity_number: '"+ resultSet.getString("ENTITY_NUMBER") +"' })\r\n"
-						+ "MERGE (entity)-[x:LINKED_WITH_PROPOSAL]->(proposal)				\r\n"
+						+ "MERGE (entity)-[x:ENTITY_PROPOSAL_RELATIONSHIP]->(proposal)				\r\n"
 						+ " ";				
 				
 				neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
@@ -580,7 +585,7 @@ public class COIGraphService {
 	
 				String cypherQuery = "	MATCH (award:Award {award_number: '"+ resultSet.getString("AWARD_NUMBER") +"' })\r\n"
 						+ "MATCH (entity:Entity {entity_number: '"+ resultSet.getString("ENTITY_NUMBER") +"' })\r\n"
-						+ "MERGE (entity)-[x:AWARD_NUMBER]->(award)	\r\n"
+						+ "MERGE (entity)-[x:ENTITY_AWARD_RELATIONSHIP]->(award)	\r\n"
 						+ " ";				
 				
 				neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
@@ -779,5 +784,10 @@ public class COIGraphService {
 		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
 	}	
+	
+	public ResponseDTO entityGraph(RequestDTO request) { 
+		return coiEntityGraphDao.entityGraphDAO(request);
+	}
+	
 	
 }

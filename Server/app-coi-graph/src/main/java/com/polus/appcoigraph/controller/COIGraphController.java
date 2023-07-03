@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +20,7 @@ import com.polus.appcoigraph.entity.Country;
 import com.polus.appcoigraph.entity.COIEntity;
 import com.polus.appcoigraph.entity.GraphNode;
 import com.polus.appcoigraph.model.Link;
+import com.polus.appcoigraph.model.RequestDTO;
 import com.polus.appcoigraph.model.ResponseDTO;
 import com.polus.appcoigraph.repository.GraphRepository;
 import com.polus.appcoigraph.service.COIGraphService;
@@ -93,5 +96,13 @@ public class COIGraphController {
     		service.executeCypherQuery();
     	  	return "Success";
     	} 
+    
+    @PostMapping("/entitygraph")
+    ResponseEntity<ResponseDTO> entityGraph(@RequestBody RequestDTO request) { 
+	 ResponseDTO response = service.entityGraph(request);
+	 return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
+  }   
+    
+    
 }
 
