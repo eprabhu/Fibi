@@ -14,7 +14,7 @@
                 aria-describedby="Goto Disclosures page">Disclosures
                 <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"></span>
             </li>
-            <li [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
+            <li *ngIf="commonService.isCoiReviewer" [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
                 routerLinkActive="active" [attr.title]="_router.url.includes('/coi/reviewer-dashboard') ? 'Review Disclosures page' : 'Go to Review Disclosures page'" aria-describedby="Goto Review Disclosures page">Review Disclosures
               <span *ngIf="_router.url.includes('/coi/reviewer-dashboard')" class="active-color"></span>
             </li>
