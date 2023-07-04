@@ -58,13 +58,11 @@
           </div>
           <div class="col-2 fs-14 border-end" [ngClass] = "!isEditMode ? 'p-10' : ''">
             <span class="mandatory fw-600">*</span>
-             <span class="fw-600"> COI Status</span>
-            <div [class.mt-2]="isEditMode" *ngIf="isEditMode">
-              <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode"
-              class="form-control select-default">
-              <option [value]=null>--Select--</option>
-              <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList">
-                {{status?.description}}</option>
+             <span title="List of COI status" class="fw-600">COI Status</span>
+             <div [class.mt-2]="isEditMode" *ngIf="isEditMode">
+              <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode" class="select-dropdown">
+                <option [value]=null>--Select--</option>
+                <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList">{{status?.description}}</option>
               </select>
             </div>
             <div>
