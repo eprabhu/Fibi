@@ -44,12 +44,6 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
   sfiStatus = '';
   canMangeSfi = false;
   revisionReason = '';
-  entityRelationships = [
-    {value: 1, description: 'New'},
-    {value: 2, description: 'Duplicate'},
-    {value: 3, description: 'Subsidiary'},
-    {value: 4, description: 'Parent'}
-  ];
   entityRelationshipValue = null;
   clearField: String;
   EntitySearchOptions: any = {};
@@ -59,7 +53,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
   entityRelationshipDescription = '';
   isQuestionnaireCompleted = false;
   allRelationQuestionnaires = [];
-
+  relationshipLookUpList: any = [];
+  entityRelationshipNumber = null;
+  
   constructor(private _router: Router, private _route: ActivatedRoute,
     public entityManagementService: EntityManagementService,
     private _commonServices: CommonService,
@@ -72,6 +68,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     this.isModifyEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
     this.getEntityID();
     this.listenForQuestionnaireSave();
+    this.getRelationshipTypes();
   }
 
   getEntityID() {
@@ -290,10 +287,16 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     }
   }
 
-  selectEntityRelationship() {
+  getRelationshipTypes(): void {
+    this.$subscriptions.push(this.entityManagementService.getRelationshipTypes().subscribe((res: any) => {
+      this.relationshipLookUpList = res;
+    }));
+  }
+
+  selectEntityRelationship() { 
     if (this.entityRelationshipValue) {
-      this.entityRelationshipDescription = this.entityRelationships.find(ele =>
-        Number(this.entityRelationshipValue) === ele.value).description;
+      this.entityRelationshipDescription = this.relationshipLookUpList.find(ele =>
+        this.entityRelationshipValue == ele.entityRelTypeCode).description;
     }
     if (this.entityRelationshipValue !== '1') {
       this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl);
@@ -303,23 +306,28 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
   approveEntity() {
     this.approveEntityValidateMap.clear();
     if (this.validateApproveEntity()) {
-      //  approve entity api call pending
       const REQ_BODY = {
-        entityId : this.entityId,
-        entityRelationshipValue : this.entityRelationshipValue,
-        entityRelationshipDescription : this.entityRelationshipDescription,
-        relationshipEntityId : this.relationshipEntityId,
-        relationshipEntityName : this.relationshipEntityName
+        entityId: this.entityId,
+        entityNumber: this.entityDetails.entityNumber,
+        entityRelTypeCode: this.entityRelationshipValue,
+        nodeId: this.entityRelationshipNumber,
+        nodeTypeCode: 1
       };
-      // after response
-      document.getElementById('hide-approve-entity-modal').click();
-      this.clearApproveEntityFiled();
+      this.$subscriptions.push(this.entityManagementService.approveEntity(REQ_BODY).subscribe((res: any) => {
+        this.entityDetails.entityStatus.entityStatusCode = res.entityStatusCode;
+        this.entityDetails.updateUserFullName = res.updateUserFullName;
+        this.entityDetails.updateTimestamp = res.updateTimestamp;
+        document.getElementById('hide-approve-entity-modal')?.click();
+        this.clearApproveEntityFiled();
+        this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity verified successfully.`);
+      }));
     }
   }
 
   selectedEvent(event) {
     this.relationshipEntityName = event ? event.entityName : '';
     this.relationshipEntityId = event ? event.entityId : null;
+    this.entityRelationshipNumber = event ? event.entityNumber : null;
   }
 
   validateApproveEntity(): boolean {
@@ -339,6 +347,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     this.relationshipEntityId = null;
     this.relationshipEntityName = '';
     this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl);
+    this.entityRelationshipNumber = null;
   }
 
   getQuestionnaire() {

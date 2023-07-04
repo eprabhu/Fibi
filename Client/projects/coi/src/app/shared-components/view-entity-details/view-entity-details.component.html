@@ -11,7 +11,7 @@
             <span class="px-2">{{sfiStatus}}</span></span>
           <h1 class="fw-bold fs-18 mt-3 px-3">{{entityDetails?.entityName}}</h1>
         </div>
-        <div *ngIf="isEntityManagement && entityDetails?.entityStatus?.entityStatusCode === '3'" class="align-items-center d-flex">
+        <div *ngIf="isEntityManagement && entityDetails?.entityStatus?.entityStatusCode === '2'" class="align-items-center d-flex">
           <span class="pill d-flex">
             <span class="cross-wrapper">
               <i class="fa fa-times" aria-hidden="true"></i>
@@ -225,7 +225,7 @@
             </button>
           </div>
         </ng-container>
-        <div *ngIf="isEntityManagement && isModifyEntity && entityDetails?.entityStatus?.entityStatusCode === '3'" class="d-flex justify-content-around mt-3 mx-3">
+        <div *ngIf="isEntityManagement && isModifyEntity && entityDetails?.entityStatus?.entityStatusCode === '2'" class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-approve-entity"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
             title="Click to access entity verification" data-bs-toggle="modal" data-bs-target="#approve-entity-modal">
@@ -257,12 +257,16 @@
             <span class="btn-save-content pr-60">Finalize</span>
           </button>
         </div>
-        <div class="my-2 ml-2 fs-13 ash-text wrapping-text">
+        <div class="my-2 ml-2 fs-13 ash-text wrapping-text px-2">
           <div><span class="fw-medium me-1">Last Updated By :</span></div>
-          <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="personEntity?.updateTimestamp">
-            <div>
+          <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="isEntityManagement ? entityDetails?.updatedUserFullName : personEntity?.updateUserFullName">
+            <div *ngIf="!isEntityManagement">
               {{personEntity?.updateUserFullName}} On
-            {{(personEntity?.updateTimestamp|dateFormatterWithTimeZone:'long')}}
+              {{(personEntity?.updateTimestamp|dateFormatterWithTimeZone:'long')}}
+            </div>
+            <div *ngIf="isEntityManagement">
+              {{entityDetails?.updatedUserFullName}} On 
+              {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}}
             </div>
           </app-no-data-label>
         </div>
@@ -417,13 +421,23 @@
       </div>
       <div class="modal-body ct-modal-padding">
         <div class="help-text">
-          <div class="col-12 py-2 grey-info font px-3">
-            <span class="fs-13 text-secondary">
-              <ol type="1">
-                <li>Mark any of the entity interrelations using the fields provided below.</li>
-                <li>You may mark multiple entity relations.</li>
-                <li>Complete entity verification by marking any relationships and clicking on Verify Entity button.</li>
-              </ol>
+          <div class="col-12 py-2 grey-info font px-3 d-flex align-items-center position-relative">
+            <span data-bs-toggle="tooltip" title="Entity Help Text." data-bs-placement="top" class="d-inline-block pe-2">
+              <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+            </span>
+            <span class="fs-13">
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Mark any of the entity interrelations using the fields provided below.
+              </div>
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                You may mark multiple entity relations.
+              </div>
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Complete entity verification by marking any relationships and clicking on Approve Entity button.
+              </div>
             </span>
           </div>
         </div>
@@ -434,7 +448,7 @@
               <select id="select-entity-relationship" class="form-control form-select" [(ngModel)]="entityRelationshipValue"
               (ngModelChange)="selectEntityRelationship()" [ngClass]="(approveEntityValidateMap?.has('relationship')) ? 'is-invalid d-block' : ''">
                 <option [value]="null"> --Select-- </option>
-                <option *ngFor="let relationship of entityRelationships" [value]="relationship?.value">
+                <option *ngFor="let relationship of relationshipLookUpList" [value]="relationship?.entityRelTypeCode">
                   {{relationship?.description}}</option>
               </select>
               <span *ngIf="approveEntityValidateMap?.has('relationship')" class="invalid-feedback d-block fs-13">
