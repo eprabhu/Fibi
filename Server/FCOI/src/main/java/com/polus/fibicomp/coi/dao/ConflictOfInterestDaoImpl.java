@@ -3511,6 +3511,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Predicate predicate2 = rootCoiTravelDisclosureOld.get("entityNumber").in(entityNumber);
 		Predicate predicate3 = rootCoiTravelDisclosureOld.get("documentStatusCode").in(Constants.TRAVEL_DOCUMENT_STATUS_CODE_APPROVED);
 		queryCoiDisclosureOld.where(builder.and(predicate1, predicate2, predicate3));
+		queryCoiDisclosureOld.orderBy(builder.asc(rootCoiTravelDisclosureOld.get("travelStartDate")));
 		return session.createQuery(queryCoiDisclosureOld).getResultList();
 	}
 }

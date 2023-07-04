@@ -15,6 +15,15 @@ public class CoiTravelDisclosureActionsDto {
 	private Timestamp acknowledgeAt;
 	private String certifiedBy;
 	private Timestamp certifiedAt;
+	private Timestamp updateTimestamp;
+
+	public Timestamp getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(Timestamp updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
+	}
 
 	public String getCertifiedBy() {
 		return certifiedBy;
