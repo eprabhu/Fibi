@@ -4,7 +4,7 @@ import { CoiService } from '../../../services/coi.service';
 import { CoiSummaryService } from '../../coi-summary.service';
 import { environment } from '../../../../../environments/environment';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
-import { CommentConfiguration } from '../../../coi-interface';
+import { CommentConfiguration, GetSFIRequestObject } from '../../../coi-interface';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Router } from '@angular/router';
 
@@ -49,19 +49,24 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     }
 
     getSfiDetails() {
-        this.$subscriptions.push(this._coiSummaryService.getSfiDetails({
-            disclosureId: Number(this.coiDetails.disclosureId),
-            disclosureStatusCode: this.coiDetails.disclosureStatusCode,
-            personId: this.coiDetails.personId,
-            filterType: '',
-            currentPage: 0,
-            pageNumber: 0
-        }).subscribe((data: any) => {
+        this.$subscriptions.push(this._coiSummaryService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
             if (data) {
                 this.coiFinancialEntityDetails = data.personEntities;
                 this.setSubSectionList();
             }
         }));
+    }
+
+    getRequestObject() {
+		const REQ_OBJ = new GetSFIRequestObject();
+        REQ_OBJ.currentPage = 0;
+        REQ_OBJ.disclosureId = Number(this.coiDetails.disclosureId);
+        REQ_OBJ.filterType = '';
+        REQ_OBJ.pageNumber = 0;
+        REQ_OBJ.personId = this.coiDetails.personId;
+        REQ_OBJ.reviewStatusCode = '';
+        REQ_OBJ.searchWord = '';
+        return REQ_OBJ;
     }
 
     setSubSectionList() {

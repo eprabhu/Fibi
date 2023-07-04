@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {CommonService} from "../../common/services/common.service";
+import { GetSFIRequestObject } from '../../disclosure/coi-interface';
 
 @Injectable()
 export class UserEntitiesService {
@@ -9,7 +10,7 @@ export class UserEntitiesService {
               private _commonService: CommonService) { }
 
 
-  getSFIDashboard(param) {
-    return this._http.post(this._commonService.baseUrl + '/getSFIDashboard', param );
+  getSFIDashboard(param: GetSFIRequestObject) {
+    return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', param);
   }
 }
