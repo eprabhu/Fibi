@@ -2882,8 +2882,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			String filterType = vo.getFilterType();
 			Integer currentPage = vo.getCurrentPage();
 			Integer pageNumber = vo.getPageNumber();
+			String searchWord = vo.getSearchWord();
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?)}");
 				if(personId == null) {
 					statement.setNull(1, Types.VARCHAR);
 				} else {
@@ -2899,10 +2900,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setInt(5, (currentPage == null ? 0 : currentPage - 1));
 				statement.setInt(6, (pageNumber == null ? 0 : pageNumber));
 				statement.setBoolean(7, false);
+				statement.setString(8, searchWord);
 				statement.execute();
 				rset = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String functionCall = "{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				if(personId == null) {
@@ -2920,6 +2922,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setInt(6, (currentPage == null ? 0 : currentPage - 1));
 				statement.setInt(7, (pageNumber == null ? 0 : pageNumber));
 				statement.setBoolean(8, false);
+				statement.setString(9, searchWord);
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
 			}
@@ -2964,8 +2967,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			Integer disclosureId = vo.getDisclosureId();
 			String reviewStatus = vo.getReviewStatusCode();
 			String filterType = vo.getFilterType();
+			String searchWord = vo.getSearchWord();
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?)}");
 				if(personId == null) {
 					statement.setNull(1, Types.VARCHAR);
 				} else {
@@ -2981,10 +2985,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setInt(5, 0);
 				statement.setInt(6, 0);
 				statement.setBoolean(7, true);
+				statement.setString(8, searchWord);
 				statement.execute();
 				rset = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String functionCall = "{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				if(personId == null) {
@@ -3002,6 +3007,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setInt(6, 0);
 				statement.setInt(7, 0);
 				statement.setBoolean(8, true);
+				statement.setString(9, searchWord);
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
 			}

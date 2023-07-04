@@ -284,6 +284,8 @@ public class ConflictOfInterestVO {
 
 	private Integer count;
 
+	private String searchWord;
+
 	public CoiReviewStatusType getCoiReviewStatusTypeDetalis() {
 		return coiReviewStatusTypeDetalis;
 	}
@@ -1274,5 +1276,13 @@ public class ConflictOfInterestVO {
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public String getSearchWord() {
+		return searchWord;
+	}
+
+	public void setSearchWord(String searchWord) {
+		this.searchWord = searchWord;
 	}
 }
