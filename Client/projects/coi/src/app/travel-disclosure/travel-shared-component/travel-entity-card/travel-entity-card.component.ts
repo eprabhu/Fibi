@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityData } from '../../../../travel-disclosure-interface';
+import { EntityData } from '../../travel-disclosure-interface';
 import { Router } from '@angular/router';
 
 @Component({

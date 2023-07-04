@@ -126,22 +126,11 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this._dataStore.manualDataUpdate(this.responseObject);
     }
 
-    private getTravelHistoryRO(): TravelHistoryRO {
-        return {
-            'personId' : this.responseObject.personId,
-            'entityNumber' : this.responseObject.entityNumber
-        };
-    }
-
     navigateBack(): void {
         const PREVIOUS_MODULE_URL = this.service.PREVIOUS_MODULE_URL;
         const ROUTE_URL = this.service.isAdminDashboard ? ADMIN_DASHBOARD_URL : HOME_URL;
         (PREVIOUS_MODULE_URL && PREVIOUS_MODULE_URL.includes('travel-disclosure')) ?
             this.router.navigate([ROUTE_URL]) : this.router.navigateByUrl(PREVIOUS_MODULE_URL || ROUTE_URL);
-    }
-
-    SaveTravelDisclosure(): void {
-        this.service.saveSubject.next('SAVE_DISCLOSURE');
     }
 
     isRouteComplete(possibleActiveRoutes: string[] = []): boolean {
@@ -183,6 +172,31 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             this.responseObject.reviewStatus = event.reviewStatus;
             this._dataStore.manualDataUpdate(this.responseObject);
         }
+    }
+
+    openConfirmationModal(actionBtnName) {
+        this.service.modalActionBtnName = actionBtnName;
+        document.getElementById('hidden-confirmation-modal-trigger').click();
+    }
+
+    performDisclosureAction() {
+        switch (this.service.modalActionBtnName) {
+            case 'Save': this.saveTravelDisclosure();
+                break;
+            case 'Submit': this.submitTravelDisclosure();
+                break;
+            case 'Withdraw': this.withdrawTravelDisclosure();
+                break;
+            case 'Return': this.returnTravelDisclosure();
+                break;
+            case 'Approve': this.approveTravelDisclosure();
+                break;
+            default:
+                break;
+        }
+    }
+    saveTravelDisclosure(): void {
+        this.service.saveSubject.next('SAVE_DISCLOSURE');
     }
 
     submitTravelDisclosure(): void {
@@ -243,17 +257,6 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Approving Travel Disclosure');
             })
         );
-    }
-
-    loadTravelDisclosureHistory(): void {
-        this.service.loadTravelDisclosureHistory(this.getTravelHistoryRO())
-            .subscribe((res: any) => {
-                if (res) {
-                    this.service.setUnSavedChanges(false, '');
-                }
-            }, (err) => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Loading Travel Disclosure History');
-            });
     }
 
 }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavigationService } from '../../common/services/navigation.service';
-import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { TravelDisclosureService } from '../services/travel-disclosure.service';
+import { NavigationService } from '../../../common/services/navigation.service';
+import { TravelDataStoreService } from '../../services/travel-data-store.service';
+import { TravelDisclosureService } from '../../services/travel-disclosure.service';
 
 @Component({
     selector: 'app-unsaved-changes-warning',

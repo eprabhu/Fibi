@@ -28,6 +28,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     clearField = new String('true');
     countryClearField = new String('true');
     entityName = '';
+    isInfoExpanded = true;
     mandatoryList = new Map();
     dateValidationList = new Map();
     travelDisclosureRO = new CoiTravelDisclosure();
