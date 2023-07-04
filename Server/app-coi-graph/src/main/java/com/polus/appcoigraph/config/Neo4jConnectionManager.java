@@ -10,27 +10,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class Neo4jConnectionManager {
     private static final int MAX_POOL_SIZE = 10;
-    private static final Driver driver;
-    
+    private static Driver driver;
+
     @Value("${spring.neo4j.uri}")
-    private static String url;
+    private String url;
 
     @Value("${spring.neo4j.authentication.username}")
-    private static String username;
+    private String username;
 
     @Value("${spring.neo4j.authentication.password}")
-    private static String password;
+    private String password;
 
-    static {
-        Config config = Config.builder().withMaxConnectionPoolSize(MAX_POOL_SIZE).build();
-        driver = GraphDatabase.driver(url, AuthTokens.basic(username, password), config);
-    }
-
-    public static Driver getDriver() {
+    public Driver getDriver() {
+        if (driver == null) {
+            Config config = Config.builder().withMaxConnectionPoolSize(MAX_POOL_SIZE).build();
+            driver = GraphDatabase.driver(url, AuthTokens.basic(username, password), config);
+        }
         return driver;
     }
 
-    public static void closeDriver() {
-        driver.close();
+    public void closeDriver() {
+        if (driver != null) {
+            driver.close();
+            driver = null;
+        }
     }
 }
+

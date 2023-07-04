@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.polus</groupId>
-	<artifactId>app-coi-graph</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>app-coi-graph</name>
+	<artifactId>fibi-graph-connect</artifactId>
+	<version>0.0.1</version>
+	<name>fibi-graph-connect</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
