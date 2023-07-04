@@ -367,5 +367,13 @@
   "/personEntity/*": {
     "target": "http://192.168.1.149/coi/",
     "secure": false
+  },
+  "/entity/relationshipTypes": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/entity/approval": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
   }
 }

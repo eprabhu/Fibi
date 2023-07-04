@@ -1788,6 +1788,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			copyPersonEntityQuestionnaireData(personEntityObj, personEntity);
 			personEntityDto.setPersonEntityId(personEntity.getPersonEntityId());
 			personEntityDto.setVersionStatus(personEntity.getVersionStatus());
+			personEntityDto.setUpdateTimestamp(personEntity.getUpdateTimestamp());
+
 		} else {
 			conflictOfInterestDao.activateOrInactivatePersonEntity(personEntityDto);
 			if (personEntityDto.getIsRelationshipActive()) {
@@ -1845,13 +1847,16 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship) {
-		// If entityRelTypeCode = 1 (new) : approve the entity
-		if (entityRelationship.getEntityRelTypeCode().equals("1")) {
-			conflictOfInterestDao.approveEntity(entityRelationship.getEntityId());
-		} else  {
+		CoiEntityDto coiEntityDto = new CoiEntityDto();
+		coiEntityDto.setUpdateTimestamp(conflictOfInterestDao.approveEntity(entityRelationship.getEntityId()));
+		if (entityRelationship.getEntityRelTypeCode() != 1) { //  entityRelTypeCode = 1 (new)
+			entityRelationship.setUpdateUser(AuthenticatedUser.getLoginUserName());
+			entityRelationship.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 			conflictOfInterestDao.saveOrUpdateEntityRelationship(entityRelationship);
 		}
-		return new ResponseEntity<>(entityRelationship, HttpStatus.OK);
+		coiEntityDto.setEntityStatusCode(Constants.COI_ENTITY_STATUS_VERIFIED);
+		coiEntityDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(AuthenticatedUser.getLoginUserFullName()));
+		return new ResponseEntity<>(coiEntityDto, HttpStatus.OK);
 	}
 	
 	@Override

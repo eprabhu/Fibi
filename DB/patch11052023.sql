@@ -141,6 +141,7 @@ ADD COLUMN `PERSON_ENTITY_NUMBER` INT NULL;
 ALTER TABLE `person_entity` 
 ADD COLUMN `REVISION_REASON` VARCHAR(100) NULL;
 
+
 CREATE TABLE `attachment_number_counter` (
   `counter_name` varchar(255) NOT NULL,
   `counter_value` int DEFAULT NULL,
@@ -151,6 +152,10 @@ ALTER TABLE `discl_attachment`
 DROP FOREIGN KEY `DISCL_ATTACHMENT_FK5`;
 ALTER TABLE `discl_attachment` 
 DROP INDEX `DISCL_ATTACHMENT_FK5_idx` ;
+
+DELETE FROM `entity_status` WHERE (`ENTITY_STATUS_CODE` = '3');
+UPDATE `entity_status` SET `DESCRIPTION` = 'Verified' WHERE (`ENTITY_STATUS_CODE` = '1');
+UPDATE `entity_status` SET `DESCRIPTION` = 'Unverified' WHERE (`ENTITY_STATUS_CODE` = '2');
 
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;

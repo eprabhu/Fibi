@@ -1,5 +1,6 @@
 package com.polus.fibicomp.coi.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -945,7 +946,7 @@ public interface ConflictOfInterestDao {
 	 * @param entityId
 	 * @return
 	 */
-	void approveEntity(Integer entityId);
+	Timestamp approveEntity(Integer entityId);
 
 	/**
 	 * Save or Update Entity Relationship

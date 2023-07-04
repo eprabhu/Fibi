@@ -50,7 +50,15 @@ export class EntityManagementService {
 
   getApplicableQuestionnaire(requestObject: any) {
     return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
-}
+  }
+ 
+  getRelationshipTypes() {
+    return this._http.get(this._commonService.baseUrl + '/entity/relationshipTypes');
+  }
+
+  approveEntity(params) {
+    return this._http.put(this._commonService.baseUrl + '/entity/approval', params);
+  }
 
 }
 export class EntityDashboardRequest {
