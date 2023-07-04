@@ -46,7 +46,7 @@ export class RelationshipSummaryComponent implements OnInit {
     ngOnInit() {
         this.fetchCOIDetails();
         this.getEntityProjectRelations();
-        // this.listenForProjectDetails();
+        this.listenForCoiDetails();
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
         this.commentConfiguration.coiSectionsTypeCode = 3;
     }
@@ -68,11 +68,11 @@ export class RelationshipSummaryComponent implements OnInit {
         });
     }
 
-    private listenForProjectDetails() {
-        this.$subscriptions.push(this._dataStoreAndEventsService.$projectDetails.subscribe((data: any) => {
+    private listenForCoiDetails() {
+        this.$subscriptions.push(this._dataStoreAndEventsService.dataEvent.subscribe((data: any) => {
             if (data) {
-                this.selectedProject = data;
-                this.getEntityProjectRelations();
+                // this.selectedProject = data;
+                this.fetchCOIDetails();
             }
         }));
     }

@@ -84,7 +84,7 @@
                     <span class="{{_commonService.getDisclosureConflictBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}">{{relation?.coiProjConflictStatusType?.description}}</span>
                   </td>
                   <td class="border-0 d-flex pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
-                    <button *ngIf="coiDetails.reviewStatusCode== 3 && coiDetails.dispositionStatusCode == 1"
+                    <button *ngIf="coiDetails?.reviewStatusCode== 3 && coiDetails?.dispositionStatusCode == 1"
                       class="btn-primary-icon-svg me-1" type="button" (mouseenter)="isShowHoverWhite[i]= true"
                       (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
                       <span class="btn-secondary-svg"></span>
