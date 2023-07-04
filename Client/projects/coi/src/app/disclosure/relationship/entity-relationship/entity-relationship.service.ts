@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
+import { GetSFIRequestObject } from '../../coi-interface';
 
 class ProjectDetails {
 	projectNumber = '';
@@ -42,9 +43,8 @@ getProjectRelationships(id, disclosureStatusCode, personId) {
     'personId': personId});
 }
 
-getSfiDetails(id, disclosureStatusCode, personId) {
-  return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure',
-  {'disclosureId': id, 'disclosureStatusCode': disclosureStatusCode, 'personId': personId});
+getSfiDetails(params: GetSFIRequestObject) {
+  return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
 }
 
 saveEntityProjectRelation(params, moduleCode, moduleItemId, did, personId) {

@@ -8,6 +8,7 @@ import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
 import { SfiService } from '../sfi/sfi.service';
 import { Subscription } from 'rxjs';
+import { GetSFIRequestObject } from '../coi-interface';
 
 @Component({
   selector: 'app-relationship',
@@ -134,12 +135,23 @@ export class RelationshipComponent implements OnInit {
   }
 
   getSfiDetails() {
-    this.$subscriptions.push(this._sfiService.getSfiDetails(
-      this.disclosureId, this.reviewStatus, this.personId, this.filterType, this.currentPage).subscribe((data: any) => {
+    this.$subscriptions.push(this._sfiService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
         if (data) {
             this.count = data.count;
         }
     }));
+}
+
+getRequestObject() {
+  const REQ_OBJ = new GetSFIRequestObject();
+  REQ_OBJ.currentPage = 0;
+  REQ_OBJ.disclosureId = this.disclosureId;
+  REQ_OBJ.filterType = this.filterType;
+  REQ_OBJ.pageNumber = 0;
+  REQ_OBJ.personId = this.personId;
+  REQ_OBJ.reviewStatusCode = this.reviewStatus;
+  REQ_OBJ.searchWord = '';
+  return REQ_OBJ;
 }
 
 getDependencyDetails() {

@@ -47,33 +47,30 @@
     </div>
     <div class="d-flex flex-fill position-relative">
         <input type="text" placeholder="Search by SFI" class="advance-search-input form-control"
-        [(ngModel)]="searchText ">
+        [(ngModel)]="searchText" (ngModelChange)="getEntities()">
         <a class="searchButton me-3" *ngIf="!searchText">
             <i aria-hidden="true" class="fa fa-search fa-med pt-2 mr-4"></i>
         </a>
-        <a class="searchButton me-3" *ngIf="searchText" (click)="searchText = ''">
+        <a class="searchButton me-3" *ngIf="searchText" (click)="clearSearchText()">
           <i aria-hidden="true" class="fa fa-times fa-med pt-2 mr-4"></i>
         </a>
     </div>
 </div>
 <div class="margin-left-5">
-<ng-container *ngIf="(coiFinancialEntityDetails| SearchFilter : searchText:
-['coiEntity.entityName']) as searchResult;">
   <ng-container
-    *ngFor="let item of searchResult ; let i =index">
-    <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_MODE'"></app-shared-sfi-card>
-</ng-container>
-<div *ngIf="searchResult.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+    *ngFor="let item of coiFinancialEntityDetails ; let i =index">
+    <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'"></app-shared-sfi-card>
+  </ng-container>
+<div *ngIf="coiFinancialEntityDetails?.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
     <nav aria-label="pagination section" class="pagination justify-content-end">
         <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="count" [pageCount]="10">
         </app-pagination>
     </nav>
 </div>
 
-<div *ngIf="!searchResult?.length">
+<div *ngIf="!coiFinancialEntityDetails?.length">
   <app-no-information> </app-no-information>
 </div>
-</ng-container>
 </div>
 
 <div #viewSFIDetailsOverlay [class.overlay]="showSlider">
