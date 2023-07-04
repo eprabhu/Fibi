@@ -123,6 +123,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.responseObject.documentStatusCode = resObject.documentStatusCode;
         this.responseObject.acknowledgeAt = resObject.acknowledgeAt;
         this.responseObject.acknowledgeBy = resObject.acknowledgeBy;
+        this.responseObject.updateTimestamp = resObject.updateTimestamp;
         this._dataStore.manualDataUpdate(this.responseObject);
     }
 
@@ -170,6 +171,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             this.responseObject.adminGroupName = event.adminGroupName || null;
             this.responseObject.reviewStatusCode = event.reviewStatusCode;
             this.responseObject.reviewStatus = event.reviewStatus;
+            this.responseObject.updateTimestamp = event.updateTimestamp;
             this._dataStore.manualDataUpdate(this.responseObject);
         }
     }
