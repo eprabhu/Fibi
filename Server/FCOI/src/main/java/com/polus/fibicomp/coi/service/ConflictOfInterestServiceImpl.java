@@ -1820,12 +1820,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	private void saveOrUpdateCoiConflictHistory(ConflictOfInterestVO vo) {
 		CoiConflictHistory coiConflictHistory =  new CoiConflictHistory();
+		CoiDisclEntProjDetails coiDisclEntProjDetails = conflictOfInterestDao.getProjectRelationship(vo.getDisclosureDetailsId());
 		DisclComment disclComment = conflictOfInterestDao.getDisclEntProjRelationComment(vo.getDisclosureDetailsId());
 		coiConflictHistory.setConflictStatusCode(conflictOfInterestDao.getProjectConflictStatusCode(vo.getDisclosureDetailsId()));
 		coiConflictHistory.setComment(disclComment.getComment());
 		coiConflictHistory.setDisclosureId(vo.getDisclosureId());
 		coiConflictHistory.setDisclosureDetailsId(vo.getDisclosureDetailsId());
-		coiConflictHistory.setUpdateUser(conflictOfInterestDao.getConflictStatusUpdateUser(vo.getDisclosureDetailsId()));
+		coiConflictHistory.setUpdateUser(coiDisclEntProjDetails.getUpdateUser());
+		coiConflictHistory.setUpdateTimestamp(coiDisclEntProjDetails.getUpdateTimestamp());
 		conflictOfInterestDao.saveOrUpdateCoiConflictHistory(coiConflictHistory);
 		conflictOfInterestDao.updateDisclosureUpdateDetails(vo.getDisclosureId());
 	}
