@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -19,34 +19,40 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
   $subscriptions: Subscription[] = [];
   personEntityRelationships:any = [];
   @Input() updateRelationshipDetails :any;
+  @Input() entityId :any;
   isReadMoreBusinessArea = false;
   isReadMoreUniversity = false;
   isReadMoreRelationWith = false;
+  @Output() sfiRelationshipDetails: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
     private _route:ActivatedRoute,private _commonService: CommonService) { }
 
-  // ngOnInit() {
-  //   const ENTITY_ID = this._route.snapshot.queryParamMap.get('entityId');
-  //   this.getEntityDetails(ENTITY_ID);
-  //   // this.sfiServices.isShowSfiNavBar
-  // }
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions)
   }
 
-  ngOnChanges() {
-    const ENTITY_ID = this._route.snapshot.queryParamMap.get('entityId');
-    this.getEntityDetails(ENTITY_ID);
+  ngOnChanges() {;
+    this.getEntityDetails(this.getEntityId());
     if(this.updateRelationshipDetails) {
       this.personEntityRelationships.push(this.updateRelationshipDetails);
     }
+  }
+
+  getEntityId() {
+    return this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId;
   }
 
   getEntityDetails(personEntityId) {
     this.$subscriptions.push(this.entityDetailsServices.getRelationshipEntityDetails(personEntityId).subscribe((res: any) => {
       this.relationshipsDetails = res.personEntity;
       this.personEntityRelationships = res.personEntityRelationships;
+      const relationSFiStatus = {
+        isRelationshipActive: this.relationshipsDetails.isRelationshipActive,
+        versionStatus: this.relationshipsDetails.versionStatus,
+        personId : this.relationshipsDetails.personId
+      };
+      this.sfiRelationshipDetails.emit({relationSFiStatus: relationSFiStatus, personEntityRelationships: this.personEntityRelationships, personEntity: this.relationshipsDetails});
     },_error=>{
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
 
@@ -55,7 +61,6 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
 
   navigateBack() {
     this._router.navigate(['/coi/user-dashboard/entities'])
-    // this._router.navigateByUrl(this.entityDetailsServices.previousURL);
   }
 }
 

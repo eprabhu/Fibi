@@ -7,7 +7,11 @@ export const NO_DATA_FOUND_MESSAGE = '-- No Data --';
 
 export const CREATE_DISCLOSURE_ROUTE_URL = '/coi/create-disclosure/screening';
 export const POST_CREATE_DISCLOSURE_ROUTE_URL = '/coi/disclosure/summary';
+export const CREATE_TRAVEL_DISCLOSURE_ROUTE_URL = '/coi/create-travel-disclosure/travel-details';
+export const POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL = '/coi/travel-disclosure/summary';
 export const HOME_URL = '/coi/user-dashboard';
+export const ADMIN_DASHBOARD_URL = '/coi/admin-dashboard';
 export const DEFAULT_UNIT_FORMAT = 'unitNumber - unitName';
 
-
+export const ADMIN_DASHBOARD_RIGHTS = new Set(['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE',
+    'VIEW_PROJECT_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE']);

@@ -10,6 +10,7 @@ export class COI {
     coiSections: any[];
     proposalIdlinkedInDisclosure: any;
     projectDetail: any;
+    coiReviewerList: ReviewerList[];
 }
 
 export interface CoiConflictStatusType {
@@ -77,6 +78,12 @@ export class CoiDisclosure {
     updateUser: string;
     isDisclosureQuestionnaire: boolean;
     person:any;
+    adminPersonId: string;
+    adminPersonName: string;
+    adminGroupId: number;
+    adminGroupName: string;
+    moduleItemKey: string;
+    title: string;
 }
 export interface UnitAdministratorType {
     code: string;
@@ -256,7 +263,7 @@ export class CommentRequest {
 
 export class SFIDashboardRequestObject {
     advancedSearch = 'L';
-    pageNumber = 30;
+    pageNumber = 20;
     sort = {};
     isDownload = false;
     property16 = '';
@@ -264,6 +271,8 @@ export class SFIDashboardRequestObject {
     property17 = null;
     property18 = null;
     property19 = null;
+    currentPage = '1';
+    filterType = 'ALL';
 }
 
 export interface getApplicableQuestionnaireData {
@@ -328,3 +337,78 @@ export interface ApplicableQuestionnaire {
     NEW_QUESTIONNAIRE_ID: any
     IS_MANDATORY: string
 }
+
+export interface ReviewerList {
+  coiReviewId: number;
+  assigneePersonId: string;
+  disclosureId: number;
+  coiDisclosure: Disclosure;
+  adminGroupId: any;
+  adminGroup: any;
+  reviewStatusTypeCode: string;
+  coiReviewStatus: CoiReviewStatus;
+  description: any;
+  createTimestamp: number;
+  createUser: any;
+  updateTimestamp: number;
+  updateUser: any;
+  assigneePersonName: string;
+}
+
+export interface Disclosure {
+  disclosureId: number;
+  personId: string;
+  person: Person;
+  homeUnit: string;
+  unit: Unit;
+  disclosureNumber: number;
+  versionNumber: number;
+  versionStatus: string;
+  fcoiTypeCode: string;
+  coiDisclosureFcoiType: CoiDisclosureFcoiType;
+  conflictStatusCode: string;
+  coiConflictStatusType: CoiConflictStatusType;
+  dispositionStatusCode: string;
+  coiDispositionStatusType: CoiDispositionStatusType;
+  reviewStatusCode: string;
+  coiReviewStatusType: CoiReviewStatusType;
+  riskCategoryCode: string;
+  coiRiskCategory: CoiRiskCategory;
+  moduleCode: number;
+  moduleItemKey: string;
+  expirationDate: number;
+  certificationText: string;
+  certifiedBy: string;
+  certifiedAt: number;
+  revisionComment: string;
+  adminGroupId: any;
+  adminPersonId: string;
+  updateTimestamp: number;
+  updateUser: string;
+  createUser: any;
+  createTimestamp: number;
+  updateUserFullName: any;
+  createUserFullName: any;
+  numberOfSFI: any;
+  numberOfProposals: any;
+  numberOfAwards: any;
+  coiProjectTypeCode: any;
+  adminGroupName: any;
+  adminPersonName: any;
+}
+export interface CoiRiskCategory {
+  riskCategoryCode: string;
+  description: string;
+  updateTimestamp: number;
+  updateUser: string;
+  isActive: boolean;
+}
+export interface CoiReviewStatus {
+  reviewStatusCode: string;
+  description: string;
+  updateTimestamp: number;
+  updateUser: string;
+  isActive: boolean;
+}
+
+export type ModalType = 'COMPLETE' | 'START';

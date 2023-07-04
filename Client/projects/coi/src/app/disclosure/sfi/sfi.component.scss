@@ -42,3 +42,138 @@
 .r-title::first-letter {
   text-transform: uppercase;
 }
+.advance-search-area {
+  min-height : 45px;
+  display    : flex;
+  align-items: center;
+
+  input {
+    background-color: #f5f5f5;
+  }
+
+  label {
+    position   : absolute;
+    color      : #747474;
+    display    : flex;
+    align-items: center;
+  }
+
+  span:not(:first-child) {
+    padding: 6px 20px !important;
+  }
+}
+
+.filter-active {
+  border    : 2px solid #54BF5B !important;
+  background: #f5fef5 !important;
+}
+
+.chin {
+  min-height : 46px;
+  margin-left: 20px;
+}
+
+.advance-search-input {
+  width : 100%;
+  height: 43px;
+}
+
+.searchButton {
+  position : absolute;
+  right    : 10px;
+  top      : 9px;
+  font-size: 1.5rem;
+  color    : #9E9E9E;
+  cursor   : pointer;
+}
+
+.grey-info {
+  background : #EEEEEE;
+  color      : #202c2e;
+  font-size  : 16px;
+  font-weight: 400;
+  border     : 1px solid #caced2;
+}
+
+.info-text {
+  margin-bottom: 5px;
+  margin-left  : 27px;
+}
+
+.info-icon {
+  top : 7px;
+  height     : 22px;
+  width      : 22px;
+  font-size  : 16px;
+  position   : absolute;
+  margin-left: 2px;
+  color      : #6f7395;
+  cursor     : pointer;
+}
+
+.count {
+  font-weight     : 600;
+  font-size       : 14px;
+  border-radius   : 50%;
+  background-color: #b5d6f3;
+  color           : #007DEC;
+}
+
+.toggle-header-btn {
+  width: 30px;
+  color: #A64040;
+  height: 30px;
+  background-color:  #fff5f5 !important;
+  mat-icon {
+    transform: scale(1.2);
+  }
+}
+
+.toggle-down {
+  position: absolute;
+    bottom: 7px;
+    right: 22px;
+}
+
+.toggle-up {
+  position: absolute;
+    bottom: -4px;;
+    right: 22px;
+    padding: 5px;
+}
+
+.slider-base {
+  position: fixed;
+  z-index: 51;
+  top: 0;
+  right: -83%;
+  width: 80%;
+  height: 100%;
+  padding-left: 0;
+  background-color: #ffecec85;
+  box-shadow: -1px 0px 6px 1px rgba(0, 0, 0, 0.12);
+  transition: right 600ms cubic-bezier(.42, .8, .67, 1.06);
+}
+
+.slider-opened {
+  right: 0 !important;
+}
+
+.slider-container {
+  background-color: #fff;
+  height: 100vh;
+  padding: 0px 10px 10px 10px;
+  overflow: auto;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;   
+  height: 100%; 
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:rgb(74 74 74 / 32%);
+  z-index: 50;
+}

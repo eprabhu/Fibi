@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { CommentConfiguration } from '../coi-interface';
 import { CoiService } from '../services/coi.service';
+import { HttpClient } from '@angular/common/http';
+import { CommonService } from '../../common/services/common.service';
 
 @Injectable()
 export class CoiSummaryEventsAndStoreService {
@@ -18,7 +20,9 @@ export class CoiSummaryEventsAndStoreService {
 
     private storeData: any = {};
 
-    constructor(private _coiService: CoiService) { }
+    constructor( private _coiService: CoiService, 
+                 private _http: HttpClient, 
+                 private _commonService: CommonService ) { }
 
     getData(disclosureId: string, keys?: Array<string>): any {
         if (!keys) {
@@ -50,6 +54,18 @@ export class CoiSummaryEventsAndStoreService {
 
     modifyReviewComment(config: CommentConfiguration) {
         this._coiService.triggerCommentModal(config);
+    }
+
+    getProjConflictStatusType() {
+        return this._http.get(this._commonService.baseUrl + '/getProjConflictStatusType');
+    }
+
+    updateProjectRelationship(params: any) {
+        return this._http.post(this._commonService.baseUrl + '/updateProjectRelationship', params);
+    }
+
+    loadProjectConflictHistory(disclosureDetailsId: any) {
+        return this._http.get(`${this._commonService.baseUrl}/loadProjectConflictHistory/${disclosureDetailsId}`);
     }
 
 }

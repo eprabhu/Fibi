@@ -8,6 +8,7 @@ import { slideInOut } from '../../../../../fibi/src/app/common/utilities/animati
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { SfiService } from '../../disclosure/sfi/sfi.service';
 
 @Component({
   selector: 'app-entity-list',
@@ -17,7 +18,6 @@ import { HTTP_ERROR_STATUS } from '../../app-constants';
 })
 export class EntityListComponent implements OnDestroy, OnInit {
 
-  entityManageId = null;
   activeTabName = 'ALL_ENTITIES';
   isViewAdvanceSearch = true;
   coiElastic = null;
@@ -32,16 +32,17 @@ export class EntityListComponent implements OnDestroy, OnInit {
   statusTypeOptions = 'EMPTY#EMPTY#true#true';
   entityList: any = [];
   $subscriptions: Subscription[] = [];
-  resultCount: number = 0;
+  resultCount = 0;
   isSearchData = false;
   showEntityList = false;
   isShowAllProposalList = false;
   rightList: string;
+  isManageEntity: boolean;
 
   constructor(private _router: Router,
     public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService,
-    private _commonService: CommonService) { }
+    private _commonService: CommonService, public sfiService: SfiService) { }
 
   ngOnInit() {
     this.coiElastic = this._elasticConfig.getElasticForCoi();
@@ -57,7 +58,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
       this.generateLookupArrayForDropdown();
       this.advancedSearch();
     }
-    this.rights()
+    this.checkUserHasRight();
   }
 
   ngOnDestroy() {
@@ -65,8 +66,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.entityManagementService.isShowEntityNavBar = false;
   }
 
-  selectedEntity(event) {
-    this.entityManageId = event;
+  selectedEntity() {
     this.isCoiEditEntity = true;
     this.entityManagementService.isShowEntityNavBar = true;
   }
@@ -88,12 +88,6 @@ export class EntityListComponent implements OnDestroy, OnInit {
       this.isShowAllProposalList = true;
     }
   }
-  rights() {
-    this._commonService.fetchPermissions().then((right: any) => {
-      this.rightList = right;
-    }).catch((error) => {
-    })
-  }
 
   redirectToEntity(coi: any) {
     this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: coi.id } });
@@ -112,9 +106,8 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   addNewEntity() {
-    this.entityManageId = null;
     this.isCoiEditEntity = false;
-    this.entityManagementService.isShowEntityNavBar = true;
+    this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'ENTITY' } });
   }
 
   selectedEvent(event) {
@@ -155,11 +148,6 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.isShowAllProposalList = true;
   }
 
-  updateEntityListDashboard(event) {
-    if (event) {
-      this.viewListOfEntity();
-    }
-  }
 
   generateLookupArrayForDropdown() {
     if (this.entityManagementService.coiRequestObject.property20.length !== 0) {
@@ -185,29 +173,15 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   viewDetails(entityListData) {
-    this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityListData.entityId } })
+    this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityListData.entityId } });
   }
 
-  allEntitiesrightCheck() {
-    if (this.rightList.includes('MANAGE_ENTITY') || this.rightList.includes('VIEW_ENTITY')) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  unverifiedEntitiesrightCheck() {
-    if (this.rightList.includes('MANAGE_ENTITY') || this.rightList.includes('VIEW_ENTITY')) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  highRiskEntitiesrightCheck() {
-    if (this.rightList.includes('MANAGE_ENTITY') || this.rightList.includes('VIEW_ENTITY')) {
-      return true;
-    } else {
-      return false;
-    }
+  actionsOnPageChange(event) {
+    this.entityManagementService.coiRequestObject.currentPage = event;
+    this.viewListOfEntity();
   }
 
+  checkUserHasRight(): void {
+    this.isManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME');
+  }
 }

@@ -1,29 +1,3 @@
-.disclosure-heading {
-  height: 40px;
-  background-color: #E8E8E8;
-}
-
-.triple-card {
-  height: 96px;
-}
-
-.navigation-tabs {
-  height: 43px;
-  background-color: #E4F1FF;
-}
-
-.notes {
-  height: 43px;
-  margin-top: -51px;
-  background-color: #DBDBDB;
-}
-
-$primary-color: #3F79CC;
-$nav-border-color: rgb(219, 219, 219);
-$nav-border-width: 8px;
-$nav-bg-color: #3F79CC;
-$bg-color: #E4F1FF;
-
 @mixin border-radius($radius) {
   -webkit-border-radius: $radius;
   -moz-border-radius: $radius;
@@ -38,15 +12,45 @@ $bg-color: #E4F1FF;
   transform: rotate($deg);
 }
 
+.disclosure-heading {
+  height: 43px;
+  background-color: #E8E8E8;
+}
+
+.triple-card {
+  height: 96px;
+}
+
+.activity-icon {
+  width: 1.5rem;
+  margin-right: 4px;
+  margin-left: -1px;
+}
+
+.status-card-width {
+  width: 280px;
+}
+
+.grey-text {
+  color: #6A7980;
+}
+
+.notes {
+  height: 45px;
+  position: absolute;
+  bottom: -2px;
+  background-color: #DBDBDB;
+}
+
 .nav-progress {
   overflow: hidden;
   margin: 0;
   width: 100%;
-  height: 43px;
-  background-color: $bg-color;
+  height: 45px;
+  background-color: #E4F1FF;
 
   >div {
-    font-size: 14px;
+    font-size: 1.4rem;
     position: relative;
     display: table-cell;
     padding: 14px 0;
@@ -56,21 +60,21 @@ $bg-color: #E4F1FF;
     font-weight: 500;
 
     &.complete {
-      background-color: $nav-bg-color;
+      background-color: #3F79CC;
       color: #FFF;
 
       .arrow {
-        border: $nav-border-width solid $nav-border-color !important;
-        background: $nav-bg-color !important;
+        border: 8px solid rgb(219, 219, 219) !important;
+        background: #3F79CC !important;
       }
     }
 
     &.active {
-      background-color: $primary-color;
+      background-color: #3F79CC;
       color: #FFF;
 
       .arrow {
-        background: $primary-color !important;
+        background: #3F79CC !important;
       }
     }
   }
@@ -93,7 +97,7 @@ $bg-color: #E4F1FF;
       z-index: 2;
       width: 45px;
       height: 45px;
-      border: $nav-border-width solid $nav-border-color;
+      border: 8px solid rgb(219, 219, 219);
       background: transparent;
       @include border-radius(0px);
       @include rotate(45deg);
@@ -110,7 +114,7 @@ $bg-color: #E4F1FF;
   font-weight: 500 !important;
   padding: 1px 0.5rem;
   border: 1px solid #dee2e6 !important;
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 
 .table-negative-margin {
@@ -121,11 +125,6 @@ $bg-color: #E4F1FF;
   margin-top: 25px;
   border-collapse: separate;
   border-spacing: 0 2px;
-  color: #6A7980;
-}
-
-table {
-  color: #6A7980;
 }
 
 .toggle-header-btn {
@@ -139,8 +138,9 @@ table {
 }
 
 .min-height-189 {
-  min-height: 200px;
-  max-height: 200px;
+  min-height: 204px;
+  max-height: 204px;
+  transition: height 0.1s ease-in-out;
 }
 
 .btn-outline-grey {
@@ -159,4 +159,45 @@ table {
   position: sticky;
   top: 51px;
   z-index: 50;
+}
+
+.navigation-tabs {
+  height: 45px;
+  background-color: #E4F1FF;
+}
+.collapse-right-tab {
+  height: 89px;
+  background-color: #E4F1FF;
+  transition: height 0.5s ease-in-out;
+}
+
+.navigation-box {
+  padding: 0 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #606060;
+}
+
+.ash-text {
+  color: #48647F !important;
+}
+
+.navigation-box-content {
+  padding: 10px 0;
+  border-bottom: 2px solid transparent;
+
+  &.active {
+    color: #007DEC;
+    border-bottom: 2px solid #007DEC;
+  }
+}
+
+.moreActionIcon {
+  transform: scale(.9);
+  width: 20px;
+}
+
+.returnIcon {
+  transform: rotate(-0.25turn);
+  transform: scaleX(-1);
 }

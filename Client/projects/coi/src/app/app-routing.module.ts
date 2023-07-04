@@ -2,10 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRouterComponent } from "./common/app-router/app-router.component";
 import { DashboardGuardService } from './common/services/dashboard-guard.service';
-import { EntityManagementGuardService } from './entity-management/entity-management-guard.service';
+import { AdminRouteGuardService } from './common/services/guards/admin-route-guard.service';
 
 const routes: Routes = [
-    // {path: '', redirectTo: 'coi/user-dashboard/disclosures', pathMatch: 'full'}
     {
         path: '', redirectTo: 'coi', pathMatch: 'full'
     },
@@ -30,7 +29,9 @@ const routes: Routes = [
             },
             {
                 path: 'admin-dashboard',
-                loadChildren: () => import('./admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule)
+                loadChildren: () => import('./admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule),
+                canActivate: [AdminRouteGuardService]
+
             },
             {
                 path: 'entity-management',
@@ -49,14 +50,26 @@ const routes: Routes = [
                 loadChildren: () => import('./user/user.module').then(m => m.UserModule)
             },
             {
+                path: 'create-travel-disclosure',
+                loadChildren: () => import('./travel-disclosure/travel-disclosure.module').then(m => m.TravelDisclosureModule)
+            },
+            {
                 path: 'travel-disclosure',
                 loadChildren: () => import('./travel-disclosure/travel-disclosure.module').then(m => m.TravelDisclosureModule)
             },
             {
                 path: 'error-handler',
                 loadChildren: () => import('./error-handler/error-handler.module').then(m => m.ErrorHandlerModule)
+            },
+            {
+              path: 'configuration',
+              loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)
+            },
+            {
+                path: 'create-sfi',
+                loadChildren: () => import('./add-sfi/add-sfi.module').then(m => m.AddSfiModule)
             }
-]
+          ]
     },
 { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
 ];

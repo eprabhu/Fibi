@@ -1,0 +1,23 @@
+<div class="border bg-white rounded-3 p-2 mt-2 hovering-card">
+    <div class="m-0 mb-2 row">
+        <strong class="entity-title fs-16 mt-3">{{entityData?.entityName}}</strong>
+    </div>
+    <div class="m-0 mb-2 row">
+        <div class="col-5 text-secondary fs-14 mt-3">
+            <span class="fw-bold me-2">Entity Type:</span>
+            <span class="fs-14 fw-400">{{entityData?.entityType}}</span>
+        </div>
+        <div class="col-5 text-secondary fs-14 mt-3">
+            <span class="fw-bold me-2"> Country: </span>
+            <span class="fs-14 fw-400">{{entityData?.country}}</span>
+        </div>
+        <div class="bg-white align-items-center col-2 mb-2 d-flex justify-content-end text-secondary"
+            title="Click to view entity details">
+            <button (click)="viewDetails(entityData?.entityId)"
+                class="align-items-center btn btn-outline-secondary d-flex fs-14">
+                <mat-icon class="me-1">visibility</mat-icon>
+                View
+            </button>
+        </div>
+    </div>
+</div>

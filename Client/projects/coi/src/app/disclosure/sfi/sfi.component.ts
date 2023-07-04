@@ -1,12 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { SfiService } from './sfi.service';
 import { DataStoreService } from '../services/data-store.service';
 import { CoiService } from '../services/coi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
+import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
     selector: 'app-sfi',
@@ -14,9 +15,12 @@ import { CommonService } from '../../common/services/common.service';
     styleUrls: ['./sfi.component.scss']
 })
 export class SfiComponent implements OnInit, OnDestroy {
+
+    @ViewChild('viewSFIDetailsOverlay', { static: true }) viewSFIDetailsOverlay: ElementRef;
     $subscriptions: Subscription[] = [];
     coiFinancialEntityDetails: any[] = [];
     searchText: string;
+    searchResult = [];
     dependencies = ['coiDisclosure', 'numberOfSFI'];
     isEditMode = false;
     conflictStatusCode: any;
@@ -24,12 +28,25 @@ export class SfiComponent implements OnInit, OnDestroy {
     personId: any;
     isSFINotAvailable = false;
     reviewStatus: any;
-
+    filterType = 'ACTIVE';
+    currentPage = 1;
+    count: any;
+    showSlider = false;
+    scrollHeight: number;
+    entityId: any;
+    personEntityId: any;
+    entityName: any;
+    isRelationshipActive: false;
+    entityDetails: any;
+    expandInfo = true;
+    isEnableActivateInactivateSfiModal: boolean;
+    
     constructor(
         private _sfiService: SfiService,
         private _dataStore: DataStoreService,
         public _coiService: CoiService,
-        private _router: Router) {
+        private _router: Router,
+        private _commonService: CommonService) {
     }
 
     ngOnInit() {
@@ -41,6 +58,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.addBodyScroll();
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -56,9 +74,10 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     getSfiDetails() {
-        this.$subscriptions.push(this._sfiService.getSfiDetails(this.disclosureId, this.reviewStatus, this.personId).subscribe((data: any) => {
+        this.$subscriptions.push(this._sfiService.getSfiDetails(this.disclosureId, this.reviewStatus, this.personId, this.filterType, this.currentPage).subscribe((data: any) => {
             if (data) {
-                this.coiFinancialEntityDetails = data;
+                this.count = data.count;
+                this.coiFinancialEntityDetails = data.personEntities;
             }
         }));
     }
@@ -83,6 +102,23 @@ export class SfiComponent implements OnInit, OnDestroy {
         );
     }
 
+    viewSlider(event) {
+        this.showSlider = event.flag;
+        this.entityId = event.entityId;
+        document.body.classList.add('overflow-hidden');
+        setTimeout(() => {
+            const slider = document.querySelector('.slider-base');
+            slider.classList.add('slider-opened');
+        });
+    }
+
+    setFilter(filterType) {
+        this.filterType = filterType;
+        this.currentPage = 1;
+        this.searchText = '';
+        this.getSfiDetails();
+    }
+
     removeEntityId() {
         this._router.navigate([], {
           queryParams: {entityId: null},
@@ -93,5 +129,57 @@ export class SfiComponent implements OnInit, OnDestroy {
     closeSFIInfo() {
         this._coiService.isShowSFIInfo = false;
     }
+
+    actionsOnPageChange(event) {
+        if(this.currentPage != event) {
+            this.currentPage = event;
+            this.searchText = '';
+            this.getSfiDetails();
+        }
+    }
+
+    hideSfiNavBar() {
+        this.addBodyScroll();
+        let slider = document.querySelector('.slider-base');
+        slider.classList.remove('slider-opened');        
+        setTimeout(() => {
+            this.showSlider = false;
+        },500);
+    }
+
+    addBodyScroll() {
+        document.body.classList.remove('overflow-hidden');
+        document.body.classList.add('overflow-auto');
+    }
+
+    deleteSFIConfirmation(event, i) {
+        this.personEntityId = event.eId;
+        this.entityName = this.coiFinancialEntityDetails.find(ele => ele.personEntityId === this.personEntityId).coiEntity.entityName;
+        document.getElementById('hidden-delete-button').click();
+    }
+
+    deleteSFI() {
+        this._sfiService.deleteSFI(this.personEntityId).subscribe((data:any) => {
+            this.currentPage = 1;
+            this.getSfiDetails();
+            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'SFI deleted successfully.');
+        }, err=> {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'SFI deletion canceled.');
+        })
+      }
+
+      activateDeactivateEvent(event) {
+        this.isEnableActivateInactivateSfiModal = true;
+        this.personEntityId = event.personEntityId;
+        this.entityName = event.coiEntity.entityName;
+        this.isRelationshipActive = event.isRelationshipActive;
+      }
+
+      closeActivateInactivateSfiModal(event) {
+          this.isEnableActivateInactivateSfiModal = false;
+          if(event) {
+            this.getSfiDetails();
+          }
+      }
 
 }

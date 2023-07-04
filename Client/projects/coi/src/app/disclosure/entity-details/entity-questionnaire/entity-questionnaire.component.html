@@ -14,11 +14,11 @@
 <div class="ml-15 mr-10 questionnaire-position">
       <div *ngIf="definedRelationships?.length">
         <app-view-questionnaire-list *ngIf="definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
-          [externalSaveEvent]="$externalSaveEvent" [isShowSave]="false">
+          [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)">
         </app-view-questionnaire-list>
         </div>
 </div>
-<div *ngIf="!definedRelationships?.length && !isEditMode" class="mx-4 mt-4 on-data-position">
+<div *ngIf="!definedRelationships?.length" class="mx-4 mt-4 on-data-position">
   <div class="shadow-sm">
     <app-no-information></app-no-information>
   </div>
@@ -31,7 +31,7 @@
     <div class="modal-content">
       <div class="modal-header custom-height">
         <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relations</h3>
-        <button type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
+        <button title="Click to close the relationship button" type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
           (click)="clearModal()"></button>
       </div>
       <div class="modal-body">
@@ -71,7 +71,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal"
           (click)="clearModal()">Cancel</button>
-        <button type="button" class="btn btn-primary mr-10 fs-14" (click)="addRelation()">Add Relation</button>
+        <button title="Click to Add Relationship" type="button" class="btn btn-primary fs-14" (click)="addRelation()">Add Relation</button>
       </div>
     </div>
   </div>

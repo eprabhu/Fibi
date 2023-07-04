@@ -26,14 +26,12 @@
     </button>
   </h3>
 </div>
-
 <ng-container *ngIf="isCollapsed">
-  <div class="px-2 mb-2 mt-3"
-    *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
-    <app-shared-sfi-card [reqObject] = 'item' [referredFrom]="'SFI_SUMMARY'"></app-shared-sfi-card>
-  </div>
-    <div *ngIf="!coiFinancialEntityDetails.length">
-      <app-no-information> </app-no-information>
+  <ng-container *ngIf="coiFinancialEntityDetails?.length">
+    <div class="px-2 mb-2 mt-3"
+      *ngFor="let item of coiFinancialEntityDetails | SearchFilter : searchText :['coiEntity.coiEntityName'] ; let i =index">
+      <app-shared-sfi-card [reqObject]='item' [referredFrom]="'SFI_SUMMARY'"></app-shared-sfi-card>
     </div>
-
+  </ng-container>
+    <app-no-information *ngIf="!coiFinancialEntityDetails?.length"> </app-no-information>
 </ng-container>

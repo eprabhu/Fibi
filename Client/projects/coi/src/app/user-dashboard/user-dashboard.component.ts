@@ -20,7 +20,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     deployMap = environment.deployUrl;
     hasFCOI: any;
-    hasActiveFCOI = false;
     isModalOpen = false;
     reviseObject: any = { revisionComment: null, disclosureId: null };
     isReadMore = false;
@@ -36,6 +35,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     to disclose and maintain your Significant Financial Interests; identify potential areas of concern related to your
      proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
     $subscriptions = [];
+    isShowCreateOrReviseModal = false;
+    triggeredFrom = '';
 
     constructor(public service: UserDashboardService, private _router: Router, public commonService: CommonService,
         public sfiService: SfiService, public router: Router) {
@@ -49,7 +50,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
     }
-
+ 
     getActiveDisclosure() {
         this.$subscriptions.push(this.service.getActiveDisclosure().subscribe((res: any) => {
             this.service.activeDisclosures = res.coiDisclosures || [];
@@ -61,41 +62,38 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         this.hasFCOI = this.service.activeDisclosures.find(disclosure =>
             disclosure.fcoiTypeCode == '1'
         );
-        this.hasActiveFCOI = this.hasFCOI ? this.hasFCOI.reviewStatusCode == '4' : false;
-    }
-
-    clearModal(): void {
-        this.reviseObject.revisionComment = null;
-        document.getElementById('triggerReviseModal').click();
     }
 
     openReviseModal() {
-        this.reviseObject = { revisionComment: null, disclosureId: null };
-        this.reviseObject.disclosureId = this.hasFCOI.disclosureId;
+        this.reviseObject = {revisionComment: null, disclosureId: null};
         this.reviseObject.revisionComment = '';
-        //  openModal('reviewConfirmationModal');
-    }
-
-    reviseDisclosure() {
-        document.getElementById('triggerReviseModal').click();
-        this.$subscriptions.push(this.service.reviseDisclosure(this.reviseObject)
-            .subscribe((data: any) => {
-                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'New version of disclosure created.');
-                this._router.navigate(['/coi/disclosure/summary'], {
-                    queryParams: {
-                        disclosureId: data.coiDisclosure.disclosureId
-                    }
-                });
-            },
-                err => {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
-                        err.error.errorMessage : 'Error in creating new version. Please try again.');
-                }));
+        this.triggeredFrom = 'FCOI_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
     }
 
     getAllRemaindersList() {
         this.$subscriptions.push(this.service.getAllRemaindersList().subscribe((res: any) => {
         }));
+    }
+
+    outputEventAction(event) {
+        if(event.closeModal != null) {
+            this.isShowCreateOrReviseModal = event.closeModal;
+        }
+    }
+
+    openProjectDisclosure() {
+        this.triggeredFrom = 'PROJECT_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
+    }
+
+    openTravelDisclosure(): void {
+        this.triggeredFrom = 'TRAVEL_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
+    }
+    
+    openCreateSFI() {
+        this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
     }
 
 }

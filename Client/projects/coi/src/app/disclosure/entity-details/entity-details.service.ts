@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../../app/common/services/common.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +10,11 @@ export class EntityDetailsService {
 
   previousURL = '';
   lookups: any;
-  entityDetails:any;
   $entityDetailsTest = new BehaviorSubject<object>({});
+  globalSave$: Subject<any> = new Subject<any>();
 
+
+  $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
   isExpanded = true;
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
@@ -25,8 +27,8 @@ export class EntityDetailsService {
     return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
   }
 
-  addSFILookUp(tabName) {
-    return this._http.get(`${this._commonService.baseUrl}/getRelationshipLookup/${tabName}`);
+  async addSFILookUp(tabName): Promise<any> {
+    return this._http.get(`${this._commonService.baseUrl}/getRelationshipLookup/${tabName}`).toPromise();
   }
 
   getCoiEntityDetails(personEntityId) {
@@ -37,8 +39,8 @@ export class EntityDetailsService {
     return this._http.get(`${this._commonService.baseUrl}/getPersonEntityDetails/${personEntityId}`);
   }
 
-  getPersonEntityRelationship(params){
-    return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship',params)
+  getPersonEntityRelationship(params) {
+    return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship', params);
   }
 
 }

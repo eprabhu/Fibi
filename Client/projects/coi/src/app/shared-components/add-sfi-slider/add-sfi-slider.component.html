@@ -1,0 +1,10 @@
+<div #sfiNavOverlay [class.overlay]="sfiService?.isShowSfiNavBar">
+<div class="slider-base" *ngIf="sfiService?.isShowSfiNavBar">
+  <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
+  <div class="slider-container p-0">
+    <app-add-sfi *ngIf="sfiService?.isShowSfiNavBar" [coiEntityManageId]="coiEntityManageId"
+    [isEditEntity]="isEditEntity" [isSlider]="true" [modifyType]="modifyType" [revisionReason]="revisionReason"
+    [disclosureDetails]="disclosureDetails" (emitUpdateEvent)="emitEvent($event)"></app-add-sfi>  
+  </div>
+</div>
+</div>

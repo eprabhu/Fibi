@@ -1,28 +1,24 @@
 export class CoiTravelDisclosure {
-    travelDisclosureId: number;
-    travelNumber: number;
-    versionNumber: number;
-    versionStatus = 'ACTIVE';
-    personId:string
+    travellerTypeCode: Array<string> = [];
     entityId: number;
     entityNumber: number;
-    travelStatusCode: string;
-    isSponsoredTravel: boolean;
     travelTitle: string;
-    purposeOfTheTrip: string;
-    travelAmount: number;
-    travelStartDate: any;
-    noOfDays: number;
+    travelState: string;
     destinationCity: string;
     destinationCountry: string;
+    purposeOfTheTrip: string;
     relationshipToYourResearch: string;
-    travelState: string;
+    travelAmount: number;
+    travelStartDate: any;
     travelEndDate: any;
-    acknowledgeBy: string;
-    acknowledgeAt: string;
-    travelTravellerId: string;
-    travellerTypeCode: Array<string> = [];
     isInternationalTravel: boolean;
+    isSponsoredTravel: boolean;
+    personId: string;
+    noOfDays: number;
+    homeUnit: string;
+    description: string;
+    travelDisclosureId?: number;
+    travelEntityName?: string;
 }
 
 export interface TravelDisclosureTraveller {
@@ -33,4 +29,83 @@ export interface TravelDisclosureTraveller {
     travelStatusCode?: string;
     updateTimestamp: number;
     updateUser: string;
+}
+
+export interface TravelCreateModalDetails {
+    homeUnit: null;
+    description: string;
+    personId: string;
+    homeUnitName: null;
+}
+
+export class TravelDisclosureResponseObject {
+    travelDisclosureId: number;
+    versionStatus: string;
+    entityId: number;
+    entityNumber: number;
+    travelEntityName: string;
+    travelTitle: string;
+    purposeOfTheTrip: string;
+    travelAmount: number;
+    travelStartDate: number;
+    travelEndDate: number;
+    destinationCity: string;
+    destinationCountry: string;
+    travelState: string;
+    relationshipToYourResearch: string;
+    acknowledgeBy: string;
+    acknowledgeAt: number;
+    updateTimestamp: number;
+    updateUser: string;
+    createUser: string;
+    createTimestamp: number;
+    travellerHomeUnit: string;
+    description: any;
+    travelSubmissionDate: number;
+    travelDisclosureStatus: string;
+    travelDisclosureStatusCode: string;
+    dispositionStatus: any;
+    dispositionStatusCode: any;
+    reviewStatus: string;
+    reviewStatusCode: string;
+    adminPersonId: string;
+    adminGroupId: any;
+    adminPersonName: string;
+    adminGroupName: any;
+    homeUnitNumber: string;
+    homeUnitName: string;
+    isInterNationalTravel: boolean;
+    travellerTypeCodeList: {};
+    personId: string;
+    personFullName: string;
+    entityTypeCode: string;
+    entityType: any;
+    countryCode: string;
+    country: string;
+    certifiedBy: string;
+    certifiedAt: number;
+    documentStatusCode: string;
+    documentStatus: string;
+    disclosureStatus: string;
+    disclosureStatusCode: string;
+}
+
+export interface EndpointOptions {
+    contextField: string;
+    formatString: string;
+    path: string;
+    defaultValue: string;
+    params: string;
+}
+
+export class EntityData {
+    country: string;
+    entityId: string | number;
+    entityType: string;
+    entityName: string;
+}
+
+export interface TravelHistoryRO {
+    personId: String;
+    entityNumber: number;
 }

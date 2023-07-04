@@ -10,4 +10,10 @@ public interface GeneralService {
      * @return List<String> rights
      */
     ResponseEntity<Object> fetchAllCoiRights();
+
+    /**
+     *
+     * @return
+     */
+    ResponseEntity<Object> fetchAdminGroupsAndPersons();
 }

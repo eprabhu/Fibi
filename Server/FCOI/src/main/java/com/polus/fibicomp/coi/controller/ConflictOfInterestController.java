@@ -6,7 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
+import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.service.GeneralService;
+import com.polus.fibicomp.constants.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
@@ -30,6 +39,7 @@ import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
@@ -49,7 +59,9 @@ public class ConflictOfInterestController {
 	@Autowired
 	private GeneralService generalService;
 
-	
+	@Autowired
+	private UserDocumentAuthorization documentAuthorization;
+
 	@GetMapping("hello")
 	public ResponseEntity<String> hello() {
 		return new ResponseEntity<>("Hello from COI", HttpStatus.OK);
@@ -64,6 +76,9 @@ public class ConflictOfInterestController {
 	@GetMapping("/loadDisclosure/{disclosureId}")
 	public ResponseEntity<Object> loadDisclosure(@PathVariable("disclosureId") Integer disclosureId) {
 		logger.info("Request for loadDisclosure");
+		if (!documentAuthorization.isAuthorized(Constants.COI_MODULE_CODE, disclosureId.toString(), AuthenticatedUser.getLoginPersonId())) {
+			return new ResponseEntity<>("Not Authorized to view this Disclosure",HttpStatus.FORBIDDEN);
+		}
 		return conflictOfInterestService.loadDisclosure(disclosureId);
 	}
 
@@ -119,7 +134,6 @@ public class ConflictOfInterestController {
 	@PostMapping("/getEntityProjectRelations")
 	public String getEntityProjectRelations(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for getEntityProjectRelations");
-		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
 		return conflictOfInterestService.getEntityProjectRelations(vo);
 	}
 
@@ -393,12 +407,6 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getAllCoiTravelDisclosureList();
 	}
 
-	@GetMapping(value = "/getCoiTravelDisclosureDetailsById/{travelDisclosureId}")
-	public CoiTravelDisclosure getCoiTravelDisclosureDetailsById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
-		logger.info("Request for getCoiTravelDisclosureById");
-		return conflictOfInterestService.getCoiTravelDisclosureDetailsById(travelDisclosureId);
-	}
-
 	@GetMapping("/loadTravellerTypesLookup")
 	public ResponseEntity<Object> loadTravellerTypesLookup() {
 		logger.info("Requesting for loadTravellerTypesLookup");
@@ -419,5 +427,118 @@ public class ConflictOfInterestController {
 	@GetMapping("/checkEntity/{entityId}/added")
 	public ResponseEntity<Object> checkEntityAdded(@PathVariable("entityId") Integer entityId) {
 		return new ResponseEntity<>(conflictOfInterestService.checkEntityAdded(entityId), HttpStatus.OK);
+	}
+
+	@GetMapping("/validate/{moduleCode}/disclosure/{moduleItemId}")
+	public ResponseEntity<Object> validateDisclosure(@PathVariable("moduleCode") Integer moduleCode,
+												   @PathVariable("moduleItemId") String moduleItemId) {
+		return conflictOfInterestService.validateDisclosure(moduleCode, moduleItemId);
+	}
+
+	@PatchMapping("/disclosure/assignAdmin")
+	public ResponseEntity<Object> assignDisclosureAdmin(@RequestBody CoiDisclosureDto dto) {
+		return conflictOfInterestService.assignDisclosureAdmin(dto);
+	}
+	
+	@GetMapping(value = "/loadTravelDisclosure/{travelDisclosureId}")
+	public ResponseEntity<Object> loadTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Request for loadTravelDisclosureById");
+		return conflictOfInterestService.loadTravelDisclosure(travelDisclosureId);
+	}
+
+	@PatchMapping("/travelDisclosure/assignAdmin")
+	public ResponseEntity<Object> assignTravelDisclosureAdmin(@RequestBody CoiAssignTravelDisclosureAdminDto dto) {
+		return conflictOfInterestService.assignTravelDisclosureAdmin(dto);
+	}
+
+	@PostMapping("/certifyTravelDisclosure")
+	public ResponseEntity<Object> certifyTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for certifyTravelDisclosure");
+		return conflictOfInterestService.certifyTravelDisclosure(vo);
+	}
+
+	@PostMapping("/submitTravelDisclosure")
+	public ResponseEntity<Object> submitTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for submitting TravelDisclosure");
+		return conflictOfInterestService.submitTravelDisclosure(vo);
+	}
+	
+	@GetMapping(value = "/withdrawTravelDisclosure/{travelDisclosureId}")
+	public ResponseEntity<Object> withdrawTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Requesting for withdrawing TravelDisclosure");
+		return conflictOfInterestService.withdrawTravelDisclosure(travelDisclosureId);
+	}
+	
+	@GetMapping(value = "/approveTravelDisclosure/{travelDisclosureId}")
+	public ResponseEntity<Object> approveTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Requesting for approving TravelDisclosure");
+		return conflictOfInterestService.approveTravelDisclosure(travelDisclosureId);
+	}
+	
+	@GetMapping(value = "/returnTravelDisclosure/{travelDisclosureId}")
+	public ResponseEntity<Object> returnTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Requesting for returning TravelDisclosure");
+		return conflictOfInterestService.returnTravelDisclosure(travelDisclosureId);
+	}
+
+	@GetMapping("/adminGroup/adminPersons")
+	public ResponseEntity<Object> fetchAdminGroupsAndPersons() {
+		return generalService.fetchAdminGroupsAndPersons();
+	}
+
+	@GetMapping("/validateConflicts/{disclosureId}")
+	public ResponseEntity<Object> validateConflicts(@PathVariable("disclosureId") Integer disclosureId) {
+		logger.info("Requesting for validateConflicts");
+		return conflictOfInterestService.validateConflicts(disclosureId);
+	}
+
+	@GetMapping("/evaluateValidation/{disclosureId}")
+	public ResponseEntity<Object> evaluateValidation(@PathVariable("disclosureId") Integer disclosureId) {
+		logger.info("Requesting for evaluateValidation");
+		return conflictOfInterestService.evaluateValidation(disclosureId);
+	}
+
+	@GetMapping("/getProjConflictStatusType")
+	public ResponseEntity<Object> getProjConflictStatusType() {
+		logger.info("Requesting for getProjConflictStatusType");
+		return conflictOfInterestService.getProjConflictStatusType();
+	}
+
+	@DeleteMapping("/personEntity/{personEntityId}")
+	public ResponseEntity<Object>deletePersonEntity(@PathVariable("personEntityId") Integer personEntityId) {
+		return conflictOfInterestService.deletePersonEntity(personEntityId);
+	}
+
+	@PostMapping(value = "/updateProjectRelationship")
+	public ResponseEntity<Object> updateProjectRelationship(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Request for updateProjectRelationship");
+		return conflictOfInterestService.updateProjectRelationship(vo);
+	}
+
+
+	@PutMapping("/entity/activateInactivate")
+	public ResponseEntity<Object> activateOrInactivateEntity(@RequestBody CoiEntityDto coiEntityDto) {
+		return conflictOfInterestService.activateOrInactivateEntity(coiEntityDto);
+	}
+
+	@PutMapping("/personEntity/activateInactivate")
+	public ResponseEntity<Object> activateOrInactivatePersonEntity(@RequestBody PersonEntityDto personEntityDto) {
+		return conflictOfInterestService.activateOrInactivatePersonEntity(personEntityDto);
+	}
+
+	@GetMapping("/entity/relationshipTypes")
+	public ResponseEntity<Object> fetchAllRelationshipTypes() {
+		return conflictOfInterestService.fetchAllRelationshipTypes();
+	}
+
+	@PutMapping("/entity/approval")
+	public ResponseEntity<Object> approveEntity(@RequestBody EntityRelationship entityRelationship) {
+		return conflictOfInterestService.approveEntity(entityRelationship);
+	}
+	
+	@PostMapping(value = "/loadTravelDisclosureHistory")
+	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Request for loadTravelDisclosureHistory");
+		return conflictOfInterestService.loadTravelDisclosureHistory(vo.getPersonId(), vo.getEntityNumber());
 	}
 }

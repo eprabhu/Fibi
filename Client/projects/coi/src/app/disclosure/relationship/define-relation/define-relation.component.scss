@@ -1,93 +1,13 @@
-.fixed-tree {
-  z-index : 1002;
-  position: fixed;
-  right   : 8px;
-  top     : 0px;
-  width: 80%;
-  height: 100%;
-}
-
-.relationship-content {
-  // height: 90vh;
-  // width             : 80%;
-  z-index           : 5;
-  // position          : relative;
-  background        : #fff;
-  padding           : 10px;
-  border-radius     : 5px;
-  -moz-box-shadow   : 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-  box-shadow        : 0 2px 2px 0 #0000001a, 0 3px 1px -2px #0000001a, 0 1px 5px 0 #0003;
-  overflow          : auto;
-  // transform      : translateX(-2px);
-  // transition     : width 2s, transform 2s;
-}
-
-.overlay {
-  position        : fixed;
-  /* Sit on top of the page content */
-  display         : none;
-  /* Hidden by default */
-  width           : 100%;
-  /* Full width (cover the whole page) */
-  height          : 100%;
-  /* Full height (cover the whole page) */
-  top             : 0;
-  left            : 0;
-  right           : 0;
-  bottom          : 0;
-  background-color: rgba(0, 0, 0, 0.13);
-  /* Black background with opacity */
-  z-index         : 1002;
-  /* Specify a stack order in case you're using a different order for other elements */
-  cursor          : pointer;
-  /* Add a pointer on hover */
-}
-
-.round-button {
-  border-radius: 50%;
-  padding      : 7px;
-  width        : 28px;
-  height       : 31px;
-  border       : 1px solid;
-  position     : relative;
-}
-
-.show-chat {
-  position: fixed;
-  left    : 188px;
-  top     : 64px;
-  z-index : 999;
-}
-
-.show-chat-icon {
-  background   : #fff;
-  display      : inline-block;
-  width        : 50px;
-  height       : 50px;
-  text-align   : center;
-  border-radius: 50%;
-  line-height  : 54px;
-  box-shadow   : 0 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%), 0 1px 18px 0 rgb(0 0 0 / 12%);
-  color        : #7c7c7c;
-  font-size    : 25px;
-  cursor       : pointer;
-}
-
 .label-text {
-  font-weight: 500;
-  color      : #48647f;
+  font-weight: 700;
+  color      : #6A7980;
   font-size  : 14px;
 }
 
 .grey-text {
   font-size: 14px;
-  color: #6a7980;
+  color: #48647F;
   margin-left: 8px;
-  font-weight: 500;
-}
-
-.table {
-  width: 99%;
 }
 
 .btn-outline-secondary {
@@ -97,31 +17,14 @@
     height: 35px;
 }
 
-.inner-card {
-  box-shadow: 0 0px 4px rgba(62, 57, 107, .2);
-}
-
-.outer-card {
-  // height: 100vh;
-  box-shadow: 0 0px 8px rgba(53, 49, 80, .2);
-}
-
-.select-default {
-  appearance: auto;
-}
-
-.entity-title {
-  color: #242424;
-}
-
 .active-ribbon {
   color: #fff;
   width: max-content;
   height: 27px;
   background: #949494;
   position: relative;
-  left: -16px;
-  top: -5px;
+  left: -13px;
+  top: -3px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -139,15 +42,20 @@
   }
 }
 
-.fixed-header {
-  max-height: 640px;
-  height    : auto;
-  overflow-x: hidden;
+.info-text{
+    margin-left: 27px;
 }
 
-.fixed-th {
-  position: sticky;
-  top     : -1px;
+.ml-11 {
+  margin: 11px;
+}
+
+.margin-top-23 {
+  margin-top: -33px;
+}
+
+.pl-6 {
+  padding-left: 6px;
 }
 
 .info-icon {
@@ -156,7 +64,7 @@
   width      : 22px;
   font-size  : 16px;
   position   : absolute;
-  top        : 17px;
+  top: 10px;  
   margin-left: 2px;
   color      : #6f7395;
   cursor     : pointer;
@@ -166,13 +74,6 @@
   color: #9e9e9e !important;
   font-size: 14px;
   margin-left: 8px;
-}
-
-// .table-secondary {
-//   color : #242424;
-// }
-.table-data {
-  color: #6A7980;
 }
 
 .mandatory {
@@ -185,76 +86,13 @@
   display: block;
 }
 
-.button-align {
-  margin-top: 24px;
-}
 
-.success-toast {
-  background-color: #6cc974;
-}
-
-.error-toast {
-  background-color: #ffe6e7;
-}
-table {
-  th {
-    height: 40px;
-    vertical-align: middle;
-    background-color: #f0f2f3 !important;
-  }
-  td:first-child {
-    color: #48647f;
-  }
-  thead {
-    tr:first-child {
-      outline: 1px solid #dddddd;
-    }
-  }
-  tr {
-    border-style: hidden;
-    &:nth-child(even) {
-      background-color: #fafafa;
-    }
-    td:last-child {
-      width: 1%;
-      white-space: nowrap;
-    }
-  }
-}
-
-
-.scrollable-table {
-  max-height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: auto;
-  overscroll-behavior: contain;
-}
-
-.scrollable-table thead {
-  position: sticky !important;
-  top: 0;
-  z-index: 1;
-}
-
-::-webkit-scrollbar {
-  width: .4em;
-}
-
-::-webkit-scrollbar-button {
-  display: none;
-}
-
-::-webkit-scrollbar-track-piece {
-  background: #eee
-}
-
-::-webkit-scrollbar-thumb {
-  background: #ccc
-}
-
-.disable-scroll {
-    overflow-y: hidden !important;
+  .grey-info {
+    background: #EEEEEE;
+    color: #202c2e;
+    font-size: 16px;
+    font-weight: 400;
+    border: 1px solid #caced2;
 }
 
 .textarea-overflow-table{
@@ -274,4 +112,143 @@ table {
 .area-position{
   position: relative;
   top: 9px;
+}
+
+.btn-primary {
+  height: 33px;
+}
+
+.tableSkin th {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.header-card {
+  background-color: #F0F2FA;
+  position: sticky;
+}
+
+.slider-base {
+  position: fixed;
+  z-index: 51;
+  top: 0;
+  right: -83%;
+  width: 80%;
+  height: 100%;
+  padding-left: 0;
+  background-color: #ffecec85;
+  box-shadow: -1px 0px 6px 1px rgba(0, 0, 0, 0.12);
+  transition: right 600ms cubic-bezier(.42, .8, .67, 1.06);
+}
+
+.slider-opened {
+  right: 0 !important;
+}
+
+.slider-container {
+  background-color: #fff;
+  height: 100vh;
+  padding: 0px 10px 10px 10px;
+  overflow: auto;
+}
+
+.btn-container {
+  position: relative;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.close-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  color: white;
+  background-color: red;
+  position: absolute;
+  left: -25px;
+  top: 10px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background-color: #b30000;
+}
+
+.slider-heading {
+  background-color: #606060;
+  padding: 10px;
+  color: azure;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.relationship-details-box {
+  width: 100%;
+  margin-top: 10px;
+  // height: 118px;
+}
+
+.relationship-info {
+  // height: 30px;
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+}
+
+.relationship-sfi-header {
+  width: 100%;
+  color: #333;
+  background-color: #f0f2f3;
+  border: 1px solid #d7dbdf;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-top: 10px;
+}
+
+.mt-27 {
+  margin-top: 27px;
+}
+
+.relationship-sfi-data {
+  width: 100%;
+  display: flex;
+  margin-bottom: 8px;
+  background-color: #f5f5f5;
+  border-left: 1px solid #d7dbdf;
+  border-right: 1px solid #d7dbdf;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #d7dbdf;
+}
+
+.border-top {
+  border-top: 1px solid #d7dbdf;
+}
+.white-bg{
+  background-color: #ffff;
+}
+.sfi-data {
+  height: 15px;
+  width: 100%;
+  background-color: #fabc5f;
+  margin: 5px;
+  display: grid;
+  place-content: center;
+  color: azure;
+}
+
+.overlay {
+  position: fixed; /* Sit on top of the page content */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:rgb(74 74 74 / 32%);
+  z-index: 50; /* Specify a stack order in case you're using a different order for other elements */
 }

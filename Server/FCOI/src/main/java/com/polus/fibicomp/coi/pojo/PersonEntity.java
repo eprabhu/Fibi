@@ -14,6 +14,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.polus.fibicomp.person.pojo.Person;
+import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
@@ -27,6 +28,9 @@ public class PersonEntity implements Serializable {
 	@Column(name = "PERSON_ENTITY_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer personEntityId;
+
+	@Column(name = "PERSON_ENTITY_NUMBER")
+	private Integer personEntityNumber;
 	
 	@Column(name = "PERSON_ID")
 	private String personId;
@@ -38,7 +42,7 @@ public class PersonEntity implements Serializable {
 	@Column(name = "ENTITY_ID")
 	private Integer entityId;
 	
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true, cascade = CascadeType.REFRESH)
 	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ENTITY_FK2"), name = "ENTITY_ID", referencedColumnName = "ENTITY_ID", insertable = false, updatable = false)
 	private CoiEntity coiEntity;
 	
@@ -90,6 +94,9 @@ public class PersonEntity implements Serializable {
 	@Column(name = "CREATE_TIMESTAMP")
 	private Timestamp createTimestamp;
 
+	@Column(name = "REVISION_REASON")
+	private String revisionReason;
+
 	@Transient
 	private List<PersonEntityRelationship> personEntityRelationships;
 	
@@ -98,6 +105,18 @@ public class PersonEntity implements Serializable {
 
 	@Transient
 	private  String personFullName;
+	
+	@Transient
+	private  Unit unit;
+	
+	@Transient
+	private  String relationshipTypes;
+	
+	@Transient
+	private  String designation;
+
+	@Transient
+	private String updateUserFullName;
 
 	public Integer getPersonEntityId() {
 		return personEntityId;
@@ -274,5 +293,52 @@ public class PersonEntity implements Serializable {
 	public void setValidPersonEntityRelTypes(List<ValidPersonEntityRelType> validPersonEntityRelTypes) {
 		this.validPersonEntityRelTypes = validPersonEntityRelTypes;
 	}
-	
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+
+	public String getRelationshipTypes() {
+		return relationshipTypes;
+	}
+
+	public void setRelationshipTypes(String relationshipTypes) {
+		this.relationshipTypes = relationshipTypes;
+	}
+
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+
+	public Integer getPersonEntityNumber() {
+		return personEntityNumber;
+	}
+
+	public void setPersonEntityNumber(Integer personEntityNumber) {
+		this.personEntityNumber = personEntityNumber;
+	}
+
+	public String getRevisionReason() {
+		return revisionReason;
+	}
+
+	public void setRevisionReason(String revisionReason) {
+		this.revisionReason = revisionReason;
+	}
+
+	public String getUpdateUserFullName() {
+		return updateUserFullName;
+	}
+
+	public void setUpdateUserFullName(String updateUserFullName) {
+		this.updateUserFullName = updateUserFullName;
+	}
 }

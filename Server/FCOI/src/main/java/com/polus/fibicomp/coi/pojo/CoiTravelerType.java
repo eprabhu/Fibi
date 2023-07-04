@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 @Entity
-@Table(name = "COI_TRAVELER_TYPE")
+@Table(name = "COI_TRAVELER")
 public class CoiTravelerType implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

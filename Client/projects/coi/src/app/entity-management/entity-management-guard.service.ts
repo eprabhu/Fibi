@@ -1,29 +1,20 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { CanActivate, Router } from '@angular/router';
 import { CommonService } from '../common/services/common.service';
 
+@Injectable()
 
-@Injectable({
-  providedIn: 'root'
-})
-export class EntityManagementGuardService implements CanActivate{
-rightList:string[]=[]
+export class EntityManagementGuardService implements CanActivate {
 
+    constructor(private router: Router, private _commonService: CommonService) { }
 
-constructor(private router: Router,
-  private _commonService: CommonService) { }
-  
-canActivate(
-): boolean{
-
-  if (this._commonService.rightsArray.includes('MANAGE_ENTITY') || this._commonService.rightsArray.includes('VIEW_ENTITY')) {
-    return true;
-  } else {
-       this.router.navigate(['/coi/error-handler/401']);
-       return false;
-  }
-}
-
+    canActivate(): any {
+        if (this._commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME')) {
+            return true;
+        } else {
+            this.router.navigate(['/coi/error-handler/401']);
+            return false;
+        }
+    }
 }
 

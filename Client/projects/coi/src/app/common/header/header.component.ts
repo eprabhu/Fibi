@@ -1,27 +1,27 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {Router} from "@angular/router";
-import {CommonService} from "../services/common.service";
-import {Subscription} from "rxjs";
-import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+import {Router} from '@angular/router';
+import {CommonService} from '../services/common.service';
+import {Subscription} from 'rxjs';
+import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import {ADMIN_DASHBOARD_RIGHTS} from '../../app-constants';
 
 class ChangePassword {
     password = '';
     reEnterPassword = '';
 }
-
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class HeaderComponent implements OnInit,OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy {
 
     logo: any;
     isAccessible = false;
     personId: any;
-    fullName: string = '';
+    fullName = '';
     clearField: String = '';
     loginPerson = this.commonService.getCurrentUserDetail('externalReviewerRight');
     isMaleUser = this.commonService.getCurrentUserDetail('gender') === 'M';
@@ -32,6 +32,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
     passwordValidation = new Map();
     timer: any = {password: null, confirmPassword: null};
     $subscriptions: Subscription[] = [];
+    isManageEntity = false;
+    isShowAdminDashboard = false;
+    canViewAdminDashboard = false;
 
     constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -39,6 +42,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
+        this.checkUserHasRight();
+        this.getPermissions();
     }
 
     ngOnDestroy(): void {
@@ -48,10 +53,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
     logout() {
         this._router.navigate(['/logout']);
     }
-    
 
     changePassword() {
-        if(this.isValidPassword()) {
+        if (this.isValidPassword()) {
             // this.$subscriptions.push(this._commonService
             //     .changeExternalReviewerPassword({newPassword: this.resetPassword.password})
             //     .subscribe((res: any) => {
@@ -88,7 +92,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
             this.passwordValidation.set('password-length', true);
         }
     }
-      
 
     checkSamePassword() {
         this.resetPassword.reEnterPassword = this.resetPassword.reEnterPassword.trim();
@@ -102,17 +105,21 @@ export class HeaderComponent implements OnInit,OnDestroy {
     }
 
     private confirmPasswordSame() {
-        if (this.resetPassword.password != this.resetPassword.reEnterPassword) {
+        if (this.resetPassword.password !== this.resetPassword.reEnterPassword) {
             this.passwordValidation.set('same-password', true);
         }
     }
-  
-    rightsCheck():boolean {
-        if (this.commonService.rightsArray.includes('MANAGE_ENTITY') || this.commonService.rightsArray.includes('VIEW_ENTITY'))  {
-            return true; 
-        } else {
-            return false;  
-        }
+
+    checkUserHasRight(): void {
+        this.isManageEntity = this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME');
+        this.canViewAdminDashboard = this.commonService.getAvailableRight(['APPLICATION_ADMINISTRATOR',
+                'MAINTAIN_QUESTIONNAIRE', 'MAINTAIN_USER_ROLES', 'MAINTAIN_ROLE', 'MAINTAIN_PERSON', 'MAINTAIN_TRAINING',
+                'VIEW_KEY_PERSON_TIMESHEET', 'MAINTAIN_KEY_PERSON_TIMESHEET', 'MAINTAIN_DELEGATION', 'MAINTAIN_ORCID_WORKS'],
+            'SOME');
     }
-    
+
+    async getPermissions() {
+        const rightsArray = await this.commonService.fetchPermissions();
+        this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+    }
 }

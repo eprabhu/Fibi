@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import {  Router} from '@angular/router';
 import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../environments/environment';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
+import { SfiService } from '../sfi/sfi.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-relationship',
@@ -12,7 +15,7 @@ import { RelationshipService } from './relationship.service';
   styleUrls: ['./relationship.component.scss'],
   animations: [slideHorizontal],
 })
-export class RelationshipComponent {
+export class RelationshipComponent implements OnInit {
   isShowRelation = false;
   proposalArray = [];
   coiStatusList = [];
@@ -27,20 +30,37 @@ export class RelationshipComponent {
   selectedProjectForView: any;
   isEditMode: boolean = true;
   collapseViewMore = {};
+  expandInfo = true;
+  count: number;
+  disclosureId: number;
+  reviewStatus: string;
+  personId: string;
+  filterType = 'ACTIVE';
+  currentPage = 1;
+  $subscriptions: Subscription[] = [];
+  dependencies = ['coiDisclosure', 'numberOfSFI'];
 
-  constructor(private _relationShipService: RelationshipService,private _route: ActivatedRoute,
-    private _dataStore: DataStoreService,public _router: Router, private _commonService: CommonService) { }
+  constructor(private _relationShipService: RelationshipService,
+              private _dataStore: DataStoreService,
+              public _router: Router,
+              private _commonService: CommonService,
+              private _sfiService: SfiService) { }
 
   closePage() {
     this.isShowRelation = false;
     this.moduleCode = null;
     this.moduleId = null;
-    this.loadProjectRelations();
+    if(this.isEditMode) {
+      this.updateConflictStatus();
+      this.loadProjectRelations(); 
+    }
   }
 
   ngOnInit() {
     this.getDataFromStore();
     this.loadProjectRelations();
+    this.getDependencyDetails();
+    this.getSfiDetails();
   }
 
   getDisclosureCount(typeCode, disclosureStatus) {
@@ -50,16 +70,28 @@ export class RelationshipComponent {
     }
   }
 
+  private updateConflictStatus(): void {
+    this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+      if(data) {
+        this.coiData.coiDisclosure.coiConflictStatusType = data;
+        this.coiData.coiDisclosure.conflictStatusCode = data.conflictStatusCode;
+        this._dataStore.updateStore(['coiDisclosure'],  this.coiData);
+      }
+    }, err => {
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating status');
+    });
+  }
+
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
     this.isEditMode = this.coiData.coiDisclosure.reviewStatusCode == '1';
-}
+  }
+
   loadProjectRelations() {
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       this.proposalArray = data.awards;
       data.proposals.every(ele => this.proposalArray.push(ele));
       this.coiStatusList = data.coiProjConflictStatusTypes;
-      this._dataStore.disclosureStatus = this.getDisclosureStatus();
     });
   }
 
@@ -91,13 +123,29 @@ export class RelationshipComponent {
 
   openProjectMoreDetails(moduleId, moduleCode) {
     if (moduleCode == 3) {
-      let test = this._commonService.fibiUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
-      window.open (test, '_blank')
+      const redirectToProposal = this._commonService.fibiApplicationUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
+      window.open (redirectToProposal);
       // this._router.navigate([test,{ queryParams: { proposalId:  moduleId}}]);
     } else {
-      let test2 = this._commonService.fibiUrl + '#/fibi/award/overview?awardId=' + moduleId;
-      window.open (test2, '_blank')
+      const redirectToAward = this._commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
+      window.open (redirectToAward);
       // this._router.navigate([test2,{ queryParams: { awardId:  moduleId}}]);
     }
+  }
+
+  getSfiDetails() {
+    this.$subscriptions.push(this._sfiService.getSfiDetails(
+      this.disclosureId, this.reviewStatus, this.personId, this.filterType, this.currentPage).subscribe((data: any) => {
+        if (data) {
+            this.count = data.count;
+        }
+    }));
+}
+
+getDependencyDetails() {
+    const DATA = this._dataStore.getData(this.dependencies);
+    this.reviewStatus = DATA && DATA.coiDisclosure ? DATA.coiDisclosure.reviewStatusCode : '';
+    this.disclosureId =  DATA && DATA.coiDisclosure ? DATA.coiDisclosure.disclosureId : null;
+    this.personId = DATA && DATA.coiDisclosure ? DATA.coiDisclosure.personId : '';
   }
 }

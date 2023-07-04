@@ -1,9 +1,9 @@
-<div class="px-3 py-2 user-dashboard-content">
+<div class="px-3 user-dashboard-content">
     <div class="row">
         <div class="col pe-0">
             <div class="border pi-info-text p-3 rounded-1">
                 <p class="fs-14 m-0">
-                    <span title="Expand Policy Text"  aria-describedby="Expand Policy Text"
+                    <span title="Expand Policy Text" aria-describedby="Expand Policy Text"
                         *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
                         {{headerInfoText | slice:0:650}}...
                         <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read
@@ -20,24 +20,24 @@
         </div>
         <div class="col-auto">
             <div class="border pi-quick-links py-2 px-3 shadow-sm fs-15 h-100">
-                <p *ngIf="hasFCOI" data-bs-target="#reviewConfirmationModal" data-bs-toggle="modal"
-                    title="Click to create new FCOI disclosure"
-                    area-describedby="Click to create new FCOI disclosure"
-                    (click)="openReviseModal()" class="m-0 cursor-pointer" role="button">
+                <p *ngIf="hasFCOI" area-describedby="Click to create new FCOI disclosure"
+                    (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
+                    title="Click to create new FCOI disclosure">
                     <u>Create/Revise FCOI</u>
                 </p>
-                <p *ngIf="!hasFCOI" [routerLink]="['/coi/create-disclosure/screening']" class="m-0 cursor-pointer"
-                    role="button" title="Click to create new Project disclosure"
-                    area-describedby="Click to create new Project disclosure"><u>Create/Revise FCOI</u></p>
-                <p (click)="service.isModalOpen= true" class="m-0 cursor-pointer" role="button"
-                    title="Click to create new Project disclosure" area-describedby="Click to create new Project disclosure"><u>Create Project
+                <p *ngIf="!hasFCOI" (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
+                    title="Click to create new FCOI disclosure"
+                    area-describedby="Click to create new FCOI disclosure"><u>Create/Revise FCOI</u></p>
+                <p (click)="openProjectDisclosure()" class="m-0 cursor-pointer" role="button"
+                    title="Click to create new Project disclosure"
+                    area-describedby="Click to create new Project disclosure"><u>Create Project
                         Disclosure</u></p>
-                <p [routerLink]="['/coi/travel-disclosure/form']" class="m-0 cursor-pointer" role="button"
+                <p (click)="openTravelDisclosure()" class="m-0 cursor-pointer" role="button"
                     title="Click to create new Travel disclosure"
                     area-describedby="Click to create new Travel disclosure"><u>Create Travel
                         Disclosure</u></p>
-                <p (click)="sfiService.isShowSfiNavBar = true" class="m-0 cursor-pointer" role="button"
-                    title="Click to create new SFI" area-describedby="Click to create new SFI"><u>Create Significant Financial Interest</u></p>
+                <p (click)="openCreateSFI()"class="m-0 cursor-pointer" role="button"
+                    title="Click to add new SFI" area-describedby="Click to add new SFI"><u>Add Significant Financial Interest</u></p>
             </div>
         </div>
     </div>
@@ -96,16 +96,18 @@
     <div class="navigation border text-center shadow-sm mb-3">
         <div class="row m-0 text-secondary">
             <div [routerLink]="['disclosures']" tabindex="0" aria-label="Goto My Disclosures"
-                class="hoverable bg-white cursor-pointer align-items-center border-end col d-flex justify-content-around p-0 position-relative" role="button"
-                routerLinkActive="active" title="Goto My Disclosures">
+                class="hoverable bg-white cursor-pointer align-items-center border-end col d-flex justify-content-around p-0 position-relative"
+                role="button" routerLinkActive="active" title="Go to My Disclosures">
                 <strong class="fs-18">My Disclosures</strong>
-                <img [class.d-none]="!router.url.includes('user-dashboard/disclosures')" class="nav-tip-active" src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
+                <img [class.d-none]="!router.url.includes('user-dashboard/disclosures')" class="nav-tip-active"
+                    src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
             </div>
             <div [routerLink]="['entities']" tabindex="0" aria-label="Goto My Entities"
-                class="hoverable bg-white cursor-pointer align-items-center col d-flex justify-content-center p-0 position-relative" role="button"
-                routerLinkActive="active" title="Goto My Entities">
+                class="hoverable bg-white cursor-pointer align-items-center col d-flex justify-content-center p-0 position-relative"
+                role="button" routerLinkActive="active" title="Go to My Entities">
                 <strong class="fs-18">My Entities</strong>
-                <img [class.d-none]="!router.url.includes('user-dashboard/entities')" class="nav-tip-active" src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
+                <img [class.d-none]="!router.url.includes('user-dashboard/entities')" class="nav-tip-active"
+                    src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
             </div>
         </div>
     </div>
@@ -113,45 +115,6 @@
     <router-outlet></router-outlet>
 </div>
 
-<a class="d-none" data-bs-target="#reviewConfirmationModal" data-bs-toggle="modal" id="triggerReviseModal"></a>
-<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog"
-    id="reviewConfirmationModal" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Create Revision for Disclosure : #{{this.hasFCOI?.disclosureId}}</h5>
-                <button (click)="clearModal();" aria-label="Close" class="btn-close" data-dismiss="modal"
-                    title="Click to close the modal" area-describedby="Click to close the modal"
-                    id="req-doc-popup-dismiss-btn" type="button">
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="col-12">
-                    <div class="form-row">
-                        <div class="col-12">
-                            <label for="desc-award">Description</label>
-                            <textarea [(ngModel)]="reviseObject.revisionComment" [isShowLimiter]='true' [limit]=2000
-                                appLengthValidator class="form-control" id="desc-award"></textarea>
-                            <div class="invalid-feedback d-block">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button (click)="clearModal();" class="btn btn-outline-secondary fs-15 mr-0" data-dismiss="modal"
-                    title="Click here to cancel the revision" area-describedby="Click here to cancel the revision"
-                    id="req-attachment-close-btn" type="button">Cancel
-                </button>
-                <button (click)="reviseDisclosure();" class="btn btn-primary fs-15" id="req-attachment-add-btn"
-                    title="Click here to create the revision" area-describedby="Click here to create the revision"
-                    type="button">Create Revision
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<app-project-disclosure *ngIf="service.isModalOpen"></app-project-disclosure>
-
-<app-add-sfi></app-add-sfi>
+<app-disclosure-create-modal *ngIf="isShowCreateOrReviseModal" [triggeredFrom]="triggeredFrom"
+    [activeDisclosures]="service.activeDisclosures" (emitCreateOrRevise)="outputEventAction($event)">
+</app-disclosure-create-modal>

@@ -15,9 +15,9 @@
                     <td>{{training?.dateAcknowledged | dateFormatter}}</td>
                     <td>{{training?.followupDate | dateFormatter}}</td>
                     <td class="actionStyle">
-                        <ul class="listStyle d-flex flex-center" data-bs-dismiss="modal" data-bs-toggle="modal">
+                        <ul class="listStyle d-flex flex-center" >
                             <li>
-                                <a class="align-items-center btn-primary-icon d-flex fs-16">
+                                <a class="btn-primary-icon fs-16">
                                     <mat-icon (click)="openInFibi(training.personTrainingId)" aria-hidden="true"
                                         class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color icon-color iconStyle">visibility</mat-icon></a>
                             </li>

@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Transient;
+
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
@@ -19,9 +21,12 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewActivity;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
@@ -29,6 +34,7 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.person.pojo.Person;
+import com.polus.fibicomp.pojo.Unit;
 
 public class ConflictOfInterestVO {
 
@@ -237,8 +243,126 @@ public class ConflictOfInterestVO {
 	private String reviewStatus;
 	
 	private Integer entityCount;
+
+	private String homeUnit;
 	
 	private List<CoiProjConflictStatusType> coiProjConflictStatusTypes;
+	
+	private Date travelSubmissionDate;
+
+	private List<EntityRiskCategory> entityRiskCategories;
+
+	private String description;
+	
+	private Unit travellerUnitDetails;
+	
+	private String disclosureStatus;
+	
+	private String dispositionStatus;
+	
+	private String reviewStatusCode;
+	
+	private String versionStatusCode;
+	
+	private String dispositionStatusCode;
+	
+	private CoiReviewStatusType coiReviewStatusTypeDetalis;
+	
+	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusDetails;
+
+	private String conflictStatusCode;
+
+	private String Comment;
+
+	private Integer disclosureDetailsId;
+
+	private String documentOwnerPersonId;
+
+	private Integer pageNumber;
+
+	private Integer currentPage;
+
+	private Integer count;
+
+	public CoiReviewStatusType getCoiReviewStatusTypeDetalis() {
+		return coiReviewStatusTypeDetalis;
+	}
+
+	public void setCoiReviewStatusTypeDetalis(CoiReviewStatusType coiReviewStatusTypeDetalis) {
+		this.coiReviewStatusTypeDetalis = coiReviewStatusTypeDetalis;
+	}
+
+	public CoiTravelDisclosureStatusType getCoiTravelDisclosureStatusDetails() {
+		return coiTravelDisclosureStatusDetails;
+	}
+
+	public void setCoiTravelDisclosureStatusDetails(CoiTravelDisclosureStatusType coiTravelDisclosureStatusDetails) {
+		this.coiTravelDisclosureStatusDetails = coiTravelDisclosureStatusDetails;
+	}
+
+	public String getDispositionStatusCode() {
+		return dispositionStatusCode;
+	}
+
+	public void setDispositionStatusCode(String dispositionStatusCode) {
+		this.dispositionStatusCode = dispositionStatusCode;
+	}
+
+	public String getVersionStatusCode() {
+		return versionStatusCode;
+	}
+
+	public void setVersionStatusCode(String versionStatusCode) {
+		this.versionStatusCode = versionStatusCode;
+	}
+
+	public String getReviewStatusCode() {
+		return reviewStatusCode;
+	}
+
+	public void setReviewStatusCode(String reviewStatusCode) {
+		this.reviewStatusCode = reviewStatusCode;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Unit getTravellerUnitDetails() {
+		return travellerUnitDetails;
+	}
+
+	public void setTravellerUnitDetails(Unit travellerUnitDetails) {
+		this.travellerUnitDetails = travellerUnitDetails;
+	}
+
+	public String getDisclosureStatus() {
+		return disclosureStatus;
+	}
+
+	public void setDisclosureStatus(String disclosureStatus) {
+		this.disclosureStatus = disclosureStatus;
+	}
+
+	public String getDispositionStatus() {
+		return dispositionStatus;
+	}
+
+	public void setDispositionStatus(String dispositionStatus) {
+		this.dispositionStatus = dispositionStatus;
+	}
+
+	public Date getTravelSubmissionDate() {
+		return travelSubmissionDate;
+	}
+
+	public void setTravelSubmissionDate(Date travelSubmissionDate) {
+		this.travelSubmissionDate = travelSubmissionDate;
+	}
 
 	public List<CoiProjConflictStatusType> getCoiProjConflictStatusTypes() {
 		return coiProjConflictStatusTypes;
@@ -1077,5 +1201,78 @@ public class ConflictOfInterestVO {
 
 	public void setProjectDetail(DisclosureDetailDto projectDetail) {
 		this.projectDetail = projectDetail;
+	}
+
+	public String getHomeUnit() {
+		return homeUnit;
+	}
+
+	public void setHomeUnit(String homeUnit) {
+		this.homeUnit = homeUnit;
+	}
+
+	public List<EntityRiskCategory> getEntityRiskCategories() {
+		return entityRiskCategories;
+	}
+
+	public void setEntityRiskCategories(List<EntityRiskCategory> entityRiskCategories) {
+		this.entityRiskCategories = entityRiskCategories;
+	}
+
+	public String getComment() {
+		return Comment;
+	}
+
+	public void setComment(String comment) {
+		Comment = comment;
+	}
+
+	public Integer getDisclosureDetailsId() {
+		return disclosureDetailsId;
+	}
+
+	public void setDisclosureDetailsId(Integer disclosureDetailsId) {
+		this.disclosureDetailsId = disclosureDetailsId;
+	}
+
+	public String getDocumentOwnerPersonId() {
+		return documentOwnerPersonId;
+	}
+
+	public void setDocumentOwnerPersonId(String documentOwnerPersonId) {
+		this.documentOwnerPersonId = documentOwnerPersonId;
+	}
+
+	public String getConflictStatusCode() {
+		return conflictStatusCode;
+	}
+
+	public void setConflictStatusCode(String conflictStatusCode) {
+		this.conflictStatusCode = conflictStatusCode;
+	}
+
+
+	public Integer getPageNumber() {
+		return pageNumber;
+	}
+
+	public void setPageNumber(Integer pageNumber) {
+		this.pageNumber = pageNumber;
+	}
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 }
