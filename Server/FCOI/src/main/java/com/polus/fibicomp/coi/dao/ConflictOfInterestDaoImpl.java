@@ -3474,18 +3474,20 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public void approveEntity(Integer entityId) {
+	public Timestamp approveEntity(Integer entityId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE CoiEntity e SET e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser, ");
 		hqlQuery.append("e.approvedUser = :updateUser, e.approvedTimestamp = :updateTimestamp, e.entityStatusCode = :entityStatusCode  ");
 		hqlQuery.append("where e.entityId = :entityId");
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("entityId", entityId);
-		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateTimestamp", updateTimestamp);
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
-		query.setParameter("entityStatusCode", Constants.COI_ENTITY_STATUS_ACTIVE);
+		query.setParameter("entityStatusCode", Constants.COI_ENTITY_STATUS_VERIFIED);
 		query.executeUpdate();
+		return updateTimestamp;
 	}
 
 	@Override
