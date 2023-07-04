@@ -1,66 +1,38 @@
-package com.polus.appcoigraph.service;
+package com.polus.appcoigraph.dao;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
 
-import org.neo4j.driver.*;
-import org.neo4j.driver.Record;
-import org.neo4j.driver.internal.value.NodeValue;
-import org.neo4j.driver.internal.value.RelationshipValue;
-import org.neo4j.driver.types.Node;
-import org.neo4j.driver.types.Path;
-import org.neo4j.driver.types.Relationship;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.neo4j.core.Neo4jClient;
-import org.springframework.data.neo4j.core.Neo4jOperations;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-import com.polus.appcoigraph.entity.Country;
-import com.polus.appcoigraph.entity.Disclosure;
 import com.polus.appcoigraph.entity.Award;
 import com.polus.appcoigraph.entity.COIEntity;
-import com.polus.appcoigraph.entity.EntityTest;
+import com.polus.appcoigraph.entity.Country;
+import com.polus.appcoigraph.entity.Disclosure;
 import com.polus.appcoigraph.entity.Person;
 import com.polus.appcoigraph.entity.Proposal;
 import com.polus.appcoigraph.entity.Sponsor;
 import com.polus.appcoigraph.entity.TravelDisclosure;
 import com.polus.appcoigraph.entity.Unit;
-import com.polus.appcoigraph.model.Link;
-import com.polus.appcoigraph.model.ResponseDTO;
 import com.polus.appcoigraph.repository.AwardRepository;
 import com.polus.appcoigraph.repository.COIDisclosureRepository;
 import com.polus.appcoigraph.repository.CountryRepository;
 import com.polus.appcoigraph.repository.EntityRepository;
-import com.polus.appcoigraph.repository.EntityRepositoryTest;
-import com.polus.appcoigraph.repository.LinkRepository;
 import com.polus.appcoigraph.repository.PersonRepository;
 import com.polus.appcoigraph.repository.ProposalRepository;
 import com.polus.appcoigraph.repository.SponsorRepository;
 import com.polus.appcoigraph.repository.TravelDisclosureRepository;
 import com.polus.appcoigraph.repository.UnitRepository;
 
-import jakarta.persistence.Tuple;
-
-@Service
-public class COIGraphService {
+@Repository
+public class COIImportGraphDataDao {
 
 	@Autowired
 	private EntityRepository entityRepository;
-	
-	@Autowired
-	private EntityRepositoryTest entityRepositoryTest;
 	
 	@Autowired
 	private CountryRepository countryRepository;
@@ -81,9 +53,6 @@ public class COIGraphService {
 	private UnitRepository unitRepository;
 	
 	@Autowired
-	private LinkRepository linkRepository;
-	
-	@Autowired
 	private TravelDisclosureRepository travelRepository;
 	
 	@Autowired
@@ -95,168 +64,11 @@ public class COIGraphService {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	@Autowired
-	 private Driver driver;
+
+	@Value("${spring.data.neo4j.database}")
+	private String schema;
 	
-	private static final String schema = "neo4j";
-    
-    public List<COIEntity> getAllEntity() {
-        return entityRepository.findAll();
-    }
-    
-    public List<Country> getAllCountry() {
-        return countryRepository.findAll();
-    }
-
-	public List<Map<String, Object>>  findAllCustom(String countryCode) {
-	///	 importDataFromMySQLToNeo4j();
-		return countryRepository.findAllCustom(countryCode);
-	}
-
-	public Iterable<Link> getLinks(String countryCode) {
-		executeCypherQuery();
-		return linkRepository.getLink(countryCode);
-	}
-	
-	public void importDataFromMySQLToNeo4j() {
-        String query = "SELECT ENTITY_ID, ENTITY_NAME, COUNTRY_CODE FROM entity";
-        List<EntityTest> persons = jdbcTemplate.query(query, (resultSet, rowNum) -> {
-        	EntityTest entity = new EntityTest();
-        	entity.setId(nextID());
-        	entity.setEntityNumber(resultSet.getString("ENTITY_ID"));
-        	entity.setEntityName(resultSet.getString("ENTITY_NAME"));
-        	
-            return entity;
-        });
-
-        entityRepositoryTest.saveAll(persons);
-    }
-
-	private String nextID() {
-		return UUID.randomUUID().toString();
-	}
-
-	public void executeCypherQuery() {
 		
-		getResults();
-       
-      
-    }
-
-    public ResponseDTO getResults() {
-    	// Create a Neo4j driver
-    	Driver driver = GraphDatabase.driver("neo4j://192.168.1.248:7687", AuthTokens.basic("neo4j", "Polus@123"));
-
-    	// Create a session
-    		////	Session session = driver.session();
-    	// Execute the query
-    	///List<Record> results = session.run("MATCH p=(e1:Entity)<--(e2:Person) -->(e3:Country) where e1.entity_number='17' RETURN e1 , e2 , e3").list();
-
-    	// Close the session
-    	////session.close();
-
-    	List<Node> cl = new ArrayList<>();
-    	List<RelationshipValue> rl = new ArrayList<>();
-    	List<NodeValue> el = new ArrayList<>();
-    	
-    	ArrayList<Map<String, Object>> outputNode = new ArrayList<>();
-    	ArrayList<Map<String, Object>> outputRel = new ArrayList<>();
-    	
-        try (Session session = driver.session()) {
-        	
-        //  String cypher = "MATCH p = (c:Country)<-[]->(e:Entity) WHERE c.country_code = 'USA'  RETURN p ";
-        	String cypher = "MATCH p=(e1:Entity)-->(e2:Country)  where e1.entity_number='99992' RETURN p \r\n"
-        			+ "\r\n"
-        			+ "UNION\r\n"
-        			+ "\r\n"
-        			+ "MATCH p=(e1:Entity)<--(e2:Person) -->(e3:Country) where e1.entity_number='99992' RETURN p \r\n"
-        			+ "\r\n"
-        			+ "UNION\r\n"
-        			+ "\r\n"
-        			+ "MATCH p=(e1:Entity)-->(e2:Proposal) -->(e3:Sponsor) where e1.entity_number='99992' RETURN p \r\n"
-        			+ "\r\n"
-        			+ "UNION\r\n"
-        			+ "\r\n"
-        			+ "MATCH p=(e1:Entity)-->(e2:Award) -->(e3:Unit) where e1.entity_number='99992' RETURN p \r\n"
-        			+ "\r\n"
-        			+ "UNION\r\n"
-        			+ "\r\n"
-        			+ "MATCH p=(e1:Entity)-->(e2:Award) -->(e3:Sponsor) where e1.entity_number='99992' RETURN p \r\n"
-        			+ "\r\n"
-        			+ "UNION\r\n"
-        			+ "\r\n"
-        			+ "MATCH p=(e1:Entity)-->(e2:Proposal) -->(e3:Unit) where e1.entity_number='99992' RETURN p \r\n"
-        			+ "";
-        	
-            Result result = session.run(cypher);
-           
-            HashSet<String> nodeElementSet = new HashSet<String>();
-            while (result.hasNext()) {
-               Record record = result.next();
-            	
-            
-            	 // Retrieve the path from the record
-                Path path = record.get("p").asPath();
-
-                // Retrieve nodes and relationships from the path
-                Iterable<Node> nodes = path.nodes();
-                Iterable<Relationship> relationships = path.relationships();
-
-                
-                
-               
-             // Process nodes
-                for (Node node : nodes) {       
-                  
-                	String elementId = node.elementId();
-                	
-                	if(!nodeElementSet.contains(elementId)) {
-	                	Map<String, Object> hmNode = new HashMap<>();
-	                    hmNode.put("elementId",elementId );
-	                    
-	                    Stream<String> stream = Stream.generate(node.labels().iterator()::next);
-	                   // String firstElement = stream.findFirst().orElse("-no data-");
-	                    
-	                    hmNode.put("label", stream.findFirst().orElse("-no data-"));
-	                    
-	                   // hmNode.put("label", node.labels().toString());
-	                    nodeElementSet.add(node.elementId());
-	                    
-	                 // Iterate over entries (keys and values)
-	                    for (Map.Entry<String, Object> entry :  node.asMap().entrySet()) {	                        
-	                        hmNode.put(entry.getKey(), entry.getValue());	                        
-	                    }
-	                    outputNode.add(hmNode);
-                	}
-                	
-
-                }
-
-                // Process relationships
-                for (Relationship relationship : relationships) {
-                	Map<String, Object> hmRel = new HashMap<>();
-                    hmRel.put("source", relationship.startNodeElementId());
-                    hmRel.put("target", relationship.endNodeElementId());
-                    hmRel.put("type", relationship.type());
-                    
-                    for (Map.Entry<String, Object> entry :  relationship.asMap().entrySet()) {                        
-                    	hmRel.put(entry.getKey(), entry.getValue());                        
-                    }
-                   
-                    outputRel.add(hmRel);
-                    
-                }
-            }
-        }
-        
-        return ResponseDTO.builder()
-        				  .nodes(outputNode)
-        				  .links(outputRel)
-        				  .build();
-
-    }
-    
-       
 	public void importDataFromRDBMS() {
 		importCountry();
 		importEntity();
@@ -286,10 +98,11 @@ public class COIGraphService {
 		linkCOIDisclosureAward();
 		linkCOIDisclosureProposal();
 		linkPersonTravelDisclosure();
-		linkEntityTravelDisclosure();
-	
+		linkEntityTravelDisclosure();	
 		
 	}
+	
+	
 	
 	public void importCountry() {
 		 String query = "SELECT CONCAT('CON',COUNTRY_CODE) AS ID, COUNTRY_NAME,COUNTRY_CODE,CURRENCY_CODE from country ";
@@ -302,7 +115,7 @@ public class COIGraphService {
 	            return country;
 	        });
 	        countryRepository.saveAll(ls);
-    }
+   }
 	
 	public void importEntity() {
 		 String query = "SELECT \r\n"
@@ -337,7 +150,7 @@ public class COIGraphService {
 	        	return entity;
 	        });
 	        entityRepository.saveAll(ls);
-   }
+  }
 	
 	public void importPerson() {
 		 String query = "select CONCAT('PER',PERSON_ID) AS ID, PERSON_ID,FULL_NAME,UNIT_NAME as HOME_UNIT,t1.COUNTRY_OF_CITIZENSHIP as COUNTRY_CODE, t4.COUNTRY_NAME,\r\n"
@@ -361,7 +174,7 @@ public class COIGraphService {
 	            return person;
 	        });
 	        personRepository.saveAll(ls);
-   }
+  }
 	
 	public void importProposal() {
 		 String query = "SELECT distinct CONCAT('EPS',t1.PROPOSAL_ID) AS ID, t1.PROPOSAL_ID, t1.TITLE, DATE_FORMAT(t1.START_DATE, '%m-%d-%Y') as START_DATE ,\r\n"
@@ -377,7 +190,7 @@ public class COIGraphService {
 		 		+ "left outer join sponsor t3 on t2.PRIME_SPONSOR_CODE = t3.SPONSOR_CODE;\r\n"
 		 		+ "";
 		 		List<Proposal> ls = jdbcTemplate.query(query, (resultSet, rowNum) -> {
-   	
+  	
 				Proposal proposal = Proposal.builder()
 											.id(resultSet.getString("ID"))
 											.proposalId(resultSet.getString("PROPOSAL_ID"))
@@ -396,7 +209,7 @@ public class COIGraphService {
 	            return proposal;
 	        });
 	        proposalRepository.saveAll(ls);
-   }	
+  }	
 
 	public void importAward() {
 		 String query = "SELECT \r\n"
@@ -425,7 +238,7 @@ public class COIGraphService {
 	            return award;
 	        });
 	        awardRepository.saveAll(ls);
-  }
+ }
 	public void importSponsor() {
 		 String query = "SELECT CONCAT('SPN',SPONSOR_CODE) AS ID, SPONSOR_CODE,SPONSOR_NAME\r\n"
 		 		+ "				FROM sponsor ";
@@ -438,7 +251,7 @@ public class COIGraphService {
 	            return sponsor;
 	        });
 	        sponsorRepository.saveAll(ls);
-   }
+  }
 	public void importUnit() {
 		 String query = "SELECT CONCAT('UNT',UNIT_NUMBER) AS ID,UNIT_NUMBER, UNIT_NAME FROM unit ";
 	        List<Unit> ls = jdbcTemplate.query(query, (resultSet, rowNum) -> {
@@ -450,17 +263,17 @@ public class COIGraphService {
 	            return unit;
 	        });
 	        unitRepository.saveAll(ls);
-   }
+  }
 	public void linkEntityCountry() {
-        String cypherQuery = "MATCH (a:Entity), (b:Country) WHERE a.country_code = b.country_code MERGE (a)-[r:BELONGS_TO]->(b)  ";
-        neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+       String cypherQuery = "MATCH (a:Entity), (b:Country) WHERE a.country_code = b.country_code MERGE (a)-[r:BELONGS_TO]->(b)  ";
+       neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
-    }
+   }
 	public void linkPersonCountry() {
-        String cypherQuery = "MATCH (a:Person), (b:Country) WHERE a.country_code = b.country_code MERGE (a)-[r:CITIZEN_OF]->(b)  ";
-        neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+       String cypherQuery = "MATCH (a:Person), (b:Country) WHERE a.country_code = b.country_code MERGE (a)-[r:CITIZEN_OF]->(b)  ";
+       neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
-    }	
+   }	
 	
 	public void linkPersonSelfEntityRelationship() {
 
@@ -484,7 +297,7 @@ public class COIGraphService {
 			 		
 		        });
 		 
-    }
+   }
 	
 	public void linkPersonSpouseEntityRelationship() {
 
@@ -508,7 +321,7 @@ public class COIGraphService {
 			 		
 		        });
 		 
-    }	
+   }	
 
 	public void linkPersonDependentEntityRelationship() {
 
@@ -532,7 +345,7 @@ public class COIGraphService {
 			 		
 		        });
 		 
-    }	
+   }	
 
 	
 	public void linkProposalEntityRelationship() {
@@ -550,7 +363,7 @@ public class COIGraphService {
 	
 				String cypherQuery = "	MATCH (proposal:Proposal {proposal_id: '"+ resultSet.getString("PROPOSAL_ID") +"' })\r\n"
 						+ "MATCH (entity:Entity {entity_number: '"+ resultSet.getString("ENTITY_NUMBER") +"' })\r\n"
-						+ "MERGE (entity)-[x:LINKED_WITH_PROPOSAL]->(proposal)				\r\n"
+						+ "MERGE (entity)-[x:ENTITY_PROPOSAL_RELATIONSHIP]->(proposal)				\r\n"
 						+ " ";				
 				
 				neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
@@ -559,7 +372,7 @@ public class COIGraphService {
 			 		
 		        });
 		 
-    }		
+   }		
 
 	
 	public void linkAwardEntityRelationship() {
@@ -580,7 +393,7 @@ public class COIGraphService {
 	
 				String cypherQuery = "	MATCH (award:Award {award_number: '"+ resultSet.getString("AWARD_NUMBER") +"' })\r\n"
 						+ "MATCH (entity:Entity {entity_number: '"+ resultSet.getString("ENTITY_NUMBER") +"' })\r\n"
-						+ "MERGE (entity)-[x:AWARD_NUMBER]->(award)	\r\n"
+						+ "MERGE (entity)-[x:ENTITY_AWARD_RELATIONSHIP]->(award)	\r\n"
 						+ " ";				
 				
 				neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
@@ -588,43 +401,43 @@ public class COIGraphService {
 				return null;
 			 		
 		        });		 
-    }		
+   }		
 		
 	public void linkAwardSponsor() {
-        String cypherQuery = "MATCH (a:Award), (b:Sponsor) WHERE a.sponsor_code = b.sponsor_code MERGE (a)-[r:AWARD_SPONSORED_BY]->(b)  ";
-        neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+       String cypherQuery = "MATCH (a:Award), (b:Sponsor) WHERE a.sponsor_code = b.sponsor_code MERGE (a)-[r:AWARD_SPONSORED_BY]->(b)  ";
+       neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
-    }
+   }
 	
 	public void linkAwardPrimeSponsor() {
-        String cypherQuery = "MATCH (a:Award), (b:Sponsor) WHERE a.prime_sponsor_code = b.sponsor_code MERGE (a)-[r:AWARD_PRIME_SPONSORED_BY]->(b)  ";
-        neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+       String cypherQuery = "MATCH (a:Award), (b:Sponsor) WHERE a.prime_sponsor_code = b.sponsor_code MERGE (a)-[r:AWARD_PRIME_SPONSORED_BY]->(b)  ";
+       neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
-    }	
+   }	
 	
 	public void linkAwardUnit() {
-        String cypherQuery = "MATCH (a:Award), (b:Unit) WHERE a.unit_number = b.unit_number MERGE (a)-[r:AWARD_OWNED_BY]->(b)";
-        neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+       String cypherQuery = "MATCH (a:Award), (b:Unit) WHERE a.unit_number = b.unit_number MERGE (a)-[r:AWARD_OWNED_BY]->(b)";
+       neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
-    }
+   }
 
 	public void linkProposalSponsor() {
-        String cypherQuery = " MATCH (a:Proposal), (b:Sponsor) WHERE a.sponsor_code = b.sponsor_code MERGE (a)-[r:PROPOSAL_SPONSORED_BY]->(b)";
-        neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+       String cypherQuery = " MATCH (a:Proposal), (b:Sponsor) WHERE a.sponsor_code = b.sponsor_code MERGE (a)-[r:PROPOSAL_SPONSORED_BY]->(b)";
+       neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
-    }
+   }
 	
 	public void linkProposalPrimeSponsor() {
-        String cypherQuery = " MATCH (a:Proposal), (b:Sponsor) WHERE a.prime_sponsor_code = b.sponsor_code MERGE (a)-[r:PROPOSAL_PRIME_SPONSORED_BY]->(b)    ";
-        neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+       String cypherQuery = " MATCH (a:Proposal), (b:Sponsor) WHERE a.prime_sponsor_code = b.sponsor_code MERGE (a)-[r:PROPOSAL_PRIME_SPONSORED_BY]->(b)    ";
+       neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
-    }	
+   }	
 	
 	public void linkProposalUnit() {
-        String cypherQuery = " MATCH (a:Proposal), (b:Unit) WHERE a.unit_number = b.unit_number MERGE (a)-[r:PROPOSAL_OWNED_BY]->(b) ";
-        neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
+       String cypherQuery = " MATCH (a:Proposal), (b:Unit) WHERE a.unit_number = b.unit_number MERGE (a)-[r:PROPOSAL_OWNED_BY]->(b) ";
+       neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
-    }
+   }
 	
 	public void importCOIDisclosure() {
 		 String query = "select CONCAT('COI',t1.DISCLOSURE_ID) as ID, t1.DISCLOSURE_NUMBER,t1.PERSON_ID from coi_disclosure t1 where t1.VERSION_STATUS = 'ACTIVE'";
@@ -637,7 +450,7 @@ public class COIGraphService {
 	            return disclosure;
 	        });
 	        coiRepository.saveAll(ls);
-  }	
+ }	
 
 	public void importTravelDisclosure() {
 		 String query = "SELECT CONCAT('TRV',t1.TRAVEL_DISCLOSURE_ID)  as ID,t1.TRAVEL_NUMBER, t1.PERSON_ID,t1.ENTITY_NUMBER FROM coi_travel_disclosure t1";
@@ -651,7 +464,7 @@ public class COIGraphService {
 	            return disclosure;
 	        });
 	        travelRepository.saveAll(ls);
- }	
+}	
 	
 	
 	
@@ -690,7 +503,7 @@ public class COIGraphService {
 			 		
 		        });
 		 
-    }
+   }
 
 	
 	public void linkPersonCOIDisclosure() {
@@ -779,5 +592,4 @@ public class COIGraphService {
 		neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
 	}	
-	
 }

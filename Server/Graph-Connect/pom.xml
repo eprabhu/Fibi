@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.polus</groupId>
-	<artifactId>app-coi-graph</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>app-coi-graph</name>
-	<description>Demo project for Spring Boot</description>
+	<artifactId>fibi-graph-connect</artifactId>
+	<version>0.0.1</version>
+	<name>fibi-graph-connect</name>
+	<description>The application facilitates the import of data from RDBMS into Graph Database (Neo4j) models, enabling the visualization of data relationships through graph modeling.</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
