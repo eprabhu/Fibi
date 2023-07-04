@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.ForeignKey;
 import javax.persistence.Transient;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Entity
 @Table(name = "ENTITY_RELATIONSHIP")
@@ -20,6 +22,7 @@ public class EntityRelationship implements Serializable {
 
 	@Id
 	@Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@Column(name = "ENTITY_NUMBER")
@@ -50,6 +53,9 @@ public class EntityRelationship implements Serializable {
 
 	@Transient
 	private Integer entityId;
+
+	@Transient
+	private String updateUserFullName;
 
 	public Integer getId() {
 		return id;
@@ -129,5 +135,13 @@ public class EntityRelationship implements Serializable {
 
 	public void setEntityId(Integer entityId) {
 		this.entityId = entityId;
+	}
+
+	public String getUpdateUserFullName() {
+		return updateUserFullName;
+	}
+
+	public void setUpdateUserFullName(String updateUserFullName) {
+		this.updateUserFullName = updateUserFullName;
 	}
 }
