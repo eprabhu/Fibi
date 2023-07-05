@@ -79,7 +79,5 @@
   }
 
   .updown-arrow-relation {
-    position: absolute;
-    right: 363px;
-    top: auto;
+    position: relative;
   }

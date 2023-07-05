@@ -32,7 +32,6 @@
   }
 
   .updown-arrow {
-    position: absolute;
-    right: 363px;
-    top: auto;
+    position: relative;
   }
+  
