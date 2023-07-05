@@ -1713,7 +1713,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> evaluateValidation(Integer disclosureId) {
-		/*validation of draft SFI to be added */
 		List <COIValidateDto>coiValidateDtoList = new ArrayList<>();
 		String personId = conflictOfInterestDao.loadDisclosure(disclosureId).getPersonId();
 		coiValidateDtoList = conflictOfInterestDao.evaluateValidation(disclosureId, personId);
