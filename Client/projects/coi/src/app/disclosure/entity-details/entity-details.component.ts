@@ -49,6 +49,10 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
    return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary'].some(ele => this._router.url.includes(ele))
   }
 
+  checkForUrl() {
+   return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary'].some(ele => this._router.url.includes(ele))
+  }
+
   ngOnDestroy(): void {
     this.entityDetailService.isExpanded = true;
   }
