@@ -25,10 +25,14 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   ngOnInit() {
     this.isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
     this.entityId = this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId;
-    this.isTriggeredFromSlider = this._router.url.includes('create-disclosure') || this._router.url.includes('user-dashboard/entities')? true : false;
+    this.isTriggeredFromSlider = this.checkForUrl();
     if (this.isEditMode) {
       this.entityDetailService.isExpanded = false;
     }
+  }
+
+  checkForUrl() {
+   return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary'].some(ele => this._router.url.includes(ele))
   }
 
   ngOnDestroy(): void {
