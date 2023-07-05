@@ -967,6 +967,12 @@ public interface ConflictOfInterestDao {
 	 * @param entityRelationship
 	 */
 	void saveOrUpdateEntityRelationship(EntityRelationship entityRelationship);
-	
+
+	/**
+	 * This method is used to delete person entity relationship
+	 * @param personEntityRelId
+	 */
+	void deletePersonEntityRelationship(Integer personEntityRelId);
+
 	List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CoiService } from '../../../services/coi.service';
 import { CoiSummaryService } from '../../coi-summary.service';
@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 })
 export class SfiSummaryComponent implements OnInit, OnDestroy {
 
+    @ViewChild('viewSFISummaryDetailsOverlay', { static: true }) viewSFISummaryDetailsOverlay: ElementRef;
     coiFinancialEntityDetails: any[] = [];
     $subscriptions: Subscription[] = [];
     deployMap = environment.deployUrl;
@@ -23,6 +24,8 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     coiDetails: any = {};
     searchText: string;
     isCollapsed = true;
+    showSlider = false;
+    entityId: any;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
@@ -85,4 +88,27 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this._dataStoreAndEventsService.modifyReviewComment(this.commentConfiguration);
     }
 
+    viewSlider(event) {
+        this.showSlider = event.flag;
+        this.entityId = event.entityId;
+        document.body.classList.add('overflow-hidden');
+        setTimeout(() => {
+            const slider = document.querySelector('.slider-base');
+            slider.classList.add('slider-opened');
+        });
+    }
+
+    hideSfiNavBar() {
+        this.addBodyScroll();
+        let slider = document.querySelector('.slider-base');
+        slider.classList.remove('slider-opened');        
+        setTimeout(() => {
+            this.showSlider = false;
+        },500);
+    }
+
+    addBodyScroll() {
+        document.body.classList.remove('overflow-hidden');
+        document.body.classList.add('overflow-auto');
+    }
 }
