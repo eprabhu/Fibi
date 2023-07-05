@@ -1464,4 +1464,16 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		return questionnaireDataBus;
 	}
 
+	@Override
+	public void deleteAllQuestionAnswers(QuestionnaireDataBus questionnaireDataBus) {
+		questionnaireDAO.deleteQuestTableAnswers(questionnaireDataBus.getModuleItemKey(),questionnaireDataBus.getModuleItemCode(),
+				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleItemKey());
+		questionnaireDAO.deleteQuestAnswerAttachment(questionnaireDataBus.getModuleItemKey(),questionnaireDataBus.getModuleItemCode(),
+				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleItemKey());
+		questionnaireDAO.deleteQuestAnswer(questionnaireDataBus.getModuleItemKey(),questionnaireDataBus.getModuleItemCode(),
+				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleItemKey());
+		questionnaireDAO.deleteQuestAnswerHeader(questionnaireDataBus.getModuleItemKey(), questionnaireDataBus.getModuleItemCode(),
+				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleItemKey());
+
+	}
 }
