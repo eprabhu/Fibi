@@ -267,8 +267,8 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
         this.sfiRelationStatus.versionStatus = event.versionStatus;
         if (this.isQuestionnaireCompleted) {
           this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
+          this.isQuestionnaireCompleted = false;
         }
-        this.isQuestionnaireCompleted = false;
       }
       this.sfiStatus = this.getSfiStatus();
       this.isEnableActivateInactivateSfiModal = false;
