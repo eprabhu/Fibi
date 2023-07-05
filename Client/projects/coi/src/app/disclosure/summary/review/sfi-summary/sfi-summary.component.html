@@ -14,12 +14,15 @@
 </div> -->
 
 <div class="main-title" id="COI802">
-  <h3 class="d-flex align-items-center fs-16 mt-4 mb-3"><strong class="mt-4">Significant Financial Interest (SFI)
+  <h3 class="d-flex align-items-center justify-content-between fs-16 mt-4 mb-3">
+    <span class="d-flex align-items-center">
+    <strong class="mt-4">Significant Financial Interest (SFI)
     </strong>
     <span class="d-inline-block mt-3" tabindex="0" data-bs-toggle="tooltip" title="View SFI details."
       data-bs-placement="top">
       <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
     </span>
+  </span>
     <button class=" updown-arrow mt-3 " (click)="isCollapsed = !isCollapsed">
       <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'" class="fa-large"
         aria-hidden="true"></i>

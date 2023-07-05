@@ -240,7 +240,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
         document.getElementById('hide-inactivate-modal').click();
         this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity ${this.entityDetails.isActive ? 'inactivate' : 'activate '} successfully completed `);
         const entityId = Number(this.entityId);
-        entityId === res.entityId ? this.updateEntityDetails(res) :
+        entityId === res.entityId ? this.updateEntityDetails(res) : 
           this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: res.entityId } });
       }, error => {
         this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
@@ -265,6 +265,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
       this.sfiRelationStatus.isRelationshipActive = event.isRelationshipActive;
       if (event.versionStatus) {
         this.sfiRelationStatus.versionStatus = event.versionStatus;
+        if (this.isQuestionnaireCompleted) {
+          this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
+        }
         this.isQuestionnaireCompleted = false;
       }
       this.sfiStatus = this.getSfiStatus();
