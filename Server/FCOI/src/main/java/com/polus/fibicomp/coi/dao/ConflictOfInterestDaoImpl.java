@@ -3518,7 +3518,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public void saveOrUpdateEntityRelationship(EntityRelationship entityRelationship) {
 		hibernateTemplate.saveOrUpdate(entityRelationship);
 	}
-	
+
+	@Override
+	public void deletePersonEntityRelationship(Integer personEntityRelId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("DELETE FROM PersonEntityRelationship pr where pr.personEntityRelId = :personEntityRelId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personEntityRelId", personEntityRelId);
+		query.executeUpdate();
+	}
+
 	@Override
 	public List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber) { 
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
