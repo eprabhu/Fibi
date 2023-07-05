@@ -463,22 +463,23 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.submitTravelDisclosure(vo);
 	}
 	
-	@GetMapping(value = "/withdrawTravelDisclosure/{travelDisclosureId}")
-	public ResponseEntity<Object> withdrawTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+	@PostMapping(value = "/withdrawTravelDisclosure")
+	public ResponseEntity<Object> withdrawTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for withdrawing TravelDisclosure");
-		return conflictOfInterestService.withdrawTravelDisclosure(travelDisclosureId);
+		return conflictOfInterestService.withdrawTravelDisclosure(vo.getTravelDisclosureId(), vo.getDescription());
 	}
 	
-	@GetMapping(value = "/approveTravelDisclosure/{travelDisclosureId}")
-	public ResponseEntity<Object> approveTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+	@PostMapping(value = "/approveTravelDisclosure")
+	public ResponseEntity<Object> approveTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for approving TravelDisclosure");
-		return conflictOfInterestService.approveTravelDisclosure(travelDisclosureId);
+		String description = vo.getDescription() != null ? vo.getDescription() : "";
+		return conflictOfInterestService.approveTravelDisclosure(vo.getTravelDisclosureId(), description);
 	}
 	
-	@GetMapping(value = "/returnTravelDisclosure/{travelDisclosureId}")
-	public ResponseEntity<Object> returnTravelDisclosure(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+	@PostMapping(value = "/returnTravelDisclosure")
+	public ResponseEntity<Object> returnTravelDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for returning TravelDisclosure");
-		return conflictOfInterestService.returnTravelDisclosure(travelDisclosureId);
+		return conflictOfInterestService.returnTravelDisclosure(vo.getTravelDisclosureId(), vo.getDescription());
 	}
 
 	@GetMapping("/adminGroup/adminPersons")

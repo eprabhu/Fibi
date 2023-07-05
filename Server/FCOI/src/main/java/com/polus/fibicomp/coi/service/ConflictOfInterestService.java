@@ -406,11 +406,11 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> certifyTravelDisclosure(ConflictOfInterestVO vo);
 	
-	ResponseEntity<Object> withdrawTravelDisclosure(Integer travelDisclosureId);
+	ResponseEntity<Object> withdrawTravelDisclosure(Integer travelDisclosureId, String description);
 	
-	ResponseEntity<Object> approveTravelDisclosure(Integer travelDisclosureId);
+	ResponseEntity<Object> approveTravelDisclosure(Integer travelDisclosureId, String description);
 	
-	ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId);
+	ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId, String description);
 
 	/**
 	 * This method is used to evaluate validation conditions:
