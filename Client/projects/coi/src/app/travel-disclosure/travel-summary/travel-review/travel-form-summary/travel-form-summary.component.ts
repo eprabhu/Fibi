@@ -55,6 +55,7 @@ export class TravelFormSummaryComponent implements OnInit, OnDestroy {
     }
 
     private setTravellerType(): void {
+        this.traveller = '';
         if (this.travelDisclosureData.travellerTypeCodeList) {
             Object.keys(this.travelDisclosureData.travellerTypeCodeList).forEach((typeCode: any) => {
                 const travellerType = this.travelDisclosureData.travellerTypeCodeList[typeCode];

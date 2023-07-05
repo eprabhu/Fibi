@@ -193,7 +193,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     setValuesForDestinationType(): void {
-        this.setUnSavedChanges();
         if (this.destination === 'Domestic') {
             this.travelDisclosureRO.destinationCountry = '';
             this.travelDisclosureRO.isInternationalTravel = false;
@@ -227,7 +226,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     private saveTravelDisclosure(): void {
         this.getAllTravelDisclosureValues(this.travelDisclosureRO);
-        if (this.validateForm()) {
+        if (this.validateForm() && this._service.travelDataChanged) {
             this.$subscriptions.push(this._service.createCoiTravelDisclosure(this.travelDisclosureRO)
                 .subscribe((res: any) => {
                     if (res) {

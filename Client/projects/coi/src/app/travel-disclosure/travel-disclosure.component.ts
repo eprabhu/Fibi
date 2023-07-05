@@ -37,9 +37,18 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     isCardExpanded = true;
     ispersondetailsmodal = false;
     isTravelAdministrator = false;
+    isExitsDescription = false;
 
     currentPersonId = '';
-    userDetails = { fullName: '', personId: '', homeUnit: null, homeUnitName: null };
+    modalHeaderInfo = ``;
+    confirmationModalDescription = '';
+
+    userDetails = {
+        fullName: '',
+        personId: '',
+        homeUnit: null,
+        homeUnitName: null
+    };
 
     constructor(
         public router: Router,
@@ -96,6 +105,16 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         } else {
             this.setUserDetails();
         }
+        this.setModalHeaderInfo();
+    }
+
+    private setModalHeaderInfo() {
+        const id = this.responseObject.travelDisclosureId || null;
+        if (id) {
+            this.modalHeaderInfo = `#${id} : Travel Disclosure By ${this.responseObject.personFullName}`;
+        }  else {
+            this.modalHeaderInfo = `Travel Disclosure By ${this.responseObject.personFullName}`;
+        }
     }
 
     private setUserDetails(): void {
@@ -151,18 +170,18 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    showHomeButton(): boolean {
-        return this.isCreateMode || this.checkReviewStatusCode(['7', '2'], 'SOME');
+    checkAdministratorRight(): boolean {
+        const personId = this.commonService.getCurrentUserDetail('personId');
+        return this.responseObject.adminPersonId === personId;
     }
 
     showReturnOrApproveButton(): boolean {
-        return (
-            this.isTravelAdministrator &&
-            this.checkReviewStatusCode(['3', '2'], 'SOME') &&
-            !!this.responseObject.adminPersonId
-        );
+        return this.checkAdministratorRight() && this.checkReviewStatusCode(['3', '2'], 'SOME');
     }
 
+    showHomeButton(): boolean {
+        return this.isCreateMode || this.checkReviewStatusCode(['7', '2'], 'SOME');
+    }
     closeAssignAdministratorModal(event): void {
         if (event.adminPersonId || event.adminGroupId) {
             this.responseObject.adminPersonId = event.adminPersonId || null;
@@ -176,15 +195,24 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    openConfirmationModal(actionBtnName) {
+    private getActionRequestObject() {
+        return {
+            travelDisclosureId: this.responseObject.travelDisclosureId,
+            description: this.confirmationModalDescription
+        };
+    }
+
+
+    openConfirmationModal(actionBtnName: string, isExitsDescription: boolean): void {
+        this.isExitsDescription = isExitsDescription;
         this.service.modalActionBtnName = actionBtnName;
         document.getElementById('hidden-confirmation-modal-trigger').click();
     }
 
-    performDisclosureAction() {
+    performDisclosureAction(event: string): void {
+        this.isExitsDescription = false;
+        this.confirmationModalDescription = event;
         switch (this.service.modalActionBtnName) {
-            case 'Save': this.saveTravelDisclosure();
-                break;
             case 'Submit': this.submitTravelDisclosure();
                 break;
             case 'Withdraw': this.withdrawTravelDisclosure();
@@ -197,6 +225,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
                 break;
         }
     }
+
     saveTravelDisclosure(): void {
         this.service.saveSubject.next('SAVE_DISCLOSURE');
     }
@@ -218,7 +247,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     withdrawTravelDisclosure(): void {
-        this.$subscriptions.push(this.service.withdrawTravelDisclosure(this.responseObject.travelDisclosureId)
+        this.$subscriptions.push(this.service.withdrawTravelDisclosure(this.getActionRequestObject())
             .subscribe((res: any) => {
                 if (res) {
                     this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Withdrawed Successfully');
@@ -233,7 +262,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     returnTravelDisclosure(): void {
-        this.$subscriptions.push(this.service.returnTravelDisclosure(this.responseObject.travelDisclosureId)
+        this.$subscriptions.push(this.service.returnTravelDisclosure(this.getActionRequestObject())
             .subscribe((res: any) => {
                 if (res) {
                     this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Returned Successfully');
@@ -248,7 +277,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     approveTravelDisclosure(): void {
-        this.$subscriptions.push(this.service.approveTravelDisclosure(this.responseObject.travelDisclosureId)
+        this.$subscriptions.push(this.service.approveTravelDisclosure(this.getActionRequestObject())
             .subscribe((res: any) => {
                 if (res) {
                     this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Approved Successfully');

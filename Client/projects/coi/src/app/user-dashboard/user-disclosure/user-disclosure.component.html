@@ -327,19 +327,21 @@
                         <label for="department-id" class="label-text col-custom-travel">Department :</label>
                         <span class="col">
                             <app-no-data-label id="department-id" class="" [valueToShow]="disclosure?.travelEntityName">
-                                <span class="grey-text text-slice">#{{disclosure?.unitDetails?.unitDetail}}</span>
+                                <span class="grey-text text-slice" [title]="disclosure?.unitDetails?.unitDetail">#{{disclosure?.unitDetails?.unitDetail}}</span>
                             </app-no-data-label>
                         </span>
                     </div>
-                    <div class="col">
+                    <div class="col d-flex">
                         <label for="destination" class="label-text">Destination :</label>
-                        <app-no-data-label id="destination" [valueToShow]="disclosure?.travelCity || disclosure?.travelCountry || disclosure?.travelState">
-                            <span class="grey-text">
-                                {{disclosure?.travelCity}}<span
-                                *ngIf="disclosure?.travelCity && (disclosure?.travelCountry || disclosure?.travelState)">,</span>
-                                {{disclosure?.travelCountry || disclosure?.travelState}}
-                            </span>
-                        </app-no-data-label>
+                        <span class="col">
+                            <app-no-data-label id="destination" [valueToShow]="disclosure?.travelCity || disclosure?.travelCountry || disclosure?.travelState">
+                                <span class="grey-text text-slice" title="{{disclosure?.travelCity}}, {{disclosure?.travelCountry || disclosure?.travelState}}">
+                                    {{disclosure?.travelCity}}<span
+                                    *ngIf="disclosure?.travelCity && (disclosure?.travelCountry || disclosure?.travelState)">,</span>
+                                    {{disclosure?.travelCountry || disclosure?.travelState}}
+                                </span>
+                            </app-no-data-label>
+                        </span>
                     </div>
                     <div class="col">
                         <label for="travel-amount" class="label-text">Actual Amount :</label>

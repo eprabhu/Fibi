@@ -206,10 +206,10 @@
                             Disclosure
                         </div>
                     </button>
-                    <button [routerLink]="['history']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
-                        role="button" [title]="isRouteComplete(['history'])? 'Travel History' : 'Go to step Travel History'">
+                    <button [routerLink]="['related-disclosures']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
+                        role="button" [title]="isRouteComplete(['related-disclosures'])? 'Related Disclosures' : 'Go to step Related Disclosures'">
                         <div class="navigation-box-content" routerLinkActive="active" area-describedby="">
-                            Travel History
+                            Related Disclosures
                         </div>
                     </button>
                 </div>
@@ -259,7 +259,7 @@
                     </ng-container>
 
                     <!-- Withdraw disclosure -->
-                    <button title="Click to Withdraw Travel Disclosure" (click)="openConfirmationModal('Withdraw')"
+                    <button title="Click to Withdraw Travel Disclosure" (click)="openConfirmationModal('Withdraw', true)"
                         class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3" 
                         *ngIf="checkReviewStatusCode(['2']) && responseObject?.personId == currentPersonId">
                         <mat-icon>logout</mat-icon>
@@ -291,7 +291,7 @@
                     <ng-container *ngIf="showReturnOrApproveButton()">
                         <!-- return to pi -->
                         <button title="Click to Return Travel Disclosure"
-                            (click)="openConfirmationModal('Return');"
+                            (click)="openConfirmationModal('Return', true);"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
                             <mat-icon class="returnIcon">refresh</mat-icon>
@@ -300,7 +300,7 @@
 
                         <!-- approve disclosure -->
                         <button title="Click to Approve Travel Disclosure"
-                            (click)="openConfirmationModal('Approve');"
+                            (click)="openConfirmationModal('Approve', true);"
                             [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
                             class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
                             <mat-icon>check_circle_outline</mat-icon>
@@ -313,14 +313,14 @@
                     <!-- save -->
                     <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
                         class="col-12 mt-3  fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        (click)="openConfirmationModal('Save')" title="Click to Save Travel Disclosure">
+                        (click)="saveTravelDisclosure()" title="Click to Save Travel Disclosure">
                         <mat-icon class="me-2">save</mat-icon>
                         Save
                     </button>
 
                     <!-- submit -->
                     <button class="col-12 mt-3 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        (click)="openConfirmationModal('Submit');" *ngIf="isRouteComplete(['certification'])"
+                        (click)="openConfirmationModal('Submit', false);" *ngIf="isRouteComplete(['certification'])"
                         [disabled]="!service.isTravelCertified" title="Click to Submit Travel Disclosure">
                         <mat-icon class="me-2">done</mat-icon>
                         Submit
@@ -374,8 +374,9 @@
 <app-unsaved-changes-warning></app-unsaved-changes-warning>
 
 <!--Confirmation Modal-->
-<app-confirmation-modal (btnAction)="performDisclosureAction()" [createUser]="userDetails?.fullName"
-    [disclosureId]="responseObject?.travelDisclosureId"></app-confirmation-modal>
+<app-confirmation-modal (btnAction)="performDisclosureAction($event)"  
+                        [modalHeaderInfo]="modalHeaderInfo"
+                        [isExitsDescription]="isExitsDescription"></app-confirmation-modal>
 
 <!-- Add SFI Slider-->
 <!-- <div>

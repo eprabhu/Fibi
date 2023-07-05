@@ -49,16 +49,16 @@ export class TravelDisclosureService {
         return this._http.get(`${this._commonService.baseUrl}/loadTravelDisclosure/${travelDisclosureId}`);
     }
 
-    withdrawTravelDisclosure(travelDisclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/withdrawTravelDisclosure/${travelDisclosureId}`);
+    withdrawTravelDisclosure(travelDisclosureRO: object) {
+        return this._http.post(`${this._commonService.baseUrl}/withdrawTravelDisclosure`, travelDisclosureRO);
     }
 
-    approveTravelDisclosure(travelDisclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/approveTravelDisclosure/${travelDisclosureId}`);
+    approveTravelDisclosure(travelDisclosureRO: object) {
+        return this._http.post(`${this._commonService.baseUrl}/approveTravelDisclosure`, travelDisclosureRO);
     }
 
-    returnTravelDisclosure(travelDisclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/returnTravelDisclosure/${travelDisclosureId}`);
+    returnTravelDisclosure(travelDisclosureRO: object) {
+        return this._http.post(`${this._commonService.baseUrl}/returnTravelDisclosure`, travelDisclosureRO);
     }
 
     loadTravelDisclosureHistory(travelHistoryRO: TravelHistoryRO) {
