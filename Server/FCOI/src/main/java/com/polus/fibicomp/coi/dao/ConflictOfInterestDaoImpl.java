@@ -2380,8 +2380,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId) {
 		PersonEntity personEntity = hibernateTemplate.get(PersonEntity.class, personEntityId);
-		personEntity.setCoiEntity(null);
-		personEntity.setUpdateUserFullName(personDao.getUserFullNameByUserName(personEntity.getUpdateUser()));
 		return personEntity;
 	}
 
@@ -2435,7 +2433,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 	
 	@Override
-	public List<ValidPersonEntityRelType> getRelatioshipDetails(String disclosureTypeCode) {
+	public List<ValidPersonEntityRelType> getRelationshipDetails(String disclosureTypeCode) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<ValidPersonEntityRelType> query = builder.createQuery(ValidPersonEntityRelType.class);
@@ -2445,7 +2443,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<PersonEntityRelationship> getRelatioshipDetails(ConflictOfInterestVO vo) {
+	public List<PersonEntityRelationship> getRelationshipDetails(ConflictOfInterestVO vo) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
@@ -2455,6 +2453,26 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			    builder.equal(rootPersonEntityRelationship.get("validPersonEntityRelType").get("disclosureTypeCode"), vo.getDisclosureTypeCode())
 			));
 		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public List<PersonEntityRelationship> getRelationshipDetails(Integer personEntityId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
+		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
+		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityId"), personEntityId));
+		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public PersonEntityRelationship getRelationshipDetailsById(Integer personEntityRelId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
+		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
+		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityRelId"), personEntityRelId));
+		return session.createQuery(query).getResultList().get(0);
 	}
 
 	@Override

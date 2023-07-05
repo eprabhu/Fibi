@@ -1217,7 +1217,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getPersonEntityDetails(Integer personEntityId) {
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
-		vo.setPersonEntity(conflictOfInterestDao.getPersonEntityDetailsById(personEntityId));
+		PersonEntity personEntity = conflictOfInterestDao.getPersonEntityDetailsById(personEntityId);
+		PersonEntity personEntityObj = new PersonEntity();
+		BeanUtils.copyProperties(personEntity, personEntityObj, "coiEntity");
+		personEntityObj.setUpdateUserFullName(personDao.getUserFullNameByUserName(personEntityObj.getUpdateUser()));
+		vo.setPersonEntity(personEntityObj);
 		List<PersonEntityRelationship> PersonEntityRelationships = conflictOfInterestDao.getPersonEntityRelationshipByPersonEntityId(personEntityId);
 		PersonEntityRelationships.forEach(PersonEntityRelationship -> {
 			conflictOfInterestDao.getValidPersonEntityRelTypeByTypeCode(PersonEntityRelationship.getValidPersonEntityRelTypeCode());
@@ -1231,7 +1235,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
 		vo.setTabName(tabName);
 		vo = getDisclosureTypecode(vo);
-		vo.setValidPersonEntityRelTypes(conflictOfInterestDao.getRelatioshipDetails(vo.getDisclosureTypeCode()));
+		vo.setValidPersonEntityRelTypes(conflictOfInterestDao.getRelationshipDetails(vo.getDisclosureTypeCode()));
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
 
@@ -1251,7 +1255,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getPersonEntityRelationship(ConflictOfInterestVO vo) {
 		vo = getDisclosureTypecode(vo);
-		vo.setPersonEntityRelationships(conflictOfInterestDao.getRelatioshipDetails(vo));
+		vo.setPersonEntityRelationships(conflictOfInterestDao.getRelationshipDetails(vo));
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
 	
@@ -1848,8 +1852,27 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> deletePersonEntity(Integer personEntityId) {
+		conflictOfInterestDao.getRelationshipDetails(personEntityId).forEach(relationship ->
+			deletePerEntQuestAnsRelationship(relationship.getPersonEntityRelId(), personEntityId, relationship.getValidPersonEntityRelTypeCode())
+		);
 		conflictOfInterestDao.deletePersonEntity(personEntityId);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * This method is used to delete  a person entity relationship and its questionnaire answers
+	 * @param personEntityRelId
+	 * @param personEntityId
+	 * @param relationshipTypeCode
+	 */
+	private void deletePerEntQuestAnsRelationship(Integer personEntityRelId, Integer personEntityId, Integer relationshipTypeCode) {
+		QuestionnaireDataBus questionnaireDataBus = new QuestionnaireDataBus();
+		questionnaireDataBus.setModuleItemCode(Constants.COI_MODULE_CODE);
+		questionnaireDataBus.setModuleSubItemCode(Constants.COI_SFI_SUBMODULE_CODE);
+		questionnaireDataBus.setModuleItemKey(personEntityId.toString());
+		questionnaireDataBus.setModuleSubItemKey(relationshipTypeCode.toString());
+		questionnaireService.deleteAllQuestionAnswers(questionnaireDataBus);
+		conflictOfInterestDao.deletePersonEntityRelationship(personEntityRelId);
 	}
 
 	@Override

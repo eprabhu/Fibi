@@ -665,9 +665,23 @@ public interface ConflictOfInterestDao {
 
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId);
 
-	public List<ValidPersonEntityRelType> getRelatioshipDetails(String tabName);
+	public List<ValidPersonEntityRelType> getRelationshipDetails(String tabName);
 
-	public List<PersonEntityRelationship> getRelatioshipDetails(ConflictOfInterestVO vo);
+	public List<PersonEntityRelationship> getRelationshipDetails(ConflictOfInterestVO vo);
+
+	/**
+	 * This method is used to get Relationship Details personEntityId
+	 * @param personEntityId
+	 * @return
+	 */
+	List<PersonEntityRelationship> getRelationshipDetails(Integer personEntityId);
+
+	/**
+	 * This method is used to get Relationship Details By personEntityRelId
+	 * @param personEntityRelId
+	 * @return
+	 */
+	PersonEntityRelationship getRelationshipDetailsById(Integer personEntityRelId);
 
 	public CoiReviewStatusType getReviewStatusByCode(String reviewStatusPending);
 
