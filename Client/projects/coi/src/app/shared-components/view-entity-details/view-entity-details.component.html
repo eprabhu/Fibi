@@ -173,7 +173,7 @@
             <span class="btn-sfi-position">Modify SFI</span>
           </button>
           <button *ngIf="(isEntityManagement && isModifyEntity) || (!isEntityManagement && sfiStatus !='Draft' && !isEditMode);else noRightDesign3" 
-          class="btn btn-outline-grey fs-14 col-2 pb-0" (click)="navigateBack()" title="Back">
+          class="btn btn-outline-grey fs-14 col-2 pb-0" (click)="navigateBack()" title="Click to go back to Entity list">
             <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
           </button>
           <ng-template #noRightDesign3>

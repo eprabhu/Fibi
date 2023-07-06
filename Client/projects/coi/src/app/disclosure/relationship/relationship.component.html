@@ -36,7 +36,7 @@
                           <div class="col-12 d-flex" *ngIf="test.moduleCode == 3">
                               <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
                               <p class="entity-title">
-                                  <strong class="fs-18" (click)="selectedProjectForView=test;" data-bs-toggle="modal"
+                                  <strong title="Click to view project details" class="fs-18" (click)="selectedProjectForView=test;" data-bs-toggle="modal"
                                       data-bs-target="#moduleViewModal">#{{test?.moduleItemId}} - {{test?.title?.length >
                                       75 && !collapseViewMore[test?.moduleItemId] ? (test?.title | slice:0:75)+'...' :
                                       test?.title}}
@@ -50,7 +50,7 @@
                           </div>
                           <div class="col-12 d-flex" *ngIf="test.moduleCode == 1">
                               <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
-                              <p class="entity-title m-0" (click)="selectedProjectForView=test" data-bs-toggle="modal"
+                              <p title="Click to view project details" class="entity-title m-0" (click)="selectedProjectForView=test" data-bs-toggle="modal"
                                   data-bs-target="#moduleViewModal">
                                   <strong class="fs-16">#{{test?.moduleItemKey}} - {{test?.title}} </strong>
                               </p>
@@ -136,7 +136,7 @@
                                   <div class="col-6 mt-3" style="text-align: center;">
                                       <div class="row mt-2">
                                           <div class="col-12">
-                                              <button
+                                              <button title="Click to {{isEditMode ? 'Define' : 'Manage'}} Project - SFI relationship"
                                                   class="align-items-center btn btn-primary d-flex define-relation fs-14"
                                                   (click)="openDefineRelationship(test)" type="submit">
                                                   <img src="{{deployMap}}assets/images/define-relation-hover.svg"
@@ -189,7 +189,7 @@
                           selectedProjectForView?.moduleItemKey}} - {{selectedProjectForView?.title}}
                       </strong>
                   </h4>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button title="Click to close the popup" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                   <div class="row mx-0 mt-3">
