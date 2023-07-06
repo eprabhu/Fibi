@@ -997,9 +997,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Map<String, String> sort = vo.getSort();
 		String personId = vo.getPersonId();
 		String filterType = vo.getFilterType();
+		String searchWord = vo.getProperty2();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD(?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD(?,?,?,?,?,?,?,?,?)}");
 				statement.setString(1, personId);
 				statement.setString(2, setCOISortOrder(sort));
 				statement.setInt(3, (currentPage == null ? 0 : currentPage - 1));
@@ -1008,11 +1009,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setBoolean(6, isDownload);
 				statement.setString(7, isAdvancedSearch);
 				statement.setString(8, filterType);
+				statement.setString(9, searchWord);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_COI_DISCLOSURE_DASHBOARD";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, personId);
@@ -1023,6 +1025,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setBoolean(7, isDownload);
 				statement.setString(8, isAdvancedSearch);
 				statement.setString(9, filterType);
+				statement.setString(10, searchWord);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
@@ -1128,9 +1131,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		String isAdvancedSearch = vo.getAdvancedSearch();
 		Map<String, String> sort = vo.getSort();
 		String filterType = vo.getFilterType();
+		String searchWord = vo.getProperty2();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD_COUNT(?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?)}");
 				statement.setString(1, personId);
 				statement.setString(2, setCOISortOrder(sort));
 				statement.setInt(3, 0);
@@ -1139,10 +1143,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setBoolean(6, true);
 				statement.setString(7, isAdvancedSearch);
 				statement.setString(8, filterType);
+				statement.setString(9, searchWord);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String functionCall = "{call GET_COI_DISCLOSURE_DASHBOARD_COUNT (?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call GET_COI_DISCLOSURE_DASHBOARD_COUNT (?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, personId);
@@ -1153,6 +1158,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setBoolean(7, true);
 				statement.setString(8, isAdvancedSearch);
 				statement.setString(9, filterType);
+				statement.setString(10, searchWord);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
