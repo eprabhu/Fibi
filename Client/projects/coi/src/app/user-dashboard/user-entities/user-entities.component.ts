@@ -32,6 +32,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   isRelationshipActive: false;
   $debounceEventForEntities = new Subject();
   $fetchSFI = new Subject();
+  isSearchTextHover = false;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService) {

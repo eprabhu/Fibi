@@ -44,7 +44,8 @@ export class SfiComponent implements OnInit, OnDestroy {
     isEnableActivateInactivateSfiModal: boolean;
     $debounceEvent = new Subject();
     $fetchSFIList = new Subject();
-    
+    isSearchTextHover = false;
+
     constructor(
         private _sfiService: SfiService,
         private _dataStore: DataStoreService,

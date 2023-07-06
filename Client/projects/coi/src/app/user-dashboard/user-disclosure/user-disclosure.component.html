@@ -198,8 +198,8 @@
     </div>
 </nav>
 
-<div class="advance-search-area border d-flex mt-2 rounded-1" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
-    <div class="border-end fs-14 p-3">
+<div class="advance-search-area border d-flex mt-2 rounded-1">
+    <div class="border-end fs-14 p-3" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Type :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
             title="Click to filter by type: All" area-describedby="Click to filter by type: All"
@@ -213,16 +213,18 @@
         <!--<span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>-->
     </div>
-    <div class="d-flex flex-fill">
-        <input class="advance-search-input border-0 px-4" id="searchText" type="text" [(ngModel)]="searchText">
-        <label for="searchText" class="fs-15 ml-15 mt-3" *ngIf="!searchText">
-            <mat-icon class="me-2">search</mat-icon> Search Disclosure </label>
+    <div class="d-flex flex-fill  position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
+    (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
+        <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
+        <input class="advance-search-input border-0 px-4" id="searchText"
+        [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
+        type="text" [(ngModel)]="searchText" (ngModelChange)="getDisclosures()">
+        <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>        
     </div>
 </div>
 <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
 <ng-container
-    *ngFor="let disclosure of filteredDisclosureArray | SearchFilter: searchText:['coiDisclosureNumber', 'fcoiType',
-        'conflictStatus', 'dispositionStatus', 'proposalTitle', 'updateUser', 'noOfSfiInPending', 'proposalId', 'reviewStatus'] let index = index;">
+    *ngFor="let disclosure of filteredDisclosureArray ; let index = index;">
     <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
         (mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
         <div class="row mt-2">
