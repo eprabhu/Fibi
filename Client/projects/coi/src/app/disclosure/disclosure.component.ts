@@ -79,7 +79,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     relationshipError: any;
     questionnaireError: any;
 
-
     constructor(public router: Router,
         public commonService: CommonService,
         private _route: ActivatedRoute,
@@ -116,6 +115,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 });
             }
         });
+        this.updateTimeStampEvent();
     }
 
     ngOnDestroy(): void {
@@ -273,7 +273,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             coiDisclosure: {
                 disclosureId: this.coiData.coiDisclosure.disclosureId,
                 certificationText: this.coiData.coiDisclosure.certificationText ?
-                    this.coiData.coiDisclosure.certificationText : this.certificationText
+                    this.coiData.coiDisclosure.certificationText : this.certificationText,
+                    conflictStatusCode: this.dataStore.disclosureStatus
             }
         };
         this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
@@ -321,6 +322,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             .completeDisclosureReview(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureNumber)
             .subscribe((res: any) => {
                 this.updateDisclosureReviewStatus(res.body.coiDisclosure);
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             }, _err => {
                 if (_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
                     document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();
@@ -333,7 +335,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     updateDisclosureReviewStatus(res) {
         this.coiData.coiDisclosure = deepCloneObject(res);
         this.dataStore.updateStore(['coiDisclosure'], this.coiData);
-        this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
     }
 
     triggerSave() {
@@ -474,5 +475,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
+    updateTimeStampEvent() {
+        this.dataStore.updateTimestampEvent.subscribe((value) => {
+            this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
+            this.coiData = JSON.parse(JSON.stringify(this.coiData));
+        });
+    }
 
 }
