@@ -129,6 +129,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         this.definedRelationships.push(res);
         this.getQuestionnaire(res);
         this.findRelation(res.validPersonEntityRelType.relationshipTypeCode);
+        this.entityDetailsServices.isShowRelationButton = this.relationLookup.length;
         this.clearRelationModal();
         this.isSaving = false;
         this.updateRelationship.emit(res);
@@ -174,6 +175,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         this.findRelation(element.validPersonEntityRelType.personEntityRelType.relationshipTypeCode);
       });
     }
+    this.entityDetailsServices.isShowRelationButton = this.relationLookup.length;
   }
   validateRelationship() {
     this.relationValidationMap.clear();
