@@ -5,38 +5,57 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{modalHeaderInfo}}</h5>
+                <h5 class="modal-title">{{modalHeaderTitle}}</h5>
                 <button type="button" id="prop-confirmationModal-dismiss-btn" class="btn-close fs-12"
-                    data-bs-dismiss="modal" aria-label="Close">
+                    data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()">
                 </button>
             </div>
-            <div class="modal-body">
-                <!-- warning msg -->
-                <p class="fs-14" *ngIf="!isExitsDescription">
-                    Are you sure you want to <strong>{{service.modalActionBtnName}}</strong> this disclosure?
-                </p>
-
-                <!-- description text area -->
-                <ng-container *ngIf="isExitsDescription">
-                    <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12">
-                        Description
-                    </label>
-                    <div class="col-12">
-                        <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator
-                            [isShowLimiter]='true' [limit]=200 autocomplete="off"
-                            [(ngModel)]="description" class="form-control fs-14"
-                            [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''">
-                        </textarea>
+            <div class="modal-body m-0 p-0">
+                <div class="d-flex grey-info align-items-center position-relative" *ngIf="helpText.length > 0">
+                    <span data-bs-toggle="tooltip" title="Travel Disclosure Help Text" data-bs-placement="top" class="d-inline-block">
+                        <mat-icon role="img"
+                            class="mat-icon me-2 info-icon material-icons mat-icon-no-color"
+                            aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                    </span>
+                    <div class="info-text fs-14 mt-1">
+                        <div class="d-flex" *ngFor="let helpText of helpText">
+                            <i class="fa fa-angle-double-right me-2 mt-1" aria-hidden="true"></i>
+                            <span>{{helpText}}</span>
+                        </div>
                     </div>
-                </ng-container>
+                </div>
+                <div class="p-2 m-2">
+                    <!-- warning msg -->
+                    <p class="fs-14 ms-2" *ngIf="!needDescriptionField">
+                        <ng-content></ng-content>
+                    </p>
+
+                    <!-- description text area -->
+                    <ng-container *ngIf="needDescriptionField">
+                        <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12">
+                            <span class="text-danger" *ngIf="isMandatory">*</span>
+                            Description
+                        </label>
+                        <div class="col-12">
+                            <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator
+                                [isShowLimiter]='true' [limit]=200 class="form-control fs-14" autocomplete="off"
+                                [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty();"
+                                [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''">
+                        </textarea>
+                            <span *ngIf="mandatoryList?.has('description')"
+                                class="fs-13 invalid-feedback d-block position-absolute">
+                                {{mandatoryList?.get('description')}}
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
             </div>
             <div class="modal-footer mx-2">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Cancel
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="closeModal()">
+                    {{modalCloseBtnName}}
                 </button>
-                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performAction()"
-                    data-bs-dismiss="modal">
-                    {{service.modalActionBtnName}}
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performAction()">
+                    {{modalActionBtnName}}
                 </button>
             </div>
         </div>

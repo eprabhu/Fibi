@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { slideHorizontal } from 'projects/fibi/src/app/common/utilities/animations';
-import { scrollIntoView } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-travel-tool-kit',
@@ -10,10 +9,15 @@ import { scrollIntoView } from 'projects/fibi/src/app/common/utilities/custom-ut
 })
 export class TravelToolKitComponent implements OnInit {
 
-    scrollIntoView = scrollIntoView;
     constructor() { }
 
     ngOnInit() {
     }
+
+    jumpToSection(section) {
+        const sectionHeight = document.getElementById(section).offsetTop - 270;
+        window.scrollTo({ top: sectionHeight, behavior: 'smooth' });
+    }
+
 
 }

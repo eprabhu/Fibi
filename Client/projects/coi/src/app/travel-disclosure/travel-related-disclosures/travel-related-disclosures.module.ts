@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TravelHistoryComponent } from './travel-history.component';
+import { TravelRelatedDisclosureComponent } from './travel-related-disclosures.component';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
+import { TravelSharedComponentModule } from '../travel-shared-component/travel-shared-component.module';
 
 const routes: Routes = [
     {
-        path: '', component: TravelHistoryComponent,
+        path: '', component: TravelRelatedDisclosureComponent,
     }
 ];
 
@@ -20,10 +20,10 @@ const routes: Routes = [
         FormsModule,
         RouterModule.forChild(routes),
         SharedComponentModule,
-        MatIconModule
+        TravelSharedComponentModule
     ],
     declarations: [
-        TravelHistoryComponent
+        TravelRelatedDisclosureComponent
     ]
 })
-export class TravelHistoryModule { }
+export class TravelRelatedDisclosuresModule { }

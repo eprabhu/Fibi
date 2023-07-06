@@ -35,9 +35,9 @@ const routes: Routes = [
                 .then(m => m.TravelSummaryModule)
             },
             {
-                path: 'history', canDeactivate: [],
-                loadChildren: () => import('./travel-history/travel-history.module')
-                .then(m => m.TravelHistoryModule)
+                path: 'related-disclosures', canDeactivate: [],
+                loadChildren: () => import('./travel-related-disclosures/travel-related-disclosures.module')
+                .then(m => m.TravelRelatedDisclosuresModule)
             }
         ]
     }
