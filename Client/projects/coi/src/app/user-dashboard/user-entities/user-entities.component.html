@@ -11,14 +11,13 @@
               class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" title="Sort by All Status"
               role="button">All</span>      
     </div>
-    <div class="d-flex flex-fill position-relative">
-        <input class="advance-search-input border-0 px-4" type="text" id="searchText" placeholder="Search Entity Name" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
-        <a class="searchButton me-3" *ngIf="!searchText">
-          <i aria-hidden="true" class="fa fa-search fa-med pt-2 mr-4"></i>
-      </a>
-      <a class="searchButton me-3" *ngIf="searchText" (click)="clearSearchText()">
-        <i aria-hidden="true" class="fa fa-times fa-med pt-2 mr-4"></i>
-      </a>
+    <div class="d-flex flex-fill position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
+    (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
+        <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
+        <input class="advance-search-input border-0 px-4" type="text" id="searchText"
+        [class.search-area]="isSearchTextHover"
+        placeholder="Search Entity Name" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
+        <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>        
     </div>
 </div>
 <app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
