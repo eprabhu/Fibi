@@ -233,7 +233,7 @@
             <span class="btn-approve-position">Approve Entity</span>
           </button>
         </div>
-        <div *ngIf="!isEntityManagement && isEditMode" class="d-flex justify-content-around mt-3 mx-3">
+        <div *ngIf="!isEntityManagement && isEditMode && entityDetailsServices.isShowRelationButton" class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-add-relationship" (click)="addNewRelationship()"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
             title="Click to add new relationship">
