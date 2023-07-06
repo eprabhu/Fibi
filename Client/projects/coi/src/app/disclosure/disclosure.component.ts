@@ -25,6 +25,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities';
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
+
 @Component({
     selector: 'app-disclosure',
     templateUrl: './disclosure.component.html',
@@ -102,8 +103,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
         this.getDataFromStore();
-        // this.validateRelationship();
-        // this.certifyIfQuestionnaireCompleted(res:)
         this.listenDataChangeFromStore();
         this.prevURL = this.navigationService.previousURL;
         this._route.queryParams.subscribe(params => {
@@ -245,15 +244,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
         if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
-            if (this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-                this.validateRelationship();
-            } else {
-                this.isSaving = false;
+            if (!this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
                 this.error = 'Please complete the following mandatory Questionnaire(s) in the Screening Questionniare section.';
                 this.coiService.submitResponseErrors.push(this.error);
-                this.validateRelationship();
-                return false;
             }
+            this.validateRelationship();
         }
     }
 
@@ -296,6 +291,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.coiService.submitResponseErrors.push( error.validationMessage) ;
             });
             this.errorCheck();
+        }, err => {
+            this.isSaving = false;
         }));
     }
     private getDataFromStore() {
@@ -470,7 +467,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     errorCheck() {
         if (this.coiService.submitResponseErrors.length) {
-            openModal('ValidateAwardModal');
+            this.isSaving = false;
+            openModal('ValidatedModal');
         } else {
             openModal('confirmModal');
         }

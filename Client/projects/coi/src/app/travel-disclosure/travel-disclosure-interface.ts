@@ -104,3 +104,24 @@ export class EntityData {
     entityType: string;
     entityName: string;
 }
+
+export interface TravelHistoryRO {
+    personId: String;
+    entityNumber: number;
+}
+
+export interface TravelHistory {
+    travelDisclosureId: number;
+    travelEntityName: string;
+    entityType: string;
+    country: string;
+    travelTitle: string;
+    purposeOfTheTrip: string;
+    destinationCity: string;
+    destinationCountry: string;
+    destinationState: string;
+    travellerTypeCodeList: [];
+    travelAmount: number;
+    travelStartDate: number;
+    travelEndDate: number;
+  }

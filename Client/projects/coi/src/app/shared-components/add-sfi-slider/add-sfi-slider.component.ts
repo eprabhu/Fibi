@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { slideHorizontalFast } from '../../../../../fibi/src/app/common/utilities/animations';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
 import { ActivityService } from '../../disclosure/activity-track/activity.service';
@@ -10,15 +9,13 @@ import { SfiService } from '../../disclosure/sfi/sfi.service';
     selector: 'app-add-sfi-slider',
     templateUrl: './add-sfi-slider.component.html',
     styleUrls: ['./add-sfi-slider.component.scss'],
-    providers: [ActivityService],
-    animations: [slideHorizontalFast]
+    providers: [ActivityService]
 })
 export class AddSfiSliderComponent implements OnInit {
 
     @Input() disclosureDetails: { disclosureId: any, disclosureNumber: any } = { disclosureId: null, disclosureNumber: null };
-
-    scrollHeight: number;
     @ViewChild('sfiNavOverlay', { static: true }) sfiNavOverlay: ElementRef;
+    scrollHeight: number;
     @Input() coiEntityManageId: any = null;
     @Input() isEditEntity = false;
     @Input() modifyType = '';
@@ -28,22 +25,31 @@ export class AddSfiSliderComponent implements OnInit {
     constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
     ngOnInit(): void {
+        document.body.classList.add('overflow-hidden');
         this.showSfiNavBar();
     }
 
     hideSfiNavBar() {
-        this.sfiService.isShowSfiNavBar = false;
-        this.showSfiNavBar();
+        let slider = document.querySelector('.slider-base');
+        slider.classList.remove('slider-opened');        
+        setTimeout(() => {
+            this.sfiService.isShowSfiNavBar = false;
+        },500);
     }
 
+    addBodyScroll() {
+        setTimeout(() => {
+          document.body.classList.remove('overflow-hidden');
+          document.body.classList.add('overflow-auto');
+        }, 500);
+      }
+
     showSfiNavBar() {
-        if (this.sfiService.isShowSfiNavBar) {
-            this.scrollHeight = document.documentElement.scrollTop;
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.top = - this.scrollHeight + 'px';
-        } else {
-            document.body.style.overflow = 'auto';
-            document.documentElement.scrollTop = this.scrollHeight;
+        if(this.sfiService.isShowSfiNavBar) {
+            setTimeout(() => {
+                const slider = document.querySelector('.slider-base');
+                slider.classList.add('slider-opened');
+            });
         }
     }
 
@@ -57,4 +63,7 @@ export class AddSfiSliderComponent implements OnInit {
         hideModal(event);
     }
 
+    ngOnDestroy() {
+        this.addBodyScroll();
+    }
 }

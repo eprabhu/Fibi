@@ -128,7 +128,7 @@ export class AddSfiComponent implements OnInit {
     }
 
     private getEntityStatusCode() {
-        return (this._router.url.includes('entity-management') || this.sfiType === 'ENTITY') ? '1' : '3';
+        return (this._router.url.includes('entity-management') || this.sfiType === 'ENTITY') ? '1' : '2';
     }
 
     private checkIfSFIAlreadyAdded(entityId, event): void {

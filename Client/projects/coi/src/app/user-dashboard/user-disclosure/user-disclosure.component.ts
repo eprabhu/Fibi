@@ -5,6 +5,9 @@ import { CommonService } from '../../common/services/common.service';
 import { CREATE_DISCLOSURE_ROUTE_URL, CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { Router } from '@angular/router';
 import { ActiveDisclosure , UserDisclosure } from './user-disclosure-interface';
+import { Subject, interval } from 'rxjs';
+import { debounce, switchMap } from 'rxjs/operators';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 @Component({
     selector: 'app-user-disclosure',
     templateUrl: './user-disclosure.component.html',
@@ -26,6 +29,7 @@ export class UserDisclosureComponent implements OnInit {
         isDownload: false,
         filterType: 'ALL',
         currentPage: '1',
+        property2: ''
     };
     filteredDisclosureArray: UserDisclosure[] = [];
     dashboardCount: any;
@@ -44,6 +48,11 @@ export class UserDisclosureComponent implements OnInit {
     fcoiTypeCode: any;
     disclosures: any;
     result: any;
+    $subscriptions = [];
+    $debounceEventForDisclosureList = new Subject();
+    $fetchDisclosures = new Subject();
+    isSearchTextHover = false;
+    
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
         public commonService: CommonService,
@@ -52,20 +61,41 @@ export class UserDisclosureComponent implements OnInit {
 
     ngOnInit() {
         this.loadDashboard();
+        this.$fetchDisclosures.next();
         this.loadDashboardCount();
+        this.getSearchList();
     }
 
     loadDashboard() {
-        this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject).subscribe((res: any) => {
+        this.$subscriptions.push(this.$fetchDisclosures.pipe(
+            switchMap(() => this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject))).subscribe((res: any) => {
             this.result = res;
             this.filteredDisclosureArray =  res.disclosureViews ? res.disclosureViews : [];
-            this.searchText = '';
-        });
+        }));
+    }
+
+    getDisclosures() {
+        this.dashboardRequestObject.currentPage = '1';
+        this.$debounceEventForDisclosureList.next();
+    }
+
+    getSearchList() {
+        this.$subscriptions.push(this.$debounceEventForDisclosureList.pipe(debounce(() => interval(800))).subscribe((data: any) => {
+        this.dashboardRequestObject.property2 = this.searchText;
+          this.$fetchDisclosures.next();
+        }
+        ));
+      }
+
+    resetAndFetchDisclosure() {
+        this.searchText = '';
+        this.dashboardRequestObject.property2 = '';
+        this.$fetchDisclosures.next();
     }
 
     actionsOnPageChange(event) {
         this.dashboardRequestObject.currentPage = event;
-        this.loadDashboard();
+        this.$fetchDisclosures.next();
     }
 
     loadDashboardCount() {
@@ -92,7 +122,11 @@ export class UserDisclosureComponent implements OnInit {
         this.dashboardRequestObject.currentPage = '1';
         this.dashboardRequestObject.filterType = 'ALL';
         this.currentSelected.filter = 'ALL';
-        this.loadDashboard();
+        this.resetAndFetchDisclosure();
+    }
+
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
     }
 
     setSelectedModuleCode(moduleName, id, disclosure, noOfcount) {
@@ -126,7 +160,7 @@ export class UserDisclosureComponent implements OnInit {
         this.currentSelected.filter = type;
         this.dashboardRequestObject.filterType = type;
         this.dashboardRequestObject.currentPage = '1';
-        this.loadDashboard();
+        this.resetAndFetchDisclosure();
     }
 
     closeModalEvent(event) {
@@ -170,6 +204,14 @@ export class UserDisclosureComponent implements OnInit {
 
     formatTravellerTypes(travellerTypes: string): string {
         return travellerTypes ? (travellerTypes.split(',').map(travellerType => travellerType.trim()).join(', ')) : '';
+    }
+
+    getSearchPlaceHolder() {
+        if(this.currentSelected.tab != 'TRAVEL_DISCLOSURES') {
+            return 'Search by #Disclosure Number, Disclosure Id, Project Title, Disclosure Status, Disposition Status, Review Status, Department Name';
+        } else {
+            return 'Search by #Travel Disclosure Id, Entity Name, Department Name, Traveller Type, Destination, Review Status, Document Status, Purpose';
+        }
     }
 
 }

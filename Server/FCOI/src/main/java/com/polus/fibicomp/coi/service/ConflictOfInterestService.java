@@ -8,14 +8,16 @@ import javax.validation.Valid;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 
 import org.springframework.http.ResponseEntity;
@@ -404,11 +406,11 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> certifyTravelDisclosure(ConflictOfInterestVO vo);
 	
-	ResponseEntity<Object> withdrawTravelDisclosure(Integer travelDisclosureId);
+	ResponseEntity<Object> withdrawTravelDisclosure(Integer travelDisclosureId, String description);
 	
-	ResponseEntity<Object> approveTravelDisclosure(Integer travelDisclosureId);
+	ResponseEntity<Object> approveTravelDisclosure(Integer travelDisclosureId, String description);
 	
-	ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId);
+	ResponseEntity<Object> returnTravelDisclosure(Integer travelDisclosureId, String description);
 
 	/**
 	 * This method is used to evaluate validation conditions:
@@ -437,13 +439,25 @@ public interface ConflictOfInterestService {
 
 	ResponseEntity<Object> updateProjectRelationship(ConflictOfInterestVO vo);
 
-
-
-
 	/**
 	 * This method is used to delete Person entity
 	 * @param personEntityId
 	 * @return
 	 */
 	ResponseEntity<Object> deletePersonEntity(Integer personEntityId);
+
+	/**
+	 * This method is used to fetch all entity relationship types
+	 * @return
+	 */
+	ResponseEntity<Object> fetchAllRelationshipTypes();
+
+	/**
+	 * This method is used to approve Entity
+	 * @param entityRelationship
+	 * @return
+	 */
+	ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship);
+	
+	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 }

@@ -30,7 +30,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
                 this.loadTravelDisclosure(MODULE_ID).subscribe((res: TravelDisclosureResponseObject) => {
                     if (res) {
                         this.updateTravelDataStore(res);
-                        this.reRouteIfWrongPath(_state.url, res.reviewStatusCode, route);
+                        this.reRouteIfWrongPath(_state.url, res.reviewStatusCode, res.personId, route);
                         this.setPreviousModuleUrl();
                         observer.next(true);
                         observer.complete();
@@ -79,11 +79,13 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
         this._dataStore.setStoreData(data);
     }
 
-    private reRouteIfWrongPath(currentPath: string, reviewStatusCode: string, route) {
+    private reRouteIfWrongPath(currentPath: string, reviewStatusCode: string, personId: string, route) {
         let reRoutePath;
         const isCreateMode = ['1', '4', '5'].includes(reviewStatusCode);
-        if (isCreateMode && !currentPath.includes('create-travel-disclosure')) {
+        if (this._service.checkCreateUserRight(personId) && isCreateMode && !currentPath.includes('create-travel-disclosure')) {
             reRoutePath = CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
+        } else if (!this._service.checkCreateUserRight(personId) && isCreateMode) {
+            this._router.navigate([HOME_URL]);
         } else if (!isCreateMode && currentPath.includes('create-travel-disclosure')) {
             reRoutePath = POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
         }

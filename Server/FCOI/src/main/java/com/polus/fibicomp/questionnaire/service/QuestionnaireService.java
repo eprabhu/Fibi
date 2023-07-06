@@ -186,4 +186,13 @@ public interface QuestionnaireService {
 	 */
 	public QuestionnaireDataBus ruleEvaluateQuestionnaire(QuestionnaireDataBus questionnaireDataBus);
 
+	/**
+	 * This method is used to delete all questionnaire answers
+	 * delete table answers
+	 * delete attachment answers
+	 * delete quest answers
+	 * delete quest header
+	 * @param questionnaireDataBus
+	 */
+	void deleteAllQuestionAnswers(QuestionnaireDataBus questionnaireDataBus);
 }

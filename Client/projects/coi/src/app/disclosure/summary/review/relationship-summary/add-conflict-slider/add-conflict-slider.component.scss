@@ -1,73 +1,14 @@
-.fixed-tree {
-  z-index: 1002;
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100vh;
-}
-
-.relationship-content {
-  height: 770px;
-  width: 1200px;
-  z-index: 5;
-  position: relative;
-  background: #fbfbff;
-  border-radius: 5px;
-  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 2px 0 #0000001a, 0 3px 1px -2px #0000001a, 0 1px 5px 0 #0003;
-}
 
 .overlay {
   position: fixed;
-  /* Sit on top of the page content */
-  display: none;
-  /* Hidden by default */
   width: 100%;
-  /* Full width (cover the whole page) */
   height: 100%;
-  /* Full height (cover the whole page) */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.13);
-  /* Black background with opacity */
-  z-index: 1002;
-  /* Specify a stack order in case you're using a different order for other elements */
-  cursor: pointer;
-  /* Add a pointer on hover */
-}
-
-.round-button {
-  border-radius: 50%;
-  padding: 7px;
-  width: 28px;
-  height: 31px;
-  border: 1px solid;
-  position: relative;
-}
-
-.close {
-  position: absolute;
-  top: 35px;
-  color: grey;
-  background: #ffffff;
-  z-index: 1500;
-  padding: 1.2rem 1.3rem;
-  border-radius: 50%;
-  left: -27px;
-  opacity: 1;
-  width: 40px;
-  height: 40px;
-  font-size: 14px;
-}
-
-.close img {
-  width: 17px;
-  position: absolute;
-  top: 50%;
-  right: 50%;
-  transform: translate(50%, -50%);
+  background:rgb(74 74 74 / 32%);
+  z-index: 50;
 }
 
 .info-card {
@@ -98,10 +39,10 @@
 
 .info-icon {
   margin-top: -7px;
-  height: 22px;
+  height: 15px;
   width: 22px;
   font-size: 16px;
-  position: absolute;
+  position: relative;
   margin-left: 2px;
   color: #6f7395;
   cursor: pointer;
@@ -202,4 +143,28 @@
 
 .comment-box-height {
   padding-left: 50px;
+}
+
+.slider-base {
+  position: fixed;
+  z-index: 51;
+  top: 0;
+  right: -83%;
+  width: 80%;
+  height: 100%;
+  padding-left: 0;
+  background-color: #ffecec85;
+  box-shadow: -1px 0px 6px 1px rgba(0, 0, 0, 0.12);
+  transition: right 600ms cubic-bezier(.42, .8, .67, 1.06);
+}
+
+.slider-opened {
+  right: 0 !important;
+}
+
+.slider-container {
+  background-color: #fff;
+  height: 100vh;
+  padding: 0px 10px 10px 10px;
+  overflow: auto;
 }

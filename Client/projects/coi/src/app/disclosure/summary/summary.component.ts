@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { DataStoreService } from '../services/data-store.service';
 import { CoiSummaryEventsAndStoreService } from './coi-summary-events-and-store.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-summary',
@@ -9,6 +10,8 @@ import { CoiSummaryEventsAndStoreService } from './coi-summary-events-and-store.
     styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent implements OnInit {
+   
+    $subscriptions: Subscription[] = [];
 
     constructor(
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
@@ -17,6 +20,16 @@ export class SummaryComponent implements OnInit {
 
     ngOnInit() {
         this.getCOIDetails();
+        this.listenDataChangeFromStore();
+    }
+    
+    private listenDataChangeFromStore() {
+        this.$subscriptions.push(
+            this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
+                this.getCOIDetails();
+                this._dataStoreAndEventsService.dataEvent.next(['coiDisclosure']);
+            })
+        );
     }
 
     getCOIDetails(): void {

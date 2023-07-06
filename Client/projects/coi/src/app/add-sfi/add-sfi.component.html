@@ -1,4 +1,4 @@
-      <div class="card card-height">
+      <div class="card card-height border-bottom-0">
         <div class="card-header px-4 py-2" [ngClass]="isSlider? 'card-header-slider':'card-header-page'">
           <h5 class="card-title review-title">
             <div class="justify-content-between d-flex align-items-center">
@@ -232,9 +232,9 @@
         </div>
 
       <!-- Additional Details -->
-          <div class="card-body p-0 my-4">
+          <div class="card-body p-0 my-4" *ngIf="!isEntityManagement">
                 <!-- Additional Details -->
-                <div *ngIf="!isEntityManagement" class="mt-1">
+                <div class="mt-1">
                     <div class="card shadow-sm border mb-3" tabindex="-1">
                         <div class="m-2 mb-0">
                             <div class="row d-flex">

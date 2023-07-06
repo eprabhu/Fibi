@@ -168,6 +168,69 @@
         <!-- <app-entity-list  [entityActiveTabName]="activeTabName" (entityListResult)="addEntityList($event)"
     (modifyEntityId)="selectedEntity($event); isViewAdvanceSearch = false" (navNextPage)="navigateNextPage($event)"
     [entityList]="entityList" [resultCount]="resultCount"></app-entity-list> -->
+    <div class="sort-div border mt-2" *ngIf="isManageEntity && entityList.length">
+        <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
+        <span tabindex="0" (keydown.enter)="sortResult('name')" (click)="sortResult('name')"
+            [class.filter-active]="isActive('name')" title="Click to sort by Entity Name"
+            area-describedby="Click to sort by Disclosure Type"
+            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill" role="button">
+            <div class="d-inline-flex align-items-center">
+                <label>Name</label>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['name']=== 'asc' ">arrow_downward</mat-icon>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['name']=== 'desc' ">arrow_upward</mat-icon>
+            </div>
+        </span>
+        <span tabindex="0" (keydown.enter)="sortResult('entityType')" (click)="sortResult('entityType')"
+            [class.filter-active]="isActive('entityType')" title="Click to sort by Entity Type"
+            area-describedby="Click to sort by Last Updated By"
+            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
+            <div class="d-inline-flex align-items-center">
+                <label>Entity Type</label>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['entityType']=== 'asc'">arrow_downward</mat-icon>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['entityType']=== 'desc' ">arrow_upward</mat-icon>
+            </div>
+        </span>
+        <span tabindex="0" (keydown.enter)="sortResult('riskLevel')" (click)="sortResult('riskLevel')"
+            [class.filter-active]="isActive('riskLevel')" title="Click to sort by Risk Level"
+            area-describedby="Click to sort by Disclosure Type"
+            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
+            <div class="d-inline-flex align-items-center">
+                <label>Risk</label>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['riskLevel']=== 'asc' ">arrow_downward</mat-icon>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['riskLevel']=== 'desc' ">arrow_upward</mat-icon>
+            </div>
+        </span>
+        <span tabindex="0" (keydown.enter)="sortResult('country')" (click)="sortResult('country')"
+            [class.filter-active]="isActive('country')" title="Click to sort by Disclosure Type"
+            area-describedby="Click to sort by Country name"
+            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
+            <div class="d-inline-flex align-items-center">
+                <label>Country</label>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['country']=== 'asc' ">arrow_downward</mat-icon>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['country']=== 'desc' ">arrow_upward</mat-icon>
+            </div>
+        </span>
+        <span tabindex="0" (keydown.enter)="sortResult('updateTimeStamp')" (click)="sortResult('updateTimeStamp')"
+            [class.filter-active]="isActive('updateTimeStamp')" title="Click to sort by last updated"
+            area-describedby="Click to sort by last updated"
+            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
+            <div class="d-inline-flex align-items-center">
+                <label>Last Updated</label>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['updateTimeStamp']=== 'asc' ">arrow_downward</mat-icon>
+                <mat-icon class="arrow selected-arrow"
+                    *ngIf="entityManagementService.coiRequestObject.sort['updateTimeStamp']=== 'desc' ">arrow_upward</mat-icon>
+            </div>
+        </span>
+    </div>
         <ng-container *ngIf="isSearchData">
             <div *ngIf="entityList.length; else noData">
                 <div *ngFor="let entityListData of entityList;let i=index">
