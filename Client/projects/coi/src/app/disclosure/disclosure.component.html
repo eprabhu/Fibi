@@ -592,13 +592,13 @@
     </div>
 </div>
 <!--validation modal-->
-<div class="modal fade mySkinDialog" tabindex="-1" id="ValidateAwardModal" tabindex="-1" role="dialog"
+<div class="modal fade mySkinDialog" tabindex="-1" id="ValidatedModal" tabindex="-1" role="dialog"
     data-backdrop="static" data-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Validation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" (click)="coiService.submitResponseErrors = [];" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -639,7 +639,10 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12 ">
-                        <div>
+                        <div *ngIf="coiData?.coiDisclosure?.numberOfSFI > 0">
+                            Are you sure you want to submit the FCOI / Project disclosure?
+                        </div>
+                        <div *ngIf="coiData?.coiDisclosure?.numberOfSFI == 0">
                             You are about to submit a no SFI disclosure.
                         </div>
                     </div>
@@ -668,3 +671,4 @@
 <app-assign-administrator-modal  (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
+
