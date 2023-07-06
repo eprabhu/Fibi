@@ -13,7 +13,6 @@ export class TravelDisclosureService {
     travelDataChanged = false;
     isTravelCertified = false;
     unSavedTabName = '';
-    modalActionBtnName = '';
     isChildRouting = false;
     isAdminDashboard = false;
     PREVIOUS_MODULE_URL = '';
@@ -24,6 +23,10 @@ export class TravelDisclosureService {
     setUnSavedChanges(dataChange: boolean, tabName: string): void {
         this.unSavedTabName = tabName;
         this.travelDataChanged = dataChange;
+    }
+
+    checkCreateUserRight(personId: string): boolean {
+        return personId === this._commonService.getCurrentUserDetail('personId');
     }
 
     createCoiTravelDisclosure(travelDisclosureRO: object) {

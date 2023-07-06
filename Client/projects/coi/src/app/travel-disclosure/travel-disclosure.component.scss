@@ -93,10 +93,11 @@
 
     .arrow {
       position: absolute;
-      left: -22px;
+      left: -23px;
       z-index: 2;
-      width: 45px;
-      height: 45px;
+      width: 47px;
+      height: 47px;
+      top: -1px;
       border: 8px solid rgb(219, 219, 219);
       background: transparent;
       @include border-radius(0px);

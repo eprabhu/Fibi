@@ -9,7 +9,7 @@
             <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
             All the fields of travel disclosure form are mandatory
             <span *ngIf="!isInfoExpanded" (click)="isInfoExpanded = true" class="fw-700 cursor-pointer">...<u
-                    title="Expand SFI help text" class="fw-700">Read More</u></span>
+                    title="Expand Travel Disclosure help text" class="fw-700">Read More</u></span>
         </div>
         <ng-container *ngIf="isInfoExpanded">
             <div class="mt-2">
@@ -19,7 +19,7 @@
             <div class="mt-2">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
                 Navigate to the Certification section to certify and submit the disclosure.
-                <span *ngIf="isInfoExpanded" (click) = "isInfoExpanded = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Show Less</u></span>
+                <span *ngIf="isInfoExpanded" (click) = "isInfoExpanded = false" class="fw-700 cursor-pointer"><u title="Collapse Travel Disclosure help text">Show Less</u></span>
             </div>
         </ng-container>
     </div>
