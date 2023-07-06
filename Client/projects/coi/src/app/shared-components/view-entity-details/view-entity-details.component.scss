@@ -292,11 +292,22 @@ mat-icon {
 }
 
 .sticky-top-50 {
-  top:52px;
+  top:51px;
   z-index:1;
   position: sticky;
 }
 
 .fa-bolt {
   margin-right: 23px;
+}
+
+.info-icon {
+  top: 11px;
+  height: 22px;
+  width: 22px;
+  font-size: 16px;
+  position: absolute;
+  margin-left: 2px;
+  color: #6f7395;
+  cursor: pointer;
 }

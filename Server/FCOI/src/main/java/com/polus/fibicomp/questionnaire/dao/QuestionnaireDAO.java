@@ -633,7 +633,7 @@ public class QuestionnaireDAO {
 	}
 
 	private ArrayList<HashMap<String, Object>> getAllApplicableQuestionnaire(String moduleItemKey,String moduleSubItemKey,
-			Integer moduleItemCode, Integer moduleSubItemCode) throws Exception {		
+			Integer moduleItemCode, Integer moduleSubItemCode) throws Exception {
 		ArrayList<HashMap<String, Object>> output = new ArrayList<HashMap<String, Object>>();
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
@@ -931,6 +931,23 @@ public class QuestionnaireDAO {
 		Predicate predicateModuleSubItemkey = builder.equal(root.get("moduleSubItemKey"), subModuleItemKey);
 		delete.where(builder.and(predicateModuleItemKey, predicateModuleItemCode, predicateModuleSubItemCode, predicateModuleSubItemkey));
 		session.createQuery(delete).executeUpdate();
+	}
+
+	public void deleteQuestTableAnswers(String moduleItemKey, Integer moduleItemCode, Integer moduleSubItemCode, String subModuleItemKey) {
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			StringBuilder hqlQuery = new StringBuilder().append("delete QuestTableAnswer t1 where t1.questAnsHeaderId in ");
+			hqlQuery.append("(select t3.questAnsHeaderId from QuestAnswerHeader t3 where t3.moduleItemKey=:moduleItemKey ");
+			hqlQuery.append("and t3.moduleItemCode =:moduleItemCode and t3.moduleSubItemCode =:moduleSubItemCode and t3.moduleSubItemKey =:moduleSubItemKey)");
+			Query query = session.createQuery(hqlQuery.toString());
+			query.setParameter("moduleItemKey", moduleItemKey);
+			query.setParameter("moduleItemCode", moduleItemCode);
+			query.setParameter("moduleSubItemCode", moduleSubItemCode);
+			query.setParameter("moduleSubItemKey", subModuleItemKey);
+			query.executeUpdate();
+		} catch (Exception e) {
+			logger.error("error occurred in deleteQuestTableAnswers : {}", e.getMessage());
+		}
 	}
 	
 	

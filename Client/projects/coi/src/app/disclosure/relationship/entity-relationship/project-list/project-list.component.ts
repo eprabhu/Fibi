@@ -6,6 +6,7 @@ import { EntityRelationshipService } from '../entity-relationship.service';
 import {slideHorizontal} from "../../../../../../../fibi/src/app/common/utilities/animations";
 import {scrollIntoView} from "../../../../../../../fibi/src/app/common/utilities/custom-utilities";
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
+import { GetSFIRequestObject } from '../../../coi-interface';
 
 
 @Component({
@@ -151,11 +152,23 @@ export class ProjectListComponent implements OnInit {
 	}
 
 	getSFIDetails() {
-		this.$subscriptions.push(this._entityService.getSfiDetails(this.disclosureId, this.disclosureStatusCode, this.personId).subscribe((data: any) => {
+		this.$subscriptions.push(this._entityService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
 			this.sfiArray = data;
 			this.currentProjectTab = "SFI";
 		}));
 	}
+
+	getRequestObject() {
+		const REQ_OBJ = new GetSFIRequestObject();
+        REQ_OBJ.currentPage = 0;
+        REQ_OBJ.disclosureId = this.disclosureId;
+        REQ_OBJ.filterType = '';
+        REQ_OBJ.pageNumber = 0;
+        REQ_OBJ.personId = this.personId;
+        REQ_OBJ.reviewStatusCode = '';
+        REQ_OBJ.searchWord = '';
+        return REQ_OBJ;
+    }
 
 	private getDataFromStore() {
 		const DATA = this._dataStore.getData(this.dependencies);

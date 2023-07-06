@@ -35,32 +35,37 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
                  private _commonService: CommonService ) { }
 
     ngOnInit() {
+        document.body.classList.add('overflow-hidden');
         this.showConflictNavBar();
         this.getConflictStatusLookup();
         this.loadProjectConflictHistory();
     }
 
     showConflictNavBar() {
-        if (this.isOpenSlider) {
-            this.addCommentOverlay.nativeElement.style.display = 'block';
-            document.documentElement.style.overflowY = 'hidden';
-        } else {
-            this.addCommentOverlay.nativeElement.style.display = 'none';
-            document.documentElement.style.overflowY = 'auto';
+        if(this.isOpenSlider) {
+            setTimeout(() => {
+                const slider = document.querySelector('.slider-base');
+                slider.classList.add('slider-opened');
+            });
         }
     }
+
+    addBodyScroll() {
+          document.body.classList.remove('overflow-hidden');
+          document.body.classList.add('overflow-auto');
+    }    
 
     closeNavBar() {
         (this.conflictStatus || this.comment) ? openModal('conflictConfirmationModal') : this.hideConflictNavBar();
     }
 
     hideConflictNavBar() {
-        this.addCommentOverlay.nativeElement.style.display = 'block';
-        this.isOpenSlider = false;
-        document.documentElement.style.overflowY = 'auto';
+        let slider = document.querySelector('.slider-base');
+        slider.classList.remove('slider-opened');
         setTimeout(() => {
+            this.isOpenSlider = false;
             this.closePage.emit(this.coiConflictStatusType);
-        }, 1500)
+        },500);
     }
 
     private getConflictStatusLookup(): void {
@@ -124,6 +129,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.addBodyScroll();
         subscriptionHandler(this.$subscriptions);
     }
     

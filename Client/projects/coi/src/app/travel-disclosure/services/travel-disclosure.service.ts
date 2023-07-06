@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { TravelDisclosureResponseObject } from '../travel-disclosure-interface';
+import { TravelDisclosureResponseObject, TravelHistoryRO } from '../travel-disclosure-interface';
 
 
 @Injectable()
 export class TravelDisclosureService {
 
     coiTravelDisclosure = new TravelDisclosureResponseObject();
-    saveOrCopySubject = new Subject();
+    saveSubject = new Subject();
     travelDataChanged = false;
     isTravelCertified = false;
     unSavedTabName = '';
@@ -23,6 +23,10 @@ export class TravelDisclosureService {
     setUnSavedChanges(dataChange: boolean, tabName: string): void {
         this.unSavedTabName = tabName;
         this.travelDataChanged = dataChange;
+    }
+
+    checkCreateUserRight(personId: string): boolean {
+        return personId === this._commonService.getCurrentUserDetail('personId');
     }
 
     createCoiTravelDisclosure(travelDisclosureRO: object) {
@@ -48,15 +52,19 @@ export class TravelDisclosureService {
         return this._http.get(`${this._commonService.baseUrl}/loadTravelDisclosure/${travelDisclosureId}`);
     }
 
-    withdrawTravelDisclosure(travelDisclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/withdrawTravelDisclosure/${travelDisclosureId}`);
+    withdrawTravelDisclosure(travelDisclosureRO: object) {
+        return this._http.post(`${this._commonService.baseUrl}/withdrawTravelDisclosure`, travelDisclosureRO);
     }
 
-    approveTravelDisclosure(travelDisclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/approveTravelDisclosure/${travelDisclosureId}`);
+    approveTravelDisclosure(travelDisclosureRO: object) {
+        return this._http.post(`${this._commonService.baseUrl}/approveTravelDisclosure`, travelDisclosureRO);
     }
 
-    returnTravelDisclosure(travelDisclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/returnTravelDisclosure/${travelDisclosureId}`);
+    returnTravelDisclosure(travelDisclosureRO: object) {
+        return this._http.post(`${this._commonService.baseUrl}/returnTravelDisclosure`, travelDisclosureRO);
+    }
+
+    loadTravelDisclosureHistory(travelHistoryRO: TravelHistoryRO) {
+        return this._http.post(`${this._commonService.baseUrl}/loadTravelDisclosureHistory`, travelHistoryRO);
     }
 }

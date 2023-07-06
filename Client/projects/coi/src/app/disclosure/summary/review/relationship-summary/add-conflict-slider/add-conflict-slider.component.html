@@ -1,7 +1,7 @@
-<div class="card" #addCommentOverlay>
-  <div @enterAnimation class="fixed-tree" *ngIf="isOpenSlider">
-    <app-slider-close-btn (closeAction)="closeNavBar()"></app-slider-close-btn>
-    <div class="relationship-content scrollable-table">
+<div #addCommentOverlay [class.overlay]="isOpenSlider">
+  <div class="slider-base" *ngIf="isOpenSlider">
+    <app-slider-close-btn (closeAction)="hideConflictNavBar()"></app-slider-close-btn>
+    <div class="slider-container p-0">
       <div class="bg-white px-4 py-2 pt-3">
         <div class="justify-content-between d-flex align-items-center">
           <h5 class="fs-16">Manage Relationship between SFIs and Projects</h5>
@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="row mt-2">
-              <div class="col d-flex">
+              <div class="col">
                 <label class="label-text">Comment: </label>
                 <span class="ml-2 grey-text fs-13">
                   <app-no-data-label [valueToShow]="entityDetails?.comment">
@@ -118,7 +118,6 @@
           </div>
         </div>
       </div>
-
       <!-- Conflict History -->
       <div class="main-title mt-15" id="">
         <h3 class="d-flex align-items-center mx-4"><strong>Conflict History</strong>

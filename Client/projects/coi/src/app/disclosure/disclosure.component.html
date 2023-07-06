@@ -300,7 +300,7 @@
             <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes">
                 Notes & Attachments
             </div>
-            <div>
+            <div *ngIf="sfiService.isShowSfiNavBar">
                 <app-add-sfi-slider [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi-slider>
             </div>
         </div>
@@ -592,13 +592,13 @@
     </div>
 </div>
 <!--validation modal-->
-<div class="modal fade mySkinDialog" tabindex="-1" id="ValidateAwardModal" tabindex="-1" role="dialog"
+<div class="modal fade mySkinDialog" tabindex="-1" id="ValidatedModal" tabindex="-1" role="dialog"
     data-backdrop="static" data-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Validation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" (click)="coiService.submitResponseErrors = [];" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -639,18 +639,21 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12 ">
-                        <div>
-                            You are about to submit a no SFI disclosure. Are you sure you want to submit?
+                        <div *ngIf="coiData?.coiDisclosure?.numberOfSFI > 0">
+                            Are you sure you want to submit the FCOI / Project disclosure?
+                        </div>
+                        <div *ngIf="coiData?.coiDisclosure?.numberOfSFI == 0">
+                            You are about to submit a no SFI disclosure.
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <ng-container>
-                    <button (click)="certifyDisclosure()" class=" btn btn-outline-secondary fs-14 px-4"
-                        data-bs-dismiss="modal" id="prop-saveExit-dismiss-btn">yes</button>
-                    <button class=" btn btn-outline-secondary fs-14 px-4" data-bs-dismiss="modal"
-                        id="prop-saveExit-dismiss-btn" (click)="isSaving = false">No</button>
+                    <button class=" btn btn-outline-secondary" data-bs-dismiss="modal"
+                        id="prop-saveExit-dismiss-btn" (click)="isSaving = false">Cancel</button>
+                        <button (click)="certifyDisclosure()" class=" btn btn-primary btn-sm fs-14"
+                        data-bs-dismiss="modal" id="prop-saveExit-dismiss-btn">Submit</button>
                 </ng-container>
             </div>
         </div>
@@ -668,3 +671,4 @@
 <app-assign-administrator-modal  (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
+

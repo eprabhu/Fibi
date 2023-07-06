@@ -19,6 +19,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {SharedComponentModule} from "../../shared-components/shared-component.module";
 import { AddConflictSliderComponent } from './review/relationship-summary/add-conflict-slider/add-conflict-slider.component';
+import { EntityDetailsModule } from '../entity-details/entity-details.module';
 
 @NgModule({
     imports: [
@@ -30,6 +31,7 @@ import { AddConflictSliderComponent } from './review/relationship-summary/add-co
         MatInputModule,
         MatFormFieldModule,
         SharedComponentModule,
+        EntityDetailsModule
     ],
     declarations: [
         SummaryComponent,

@@ -80,6 +80,8 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -995,9 +997,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Map<String, String> sort = vo.getSort();
 		String personId = vo.getPersonId();
 		String filterType = vo.getFilterType();
+		String searchWord = vo.getProperty2();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD(?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD(?,?,?,?,?,?,?,?,?)}");
 				statement.setString(1, personId);
 				statement.setString(2, setCOISortOrder(sort));
 				statement.setInt(3, (currentPage == null ? 0 : currentPage - 1));
@@ -1006,11 +1009,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setBoolean(6, isDownload);
 				statement.setString(7, isAdvancedSearch);
 				statement.setString(8, filterType);
+				statement.setString(9, searchWord);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_COI_DISCLOSURE_DASHBOARD";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, personId);
@@ -1021,6 +1025,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setBoolean(7, isDownload);
 				statement.setString(8, isAdvancedSearch);
 				statement.setString(9, filterType);
+				statement.setString(10, searchWord);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
@@ -1126,9 +1131,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		String isAdvancedSearch = vo.getAdvancedSearch();
 		Map<String, String> sort = vo.getSort();
 		String filterType = vo.getFilterType();
+		String searchWord = vo.getProperty2();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD_COUNT(?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?)}");
 				statement.setString(1, personId);
 				statement.setString(2, setCOISortOrder(sort));
 				statement.setInt(3, 0);
@@ -1137,10 +1143,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setBoolean(6, true);
 				statement.setString(7, isAdvancedSearch);
 				statement.setString(8, filterType);
+				statement.setString(9, searchWord);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String functionCall = "{call GET_COI_DISCLOSURE_DASHBOARD_COUNT (?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call GET_COI_DISCLOSURE_DASHBOARD_COUNT (?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, personId);
@@ -1151,6 +1158,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setBoolean(7, true);
 				statement.setString(8, isAdvancedSearch);
 				statement.setString(9, filterType);
+				statement.setString(10, searchWord);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
@@ -2377,9 +2385,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId) {
-		PersonEntity personEntity = new PersonEntity();
-		personEntity = hibernateTemplate.get(PersonEntity.class, personEntityId);
-		personEntity.setCoiEntity(null);
+		PersonEntity personEntity = hibernateTemplate.get(PersonEntity.class, personEntityId);
 		return personEntity;
 	}
 
@@ -2433,7 +2439,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 	
 	@Override
-	public List<ValidPersonEntityRelType> getRelatioshipDetails(String disclosureTypeCode) {
+	public List<ValidPersonEntityRelType> getRelationshipDetails(String disclosureTypeCode) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<ValidPersonEntityRelType> query = builder.createQuery(ValidPersonEntityRelType.class);
@@ -2443,7 +2449,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<PersonEntityRelationship> getRelatioshipDetails(ConflictOfInterestVO vo) {
+	public List<PersonEntityRelationship> getRelationshipDetails(ConflictOfInterestVO vo) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
@@ -2453,6 +2459,26 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			    builder.equal(rootPersonEntityRelationship.get("validPersonEntityRelType").get("disclosureTypeCode"), vo.getDisclosureTypeCode())
 			));
 		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public List<PersonEntityRelationship> getRelationshipDetails(Integer personEntityId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
+		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
+		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityId"), personEntityId));
+		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public PersonEntityRelationship getRelationshipDetailsById(Integer personEntityRelId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
+		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
+		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityRelId"), personEntityRelId));
+		return session.createQuery(query).getResultList().get(0);
 	}
 
 	@Override
@@ -2880,8 +2906,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			String filterType = vo.getFilterType();
 			Integer currentPage = vo.getCurrentPage();
 			Integer pageNumber = vo.getPageNumber();
+			String searchWord = vo.getSearchWord();
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?)}");
 				if(personId == null) {
 					statement.setNull(1, Types.VARCHAR);
 				} else {
@@ -2897,10 +2924,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setInt(5, (currentPage == null ? 0 : currentPage - 1));
 				statement.setInt(6, (pageNumber == null ? 0 : pageNumber));
 				statement.setBoolean(7, false);
+				statement.setString(8, searchWord);
 				statement.execute();
 				rset = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String functionCall = "{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				if(personId == null) {
@@ -2918,6 +2946,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setInt(6, (currentPage == null ? 0 : currentPage - 1));
 				statement.setInt(7, (pageNumber == null ? 0 : pageNumber));
 				statement.setBoolean(8, false);
+				statement.setString(9, searchWord);
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
 			}
@@ -2962,8 +2991,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			Integer disclosureId = vo.getDisclosureId();
 			String reviewStatus = vo.getReviewStatusCode();
 			String filterType = vo.getFilterType();
+			String searchWord = vo.getSearchWord();
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?)}");
 				if(personId == null) {
 					statement.setNull(1, Types.VARCHAR);
 				} else {
@@ -2979,10 +3009,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setInt(5, 0);
 				statement.setInt(6, 0);
 				statement.setBoolean(7, true);
+				statement.setString(8, searchWord);
 				statement.execute();
 				rset = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String functionCall = "{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call GET_PERSON_ENTITIES(?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				if(personId == null) {
@@ -3000,6 +3031,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setInt(6, 0);
 				statement.setInt(7, 0);
 				statement.setBoolean(8, true);
+				statement.setString(9, searchWord);
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
 			}
@@ -3325,13 +3357,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public void activateOrInactivatePersonEntity(PersonEntityDto personEntityDto) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE PersonEntity e SET e.isRelationshipActive = :isRelationshipActive , e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser ");
-		hqlQuery.append("WHERE e.personEntityId = : personEntityId");
+		hqlQuery.append("UPDATE PersonEntity e SET e.isRelationshipActive = :isRelationshipActive , e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser, ");
+		hqlQuery.append("e.versionStatus = :versionStatus WHERE e.personEntityId = : personEntityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("isRelationshipActive", personEntityDto.getIsRelationshipActive());
 		query.setParameter("personEntityId", personEntityDto.getPersonEntityId());
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("versionStatus", Constants.COI_ACTIVE_STATUS);
 		query.executeUpdate();
 	}
 
@@ -3443,7 +3476,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public CoiReviewComments loadCoiReviewCommentById(Integer coiReviewCommentId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("SELECT rc CoiReviewComments rc where rc.coiReviewCommentId = :coiReviewCommentId");
+		hqlQuery.append("SELECT rc FROM CoiReviewComments rc where rc.coiReviewCommentId = :coiReviewCommentId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("coiReviewCommentId", coiReviewCommentId);
 		return (CoiReviewComments) query.getResultList().get(0);
@@ -3459,5 +3492,60 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.executeUpdate();
+	}
+
+	@Override
+	public List<EntityRelationshipType> fetchAllRelationshipTypes() {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT rt FROM EntityRelationshipType rt");
+		Query query = session.createQuery(hqlQuery.toString());
+		return query.getResultList();
+	}
+
+	@Override
+	public Timestamp approveEntity(Integer entityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiEntity e SET e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser, ");
+		hqlQuery.append("e.approvedUser = :updateUser, e.approvedTimestamp = :updateTimestamp, e.entityStatusCode = :entityStatusCode  ");
+		hqlQuery.append("where e.entityId = :entityId");
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("updateTimestamp", updateTimestamp);
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.setParameter("entityStatusCode", Constants.COI_ENTITY_STATUS_VERIFIED);
+		query.executeUpdate();
+		return updateTimestamp;
+	}
+
+	@Override
+	public void saveOrUpdateEntityRelationship(EntityRelationship entityRelationship) {
+		hibernateTemplate.saveOrUpdate(entityRelationship);
+	}
+
+	@Override
+	public void deletePersonEntityRelationship(Integer personEntityRelId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("DELETE FROM PersonEntityRelationship pr where pr.personEntityRelId = :personEntityRelId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personEntityRelId", personEntityRelId);
+		query.executeUpdate();
+	}
+
+	@Override
+	public List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber) { 
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelDisclosure> queryCoiDisclosureOld = builder.createQuery(CoiTravelDisclosure.class);
+		Root<CoiTravelDisclosure> rootCoiTravelDisclosureOld = queryCoiDisclosureOld.from(CoiTravelDisclosure.class);
+		Predicate predicate1 = rootCoiTravelDisclosureOld.get("personId").in(personId);
+		Predicate predicate2 = rootCoiTravelDisclosureOld.get("entityNumber").in(entityNumber);
+		Predicate predicate3 = rootCoiTravelDisclosureOld.get("documentStatusCode").in(Constants.TRAVEL_DOCUMENT_STATUS_CODE_APPROVED);
+		queryCoiDisclosureOld.where(builder.and(predicate1, predicate2, predicate3));
+		queryCoiDisclosureOld.orderBy(builder.desc(rootCoiTravelDisclosureOld.get("travelStartDate")));
+		return session.createQuery(queryCoiDisclosureOld).getResultList();
 	}
 }

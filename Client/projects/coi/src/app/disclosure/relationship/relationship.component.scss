@@ -268,25 +268,10 @@ label {
   color           : #007DEC;
 }
 
-.toggle-down {
-  position: absolute;
-    bottom: 7px;
-    right: 22px;
-}
-
-.toggle-up {
-  position: absolute;
-    bottom: -4px;;
-    right: 22px;
-    padding: 5px;
-}
-
-.toggle-header-btn {
-  width: 30px;
-  color: #A64040;
-  height: 30px;
-  background-color:  #fff5f5 !important;
-  mat-icon {
-    transform: scale(1.2);
-  }
+.emptySfi {
+  display: flex;
+  justify-content: center;
+  color: #800202;
+  font-size: 14px;
+  font-weight: 400;
 }

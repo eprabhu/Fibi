@@ -117,7 +117,7 @@ public class CoiEntity implements Serializable {
 	private Timestamp updateTimestamp;
 	
 	@Column(name = "APPROVED_USER")
-	private String approveduser;
+	private String approvedUser;
 	
 	@Column(name = "APPROVED_TIMESTAMP")
 	private Timestamp approvedTimestamp;
@@ -142,6 +142,9 @@ public class CoiEntity implements Serializable {
 	
 	@Transient
 	private String createUserFullName;
+
+	@Transient
+	private boolean majorVersion; // status of modification, is major change or minor change
 
 	public String getCreateUserFullName() {
 		return createUserFullName;
@@ -335,12 +338,12 @@ public class CoiEntity implements Serializable {
 		this.updateTimestamp = updateTimestamp;
 	}
 
-	public String getApproveduser() {
-		return approveduser;
+	public String getApprovedUser() {
+		return approvedUser;
 	}
 
-	public void setApproveduser(String approveduser) {
-		this.approveduser = approveduser;
+	public void setApprovedUser(String approvedUser) {
+		this.approvedUser = approvedUser;
 	}
 
 	public Timestamp getApprovedTimestamp() {
@@ -389,6 +392,14 @@ public class CoiEntity implements Serializable {
 
 	public void setCountryDescription(String countryDescription) {
 		this.countryDescription = countryDescription;
+	}
+
+	public boolean isMajorVersion() {
+		return majorVersion;
+	}
+
+	public void setMajorVersion(boolean majorVersion) {
+		this.majorVersion = majorVersion;
 	}
 
 	public String getUpdatedUserFullName() {

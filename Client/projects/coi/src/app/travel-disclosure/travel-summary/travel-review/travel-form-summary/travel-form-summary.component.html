@@ -18,9 +18,9 @@
     </div>
 
     <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
-        <span class="col-4">
+        <span class="col-12">
             <label class="fw-500 fs-14 col-12 me-3" for="travel-disclosure-title">Trip Title</label>
-            <span class="fs-14 text-color col-12"
+            <span class="fs-14 grey-text col-12"
                 for="travel-disclosure-title">{{travelDisclosureData?.travelTitle}}</span>
         </span>
     </div>
@@ -28,26 +28,26 @@
     <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
         <span class="col-4">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-destination">Destination</label>
-            <span class="col-12 fs-14 text-color">{{travelDisclosureData?.isInterNationalTravel?
+            <span class="col-12 fs-14 grey-text">{{travelDisclosureData?.isInterNationalTravel?
                 'International' : 'Domestic'}}
             </span>
         </span>
 
         <span class="col-4" *ngIf="!travelDisclosureData?.isInterNationalTravel">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-state">State</label>
-            <span class="fs-14 text-color col-12"
+            <span class="fs-14 grey-text col-12"
                 for="travel-disclosure-state">{{travelDisclosureData?.travelState}}</span>
         </span>
 
         <span class="col-4" *ngIf="travelDisclosureData?.isInterNationalTravel">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-country">Country</label>
-            <span class="fs-14 text-color col-12"
+            <span class="fs-14 grey-text col-12"
                 for="travel-disclosure-country">{{travelDisclosureData?.destinationCountry}}</span>
         </span>
 
         <span class="col-4">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-city">City</label>
-            <span class="fs-14 text-color col-12"
+            <span class="fs-14 grey-text col-12"
                 for="travel-disclosure-city">{{travelDisclosureData?.destinationCity}}</span>
         </span>
     </div>
@@ -55,13 +55,13 @@
     <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">
         <span class="col-4">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-traveller">Traveller</label>
-            <span class="fs-14 text-color col-12">{{traveller}}</span>
+            <span class="fs-14 grey-text col-12">{{traveller}}</span>
         </span>
 
         <span class="col-4">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-startDate">Start Date</label>
             <app-no-data-label [valueToShow]="travelDisclosureData?.travelStartDate">
-                <span class="fs-14 text-color col-12"
+                <span class="fs-14 grey-text col-12"
                     for="travel-disclosure-startDate">{{travelDisclosureData?.travelStartDate |
                     dateFormatter}}</span>
             </app-no-data-label>
@@ -70,7 +70,7 @@
         <span class="col-4">
             <label class="fw-500 fs-14 col-12" for="travel-disclosure-endDate">End Date</label>
             <app-no-data-label [valueToShow]="travelDisclosureData?.travelEndDate">
-                <span class="fs-14 text-color col-12"
+                <span class="fs-14 grey-text col-12"
                     for="travel-disclosure-endDate">{{travelDisclosureData?.travelEndDate
                     |
                     dateFormatter}}</span>
@@ -81,21 +81,21 @@
     <div class="px-3 mb-3 py-2">
         <label class="fw-500 fs-14 col-12" for="travel-disclosure-purpose">Purpose of the Trip</label>
         <span for="travel-disclosure-relationship"
-            class="fs-14 text-color col-12">{{travelDisclosureData?.purposeOfTheTrip}}</span>
+            class="fs-14 grey-text col-12">{{travelDisclosureData?.purposeOfTheTrip}}</span>
     </div>
 
     <div class="px-3 mb-3 py-2">
         <label class="fw-500 fs-14 col-12" for="travel-disclosure-relationship">Relationship to Your
             Research</label>
         <span for="travel-disclosure-relationship"
-            class="fs-14 text-color col-12">{{travelDisclosureData?.relationshipToYourResearch}}</span>
+            class="fs-14 grey-text col-12">{{travelDisclosureData?.relationshipToYourResearch}}</span>
     </div>
 
     <div class="px-3 mb-3 py-2">
         <label class="fw-500 fs-14 col-12" for="travel-disclosure-amount">Actual U.S. dollar amount reimbursed
             and/or paid on your behalf</label>
-        <span class="fs-14 text-color col-custom me-3"
-            for="travel-disclosure-amount">${{travelDisclosureData?.travelAmount}}</span>
+        <span class="fs-14 grey-text col-custom me-3"
+            for="travel-disclosure-amount">${{getFormattedAmount(travelDisclosureData?.travelAmount)}}</span>
     </div>
 
 </div>
