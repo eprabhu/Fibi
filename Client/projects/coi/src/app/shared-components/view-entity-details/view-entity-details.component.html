@@ -204,7 +204,7 @@
             </button>
           </div>
         </ng-container>
-        <ng-container *ngIf="!isEntityManagement &&  sfiStatus !== 'Draft' && !isEditMode" >
+        <ng-container *ngIf="!isEntityManagement && sfiStatus !== 'Draft' && !isEditMode" >
           <div *ngIf="canMangeSfi && sfiStatus ==='Active'" class="d-flex justify-content-around mt-3 mx-3">
             <button id="btn-inactivate"
               class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
@@ -215,7 +215,7 @@
               </span>
             </button>
           </div>
-          <div *ngIf="canMangeSfi  && sfiStatus ==='Inactive'" class="d-flex justify-content-around mt-3 mx-3">
+          <div *ngIf="canMangeSfi && sfiStatus ==='Inactive'" class="d-flex justify-content-around mt-3 mx-3">
             <button id="btn-activate" class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
               title="Click to activate Sfi" (click)="activateInactivateEntityOrSfi('SFI')">
               <i class="fa fa-bolt fs-18 fw-700" aria-hidden="true"></i>
@@ -233,7 +233,7 @@
             <span class="btn-approve-position">Approve Entity</span>
           </button>
         </div>
-        <div *ngIf="!isEntityManagement && isEditMode && sfiStatus !='Inactive'" class="d-flex justify-content-around mt-3 mx-3">
+        <div *ngIf="!isEntityManagement && isEditMode" class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-add-relationship" (click)="addNewRelationship()"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
             title="Click to add new relationship">
@@ -241,7 +241,7 @@
            <span class="btn-add-content">Add Relationship</span>
           </button>
         </div>
-        <div *ngIf="!isEntityManagement && isEditMode && sfiStatus !='Inactive'" class="d-flex justify-content-around mt-3 mx-3">
+        <div *ngIf="!isEntityManagement && isEditMode" class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-save-relationship" (click)="saveRelationship()"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
             title="Click to save relationship">
@@ -249,7 +249,7 @@
             <span class="btn-save-content">Save Relationship</span>
           </button>
         </div>
-        <div *ngIf="isQuestionnaireCompleted" class="d-flex justify-content-around mt-3 mx-3">
+        <div *ngIf="isQuestionnaireCompleted && sfiStatus == 'Draft'" class="d-flex justify-content-around mt-3 mx-3">
           <button id="btn-save-relationship"
             class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
             title="Click to finalize relationship" (click)="sfiRelationStatus.isRelationshipActive = false; activateInactivateEntityOrSfi('Finalize')">

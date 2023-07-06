@@ -32,7 +32,6 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
       this.entityDetailService.isExpanded = false;
     }
     this.getQueryParams();
-    this.isTriggeredFromSlider = this._router.url.includes('create-disclosure') || this._router.url.includes('user-dashboard/entities')? true : false;
   }
 
   getQueryParams() {
@@ -43,10 +42,6 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
         this.entityDetailService.isExpanded = false;
       }
     }));
-  }
-
-  checkForUrl() {
-   return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary'].some(ele => this._router.url.includes(ele))
   }
 
   checkForUrl() {
