@@ -3,6 +3,7 @@ import { CompleterOptions } from '../../../../../fibi/src/app/service-request/se
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
+import { DataStoreService } from '../../disclosure/services/data-store.service';
 
 declare var $: any;
 
@@ -37,7 +38,8 @@ export class AssignAdministratorModalComponent implements OnChanges {
 
 
   constructor( private _commonService: CommonService,
-               private _assignAdminService: AssignAdministratorModalService ) { }
+               private _assignAdminService: AssignAdministratorModalService,
+               private _dataStore: DataStoreService ) { }
 
   ngOnChanges() {
     this.getAdminDetails();
@@ -132,6 +134,7 @@ setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: s
         this.isSaving = false;
         this.clearAdministratorField = new String('true');
         this.closeModal.emit(data);
+        this._dataStore.updateTimestampEvent.next();
         document.getElementById('hide-assign-admin').click();
       }, err => {
         this.isSaving = false;
