@@ -1,9 +1,28 @@
-<div class="help-text-card pt-2 mb-2">
-    <p class="pb-0 pt-1 ps-4">
-        1. All the fields of travel disclosure form are mandatory<span class="text-danger">*</span>.
-        <br>2. Fill in all the fields of the disclosure form and to save your progress, click on the ‘Save’ button.
-        <br>3. Navigate to the Certification section to certify and submit the disclosure.
-    </p>
+<div class="mt-2 d-flex grey-info align-items-center position-relative">
+    <span data-bs-toggle="tooltip" title="Travel Disclosure Help Text" data-bs-placement="top" class="d-inline-block">
+        <mat-icon role="img"
+            class="mat-icon me-2 info-icon material-icons mat-icon-no-color"
+            aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+    </span>
+    <div class="info-text fs-14">
+        <div class="mt-2">
+            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+            All the fields of travel disclosure form are mandatory
+            <span *ngIf="!isInfoExpanded" (click)="isInfoExpanded = true" class="fw-700 cursor-pointer">...<u
+                    title="Expand Travel Disclosure help text" class="fw-700">Read More</u></span>
+        </div>
+        <ng-container *ngIf="isInfoExpanded">
+            <div class="mt-2">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Fill in all the fields of the disclosure form and to save your progress, click on the ‘Save’ button.
+            </div>
+            <div class="mt-2">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Navigate to the Certification section to certify and submit the disclosure.
+                <span *ngIf="isInfoExpanded" (click) = "isInfoExpanded = false" class="fw-700 cursor-pointer"><u title="Collapse Travel Disclosure help text">Show Less</u></span>
+            </div>
+        </ng-container>
+    </div>
 </div>
 <div class="card">
     <div class="row p-4 m-3 shadow-sm bg-white">
@@ -16,7 +35,7 @@
                     [isError]="(mandatoryList?.has('entity'))? true: false" class="w-100"
                     [uniqueId]="'travel-disclosure-entity-name'" autocomplete="off">
                 </app-endpoint-search>
-                <span *ngIf="mandatoryList?.has('entity')" class="fs-13 invalid-feedback d-block">
+                <span *ngIf="mandatoryList?.has('entity')" class="fs-13 invalid-feedback d-block position-absolute">
                     {{mandatoryList?.get('entity')}}
                 </span>
                 <span *ngIf="!mandatoryList?.has('entity')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -42,7 +61,7 @@
                         </label>
                     </span>
                 </div>
-                <span *ngIf="mandatoryList?.has('traveller')" class="fs-13 invalid-feedback d-block col">
+                <span *ngIf="mandatoryList?.has('traveller')" class="fs-13 invalid-feedback d-block position-absolute col">
                     {{mandatoryList?.get('traveller')}}
                 </span>
                 <span *ngIf="!mandatoryList?.has('traveller')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -60,7 +79,7 @@
                     (ngModelChange)="setUnSavedChanges();"
                     [ngClass]="(mandatoryList?.get('title')) ? 'invalid-border':''">
                   </textarea>
-                <span *ngIf="mandatoryList?.has('title')" class="fs-13 invalid-feedback d-block">
+                <span *ngIf="mandatoryList?.has('title')" class="fs-13 invalid-feedback d-block position-absolute">
                     {{mandatoryList?.get('title')}}
                 </span>
                 <span *ngIf="!mandatoryList?.has('title')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -75,13 +94,13 @@
             <div class="divCenter ms-1 col">
                 <input class=" me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
                     id="travelDisclosure-domestic" value="Domestic" [(ngModel)]="destination"
-                    (click)="setValuesForDestinationType()">
+                    (click)="setValuesForDestinationType(); setUnSavedChanges(); ">
                 <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-domestic">
                     Domestic
                 </label>
                 <input class=" ms-4 me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
                     id="travelDisclosure-international" value="International" [(ngModel)]="destination"
-                    (click)="setValuesForDestinationType()">
+                    (click)="setValuesForDestinationType(); setUnSavedChanges();">
                 <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-international">
                     International
                 </label>
@@ -99,7 +118,7 @@
                         (change)="setUnSavedChanges();" autocomplete="off"
                         [isError]="(mandatoryList?.has('country'))? true: false">
                     </app-endpoint-search>
-                    <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-feedback d-block">
+                    <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-feedback d-block position-absolute">
                         {{mandatoryList?.get('country')}}
                     </span>
                     <span *ngIf="!mandatoryList?.has('country')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -116,7 +135,7 @@
                         [(ngModel)]="travelDisclosureRO.travelState" class="form-control col"
                         (ngModelChange)="setUnSavedChanges();"
                         [ngClass]="(mandatoryList?.get('state')) ? 'invalid-border':''">
-                    <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-feedback d-block">
+                    <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-feedback d-block position-absolute">
                         {{mandatoryList?.get('state')}}
                     </span>
                     <span *ngIf="!mandatoryList?.has('state')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -133,7 +152,7 @@
                         [(ngModel)]="travelDisclosureRO.destinationCity" class="form-control"
                         (ngModelChange)="setUnSavedChanges();"
                         [ngClass]="(mandatoryList?.get('city')) ? 'invalid-border':''">
-                    <span *ngIf="mandatoryList?.has('city')" class="fs-13 invalid-feedback d-block">
+                    <span *ngIf="mandatoryList?.has('city')" class="fs-13 invalid-feedback d-block position-absolute">
                         {{mandatoryList?.get('city')}}
                     </span>
                     <span *ngIf="!mandatoryList?.has('city')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -161,7 +180,7 @@
                         <i (click)="startDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
                         <mat-datepicker #startDate></mat-datepicker>
                     </span>
-                    <span *ngIf="(dateValidationList.get('startDate'))" class="fs-13 invalid-feedback d-block">
+                    <span *ngIf="(dateValidationList.get('startDate'))" class="fs-13 invalid-feedback d-block position-absolute">
                         {{dateValidationList.get('startDate')}}
                     </span>
                     <span *ngIf="!dateValidationList?.has('startDate')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -186,7 +205,7 @@
                         <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
                         <mat-datepicker #endDate></mat-datepicker>
                     </span>
-                    <span *ngIf="(dateValidationList.get('endDate'))" class="fs-13 invalid-feedback d-block">
+                    <span *ngIf="(dateValidationList.get('endDate'))" class="fs-13 invalid-feedback d-block position-absolute">
                         {{dateValidationList.get('endDate')}}
                     </span>
                     <span *ngIf="!dateValidationList?.has('endDate')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -207,7 +226,7 @@
                     (ngModelChange)="setUnSavedChanges();"
                     [ngClass]="(mandatoryList?.get('purpose')) ? 'invalid-border':''">
                     </textarea>
-                <span *ngIf="mandatoryList?.has('purpose')" class="fs-13 invalid-feedback d-block">
+                <span *ngIf="mandatoryList?.has('purpose')" class="fs-13 invalid-feedback d-block position-absolute">
                     {{mandatoryList?.get('purpose')}}
                 </span>
                 <span *ngIf="!mandatoryList?.has('purpose')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -227,7 +246,7 @@
                     (ngModelChange)="setUnSavedChanges();"
                     [ngClass]="(mandatoryList?.get('relationship')) ? 'invalid-border':''">
                   </textarea>
-                <span *ngIf="mandatoryList?.has('relationship')" class="fs-13 invalid-feedback d-block">
+                <span *ngIf="mandatoryList?.has('relationship')" class="fs-13 invalid-feedback d-block position-absolute">
                     {{mandatoryList?.get('relationship')}}
                 </span>
                 <span *ngIf="!mandatoryList?.has('relationship')" class="position-absolute fs-13 col text-secondary mb-0">
@@ -247,7 +266,7 @@
                     [(ngModel)]="travelDisclosureRO.travelAmount" [initialValue]="travelDisclosureRO.travelAmount"
                     id="travelDisclosure-estimation" autocomplete="off" (ngModelChange)="setUnSavedChanges();"
                     [ngClass]="(mandatoryList?.get('amount')) ? 'invalid-border' : ''">
-                <span *ngIf="mandatoryList?.has('amount')" class="fs-13 invalid-feedback d-block">
+                <span *ngIf="mandatoryList?.has('amount')" class="fs-13 invalid-feedback d-block position-absolute">
                     {{mandatoryList?.get('amount')}}
                 </span>
                 <span *ngIf="!mandatoryList?.has('amount')" class="position-absolute fs-13 col text-secondary mb-0">

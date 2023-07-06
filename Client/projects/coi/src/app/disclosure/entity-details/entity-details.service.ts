@@ -12,8 +12,9 @@ export class EntityDetailsService {
   lookups: any;
   $entityDetailsTest = new BehaviorSubject<object>({});
   globalSave$: Subject<any> = new Subject<any>();
+  isShowRelationButton: any;
 
-
+  $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
   isExpanded = true;
   constructor(private _http: HttpClient, private _commonService: CommonService) { }

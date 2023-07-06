@@ -28,6 +28,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     clearField = new String('true');
     countryClearField = new String('true');
     entityName = '';
+    isInfoExpanded = true;
     mandatoryList = new Map();
     dateValidationList = new Map();
     travelDisclosureRO = new CoiTravelDisclosure();
@@ -74,7 +75,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     private handleTravelDisclosureSave(): void {
-        this.$subscriptions.push(this._service.saveOrCopySubject.subscribe((event: string) => {
+        this.$subscriptions.push(this._service.saveSubject.subscribe((event: string) => {
             if (event) {
                 this.saveTravelDisclosure();
             }
@@ -192,7 +193,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     setValuesForDestinationType(): void {
-        this.setUnSavedChanges();
         if (this.destination === 'Domestic') {
             this.travelDisclosureRO.destinationCountry = '';
             this.travelDisclosureRO.isInternationalTravel = false;
@@ -226,7 +226,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     private saveTravelDisclosure(): void {
         this.getAllTravelDisclosureValues(this.travelDisclosureRO);
-        if (this.validateForm()) {
+        if (this.validateForm() && this._service.travelDataChanged) {
             this.$subscriptions.push(this._service.createCoiTravelDisclosure(this.travelDisclosureRO)
                 .subscribe((res: any) => {
                     if (res) {

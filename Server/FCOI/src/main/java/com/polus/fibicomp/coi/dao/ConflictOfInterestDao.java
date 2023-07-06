@@ -1,5 +1,6 @@
 package com.polus.fibicomp.coi.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,6 +50,8 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.Country;
@@ -662,9 +665,23 @@ public interface ConflictOfInterestDao {
 
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId);
 
-	public List<ValidPersonEntityRelType> getRelatioshipDetails(String tabName);
+	public List<ValidPersonEntityRelType> getRelationshipDetails(String tabName);
 
-	public List<PersonEntityRelationship> getRelatioshipDetails(ConflictOfInterestVO vo);
+	public List<PersonEntityRelationship> getRelationshipDetails(ConflictOfInterestVO vo);
+
+	/**
+	 * This method is used to get Relationship Details personEntityId
+	 * @param personEntityId
+	 * @return
+	 */
+	List<PersonEntityRelationship> getRelationshipDetails(Integer personEntityId);
+
+	/**
+	 * This method is used to get Relationship Details By personEntityRelId
+	 * @param personEntityRelId
+	 * @return
+	 */
+	PersonEntityRelationship getRelationshipDetailsById(Integer personEntityRelId);
 
 	public CoiReviewStatusType getReviewStatusByCode(String reviewStatusPending);
 
@@ -931,4 +948,31 @@ public interface ConflictOfInterestDao {
 	 * @param personEntityId
 	 */
 	void updatePersonEntityUpdateDetails(Integer personEntityId);
+
+	/**
+	 * This method is used to fetch all entity relationship types
+	 * @return
+	 */
+	List<EntityRelationshipType> fetchAllRelationshipTypes();
+
+	/**
+	 * This method is used to approve Entity
+	 * @param entityId
+	 * @return
+	 */
+	Timestamp approveEntity(Integer entityId);
+
+	/**
+	 * Save or Update Entity Relationship
+	 * @param entityRelationship
+	 */
+	void saveOrUpdateEntityRelationship(EntityRelationship entityRelationship);
+
+	/**
+	 * This method is used to delete person entity relationship
+	 * @param personEntityRelId
+	 */
+	void deletePersonEntityRelationship(Integer personEntityRelId);
+
+	List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 }

@@ -38,10 +38,10 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   coiFinancialEntityDetail: EntityDetail = new EntityDetail();
   isSaving = false;
   relationValidationMap = new Map();
-  isEditMode = false;
   $subscriptions: Subscription[] = [];
   @Output() updateRelationship: EventEmitter<any> = new EventEmitter<any>();
   @Input() isAddRelationship = false;
+  @Input() isEditMode = false;
   @Output() isEmitModalClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() positionsToView: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() entityId: any;
@@ -52,18 +52,17 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   ) { }
 
   ngOnInit() {
-    this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit';
     this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
       this.getDataFromService();
     }));
-    this.configuration.enableViewMode = !this.isEditMode;
   }
   ngOnChanges() {
     if (this.isAddRelationship) {
       this.openAddRelationshipModal('addRelationshipModal');
     }
-
+    this.configuration.enableViewMode = !this.isEditMode;
   }
+  
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
     hideModal('addRelationshipModal');
@@ -130,6 +129,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         this.definedRelationships.push(res);
         this.getQuestionnaire(res);
         this.findRelation(res.validPersonEntityRelType.relationshipTypeCode);
+        this.entityDetailsServices.isShowRelationButton = this.relationLookup.length;
         this.clearRelationModal();
         this.isSaving = false;
         this.updateRelationship.emit(res);
@@ -175,6 +175,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         this.findRelation(element.validPersonEntityRelType.personEntityRelType.relationshipTypeCode);
       });
     }
+    this.entityDetailsServices.isShowRelationButton = this.relationLookup.length;
   }
   validateRelationship() {
     this.relationValidationMap.clear();
@@ -188,6 +189,10 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   clearModal() {
     this.relationValidationMap.clear();
     this.isEmitModalClose.emit(false);
+  }
+
+  questionnaireSaveAction(event) {
+    this.entityDetailsServices.$saveQuestionnaireAction.next(event);
   }
 
 }

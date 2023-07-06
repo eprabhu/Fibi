@@ -1,5 +1,7 @@
 package com.polus.fibicomp.coi.dto;
 
+import java.sql.Timestamp;
+
 public class CoiAssignTravelDisclosureAdminDto {
 
 	private Integer travelDisclosureId;
@@ -16,6 +18,15 @@ public class CoiAssignTravelDisclosureAdminDto {
 	private String documentStatusCode;
 	private String documentStatus;
 	private String versionStatus;
+	private Timestamp updateTimestamp;
+
+	public Timestamp getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(Timestamp updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
+	}
 
 	public String getDocumentStatusCode() {
 		return documentStatusCode;

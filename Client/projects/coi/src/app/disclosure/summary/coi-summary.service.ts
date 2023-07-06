@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { CommonService } from '../../common/services/common.service';
+import { GetSFIRequestObject } from '../coi-interface';
 
 @Injectable()
 export class CoiSummaryService {
@@ -36,7 +37,7 @@ export class CoiSummaryService {
       }
     }
 
-    getSfiDetails(params: any) {
+    getSfiDetails(params: GetSFIRequestObject) {
         return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
     }
 

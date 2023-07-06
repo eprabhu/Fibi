@@ -15,6 +15,7 @@ public class CoiEntityDto {
 	private String updateUser;
 	private Timestamp updateTimestamp;
 	private String revisionReason;
+	private String updateUserFullName;
 
 	public Integer getEntityId() {
 		return entityId;
@@ -102,5 +103,13 @@ public class CoiEntityDto {
 
 	public void setRevisionReason(String revisionReason) {
 		this.revisionReason = revisionReason;
+	}
+
+	public String getUpdateUserFullName() {
+		return updateUserFullName;
+	}
+
+	public void setUpdateUserFullName(String updateUserFullName) {
+		this.updateUserFullName = updateUserFullName;
 	}
 }

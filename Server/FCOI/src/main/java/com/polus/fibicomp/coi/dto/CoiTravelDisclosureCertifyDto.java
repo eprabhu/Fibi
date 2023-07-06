@@ -6,6 +6,7 @@ public class CoiTravelDisclosureCertifyDto {
 
 	private String certifiedBy;
 	private Timestamp certifiedAt;
+	private Timestamp updateTimestamp;
 
 	public String getCertifiedBy() {
 		return certifiedBy;
@@ -21,6 +22,14 @@ public class CoiTravelDisclosureCertifyDto {
 
 	public void setCertifiedAt(Timestamp certifiedAt) {
 		this.certifiedAt = certifiedAt;
+	}
+
+	public Timestamp getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(Timestamp updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
 	}
 
 }
