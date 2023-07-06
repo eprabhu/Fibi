@@ -15,56 +15,8 @@ public class CoiTravelDisclosureActionsDto {
 	private Timestamp acknowledgeAt;
 	private String certifiedBy;
 	private Timestamp certifiedAt;
-	private Timestamp updateTimestamp;
 	private String description;
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getCertifiedBy() {
-		return certifiedBy;
-	}
-
-	public void setCertifiedBy(String certifiedBy) {
-		this.certifiedBy = certifiedBy;
-	}
-
-	public Timestamp getCertifiedAt() {
-		return certifiedAt;
-	}
-
-	public void setCertifiedAt(Timestamp certifiedAt) {
-		this.certifiedAt = certifiedAt;
-	}
-
-	public String getAcknowledgeBy() {
-		return acknowledgeBy;
-	}
-
-	public void setAcknowledgeBy(String acknowledgeBy) {
-		this.acknowledgeBy = acknowledgeBy;
-	}
-
-	public Timestamp getAcknowledgeAt() {
-		return acknowledgeAt;
-	}
-
-	public void setAcknowledgeAt(Timestamp acknowledgeAt) {
-		this.acknowledgeAt = acknowledgeAt;
-	}
+	private Timestamp updateTimestamp;
 
 	public String getReviewStatus() {
 		return reviewStatus;
@@ -120,6 +72,54 @@ public class CoiTravelDisclosureActionsDto {
 
 	public void setTravelDisclosureStatusCode(String travelDisclosureStatusCode) {
 		this.travelDisclosureStatusCode = travelDisclosureStatusCode;
+	}
+
+	public String getAcknowledgeBy() {
+		return acknowledgeBy;
+	}
+
+	public void setAcknowledgeBy(String acknowledgeBy) {
+		this.acknowledgeBy = acknowledgeBy;
+	}
+
+	public Timestamp getAcknowledgeAt() {
+		return acknowledgeAt;
+	}
+
+	public void setAcknowledgeAt(Timestamp acknowledgeAt) {
+		this.acknowledgeAt = acknowledgeAt;
+	}
+
+	public String getCertifiedBy() {
+		return certifiedBy;
+	}
+
+	public void setCertifiedBy(String certifiedBy) {
+		this.certifiedBy = certifiedBy;
+	}
+
+	public Timestamp getCertifiedAt() {
+		return certifiedAt;
+	}
+
+	public void setCertifiedAt(Timestamp certifiedAt) {
+		this.certifiedAt = certifiedAt;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Timestamp getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(Timestamp updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
 	}
 
 }

@@ -13,12 +13,12 @@ public class CoiTravelHistoryDto {
 	private String travelTitle;
 	private String purposeOfTheTrip;
 	private String destinationCity;
-	private String destinationCountry;
 	private String destinationState;
-	Map<String, String> travellerTypeCodeList;
+	private String destinationCountry;
 	private BigDecimal travelAmount;
 	private Date travelStartDate;
 	private Date travelEndDate;
+	Map<String, String> travellerTypeCodeList;
 
 	public Integer getTravelDisclosureId() {
 		return travelDisclosureId;
@@ -26,14 +26,6 @@ public class CoiTravelHistoryDto {
 
 	public void setTravelDisclosureId(Integer travelDisclosureId) {
 		this.travelDisclosureId = travelDisclosureId;
-	}
-
-	public String getDestinationState() {
-		return destinationState;
-	}
-
-	public void setDestinationState(String destinationState) {
-		this.destinationState = destinationState;
 	}
 
 	public String getTravelEntityName() {
@@ -84,20 +76,20 @@ public class CoiTravelHistoryDto {
 		this.destinationCity = destinationCity;
 	}
 
+	public String getDestinationState() {
+		return destinationState;
+	}
+
+	public void setDestinationState(String destinationState) {
+		this.destinationState = destinationState;
+	}
+
 	public String getDestinationCountry() {
 		return destinationCountry;
 	}
 
 	public void setDestinationCountry(String destinationCountry) {
 		this.destinationCountry = destinationCountry;
-	}
-
-	public Map<String, String> getTravellerTypeCodeList() {
-		return travellerTypeCodeList;
-	}
-
-	public void setTravellerTypeCodeList(Map<String, String> travellerTypeCodeList) {
-		this.travellerTypeCodeList = travellerTypeCodeList;
 	}
 
 	public BigDecimal getTravelAmount() {
@@ -122,6 +114,14 @@ public class CoiTravelHistoryDto {
 
 	public void setTravelEndDate(Date travelEndDate) {
 		this.travelEndDate = travelEndDate;
+	}
+
+	public Map<String, String> getTravellerTypeCodeList() {
+		return travellerTypeCodeList;
+	}
+
+	public void setTravellerTypeCodeList(Map<String, String> travellerTypeCodeList) {
+		this.travellerTypeCodeList = travellerTypeCodeList;
 	}
 
 }
