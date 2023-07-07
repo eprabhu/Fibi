@@ -262,7 +262,7 @@
                                       style="width: 100% !important" (click)="startDate.open()" autocomplete="off" class="d-inline-block form-control"
                                       [(ngModel)]="additionalDetails.involvementStartDate" (keypress)="_commonService._keyPress($event, 'date')"
                                       [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''" />
-                                    <i (click)="startDate.open()" [class.date-field-error]="mandatoryList?.has('date')"
+                                    <i title="Click to select Start date" (click)="startDate.open()" [class.date-field-error]="mandatoryList?.has('date')"
                                       class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click to select date"></i>
                                     <mat-datepicker #startDate [pickerType]="'calendar'">
                                     </mat-datepicker>
@@ -273,7 +273,7 @@
                                 </div>
                               </div>
                               <div class="col px-5">
-                                    <label class="d-block fs-14 fw-500 px-1 py-2" title="Clcik to select date"
+                                    <label class="d-block fs-14 fw-500 px-1 py-2" title="Click to select Start date"
                                         for="End date of involvement">End Date of Involvement :
                                     </label>
                                 <div>
@@ -285,7 +285,7 @@
                                             [(ngModel)]="additionalDetails.involvementEndDate"
                                             (ngModelChange)="endDateValidation()"
                                             (keypress)="_commonService._keyPress($event, 'date')" />
-                                        <i (click)="endDate.open()"
+                                        <i title="Click to select End date" (click)="endDate.open()"
                                             class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click to select end date"></i>
                                         <mat-datepicker #endDate [pickerType]="'calendar'">
                                         </mat-datepicker>

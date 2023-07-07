@@ -53,13 +53,12 @@
                     </div>
             </div>
         </nav>
-
         <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample">
             <div class="card-body">
                 <ng-container *ngIf="_coiAdminDashboardService.coiRequestObject.tabName !='ENTITY'">
                     <div class="form-row row">
                         <!-- Person Name -->
-                        <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Person name">
+                        <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Person Name">
                             <label class="d-block" for="adv-disclosure-person-name">Person</label>
                             <app-elastic (selectedResult)="selectPersonName($event)" [clearField]="advSearchClearField"
                                 [options]="elasticPersonSearchOptions" [placeHolder]="'Search by Person'"
@@ -67,7 +66,7 @@
                             </app-elastic>
                         </div>
                         <!-- Department Name -->
-                        <div class="col-xl-3 col-lg-5 col-sm-6 col-3">
+                        <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Department Name">
                             <label class="d-block" for="adv-disclosure-department-name">
                                 Department
                             </label>
@@ -77,7 +76,7 @@
                             </app-endpoint-search>
                         </div>
                         <!-- Entity Name -->
-                        <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Entity">
+                        <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Entity Name">
                             <label class="d-block" for="adv-disclosure-entity-name">Entity</label>
                             <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
                                 [httpOptions]="entitySearchOptions" [placeHolder]="'Search by Entity'"
@@ -115,7 +114,7 @@
                                 placeholder="Search by Disclosure Number" type="text" />
                         </div> -->
                         <!-- Disclosure Status -->
-                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Disclosure Status">
                             <label class="d-block" for="adv-disclosure-status">
                                 Disclosure Status
                             </label>
@@ -126,7 +125,7 @@
                         </div>
                         <!-- Disposition Status -->
                         <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3"
-                            title="Click to search by Disposition status">
+                            title="Click to search by Disposition Status">
                             <label class="d-block" for="adv-disposition-status">
                                 Disposition Status
                             </label>
@@ -136,7 +135,7 @@
                             </app-look-up>
                         </div>
                         <!-- Review Status -->
-                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Review status">
+                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Review Status">
                             <label class="d-block">
                                 <ng-container>Review Status</ng-container>
                             </label>
@@ -178,8 +177,8 @@
                         </div> -->
                     </div>
                     <div class="form-row row mt-3">
-                         <!-- End Date -->
-                         <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                        <!-- End Date -->
+                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Expiration Date">
                             <label class="d-block" for="adv-disclosure-expiration-date">
                                 Expiration Date
                             </label>
@@ -224,8 +223,7 @@
                             title="Click here to clear all the fields"
                             title="Click here to Clear the fields">Clear</button>
                         <button (click)="performAdvanceSearch()" class="btn btn-primary fs-14 ms-3 primary-button"
-                            title="Initiate Search with/without fields"
-                            title="Click here to initiate search">Search</button>
+                            title="Click here to Initiate search">Search</button>
                     </div>
                 </ng-container>
             </div>
@@ -296,9 +294,9 @@
                         *ngIf="_coiAdminDashboardService.coiRequestObject.sort['disclosureStatus']=== 'desc' ">arrow_upward</mat-icon>
                 </div>
             </span>
-            <span tabindex="0" (keydown.enter)="sortResult('dispositionStatus')" (click)="sortResult('dispositionStatus')"
-                [class.filter-active]="isActive('dispositionStatus')" title="Click to sort by disclosure status"
-                area-describedby="Click to sort by disposition status"
+            <span tabindex="0" (keydown.enter)="sortResult('dispositionStatus')"
+                (click)="sortResult('dispositionStatus')" [class.filter-active]="isActive('dispositionStatus')"
+                title="Click to sort by Disposition Status" area-describedby="Click to sort by disposition status"
                 [class.px-8]="!_coiAdminDashboardService.coiRequestObject.sort['dispositionStatus']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center">
@@ -313,8 +311,8 @@
                 </div>
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('reviewStatus')" (click)="sortResult('reviewStatus')"
-                [class.filter-active]="isActive('reviewStatus')" title="Click to sort by disclosure status"
-                area-describedby="Click to sort by review status"
+                [class.filter-active]="isActive('reviewStatus')" title="Click to sort by review status"
+                area-describedby="Click to sort by Review Status"
                 [class.px-8]="!_coiAdminDashboardService.coiRequestObject.sort['reviewStatus']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center">
@@ -330,7 +328,7 @@
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('certificationDate')"
                 (click)="sortResult('certificationDate')" [class.filter-active]="isActive('certificationDate')"
-                title="Click to sort by certification date" area-describedby="Click to sort by certification date"
+                title="Click to sort by Certification Date" area-describedby="Click to sort by certification date"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button"
                 [class.px-8] = "!_coiAdminDashboardService.coiRequestObject.sort['certificationDate']">
                 <div class="d-inline-flex align-items-center">
@@ -678,7 +676,7 @@
                 </nav>
             </div>
         </ng-container>
-        
+
         <div *ngIf="coiList?.length == 0 && isShowDisclosureList">
             <app-no-information></app-no-information>
         </div>

@@ -491,7 +491,7 @@
                 </button> -->
                 <button (click)="redirectToDisclosure(disclosure)" aria-describedby="Click to view Disclosure details"
                     class="d-flex align-items-center btn btn-outline-primary  fs-14"
-                    [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : 'Click to view Project Disclosure details'">
+                    [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
                     <mat-icon class="me-1">visibility</mat-icon>
                     View
                 </button>

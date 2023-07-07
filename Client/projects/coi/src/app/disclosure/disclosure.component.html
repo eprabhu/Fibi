@@ -41,7 +41,7 @@
                     </ng-container> -->
 
                     <ng-container *ngIf="!isCreateMode">
-                        <div class="align-items-center d-flex" title="Click here to collapse/un-collapse">
+                        <div class="align-items-center d-flex" title="Click here to collapse / expand">
                             <button (click)="isCardExpanded=!isCardExpanded"
                                 class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
                                 <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
@@ -273,7 +273,7 @@
                         Next
                     </button>
                 </div>
-                <div *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')" class="d-flex justify-content-around px-3 pb-3" title="Click here to add a new financial interest">
+                <div *ngIf="router.url.includes('/create-disclosure/sfi') || router.url.includes('/create-disclosure/relationship')" class="d-flex justify-content-around px-3 pb-3" title="Click to add new SFI">
                     <span (click)="sfiService.isShowSfiNavBar = true"
                         class="fs-14 btn {{router.url.includes('create-disclosure/sfi')?'btn-primary':'btn-outline-grey'}} d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">add</mat-icon>
