@@ -209,7 +209,7 @@ public interface ConflictOfInterestDao {
 	 * @param 
 	 * @return check if SFI Completed For Project
 	 */
-	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId);
+	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId);
 
 	/**
 	 * 
@@ -569,10 +569,9 @@ public interface ConflictOfInterestDao {
 	 * @param moduleCode module code
 	 * @param moduleItemId module item key
 	 * @param disclosureId disclosure id
-	 * @param personId login person id
 	 * @return list of count objects
 	 */
-	List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId);
+	List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId);
 
 	/**
 	 * This method is used to get Entity Details by Entity Id

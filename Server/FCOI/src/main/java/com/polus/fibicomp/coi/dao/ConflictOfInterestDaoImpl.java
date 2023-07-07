@@ -319,18 +319,15 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId) {
+	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		StringBuilder hqlQuery = new StringBuilder();
-		hqlQuery.append("SELECT (SELECT COUNT(*) FROM COI_DISCLOSURE C1 INNER JOIN COI_DISCL_ENT_PROJ_DETAILS C2 ON C2.DISCLOSURE_ID=C1.DISCLOSURE_ID ");
-		hqlQuery.append("WHERE C1.PERSON_ID = :personId and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId ) as entityCount, ");
-		hqlQuery.append("(SELECT COUNT(*) FROM COI_DISCLOSURE C1 INNER JOIN COI_DISCL_ENT_PROJ_DETAILS C2 ON C2.DISCLOSURE_ID=C1.DISCLOSURE_ID ");
-		hqlQuery.append("INNER JOIN PERSON_ENTITY C3 ON C3.PERSON_ENTITY_ID=C2.PERSON_ENTITY_ID ");
-//		hqlQuery.append("INNER JOIN COI_DISC_DETAILS_COMMENTS C4 ON C4.DISCLOSURE_DETAILS_ID=C2.DISCLOSURE_DETAILS_ID ");
-		hqlQuery.append("WHERE C2.PROJECT_CONFLICT_STATUS_CODE IS NOT NULL AND C1.PERSON_ID = :personId ");
+		hqlQuery.append("SELECT (SELECT COUNT(*) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
+		hqlQuery.append("WHERE C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId ) as entityCount, ");
+		hqlQuery.append("(SELECT COUNT(*) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
+		hqlQuery.append("WHERE C2.PROJECT_CONFLICT_STATUS_CODE IS NOT NULL ");
 		hqlQuery.append("and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId) as disDetCount");
 		Query query = session.createNativeQuery(hqlQuery.toString());
-		query.setParameter("personId", personId);
 		query.setParameter("disclosureId", disclosureId);
 		query.setParameter("moduleCode", moduleCode);
 		query.setParameter("moduleItemId", moduleItemId);
@@ -888,17 +885,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 
 	@Override
-	public List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId) {
+	public List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		StringBuilder hqlQuery = new StringBuilder();
-		hqlQuery.append("SELECT  C2.PROJECT_CONFLICT_STATUS_CODE, COUNT(*) FROM COI_DISCLOSURE C1 INNER JOIN COI_DISCL_ENT_PROJ_DETAILS C2 ON C2.DISCLOSURE_ID=C1.DISCLOSURE_ID ");
-		hqlQuery.append("INNER JOIN PERSON_ENTITY C3 ON C3.PERSON_ENTITY_ID=C2.PERSON_ENTITY_ID ");
-//		hqlQuery.append("INNER JOIN COI_DISC_DETAILS_COMMENTS C4 ON C4.DISCLOSURE_DETAILS_ID=C2.DISCLOSURE_DETAILS_ID ");
-		hqlQuery.append("WHERE C2.PROJECT_CONFLICT_STATUS_CODE IS NOT NULL AND C1.PERSON_ID = :personId ");
+		hqlQuery.append("SELECT  C2.PROJECT_CONFLICT_STATUS_CODE, COUNT(C2.PROJECT_CONFLICT_STATUS_CODE) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
+		hqlQuery.append("WHERE C2.PROJECT_CONFLICT_STATUS_CODE IS NOT NULL ");
 		hqlQuery.append("and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId GROUP BY C2.PROJECT_CONFLICT_STATUS_CODE ");
 		hqlQuery.append("ORDER BY C2.PROJECT_CONFLICT_STATUS_CODE ASC");
 		Query query = session.createNativeQuery(hqlQuery.toString());
-		query.setParameter("personId", personId);
 		query.setParameter("disclosureId", disclosureId);
 		query.setParameter("moduleCode", moduleCode);
 		query.setParameter("moduleItemId", moduleItemId);
@@ -2583,10 +2577,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		String entityRiskLevel = vo.getProperty22() != null && !vo.getProperty22().isEmpty() ? String.join(",", vo.getProperty22()) : "";
 		Boolean hasSFI = vo.getProperty18();
 		Boolean hasDisclosure = vo.getProperty19();
+		String entityVerificationStatus = vo.getProperty24() != null && !vo.getProperty24().isEmpty() ? String.join(",", vo.getProperty24()) : "";
 		Integer count = null;
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_ALL_SYSTEM_ENTITY_LIST_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+				statement = connection.prepareCall("{call GET_ALL_SYSTEM_ENTITY_LIST_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 				statement.setString(1, tabName);
 				statement.setString(2, setCOISortOrder(sort));
 				statement.setInt(3, (pageNumber == null ? 0 : pageNumber));
@@ -2600,11 +2595,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setBoolean(11, hasSFI);
 				statement.setBoolean(12, hasDisclosure);
 				statement.setString(13, entityName);
+				statement.setString(14, entityVerificationStatus);
 				statement.execute();
 				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_ALL_SYSTEM_ENTITY_LIST_COUNT";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, tabName);
@@ -2619,7 +2615,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				statement.setString(11, entityRiskLevel);
 				statement.setBoolean(12, hasSFI);
 				statement.setBoolean(13, hasDisclosure);
-				statement.setString(13, entityName);
+				statement.setString(14, entityName);
+				statement.setString(15, entityVerificationStatus);
 				statement.execute();
 				resultSet = (ResultSet) statement.getObject(1);
 			}
