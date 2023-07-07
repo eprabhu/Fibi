@@ -6,7 +6,7 @@ import { CommonService } from '../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
-import { CoiTravelDisclosure, TravelCreateModalDetails, TravelDisclosureResponseObject } from './travel-disclosure-interface';
+import { CoiTravelDisclosure, DefaultAdminDetails, TravelCreateModalDetails, TravelDisclosureResponseObject } from './travel-disclosure-interface';
 import { environment } from '../../environments/environment';
 import { TravelDataStoreService } from './services/travel-data-store.service';
 import {
@@ -31,21 +31,23 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
 
     deployMap = environment.deployUrl;
     $subscriptions: Subscription[] = [];
+    defaultAdminDetails = new DefaultAdminDetails();
     responseObject = new TravelDisclosureResponseObject();
 
     isCreateMode = true;
-    isCardExpanded = true;
-    ispersondetailsmodal = false;
-    isTravelAdministrator = false;
-    needDescriptionField = false;
     isMandatory = false;
+    isCardExpanded = true;
+    isAddAssignModalOpen = false;
+    needDescriptionField = false;
+    isTravelAdministrator = false;
+    isPersonDetailsModalOpen = false;
 
     currentPersonId = '';
     modalHeaderTitle = '';
     modalActionBtnName = '';
     descriptionError = '';
-    withdrawError = 'Kindly provide the reason for withdrawal';
-    returnError = 'Kindly provide the reason for returning the disclosure';
+    withdrawError = 'Describe the reason for withdrawing the disclosure';
+    returnError = 'Describe the reason for returning the disclosure';
     confirmationModalDescription = '';
 
     userDetails = {
@@ -123,6 +125,13 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
+    private setAssignAdminModalDetails(): void {
+        this.defaultAdminDetails.adminGroupId = this.responseObject.adminGroupId || '';
+        this.defaultAdminDetails.adminGroupName = this.responseObject.adminGroupName || '';
+        this.defaultAdminDetails.adminPersonId = this.responseObject.adminPersonId;
+        this.defaultAdminDetails.adminPersonName = this.responseObject.adminPersonName;
+    }
+
     private setmodalHeaderTitle(modalActionBtnName: string) {
         const id = this.responseObject.travelDisclosureId || null;
         const createrName = this.responseObject.personFullName || null;
@@ -192,7 +201,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     closePersonDetailsModal(event: any): void {
-        this.ispersondetailsmodal = event;
+        this.isPersonDetailsModalOpen = event;
     }
 
     checkReviewStatusCode(statusCode: string[] | string, method: Method = 'EVERY'): boolean {
@@ -205,8 +214,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     checkAdministratorRight(): boolean {
-        const personId = this.commonService.getCurrentUserDetail('personId');
-        return this.responseObject.adminPersonId === personId;
+        return this.service.checkCreateUserRight(this.responseObject.adminPersonId);
     }
 
     showReturnOrApproveButton(): boolean {
@@ -217,8 +225,13 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         return this.isCreateMode || this.checkReviewStatusCode(['7', '2'], 'SOME');
     }
 
+    openAddAssignModal(): void {
+        this.isAddAssignModalOpen = true;
+        this.setAssignAdminModalDetails();
+    }
+
     closeAssignAdministratorModal(event): void {
-        if (event.adminPersonId || event.adminGroupId) {
+        if (event && (event.adminPersonId || event.adminGroupId)) {
             this.responseObject.adminPersonId = event.adminPersonId || null;
             this.responseObject.adminPersonName = event.adminPersonName || null;
             this.responseObject.adminGroupId = event.adminGroupId || null;
@@ -228,6 +241,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             this.responseObject.updateTimestamp = event.updateTimestamp;
             this._dataStore.manualDataUpdate(this.responseObject);
         }
+        this.isAddAssignModalOpen = false;
     }
 
     openConfirmationModal(actionBtnName: string, needDescriptionField: boolean,
@@ -289,7 +303,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.service.withdrawTravelDisclosure(this.getActionRequestObject())
             .subscribe((res: any) => {
                 if (res) {
-                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure withdrawn successfully');
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Travel Disclosure Withdrawn Successfully.');
                     this.service.setUnSavedChanges(false, '');
                     this.router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
                         { queryParams: { disclosureId: this.responseObject.travelDisclosureId } });

@@ -37,6 +37,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         filter: 'did'
     }
     isShowCountModal = false;
+    isAddAssignModalOpen = false;
     selectedModuleCode: any;
     currentDisclosureId: any;
     currentDisclosureNumber: any;
@@ -678,11 +679,17 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this._coiAdminDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;
 	}
 
+    openAssignAdminModal(coi) {
+        this.addAdmin.disclosureId = coi.coiDisclosureId;
+        this.isAddAssignModalOpen = true;
+    }
+
     closeAssignAdminModal(event) {
         if (event) {
             this.addAdmin.disclosureId = null;
             this.$coiList.next();
-        } 
+        }
+        this.isAddAssignModalOpen = false;
     }
 }
 

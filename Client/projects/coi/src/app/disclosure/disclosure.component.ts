@@ -39,6 +39,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     isCreateMode = false;
     isSaving = false;
     isCOIAdministrator = true;
+    isAddAssignModalOpen = false;
     certificationText = 'I certify that the information provided for the Financial conflict of interest, including, responses to screening questions, list of my pertinent Significant Financial interests and possible relationship to my sponsored activity is an accurate and current statement of my reportable outside interests and activities.';
     $subscriptions: Subscription[] = [];
     coiData = new COI();
@@ -445,7 +446,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     closeAssignAdministratorModal(event) {
-        if (event.adminPersonId || event.adminGroupId) {
+        if (event && (event.adminPersonId || event.adminGroupId)) {
             this.coiData.coiDisclosure.adminPersonId = event.adminPersonId;
             this.coiData.coiDisclosure.adminPersonName = event.adminPersonName;
             this.coiData.coiDisclosure.adminGroupId = event.adminGroupId;
@@ -454,6 +455,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
             this.dataStore.updateStore(['coiDisclosure'], this.coiData);
         }
+        this.isAddAssignModalOpen = false;
     }
 
     public updateCoiReview(modalType: ModalType) {

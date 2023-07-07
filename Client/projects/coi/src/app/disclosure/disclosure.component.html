@@ -343,8 +343,7 @@
                 </div>
                 <div *ngIf="coiService.isCOIAdministrator && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode !='4'" class="d-flex justify-content-around px-3 pb-3">
                     <button  title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
-                      class="fs-14   d-flex justify-content-center w-100 align-items-center" data-bs-toggle="modal"
-                      data-bs-target="#assign-to-admin-modal"
+                      class="fs-14   d-flex justify-content-center w-100 align-items-center" (click)="isAddAssignModalOpen = true;"
                       [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn btn-outline-grey':'btn btn-primary'">
                       <mat-icon class="me-1">group_add</mat-icon>
                       Assign Admin
@@ -668,7 +667,7 @@
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
 
-<app-assign-administrator-modal  (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
+<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
