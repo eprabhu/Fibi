@@ -657,8 +657,7 @@
                                     View
                                 </button>
                                 <button *ngIf="_coiAdminDashboardService.coiRequestObject.tabName == 'NEW_SUBMISSIONS' || _coiAdminDashboardService.coiRequestObject.tabName == 'NEW_SUBMISSIONS_WITHOUT_SFI'" title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
-                                    class="align-items-center btn btn-outline-primary d-flex fs-14 ml-2" data-bs-toggle="modal" data-bs-target="#assign-to-admin-modal"
-                                    (click)="addAdmin.disclosureId = coi.coiDisclosureId;">
+                                    class="align-items-center btn btn-outline-primary d-flex fs-14 ml-2" (click)="openAssignAdminModal(coi);">
                                     <mat-icon class="me-1">group_add</mat-icon>
                                     Assign Admin
                                 </button>
@@ -681,7 +680,7 @@
             <app-no-information></app-no-information>
         </div>
     </section>
-    <app-assign-administrator-modal (closeModal)="closeAssignAdminModal($event)"  [disclosureId]="addAdmin.disclosureId"></app-assign-administrator-modal>
+    <app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdminModal($event)"  [disclosureId]="addAdmin.disclosureId"></app-assign-administrator-modal>
 
     <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
         [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"

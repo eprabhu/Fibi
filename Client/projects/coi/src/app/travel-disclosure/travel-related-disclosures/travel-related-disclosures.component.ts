@@ -8,15 +8,17 @@ import { HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../.
 import { CommonService } from '../../common/services/common.service';
 import { Router } from '@angular/router';
 import { getFormattedAmount } from '../../common/utlities/custom-utlities';
+import { listAnimation } from 'projects/fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-travel-related-disclosures',
     templateUrl: './travel-related-disclosures.component.html',
-    styleUrls: ['./travel-related-disclosures.component.scss']
+    styleUrls: ['./travel-related-disclosures.component.scss'],
+    animations: [listAnimation]
 })
 export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
 
-    historyData: Array<TravelHistory>;
+    historyData: Array<TravelHistory> = [];
     travelDisclosureData = new TravelDisclosureResponseObject();
     entityData = new EntityData();
     $subscriptions: Subscription[] = [];
@@ -68,7 +70,7 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
 
     private loadTravelDisclosureHistory(): void {
         this._service.loadTravelDisclosureHistory(this.getTravelHistoryRO())
-            .subscribe((res: any) => {
+            .subscribe((res: Array<TravelHistory>) => {
                 if (res) {
                     this.historyData = res;
                 }

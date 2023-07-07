@@ -124,4 +124,11 @@ export interface TravelHistory {
     travelAmount: number;
     travelStartDate: number;
     travelEndDate: number;
-  }
+}
+
+export class DefaultAdminDetails {
+    adminPersonId = '';
+    adminGroupId = null;
+    adminPersonName = '';
+    adminGroupName = '';
+}
