@@ -1,5 +1,5 @@
 import { Component, Output, Input, OnInit, EventEmitter } from '@angular/core';
-import { Person_details_modalService } from './person-details-modal.service';
+import { PersonDetailsModalService } from './person-details-modal.service';
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
@@ -7,11 +7,12 @@ import { CommonService } from '../../common/services/common.service';
 @Component({
     selector: 'app-personal-details-modal',
     templateUrl: './personal-details-modal.component.html',
-    styleUrls: ['./personal-details-modal.component.scss']
+    styleUrls: ['./personal-details-modal.component.scss'],
+    providers: [PersonDetailsModalService]
 })
 export class PersonalDetailsModalComponent implements OnInit {
 
-    constructor(private _personservice: Person_details_modalService, private _commonservice: CommonService) { }
+    constructor(private _personservice: PersonDetailsModalService, private _commonservice: CommonService) { }
 
     @Input() userdetails: any;
     @Output() closeModalPersonDetails: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -35,7 +36,7 @@ export class PersonalDetailsModalComponent implements OnInit {
         this.$subscriptions.push(this._personservice.getPersonData(userDetails.personId).subscribe((data: any) => {
             this.personValues = data;
         },
-        error => this._commonservice.showToast(HTTP_ERROR_STATUS, 'Fetching training details failed. Please try again.')));
+        error => this._commonservice.showToast(HTTP_ERROR_STATUS, 'Fetching person details failed. Please try again.')));
     }
 
     viewPersoDetails(personTrainingId: string): void {
