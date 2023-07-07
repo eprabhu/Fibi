@@ -332,9 +332,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		for (DisclosureDetailDto disclosureDetail : disclosureDetails) {
 			disclosureDetail.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, disclosureDetail.getModuleItemId(),
-					vo.getDisclosureId(), vo.getPersonId()));
+					vo.getDisclosureId()));
 			disclosureDetail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.AWARD_MODULE_CODE,
-					disclosureDetail.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
+					disclosureDetail.getModuleItemId(), vo.getDisclosureId()));
 		}
 		vo.setAwards(disclosureDetails);
 	}
@@ -350,9 +350,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		for (DisclosureDetailDto disclosureDetail : proposalDetails) {
 			disclosureDetail.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE,
-					disclosureDetail.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
+					disclosureDetail.getModuleItemId(), vo.getDisclosureId()));
 			disclosureDetail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE,
-					disclosureDetail.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
+					disclosureDetail.getModuleItemId(), vo.getDisclosureId()));
 		}
 		vo.setProposals(proposalDetails);
 	}
@@ -382,8 +382,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		});
 		detail.setSfiCompleted(Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode) ?
 				conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, proposal.getProposalId(),
-						disclosureId, personId) : Boolean.TRUE);
-		detail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, proposal.getProposalId(), disclosureId, personId));
+						disclosureId) : Boolean.TRUE);
+		detail.setDisclosureStatusCount(conflictOfInterestDao.disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, proposal.getProposalId(), disclosureId));
 		proposalDetails.add(detail);
 	}
 
@@ -500,9 +500,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public String checkSFICompleted(ConflictOfInterestVO vo) {
 		if (Constants.DEV_PROPOSAL_MODULE_CODE.equals(vo.getModuleCode())) {
-			vo.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
+			vo.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getModuleItemId(), vo.getDisclosureId()));
 		} else if (Constants.AWARD_MODULE_CODE.equals(vo.getModuleCode())) {
-			vo.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, vo.getModuleItemId(), vo.getDisclosureId(), vo.getPersonId()));
+			vo.setSfiCompleted(conflictOfInterestDao.checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, vo.getModuleItemId(), vo.getDisclosureId()));
 		}
 		return commonDao.convertObjectToJSON(vo);
 	}
@@ -520,7 +520,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				if (Constants.DISCLOSURE_STATUS_PENDING.equals(disclosureStatusCode) && !coiFinancialIds.contains(sfiDetail.getPersonEntityId())) {
 					CoiDisclEntProjDetails coiDisclEntProjDetails = new CoiDisclEntProjDetails();
 					coiDisclEntProjDetails.setPersonEntity(sfiDetail);
-//					CoiDisclosureOldDetail.setComment(new CoiDisclosureOldDetailsComments());
 					disclosureDetails.add(coiDisclEntProjDetails);
 				}
 			});
