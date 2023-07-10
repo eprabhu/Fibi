@@ -518,11 +518,9 @@
                                     <div class="col-3">
                                         <label for="review-status" class="label-text">Document Status :</label>
                                         <app-no-data-label id="review-status" [valueToShow]="coi?.documentStatusDescription">
-                                            <span
+                                            <span class="ms-3 {{commonService.getDocumentStatusBadge(coi?.documentStatusCode)}}"
                                                 [class.text-dark]="commonService.getDocumentStatusBadge(coi?.documentStatusCode) === 'warning'"
-                                                class="ms-3 {{commonService.getDocumentStatusBadge(coi?.documentStatusCode)}}"
-                                                id="disp-status">
-                                                {{coi?.documentStatusDescription}}
+                                                id="disp-status">{{coi?.documentStatusDescription}}
                                             </span>
                                         </app-no-data-label>
                                     </div>
@@ -551,11 +549,9 @@
                                     <div class="col-3">
                                         <label for="review-status" class="label-text">Review Status :</label>
                                         <app-no-data-label id="review-status" [valueToShow]="coi?.reviewDescription">
-                                            <span
+                                            <span class="ms-3 {{commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode)}}"
                                                 [class.text-dark]="commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
-                                                class="ms-3 {{commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode)}}"
-                                                id="disp-status">
-                                                {{coi?.reviewDescription}}
+                                                id="disp-status">{{coi?.reviewDescription}}
                                             </span>
                                         </app-no-data-label>
                                     </div>
