@@ -126,8 +126,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private setAssignAdminModalDetails(): void {
-        this.defaultAdminDetails.adminGroupId = this.responseObject.adminGroupId || '';
-        this.defaultAdminDetails.adminGroupName = this.responseObject.adminGroupName || '';
+        this.defaultAdminDetails.adminGroupId = this.responseObject.adminGroupId;
+        this.defaultAdminDetails.adminGroupName = this.responseObject.adminGroupName;
         this.defaultAdminDetails.adminPersonId = this.responseObject.adminPersonId;
         this.defaultAdminDetails.adminPersonName = this.responseObject.adminPersonName;
     }

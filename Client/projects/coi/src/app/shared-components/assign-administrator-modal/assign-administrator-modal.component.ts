@@ -3,6 +3,7 @@ import { CompleterOptions } from '../../../../../fibi/src/app/service-request/se
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
+import { DefaultAdminDetails } from '../../travel-disclosure/travel-disclosure-interface';
 
 declare var $: any;
 
@@ -12,12 +13,7 @@ class AssignAdminRO {
     travelDisclosureId?: '';
     disclosureId?: '';
 }
-class DefaultAdminDetails {
-    adminPersonId = '';
-    adminGroupId = null;
-    adminPersonName = '';
-    adminGroupName = '';
-}
+
 @Component({
     selector: 'app-assign-administrator-modal',
     templateUrl: './assign-administrator-modal.component.html',
@@ -33,8 +29,6 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
     addAdmin = new AssignAdminRO();
     adminGroupsCompleterOptions: CompleterOptions = new CompleterOptions();
     clearAdminGroupField: any;
-    isShowWarningMessage = false;
-    warningMessage: any;
     $subscriptions: Subscription[] = [];
     isSaving = false;
 
@@ -42,7 +36,6 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
     @Input() defaultAdminDetails = new DefaultAdminDetails();
     @Input() path: 'disclosure' | 'travelDisclosure' = 'disclosure';
     @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
-
 
     constructor(private _commonService: CommonService, private _assignAdminService: AssignAdministratorModalService) { }
 
@@ -109,7 +102,6 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
         if (checkBoxEvent.target.checked) {
             this.adminSearchOptions.defaultValue = this._commonService.getCurrentUserDetail('fullName');
             this.addAdmin.adminPersonId = this._commonService.getCurrentUserDetail('personId');
-            this.getAdminGroupDetails(this._commonService.getCurrentUserDetail('personId'));
             this.isAssignToMe = true;
             this.assignAdminMap.clear();
         } else {
@@ -122,24 +114,17 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
 
     public adminSelect(event: any) {
         if (event) {
-            this.getAdminGroupDetails(event.personId);
             this.addAdmin.adminPersonId = event.personId;
             this.isAssignToMe = this.setAssignToMe();
             this.assignAdminMap.clear();
         } else {
             this.addAdmin.adminPersonId = null;
             this.isAssignToMe = false;
-            this.isShowWarningMessage = false;
         }
     }
 
     public adminGroupSelect(event) {
-        if (event) {
-            this.isShowWarningMessage = false;
-            this.addAdmin.adminGroupId = event.adminGroupId;
-        } else {
-            this.addAdmin.adminGroupId = null;
-        }
+        this.addAdmin.adminGroupId = (event && event.adminGroupId) || null;
     }
 
     public assignAdministrator() {
@@ -149,12 +134,11 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
             this.$subscriptions.push(this._assignAdminService.assignAdmin(this.path, this.addAdmin)
                 .subscribe((data: any) => {
                     this.isAssignToMe = false;
-                    this.isShowWarningMessage = false;
                     this.addAdmin = new AssignAdminRO();
                     this.isSaving = false;
                     this.clearAdministratorField = new String('true');
                     this.closeModal.emit(data);
-                    document.getElementById('hide-assign-admin').click();
+                    document.getElementById('toggle-assign-admin').click();
                 }, err => {
                     this.isSaving = false;
                 }));
@@ -169,20 +153,6 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
         return this.assignAdminMap.size > 0 ? false : true;
     }
 
-    private getAdminGroupDetails(personId) {
-        this.$subscriptions.push(this._assignAdminService.getPersonGroup(personId).subscribe((data: any) => {
-            if (data.adminGroupId) {
-                this.adminGroupsCompleterOptions.defaultValue = data.adminGroupName;
-                this.addAdmin.adminGroupId = data.adminGroupId;
-                this.isShowWarningMessage = false;
-                this.clearAdminGroupField = new String('false');
-            } else {
-                this.isShowWarningMessage = true;
-                this.warningMessage = data;
-            }
-        }));
-    }
-
     private setAssignToMe(): boolean {
         return this.addAdmin.adminPersonId === this._commonService.getCurrentUserDetail('personId') ? true : false;
     }
@@ -191,7 +161,6 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
         this.isAssignToMe = false;
         this.closeModal.emit();
         this.addAdmin = new AssignAdminRO();
-        this.isShowWarningMessage = false;
         this.clearAdminGroupField = new String('true');
         this.clearAdministratorField = new String('true');
     }

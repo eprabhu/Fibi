@@ -2,7 +2,7 @@
     data-bs-toggle="modal" data-bs-target="#confirmationModal"></button>
 <div class="modal modal-coi fade mySkinDialog" id="confirmationModal" role="dialog" aria-labelledby="confirmationModal"
     aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" [class.modal-lg]="needDescriptionField">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{modalHeaderTitle}}</h5>
@@ -38,7 +38,7 @@
                         </label>
                         <div class="col-12">
                             <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator
-                                [isShowLimiter]='true' [limit]=200 class="form-control fs-14" autocomplete="off"
+                                [isShowLimiter]='true' [limit]=500 class="form-control fs-14" autocomplete="off"
                                 [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty();"
                                 [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''">
                         </textarea>
