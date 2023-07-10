@@ -1,59 +1,53 @@
-
-
 <button class="d-none" data-bs-toggle="modal" data-bs-target="#assign-to-admin-modal" id="toggle-assign-admin"></button>
 <div class="modal fade mySkinDialog" data-bs-backdrop="static" id="assign-to-admin-modal" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header ct-footer-padding">
-        <h4 class="modal-title">Assign Administrator</h4>
-        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close fs-12"
-          (click)="clearData()">
-        </button>
-      </div>
-      <div class="modal-body ct-modal-padding">
-        <div class="row">
-          <div class="col-5 mt-3">
-            <span class="mt-4 py-3 ml-4">
-              <input type="checkbox" class="form-check-input" name="assignToMe" id="assignCheck"
-                (change)="assignToMe($event);" [checked]="isAssignToMe">
-              <label class="form-check-label ml-2" for="assignCheck">Assign to me</label>
-            </span>
-          </div>
-        </div>
-        <div class="row mt-3">
-          <label class="d-block ml-4 mt-3"><span class="mandatory">*</span>Select Administrator</label>
-          <div class="col-md-12 col-sm-4 col-12">
-            <app-autocompleter [completerOptions]="adminSearchOptions" [clearField]="clearAdministratorField"
-              [placeHolder]="'Search for admin'" (onSelect)="adminSelect($event)"
-              [ngClass]="(assignAdminMap.get('adminName'))? 'is-invalid d-block' : ''"></app-autocompleter>
-            <div *ngIf="assignAdminMap.has('adminName')" class="invalid-feedback d-block fs-12">Please select an admin.
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header ct-footer-padding">
+                <h4 class="modal-title">Assign Administrator</h4>
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close fs-12"
+                    (click)="clearData()">
+                </button>
             </div>
-          </div>
+            <div class="modal-body ct-modal-padding">
+                <div class="row">
+                    <div class="col-5 mt-3">
+                        <span class="mt-4 py-3 ml-4">
+                            <input type="checkbox" class="form-check-input" name="assignToMe" id="assignCheck"
+                                (change)="assignToMe($event);" [checked]="isAssignToMe">
+                            <label class="form-check-label ml-2" for="assignCheck">Assign to me</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <label class="d-block ml-4 mt-3"><span class="mandatory">*</span>Administrator</label>
+                    <div class="col-md-12 col-sm-4 col-12">
+                        <app-autocompleter [completerOptions]="adminSearchOptions"
+                            [clearField]="clearAdministratorField" [placeHolder]="'Search for admin'"
+                            (onSelect)="adminSelect($event)"
+                            [ngClass]="(assignAdminMap.get('adminName'))? 'is-invalid d-block' : ''"></app-autocompleter>
+                        <div *ngIf="assignAdminMap.has('adminName')" class="invalid-feedback d-block fs-12">Please
+                            select an admin.
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <label class="d-block ml-4 mt-3">Admin Group</label>
+                    <div class="col-md-12 col-sm-4 col-12">
+                        <app-autocompleter [completerOptions]="adminGroupsCompleterOptions"
+                            [clearField]="clearAdminGroupField" [placeHolder]="'Search for admin group'"
+                            (onSelect)="adminGroupSelect($event)">
+                        </app-autocompleter>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer mt-4">
+                <button type="button" class="btn btn-outline-secondary btn-sm" title="Cancel" data-bs-dismiss="modal"
+                    (click)="clearData();">Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm fs-14 me-3" title="Assign Administrator"
+                    (click)="assignAdministrator()">Assign
+                </button>
+            </div>
         </div>
-        <div class="row mt-3">
-          <label class="d-block ml-4 mt-3">Select Admin Group</label>
-          <div class="col-md-12 col-sm-4 col-12">
-            <app-autocompleter [completerOptions]="adminGroupsCompleterOptions" [clearField]="clearAdminGroupField"
-              [placeHolder]="'Search for admin group'" (onSelect)="adminGroupSelect($event)">
-            </app-autocompleter>
-          </div>
-        </div>
-        <div *ngIf="isShowWarningMessage"
-          class="success-banner px-3 mt-2 d-flex justify-content-between align-items-center">
-          <div>
-            <i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
-            <em class="fs-12">{{warningMessage}}</em>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer mt-4">
-        <button type="button" class="btn btn-outline-secondary btn-sm" title="Cancel" data-bs-dismiss="modal"
-          (click)="clearData();">Cancel</button>
-        <button type="button" class="btn btn-primary btn-sm fs-14 me-3" title="Assign Administrator"
-          (click)="assignAdministrator()">Assign
-        </button>
-      </div>
     </div>
-  </div>
 </div>

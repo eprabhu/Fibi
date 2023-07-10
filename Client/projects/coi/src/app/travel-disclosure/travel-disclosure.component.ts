@@ -126,8 +126,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private setAssignAdminModalDetails(): void {
-        this.defaultAdminDetails.adminGroupId = this.responseObject.adminGroupId || '';
-        this.defaultAdminDetails.adminGroupName = this.responseObject.adminGroupName || '';
+        this.defaultAdminDetails.adminGroupId = this.responseObject.adminGroupId;
+        this.defaultAdminDetails.adminGroupName = this.responseObject.adminGroupName;
         this.defaultAdminDetails.adminPersonId = this.responseObject.adminPersonId;
         this.defaultAdminDetails.adminPersonName = this.responseObject.adminPersonName;
     }
@@ -222,7 +222,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     showHomeButton(): boolean {
-        return this.isCreateMode || this.checkReviewStatusCode(['7', '2'], 'SOME');
+        return (this.isCreateMode || this.checkReviewStatusCode(['7'], 'SOME'))
+            && !this.checkReviewStatusCode(['2', '3'], 'SOME');
     }
 
     openAddAssignModal(): void {

@@ -25,6 +25,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities';
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
+import { DefaultAdminDetails } from '../travel-disclosure/travel-disclosure-interface';
 
 @Component({
     selector: 'app-disclosure',
@@ -79,6 +80,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     showConfirmation = false;
     relationshipError: any;
     questionnaireError: any;
+    defaultAdminDetails = new DefaultAdminDetails();
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -304,6 +306,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
         this.setAdminGroupOptions();
+        this.setAssignAdminModalDetails();
+    }
+
+    private setAssignAdminModalDetails(): void {
+        this.defaultAdminDetails.adminGroupId = this.coiData.coiDisclosure.adminGroupId;
+        this.defaultAdminDetails.adminGroupName = this.coiData.coiDisclosure.adminGroupName;
+        this.defaultAdminDetails.adminPersonId = this.coiData.coiDisclosure.adminPersonId;
+        this.defaultAdminDetails.adminPersonName = this.coiData.coiDisclosure.adminPersonName;
     }
 
     getDisclosureStatusBadgeTextColor(statusCode) {
