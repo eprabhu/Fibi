@@ -222,7 +222,8 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     showHomeButton(): boolean {
-        return this.isCreateMode || this.checkReviewStatusCode(['7', '2'], 'SOME');
+        return (this.isCreateMode || this.checkReviewStatusCode(['7'], 'SOME'))
+            && !this.checkReviewStatusCode(['2', '3'], 'SOME');
     }
 
     openAddAssignModal(): void {
