@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.polus.fibicomp.coi.pojo.CoiQuestAnswer;
 
 @Entity
 @Table(name = "QUEST_ANSWER_HEADER")
@@ -53,6 +54,10 @@ public class QuestAnswerHeader implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "questAnswerHeader", orphanRemoval = true, cascade = { CascadeType.REMOVE, CascadeType.ALL })
 	private List<QuestAnswer> qusetAnswers;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "questAnswerHeader", orphanRemoval = true, cascade = { CascadeType.REMOVE, CascadeType.ALL })
+	private List<CoiQuestAnswer> coiQuestAnswers;
 
 	public Integer getQuestAnsHeaderId() {
 		return questAnsHeaderId;
@@ -133,4 +138,13 @@ public class QuestAnswerHeader implements Serializable {
 	public void setUpdateTimeStamp(Timestamp updateTimeStamp) {
 		this.updateTimeStamp = updateTimeStamp;
 	}
+
+	public List<CoiQuestAnswer> getCoiQuestAnswers() {
+		return coiQuestAnswers;
+	}
+
+	public void setCoiQuestAnswers(List<CoiQuestAnswer> coiQuestAnswers) {
+		this.coiQuestAnswers = coiQuestAnswers;
+	}
+
 }
