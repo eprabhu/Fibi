@@ -463,6 +463,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.coiData.coiDisclosure.adminGroupName = event.adminGroupName;
             this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = event.reviewStatusCode;
             this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
+            this.coiData.coiDisclosure.reviewStatusCode = event.reviewStatusCode;
             this.dataStore.updateStore(['coiDisclosure'], this.coiData);
         }
         this.isAddAssignModalOpen = false;
