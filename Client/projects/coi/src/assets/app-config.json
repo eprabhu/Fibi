@@ -1,13 +1,13 @@
 {
-  "baseUrl": "",
-  "fibiUrl": "",
-  "authUrl": "/auth",
+  "baseUrl": "https://coi.fibiweb.com/coi",
+  "fibiUrl": "https://coi.fibiweb.com/fibii",
+  "authUrl": "https://coi.fibiweb.com/auth",
   "enableSSO": false,
   "isElasticAuthentiaction" : false,
   "elasticUserName": "elastic",
   "elasticDelimiter": ":",
   "elasticPassword":"changeme",
   "elasticAuthScheme": "Basic",
-  "elasticIndexUrl": "http://192.168.1.47:9200/",
-  "fibiApplicationUrl":"http://192.168.1.47:8080/fibi"
+  "elasticIndexUrl": "https://coi.fibiweb.com/elastic/",
+  "fibiApplicationUrl":"https://stage.fibiweb.com/fibi"
 }
