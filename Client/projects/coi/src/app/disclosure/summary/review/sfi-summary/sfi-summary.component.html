@@ -13,21 +13,22 @@
   </div>
 </div> -->
 
-<div class="main-title" id="COI802">
-  <h3 class="d-flex align-items-center justify-content-between fs-16 mt-4 mb-3">
+<div class="main-title d-flex flex-end justify-content-between px-1 pb-2" id="COI802">
+  <h3 class="fs-16">
     <span class="d-flex align-items-center">
-    <strong class="mt-4">Significant Financial Interest (SFI)
+    <strong>Significant Financial Interest (SFI)
     </strong>
-    <span class="d-inline-block mt-3" tabindex="0" data-bs-toggle="tooltip" title="View SFI details."
+    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="View SFI details."
       data-bs-placement="top">
       <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
     </span>
   </span>
-    <button class=" updown-arrow mt-3 " (click)="isCollapsed = !isCollapsed">
-      <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'" class="fa-large"
-        aria-hidden="true"></i>
-    </button>
   </h3>
+  <button class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm" 
+  [title]="isCollapsed ? 'Click here to collapse Significant Financial Interest (SFI)' : 'Click here to expand Significant Financial Interest (SFI)'"
+  (click)="isCollapsed = !isCollapsed">
+    <mat-icon>{{isCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
+  </button>
 </div>
 <ng-container *ngIf="isCollapsed">
   <ng-container *ngIf="coiFinancialEntityDetails?.length">

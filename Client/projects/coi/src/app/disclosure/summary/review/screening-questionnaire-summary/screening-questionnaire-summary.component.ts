@@ -25,6 +25,7 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck {
     };
     deployMap = environment.deployUrl;
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
+    isQuestionnaireCollapsed = false;
 
     constructor(
         private _commonService: CommonService,
