@@ -297,6 +297,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public List<CoiDisclEntProjDetails> getProjectRelationshipByParam(Integer moduleCode, Integer moduleItemId, String loginPersonId, Integer disclosureId) {
 		return hibernateTemplate.execute(session -> {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
+			List<Order> orderList = new ArrayList<>();
 			CriteriaQuery<CoiDisclEntProjDetails> criteria = builder.createQuery(CoiDisclEntProjDetails.class);
 			Root<CoiDisclEntProjDetails> root = criteria.from(CoiDisclEntProjDetails.class);
 			Predicate predicatePersonId = builder.equal(root.get("coiDisclosure").get("personId"), loginPersonId);
@@ -308,6 +309,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			} else {
 				criteria.where(builder.and(predicatePersonId, predicateDisclosureId));
 			}
+			orderList.add(builder.desc(root.get("personEntity").get("updateTimestamp")));
+			criteria.orderBy(orderList);
 			return session.createQuery(criteria).getResultList();
 		});
 	}
