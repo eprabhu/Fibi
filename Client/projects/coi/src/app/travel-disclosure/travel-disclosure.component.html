@@ -7,7 +7,7 @@
                         <ng-container *ngIf="!responseObject?.travelDisclosureId">
                             <strong>Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="ispersondetailsmodal = true;"
+                                    <u (click)="isPersonDetailsModalOpen = true;"
                                         title="Show the details of {{userDetails?.fullName}}">
                                         {{userDetails?.fullName}}
                                     </u>
@@ -18,7 +18,7 @@
                             <strong title="">
                                 #{{responseObject?.travelDisclosureId}} : Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="ispersondetailsmodal = true;"
+                                    <u (click)="isPersonDetailsModalOpen = true;"
                                         title="Show the details of {{userDetails?.fullName}}">
                                         {{userDetails?.fullName}}
                                     </u>
@@ -230,9 +230,8 @@
 
                 <!-- Comments -->
                 <button title="Click to add new review commments" aria-expanded="false"
-                    *ngIf="!isCreateMode && checkReviewStatusCode(['3'])"
-                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col 0 ms-2"
-                    data-bs-target="#coi-review-comment" data-bs-toggle="modal" role="button">
+                    *ngIf="checkReviewStatusCode(['2', '3'], 'SOME')"
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2">
                     <mat-icon>rate_review</mat-icon>
                     <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
                 </button>
@@ -246,13 +245,13 @@
                 </button>
 
                 <!-- more options -->
-                <mat-menu #beforeMenu="matMenu" xPosition="after">
+                <mat-menu #beforeMenu="matMenu" xPosition="before">
                     <!-- reassigned admin -->
                     <ng-container *ngIf="responseObject?.adminPersonId">
                         <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
                             class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
                             *ngIf="isTravelAdministrator && checkReviewStatusCode(['2', '3'], 'SOME')"
-                            data-bs-toggle="modal" data-bs-target="#assign-to-admin-modal">
+                            (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2">Reassign Admin</span>
                         </button>
@@ -282,8 +281,8 @@
                             area-describedby="Click to assign administrator"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
-                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2'])" data-bs-toggle="modal"
-                            data-bs-target="#assign-to-admin-modal">
+                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2'])"
+                            (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2" *ngIf="isCardExpanded">Assign Admin</span>
                         </button>
@@ -376,7 +375,7 @@
 
 <!--Confirmation Modal-->
 <app-confirmation-modal (btnAction)="performDisclosureAction($event)" [modalActionBtnName]="modalActionBtnName"
-    [helpText]="helpText" [modalHeaderTitle]="modalHeaderTitle" (closeModal)="closeConfirmationModal"
+    [helpText]="helpText" [modalHeaderTitle]="modalHeaderTitle" (closeModal)="closeConfirmationModal()"
     [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionError]="descriptionError">
     <span>Are you sure you want to <strong>{{modalActionBtnName}}</strong> this disclosure?</span>
 </app-confirmation-modal>
@@ -390,9 +389,12 @@
 <!-- <app-coi-review-comment-modal></app-coi-review-comment-modal> -->
 
 <!-- personal details Modal-->
-<app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
-    [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails">
+<app-personal-details-modal *ngIf="isPersonDetailsModalOpen"
+    (closeModalPersonDetails)="closePersonDetailsModal($event)" [userdetails]="userDetails">
 </app-personal-details-modal>
 
-<app-assign-administrator-modal *ngIf="checkReviewStatusCode(['2','3'], 'SOME')" [path]="'travelDisclosure'" (closeModal)="closeAssignAdministratorModal($event)"
-    [disclosureId]="responseObject?.travelDisclosureId"></app-assign-administrator-modal>
+<app-assign-administrator-modal *ngIf="isAddAssignModalOpen"
+    [defaultAdminDetails]="defaultAdminDetails"
+    [path]="'travelDisclosure'" (closeModal)="closeAssignAdministratorModal($event)"
+    [disclosureId]="responseObject?.travelDisclosureId">
+</app-assign-administrator-modal>

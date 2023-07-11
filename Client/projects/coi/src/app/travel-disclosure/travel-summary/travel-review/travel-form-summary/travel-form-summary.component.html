@@ -1,13 +1,17 @@
 <div class="main-title">
-    <h3 class="d-flex align-items-center fs-16 position-relative">
-        <strong class="mt-4 ms-1">Travel Details</strong>
-        <span class="d-inline-block mt-3" tabindex="0" data-bs-toggle="tooltip" title="View Travel Details"
+    <h3 class="d-flex pe-3 align-items-center fs-16 position-relative">
+        <strong class="mt-1">Travel Details</strong>
+        <span class="d-inline-block flex-fill" tabindex="0" data-bs-toggle="tooltip" title="View Travel Details"
             data-bs-placement="top">
             <mat-icon class="me-2 info-icon fs-16" data-bs-toggle="tooltip">info</mat-icon>
         </span>
-        <button class="updown-arrow" (click)="isCollapsed = !isCollapsed">
-            <i [ngClass]="!isCollapsed?'fa fa-angle-double-down':'fa fa-angle-double-up'" class="fa-large"
-                aria-hidden="true"></i>
+        <button class="btn d-flex btn-primary-icon btn-sm mr-2 mt-1" id="add-activity" title="Add Review Comment"
+            type="button">
+            <mat-icon>rate_review</mat-icon>
+        </button>
+        <button (click)="isCollapsed=!isCollapsed;"
+            class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm me-1">
+            <mat-icon>{{isCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
         </button>
     </h3>
 </div>

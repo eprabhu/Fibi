@@ -23,6 +23,10 @@ export class EntityManagementService {
     {code: 'Y', description: 'Active'},
     {code: 'N', description: 'Inactive'}
   ];
+  statusCode: any = [
+    {code: '1', description: 'verified'},
+    {code: '2', description: 'unverified'}
+  ];
 
   getAllSystemEntityList(params) {
     return this._http.post(this._commonService.baseUrl + '/getAllSystemEntityList', params);
@@ -68,6 +72,7 @@ export class EntityDashboardRequest {
   property20 = [];
   property21 = [];
   property22 = [];
+  property24 = [];
   property18 = false;
   property19 = false;
   sort: any = {'updateTimeStamp': 'desc'};

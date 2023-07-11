@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
@@ -52,6 +51,7 @@ export class ReviewerDashboardComponent implements OnInit {
     isShowDisclosureList = false;
     localCOIRequestObject: ReviewerDashboardRequest = new ReviewerDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
+    isShowNoDataCard = false;
     constructor(
         public reviewerDashboardService: ReviewerDashboardService,
         public commonService: CommonService,
@@ -79,12 +79,14 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     getDashboardDetails() {
+        this.isShowNoDataCard = false;
         this.$subscriptions.push(this.$coiList.pipe(
             switchMap(() => this.reviewerDashboardService.getCOIReviewerDashboard(this.getRequestObject())))
             .subscribe((data: any) => {
                 this.result = data || [];
                 if (this.result) {
                     this.coiList = this.result.disclosureViews || [];
+                    this.isShowNoDataCard = true;
                     this.coiList.map(ele => {
                         ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
                         ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
@@ -298,6 +300,7 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     changeTab(tabName) {
+        this.isShowNoDataCard = false;
         this.coiList = [];
         this.isShowDisclosureList = false;
         this.reviewerDashboardService.isAdvanceSearch = false;

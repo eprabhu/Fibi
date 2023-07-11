@@ -25,6 +25,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities';
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
+import { DefaultAdminDetails } from '../travel-disclosure/travel-disclosure-interface';
 
 @Component({
     selector: 'app-disclosure',
@@ -39,6 +40,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     isCreateMode = false;
     isSaving = false;
     isCOIAdministrator = true;
+    isAddAssignModalOpen = false;
     certificationText = 'I certify that the information provided for the Financial conflict of interest, including, responses to screening questions, list of my pertinent Significant Financial interests and possible relationship to my sponsored activity is an accurate and current statement of my reportable outside interests and activities.';
     $subscriptions: Subscription[] = [];
     coiData = new COI();
@@ -78,7 +80,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     showConfirmation = false;
     relationshipError: any;
     questionnaireError: any;
-
+    defaultAdminDetails = new DefaultAdminDetails();
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -116,6 +118,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 });
             }
         });
+        this.updateTimeStampEvent();
     }
 
     ngOnDestroy(): void {
@@ -273,7 +276,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             coiDisclosure: {
                 disclosureId: this.coiData.coiDisclosure.disclosureId,
                 certificationText: this.coiData.coiDisclosure.certificationText ?
-                    this.coiData.coiDisclosure.certificationText : this.certificationText
+                    this.coiData.coiDisclosure.certificationText : this.certificationText,
+                    conflictStatusCode: this.dataStore.disclosureStatus
             }
         };
         this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
@@ -302,6 +306,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
         this.setAdminGroupOptions();
+        this.setAssignAdminModalDetails();
+    }
+
+    private setAssignAdminModalDetails(): void {
+        this.defaultAdminDetails.adminGroupId = this.coiData.coiDisclosure.adminGroupId;
+        this.defaultAdminDetails.adminGroupName = this.coiData.coiDisclosure.adminGroupName;
+        this.defaultAdminDetails.adminPersonId = this.coiData.coiDisclosure.adminPersonId;
+        this.defaultAdminDetails.adminPersonName = this.coiData.coiDisclosure.adminPersonName;
     }
 
     getDisclosureStatusBadgeTextColor(statusCode) {
@@ -321,6 +333,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             .completeDisclosureReview(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureNumber)
             .subscribe((res: any) => {
                 this.updateDisclosureReviewStatus(res.body.coiDisclosure);
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             }, _err => {
                 if (_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
                     document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();
@@ -333,7 +346,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     updateDisclosureReviewStatus(res) {
         this.coiData.coiDisclosure = deepCloneObject(res);
         this.dataStore.updateStore(['coiDisclosure'], this.coiData);
-        this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
     }
 
     triggerSave() {
@@ -444,15 +456,17 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     closeAssignAdministratorModal(event) {
-        if (event.adminPersonId || event.adminGroupId) {
+        if (event && (event.adminPersonId || event.adminGroupId)) {
             this.coiData.coiDisclosure.adminPersonId = event.adminPersonId;
             this.coiData.coiDisclosure.adminPersonName = event.adminPersonName;
             this.coiData.coiDisclosure.adminGroupId = event.adminGroupId;
             this.coiData.coiDisclosure.adminGroupName = event.adminGroupName;
             this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = event.reviewStatusCode;
             this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
+            this.coiData.coiDisclosure.reviewStatusCode = event.reviewStatusCode;
             this.dataStore.updateStore(['coiDisclosure'], this.coiData);
         }
+        this.isAddAssignModalOpen = false;
     }
 
     public updateCoiReview(modalType: ModalType) {
@@ -474,5 +488,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
+    updateTimeStampEvent() {
+        this.dataStore.updateTimestampEvent.subscribe((value) => {
+            this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
+            this.coiData = JSON.parse(JSON.stringify(this.coiData));
+        });
+    }
 
 }
