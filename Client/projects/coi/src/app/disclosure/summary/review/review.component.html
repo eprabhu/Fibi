@@ -21,21 +21,21 @@
 
 <app-screening-questionnaire-summary></app-screening-questionnaire-summary>
 <app-sfi-summary></app-sfi-summary>
-<div class="main-title mb-3 mt-4" id="COI803">
-<h3 class="d-flex align-items-center justify-content-between fs-16 mb-3">
-	<span class="d-flex align-items-center">
-		<strong class="mt-3">Relationships</strong>
-		<span class="d-inline-block mt-3" tabindex="0" data-bs-toggle="tooltip" title="View entity relationships."
-			data-bs-placement="top">
-			<mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
-		</span>
+<div class="main-title d-flex flex-end justify-content-between px-1 pb-2" id="COI802">
+	<h3 class="fs-16">
+	  <span class="d-flex align-items-center">
+	  <strong>Relationships</strong>
+	  <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="View entity relationships."
+		data-bs-placement="top">
+		<mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
+	  </span>
 	</span>
-	<button class="updown-arrow updown-arrow-relation mt-3 " (click)="isRelationCollapsed = !isRelationCollapsed">
-		<i [ngClass]="!isRelationCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
-			class="fa-large" aria-hidden="true"></i>
+	</h3>
+	<button class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm" 
+	(click)="isRelationCollapsed = !isRelationCollapsed" [title]="isRelationCollapsed ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
+	  <mat-icon>{{isRelationCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
 	</button>
-</h3>
-</div>
+  </div>
 <ng-container *ngIf="isRelationCollapsed">
 	<ng-container *ngIf="_dataStoreAndEventsService.concatenatedProjectList?.length">
 		<ng-container *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
