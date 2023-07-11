@@ -407,6 +407,7 @@ export class ReviewerDashboardComponent implements OnInit {
         this.localCOIRequestObject.property9 = this.reviewerDashboardService.reviewerRequestObject.property9 ?
             this.reviewerDashboardService.reviewerRequestObject.property9 : null;
         this.localCOIRequestObject.advancedSearch = 'A';
+        this.localSearchDefaultValues = this.reviewerDashboardService.searchDefaultValues;
     }
 
     generateLookupArrayForDropdown() {
