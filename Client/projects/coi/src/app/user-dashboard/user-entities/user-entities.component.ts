@@ -33,6 +33,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   $debounceEventForEntities = new Subject();
   $fetchSFI = new Subject();
   isSearchTextHover = false;
+  isShowNoDataCard = false;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService) {
@@ -48,11 +49,15 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   }
 
  fetchMyEntities() {
+  this.isShowNoDataCard = false;
     this.sfiDashboardRequestObject.personId = this._commonService.getCurrentUserDetail('personId');
     this.$subscriptions.push(this.$fetchSFI.pipe(
       switchMap(() => this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject))).subscribe((data: any) => {
       this.result = data;
-      this.filteredEntityArray = data.personEntities || [];
+      if (this.result) {
+        this.isShowNoDataCard = true;
+        this.filteredEntityArray = data.personEntities || [];
+      }
     }));
   }
 
