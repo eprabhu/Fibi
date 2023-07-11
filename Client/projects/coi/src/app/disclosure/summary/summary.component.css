@@ -9,10 +9,10 @@
     display: inline-block;
     width: 24%;
     position: fixed;
-    margin-left: 3px;
+    margin-left: 5px;
 }
 
 
 @media (min-width: 1600px) {
-  .right-div {width: 395px;}
+  .right-div {width: 388px;}
 }

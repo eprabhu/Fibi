@@ -108,6 +108,8 @@ export class AddSfiComponent implements OnInit {
     hideRelationshipModal(event): void {
         this.showRelationshipModal = event;
         this.clearSFIFields();
+        this.clearField = new String('true');
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
     }
 
     private createOrUpdateEntitySFI(): void {
@@ -194,7 +196,6 @@ export class AddSfiComponent implements OnInit {
             this.clearField = new String('false');
             this.checkIfSFIAlreadyAdded(event.entityId, event);
         } else {
-            this.entityDetails = new EntityDetails();
             this.clearSFIFields();
         }
     }
@@ -214,8 +215,6 @@ export class AddSfiComponent implements OnInit {
             sponsorsResearch: false
         };
         this.clearCountryField = new String('true');
-        this.clearField = new String('true');
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.isResultFromSearch = false;
         this.mandatoryList.clear();

@@ -136,6 +136,7 @@ export class LocationComponent implements OnInit, OnDestroy {
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.modifyIndex = -1;
                 this.reviewDetails = {};
+                this._dataStore.updateTimestampEvent.next();
                 document.getElementById('add-review-modal-trigger').click();
                 //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
             }, _err => {
@@ -147,6 +148,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     addReviewToList(review: any) {
         this.reviewerList.push(review);
         this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
+        this._dataStore.updateTimestampEvent.next();
         this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
         this.coiService.isReviewActionCompleted = this.completeReviewAction();
     }
@@ -154,6 +156,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     updateReview(review: any) {
         this.reviewerList.splice(this.modifyIndex, 1, review);
         this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
+        this._dataStore.updateTimestampEvent.next();
         this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
     }
 

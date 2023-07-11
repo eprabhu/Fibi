@@ -14,6 +14,8 @@ import { CoiDashboardRequest } from '../../admin-dashboard/admin-dashboard.servi
 import { NavigationService } from '../../common/services/navigation.service';
 import { switchMap } from 'rxjs/operators';
 import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
+import { CoiService } from '../../disclosure/services/coi.service';
+import { UserDashboardService } from '../../user-dashboard/user-dashboard.service';
 
 @Component({
   selector: 'app-entity-list',
@@ -37,7 +39,8 @@ export class EntityListComponent implements OnDestroy, OnInit {
   lookupValues = [];
   riskLevelTypeOptions = 'entity_risk_category#RISK_CATEGORY_CODE#true#true';
   entityTypeOptions = 'entity_type#ENTITY_TYPE_CODE#true#true';
-  statusTypeOptions = 'EMPTY#EMPTY#true#true';
+  statusTypeOptions = 'EMPTY#EMPTY#true#true#true#true';
+  verificationTypeOptions = 'ENTITY_STATUS#ENTITY_STATUS_CODE#true#true';
   $entityList = new Subject();
   entityList: any = [];
   $subscriptions: Subscription[] = [];
@@ -180,6 +183,9 @@ export class EntityListComponent implements OnDestroy, OnInit {
     if (this.entityManagementService.coiRequestObject.property22.length !== 0) {
       this.generateLookupArray(this.entityManagementService.coiRequestObject.property22, 'property22');
     }
+    if (this.entityManagementService.coiRequestObject.property24.length !== 0) {
+        this.generateLookupArray(this.entityManagementService.coiRequestObject.property24, 'property24');
+      }
   }
 
   generateLookupArray(property, propertyNumber) {
@@ -249,4 +255,5 @@ setEventTypeFlag() {
         }
 
     }
+
 }

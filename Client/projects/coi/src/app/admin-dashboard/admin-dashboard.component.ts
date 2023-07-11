@@ -35,12 +35,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     currentSelected = {
         tab: 'IN_PROGRESS',
         filter: 'did'
-    }
+    };
     isShowCountModal = false;
+    isAddAssignModalOpen = false;
     selectedModuleCode: any;
     currentDisclosureId: any;
     currentDisclosureNumber: any;
-    disclosureType: any
+    disclosureType: any;
     datePlaceHolder = DATE_PLACEHOLDER;
     advancedSearch = { hasSFI: true };
     conflictStatusOptions = 'coi_disc_det_status#DISC_DET_STATUS_CODE#true#true';
@@ -87,12 +88,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     addAdmin: any = {};
     localCOIRequestObject: CoiDashboardRequest = new CoiDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
+    isShowNoDataCard = false;
 
-    constructor( 
+    constructor(public _coiAdminDashboardService: AdminDashboardService,
         private _router: Router,
         private _elasticConfig: ElasticConfigService,
         public commonService: CommonService,
-        public _coiAdminDashboardService: AdminDashboardService,
         private _navigationService: NavigationService
     ) { }
 
@@ -217,20 +218,22 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                 setTimeout(() => {
                     this.getDashboardDetails();
                     this.$coiList.next();
-                })
+                });
             }));
     }
 
     getDashboardDetails() {
+        this.isShowNoDataCard = false;
         this.$subscriptions.push(this.$coiList.pipe(
             switchMap(() => this._coiAdminDashboardService.getCOIAdminDashboard(this.getRequestObject())))
             .subscribe((data: any) => {
                 this.result = data || [];
                 if (this.result) {
                     this.coiList = this.result.disclosureViews || [];
+                    this.isShowNoDataCard = true;
                     this.coiList.map(ele => {
-                        ele.numberOfProposals = ele.disclosureStatusCode != 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
-                        ele.numberOfAwards = ele.disclosureStatusCode != 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
+                        ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
+                        ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
                     });
                 }
                 this.setEventTypeFlag();
@@ -238,7 +241,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     setEventTypeFlag() {
-        this.isActiveDisclosureAvailable = !!this.coiList.find((ele: any) => ele.disclosureSequenceStatusCode == '2');
+        this.isActiveDisclosureAvailable = !!this.coiList.find((ele: any) => ele.disclosureSequenceStatusCode === '2');
     }
 
     getRequestObject() {     
@@ -257,6 +260,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     changeTab(tabName) {
+        this.isShowNoDataCard = false;
         this.coiList = [];
         this.isShowDisclosureList = false;
         this._coiAdminDashboardService.isAdvanceSearch = false;
@@ -266,7 +270,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         if (this.isAdvanceSearchTab(tabName)) {
             this.resetAdvanceSearchFields();
             this.setAdvanceSearch();
-            if (tabName != 'ALL_DISCLOSURES') {
+            if (tabName !== 'ALL_DISCLOSURES') {
                 this.$coiList.next();
             }
             return;
@@ -309,7 +313,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     leadUnitChangeFunction(unit: any) {
         this.localCOIRequestObject.property3 = unit ? unit.unitNumber : null;
-        this.localSearchDefaultValues.departmentName = unit ? unit.unitName : null
+        this.localSearchDefaultValues.departmentName = unit ? unit.unitName : null;
     }
 
     selectPersonName(person: any) {
@@ -367,7 +371,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.personId = coi.personId;
         }
     }
-    
     performAdvanceSearch() {
         this.setAdvanceSearchToServiceObject();
         this.localCOIRequestObject.advancedSearch = 'A';
@@ -378,7 +381,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     toggleAdvanceSearch() {
-        this.isViewAdvanceSearch= !this.isViewAdvanceSearch;
+        this.isViewAdvanceSearch = !this.isViewAdvanceSearch;
         if (!this.isViewAdvanceSearch) {
             this._coiAdminDashboardService.isAdvanceSearch = false;
         }
@@ -406,7 +409,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     completeDisclosureReview() {
         this.$subscriptions.push(this._coiAdminDashboardService
             .completeCOIReview(this.selectedStartReviewCoiId)
-            .subscribe( (_res: any) => {
+            .subscribe((_res: any) => {
                 // this._router.navigate(['fibi/coi/summary'], { queryParams: { disclosureId: this.selectedStartReviewCoiId }});
                 // this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
                 this.finishReviewRequest();
@@ -476,7 +479,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     performReplyComment(comment: any, index: number) {
-        if (this.replyComment[index] != undefined && this.replyComment[index].trim() && !this.isSaving) {
+        if (this.replyComment[index] !== undefined && this.replyComment[index].trim() && !this.isSaving) {
             this.isSaving = true;
             this.$subscriptions.push(this._coiAdminDashboardService
                 .addCOIReviewComment(this.getCommentRequestObj(comment, index))
@@ -526,13 +529,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     getEventType(disclosureSequenceStatusCode, disclosureCategoryType) {
-        if (disclosureCategoryType == 1) {
-            if (disclosureSequenceStatusCode == 2 || disclosureSequenceStatusCode == 1 && !this.isActiveDisclosureAvailable) {
+        if (disclosureCategoryType === 1) {
+            if (disclosureSequenceStatusCode === 2 || disclosureSequenceStatusCode === 1 && !this.isActiveDisclosureAvailable) {
                 return 'Active';
-            } else if (disclosureSequenceStatusCode == 1 && this.isActiveDisclosureAvailable) {
+            } else if (disclosureSequenceStatusCode === 1 && this.isActiveDisclosureAvailable) {
                 return 'Revision';
             }
-        } else if (disclosureCategoryType == 3) {
+        } else if (disclosureCategoryType === 3) {
             return 'Proposal';
         }
     }
@@ -571,7 +574,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     async checkTravelDisclosureRights() {
         const rightsArray = await this.commonService.fetchPermissions();
-        this.hasTravelDisclosureRights = rightsArray.some((right) => ['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'].includes(right));
+        this.hasTravelDisclosureRights = rightsArray.some((right) =>
+            ['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'].includes(right));
     }
 
     getColorBadges(disclosure) {
@@ -678,11 +682,17 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this._coiAdminDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;
 	}
 
+    openAssignAdminModal(coi) {
+        this.addAdmin.disclosureId = coi.coiDisclosureId;
+        this.isAddAssignModalOpen = true;
+    }
+
     closeAssignAdminModal(event) {
         if (event) {
             this.addAdmin.disclosureId = null;
             this.$coiList.next();
-        } 
+        }
+        this.isAddAssignModalOpen = false;
     }
 }
 

@@ -26,6 +26,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     isCollapsed = true;
     showSlider = false;
     entityId: any;
+    isShowNoDataCard = false;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
@@ -52,8 +53,10 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     }
 
     getSfiDetails() {
+        this.isShowNoDataCard = false;
         this.$subscriptions.push(this._coiSummaryService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
             if (data) {
+                this.isShowNoDataCard = true;
                 this.coiFinancialEntityDetails = data.personEntities;
                 this.setSubSectionList();
             }

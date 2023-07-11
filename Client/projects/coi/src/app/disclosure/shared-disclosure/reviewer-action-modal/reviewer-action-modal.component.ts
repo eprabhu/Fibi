@@ -42,6 +42,7 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         }).subscribe((res: any) => {
             this.updateDataStore(res);
             this.currentReviewer = {};
+            this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review started successfully.`);
         }, _err => {
             this.currentReviewer = {};
@@ -56,6 +57,7 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         }).subscribe((res: any) => {
             this.updateDataStore(res);
             this.currentReviewer = {};
+            this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
         }, _err => {
             this.currentReviewer = {};

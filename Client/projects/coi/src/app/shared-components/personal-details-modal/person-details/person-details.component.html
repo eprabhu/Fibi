@@ -1,122 +1,119 @@
 <div class="row mx-0 mt-3">
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle">First Name</label>
-        <span [ngClass]="personValues?.person?.firstName  ? 'dataExists' : 'noDataExists'">
-            {{personValues?.person?.firstName ? personValues?.person?.firstName : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.firstName">
+                <span class="fs-14"> {{personValues?.person?.firstName}}</span>
+            </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle   ">Middle Name </label>
-        <span [ngClass]="personValues?.person?.firstName  ? 'dataExists' : 'noDataExists'">
-            {{personValues?.person?.middleName ? personValues?.person?.middleName : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.middleName">
+                <span class="fs-14"> {{personValues?.person?.middleName}}</span>
+            </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Last Name</label>
-        <span [ngClass]="personValues?.person?.firstName  ? 'dataExists' : 'noDataExists'">
-            {{personValues?.person?.lastName ? personValues?.person?.lastName : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.lastName">
+                <span class="fs-14"> {{personValues?.person?.lastName}}</span>
+            </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Full Name</label>
-        <span [ngClass]="personValues?.person?.firstName  ? 'dataExists' : 'noDataExists'">
-            {{personValues?.person?.fullName ? personValues?.person?.fullName : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.fullName">
+                <span class="fs-14"> {{personValues?.person?.fullName}}</span>
+            </app-no-data-label>
     </div>
     <div *ngIf="personValues?.person?.rolodexId" class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Organization</label>
-        <span *ngIf="personValues?.person?.organizationName !== null"
-            [ngClass]="personValues?.person?.organizationName !== null ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.organizationName !== null ?
-            personValues?.person?.organizationName : 'No Data'}}
-        </span>
-        <span *ngIf="personValues?.person?.organizationName == null"
-            [ngClass]="personValues?.person?.organizationName !== null ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.organizationName !== null ?
-            personValues?.person?.organizationName : 'No Data'}}
-        </span>
+        <app-no-data-label *ngIf="personValues?.person?.organizationName !== null" [valueToShow]="personValues?.person?.organizationName">
+            <span class="fs-14"> {{personValues?.person?.organizationName}}</span>
+        </app-no-data-label>
+        <app-no-data-label *ngIf="personValues?.person?.organizationName == null" [valueToShow]="personValues?.person?.organizationName">
+            <span class="fs-14"> {{personValues?.person?.organizationName}}</span>
+        </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Designation</label>
-        <span *ngIf="personValues?.person?.personId"
-            [ngClass]="personValues?.person?.primaryTitle !== null ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.primaryTitle !== null ? personValues?.person?.primaryTitle : 'No Data'}}
-        </span>
-        <span *ngIf="personValues?.person?.rolodexId"
-            [ngClass]="personValues?.person?.designation !== null ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.designation !== null ? personValues?.person?.designation : 'No Data'}}
-        </span>
+        <app-no-data-label *ngIf="personValues?.person?.personId" [valueToShow]="personValues?.person?.primaryTitle">
+            <span class="fs-14"> {{personValues?.person?.primaryTitle}}</span>
+        </app-no-data-label>
+        <app-no-data-label *ngIf="personValues?.person?.rolodexId" [valueToShow]="personValues?.person?.designation">
+            <span class="fs-14"> {{personValues?.person?.designation}}</span>
+        </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Address Line 1</label>
-        <span [ngClass]="personValues?.person?.addressLine1 ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.addressLine1 ? personValues?.person?.addressLine1 : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.addressLine1">
+                <span class="fs-14"> {{personValues?.person?.addressLine1}}</span>
+            </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle   ">Address Line 2</label>
-        <span [ngClass]="personValues?.person?.addressLine2 ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.addressLine2 ? personValues?.person?.addressLine2 : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.addressLine2">
+                <span class="fs-14"> {{personValues?.person?.addressLine2}}</span>
+            </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">Address Line 3</label>
-        <span [ngClass]="personValues?.person?.addressLine3 ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.addressLine3 ? personValues?.person?.addressLine3 : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.addressLine3">
+                <span class="fs-14"> {{personValues?.person?.addressLine3}}</span>
+            </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle  ">City</label>
-        <span [ngClass]="personValues?.person?.city ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.city ? personValues?.person?.city: 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.city">
+                <span class="fs-14"> {{personValues?.person?.city}}</span>
+            </app-no-data-label>   
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">PostalCode</label>
-        <span [ngClass]="personValues?.person?.postalCode ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.postalCode ? personValues?.person?.postalCode : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.postalCode">
+                <span class="fs-14"> {{personValues?.person?.postalCode}}</span>
+            </app-no-data-label>   
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">State</label>
-        <span [ngClass]="personValues?.person?.state ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.state ? personValues?.person?.state : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.state">
+                <span class="fs-14"> {{personValues?.person?.state}}</span>
+            </app-no-data-label>           
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Country</label>
-        <span *ngIf="personValues?.person?.personId"
-            [ngClass]="personValues?.person?.countryDetails ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.countryDetails ? personValues?.person?.countryDetails?.countryCode + '-' +
-            selectedPersonDetails?.countryDetails.countryName : 'No Data'}}</span>
-        <span *ngIf="personValues?.person?.rolodexId"
-            [ngClass]="selectedPersonDetails.country ?  'dataExists' : 'noDataExists'">
-            {{selectedPersonDetails.country ? selectedPersonDetails?.country?.countryName : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.countryDetails?.countryCode" [classesToApply]="'noDataExists fw-500'">
+                <span class="fs-14"> {{personValues?.person?.countryDetails?.countryCode}}</span>
+            </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Email Address</label>
-        <span [ngClass]="personValues?.person?.emailAddress !== null ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.emailAddress !== null ? personValues?.person?.emailAddress : 'No Data'}}
-        </span>
+        <app-no-data-label [valueToShow]="personValues?.person?.emailAddress">
+            <span class="fs-14"> {{personValues?.person?.emailAddress}}</span>
+        </app-no-data-label>
     </div>
     <div class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Phone Number</label>
-        <span *ngIf="personValues?.person?.rolodexId == null"
-            [ngClass]="personValues?.person?.mobileNumber !== null ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.mobileNumber !== null ? personValues?.person?.mobileNumber : 'No Data'}}
-        </span>
-        <span *ngIf="personValues?.person?.rolodexId != null"
-            [ngClass]="personValues?.person?.phoneNumber !== null ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.phoneNumber !== null ? personValues?.person?.phoneNumber : 'No Data'}}
-        </span>
+        <app-no-data-label *ngIf="personValues?.person?.rolodexId == null" [valueToShow]="personValues?.person?.mobileNumber">
+            <span class="fs-14"> {{personValues?.person?.mobileNumber}}</span>
+        </app-no-data-label>
+        <app-no-data-label *ngIf="personValues?.person?.rolodexId != null" [valueToShow]="personValues?.person?.phoneNumber">
+            <span class="fs-14"> {{personValues?.person?.phoneNumber}}</span>
+        </app-no-data-label>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Fax</label>
-        <span [ngClass]="personValues?.person?.faxNumber ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.faxNumber ? personValues?.person?.faxNumber : 'No Data'}}</span>
+            <app-no-data-label [valueToShow]="personValues?.person?.faxNumber">
+                <span class="fs-14"> {{personValues?.person?.faxNumber}}</span>
+            </app-no-data-label> 
     </div>
     <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Home Unit</label>
-        <span [ngClass]="personValues?.person?.unit?.unitName !== null ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.unit?.unitName !== null ? personValues?.person?.unit?.unitName :
-            'No Data'}}
-        </span>
+        <app-no-data-label [valueToShow]="personValues?.person?.unit?.unitName">
+            <span class="fs-14"> {{personValues?.person?.unit?.unitName}}</span>
+        </app-no-data-label> 
     </div>
     <div *ngIf="personValues?.person?.personId" class="col-lg-3 col-sm-6 col-12 mb-3">
         <label class="d-block labelStyle ">Directory Title</label>
-        <span [ngClass]="personValues?.person?.directoryTitle !== null ?  'dataExists' : 'noDataExists'">
-            {{personValues?.person?.directoryTitle !== null ? personValues?.person?.directoryTitle :
-            'No Data'}}
-        </span>
+        <app-no-data-label [valueToShow]="personValues?.person?.directoryTitle">
+            <span class="fs-14"> {{personValues?.person?.directoryTitle}}</span>
+        </app-no-data-label> 
     </div>
 </div>
