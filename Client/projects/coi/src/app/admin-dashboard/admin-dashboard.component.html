@@ -45,12 +45,13 @@
                         area-describedby="Click to view Travel Disclosures">Travel Disclosures
                     </li>
                 </ul>
-                    <div class="mx-1">
-                        <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0" id="advanced-search"
-                            aria-controls="collapseExample" aria-expanded="false" (click)="toggleAdvanceSearch();"
-                            aria-label="Toggle Advanced Search" title="Click here to expand / collapse  Advanced Search fields"><mat-icon
-                                class="me-3">tune</mat-icon>Advanced Search</span>
-                    </div>
+                <div class="mx-1">
+                    <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0"
+                        id="advanced-search" aria-controls="collapseExample" aria-expanded="false"
+                        (click)="toggleAdvanceSearch();" aria-label="Toggle Advanced Search"
+                        title="Click here to expand / collapse  Advanced Search fields">
+                        <mat-icon class="me-3">tune</mat-icon>Advanced Search</span>
+                </div>
             </div>
         </nav>
         <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample">
@@ -233,7 +234,8 @@
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By:</span>
             <span tabindex="0" (keydown.enter)="sortResult('coiDisclosureNumber')"
                 title="Click to sort by disclosure number" area-describedby="Click to sort by disclosure number"
-                (click)="sortResult('coiDisclosureNumber')" [class.px-8] = "!_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']"
+                (click)="sortResult('coiDisclosureNumber')"
+                [class.px-8]="!_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']"
                 [class.filter-active]="_coiAdminDashboardService.coiRequestObject.sort['coiDisclosureNumber']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 ml-15 border rounded-5 bg-white" role="button">
                 <div class="d-inline-flex align-items-center" title="Click to sort by Disclosure Number">
@@ -250,7 +252,8 @@
             <span tabindex="0" (keydown.enter)="sortResult('disclosurePersonFullName')"
                 (click)="sortResult('disclosurePersonFullName')"
                 [class.filter-active]="isActive('disclosurePersonFullName')" title="Click to sort by person name"
-                area-describedby="Click to sort by person name" [class.px-8] = "!_coiAdminDashboardService.coiRequestObject.sort['disclosurePersonFullName']"
+                area-describedby="Click to sort by person name"
+                [class.px-8]="!_coiAdminDashboardService.coiRequestObject.sort['disclosurePersonFullName']"
                 class="shaow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center" title="Click to sort by Person Name">
                     <label class="offscreen">Click to Sort by Person Name in
@@ -266,7 +269,8 @@
             <span tabindex="0" (keydown.enter)="sortResult('disclosureCategoryType')"
                 (click)="sortResult('disclosureCategoryType')"
                 [class.filter-active]="isActive('disclosureCategoryType')" title="Click to sort by disclosure type"
-                area-describedby="Click to sort by disclosure type" [class.px-8] = "!_coiAdminDashboardService.coiRequestObject.sort['disclosureCategoryType']"
+                area-describedby="Click to sort by disclosure type"
+                [class.px-8]="!_coiAdminDashboardService.coiRequestObject.sort['disclosureCategoryType']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
                 <div class="d-inline-flex align-items-center" title="Click to sort by Disclosure Type">
                     <label class="offscreen">Click to Sort by Disclosure Type in
@@ -281,7 +285,8 @@
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('disclosureStatus')" (click)="sortResult('disclosureStatus')"
                 [class.filter-active]="isActive('disclosureStatus')" title="Click to sort by disclosure status"
-                area-describedby="Click to sort by disclosure status" [class.px-8] = "!_coiAdminDashboardService.coiRequestObject.sort['disclosureStatus']"
+                area-describedby="Click to sort by disclosure status"
+                [class.px-8]="!_coiAdminDashboardService.coiRequestObject.sort['disclosureStatus']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center" title="Click to sort by Disclosure Status">
                     <label class="offscreen">Click to Sort by Disclosure Status in
@@ -301,7 +306,8 @@
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label class="offscreen">Click to Sort by Disposition Status in
-                        {{_coiAdminDashboardService.coiRequestObject.sort['dispositionStatus']=== 'asc' ? 'Descending Order' :
+                        {{_coiAdminDashboardService.coiRequestObject.sort['dispositionStatus']=== 'asc' ? 'Descending
+                        Order' :
                         'Ascending Order'}} </label>
                     <label aria-hidden="true">Disposition Status</label>
                     <mat-icon class="arrow selected-arrow"
@@ -317,7 +323,8 @@
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center">
                     <label class="offscreen">Click to Sort by Review Status in
-                        {{_coiAdminDashboardService.coiRequestObject.sort['reviewStatus']=== 'asc' ? 'Descending Order' :
+                        {{_coiAdminDashboardService.coiRequestObject.sort['reviewStatus']=== 'asc' ? 'Descending Order'
+                        :
                         'Ascending Order'}} </label>
                     <label aria-hidden="true">Review Status</label>
                     <mat-icon class="arrow selected-arrow"
@@ -330,7 +337,7 @@
                 (click)="sortResult('certificationDate')" [class.filter-active]="isActive('certificationDate')"
                 title="Click to sort by Certification Date" area-describedby="Click to sort by certification date"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button"
-                [class.px-8] = "!_coiAdminDashboardService.coiRequestObject.sort['certificationDate']">
+                [class.px-8]="!_coiAdminDashboardService.coiRequestObject.sort['certificationDate']">
                 <div class="d-inline-flex align-items-center">
                     <label class="offscreen">Click to Sort by Certification Date in
                         {{_coiAdminDashboardService.coiRequestObject.sort['certificationDate']=== 'asc' ? 'Descending
@@ -344,8 +351,8 @@
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('expirationDate')" (click)="sortResult('expirationDate')"
                 [class.filter-active]="isActive('expirationDate')" title="Click to sort by expiration date"
-                area-describedby="Click to sort by expiration date"
-                [class.px-8] = "!_coiAdminDashboardService.coiRequestObject.sort['expirationDate']"
+                area-describedby="Click to sort by Expiration Date"
+                [class.px-8]="!_coiAdminDashboardService.coiRequestObject.sort['expirationDate']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
                 <div class="d-inline-flex align-items-center" title="Click to sort by Expiration Date">
                     <label class="offscreen">Click to Sort by Expiration Date in
@@ -360,7 +367,8 @@
             </span>
             <span tabindex="0" (keydown.enter)="sortResult('updateTimeStamp')" (click)="sortResult('updateTimeStamp')"
                 [class.filter-active]="isActive('updateTimeStamp')" title="Click to sort by last updated"
-                area-describedby="Click to sort by last updated" [class.px-8] = "!_coiAdminDashboardService.coiRequestObject.sort['updateTimeStamp']"
+                area-describedby="Click to sort by Last Updated"
+                [class.px-8]="!_coiAdminDashboardService.coiRequestObject.sort['updateTimeStamp']"
                 class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
                 <div class="d-inline-flex align-items-center" title="Click to sort by Last Updated">
                     <label class="offscreen">Click to Sort by Last Updated in
@@ -374,8 +382,8 @@
                 </div>
             </span>
         </div>
-
-        <ng-container *ngIf="isShowDisclosureList && coiList.length">
+        <ng-container *ngIf="isShowDisclosureList && isShowNoDataCard;">
+            <ng-container *ngIf="coiList.length > 0;else noData">
             <ng-container *ngFor="let coi of coiList;let index=index;">
                 <section class="mt-3 shadow-sm coi-card" (mouseover)="isHover[index] = true"
                     (mouseout)="isHover[index] = false">
@@ -405,8 +413,10 @@
                                         id="disclosure-status">{{coi?.conflictStatus}}
                                     </span>
                                 </app-no-data-label>
-                                <app-no-data-label [valueToShow]="coi?.travelDisclosureStatusDescription" *ngIf="coi?.travelDisclosureId">
-                                    <span class="ms-3 {{commonService.getDisclosureConflictBadge(coi?.travelDisclosureStatusCode)}}"
+                                <app-no-data-label [valueToShow]="coi?.travelDisclosureStatusDescription"
+                                    *ngIf="coi?.travelDisclosureId">
+                                    <span
+                                        class="ms-3 {{commonService.getDisclosureConflictBadge(coi?.travelDisclosureStatusCode)}}"
                                         id="disclosure-status">{{coi?.travelDisclosureStatusDescription}}
                                     </span>
                                 </app-no-data-label>
@@ -481,7 +491,8 @@
                                     <div class="col-3">
                                         <label for="review-status" class="label-text">Review Status :</label>
                                         <app-no-data-label [valueToShow]="coi?.reviewStatus">
-                                            <span class="ms-3 {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
+                                            <span
+                                                class="ms-3 {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
                                                 id="review-status">{{coi?.reviewStatus}}</span>
                                         </app-no-data-label>
                                     </div>
@@ -494,7 +505,8 @@
                                         <label for="entity" class="label-text col-custom-travel">Entity :</label>
                                         <span class="col">
                                             <app-no-data-label id="entity" [valueToShow]="coi?.travelEntityName">
-                                                <span class="grey-text text-slice" [title]="coi?.travelEntityName">{{coi?.travelEntityName}}</span>
+                                                <span class="grey-text text-slice"
+                                                    [title]="coi?.travelEntityName">{{coi?.travelEntityName}}</span>
                                             </app-no-data-label>
                                         </span>
                                     </div>
@@ -564,7 +576,8 @@
                                     <label for="purpose" class="label-text col-custom-travel">Purpose :</label>
                                     <span class="col">
                                         <app-no-data-label id="purpose" [valueToShow]="coi?.travelPurpose">
-                                            <span class="grey-text text-slice" [title]="coi?.travelPurpose">{{coi?.travelPurpose}}</span>
+                                            <span class="grey-text text-slice"
+                                                [title]="coi?.travelPurpose">{{coi?.travelPurpose}}</span>
                                         </app-no-data-label>
                                     </span>
                                 </div>
@@ -665,19 +678,17 @@
             <!-- Pagination -->
             <div *ngIf="coiList.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
                 <nav aria-label="pagination section" class="pagination justify-content-end">
-                    <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
-                        [totalCount]="result.disclosureCount">
+                    <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="result.disclosureCount">
                     </app-pagination>
                 </nav>
             </div>
+            </ng-container>
         </ng-container>
-
-        <div *ngIf="coiList?.length == 0 && isShowDisclosureList">
+        <ng-template #noData>
             <app-no-information></app-no-information>
-        </div>
+        </ng-template>
     </section>
     <app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdminModal($event)"  [disclosureId]="addAdmin.disclosureId"></app-assign-administrator-modal>
-
     <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
         [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
         [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"

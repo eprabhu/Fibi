@@ -20,9 +20,13 @@
         <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>        
     </div>
 </div>
-<app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
-<ng-container *ngFor="let entities of filteredEntityArray">
-  <app-shared-sfi-card [reqObject] = 'entities' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" ></app-shared-sfi-card>
+<ng-container *ngIf="isShowNoDataCard">
+  <ng-container *ngIf="filteredEntityArray.length; else noData">
+    <ng-container *ngFor="let entities of filteredEntityArray">
+      <app-shared-sfi-card [reqObject] = 'entities' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" ></app-shared-sfi-card>
+    </ng-container>
+  </ng-container>
+  <app-no-information #noData></app-no-information>
 </ng-container>
  <!-- Pagination -->
  <div *ngIf="filteredEntityArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">

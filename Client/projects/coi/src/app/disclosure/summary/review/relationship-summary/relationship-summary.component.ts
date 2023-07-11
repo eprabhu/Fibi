@@ -35,6 +35,7 @@ export class RelationshipSummaryComponent implements OnInit {
     entityDetails: any = null;
     isReadMore: boolean[] = [];
     projectConflictValidationMap = new Map();
+    isShowNoDataCard = false;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
@@ -78,11 +79,13 @@ export class RelationshipSummaryComponent implements OnInit {
     }
 
     getEntityProjectRelations() {
+        this.isShowNoDataCard = false;
         this.$subscriptions.push(
             this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
                Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode, this.coiDetails.personId)
                 .subscribe((data: any) => {
                 if (data && data.coiDisclEntProjDetails?.length > 0) {
+                    this.isShowNoDataCard = true;
                     this.projectRelations = data.coiDisclEntProjDetails;
                 }
                 // if (data && this.selectedProject.proposalIdlinkedInDisclosure && data.proposals.length) {

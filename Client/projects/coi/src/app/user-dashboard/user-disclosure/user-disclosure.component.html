@@ -222,284 +222,307 @@
         <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>        
     </div>
 </div>
-<app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
-<ng-container
-    *ngFor="let disclosure of filteredDisclosureArray ; let index = index;">
-    <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
-        (mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
-        <div class="row mt-2">
-            <div class="col">
-                <span class="align-items-center d-flex">
-                    <span
-                        class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(disclosure)}}">
-                        <span class="px-2">{{disclosure?.travelDisclosureId? 'Travel' : disclosure?.fcoiType}}</span>
-                    </span>
-                    <h4 class="mb-0 ml-2"><strong>{{modalHeader(disclosure)}}</strong></h4>
-                </span>
-            </div>
-            <div class="col-3 ms-3 p-1 align-items-center mt-2">
-                <label for="status" class="label-text">Disclosure Status :</label>
-                <app-no-data-label [valueToShow]="disclosure?.conflictStatus" *ngIf="!disclosure?.travelDisclosureId">
-                    <span class="ms-3 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}"
-                        id="status">{{disclosure?.conflictStatus}}
-                    </span>
-                </app-no-data-label>
-                <app-no-data-label [valueToShow]="disclosure?.travelDisclosureStatusDescription" *ngIf="disclosure?.travelDisclosureId">
-                    <span class="ms-3 {{commonService.getDisclosureConflictBadge(disclosure?.travelDisclosureStatusCode)}}"
-                        id="status">{{disclosure?.travelDisclosureStatusDescription}}
-                    </span>
-                </app-no-data-label>
-            </div>
-        </div>
-        <div class="border-bottom">
-            <ng-container *ngIf="!disclosure?.travelDisclosureId">
-                <div class="row mb-3 px-3 mt-2">
-                    <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-12 mb-3">
-                        <label for="id" class="label-text">Project :</label>
-                        <app-no-data-label
-                            [valueToShow]="(disclosure?.fcoiTypeCode==2 && disclosure?.proposalId) || (disclosure?.fcoiTypeCode==3 && disclosure?.awardId)">
-                            <span *ngIf="disclosure?.fcoiTypeCode==2" id="id" class="grey-text">#{{disclosure?.proposalId}}
-                                - {{disclosure?.proposalTitle}}
-                            </span>
-                            <span *ngIf="disclosure?.fcoiTypeCode==3" id="id" class="grey-text">#{{disclosure?.awardId}} -
-                                {{disclosure?.awardTitle}}
-                            </span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col-5">
-                        <span class="label-text">Department:</span> <span class="grey-text">
-                            #{{disclosure?.unit?.unitDetail}} </span>
-                    </div>
+<ng-container *ngIf="isShowNoDataCard">
+    <ng-container *ngIf="filteredDisclosureArray.length">
+        <ng-container *ngFor="let disclosure of filteredDisclosureArray ; let index = index;">
+            <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
+                (mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
+                <div class="row mt-2">
                     <div class="col">
-                        <span class="label-text me-2">Certification Date :</span>
-                        <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
-                            <span class="grey-text">{{disclosure?.certifiedAt |dateFormatter}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col">
-                        <span class="label-text me-2 fs-15">Expiration Date :</span>
-                        <app-no-data-label [valueToShow]="disclosure?.expirationDate">
-                            <span class="grey-text">{{disclosure?.expirationDate | dateFormatter}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col-3">
-                        <span class="label-text me-2">Disposition Status :</span> <span
-                            class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} ">{{disclosure?.dispositionStatus}}</span>
-                    </div>
-                </div>
-                <div class="row mb-3 px-3 mt-2">
-                    <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-5">
-                        <label for="id" class="label-text">{{disclosure?.disclosureVersionNumber== 1 ? 'Description:' :
-                            'Revision Reason:'}}</label>
-                        <app-no-data-label [valueToShow]="disclosure?.revisionComment">
-                            <span id="id" class="grey-text">{{disclosure?.revisionComment}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-5">
-                        <label for="id" class="label-text">Description :</label>
-                        <app-no-data-label [valueToShow]="disclosure?.reviseComment">
-                            <span id="id" class="grey-text">{{disclosure?.reviseComment}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col">
-                        <label for="id" class="label-text">Administrator :</label>
-                        <app-no-data-label [valueToShow]="disclosure?.administrator">
-                            <span id="id" class="grey-text">{{disclosure?.administrator}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col">
-                        <label for="id" class="label-text">Admin Group :</label>
-                        <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
-                            <span id="id" class="grey-text">{{disclosure?.adminGroupName}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col-3">
-                        <label for="review-status" class="label-text">Review Status :</label>
-                        <app-no-data-label [valueToShow]="disclosure?.reviewStatus">
+                        <span class="align-items-center d-flex">
                             <span
-                                class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}"
-                                id="review-status">{{disclosure?.reviewStatus}}</span>
-                        </app-no-data-label>
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="disclosure?.travelDisclosureId">
-                <div class="row mb-3 px-3 mt-2">
-                    <div class="col-4 d-flex">
-                        <label for="department-id" class="label-text col-custom-travel">Department :</label>
-                        <span class="col">
-                            <app-no-data-label id="department-id" class="" [valueToShow]="disclosure?.travelEntityName">
-                                <span class="grey-text text-slice" [title]="disclosure?.unitDetails?.unitDetail">#{{disclosure?.unitDetails?.unitDetail}}</span>
-                            </app-no-data-label>
+                                class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(disclosure)}}">
+                                <span class="px-2">{{disclosure?.travelDisclosureId? 'Travel' :
+                                    disclosure?.fcoiType}}</span>
+                            </span>
+                            <h4 class="mb-0 ml-2"><strong>{{modalHeader(disclosure)}}</strong></h4>
                         </span>
                     </div>
-                    <div class="col d-flex">
-                        <label for="destination" class="label-text">Destination :</label>
-                        <span class="col">
-                            <app-no-data-label id="destination" [valueToShow]="disclosure?.travelCity || disclosure?.travelCountry || disclosure?.travelState">
-                                <span class="grey-text text-slice" title="{{disclosure?.travelCity}}, {{disclosure?.travelCountry || disclosure?.travelState}}">
-                                    {{disclosure?.travelCity}}<span
-                                    *ngIf="disclosure?.travelCity && (disclosure?.travelCountry || disclosure?.travelState)">,</span>
-                                    {{disclosure?.travelCountry || disclosure?.travelState}}
-                                </span>
-                            </app-no-data-label>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <label for="travel-amount" class="label-text">Actual Amount :</label>
-                        <app-no-data-label id="travel-amount" [valueToShow]="disclosure?.travelAmount">
-                            <span class="grey-text">${{disclosure?.travelAmount}}</span>
+                    <div class="col-3 ms-3 p-1 align-items-center mt-2">
+                        <label for="status" class="label-text">Disclosure Status :</label>
+                        <app-no-data-label [valueToShow]="disclosure?.conflictStatus"
+                            *ngIf="!disclosure?.travelDisclosureId">
+                            <span
+                                class="ms-3 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}"
+                                id="status">{{disclosure?.conflictStatus}}
+                            </span>
                         </app-no-data-label>
-                    </div>
-                    <div class="col-3">
-                        <label for="review-status" class="label-text">Document Status :</label>
-                        <app-no-data-label id="review-status" [valueToShow]="disclosure?.documentStatusDescription">
-                            <span [class.text-dark]="commonService.getDocumentStatusBadge(disclosure?.documentStatusCode) === 'warning'"
-                                class="ms-3 {{commonService.getDocumentStatusBadge(disclosure?.documentStatusCode)}}">{{disclosure?.documentStatusDescription}}</span>
+                        <app-no-data-label [valueToShow]="disclosure?.travelDisclosureStatusDescription"
+                            *ngIf="disclosure?.travelDisclosureId">
+                            <span
+                                class="ms-3 {{commonService.getDisclosureConflictBadge(disclosure?.travelDisclosureStatusCode)}}"
+                                id="status">{{disclosure?.travelDisclosureStatusDescription}}
+                            </span>
                         </app-no-data-label>
                     </div>
                 </div>
-                <div class="row mb-3 px-3 mt-2">
-                    <div class="col-4">
-                        <label for="traveller" class="label-text" >Traveller :</label>
-                        <app-no-data-label id="traveller" [valueToShow]="disclosure?.travellerTypeDescription">
-                            <span class="grey-text">{{formatTravellerTypes(disclosure?.travellerTypeDescription)}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col">
-                        <label for="certify-date" class="label-text">Certification Date :</label>
-                        <app-no-data-label id="certify-date" [valueToShow]="disclosure?.travelSubmissionDate">
-                            <span class="grey-text">{{disclosure?.travelSubmissionDate |
-                                dateFormatter}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col">
-                        <label for="expiration-date" class="label-text">Expiration Date :</label>
-                        <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.expirationDate">
-                            <span class="grey-text">{{disclosure?.expirationDate |
-                                dateFormatter}}</span>
-                        </app-no-data-label>
-                    </div>
-                    <div class="col-3">
-                        <label for="review-status" class="label-text">Review Status :</label>
-                        <app-no-data-label id="review-status" [valueToShow]="disclosure?.reviewDescription">
-                            <span [class.text-dark]="commonService.getTravelReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
-                                class="ms-3 {{commonService.getTravelReviewStatusBadge(disclosure?.reviewStatusCode)}}">{{disclosure?.reviewDescription}}</span>
-                        </app-no-data-label>
-                    </div>
-                </div>
-            </ng-container>
-        </div>
-        <div class="d-flex row align-items-center py-2 px-3">
-            <ng-container *ngIf="!disclosure?.travelDisclosureId">
-                <div class="col-5 d-flex">
-                    <div class="align-items-center col-6 d-flex fs-14"
-                        [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                        [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
-                        area-describedby="Click to view SFI list">
-                        <strong class="fs-18 me-2 text-blue-color"
-                            [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
-                            area-describedby="Click to view SFI list"
-                            (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
-                            <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}} </label>
-                        </strong>
-                        <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
-                        <div>
-                            <label class="label-text margin-top-3px">
-                                <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                                    [class.text-decoration-underline]="ishover[index]&& disclosure?.noOfSfi > 0"
-                                    (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
-                                    Significant Financial Interest
-                                </strong>
-                            </label>
+                <div class="border-bottom">
+                    <ng-container *ngIf="!disclosure?.travelDisclosureId">
+                        <div class="row mb-3 px-3 mt-2">
+                            <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-12 mb-3">
+                                <label for="id" class="label-text">Project :</label>
+                                <app-no-data-label
+                                    [valueToShow]="(disclosure?.fcoiTypeCode==2 && disclosure?.proposalId) || (disclosure?.fcoiTypeCode==3 && disclosure?.awardId)">
+                                    <span *ngIf="disclosure?.fcoiTypeCode==2" id="id"
+                                        class="grey-text">#{{disclosure?.proposalId}}
+                                        - {{disclosure?.proposalTitle}}
+                                    </span>
+                                    <span *ngIf="disclosure?.fcoiTypeCode==3" id="id"
+                                        class="grey-text">#{{disclosure?.awardId}} -
+                                        {{disclosure?.awardTitle}}
+                                    </span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col-5">
+                                <span class="label-text">Department:</span> <span class="grey-text">
+                                    #{{disclosure?.unit?.unitDetail}} </span>
+                            </div>
+                            <div class="col">
+                                <span class="label-text me-2">Certification Date :</span>
+                                <app-no-data-label [valueToShow]="disclosure?.certifiedAt">
+                                    <span class="grey-text">{{disclosure?.certifiedAt |dateFormatter}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col">
+                                <span class="label-text me-2 fs-15">Expiration Date :</span>
+                                <app-no-data-label [valueToShow]="disclosure?.expirationDate">
+                                    <span class="grey-text">{{disclosure?.expirationDate | dateFormatter}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col-3">
+                                <span class="label-text me-2">Disposition Status :</span> <span
+                                    class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} ">{{disclosure?.dispositionStatus}}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class=" text-secondary col-6 fs-14 d-flex">
-                        <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
+                        <div class="row mb-3 px-3 mt-2">
+                            <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-5">
+                                <label for="id" class="label-text">{{disclosure?.disclosureVersionNumber== 1 ?
+                                    'Description:' :
+                                    'Revision Reason:'}}</label>
+                                <app-no-data-label [valueToShow]="disclosure?.revisionComment">
+                                    <span id="id" class="grey-text">{{disclosure?.revisionComment}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-5">
+                                <label for="id" class="label-text">Description :</label>
+                                <app-no-data-label [valueToShow]="disclosure?.reviseComment">
+                                    <span id="id" class="grey-text">{{disclosure?.reviseComment}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col">
+                                <label for="id" class="label-text">Administrator :</label>
+                                <app-no-data-label [valueToShow]="disclosure?.administrator">
+                                    <span id="id" class="grey-text">{{disclosure?.administrator}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col">
+                                <label for="id" class="label-text">Admin Group :</label>
+                                <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
+                                    <span id="id" class="grey-text">{{disclosure?.adminGroupName}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col-3">
+                                <label for="review-status" class="label-text">Review Status :</label>
+                                <app-no-data-label [valueToShow]="disclosure?.reviewStatus">
+                                    <span
+                                        class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.reviewStatusCode)}}"
+                                        id="review-status">{{disclosure?.reviewStatus}}</span>
+                                </app-no-data-label>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="disclosure?.travelDisclosureId">
+                        <div class="row mb-3 px-3 mt-2">
+                            <div class="col-4 d-flex">
+                                <label for="department-id" class="label-text col-custom-travel">Department :</label>
+                                <span class="col">
+                                    <app-no-data-label id="department-id" class=""
+                                        [valueToShow]="disclosure?.travelEntityName">
+                                        <span class="grey-text text-slice"
+                                            [title]="disclosure?.unitDetails?.unitDetail">#{{disclosure?.unitDetails?.unitDetail}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                            <div class="col d-flex">
+                                <label for="destination" class="label-text">Destination :</label>
+                                <span class="col">
+                                    <app-no-data-label id="destination"
+                                        [valueToShow]="disclosure?.travelCity || disclosure?.travelCountry || disclosure?.travelState">
+                                        <span class="grey-text text-slice"
+                                            title="{{disclosure?.travelCity}}, {{disclosure?.travelCountry || disclosure?.travelState}}">
+                                            {{disclosure?.travelCity}}<span
+                                                *ngIf="disclosure?.travelCity && (disclosure?.travelCountry || disclosure?.travelState)">,</span>
+                                            {{disclosure?.travelCountry || disclosure?.travelState}}
+                                        </span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                            <div class="col">
+                                <label for="travel-amount" class="label-text">Actual Amount :</label>
+                                <app-no-data-label id="travel-amount" [valueToShow]="disclosure?.travelAmount">
+                                    <span class="grey-text">${{disclosure?.travelAmount}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col-3">
+                                <label for="review-status" class="label-text">Document Status :</label>
+                                <app-no-data-label id="review-status"
+                                    [valueToShow]="disclosure?.documentStatusDescription">
+                                    <span
+                                        [class.text-dark]="commonService.getDocumentStatusBadge(disclosure?.documentStatusCode) === 'warning'"
+                                        class="ms-3 {{commonService.getDocumentStatusBadge(disclosure?.documentStatusCode)}}">{{disclosure?.documentStatusDescription}}</span>
+                                </app-no-data-label>
+                            </div>
+                        </div>
+                        <div class="row mb-3 px-3 mt-2">
+                            <div class="col-4">
+                                <label for="traveller" class="label-text">Traveller :</label>
+                                <app-no-data-label id="traveller" [valueToShow]="disclosure?.travellerTypeDescription">
+                                    <span
+                                        class="grey-text">{{formatTravellerTypes(disclosure?.travellerTypeDescription)}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col">
+                                <label for="certify-date" class="label-text">Certification Date :</label>
+                                <app-no-data-label id="certify-date" [valueToShow]="disclosure?.travelSubmissionDate">
+                                    <span class="grey-text">{{disclosure?.travelSubmissionDate |
+                                        dateFormatter}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col">
+                                <label for="expiration-date" class="label-text">Expiration Date :</label>
+                                <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.expirationDate">
+                                    <span class="grey-text">{{disclosure?.expirationDate |
+                                        dateFormatter}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col-3">
+                                <label for="review-status" class="label-text">Review Status :</label>
+                                <app-no-data-label id="review-status" [valueToShow]="disclosure?.reviewDescription">
+                                    <span
+                                        [class.text-dark]="commonService.getTravelReviewStatusBadge(disclosure?.reviewStatusCode) === 'warning'"
+                                        class="ms-3 {{commonService.getTravelReviewStatusBadge(disclosure?.reviewStatusCode)}}">{{disclosure?.reviewDescription}}</span>
+                                </app-no-data-label>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="d-flex row align-items-center py-2 px-3">
+                    <ng-container *ngIf="!disclosure?.travelDisclosureId">
+                        <div class="col-5 d-flex">
                             <div class="align-items-center col-6 d-flex fs-14"
-                                [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
-                                [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                area-describedby="Click to view Proposal list">
+                                [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                                [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
+                                area-describedby="Click to view SFI list">
                                 <strong class="fs-18 me-2 text-blue-color"
-                                    [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
-                                    area-describedby="Click to view Proposal list"
-                                    (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}</strong>
+                                    [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
+                                    area-describedby="Click to view SFI list"
+                                    (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
+                                    <label [class.cursor-pointer]="disclosure?.noOfSfi">{{disclosure?.noOfSfi || 0}}
+                                    </label>
+                                </strong>
+                                <!-- <strong (click)="openRelationModal()">SFIs</strong> -->
                                 <div>
                                     <label class="label-text margin-top-3px">
-                                        <strong [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
-                                            [class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
-                                            (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">
-                                            Proposals
+                                        <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
+                                            [class.text-decoration-underline]="ishover[index]&& disclosure?.noOfSfi > 0"
+                                            (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
+                                            Significant Financial Interest
                                         </strong>
                                     </label>
                                 </div>
                             </div>
-                            <div class="align-items-center col-6 d-flex fs-14"
-                                [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
-                                [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
-                                area-describedby="Click to view Award list">
-                                <strong class="fs-18 me-2 text-blue-color"
-                                    (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">{{disclosure?.noOfAward}}</strong>
-                                <div>
-                                    <label class="label-text margin-top-3px">
-                                        <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
-                                            [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
-                                            (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">
-                                            Awards
-                                        </strong>
-                                    </label>
-                                </div>
+                            <div class=" text-secondary col-6 fs-14 d-flex">
+                                <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
+                                    <div class="align-items-center col-6 d-flex fs-14"
+                                        [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
+                                        [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                        area-describedby="Click to view Proposal list">
+                                        <strong class="fs-18 me-2 text-blue-color"
+                                            [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
+                                            area-describedby="Click to view Proposal list"
+                                            (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">{{disclosure?.noOfProposal}}</strong>
+                                        <div>
+                                            <label class="label-text margin-top-3px">
+                                                <strong
+                                                    [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
+                                                    [class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
+                                                    (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">
+                                                    Proposals
+                                                </strong>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="align-items-center col-6 d-flex fs-14"
+                                        [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
+                                        [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
+                                        area-describedby="Click to view Award list">
+                                        <strong class="fs-18 me-2 text-blue-color"
+                                            (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">{{disclosure?.noOfAward}}</strong>
+                                        <div>
+                                            <label class="label-text margin-top-3px">
+                                                <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
+                                                    [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
+                                                    (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">
+                                                    Awards
+                                                </strong>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </ng-container>
                             </div>
-                        </ng-container>
-                    </div>
-                </div>
-                <div class="col d-flex align-items-center">
-                    <label class="label-text" for="last-updated">Last Updated By : </label>
-                    <span id="last-updated" class="grey-text">{{disclosure?.updateUserFullName}} On
-                        {{disclosure?.updateTimeStamp
-                        | dateFormatterWithTimeZone: 'long'}}</span>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="disclosure?.travelDisclosureId">
-                <div class="col-4 d-flex">
-                    <label for="purpose" class="label-text col-custom-travel">Purpose :</label>
-                    <span class="col">
-                        <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
-                            <span class="grey-text text-slice" [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose}}</span>
-                        </app-no-data-label>
-                    </span>
-                </div>
-                <div class="col">
-                    <label for="start-date" class="label-text">Start Date :</label>
-                    <app-no-data-label id="start-date" [valueToShow]="disclosure?.travelStartDate">
-                        <span class="grey-text">{{disclosure?.travelStartDate | dateFormatterWithTimeZone}}</span>
-                    </app-no-data-label>
-                </div>
-                <div class="col ms-2">
-                    <label for="end-date" class="label-text">End Date :</label>
-                    <app-no-data-label id="end-date" [valueToShow]="disclosure?.travelEndDate">
-                        <span class="grey-text">{{disclosure?.travelEndDate | dateFormatterWithTimeZone}}</span>
-                    </app-no-data-label>
-                </div>
-            </ng-container>
-            <div class="d-flex mr-2 justify-content-end px-0"
-                [ngClass]="disclosure.travelDisclosureId? 'col-3' : 'col-auto'">
-                <!-- <button *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.conflictStatusCode == '3'"
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <label class="label-text" for="last-updated">Last Updated By : </label>
+                            <span id="last-updated" class="grey-text">{{disclosure?.updateUserFullName}} On
+                                {{disclosure?.updateTimeStamp
+                                | dateFormatterWithTimeZone: 'long'}}</span>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="disclosure?.travelDisclosureId">
+                        <div class="col-4 d-flex">
+                            <label for="purpose" class="label-text col-custom-travel">Purpose :</label>
+                            <span class="col">
+                                <app-no-data-label id="purpose" [valueToShow]="disclosure?.travelPurpose">
+                                    <span class="grey-text text-slice"
+                                        [title]="disclosure?.travelPurpose">{{disclosure?.travelPurpose}}</span>
+                                </app-no-data-label>
+                            </span>
+                        </div>
+                        <div class="col">
+                            <label for="start-date" class="label-text">Start Date :</label>
+                            <app-no-data-label id="start-date" [valueToShow]="disclosure?.travelStartDate">
+                                <span class="grey-text">{{disclosure?.travelStartDate |
+                                    dateFormatterWithTimeZone}}</span>
+                            </app-no-data-label>
+                        </div>
+                        <div class="col ms-2">
+                            <label for="end-date" class="label-text">End Date :</label>
+                            <app-no-data-label id="end-date" [valueToShow]="disclosure?.travelEndDate">
+                                <span class="grey-text">{{disclosure?.travelEndDate | dateFormatterWithTimeZone}}</span>
+                            </app-no-data-label>
+                        </div>
+                    </ng-container>
+                    <div class="d-flex mr-2 justify-content-end px-0"
+                        [ngClass]="disclosure.travelDisclosureId? 'col-3' : 'col-auto'">
+                        <!-- <button *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.conflictStatusCode == '3'"
                     class="mx-2 align-items-center btn btn-outline-primary d-flex fs-14">
                     <mat-icon class="me-1">restart_alt</mat-icon>
                     Revise
                 </button> -->
-                <button (click)="redirectToDisclosure(disclosure)" aria-describedby="Click to view Disclosure details"
-                    class="d-flex align-items-center btn btn-outline-primary  fs-14"
-                    [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
-                    <mat-icon class="me-1">visibility</mat-icon>
-                    View
-                </button>
+                        <button (click)="redirectToDisclosure(disclosure)"
+                            aria-describedby="Click to view Disclosure details"
+                            class="d-flex align-items-center btn btn-outline-primary  fs-14"
+                            [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
+                            <mat-icon class="me-1">visibility</mat-icon>
+                            View
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </ng-container>
+    </ng-container>
+    <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
 </ng-container>
-
 <!-- Pagination -->
 <div *ngIf="filteredDisclosureArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
     <nav aria-label="pagination section" class="pagination justify-content-end">

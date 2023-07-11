@@ -36,53 +36,56 @@
             </div>
         </h4>
     </div> -->
-    <div *ngIf="questionnaireList.length == 0 && isShowQuestionnaire" class="no-data-container">
-        <span class="no-data-icon-outer">
-            <div class="no-data-icon">
-                <i class="fa fa-file-o" aria-hidden="true"></i>
-                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+    <ng-container *ngIf="isShowNoDatacard">
+            <div *ngIf="questionnaireList.length != 0 && isShowQuestionnaire">
+                <div class=" w-100">
+                    <div class="px-4">
+                        <ul class="nav nav-tabs mb-0">
+                            <li class="nav-item hand-cursor mb-2" *ngFor='let questionnaire of questionnaireList; let i= index'
+                                id="questionnaire-tab{{i}}"
+                                [ngClass]="{'qst-success-nav':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
+                                                        (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null &&
+                                                        isViewMode),
+                                        'qst-warning-nav':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
+                                                        questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null || (questionnaire.NEW_QUESTIONNAIRE_ID && !isViewMode) }">
+                                <a (click)="isQuestionnaireChanged(i);" title="Go to {{ questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }}"
+                                    class=" tab subTabLink nav-item nav-link txt-medium text-black hand-cursor" [ngClass]="{'active':selectedIndex === i,
+                                                'text-success fw-600':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
+                                                                    (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null
+                                                                    && isViewMode)}" tabindex="0">
+                                    <i [ngClass]="{'txt-green':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y',
+                                                    'txt-red':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
+                                                                questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null}"
+                                        aria-hidden="true"></i>
+                                    <span class="mandatory" *ngIf="questionnaire.IS_MANDATORY == 'Y'" title="Mandatory">*</span>
+                                    {{questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }}
+                                    <span id="qnr-complete-msg"
+                                        *ngIf="(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
+                                                    (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null && isViewMode)"
+                                        class="fa fa-check" title="Completed">
+                                    </span>
+                                    <span id="qnr-incomplete-msg"
+                                        *ngIf="questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
+                                                    questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null || (questionnaire.NEW_QUESTIONNAIRE_ID && !isViewMode)"
+                                        class="fa fa-exclamation-circle text-warning" title="Incomplete">
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </span>
-        <h4>There is no information in this section.</h4>
-    </div>
-    <div *ngIf="questionnaireList.length != 0 && isShowQuestionnaire">
-        <div class=" w-100">
-            <div class="px-4">
-                <ul class="nav nav-tabs mb-0">
-                    <li class="nav-item hand-cursor mb-2" *ngFor='let questionnaire of questionnaireList; let i= index'
-                        id="questionnaire-tab{{i}}"
-                        [ngClass]="{'qst-success-nav':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
-                                                (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null &&
-                                                isViewMode),
-                                'qst-warning-nav':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
-                                                questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null || (questionnaire.NEW_QUESTIONNAIRE_ID && !isViewMode) }">
-                        <a (click)="isQuestionnaireChanged(i);" title="Go to {{ questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }}"
-                            class=" tab subTabLink nav-item nav-link txt-medium text-black hand-cursor" [ngClass]="{'active':selectedIndex === i,
-                                        'text-success fw-600':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
-                                                            (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null
-                                                            && isViewMode)}" tabindex="0">
-                            <i [ngClass]="{'txt-green':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y',
-                                            'txt-red':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
-                                                        questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null}"
-                                aria-hidden="true"></i>
-                            <span class="mandatory" *ngIf="questionnaire.IS_MANDATORY == 'Y'" title="Mandatory">*</span>
-                            {{questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }}
-                            <span id="qnr-complete-msg"
-                                *ngIf="(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
-                                            (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null && isViewMode)"
-                                class="fa fa-check" title="Completed">
-                            </span>
-                            <span id="qnr-incomplete-msg"
-                                *ngIf="questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
-                                            questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null || (questionnaire.NEW_QUESTIONNAIRE_ID && !isViewMode)"
-                                class="fa fa-exclamation-circle text-warning" title="Incomplete">
-                            </span>
-                        </a>
-                    </li>
-                </ul>
+            <div *ngIf="questionnaireList.length == 0 && isShowQuestionnaire" class="no-data-container">
+                <span class="no-data-icon-outer">
+                    <div class="no-data-icon">
+                        <i class="fa fa-file-o" aria-hidden="true"></i>
+                        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                    </div>
+                </span>
+                <h4>There is no information in this section.</h4>
             </div>
-        </div>
-    </div>
+    </ng-container>
+    
     <div *ngIf="this.questionnaireList.length != 0 && isShowQuestionnaire" class="tab-pane">
         <div class=" my-2 mb-3 mx-3">
             <div class="pt-0">

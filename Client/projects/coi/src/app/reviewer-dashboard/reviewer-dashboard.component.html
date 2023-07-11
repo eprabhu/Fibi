@@ -255,8 +255,7 @@
                 </div>
             </span>
         </div>
-
-        <ng-container *ngIf="isShowDisclosureList">
+        <ng-container *ngIf="isShowDisclosureList && isShowNoDataCard">
             <ng-container *ngIf="coiList.length > 0;else noData">
                 <ng-container *ngFor="let coi of coiList;let index = index">
                     <section class="shadow-sm coi-card">

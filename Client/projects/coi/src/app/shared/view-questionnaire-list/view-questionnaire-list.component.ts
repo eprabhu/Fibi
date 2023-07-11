@@ -74,6 +74,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
     $subscriptions: Subscription[] = [];
     isSaving = false;
     isShowQuestionnaire = true;
+    isShowNoDatacard = false;
 
     constructor(private _http: HttpClient, private _questionnaireListService: QuestionnaireListService, public _commonService: CommonService,
                 private _router: Router, private _CDRef: ChangeDetectorRef) {
@@ -115,11 +116,15 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
      * is chance to combine multiple sub modules for a given module
      */
     loadAllQuestionnaires() {
+        this.isShowNoDatacard = false;
         this.questionnaireList = [];
         this.list = [];
         this.configuration.moduleSubitemCodes.forEach(subItemCode => this.setRequestObject(subItemCode));
         this.$subscriptions.push(
             forkJoin(...this.list).subscribe(data => {
+                if (data) {
+                    this.isShowNoDatacard = true;
+                }
                 this.questionnaireList = [];
                 data.forEach((d: any) => this.combineQuestionnaireList(d.applicableQuestionnaire));
                 this.checkQuestionnaireOpened();
