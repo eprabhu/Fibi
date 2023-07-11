@@ -654,7 +654,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 		this.localCOIRequestObject.property20 = this._coiAdminDashboardService.coiRequestObject.property20 ?
 		    this._coiAdminDashboardService.coiRequestObject.property20 : [];
         this.localCOIRequestObject.advancedSearch = 'A';
-        // this.localCOIRequestObject.currentPage = 1;
+        this.localSearchDefaultValues = this._coiAdminDashboardService.searchDefaultValues;
 	}
 
     setAdvanceSearchToServiceObject() {
