@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
+import com.polus.fibicomp.coi.pojo.CoiQuestAnswer;
+import com.polus.fibicomp.coi.pojo.CoiQuestAnswerAttachment;
+import com.polus.fibicomp.coi.pojo.CoiQuestTableAnswer;
 import com.polus.fibicomp.questionnaire.pojo.QuestTableAnswer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -148,13 +151,14 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		Integer questionnaireAnswerHeaderId = questionnaireDataBus.getQuestionnaireAnswerHeaderId();
 		Integer questionnaireId = questionnaireDataBus.getQuestionnaireId();
 		Integer newQuestionnaireId = questionnaireDataBus.getNewQuestionnaireId();
+		Integer moduleCode = questionnaireDAO.getModuleByQuestAnswerHeaderId(questionnaireAnswerHeaderId);
 		logger.info("questionnaireAnswerHeaderId : {}", questionnaireAnswerHeaderId);
 		logger.info("questionnaireId: {}", questionnaireId);
 		logger.info("newQuestionnaireId: {}", newQuestionnaireId);
 		try {
 			if(newQuestionnaireId != null && newQuestionnaireId.equals(questionnaireId)) {
 				questionsList = getQuestionnaireQuestions(newQuestionnaireId);
-				questionnaireAnswerHeaderId = questionnaireDAO.copyAnswerToNewVersion(questionnaireAnswerHeaderId, newQuestionnaireId);
+				questionnaireAnswerHeaderId = questionnaireDAO.copyAnswerToNewVersion(questionnaireAnswerHeaderId, newQuestionnaireId, moduleCode);
 				questionnaireId = newQuestionnaireId;
 				questionnaireDataBus.setNewQuestionnaireId(null);
 				questionnaireDataBus.setQuestionnaireId(questionnaireId);
@@ -163,13 +167,13 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 				questionsList = getQuestionnaireQuestions(questionnaireId);
 			}
 			if (questionnaireAnswerHeaderId != null) {
-				answerList = getAnswer(questionnaireAnswerHeaderId);
-				getTableAnswers(answerList, questionnaireAnswerHeaderId);
+				answerList = getAnswer(questionnaireAnswerHeaderId, moduleCode);
+				getTableAnswers(answerList, questionnaireAnswerHeaderId, moduleCode);
 			}
 			questionsList = setAnswerToQuestionnaireQuestion(questionsList, answerList);
 			questionnaire.setQuestions(questionsList);
-			List<HashMap<String, Object>> header = questionnaireDAO.getQuestionnaireHeader(questionnaireId, questionnaireAnswerHeaderId);
 			List<HashMap<String, Object>> condition = questionnaireDAO.getQuestionnaireCondition(questionnaireId);
+			List<HashMap<String, Object>> header = questionnaireDAO.getQuestionnaireHeader(questionnaireId, questionnaireAnswerHeaderId);
 			List<HashMap<String, Object>> option = questionnaireDAO.getQuestionnaireOptions(questionnaireId);
 			questionnaireDataBus.setHeader(header.get(0));
 			questionnaire.setConditions(condition);
@@ -208,7 +212,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 				}
 				List<HashMap<String, Object>> questionlist = questionnaireDataBus.getQuestionnaire().getQuestions();
 				for (HashMap<String, Object> question : questionlist) {
-					saveAnswer(question, questionnaireDataBus, request, multipartFile);
+					saveAnswer(question, questionnaireDataBus, request, multipartFile, moduleCode);
 				}
 				updateQuestionnaireCompleteFlag(questionnaireAnsHeaderId, questionnaireCompletionFlag);
 				questionnaireDataBus.getHeader().put("ANS_PERSON_FULL_NAME", AuthenticatedUser.getLoginUserFullName());
@@ -233,7 +237,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void saveAnswer(HashMap<String, Object> question, QuestionnaireDataBus questionnaireDataBus, MultipartHttpServletRequest request, MultipartFile multipartFile) throws Exception {
+	private void saveAnswer(HashMap<String, Object> question, QuestionnaireDataBus questionnaireDataBus, MultipartHttpServletRequest request, MultipartFile multipartFile, Integer moduleCode) throws Exception {
 		String updateUser = AuthenticatedUser.getLoginUserName();
 		Integer answerHeaderId = questionnaireDataBus.getQuestionnaireAnswerHeaderId();
 		HashMap<Integer, String> answers = new HashMap<>();
@@ -246,7 +250,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			acType = (String) question.get(AC_TYPE);
 		}
 		if (TEXT.equals(question.get(ANSWER_TYPE))) {
-			deleteAnswer(answerHeaderId, question);
+			deleteAnswer(answerHeaderId, question, moduleCode);
 			Integer noOfAnswer = Integer.parseInt((question.get(NO_OF_ANSWERS).toString()));
 			if ((question.get(AC_TYPE) != null ) && !((String) question.get(AC_TYPE)).equals("D")) {
 				acType = "I";
@@ -254,14 +258,14 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 					answers = (HashMap<Integer, String>) question.get(ANSWERS);
 				}
 				for (Integer index = 1; index <= noOfAnswer; index++) {
-					saveAnswer(answerHeaderId, question, acType, answers.get(index.toString()), null, index, updateUser);
+					saveAnswer(answerHeaderId, question, acType, answers.get(index.toString()), null, index, updateUser, moduleCode);
 				}
 			} else if ((question.get(AC_TYPE) != null ) && ((String) question.get(AC_TYPE)).equals("D")) {
 				question.put(AC_TYPE, null);
 			}
 		}
 		else if (Constants.SYSTEM_LOOKUP.equals(question.get(ANSWER_TYPE)) || Constants.USER_LOOKUP.equals(question.get(ANSWER_TYPE))) {
-			deleteAnswer(answerHeaderId, question);
+			deleteAnswer(answerHeaderId, question, moduleCode);
 			HashMap<Integer, HashMap<String, String>> answersLookUp = new HashMap<>();
 			if ((question.get(AC_TYPE) != null ) && !((String) question.get(AC_TYPE)).equals("D")) {
 				acType = "I";
@@ -269,13 +273,13 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 					answersLookUp = (HashMap<Integer, HashMap<String, String>>) question.get(ANSWERS);
 				}
 				for (Integer index = 0; index < answersLookUp.size(); index++) {
-					saveAnswer(answerHeaderId, question, acType, (answersLookUp.get(index.toString())).get("description"), (answersLookUp.get(index.toString())).get("code"), index, updateUser);
+					saveAnswer(answerHeaderId, question, acType, (answersLookUp.get(index.toString())).get("description"), (answersLookUp.get(index.toString())).get("code"), index, updateUser, moduleCode);
 				}
 			} else if ((question.get(AC_TYPE) != null ) && ((String) question.get(AC_TYPE)).equals("D")) {
 				question.put(AC_TYPE, null);
 			}
 		} else if (CHECKBOX.equals(question.get(ANSWER_TYPE))) {
-			deleteAnswer(answerHeaderId, question);
+			deleteAnswer(answerHeaderId, question, moduleCode);
 			if ((question.get(AC_TYPE) != null) && !((String) question.get(AC_TYPE)).equals("D")) {
 				acType = "I";
 				Integer noOfAnswer = Integer.parseInt((question.get(NO_OF_ANSWERS).toString()));
@@ -288,7 +292,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 					if (answerObj != null) {
 						boolean isAnswered = Boolean.parseBoolean(answerObj.toString());
 						if (isAnswered && !question.get(AC_TYPE).equals("D")) {
-							saveAnswer(answerHeaderId, question, acType, answer, null, noOfAnswer, updateUser);
+							saveAnswer(answerHeaderId, question, acType, answer, null, noOfAnswer, updateUser, moduleCode);
 						}
 					}
 				}
@@ -300,45 +304,45 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			String answer = answers.get("1");
 			if ("D".equals(acType)) {
 				if (multipartFile != null) {
-					saveAttachmentAnswer(question, acType, updateUser, multipartFile);
+					saveAttachmentAnswer(question, acType, updateUser, multipartFile, moduleCode);
 				} else {
-					saveAttachmentAnswer(question, acType, updateUser, request);
+					saveAttachmentAnswer(question, acType, updateUser, request, moduleCode);
 				}
-				saveAnswer(answerHeaderId, question, acType, answer, null, 1, updateUser);
+				saveAnswer(answerHeaderId, question, acType, answer, null, 1, updateUser, moduleCode);
 			} else {
 				if (answer != null && !answer.isEmpty()) {
-					saveAnswer(answerHeaderId, question, acType, answer, null, 1, updateUser);
+					saveAnswer(answerHeaderId, question, acType, answer, null, 1, updateUser, moduleCode);
 					if (multipartFile != null) {
-						saveAttachmentAnswer(question, acType, updateUser, multipartFile);
+						saveAttachmentAnswer(question, acType, updateUser, multipartFile, moduleCode);
 					} else {
-						saveAttachmentAnswer(question, acType, updateUser, request);
+						saveAttachmentAnswer(question, acType, updateUser, request, moduleCode);
 					}
 				}
 			}
 		} else if (Constants.TABLE.equals(question.get(ANSWER_TYPE))){
 			if (question.get(ANSWERS) != null)
-			    saveTableAnswer(answerHeaderId, question, (HashMap<String, Object>) question.get(ANSWERS), updateUser);
+			    saveTableAnswer(answerHeaderId, question, (HashMap<String, Object>) question.get(ANSWERS), updateUser, moduleCode);
 		}
 		else {
 			answers = (HashMap<Integer, String>) question.get(ANSWERS);
 			String answerLookupCode = question.get("ANSWER_LOOKUP_CODE") != null ? question.get("ANSWER_LOOKUP_CODE").toString(): null;
 			String answer = answers.get("1");
-			saveAnswer(answerHeaderId, question, acType, answer, answerLookupCode, 1, updateUser);
+			saveAnswer(answerHeaderId, question, acType, answer, answerLookupCode, 1, updateUser, moduleCode);
 		}
 	}
 
-	private void saveAttachmentAnswer(HashMap<String, Object> question, String acType, String updateUser, MultipartFile multipartFile) throws Exception{
-		insertOrUpdateAttachment(question, acType, updateUser, multipartFile);	
+	private void saveAttachmentAnswer(HashMap<String, Object> question, String acType, String updateUser, MultipartFile multipartFile, Integer moduleCode) throws Exception{
+		insertOrUpdateAttachment(question, acType, updateUser, multipartFile, moduleCode);	
 	}
 
-	private void saveAttachmentAnswer(HashMap<String, Object> question, String acType, String updateUser, MultipartHttpServletRequest request) throws Exception {
+	private void saveAttachmentAnswer(HashMap<String, Object> question, String acType, String updateUser, MultipartHttpServletRequest request, Integer moduleCode) throws Exception {
 		MultipartFile file = getAttachmentFile(request, question);
 		if (file != null) {
-			insertOrUpdateAttachment(question, acType, updateUser, file);
+			insertOrUpdateAttachment(question, acType, updateUser, file, moduleCode);
 		}
 	}
 
-	private void insertOrUpdateAttachment(HashMap<String, Object> question, String acType, String updateUser, MultipartFile file)  throws Exception{
+	private void insertOrUpdateAttachment(HashMap<String, Object> question, String acType, String updateUser, MultipartFile file, Integer moduleCode)  throws Exception{
 		Integer questionnaireAnsAttachmentId = null;
 		Object attachmentId = question.get(ATTACHMENT_ID);
 		if (attachmentId != null) {
@@ -348,14 +352,14 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		}
 		if ("D".equals(acType)) {
 			if (questionnaireAnsAttachmentId != null) {
-				deleteAttachmentAnswer(questionnaireAnsAttachmentId);
+				deleteAttachmentAnswer(questionnaireAnsAttachmentId, moduleCode);
 			}
 		} else if ("U".equals(acType)) {
 			if (questionnaireAnsAttachmentId != null) {
-				updateAttachmentAnswer(questionnaireAnsAttachmentId, file, updateUser);
+				updateAttachmentAnswer(questionnaireAnsAttachmentId, file, updateUser, moduleCode);
 			}
 		} else if ("I".equals(acType)) {
-			insertAttachmentAnswer(question, updateUser, file);
+			insertAttachmentAnswer(question, updateUser, file, moduleCode);
 			question.put(AC_TYPE, "U");
 		}	
 	}
@@ -372,13 +376,15 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		return file;
 	}
 
-	private Integer deleteAttachmentAnswer(Integer questionnaireAnsAttachmentId) throws Exception {
+	private Integer deleteAttachmentAnswer(Integer questionnaireAnsAttachmentId, Integer moduleCode) throws Exception {
 		Integer isUpdated = 0;
+		String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "DELETE_COI_QUESTIONNAIRE_ATTACHMENT_ANSWER"
+				: "DELETE_QUESTIONNAIRE_ATTACHMENT_ANSWER";
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
 			inParam.add(new Parameter(QUESTIONNAIRE_ANSWER_ATTACHMENT_ID, DBEngineConstants.TYPE_INTEGER,
 					questionnaireAnsAttachmentId));
-			isUpdated = dbEngine.executeUpdate(inParam, "DELETE_QUESTIONNAIRE_ATTACHMENT_ANSWER");
+			isUpdated = dbEngine.executeUpdate(inParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in deleteQuestionnaireAnswers : {}", e.getMessage());
 			throw e;
@@ -386,8 +392,10 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		return isUpdated;
 	}
 
-	private void updateAttachmentAnswer(Integer questionnaireAnsAttachmentId, MultipartFile file, String updateUser) throws Exception {
+	private void updateAttachmentAnswer(Integer questionnaireAnsAttachmentId, MultipartFile file, String updateUser, Integer moduleCode) throws Exception {
 		try {
+			String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "UPDATE_COI_QUESTIONNAIRE_ATTACHMENT_ANSWER"
+					: "UPDATE_QUESTIONNAIRE_ATTACHMENT_ANSWER";
 			ArrayList<Parameter> inParam = new ArrayList<>();
 			inParam.add(new Parameter("<<ATTACHMENT>>", DBEngineConstants.TYPE_BLOB, file.getBytes()));
 			inParam.add(new Parameter("<<FILE_NAME>>", DBEngineConstants.TYPE_STRING, file.getOriginalFilename()));
@@ -396,7 +404,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			inParam.add(new Parameter(UPDATE_USER_PARAM, DBEngineConstants.TYPE_STRING, updateUser));
 			inParam.add(new Parameter(QUESTIONNAIRE_ANSWER_ATTACHMENT_ID, DBEngineConstants.TYPE_INTEGER,
 					questionnaireAnsAttachmentId));
-			dbEngine.executeUpdate(inParam, "UPDATE_QUESTIONNAIRE_ATTACHMENT_ANSWER");
+			dbEngine.executeUpdate(inParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in updateAttachmentAnswer : {}", e.getMessage());
 			throw e;
@@ -404,7 +412,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	}
 
 	private void saveAnswer(Integer answerHeaderId, HashMap<String, Object> question, String acType, String answer,
-			String lookUpCode, Integer answerNumber, String updateUser) throws Exception {
+			String lookUpCode, Integer answerNumber, String updateUser, Integer moduleCode) throws Exception {
 		if ("I".equals(acType)) {
 			Integer questionId = Integer.parseInt(question.get(QUESTION_ID).toString());
 			String explanation = question.get("EXPLANATION")!= null ? question.get("EXPLANATION").toString() : null;
@@ -412,16 +420,18 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			question.put(AC_TYPE, "U");
 			question.put("QUESTIONNAIRE_ANS_ID", questionnaireAnswerId);
 		} else if ("U".equals(acType)) {
-			updateAnswer(answerHeaderId, question, answer, lookUpCode, answerNumber, updateUser);
+			updateAnswer(answerHeaderId, question, answer, lookUpCode, answerNumber, updateUser, moduleCode);
 		} else if ("D".equals(acType)) {
-			deleteQuestAnswerAttachment(answerHeaderId, question);
-			deleteAnswer(answerHeaderId, question);
+			deleteQuestAnswerAttachment(answerHeaderId, question, moduleCode);
+			deleteAnswer(answerHeaderId, question, moduleCode);
 			question.put(AC_TYPE, null);
 		}
 	}
 
-	private Integer insertAttachmentAnswer(HashMap<String, Object> question, String updateUser, MultipartFile file) throws Exception {
+	private Integer insertAttachmentAnswer(HashMap<String, Object> question, String updateUser, MultipartFile file, Integer moduleCode) throws Exception {
 		try {
+			String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "INSERT_COI_QUESTIONNAIRE_ATTACHMENT_ANSWER"
+					: "INSERT_QUESTIONNAIRE_ATTACHMENT_ANSWER";
 			ArrayList<Parameter> inParam = new ArrayList<>();
 			Integer questionnaireAnsAttachmentId = questionnaireDAO.getNextQuestionAnswerAttachId();
 //			inParam.add(new Parameter(QUESTIONNAIRE_ANSWER_ATTACHMENT_ID, DBEngineConstants.TYPE_INTEGER, questionnaireAnsAttachmentId));
@@ -431,7 +441,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			inParam.add(new Parameter("<<CONTENT_TYPE>>", DBEngineConstants.TYPE_STRING, file.getContentType()));
 			inParam.add(new Parameter(UPDATE_TIMESTAMP_PARAM, DBEngineConstants.TYPE_TIMESTAMP, commonDao.getCurrentTimestamp()));
 			inParam.add(new Parameter(UPDATE_USER_PARAM, DBEngineConstants.TYPE_STRING, updateUser));
-			dbEngine.executeUpdate(inParam, "INSERT_QUESTIONNAIRE_ATTACHMENT_ANSWER");
+			dbEngine.executeUpdate(inParam, genericSQL);
 			question.put(ATTACHMENT_ID, questionnaireAnsAttachmentId);
 		} catch (Exception e) {
 			logger.error("Exception in insertQuestionnaireAnswer : {}", e.getMessage());
@@ -462,8 +472,10 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		return questionnaireAnswerId;
 	}
 */
-	private Integer updateAnswer(Integer answerHeaderId, HashMap<String, Object> question, String answer, String lookUpCode, Integer answerNumber, String updateUser) throws Exception {
+	private Integer updateAnswer(Integer answerHeaderId, HashMap<String, Object> question, String answer, String lookUpCode, Integer answerNumber, String updateUser, Integer moduleCode) throws Exception {
 		try {
+			String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "UPDATE_COI_QUESTIONNAIRE_ANSWER"
+					: "UPDATE_QUESTIONNAIRE_ANSWER";
 			ArrayList<Parameter> inParam = new ArrayList<>();	
 			inParam.add(new Parameter("<<ANSWER>>", DBEngineConstants.TYPE_STRING, answer));
 			inParam.add(new Parameter("<<ANSWER_LOOKUP_CODE>>", DBEngineConstants.TYPE_STRING, lookUpCode));
@@ -473,7 +485,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			inParam.add(new Parameter(QUESTION_ID_PARAM, DBEngineConstants.TYPE_INTEGER, question.get(QUESTION_ID)));
 			inParam.add(new Parameter("<<ANSWER_NUMBER>>", DBEngineConstants.TYPE_INTEGER, answerNumber));
 			inParam.add(new Parameter(QUESTIONNAIRE_ANSWER_HEADER_ID_PARAM, DBEngineConstants.TYPE_INTEGER, answerHeaderId));
-			dbEngine.executeUpdate(inParam, "UPDATE_QUESTIONNAIRE_ANSWER");
+			dbEngine.executeUpdate(inParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in updateQnrAnswer : {}", e.getMessage());
 			throw e;
@@ -481,13 +493,15 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		return 1;
 	}
 
-	public Integer deleteAnswer(Integer answerHeaderId, Map<String, Object> question) throws Exception {
+	public Integer deleteAnswer(Integer answerHeaderId, Map<String, Object> question, Integer moduleCode) throws Exception {
 		Integer isUpdated = 0;
+		String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "DELETE_COI_QUESTIONNAIRE_ANSWER"
+				: "DELETE_QUESTIONNAIRE_ANSWER";
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
 			inParam.add(new Parameter(QUESTION_ID_PARAM, DBEngineConstants.TYPE_INTEGER, question.get(QUESTION_ID)));
 			inParam.add(new Parameter(QUESTIONNAIRE_ANSWER_HEADER_ID_PARAM, DBEngineConstants.TYPE_INTEGER, answerHeaderId));
-			isUpdated = dbEngine.executeUpdate(inParam, "DELETE_QUESTIONNAIRE_ANSWER");
+			isUpdated = dbEngine.executeUpdate(inParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in deleteQuestionnaireAnswer : {}", e.getMessage());
 			throw e;
@@ -495,12 +509,14 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		return isUpdated;
 	}
 
-	private ArrayList<HashMap<String, Object>> getAnswer(Integer questionnaireAnswerHeaderId) throws Exception {
+	private ArrayList<HashMap<String, Object>> getAnswer(Integer questionnaireAnswerHeaderId, Integer moduleCode) throws Exception {
 		try {
+			String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "GET_COI_QUESTIONNAIRE_ANSWER"
+					: "GET_QUESTIONNAIRE_ANSWER";
 			ArrayList<Parameter> inputParam = new ArrayList<>();
 			inputParam.add(new Parameter("<<AV_QNR_ANS_HEADER_ID>>", DBEngineConstants.TYPE_INTEGER,
 					questionnaireAnswerHeaderId));
-			return dbEngine.executeQuery(inputParam, "GET_QUESTIONNAIRE_ANSWER");
+			return dbEngine.executeQuery(inputParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in getAnswer : {}", e.getMessage());
 			return new ArrayList<>();
@@ -997,7 +1013,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			HttpServletResponse response) {
 		ResponseEntity<byte[]> attachmentData = null;
 		try {
-			List<HashMap<String, Object>> questionnaireAttachment = questionnaireDAO.getQuestionnaireAttachment(questionnaireDataBus.getQuestionnaireAnsAttachmentId());
+			List<HashMap<String, Object>> questionnaireAttachment = questionnaireDAO.getQuestionnaireAttachment(questionnaireDataBus.getQuestionnaireAnsAttachmentId(), questionnaireDataBus.getModuleItemCode());
 			if (questionnaireAttachment.get(0).get("ATTACHMENT") != null) {
 				ByteArrayOutputStream byteArrayOutputStream = null;
 				byteArrayOutputStream = (ByteArrayOutputStream) questionnaireAttachment.get(0).get("ATTACHMENT");
@@ -1236,11 +1252,20 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	@Override
 	public void copyQuestionnaireForVersion(QuestionnaireDataBus questionnaireDataBus) {
 		Integer moduleCode = questionnaireDataBus.getModuleItemCode();
+		if (Constants.COI_MODULE_CODE.equals(moduleCode)) {
+			copyQuestionnaireForCOIModule(questionnaireDataBus);
+		} else {
+			copyQuestionnaireData(questionnaireDataBus, moduleCode);
+		}
+	}
+
+	private void copyQuestionnaireData(QuestionnaireDataBus questionnaireDataBus, Integer moduleCode) {
 		List<Integer> moduleSubItemCodes = questionnaireDataBus.getModuleSubItemCodes();
 		String moduleItemKey = questionnaireDataBus.getModuleItemKey();
 		String moduleSubItemKey = questionnaireDataBus.getModuleSubItemKey();
 		String copyModuleItemKey = questionnaireDataBus.getCopyModuleItemKey();
-		List<QuestAnswerHeader> answerHeaders = questionnaireDAO.getQuestionanswerHeadersToCopy(moduleCode, moduleSubItemCodes, moduleItemKey, moduleSubItemKey);
+		List<QuestAnswerHeader> answerHeaders = questionnaireDAO.getQuestionanswerHeadersToCopy(moduleCode,
+				moduleSubItemCodes, moduleItemKey, moduleSubItemKey);
 		for (QuestAnswerHeader answerHeader : answerHeaders) {
 			List<QuestAnswer> copyQuestAnswers = new ArrayList<>();
 			QuestAnswerHeader copyAnswerHeader = new QuestAnswerHeader();
@@ -1253,7 +1278,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			copyAnswerHeader.setUpdateUser(answerHeader.getUpdateUser());
 			copyAnswerHeader.setUpdateTimeStamp(answerHeader.getUpdateTimeStamp());
 			List<QuestAnswer> questAnswers = answerHeader.getQusetAnswers();
-			if(questAnswers != null && !questAnswers.isEmpty()) {
+			if (questAnswers != null && !questAnswers.isEmpty()) {
 				for (QuestAnswer questAnswer : questAnswers) {
 					QuestAnswer copyQuestAnswer = new QuestAnswer();
 					copyQuestAnswer.setAnswer(questAnswer.getAnswer());
@@ -1282,11 +1307,91 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 					copyQuestAnswer.setQuestAnswerAttachment(copyQuestAnswerAttachments);
 					copyQuestAnswers.add(copyQuestAnswer);
 				}
-				 
 			}
 			copyAnswerHeader.setQusetAnswers(copyQuestAnswers);
 			questionnaireDAO.copyQuestionAnswers(copyAnswerHeader);
 			copyTableAnswer(answerHeader.getQuestAnsHeaderId(), copyAnswerHeader.getQuestAnsHeaderId());
+		}
+		
+	}
+
+	private void copyQuestionnaireForCOIModule(QuestionnaireDataBus questionnaireDataBus) {
+		Integer moduleCode = questionnaireDataBus.getModuleItemCode();
+		List<Integer> moduleSubItemCodes = questionnaireDataBus.getModuleSubItemCodes();
+		String moduleItemKey = questionnaireDataBus.getModuleItemKey();
+		String moduleSubItemKey = questionnaireDataBus.getModuleSubItemKey();
+		String copyModuleItemKey = questionnaireDataBus.getCopyModuleItemKey();
+		List<QuestAnswerHeader> answerHeaders = questionnaireDAO.getQuestionanswerHeadersToCopy(moduleCode, moduleSubItemCodes, moduleItemKey, moduleSubItemKey);
+		for (QuestAnswerHeader answerHeader : answerHeaders) {
+			List<CoiQuestAnswer> copyQuestAnswers = new ArrayList<>();
+			QuestAnswerHeader copyAnswerHeader = new QuestAnswerHeader();
+			copyAnswerHeader.setModuleItemCode(answerHeader.getModuleItemCode());
+			copyAnswerHeader.setModuleSubItemCode(answerHeader.getModuleSubItemCode());
+			copyAnswerHeader.setModuleItemKey(copyModuleItemKey);
+			copyAnswerHeader.setModuleSubItemKey(answerHeader.getModuleSubItemKey());
+			copyAnswerHeader.setQuestCompletedFlag(answerHeader.getQuestCompletedFlag());
+			copyAnswerHeader.setQuestionnaireId(answerHeader.getQuestionnaireId());
+			copyAnswerHeader.setUpdateUser(answerHeader.getUpdateUser());
+			copyAnswerHeader.setUpdateTimeStamp(answerHeader.getUpdateTimeStamp());
+			List<CoiQuestAnswer> questAnswers = answerHeader.getCoiQuestAnswers();
+			if (questAnswers != null && !questAnswers.isEmpty()) {
+				for (CoiQuestAnswer questAnswer : questAnswers) {
+					CoiQuestAnswer copyQuestAnswer = new CoiQuestAnswer();
+					copyQuestAnswer.setAnswer(questAnswer.getAnswer());
+					copyQuestAnswer.setAnswerLookUpCode(questAnswer.getAnswerLookUpCode());
+					copyQuestAnswer.setAnswerNumber(questAnswer.getAnswerNumber());
+					copyQuestAnswer.setExplanation(questAnswer.getExplanation());
+					copyQuestAnswer.setQuestionId(questAnswer.getQuestionId());
+					copyQuestAnswer.setOptionNumber(questAnswer.getOptionNumber());
+					copyQuestAnswer.setUpdateTimeStamp(questAnswer.getUpdateTimeStamp());
+					copyQuestAnswer.setUpdateUser(questAnswer.getUpdateUser());
+					copyQuestAnswer.setQuestAnswerHeader(copyAnswerHeader);
+					List<CoiQuestAnswerAttachment> copyQuestAnswerAttachments = new ArrayList<>();
+					List<CoiQuestAnswerAttachment> questAnswerAttachments = questAnswer.getQuestAnswerAttachment();
+					if (questAnswerAttachments != null && !questAnswerAttachments.isEmpty()) {
+						for (CoiQuestAnswerAttachment questAnswerAttachment : questAnswerAttachments) {
+							CoiQuestAnswerAttachment copyQuestAnswerAttachment = new CoiQuestAnswerAttachment();
+							copyQuestAnswerAttachment.setAttachment(questAnswerAttachment.getAttachment());
+							copyQuestAnswerAttachment.setContentType(questAnswerAttachment.getContentType());
+							copyQuestAnswerAttachment.setFileName(questAnswerAttachment.getFileName());
+							copyQuestAnswerAttachment.setUpdateTimeStamp(questAnswerAttachment.getUpdateTimeStamp());
+							copyQuestAnswerAttachment.setUpdateUser(questAnswerAttachment.getUpdateUser());
+							copyQuestAnswerAttachment.setQuestAnswer(copyQuestAnswer);
+							copyQuestAnswerAttachments.add(copyQuestAnswerAttachment);
+						}
+					}
+					copyQuestAnswer.setQuestAnswerAttachment(copyQuestAnswerAttachments);
+					copyQuestAnswers.add(copyQuestAnswer);
+				}
+			}
+			copyAnswerHeader.setCoiQuestAnswers(copyQuestAnswers);
+			questionnaireDAO.copyQuestionAnswers(copyAnswerHeader);
+			copyCoiTableAnswer(answerHeader.getQuestAnsHeaderId(), copyAnswerHeader.getQuestAnsHeaderId());
+		}
+	}
+
+	private void copyCoiTableAnswer(Integer oldQuestionnaireAnsHeaderId, Integer questionnaireAnsHeaderId) {
+		List<CoiQuestTableAnswer> questTableAnswers = questionnaireDAO.getCoiQuestTableAnswers(oldQuestionnaireAnsHeaderId);
+		if (questTableAnswers != null && !questTableAnswers.isEmpty()) {
+			questTableAnswers.forEach(tableAnswer -> {
+				CoiQuestTableAnswer questTableAnswer = new CoiQuestTableAnswer();
+				questTableAnswer.setQuestAnsHeaderId(questionnaireAnsHeaderId);
+				questTableAnswer.setOrderNumber(tableAnswer.getOrderNumber());
+				questTableAnswer.setQuestionId(tableAnswer.getQuestionId());
+				questTableAnswer.setUpdateUser(tableAnswer.getUpdateUser());
+				questTableAnswer.setUpdateTimeStamp(commonDao.getCurrentTimestamp());
+				questTableAnswer.setColumn1(tableAnswer.getColumn1());
+				questTableAnswer.setColumn2(tableAnswer.getColumn2());
+				questTableAnswer.setColumn3(tableAnswer.getColumn3());
+				questTableAnswer.setColumn4(tableAnswer.getColumn4());
+				questTableAnswer.setColumn5(tableAnswer.getColumn5());
+				questTableAnswer.setColumn6(tableAnswer.getColumn6());
+				questTableAnswer.setColumn7(tableAnswer.getColumn7());
+				questTableAnswer.setColumn8(tableAnswer.getColumn8());
+				questTableAnswer.setColumn9(tableAnswer.getColumn9());
+				questTableAnswer.setColumn10(tableAnswer.getColumn10());
+				questionnaireDAO.saveCoiQuestTableAnswers(questTableAnswer);
+			});
 		}
 	}
 
@@ -1315,13 +1420,15 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		}
 	}
 
-	public Integer deleteQuestAnswerAttachment(Integer answerHeaderId, Map<String, Object> question) throws Exception {
+	public Integer deleteQuestAnswerAttachment(Integer answerHeaderId, Map<String, Object> question, Integer moduleCode) throws Exception {
 		Integer isUpdated = 0;
+		String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "DELETE_COI_QUEST_ANSWER_ATTACHMENT"
+				: "DELETE_QUEST_ANSWER_ATTACHMENT";
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
 			inParam.add(new Parameter(QUESTION_ID_PARAM, DBEngineConstants.TYPE_INTEGER, question.get(QUESTION_ID)));
 			inParam.add(new Parameter(QUESTIONNAIRE_ANSWER_HEADER_ID_PARAM, DBEngineConstants.TYPE_INTEGER, answerHeaderId));
-			isUpdated = dbEngine.executeUpdate(inParam, "DELETE_QUEST_ANSWER_ATTACHMENT");
+			isUpdated = dbEngine.executeUpdate(inParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in deleteQuestionnaireAnswerAttachment : {}", e.getMessage());
 			throw e;
@@ -1329,8 +1436,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		return isUpdated;
 	}
 
-	void getTableAnswers(ArrayList<HashMap<String, Object>> answerList, Integer questionnaireAnswerHeaderId) {
-		Map<Object, List<HashMap<String, Object>>> data = getTableAnswer(questionnaireAnswerHeaderId)
+	void getTableAnswers(ArrayList<HashMap<String, Object>> answerList, Integer questionnaireAnswerHeaderId, Integer moduleCode) {
+		Map<Object, List<HashMap<String, Object>>> data = getTableAnswer(questionnaireAnswerHeaderId, moduleCode)
 				.stream().collect(Collectors.groupingBy(obj -> obj.get("QUESTION_NUMBER"), Collectors.toList()));
 		data.entrySet().stream().forEach(integerListEntry -> {
 			HashMap<String, Object> map = new HashMap<>();
@@ -1340,35 +1447,37 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		});
 	}
 
-	private ArrayList<HashMap<String, Object>> getTableAnswer(Integer questionnaireAnswerHeaderId){
+	private ArrayList<HashMap<String, Object>> getTableAnswer(Integer questionnaireAnswerHeaderId, Integer moduleCode){
 		try {
+			String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "GET_COI_QUESTIONNAIRE_TABLE_ANSWER"
+					: "GET_QUESTIONNAIRE_TABLE_ANSWER";
 			ArrayList<Parameter> inputParam = new ArrayList<>();
 			inputParam.add(new Parameter("<<AV_QNR_ANS_HEADER_ID>>", DBEngineConstants.TYPE_INTEGER,
 					questionnaireAnswerHeaderId));
-			return dbEngine.executeQuery(inputParam, "GET_QUESTIONNAIRE_TABLE_ANSWER");
+			return dbEngine.executeQuery(inputParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in getTableAnswer : {}", e.getMessage());
 			return new ArrayList<>();
 		}
 	}
 
-	private void saveTableAnswer(Integer answerHeaderId, HashMap<String, Object> question, HashMap<String, Object> answer, String updateUser) {
+	private void saveTableAnswer(Integer answerHeaderId, HashMap<String, Object> question, HashMap<String, Object> answer, String updateUser, Integer moduleCode) {
 		try {
 			ArrayList<HashMap<String, Object>> data = (ArrayList<HashMap<String, Object>>) answer.get("1");
 			for (HashMap<String, Object> tableAnswer : data) {
 				if (tableAnswer.get(AC_TYPE) != null && "I".equals(tableAnswer.get(AC_TYPE))) {
-					insertTableAnswer(tableAnswer, answerHeaderId, updateUser, (Integer)question.get(QUESTION_ID));
+					insertTableAnswer(tableAnswer, answerHeaderId, updateUser, (Integer)question.get(QUESTION_ID), moduleCode);
 					tableAnswer.put("QUEST_TABLE_ANSWER_ID", getTableAnswerId(answerHeaderId, (Integer)question.get(QUESTION_ID)));
 					tableAnswer.put(AC_TYPE, null);
 				}
 				else if (tableAnswer.get(AC_TYPE) != null && "U".equals(tableAnswer.get(AC_TYPE))) {
 					QuestTableAnswer questTableAnswer = new QuestTableAnswer();
 					questTableAnswer.setQuestTableAnswerId((Integer)tableAnswer.get("QUEST_TABLE_ANSWER_ID"));
-					updateTableAnswer(tableAnswer, updateUser);
+					updateTableAnswer(tableAnswer, updateUser, moduleCode);
 					tableAnswer.put(AC_TYPE, null);
 				}
 				else if (tableAnswer.get(AC_TYPE) != null && "D".equals(tableAnswer.get(AC_TYPE))) {
-					deleteTableAnswer((Integer)tableAnswer.get("QUEST_TABLE_ANSWER_ID"));
+					deleteTableAnswer((Integer)tableAnswer.get("QUEST_TABLE_ANSWER_ID"), moduleCode);
 					tableAnswer.clear();
 				}
 			}
@@ -1393,8 +1502,10 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		return null;
 	}
 
-	private void insertTableAnswer(HashMap<String, Object> tableAnswer, Integer answerHeaderId, String updateUser, Integer questionId) {
+	private void insertTableAnswer(HashMap<String, Object> tableAnswer, Integer answerHeaderId, String updateUser, Integer questionId, Integer moduleCode) {
 //		Integer questionnaireAnswerId = questionnaireDAO.getNextQuestionnaireAnswerTableId();
+		String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "INSERT_COI_QUESTIONNAIRE_TABLE_ANSWER"
+				: "INSERT_QUESTIONNAIRE_TABLE_ANSWER";
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
 //			inParam.add(new Parameter("<<QUEST_TABLE_ANSWER_ID>>", DBEngineConstants.TYPE_INTEGER, questionnaireAnswerId));
@@ -1413,15 +1524,17 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			inParam.add(new Parameter("<<COLUMN_10>>", DBEngineConstants.TYPE_STRING, tableAnswer.get("COLUMN_10")));
 			inParam.add(new Parameter(UPDATE_TIMESTAMP_PARAM, DBEngineConstants.TYPE_TIMESTAMP, commonDao.getCurrentTimestamp()));
 			inParam.add(new Parameter(UPDATE_USER_PARAM, DBEngineConstants.TYPE_STRING, updateUser));
-			dbEngine.executeUpdate(inParam, "INSERT_QUESTIONNAIRE_TABLE_ANSWER");
+			dbEngine.executeUpdate(inParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in insertQuestionnaireAnswer : {}", e.getMessage());
 		}
 //		return questionnaireAnswerId;
 	}
 
-	private Integer updateTableAnswer(HashMap<String, Object> tableAnswer, String updateUser) {
+	private Integer updateTableAnswer(HashMap<String, Object> tableAnswer, String updateUser, Integer moduleCode) {
 		try {
+			String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "UPDATE_COI_QUESTIONNAIRE_TABLE_ANSWER"
+					: "UPDATE_QUESTIONNAIRE_TABLE_ANSWER";
 			ArrayList<Parameter> inParam = new ArrayList<>();
 			inParam.add(new Parameter("<<ORDER_NUMBER>>", DBEngineConstants.TYPE_INTEGER, tableAnswer.get("ORDER_NUMBER")));
 			inParam.add(new Parameter("<<COLUMN_1>>", DBEngineConstants.TYPE_STRING, tableAnswer.get("COLUMN_1")));
@@ -1437,19 +1550,21 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 			inParam.add(new Parameter(UPDATE_TIMESTAMP_PARAM, DBEngineConstants.TYPE_TIMESTAMP, commonDao.getCurrentTimestamp()));
 			inParam.add(new Parameter(UPDATE_USER_PARAM, DBEngineConstants.TYPE_STRING, updateUser));
 			inParam.add(new Parameter("<<QUEST_TABLE_ANSWER_ID>>", DBEngineConstants.TYPE_INTEGER, tableAnswer.get("QUEST_TABLE_ANSWER_ID")));
-			dbEngine.executeUpdate(inParam, "UPDATE_QUESTIONNAIRE_TABLE_ANSWER");
+			dbEngine.executeUpdate(inParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in updateQnrTableAnswer : {}", e.getMessage());
 		}
 		return 1;
 	}
 
-	public Integer deleteTableAnswer(Integer answerTableId) {
+	public Integer deleteTableAnswer(Integer answerTableId, Integer moduleCode) {
 		Integer isUpdated = 0;
+		String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "DELETE_COI_QUESTIONNAIRE_TABLE_ANSWER"
+				: "DELETE_QUESTIONNAIRE_TABLE_ANSWER";
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
 			inParam.add(new Parameter("<<QUEST_TABLE_ANSWER_ID>>", DBEngineConstants.TYPE_INTEGER, answerTableId));
-			isUpdated = dbEngine.executeUpdate(inParam, "DELETE_QUESTIONNAIRE_TABLE_ANSWER");
+			isUpdated = dbEngine.executeUpdate(inParam, genericSQL);
 		} catch (Exception e) {
 			logger.error("Exception in deleteQuestionnaireTableAnswer : {}", e.getMessage());
 		}
@@ -1476,4 +1591,5 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleItemKey());
 
 	}
+
 }
