@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { AdminDashboardService } from './admin-dashboard.service';
 import { FormsModule } from '@angular/forms';
+import { DataStoreService } from '../disclosure/services/data-store.service';
 
 const routes: Routes = [{path: '', component: AdminDashboardComponent}];
 
@@ -22,7 +23,7 @@ const routes: Routes = [{path: '', component: AdminDashboardComponent}];
         FormsModule,
         SharedModule
     ],
-    providers: [AdminDashboardService]
+    providers: [AdminDashboardService, DataStoreService]
 })
 export class AdminDashboardModule {
 }

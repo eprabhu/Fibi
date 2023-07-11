@@ -52,7 +52,8 @@ export class UserDisclosureComponent implements OnInit {
     $debounceEventForDisclosureList = new Subject();
     $fetchDisclosures = new Subject();
     isSearchTextHover = false;
-    
+    isShowNoDataCard = false;
+
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
         public commonService: CommonService,
@@ -67,10 +68,14 @@ export class UserDisclosureComponent implements OnInit {
     }
 
     loadDashboard() {
+        this.isShowNoDataCard = false;
         this.$subscriptions.push(this.$fetchDisclosures.pipe(
             switchMap(() => this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject))).subscribe((res: any) => {
             this.result = res;
-            this.filteredDisclosureArray =  res.disclosureViews ? res.disclosureViews : [];
+            if (this.result) {
+                this.isShowNoDataCard = true;
+                this.filteredDisclosureArray =  res.disclosureViews || [];
+            }
         }));
     }
 

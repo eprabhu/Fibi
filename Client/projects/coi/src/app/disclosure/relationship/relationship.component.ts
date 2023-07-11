@@ -40,6 +40,7 @@ export class RelationshipComponent implements OnInit {
   currentPage = 1;
   $subscriptions: Subscription[] = [];
   dependencies = ['coiDisclosure', 'numberOfSFI'];
+  isShowNoDataCard = false;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
@@ -89,10 +90,14 @@ export class RelationshipComponent implements OnInit {
   }
 
   loadProjectRelations() {
+    this.isShowNoDataCard = false;
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
-      this.proposalArray = data.awards;
-      data.proposals.every(ele => this.proposalArray.push(ele));
-      this.coiStatusList = data.coiProjConflictStatusTypes;
+      if (data) {
+        this.isShowNoDataCard = true;
+        this.proposalArray = data.awards;
+        data.proposals.every(ele => this.proposalArray.push(ele));
+        this.coiStatusList = data.coiProjConflictStatusTypes;
+      }
     });
   }
 

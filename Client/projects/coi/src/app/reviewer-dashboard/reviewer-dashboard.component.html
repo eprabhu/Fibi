@@ -82,7 +82,7 @@
                         </app-elastic>
                     </div>
                     <!-- Department Name -->
-                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Departement Name">
+                    <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Department Name">
                         <label class="d-block" for="reviewer-adv-department-name">
                             Department
                         </label>
@@ -255,8 +255,7 @@
                 </div>
             </span>
         </div>
-
-        <ng-container *ngIf="isShowDisclosureList">
+        <ng-container *ngIf="isShowDisclosureList && isShowNoDataCard">
             <ng-container *ngIf="coiList.length > 0;else noData">
                 <ng-container *ngFor="let coi of coiList;let index = index">
                     <section class="shadow-sm coi-card">

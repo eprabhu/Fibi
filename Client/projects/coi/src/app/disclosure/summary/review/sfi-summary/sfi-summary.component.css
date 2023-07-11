@@ -72,3 +72,13 @@
     background: rgb(74 74 74 / 32%);
     z-index: 50;
   }
+
+  .toggle-header-btn {
+    width: 30px;
+    color: #A64040;
+    height: 30px;
+  
+    mat-icon {
+      transform: scale(1.2);
+    }
+  }

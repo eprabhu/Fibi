@@ -146,6 +146,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
         if (!this.entityName) {
             this.mandatoryList.set('entity', 'Please enter the entity name.');
+            this.clearField = new String('false');
         }
         if (!this.travelDisclosureRO.travelTitle) {
             this.mandatoryList.set('title', 'Please enter the trip title.');
@@ -168,19 +169,20 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
             }
         } else if (!this.travelDisclosureRO.destinationCountry) {
             this.mandatoryList.set('country', 'Please enter the country.');
+            this.countryClearField = new String('false');
         }
         this.validateDates();
         return this.mandatoryList.size !== 0 || !this.validateDates() ? false : true;
     }
 
     selectedEntityEvent(event: any): void {
-        this.entityName = event && event.entityName || null;
-        this.travelDisclosureRO.entityId = event && event.entityId || null;
-        this.travelDisclosureRO.entityNumber = event && event.entityNumber || null;
+        this.entityName = (event && event.entityName) || null;
+        this.travelDisclosureRO.entityId = (event && event.entityId) || null;
+        this.travelDisclosureRO.entityNumber = (event && event.entityNumber) || null;
     }
 
     selectTravelCountry(event: any): void {
-        this.travelDisclosureRO.destinationCountry = event && event.countryName || null;
+        this.travelDisclosureRO.destinationCountry = (event && event.countryName) || null;
     }
 
     getTravellerTypeCode(): void {

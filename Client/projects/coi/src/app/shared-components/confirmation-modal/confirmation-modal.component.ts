@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { TravelDisclosureService } from '../../services/travel-disclosure.service';
 
 @Component({
     selector: 'app-confirmation-modal',
@@ -15,13 +14,13 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
     @Input() modalHeaderTitle = '';
     @Input() modalActionBtnName = 'Save';
     @Input() modalCloseBtnName = 'Cancel';
-    @Input() descriptionError = 'Cancel';
+    @Input() descriptionError = '';
     @Output() btnAction: EventEmitter<any> = new EventEmitter<any>();
     @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
     mandatoryList = new Map();
 
-    constructor(public service: TravelDisclosureService) { }
+    constructor() { }
 
     ngOnInit() {
     }
@@ -43,7 +42,7 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
     }
 
     closeModal() {
-        this.close.emit();
+        this.close.emit(false);
         this.mandatoryList.clear();
         this.description = '';
         document.getElementById('prop-confirmationModal-dismiss-btn').click();

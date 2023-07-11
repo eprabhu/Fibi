@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class TravelReviewComponent {
 
+  constructor() {
+    window.scroll(0, 0);
+  }
 }

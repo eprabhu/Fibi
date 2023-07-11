@@ -57,7 +57,7 @@
       </div>
       <div class="relationship-sfi-header card">
         <div class="row m-0">
-          <div class="col-4 fs-14 border-end" [ngClass] = "!isEditMode ? 'p-10' : '' ">
+          <div title="List of SFIs" class="col-4 fs-14 border-end" [ngClass] = "!isEditMode ? 'p-10' : '' ">
               <div class="fw-600">Significant Financial Interest</div>
           </div>
           <div class="col-2 fs-14 border-end" [ngClass] = "!isEditMode ? 'p-10' : ''">
@@ -88,7 +88,7 @@
             </span>
           </div>
           <div class="col-auto fs-14 mt-27"  *ngIf="isEditMode">
-            <button type="button" class="btn btn-primary btn-sm fs-14" id="apply common coi status and description and save"(click)="openSaveAllConfirmationModal()">Apply & Save</button>
+            <button type="button" class="btn btn-primary btn-sm fs-14" id="apply common coi status and description and save" title="Click to apply for all SFIs  and save" (click)="openSaveAllConfirmationModal()">Apply & Save</button>
           </div>
         </div>
       </div>
@@ -125,7 +125,7 @@
               </span>
             </div>
             <div class="col-auto fs-14" *ngIf="isEditMode" >
-              <button type="button" class="btn btn-primary btn-sm fs-14 my-3 ml-11" id="save {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="saveSingleEntity(i, test)"
+              <button title="Click to save for individual SFI" type="button" class="btn btn-primary btn-sm fs-14 my-3 ml-11" id="save {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="saveSingleEntity(i, test)"
               >Save</button>
             </div>
         </div>
@@ -140,7 +140,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Click to close Project -SFI slider"></button>
       </div>
       <div class="modal-body fs-14">
         <p>Do you want to clear all the data entered?</p>
