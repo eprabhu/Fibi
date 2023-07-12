@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {DataStoreService} from "../../disclosure/services/data-store.service";
-import {CoiService} from "../../disclosure/services/coi.service";
-import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
+import {DataStoreService} from '../../disclosure/services/data-store.service';
+import {CoiService} from '../../disclosure/services/coi.service';
+import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../../common/services/common.service';
+
 
 @Component({
     selector: 'app-certification',
@@ -31,7 +32,9 @@ export class CertificationComponent implements OnInit, OnDestroy {
     to disclose and maintain your Significant Financial Interests; identify potential areas of concern related to your
      proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
-    constructor(public _dataStore: DataStoreService, public _coiService: CoiService, public commonService: CommonService) { }
+    constructor(public _dataStore: DataStoreService, public _coiService: CoiService, public commonService: CommonService) { 
+        window.scrollTo(0, 0);
+    }
 
     ngOnInit() {
         this._coiService.isShowCertifyInfo = true;
@@ -81,5 +84,4 @@ export class CertificationComponent implements OnInit, OnDestroy {
     closeCertifyInfo() {
         this._coiService.isShowCertifyInfo = false;
     }
-
 }

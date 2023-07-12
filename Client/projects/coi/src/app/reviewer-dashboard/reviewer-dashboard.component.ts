@@ -98,7 +98,7 @@ export class ReviewerDashboardComponent implements OnInit {
 
     getRequestObject() {
         this.setAdvanceSearchValuesToServiceObject();
-        this.localCOIRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab');
+        this.localCOIRequestObject.tabName = sessionStorage.getItem('currentCOIReviewTab');
         return this.localCOIRequestObject;
     }
 
@@ -282,7 +282,7 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     setAdvanceSearch() {
-        sessionStorage.setItem('currentCOIAdminTab', this.reviewerDashboardService.reviewerRequestObject.tabName);
+        sessionStorage.setItem('currentCOIReviewTab', this.reviewerDashboardService.reviewerRequestObject.tabName);
         if (this.reviewerDashboardService.reviewerRequestObject.tabName === 'HISTORY') {
             this.isViewAdvanceSearch = true;
         } else {
@@ -306,7 +306,7 @@ export class ReviewerDashboardComponent implements OnInit {
         this.reviewerDashboardService.isAdvanceSearch = false;
         this.reviewerDashboardService.reviewerRequestObject.tabName = tabName;
         this.reviewerDashboardService.reviewerRequestObject.sort = { 'updateTimeStamp': 'desc' };
-        sessionStorage.setItem('currentCOIAdminTab', tabName);
+        sessionStorage.setItem('currentCOIReviewTab', tabName);
         if (this.isAdvanceSearchTab(tabName)) {
             this.resetAdvanceSearchFields();
             this.setAdvanceSearch();
@@ -320,7 +320,7 @@ export class ReviewerDashboardComponent implements OnInit {
 
     private resetAdvanceSearchFields() {
         this.sortCountObj = new SortCountObj();
-        this.reviewerDashboardService.reviewerRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab');
+        this.reviewerDashboardService.reviewerRequestObject.tabName = sessionStorage.getItem('currentCOIReviewTab');
         this.localCOIRequestObject = new ReviewerDashboardRequest(this.reviewerDashboardService.reviewerRequestObject.tabName);
         this.localSearchDefaultValues = new NameObject();
         this.reviewerDashboardService.searchDefaultValues = new NameObject();
@@ -336,8 +336,8 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     setDashboardTab() {
-        this.reviewerDashboardService.reviewerRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab') ?
-            sessionStorage.getItem('currentCOIAdminTab') : 'NEW_SUBMISSIONS';
+        this.reviewerDashboardService.reviewerRequestObject.tabName = sessionStorage.getItem('currentCOIReviewTab') ?
+            sessionStorage.getItem('currentCOIReviewTab') : 'NEW_SUBMISSIONS';
     }
 
     checkForSort() {

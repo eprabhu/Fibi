@@ -84,6 +84,7 @@ export class CoiDisclosure {
     adminGroupName: string;
     moduleItemKey: string;
     title: string;
+    numberOfSFI: any;
 }
 export interface UnitAdministratorType {
     code: string;
