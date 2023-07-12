@@ -32,7 +32,7 @@ export class ElasticConfigService {
     getElasticForPerson() {
         const elasticSearchOption = new ElasticOption(this.url);
         elasticSearchOption.contextField = 'full_name';
-        elasticSearchOption.index = 'fibiperson';
+        elasticSearchOption.index = 'coiperson';
         elasticSearchOption.type = 'person';
         elasticSearchOption.formatString = ELASTIC_FIBI_PERSON_OUTPUT_FORMAT;
         elasticSearchOption.fields = {
