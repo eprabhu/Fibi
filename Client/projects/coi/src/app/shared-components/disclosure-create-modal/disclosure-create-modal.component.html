@@ -212,13 +212,14 @@
                                 </div>
                                 <div class="col-6 mb-2 mt-2 ">
                                     <label class="f-14 pe-2">Period : </label>
-                                        <span class="ml-2" *ngIf="manualProjectAddDetails?.startDate || manualProjectAddDetails?.endDate">{{manualProjectAddDetails?.startDate | dateFormatter}} 
+                                    <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails?.startDate">
+                                        <span class="ml-2 date-block"
+                                            *ngIf="manualProjectAddDetails?.startDate || manualProjectAddDetails?.endDate">{{manualProjectAddDetails?.startDate
+                                            | dateFormatter}}
                                             <span *ngIf="manualProjectAddDetails?.startDate && manualProjectAddDetails?.endDate">-</span>
                                             {{manualProjectAddDetails?.endDate | dateFormatter}}
                                         </span>
-                                        <span class="noDataExists fs-14">
-                                            -- No Data --
-                                        </span>
+                                    </app-no-data-label>
                                 </div>
                                 <div class="col-6 mb-2 mt-2 ">
                                     <label class="f-14 pe-2">Sponsor : </label>

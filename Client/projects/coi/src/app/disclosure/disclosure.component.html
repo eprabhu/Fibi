@@ -603,8 +603,8 @@
                     <div class="d-flex">
                         <span class="text-slice">#{{coiData?.coiDisclosure?.disclosureNumber}} :
                             {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                            Disclosure <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode !== '1' || coiData?.coiDisclosure?.numberOfSFI !== 0">For [ <span>{{coiData?.projectDetail?.moduleItemId}} :
-                            {{coiData?.projectDetail?.title.slice(0,15) + '...'}}</span><span class="col"> ]</span></ng-container>  By <strong
+                            Disclosure <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode !== '1'">For [ <span>{{coiData?.projectDetail?.moduleItemId}} :
+                            {{coiData?.projectDetail?.title.slice(0,10) + '...'}}</span><span class="col"> ]</span></ng-container>  By <strong
                                 title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</strong>
                         </span>
                     </div>
