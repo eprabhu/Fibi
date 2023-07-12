@@ -16,7 +16,6 @@ import { ElasticConfigService } from '../../../../fibi/src/app/common/services/e
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../fibi/src/app/app-constants';
 import { CommonService } from '../common/services/common.service';
 import {
-    CREATE_DISCLOSURE_ROUTE_URL,
     NO_DATA_FOUND_MESSAGE,
     HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL
@@ -26,6 +25,7 @@ import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
 import { DefaultAdminDetails } from '../travel-disclosure/travel-disclosure-interface';
+import { UserDashboardService } from '../user-dashboard/user-dashboard.service';
 
 @Component({
     selector: 'app-disclosure',
@@ -85,6 +85,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     constructor(public router: Router,
         public commonService: CommonService,
         private _route: ActivatedRoute,
+        public userDashboardService: UserDashboardService,
         private _elasticConfigService: ElasticConfigService,
         public sfiService: SfiService,
         public coiService: CoiService,
@@ -105,6 +106,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
         this.getDataFromStore();
+        this.getDisclosureTypeMessage();
         this.listenDataChangeFromStore();
         this.prevURL = this.navigationService.previousURL;
         this._route.queryParams.subscribe(params => {
@@ -493,6 +495,15 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
             this.coiData = JSON.parse(JSON.stringify(this.coiData));
         });
+    }
+
+    getDisclosureTypeMessage(): string {
+        const FCOITYPECODE = this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode;
+        switch (FCOITYPECODE) {
+            case '1': return 'FCOI';
+            case '2': case '3': return 'Project';
+            default: return ;
+        }
     }
 
 }
