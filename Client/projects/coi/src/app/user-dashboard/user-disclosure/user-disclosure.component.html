@@ -216,7 +216,7 @@
     <div class="d-flex flex-fill  position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
     (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
-        <input class="advance-search-input border-0 px-4" id="searchText"
+        <input class="advance-search-input border-0 px-4 fs-14" id="searchText"
         [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
         type="text" [(ngModel)]="searchText" (ngModelChange)="getDisclosures()">
         <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>        

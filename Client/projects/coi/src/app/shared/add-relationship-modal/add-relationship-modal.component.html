@@ -22,7 +22,7 @@
                                 </b></label>
                         </div>
                         <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
-                            <input type="radio" name="relation" class="form-check-input text-secondary"
+                            <input type="radio" name="relation" class="form-check-input text-secondary border border-secondary"
                                 [value]="relation?.relationshipTypeCode"
                                 [(ngModel)]="entityDetail.validPersonEntityRelTypes.relationshipTypeCode"
                                 (ngModelChange)="setRelationship()" title = "Click to select {{relation?.description}} relation">
