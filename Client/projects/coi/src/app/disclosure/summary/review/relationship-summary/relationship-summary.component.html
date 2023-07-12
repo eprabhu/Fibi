@@ -53,7 +53,7 @@
             </div>
             </div>
             <ng-container *ngIf="isShowNoDataCard">
-              <table class="table fs-14 fw-medium" *ngIf="projectRelations.length > 0 else noData">
+              <table class="table fs-14 fw-medium" *ngIf="projectRelations.length > 0">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
                     <tr class="header-border table-light">
@@ -99,7 +99,7 @@
                   </tr>
                 </tbody>
               </table>
-              <div #noData>
+              <div *ngIf="!projectRelations.length">
                 <app-no-information> </app-no-information>
               </div>
             </ng-container>
