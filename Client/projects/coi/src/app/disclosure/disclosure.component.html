@@ -599,13 +599,15 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}}
-                    :
-                    {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                    Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} :
-                    {{(coiData?.projectDetail?.title)?.length>40 ?
-                    (coiData?.projectDetail?.title | slice:0: 40)+'...' :
-                    coiData?.projectDetail?.title}} ]
+                <strong title="{{coiData?.projectDetail?.title}}">
+                    <div class="d-flex">
+                        <span class="col-auto">#{{coiData?.coiDisclosure?.disclosureNumber}} :
+                            {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
+                            Disclosure For [ </span><span class="col text-slice">{{coiData?.projectDetail?.moduleItemId}} :
+                            {{coiData?.projectDetail?.title}}</span><span class="col text-nowrap"> ] By <u
+                                title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u>
+                        </span>
+                    </div>
                 </strong>
                 <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
                     aria-label="Close" (click)="isSaving = false">
@@ -613,27 +615,30 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 ">
-                        <div *ngIf="coiData?.coiDisclosure?.numberOfSFI > 0">
-                            Are you sure you want to submit the FCOI / Project disclosure?
+                    <div class="col-12">
+                    <ng-container *ngIf="coiData?.coiDisclosure?.numberOfSFI > 0">
+                        <div>
+                           <p class="fs-14">Are you sure you want to submit the <strong>{{getDisclosureTypeMessage()}} </strong> disclosure?</p>
                         </div>
-                        <div *ngIf="coiData?.coiDisclosure?.numberOfSFI == 0">
-                            You are about to submit a no SFI disclosure.
+                    </ng-container>
+                         <div *ngIf="coiData?.coiDisclosure?.numberOfSFI == 0">
+                           <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTypeMessage()}} </strong> disclosure.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <ng-container>
-                    <button class=" btn btn-outline-secondary" data-bs-dismiss="modal"
-                        id="prop-saveExit-dismiss-btn" (click)="isSaving = false">Cancel</button>
-                        <button (click)="certifyDisclosure()" class=" btn btn-primary btn-sm fs-14"
-                        data-bs-dismiss="modal" id="prop-saveExit-dismiss-btn">Submit</button>
+                    <button class=" btn btn-outline-secondary" data-bs-dismiss="modal" id="prop-saveExit-dismiss-btn"
+                        (click)="isSaving = false">Cancel</button>
+                    <button (click)="certifyDisclosure()" class=" btn btn-primary btn-sm fs-14" data-bs-dismiss="modal"
+                        id="prop-saveExit-dismiss-btn">Submit</button>
                 </ng-container>
             </div>
         </div>
     </div>
 </div>
+
 <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
@@ -643,9 +648,7 @@
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
 
-<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"
-    [defaultAdminDetails]="defaultAdminDetails" [disclosureId]="coiData?.coiDisclosure?.disclosureId">
-</app-assign-administrator-modal>
+<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
