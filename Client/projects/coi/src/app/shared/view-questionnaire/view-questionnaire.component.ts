@@ -1045,7 +1045,7 @@ import {compareDatesWithoutTimeZone} from "../../../../../fibi/src/app/common/ut
       */
      downloadAttachment(attachmentId, attachmentName) {
          this.$subscriptions.push(
-             this._questionnaireService.downloadAttachment(attachmentId).subscribe(
+             this._questionnaireService.downloadAttachment(attachmentId, this.moduleDetails.moduleItemCode).subscribe(
                  (data: any) => {
                      const a = document.createElement('a');
                      const blob = new Blob([data], { type: data.type });
