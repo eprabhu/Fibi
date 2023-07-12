@@ -331,8 +331,7 @@
                         <mat-icon class="me-2">rate_review</mat-icon>
                         <span class="mt-1 ms-2" *ngIf="isCardExpanded">Comments</span>
                     </button>
-
-                    <button  title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                    <button *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode!=4" title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" 
                     class="fs-14 btn btn-outline-secondary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12 mb-3' : 'col me-2'}}" (click)="isAddAssignModalOpen = true;"
                     [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn btn-outline-grey':'btn btn-primary'">
                     <mat-icon class="me-1">group_add</mat-icon>
