@@ -25,7 +25,7 @@ import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
 import { DefaultAdminDetails } from '../travel-disclosure/travel-disclosure-interface';
-import { UserDashboardService } from '../user-dashboard/user-dashboard.service';
+
 
 @Component({
     selector: 'app-disclosure',
@@ -85,7 +85,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     constructor(public router: Router,
         public commonService: CommonService,
         private _route: ActivatedRoute,
-        public userDashboardService: UserDashboardService,
         private _elasticConfigService: ElasticConfigService,
         public sfiService: SfiService,
         public coiService: CoiService,
