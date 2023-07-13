@@ -40,7 +40,6 @@ public class CoiConflictHistory implements Serializable {
 	@Column(name = "CONFLICT_STATUS_CODE")
 	private String conflictStatusCode;
 
-	@LastModifiedDate
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
 
