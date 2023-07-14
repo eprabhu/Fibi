@@ -43,7 +43,7 @@
             <div *ngIf="mandatoryList?.has('entityAlreadyAdded')" class="invalid-feedback d-block fs-13">
               {{mandatoryList?.get('entityAlreadyAdded')}}
             </div>
-            <span class="col fs-13">
+            <span *ngIf="!mandatoryList?.has('entityAlreadyAdded')"  class="col fs-13">
               <p class="new-line-property text-secondary px-1-nav mt-2 mb-0">Type in the official name of the
                 business or organization
                 you need to report. Entities to report include foreign, domestic, public or private
@@ -52,7 +52,68 @@
             </span>
           </div>
         </div>
-
+        <div *ngIf="mandatoryList?.has('entityAlreadyAdded')" class="mx-1 px-4">
+          <div class="bg-light info-card-border p-2 rounded-2 shadow-medium">
+            <div class="m-0 mb-2 pt-2 row">
+              <div class="col-4 text-secondary fs-14">
+                <span class="fw-bold me-3">Relationship :</span>
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="existingEntityDetails.personEntityRelationships?.length">
+                  <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
+                    <span class="fw-medium">Financial : </span>
+                    <ng-container>
+                      <em *ngFor="let relationship of existingEntityDetails.personEntityRelationships;let last = last">
+                        <span *ngIf="!last">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description +','}}
+                        </span>
+                        <span *ngIf="last">{{relationship?.validPersonEntityRelType?.personEntityRelType?.description}}
+                        </span>
+                      </em>
+                    </ng-container>
+                  </span>
+                </app-no-data-label>
+              </div>
+              <div class="col text-secondary">
+                <span class="fw-bold me-2 fs-14">Entity Type :</span>
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="existingEntityDetails?.entityType?.description">
+                  <span class="fs-14">{{existingEntityDetails?.entityType?.description}}</span>
+                </app-no-data-label>
+              </div>
+            </div>
+            <div class="fs-14 mx-0 row">
+              <div class="align-items-center col-4 d-flex justify-content-between text-secondary">
+                <div>
+                  <span class="fw-bold me-2"> Start Date Of Involvement : </span>
+                  <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="existingEntityDetails?.involvementStartDate">
+                    <span>{{existingEntityDetails?.involvementStartDate | dateFormatterWithTimeZone}}</span>
+                  </app-no-data-label>
+                </div>
+              </div>
+              <div class="align-items-center col-3 d-flex justify-content-between text-secondary">
+                <div>
+                  <span class="fw-bold me-2"> End Date Of Involvement :</span>
+                  <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="existingEntityDetails?.involvementEndDate">
+                    <span>
+                     {{existingEntityDetails?.involvementEndDate | dateFormatterWithTimeZone}}
+                    </span>
+                  </app-no-data-label>
+                </div>
+              </div>
+              <div class="align-items-center d-flex col-3 fs-14 text-secondary">
+                <span class="fw-bold me-2"> Country : </span>
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="existingEntityDetails?.country?.countryName">
+                  <div>
+                    {{existingEntityDetails?.country?.countryName}}
+                  </div>
+                </app-no-data-label>
+              </div>
+              <div class="align-items-center col-2 mb-2 d-flex text-secondary justify-content-end">
+                <button class="align-items-center btn btn-outline-primary d-flex fs-14" (click)="viewSfiDetails()">
+                  <mat-icon class="me-1">visibility</mat-icon>
+                  View
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="px-4 py-3 row">
          <div class="col">
           <div class="d-flex">
@@ -68,7 +129,7 @@
             <div *ngIf="mandatoryList?.has('country')" class="invalid-feedback d-block fs-13">
               {{mandatoryList?.get('country')}}
             </div>
-            <span class="col fs-13">
+            <span *ngIf="!mandatoryList?.has('country')" class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Select country from search bar.</p>
             </span>
           </div>
@@ -100,7 +161,7 @@
               <div *ngIf="mandatoryList?.has('address')" class="invalid-feedback d-block fs-13">
                 {{mandatoryList?.get('address')}}
               </div>
-            <span class="col fs-13">
+            <span *ngIf="!mandatoryList?.has('address')" class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type in the address of the business or organization you want to report.</p>
             </span>
           </div>
@@ -121,7 +182,7 @@
             <div *ngIf="mandatoryList?.has('phone')" class="invalid-feedback d-block fs-13">
               {{mandatoryList?.get('phone')}}
             </div>
-            <span class="col fs-13">
+            <span *ngIf="!mandatoryList?.has('phone')" class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type in the phone number of the business or organization you want to report.</p>
             </span>
           </div>
@@ -139,7 +200,7 @@
               <div *ngIf="mandatoryList?.has('zipCode')" class="invalid-feedback d-block fs-13">
                 {{mandatoryList?.get('zipCode')}}
               </div>
-            <span class="col fs-13">
+            <span *ngIf="!mandatoryList?.has('zipCode')" class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type in the zip code of the business or
                 organization
                 you need to report.</p>
@@ -177,7 +238,7 @@
               <div class="invalid-feedback d-block mb-3 fs-13" *ngIf="(mandatoryList?.has('email'))">
                 {{mandatoryList?.get('email')}}
               </div>
-              <span class="col fs-13">
+              <span *ngIf="!mandatoryList?.has('email')" class="col fs-13">
                 <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Type the email address of the business
                   or organization
                   you want to report.</p>
@@ -203,7 +264,7 @@
             <div *ngIf="mandatoryList?.has('entityType')" class="invalid-feedback d-block fs-13">
               {{mandatoryList?.get('entityType')}}
             </div>
-            <span class="col fs-13">
+            <span *ngIf="!mandatoryList?.has('entityType')" class="col fs-13">
               <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Select type from the available
                 options.</p>
             </span>
@@ -319,7 +380,6 @@
                               </div>
                             </div>
                             <div class="row px-4 py-3">
-
                                 <div class="d-flex px-4">
                                     <label class="d-block fs-14 fw-500 py-2 row">Relationship with Entity :<span
                                             class="mandatory px-2">*</span></label>
@@ -333,7 +393,7 @@
                                     <div *ngIf="mandatoryList?.has('staff')" class="invalid-feedback d-block fs-13">
                                         {{mandatoryList?.get('staff')}}
                                     </div>
-                                    <p class="new-line-property text-secondary fs-13 mt-2 mb-0">This description is
+                                    <p *ngIf="!mandatoryList?.has('staff')" class="new-line-property text-secondary fs-13 mt-2 mb-0">This description is
                                         presented in the Relationship
                                         section to help you relate this entity to your research
                                         projects.
@@ -346,7 +406,6 @@
                                 </div>
                             </div>
                             <div class="row px-3">
-
                                 <div class="d-flex px-3">
                                     <label class="d-block fw-500 fs-14 px-1 py-2">Principle Business Area of Entity
                                         :<span class="mandatory px-2">*</span></label>
@@ -360,13 +419,12 @@
                                     <div *ngIf="mandatoryList?.has('student')" class="invalid-feedback d-block fs-13">
                                         {{mandatoryList?.get('student')}}
                                     </div>
-                                    <p class="new-line-property text-secondary fs-13 mt-2 mb-0">Please enter an adequate
+                                    <p *ngIf="!mandatoryList?.has('student')" class="new-line-property text-secondary fs-13 mt-2 mb-0">Please enter an adequate
                                         description of the entity's principal are of business.
                                     </p>
                                 </div>
                             </div>
                             <div class="row px-3">
-
                                 <div class="d-flex px-3">
                                     <label class="d-block fw-500 fs-14 px-1 py-2">Relationship of Entity to your
                                         University responsibilities :<span class="mandatory px-2">*</span></label>
@@ -380,7 +438,7 @@
                                     <div *ngIf="mandatoryList?.has('resource')" class="invalid-feedback d-block fs-13">
                                         {{mandatoryList?.get('resource')}}
                                     </div>
-                                    <p class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Please enter an
+                                    <p *ngIf="!mandatoryList?.has('resource')" class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Please enter an
                                         adequate description of the entity's relationship to your University
                                         responsibilities.
                                     </p>

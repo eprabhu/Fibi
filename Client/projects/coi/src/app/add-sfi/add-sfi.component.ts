@@ -56,6 +56,7 @@ export class AddSfiComponent implements OnInit {
     btnTitle = '';
     isViewMode: any;
     sfiType: string;
+    existingEntityDetails: any = {};
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -135,9 +136,10 @@ export class AddSfiComponent implements OnInit {
 
     private checkIfSFIAlreadyAdded(entityId, event): void {
         this.mandatoryList.delete('entityAlreadyAdded');
-        this.$subscriptions.push(this.sfiService.isEntityAdded(entityId).subscribe((isSFIAdded: boolean) => {
-            if (isSFIAdded) {
-                this.mandatoryList.set('entityAlreadyAdded', 'Selected Entity is already added.');
+        this.$subscriptions.push(this.sfiService.isEntityAdded(entityId).subscribe((res: any) => {
+            if (res) {
+                this.existingEntityDetails = res;
+                this.mandatoryList.set('entityAlreadyAdded', 'An SFI has already been created against the entity you are trying to add. To view the SFI, please click on the View button on the SFI card.');
             } else {
                 this.isResultFromSearch = true;
                 this.entityDetails.coiEntity = event;
@@ -371,6 +373,9 @@ export class AddSfiComponent implements OnInit {
         this.entityDetails.coiEntity.revisionReason = this.revisionReason;
         this.entityDetails.coiEntity.majorVersion = this.modifyType === '2' ? true : false;
         this.createOrUpdateEntitySFI();
+    }
+    viewSfiDetails() {
+      this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId, mode: 'view' } });
     }
 
 }
