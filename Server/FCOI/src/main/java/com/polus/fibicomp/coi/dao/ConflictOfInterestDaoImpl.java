@@ -936,6 +936,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				coiDisclosure.setNumberOfProposals(getNumberOfProposalsBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
 				coiDisclosure.setNumberOfAwards(getNumberOfAwardsBasedOnDisclosureId(coiDisclosure.getDisclosureId()));
 				coiDisclosure.setDisclosurePersonFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
+				coiDisclosure.setAdminPersonName(coiDisclosure.getAdminPersonId() != null ? personDao.getPersonFullNameByPersonId(coiDisclosure.getAdminPersonId()) : null);
+				coiDisclosure.setAdminGroupName(coiDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(coiDisclosure.getAdminGroupId()).getAdminGroupName() : null);
 				coiDisclosures.add(coiDisclosure);
 			}
 			CoiDisclosure coiDisclosure = getPendingFCOIDisclosure(personId);
@@ -1074,7 +1076,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
 					disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
 					disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
-					disclosureView.setLastApprovedVersion(resultSet.getInt("VERSION_NUMBER")); // TODO procedure change
+					disclosureView.setLastApprovedVersion(resultSet.getInt("VERSION_NUMBER"));
 					disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
 					disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
 //					disclosureView.setNoOfSfiInActive(resultSet.getInt("NO_OF_SFI"));
@@ -1103,6 +1105,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
 					disclosureView.setUnit(unit);
 					disclosureViews.add(disclosureView);
+					disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
 				}
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
