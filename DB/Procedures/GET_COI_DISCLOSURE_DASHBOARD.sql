@@ -224,7 +224,7 @@ ELSE
 										T15.AWARD_IDS,
                                         T7.NO_OF_SFI,
                                         T8.NO_OF_PROPOSAL,
-                                        T9.NO_OF_AWARD ' ,SELECTED_FIELD_LIST,'
+                                        T9.NO_OF_AWARD, T1.REVISION_COMMENT ' ,SELECTED_FIELD_LIST,'
                                         FROM COI_DISCLOSURE T1 
 										LEFT JOIN COI_CONFLICT_STATUS_TYPE T2 ON T2.CONFLICT_STATUS_CODE=T1.CONFLICT_STATUS_CODE
 										INNER JOIN COI_DISPOSITION_STATUS_TYPE T3 ON T3.DISPOSITION_STATUS_CODE = T1.DISPOSITION_STATUS_CODE

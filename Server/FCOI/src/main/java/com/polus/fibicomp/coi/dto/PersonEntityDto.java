@@ -1,10 +1,14 @@
 package com.polus.fibicomp.coi.dto;
 
 
+import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.pojo.Country;
 import lombok.Getter;
 import lombok.Setter;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,5 +34,9 @@ public class PersonEntityDto {
 	private Timestamp createTimestamp;
 	private String personFullName;
 	private String revisionReason;
+	private String updateUserFullName;
+	private List<PersonEntityRelationship> personEntityRelationships;
+	private Country country;
+	private EntityType entityType;
 
 }
