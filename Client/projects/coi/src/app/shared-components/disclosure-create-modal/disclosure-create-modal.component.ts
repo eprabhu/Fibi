@@ -94,7 +94,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     hasFCOI: any;
     canReviseFCOI: any;
     homeUnitName: null;
-
+    title = '';
     constructor(public commonService: CommonService, private _disclosureCreateModalService: DisclosureCreateModalService,
                 private _router: Router, private _elasticConfig: ElasticConfigService) {
     }
@@ -503,5 +503,16 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.manualProjectAddDetails = {};
         this.manualProjectAddDetails.moduleItemId = null;
         this.manualProjectAddDetails.title = null;
+    }
+
+    private setHelpTextToolTip(): string {
+        if (this.triggeredFrom === 'FCOI_DISCLOSURE' && !this.isShowExistingDisclosure) {
+            this.hasFCOI ? this.title = 'Create Revision help text' : this.title = 'Create FCOI help text';
+        } else if (this.triggeredFrom === 'PROJECT_DISCLOSURE' && !this.isShowExistingDisclosure) {
+            this.title = 'Create Project Disclosure help text';
+        } else if (this.triggeredFrom === 'TRAVEL_DISCLOSURE') {
+            this.title = 'Create Travel Disclosure help text';
+        }
+        return this.title;
     }
 }
