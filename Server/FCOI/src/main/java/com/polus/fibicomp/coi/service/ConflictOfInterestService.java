@@ -354,7 +354,7 @@ public interface ConflictOfInterestService {
 	 * @param entityId Entity Id
 	 * @return
 	 */
-	Object checkEntityAdded(Integer entityId);
+	ResponseEntity<Object> checkEntityAdded(Integer entityId);
 
 	/**
 	 * Validate

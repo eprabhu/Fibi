@@ -972,6 +972,12 @@ public interface ConflictOfInterestDao {
 	 * @param personEntityRelId
 	 */
 	void deletePersonEntityRelationship(Integer personEntityRelId);
-
+	/**
+	 * This method is used to get person entity by entity id and person id
+	 * @param entityId
+	 * @param personId
+	 * @return
+	 */
+	PersonEntity fetchPersonEntityById(Integer entityId, String personId);
 	List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 }

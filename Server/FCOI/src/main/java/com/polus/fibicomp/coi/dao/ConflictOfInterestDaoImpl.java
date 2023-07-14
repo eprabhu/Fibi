@@ -3542,6 +3542,22 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
+	public PersonEntity fetchPersonEntityById(Integer entityId, String personId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT pe FROM PersonEntity pe WHERE pe.entityId = :entityId AND pe.personId = :personId AND pe.versionStatus != :versionStatus");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("personId", personId);
+		query.setParameter("versionStatus", Constants.COI_ARCHIVE_STATUS);
+		List result = query.getResultList();
+		if (result ==null || result.isEmpty()) {
+			return  null;
+		}
+		return (PersonEntity) result.get(0);
+	}
+
+	@Override
 	public List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber) { 
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
