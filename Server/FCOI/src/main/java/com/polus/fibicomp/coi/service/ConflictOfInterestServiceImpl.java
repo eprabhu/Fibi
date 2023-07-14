@@ -1661,8 +1661,24 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public Object checkEntityAdded(Integer entityId) {
-		return conflictOfInterestDao.checkEntityAdded(entityId, AuthenticatedUser.getLoginPersonId());
+	public ResponseEntity<Object> checkEntityAdded(Integer entityId) {
+		PersonEntity personEntity = conflictOfInterestDao.fetchPersonEntityById(entityId, AuthenticatedUser.getLoginPersonId());
+		if (personEntity != null) {
+			PersonEntityDto personEntityDto = new PersonEntityDto();
+			BeanUtils.copyProperties(personEntity, personEntityDto);
+			CoiEntity coiEntityObj = conflictOfInterestDao.getEntityDetails(personEntity.getEntityId());
+			personEntityDto.setEntityType(coiEntityObj.getEntityType());
+			personEntityDto.setCountry(coiEntityObj.getCountry());
+			personEntityDto.setPersonFullName(personDao.getPersonFullNameByPersonId(personEntity.getPersonId()));
+			personEntityDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(personEntity.getUpdateUser()));
+			List<PersonEntityRelationship> PersonEntityRelationships = conflictOfInterestDao.getPersonEntityRelationshipByPersonEntityId(personEntity.getPersonEntityId());
+			PersonEntityRelationships.forEach(PersonEntityRelationship -> {
+				conflictOfInterestDao.getValidPersonEntityRelTypeByTypeCode(PersonEntityRelationship.getValidPersonEntityRelTypeCode());
+			});
+			personEntityDto.setPersonEntityRelationships(PersonEntityRelationships);
+			return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
+		}
+		return new ResponseEntity<>("Person Entity not found", HttpStatus.NO_CONTENT);
 	}
 
 	@Override

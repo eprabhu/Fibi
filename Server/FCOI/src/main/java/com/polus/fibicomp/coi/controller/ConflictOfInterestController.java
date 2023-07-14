@@ -424,9 +424,9 @@ public class ConflictOfInterestController {
 		return generalService.fetchAllCoiRights();
 	}
 
-	@GetMapping("/checkEntity/{entityId}/added")
+	@GetMapping("/entity/isLinked/{entityId}/personEntity")
 	public ResponseEntity<Object> checkEntityAdded(@PathVariable("entityId") Integer entityId) {
-		return new ResponseEntity<>(conflictOfInterestService.checkEntityAdded(entityId), HttpStatus.OK);
+		return conflictOfInterestService.checkEntityAdded(entityId);
 	}
 
 	@GetMapping("/validate/{moduleCode}/disclosure/{moduleItemId}")
