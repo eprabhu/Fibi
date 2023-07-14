@@ -19,20 +19,35 @@
             </div>
             <div class="modal-body">
                 <div class="info-card-margin row">
-                    <div class="col-12 pt-2 grey-info font" *ngIf="!isShowExistingDisclosure">
-                        <p class="fs-14 pb-0 pt-1 left-padding-info-text"
+                    <div class="col-12 pt-2 grey-info font d-flex" *ngIf="!isShowExistingDisclosure">
+                        <span data-bs-toggle="tooltip" title="{{setHelpTextToolTip()}}" data-bs-placement="top" class="d-inline-block">
+                            <mat-icon role="img"
+                                class="mat-icon me-2 info-icon material-icons mat-icon-no-color mt-2"
+                                aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                        </span>
+                        <p class="fs-14 pb-0 pt-1"
                             *ngIf="!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE'">
-                            1. For disclosing at any other unit please click on the ‘Edit’ icon near the unit field to
+                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                            For disclosing at any other unit please click on the ‘Edit’ icon near the unit field to
                             proceed to disclosure creation
-                            <br>2. For reverting to the original unit click on the 'Reset' icon.
-                            <br>3. For adding any additional description/comment, please use the “Description“ field.
+                            <br>
+                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                            For reverting to the original unit click on the 'Reset' icon.
+                            <br>
+                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                            For adding any additional description/comment, please use the “Description“ field.
                         </p>
-                        <p class="fs-14 pb-0 pt-1 left-padding-info-text" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
+                        <p class="fs-14 pb-0 pt-1" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
                             <span>
-                                1. For disclosing at any other unit please click on the ‘Edit’ icon near the unit field
+                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                                For disclosing at any other unit please click on the ‘Edit’ icon near the unit field
                                 to proceed to disclosure creation.
-                                <br>2. For reverting to the original unit click on the 'Reset' icon.
-                                <br>3. For adding any additional description/comment, please use the “Description“
+                                <br>
+                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                                For reverting to the original unit click on the 'Reset' icon.
+                                <br>
+                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                                For adding any additional description/comment, please use the “Description“
                                 field.
                             </span>
                         </p>
