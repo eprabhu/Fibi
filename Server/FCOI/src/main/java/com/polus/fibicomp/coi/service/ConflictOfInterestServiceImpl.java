@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -1457,6 +1458,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setDocumentStatus(coiTravelDocumentStatusType.getDescription());
 		dto.setDocumentStatusCode(coiTravelDocumentStatusType.getDocumentStatusCode());
 	}
+	
+	private Date getExpirationDate() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.YEAR, 1);
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		return cal.getTime();
+	}
 
 	@Override
 	public ResponseEntity<Object> loadTravelDisclosure(Integer travelDisclosureId) {
@@ -1506,6 +1514,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setCertifiedAt(coiTravelDisclosure.getCertifiedAt());
 		dto.setCertifiedBy(coiTravelDisclosure.getCertifiedBy());
 		dto.setDescription(coiTravelDisclosure.getDescription());
+		dto.setExpirationDate(coiTravelDisclosure.getExpirationDate());
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
@@ -1547,6 +1556,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setCertifiedBy(personId);
 		coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		coiTravelDisclosure.setExpirationDate(getExpirationDate());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		CoiTravelDisclosure coiTravelDosclosureObject = conflictOfInterestDao.loadTravelDisclosure(coiTravelDisclosure.getTravelDisclosureId());
 		return new ResponseEntity<>(coiTravelDosclosureObject, HttpStatus.OK);

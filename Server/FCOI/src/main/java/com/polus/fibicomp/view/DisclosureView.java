@@ -91,6 +91,24 @@ public class DisclosureView {
 	private String travelDisclosureStatusDescription;
 	private String documentStatusCode;
 	private String documentStatusDescription;
+	private String adminPersonId;
+	private Integer adminGroupId;
+
+	public String getAdminPersonId() {
+		return adminPersonId;
+	}
+
+	public void setAdminPersonId(String adminPersonId) {
+		this.adminPersonId = adminPersonId;
+	}
+
+	public Integer getAdminGroupId() {
+		return adminGroupId;
+	}
+
+	public void setAdminGroupId(Integer adminGroupId) {
+		this.adminGroupId = adminGroupId;
+	}
 
 	public String getDocumentStatusCode() {
 		return documentStatusCode;
