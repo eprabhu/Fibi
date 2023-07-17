@@ -8,7 +8,7 @@ import { CoiService } from '../services/coi.service';
 import { DataStoreService } from '../services/data-store.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {deepCloneObject} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
-import {HTTP_ERROR_STATUS} from "../../../../../fibi/src/app/app-constants";
+import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
 import {SfiService} from "../sfi/sfi.service";
 @Component({
     selector: 'app-screening-questionnaire',
@@ -83,7 +83,7 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
     getSaveEvent(_event: any) {
         this._dataStore.dataChanged = false;
         this.coiService.unSavedModules = '';
-        if (_event.QUESTIONNAIRE_COMPLETED_FLAG == 'Y') {
+        if (_event.QUESTIONNAIRE_COMPLETED_FLAG === 'Y') {
             this.evaluateDisclosureQuestionnaire();
         }
     }
@@ -102,8 +102,9 @@ export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
                 const NEXT_STEP = data ? '/coi/create-disclosure/sfi' : '/coi/create-disclosure/certification';
                 this._router.navigate([NEXT_STEP], { queryParamsHandling: 'preserve' });
                 this.coiService.stepTabName = data ? 'sfi' : 'certify';
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, `Questionnaire Saved Successfully`);
             }, _err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in evaluating disclosure.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in Evaluating Disclosure.');
             })
         );
     }

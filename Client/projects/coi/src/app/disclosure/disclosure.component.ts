@@ -286,8 +286,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.dataStore.updateStore(['coiDisclosure'], { coiDisclosure: res });
             this.isSaving = false;
             this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
+            this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure Submitted Successfully.');
         }, err => {
             this.isSaving = false;
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Error In Certifying Disclosure.');
         }));
     }
     validateRelationship() {

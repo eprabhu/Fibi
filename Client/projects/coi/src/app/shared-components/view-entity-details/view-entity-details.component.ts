@@ -114,7 +114,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     } else {
       if (this._navigationService.previousURL.includes('personEntityId') ||
         this._navigationService.previousURL.includes('create-sfi/create') || this._navigationService.previousURL === '') {
-        this._router.navigate(['/coi/user-dashboard/entities']);
+         this._router.navigate(['/coi/user-dashboard/entities']);
       } else {
         this._router.navigateByUrl(this._navigationService.previousURL);
       }
