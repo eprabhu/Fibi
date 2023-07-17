@@ -1042,6 +1042,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
 					disclosureView.setTravelAmount(resultSet.getBigDecimal("TRAVEL_AMOUNT"));
 					disclosureView.setTravelSubmissionDate(resultSet.getDate("SUBMISSION_DATE"));
+					disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
 					disclosureView.setAcknowledgeDate(resultSet.getDate("ACKNOWLEDGE_DATE"));
 					disclosureView.setTravelExpirationDate(resultSet.getDate("EXPIRATION_DATE"));
 					disclosureView.setTravelPurpose(resultSet.getString("PURPOSE_OF_THE_TRIP"));
@@ -1213,6 +1214,30 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		}
 		return sortOrder;
 	}
+	
+	private String setSortOrderForTravelDisclosure(Map<String, String> sort) {
+		String sortOrder = null;
+		if (!sort.isEmpty()) {
+			for (Map.Entry<String, String> mapElement : sort.entrySet()) {
+				if (mapElement.getKey().equals("updateTimeStamp")) {
+					sortOrder = (sortOrder == null ? "T.UPDATE_TIMESTAMP " + mapElement.getValue() : sortOrder + ", T.UPDATE_TIMESTAMP " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("travelEntityName")) {
+					sortOrder = (sortOrder == null ? "T.TRAVEL_ENTITY_NAME " + mapElement.getValue() : sortOrder + ", T.TRAVEL_ENTITY_NAME " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("travelDisclosureStatusDescription")) {
+					sortOrder = (sortOrder == null ? "T.TRAVEL_DISCLOSURE_STATUS_DESCRIPTION " + mapElement.getValue() : sortOrder + ", T.TRAVEL_DISCLOSURE_STATUS_DESCRIPTION " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("reviewDescription")) {
+					sortOrder = (sortOrder == null ? "T.REVIEW_STATUS_DESCRIPTION " + mapElement.getValue() : sortOrder + ", T.REVIEW_STATUS_DESCRIPTION " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("certifiedAt")) {
+					sortOrder = (sortOrder == null ? "T.CERTIFIED_AT " + mapElement.getValue() : sortOrder + ", T.CERTIFIED_AT " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("travelExpirationDate")) {
+					sortOrder = (sortOrder == null ? "T.EXPIRATION_DATE " + mapElement.getValue() : sortOrder + ", T.EXPIRATION_DATE " + mapElement.getValue());
+				} else if (mapElement.getKey().equals("travellerName")) {
+					sortOrder = (sortOrder == null ? "T.TRAVELLER_NAME " + mapElement.getValue() : sortOrder + ", T.TRAVELLER_NAME " + mapElement.getValue());
+				}
+			}
+		}
+		return sortOrder;
+	}
 
 	@Override
 	public DashBoardProfile getCOIAdminDashboard(CoiDashboardVO vo) {
@@ -1264,7 +1289,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					statement.setNull(11, Types.VARCHAR);
 					statement.setNull(12, Types.VARCHAR);
 					statement.setString(13, personId);
-					statement.setString(14, setCOISortOrder(sort));
+					statement.setString(14, setSortOrderForTravelDisclosure(sort));
 					statement.setInt(15, (currentPage == null ? 0 : currentPage - 1));
 					statement.setInt(16, (pageNumber == null ? 0 : pageNumber));
 					statement.setString(17, tabName);
@@ -1340,39 +1365,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			}
 			while (resultSet.next()) {
 				if (tabName.equals("TRAVEL_DISCLOSURES")) {
-					DisclosureView disclosureView =  new DisclosureView();
-					disclosureView.setTravelDisclosureId(resultSet.getInt("TRAVEL_DISCLOSURE_ID"));
-					Unit unit = new Unit();
-					unit.setUnitNumber(resultSet.getString("UNIT"));
-					unit.setUnitName(resultSet.getString("UNIT_NAME"));
-					disclosureView.setUnitDetails(unit);
-					disclosureView.setTravelDisclosureStatusCode(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_CODE"));
-					disclosureView.setTravelDisclosureStatusDescription(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_DESCRIPTION"));
-					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
-					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
-					disclosureView.setTravelAmount(resultSet.getBigDecimal("TRAVEL_AMOUNT"));
-					disclosureView.setTravelSubmissionDate(resultSet.getDate("SUBMISSION_DATE"));
-					disclosureView.setAcknowledgeDate(resultSet.getDate("ACKNOWLEDGE_DATE"));
-					disclosureView.setTravelExpirationDate(resultSet.getDate("EXPIRATION_DATE"));
-					disclosureView.setTravelPurpose(resultSet.getString("PURPOSE_OF_THE_TRIP"));
-					disclosureView.setTravelCity(resultSet.getString("DESTINATION_CITY"));
-					disclosureView.setTravelCountry(resultSet.getString("DESTINATION_COUNTRY"));
-					disclosureView.setTravelState(resultSet.getString("STATE"));
-					disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
-					disclosureView.setReviewDescription(resultSet.getString("REVIEW_STATUS_DESCRIPTION"));
-					disclosureView.setTravellerTypeCode(resultSet.getString("TRAVELER_TYPE_CODE"));
-					disclosureView.setTravellerTypeDescription(resultSet.getString("TRAVELER_TYPE_DESCRIPTION"));
-					disclosureView.setTravelStartDate(resultSet.getDate("TRAVEL_START_DATE"));
-					disclosureView.setTravelEndDate(resultSet.getDate("TRAVEL_END_DATE"));
-					disclosureView.setTravelSubmissionDate(resultSet.getDate("SUBMISSION_DATE"));
-					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
-					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
-					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
-					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
-					disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
-					disclosureView.setDocumentStatusCode(resultSet.getString("DOCUMENT_STATUS_CODE"));
-					disclosureView.setDocumentStatusDescription(resultSet.getString("DOCUMENT_STATUS_DESCRIPTION"));
-					disclosureViews.add(disclosureView);
+					disclosureViews.add(setTravelDisclosureAdminDashboardValues(resultSet));
 				} else {
 					DisclosureView disclosureView =  new DisclosureView();
 					disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
@@ -1427,6 +1420,50 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			throw new ApplicationException("Error in getCOIAdminDashboard {}", e, Constants.JAVA_ERROR);
 		}
 		return dashBoardProfile;
+	}
+	
+	private DisclosureView setTravelDisclosureAdminDashboardValues(ResultSet resultSet) {
+		try {
+			DisclosureView disclosureView =  new DisclosureView();
+			disclosureView.setTravelDisclosureId(resultSet.getInt("TRAVEL_DISCLOSURE_ID"));
+			Unit unit = new Unit();
+			unit.setUnitNumber(resultSet.getString("UNIT"));
+			unit.setUnitName(resultSet.getString("UNIT_NAME"));
+			disclosureView.setUnitDetails(unit);
+			disclosureView.setTravelDisclosureStatusCode(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_CODE"));
+			disclosureView.setTravelDisclosureStatusDescription(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_DESCRIPTION"));
+			disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
+			disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
+			disclosureView.setTravelAmount(resultSet.getBigDecimal("TRAVEL_AMOUNT"));
+			disclosureView.setTravelSubmissionDate(resultSet.getDate("SUBMISSION_DATE"));
+			disclosureView.setAcknowledgeDate(resultSet.getDate("ACKNOWLEDGE_DATE"));
+			disclosureView.setTravelExpirationDate(resultSet.getDate("EXPIRATION_DATE"));
+			disclosureView.setTravelPurpose(resultSet.getString("PURPOSE_OF_THE_TRIP"));
+			disclosureView.setTravelCity(resultSet.getString("DESTINATION_CITY"));
+			disclosureView.setTravelCountry(resultSet.getString("DESTINATION_COUNTRY"));
+			disclosureView.setTravelState(resultSet.getString("STATE"));
+			disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
+			disclosureView.setReviewDescription(resultSet.getString("REVIEW_STATUS_DESCRIPTION"));
+			disclosureView.setTravellerTypeCode(resultSet.getString("TRAVELER_TYPE_CODE"));
+			disclosureView.setTravellerTypeDescription(resultSet.getString("TRAVELER_TYPE_DESCRIPTION"));
+			disclosureView.setTravelStartDate(resultSet.getDate("TRAVEL_START_DATE"));
+			disclosureView.setTravelEndDate(resultSet.getDate("TRAVEL_END_DATE"));
+			disclosureView.setTravelSubmissionDate(resultSet.getDate("SUBMISSION_DATE"));
+			disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
+			disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
+			disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
+			disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
+			disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
+			disclosureView.setDocumentStatusCode(resultSet.getString("DOCUMENT_STATUS_CODE"));
+			disclosureView.setDocumentStatusDescription(resultSet.getString("DOCUMENT_STATUS_DESCRIPTION"));
+			disclosureView.setAdminPersonId(resultSet.getString("ADMIN_PERSON_ID"));
+			disclosureView.setAdminGroupId(resultSet.getInt("ADMIN_GROUP_ID"));
+			return disclosureView;
+		} catch (Exception e ) {
+			e.printStackTrace();
+			logger.error("Error in Travel Disclosure Sort {}", e.getMessage());
+			throw new ApplicationException("Error in Travel Disclosure Sort {}", e, Constants.JAVA_ERROR);
+		}
 	}
 
 	private Integer getCOIAdminDashboardCount(CoiDashboardVO vo) {
