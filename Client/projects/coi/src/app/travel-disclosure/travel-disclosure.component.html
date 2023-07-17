@@ -164,20 +164,7 @@
             </div>
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress row mt-1">
-                    <!-- Screening Questionnaire tab -->
-                    <!-- <div class="col h-100 m-0 fs-14"
-                        [routerLink]="['screening']"
-                        [class.complete]="isRouteComplete(['screening', 'travel-details', 'certification'])"
-                        [class.cursor-pointer]="!isRouteComplete(['screening'])"
-                        queryParamsHandling='merge'
-                        title="Go to step Screening Questionnaire">
-                        Screening Questionnaire
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
-                    </div> -->
+                    <!-- travel details -->
                     <div class="col h-100 m-0 fs-14" (click)="service.isChildRouting = true"
                         [class.complete]="isRouteComplete(['travel-details', 'certification'])"
                         [routerLink]="['travel-details']" queryParamsHandling='merge'
@@ -190,6 +177,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- certification -->
                     <div class="col fs-14" (click)="service.isChildRouting = true"
                         [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
                         queryParamsHandling='merge' [class.cursor-pointer]="!isRouteComplete(['certification'])"
@@ -200,12 +188,14 @@
             </ng-container>
             <ng-container *ngIf="!isCreateMode">
                 <div class="navigation-tabs d-flex align-items-center">
+                     <!-- Disclosure -->
                     <button [routerLink]="['summary']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
                         role="button" [title]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'">
                         <div class="navigation-box-content" routerLinkActive="active" area-describedby="">
                             Disclosure
                         </div>
                     </button>
+                     <!-- Related Disclosures -->
                     <button [routerLink]="['related-disclosures']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
                         role="button" [title]="isRouteComplete(['related-disclosures'])? 'Related Disclosures' : 'Go to step Related Disclosures'">
                         <div class="navigation-box-content" routerLinkActive="active" area-describedby="">
@@ -229,7 +219,7 @@
                 </button>
 
                 <!-- Comments -->
-                <button title="Click to add new review commments" aria-expanded="false"
+                <button title="Click to add new review comments" aria-expanded="false"
                     *ngIf="checkReviewStatusCode(['2', '3'], 'SOME')"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2">
                     <mat-icon>rate_review</mat-icon>
@@ -341,24 +331,6 @@
                         dateFormatterWithTimeZone:'long'}}</div>
                 </div>
             </div>            
-                
-            <!-- <div class="d-flex justify-content-around px-3 pb-2"
-                    *ngIf="isRouteComplete(['screening', 'travel-details'])"
-                    title="Click here to add a new financial interest">
-                    <button (click)="sfiService.isShowSfiNavBar = true"
-                        class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
-                        <mat-icon class="me-2">add</mat-icon>
-                        Add Significant Financial Interest
-                    </button>
-                </div>
-                
-                <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100"
-                    *ngIf="isRouteComplete(['certification'])" [disabled]="!service.isTravelCertified">
-                    <span class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
-                        <i class="me-2 fs-4 fa fa-clipboard"></i>
-                        Certify & Copy
-                    </span>
-                </button> -->
 
             <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes w-100" *ngIf="isCreateMode">
                 Notes & Attachments
@@ -370,23 +342,42 @@
     <router-outlet></router-outlet>
 </div>
 
-<!--Unsaved Changes Modal-->
-<app-unsaved-changes-warning></app-unsaved-changes-warning>
-
-<!--Confirmation Modal-->
-<app-confirmation-modal (btnAction)="performDisclosureAction($event)" [modalActionBtnName]="modalActionBtnName"
-    [helpText]="helpText" [modalHeaderTitle]="modalHeaderTitle" (closeModal)="closeConfirmationModal()"
-    [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionError]="descriptionError">
-    <span>Are you sure you want to <strong>{{modalActionBtnName}}</strong> this disclosure?</span>
+<!--Unsaved Changes confirmation Modal-->
+<app-confirmation-modal [modalName] = "'travel-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked($event)"
+    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
+    <!-- modal header -->
+    <ng-container header>
+        <span>Confirmation</span>
+    </ng-container>
+    <!-- modal content -->
+    <div content class="ms-2">
+        <p *ngIf="service.unSavedTabName != 'Certification'" class="fs-14">
+            You have unsaved changes in
+            <strong>{{service.unSavedTabName? service.unSavedTabName : 'Travel Disclosure Creation'}}.</strong>
+        </p>
+        <p class="fs-14">Do you want to leave the
+            <strong  *ngIf="service.unSavedTabName == 'Certification'">Certification </strong>
+            {{service.unSavedTabName == 'Certification' ? 'Page' : 'page without saving' }} ?
+        </p>
+    </div>
 </app-confirmation-modal>
 
-<!-- Add SFI Slider-->
-<!-- <div>
-    <app-add-sfi-slider></app-add-sfi-slider>
-</div> -->
-
-<!-- review comment Modal-->
-<!-- <app-coi-review-comment-modal></app-coi-review-comment-modal> -->
+<!--Confirmation Modal-->
+<app-confirmation-modal [modalName] = "'travel-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
+    [primaryBtnName]="modalActionBtnName" [helpText]="helpText" [modalSize]="modalSize"
+    [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionError]="descriptionError">
+    <!-- modal header -->
+    <ng-container header>
+        <span>{{modalActionBtnName}} Disclosure #{{responseObject?.travelDisclosureId}}
+            : Travel Disclosure By {{responseObject?.personFullName}}</span>
+    </ng-container>
+    <!-- modal content -->
+    <ng-container content>
+        <p *ngIf="modalActionBtnName == 'Submit'" class="fs-14 ms-2">
+            Are you sure you want to <strong class="text-lowercase">{{modalActionBtnName}}</strong> this disclosure?
+        </p>
+    </ng-container>
+</app-confirmation-modal>
 
 <!-- personal details Modal-->
 <app-personal-details-modal *ngIf="isPersonDetailsModalOpen"
@@ -395,6 +386,6 @@
 
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen"
     [defaultAdminDetails]="defaultAdminDetails"
-    [path]="'travelDisclosure'" (closeModal)="closeAssignAdministratorModal($event)"
+    [path]="'TRAVEL_DISCLOSURES'" (closeModal)="closeAssignAdministratorModal($event)"
     [disclosureId]="responseObject?.travelDisclosureId">
 </app-assign-administrator-modal>
