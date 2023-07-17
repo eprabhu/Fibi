@@ -14,18 +14,19 @@ import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../common/services/common.service';
 import { AdminDashboardService, CoiDashboardRequest, NameObject, SortCountObj } from './admin-dashboard.service';
-import { ADMIN_DASHBOARD_RIGHTS,
-        HTTP_ERROR_STATUS,
-        HTTP_SUCCESS_STATUS,
-        POST_CREATE_DISCLOSURE_ROUTE_URL,
-        POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
+import {
+    ADMIN_DASHBOARD_RIGHTS,
+    POST_CREATE_DISCLOSURE_ROUTE_URL,
+    POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
+import { listAnimation } from 'projects/fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-admin-dashboard',
     templateUrl: './admin-dashboard.component.html',
-    styleUrls: ['./admin-dashboard.component.scss']
+    styleUrls: ['./admin-dashboard.component.scss'],
+    animations: [listAnimation]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
 
@@ -37,7 +38,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         filter: 'did'
     };
     isShowCountModal = false;
-    isAddAssignModalOpen = false;
+    isAssignAdminModalOpen = false;
     selectedModuleCode: any;
     currentDisclosureId: any;
     currentDisclosureNumber: any;
@@ -56,7 +57,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     leadUnitSearchOptions: any = {};
     countrySearchOptions: any = {};
     lookupValues = [];
-    advSearchClearField: String;
+    advSearchClearField: string;
     coiList = [];
     isActiveDisclosureAvailable: boolean;
     advanceSearchDates = { approvalDate: null, expirationDate: null, certificationDate: null };
@@ -77,7 +78,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     searchText: any;
     entitySearchOptions: any = {};
     sortCountObj: SortCountObj;
-    clearField: String;
+    clearField: string;
     isHover: [] = [];
     isViewAdvanceSearch = true;
     adminData: any;
@@ -89,12 +90,34 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     localCOIRequestObject: CoiDashboardRequest = new CoiDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
     isShowNoDataCard = false;
+    assignAdminPath: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' = 'DISCLOSURES';
+    sortSectionsList = [];
+    disclosureSortSections = [
+        { variableName: 'coiDisclosureNumber', fieldName: 'Disclosure#' },
+        { variableName: 'disclosurePersonFullName', fieldName: 'Person' },
+        { variableName: 'disclosureCategoryType', fieldName: 'Disclosure Type' },
+        { variableName: 'disclosureStatus', fieldName: 'Disclosure Status' },
+        { variableName: 'dispositionStatus', fieldName: 'Disposition Status' },
+        { variableName: 'reviewStatus', fieldName: 'Review Status' },
+        { variableName: 'certificationDate', fieldName: 'Certification Date' },
+        { variableName: 'expirationDate', fieldName: 'Expiration Date' },
+        { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
+    ];
+    travelDisclosureSortSections = [
+        { variableName: 'travellerName', fieldName: 'Person' },
+        { variableName: 'travelEntityName', fieldName: 'Entity' },
+        { variableName: 'travelDisclosureStatusDescription', fieldName: 'Disclosure Status' },
+        { variableName: 'reviewDescription', fieldName: 'Review Status' },
+        { variableName: 'certifiedAt', fieldName: 'Certification Date' },
+        { variableName: 'travelExpirationDate', fieldName: 'Expiration Date' },
+        { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
+    ];
 
-    constructor(public _coiAdminDashboardService: AdminDashboardService,
-        private _router: Router,
-        private _elasticConfig: ElasticConfigService,
-        public commonService: CommonService,
-        private _navigationService: NavigationService
+    constructor(public coiAdminDashboardService: AdminDashboardService,
+                private _router: Router,
+                private _elasticConfig: ElasticConfigService,
+                public commonService: CommonService,
+                private _navigationService: NavigationService
     ) { }
 
     ngOnInit() {
@@ -108,16 +131,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.checkTravelDisclosureRights();
     }
 
-      checkForAdvanceSearch() {
+    checkForAdvanceSearch() {
         if (this.isAdvancedSearchMade() && this._navigationService.previousURL.includes('coi/disclosure')) {
             this.isShowDisclosureList = true;
-            if (this._coiAdminDashboardService.isAdvanceSearch) {
+            if (this.coiAdminDashboardService.isAdvanceSearch) {
                 this.isViewAdvanceSearch = true;
                 this.fetchLocalObjectFromServiceObject();
                 this.generateLookupArrayForDropdown();
                 this.setDefaultSearchOptions();
             } else {
-                if (this._coiAdminDashboardService.coiRequestObject.tabName === 'ALL_DISCLOSURES') {
+                if (this.coiAdminDashboardService.coiRequestObject.tabName === 'ALL_DISCLOSURES') {
                     this.isViewAdvanceSearch = true;
                     this.isShowDisclosureList = false;
                 } else {
@@ -133,51 +156,52 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     checkForSort() {
-        if(!isEmptyObject(this._coiAdminDashboardService.coiRequestObject.sort) && this._navigationService.previousURL.includes('coi/disclosure')) {
-            this.localCOIRequestObject.sort = deepCloneObject(this._coiAdminDashboardService.coiRequestObject.sort);
-            this.sortCountObj = deepCloneObject(this._coiAdminDashboardService.sortCountObject);
+        if (!isEmptyObject(this.coiAdminDashboardService.coiRequestObject.sort) && this._navigationService.previousURL.includes('coi/disclosure')) {
+            this.localCOIRequestObject.sort = deepCloneObject(this.coiAdminDashboardService.coiRequestObject.sort);
+            this.sortCountObj = deepCloneObject(this.coiAdminDashboardService.sortCountObject);
         } else {
             this.resetSortObjects();
         }
     }
 
     resetSortObjects() {
-        this.localCOIRequestObject.sort = {'updateTimeStamp': 'desc'};
-        this._coiAdminDashboardService.coiRequestObject.sort = {'updateTimeStamp': 'desc'};
+        this.localCOIRequestObject.sort = { 'updateTimeStamp': 'desc' };
+        this.coiAdminDashboardService.coiRequestObject.sort = { 'updateTimeStamp': 'desc' };
         this.sortCountObj = new SortCountObj();
-        this._coiAdminDashboardService.sortCountObject = new SortCountObj();
+        this.coiAdminDashboardService.sortCountObject = new SortCountObj();
     }
 
     setDefaultSearchOptions() {
-		this.elasticPersonSearchOptions.defaultValue = this._coiAdminDashboardService.searchDefaultValues.personName || '';
-		this.entitySearchOptions.defaultValue = this._coiAdminDashboardService.searchDefaultValues.entityName || '';
-        this.leadUnitSearchOptions.defaultValue = this._coiAdminDashboardService.searchDefaultValues.departmentName || '';
-	}
+        this.elasticPersonSearchOptions.defaultValue = this.coiAdminDashboardService.searchDefaultValues.personName || '';
+        this.entitySearchOptions.defaultValue = this.coiAdminDashboardService.searchDefaultValues.entityName || '';
+        this.leadUnitSearchOptions.defaultValue = this.coiAdminDashboardService.searchDefaultValues.departmentName || '';
+    }
 
     generateLookupArrayForDropdown() {
-		if (this._coiAdminDashboardService.coiRequestObject.property4.length) {
-			this.generateLookupArray(this._coiAdminDashboardService.coiRequestObject.property4, 'property4');
-		}
-		if (this._coiAdminDashboardService.coiRequestObject.property5.length) {
-			this.generateLookupArray(this._coiAdminDashboardService.coiRequestObject.property5, 'property5');
-		}
-		if (this._coiAdminDashboardService.coiRequestObject.property20.length) {
-			this.generateLookupArray(this._coiAdminDashboardService.coiRequestObject.property20, 'property20');
-		}
-		if (this._coiAdminDashboardService.coiRequestObject.property21.length) {
-			this.generateLookupArray(this._coiAdminDashboardService.coiRequestObject.property21, 'property21');
+        if (this.coiAdminDashboardService.coiRequestObject.property4.length) {
+            this.generateLookupArray(this.coiAdminDashboardService.coiRequestObject.property4, 'property4');
         }
-	}
+        if (this.coiAdminDashboardService.coiRequestObject.property5.length) {
+            this.generateLookupArray(this.coiAdminDashboardService.coiRequestObject.property5, 'property5');
+        }
+        if (this.coiAdminDashboardService.coiRequestObject.property20.length) {
+            this.generateLookupArray(this.coiAdminDashboardService.coiRequestObject.property20, 'property20');
+        }
+        if (this.coiAdminDashboardService.coiRequestObject.property21.length) {
+            this.generateLookupArray(this.coiAdminDashboardService.coiRequestObject.property21, 'property21');
+        }
+    }
 
     generateLookupArray(property, propertyNumber) {
-		this.lookupValues[propertyNumber] = [];
-		property.forEach(element => {
-			this.lookupValues[propertyNumber].push({ code: element });
-		});
-	}
+        this.lookupValues[propertyNumber] = [];
+        property.forEach(element => {
+            this.lookupValues[propertyNumber].push({ code: element });
+        });
+    }
 
     isAdvancedSearchMade() {
-        return !!Object.values(this._coiAdminDashboardService.coiRequestObject).find(V => V && ((typeof (V) === 'string' && V) || (typeof (V) === 'object' && V.length)));
+        return !!Object.values(this.coiAdminDashboardService.coiRequestObject)
+            .find(V => V && ((typeof (V) === 'string' && V) || (typeof (V) === 'object' && V.length)));
     }
 
 
@@ -189,8 +213,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     setAdvanceSearch() {
-        sessionStorage.setItem('currentCOIAdminTab', this._coiAdminDashboardService.coiRequestObject.tabName);
-        if (this._coiAdminDashboardService.coiRequestObject.tabName === 'ALL_DISCLOSURES') {
+        sessionStorage.setItem('currentCOIAdminTab', this.coiAdminDashboardService.coiRequestObject.tabName);
+        if (this.coiAdminDashboardService.coiRequestObject.tabName === 'ALL_DISCLOSURES') {
             this.isViewAdvanceSearch = true;
         } else {
             this.isShowDisclosureList = true;
@@ -199,8 +223,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     setDashboardTab() {
-        this._coiAdminDashboardService.coiRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab') ?
-             sessionStorage.getItem('currentCOIAdminTab') : 'MY_REVIEWS';
+        this.coiAdminDashboardService.coiRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab') ?
+            sessionStorage.getItem('currentCOIAdminTab') : 'MY_REVIEWS';
+        this.checkForTravelDisclosureTabChange(this.coiAdminDashboardService.coiRequestObject.tabName);
     }
 
     toggleADSearch() {
@@ -212,7 +237,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     getDashboardCounts() {
-        this.$subscriptions.push(this._coiAdminDashboardService.loadDisclosureAdminDashboardCounts()
+        this.$subscriptions.push(this.coiAdminDashboardService.loadDisclosureAdminDashboardCounts()
             .subscribe((res: any) => {
                 this.dashboardCounts = res;
                 setTimeout(() => {
@@ -225,7 +250,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     getDashboardDetails() {
         this.isShowNoDataCard = false;
         this.$subscriptions.push(this.$coiList.pipe(
-            switchMap(() => this._coiAdminDashboardService.getCOIAdminDashboard(this.getRequestObject())))
+            switchMap(() => this.coiAdminDashboardService.getCOIAdminDashboard(this.getRequestObject())))
             .subscribe((data: any) => {
                 this.result = data || [];
                 if (this.result) {
@@ -244,9 +269,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.isActiveDisclosureAvailable = !!this.coiList.find((ele: any) => ele.disclosureSequenceStatusCode === '2');
     }
 
-    getRequestObject() {     
+    getRequestObject() {
         this.setAdvanceSearchValuesToServiceObject();
-        this.localCOIRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab'); 
+        this.localCOIRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab');
         return this.localCOIRequestObject;
     }
 
@@ -263,10 +288,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.isShowNoDataCard = false;
         this.coiList = [];
         this.isShowDisclosureList = false;
-        this._coiAdminDashboardService.isAdvanceSearch = false;
-        this._coiAdminDashboardService.coiRequestObject.tabName = tabName;
-        this._coiAdminDashboardService.coiRequestObject.sort = {'updateTimeStamp': 'desc'};
+        this.coiAdminDashboardService.isAdvanceSearch = false;
+        this.coiAdminDashboardService.coiRequestObject.tabName = tabName;
+        this.coiAdminDashboardService.coiRequestObject.sort = { 'updateTimeStamp': 'desc' };
         sessionStorage.setItem('currentCOIAdminTab', tabName);
+        this.checkForTravelDisclosureTabChange(tabName);
         if (this.isAdvanceSearchTab(tabName)) {
             this.resetAdvanceSearchFields();
             this.setAdvanceSearch();
@@ -278,12 +304,23 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.localCOIRequestObject.tabName = tabName;
     }
 
-    isAdvanceSearchTab(tabName) {
-        return ['ALL_DISCLOSURES', 'NEW_SUBMISSIONS', 'NEW_SUBMISSIONS_WITHOUT_SFI', 'MY_REVIEWS', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES'].includes(tabName);
+    private checkForTravelDisclosureTabChange(tabName: string): void {
+        if (tabName !== 'TRAVEL_DISCLOSURES') {
+            this.assignAdminPath = 'DISCLOSURES';
+            this.sortSectionsList = this.disclosureSortSections;
+        } else {
+            this.assignAdminPath = tabName;
+            this.sortSectionsList = this.travelDisclosureSortSections;
+        }
+    }
+
+    isAdvanceSearchTab(tabName): boolean {
+        return [ 'ALL_DISCLOSURES', 'NEW_SUBMISSIONS', 'NEW_SUBMISSIONS_WITHOUT_SFI',
+                 'MY_REVIEWS', 'ALL_REVIEWS', 'TRAVEL_DISCLOSURES' ].includes(tabName);
     }
 
     fetchMentionedComments() {
-        this.$subscriptions.push(this._coiAdminDashboardService.loadCoiReviewComments({
+        this.$subscriptions.push(this.coiAdminDashboardService.loadCoiReviewComments({
             personId: this.commonService.getCurrentUserDetail('personId'),
             disclosureId: null,
             coiSubSectionsId: null,
@@ -376,14 +413,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.localCOIRequestObject.advancedSearch = 'A';
         this.localCOIRequestObject.currentPage = 1;
         this.isShowDisclosureList = true;
-        this._coiAdminDashboardService.isAdvanceSearch = true;
+        this.coiAdminDashboardService.isAdvanceSearch = true;
         this.$coiList.next();
     }
 
     toggleAdvanceSearch() {
         this.isViewAdvanceSearch = !this.isViewAdvanceSearch;
         if (!this.isViewAdvanceSearch) {
-            this._coiAdminDashboardService.isAdvanceSearch = false;
+            this.coiAdminDashboardService.isAdvanceSearch = false;
         }
     }
 
@@ -407,7 +444,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     completeDisclosureReview() {
-        this.$subscriptions.push(this._coiAdminDashboardService
+        this.$subscriptions.push(this.coiAdminDashboardService
             .completeCOIReview(this.selectedStartReviewCoiId)
             .subscribe((_res: any) => {
                 // this._router.navigate(['fibi/coi/summary'], { queryParams: { disclosureId: this.selectedStartReviewCoiId }});
@@ -421,7 +458,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     startDisclosureReview() {
-        this.$subscriptions.push(this._coiAdminDashboardService
+        this.$subscriptions.push(this.coiAdminDashboardService
             .startCOIReview(this.selectedStartReviewCoiId)
             .subscribe(async (res: any) => {
                 await this._router.navigate(['fibi/coi/summary'], { queryParams: { disclosureId: res.coiDisclosure.disclosureId } });
@@ -481,7 +518,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     performReplyComment(comment: any, index: number) {
         if (this.replyComment[index] !== undefined && this.replyComment[index].trim() && !this.isSaving) {
             this.isSaving = true;
-            this.$subscriptions.push(this._coiAdminDashboardService
+            this.$subscriptions.push(this.coiAdminDashboardService
                 .addCOIReviewComment(this.getCommentRequestObj(comment, index))
                 .subscribe((res: any) => {
                     this.replyComment[index] = '';
@@ -515,14 +552,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     private resetAdvanceSearchFields() {
         this.sortCountObj = new SortCountObj();
-        this._coiAdminDashboardService.coiRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab');
-        this.localCOIRequestObject = new CoiDashboardRequest(this._coiAdminDashboardService.coiRequestObject.tabName);
+        this.coiAdminDashboardService.coiRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab');
+        this.localCOIRequestObject = new CoiDashboardRequest(this.coiAdminDashboardService.coiRequestObject.tabName);
         this.localSearchDefaultValues = new NameObject();
-        this._coiAdminDashboardService.searchDefaultValues = new NameObject();
-        this._coiAdminDashboardService.coiRequestObject = new CoiDashboardRequest(this._coiAdminDashboardService.coiRequestObject.tabName);
+        this.coiAdminDashboardService.searchDefaultValues = new NameObject();
+        this.coiAdminDashboardService.coiRequestObject = new CoiDashboardRequest(this.coiAdminDashboardService.coiRequestObject.tabName);
         this.advanceSearchDates = { approvalDate: null, expirationDate: null, certificationDate: null };
-        if(this._coiAdminDashboardService.coiRequestObject.tabName !=='ALL_DISCLOSURES') {
-            this._coiAdminDashboardService.isAdvanceSearch = false;
+        if (this.coiAdminDashboardService.coiRequestObject.tabName !== 'ALL_DISCLOSURES') {
+            this.coiAdminDashboardService.isAdvanceSearch = false;
         }
         this.lookupValues = [];
         this.setSearchOptions();
@@ -548,14 +585,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.sortCountObj[sortFieldBy] = 0;
             delete this.localCOIRequestObject.sort[sortFieldBy];
         }
-        this._coiAdminDashboardService.sortCountObject = deepCloneObject(this.sortCountObj);
-        this._coiAdminDashboardService.coiRequestObject.sort = deepCloneObject(this.localCOIRequestObject.sort);
-        this._coiAdminDashboardService.sort = deepCloneObject(this.localCOIRequestObject.sort);
+        this.coiAdminDashboardService.sortCountObject = deepCloneObject(this.sortCountObj);
+        this.coiAdminDashboardService.coiRequestObject.sort = deepCloneObject(this.localCOIRequestObject.sort);
+        this.coiAdminDashboardService.sort = deepCloneObject(this.localCOIRequestObject.sort);
         this.$coiList.next();
     }
 
     selectedEvent(event) {
-        this.localCOIRequestObject.property8 = event ? event.entityName: null;
+        this.localCOIRequestObject.property8 = event ? event.entityName : null;
         this.localSearchDefaultValues.entityName = event ? event.entityName : null;
     }
 
@@ -598,9 +635,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         if (disclosure.travelDisclosureId) {
             return `#${disclosure.travelDisclosureId}: Travel Disclosure By ${disclosure.travellerName}`;
         }
-        if (disclosure.fcoiTypeCode == 1) {
+        if (disclosure.fcoiTypeCode === '1') {
             return `#${disclosure.coiDisclosureNumber}: FCOI Disclosure By ${disclosure.disclosurePersonFullName}`;
-        } else if (disclosure.fcoiTypeCode == 2 || disclosure.fcoiTypeCode == 3) {
+        } else if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
             return `#${disclosure.coiDisclosureNumber}: Project Disclosure By ${disclosure.disclosurePersonFullName}`;
         }
     }
@@ -615,84 +652,99 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             { queryParams: { disclosureId: coi.travelDisclosureId || coi.coiDisclosureId } });
     }
     fetchLocalObjectFromServiceObject() {
-		this.localCOIRequestObject.property1 = this._coiAdminDashboardService.coiRequestObject.property1 ?
-			this._coiAdminDashboardService.coiRequestObject.property1 : null;
-		this.localCOIRequestObject.property2 = this._coiAdminDashboardService.coiRequestObject.property2 ?
-			this._coiAdminDashboardService.coiRequestObject.property2 : null;
-		this.localCOIRequestObject.property3 = this._coiAdminDashboardService.coiRequestObject.property3 ?
-			this._coiAdminDashboardService.coiRequestObject.property3 : null;
-		this.localCOIRequestObject.property4 = this._coiAdminDashboardService.coiRequestObject.property4.length > 0 ?
-			this._coiAdminDashboardService.coiRequestObject.property4 : [];
-		this.localCOIRequestObject.property5 = this._coiAdminDashboardService.coiRequestObject.property5.length > 0 ?
-			this._coiAdminDashboardService.coiRequestObject.property5 : [];
-		this.localCOIRequestObject.property8 = this._coiAdminDashboardService.coiRequestObject.property8 ?
-			this._coiAdminDashboardService.coiRequestObject.property8 : null;
-		this.localCOIRequestObject.property9 = this._coiAdminDashboardService.coiRequestObject.property9 ?
-			this._coiAdminDashboardService.coiRequestObject.property9 : null;
-		this.localCOIRequestObject.property10 = this._coiAdminDashboardService.coiRequestObject.property10 ?
-			this._coiAdminDashboardService.coiRequestObject.property10 : null;
-		this.localCOIRequestObject.property11 = this._coiAdminDashboardService.coiRequestObject.property11 ?
-			this._coiAdminDashboardService.coiRequestObject.property11 : null;
-		this.localCOIRequestObject.property12 = this._coiAdminDashboardService.coiRequestObject.property15 ?
-			this._coiAdminDashboardService.coiRequestObject.property12 : null;
-		this.localCOIRequestObject.property13 = this._coiAdminDashboardService.coiRequestObject.property13 ?
-			this._coiAdminDashboardService.coiRequestObject.property13 : null;
-		this.localCOIRequestObject.property14 = this._coiAdminDashboardService.coiRequestObject.property14 ?
-			this._coiAdminDashboardService.coiRequestObject.property14 : null;
-		this.localCOIRequestObject.property15 = this._coiAdminDashboardService.coiRequestObject.property15 ?
-			this._coiAdminDashboardService.coiRequestObject.property15 : null;
-		this.localCOIRequestObject.property21 = this._coiAdminDashboardService.coiRequestObject.property21 ?
-			this._coiAdminDashboardService.coiRequestObject.property21 : [];
-        this.localCOIRequestObject.property22 = this._coiAdminDashboardService.coiRequestObject.property22 ?
-            this._coiAdminDashboardService.coiRequestObject.property22 : null;
-        this.advanceSearchDates.approvalDate = this.localCOIRequestObject.property6 = this._coiAdminDashboardService.coiRequestObject.property6 ?
-            getDateObjectFromTimeStamp(this._coiAdminDashboardService.coiRequestObject.property6) : null;
-        this.advanceSearchDates.expirationDate = this.localCOIRequestObject.property7 = this._coiAdminDashboardService.coiRequestObject.property7 ?
-            getDateObjectFromTimeStamp(this._coiAdminDashboardService.coiRequestObject.property7) : null;
-        this.advanceSearchDates.certificationDate = this.localCOIRequestObject.property23 = this._coiAdminDashboardService.coiRequestObject.property23 ?
-            getDateObjectFromTimeStamp(this._coiAdminDashboardService.coiRequestObject.property23) : null;
-		this.localCOIRequestObject.property20 = this._coiAdminDashboardService.coiRequestObject.property20 ?
-		    this._coiAdminDashboardService.coiRequestObject.property20 : [];
+        this.localCOIRequestObject.property1 = this.coiAdminDashboardService.coiRequestObject.property1 ?
+            this.coiAdminDashboardService.coiRequestObject.property1 : null;
+        this.localCOIRequestObject.property2 = this.coiAdminDashboardService.coiRequestObject.property2 ?
+            this.coiAdminDashboardService.coiRequestObject.property2 : null;
+        this.localCOIRequestObject.property3 = this.coiAdminDashboardService.coiRequestObject.property3 ?
+            this.coiAdminDashboardService.coiRequestObject.property3 : null;
+        this.localCOIRequestObject.property4 = this.coiAdminDashboardService.coiRequestObject.property4.length > 0 ?
+            this.coiAdminDashboardService.coiRequestObject.property4 : [];
+        this.localCOIRequestObject.property5 = this.coiAdminDashboardService.coiRequestObject.property5.length > 0 ?
+            this.coiAdminDashboardService.coiRequestObject.property5 : [];
+        this.localCOIRequestObject.property8 = this.coiAdminDashboardService.coiRequestObject.property8 ?
+            this.coiAdminDashboardService.coiRequestObject.property8 : null;
+        this.localCOIRequestObject.property9 = this.coiAdminDashboardService.coiRequestObject.property9 ?
+            this.coiAdminDashboardService.coiRequestObject.property9 : null;
+        this.localCOIRequestObject.property10 = this.coiAdminDashboardService.coiRequestObject.property10 ?
+            this.coiAdminDashboardService.coiRequestObject.property10 : null;
+        this.localCOIRequestObject.property11 = this.coiAdminDashboardService.coiRequestObject.property11 ?
+            this.coiAdminDashboardService.coiRequestObject.property11 : null;
+        this.localCOIRequestObject.property12 = this.coiAdminDashboardService.coiRequestObject.property15 ?
+            this.coiAdminDashboardService.coiRequestObject.property12 : null;
+        this.localCOIRequestObject.property13 = this.coiAdminDashboardService.coiRequestObject.property13 ?
+            this.coiAdminDashboardService.coiRequestObject.property13 : null;
+        this.localCOIRequestObject.property14 = this.coiAdminDashboardService.coiRequestObject.property14 ?
+            this.coiAdminDashboardService.coiRequestObject.property14 : null;
+        this.localCOIRequestObject.property15 = this.coiAdminDashboardService.coiRequestObject.property15 ?
+            this.coiAdminDashboardService.coiRequestObject.property15 : null;
+        this.localCOIRequestObject.property21 = this.coiAdminDashboardService.coiRequestObject.property21 ?
+            this.coiAdminDashboardService.coiRequestObject.property21 : [];
+        this.localCOIRequestObject.property22 = this.coiAdminDashboardService.coiRequestObject.property22 ?
+            this.coiAdminDashboardService.coiRequestObject.property22 : null;
+        this.advanceSearchDates.approvalDate = this.localCOIRequestObject.property6 =
+            this.coiAdminDashboardService.coiRequestObject.property6 ?
+            getDateObjectFromTimeStamp(this.coiAdminDashboardService.coiRequestObject.property6) : null;
+        this.advanceSearchDates.expirationDate = this.localCOIRequestObject.property7 =
+            this.coiAdminDashboardService.coiRequestObject.property7 ?
+            getDateObjectFromTimeStamp(this.coiAdminDashboardService.coiRequestObject.property7) : null;
+        this.advanceSearchDates.certificationDate = this.localCOIRequestObject.property23 =
+            this.coiAdminDashboardService.coiRequestObject.property23 ?
+            getDateObjectFromTimeStamp(this.coiAdminDashboardService.coiRequestObject.property23) : null;
+        this.localCOIRequestObject.property20 = this.coiAdminDashboardService.coiRequestObject.property20 ?
+            this.coiAdminDashboardService.coiRequestObject.property20 : [];
         this.localCOIRequestObject.advancedSearch = 'A';
-        this.localSearchDefaultValues = this._coiAdminDashboardService.searchDefaultValues;
-	}
-
-    setAdvanceSearchToServiceObject() {
-		this._coiAdminDashboardService.coiRequestObject.property1 = this.localCOIRequestObject.property1 || null;
-		this._coiAdminDashboardService.coiRequestObject.property2 = this.localCOIRequestObject.property2 || null;
-		this._coiAdminDashboardService.coiRequestObject.property3 = this.localCOIRequestObject.property3 || null;
-		this._coiAdminDashboardService.coiRequestObject.property4 = this.localCOIRequestObject.property4 || [];
-		this._coiAdminDashboardService.coiRequestObject.property5 = this.localCOIRequestObject.property5 || [];
-		this._coiAdminDashboardService.coiRequestObject.property8 = this.localCOIRequestObject.property8 || null;
-		this._coiAdminDashboardService.coiRequestObject.property9 = this.localCOIRequestObject.property9 || null;
-		this._coiAdminDashboardService.coiRequestObject.property10 = this.localCOIRequestObject.property10 || null;
-        this._coiAdminDashboardService.coiRequestObject.property11 = this.localCOIRequestObject.property11 || null;
-		this._coiAdminDashboardService.coiRequestObject.property12 = this.localCOIRequestObject.property12 || null;
-		this._coiAdminDashboardService.coiRequestObject.property13 = this.localCOIRequestObject.property13 || null;
-		this._coiAdminDashboardService.coiRequestObject.property14 = this.localCOIRequestObject.property14 || null;
-		this._coiAdminDashboardService.coiRequestObject.property15 = this.localCOIRequestObject.property15 || null;
-		this._coiAdminDashboardService.coiRequestObject.property20 = this.localCOIRequestObject.property20 || [];
-		this._coiAdminDashboardService.coiRequestObject.property21 = this.localCOIRequestObject.property21 || [];
-		this._coiAdminDashboardService.coiRequestObject.property22 = this.localCOIRequestObject.property22 || null;
-        this._coiAdminDashboardService.coiRequestObject.property23 = parseDateWithoutTimestamp(this.advanceSearchDates.certificationDate) || null;
-        this._coiAdminDashboardService.coiRequestObject.property6 = parseDateWithoutTimestamp(this.localCOIRequestObject.property6) || null;
-		this._coiAdminDashboardService.coiRequestObject.property7 = parseDateWithoutTimestamp(this.advanceSearchDates.expirationDate) || null;
-		this._coiAdminDashboardService.searchDefaultValues.personName = this.localSearchDefaultValues.personName || null;
-		this._coiAdminDashboardService.searchDefaultValues.entityName = this.localSearchDefaultValues.entityName || null;
-        this._coiAdminDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;
-	}
-
-    openAssignAdminModal(coi) {
-        this.addAdmin.disclosureId = coi.coiDisclosureId;
-        this.isAddAssignModalOpen = true;
+        this.localSearchDefaultValues = this.coiAdminDashboardService.searchDefaultValues;
     }
 
-    closeAssignAdminModal(event) {
+    setAdvanceSearchToServiceObject() {
+        this.coiAdminDashboardService.coiRequestObject.property1 = this.localCOIRequestObject.property1 || null;
+        this.coiAdminDashboardService.coiRequestObject.property2 = this.localCOIRequestObject.property2 || null;
+        this.coiAdminDashboardService.coiRequestObject.property3 = this.localCOIRequestObject.property3 || null;
+        this.coiAdminDashboardService.coiRequestObject.property4 = this.localCOIRequestObject.property4 || [];
+        this.coiAdminDashboardService.coiRequestObject.property5 = this.localCOIRequestObject.property5 || [];
+        this.coiAdminDashboardService.coiRequestObject.property8 = this.localCOIRequestObject.property8 || null;
+        this.coiAdminDashboardService.coiRequestObject.property9 = this.localCOIRequestObject.property9 || null;
+        this.coiAdminDashboardService.coiRequestObject.property10 = this.localCOIRequestObject.property10 || null;
+        this.coiAdminDashboardService.coiRequestObject.property11 = this.localCOIRequestObject.property11 || null;
+        this.coiAdminDashboardService.coiRequestObject.property12 = this.localCOIRequestObject.property12 || null;
+        this.coiAdminDashboardService.coiRequestObject.property13 = this.localCOIRequestObject.property13 || null;
+        this.coiAdminDashboardService.coiRequestObject.property14 = this.localCOIRequestObject.property14 || null;
+        this.coiAdminDashboardService.coiRequestObject.property15 = this.localCOIRequestObject.property15 || null;
+        this.coiAdminDashboardService.coiRequestObject.property20 = this.localCOIRequestObject.property20 || [];
+        this.coiAdminDashboardService.coiRequestObject.property21 = this.localCOIRequestObject.property21 || [];
+        this.coiAdminDashboardService.coiRequestObject.property22 = this.localCOIRequestObject.property22 || null;
+        this.coiAdminDashboardService.coiRequestObject.property23 = parseDateWithoutTimestamp(
+            this.advanceSearchDates.certificationDate) || null;
+        this.coiAdminDashboardService.coiRequestObject.property6 = parseDateWithoutTimestamp(
+            this.localCOIRequestObject.property6) || null;
+        this.coiAdminDashboardService.coiRequestObject.property7 = parseDateWithoutTimestamp(
+            this.advanceSearchDates.expirationDate) || null;
+        this.coiAdminDashboardService.searchDefaultValues.personName = this.localSearchDefaultValues.personName || null;
+        this.coiAdminDashboardService.searchDefaultValues.entityName = this.localSearchDefaultValues.entityName || null;
+        this.coiAdminDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;
+    }
+
+    showAssignAdminButton(coi): boolean {
+        const tabName = this.coiAdminDashboardService.coiRequestObject.tabName;
+        const isTabForNewSubmission = tabName === 'NEW_SUBMISSIONS' || tabName === 'NEW_SUBMISSIONS_WITHOUT_SFI';
+        if (tabName === 'TRAVEL_DISCLOSURES' && coi.reviewStatusCode === '2') {
+            return true;
+        }
+        return isTabForNewSubmission;
+    }
+
+    openAssignAdminModal(coi): void {
+        this.addAdmin.disclosureId = coi.coiDisclosureId || coi.travelDisclosureId;
+        this.isAssignAdminModalOpen = true;
+    }
+
+    closeAssignAdminModal(event): void {
         if (event) {
             this.addAdmin.disclosureId = null;
             this.$coiList.next();
         }
-        this.isAddAssignModalOpen = false;
+        this.isAssignAdminModalOpen = false;
     }
 }
 

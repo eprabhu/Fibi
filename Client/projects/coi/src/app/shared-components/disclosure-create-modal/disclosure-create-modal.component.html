@@ -26,7 +26,7 @@
                                 aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
                         </span>
                         <p class="fs-14 pb-0 pt-1"
-                            *ngIf="!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE'">
+                            *ngIf="(!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE') || triggeredFrom != 'PROJECT_DISCLOSURE'">
                             <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
                             For disclosing at any other unit please click on the ‘Edit’ icon near the unit field to
                             proceed to disclosure creation
@@ -36,20 +36,6 @@
                             <br>
                             <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
                             For adding any additional description/comment, please use the “Description“ field.
-                        </p>
-                        <p class="fs-14 pb-0 pt-1" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
-                            <span>
-                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                                For disclosing at any other unit please click on the ‘Edit’ icon near the unit field
-                                to proceed to disclosure creation.
-                                <br>
-                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                                For reverting to the original unit click on the 'Reset' icon.
-                                <br>
-                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                                For adding any additional description/comment, please use the “Description“
-                                field.
-                            </span>
                         </p>
                     </div>
                     <p class="fs-14 alert alert-danger" *ngIf="isShowExistingDisclosure">

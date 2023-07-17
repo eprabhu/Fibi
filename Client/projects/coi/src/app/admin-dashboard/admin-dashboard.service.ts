@@ -12,7 +12,7 @@ export class AdminDashboardService {
   searchDefaultValues: NameObject = new NameObject();
   sortCountObject: SortCountObj = new SortCountObj();
   sort: any;
-  
+
   constructor(private _http: HttpClient,
               private _commonService: CommonService) {
   }
@@ -89,8 +89,17 @@ export class SortCountObj {
   reviewStatus = 0;
   expirationDate = 0;
   certificationDate = 0;
+  travellerName = 0;
+  travelEntityName = 0;
+  travelState = 0;
+  travelCountry = 0;
+  travelCity = 0;
+  documentStatusDescription = 0;
+  reviewDescription = 0;
+  certifiedAt = 0;
+  travelExpirationDate = 0;
   updateTimeStamp = 2;
-};
+}
 
 export class NameObject {
   entityName = '';
