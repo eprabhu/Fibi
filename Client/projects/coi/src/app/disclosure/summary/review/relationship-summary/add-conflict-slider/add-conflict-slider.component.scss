@@ -41,7 +41,7 @@
   margin-top: -7px;
   height: 15px;
   width: 22px;
-  font-size: 16px;
+  font-size: 1.6rem;
   position: relative;
   margin-left: 2px;
   color: #6f7395;
@@ -167,4 +167,23 @@
   height: 100vh;
   padding: 0px 10px 10px 10px;
   overflow: auto;
+}
+
+.info-icon {
+  top: 17px;
+  height: 22px;
+  width: 22px;
+  font-size: 16px;
+  position: absolute;
+  margin-left: 0px;
+  color: #6f7395;
+  cursor: pointer;
+}
+
+.grey-info {
+  background: #EEEEEE;
+  color: #202c2e;
+  font-size: 16px;
+  font-weight: 400;
+  border: 1px solid #caced2;
 }
