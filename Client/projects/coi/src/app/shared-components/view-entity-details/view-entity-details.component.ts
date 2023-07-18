@@ -83,7 +83,10 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     this.$subscriptions.push(this.entityDetailsServices.$saveQuestionnaireAction.subscribe((params: any) => {
       if (params) {
         this.getQuestionnaire();
+        this.entityDetailsServices.isRelationshipQuestionnaireChanged = false;
         this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Relationship saved successfully `);
+      } else {
+        this._commonServices.showToast(HTTP_ERROR_STATUS, `Error in saving relationship`);
       }
     }));
   }
@@ -164,7 +167,10 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
   }
 
   addNewRelationship() {
-    this.emitRelationshipModal.emit(true);
+    if(this.entityDetailsServices.isRelationshipQuestionnaireChanged) {
+      this.entityDetailsServices.globalSave$.next();
+    }
+      this.emitRelationshipModal.emit(true);
   }
 
   saveRelationship() {
@@ -205,12 +211,16 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
    this.modifyDescription = '';
    $('#modifyEntityConfirmationModal').modal('hide');
   }
+
   goToHome() {
     this.isEntityManagement ? this._router.navigate(['/coi/user-dashboard'])
-      : this._router.navigate(['/coi/user-dashboard/entities']);
+    : this._router.navigate(['/coi/user-dashboard/entities']);
   }
 
   activateInactivateEntityOrSfi(moduleName: string) {
+    if(moduleName === 'Finalize' && this.entityDetailsServices.isRelationshipQuestionnaireChanged) {
+      this.entityDetailsServices.globalSave$.next();
+    }
     if (moduleName === 'ENTITY') {
       document.getElementById('inactivate-confirm-message').click();
     } else {
@@ -232,7 +242,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     if (this.validForActivateAndInactivateEntity()) {
       const REQ_BODY = {
         entityId: this.entityId,
-        active: !this.entityDetails.isActive,
+        isActive: !this.entityDetails.isActive,
         revisionReason: this.inactivateReason
       };
       this.$subscriptions.push(this.entityManagementService.activateInactivate(REQ_BODY).subscribe((res: any) => {
@@ -318,7 +328,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
       };
       this.$subscriptions.push(this.entityManagementService.approveEntity(REQ_BODY).subscribe((res: any) => {
         this.entityDetails.entityStatus.entityStatusCode = res.entityStatusCode;
-        this.entityDetails.updateUserFullName = res.updateUserFullName;
+        this.entityDetails.updateUserFullName = res.updatedUserFullName;
         this.entityDetails.updateTimestamp = res.updateTimestamp;
         document.getElementById('hide-approve-entity-modal')?.click();
         this.clearApproveEntityFiled();

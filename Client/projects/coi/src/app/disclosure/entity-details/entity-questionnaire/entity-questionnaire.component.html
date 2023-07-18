@@ -13,7 +13,7 @@
 </div>
 <div class="ml-15 mr-10 questionnaire-position">
       <div *ngIf="definedRelationships?.length">
-        <app-view-questionnaire-list *ngIf="definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
+        <app-view-questionnaire-list *ngIf="definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''" (QuestionnaireEditEvent)="questionnaireEdit($event)"
           [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)">
         </app-view-questionnaire-list>
         </div>

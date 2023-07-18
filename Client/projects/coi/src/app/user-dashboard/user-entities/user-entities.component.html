@@ -1,15 +1,15 @@
 <div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;">
     <div class="border-end fs-14 p-3">
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
-        <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" title="Sort by Active Status"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">Active</span>
-        <span (click)="setFilter('DRAFT')" [class.filter-active]="sfiDashboardRequestObject.filterType=='DRAFT'" title="Sort by DRAFT Status"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Draft</span>
-        <span (click)="setFilter('INACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INACTIVE'" title="Sort by Inactive Status"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Inactive</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'"
-              class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" title="Sort by All Status"
-              role="button">All</span>      
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" title="Sort by All Status"
+              role="button">All</span> 
+        <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" title="Sort by Active Status"
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
+        <span (click)="setFilter('DRAFT')" [class.filter-active]="sfiDashboardRequestObject.filterType=='DRAFT'" title="Sort by DRAFT Status"
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Draft</span>
+        <span (click)="setFilter('INACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INACTIVE'" title="Sort by Inactive Status"
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Inactive</span>     
     </div>
     <div class="d-flex flex-fill position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
     (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
@@ -25,8 +25,8 @@
     <ng-container *ngFor="let entities of filteredEntityArray">
       <app-shared-sfi-card [reqObject] = 'entities' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" ></app-shared-sfi-card>
     </ng-container>
-    <app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
   </ng-container>
+  <app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
 </ng-container>
  <!-- Pagination -->
  <div *ngIf="filteredEntityArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">

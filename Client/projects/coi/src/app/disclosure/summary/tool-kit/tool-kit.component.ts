@@ -113,4 +113,15 @@ export class ToolKitComponent implements OnInit, OnDestroy {
         window.scrollTo({ top: sectionHeight, behavior: 'smooth' });
     }
 
+    jumpToProjectSection(section) {
+        if(document.getElementById(section)) {
+           this.jumpToSection(section);
+        } else {
+            document.getElementById('relationship_collapse_btn').click();
+            setTimeout(() => {
+                this.jumpToSection(section);
+            });
+        }
+    }
+
 }

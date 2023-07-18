@@ -3,9 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../../app/common/services/common.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EntityDetailsService {
 
   previousURL = '';
@@ -13,6 +11,7 @@ export class EntityDetailsService {
   $entityDetailsTest = new BehaviorSubject<object>({});
   globalSave$: Subject<any> = new Subject<any>();
   isShowRelationButton: any;
+  isRelationshipQuestionnaireChanged = false;
 
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
