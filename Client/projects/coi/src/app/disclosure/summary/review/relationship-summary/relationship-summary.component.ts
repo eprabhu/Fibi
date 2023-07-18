@@ -118,7 +118,9 @@ export class RelationshipSummaryComponent implements OnInit {
             title: this.selectedProject.title,
             coiProjConflictStatusType: entity.coiProjConflictStatusType,
             disclosureId: this.coiDetails.disclosureId,
-            comment:entity.disclComment.comment
+            comment:entity.disclComment.comment,
+            sponsor: this.selectedProject.sponsor,
+            primeSponsor: this.selectedProject.primeSponsor
         }
     }
 

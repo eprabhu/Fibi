@@ -59,7 +59,6 @@ export class ReviewerDashboardComponent implements OnInit {
         private _navigationService: NavigationService) { }
 
     ngOnInit() {
-        this.getCount();
         this.getDashboardDetails();
         this.setSearchOptions();
         this.setAdvanceSearch();
@@ -71,11 +70,6 @@ export class ReviewerDashboardComponent implements OnInit {
     actionsOnPageChange(event) {
         this.localCOIRequestObject.currentPage = event;
         this.$coiList.next();
-    }
-
-    getCount() {
-        this.$subscriptions.push(this.reviewerDashboardService.loadDisclosureReviewerQuickCardCounts().subscribe((data: any) => {
-        }));
     }
 
     getDashboardDetails() {
@@ -372,9 +366,8 @@ export class ReviewerDashboardComponent implements OnInit {
             }
             this.$coiList.next();
         } else {
-            this.resetAndPerformAdvanceSearch();
             this.resetSortObjects();
-            this.$coiList.next();
+            this.resetAndPerformAdvanceSearch();
         }
     }
 

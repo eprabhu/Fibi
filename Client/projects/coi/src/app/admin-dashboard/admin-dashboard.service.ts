@@ -23,10 +23,6 @@ export class AdminDashboardService {
       }));
   }
 
-  loadDisclosureAdminDashboardCounts() {
-      return this._http.get(this._commonService.baseUrl + '/loadDisclosureAdminDashboardCounts');
-  }
-
   startCOIReview(coiReviewId: number) {
       return this._http.post(`${this._commonService.baseUrl}/startCOIReview`,
           {coiReview: {coiReviewId}});

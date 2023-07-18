@@ -1,4 +1,3 @@
-
 {
   "/login": {
     "target": "http://192.168.1.149/coi",
@@ -168,10 +167,6 @@
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
-  "/loadDisclosureAdminDashboardCounts": {
-    "target": "http://192.168.1.149/coi",
-    "secure": false
-  },
   "/findLeadUnits": {
     "target": "http://192.168.1.149",
     "secure": false
@@ -181,10 +176,6 @@
     "secure": false
   },
   "/getCOIReviewerDashboard": {
-    "target": "http://192.168.1.149/coi",
-    "secure": false
-  },
-  "/loadDisclosureReviewerQuickCardCounts": {
     "target": "http://192.168.1.149/coi",
     "secure": false
   },

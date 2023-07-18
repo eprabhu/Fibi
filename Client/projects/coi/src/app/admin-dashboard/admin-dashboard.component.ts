@@ -124,7 +124,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.setDashboardTab();
         this.setSearchOptions();
         this.setAdvanceSearch();
-        this.getDashboardCounts();
+        this.getDashboardDetails();
         this.getPermissions();
         this.checkForSort();
         this.checkForAdvanceSearch();
@@ -149,9 +149,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             }
             this.$coiList.next();
         } else {
-            this.resetAndPerformAdvanceSearch();
             this.resetSortObjects();
-            this.$coiList.next();
+            this.resetAndPerformAdvanceSearch();
         }
     }
 
@@ -234,17 +233,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         } else {
             document.getElementById('collapseExample').classList.add('show');
         }
-    }
-
-    getDashboardCounts() {
-        this.$subscriptions.push(this.coiAdminDashboardService.loadDisclosureAdminDashboardCounts()
-            .subscribe((res: any) => {
-                this.dashboardCounts = res;
-                setTimeout(() => {
-                    this.getDashboardDetails();
-                    this.$coiList.next();
-                });
-            }));
     }
 
     getDashboardDetails() {
