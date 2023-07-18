@@ -8,6 +8,7 @@ import java.util.Set;
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.agreements.pojo.AgreementHeader;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
 import com.polus.fibicomp.common.vo.ProposalView;
 import com.polus.fibicomp.dashboard.pojo.QuickLink;
 import com.polus.fibicomp.dashboard.pojo.UserSelectedWidget;
@@ -130,6 +131,16 @@ public class DashBoardProfile {
 	private Integer travelDisclosureCount;
 
 	private List<Object> data;
+	
+	List<CoiTravelDashboardDto> travelDashboardViews;
+
+	public List<CoiTravelDashboardDto> getTravelDashboardViews() {
+		return travelDashboardViews;
+	}
+
+	public void setTravelDashboardViews(List<CoiTravelDashboardDto> travelDashboardViews) {
+		this.travelDashboardViews = travelDashboardViews;
+	}
 
 	public Integer getTravelDisclosureCount() {
 		return travelDisclosureCount;
