@@ -4,36 +4,23 @@ package com.polus.fibicomp.coi.service;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.dto.COIValidateDto;
-import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
-import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
-import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
-import com.polus.fibicomp.coi.dto.CoiTravelDisclosureCertifyDto;
-import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
-import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
-import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
-import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.convert.DtoInstantiatingConverter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,8 +36,19 @@ import com.polus.fibicomp.award.dao.AwardDao;
 import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.award.pojo.AwardPerson;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
+import com.polus.fibicomp.coi.dto.COIValidateDto;
+import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
+import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureCertifyDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
+import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
@@ -64,19 +62,17 @@ import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewComments;
-import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
-import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -90,6 +86,8 @@ import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.proposal.dao.ProposalDao;
 import com.polus.fibicomp.proposal.pojo.Proposal;
 import com.polus.fibicomp.proposal.pojo.ProposalPerson;
+import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
+import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 
@@ -526,18 +524,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			});
 		}
 		return disclosureDetails;
-	}
-
-	@Override
-	public ResponseEntity<Object> loadDisclosureAdminDashboardCounts() {
-		ConflictOfInterestVO externalReviewVO = new ConflictOfInterestVO();
-		externalReviewVO.setConflictIdentifiedCount(4);
-		externalReviewVO.setNewSubmissionsCount(7);
-		externalReviewVO.setUnassignedCount(5);
-		externalReviewVO.setPendingEntityApproval(2);
-		externalReviewVO.setReviewCommentsCount(conflictOfInterestDao.getReviewCommentsCount());
-//		externalReviewVO.setTravelDisclosureCount(conflictOfInterestDao.getCOIAdminDashboardCount());
-		return new ResponseEntity<>(externalReviewVO, HttpStatus.OK);
 	}
 
 	@Override
@@ -991,12 +977,20 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public List<CoiConflictHistory> getCoiConflictHistory(Integer disclosureDetailsId){
-		List<CoiConflictHistory> coiConflictHistory = conflictOfInterestDao.getCoiConflictHistory(disclosureDetailsId);
-		coiConflictHistory.forEach(conflictHistory -> {
+		DisclComment disclComment = conflictOfInterestDao.getDisclEntProjRelationComment(disclosureDetailsId);
+		CoiDisclEntProjDetails coiDisclEntProjDetails = conflictOfInterestDao.getProjectRelationship(disclosureDetailsId);
+		CoiConflictHistory coiConflictHistory = new CoiConflictHistory();
+		coiConflictHistory.setComment(disclComment.getComment());
+		coiConflictHistory.setConflictStatusCode(coiDisclEntProjDetails.getProjectConflictStatusCode());
+		coiConflictHistory.setUpdateTimestamp(coiDisclEntProjDetails.getUpdateTimestamp());
+		coiConflictHistory.setUpdateUser(coiDisclEntProjDetails.getUpdateUser());
+		List<CoiConflictHistory> coiConflictHistoryList = conflictOfInterestDao.getCoiConflictHistory(disclosureDetailsId);
+		coiConflictHistoryList.add(0, coiConflictHistory);
+		coiConflictHistoryList.forEach(conflictHistory -> {
 			conflictHistory.setUpdateUserFullName(personDao.getUserFullNameByUserName(conflictHistory.getUpdateUser()));
 			conflictHistory.setConflictStatusDescription(conflictOfInterestDao.getCoiConflictStatusByStatusCode(conflictHistory.getConflictStatusCode()));
 		});
-		return coiConflictHistory;
+		return coiConflictHistoryList;
 	}
 
 	@Override
@@ -1192,18 +1186,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			return new ResponseEntity<>(dashBoardProfile, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}
-
-	@Override
-	public ResponseEntity<Object> loadDisclosureReviewerQuickCardCounts() {
-		try {
-			ConflictOfInterestVO conflictOfInterestVO = conflictOfInterestDao
-					.loadDisclosureQuickCardCounts("REVIEWER", AuthenticatedUser.getLoginPersonId());
-			return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
-		} catch (Exception e) {
-			logger.error("Error in method loadDisclosureReviewerQuickCardCounts", e);
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 	}
 	
 	@Override
@@ -1945,4 +1927,5 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		});
 		return travelHistories;
 	}
+
 }

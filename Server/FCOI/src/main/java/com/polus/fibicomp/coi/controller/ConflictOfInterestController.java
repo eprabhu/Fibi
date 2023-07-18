@@ -144,13 +144,6 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.checkSFICompleted(vo);
 	}
 
-	@GetMapping(value = "/loadDisclosureAdminDashboardCounts")
-	public ResponseEntity<Object> loadDisclosureAdminDashboardCounts() {
-		logger.info("Request for loadDisclosureAdminDashboardCounts");
-		logger.info("Login Person Id : {}", AuthenticatedUser.getLoginPersonId());
-		return conflictOfInterestService.loadDisclosureAdminDashboardCounts();
-	}
-
 	@PostMapping("/reviseDisclosure")
 	public String reviseDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for reviseDisclosure");
@@ -363,13 +356,6 @@ public class ConflictOfInterestController {
 		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
 		return conflictOfInterestService.getCOIReviewerDashboard(vo);
 	}
-
-	@GetMapping(value = "/loadDisclosureReviewerQuickCardCounts")
-	public ResponseEntity<Object> loadDisclosureReviewerQuickCardCounts() {
-		logger.info("Request for loadDisclosureReviewerQuickCardCounts");
-		logger.info("Login Person Id : {}", AuthenticatedUser.getLoginPersonId());
-		return conflictOfInterestService.loadDisclosureReviewerQuickCardCounts();
-	}
 	
 	@GetMapping("/getCoiEntityDetails/{personEntityId}")
 	public ResponseEntity<Object> getCoiEntityDetails(@PathVariable("personEntityId") Integer personEntityId) {
@@ -542,4 +528,5 @@ public class ConflictOfInterestController {
 		logger.info("Request for loadTravelDisclosureHistory");
 		return conflictOfInterestService.loadTravelDisclosureHistory(vo.getPersonId(), vo.getEntityNumber());
 	}
+
 }

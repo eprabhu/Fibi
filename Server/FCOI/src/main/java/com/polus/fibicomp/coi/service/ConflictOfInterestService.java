@@ -120,12 +120,6 @@ public interface ConflictOfInterestService {
 	String checkSFICompleted(ConflictOfInterestVO vo);
 
 	/**
-	 * This method is used to get admin dashboard detail counts
-	 * @return counts
-	 */
-	ResponseEntity<Object> loadDisclosureAdminDashboardCounts();
-
-	/**
 	 * This method is used to revise Coi disclosure
 	 * @return counts
 	 */
@@ -328,13 +322,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> getCOIReviewerDashboard(CoiDashboardVO vo);
-
-	/**
-	 *  This method is used to load reviewer quick card count
-	 *
-	 * @return
-	 */
-	ResponseEntity<Object> loadDisclosureReviewerQuickCardCounts();
 	
 	public ResponseEntity<Object> getCoiEntityDetails(Integer personEntityId);
 
@@ -460,4 +447,5 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship);
 	
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
+
 }

@@ -2363,43 +2363,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		}
 		return count;
 	}
-
-
-	@Override
-	public ConflictOfInterestVO loadDisclosureQuickCardCounts(String dashboardType, String loginPersonId) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		SessionImpl sessionImpl = (SessionImpl) session;
-		Connection connection = sessionImpl.connection();
-		CallableStatement statement = null;
-		ResultSet resultSet = null;
-		try {
-			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_QUICK_CARD_COUNTS(?,?)}");
-				statement.setString(1, dashboardType);
-				statement.setString(2, loginPersonId);
-				statement.execute();
-				resultSet = statement.getResultSet();
-			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String procedureName = "GET_QUICK_CARD_COUNTS";
-				String functionCall = "{call " + procedureName + "(?,?,?)}";
-				statement = connection.prepareCall(functionCall);
-				statement.registerOutParameter(1, OracleTypes.CURSOR);
-				statement.setString(2, dashboardType);
-				statement.setString(3, loginPersonId);
-				statement.execute();
-				resultSet = (ResultSet) statement.getObject(1);
-			}
-			ConflictOfInterestVO conflictOfInterestVO = new ConflictOfInterestVO();
-			while (resultSet.next()) {
-				conflictOfInterestVO.setNewSubmissionsCount(resultSet.getInt("NEW_SUBMISSIONS"));
-				conflictOfInterestVO.setConflictIdentifiedCount(resultSet.getInt("CONFLICTS_IDENTIFIED"));
-			}
-			return conflictOfInterestVO;
-		} catch (Exception e) {
-			logger.error("Error in loadDisclosureQuickCardCounts {}", e.getMessage());
-			throw new ApplicationException("Error in loadDisclosureQuickCardCounts", e, Constants.JAVA_ERROR);
-		}
-	}
 	
 	@Override
 	public CoiProjectProposal saveOrUpdateCoiProjectProposal(CoiProjectProposal coiProjectProposal) {
