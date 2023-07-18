@@ -52,6 +52,7 @@ export class ReviewerDashboardComponent implements OnInit {
     localCOIRequestObject: ReviewerDashboardRequest = new ReviewerDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
     isShowNoDataCard = false;
+    readMoreOrLess = [];
     constructor(
         public reviewerDashboardService: ReviewerDashboardService,
         public commonService: CommonService,
@@ -247,11 +248,12 @@ export class ReviewerDashboardComponent implements OnInit {
         }
     }
 
-    modalHeader(coi) {
-        if (coi.fcoiTypeCode == 1) {
-            return `#${coi.coiDisclosureNumber}: FCOI Disclosure By ${coi.disclosurePersonFullName}`;
-        } else if (coi.fcoiTypeCode == 2 || coi.fcoiTypeCode == 3) {
-            return `#${coi.coiDisclosureNumber}: Project Disclosure By ${coi.disclosurePersonFullName}`;
+    modalHeader(coi) { if (coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3') {
+            if (coi.fcoiTypeCode === '2') {
+                return `# ${coi.proposalId} - ${coi.proposalTitle}`;
+            } else if (coi.fcoiTypeCode === '3') {
+                return `# ${coi.awardId} - ${coi.awardTitle}`;
+            }
         }
     }
 
