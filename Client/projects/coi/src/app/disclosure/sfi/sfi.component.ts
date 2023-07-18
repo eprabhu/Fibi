@@ -30,7 +30,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     personId: any;
     isSFINotAvailable = false;
     reviewStatus: any;
-    filterType = 'ACTIVE';
+    filterType = 'ALL';
     currentPage = 1;
     count: any;
     showSlider = false;

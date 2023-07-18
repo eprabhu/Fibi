@@ -14,9 +14,9 @@
                     </span>
                     <div class="col-3 mt-2">
                         <span class="label-text me-2 p-0 ">Disclosure Status :</span>
-                        <app-no-data-label [valueToShow]="disclosure?.conflictStatus">
+                        <app-no-data-label [valueToShow]="disclosure?.coiConflictStatusType?.description">
                             <span
-                                class="{{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.conflictStatus}}</span>
+                                class="{{commonService.getDisclosureConflictBadge(disclosure?.coiConflictStatusType?.conflictStatusCode)}}">{{disclosure?.coiConflictStatusType?.description}}</span>
                         </app-no-data-label>
                     </div>
                 </div>
@@ -66,14 +66,14 @@
                         </div>
                         <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-5">
                             <label for="id" class="label-text">Description :</label>
-                            <app-no-data-label [valueToShow]="disclosure?.reviseComment">
-                                <span id="id" class="grey-text">{{disclosure?.reviseComment}}</span>
+                            <app-no-data-label [valueToShow]="disclosure?.revisionComment">
+                                <span id="id" class="grey-text">{{disclosure?.revisionComment}}</span>
                             </app-no-data-label>
                         </div>
                         <div class="col">
                             <label for="id" class="label-text">Administrator :</label>
-                            <app-no-data-label [valueToShow]="disclosure?.administrator">
-                                <span id="id" class="grey-text">{{disclosure?.administrator}}</span>
+                            <app-no-data-label [valueToShow]="disclosure?.adminPersonName">
+                                <span id="id" class="grey-text">{{disclosure?.adminPersonName}}</span>
                             </app-no-data-label>
                         </div>
                         <div class="col">
@@ -294,8 +294,8 @@
                                 <label for="id" class="label-text">{{disclosure?.disclosureVersionNumber== 1 ?
                                     'Description:' :
                                     'Revision Reason:'}}</label>
-                                <app-no-data-label [valueToShow]="disclosure?.revisionComment">
-                                    <span id="id" class="grey-text">{{disclosure?.revisionComment}}</span>
+                                <app-no-data-label [valueToShow]="disclosure?.reviseComment">
+                                    <span id="id" class="grey-text">{{disclosure?.reviseComment}}</span>
                                 </app-no-data-label>
                             </div>
                             <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-5">

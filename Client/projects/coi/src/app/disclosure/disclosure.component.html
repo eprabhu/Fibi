@@ -309,7 +309,7 @@
                 <div class="row m-0 px-3 d-flex justify-content-between {{isCardExpanded ? 'py-3' : 'pt-2'}}">
                     <button title="Go to COI home page" (click)="goToHomeUrl()"
                     [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
-                    [ngClass]="coiData?.coiDisclosure?.reviewStatusCode != '4' ? 'col-2':'col'"
+                    [ngClass]="coiData?.coiDisclosure?.reviewStatusCode != '4' && isCardExpanded ? 'col-2' :'col'"
                     class="btn btn-outline-secondary home-btn-cente me-2 d-flex justify-content-center {{isCardExpanded ? 'mb-3' : ''}}">
                     <mat-icon>home</mat-icon>
                     <span class="fs-14 mt-1 ml-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4 && isCardExpanded">Home</span>
@@ -331,7 +331,7 @@
                         <mat-icon class="me-2">rate_review</mat-icon>
                         <span class="mt-1 ms-2" *ngIf="isCardExpanded">Comments</span>
                     </button>
-                    <button *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode!=4" title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" 
+                    <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" 
                     class="fs-14 btn btn-outline-secondary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12 mb-3' : 'col me-2'}}" (click)="isAddAssignModalOpen = true;"
                     [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn btn-outline-grey':'btn btn-primary'">
                     <mat-icon class="me-1">group_add</mat-icon>
@@ -363,9 +363,9 @@
                         <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                     </button>
 
-                    <div class="fs-14 ash-text wrapping-text p-0 {{isCardExpanded ? 'mt-2' : 'mt-1'}}"  
+                    <div class="fs-14 ash-text p-0 {{isCardExpanded ? '' : 'm-04'}}"  
                         [class.mt-1] = "coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'">
-                        <div><span class="fw-medium me-3">Last Updated By :</span></div>
+                        <div><span class="fw-medium me-3">Last Updated By:</span></div>
                         <div>{{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp |
                             dateFormatterWithTimeZone:'long'}}</div>
                     </div>

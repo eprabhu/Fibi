@@ -96,6 +96,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   entityTabName(tabName: string) {
+    this.localCOIRequestObject = new EntityDashboardRequest();
     this.resetAdvanceSearchFields();
     this.entityList = [];
     this.resultCount = null;
