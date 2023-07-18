@@ -112,6 +112,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         { variableName: 'travelExpirationDate', fieldName: 'Expiration Date' },
         { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
     ];
+    readMoreOrLess = [];
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -619,14 +620,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    modalHeader(disclosure) {
-        if (disclosure.travelDisclosureId) {
-            return `#${disclosure.travelDisclosureId}: Travel Disclosure By ${disclosure.travellerName}`;
-        }
-        if (disclosure.fcoiTypeCode === '1') {
-            return `#${disclosure.coiDisclosureNumber}: FCOI Disclosure By ${disclosure.disclosurePersonFullName}`;
-        } else if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
-            return `#${disclosure.coiDisclosureNumber}: Project Disclosure By ${disclosure.disclosurePersonFullName}`;
+    modalHeader (disclosure) {
+        if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
+            if (disclosure.fcoiTypeCode === '2') {
+                return `# ${disclosure.proposalId} - ${disclosure.proposalTitle}`;
+            } else if (disclosure.fcoiTypeCode === '3') {
+                return `# ${disclosure.awardId} - ${disclosure.awardTitle}`;
+            }
         }
     }
 

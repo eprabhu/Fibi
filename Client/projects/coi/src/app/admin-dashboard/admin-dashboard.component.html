@@ -262,21 +262,28 @@
                     (mouseout)="isHover[index] = false">
                     <div class="bg-white border f-14">
                         <div class="row mt-2">
-                            <div class="col" [class.col-4]="coi?.travelDisclosureId">
+                            <div class="col">
                                 <span class="align-items-center d-flex">
                                     <span
                                         class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(coi)}}">
                                         <span class="px-2">{{coi?.travelDisclosureId? 'Travel' :
                                             coi?.fcoiType}}</span></span>
-                                    <h4 class="mb-0 ml-2"><strong>{{modalHeader(coi)}}</strong></h4>
+                                            <h4 *ngIf="coi.travelDisclosureId" class="mb-0 ml-2 mt-2"><strong class="me-2">{{coi.travellerName}}</strong>
+                                                <span class="me-2 pipe"></span>
+                                                <span class="label-text">Entity : </span><span class="title-text">{{coi.travelEntityName}}</span></h4>
+                                            <h4 *ngIf="!coi.travelDisclosureId" class="mb-0 ml-2 mt-2">
+                                                <strong>
+                                                        <span class="me-2">{{coi.disclosurePersonFullName}}</span>
+                                                        <span class="pipe"></span>
+                                                        <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="label-text ms-2">Project : </span>
+                                                        <span class="title-text">{{(readMoreOrLess[index]) ? modalHeader(coi) : modalHeader(coi) | slice:0:90}}</span>
+                                                        <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>90"><span class="title-text">...</span><a
+                                                                (click)="readMoreOrLess[index]=true"> <span class="readMore">Read More</span></a></span>
+                                                        <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1">Read Less</span></a>
+                                            
+                                                </strong>
+                                            </h4>
                                 </span>
-                            </div>
-                            <div class="col-5 pt-1 ps-3 align-items-center mt-2" *ngIf="coi?.travelDisclosureId">
-                                <label for="traveller" class="label-text">Traveller :</label>
-                                <app-no-data-label id="traveller" [valueToShow]="coi?.travellerTypeDescription">
-                                    <span
-                                        class="grey-text">{{formatTravellerListValues(coi?.travellerTypeDescription)}}</span>
-                                </app-no-data-label>
                             </div>
                             <div class="p-1 align-items-center mt-2 col-3">
                                 <label for="disclosure-status" class="label-text">Disclosure Status :</label>
@@ -299,16 +306,6 @@
                         <div class="border-bottom">
                             <ng-container *ngIf="!coi?.travelDisclosureId">
                                 <div class="row mb-3 px-3 mt-2">
-                                    <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-12 mb-3">
-                                        <label for="id" class="label-text">Project :</label>
-                                        <app-no-data-label
-                                            [valueToShow]="(coi?.fcoiTypeCode==2 && coi?.proposalId) || (coi?.fcoiTypeCode==3 && coi?.awardId)">
-                                            <span *ngIf="coi?.fcoiTypeCode==2" id="id"
-                                                class="grey-text">#{{coi?.proposalId}} - {{coi?.proposalTitle}}</span>
-                                            <span *ngIf="coi?.fcoiTypeCode==3" id="id"
-                                                class="grey-text">#{{coi?.awardId}} -
-                                                {{coi?.awardTitle}}</span></app-no-data-label>
-                                    </div>
                                     <div class="col-5">
                                         <label for="id" class="label-text">Department :</label>
                                         <span id="id" class="grey-text">#{{coi?.unit?.unitDetail}}</span>
@@ -374,14 +371,12 @@
 
                             <ng-container *ngIf="coi?.travelDisclosureId">
                                 <div class="row mb-3 px-3 mt-2">
-                                    <div class="col-4 d-flex">
-                                        <label for="entity" class="label-text col-custom-travel">Entity :</label>
-                                        <span class="col">
-                                            <app-no-data-label id="entity" [valueToShow]="coi?.travelEntityName">
-                                                <span class="grey-text text-slice"
-                                                    [title]="coi?.travelEntityName">{{coi?.travelEntityName}}</span>
-                                            </app-no-data-label>
-                                        </span>
+                                    <div class="col-4 d-flex" *ngIf="coi?.travelDisclosureId">
+                                        <label for="traveller" class="label-text">Travellers :</label>
+                                        <app-no-data-label id="traveller" [valueToShow]="coi?.travellerTypeDescription">
+                                            <span
+                                                class="grey-text">{{formatTravellerListValues(coi?.travellerTypeDescription)}}</span>
+                                        </app-no-data-label>
                                     </div>
                                     <div class="col">
                                         <label for="destination" class="label-text">Destination :</label>
