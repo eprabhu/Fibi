@@ -271,7 +271,7 @@
                                         <h4 class="mb-0 ml-2 mt-2">
                                             <strong>
                                                 <span class="me-2">{{coi.disclosurePersonFullName}}</span>
-                                                <span class="pipe"></span>
+                                                <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="pipe"></span>
                                                 <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="label-text ms-2">Project : </span>
                                                 <span class="title-text"> {{(readMoreOrLess[index]) ? modalHeader(coi) : modalHeader(coi) | slice:0:90}}</span>
                                                 <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>90">...
