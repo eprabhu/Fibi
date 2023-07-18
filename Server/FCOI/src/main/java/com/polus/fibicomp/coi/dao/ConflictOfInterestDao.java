@@ -647,14 +647,6 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	DashBoardProfile getCOIReviewerDashboard(CoiDashboardVO vo);
-
-	/**
-	 *
-	 * @param dashboardType
-	 * @param loginPersonId
-	 * @return
-	 */
-	ConflictOfInterestVO loadDisclosureQuickCardCounts(String dashboardType, String loginPersonId);
 	
 	public CoiProjectProposal saveOrUpdateCoiProjectProposal(CoiProjectProposal coiProjectProposal);
 
