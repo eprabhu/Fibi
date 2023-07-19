@@ -291,19 +291,31 @@
         <div class="row ">
           <div class="col-lg-12">
             <div class="help-text row">
-              <div class="col-12 py-2 grey-info font">
-              <ol type="1" class="fs-13 text-secondary">
-                <li><span class="fw-bold">Minor modification</span> -  Select for minor corrections like typos.</li>
-                <li><span class="fw-bold">Major modification</span> - Select for major corrections like
-                  changes in the company name, ownership type,
-                  and permanent change in entity address that reflects in entity country.</li>
-                <li><span class="fw-bold">
-                    Description
-                  </span>
-                  - Provide any description or comments on why you want to modify the entity.
-                </li>
-
-              </ol>
+              <div class="col-12 py-2 grey-info font d-flex">
+                <span data-bs-toggle="tooltip" title=" Modifie entity help text" data-bs-placement="top" class="d-inline-block">
+                  <mat-icon role="img" class="mat-icon me-2 info-icon material-icons mat-icon-no-color" aria-hidden="true"
+                    data-mat-icon-type="font">info</mat-icon>
+                </span>
+                <div class="ms-5 text-colors mt-1 fs-14">
+                  <div>
+                    <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                    <span class="fw-bold">Minor modification</span> - Select for minor corrections like typos.
+                    <br>
+                  </div>
+                  <div class="d-flex mt-2">
+                    <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                    <div>
+                      <span class="fw-bold">Major modification</span> - Select for major corrections like
+                      changes in the company name, ownership type,
+                      and permanent change in entity address that reflects in entity country.
+                    </div>
+                  </div>
+                  <div>
+                    <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                    <span class="fw-bold">Description</span> - Provide any description or comments on why you want to modify the
+                    entity.
+                  </div>
+                </div>
               </div>
             </div>
             <div class="fs-14 fw-bold mx-1"><span class="mandatory px-1">*</span>Modify Type :
@@ -360,7 +372,7 @@
         <button type="button" class="btn-close fs-12 " title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="inactivateReason=''"></button>
       </div>
       <div class="modal-body ct-modal-padding">
-        <div class="help-text">
+        <!-- <div class="help-text">
           <div class="col-12 py-2 grey-info font px-3">
             <span *ngIf="entityDetails.isActive" class="fs-13 text-secondary">
               <ol type="1">
@@ -375,6 +387,36 @@
                 <li>Provide the reason for Activation in the field provided.</li>
                 <li>Click on Activate button to activate the entity.</li>
               </ol>
+            </span>
+          </div>
+        </div> -->
+        <div class="help-text">
+          <div class="col-12 py-2 grey-info font px-3 d-flex align-items-center position-relative">
+            <span data-bs-toggle="tooltip" title="Inactivate entity Help Text." data-bs-placement="top" class="d-inline-block pe-2">
+              <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+            </span>
+            <span class="fs-14 ms-3 text-colors" *ngIf="entityDetails.isActive">
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Provide the reason for Inactivation in the field provided.</div>
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Click on Activate button to activate the entity.</div>
+              <div class="mt-2 ml-15 d-flex">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                <div class="ms-1">
+                  If the entity is used in any of the Active SFIs (Financial or Travel), then a new version of the entity
+                  is created in Inactive status and the previous version goes to Archive status.
+                </div>
+               </div>
+            </span>
+            <span class="fs-14 ms-3 text-colors" *ngIf="!entityDetails.isActive">
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Provide the reason for Activation in the field provided.</div>
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Click on Inactivate button to activate the entity.</div>
             </span>
           </div>
         </div>
@@ -422,19 +464,19 @@
       <div class="modal-body ct-modal-padding">
         <div class="help-text">
           <div class="col-12 py-2 grey-info font px-3 d-flex align-items-center position-relative">
-            <span data-bs-toggle="tooltip" title="Entity Help Text." data-bs-placement="top" class="d-inline-block pe-2">
+            <span data-bs-toggle="tooltip" title="Approve entity help text." data-bs-placement="top" class="d-inline-block pe-2">
               <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
             </span>
-            <span class="fs-13">
+            <span class="fs-14 ms-3 text-colors">
               <div class="mt-2 ml-15">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
                 Mark any of the entity interrelations using the fields provided below.
               </div>
-              <div class="mt-2 ml-15">
+              <div class="ml-15">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
                 You may mark multiple entity relations.
               </div>
-              <div class="mt-2 ml-15">
+              <div class="ml-15">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
                 Complete entity verification by marking any relationships and clicking on Approve Entity button.
               </div>

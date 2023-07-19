@@ -111,19 +111,13 @@ public interface ConflictOfInterestService {
 	 * This method is used to get disclosure Relationship by proposalId.
 	 * @return vo
 	 */
-	String getEntityProjectRelations(ConflictOfInterestVO vo);
+	ResponseEntity<Object> getDisclosureProjectRelations(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used to get sfi relation all conflicts are completed or not.
 	 * @return vo
 	 */
 	String checkSFICompleted(ConflictOfInterestVO vo);
-
-	/**
-	 * This method is used to get admin dashboard detail counts
-	 * @return counts
-	 */
-	ResponseEntity<Object> loadDisclosureAdminDashboardCounts();
 
 	/**
 	 * This method is used to revise Coi disclosure
@@ -144,13 +138,6 @@ public interface ConflictOfInterestService {
 	 * @return list of SFI details
 	 */
 	ResponseEntity<Object> getDisclosureDetailsForSFI(Integer coiFinancialEntityId);
-
-	/**
-	 * This method is used to get Disclosure Relations for SFI
-	 * @param coiFinancialEntityId
-	 * @return list of Disclosure Relations details
-	 */
-	ResponseEntity<Object> getDisclosureRelationsForSFI(Integer coiFinancialEntityId);
 
 	/**
 	 * This method is used for save review details
@@ -328,13 +315,6 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> getCOIReviewerDashboard(CoiDashboardVO vo);
-
-	/**
-	 *  This method is used to load reviewer quick card count
-	 *
-	 * @return
-	 */
-	ResponseEntity<Object> loadDisclosureReviewerQuickCardCounts();
 	
 	public ResponseEntity<Object> getCoiEntityDetails(Integer personEntityId);
 
@@ -354,7 +334,7 @@ public interface ConflictOfInterestService {
 	 * @param entityId Entity Id
 	 * @return
 	 */
-	Object checkEntityAdded(Integer entityId);
+	ResponseEntity<Object> checkEntityAdded(Integer entityId);
 
 	/**
 	 * Validate
@@ -460,4 +440,5 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship);
 	
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
+
 }

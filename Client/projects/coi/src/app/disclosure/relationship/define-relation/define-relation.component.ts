@@ -102,7 +102,7 @@ export class DefineRelationComponent implements OnInit {
 
     getEntityList() {
       this.$subscriptions.push(  this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode,this.coiData.coiDisclosure.personId).subscribe((data: any) => {
-        this.entityProjectDetails = data.coiDisclEntProjDetails;
+        this.entityProjectDetails = data;
         this.selectedProject = this.module;
         this.calculateSize();
         this.showTaskNavBar();
@@ -184,7 +184,7 @@ export class DefineRelationComponent implements OnInit {
         this.coiTableValidation.set('save-description'+index , 'Please enter description');
       }
       if(!this.coiTableValidation.has('save-status'+index) && !this.coiTableValidation.has('save-description'+index) ) {
-        test.personEntityId = test.personEntity.personEntityId;
+        test.personEntityId = test.personEntityId;
         test.disclosureId = this.coiData.coiDisclosure.disclosureId;
         test.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
         test.moduleCode = this.selectedProject.moduleCode;
@@ -197,7 +197,7 @@ export class DefineRelationComponent implements OnInit {
 
     prepareSaveObject() {
       this.entityProjectDetails.forEach((ele: any) => {
-        ele.personEntityId = ele.personEntity.personEntityId;
+        ele.personEntityId = ele.personEntityId;
         ele.disclosureId = this.coiData.coiDisclosure.disclosureId;
         ele.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
         ele.moduleCode = this.selectedProject.moduleCode;

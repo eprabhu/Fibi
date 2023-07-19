@@ -35,7 +35,7 @@ export class SfiService {
     }
 
     isEntityAdded(entityId) {
-        return this._http.get(`${this._commonService.baseUrl}/checkEntity/${entityId}/added`)
+        return this._http.get(`${this._commonService.baseUrl}/entity/isLinked/${entityId}/personEntity`);
     }
 
     addSFILookUp() {

@@ -53,6 +53,7 @@ public class CoiTravelDisclosureDto {
 	private String documentStatus;
 	private String riskLevel;
 	Map<String, String> travellerTypeCodeList;
+	private Date expirationDate;
 	private String createUser;
 	private Timestamp createTimestamp;
 	private String updateUser;
@@ -392,6 +393,14 @@ public class CoiTravelDisclosureDto {
 
 	public void setAdminPersonName(String adminPersonName) {
 		this.adminPersonName = adminPersonName;
+	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
 	public String getCreateUser() {

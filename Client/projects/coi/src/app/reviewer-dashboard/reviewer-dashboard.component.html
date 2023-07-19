@@ -268,7 +268,18 @@
                                             class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(coi.fcoiTypeCode)}}">
                                             <span class="px-2">{{coi?.fcoiType}}</span>
                                         </span>
-                                        <h4 class="mb-0 ml-2"><strong>{{modalHeader(coi)}}</strong></h4>
+                                        <h4 class="mb-0 ml-2 mt-2">
+                                            <strong>
+                                                <span class="me-2">{{coi.disclosurePersonFullName}}</span>
+                                                <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="pipe"></span>
+                                                <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="label-text ms-2">Project : </span>
+                                                <span class="title-text"> {{(readMoreOrLess[index]) ? modalHeader(coi) : modalHeader(coi) | slice:0:90}}</span>
+                                                <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>90">...
+                                                    <a (click)="readMoreOrLess[index]=true"><span class="readMore">Read More</span></a>
+                                                </span>
+                                                <span *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1">Read Less</span></span>
+                                            </strong>
+                                        </h4>
                                     </span>
                                 </div>
                                 <div class="col-3 p-1 align-items-center mt-2">
@@ -283,17 +294,6 @@
                             </div>
                             <div class="border-bottom">
                                 <div class="row mb-3 px-3 mt-2">
-                                    <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-12 mb-3">
-                                        <label for="id" class="label-text">Project :</label>
-                                        <app-no-data-label
-                                            [valueToShow]="(coi?.fcoiTypeCode==2 && coi?.proposalId) || (coi?.fcoiTypeCode==3 && coi?.awardId)">
-                                            <span *ngIf="coi?.fcoiTypeCode==2" id="id"
-                                                class="grey-text">#{{coi?.proposalId}} - {{coi?.proposalTitle}}</span>
-                                            <span *ngIf="coi?.fcoiTypeCode==3" id="id"
-                                                class="grey-text">#{{coi?.awardId}} -
-                                                {{coi?.awardTitle}}</span>
-                                        </app-no-data-label>
-                                    </div>
                                     <div class="col-5">
                                         <label for="id" class="label-text">Department :</label>
                                         <span id="id" class="grey-text">#{{coi?.unit?.unitDetail}}</span>

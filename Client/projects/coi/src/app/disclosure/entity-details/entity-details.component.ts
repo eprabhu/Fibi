@@ -1,8 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityDetailsService } from './entity-details.service';
-import { scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { hideModal, openModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
+import { NavigationService } from '../../common/services/navigation.service';
 
 @Component({
   selector: 'app-entity-details',
@@ -14,7 +15,7 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   isTriggeredFromSlider = false;
   $subscriptions: Subscription[] = [];
 
-  constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router) {
+  constructor(public entityDetailService: EntityDetailsService,private _navigationService: NavigationService, private _route: ActivatedRoute, private _router: Router) {
     this.clearSfiNavBarStyle();
   }
   updateRelationshipDetails: any;
@@ -77,6 +78,16 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
     this.sfiRelationStatus = event.relationSFiStatus;
     this.personEntityRelationships = event.personEntityRelationships;
     this.personEntity = event.personEntity;
+  }
+
+  leavePage() {
+      this.entityDetailService.isRelationshipQuestionnaireChanged = false;
+      this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
+      this.closeUnsavedChangesModal();
+  }
+  
+  closeUnsavedChangesModal() {
+    hideModal('hiddenUnsavedChanges');
   }
 
 }
