@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
 import { CREATE_DISCLOSURE_ROUTE_URL, CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { Router } from '@angular/router';
-import { ActiveDisclosure , UserDisclosure } from './user-disclosure-interface';
+import { UserDisclosure } from './user-disclosure-interface';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -14,7 +14,7 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
     styleUrls: ['./user-disclosure.component.scss']
 })
 
-export class UserDisclosureComponent implements OnInit {
+export class UserDisclosureComponent implements OnInit, OnDestroy {
     isShowCountModal = false;
     searchText = '';
     currentSelected = {
@@ -40,7 +40,7 @@ export class UserDisclosureComponent implements OnInit {
     disclosureType: any;
     inputType: string;
     coiList: [];
-    ishover: [] = [];
+    isHover: [] = [];
     disclosureSequenceStatusCode: any;
     personId: any;
     onButtonHovering: any = true;
@@ -53,6 +53,7 @@ export class UserDisclosureComponent implements OnInit {
     $fetchDisclosures = new Subject();
     isSearchTextHover = false;
     isShowNoDataCard = false;
+    isShowNoInfoCard = false;
     readMoreOrLess = [];
 
     constructor(public userDisclosureService: UserDisclosureService,
@@ -70,14 +71,28 @@ export class UserDisclosureComponent implements OnInit {
 
     loadDashboard() {
         this.isShowNoDataCard = false;
+        this.isShowNoInfoCard = false;
         this.$subscriptions.push(this.$fetchDisclosures.pipe(
             switchMap(() => this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject))).subscribe((res: any) => {
             this.result = res;
             if (this.result) {
                 this.isShowNoDataCard = true;
-                this.filteredDisclosureArray =  res.disclosureViews || [];
+                this.filteredDisclosureArray =  this.getDashboardList();
+                this.showOrHideNoInfoCard();
             }
-        }));
+        }), (err) => {
+            this.showOrHideNoInfoCard();
+        });
+    }
+
+    private getDashboardList(): any {
+        const disclosureViews = this.result.disclosureViews || [];
+        const travelDashboardViews = this.result.travelDashboardViews || [];
+        return disclosureViews.concat(travelDashboardViews);
+    }
+
+    private showOrHideNoInfoCard() {
+        this.isShowNoInfoCard = !this.filteredDisclosureArray.length;
     }
 
     getDisclosures() {
@@ -95,6 +110,7 @@ export class UserDisclosureComponent implements OnInit {
 
     resetAndFetchDisclosure() {
         this.searchText = '';
+        this.filteredDisclosureArray = [];
         this.dashboardRequestObject.property2 = '';
         this.$fetchDisclosures.next();
     }
@@ -213,7 +229,7 @@ export class UserDisclosureComponent implements OnInit {
     }
 
     getSearchPlaceHolder() {
-        if(this.currentSelected.tab != 'TRAVEL_DISCLOSURES') {
+        if (this.currentSelected.tab !== 'TRAVEL_DISCLOSURES') {
             return 'Search by #Disclosure Number, Disclosure Id, Project Title, Disclosure Status, Disposition Status, Review Status, Department Name';
         } else {
             return 'Search by #Travel Disclosure Id, Entity Name, Department Name, Traveller Type, Destination, Review Status, Document Status, Purpose';

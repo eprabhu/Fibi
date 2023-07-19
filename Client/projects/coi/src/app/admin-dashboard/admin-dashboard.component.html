@@ -1,5 +1,5 @@
 <div class="px-3">
-    <section class="section-advanced-search" [@listAnimation]="coiList.length">
+    <section class="section-advanced-search"  [@slideInOut] [@listAnimation]="coiList.length">
         <nav class="coi-admin-dash mb-2 mx-0 row border shadow-sm">
             <div class="align-items-center bg-white d-flex justify-content-between list">
                 <ul class="m-0 p-0">
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </nav>
-        <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample">
+        <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample" [@slideInOut]>
             <div class="card-body">
                 <ng-container *ngIf="coiAdminDashboardService.coiRequestObject.tabName !='ENTITY'">
                     <div class="form-row row">
@@ -421,8 +421,8 @@
                                     </div>
                                     <div class="col">
                                         <label for="expiration-date" class="label-text">Expiration Date :</label>
-                                        <app-no-data-label id="expiration-date" [valueToShow]="coi?.travelExpirationDate">
-                                            <span class="grey-text">{{coi?.travelExpirationDate |
+                                        <app-no-data-label id="expiration-date" [valueToShow]="coi?.expirationDate">
+                                            <span class="grey-text">{{coi?.expirationDate |
                                                 dateFormatter}}</span>
                                         </app-no-data-label>
                                     </div>
@@ -554,7 +554,7 @@
             </ng-container>
         </ng-container>
         <ng-template #noData>
-            <app-no-information></app-no-information>
+            <app-no-information [@slideInOut]></app-no-information>
         </ng-template>
     </section>
     <app-assign-administrator-modal *ngIf="isAssignAdminModalOpen" (closeModal)="closeAssignAdminModal($event)"

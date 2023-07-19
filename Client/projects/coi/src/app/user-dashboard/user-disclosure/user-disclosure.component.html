@@ -226,7 +226,7 @@
     <ng-container *ngIf="filteredDisclosureArray.length">
         <ng-container *ngFor="let disclosure of filteredDisclosureArray ; let index = index;">
             <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
-                (mouseover)="ishover[index] = true" (mouseout)="ishover[index] = false">
+                (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
                 <div class="row mt-2">
                     <div class="col">
                         <span class="align-items-center d-flex">
@@ -385,8 +385,8 @@
                             </div>
                             <div class="col">
                                 <label for="expiration-date" class="label-text">Expiration Date :</label>
-                                <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.travelExpirationDate">
-                                    <span class="grey-text">{{disclosure?.travelExpirationDate |
+                                <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.expirationDate">
+                                    <span class="grey-text">{{disclosure?.expirationDate |
                                         dateFormatter}}</span>
                                 </app-no-data-label>
                             </div>
@@ -419,7 +419,7 @@
                                 <div>
                                     <label class="label-text margin-top-3px">
                                         <strong [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                                            [class.text-decoration-underline]="ishover[index]&& disclosure?.noOfSfi > 0"
+                                            [class.text-decoration-underline]="isHover[index]&& disclosure?.noOfSfi > 0"
                                             (click)="setSelectedModuleCode('sfi',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfSfi);">
                                             Significant Financial Interest
                                         </strong>
@@ -440,7 +440,7 @@
                                             <label class="label-text margin-top-3px">
                                                 <strong
                                                     [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
-                                                    [class.text-decoration-underline]="ishover[index] && disclosure.noOfProposal > 0"
+                                                    [class.text-decoration-underline]="isHover[index] && disclosure.noOfProposal > 0"
                                                     (click)="setSelectedModuleCode('proposal',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfProposal);">
                                                     Proposals
                                                 </strong>
@@ -456,7 +456,7 @@
                                         <div>
                                             <label class="label-text margin-top-3px">
                                                 <strong [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
-                                                    [class.text-decoration-underline]="ishover[index] && disclosure.noOfAward > 0"
+                                                    [class.text-decoration-underline]="isHover[index] && disclosure.noOfAward > 0"
                                                     (click)="setSelectedModuleCode('Awards',disclosure?.coiDisclosureId, disclosure, disclosure?.noOfAward);">
                                                     Awards
                                                 </strong>
@@ -515,8 +515,8 @@
                 </div>
             </div>
         </ng-container>
-    </ng-container>
-    <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
+    </div>
+    <app-no-information *ngIf="isShowNoInfoCard"></app-no-information>
 </ng-container>
 <!-- Pagination -->
 <div *ngIf="filteredDisclosureArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
