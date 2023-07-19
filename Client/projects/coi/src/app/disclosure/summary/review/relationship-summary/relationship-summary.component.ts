@@ -84,14 +84,10 @@ export class RelationshipSummaryComponent implements OnInit {
             this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
                Number(this.coiDetails.disclosureId), this.coiDetails.disclosureStatusCode, this.coiDetails.personId)
                 .subscribe((data: any) => {
-                if (data && data.coiDisclEntProjDetails?.length > 0) {
+                if (data && data.length > 0) {
                     this.isShowNoDataCard = true;
-                    this.projectRelations = data.coiDisclEntProjDetails;
+                    this.projectRelations = data;
                 }
-                // if (data && this.selectedProject.proposalIdlinkedInDisclosure && data.proposals.length) {
-                //     this.selectedProject = data.proposals[0];
-                // }
-            // this.setSubSectionList();
         }, _err => {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project details. Please try again.');
         }));
