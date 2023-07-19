@@ -9,9 +9,10 @@ import { EntityDetailsService } from './entity-details.service';
 import { FormsModule } from '@angular/forms';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { ViewRelationshipDetailsComponent } from './view-relationship-details/view-relationship-details.component';
-import { SfiService } from '../sfi/sfi.service';
+import { CoiService } from '../services/coi.service';
+import { EntityDetailsRouteGuardService } from './entity-details-route-guard.service';
 
-const routes: Routes = [{ path: 'entity', component:EntityDetailsComponent }]
+const routes: Routes = [{ path: 'entity', component:EntityDetailsComponent, canDeactivate: [EntityDetailsRouteGuardService] }]
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ const routes: Routes = [{ path: 'entity', component:EntityDetailsComponent }]
   ],
   providers:[
     EntityDetailsService,
+    EntityDetailsRouteGuardService
     ], 
   exports : [EntityDetailsComponent]
 })

@@ -38,7 +38,7 @@ export interface TravelCreateModalDetails {
     homeUnitName: null;
 }
 
-export class TravelDisclosureResponseObject {
+export class TravelDisclosure {
     travelDisclosureId: number;
     versionStatus: string;
     entityId: number;
@@ -131,4 +131,9 @@ export class DefaultAdminDetails {
     adminGroupId = null;
     adminPersonName = '';
     adminGroupName = '';
+}
+
+export interface TravelActionAfterSubmitRO {
+    travelDisclosureId: number;
+    description: string;
 }

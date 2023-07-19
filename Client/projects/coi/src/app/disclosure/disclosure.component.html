@@ -309,7 +309,7 @@
                 <div class="row m-0 px-3 d-flex justify-content-between {{isCardExpanded ? 'py-3' : 'pt-2'}}">
                     <button title="Go to COI home page" (click)="goToHomeUrl()"
                     [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
-                    [ngClass]="coiData?.coiDisclosure?.reviewStatusCode != '4' ? 'col-2':'col'"
+                    [ngClass]="coiData?.coiDisclosure?.reviewStatusCode != '4' && isCardExpanded ? 'col-2' :'col'"
                     class="btn btn-outline-secondary home-btn-cente me-2 d-flex justify-content-center {{isCardExpanded ? 'mb-3' : ''}}">
                     <mat-icon>home</mat-icon>
                     <span class="fs-14 mt-1 ml-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4 && isCardExpanded">Home</span>
@@ -331,8 +331,7 @@
                         <mat-icon class="me-2">rate_review</mat-icon>
                         <span class="mt-1 ms-2" *ngIf="isCardExpanded">Comments</span>
                     </button>
-
-                    <button  title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                    <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" 
                     class="fs-14 btn btn-outline-secondary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12 mb-3' : 'col me-2'}}" (click)="isAddAssignModalOpen = true;"
                     [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn btn-outline-grey':'btn btn-primary'">
                     <mat-icon class="me-1">group_add</mat-icon>
@@ -364,9 +363,9 @@
                         <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                     </button>
 
-                    <div class="fs-14 ash-text wrapping-text p-0 {{isCardExpanded ? 'mt-2' : 'mt-1'}}"  
+                    <div class="fs-14 ash-text p-0 {{isCardExpanded ? '' : 'm-04'}}"  
                         [class.mt-1] = "coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'">
-                        <div><span class="fw-medium me-3">Last Updated By :</span></div>
+                        <div><span class="fw-medium me-3">Last Updated By:</span></div>
                         <div>{{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp |
                             dateFormatterWithTimeZone:'long'}}</div>
                     </div>
@@ -599,13 +598,15 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <strong title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}}
-                    :
-                    {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                    Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} :
-                    {{(coiData?.projectDetail?.title)?.length>40 ?
-                    (coiData?.projectDetail?.title | slice:0: 40)+'...' :
-                    coiData?.projectDetail?.title}} ]
+                <strong title="{{coiData?.projectDetail?.title}}">
+                    <div class="d-flex">
+                        <span class="text-slice">#{{coiData?.coiDisclosure?.disclosureNumber}} :
+                            {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
+                            Disclosure <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode !== '1'">For [ <span>{{coiData?.projectDetail?.moduleItemId}} :
+                            {{coiData?.projectDetail?.title.slice(0,10) + '...'}}</span><span class="col"> ]</span></ng-container>  By <strong
+                                title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</strong>
+                        </span>
+                    </div>
                 </strong>
                 <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
                     aria-label="Close" (click)="isSaving = false">
@@ -613,27 +614,30 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 ">
-                        <div *ngIf="coiData?.coiDisclosure?.numberOfSFI > 0">
-                            Are you sure you want to submit the FCOI / Project disclosure?
+                    <div class="col-12">
+                    <ng-container *ngIf="coiData?.coiDisclosure?.numberOfSFI > 0">
+                        <div>
+                           <p class="fs-14">Are you sure you want to submit the <strong>{{getDisclosureTypeMessage()}} </strong> disclosure?</p>
                         </div>
-                        <div *ngIf="coiData?.coiDisclosure?.numberOfSFI == 0">
-                            You are about to submit a no SFI disclosure.
+                    </ng-container>
+                         <div *ngIf="coiData?.coiDisclosure?.numberOfSFI == 0">
+                           <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTypeMessage()}} </strong> disclosure.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <ng-container>
-                    <button class=" btn btn-outline-secondary" data-bs-dismiss="modal"
-                        id="prop-saveExit-dismiss-btn" (click)="isSaving = false">Cancel</button>
-                        <button (click)="certifyDisclosure()" class=" btn btn-primary btn-sm fs-14"
-                        data-bs-dismiss="modal" id="prop-saveExit-dismiss-btn">Submit</button>
+                    <button class=" btn btn-outline-secondary" data-bs-dismiss="modal" id="prop-saveExit-dismiss-btn"
+                        (click)="isSaving = false">Cancel</button>
+                    <button (click)="certifyDisclosure()" class=" btn btn-primary btn-sm fs-14" data-bs-dismiss="modal"
+                        id="prop-saveExit-dismiss-btn">Submit</button>
                 </ng-container>
             </div>
         </div>
     </div>
 </div>
+
 <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
@@ -643,9 +647,7 @@
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
 
-<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"
-    [defaultAdminDetails]="defaultAdminDetails" [disclosureId]="coiData?.coiDisclosure?.disclosureId">
-</app-assign-administrator-modal>
+<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 

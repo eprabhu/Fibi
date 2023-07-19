@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { TravelDisclosureResponseObject, TravelHistoryRO } from '../travel-disclosure-interface';
+import { TravelActionAfterSubmitRO, TravelDisclosure, TravelHistoryRO } from '../travel-disclosure-interface';
 
 
 @Injectable()
 export class TravelDisclosureService {
 
-    coiTravelDisclosure = new TravelDisclosureResponseObject();
+    coiTravelDisclosure = new TravelDisclosure();
     saveSubject = new Subject();
     travelDataChanged = false;
     isTravelCertified = false;
@@ -52,15 +52,15 @@ export class TravelDisclosureService {
         return this._http.get(`${this._commonService.baseUrl}/loadTravelDisclosure/${travelDisclosureId}`);
     }
 
-    withdrawTravelDisclosure(travelDisclosureRO: object) {
+    withdrawTravelDisclosure(travelDisclosureRO: TravelActionAfterSubmitRO) {
         return this._http.post(`${this._commonService.baseUrl}/withdrawTravelDisclosure`, travelDisclosureRO);
     }
 
-    approveTravelDisclosure(travelDisclosureRO: object) {
+    approveTravelDisclosure(travelDisclosureRO: TravelActionAfterSubmitRO) {
         return this._http.post(`${this._commonService.baseUrl}/approveTravelDisclosure`, travelDisclosureRO);
     }
 
-    returnTravelDisclosure(travelDisclosureRO: object) {
+    returnTravelDisclosure(travelDisclosureRO: TravelActionAfterSubmitRO) {
         return this._http.post(`${this._commonService.baseUrl}/returnTravelDisclosure`, travelDisclosureRO);
     }
 

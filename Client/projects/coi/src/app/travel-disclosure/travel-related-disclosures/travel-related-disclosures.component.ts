@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { TravelDisclosureResponseObject, EntityData, TravelHistoryRO, TravelHistory } from '../travel-disclosure-interface';
+import { TravelDisclosure, EntityData, TravelHistoryRO, TravelHistory } from '../travel-disclosure-interface';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
@@ -19,7 +19,7 @@ import { listAnimation } from 'projects/fibi/src/app/common/utilities/animations
 export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
 
     historyData: Array<TravelHistory> = [];
-    travelDisclosureData = new TravelDisclosureResponseObject();
+    travelDisclosure = new TravelDisclosure();
     entityData = new EntityData();
     $subscriptions: Subscription[] = [];
 
@@ -40,16 +40,16 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private getDataFromStore(): void {
-        this.travelDisclosureData = this._dataStore.getData();
+        this.travelDisclosure = this._dataStore.getData();
         this.setEntityData();
         this.loadTravelDisclosureHistory();
     }
 
     private setEntityData(): void {
-        this.entityData.country = this.travelDisclosureData.country;
-        this.entityData.entityId = this.travelDisclosureData.entityId;
-        this.entityData.entityType = this.travelDisclosureData.entityType;
-        this.entityData.entityName = this.travelDisclosureData.travelEntityName;
+        this.entityData.country = this.travelDisclosure.country;
+        this.entityData.entityId = this.travelDisclosure.entityId;
+        this.entityData.entityType = this.travelDisclosure.entityType;
+        this.entityData.entityName = this.travelDisclosure.travelEntityName;
 
     }
 
@@ -63,8 +63,8 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
 
     private getTravelHistoryRO(): TravelHistoryRO {
         return {
-            'personId': this.travelDisclosureData.personId,
-            'entityNumber': this.travelDisclosureData.entityNumber
+            'personId': this.travelDisclosure.personId,
+            'entityNumber': this.travelDisclosure.entityNumber
         };
     }
 
@@ -81,9 +81,9 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
 
     getTravellerType(): string {
         let traveller = '';
-        if (this.travelDisclosureData.travellerTypeCodeList) {
-            Object.keys(this.travelDisclosureData.travellerTypeCodeList).forEach((typeCode: any) => {
-                const travellerType = this.travelDisclosureData.travellerTypeCodeList[typeCode];
+        if (this.travelDisclosure.travellerTypeCodeList) {
+            Object.keys(this.travelDisclosure.travellerTypeCodeList).forEach((typeCode: any) => {
+                const travellerType = this.travelDisclosure.travellerTypeCodeList[typeCode];
                 traveller += traveller === '' ? travellerType : `, ${travellerType}`;
             });
         }

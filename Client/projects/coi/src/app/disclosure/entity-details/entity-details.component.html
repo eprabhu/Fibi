@@ -4,3 +4,28 @@
   <app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"  (sfiRelationshipDetails)="getRelationshipDetails($event)"></app-view-relationship-details>
   <app-entity-questionnaire  [entityId]="entityId" id="focusQuestionnaire" (updateRelationship)="updateRelationship($event)" (isEmitModalClose)="closedRelationshipModal($event)" [isAddRelationship]="isEnableRelationshipModal" (positionsToView)="scrollPosition($event)" [isEditMode]="isEditMode"></app-entity-questionnaire>
 </div>
+
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-unsaved-changes-button" data-bs-toggle="modal"
+    data-bs-target="#hiddenUnsavedChanges"></button>
+<div class="modal modal-coi fade mySkinDialog" id="hiddenUnsavedChanges" role="dialog" aria-labelledby="hiddenUnsavedChanges"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12"
+                data-bs-dismiss="modal"
+                    aria-label="Close" (click)="closeUnsavedChangesModal()">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>You have unsaved changes in the current<strong> Relationship Questionnaire</strong>.</p>
+                <span class="fs-14"><p>Do you want to leave the page?</p></span>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary" (click)="leavePage();">Leave Page</button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="closeUnsavedChangesModal()">Stay On Page</button>
+            </div>
+        </div>
+    </div>
+</div>

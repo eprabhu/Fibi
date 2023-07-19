@@ -53,6 +53,7 @@ export class UserDisclosureComponent implements OnInit {
     $fetchDisclosures = new Subject();
     isSearchTextHover = false;
     isShowNoDataCard = false;
+    readMoreOrLess = [];
 
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
@@ -198,12 +199,12 @@ export class UserDisclosureComponent implements OnInit {
     }
 
     modalHeader(disclosure: UserDisclosure) {
-        if (disclosure.fcoiTypeCode === '1') {
-            return `#${disclosure.coiDisclosureNumber}: FCOI Disclosure By ${disclosure.disclosurePersonFullName}`;
-        } else if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
-            return `#${disclosure.coiDisclosureNumber}: Project Disclosure By ${disclosure.disclosurePersonFullName}`;
-        } else if (disclosure.travelDisclosureId) {
-            return `#${disclosure.travelDisclosureId}: ${disclosure.travelEntityName}`;
+        if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
+            if (disclosure.fcoiTypeCode === '2') {
+                return `#${disclosure.proposalId} - ${disclosure.proposalTitle}`;
+            } else if (disclosure.fcoiTypeCode === '3') {
+                return `#${disclosure.awardId} - ${disclosure.awardTitle}`;
+            }
         }
     }
 

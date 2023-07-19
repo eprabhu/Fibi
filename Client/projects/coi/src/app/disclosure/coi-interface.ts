@@ -84,6 +84,7 @@ export class CoiDisclosure {
     adminGroupName: string;
     moduleItemKey: string;
     title: string;
+    numberOfSFI: any;
 }
 export interface UnitAdministratorType {
     code: string;
@@ -265,7 +266,7 @@ export class GetSFIRequestObject {
     'disclosureId' = null;
     'reviewStatusCode' = ''; 
     'personId' : any; 
-    'filterType': string =  'ACTIVE';
+    'filterType': string =  'ALL';
     'currentPage': any =1; 
     'pageNumber': any = 20;
     'searchWord': any;

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UnsavedChangesWarningComponent } from './unsaved-changes-warning/unsaved-changes-warning.component';
 import { TravelEntityCardComponent } from './travel-entity-card/travel-entity-card.component';
 import { FormsModule } from '@angular/forms';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
@@ -14,11 +13,9 @@ import { SharedModule } from '../../shared/shared.module';
     SharedComponentModule,
   ],
   declarations: [
-    UnsavedChangesWarningComponent,
     TravelEntityCardComponent
   ],
   exports: [
-    UnsavedChangesWarningComponent,
     TravelEntityCardComponent
   ]
 })

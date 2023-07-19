@@ -195,4 +195,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
     this.entityDetailsServices.$saveQuestionnaireAction.next(event);
   }
 
+  questionnaireEdit(event) {
+    this.entityDetailsServices.isRelationshipQuestionnaireChanged = true;
+  }
+
 }

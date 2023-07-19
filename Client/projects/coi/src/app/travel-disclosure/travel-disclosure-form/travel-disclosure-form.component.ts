@@ -7,7 +7,7 @@ import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from 'proje
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
-import { CoiTravelDisclosure, EndpointOptions, TravelCreateModalDetails, TravelDisclosureResponseObject, TravelDisclosureTraveller } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, EndpointOptions, TravelCreateModalDetails, TravelDisclosure, TravelDisclosureTraveller } from '../travel-disclosure-interface';
 import { CommonService } from '../../common/services/common.service';
 import { convertToValidAmount } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
@@ -32,7 +32,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     mandatoryList = new Map();
     dateValidationList = new Map();
     travelDisclosureRO = new CoiTravelDisclosure();
-    travelResObject = new TravelDisclosureResponseObject();
+    travelResObject = new TravelDisclosure();
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
     destination: 'Domestic' | 'International' = 'Domestic';
@@ -66,7 +66,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private setDisclosureDetails(responseObject: TravelDisclosureResponseObject): void {
+    private setDisclosureDetails(responseObject: TravelDisclosure): void {
         this.entitySearchOptions.defaultValue = responseObject.travelEntityName;
         this.entityName = responseObject.travelEntityName;
         this.countrySearchOptions.defaultValue = responseObject.destinationCountry;

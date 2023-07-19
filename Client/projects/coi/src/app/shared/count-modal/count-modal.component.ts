@@ -80,16 +80,6 @@ export class CountModalComponent implements OnInit {
                 }, err => {
                     this.closeCountModal();
                 }));
-        } else {
-            this.$subscriptions.push(this._countModalService
-                .getAwardProposalSFIList(this.disclosureId).subscribe((data: any) => {
-                    this.projectDatas = data;
-                    this.currentModalTab = this.moduleCode === 1 ? 'Award' : 'Proposal';
-                    this.switchTableData();
-                    document.getElementById('hidden-open-button').click();
-                }, err => {
-                    this.closeCountModal();
-                }));
         }
     }
 

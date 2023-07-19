@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TravelDataStoreService } from '../../../services/travel-data-store.service';
-import { EntityData, TravelDisclosureResponseObject, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
+import { EntityData, TravelDisclosure, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { getFormattedAmount } from 'projects/coi/src/app/common/utlities/custom-utlities';
 
@@ -14,7 +14,7 @@ export class TravelFormSummaryComponent implements OnInit, OnDestroy {
 
     isCollapsed = true;
     $subscriptions: Subscription[] = [];
-    travelDisclosureData = new TravelDisclosureResponseObject();
+    travelDisclosureData = new TravelDisclosure();
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     traveller = '';
     isReadMorePurpose = false;

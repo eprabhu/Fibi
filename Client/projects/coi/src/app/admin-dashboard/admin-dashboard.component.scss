@@ -193,6 +193,7 @@ nav ul li {
 .arrow {
   font-size: 18px;
   height: 18px;
+  width: 16px;
   margin-left: 4px;
 }
 
@@ -249,7 +250,24 @@ small {
   }
 }
 
-
 .col-custom-travel {
   width: max-content;
+}
+
+.title-text {
+  font-weight: 400;
+  color: #48647f;
+  font-size: 14px;
+}
+
+.readMore {
+  color: #41464B;
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.pipe {
+  border-left: 2px solid #48647f82;
+  padding-top: 2px;
 }

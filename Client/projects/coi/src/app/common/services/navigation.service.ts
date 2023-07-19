@@ -86,6 +86,7 @@ export class NavigationService {
         const agreementSubTab = sessionStorage.getItem('currentAgreementDashboardTab');
         const serviceRequestSubTab = sessionStorage.getItem('currentServiceRequestTab');
         const coiAdminTab = sessionStorage.getItem('currentCOIAdminTab');
+        const coiReviewTab = sessionStorage.getItem('currentCOIReviewTab');
         this.removeCurrentTab();
         if (this.awardModulePermission(event) && awardSubTabName) {
             sessionStorage.setItem('currentAwardDashboardTab', awardSubTabName);
@@ -97,6 +98,8 @@ export class NavigationService {
             sessionStorage.setItem('currentServiceRequestTab', serviceRequestSubTab);
         } else if (this.coiPermissionList(event) && coiAdminTab) {
             sessionStorage.setItem('currentCOIAdminTab', coiAdminTab);
+        } else if (this.coiReviewerPermissionList(event) && coiReviewTab) {
+            sessionStorage.setItem('currentCOIReviewTab', coiReviewTab);
         }
     }
 
@@ -109,6 +112,7 @@ export class NavigationService {
         sessionStorage.removeItem('currentAgreementDashboardTab');
         sessionStorage.removeItem('currentServiceRequestTab');
         sessionStorage.removeItem('currentCOIAdminTab');
+        sessionStorage.removeItem('currentCOIReviewTab');
     }
 
     /**
@@ -147,6 +151,13 @@ export class NavigationService {
      */
      coiPermissionList(event) {
         return event.url.split(/[/?]/).includes('disclosure') || event.url.split('/').includes('admin-dashboard') ? true : false;
+    }
+    /**
+     * @param  {} event
+     * check whether the current url has 'disclosure' or 'reviewer-dashboard' and return true so that the value can be reset.
+     */
+    coiReviewerPermissionList(event) {
+    return event.url.split(/[/?]/).includes('disclosure') || event.url.split('/').includes('reviewer-dashboard') ? true : false;
     }
     /**
      * @param  {} pathDetails

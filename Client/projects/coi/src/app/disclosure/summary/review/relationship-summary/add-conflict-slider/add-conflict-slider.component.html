@@ -1,198 +1,213 @@
 <div #addCommentOverlay [class.overlay]="isOpenSlider">
-  <div class="slider-base" *ngIf="isOpenSlider">
-    <app-slider-close-btn (closeAction)="hideConflictNavBar()"></app-slider-close-btn>
-    <div class="slider-container p-0">
-      <div class="bg-white px-4 py-2 pt-3">
-        <div class="justify-content-between d-flex align-items-center">
-          <h5 class="fs-16">Manage Relationship between SFIs and Projects</h5>
-        </div>
-      </div>
-      <div class="card comment-card shadow-sm">
-        <div class="row ml-15 mt-2">
-          <div class="border position-relative p-3 fs-14 pl-5 fw-500">
-            <div class="row">
-              <div class="col d-flex">
-                <label class="label-text">Project: </label>
-                <span class="ml-2 grey-text">
-                  <app-no-data-label
-                    [valueToShow]="(entityDetails?.moduleCode == 3) || (entityDetails?.moduleCode == 1)">
-                    <span *ngIf="entityDetails?.moduleCode == 3" id="id"
-                      class="grey-text">#{{entityDetails?.moduleItemId}} -
-                      {{entityDetails?.title}}</span>
-                    <span *ngIf="entityDetails?.moduleCode == 1" id="id"
-                      class="grey-text">#{{entityDetails?.moduleItemKey}} -
-                      {{entityDetails?.title}}</span></app-no-data-label>
-                </span>
-              </div>
+    <div class="slider-base" *ngIf="isOpenSlider">
+        <app-slider-close-btn (closeAction)="hideConflictNavBar()"></app-slider-close-btn>
+        <div class="slider-container p-0">
+            <div class="card card-header bg-white px-4 py-2 pt-3">
+                <div class="justify-content-between d-flex align-items-center">
+                    <h5 class="fs-16">Relationship between SFIs and Projects</h5>
+                </div>
             </div>
-            <div class="row mt-2">
-              <div class="col d-flex">
-                <label class="label-text">Significant Financial Interest: </label>
-                <span class="ml-2 grey-text">
-                  <app-no-data-label [valueToShow]="entityDetails?.entityName">
-                    <span>{{entityDetails?.entityName}}</span>
-                  </app-no-data-label>
-                </span>
-              </div>
-              <div class="col d-flex">
-                <label class="label-text left-margin">Conflict Status: </label>
-                <app-no-data-label [valueToShow]="entityDetails?.coiProjConflictStatusType?.description">
-                  <span
-                    class="ml-2 {{_commonService.getDisclosureConflictBadge(entityDetails?.coiProjConflictStatusType?.projectConflictStatusCode)}}">
-                    {{entityDetails?.coiProjConflictStatusType?.description}}</span>
-                </app-no-data-label>
-              </div>
-            </div>
-            <div class="row mt-2">
-              <div class="col">
-                <label class="label-text">Comment: </label>
-                <span class="ml-2 grey-text fs-13">
-                  <app-no-data-label [valueToShow]="entityDetails?.comment">
-                    <span>
-                      <span *ngIf="!isShowMore && entityDetails?.comment?.length > 130; else showFullInfo">
-                        {{(entityDetails?.comment | slice:0:130)}}
-                        <span (click)="isShowMore = !isShowMore" class="hand-cursor"><span class="fw-medium">...
-                            <strong><u>Read more</u></strong>
-                            <i aria-hidden="true"></i></span>
-                        </span>
-                      </span>
-                      <ng-template #showFullInfo>
-                        <span>{{entityDetails?.comment}}</span>
-                        <span *ngIf="entityDetails?.comment?.length > 130" (click)="isShowMore = !isShowMore"
-                          aria-hidden="true" class="hand-cursor"><span class="fw-medium"> <strong><u>Show
-                                Less</u></strong>
-                            <i aria-hidden="true"></i></span>
-                        </span>
-                      </ng-template>
-                    </span>
-                  </app-no-data-label>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="info-card fs-14 pl-5 mt-2">
-        1. Modify the conflict status of this Project - SFI relation from the Conflict Status field.<br>
-        2. Provide an adequate reason for your decision in the description field provided.
-      </div>
-      <div>
-        <div class="card-body">
-          <div>
-            <div class="card comment-card shadow-sm">
-              <div class="row ml-15 mt-4">
-                <div class="col-4 ml-15 align-items-center">
-                  <label class="fs-14 fw-500">Conflict Status:</label>
-                  <span>
-                    <select class="form-control form-select" [(ngModel)]="conflictStatus"
-                      [ngClass]="projectConflictValidationMap?.has('coiConflictStatusCode') ? 'is-invalid d-block' : ''"
-                      (ngModelChange)="setCoiProjConflictStatusType()">
-                      <option [value]=null>--Select--</option>
-                      <option *ngFor="let status of conflictLookUpList" [value]="status.projectConflictStatusCode">
-                        {{status?.description}}</option>
-                    </select>
-                    <div *ngIf="projectConflictValidationMap?.has('coiConflictStatusCode')"
-                      class="invalid-feedback d-block fs-12">
-                      {{projectConflictValidationMap?.get('coiConflictStatusCode')}}
+            <div class="info-card-border mt-2 rounded-2 shadow-medium bg-light mx-4 ms-4">
+                <div class="row ml-15 mt-2">
+                    <div class="position-relative p-3 fs-14 pl-5 fw-500">
+                        <div class="row">
+                            <div class="col d-flex">
+                                <label class="label-text left-margin me-2">Person Associated with Disclosure: </label>
+                                <app-no-data-label [valueToShow]="disclosureMetaData?.coiPersonFullName">
+                                    <span class="grey-text">{{disclosureMetaData?.coiPersonFullName}}</span>
+                                </app-no-data-label>
+                            </div>
+                            <div class="col d-flex">
+                                <label class="label-text">Significant Financial Interest: </label>
+                                <span class="ml-2 grey-text">
+                                    <app-no-data-label [valueToShow]="entityDetails?.entityName">
+                                        <span>{{entityDetails?.entityName}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col d-flex">
+                                    <label class="label-text">Project: </label>
+                                    <span class="ml-2 grey-text">
+                                        <app-no-data-label
+                                            [valueToShow]="(entityDetails?.moduleCode == 3) || (entityDetails?.moduleCode == 1)">
+                                            <span *ngIf="entityDetails?.moduleCode == 3" id="id"
+                                                class="grey-text">#{{entityDetails?.moduleItemId}}
+                                                -
+                                                {{entityDetails?.title}}</span>
+                                            <span *ngIf="entityDetails?.moduleCode == 1" id="id"
+                                                class="grey-text">#{{entityDetails?.moduleItemKey}}
+                                                -
+                                                {{entityDetails?.title}}</span></app-no-data-label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="label-text">Sponsor: </label>
+                                <span class="ml-2 grey-text">
+                                    <app-no-data-label [valueToShow]="entityDetails?.sponsor">
+                                        <span>{{entityDetails?.sponsor}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                            <div class="col d-flex">
+                                <label class="label-text left-margin">Prime Sponsor: </label>
+                                <span class="ml-2 grey-text">
+                                <app-no-data-label [valueToShow]="entityDetails?.primeSponsor">
+                                    <span>{{entityDetails?.primeSponsor}}</span>
+                                </app-no-data-label>
+                            </span>
+                            </div>
+                        </div>
                     </div>
-                  </span>
                 </div>
-                <div class="col mr-10">
-                  <label class="fs-14 fw-500">Describe the reason for Conflict status change:</label>
-                  <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description" row="1"
-                    [(ngModel)]="comment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
-                    [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
-                  <div *ngIf="projectConflictValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
-                    {{projectConflictValidationMap?.get('comment')}}
-                  </div>
-                </div>
-              </div>
-              <div class="text-muted mb-3 mr-10 mt-2">
-                <button type="button" class="btn btn-primary float-end fs-14" data-bs-dismiss="modal"
-                  (click)="updateProjectRelationship()">Save</button>
-                <button type="button" class="btn btn-outline-secondary float-end mr-10" data-bs-dismiss="modal"
-                  (click)="clearConflictModal()">Clear</button>
-              </div>
             </div>
-          </div>
+
+            <div *ngIf="isEditMode" class="fs-14 mt-3 mx-4">
+                <div class="col-12 py-2 grey-info font px-2 d-flex align-items-center position-relative">
+                    <span data-bs-toggle="tooltip" title="Conflict History." data-bs-placement="top"
+                        class="d-inline-block pe-2">
+                        <mat-icon role="img"
+                            class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color"
+                            aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                    </span>
+                    <span class="fs-14">
+                        <div class="mt-2 ml-15">
+                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                            Modify the conflict status of this Project - SFI relation from the Conflict Status field.
+                        </div>
+                        <div class="mt-2 ml-15">
+                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                            Provide an adequate reason for your decision in the description field provided.
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div>
+
+                <div *ngIf="isEditMode" class="card-body">
+                    <div>
+                        <div class="card comment-card shadow-sm mx-1">
+                            <div class="row ml-15 mt-4">
+                                <div class="col-4 ml-15 align-items-center">
+                                    <label class="fs-14 fw-500">Conflict Status:</label>
+                                    <span>
+                                        <select class="form-control form-select" [(ngModel)]="conflictStatus"
+                                            [ngClass]="projectConflictValidationMap?.has('coiConflictStatusCode') ? 'is-invalid d-block' : ''"
+                                            (ngModelChange)="setCoiProjConflictStatusType()">
+                                            <option [value]=null>--Select--</option>
+                                            <option *ngFor="let status of conflictLookUpList"
+                                                [value]="status.projectConflictStatusCode">
+                                                {{status?.description}}</option>
+                                        </select>
+                                        <div *ngIf="projectConflictValidationMap?.has('coiConflictStatusCode')"
+                                            class="invalid-feedback d-block fs-12">
+                                            {{projectConflictValidationMap?.get('coiConflictStatusCode')}}
+                                        </div>
+                                    </span>
+                                </div>
+                                <div class="col mr-10">
+                                    <label class="fs-14 fw-500">Describe the reason for Conflict status change:</label>
+                                    <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description"
+                                        row="1" [(ngModel)]="comment" appLengthValidator [limit]="2000"
+                                        [isShowLimiter]="true"
+                                        [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
+                                    <div *ngIf="projectConflictValidationMap?.has('comment')"
+                                        class="invalid-feedback d-block fs-12">
+                                        {{projectConflictValidationMap?.get('comment')}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-muted mb-3 mr-10 mt-2">
+                                <button type="button" class="btn btn-primary float-end fs-14" data-bs-dismiss="modal"
+                                    (click)="updateProjectRelationship()">Save</button>
+                                <button type="button" class="btn btn-outline-secondary float-end mr-10"
+                                    data-bs-dismiss="modal" (click)="clearConflictModal()">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conflict History -->
+            <div class="main-title mt-15" id="">
+                <h3 class="d-flex align-items-center mx-4"><strong>Conflict History</strong>
+                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"
+                        title="Click to view Project - SFI conflict history." data-bs-placement="top">
+                    </span>
+                </h3>
+            </div>
+
+            <ng-container *ngIf="conflictHistory.length > 0;else noData">
+                <ng-container *ngFor="let historyEntry of conflictHistory;let index = index;let last = last;">
+                    <div class="row mx-2">
+                        <div class="col-1 mr-15" [class.time-line]="!last" style="position: relative">
+                            <span
+                                class="badge rounded-pill badge-width {{_commonService.getDisclosureConflictBadge(historyEntry?.conflictStatusCode)}}">{{historyEntry?.conflictStatusDescription}}</span>
+                        </div>
+                        <div class="col pb-4 mx-auto comment-box-height">
+                            <div class="align-items-center ml-5 mx-0">
+                                <span class="d-flex align-items-center text-muted">
+                                    <i class="fa fa-user grey-text fs-16" aria-hidden="true"></i>
+                                    <label class="fw-700 fs-14 ml-2">{{historyEntry?.updateUserFullName}}</label>
+                                    <span class="ml-15 fs-12">{{historyEntry?.updateTimestamp |
+                                        dateFormatterWithTimeZone:'long'}}</span></span>
+                                <div class="p-3 person-card fs-13">
+                                    <span
+                                        *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
+                                        <span> {{(historyEntry?.comment | slice:0:230)}}</span>
+                                        <span (click)="isReadMore[index] = !isReadMore[index]" class="hand-cursor"><span
+                                                class="fw-medium">... <u>Read more</u>
+                                                <i aria-hidden="true"></i></span>
+                                        </span>
+                                    </span>
+                                    <ng-template #showFullInfo>
+                                        <span>{{historyEntry?.comment}}</span>
+                                        <span *ngIf="historyEntry?.comment?.length > 230"
+                                            (click)="isReadMore[index] = !isReadMore[index]" aria-hidden="true"
+                                            class="hand-cursor"><span class="fw-medium">. <u>Show Less</u>
+                                                <i aria-hidden="true"></i></span>
+                                        </span>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <ng-template #noData>
+                <app-no-information></app-no-information>
+            </ng-template>
         </div>
-      </div>
-      <!-- Conflict History -->
-      <div class="main-title mt-15" id="">
-        <h3 class="d-flex align-items-center mx-4"><strong>Conflict History</strong>
-          <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"
-            title="Click to view Project - SFI conflict history." data-bs-placement="top">
-            <mat-icon class="me-2 info-icon" data-bs-toggle="tooltip">info</mat-icon>
-          </span>
-        </h3>
-      </div>
-      <ng-container *ngIf="conflictHistory.length > 0;else noData">
-        <ng-container *ngFor="let historyEntry of conflictHistory;let index = index;let last = last;">
-          <div class="row mx-2">
-            <div class="col-1 mr-15" [class.time-line]="!last" style="position: relative">
-              <span
-                class="badge rounded-pill badge-width {{_commonService.getDisclosureConflictBadge(historyEntry?.conflictStatusCode)}}">{{historyEntry?.conflictStatusDescription}}</span>
-            </div>
-            <div class="col pb-4 mx-auto comment-box-height">
-              <div class="align-items-center ml-5 mx-0">
-                <span class="d-flex align-items-center text-muted">
-                  <i class="fa fa-user grey-text fs-16" aria-hidden="true"></i>
-                  <label class="fw-700 fs-14 ml-2">{{historyEntry?.updateUserFullName}}</label>
-                  <span class="ml-15 fs-12">{{historyEntry?.updateTimestamp |
-                    dateFormatterWithTimeZone:'long'}}</span></span>
-                <div class="p-3 person-card fs-13">
-                  <span *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
-                    <span> {{(historyEntry?.comment | slice:0:230)}}</span>
-                    <span (click)="isReadMore[index] = !isReadMore[index]" class="hand-cursor"><span
-                        class="fw-medium">... <u>Read more</u>
-                        <i aria-hidden="true"></i></span>
-                    </span>
-                  </span>
-                  <ng-template #showFullInfo>
-                    <span>{{historyEntry?.comment}}</span>
-                    <span *ngIf="historyEntry?.comment?.length > 230" (click)="isReadMore[index] = !isReadMore[index]"
-                      aria-hidden="true" class="hand-cursor"><span class="fw-medium">. <u>Show Less</u>
-                        <i aria-hidden="true"></i></span>
-                    </span>
-                  </ng-template>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-      </ng-container>
-      <ng-template #noData>
-        <app-no-information></app-no-information>
-      </ng-template>
     </div>
-  </div>
 </div>
 
 <!-- Confirmation Modal -->
 <div class="modal fade mySkinDialog" id="conflictConfirmationModal" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          Confirmation
-        </h5>
-        <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" aria-label="Close">
-        </button>
-      </div>
-      <div class="modal-body title-descriptions">
-        <p> You have unsaved changes in the <strong>Project - SFI relations</strong>, do you want to leave?.
-        </p>
-      </div>
-      <div class="modal-footer mx-2">
-        <button type="button" class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
-          (click)="hideConflictNavBar()">
-          Leave Page
-        </button>
-        <button type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal">
-          Stay On Page
-        </button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Confirmation
+                </h5>
+                <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body title-descriptions">
+                <p> You have unsaved changes in the <strong>Project - SFI relations</strong>, do you want to leave?.
+                </p>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
+                    (click)="hideConflictNavBar()">
+                    Leave Page
+                </button>
+                <button type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal">
+                    Stay On Page
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
