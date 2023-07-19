@@ -96,7 +96,7 @@
         <div class="relationship-sfi-data row m-0" [class.white-bg]="i%2==0" [class.border-bottom]="i==entityProjectDetails.length-1" [class.border-top]="i==0">
             <div class="col-4 fs-14 border-end">
              <div class="table-text my-4">
-              {{test?.personEntity?.coiEntity?.entityName?.length > 100 ? (test?.personEntity?.coiEntity?.entityName | slice:0:100)+'...' : test?.personEntity?.coiEntity?.entityName}}
+              {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' : test?.coiEntity?.entityName}}
              </div>
             </div>
             <div class="col-2 fs-14 border-end">

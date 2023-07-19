@@ -27,7 +27,7 @@
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
-  "/getEntityProjectRelations": {
+  "/disclosure/project/relations": {
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
@@ -257,10 +257,6 @@
   },
   "/getTrainingDashboard": {
     "target": "http://192.168.1.149/fibii",
-    "secure": false
-  },
-  "/getDisclosureRelationForSFI": {
-    "target": "http://192.168.1.149/coi",
     "secure": false
   },
   "/validate/*": {
