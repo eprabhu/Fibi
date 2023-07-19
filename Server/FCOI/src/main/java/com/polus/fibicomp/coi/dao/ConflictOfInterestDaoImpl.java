@@ -12,8 +12,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -40,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.applicationexception.dto.ApplicationException;
-import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
@@ -89,7 +86,6 @@ import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
-import com.polus.fibicomp.proposal.pojo.Proposal;
 import com.polus.fibicomp.security.AuthenticatedUser;
 import com.polus.fibicomp.view.DisclosureView;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
@@ -326,20 +322,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		StringBuilder hqlQuery = new StringBuilder();
-		hqlQuery.append("SELECT (SELECT COUNT(*) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
-		hqlQuery.append("WHERE C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId ) as entityCount, ");
-		hqlQuery.append("(SELECT COUNT(*) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
-		hqlQuery.append("WHERE C2.PROJECT_CONFLICT_STATUS_CODE IS NOT NULL ");
-		hqlQuery.append("and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId) as disDetCount");
+		hqlQuery.append("SELECT COUNT(*) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
+		hqlQuery.append("WHERE C2.PROJECT_CONFLICT_STATUS_CODE IS  NULL ");
+		hqlQuery.append("and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId");
 		Query query = session.createNativeQuery(hqlQuery.toString());
 		query.setParameter("disclosureId", disclosureId);
 		query.setParameter("moduleCode", moduleCode);
 		query.setParameter("moduleItemId", moduleItemId);
-		List<Object[]> countData = query.getResultList();
-		if (countData != null && !countData.isEmpty()) {
-			Integer entityCount = Integer.parseInt(countData.get(0)[0].toString());
-			Integer disDetCount = Integer.parseInt(countData.get(0)[1].toString());
-			return  entityCount == 0 || disDetCount == 0 ? null : entityCount > disDetCount ? Boolean.FALSE : Boolean.TRUE;
+		Object countData = query.getSingleResult();
+		if (countData != null) {
+			BigInteger count = (BigInteger) countData;
+			return  count.intValue() != 0 ? Boolean.FALSE : Boolean.TRUE;
 		}
 		return null;
 	}
@@ -427,26 +420,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("personEntityId", coiFinancialEntityId);
 		query.setParameter("moduleCode", moduleCode);
 		return query.getResultList();
-	}
-
-	@Override
-	public List<Proposal> getProposalsBasedOnProposalIds(List<Integer> proposalIds) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Proposal> queryProposal = builder.createQuery(Proposal.class);
-		Root<Proposal> rootProposal = queryProposal.from(Proposal.class);
-		queryProposal.where(rootProposal.get("proposalId").in(proposalIds));
-		return session.createQuery(queryProposal).getResultList();
-	}
-
-	@Override
-	public List<Award> getAwardsBasedOnAwardIds(List<Integer> awardIds) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Award> queryAward = builder.createQuery(Award.class);
-		Root<Award> rootAward = queryAward.from(Award.class);
-		queryAward.where(rootAward.get("awardId").in(awardIds));
-		return session.createQuery(queryAward).getResultList();
 	}
 
 	@Override
@@ -1745,7 +1718,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String disclosureStatusCode) {
+	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		List<DisclosureDetailDto> awardDetails = new ArrayList<>();
 		SessionImpl sessionImpl = (SessionImpl) session;
@@ -1793,6 +1766,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setSponsor(rset.getString("SPONSOR_NAME"));
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
+					if (disclosureId != null) {
+						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
+						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
+					}
 				}
 				else if (moduleCode == Constants.DEV_PROPOSAL_MODULE_CODE) {
 					detail.setModuleCode(Constants.DEV_PROPOSAL_MODULE_CODE);
@@ -1806,6 +1783,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setPrimeSponsor(rset.getString("PRIME_SPONSOR_NAME"));
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
+					if (disclosureId != null) {
+						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
+						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
+					}
 				}
 				awardDetails.add(detail);
 
@@ -2016,7 +1997,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
 					disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
 					disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
-					disclosureView.setLastApprovedVersion(resultSet.getInt("VERSION_NUMBER")); // TODO procedure change
+					disclosureView.setLastApprovedVersion(resultSet.getInt("VERSION_NUMBER"));
 					disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
 					disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
 					disclosureView.setCreateTimestamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
@@ -3321,7 +3302,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		hqlQuery.append("UPDATE CoiEntity e SET e.isActive = :isActive , e.revisionReason = :revisionReason, e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser ");
 		hqlQuery.append("WHERE e.entityId = : entityId");
 		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("isActive", coiEntityDto.getActive());
+		query.setParameter("isActive", coiEntityDto.getIsActive());
 		query.setParameter("entityId", coiEntityDto.getEntityId());
 		query.setParameter("revisionReason", coiEntityDto.getRevisionReason());
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
