@@ -52,6 +52,7 @@ export class ReviewerDashboardComponent implements OnInit {
     localCOIRequestObject: ReviewerDashboardRequest = new ReviewerDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
     isShowNoDataCard = false;
+    readMoreOrLess = [];
     constructor(
         public reviewerDashboardService: ReviewerDashboardService,
         public commonService: CommonService,
@@ -59,7 +60,6 @@ export class ReviewerDashboardComponent implements OnInit {
         private _navigationService: NavigationService) { }
 
     ngOnInit() {
-        this.getCount();
         this.getDashboardDetails();
         this.setSearchOptions();
         this.setAdvanceSearch();
@@ -71,11 +71,6 @@ export class ReviewerDashboardComponent implements OnInit {
     actionsOnPageChange(event) {
         this.localCOIRequestObject.currentPage = event;
         this.$coiList.next();
-    }
-
-    getCount() {
-        this.$subscriptions.push(this.reviewerDashboardService.loadDisclosureReviewerQuickCardCounts().subscribe((data: any) => {
-        }));
     }
 
     getDashboardDetails() {
@@ -253,11 +248,12 @@ export class ReviewerDashboardComponent implements OnInit {
         }
     }
 
-    modalHeader(coi) {
-        if (coi.fcoiTypeCode == 1) {
-            return `#${coi.coiDisclosureNumber}: FCOI Disclosure By ${coi.disclosurePersonFullName}`;
-        } else if (coi.fcoiTypeCode == 2 || coi.fcoiTypeCode == 3) {
-            return `#${coi.coiDisclosureNumber}: Project Disclosure By ${coi.disclosurePersonFullName}`;
+    modalHeader(coi) { if (coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3') {
+            if (coi.fcoiTypeCode === '2') {
+                return `# ${coi.proposalId} - ${coi.proposalTitle}`;
+            } else if (coi.fcoiTypeCode === '3') {
+                return `# ${coi.awardId} - ${coi.awardTitle}`;
+            }
         }
     }
 
@@ -372,9 +368,8 @@ export class ReviewerDashboardComponent implements OnInit {
             }
             this.$coiList.next();
         } else {
-            this.resetAndPerformAdvanceSearch();
             this.resetSortObjects();
-            this.$coiList.next();
+            this.resetAndPerformAdvanceSearch();
         }
     }
 

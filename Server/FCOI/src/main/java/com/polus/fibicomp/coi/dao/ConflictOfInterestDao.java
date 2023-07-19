@@ -258,20 +258,6 @@ public interface ConflictOfInterestDao {
 	public List<String> getModuleItemKeysByCOIFinancialEntityIdAndModuleCode(Integer coiFinancialEntityId, Integer moduleCode);
 
 	/**
-	 * This method is used for get Proposal Details based on proposalIds
-	 * @param proposalIds
-	 * @return list of Proposal
-	 */
-	public List<Proposal> getProposalsBasedOnProposalIds(List<Integer> proposalIds);
-
-	/**
-	 * This method is used for get Proposal Details based on proposalIds
-	 * @param awardIds
-	 * @return list of Award
-	 */
-	public List<Award> getAwardsBasedOnAwardIds(List<Integer> awardIds);
-
-	/**
 	 * This method is used for fetchCoiSections
 	 * @return
 	 */
@@ -611,14 +597,13 @@ public interface ConflictOfInterestDao {
 
 
 	/**
-	 *
+	 *This method is used to get the project based in the given parameters
 	 * @param moduleCode
 	 * @param personId
 	 * @param disclosureId
-	 * @param status
 	 * @return
 	 */
-	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String status);
+	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId);
 
 	public List<CoiEntity> getAllSystemEntityList(CoiDashboardVO vo);
 
@@ -647,14 +632,6 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	DashBoardProfile getCOIReviewerDashboard(CoiDashboardVO vo);
-
-	/**
-	 *
-	 * @param dashboardType
-	 * @param loginPersonId
-	 * @return
-	 */
-	ConflictOfInterestVO loadDisclosureQuickCardCounts(String dashboardType, String loginPersonId);
 	
 	public CoiProjectProposal saveOrUpdateCoiProjectProposal(CoiProjectProposal coiProjectProposal);
 
@@ -972,6 +949,12 @@ public interface ConflictOfInterestDao {
 	 * @param personEntityRelId
 	 */
 	void deletePersonEntityRelationship(Integer personEntityRelId);
-
+	/**
+	 * This method is used to get person entity by entity id and person id
+	 * @param entityId
+	 * @param personId
+	 * @return
+	 */
+	PersonEntity fetchPersonEntityById(Integer entityId, String personId);
 	List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 }

@@ -10,10 +10,6 @@ export class CountModalService {
                 private _commonService: CommonService) {
     }
 
-    getAwardProposalSFIList(id) {
-        return this._http.post(this._commonService.baseUrl + '/getDisclosureRelationForSFI', {'coiFinancialEntityId': id});
-    }
-
     getSFICount(params: GetSFIRequestObject) {
         return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
     }

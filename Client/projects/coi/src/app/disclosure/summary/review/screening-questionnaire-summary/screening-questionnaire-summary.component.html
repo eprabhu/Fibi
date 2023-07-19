@@ -10,23 +10,23 @@
         </span>
       </span>
     </h3>
-    <button class="btn btn-primary-icon btn-sm toggle-header-btn ms-auto mr-10 pt-2" id="add-activity"
+    <button class="btn btn-primary-icon btn-sm toggle-header-btn ms-auto mr-15 pt-2" id="add-activity"
       (click)="modifyReviewComment()" title="Click here to add new review comment" type="button">
       <mat-icon>rate_review</mat-icon>
     </button>
     <button
-      class="align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm toggle-header-btn"
+      class="align-items-center bg-white border btn d-flex justify-content-center mr-8 p-0 rounded-5 shadow-sm toggle-header-btn"
       (click)="isQuestionnaireCollapsed = !isQuestionnaireCollapsed" [title]="isQuestionnaireCollapsed ? 'Click here to expand disclosure screening form' : 'Click here to collapse disclosure screening form'">
       <mat-icon>{{isQuestionnaireCollapsed ? 'expand_more' : 'expand_less'}}</mat-icon>
     </button>
   </div>
   <div [hidden]="isQuestionnaireCollapsed">
-    <button class="btn btn-primary-icon btn-sm add-activity-button mt-2 pt-2 d-flex" id="add-activity"
+    <button class="btn btn-primary-icon btn-sm add-activity-button mr-15 mt-2 pt-2 d-flex" id="add-activity"
       (click)="modifyReviewComment()" title="Click here to add new review comment" type="button">
       <mat-icon>rate_review</mat-icon>
     </button>
     <button
-      class="toggle-header-btn add-collapse-button align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm"
+      class="toggle-header-btn add-collapse-button align-items-center mr-8 bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm"
       (click)="isQuestionnaireCollapsed = !isQuestionnaireCollapsed" [title]="isQuestionnaireCollapsed ? 'Click here to expand disclosure screening form' : 'Click here to collapse disclosure screening form'">
       <mat-icon>{{isQuestionnaireCollapsed ? 'expand_more' : 'expand_less'}}</mat-icon>
     </button>

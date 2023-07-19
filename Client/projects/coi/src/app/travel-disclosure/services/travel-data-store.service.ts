@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { CoiTravelDisclosure, TravelCreateModalDetails, TravelDisclosureResponseObject } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure-interface';
 import { Subject } from 'rxjs';
 import { convertToValidAmount } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { getTotalNoOfDays, parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 
 @Injectable()
 export class TravelDataStoreService {
-    private storeData: TravelDisclosureResponseObject = new TravelDisclosureResponseObject();
+    private storeData: TravelDisclosure = new TravelDisclosure();
     dataEvent = new Subject();
     travelCreateModalDetails: TravelCreateModalDetails;
 
@@ -21,7 +21,7 @@ export class TravelDataStoreService {
         sessionStorage.removeItem('travelCreateModalDetails');
     }
 
-    getData(keys?: Array<string>): TravelDisclosureResponseObject {
+    getData(keys?: Array<string>): TravelDisclosure {
         if (!keys) {
             return this.structuredClone(this.storeData);
         }
@@ -74,11 +74,11 @@ export class TravelDataStoreService {
         this.dataEvent.next(KEYS);
     }
 
-    setStoreData(data: TravelDisclosureResponseObject): void {
+    setStoreData(data: TravelDisclosure): void {
         this.storeData = this.structuredClone(data);
     }
 
-    private structuredClone(obj: TravelDisclosureResponseObject): any {
+    private structuredClone(obj: TravelDisclosure): any {
         const nativeCloneFunction = (window as any).structuredClone;
         return (typeof nativeCloneFunction === 'function') ? nativeCloneFunction(obj) : JSON.parse(JSON.stringify(obj));
     }

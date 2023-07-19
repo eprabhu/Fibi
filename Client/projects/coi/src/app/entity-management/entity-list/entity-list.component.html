@@ -29,12 +29,11 @@
                 </ul>
             </nav>
             <div class="align-items-center d-flex justify-content-end">
-                <button class="btn btn-tertiary mt-1 fs-13 d-flex align-items-center" id="advanced-search"
-                    title="Click here to expand / collapse  Advanced Search fields"
-                    (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search"
-                    aria-expanded="true" aria-label="Toggle Advanced Search"><mat-icon class="add-icon mt-1"
-                        area-describedby="Click here to collapse/un-collapse advanced search">tune</mat-icon> Advanced
-                    Search
+                <button role="button" class="btn btn-tertiary d-flex align-items-center mt-1 ms-auto fs-14"
+                     (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search"
+                    aria-expanded="false" title="Click here to expand / collapse Advanced Search fields"
+                    aria-label="Toggle Advanced Search"><mat-icon class="me-3">tune</mat-icon>
+                    Advanced Search
                 </button>
                 <div class="mx-4">
                     <span class="btn btn-outline-secondary d-flex fs-13 align-items-center px-3" id="add-new-entity"
@@ -148,18 +147,17 @@
           </div>
         </div> -->
                     <div class="col-3" title="Click to search by Risk Level">
-                        <label class="fw-bold fs-14 d-block" for="adv-entity-type">Risk Level</label>
+                        <label class="fw-bold fs-14 d-block" for="adv-entity-type">Risk</label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'property22')"
                             [options]="riskLevelTypeOptions" [selectedLookUpList]="lookupValues['property22']"
                             class=" text-secondary fs-13" [uniqueId]="'adv-entity-type'">
                         </app-look-up>
                     </div>
-						  <div class="col-3" title="Click to search by verification">
+                        <div *ngIf="activeTabName !== 'UNVERIFIED'" class="col-3" title="Click to search by verification">
                             <label class="fw-bold fs-14 d-block">Verification</label>
-                            <app-look-up (selectedResult)="onLookupSelect($event, 'property24')"
-                                [options]="verificationTypeOptions" [selectedLookUpList]="lookupValues['property24']"
-                                [externalArray]="entityManagementService.statusCode" [isExternalArray]="true"
-                                class=" text-secondary fs-13" [uniqueId]="'adv-disclosure-type'">
+                            <app-look-up (selectedResult)="onLookupSelect($event, 'property24')" [options]="verificationTypeOptions"
+                                [selectedLookUpList]="lookupValues['property24']" [externalArray]="entityManagementService.statusCode"
+                                [isExternalArray]="true" class=" text-secondary fs-13" [uniqueId]="'adv-disclosure-type'">
                             </app-look-up>
                         </div>
                     <div class="col-6 d-flex justify-content-end align-items-end">
@@ -181,9 +179,9 @@
         <span tabindex="0" (keydown.enter)="sortResult('name')" (click)="sortResult('name')"
             [class.filter-active]="isActive('name')" title="Click to sort by Entity Name"
             area-describedby="Click to sort by Disclosure Type"
-            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill" role="button">
+            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill" role="button">
             <div class="d-inline-flex align-items-center">
-                <label>Name</label>
+                <label class="cursor-pointer">Name</label>
                 <mat-icon class="arrow selected-arrow"
                     *ngIf="entityManagementService.coiRequestObject.sort['name']=== 'asc' ">arrow_downward</mat-icon>
                 <mat-icon class="arrow selected-arrow"
@@ -193,9 +191,9 @@
         <span tabindex="0" (keydown.enter)="sortResult('entityType')" (click)="sortResult('entityType')"
             [class.filter-active]="isActive('entityType')" title="Click to sort by Entity Type"
             area-describedby="Click to sort by Last Updated By"
-            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
+            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
             <div class="d-inline-flex align-items-center">
-                <label>Entity Type</label>
+                <label class="cursor-pointer">Entity Type</label>
                 <mat-icon class="arrow selected-arrow"
                     *ngIf="entityManagementService.coiRequestObject.sort['entityType']=== 'asc'">arrow_downward</mat-icon>
                 <mat-icon class="arrow selected-arrow"
@@ -205,9 +203,9 @@
         <span tabindex="0" (keydown.enter)="sortResult('riskLevel')" (click)="sortResult('riskLevel')"
             [class.filter-active]="isActive('riskLevel')" title="Click to sort by Risk Level"
             area-describedby="Click to sort by Disclosure Type"
-            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
+            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
             <div class="d-inline-flex align-items-center">
-                <label>Risk</label>
+                <label class="cursor-pointer">Risk</label>
                 <mat-icon class="arrow selected-arrow"
                     *ngIf="entityManagementService.coiRequestObject.sort['riskLevel']=== 'asc' ">arrow_downward</mat-icon>
                 <mat-icon class="arrow selected-arrow"
@@ -217,9 +215,9 @@
         <span tabindex="0" (keydown.enter)="sortResult('country')" (click)="sortResult('country')"
             [class.filter-active]="isActive('country')" title="Click to sort by Disclosure Type"
             area-describedby="Click to sort by Country name"
-            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
+            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
             <div class="d-inline-flex align-items-center">
-                <label>Country</label>
+                <label class="cursor-pointer">Country</label>
                 <mat-icon class="arrow selected-arrow"
                     *ngIf="entityManagementService.coiRequestObject.sort['country']=== 'asc' ">arrow_downward</mat-icon>
                 <mat-icon class="arrow selected-arrow"
@@ -229,9 +227,9 @@
         <span tabindex="0" (keydown.enter)="sortResult('updateTimeStamp')" (click)="sortResult('updateTimeStamp')"
             [class.filter-active]="isActive('updateTimeStamp')" title="Click to sort by last updated"
             area-describedby="Click to sort by last updated"
-            class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
+            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
             <div class="d-inline-flex align-items-center">
-                <label>Last Updated</label>
+                <label class="cursor-pointer">Last Updated</label>
                 <mat-icon class="arrow selected-arrow"
                     *ngIf="entityManagementService.coiRequestObject.sort['updateTimeStamp']=== 'asc' ">arrow_downward</mat-icon>
                 <mat-icon class="arrow selected-arrow"

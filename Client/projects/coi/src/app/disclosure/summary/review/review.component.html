@@ -31,7 +31,7 @@
 	  </span>
 	</span>
 	</h3>
-	<button class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm" 
+	<button id="relationship_collapse_btn" class="mr-8 toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm" 
 	(click)="isRelationCollapsed = !isRelationCollapsed" [title]="isRelationCollapsed ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
 	  <mat-icon>{{isRelationCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
 	</button>
@@ -40,7 +40,7 @@
 	<ng-container *ngIf="_dataStoreAndEventsService.concatenatedProjectList?.length">
 		<ng-container *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
 			<app-relationship-summary [selectedProject]="award"></app-relationship-summary>
-		  </ng-container>
+		</ng-container>
 	</ng-container>
 	<div *ngIf="!_dataStoreAndEventsService.concatenatedProjectList?.length">
 		<app-no-information> </app-no-information>

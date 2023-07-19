@@ -34,7 +34,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
 
     @Input() disclosureId = null;
     @Input() defaultAdminDetails = new DefaultAdminDetails();
-    @Input() path: 'disclosure' | 'travelDisclosure' = 'disclosure';
+    @Input() path: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' = 'DISCLOSURES';
     @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private _commonService: CommonService, private _assignAdminService: AssignAdministratorModalService) { }
@@ -70,7 +70,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
     }
 
     private setDisclosureId(): void {
-        if (this.path === 'travelDisclosure') {
+        if (this.path === 'TRAVEL_DISCLOSURES') {
             this.addAdmin.travelDisclosureId = this.disclosureId;
         } else {
             this.addAdmin.disclosureId = this.disclosureId;
@@ -131,7 +131,8 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
         if (!this.isSaving && this.validateAdmin()) {
             this.isSaving = true;
             this.setDisclosureId();
-            this.$subscriptions.push(this._assignAdminService.assignAdmin(this.path, this.addAdmin)
+            const path = this.path === 'DISCLOSURES' ? 'disclosure' : 'travelDisclosure';
+            this.$subscriptions.push(this._assignAdminService.assignAdmin(path, this.addAdmin)
                 .subscribe((data: any) => {
                     this.isAssignToMe = false;
                     this.addAdmin = new AssignAdminRO();

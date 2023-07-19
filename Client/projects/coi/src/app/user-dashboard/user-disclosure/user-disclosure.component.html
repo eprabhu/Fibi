@@ -14,9 +14,9 @@
                     </span>
                     <div class="col-3 mt-2">
                         <span class="label-text me-2 p-0 ">Disclosure Status :</span>
-                        <app-no-data-label [valueToShow]="disclosure?.conflictStatus">
+                        <app-no-data-label [valueToShow]="disclosure?.coiConflictStatusType?.description">
                             <span
-                                class="{{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}">{{disclosure?.conflictStatus}}</span>
+                                class="{{commonService.getDisclosureConflictBadge(disclosure?.coiConflictStatusType?.conflictStatusCode)}}">{{disclosure?.coiConflictStatusType?.description}}</span>
                         </app-no-data-label>
                     </div>
                 </div>
@@ -66,14 +66,14 @@
                         </div>
                         <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-5">
                             <label for="id" class="label-text">Description :</label>
-                            <app-no-data-label [valueToShow]="disclosure?.reviseComment">
-                                <span id="id" class="grey-text">{{disclosure?.reviseComment}}</span>
+                            <app-no-data-label [valueToShow]="disclosure?.revisionComment">
+                                <span id="id" class="grey-text">{{disclosure?.revisionComment}}</span>
                             </app-no-data-label>
                         </div>
                         <div class="col">
                             <label for="id" class="label-text">Administrator :</label>
-                            <app-no-data-label [valueToShow]="disclosure?.administrator">
-                                <span id="id" class="grey-text">{{disclosure?.administrator}}</span>
+                            <app-no-data-label [valueToShow]="disclosure?.adminPersonName">
+                                <span id="id" class="grey-text">{{disclosure?.adminPersonName}}</span>
                             </app-no-data-label>
                         </div>
                         <div class="col">
@@ -216,7 +216,7 @@
     <div class="d-flex flex-fill  position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
     (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
-        <input class="advance-search-input border-0 px-4" id="searchText"
+        <input class="advance-search-input border-0 px-4 fs-14" id="searchText"
         [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
         type="text" [(ngModel)]="searchText" (ngModelChange)="getDisclosures()">
         <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>        
@@ -235,7 +235,16 @@
                                 <span class="px-2">{{disclosure?.travelDisclosureId? 'Travel' :
                                     disclosure?.fcoiType}}</span>
                             </span>
-                            <h4 class="mb-0 ml-2"><strong>{{modalHeader(disclosure)}}</strong></h4>
+                            <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2"><span><strong class="me-2">{{disclosure?.travellerName}}</strong><span class="pipe"></span><span class="label-text ms-2">Entity : </span ><span class="title-text">{{disclosure.travelEntityName}}</span></span></h4>
+                            <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2"><strong class="me-1">{{disclosure.disclosurePersonFullName}}</strong>
+                                <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="label-text ms-1"><span class="pipe"></span> Project :
+                                </span> 
+                                <span class="title-text"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:90)}}</span>
+                                <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>90">...
+                                    <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span class="readMore">Read More</span></a>
+                                </span>
+                                <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1">Read Less</span></a>
+                            </h4>
                         </span>
                     </div>
                     <div class="col-3 ms-3 p-1 align-items-center mt-2">
@@ -259,20 +268,6 @@
                 <div class="border-bottom">
                     <ng-container *ngIf="!disclosure?.travelDisclosureId">
                         <div class="row mb-3 px-3 mt-2">
-                            <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-12 mb-3">
-                                <label for="id" class="label-text">Project :</label>
-                                <app-no-data-label
-                                    [valueToShow]="(disclosure?.fcoiTypeCode==2 && disclosure?.proposalId) || (disclosure?.fcoiTypeCode==3 && disclosure?.awardId)">
-                                    <span *ngIf="disclosure?.fcoiTypeCode==2" id="id"
-                                        class="grey-text">#{{disclosure?.proposalId}}
-                                        - {{disclosure?.proposalTitle}}
-                                    </span>
-                                    <span *ngIf="disclosure?.fcoiTypeCode==3" id="id"
-                                        class="grey-text">#{{disclosure?.awardId}} -
-                                        {{disclosure?.awardTitle}}
-                                    </span>
-                                </app-no-data-label>
-                            </div>
                             <div class="col-5">
                                 <span class="label-text">Department:</span> <span class="grey-text">
                                     #{{disclosure?.unit?.unitDetail}} </span>
@@ -299,8 +294,8 @@
                                 <label for="id" class="label-text">{{disclosure?.disclosureVersionNumber== 1 ?
                                     'Description:' :
                                     'Revision Reason:'}}</label>
-                                <app-no-data-label [valueToShow]="disclosure?.revisionComment">
-                                    <span id="id" class="grey-text">{{disclosure?.revisionComment}}</span>
+                                <app-no-data-label [valueToShow]="disclosure?.reviseComment">
+                                    <span id="id" class="grey-text">{{disclosure?.reviseComment}}</span>
                                 </app-no-data-label>
                             </div>
                             <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-5">
@@ -390,8 +385,8 @@
                             </div>
                             <div class="col">
                                 <label for="expiration-date" class="label-text">Expiration Date :</label>
-                                <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.expirationDate">
-                                    <span class="grey-text">{{disclosure?.expirationDate |
+                                <app-no-data-label id="expiration-date" [valueToShow]="disclosure?.travelExpirationDate">
+                                    <span class="grey-text">{{disclosure?.travelExpirationDate |
                                         dateFormatter}}</span>
                                 </app-no-data-label>
                             </div>

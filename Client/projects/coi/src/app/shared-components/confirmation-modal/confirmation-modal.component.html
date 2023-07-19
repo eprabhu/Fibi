@@ -1,18 +1,20 @@
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-confirmation-modal-trigger"
-    data-bs-toggle="modal" data-bs-target="#confirmationModal"></button>
-<div class="modal modal-coi fade mySkinDialog" id="confirmationModal" role="dialog" aria-labelledby="confirmationModal"
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="{{modalName}}-trigger-btn"
+    data-bs-toggle="modal" [attr.data-bs-target]="'#'+modalName"></button>
+<div class="modal modal-coi fade mySkinDialog" id="{{modalName}}" role="dialog" [attr.aria-labelledby]="modalName"
     aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog" role="document" [class.modal-lg]="needDescriptionField">
+    <div class="modal-dialog {{getModalSize()}}" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{modalHeaderTitle}}</h5>
-                <button type="button" id="prop-confirmationModal-dismiss-btn" class="btn-close fs-12"
-                    data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()">
+                <h5 class="modal-title">
+                    <ng-content select="[header]"></ng-content>
+                </h5>
+                <button type="button" id="{{modalName}}-dismiss-btn" class="btn-close fs-12"
+                    data-bs-dismiss="modal" aria-label="Close" (click)="performSecondaryAction(false)">
                 </button>
             </div>
             <div class="modal-body m-0 p-0">
                 <div class="d-flex grey-info align-items-center position-relative" *ngIf="helpText.length > 0">
-                    <span data-bs-toggle="tooltip" title="Travel Disclosure Help Text" data-bs-placement="top" class="d-inline-block">
+                    <span data-bs-toggle="tooltip" title="{{primaryBtnName}} Help Text" data-bs-placement="top" class="d-inline-block">
                         <mat-icon role="img"
                             class="mat-icon me-2 info-icon material-icons mat-icon-no-color"
                             aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
@@ -26,9 +28,7 @@
                 </div>
                 <div class="p-2 m-2">
                     <!-- warning msg -->
-                    <p class="fs-14 ms-2" *ngIf="!needDescriptionField">
-                        <ng-content></ng-content>
-                    </p>
+                    <ng-content select="[content]"></ng-content>
 
                     <!-- description text area -->
                     <ng-container *ngIf="needDescriptionField">
@@ -51,11 +51,11 @@
                 </div>
             </div>
             <div class="modal-footer mx-2">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="closeModal()">
-                    {{modalCloseBtnName}}
+                <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction(true)">
+                    {{secondaryBtnName}}
                 </button>
-                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performAction()">
-                    {{modalActionBtnName}}
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performPrimaryAction()">
+                    {{primaryBtnName}}
                 </button>
             </div>
         </div>

@@ -79,8 +79,8 @@ export class EntityListComponent implements OnInit {
         this.personId, isProposalDisclosure).subscribe((data: any) => {
         this.coiDescription = '';
         this.coiStatusCode = null;
-        if (data && data.coiDisclosureDetails.length > 0) {
-        this.newArray = data.coiDisclosureDetails;
+        if (data && data.length > 0) {
+        this.newArray = data;
         if (this._entityService.linkedProposalId && this.coiDisclosure.coiDisclosureCategoryType.disclosureCategoryTypeCode == 3) {
           this.selectedProject = data.proposals[0];
         }

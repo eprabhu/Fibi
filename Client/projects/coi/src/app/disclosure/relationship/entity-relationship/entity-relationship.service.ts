@@ -59,7 +59,7 @@ saveEntityProjectRelation(params, moduleCode, moduleItemId, did, personId) {
 
 getEntityProjectRelations(moduleCode, moduleItemId, disclosureId, disclosureStatusCode, personId, isProposalDisclosure) {
   if (!isProposalDisclosure) {
-      return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations',
+      return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations',
     {
     'moduleCode': moduleCode,
     'moduleItemId': moduleItemId,
@@ -69,7 +69,7 @@ getEntityProjectRelations(moduleCode, moduleItemId, disclosureId, disclosureStat
     'personId': personId
     });
   } else {
-    return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations',
+    return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations',
   {
   'moduleCode': moduleCode,
   'moduleItemId': moduleItemId,

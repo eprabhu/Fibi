@@ -1,12 +1,14 @@
 package com.polus.fibicomp.coi.dto;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class CoiTravelDisclosureCertifyDto {
 
 	private String certifiedBy;
 	private Timestamp certifiedAt;
 	private Timestamp updateTimestamp;
+	private Date expirationDate;
 
 	public String getCertifiedBy() {
 		return certifiedBy;
@@ -30,6 +32,14 @@ public class CoiTravelDisclosureCertifyDto {
 
 	public void setUpdateTimestamp(Timestamp updateTimestamp) {
 		this.updateTimestamp = updateTimestamp;
+	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
 }

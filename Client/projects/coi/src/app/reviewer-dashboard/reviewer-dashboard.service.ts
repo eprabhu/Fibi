@@ -22,10 +22,6 @@ export class ReviewerDashboardService {
             return of();
         }));
     }
-
-    loadDisclosureReviewerQuickCardCounts() {
-        return this._http.get(this._commonService.baseUrl + '/loadDisclosureReviewerQuickCardCounts');
-    }
 }
 
 export class ReviewerDashboardRequest {
