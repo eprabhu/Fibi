@@ -152,7 +152,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.$coiList.next();
         } else {
             this.resetSortObjects();
-            this.resetAndPerformAdvanceSearch();
+            this.resetAdvanceSearchFields();
+            if (this.coiAdminDashboardService.coiRequestObject.tabName !== 'ALL_DISCLOSURES') {
+                this.$coiList.next();
+            }
         }
     }
 
@@ -368,7 +371,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     resetAndPerformAdvanceSearch() {
         this.resetAdvanceSearchFields();
-        this.$coiList.next();
+        this.$coiList.next(); 
     }
 
     selectEntityCountry(country: any) {
