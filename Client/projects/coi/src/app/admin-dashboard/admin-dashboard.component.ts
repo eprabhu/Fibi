@@ -20,13 +20,13 @@ import {
     POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { listAnimation } from 'projects/fibi/src/app/common/utilities/animations';
+import { slideInOut, listAnimation } from 'projects/fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-admin-dashboard',
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.scss'],
-    animations: [listAnimation]
+    animations: [slideInOut, listAnimation]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
 
@@ -79,6 +79,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     entitySearchOptions: any = {};
     sortCountObj: SortCountObj;
     clearField: string;
+    countryClearField: string;
     isHover: [] = [];
     isViewAdvanceSearch = true;
     adminData: any;
@@ -151,7 +152,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.$coiList.next();
         } else {
             this.resetSortObjects();
-            this.resetAndPerformAdvanceSearch();
+            this.resetAdvanceSearchFields();
+            if (this.coiAdminDashboardService.coiRequestObject.tabName !== 'ALL_DISCLOSURES') {
+                this.$coiList.next();
+            }
         }
     }
 
@@ -243,7 +247,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             .subscribe((data: any) => {
                 this.result = data || [];
                 if (this.result) {
-                    this.coiList = this.result.disclosureViews || [];
+                    this.coiList = this.getAdminDashboardList();
                     this.isShowNoDataCard = true;
                     this.coiList.map(ele => {
                         ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
@@ -252,6 +256,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                 }
                 this.setEventTypeFlag();
             }));
+    }
+
+    private getAdminDashboardList(): any {
+        const disclosureViews = this.result.disclosureViews || [];
+        const travelDashboardViews = this.result.travelDashboardViews || [];
+        return disclosureViews.concat(travelDashboardViews);
     }
 
     setEventTypeFlag() {
@@ -361,7 +371,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     resetAndPerformAdvanceSearch() {
         this.resetAdvanceSearchFields();
-        this.$coiList.next();
+        this.$coiList.next(); 
     }
 
     selectEntityCountry(country: any) {

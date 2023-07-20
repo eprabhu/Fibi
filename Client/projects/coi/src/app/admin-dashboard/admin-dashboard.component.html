@@ -1,5 +1,5 @@
 <div class="px-3">
-    <section class="section-advanced-search" [@listAnimation]="coiList.length">
+    <section class="section-advanced-search"  [@slideInOut] [@listAnimation]="coiList.length">
         <nav class="coi-admin-dash mb-2 mx-0 row border shadow-sm">
             <div class="align-items-center bg-white d-flex justify-content-between list">
                 <ul class="m-0 p-0">
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </nav>
-        <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample">
+        <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample" [@slideInOut]>
             <div class="card-body">
                 <ng-container *ngIf="coiAdminDashboardService.coiRequestObject.tabName !='ENTITY'">
                     <div class="form-row row">
@@ -221,8 +221,7 @@
                     <div class="d-flex justify-content-end mt-4">
                         <button (click)="resetAndPerformAdvanceSearch()"
                             class="btn btn-outline-secondary btn-xs fs-14 px-4"
-                            title="Click here to clear all the fields"
-                            title="Click here to Clear the fields">Clear</button>
+                            title="Click here to clear all the fields">Clear</button>
                         <button (click)="performAdvanceSearch()" class="btn btn-primary fs-14 ms-3 primary-button"
                             title="Click here to Initiate search">Search</button>
                     </div>
@@ -421,8 +420,8 @@
                                     </div>
                                     <div class="col">
                                         <label for="expiration-date" class="label-text">Expiration Date :</label>
-                                        <app-no-data-label id="expiration-date" [valueToShow]="coi?.travelExpirationDate">
-                                            <span class="grey-text">{{coi?.travelExpirationDate |
+                                        <app-no-data-label id="expiration-date" [valueToShow]="coi?.expirationDate">
+                                            <span class="grey-text">{{coi?.expirationDate |
                                                 dateFormatter}}</span>
                                         </app-no-data-label>
                                     </div>
@@ -554,7 +553,7 @@
             </ng-container>
         </ng-container>
         <ng-template #noData>
-            <app-no-information></app-no-information>
+            <app-no-information [@slideInOut]></app-no-information>
         </ng-template>
     </section>
     <app-assign-administrator-modal *ngIf="isAssignAdminModalOpen" (closeModal)="closeAssignAdminModal($event)"
