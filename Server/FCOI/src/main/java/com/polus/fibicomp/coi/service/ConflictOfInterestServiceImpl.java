@@ -69,6 +69,7 @@ import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
@@ -286,11 +287,24 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public PersonEntityRelationship saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship) {
-		personEntityRelationship.setValidPersonEntityRelType(conflictOfInterestDao.getValidPersonEntityRelTypeByTypeCode(personEntityRelationship.getValidPersonEntityRelTypeCode()));
-		conflictOfInterestDao.saveOrUpdatePersonEntityRelationship(personEntityRelationship);
-		return conflictOfInterestDao.getPersonEntityRelationshipByPersonEntityRelId(personEntityRelationship.getPersonEntityRelId());
-	}
+    public List<PersonEntityRelationship> saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship) {
+        List<PersonEntityRelationship> personEntityRelationshipList = new ArrayList<>();
+        Map<Integer, ValidPersonEntityRelType> validPersonEntityRelTypeMap = new HashMap<>();
+        List<ValidPersonEntityRelType> validPersonEntityRelTypes = conflictOfInterestDao.getValidPersonEntityRelType();
+        for (ValidPersonEntityRelType validPersonEntityRelType : validPersonEntityRelTypes) {
+        	validPersonEntityRelTypeMap.put(validPersonEntityRelType.getValidPersonEntityRelTypeCode(), validPersonEntityRelType);
+        }
+        personEntityRelationship.getValidPersonEntityRelTypeCodes().forEach(code -> {
+            PersonEntityRelationship personEntityRelation = new PersonEntityRelationship();
+            personEntityRelation.setQuestionnaireAnsHeaderId(personEntityRelationship.getQuestionnaireAnsHeaderId());
+            personEntityRelation.setPersonEntityId(personEntityRelationship.getPersonEntityId());
+            personEntityRelation.setValidPersonEntityRelTypeCode(code);
+            personEntityRelation.setValidPersonEntityRelType(validPersonEntityRelTypeMap.get(code));
+            conflictOfInterestDao.saveOrUpdatePersonEntityRelationship(personEntityRelation);
+            personEntityRelationshipList.add(conflictOfInterestDao.getPersonEntityRelationshipByPersonEntityRelId(personEntityRelation.getPersonEntityRelId()));
+        });
+        return personEntityRelationshipList;
+    }
 
 	@Override
 	public ResponseEntity<Object> certifyDisclosure(CoiDisclosure coiDisclosure) {

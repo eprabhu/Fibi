@@ -85,7 +85,7 @@ public interface ConflictOfInterestService {
 	 * @param personEntityRelationship
 	 * @return COIFinancialEntityDetails
 	 */
-	PersonEntityRelationship saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
+	List<PersonEntityRelationship> saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
 
 	/**
 	 * This method is used to create SFI

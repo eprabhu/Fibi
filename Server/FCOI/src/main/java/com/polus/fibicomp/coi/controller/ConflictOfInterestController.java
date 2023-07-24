@@ -120,7 +120,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/saveOrUpdateCoiFinancialEntityDetails")
-	public PersonEntityRelationship saveCoiFinancialEntityDetails(@RequestBody PersonEntityRelationship vo) {
+	public List<PersonEntityRelationship> saveCoiFinancialEntityDetails(@RequestBody PersonEntityRelationship vo) {
 		logger.info("Request for saveOrUpdateCoiFinancialEntityDetails");
 		return conflictOfInterestService.saveOrUpdatePersonEntityRelationship(vo);
 	}
