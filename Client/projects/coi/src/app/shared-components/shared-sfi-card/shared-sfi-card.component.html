@@ -1,7 +1,7 @@
 <div class="border bg-white rounded-3 p-2 mt-2">
   <div class="m-0 mb-2 row">
     <span class="align-items-center d-flex">
-      <span class="shadow-sm align-items-center d-flex ps-3"
+      <span class="shadow-sm align-items-center d-flex"
         [ngClass]="SFIObject.isActive === 'ACTIVE'? 'active-ribbon' : SFIObject?.isActive === 'DRAFT' ? 'draft-ribbon'  : 'inactive-ribbon'">{{SFIObject?.isActive === 'ACTIVE' ?
         'Active' : SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'}}</span>
       <p class="entity-title mt-3">
