@@ -34,8 +34,10 @@ export class ViewRelationshipDetailsComponent implements  OnDestroy, OnChanges {
 
   ngOnChanges() {;
     this.getEntityDetails(this.getEntityId());
-    if(this.updateRelationshipDetails) {
-      this.personEntityRelationships.push(this.updateRelationshipDetails);
+    if(this.updateRelationshipDetails?.length) {
+      this.updateRelationshipDetails.forEach(element => {
+        this.personEntityRelationships.push(element);
+      });
     }
   }
 

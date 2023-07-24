@@ -47,10 +47,9 @@
                   </b></label>
               </div>
               <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
-                <input type="radio" name="relation" class="form-check-input text-secondary border border-secondary"
+                <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
                   [value]="relation?.personEntityRelType?.relationshipTypeCode"
-                  [(ngModel)]="coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode"
-                  (ngModelChange)="setRelationship()">
+                  [(ngModel)]="isChecked[relation?.personEntityRelType?.relationshipTypeCode]">
                 <label class="text-secondary r-title fs-14">
                   {{relation?.personEntityRelType?.description}}
                 </label>
