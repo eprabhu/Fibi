@@ -37,6 +37,7 @@ export class AddRelationshipModalComponent implements OnInit {
     isEnableVersion: true,
   }
   relationLookup: any = [];
+  isChecked = {};
 
   constructor( private _router:Router, private _sfiService: SfiService, private _activatedRoute: ActivatedRoute,
               private _commonService: CommonService) { }
@@ -58,10 +59,6 @@ export class AddRelationshipModalComponent implements OnInit {
     }));
   }
 
-  // addRelation() {
-  //   this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode ? this.addRelationAPI() : this.navigateToSFI();
-  // }
-
   addRelation() {
     this.relationValidationMap.clear();
     if (!this.isSaving && this.validateRelationship()) {
@@ -69,15 +66,22 @@ export class AddRelationshipModalComponent implements OnInit {
       const REQ_BODY = {
         "questionnaireAnsHeaderId": null,
         "personEntityId": this.personEntityId,
-        "validPersonEntityRelTypeCode": this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode
+        "validPersonEntityRelTypeCodes": this.getSelectedRelationTypeCodes().map(typeCode => Number(typeCode))
       }
       this.$subscriptions.push(this._sfiService.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
-        this.definedRelationships.push(res);
+        res.forEach(ele => {
+          this.definedRelationships.push(ele);
+          this.findRelation(ele.validPersonEntityRelType.relationshipTypeCode);
+        });
         this.clearRelationModal();
         this.isSaving = false;
         this.navigateToSFI();
       }));
     }
+  }
+
+  getSelectedRelationTypeCodes() {
+    return Object.keys(this.isChecked).filter(key => this.isChecked[key]);
   }
 
   private navigateToSFI() {
@@ -89,7 +93,7 @@ export class AddRelationshipModalComponent implements OnInit {
 
   validateRelationship() {
     this.relationValidationMap.clear();
-    if (!this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode) {
+    if (!this.getSelectedRelationTypeCodes().length) {
       this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
     }
     return this.relationValidationMap.size === 0 ? true : false;
@@ -118,6 +122,7 @@ export class AddRelationshipModalComponent implements OnInit {
     hideModal('addRelationshipModal');
     this.entityDetail.personEntityRelType = null;
     this.entityDetail.validPersonEntityRelTypes.validPersonEntityRelTypeCode = null;
+    this.isChecked = {};
   }
 
   closeRelationModal() {
@@ -126,5 +131,6 @@ export class AddRelationshipModalComponent implements OnInit {
     this.closeModal();
     this._sfiService.isShowSfiNavBar = false;
     this.relationValidationMap.clear();
+    this.isChecked = {};
   }
 }

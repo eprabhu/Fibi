@@ -45,6 +45,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   @Output() isEmitModalClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() positionsToView: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() entityId: any;
+  isChecked = {};
+
 
   constructor(private _commonService: CommonService, private _router: Router,
     public entityDetailsServices: EntityDetailsService,
@@ -123,22 +125,29 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
       const REQ_BODY = {
         'questionnaireAnsHeaderId': null,
         'personEntityId': this._activatedRoute.snapshot.queryParamMap.get('personEntityId'),
-        'validPersonEntityRelTypeCode': this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode
+        'validPersonEntityRelTypeCodes': this.getSelectedRelationTypeCodes().map(typeCode => Number(typeCode))
       };
       this.$subscriptions.push(this.entityDetailsServices.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
-        this.definedRelationships.push(res);
-        this.getQuestionnaire(res);
-        this.findRelation(res.validPersonEntityRelType.relationshipTypeCode);
+        res.forEach(ele => {
+          this.definedRelationships.push(ele);
+          this.findRelation(ele.validPersonEntityRelType.relationshipTypeCode);
+        });
+        this.getQuestionnaire(res[res.length-1]);
         this.entityDetailsServices.isShowRelationButton = this.relationLookup.length;
         this.clearRelationModal();
         this.isSaving = false;
         this.updateRelationship.emit(res);
-      }, error => {
+       }, error => {
         this.isSaving = false;
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
       }));
     }
   }
+
+  getSelectedRelationTypeCodes() {
+    return Object.keys(this.isChecked).filter(key => this.isChecked[key]);
+  }
+
 
   closeModal(elementId) {
     hideModal(elementId);
@@ -147,13 +156,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   openAddRelationshipModal(elementId) {
     openModal(elementId);
   }
-
-  setRelationship() {
-    this.coiFinancialEntityDetail.personEntityRelType = this.relationLookup.find(
-      ele => ele.personEntityRelType.relationshipTypeCode === this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode);
-  }
-
-
 
   private findRelation(financialEntityRelTypeCode: string) {
     const RELATION_INDEX = this.relationLookup.findIndex(element =>
@@ -166,7 +168,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   clearRelationModal() {
     hideModal('addRelationshipModal');
     this.coiFinancialEntityDetail.personEntityRelType = null;
-    this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode = null;
+    this.isChecked = {};
   }
   private removeExistingRelation() {
     if (this.definedRelationships.length) {
@@ -179,8 +181,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   }
   validateRelationship() {
     this.relationValidationMap.clear();
-
-    if (!this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode) {
+    if (!this.getSelectedRelationTypeCodes().length) {
       this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
     }
     return this.relationValidationMap.size === 0 ? true : false;
@@ -189,6 +190,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   clearModal() {
     this.relationValidationMap.clear();
     this.isEmitModalClose.emit(false);
+    this.isChecked = {};
   }
 
   questionnaireSaveAction(event) {
