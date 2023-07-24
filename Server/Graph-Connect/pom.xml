@@ -12,7 +12,7 @@
 	<artifactId>fibi-graph-connect</artifactId>
 	<version>0.0.1</version>
 	<name>fibi-graph-connect</name>
-	<description>The application facilitates the import of data from RDBMS into Graph Database (Neo4j) models, enabling the visualization of data relationships through graph modeling.</description>
+	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -54,10 +54,31 @@
 		    <artifactId>neo4j-java-driver</artifactId>
 		    <!-- Replace with the appropriate version -->
 		</dependency>
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    </dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<container>
+		         		 <mainClass>com.polus.fibi.graphconnect.GraphConnectMainApp</mainClass>
+		       		</container>
+					<from>
+						<image>openjdk:17</image>
+					</from>
+					<to>
+						<image>registry.hub.docker.com/polusdocker/fibi-graph-connect</image>
+						<tags>${project.version}</tags>
+					</to>
+				</configuration>
+			</plugin>		
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
