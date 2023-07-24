@@ -17,6 +17,7 @@ export const slideInOut = trigger('slideInOut', [
     ])
   ])
 ]);
+
 export const slowSlideInOut = trigger('slowSlideInOut', [
   state('in', style({ height: '*', opacity: 0 })),
   transition(':leave', [
@@ -116,11 +117,74 @@ export const slideHorizontal = trigger(
     ])
 ]);
 
-export let listAnimation = trigger('listAnimation', [
+
+export const fadeIn =  trigger('fadeIn', [
+  transition(':enter', [
+    animate('400ms ease-in', keyframes([
+      style({opacity: 0,  offset: 0}),
+      style({opacity: .5, offset: 0.5}),
+      style({opacity: 1, offset: 1.0}),
+    ]))
+  ])
+]);
+
+export const listAnimation = trigger('listAnimation', [
   transition('* => *', [
     query(':enter', [
-      style({ opacity: 0, transform: 'translateY(-5px)' }),
-      stagger('100ms', [animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))])
-    ], { optional: true })
+      style({ opacity: 0, transform: 'translateY(-10px)' }),
+      stagger('100ms', [
+        animate('400ms cubic-bezier(0.35, 0, 0.25, 1)',
+        style({ opacity: 1, transform: 'translateY(0)' }))
+      ])], { optional: true }
+    )
+  ])
+]);
+
+export const leftSlideInOut = trigger('leftSlideInOut', [
+  transition(':enter', [
+    animate('300ms ease-in-out', keyframes([
+      style({ opacity: 0, transform: 'translateX(-20px)', offset: 0 }),
+      style({ opacity: .3, transform: 'translateX(-10px)', offset: 0.3 }),
+      style({ opacity: 1, transform: 'translateX(0)', offset: 1.0 }),
+    ]))
+  ]),
+  transition(':leave', [
+    animate('300ms ease-in-out', keyframes([
+      style({ opacity: 1, transform: 'translateX(0)', offset: 0 }),
+      style({ opacity: .3, transform: 'translateX(-5px)', offset: 0.3 }),
+      style({ opacity: 0, transform: 'translateX(-10px)', offset: 1.0 }),
+    ]))
+  ])
+]);
+
+export const topSlideInOut = trigger('topSlideInOut', [
+  transition(':enter', [
+    style({ height: '0', opacity: 0 }),
+    group([
+      animate(200, style({ height: '*' })),
+      animate('300ms ease-in-out', style({ 'opacity': '1' }))
+    ])
+  ]),
+  transition(':leave', [
+    animate('250ms ease-in-out', keyframes([
+      style({ opacity: 1, height: '*', transform: 'translateY(0)', offset: 0 }),
+      style({ opacity: .3, transform: 'translateY(-5px)', offset: 0.3 }),
+      style({ opacity: 0, height: 0, transform: 'translateY(-10px)', offset: 1.0 }),
+    ]))
+  ])
+]);
+
+export const fadeInOutHeight  = trigger('fadeInOutHeight', [
+  transition(':enter', [
+    style({ height: '0', opacity: 0 }),
+    group([
+      animate('400ms ease-in-out', style({ 'opacity': '1' }))
+    ])
+  ]),
+  transition(':leave', [
+    style({ height: '*', opacity: 1 }),
+    group([
+      animate('200ms ease-in-out', style({ 'opacity': '0' }))
+    ])
   ])
 ]);

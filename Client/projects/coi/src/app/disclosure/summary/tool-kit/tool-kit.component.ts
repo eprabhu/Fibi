@@ -109,8 +109,8 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     }
 
     jumpToSection(section) {
-        const sectionHeight = document.getElementById(section).offsetTop - 250;
-        window.scrollTo({ top: sectionHeight, behavior: 'smooth' });
+        const sectionHeight = document.getElementById(section).offsetTop - 265;
+        document.getElementById('COI_SCROLL').scrollTo({ top: sectionHeight, behavior: 'smooth' });
     }
 
     jumpToProjectSection(section) {

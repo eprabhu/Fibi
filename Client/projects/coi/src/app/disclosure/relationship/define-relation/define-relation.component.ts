@@ -68,7 +68,7 @@ export class DefineRelationComponent implements OnInit {
   }
 
   showTaskNavBar() {
-    document.body.classList.add('overflow-hidden');
+    document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
     const slider = document.querySelector('.slider-base');
     slider.classList.add('slider-opened');
   }
@@ -310,8 +310,8 @@ export class DefineRelationComponent implements OnInit {
   }
 
   addBodyScroll() {
-      document.body.classList.remove('overflow-hidden');
-      document.body.classList.add('overflow-auto');
+      document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+      document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
   }
 
   ngOnDestroy() {

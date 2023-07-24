@@ -10,6 +10,7 @@ import { NavigationService } from '../../common/services/navigation.service';
   templateUrl: './entity-details.component.html',
   styleUrls: ['./entity-details.component.scss']
 })
+
 export class EntityDetailsComponent implements  OnInit, OnDestroy {
   @Input() entityId: any;
   isTriggeredFromSlider = false;
@@ -53,7 +54,7 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
     this.entityDetailService.isExpanded = true;
   }
    clearSfiNavBarStyle() {
-    document.body.style.removeProperty('overflow');
+    document.getElementById('COI_SCROLL').style.removeProperty('overflow');
   }
 
   updateRelationship(event) {

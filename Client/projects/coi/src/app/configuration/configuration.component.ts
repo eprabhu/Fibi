@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {environment} from "../../../../admin-dashboard/src/environments/environment";
 import {CommonService} from "../common/services/common.service";
+import { fadeInOutHeight } from 'projects/fibi/src/app/common/utilities/animations';
 
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.component.html',
-  styleUrls: ['./configuration.component.scss']
+  styleUrls: ['./configuration.component.scss'],
+  animations: [fadeInOutHeight]
 })
 export class ConfigurationComponent implements OnInit{
 
