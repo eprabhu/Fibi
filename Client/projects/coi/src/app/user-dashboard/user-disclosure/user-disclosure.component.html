@@ -8,7 +8,7 @@
                     <span class="align-items-center col-9 d-flex">
                         <span
                             class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(disclosure)}}">
-                            <span class="px-2">{{disclosure?.coiDisclosureFcoiType.description}}</span></span>
+                            <span>{{disclosure?.coiDisclosureFcoiType.description}}</span></span>
                         <h4 class="mb-0 ml-2"><strong class="fs-15">#{{disclosure?.disclosureNumber}} : FCOI
                                 Disclosure</strong></h4>
                     </span>
@@ -232,7 +232,7 @@
                         <span class="align-items-center d-flex">
                             <span
                                 class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(disclosure)}}">
-                                <span class="px-2">{{disclosure?.travelDisclosureId? 'Travel' :
+                                <span>{{disclosure?.travelDisclosureId? 'Travel' :
                                     disclosure?.fcoiType}}</span>
                             </span>
                             <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2"><span><strong class="me-2">{{disclosure?.travellerName}}</strong><span class="pipe"></span><span class="label-text ms-2">Entity : </span ><span class="title-text">{{disclosure.travelEntityName}}</span></span></h4>
@@ -267,7 +267,7 @@
                 </div>
                 <div class="border-bottom">
                     <ng-container *ngIf="!disclosure?.travelDisclosureId">
-                        <div class="row mb-3 px-3 mt-2">
+                        <div class="row mb-3 p-013 mt-2">
                             <div class="col-5">
                                 <span class="label-text">Department:</span> <span class="grey-text">
                                     #{{disclosure?.unit?.unitDetail}} </span>
@@ -289,7 +289,7 @@
                                     class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} ">{{disclosure?.dispositionStatus}}</span>
                             </div>
                         </div>
-                        <div class="row mb-3 px-3 mt-2">
+                        <div class="row mb-3 p-013 mt-2">
                             <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-5">
                                 <label for="id" class="label-text">{{disclosure?.disclosureVersionNumber== 1 ?
                                     'Description:' :
@@ -327,7 +327,7 @@
                         </div>
                     </ng-container>
                     <ng-container *ngIf="disclosure?.travelDisclosureId">
-                        <div class="row mb-3 px-3 mt-2">
+                        <div class="row mb-3 p-013 mt-2">
                             <div class="col-4 d-flex">
                                 <label for="department-id" class="label-text col-custom-travel">Department :</label>
                                 <span class="col">
@@ -368,7 +368,7 @@
                                 </app-no-data-label>
                             </div>
                         </div>
-                        <div class="row mb-3 px-3 mt-2">
+                        <div class="row mb-3 p-013 mt-2">
                             <div class="col-4">
                                 <label for="traveller" class="label-text">Traveller :</label>
                                 <app-no-data-label id="traveller" [valueToShow]="disclosure?.travellerTypeDescription">
@@ -513,7 +513,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div>  
         </ng-container>
     </ng-container>
     <app-no-information *ngIf="isShowNoInfoCard"></app-no-information>

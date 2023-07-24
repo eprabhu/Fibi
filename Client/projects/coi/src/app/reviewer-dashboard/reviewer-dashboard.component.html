@@ -266,7 +266,7 @@
                                     <span class="align-items-center d-flex">
                                         <span
                                             class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(coi.fcoiTypeCode)}}">
-                                            <span class="px-2">{{coi?.fcoiType}}</span>
+                                            <span>{{coi?.fcoiType}}</span>
                                         </span>
                                         <h4 class="mb-0 ml-2 mt-2">
                                             <strong>
@@ -293,7 +293,7 @@
                                 </div>
                             </div>
                             <div class="border-bottom">
-                                <div class="row mb-3 px-3 mt-2">
+                                <div class="row mb-3 p-013 mt-2">
                                     <div class="col-5">
                                         <label for="id" class="label-text">Department :</label>
                                         <span id="id" class="grey-text">#{{coi?.unit?.unitDetail}}</span>
@@ -322,7 +322,7 @@
                                         </app-no-data-label>
                                     </div>
                                 </div>
-                                <div class="row mb-3 px-3">
+                                <div class="row mb-3 p-013">
                                     <div *ngIf="coi?.fcoiTypeCode== 1" class="col-5">
                                         <label for="id" class="label-text">{{coi?.disclosureVersionNumber== 1 ?
                                             'Description:' : 'Revision Reason:'}}</label>
@@ -356,7 +356,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row py-2 m-0 bg-white">
+                            <div class="row py-2 px-2 m-0 bg-white">
                                 <div class="col-3 d-flex align-items-center">
                                     <div (click)="setSelectedModuleCode('sfi', coi.coiDisclosureId, coi.coiDisclosureNumber,coi.personId,coi?.noOfSfi,coi);"
                                         *ngIf="coi?.disclosureStatusCode == 1"

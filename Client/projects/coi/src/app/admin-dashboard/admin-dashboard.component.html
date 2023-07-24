@@ -265,7 +265,7 @@
                                 <span class="align-items-center d-flex">
                                     <span
                                         class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(coi)}}">
-                                        <span class="px-2">{{coi?.travelDisclosureId? 'Travel' :
+                                        <span>{{coi?.travelDisclosureId? 'Travel' :
                                             coi?.fcoiType}}</span></span>
                                             <h4 *ngIf="coi.travelDisclosureId" class="mb-0 ml-2 mt-2"><strong class="me-2">{{coi.travellerName}}</strong>
                                                 <span class="me-2 pipe"></span>
@@ -304,7 +304,7 @@
 
                         <div class="border-bottom">
                             <ng-container *ngIf="!coi?.travelDisclosureId">
-                                <div class="row mb-3 px-3 mt-2">
+                                <div class="row mb-3 p-013 mt-2">
                                     <div class="col-5">
                                         <label for="id" class="label-text">Department :</label>
                                         <span id="id" class="grey-text">#{{coi?.unit?.unitDetail}}</span>
@@ -333,7 +333,7 @@
                                         </app-no-data-label>
                                     </div>
                                 </div>
-                                <div class="row mb-3 px-3">
+                                <div class="row mb-3 p-013">
                                     <div *ngIf="coi?.fcoiTypeCode== 1" class="col-5">
                                         <label for="id" class="label-text">{{coi?.disclosureVersionNumber== 1 ?
                                             'Description:' : 'Revision Reason:'}}</label>
@@ -369,7 +369,7 @@
                             </ng-container>
 
                             <ng-container *ngIf="coi?.travelDisclosureId">
-                                <div class="row mb-3 px-3 mt-2">
+                                <div class="row mb-3 p-013 mt-2">
                                     <div class="col-4 d-flex" *ngIf="coi?.travelDisclosureId">
                                         <label for="traveller" class="label-text">Travellers :</label>
                                         <app-no-data-label id="traveller" [valueToShow]="coi?.travellerTypeDescription">
@@ -404,7 +404,7 @@
                                         </app-no-data-label>
                                     </div>
                                 </div>
-                                <div class="row mb-3 px-3 mt-2">
+                                <div class="row mb-3 p-013 mt-2">
                                     <div class="col-4">
                                         <label for="department-id" class="label-text">Department :</label>
                                         <app-no-data-label id="department-id" [valueToShow]="coi?.travelEntityName">
@@ -437,7 +437,7 @@
                                 </div>
                             </ng-container>
                         </div>
-                        <div class="row py-2 m-0 bg-white d-flex align-items-center">
+                        <div class="row px-2 py-2 m-0 bg-white d-flex align-items-center">
                             <ng-container *ngIf="coi?.travelDisclosureId">
                                 <div class="col-4 d-flex">
                                     <label for="purpose" class="label-text col-custom-travel">Purpose :</label>
