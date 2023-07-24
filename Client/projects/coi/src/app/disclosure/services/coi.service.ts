@@ -20,6 +20,7 @@ export class CoiService {
     isCertified = false;
     isReviewActionCompleted = false;
     $SelectedReviewerDetails = new BehaviorSubject<any>({});
+    isShowCommentNavBar = false;
     isCOIAdministrator = false;
     isStartReview = false;
     isCompleteReview = false;
@@ -66,20 +67,6 @@ export class CoiService {
         return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
     }
 
-    getAdminDetails() {
-      return this._http.get(this._commonService.baseUrl + '/adminGroup/adminPersons');
-    }
-
-    getPersonGroup (personId) {
-      return this._http.get(this._commonService.fibiUrl + '/getPersonGroup', {
-        headers: new HttpHeaders().set('personId', personId.toString())
-      });
-    }
-
-    assignAdmin(params) {
-        return this._http.patch(this._commonService.baseUrl + '/disclosure/assignAdmin', params);
-    }
-
     getCoiReview(disclosureId: number) {
       return this._http.get(`${this._commonService.baseUrl}/getCoiReview/${disclosureId}`);
   }
@@ -99,4 +86,5 @@ export class CoiService {
   givecoiID(disclosureId: number) {
     return this._http.get(`${this._commonService.baseUrl}/evaluateValidation/${disclosureId}`);
   }
+  
 }
