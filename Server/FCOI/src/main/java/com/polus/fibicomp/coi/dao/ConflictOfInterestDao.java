@@ -956,5 +956,11 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	PersonEntity fetchPersonEntityById(Integer entityId, String personId);
+
 	List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber);
+
+	public List<ValidPersonEntityRelType> getValidPersonEntityRelType();
+
+	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
+
 }
