@@ -25,12 +25,14 @@ import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
 import { DefaultAdminDetails } from '../travel-disclosure/travel-disclosure-interface';
+import { slideHorizontal } from 'projects/fibi/src/app/common/utilities/animations';
 
 
 @Component({
     selector: 'app-disclosure',
     templateUrl: './disclosure.component.html',
-    styleUrls: ['./disclosure.component.scss']
+    styleUrls: ['./disclosure.component.scss'],
+    animations: [slideHorizontal]
 })
 
 
