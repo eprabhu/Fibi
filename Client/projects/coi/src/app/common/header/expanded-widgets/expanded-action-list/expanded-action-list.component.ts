@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DEFAULT_DATE_FORMAT, DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
 import { Constants } from 'projects/fibi/src/app/common/constants/action-list.constants';
 import { CommonService } from '../../../services/common.service';
 import { setFocusToElement } from 'projects/fibi/src/app/common/utilities/custom-utilities';
@@ -9,14 +9,16 @@ import { setFocusToElement } from 'projects/fibi/src/app/common/utilities/custom
 import { ExpandedActionListService } from './expanded-action-list.service';
 import { getTimeInterval, parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { fadeInOutHeight } from 'projects/fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-expanded-action-list',
     templateUrl: './expanded-action-list.component.html',
-    styleUrls: ['./expanded-action-list.component.scss']
+    styleUrls: ['./expanded-action-list.component.scss'],
+    animations: [fadeInOutHeight]
 })
 export class ExpandedActionListComponent implements OnInit, OnDestroy {
-    
+
     inboxObject: any = {
         moduleCode: null
     };

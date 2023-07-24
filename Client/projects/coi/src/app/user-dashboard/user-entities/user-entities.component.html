@@ -1,4 +1,4 @@
-<div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;">
+<div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;" [@fadeInOutHeight]>
     <div class="border-end fs-14 p-3">
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'"
@@ -14,20 +14,22 @@
     <div class="d-flex flex-fill position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
     (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
-        <input class="advance-search-input border-0 px-4" type="text" id="searchText"
+        <input class="advance-search-input border-0 px-4 fs-14" type="text" id="searchText"
         [class.search-area]="isSearchTextHover"
         placeholder="Search Entity Name" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
         <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>        
     </div>
 </div>
-<ng-container *ngIf="isShowNoDataCard">
-  <ng-container *ngIf="filteredEntityArray.length > 0">
+<ng-container *ngIf="!isLoading">
+  <div *ngIf="filteredEntityArray.length > 0" [@listAnimation]="filteredEntityArray.length">
     <ng-container *ngFor="let entities of filteredEntityArray">
       <app-shared-sfi-card [reqObject] = 'entities' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" ></app-shared-sfi-card>
     </ng-container>
-  </ng-container>
+  </div>
+
+  <!-- no data card -->
   <app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
-</ng-container>
+
  <!-- Pagination -->
  <div *ngIf="filteredEntityArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
     <nav aria-label="pagination section" class="pagination justify-content-end">
@@ -36,6 +38,8 @@
         </app-pagination>
     </nav>
 </div>
+
+</ng-container>
 
 <div #viewMyEntitiesOverlay [class.overlay]="showSlider">
     <div class="slider-base" *ngIf="showSlider">

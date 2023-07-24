@@ -10,12 +10,14 @@ import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
+import { fadeInOutHeight } from 'projects/fibi/src/app/common/utilities/animations';
 
-declare var $: any;
+declare const $: any;
 @Component({
   selector: 'app-view-entity-sfi-details',
   templateUrl: './view-entity-details.component.html',
-  styleUrls: ['./view-entity-details.component.scss']
+  styleUrls: ['./view-entity-details.component.scss'],
+  animations: [fadeInOutHeight]
 })
 export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges {
 

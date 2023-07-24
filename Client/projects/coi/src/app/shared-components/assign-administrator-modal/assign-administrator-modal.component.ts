@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { CompleterOptions } from '../../../../../fibi/src/app/service-request/service-request.interface';
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
 import { DefaultAdminDetails } from '../../travel-disclosure/travel-disclosure-interface';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 
-declare var $: any;
+declare const $: any;
 
 class AssignAdminRO {
     adminPersonId = '';
@@ -20,7 +21,7 @@ class AssignAdminRO {
     styleUrls: ['./assign-administrator-modal.component.scss'],
     providers: [AssignAdministratorModalService]
 })
-export class AssignAdministratorModalComponent implements OnInit, OnChanges {
+export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnDestroy {
 
     isAssignToMe = false;
     adminSearchOptions: any = {};
@@ -47,15 +48,19 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
         this.setDefaultAdminDetails();
     }
 
-    ngOnChanges() {
+    ngOnChanges(): void {
         this.getAdminDetails();
         this.setDisclosureId();
     }
 
-    getAdminDetails() {
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
+    }
+
+    private getAdminDetails() {
         this.$subscriptions.push(this._assignAdminService.getAdminDetails().subscribe((data: any) => {
             this.setAdminGroupOptions(data);
-            this.setCompleterOptions(this.adminSearchOptions, data.persons, 'fullName');
+            this.setCompleterOptions(data.persons, 'fullName', this.adminSearchOptions);
         }));
     }
 
@@ -91,7 +96,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
         return data.adminGroups.filter(element => element.isActive === 'Y');
     }
 
-    setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: string) {
+    private setCompleterOptions(arrayList: any, searchShowField: string, searchOption: any = null) {
         searchOption.defaultValue = '';
         searchOption.arrayList = arrayList || [];
         searchOption.contextField = searchShowField;
@@ -124,7 +129,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
     }
 
     public adminGroupSelect(event) {
-        this.addAdmin.adminGroupId = (event && event.adminGroupId) || null;
+        this.addAdmin.adminGroupId = (event?.adminGroupId) || null;
     }
 
     public assignAdministrator() {
