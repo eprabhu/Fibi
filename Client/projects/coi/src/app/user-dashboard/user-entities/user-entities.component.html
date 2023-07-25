@@ -1,5 +1,5 @@
-<div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;" [@fadeInOutHeight]>
-    <div class="border-end fs-14 p-3">
+<div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;">
+    <div class="border-end fs-14 p-3" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" title="Sort by All Status"

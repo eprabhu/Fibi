@@ -8,13 +8,13 @@ import { HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../.
 import { CommonService } from '../../common/services/common.service';
 import { Router } from '@angular/router';
 import { getFormattedAmount } from '../../common/utlities/custom-utlities';
-import { listAnimation } from 'projects/fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight, listAnimation } from '../../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-travel-related-disclosures',
     templateUrl: './travel-related-disclosures.component.html',
     styleUrls: ['./travel-related-disclosures.component.scss'],
-    animations: [listAnimation]
+    animations: [listAnimation, fadeInOutHeight]
 })
 export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
 

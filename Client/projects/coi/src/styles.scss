@@ -18,7 +18,7 @@ body {
   background: #F5F5F5;
   -webkit-font-smoothing: antialiased;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 // scroll design

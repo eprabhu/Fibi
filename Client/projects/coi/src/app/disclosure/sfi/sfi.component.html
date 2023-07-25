@@ -30,7 +30,7 @@
     </div>
 </div>
 <div class="advance-search-area border d-flex mt-2 rounded-1">
-    <div class="border-end fs-14 p-3">
+    <div class="border-end fs-14 p-3" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="filterType=='ALL'"
             title="Click to filter by type: All" area-describedby="Click to filter by type: All"
@@ -54,22 +54,24 @@
       <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon> 
     </div>
 </div>
-<div class="margin-left-5">
-  <ng-container
-    *ngFor="let item of coiFinancialEntityDetails ; let i =index">
-    <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'"></app-shared-sfi-card>
-  </ng-container>
-<div *ngIf="coiFinancialEntityDetails?.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-    <nav aria-label="pagination section" class="pagination justify-content-end">
-        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="count" [pageCount]="10">
-        </app-pagination>
-    </nav>
-</div>
-
-<div *ngIf="!coiFinancialEntityDetails?.length">
-  <app-no-information> </app-no-information>
-</div>
-</div>
+<ng-container *ngIf="!isLoading">
+  <div class="margin-left-5" [@listAnimation]="coiFinancialEntityDetails.length">
+    <div
+      *ngFor="let item of coiFinancialEntityDetails ; let i =index">
+      <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'"></app-shared-sfi-card>
+    </div>
+    <div *ngIf="coiFinancialEntityDetails?.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+        <nav aria-label="pagination section" class="pagination justify-content-end">
+            <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="count" [pageCount]="10">
+            </app-pagination>
+        </nav>
+    </div>
+  
+    <div *ngIf="!coiFinancialEntityDetails?.length">
+      <app-no-information> </app-no-information>
+    </div>
+  </div>
+</ng-container>
 
 <div #viewSFIDetailsOverlay [class.overlay]="showSlider">
 <div class="slider-base" *ngIf="showSlider">

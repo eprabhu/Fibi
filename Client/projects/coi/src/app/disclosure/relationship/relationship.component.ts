@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {  Router} from '@angular/router';
-import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
+import { slideHorizontal, listAnimation } from '../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../environments/environment';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
@@ -14,7 +14,7 @@ import { GetSFIRequestObject } from '../coi-interface';
   selector: 'app-relationship',
   templateUrl: './relationship.component.html',
   styleUrls: ['./relationship.component.scss'],
-  animations: [slideHorizontal],
+  animations: [slideHorizontal, listAnimation],
 })
 export class RelationshipComponent implements OnInit {
   isShowRelation = false;
