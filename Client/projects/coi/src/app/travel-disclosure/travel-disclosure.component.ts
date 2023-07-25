@@ -226,7 +226,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     showReturnOrApproveButton(): boolean {
-        return this.checkAdministratorRight() && this.checkReviewStatusCode(['3', '2'], 'SOME');
+        return this.checkAdministratorRight() && this.checkReviewStatusCode(['3']);
     }
 
     showHomeButton(): boolean {
@@ -291,7 +291,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private handleChildRouting(): void {
-        if (!this.service.isChildRouting) {
+        if (!this.service.isChildRouteTriggered) {
             this._dataStore.removeCreateModalDetails();
         }
     }
