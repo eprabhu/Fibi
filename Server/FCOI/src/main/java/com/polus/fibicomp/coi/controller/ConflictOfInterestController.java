@@ -85,7 +85,6 @@ public class ConflictOfInterestController {
 	@PostMapping("/getDisclosureRelations")
 	public String getDisclosureRelations(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for getDisclosureRelations");
-		vo.setPersonId(AuthenticatedUser.getLoginPersonId());
 		return conflictOfInterestService.getDisclosureRelations(vo);
 	}
 
@@ -245,11 +244,18 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getCoiConflictHistory(disclosureDetailsId);
 	}
 
-	@PostMapping(value = "/loadProposalsForDisclosure")
-	public String loadProposalsForDisclosure(@RequestBody ConflictOfInterestVO vo) {
+	@GetMapping(value = "/loadProposalsForDisclosure/{searchString}")
+	public String loadProposalsForDisclosure(@PathVariable("searchString") String searchString) {
 		logger.info("Request for loadProposalsForDisclosure");
-		logger.info("searchString : {}", vo.getSearchString());
-		return conflictOfInterestService.loadProposalsForDisclosure(vo);
+		logger.info("searchString : {}", searchString);
+		return conflictOfInterestService.loadProposalsForDisclosure(searchString);
+	}
+
+	@GetMapping(value = "/loadAwardsForDisclosure/{searchString}")
+	public String loadAwardsForDisclosure(@PathVariable("searchString") String searchString) {
+		logger.info("Request for loadAwardsForDisclosure");
+		logger.info("searchString : {}", searchString);
+		return conflictOfInterestService.loadAwardsForDisclosure(searchString);
 	}
 
 	@PostMapping(value = "/loadDisclosureHistory")
