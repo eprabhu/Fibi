@@ -54,6 +54,13 @@ export class EntityListComponent implements OnDestroy, OnInit {
   localCOIRequestObject: EntityDashboardRequest = new EntityDashboardRequest();
   result: any;
   isActiveDisclosureAvailable: boolean;
+  sortSectionsList = [
+    { variableName: 'name', fieldName: 'Name' },
+    { variableName: 'entityType', fieldName: 'Entity Type' },
+    { variableName: 'riskLevel', fieldName: 'Risk' },
+    { variableName: 'country', fieldName: 'Country' },
+    { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
+];
 
   constructor(private _router: Router,
     public entityManagementService: EntityManagementService,
