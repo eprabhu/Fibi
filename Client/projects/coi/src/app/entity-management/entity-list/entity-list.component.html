@@ -176,64 +176,17 @@
     [entityList]="entityList" [resultCount]="resultCount"></app-entity-list> -->
     <div class="sort-div border mt-2" *ngIf="isManageEntity && entityList.length">
         <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
-        <span tabindex="0" (keydown.enter)="sortResult('name')" (click)="sortResult('name')"
-            [class.filter-active]="isActive('name')" title="Click to sort by Entity Name"
-            area-describedby="Click to sort by Disclosure Type"
-            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill" role="button">
+        <span tabindex="0" *ngFor="let sortSection of sortSectionsList"
+            (keydown.enter)="sortResult(sortSection.variableName)" (click)="sortResult(sortSection.variableName)"
+            [class.filter-active]="isActive(sortSection.variableName)" title="Click to sort by {{sortSection.fieldName}}"
+            area-describedby="Click to sort by {{sortSection.fieldName}}"
+            class="shadow-sm fw-medium pl-15 pr-05 py-2 px-3 fs-13 border rounded-5 bg-white ml-5 mr-2" role="button">
             <div class="d-inline-flex align-items-center">
-                <label class="cursor-pointer">Name</label>
+                <label class="cursor-pointer">{{sortSection.fieldName}}</label>
                 <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['name']=== 'asc' ">arrow_downward</mat-icon>
+                    *ngIf="entityManagementService.coiRequestObject.sort[sortSection.variableName]=== 'asc' ">arrow_downward</mat-icon>
                 <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['name']=== 'desc' ">arrow_upward</mat-icon>
-            </div>
-        </span>
-        <span tabindex="0" (keydown.enter)="sortResult('entityType')" (click)="sortResult('entityType')"
-            [class.filter-active]="isActive('entityType')" title="Click to sort by Entity Type"
-            area-describedby="Click to sort by Last Updated By"
-            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
-            <div class="d-inline-flex align-items-center">
-                <label class="cursor-pointer">Entity Type</label>
-                <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['entityType']=== 'asc'">arrow_downward</mat-icon>
-                <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['entityType']=== 'desc' ">arrow_upward</mat-icon>
-            </div>
-        </span>
-        <span tabindex="0" (keydown.enter)="sortResult('riskLevel')" (click)="sortResult('riskLevel')"
-            [class.filter-active]="isActive('riskLevel')" title="Click to sort by Risk Level"
-            area-describedby="Click to sort by Disclosure Type"
-            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
-            <div class="d-inline-flex align-items-center">
-                <label class="cursor-pointer">Risk</label>
-                <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['riskLevel']=== 'asc' ">arrow_downward</mat-icon>
-                <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['riskLevel']=== 'desc' ">arrow_upward</mat-icon>
-            </div>
-        </span>
-        <span tabindex="0" (keydown.enter)="sortResult('country')" (click)="sortResult('country')"
-            [class.filter-active]="isActive('country')" title="Click to sort by Disclosure Type"
-            area-describedby="Click to sort by Country name"
-            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
-            <div class="d-inline-flex align-items-center">
-                <label class="cursor-pointer">Country</label>
-                <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['country']=== 'asc' ">arrow_downward</mat-icon>
-                <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['country']=== 'desc' ">arrow_upward</mat-icon>
-            </div>
-        </span>
-        <span tabindex="0" (keydown.enter)="sortResult('updateTimeStamp')" (click)="sortResult('updateTimeStamp')"
-            [class.filter-active]="isActive('updateTimeStamp')" title="Click to sort by last updated"
-            area-describedby="Click to sort by last updated"
-            class="shadow-sm fw-medium py-2 px-4 py-2 fs-13 border rounded-5 bg-white sort-pill mx-1" role="button">
-            <div class="d-inline-flex align-items-center">
-                <label class="cursor-pointer">Last Updated</label>
-                <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['updateTimeStamp']=== 'asc' ">arrow_downward</mat-icon>
-                <mat-icon class="arrow selected-arrow"
-                    *ngIf="entityManagementService.coiRequestObject.sort['updateTimeStamp']=== 'desc' ">arrow_upward</mat-icon>
+                    *ngIf="entityManagementService.coiRequestObject.sort[sortSection.variableName]=== 'desc' ">arrow_upward</mat-icon>
             </div>
         </span>
     </div>
@@ -241,12 +194,14 @@
             <div *ngIf="entityList.length; else noData">
                 <div *ngFor="let entityListData of entityList;let i=index">
                     <div class="border bg-white rounded-3 p-2 mt-2 hovering-card">
-                        <div class="m-0 mb-2 ">
-                            <span class="align-items-center  d-flex">
+                        <div class="m-0 mb-2 row">
+                            <div class="col-11"> 
+                            <span class="align-items-center d-flex">
                                 <span
                                     [ngClass]="entityListData?.isActive ? 'entity-status-active' : 'entity-status-inactive'">
                                     <span class="ps-3"> {{ entityListData?.isActive ? 'Active' : 'Inactive' }}</span>
                                 </span>
+                                
                                 <p class="entity-title mt-3 d-flex justify-content-between align-items-center">
                                     <strong class="fs-16 me-3">{{entityListData?.entityName}}</strong>
                                     <span *ngIf="entityListData?.statusDescription === 'Unverified'"
@@ -256,9 +211,18 @@
                                         </span>
                                         <span class="text">Unverified</span>
                                     </span>
-                                </p>
+                                </p>   
+                            
                             </span>
                         </div>
+                        </div>
+                        <!-- <mat-menu #beforeMenu>
+                            <button class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
+                                id="edit-location-btn" data-bs-toggle="modal" data-bs-target="#add-location-modal">
+                                <mat-icon class="me-2 invalid material-icons-round">warning</mat-icon>
+                                <span>Risk</span>
+                            </button>
+                        </mat-menu>  -->
                         <div class="m-0 mb-2 row">
                             <div class="col-4 text-secondary fs-14 mt-3">
                                 <span class="fw-bold me-2">Entity Type:</span>
