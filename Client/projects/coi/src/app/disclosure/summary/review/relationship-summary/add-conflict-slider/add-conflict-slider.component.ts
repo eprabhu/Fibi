@@ -37,7 +37,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
                  private _commonService: CommonService ) { }
 
     ngOnInit() {
-        document.body.classList.add('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         this.showConflictNavBar();
         this.getConflictStatusLookup();
         this.loadProjectConflictHistory();
@@ -53,8 +53,8 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     }
 
     addBodyScroll() {
-          document.body.classList.remove('overflow-hidden');
-          document.body.classList.add('overflow-auto');
+          document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+          document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }    
 
     closeNavBar() {

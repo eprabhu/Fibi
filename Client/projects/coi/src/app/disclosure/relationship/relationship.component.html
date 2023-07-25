@@ -29,7 +29,7 @@
       *ngIf="(proposalArray| SearchFilter : searchText:
   ['title', 'moduleItemId', 'moduleItemKey', 'moduleStatus', 'principalInvestigator', 'sponsor', 'primeSponsor']) as searchResult; let i = index">
       <ng-container *ngIf="isShowNoDataCard">
-        <ng-container *ngIf="searchResult.length">
+        <div *ngIf="searchResult.length" [@listAnimation]="searchResult.length">
             <ng-container *ngFor="let test of searchResult;let i = index">
                 <div class="card outer-card">
                     <div class="card-body">
@@ -171,7 +171,7 @@
                     </div>
                 </div>
             </ng-container>
-        </ng-container>
+        </div>
         <div *ngIf="!searchResult.length">
             <app-no-information> </app-no-information>
         </div>

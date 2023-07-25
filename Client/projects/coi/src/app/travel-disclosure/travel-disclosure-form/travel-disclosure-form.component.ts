@@ -41,7 +41,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _service: TravelDisclosureService,
         private _dataStore: TravelDataStoreService) {
-        window.scrollTo(0, 0);
+        document.getElementById('COI_SCROLL').scrollTo(0, 0);
     }
 
     ngOnInit(): void {

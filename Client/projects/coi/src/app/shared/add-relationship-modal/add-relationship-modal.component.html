@@ -7,9 +7,9 @@
               <h1 class="modal-title f-16" id="exampleModalLabel">Add Relationship</h1>
               <button type="button" title="Click to close the relationship button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="closeRelationModal();"></button>
           </div>
-        <div class="modal-body ">
+        <div class="modal-body p-0">
             <!-- Paragraph -->
-            <div class="row">
+            <div class="row m-0">
                 <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than
                     government entities, institution of higher education and affiliated organizations.</p>
             </div>
@@ -22,10 +22,10 @@
                                 </b></label>
                         </div>
                         <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
-                            <input type="radio" name="relation" class="form-check-input text-secondary border border-secondary"
+                            <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
                                 [value]="relation?.relationshipTypeCode"
-                                [(ngModel)]="entityDetail.validPersonEntityRelTypes.relationshipTypeCode"
-                                (ngModelChange)="setRelationship()" title = "Click to select {{relation?.description}} relation">
+                                [(ngModel)]="isChecked[relation.relationshipTypeCode]"
+                                title = "Click to select {{relation?.description}} relation">
                             <label  class="text-secondary r-title fs-14">
                                 {{relation?.description}}
                             </label>
@@ -34,17 +34,11 @@
                 </div>
             </div>
             <div *ngIf="relationValidationMap.has('relationRadio')"
-              class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
+            class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
             </div>
             <ng-template #noData>
-                <div class="no-data-container">
-                    <span class="no-data-icon-outer">
-                        <div class="no-data-icon">
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                        </div>
-                    </span>
-                    <h4>There are no relationships.</h4>
+                <div class="m-3">
+                <app-no-information></app-no-information>
                 </div>
             </ng-template>
         </div>

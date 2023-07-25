@@ -29,12 +29,13 @@ import {SSO_TIMEOUT_ERROR_CODE} from "../../../../../fibi/src/app/app-constants"
 export class AppHttpInterceptor implements HttpInterceptor {
     constructor(private _router: Router, private _commonService: CommonService) { }
     AuthToken: string;
+    currentActiveAPICount = 0;
     /**catches every request and adds the authentication token from local storage
      * creates new header with auth-key
     */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         this.AuthToken = this._commonService.getCurrentUserDetail('Authorization');
-
+        this.currentActiveAPICount++;
         if (this.AuthToken) {
             req = req.clone({ headers: req.headers.set('Authorization', this.AuthToken) });
         }
@@ -68,7 +69,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
             }),
 
             finalize(() => {
-                if (!this._commonService.isManualLoaderOn) {
+                this.currentActiveAPICount--;
+                if (!this._commonService.isManualLoaderOn && this.currentActiveAPICount <= 0) {
                     this._commonService.isShowLoader.next(false);
                     this._commonService.appLoaderContent = 'Loading...';
                     this._commonService.isShowOverlay = false;

@@ -4,7 +4,7 @@ import { EntityDashDefaultValues, EntityDashboardRequest, EntityManagementServic
 import { Subject, Subscription } from 'rxjs';
 import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import { CommonService } from '../../common/services/common.service';
-import { slideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
+import { slideInOut , listAnimation, topSlideInOut, fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
@@ -21,7 +21,7 @@ import { UserDashboardService } from '../../user-dashboard/user-dashboard.servic
   selector: 'app-entity-list',
   templateUrl: './entity-list.component.html',
   styleUrls: ['./entity-list.component.scss'],
-  animations: [slideInOut]
+  animations: [slideInOut, listAnimation, topSlideInOut, fadeInOutHeight]
 })
 export class EntityListComponent implements OnDestroy, OnInit {
 
@@ -54,6 +54,13 @@ export class EntityListComponent implements OnDestroy, OnInit {
   localCOIRequestObject: EntityDashboardRequest = new EntityDashboardRequest();
   result: any;
   isActiveDisclosureAvailable: boolean;
+  sortSectionsList = [
+    { variableName: 'name', fieldName: 'Name' },
+    { variableName: 'entityType', fieldName: 'Entity Type' },
+    { variableName: 'riskLevel', fieldName: 'Risk' },
+    { variableName: 'country', fieldName: 'Country' },
+    { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
+];
 
   constructor(private _router: Router,
     public entityManagementService: EntityManagementService,

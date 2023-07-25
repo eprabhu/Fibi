@@ -20,13 +20,13 @@ import {
     POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { slideInOut, listAnimation } from 'projects/fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight, listAnimation, topSlideInOut } from 'projects/fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-admin-dashboard',
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.scss'],
-    animations: [slideInOut, listAnimation]
+    animations: [fadeInOutHeight, listAnimation, topSlideInOut]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
 
@@ -50,6 +50,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     disclosureTypeOptions = 'COI_DISCLOSURE_FCOI_TYPE#FCOI_TYPE_CODE#true#true';
     disPositionOptions = 'COI_DISPOSITION_STATUS_TYPE#DISPOSITION_STATUS_CODE#true#true';
     coiReviewStatusOptions = 'COI_REVIEW_STATUS_TYPE#REVIEW_STATUS_CODE#true#true';
+    travelDisclosureStatusOptions = 'coi_travel_disclosure_status#TRAVEL_DISCLOSURE_STATUS_CODE#true#true';
+    travelDocumentStatusOptions = 'coi_travel_document_status#DOCUMENT_STATUS_CODE#true#true';
+    travelReviewStatusOptions = 'coi_travel_review_status#REVIEW_STATUS_CODE#true#true';
     $subscriptions: Subscription[] = [];
     result: any = { disclosureCount: 0 };
     $coiList = new Subject();
@@ -114,6 +117,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
     ];
     readMoreOrLess = [];
+    travelState = '';
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -561,6 +565,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.coiAdminDashboardService.isAdvanceSearch = false;
         }
         this.lookupValues = [];
+        this.travelState = '';
         this.setSearchOptions();
     }
 
@@ -593,6 +598,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     selectedEvent(event) {
         this.localCOIRequestObject.property8 = event ? event.entityName : null;
         this.localSearchDefaultValues.entityName = event ? event.entityName : null;
+    }
+
+    selectedCountryEvent(event) {
     }
 
     isActive(colName) {
