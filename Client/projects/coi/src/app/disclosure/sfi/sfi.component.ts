@@ -125,7 +125,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
-        document.body.classList.add('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         setTimeout(() => {
             const slider = document.querySelector('.slider-base');
             slider.classList.add('slider-opened');
@@ -168,8 +168,8 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     addBodyScroll() {
-        document.body.classList.remove('overflow-hidden');
-        document.body.classList.add('overflow-auto');
+        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }
 
     deleteSFIConfirmation(event, i) {

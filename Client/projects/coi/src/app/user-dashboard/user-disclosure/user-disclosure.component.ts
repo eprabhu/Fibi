@@ -8,10 +8,13 @@ import { UserDisclosure } from './user-disclosure-interface';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { listAnimation, leftSlideInOut } from 'projects/fibi/src/app/common/utilities/animations';
 @Component({
     selector: 'app-user-disclosure',
     templateUrl: './user-disclosure.component.html',
-    styleUrls: ['./user-disclosure.component.scss']
+    styleUrls: ['./user-disclosure.component.scss'],
+    animations: [listAnimation, leftSlideInOut]
+
 })
 
 export class UserDisclosureComponent implements OnInit, OnDestroy {
@@ -52,8 +55,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     $debounceEventForDisclosureList = new Subject();
     $fetchDisclosures = new Subject();
     isSearchTextHover = false;
-    isShowNoDataCard = false;
-    isShowNoInfoCard = false;
+    isLoading = false;
     readMoreOrLess = [];
 
     constructor(public userDisclosureService: UserDisclosureService,
@@ -70,18 +72,16 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     loadDashboard() {
-        this.isShowNoDataCard = false;
-        this.isShowNoInfoCard = false;
+        this.isLoading = true;
         this.$subscriptions.push(this.$fetchDisclosures.pipe(
             switchMap(() => this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject))).subscribe((res: any) => {
             this.result = res;
             if (this.result) {
-                this.isShowNoDataCard = true;
                 this.filteredDisclosureArray =  this.getDashboardList();
-                this.showOrHideNoInfoCard();
+                this.loadingComplete();
             }
         }), (err) => {
-            this.showOrHideNoInfoCard();
+            this.loadingComplete();
         });
     }
 
@@ -91,8 +91,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         return disclosureViews.concat(travelDashboardViews);
     }
 
-    private showOrHideNoInfoCard() {
-        this.isShowNoInfoCard = !this.filteredDisclosureArray.length;
+    private loadingComplete() {
+        this.isLoading = false;
     }
 
     getDisclosures() {
@@ -110,6 +110,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     resetAndFetchDisclosure() {
         this.searchText = '';
+        this.isLoading = true;
         this.filteredDisclosureArray = [];
         this.dashboardRequestObject.property2 = '';
         this.$fetchDisclosures.next();

@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
 import { EntityDetailsService } from '../entity-details.service';
-import { hideModal, openModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { EntityDetail } from '../../sfi/add-sfi.interface';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS } from '../../../app-constants';
@@ -60,14 +59,13 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   }
   ngOnChanges() {
     if (this.isAddRelationship) {
-      this.openAddRelationshipModal('addRelationshipModal');
+      document.getElementById('addRelationshipModal-trigger-btn').click();
     }
     this.configuration.enableViewMode = !this.isEditMode;
   }
-  
+
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
-    hideModal('addRelationshipModal');
   }
 
   async getDataFromService() {
@@ -148,15 +146,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
     return Object.keys(this.isChecked).filter(key => this.isChecked[key]);
   }
 
-
-  closeModal(elementId) {
-    hideModal(elementId);
-  }
-
-  openAddRelationshipModal(elementId) {
-    openModal(elementId);
-  }
-
   private findRelation(financialEntityRelTypeCode: string) {
     const RELATION_INDEX = this.relationLookup.findIndex(element =>
       element.personEntityRelType.relationshipTypeCode === financialEntityRelTypeCode);
@@ -166,7 +155,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   }
 
   clearRelationModal() {
-    hideModal('addRelationshipModal');
+    document.getElementById('close-addRelationshipModal-trigger-btn').click();
     this.coiFinancialEntityDetail.personEntityRelType = null;
     this.isChecked = {};
   }

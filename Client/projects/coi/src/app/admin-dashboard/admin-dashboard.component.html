@@ -1,5 +1,5 @@
-<div class="px-3">
-    <section class="section-advanced-search"  [@slideInOut] [@listAnimation]="coiList.length">
+<div class="px-3" [@fadeInOutHeight]>
+    <section class="section-advanced-search" [@listAnimation]="coiList.length">
         <nav class="coi-admin-dash mb-2 mx-0 row border shadow-sm">
             <div class="align-items-center bg-white d-flex justify-content-between list">
                 <ul class="m-0 p-0">
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </nav>
-        <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample" [@slideInOut]>
+        <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample" [@topSlideInOut]>
             <div class="card-body">
                 <ng-container *ngIf="coiAdminDashboardService.coiRequestObject.tabName !='ENTITY'">
                     <div class="form-row row">
@@ -84,25 +84,21 @@
                                 class="w-100 mt-4" [uniqueId]="'adv-disclosure-entity-name'">
                             </app-endpoint-search>
                         </div>
-                        <!-- Disclosure Type -->
-                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3"
-                            title="Click to search by Disclosure Type">
-                            <label class="d-block" for="adv-disclosure-type">
-                                Disclosure Type
+                        <!-- Expiration Date -->
+                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Expiration Date">
+                            <label class="d-block" for="adv-disclosure-expiration-date">
+                                Expiration Date
                             </label>
-                            <app-look-up (selectedResult)="onLookupSelect($event, 'property5')"
-                                [options]="disclosureTypeOptions" [selectedLookUpList]="lookupValues['property5']"
-                                [uniqueId]="'adv-disclosure-type'">
-                            </app-look-up>
+                            <span class="dateField">
+                                <input matInput [matDatepicker]="expirationDate" (keypress)="expirationDate.open()"
+                                    id="adv-disclosure-expiration-date" (click)="expirationDate.open()"
+                                    class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.expirationDate"
+                                    placeholder="{{datePlaceHolder}}">
+                                <i (click)="expirationDate.open()"
+                                    class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                                <mat-datepicker #expirationDate></mat-datepicker>
+                            </span>
                         </div>
-                        <!-- Entity Country -->
-                        <!-- <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
-                            <label class="d-block" for="adv-disclosure-entity-country">Country</label>
-                            <app-endpoint-search (onSelect)="selectEntityCountry($event)"
-                                [clearField]="advSearchClearField" [httpOptions]="countrySearchOptions"
-                                [placeHolder]="'Search by Country'" [uniqueId]="'adv-disclosure-entity-country'">
-                            </app-endpoint-search>
-                        </div> -->
                     </div>
                     <div class="form-row row mt-3">
                         <!-- Disclosure # -->
@@ -120,12 +116,14 @@
                                 Disclosure Status
                             </label>
                             <app-look-up (selectedResult)="onLookupSelect($event, 'property4')"
-                                [options]="disclosureStatusOptions" [selectedLookUpList]="lookupValues['property4']"
+                                [options]="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES' ? disclosureStatusOptions : travelDisclosureStatusOptions" 
+                                [selectedLookUpList]="lookupValues['property4']"
                                 [uniqueId]="'adv-disclosure-status'">
                             </app-look-up>
                         </div>
                         <!-- Disposition Status -->
                         <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3"
+                            *ngIf="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES'"
                             title="Click to search by Disposition Status">
                             <label class="d-block" for="adv-disposition-status">
                                 Disposition Status
@@ -135,13 +133,26 @@
                                 [uniqueId]="'adv-disposition-status'">
                             </app-look-up>
                         </div>
+                        <!-- Travel Document Status -->
+                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3"
+                            *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'TRAVEL_DISCLOSURES'"
+                            title="Click to search by Document Status">
+                            <label class="d-block" for="adv-disclosure-type">
+                                Document Status
+                            </label>
+                            <app-look-up (selectedResult)="onLookupSelect($event, 'property20')"
+                                [options]="travelDocumentStatusOptions" [selectedLookUpList]="lookupValues['property20']"
+                                [uniqueId]="'adv-disposition-status'">
+                            </app-look-up>
+                        </div>
                         <!-- Review Status -->
                         <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Review Status">
                             <label class="d-block">
                                 <ng-container>Review Status</ng-container>
                             </label>
                             <app-look-up (selectedResult)="onLookupSelect($event, 'property21')"
-                                [options]="coiReviewStatusOptions" [selectedLookUpList]="lookupValues['property21']">
+                                [options]="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES' ? coiReviewStatusOptions : travelReviewStatusOptions" 
+                                [selectedLookUpList]="lookupValues['property21']">
                             </app-look-up>
                         </div>
                         <!-- Certification Date -->
@@ -178,20 +189,42 @@
                         </div> -->
                     </div>
                     <div class="form-row row mt-3">
-                        <!-- End Date -->
-                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Expiration Date">
-                            <label class="d-block" for="adv-disclosure-expiration-date">
-                                Expiration Date
+                        <!-- Disclosure Type -->
+                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Disclosure Type"
+                            *ngIf="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES'">
+                            <label class="d-block" for="adv-disclosure-type">
+                                Disclosure Type
                             </label>
-                            <span class="dateField">
-                                <input matInput [matDatepicker]="expirationDate" (keypress)="expirationDate.open()"
-                                    id="adv-disclosure-expiration-date" (click)="expirationDate.open()"
-                                    class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.expirationDate"
-                                    placeholder="{{datePlaceHolder}}">
-                                <i (click)="expirationDate.open()"
-                                    class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
-                                <mat-datepicker #expirationDate></mat-datepicker>
-                            </span>
+                            <app-look-up (selectedResult)="onLookupSelect($event, 'property5')"
+                                [options]="disclosureTypeOptions" [selectedLookUpList]="lookupValues['property5']"
+                                [uniqueId]="'adv-disclosure-type'">
+                            </app-look-up>
+                        </div>
+                        <!-- Travel Country -->
+                        <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Country Name"
+                            *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'TRAVEL_DISCLOSURES'">
+                            <label class="d-block" for="adv-disclosure-country-name">Country</label>
+                            <app-endpoint-search (onSelect)="selectedCountryEvent($event)" [clearField]="countryClearField"
+                                [httpOptions]="countrySearchOptions" [placeHolder]="'Search by Country'"
+                                class="w-100 mt-4" [uniqueId]="'adv-disclosure-country-name'">
+                            </app-endpoint-search>
+                        </div>
+                        <!-- Entity Country -->
+                        <!-- <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3">
+                            <label class="d-block" for="adv-disclosure-entity-country">Country</label>
+                            <app-endpoint-search (onSelect)="selectEntityCountry($event)"
+                                [clearField]="advSearchClearField" [httpOptions]="countrySearchOptions"
+                                [placeHolder]="'Search by Country'" [uniqueId]="'adv-disclosure-entity-country'">
+                            </app-endpoint-search>
+                        </div> -->
+                        <!-- Travel State -->
+                        <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Type for searching State"
+                            *ngIf="coiAdminDashboardService.coiRequestObject.tabName == 'TRAVEL_DISCLOSURES'">
+                            <label class="d-block" for="adv-disclosure-expiration-date">
+                                State
+                            </label>
+                            <input type="text" class="form-control d-inline-block" [(ngModel)]="travelState"
+                                placeholder="Type State">
                         </div>
                         <!-- Has SFI -->
                         <!-- <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" aria-labelledby="Disclosures_has_sfi">
@@ -553,7 +586,7 @@
             </ng-container>
         </ng-container>
         <ng-template #noData>
-            <app-no-information [@slideInOut]></app-no-information>
+            <app-no-information></app-no-information>
         </ng-template>
     </section>
     <app-assign-administrator-modal *ngIf="isAssignAdminModalOpen" (closeModal)="closeAssignAdminModal($event)"

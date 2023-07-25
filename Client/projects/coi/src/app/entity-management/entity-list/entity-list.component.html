@@ -1,5 +1,5 @@
 <div>
-    <div class="px-3" [@slideInOut]>
+    <div class="px-3" [@fadeInOutHeight] [@listAnimation]="entityList.length">
         <div *ngIf="isManageEntity" class="row bg-white mx-0 d-flex py-1 pb-2 align-items-center border ">
             <nav class="coi-admin-dash mx-0 borderlist">
                 <ul
@@ -60,7 +60,7 @@
       </div> -->
             </div>
         </div>
-        <div *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow-sm rounded-3" id="view-advance-search">
+        <div *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow-sm rounded-3" id="view-advance-search" [@topSlideInOut]>
             <div *ngIf="isManageEntity" class="card-body mb-3">
                 <div class="form-row row mx-2">
                     <div class="col-3" title="Click to search by Entity name">

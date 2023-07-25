@@ -199,7 +199,7 @@
 </nav>
 
 <div class="advance-search-area border d-flex mt-2 rounded-1">
-    <div class="border-end fs-14 p-3" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
+    <div class="border-end fs-14 p-3" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Type :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
             title="Click to filter by type: All" area-describedby="Click to filter by type: All"
@@ -213,8 +213,9 @@
         <!--<span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>-->
     </div>
-    <div class="d-flex flex-fill  position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
-    (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
+    <div class="d-flex flex-fill  position-relative"
+        [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
+        (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
         <input class="advance-search-input border-0 px-4 fs-14" id="searchText"
         [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
@@ -222,8 +223,8 @@
         <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>        
     </div>
 </div>
-<ng-container *ngIf="isShowNoDataCard">
-    <ng-container *ngIf="filteredDisclosureArray.length">
+<ng-container *ngIf="!isLoading">
+    <div [@listAnimation]="filteredDisclosureArray.length">
         <ng-container *ngFor="let disclosure of filteredDisclosureArray ; let index = index;">
             <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
                 (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
@@ -515,16 +516,16 @@
                 </div>
             </div>  
         </ng-container>
-    </ng-container>
-    <app-no-information *ngIf="isShowNoInfoCard"></app-no-information>
+    </div>
+    <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
+    <!-- Pagination -->
+    <div *ngIf="filteredDisclosureArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+        <nav aria-label="pagination section" class="pagination justify-content-end">
+            <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="result.totalServiceRequest">
+            </app-pagination>
+        </nav>
+    </div>
 </ng-container>
-<!-- Pagination -->
-<div *ngIf="filteredDisclosureArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-    <nav aria-label="pagination section" class="pagination justify-content-end">
-        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="result.totalServiceRequest">
-        </app-pagination>
-    </nav>
-</div>
 
 <app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
