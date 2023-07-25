@@ -234,10 +234,12 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used to get proposals for Disclosure
-	 * @param vo
+	 * @param searchString
 	 * @return list of proposals
 	 */
-	String loadProposalsForDisclosure(ConflictOfInterestVO vo);
+	String loadProposalsForDisclosure(String searchString);
+
+	String loadAwardsForDisclosure(String searchString);
 
 	/**
 	 * @param vo

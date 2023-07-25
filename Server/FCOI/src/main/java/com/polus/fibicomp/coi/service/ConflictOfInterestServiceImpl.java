@@ -209,11 +209,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		String coiTypeCode = coiDisclosure.getFcoiTypeCode();
 		if (Constants.PROPOSAL_DISCLOSURE.equals(coiTypeCode)) {
 			List<DisclosureDetailDto> projDetailObjs = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE,
-					AuthenticatedUser.getLoginPersonId(), disclosureId);
+					conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(disclosureId), disclosureId, null);
 			conflictOfInterestVO.setProjectDetail(projDetailObjs == null || projDetailObjs.isEmpty() ? null : projDetailObjs.get(0));
 		} else if (Constants.AWARD_DISCLOSURE.equals(coiTypeCode)) {
 			List<DisclosureDetailDto> projDetailObjs = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE,
-					AuthenticatedUser.getLoginPersonId(), disclosureId);
+					conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(disclosureId), disclosureId, null);
 			conflictOfInterestVO.setProjectDetail(projDetailObjs == null || projDetailObjs.isEmpty() ? null : projDetailObjs.get(0));
 		}
 		coiDisclosure.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
@@ -230,10 +230,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public String getDisclosureRelations(ConflictOfInterestVO vo) {
 		vo.setCoiConflictStatusTypes(conflictOfInterestDao.getCoiConflictStatusTypes());
 		vo.setCoiProjConflictStatusTypes(conflictOfInterestDao.getProjConflictStatusTypes());
+		vo.setPersonId(conflictOfInterestDao.getDisclosurePersonIdByDisclosureId(vo.getDisclosureId()));
 		List<DisclosureDetailDto> awardDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE,
-				vo.getPersonId(), vo.getDisclosureId());
+				vo.getPersonId(), vo.getDisclosureId(), null);
 		List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, vo.getPersonId(),
-				vo.getDisclosureId());
+				vo.getDisclosureId(), null);
 		vo.setAwards(awardDetails);
 		vo.setProposals(proposalDetails);
 		return commonDao.convertObjectToJSON(vo);
@@ -765,10 +766,17 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public String loadProposalsForDisclosure(ConflictOfInterestVO vo) {
+	public String loadProposalsForDisclosure(String searchString) {
 		List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE,
-				AuthenticatedUser.getLoginPersonId(), null);
+				AuthenticatedUser.getLoginPersonId(), null, searchString);
 		return commonDao.convertObjectToJSON(proposalDetails);
+	}
+
+	@Override
+	public String loadAwardsForDisclosure(String searchString) {
+		List<DisclosureDetailDto> awardDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE,
+				AuthenticatedUser.getLoginPersonId(), null, searchString);
+		return commonDao.convertObjectToJSON(awardDetails);
 	}
 
 	@Override

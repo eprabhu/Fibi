@@ -4,6 +4,15 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DisclosureDetailDto {
 
 	private Integer moduleCode;
@@ -34,115 +43,14 @@ public class DisclosureDetailDto {
 
 	private List<Map<Object, Object>> disclosureStatusCount;
 
-	public Integer getModuleCode() {
-		return moduleCode;
-	}
+	private String reporterRole;
 
-	public void setModuleCode(Integer moduleCode) {
-		this.moduleCode = moduleCode;
-	}
+	private String reporterName;
 
-	public Integer getModuleItemId() {
-		return moduleItemId;
-	}
+	private String reporterPersonId;
 
-	public void setModuleItemId(Integer moduleItemId) {
-		this.moduleItemId = moduleItemId;
-	}
+	private String sponsorAwardNumber;
 
-	public String getModuleItemKey() {
-		return moduleItemKey;
-	}
+	private String accountNumber;
 
-	public void setModuleItemKey(String moduleItemKey) {
-		this.moduleItemKey = moduleItemKey;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getPrincipalInvestigator() {
-		return principalInvestigator;
-	}
-
-	public void setPrincipalInvestigator(String principalInvestigator) {
-		this.principalInvestigator = principalInvestigator;
-	}
-
-	public String getSponsor() {
-		return sponsor;
-	}
-
-	public void setSponsor(String sponsor) {
-		this.sponsor = sponsor;
-	}
-
-	public Timestamp getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Timestamp startDate) {
-		this.startDate = startDate;
-	}
-
-	public Timestamp getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Timestamp endDate) {
-		this.endDate = endDate;
-	}
-
-	public Boolean getSfiCompleted() {
-		return sfiCompleted;
-	}
-
-	public void setSfiCompleted(Boolean sfiCompleted) {
-		this.sfiCompleted = sfiCompleted;
-	}
-
-	public String getModuleStatus() {
-		return moduleStatus;
-	}
-
-	public void setModuleStatus(String moduleStatus) {
-		this.moduleStatus = moduleStatus;
-	}
-
-	public String getUnitName() {
-		return unitName;
-	}
-
-	public void setUnitName(String unitName) {
-		this.unitName = unitName;
-	}
-
-	public String getPrimeSponsor() {
-		return primeSponsor;
-	}
-
-	public void setPrimeSponsor(String primeSponsor) {
-		this.primeSponsor = primeSponsor;
-	}
-
-	public String getUnitNumber() {
-		return unitNumber;
-	}
-
-	public void setUnitNumber(String unitNumber) {
-		this.unitNumber = unitNumber;
-	}
-
-	public List<Map<Object, Object>> getDisclosureStatusCount() {
-		return disclosureStatusCount;
-	}
-
-	public void setDisclosureStatusCount(List<Map<Object, Object>> disclosureStatusCount) {
-		this.disclosureStatusCount = disclosureStatusCount;
-	}
 }

@@ -601,9 +601,10 @@ public interface ConflictOfInterestDao {
 	 * @param moduleCode
 	 * @param personId
 	 * @param disclosureId
+	 * @param searchString 
 	 * @return
 	 */
-	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId);
+	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString);
 
 	public List<CoiEntity> getAllSystemEntityList(CoiDashboardVO vo);
 
