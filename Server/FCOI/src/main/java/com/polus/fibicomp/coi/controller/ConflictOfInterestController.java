@@ -11,6 +11,7 @@ import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.service.GeneralService;
@@ -244,18 +245,18 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getCoiConflictHistory(disclosureDetailsId);
 	}
 
-	@GetMapping(value = "/loadProposalsForDisclosure/{searchString}")
-	public String loadProposalsForDisclosure(@PathVariable("searchString") String searchString) {
+	@PostMapping(value = "/loadProposalsForDisclosure")
+	public String loadProposalsForDisclosure(@RequestBody SearchDto searchDto) {
 		logger.info("Request for loadProposalsForDisclosure");
-		logger.info("searchString : {}", searchString);
-		return conflictOfInterestService.loadProposalsForDisclosure(searchString);
+		logger.info("searchString : {}", searchDto.getSearchString());
+		return conflictOfInterestService.loadProposalsForDisclosure(searchDto.getSearchString());
 	}
 
-	@GetMapping(value = "/loadAwardsForDisclosure/{searchString}")
-	public String loadAwardsForDisclosure(@PathVariable("searchString") String searchString) {
+	@PostMapping(value = "/loadAwardsForDisclosure")
+	public String loadAwardsForDisclosure(@RequestBody SearchDto searchDto) {
 		logger.info("Request for loadAwardsForDisclosure");
-		logger.info("searchString : {}", searchString);
-		return conflictOfInterestService.loadAwardsForDisclosure(searchString);
+		logger.info("searchString : {}", searchDto.getSearchString());
+		return conflictOfInterestService.loadAwardsForDisclosure(searchDto.getSearchString());
 	}
 
 	@PostMapping(value = "/loadDisclosureHistory")
