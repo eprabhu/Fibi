@@ -66,7 +66,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadDashboard();
-        this.$fetchDisclosures.next();
+        this.getDashboardBasedOnTab();
         this.loadDashboardCount();
         this.getSearchList();
     }
@@ -94,6 +94,16 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     private loadingComplete() {
         this.isLoading = false;
     }
+    
+    getDashboardBasedOnTab() {
+        if(this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
+            this.getDisclosureHistory();
+        } else { 
+            this.isLoading = true;
+            this.filteredDisclosureArray = [];
+            this.$fetchDisclosures.next();
+        }
+    }
 
     getDisclosures() {
         this.dashboardRequestObject.currentPage = '1';
@@ -103,7 +113,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     getSearchList() {
         this.$subscriptions.push(this.$debounceEventForDisclosureList.pipe(debounce(() => interval(800))).subscribe((data: any) => {
         this.dashboardRequestObject.property2 = this.searchText;
-          this.$fetchDisclosures.next();
+            this.isLoading = true;
+            this.filteredDisclosureArray = [];
+            this.$fetchDisclosures.next();
         }
         ));
       }
@@ -113,11 +125,13 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.filteredDisclosureArray = [];
         this.dashboardRequestObject.property2 = '';
-        this.$fetchDisclosures.next();
+        this.getDashboardBasedOnTab();
     }
 
     actionsOnPageChange(event) {
         this.dashboardRequestObject.currentPage = event;
+        this.isLoading = true;
+        this.filteredDisclosureArray = [];
         this.$fetchDisclosures.next();
     }
 
@@ -235,6 +249,15 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         } else {
             return 'Search by #Travel Disclosure Id, Entity Name, Department Name, Traveller Type, Destination, Review Status, Document Status, Purpose';
         }
+    }
+
+    getDisclosureHistory() {
+        this.isLoading = true;
+        this.filteredDisclosureArray =  [];
+        this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({'filterType':this.currentSelected.filter}).subscribe((data: any) => {
+            this.filteredDisclosureArray =  data;
+            this.loadingComplete();
+        })); 
     }
 
 }
