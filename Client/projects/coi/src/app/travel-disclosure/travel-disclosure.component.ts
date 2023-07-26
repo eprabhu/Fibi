@@ -226,7 +226,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     showReturnOrApproveButton(): boolean {
-        return this.checkAdministratorRight() && this.checkReviewStatusCode(['3']);
+        return this.checkAdministratorRight() && this.checkReviewStatusCode(['3', '2'], 'SOME');
     }
 
     showHomeButton(): boolean {
