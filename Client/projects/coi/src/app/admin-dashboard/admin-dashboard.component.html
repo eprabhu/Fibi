@@ -300,20 +300,23 @@
                                         class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(coi)}}">
                                         <span>{{coi?.travelDisclosureId? 'Travel' :
                                             coi?.fcoiType}}</span></span>
-                                            <h4 *ngIf="coi.travelDisclosureId" class="mb-0 ml-2 mt-2"><strong class="me-2">{{coi.travellerName}}</strong>
-                                                <span class="me-2 pipe"></span>
-                                                <span class="label-text">Entity : </span><span class="title-text">{{coi.travelEntityName}}</span></h4>
+                                            <h4 *ngIf="coi.travelDisclosureId" class="mb-0 ml-2 mt-2 fa fa-user label-text align-items-center fs-16"><strong class="ml-2">{{coi.travellerName}}</strong>
+                                                <span class="ms-2 align-items-center me-1"><span class="pipe"></span>
+                                                <img class="entity-icon" src="{{deployMap}}assets/images/entity.svg">Entity : </span><span class="title-text">{{coi.travelEntityName}}</span></h4>
+
                                             <h4 *ngIf="!coi.travelDisclosureId" class="mb-0 ml-2 mt-2">
-                                                <strong>
-                                                        <span class="me-2">{{coi.disclosurePersonFullName}}</span>
+                                               
+                                                        <span class="mb-0 mt-2 align-items-center fa fa-user label-text fs-16 me-2"> <strong class="me-1 ml-2">{{coi.disclosurePersonFullName}}</strong></span>
                                                         <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="pipe"></span>
-                                                        <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="label-text ms-2">Project : </span>
+                                                        <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="label-text ms-2 fs-16">
+                                                        <img *ngIf="coi.fcoiTypeCode==2" class="proposal-icon" src="{{deployMap}}assets/images/proposal.png">
+                                                        <img *ngIf="coi.fcoiTypeCode==3" class="award-icon" src="{{deployMap}}assets/images/award.png">
+                                                        Project : 
+                                                    </span>
                                                         <span class="title-text">{{(readMoreOrLess[index]) ? modalHeader(coi) : modalHeader(coi) | slice:0:90}}</span>
                                                         <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>90"><span class="title-text">...</span><a
                                                                 (click)="readMoreOrLess[index]=true"> <span class="readMore">Read More</span></a></span>
                                                         <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1">Read Less</span></a>
-                                            
-                                                </strong>
                                             </h4>
                                 </span>
                             </div>
