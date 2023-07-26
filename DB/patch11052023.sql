@@ -156,6 +156,7 @@ DROP INDEX `DISCL_ATTACHMENT_FK5_idx` ;
 DELETE FROM `entity_status` WHERE (`ENTITY_STATUS_CODE` = '3');
 UPDATE `entity_status` SET `DESCRIPTION` = 'Verified' WHERE (`ENTITY_STATUS_CODE` = '1');
 UPDATE `entity_status` SET `DESCRIPTION` = 'Unverified' WHERE (`ENTITY_STATUS_CODE` = '2');
+UPDATE `COI_TRAVEL_REVIEW_STATUS` SET DESCRIPTION = 'Returned' WHERE REVIEW_STATUS_CODE='4';
 
 INSERT INTO `entity_relationship_type` (`ENTITY_REL_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('1', 'New', 'Y', now(), 'quickstart');
 INSERT INTO `entity_relationship_type` (`ENTITY_REL_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', 'Duplicate', 'Y', now(), 'quickstart');
