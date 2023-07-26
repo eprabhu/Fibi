@@ -331,6 +331,12 @@ nav ul li.active {
   color: #fff;
 }
 
+.grey-badge {
+  @extend .coi-badge;
+  background-color: #7f7b7b !important;
+  color: #fff;
+}
+
 .brown-badge {
   @extend .coi-badge;
   background-color: #997404;

@@ -7,12 +7,14 @@ import {SharedComponentModule} from "../../shared-components/shared-component.mo
 import {FormsModule} from "@angular/forms";
 import { SharedModule } from '../../shared/shared.module';
 import { UserDisclosureComponent } from './user-disclosure.component';
+import { DisclosureHistoryCardComponent } from './disclosure-history-card/disclosure-history-card.component';
 
 const routes: Routes = [{path: '', component: UserDisclosureComponent}];
 
 @NgModule({
     declarations: [
         UserDisclosureComponent,
+        DisclosureHistoryCardComponent
     ],
     providers: [UserDisclosureService],
     imports: [
