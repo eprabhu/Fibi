@@ -91,6 +91,7 @@ import com.polus.fibicomp.view.DisclosureView;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 
 import oracle.jdbc.OracleTypes;
 
@@ -3542,6 +3543,70 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public List<ValidPersonEntityRelType> getValidPersonEntityRelType() {
 		return hibernateTemplate.loadAll(ValidPersonEntityRelType.class);
+	}
+
+	@Override
+	public List<DisclosureHistoryDto> getDisclosureHistory(CoiDashboardVO dashboardVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		ResultSet rset = null;
+		List<DisclosureHistoryDto> disclosureHistoryList = new ArrayList<>();
+		try {
+			String filterType = dashboardVO.getFilterType();
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_HISTORY(?,?)}");
+				statement.setString(1, AuthenticatedUser.getLoginPersonId());
+				statement.setString(2, filterType);
+				statement.execute();
+				rset = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String functionCall = "{call GET_COI_DISCLOSURE_HISTORY(?,?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				statement.setString(2, AuthenticatedUser.getLoginUserName());
+				statement.setString(3, filterType);
+				statement.execute();
+				rset = (ResultSet) statement.getObject(1);
+			}
+			while (rset.next()) {
+				DisclosureHistoryDto disclosureHistory = new DisclosureHistoryDto();
+				disclosureHistory.setDisclosureId(rset.getInt("DISCLOSURE_ID"));
+				disclosureHistory.setTravelDisclosureId(rset.getInt("TRAVEL_DISCLOSURE_ID"));
+				disclosureHistory.setVersionStatus(rset.getString("VERSION_STATUS"));
+				disclosureHistory.setFcoiTypeCode(rset.getString("FCOI_TYPE_CODE"));
+				disclosureHistory.setFcoiType(rset.getString("FCOI_TYPE"));
+				disclosureHistory.setHomeUnit(rset.getString("HOME_UNIT"));
+				disclosureHistory.setHomeUnitName(rset.getString("UNIT_NAME"));
+				disclosureHistory.setExpirationDate(rset.getTimestamp("EXPIRATION_DATE"));
+				disclosureHistory.setCertifiedAt(rset.getTimestamp("CERTIFIED_AT"));
+				disclosureHistory.setConflictStatusCode(rset.getString("CONFLICT_STATUS_CODE"));
+				disclosureHistory.setConflictStatus(rset.getString("CONFLICT_STATUS"));
+				disclosureHistory.setDispositionStatusCode(rset.getString("DISPOSITION_STATUS_CODE"));
+				disclosureHistory.setDispositionStatus(rset.getString("DISPOSITION_STATUS"));
+				disclosureHistory.setReviewStatusCode(rset.getString("REVIEW_STATUS_CODE"));
+				disclosureHistory.setReviewStatus(rset.getString("REVIEW_STATUS"));
+				disclosureHistory.setEntityName(rset.getString("ENTITY_NAME"));
+				disclosureHistory.setDestinationCountry(rset.getString("DESTINATION_COUNTRY"));
+				disclosureHistory.setTravelState(rset.getString("STATE"));
+				disclosureHistory.setDestinationCity(rset.getString("DESTINATION_CITY"));
+				disclosureHistory.setPurposeOfTheTrip(rset.getString("PURPOSE_OF_THE_TRIP"));
+				disclosureHistory.setTravelStatusCode(rset.getString("TRAVEL_STATUS_CODE"));
+				disclosureHistory.setTravelStatus(rset.getString("TRAVEL_STATUS"));
+				disclosureHistory.setTravelStartDate(rset.getTimestamp("TRAVEL_START_DATE"));
+				disclosureHistory.setTravelEndDate(rset.getTimestamp("TRAVEL_END_DATE"));
+				disclosureHistory.setUpdateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"));
+				disclosureHistory.setProjectTitle(rset.getString("PROJECT_TITLE"));
+				disclosureHistory.setProjectNumber(rset.getString("PROJECT_NUMBER"));
+				disclosureHistoryList.add(disclosureHistory);
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception on getDisclosureHistory {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch Disclosure history", e, Constants.JAVA_ERROR);
+		}
+		return disclosureHistoryList;
 	}
 
 	@Override

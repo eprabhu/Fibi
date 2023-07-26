@@ -1698,7 +1698,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiEntityDto.setUpdatedUserFullName(personDao.getUserFullNameByUserName(AuthenticatedUser.getLoginUserFullName()));
 		return new ResponseEntity<>(coiEntityDto, HttpStatus.OK);
 	}
-	
+
+	@Override
+	public ResponseEntity<Object> getDisclosureHistory(CoiDashboardVO dashboardVO) {
+		return new ResponseEntity<>(conflictOfInterestDao.getDisclosureHistory(dashboardVO), HttpStatus.OK);
+	}
+
 	@Override
 	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber) {
 		List<CoiTravelHistoryDto> travelHistories = new ArrayList<>();
