@@ -236,9 +236,14 @@
                                 <span>{{disclosure?.travelDisclosureId? 'Travel' :
                                     disclosure?.fcoiType}}</span>
                             </span>
-                            <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2"><span><strong class="me-2">{{disclosure?.travellerName}}</strong><span class="pipe"></span><span class="label-text ms-2">Entity : </span ><span class="title-text">{{disclosure.travelEntityName}}</span></span></h4>
-                            <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2"><strong class="me-1">{{disclosure.disclosurePersonFullName}}</strong>
-                                <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="label-text ms-1"><span class="pipe"></span> Project :
+                            <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex align-items-center fa fa-user label-text fs-16"><strong class="ml-2">{{disclosure?.travellerName}}</strong>
+                                <span class="ms-2 d-flex align-items-center me-1"><span class="pipe"></span>
+                                <img class="entity-icon" src="{{deployMap}}assets/images/entity.svg">Entity : </span ><span class="title-text">{{disclosure.travelEntityName}}</span></h4>
+                            <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex align-items-center fa fa-user label-text fs-16"><strong class="me-1 ml-2">{{disclosure.disclosurePersonFullName}}</strong>
+                                <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="ms-1 d-flex align-items-center"><span class="pipe me-1"></span>
+                                <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon" src="{{deployMap}}assets/images/proposal.png">
+                                <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon" src="{{deployMap}}assets/images/award.png">
+                                Project :
                                 </span> 
                                 <span class="title-text"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:90)}}</span>
                                 <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>90">...
