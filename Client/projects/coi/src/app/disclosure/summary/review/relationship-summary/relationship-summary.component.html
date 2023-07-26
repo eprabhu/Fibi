@@ -3,14 +3,14 @@
     <div class="card-header px-4 d-flex align-items-center justify-content-between">
       <span class="align-items-center d-flex">
         <ng-container *ngIf="selectedProject?.moduleCode == 3">
-          <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
-          <p class="entity-title mt-3">
+          <span class="active-ribbon shadow-sm align-items-center d-flex">Proposal</span>
+          <p class="entity-title mt-2">
             <strong class="fs-16">#{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
           </p>
         </ng-container>
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
-          <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
-          <p class="entity-title mt-3">
+          <span class="active-ribbon shadow-sm align-items-center d-flex">Award</span>
+          <p class="entity-title mt-2">
             <strong class="fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
           </p>
         </ng-container>
