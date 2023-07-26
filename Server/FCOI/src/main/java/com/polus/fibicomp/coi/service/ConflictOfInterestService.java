@@ -440,7 +440,13 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship);
-	
+
+	/**
+	 * This method is used to fetch disclosure history
+	 * @param dashboardVO
+	 */
+	ResponseEntity<Object> getDisclosureHistory(CoiDashboardVO dashboardVO);
+
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 
 }

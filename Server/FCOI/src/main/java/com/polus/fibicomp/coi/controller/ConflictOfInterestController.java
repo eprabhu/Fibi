@@ -522,6 +522,11 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> approveEntity(@RequestBody EntityRelationship entityRelationship) {
 		return conflictOfInterestService.approveEntity(entityRelationship);
 	}
+
+	@PostMapping("/disclosure/historyDashboard")
+	public ResponseEntity<Object> getDisclosureHistory(@RequestBody CoiDashboardVO dashboardVO) {
+		return conflictOfInterestService.getDisclosureHistory(dashboardVO);
+	}
 	
 	@PostMapping(value = "/loadTravelDisclosureHistory")
 	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(@RequestBody ConflictOfInterestVO vo) {
