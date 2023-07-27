@@ -9,7 +9,7 @@ import { SharedComponentModule } from '../../shared-components/shared-component.
 import { SharedModule } from '../../shared/shared.module';
 import { TravelFormSummaryComponent } from './travel-review/travel-form-summary/travel-form-summary.component';
 import { TravelCertifySummaryComponent } from './travel-review/travel-certify-summary/travel-certify-summary.component';
-import { TravelSharedComponentModule } from '../travel-shared-component/travel-shared-component.module';
+import { AddSfiModule } from '../../add-sfi/add-sfi.module';
 
 const routes: Routes = [
     {
@@ -30,8 +30,8 @@ const routes: Routes = [
         SharedModule,
         FormsModule,
         RouterModule.forChild(routes),
+        AddSfiModule,
         SharedComponentModule,
-        TravelSharedComponentModule
     ]
 })
 export class TravelSummaryModule { }

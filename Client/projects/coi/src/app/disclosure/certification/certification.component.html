@@ -15,7 +15,7 @@
         </ng-template>
     </p>
 </div>
-<div class="card mt-1">
+<div class="card mt-1" [@fadeInOutHeight]>
     <div class="errorMessage">
         <div class="text-danger" *ngFor="let error of _coiService.certificationResponseErrors">
             <p *ngIf="this._coiService.certificationResponseErrors.length > 0" role="alert"

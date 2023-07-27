@@ -140,8 +140,8 @@
                             <label class="d-block" for="adv-disclosure-type">
                                 Document Status
                             </label>
-                            <app-look-up (selectedResult)="onLookupSelect($event, 'property20')"
-                                [options]="travelDocumentStatusOptions" [selectedLookUpList]="lookupValues['property20']"
+                            <app-look-up (selectedResult)="onLookupSelect($event, 'property5')"
+                                [options]="travelDocumentStatusOptions" [selectedLookUpList]="lookupValues['property5']"
                                 [uniqueId]="'adv-disposition-status'">
                             </app-look-up>
                         </div>
@@ -223,7 +223,7 @@
                             <label class="d-block" for="adv-disclosure-expiration-date">
                                 State
                             </label>
-                            <input type="text" class="form-control d-inline-block" [(ngModel)]="travelState"
+                            <input type="text" class="form-control d-inline-block" [(ngModel)]="this.localCOIRequestObject.property11"
                                 placeholder="Type State">
                         </div>
                         <!-- Has SFI -->
