@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { fadeInOutHeight } from 'projects/fibi/src/app/common/utilities/animations';
 
 @Component({
   selector: 'app-no-information',
   templateUrl: './no-information.component.html',
-  styleUrls: ['./no-information.component.scss']
+  styleUrls: ['./no-information.component.scss'],
+  animations: [fadeInOutHeight]
 })
-export class NoInformationComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
+export class NoInformationComponent {
 
 }

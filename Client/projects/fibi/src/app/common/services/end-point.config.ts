@@ -222,6 +222,16 @@ export function getEndPointOptionsForAwardNumber(baseUrl = '') {
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
+export function getEndPointOptionsForCoiAwardNumber (baseUrl = '') {
+    endPointOptions.contextField = 'title';
+    endPointOptions.formatString =
+        'moduleItemKey | accountNumber | title | sponsorName | sponsorAwardNumber | unitName | PrincipalInvestigator';
+    endPointOptions.path = baseUrl + '/' + 'loadAwardsForDisclosure';
+    endPointOptions.defaultValue = '';
+    endPointOptions.params = null;
+    return JSON.parse(JSON.stringify(endPointOptions));
+}
+
 export function getEndPointOptionsForScopus() {
     endPointOptions.contextField =  'title';
     endPointOptions.formatString = 'scopusId | creator | title';

@@ -8,19 +8,20 @@ import { HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../.
 import { CommonService } from '../../common/services/common.service';
 import { Router } from '@angular/router';
 import { getFormattedAmount } from '../../common/utlities/custom-utlities';
-import { listAnimation } from 'projects/fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight, listAnimation } from '../../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-travel-related-disclosures',
     templateUrl: './travel-related-disclosures.component.html',
     styleUrls: ['./travel-related-disclosures.component.scss'],
-    animations: [listAnimation]
+    animations: [listAnimation, fadeInOutHeight]
 })
 export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
 
+    isLoading = false;
     historyData: Array<TravelHistory> = [];
     travelDisclosure = new TravelDisclosure();
-    entityData = new EntityData();
+    entityData: EntityData = new EntityData();
     $subscriptions: Subscription[] = [];
 
     constructor(
@@ -46,11 +47,15 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private setEntityData(): void {
-        this.entityData.country = this.travelDisclosure.country;
-        this.entityData.entityId = this.travelDisclosure.entityId;
-        this.entityData.entityType = this.travelDisclosure.entityType;
-        this.entityData.entityName = this.travelDisclosure.travelEntityName;
-
+        this.entityData = {
+            isActive: this.travelDisclosure.entityIsActive,
+            country: { countryName: this.travelDisclosure.country },
+            entityId: this.travelDisclosure.entityId,
+            entityType: { description: this.travelDisclosure.entityType },
+            entityName: this.travelDisclosure.travelEntityName,
+            emailAddress: this.travelDisclosure.entityEmail,
+            address: this.travelDisclosure.entityAddress
+        };
     }
 
     private listenDataChangeFromStore(): void {
@@ -69,14 +74,19 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private loadTravelDisclosureHistory(): void {
-        this._service.loadTravelDisclosureHistory(this.getTravelHistoryRO())
-            .subscribe((res: Array<TravelHistory>) => {
-                if (res) {
-                    this.historyData = res;
-                }
-            }, (err) => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in Loading Travel Disclosure History');
-            });
+        this.isLoading = true;
+        this.$subscriptions.push(
+            this._service.loadTravelDisclosureHistory(this.getTravelHistoryRO())
+                .subscribe((res: Array<TravelHistory>) => {
+                    if (res) {
+                        this.isLoading = false;
+                        this.historyData = res;
+                    }
+                }, (err) => {
+                    this.isLoading = false;
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in Loading Travel Disclosure History');
+                })
+        );
     }
 
     getTravellerType(): string {
@@ -90,12 +100,16 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
         return traveller;
     }
 
+    viewEntity(entityId: string): void {
+        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityId } });
+    }
+
     getFormattedAmount(travelAmount: number): string {
         return getFormattedAmount(travelAmount);
     }
 
     viewTravelDisclosure(travelDisclosureId: number) {
-        const url = '/#/' + this._router.createUrlTree([POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
+        const url = '/#' + this._router.createUrlTree([POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
             { queryParams: { disclosureId: travelDisclosureId } }).toString();
         window.open(url, '_blank');
     }

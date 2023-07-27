@@ -85,7 +85,7 @@ public interface ConflictOfInterestService {
 	 * @param personEntityRelationship
 	 * @return COIFinancialEntityDetails
 	 */
-	PersonEntityRelationship saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
+	List<PersonEntityRelationship> saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
 
 	/**
 	 * This method is used to create SFI
@@ -234,10 +234,12 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used to get proposals for Disclosure
-	 * @param vo
+	 * @param searchString
 	 * @return list of proposals
 	 */
-	String loadProposalsForDisclosure(ConflictOfInterestVO vo);
+	String loadProposalsForDisclosure(String searchString);
+
+	String loadAwardsForDisclosure(String searchString);
 
 	/**
 	 * @param vo
@@ -438,7 +440,13 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship);
-	
+
+	/**
+	 * This method is used to fetch disclosure history
+	 * @param dashboardVO
+	 */
+	ResponseEntity<Object> getDisclosureHistory(CoiDashboardVO dashboardVO);
+
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 
 }

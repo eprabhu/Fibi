@@ -8,7 +8,7 @@
                     <span class="align-items-center col-9 d-flex">
                         <span
                             class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(disclosure)}}">
-                            <span class="px-2">{{disclosure?.coiDisclosureFcoiType.description}}</span></span>
+                            <span>{{disclosure?.coiDisclosureFcoiType.description}}</span></span>
                         <h4 class="mb-0 ml-2"><strong class="fs-15">#{{disclosure?.disclosureNumber}} : FCOI
                                 Disclosure</strong></h4>
                     </span>
@@ -196,10 +196,10 @@
         <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3">Disclosure History
             ({{dashboardCount?.disclosureHistoryCount || 0}})</span>
     </div>
-</nav>
+</nav> 
 
 <div class="advance-search-area border d-flex mt-2 rounded-1">
-    <div class="border-end fs-14 p-3" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'">
+    <div class="fs-14 p-3" [class.border-end] = "currentSelected.tab != 'DISCLOSURE_HISTORY'" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Type :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
             title="Click to filter by type: All" area-describedby="Click to filter by type: All"
@@ -209,12 +209,17 @@
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">FCOI</span>
         <span (click)="setFilter('PROJECT')" [class.filter-active]="currentSelected.filter=='PROJECT'"
             title="Click to filter by type: Project" area-describedby="Click to filter by type: Project"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Project</span>
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">Project</span>
+        <span *ngIf="currentSelected.tab == 'DISCLOSURE_HISTORY'"  (click)="setFilter('TRAVEL')" 
+            [class.filter-active]="currentSelected.filter=='TRAVEL'"
+            title="Click to filter by type: Travel" area-describedby="Click to filter by type: Travel"
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Travel</span>
         <!--<span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>-->
     </div>
-    <div class="d-flex flex-fill  position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
-    (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
+    <div class="d-flex flex-fill  position-relative" *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
+        [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
+        (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
         <input class="advance-search-input border-0 px-4 fs-14" id="searchText"
         [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
@@ -222,22 +227,27 @@
         <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>        
     </div>
 </div>
-<ng-container *ngIf="isShowNoDataCard">
-    <ng-container *ngIf="filteredDisclosureArray.length">
-        <ng-container *ngFor="let disclosure of filteredDisclosureArray ; let index = index;">
-            <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
-                (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
+<ng-container *ngIf="!isLoading">
+    <div [@listAnimation]="filteredDisclosureArray.length">
+        <ng-container *ngFor="let disclosure of filteredDisclosureArray ; let index = index; let isLast=last;">
+            <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color" 
+                (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false" >
                 <div class="row mt-2">
                     <div class="col">
                         <span class="align-items-center d-flex">
                             <span
                                 class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(disclosure)}}">
-                                <span class="px-2">{{disclosure?.travelDisclosureId? 'Travel' :
+                                <span>{{disclosure?.travelDisclosureId? 'Travel' :
                                     disclosure?.fcoiType}}</span>
                             </span>
-                            <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2"><span><strong class="me-2">{{disclosure?.travellerName}}</strong><span class="pipe"></span><span class="label-text ms-2">Entity : </span ><span class="title-text">{{disclosure.travelEntityName}}</span></span></h4>
-                            <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2"><strong class="me-1">{{disclosure.disclosurePersonFullName}}</strong>
-                                <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="label-text ms-1"><span class="pipe"></span> Project :
+                            <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex align-items-center fa fa-user label-text fs-16"><strong class="ml-2">{{disclosure?.travellerName}}</strong>
+                                <span class="ms-2 d-flex align-items-center me-1"><span class="pipe"></span>
+                                <img class="entity-icon" src="{{deployMap}}assets/images/entity.svg">Entity : </span ><span class="title-text">{{disclosure.travelEntityName}}</span></h4>
+                            <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex align-items-center fa fa-user label-text fs-16"><strong class="me-1 ml-2">{{disclosure.disclosurePersonFullName}}</strong>
+                                <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="ms-1 d-flex align-items-center"><span class="pipe me-1"></span>
+                                <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon" src="{{deployMap}}assets/images/proposal.png">
+                                <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon" src="{{deployMap}}assets/images/award.png">
+                                Project :
                                 </span> 
                                 <span class="title-text"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:90)}}</span>
                                 <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>90">...
@@ -267,7 +277,7 @@
                 </div>
                 <div class="border-bottom">
                     <ng-container *ngIf="!disclosure?.travelDisclosureId">
-                        <div class="row mb-3 px-3 mt-2">
+                        <div class="row mb-3 p-013 mt-2">
                             <div class="col-5">
                                 <span class="label-text">Department:</span> <span class="grey-text">
                                     #{{disclosure?.unit?.unitDetail}} </span>
@@ -289,7 +299,7 @@
                                     class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} ">{{disclosure?.dispositionStatus}}</span>
                             </div>
                         </div>
-                        <div class="row mb-3 px-3 mt-2">
+                        <div class="row mb-3 p-013 mt-2">
                             <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-5">
                                 <label for="id" class="label-text">{{disclosure?.disclosureVersionNumber== 1 ?
                                     'Description:' :
@@ -327,7 +337,7 @@
                         </div>
                     </ng-container>
                     <ng-container *ngIf="disclosure?.travelDisclosureId">
-                        <div class="row mb-3 px-3 mt-2">
+                        <div class="row mb-3 p-013 mt-2">
                             <div class="col-4 d-flex">
                                 <label for="department-id" class="label-text col-custom-travel">Department :</label>
                                 <span class="col">
@@ -368,7 +378,7 @@
                                 </app-no-data-label>
                             </div>
                         </div>
-                        <div class="row mb-3 px-3 mt-2">
+                        <div class="row mb-3 p-013 mt-2">
                             <div class="col-4">
                                 <label for="traveller" class="label-text">Traveller :</label>
                                 <app-no-data-label id="traveller" [valueToShow]="disclosure?.travellerTypeDescription">
@@ -514,17 +524,20 @@
                     </div>
                 </div>
             </div>
+            <div *ngIf="currentSelected.tab=='DISCLOSURE_HISTORY'">
+                    <app-disclosure-history-card [disclosure]="disclosure" [isLastElement]="isLast"></app-disclosure-history-card>
+            </div>    
         </ng-container>
-    </ng-container>
-    <app-no-information *ngIf="isShowNoInfoCard"></app-no-information>
+    </div>
+    <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
+    <!-- Pagination -->
+    <div *ngIf="filteredDisclosureArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY'"  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+        <nav aria-label="pagination section" class="pagination justify-content-end">
+            <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="result.totalServiceRequest">
+            </app-pagination>
+        </nav>
+    </div>
 </ng-container>
-<!-- Pagination -->
-<div *ngIf="filteredDisclosureArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-    <nav aria-label="pagination section" class="pagination justify-content-end">
-        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="result.totalServiceRequest">
-        </app-pagination>
-    </nav>
-</div>
 
 <app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"

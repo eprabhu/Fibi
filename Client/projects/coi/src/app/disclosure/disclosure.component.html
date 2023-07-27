@@ -323,13 +323,14 @@
                     <span class="mt-1 ms-2" *ngIf="isCardExpanded">Previous</span>
                     </button>
 
-                    <button data-bs-target="#coi-activity-modal" data-bs-toggle="modal"
+                    <button
                         title="Click here to add new review comment"
                         *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
-                        [ngClass]="isCardExpanded ? 'mb-3' : 'me-2'"
-                        class="fs-14 align-items-center btn btn-outline-secondary d-flex justify-content-center col">
+                        [ngClass]="isCardExpanded ? 'mb-3' : ''"
+                        (click)="coiService.isShowCommentNavBar = !coiService.isShowCommentNavBar"
+                        class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2">
                         <mat-icon class="me-2">rate_review</mat-icon>
-                        <span class="mt-1 ms-2" *ngIf="isCardExpanded">Comments</span>
+                        <span *ngIf="isCardExpanded">Comments</span>
                     </button>
                     <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" 
                     class="fs-14 btn btn-outline-secondary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12 mb-3' : 'col me-2'}}" (click)="isAddAssignModalOpen = true;"
@@ -651,3 +652,6 @@
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
+<div *ngIf="coiService.isShowCommentNavBar">
+    <app-review-comments-slider></app-review-comments-slider>
+</div>

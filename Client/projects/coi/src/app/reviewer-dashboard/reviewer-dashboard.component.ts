@@ -8,11 +8,13 @@ import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../
 import { NameObject, ReviewerDashboardRequest, ReviewerDashboardService, SortCountObj } from './reviewer-dashboard.service';
 import { CommonService } from '../common/services/common.service';
 import { NavigationService } from '../common/services/navigation.service';
+import { slideInOut, listAnimation, topSlideInOut, fadeInOutHeight} from '../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-reviewer-dashboard',
     templateUrl: './reviewer-dashboard.component.html',
-    styleUrls: ['./reviewer-dashboard.component.scss']
+    styleUrls: ['./reviewer-dashboard.component.scss'],
+    animations: [slideInOut, listAnimation, topSlideInOut, fadeInOutHeight]
 })
 export class ReviewerDashboardComponent implements OnInit {
 
@@ -46,12 +48,12 @@ export class ReviewerDashboardComponent implements OnInit {
     fcoiTypeCode: any;
     isShowCountModal = false;
     inputType: any;
-    ishover: [] = [];
+    isHover: [] = [];
     isViewAdvanceSearch = true;
     isShowDisclosureList = false;
     localCOIRequestObject: ReviewerDashboardRequest = new ReviewerDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
-    isShowNoDataCard = false;
+    isLoading = false;
     readMoreOrLess = [];
     constructor(
         public reviewerDashboardService: ReviewerDashboardService,
@@ -74,21 +76,27 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     getDashboardDetails() {
-        this.isShowNoDataCard = false;
+        this.isLoading = true;
         this.$subscriptions.push(this.$coiList.pipe(
             switchMap(() => this.reviewerDashboardService.getCOIReviewerDashboard(this.getRequestObject())))
             .subscribe((data: any) => {
                 this.result = data || [];
+                this.loadingComplete();
                 if (this.result) {
                     this.coiList = this.result.disclosureViews || [];
-                    this.isShowNoDataCard = true;
                     this.coiList.map(ele => {
                         ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
                         ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
                     });
                 }
                 this.setEventTypeFlag();
+            }, (err) => {
+                this.loadingComplete();
             }));
+    }
+
+    private loadingComplete() {
+        this.isLoading = false;
     }
 
     getRequestObject() {
@@ -120,6 +128,8 @@ export class ReviewerDashboardComponent implements OnInit {
 
     resetAndPerformAdvanceSearch() {
         this.resetAdvanceSearchFields();
+        this.isLoading = true;
+        this.coiList = [];
         this.$coiList.next();
     }
 
@@ -134,6 +144,7 @@ export class ReviewerDashboardComponent implements OnInit {
         this.localCOIRequestObject.currentPage = 1;
         this.isShowDisclosureList = true;
         this.reviewerDashboardService.isAdvanceSearch = true;
+        this.isLoading = true;
         this.$coiList.next();
     }
 
@@ -296,8 +307,8 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     changeTab(tabName) {
-        this.isShowNoDataCard = false;
         this.coiList = [];
+        this.isLoading = true;
         this.isShowDisclosureList = false;
         this.reviewerDashboardService.isAdvanceSearch = false;
         this.reviewerDashboardService.reviewerRequestObject.tabName = tabName;

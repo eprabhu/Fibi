@@ -18,7 +18,29 @@ body {
   background: #F5F5F5;
   -webkit-font-smoothing: antialiased;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+  overflow: hidden !important;
 }
+
+// scroll design
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track { 
+  width: 12px;
+  background-color: #e7e7e7;
+  border-radius: 5px;
+}
+ 
+::-webkit-scrollbar-thumb {
+	background: #b8b7b6;
+	border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #979797; 
+}
+// scroll design ends
 
 .fs-12 {
   font-size: 1.2rem !important;
@@ -304,6 +326,12 @@ nav ul li.active {
 .red-badge {
   @extend .coi-badge;
   background-color: rgba(220,53,69,1)!important;
+  color: #fff;
+}
+
+.grey-badge {
+  @extend .coi-badge;
+  background-color: #7f7b7b !important;
   color: #fff;
 }
 

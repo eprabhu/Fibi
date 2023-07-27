@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService, RelationshipDashboardRequest } from '../entity-management.service';
-import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
+import { slowSlideInOut, fadeInOutHeight, listAnimation } from '../../../../../fibi/src/app/common/utilities/animations';
 import { Subject, Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
@@ -11,13 +11,12 @@ import { switchMap } from 'rxjs/operators';
 import { CREATE_DISCLOSURE_ROUTE_URL, HTTP_ERROR_STATUS, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { DATE_PLACEHOLDER } from '../../../../../fibi/src/app/app-constants';
-import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-entity-details-list',
   templateUrl: './entity-details-list.component.html',
   styleUrls: ['./entity-details-list.component.scss'],
-  animations: [slowSlideInOut]
+  animations: [slowSlideInOut, fadeInOutHeight, listAnimation]
 })
 export class EntityDetailsListComponent implements OnInit, OnDestroy {
 
@@ -48,6 +47,7 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   isViewProjectDisclosure = false;
   isViewTravelDisclosure = false;
   isViewFcoiDisclosure = false;
+  isLoading = false;
 
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService, public commonService: CommonService) { }
@@ -77,6 +77,7 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   }
 
   getRelationshipEntityList() {
+    this.isLoading = true;
     const id = parseInt(this._route.snapshot.queryParamMap.get('entityManageId'));
     this.entityManagementService.relationshipDashboardRequest.id = id;
     this.$subscriptions.push(
@@ -87,12 +88,18 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
         .subscribe((res: any) => {
           this.entityDetails = res.data || [];
           this.resultCount = res.count;
+          this.loadingComplete();
         }, error => {
+          this.loadingComplete();
           this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         }));
   }
 
+  private loadingComplete() {
+    this.isLoading = false;
+}
   currentTab(tab) {
+    this.isLoading = true;
     this.resetAdvanceSearchFields();
     this.entityManagementService.relationshipDashboardRequest.filterType = tab;
     this.entityManagementService.relationshipDashboardRequest.id =  parseInt(this._route.snapshot.queryParamMap.get('entityManageId'));

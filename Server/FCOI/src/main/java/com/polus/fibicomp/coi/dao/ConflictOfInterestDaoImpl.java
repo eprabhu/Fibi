@@ -91,6 +91,7 @@ import com.polus.fibicomp.view.DisclosureView;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 
 import oracle.jdbc.OracleTypes;
 
@@ -1718,7 +1719,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId) {
+	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		List<DisclosureDetailDto> awardDetails = new ArrayList<>();
 		SessionImpl sessionImpl = (SessionImpl) session;
@@ -1727,7 +1728,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		ResultSet rset = null;
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_DISCLOSURE_RELATIONS(?,?,?)}");
+				statement = connection.prepareCall("{call GET_DISCLOSURE_RELATIONS(?,?,?,?)}");
 				statement.setInt(1, moduleCode);
 				statement.setString(2, personId);
 				if (disclosureId == null) {
@@ -1735,11 +1736,16 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				} else {
 					statement.setInt(3, disclosureId);
 				}
+				if (searchString == null) {
+					statement.setNull(4, Types.VARCHAR);
+				} else {
+					statement.setString(4, searchString);
+				}
 				statement.execute();
 				rset = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_DISCLOSURE_RELATIONS";
-				String functionCall = "{call " + procedureName + "(?,?,?,?)}";
+				String functionCall = "{call " + procedureName + "(?,?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setInt(2, moduleCode);
@@ -1748,6 +1754,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					statement.setNull(4, Types.INTEGER);
 				} else {
 					statement.setInt(4, disclosureId);
+				}
+				if (searchString == null) {
+					statement.setNull(5, Types.VARCHAR);
+				} else {
+					statement.setString(5, searchString);
 				}
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
@@ -1766,6 +1777,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setSponsor(rset.getString("SPONSOR_NAME"));
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
+					detail.setPrimeSponsor(rset.getString("PRIME_SPONSOR_NAME"));
+					detail.setReporterRole(rset.getString("REPORTER_ROLE"));
+					detail.setReporterName(rset.getString("KEY_PERSON"));
+					detail.setReporterPersonId(rset.getString("KEY_PERSON_ID"));
+					detail.setAccountNumber(rset.getString("ACCOUNT_NUMBER"));
+					detail.setSponsorAwardNumber(rset.getString("SPONSOR_AWARD_NUMBER"));
 					if (disclosureId != null) {
 						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
 						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.AWARD_MODULE_CODE, detail.getModuleItemId(), disclosureId));
@@ -1783,15 +1800,16 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setPrimeSponsor(rset.getString("PRIME_SPONSOR_NAME"));
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
+					detail.setReporterRole(rset.getString("REPORTER_ROLE"));
+					detail.setReporterName(rset.getString("KEY_PERSON"));
+					detail.setReporterPersonId(rset.getString("KEY_PERSON_ID"));
 					if (disclosureId != null) {
 						detail.setSfiCompleted(checkIsSFICompletedForProject(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
 						detail.setDisclosureStatusCount(disclosureStatusCount(Constants.DEV_PROPOSAL_MODULE_CODE, detail.getModuleItemId(), disclosureId));
 					}
 				}
 				awardDetails.add(detail);
-
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("Exception in getProjectsBasedOnParams: {} ", e.getMessage());
@@ -3521,4 +3539,85 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		queryCoiDisclosureOld.orderBy(builder.desc(rootCoiTravelDisclosureOld.get("travelStartDate")));
 		return session.createQuery(queryCoiDisclosureOld).getResultList();
 	}
+
+	@Override
+	public List<ValidPersonEntityRelType> getValidPersonEntityRelType() {
+		return hibernateTemplate.loadAll(ValidPersonEntityRelType.class);
+	}
+
+	@Override
+	public List<DisclosureHistoryDto> getDisclosureHistory(CoiDashboardVO dashboardVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		ResultSet rset = null;
+		List<DisclosureHistoryDto> disclosureHistoryList = new ArrayList<>();
+		try {
+			String filterType = dashboardVO.getFilterType();
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_HISTORY(?,?)}");
+				statement.setString(1, AuthenticatedUser.getLoginPersonId());
+				statement.setString(2, filterType);
+				statement.execute();
+				rset = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String functionCall = "{call GET_COI_DISCLOSURE_HISTORY(?,?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				statement.setString(2, AuthenticatedUser.getLoginUserName());
+				statement.setString(3, filterType);
+				statement.execute();
+				rset = (ResultSet) statement.getObject(1);
+			}
+			while (rset.next()) {
+				DisclosureHistoryDto disclosureHistory = new DisclosureHistoryDto();
+				disclosureHistory.setDisclosureId(rset.getInt("DISCLOSURE_ID"));
+				disclosureHistory.setTravelDisclosureId(rset.getInt("TRAVEL_DISCLOSURE_ID"));
+				disclosureHistory.setVersionStatus(rset.getString("VERSION_STATUS"));
+				disclosureHistory.setFcoiTypeCode(rset.getString("FCOI_TYPE_CODE"));
+				disclosureHistory.setFcoiType(rset.getString("FCOI_TYPE"));
+				disclosureHistory.setHomeUnit(rset.getString("HOME_UNIT"));
+				disclosureHistory.setHomeUnitName(rset.getString("UNIT_NAME"));
+				disclosureHistory.setExpirationDate(rset.getTimestamp("EXPIRATION_DATE"));
+				disclosureHistory.setCertifiedAt(rset.getTimestamp("CERTIFIED_AT"));
+				disclosureHistory.setConflictStatusCode(rset.getString("CONFLICT_STATUS_CODE"));
+				disclosureHistory.setConflictStatus(rset.getString("CONFLICT_STATUS"));
+				disclosureHistory.setDispositionStatusCode(rset.getString("DISPOSITION_STATUS_CODE"));
+				disclosureHistory.setDispositionStatus(rset.getString("DISPOSITION_STATUS"));
+				disclosureHistory.setReviewStatusCode(rset.getString("REVIEW_STATUS_CODE"));
+				disclosureHistory.setReviewStatus(rset.getString("REVIEW_STATUS"));
+				disclosureHistory.setEntityName(rset.getString("ENTITY_NAME"));
+				disclosureHistory.setDestinationCountry(rset.getString("DESTINATION_COUNTRY"));
+				disclosureHistory.setTravelState(rset.getString("STATE"));
+				disclosureHistory.setDestinationCity(rset.getString("DESTINATION_CITY"));
+				disclosureHistory.setPurposeOfTheTrip(rset.getString("PURPOSE_OF_THE_TRIP"));
+				disclosureHistory.setTravelStatusCode(rset.getString("TRAVEL_STATUS_CODE"));
+				disclosureHistory.setTravelStatus(rset.getString("TRAVEL_STATUS"));
+				disclosureHistory.setTravelStartDate(rset.getTimestamp("TRAVEL_START_DATE"));
+				disclosureHistory.setTravelEndDate(rset.getTimestamp("TRAVEL_END_DATE"));
+				disclosureHistory.setUpdateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"));
+				disclosureHistory.setProjectTitle(rset.getString("PROJECT_TITLE"));
+				disclosureHistory.setProjectNumber(rset.getString("PROJECT_NUMBER"));
+				disclosureHistoryList.add(disclosureHistory);
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception on getDisclosureHistory {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch Disclosure history", e, Constants.JAVA_ERROR);
+		}
+		return disclosureHistoryList;
+	}
+
+	@Override
+	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<String> query = builder.createQuery(String.class);
+		Root<CoiDisclosure> root = query.from(CoiDisclosure.class);
+		query.select(root.get("personId"));
+        query.where(builder.equal(root.get("disclosureId"), disclosureId));
+		return session.createQuery(query).getSingleResult();
+	}
+
 }

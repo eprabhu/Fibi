@@ -3,11 +3,13 @@ import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { CoiTravelDisclosure, TravelDisclosure } from '../travel-disclosure-interface';
+import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-travel-certification',
     templateUrl: './travel-certification.component.html',
-    styleUrls: ['./travel-certification.component.scss']
+    styleUrls: ['./travel-certification.component.scss'],
+    animations: [fadeInOutHeight]
 })
 export class TravelCertificationComponent implements OnInit, OnDestroy {
 
@@ -36,7 +38,7 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
     proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
     constructor(public travelService: TravelDisclosureService, private _dataStore: TravelDataStoreService) {
-        window.scrollTo(0, 0);
+        document.getElementById('COI_SCROLL').scrollTo(0, 0);
     }
 
     ngOnInit(): void {

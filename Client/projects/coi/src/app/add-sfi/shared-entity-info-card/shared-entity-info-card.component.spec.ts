@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { TravelEntityCardComponent } from './travel-entity-card.component';
+import { SharedEntityInfoCardComponent } from './shared-entity-info-card.component';
 
-describe('TravelEntityCardComponent', () => {
-  let component: TravelEntityCardComponent;
-  let fixture: ComponentFixture<TravelEntityCardComponent>;
+describe('SharedEntityInfoCardComponent', () => {
+  let component: SharedEntityInfoCardComponent;
+  let fixture: ComponentFixture<SharedEntityInfoCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TravelEntityCardComponent ]
+      declarations: [ SharedEntityInfoCardComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TravelEntityCardComponent);
+    fixture = TestBed.createComponent(SharedEntityInfoCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -3,7 +3,7 @@
     <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;let last = last">
       <div (click)="getQuestionnaire(coiFinancialEntityDetail)"  class="text-secondary {{last?'':'border-end'}}" role="button"
         [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'navigation-icons':''">
-        <span title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}} Qestionnaire"
+        <span title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}} Questionnaire"
           [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
           class="active r-title px-3 py-3">
           {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}</span>
@@ -25,32 +25,33 @@
 </div>
 
 <!-- Modal -->
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="addRelationshipModal-trigger-btn"
+    data-bs-toggle="modal" data-bs-target="#addRelationshipModal"></button>
 <div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  data-mdb-backdrop="true">
+  data-mdb-backdrop="true" data-bs-backdrop="static">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header custom-height">
         <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relations</h3>
         <button title="Click to close the relationship button" type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
-          (click)="clearModal()"></button>
+          id="close-addRelationshipModal-trigger-btn" (click)="clearModal()"></button>
       </div>
-      <div class="modal-body">
-        <div class="row">
+      <div class="modal-body p-0">
+        <div class="row m-0">
           <p class="fs-13 m-0"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
         </div>
-        <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center mb-15 mt-20">
+        <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center mb-15 mt-15">
           <div class="card custom-padding"
           [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
-            <div class="header-size">
-              <div class="form-check form-check-inline">
+            <div class="d-flex flex-row">
+              <div class="form-check form-check-inline color-black">
                 <label class="form-check-label ps-5 colour-black"><b>Select Relation :
                   </b></label>
               </div>
               <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
-                <input type="radio" name="relation" class="form-check-input text-secondary"
+                <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
                   [value]="relation?.personEntityRelType?.relationshipTypeCode"
-                  [(ngModel)]="coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode"
-                  (ngModelChange)="setRelationship()">
+                  [(ngModel)]="isChecked[relation?.personEntityRelType?.relationshipTypeCode]">
                 <label class="text-secondary r-title fs-14">
                   {{relation?.personEntityRelType?.description}}
                 </label>

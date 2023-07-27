@@ -152,9 +152,8 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4">Disclosure : </label>
                                 <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="responseObject?.disclosureStatusCode">
-                                        <span
-                                            class="fs-14 {{commonService.getDisclosureConflictBadge(responseObject?.disclosureStatusCode)}}">{{responseObject?.disclosureStatus}}</span>
+                                    <app-no-data-label [valueToShow]=null>
+                                        <span class="fs-14 {{commonService.getDisclosureConflictBadge(null)}}"></span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -165,7 +164,7 @@
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress row mt-1">
                     <!-- travel details -->
-                    <div class="col h-100 m-0 fs-14" (click)="service.isChildRouting = true"
+                    <div class="col h-100 m-0 fs-14" (click)="service.isChildRouteTriggered = true"
                         [class.complete]="isRouteComplete(['travel-details', 'certification'])"
                         [routerLink]="['travel-details']" queryParamsHandling='merge'
                         [class.cursor-pointer]="!isRouteComplete(['travel-details'])"
@@ -178,7 +177,7 @@
                         </div>
                     </div>
                     <!-- certification -->
-                    <div class="col fs-14" (click)="service.isChildRouting = true"
+                    <div class="col fs-14" (click)="service.isChildRouteTriggered = true"
                         [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
                         queryParamsHandling='merge' [class.cursor-pointer]="!isRouteComplete(['certification'])"
                         [title]="isRouteComplete(['certification'])? 'Certification' : 'Go to step Certification'">
@@ -240,7 +239,7 @@
                     <ng-container *ngIf="responseObject?.adminPersonId">
                         <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
                             class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
-                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2', '3'], 'SOME')"
+                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['3'])"
                             (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2">Reassign Admin</span>

@@ -101,4 +101,5 @@ export class NameObject {
   entityName = '';
   personName = '';
   departmentName = '';
+  travelCountryName = '';
 }

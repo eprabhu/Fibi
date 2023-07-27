@@ -1,0 +1,170 @@
+<div class="card-height" *ngIf="_coiService.isShowCommentNavBar" #commentNavOverlay @enterAnimation
+    [class.overlay]="_coiService.isShowCommentNavBar">
+    <div class="task-right-div card-height d-flex align-items-center" id="task-nav-bar">
+        <app-slider-close-btn (closeAction)="hideCommentNavBar()"></app-slider-close-btn>
+        <div class="tool-kit-body card-height scrollable-table">
+                <div class="card card-header bg-white px-4 pt-3">
+                    <h4 class="card-title review-title">
+                        <div class="justify-content-between row">
+                            <div class="col-auto fs-16">Review Comments
+                            </div>
+                        </div>
+                    </h4>
+                </div>
+                <div class="card pt-2 px-2 shadow-medium m-3">
+                    <div class="p-3 br-12">
+                            <textarea id="main-panel-comnt" class="form-control comment-text-box fs-14" 
+                            placeholder="Comment" row="1" maxlength="2000"></textarea>
+                        <div class="border border-top-steps d-flex mx-0 pt-3 px-3 pb-3">
+                            <span class="fs-14 fw-500 mr-2" for="comment">Comment About:</span>
+                            <div class="tab-color px-0 d-flex">
+                                <span class="badge ml-2 border-color d-flex fs-14 rounded-5 px-4">
+                                    General</span>
+                                <span class="badge ml-2 border-color d-flex fs-14 rounded-5 px-4">
+                                    Questionnaire</span>
+                                <span class="badge ml-2 border-color d-flex fs-14 rounded-5 px-4">
+                                    SFIs</span>
+                                <span class="badge ml-2 border-color d-flex fs-14 rounded-5 px-4">
+                                    Project Relationships</span>
+                            </div>
+                            <span class="checkbox-align">
+                                <input class="form-check-input mt-2" type="checkbox" name="Mark as private">
+                                <span class="form-check-label fs-14 fw-500 p-2" for="Mark as private">
+                                    Mark as private
+                                </span>
+                                <a class="tooltip-helptext"><i class="fa fa-info-circle ct-icon-right hand-cursor mt-2" aria-hidden="true"></i></a>
+                            </span>
+                            </div>
+
+                        <div *ngIf="isAddAttachment" class="border border-top-steps card-col mx-0 pt-3 px-3">
+                            <app-file-drop [multiple]="false" (filesDropEvent)="fileDrop($event)"></app-file-drop>
+                        </div>
+                        <div *ngIf="isAddAssignee" class="border border-top-steps mx-0 pt-3 px-3">
+                            <div class="mr-2">
+                                <label class="fs-14 fw-500" for="comment">Assignee:</label>
+                            </div>
+                        </div>
+                        <div
+                            class="border border-top-steps card-col d-flex form-row justify-content-between mx-0 pt-3 px-3">
+                            <div class="fs-14 mb-3">
+                                <button class="attch p-2 me-3" id="add-attach-btn" title="Add New Attachment"
+                                    (click)="isAddAttachment = !isAddAttachment ">
+                                    <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                    <span class="d-none d-md-inline-block ml-2">Add Attachment</span>
+                                </button>
+                                <button class="attch p-2" id="add-admin-groups" title="Tag Assignee/Admin Groups"
+                                    (click)="isAddAssignee = !isAddAssignee ">
+                                    <i class="fa fa-user-o ml-2" aria-hidden="true"></i>
+                                    <span class="d-md-inline-block d-none fs-14">Tag Assignee/Admin Groups</span>
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3" id="clear-btn">Clear</button>
+                                <button class="btn btn-primary px-4 py-2 fs-14" id="add-comment-btn">Add Comment</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            <div class="mx-0 pt-3 px-3 d-flex justify-content-between">
+                <div class="align-items-center d-flex">
+                    <div class="fs-14 ml-3 mr-2">
+                        <label class="fw-500 fs-14" for="comment">Filter by:</label>
+                    </div>
+                    <div class="tab-color px-0">
+                        <div class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
+                            All</div>
+                    </div>
+                    <div class="tab-color px-0">
+                        <span class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
+                            General</span>
+                    </div>
+                    <div class="tab-color px-0">
+                        <div class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
+                            Questionnaire</div>
+                    </div>
+                    <div class="tab-color px-0">
+                        <div class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
+                            SFIs</div>
+                    </div>
+                    <div class="tab-color px-0">
+                        <div class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
+                            Project Relationships</div>
+                    </div>
+                </div>
+                <div class="align-items-center d-flex fs-14 pl-4 text-right border-left-line">
+                    <label class="fw-500 mr-2" for="Reviewer"> Reviewer: </label>
+                    <select id="reviewer" class="form-control dateBox">
+                        <option [value]=null>--Select--</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row mx-0 pt-3 px-3 d-flex justify-content-between mt-3">
+                <span class="badge-title bg-transparent px-0 fs-14-nav">
+                    <mat-icon class="me-1 date">person</mat-icon>
+                    <span class="d-none d-md-inline-block ml-3 mx-2 fs-14"> Chew Cindy: </span>
+                    <span class="date fs-14">{{'Thu Feb 16 2023 19:42:01' | dateFormatter: 'long'}}</span>
+                </span>
+            </div>
+                <div class="col-11 comment-card pt-1 p-2 ml-5 mb-0 comment-box-margin mx-auto">
+                    <span class="fs-13">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                        Ipsum
+                        has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+                        galley
+                        <span (click)="isReadMore = !isReadMore" class="hand-cursor italian">...Read more
+                            <i aria-hidden="true"
+                                [ngClass]="isReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i>
+                        </span>
+                    </span>
+                </div>
+                <div class="col f-13 text-secondary my-3 d-flex justify-content-end mr-15 mb-4">
+                    <span class="hand-cursor mr-15">
+                        <i aria-hidden="true" class="fa fa-commenting mr-2"></i>
+                        <ng-container>Show</ng-container>
+                        replies(3)
+                    </span>
+                    <span class="hand-cursor">
+                        <i aria-hidden="true" class="fa fa-reply mr-2"></i>
+                        Reply
+                    </span>
+                </div>
+            
+
+            <div class="position-relative">
+                <span class="collapse-description ml-5 mr-4"></span>
+            </div>
+
+            <div class="form-row mx-0 pt-3 px-3 d-flex justify-content-between mt-3">
+                <span class="badge-title bg-transparent px-0 fs-14-nav">
+                    <mat-icon class="me-1 date">person</mat-icon>
+                    <span class="d-none d-md-inline-block ml-3 mx-2 fs-14">Chew Cindy: </span>
+                    <span class="date fs-14">{{'Thu Feb 16 2023 19:42:01' | dateFormatter: 'long'}}</span>
+                </span>
+            </div>
+                <div class="col-11 comment-card pt-1 p-2 ml-5 mb-0 comment-box-margin mx-auto">
+                    <span class="fs-13">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                        Ipsum
+                        has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+                        galley
+                        <span (click)="isReadMore = !isReadMore" class="hand-cursor italian">...Read more
+                            <i aria-hidden="true"
+                                [ngClass]="isReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i>
+                        </span>
+                    </span>
+                </div>
+                <div class="col f-13 text-secondary my-3 d-flex justify-content-end mr-15 mb-4">
+                    <span class="hand-cursor mr-15">
+                        <i aria-hidden="true" class="fa fa-commenting mr-2"></i>
+                        <ng-container>Show</ng-container>
+                        replies(3)
+                    </span>
+                    <span class="hand-cursor">
+                        <i aria-hidden="true" class="fa fa-reply mr-2"></i>
+                        Reply
+                    </span>
+                </div>
+        </div>
+    </div>
+</div>

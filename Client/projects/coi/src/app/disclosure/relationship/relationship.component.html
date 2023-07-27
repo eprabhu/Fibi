@@ -29,14 +29,14 @@
       *ngIf="(proposalArray| SearchFilter : searchText:
   ['title', 'moduleItemId', 'moduleItemKey', 'moduleStatus', 'principalInvestigator', 'sponsor', 'primeSponsor']) as searchResult; let i = index">
       <ng-container *ngIf="isShowNoDataCard">
-        <ng-container *ngIf="searchResult.length">
+        <div *ngIf="searchResult.length" [@listAnimation]="searchResult.length">
             <ng-container *ngFor="let test of searchResult;let i = index">
                 <div class="card outer-card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-8 col-12 mb-10">
                                 <div class="col-12 d-flex" *ngIf="test.moduleCode == 3">
-                                    <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
+                                    <span class="active-ribbon shadow-sm align-items-center d-flex">Proposal</span>
                                     <p class="entity-title">
                                         <strong title="Click to view project details" class="fs-18" (click)="selectedProjectForView=test;" data-bs-toggle="modal"
                                             data-bs-target="#moduleViewModal">#{{test?.moduleItemId}} - {{test?.title?.length >
@@ -51,7 +51,7 @@
                                     </p>
                                 </div>
                                 <div class="col-12 d-flex" *ngIf="test.moduleCode == 1">
-                                    <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
+                                    <span class="active-ribbon shadow-sm align-items-center d-flex">Award</span>
                                     <p title="Click to view project details" class="entity-title m-0" (click)="selectedProjectForView=test" data-bs-toggle="modal"
                                         data-bs-target="#moduleViewModal">
                                         <strong class="fs-16">#{{test?.moduleItemKey}} - {{test?.title}} </strong>
@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="col-6">
                                         <label class="label-text">Sponsor :</label>
-                                        <span class="ml-2 grey-text">{{test?.sponsor}}</span>
+                                        <span class="grey-text">{{test?.sponsor}}</span>
                                     </div>
                                     <div class="col-6">
                                         <label class="label-text">Period :</label>
@@ -171,7 +171,7 @@
                     </div>
                 </div>
             </ng-container>
-        </ng-container>
+        </div>
         <div *ngIf="!searchResult.length">
             <app-no-information> </app-no-information>
         </div>

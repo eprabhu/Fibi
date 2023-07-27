@@ -39,7 +39,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
                     }
                 });
             });
-        } else if (this.getHomeAndPersonId()) {
+        } else if (this.hasHomeAndPersonId()) {
             return true;
         } else {
             this._router.navigate([HOME_URL]);
@@ -48,23 +48,22 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
     }
 
     canDeactivate(): boolean {
-        if (!this._service.isChildRouting && this.getHomeAndPersonId()) {
-            document.getElementById('travel-unsaved-changes-modal-trigger-btn').click();
-            return false;
-        } else if (this._service.travelDataChanged) {
-            document.getElementById('travel-unsaved-changes-modal-trigger-btn').click();
+        const triggerButton = document.getElementById('travel-unsaved-changes-modal-trigger-btn');
+        const shouldShowUnsavedModal = (!this._service.isChildRouteTriggered && this.hasHomeAndPersonId())
+                                        || this._service.travelDataChanged;
 
+        if (shouldShowUnsavedModal) {
+            triggerButton?.click();
             return false;
         }
-        this._service.isChildRouting = false;
+
+        this._service.isChildRouteTriggered = false;
         return true;
     }
 
-    private getHomeAndPersonId(): boolean {
+    private hasHomeAndPersonId(): boolean {
         const travelCreateModalDetails: TravelCreateModalDetails = this._dataStore.getCreateModalDetails();
-        const homeUnit = (travelCreateModalDetails && travelCreateModalDetails.homeUnit) || null;
-        const personId = (travelCreateModalDetails && travelCreateModalDetails.personId) || null;
-        return (homeUnit && personId) ? true : false;
+        return !!travelCreateModalDetails?.homeUnit && !!travelCreateModalDetails?.personId;
     }
 
     private setPreviousModuleUrl(): void {

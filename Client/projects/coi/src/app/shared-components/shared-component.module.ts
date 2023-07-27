@@ -16,6 +16,7 @@ import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-de
 import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
 import { ActivateInactivateSfiModalComponent } from './activate-inactivate-sfi-modal/activate-inactivate-sfi-modal.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
+import { ReviewCommentsSliderComponent } from './review-comments-slider/review-comments-slider.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -36,7 +37,8 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
     ViewEntityDetailsComponent,
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    ReviewCommentsSliderComponent
   ],
   exports: [
     NoInformationComponent,
@@ -48,7 +50,8 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
     ViewEntityDetailsComponent,
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    ReviewCommentsSliderComponent
   ]
 })
 export class SharedComponentModule { }

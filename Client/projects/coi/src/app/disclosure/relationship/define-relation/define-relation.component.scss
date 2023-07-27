@@ -23,8 +23,8 @@
   height: 27px;
   background: #949494;
   position: relative;
-  left: -13px;
-  top: -3px;
+  left: -6px;
+  top: 7px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -149,7 +149,7 @@
   background-color: #fff;
   height: 100vh;
   padding: 0px 10px 10px 10px;
-  overflow: auto;
+  overflow-y: scroll;
 }
 
 .btn-container {
