@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { fadeInOutHeight } from 'projects/fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
   selector: 'app-no-information',

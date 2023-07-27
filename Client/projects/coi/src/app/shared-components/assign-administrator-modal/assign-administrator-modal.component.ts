@@ -4,7 +4,7 @@ import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
 import { DefaultAdminDetails } from '../../travel-disclosure/travel-disclosure-interface';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 declare const $: any;
 

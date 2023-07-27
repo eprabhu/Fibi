@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {environment} from "../../../../admin-dashboard/src/environments/environment";
-import {CommonService} from "../common/services/common.service";
-import { fadeInOutHeight } from 'projects/fibi/src/app/common/utilities/animations';
+import {environment} from '../../../../admin-dashboard/src/environments/environment';
+import {CommonService} from '../common/services/common.service';
+import { fadeInOutHeight } from '../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
   selector: 'app-configuration',
@@ -9,7 +9,7 @@ import { fadeInOutHeight } from 'projects/fibi/src/app/common/utilities/animatio
   styleUrls: ['./configuration.component.scss'],
   animations: [fadeInOutHeight]
 })
-export class ConfigurationComponent implements OnInit{
+export class ConfigurationComponent implements OnInit {
 
   deployMap = environment.deployUrl;
   isMaintainQuestionnaire = false;

@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { slideHorizontal } from 'projects/fibi/src/app/common/utilities/animations';
+import { slideHorizontal } from '../../../../fibi/src/app/common/utilities/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TravelDisclosureService } from './services/travel-disclosure.service';
 import { CommonService } from '../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { SfiService } from '../disclosure/sfi/sfi.service';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { environment } from '../../environments/environment';
 import { TravelDataStoreService } from './services/travel-data-store.service';
 import {

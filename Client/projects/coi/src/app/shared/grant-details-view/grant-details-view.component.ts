@@ -4,7 +4,7 @@
  *  @OUTPUT() - showGrantDetails - emits back false value to parent to destroy the scope of the compenent
  */
 import { Component, OnInit, Input, OnChanges, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { concatUnitNumberAndUnitName } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { concatUnitNumberAndUnitName } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';

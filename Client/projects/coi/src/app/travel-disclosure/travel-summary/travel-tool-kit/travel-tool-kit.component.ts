@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { slideHorizontal } from 'projects/fibi/src/app/common/utilities/animations';
+import { Component } from '@angular/core';
+import { slideHorizontal } from '../../../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-travel-tool-kit',
