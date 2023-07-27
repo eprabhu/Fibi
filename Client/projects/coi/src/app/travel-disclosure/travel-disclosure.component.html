@@ -152,9 +152,8 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4">Disclosure : </label>
                                 <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="responseObject?.disclosureStatusCode">
-                                        <span
-                                            class="fs-14 {{commonService.getDisclosureConflictBadge(responseObject?.disclosureStatusCode)}}">{{responseObject?.disclosureStatus}}</span>
+                                    <app-no-data-label [valueToShow]=null>
+                                        <span class="fs-14 {{commonService.getDisclosureConflictBadge(null)}}"></span>
                                     </app-no-data-label>
                                 </span>
                             </div>

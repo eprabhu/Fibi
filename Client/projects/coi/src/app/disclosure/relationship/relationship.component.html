@@ -36,7 +36,7 @@
                         <div class="row">
                             <div class="col-md-8 col-12 mb-10">
                                 <div class="col-12 d-flex" *ngIf="test.moduleCode == 3">
-                                    <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
+                                    <span class="active-ribbon shadow-sm align-items-center d-flex">Proposal</span>
                                     <p class="entity-title">
                                         <strong title="Click to view project details" class="fs-18" (click)="selectedProjectForView=test;" data-bs-toggle="modal"
                                             data-bs-target="#moduleViewModal">#{{test?.moduleItemId}} - {{test?.title?.length >
@@ -51,7 +51,7 @@
                                     </p>
                                 </div>
                                 <div class="col-12 d-flex" *ngIf="test.moduleCode == 1">
-                                    <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
+                                    <span class="active-ribbon shadow-sm align-items-center d-flex">Award</span>
                                     <p title="Click to view project details" class="entity-title m-0" (click)="selectedProjectForView=test" data-bs-toggle="modal"
                                         data-bs-target="#moduleViewModal">
                                         <strong class="fs-16">#{{test?.moduleItemKey}} - {{test?.title}} </strong>
@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="col-6">
                                         <label class="label-text">Sponsor :</label>
-                                        <span class="ml-2 grey-text">{{test?.sponsor}}</span>
+                                        <span class="grey-text">{{test?.sponsor}}</span>
                                     </div>
                                     <div class="col-6">
                                         <label class="label-text">Period :</label>

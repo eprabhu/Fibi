@@ -101,13 +101,13 @@
                     </div>
                 </div>
                 <div *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && isShowExistingDisclosure" class="col-lg-12 col-12 mb-4 mt-4 shadow-lg resultCard px-0">
-                    <div class="row fs-14">
-                        <div class="col-4 mt-2 mb-2">
+                    <div class="pt-2 py-2 info-card-border row fs-14 rounded-2 shadow-medium bg-light">
+                        <div class="col-4 mb-2">
                             <span>
                                 <strong>#{{existingDisclosureDetails?.disclosureNumber}} : {{existingDisclosureDetails?.disclosureType}} Disclosure by {{existingDisclosureDetails?.disclosurePersonFullName}}</strong>
                             </span>
                         </div>
-                        <div class="col-8 mt-2 mb-2">
+                        <div class="col-8 mb-2">
                             <label class="f-14 pe-2">Department: </label>
                             <span>
                                 <app-no-data-label [valueToShow]="existingDisclosureDetails?.homeUnit">
@@ -115,22 +115,23 @@
                                         {{existingDisclosureDetails?.homeUnitName}}</span>
                                 </app-no-data-label>
                             </span>
-                        </div>        
-                        <div class="col-4 mt-2 mb-2">
+                        </div>
+                                
+                        <div class="col-4 mb-2">
                             <label class="f-14 pe-2">Create Date : </label>
                             <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp">
                                 <span class="ml-2">{{existingDisclosureDetails?.createTimestamp |
                                     dateFormatter}}</span>
                             </app-no-data-label>
                         </div>
-                        <div class="col-4 mt-2 mb-2">
+                        <div class="col-4 mb-2">
                             <label class="f-14 pe-2">Expiration Date : </label>
                             <app-no-data-label [valueToShow]="existingDisclosureDetails?.expirationDate ">
                                 <span class="ml-2">{{existingDisclosureDetails?.expirationDate |
                                     dateFormatter}}</span>
                             </app-no-data-label>
                         </div>
-                        <div class="col-4 mt-2 mb-2">
+                        <div class="col-4 mb-2">
                             <label class="f-14 pe-2">Certification Date : </label>
                             <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt">
                                 <span class="ml-2">{{existingDisclosureDetails?.certifiedAt |
@@ -138,7 +139,7 @@
                             </app-no-data-label>
                         </div>
                         
-                        <div class="col-4 mt-2 mb-2">
+                        <div class="col-4">
                             <label class="f-14 pe-2">Review Status : </label>
                             <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
                                 <span
@@ -146,7 +147,7 @@
                             </app-no-data-label>
                         </div>
                        
-                        <div class="col-4 mt-2 mb-2">
+                        <div class="col-4">
                             <label class="f-14 pe-2">Disclosure Status : </label>
                             <app-no-data-label
                                 [valueToShow]="existingDisclosureDetails?.conflictStatusCode">
@@ -155,7 +156,7 @@
                             </app-no-data-label>
                         </div>
                       
-                        <div class="col-4 mt-2 mb-2">
+                        <div class="col-4">
                             <label class="f-14 pe-2">Disposition Status : </label>
                             <app-no-data-label
                                 [valueToShow]="existingDisclosureDetails?.dispositionStatusCode">
@@ -197,21 +198,37 @@
                             {{projectDisclosureValidation?.get('proposalSearch')}}
                         </div>
                         <div *ngIf="isShowResultCard && !isShowExistingDisclosure"
-                            class="col-lg-12 col-12 mb-4 mt-2 shadow-lg resultCard px-0">
-                            <div class="row">
+                            class="col-lg-12 col-12 mt-2 shadow-lg resultCard px-0">
+                            <div class="pt-2 py-2 row info-card-border rounded-2 shadow-medium bg-light">
                                 <div class="col-12">
-                                    <label class="f-14 mt-2 mb-2 pe-2">Title : </label>
-                                    <span class="ml-2">{{manualProjectAddDetails?.title}}</span>
+                                    <label class="f-14 pe-2">Title : </label>
+                                    <span class="ml-2 grey-text">#{{manualProjectAddDetails?.title}}</span>
                                 </div>
-                                <div class="col-6 mt-2 mb-2 ">
-                                    <label class="f-14 pe-2">Principal Investigator : </label>
-                                    <span class="ml-2">{{manualProjectAddDetails?.principalInvestigator}}</span>
+
+                                <div class="col-6">
+                                    <label class="f-14 pe-2">Sponsor : </label>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.sponsor}}</span>
                                 </div>
-                                <div class="col-6 mt-2 mb-2 ">
+                                <div class="col-6">
+                                    <label class="f-14 pe-2">Prime Sponsor : </label>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails.primeSponsorName || 'No Data'}}</span>
+                                </div>
+
+                                
+                                <div class="col-6 pt-1 py-1">
+                                    <label class="f-14 pe-2">{{manualProjectAddDetails?.reporterRole}} : </label>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.principalInvestigator}}</span>
+                                </div>
+                                <div class="col-6 pt-1 py-1">
                                     <label class="f-14 pe-2">Lead Unit : </label>
-                                    <span class="ml-2">{{manualProjectAddDetails?.unitName}}</span>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.unitName}}</span>
                                 </div>
-                                <div class="col-6 mb-2 mt-2 ">
+                                
+                                <div class="col-6">
+                                    <label class="f-14 pe-2">Project Role : </label>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.reporterRole}}</span>
+                                </div>
+                                <div class="col-6">
                                     <label class="f-14 pe-2">Period : </label>
                                     <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails?.startDate">
                                         <span class="ml-2 date-block"
@@ -222,44 +239,42 @@
                                         </span>
                                     </app-no-data-label>
                                 </div>
-                                <div class="col-6 mb-2 mt-2 ">
-                                    <label class="f-14 pe-2">Sponsor : </label>
-                                    <span class="ml-2">{{manualProjectAddDetails?.sponsor}}</span>
-                                </div>
+                                
                             </div>
                         </div>
                         <div *ngIf="isShowResultCard && isShowExistingDisclosure"
-                            class="col-lg-12 col-12 mb-4 mt-2 shadow-lg resultCard px-0">
-                            <div class="row fs-14">
-                                <div class="col-4 mt-2 mb-2">
+                            class="col-lg-12 col-12 mt-2 shadow-lg resultCard px-0">
+                            <div class="row fs-14 info-card-border rounded-2 shadow-medium bg-light pt-2 py-2">
+                                <div class="col-4">
                                     <span>
                                         <strong>#{{existingDisclosureDetails?.disclosureNumber}} : {{existingDisclosureDetails?.disclosureType}} Disclosure by {{existingDisclosureDetails?.disclosurePersonFullName}}</strong>
                                     </span>
                                 </div>
-                                <div class="col-8 mt-2 mb-2">
-                                    <label class="f-14 pe-2">Department: </label>
+                                <div class="col-8 ">
+                                    <label class="f-14 pe-2">Department : </label>
                                     <span>
                                         <app-no-data-label [valueToShow]="existingDisclosureDetails?.homeUnit">
-                                            <span [title]="existingDisclosureDetails?.homeUnitName">{{existingDisclosureDetails?.homeUnit}} -
+                                            <span [title]="existingDisclosureDetails?.homeUnitName" class="grey-text">{{existingDisclosureDetails?.homeUnit}} -
                                                 {{existingDisclosureDetails?.homeUnitName}}</span>
                                         </app-no-data-label>
                                     </span>
-                                </div>        
-                                <div class="col-4 mt-2 mb-2">
+                                </div>
+
+                                <div class="col-4 pt-1 py-1">
                                     <label class="f-14 pe-2">Create Date : </label>
                                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.createTimestamp">
-                                        <span class="ml-2">{{existingDisclosureDetails?.createTimestamp |
+                                        <span class="ml-2 grey-text">{{existingDisclosureDetails?.createTimestamp |
                                             dateFormatter}}</span>
                                     </app-no-data-label>
                                 </div>
-                                <div class="col-4 mt-2 mb-2">
+                                <div class="col-4 pt-1 py-1">
                                     <label class="f-14 pe-2">Expiration Date : </label>
                                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.expirationDate ">
-                                        <span class="ml-2">{{existingDisclosureDetails?.expirationDate |
+                                        <span class="ml-2 grey-text">{{existingDisclosureDetails?.expirationDate |
                                             dateFormatter}}</span>
                                     </app-no-data-label>
                                 </div>
-                                <div class="col-4 mt-2 mb-2">
+                                <div class="col-4 pt-1 py-1">
                                     <label class="f-14 pe-2">Certification Date : </label>
                                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.certifiedAt">
                                         <span class="ml-2">{{existingDisclosureDetails?.certifiedAt |
@@ -267,7 +282,7 @@
                                     </app-no-data-label>
                                 </div>
                                 
-                                <div class="col-4 mt-2 mb-2">
+                                <div class="col-4 mb-2">
                                     <label class="f-14 pe-2">Review Status : </label>
                                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
                                         <span
@@ -275,7 +290,7 @@
                                     </app-no-data-label>
                                 </div>
                                
-                                <div class="col-4 mt-2 mb-2">
+                                <div class="col-4 mb-2">
                                     <label class="f-14 pe-2">Disclosure Status : </label>
                                     <app-no-data-label
                                         [valueToShow]="existingDisclosureDetails?.conflictStatusCode">
@@ -284,7 +299,7 @@
                                     </app-no-data-label>
                                 </div>
                               
-                                <div class="col-4 mt-2 mb-2">
+                                <div class="col-4 mb-2">
                                     <label class="f-14 pe-2">Disposition Status : </label>
                                     <app-no-data-label
                                         [valueToShow]="existingDisclosureDetails?.dispositionStatusCode">

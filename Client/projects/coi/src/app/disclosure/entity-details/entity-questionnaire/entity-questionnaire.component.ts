@@ -130,7 +130,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
           this.definedRelationships.push(ele);
           this.findRelation(ele.validPersonEntityRelType.relationshipTypeCode);
         });
-        this.getQuestionnaire(res[res.length-1]);
+        this.getQuestionnaire(res[0]);
         this.entityDetailsServices.isShowRelationButton = this.relationLookup.length;
         this.clearRelationModal();
         this.isSaving = false;

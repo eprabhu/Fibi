@@ -28,8 +28,6 @@ body {
 
 ::-webkit-scrollbar-track { 
   width: 12px;
-  max-height: 50vh;
-  height: 50vh;
   background-color: #e7e7e7;
   border-radius: 5px;
 }
@@ -328,6 +326,12 @@ nav ul li.active {
 .red-badge {
   @extend .coi-badge;
   background-color: rgba(220,53,69,1)!important;
+  color: #fff;
+}
+
+.grey-badge {
+  @extend .coi-badge;
+  background-color: #7f7b7b !important;
   color: #fff;
 }
 

@@ -1,22 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'projects/admin-dashboard/src/environments/environment';
-import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/fibi/src/app/app-constants';
-import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from 'projects/fibi/src/app/common/services/end-point.config';
-import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from 'projects/fibi/src/app/common/utilities/date-utilities';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { environment } from '../../../../../admin-dashboard/src/environments/environment';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
+import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../../fibi/src/app/common/services/end-point.config';
+import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { CoiTravelDisclosure, EndpointOptions, TravelCreateModalDetails, TravelDisclosure, TravelDisclosureTraveller } from '../travel-disclosure-interface';
 import { CommonService } from '../../common/services/common.service';
-import { convertToValidAmount } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
+import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
 
-declare var $: any;
 @Component({
     selector: 'app-travel-disclosure-form',
     templateUrl: './travel-disclosure-form.component.html',
-    styleUrls: ['./travel-disclosure-form.component.scss']
+    styleUrls: ['./travel-disclosure-form.component.scss'],
+    animations: [fadeInOutHeight]
 })
 export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
@@ -176,13 +177,13 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     selectedEntityEvent(event: any): void {
-        this.entityName = (event && event.entityName) || null;
-        this.travelDisclosureRO.entityId = (event && event.entityId) || null;
-        this.travelDisclosureRO.entityNumber = (event && event.entityNumber) || null;
+        this.entityName = event ? event.entityName : null;
+        this.travelDisclosureRO.entityId = event ? event.entityId : null;
+        this.travelDisclosureRO.entityNumber = event ? event.entityNumber : null;
     }
 
     selectTravelCountry(event: any): void {
-        this.travelDisclosureRO.destinationCountry = (event && event.countryName) || null;
+        this.travelDisclosureRO.destinationCountry = event ? event.countryName : null;
     }
 
     getTravellerTypeCode(): void {

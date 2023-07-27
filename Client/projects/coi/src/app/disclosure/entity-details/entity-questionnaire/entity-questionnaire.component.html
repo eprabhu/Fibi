@@ -40,7 +40,7 @@
         <div class="row m-0">
           <p class="fs-13 m-0"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
         </div>
-        <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center mb-15 mt-20">
+        <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center mb-15 mt-15">
           <div class="card custom-padding"
           [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
             <div class="d-flex flex-row">

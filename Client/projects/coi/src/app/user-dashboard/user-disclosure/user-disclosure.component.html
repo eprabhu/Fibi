@@ -196,10 +196,10 @@
         <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3">Disclosure History
             ({{dashboardCount?.disclosureHistoryCount || 0}})</span>
     </div>
-</nav>
+</nav> 
 
 <div class="advance-search-area border d-flex mt-2 rounded-1">
-    <div class="border-end fs-14 p-3" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
+    <div class="fs-14 p-3" [class.border-end] = "currentSelected.tab != 'DISCLOSURE_HISTORY'" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Type :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="currentSelected.filter=='ALL'"
             title="Click to filter by type: All" area-describedby="Click to filter by type: All"
@@ -209,11 +209,15 @@
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">FCOI</span>
         <span (click)="setFilter('PROJECT')" [class.filter-active]="currentSelected.filter=='PROJECT'"
             title="Click to filter by type: Project" area-describedby="Click to filter by type: Project"
-            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Project</span>
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">Project</span>
+        <span *ngIf="currentSelected.tab == 'DISCLOSURE_HISTORY'"  (click)="setFilter('TRAVEL')" 
+            [class.filter-active]="currentSelected.filter=='TRAVEL'"
+            title="Click to filter by type: Travel" area-describedby="Click to filter by type: Travel"
+            class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Travel</span>
         <!--<span (click)="setFilter('OPA')" [class.filter-active]="currentSelected.filter=='OPA'"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">OPA</span>-->
     </div>
-    <div class="d-flex flex-fill  position-relative"
+    <div class="d-flex flex-fill  position-relative" *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'"
         [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
         (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
@@ -225,9 +229,9 @@
 </div>
 <ng-container *ngIf="!isLoading">
     <div [@listAnimation]="filteredDisclosureArray.length">
-        <ng-container *ngFor="let disclosure of filteredDisclosureArray ; let index = index;">
-            <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
-                (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
+        <ng-container *ngFor="let disclosure of filteredDisclosureArray ; let index = index; let isLast=last;">
+            <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color" 
+                (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false" >
                 <div class="row mt-2">
                     <div class="col">
                         <span class="align-items-center d-flex">
@@ -236,9 +240,14 @@
                                 <span>{{disclosure?.travelDisclosureId? 'Travel' :
                                     disclosure?.fcoiType}}</span>
                             </span>
-                            <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2"><span><strong class="me-2">{{disclosure?.travellerName}}</strong><span class="pipe"></span><span class="label-text ms-2">Entity : </span ><span class="title-text">{{disclosure.travelEntityName}}</span></span></h4>
-                            <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2"><strong class="me-1">{{disclosure.disclosurePersonFullName}}</strong>
-                                <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="label-text ms-1"><span class="pipe"></span> Project :
+                            <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex align-items-center fa fa-user label-text fs-16"><strong class="ml-2">{{disclosure?.travellerName}}</strong>
+                                <span class="ms-2 d-flex align-items-center me-1"><span class="pipe"></span>
+                                <img class="entity-icon" src="{{deployMap}}assets/images/entity.svg">Entity : </span ><span class="title-text">{{disclosure.travelEntityName}}</span></h4>
+                            <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex align-items-center fa fa-user label-text fs-16"><strong class="me-1 ml-2">{{disclosure.disclosurePersonFullName}}</strong>
+                                <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="ms-1 d-flex align-items-center"><span class="pipe me-1"></span>
+                                <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon" src="{{deployMap}}assets/images/proposal.png">
+                                <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon" src="{{deployMap}}assets/images/award.png">
+                                Project :
                                 </span> 
                                 <span class="title-text"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:90)}}</span>
                                 <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>90">...
@@ -514,12 +523,15 @@
                         </button>
                     </div>
                 </div>
-            </div>  
+            </div>
+            <div *ngIf="currentSelected.tab=='DISCLOSURE_HISTORY'">
+                    <app-disclosure-history-card [disclosure]="disclosure" [isLastElement]="isLast"></app-disclosure-history-card>
+            </div>    
         </ng-container>
     </div>
     <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
     <!-- Pagination -->
-    <div *ngIf="filteredDisclosureArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+    <div *ngIf="filteredDisclosureArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY'"  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
         <nav aria-label="pagination section" class="pagination justify-content-end">
             <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="result.totalServiceRequest">
             </app-pagination>

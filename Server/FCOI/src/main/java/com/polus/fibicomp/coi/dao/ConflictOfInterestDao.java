@@ -9,6 +9,7 @@ import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -961,6 +962,13 @@ public interface ConflictOfInterestDao {
 	List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 
 	public List<ValidPersonEntityRelType> getValidPersonEntityRelType();
+
+	/**
+	 * This method is used to fetch disclosure
+	 * @param dashboardVO
+	 * @return
+	 */
+	List<DisclosureHistoryDto> getDisclosureHistory(CoiDashboardVO dashboardVO);
 
 	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
 

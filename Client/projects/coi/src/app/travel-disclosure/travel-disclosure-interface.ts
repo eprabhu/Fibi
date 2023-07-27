@@ -44,6 +44,9 @@ export class TravelDisclosure {
     entityId: number;
     entityNumber: number;
     travelEntityName: string;
+    entityEmail: string;
+    entityAddress: string;
+    entityIsActive: boolean;
     travelTitle: string;
     purposeOfTheTrip: string;
     travelAmount: number;
@@ -62,8 +65,6 @@ export class TravelDisclosure {
     travellerHomeUnit: string;
     description: string;
     travelSubmissionDate: number;
-    travelDisclosureStatus: string;
-    travelDisclosureStatusCode: string;
     dispositionStatus: string;
     dispositionStatusCode: string;
     reviewStatus: string;
@@ -86,9 +87,9 @@ export class TravelDisclosure {
     certifiedAt: number;
     documentStatusCode: string;
     documentStatus: string;
-    disclosureStatus: string;
-    disclosureStatusCode: string;
-}
+    riskLevel: string;
+    expirationDate: number;
+  }
 
 export interface EndpointOptions {
     contextField: string;
@@ -99,14 +100,17 @@ export interface EndpointOptions {
 }
 
 export class EntityData {
-    country: string;
+    isActive: boolean;
+    country: { countryName: string };
     entityId: string | number;
-    entityType: string;
+    entityType: { description: string };
     entityName: string;
+    emailAddress: string;
+    address: string;
 }
 
 export interface TravelHistoryRO {
-    personId: String;
+    personId: string;
     entityNumber: number;
 }
 

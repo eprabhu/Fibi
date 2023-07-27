@@ -5,7 +5,7 @@ import { SharedComponentModule } from '../../shared-components/shared-component.
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
-import { TravelSharedComponentModule } from '../travel-shared-component/travel-shared-component.module';
+import { AddSfiModule } from '../../add-sfi/add-sfi.module';
 
 const routes: Routes = [
     {
@@ -18,9 +18,9 @@ const routes: Routes = [
         CommonModule,
         SharedModule,
         FormsModule,
+        AddSfiModule,
         RouterModule.forChild(routes),
         SharedComponentModule,
-        TravelSharedComponentModule
     ],
     declarations: [
         TravelRelatedDisclosureComponent

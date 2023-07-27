@@ -1,0 +1,40 @@
+package com.polus.fibicomp.coi.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.sql.Timestamp;
+import java.util.Date;
+
+@Getter
+@Setter
+public class DisclosureHistoryDto {
+
+    private Integer disclosureId;
+    private Integer travelDisclosureId;
+    private String homeUnit;
+    private String homeUnitName;
+    private String versionStatus;
+    private Date certifiedAt;
+    private Date expirationDate;
+    private String fcoiTypeCode;
+    private String fcoiType;
+    private String conflictStatusCode;
+    private String conflictStatus;
+    private String dispositionStatusCode;
+    private String dispositionStatus;
+    private String reviewStatusCode;
+    private String reviewStatus;
+    private String entityName;
+    private String travelStatusCode;
+    private String travelStatus;
+    private String purposeOfTheTrip;
+    private Date travelStartDate;
+    private Date travelEndDate;
+    private String destinationCity;
+    private String destinationCountry;
+    private String travelState;
+    private Timestamp updateTimestamp;
+    private String projectNumber;
+    private String projectTitle;
+}

@@ -29,4 +29,8 @@ export class UserDisclosureService {
             "isDownload": false
         });
     }
+
+    getDisclosureHistory(param) {
+        return this._http.post(this._commonService.baseUrl + '/disclosure/historyDashboard',param);
+    }
 }

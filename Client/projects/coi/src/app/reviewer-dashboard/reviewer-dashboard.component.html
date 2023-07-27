@@ -269,9 +269,12 @@
                                     </span>
                                     <h4 class="mb-0 ml-2 mt-2">
                                         <strong>
-                                            <span class="me-2">{{coi.disclosurePersonFullName}}</span>
+                                            <span class="me-2 mb-0 ml-2 mt-2 fa fa-user label-text align-items-center fs-16"><strong class="me-1 ml-2">{{coi.disclosurePersonFullName}}</strong></span>
                                             <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="pipe"></span>
-                                            <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="label-text ms-2">Project : </span>
+                                            <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="label-text ms-2 fs-16">
+                                            <img *ngIf="coi.fcoiTypeCode==2" class="proposal-icon" src="{{deployMap}}assets/images/proposal.png">
+                                            <img *ngIf="coi.fcoiTypeCode==3" class="award-icon" src="{{deployMap}}assets/images/award.png">
+                                                Project : </span>
                                             <span class="title-text"> {{(readMoreOrLess[index]) ? modalHeader(coi) : modalHeader(coi) | slice:0:90}}</span>
                                             <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>90">...
                                                 <a (click)="readMoreOrLess[index]=true"><span class="readMore">Read More</span></a>

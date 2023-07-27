@@ -1237,6 +1237,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		CoiEntity entityDetails = conflictOfInterestDao.getEntityDetails(coiTravelDisclosure.getEntityId());
 		dto.setEntityId(entityDetails.getEntityId());
 		dto.setEntityTypeCode(entityDetails.getEntityTypeCode());
+		dto.setEntityEmail(entityDetails.getEmailAddress());
+		dto.setEntityAddress(entityDetails.getAddress());
+		dto.setEntityIsActive(entityDetails.getIsActive());
 		EntityRiskCategory riskCategory = conflictOfInterestDao.getEntityRiskDetails(entityDetails.getRiskCategoryCode());
 		dto.setRiskLevel(riskCategory.getDescription());
 		EntityType entityTypeDetails = conflictOfInterestDao.getEntityTypeDetails(entityDetails.getEntityTypeCode());
@@ -1294,6 +1297,23 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.certifyTravelDisclosure(coiTravelDisclosure);
 		return new ResponseEntity<>(travelCertifyDto, HttpStatus.OK);
 	}
+	
+	/** If any travel disclosure is returned and it is having any admins or admin groups are assigned,
+	 * then the review status should be changed to 'Review in Progress'. Otherwise it should be 'Submitted' */
+	private void setTravelReviewStatusWhileSubmit(CoiTravelDisclosure coiTravelDisclosure) {
+		if (coiTravelDisclosure.getReviewStatusCode().equalsIgnoreCase(Constants.TRAVEL_REVIEW_STATUS_CODE_RETURNED_TO_PI) &&
+				(coiTravelDisclosure.getAdminPersonId() != null || coiTravelDisclosure.getAdminGroupId() != null)) {
+			coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_INPROGRESS);
+			CoiTravelReviewStatusType coiTravelReviewStatusType =
+					conflictOfInterestDao.getTravelReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE_INPROGRESS);
+			coiTravelDisclosure.setCoiTravelReviewStatusTypeDetails(coiTravelReviewStatusType);
+		} else {
+			coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_SUBMITTED);
+			CoiTravelReviewStatusType coiTravelReviewStatusType =
+					conflictOfInterestDao.getTravelReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE_SUBMITTED);
+			coiTravelDisclosure.setCoiTravelReviewStatusTypeDetails(coiTravelReviewStatusType);
+		}
+	}
 
 	/** On Submitting travel disclosure, Review Status -> Submitted, Document Status -> Draft and Version Status -> PENDING */
 	@Override
@@ -1301,10 +1321,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		Timestamp currentTimestamp = commonDao.getCurrentTimestamp();
 		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(vo.getTravelDisclosureId());
 		coiTravelDisclosure.setTravelSubmissionDate(commonDao.getCurrentTimestamp());
-		coiTravelDisclosure.setReviewStatusCode(Constants.TRAVEL_REVIEW_STATUS_CODE_SUBMITTED);
-		CoiTravelReviewStatusType coiTravelReviewStatusType =
-				conflictOfInterestDao.getTravelReviewStatusDetails(Constants.TRAVEL_REVIEW_STATUS_CODE_SUBMITTED);
-		coiTravelDisclosure.setCoiTravelReviewStatusTypeDetails(coiTravelReviewStatusType);
+		setTravelReviewStatusWhileSubmit(coiTravelDisclosure);
 		coiTravelDisclosure.setDocumentStatusCode(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
 		CoiTravelDocumentStatusType coiTravelDocumentStatusType =
 				conflictOfInterestDao.getDocumentStatusDetails(Constants.TRAVEL_DOCUMENT_STATUS_CODE_DRAFT);
@@ -1681,7 +1698,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiEntityDto.setUpdatedUserFullName(personDao.getUserFullNameByUserName(AuthenticatedUser.getLoginUserFullName()));
 		return new ResponseEntity<>(coiEntityDto, HttpStatus.OK);
 	}
-	
+
+	@Override
+	public ResponseEntity<Object> getDisclosureHistory(CoiDashboardVO dashboardVO) {
+		return new ResponseEntity<>(conflictOfInterestDao.getDisclosureHistory(dashboardVO), HttpStatus.OK);
+	}
+
 	@Override
 	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber) {
 		List<CoiTravelHistoryDto> travelHistories = new ArrayList<>();

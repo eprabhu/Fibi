@@ -16,6 +16,9 @@ public class CoiTravelDisclosureDto {
 	private Integer entityId;
 	private Integer entityNumber;
 	private String travelEntityName;
+	private String entityEmail;
+	private String entityAddress;
+	private Boolean entityIsActive;
 	private String travelTitle;
 	private String purposeOfTheTrip;
 	private BigDecimal travelAmount;
@@ -97,6 +100,30 @@ public class CoiTravelDisclosureDto {
 
 	public void setTravelEntityName(String travelEntityName) {
 		this.travelEntityName = travelEntityName;
+	}
+
+	public String getEntityEmail() {
+		return entityEmail;
+	}
+
+	public void setEntityEmail(String entityEmail) {
+		this.entityEmail = entityEmail;
+	}
+
+	public String getEntityAddress() {
+		return entityAddress;
+	}
+
+	public void setEntityAddress(String entityAddress) {
+		this.entityAddress = entityAddress;
+	}
+	
+	public Boolean getEntityIsActive() {
+		return entityIsActive;
+	}
+
+	public void setEntityIsActive(Boolean entityIsActive) {
+		this.entityIsActive = entityIsActive;
 	}
 
 	public String getTravelTitle() {
