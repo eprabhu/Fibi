@@ -9,13 +9,8 @@ import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../..
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
-import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { CoiDashboardRequest } from '../../admin-dashboard/admin-dashboard.service';
+import { deepCloneObject, isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { NavigationService } from '../../common/services/navigation.service';
-import { switchMap } from 'rxjs/operators';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
-import { CoiService } from '../../disclosure/services/coi.service';
-import { UserDashboardService } from '../../user-dashboard/user-dashboard.service';
 
 @Component({
   selector: 'app-entity-list',

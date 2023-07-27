@@ -5,11 +5,11 @@ import { CoiService } from "../../disclosure/services/coi.service";
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { UserEntitiesService } from "./user-entities.service";
 import { CommonService } from '../../common/services/common.service';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
-import { listAnimation, fadeInOutHeight, leftSlideInOut } from 'projects/fibi/src/app/common/utilities/animations';
+import { listAnimation, fadeInOutHeight, leftSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
   selector: 'app-user-entities',
