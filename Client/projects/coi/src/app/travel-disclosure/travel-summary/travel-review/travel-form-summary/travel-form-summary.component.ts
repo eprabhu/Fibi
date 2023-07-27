@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TravelDataStoreService } from '../../../services/travel-data-store.service';
 import { EntityData, TravelDisclosure, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
-import { getFormattedAmount } from 'projects/coi/src/app/common/utlities/custom-utlities';
+import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { getFormattedAmount } from '../../../../common/utlities/custom-utlities';
 import { Router } from '@angular/router';
 
 @Component({

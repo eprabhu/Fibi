@@ -8,7 +8,7 @@ import { UserDisclosure } from './user-disclosure-interface';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { listAnimation, leftSlideInOut } from 'projects/fibi/src/app/common/utilities/animations';
+import { listAnimation, leftSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
 @Component({
     selector: 'app-user-disclosure',
     templateUrl: './user-disclosure.component.html',
