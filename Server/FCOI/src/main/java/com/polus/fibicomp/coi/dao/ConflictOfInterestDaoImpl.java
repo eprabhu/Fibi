@@ -1193,6 +1193,35 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		DashBoardProfile dashBoardProfile = new DashBoardProfile();
 		List<DisclosureView> disclosureViews = new ArrayList<>();
 		List<CoiTravelDashboardDto> travelDashboardViews = new ArrayList<>();
+		String tabName = vo.getTabName();
+
+		try {
+				if (tabName.equals("TRAVEL_DISCLOSURES")) {
+					resultSet = getTravelAdminDashboardResultSet(vo, connection, false);
+					while (resultSet.next()) {
+						travelDashboardViews.add(setTravelDisclosureDashboardValues(resultSet, "ADMIN_DASHBOARD"));
+					}
+					dashBoardProfile.setTravelDashboardViews(travelDashboardViews);
+					ResultSet countResultSet = getTravelAdminDashboardResultSet(vo, connection, true);
+					while (resultSet.next()) {
+						dashBoardProfile.setTravelDisclosureCount(Integer.parseInt(resultSet.getString(1)));
+					}
+				} else {
+					getDisclosureAdminDashboardData(vo, connection, disclosureViews, tabName);
+					dashBoardProfile.setDisclosureViews(disclosureViews);
+					dashBoardProfile.setDisclosureCount(getCOIAdminDashboardCount(vo));
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Error in getCOIAdminDashboard {}", e.getMessage());
+			throw new ApplicationException("Error in getCOIAdminDashboard {}", e, Constants.JAVA_ERROR);
+		}
+		return dashBoardProfile;
+	}
+
+	private void getDisclosureAdminDashboardData(CoiDashboardVO vo, Connection connection, List<DisclosureView> disclosureViews, String tabName) throws SQLException {
+		ResultSet resultSet;
+		CallableStatement statement;
 		String disclosureId = vo.getProperty1();
 		String disclosurePersonId = vo.getProperty2();
 		String homeUnit = vo.getProperty3();
@@ -1205,8 +1234,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		String title = vo.getProperty11();
 		String awardId = vo.getProperty12();
 		String projectTypeCode = vo.getProperty14();
-		String hasSFIFlag = vo.getProperty15() != null ? (vo.getProperty15().equals(Boolean.TRUE) ? "YES" : "NO" ) : null;
-		String tabName = vo.getTabName();
+		String hasSFIFlag = vo.getProperty15() != null ? (vo.getProperty15().equals(Boolean.TRUE) ? "YES" : "NO") : null;
 		Integer currentPage = vo.getCurrentPage();
 		Integer pageNumber = vo.getPageNumber();
 		String isAdvancedSearch = vo.getAdvancedSearch();
@@ -1217,157 +1245,122 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		List<String> reviewStatusCodes = vo.getProperty21();
 		List<String> conflictStatusCodes = vo.getProperty4();
 		String certificationDate = vo.getProperty23();
-		try {
-			if (oracledb.equalsIgnoreCase("N")) {
-				if (tabName.equals("TRAVEL_DISCLOSURES")) {
-					statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-					statement.setNull(1, Types.INTEGER);
-					statement.setString(2, personId);
-					statement.setNull(3, Types.VARCHAR);
-					statement.setInt(4, Types.VARCHAR);
-					statement.setNull(5, Types.VARCHAR);
-					statement.setNull(6, Types.VARCHAR);
-					statement.setNull(7, Types.VARCHAR);
-					statement.setNull(8, Types.VARCHAR);
-					statement.setNull(9, Types.VARCHAR);
-					statement.setNull(10, Types.VARCHAR);
-					statement.setNull(11, Types.VARCHAR);
-					statement.setNull(12, Types.VARCHAR);
-					statement.setString(13, personId);
-					statement.setString(14, setSortOrderForTravelDisclosure(sort));
-					statement.setInt(15, (currentPage == null ? 0 : currentPage - 1));
-					statement.setInt(16, (pageNumber == null ? 0 : pageNumber));
-					statement.setString(17, tabName);
-					statement.setBoolean(18, isDownload);
-					statement.setString(19, isAdvancedSearch);
-					statement.setNull(20, Types.VARCHAR);
-					statement.setNull(21, Types.VARCHAR);
-					statement.setNull(22, Types.VARCHAR);
-					statement.setNull(23, Types.VARCHAR);
-					statement.setNull(24, Types.VARCHAR);
-					statement.execute();
-					resultSet = statement.getResultSet();
-				} else {
-					statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-					statement.setString(1, disclosureId);
-					statement.setString(2, disclosurePersonId);
-					statement.setString(3, homeUnit);
-					statement.setString(4, conflictStatusCodes != null && !conflictStatusCodes.isEmpty() ? String.join(",", conflictStatusCodes) : null);
-					statement.setString(5, disclosureCategoryTypeCodes != null && !disclosureCategoryTypeCodes.isEmpty() ? String.join(",", disclosureCategoryTypeCodes) : null);
-					statement.setString(6, startDate);
-					statement.setString(7, endDate);
-					statement.setString(8, entityName);
-					statement.setString(9, entityCountry);
-					statement.setString(10, proposalId);
-					statement.setString(11, title);
-					statement.setString(12, awardId);
-					statement.setString(13, personId);
-					statement.setString(14, setCOISortOrder(sort));
-					statement.setInt(15, (currentPage == null ? 0 : currentPage - 1));
-					statement.setInt(16, (pageNumber == null ? 0 : pageNumber));
-					statement.setString(17, tabName);
-					statement.setBoolean(18, isDownload);
-					statement.setString(19, isAdvancedSearch);
-					statement.setString(20, projectTypeCode);
-					statement.setString(21, hasSFIFlag);
-					statement.setString(22, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
-					statement.setString(23, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
-					statement.setString(24, certificationDate);
-					statement.execute();
-					resultSet = statement.getResultSet();
-				}
-			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String procedureName = "GET_COI_DISCLOSURE_ADMIN_DASHBOARD";
-				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
-				statement = connection.prepareCall(functionCall);
-				statement.registerOutParameter(1, OracleTypes.CURSOR);
-				statement.setString(2, disclosureId);
-				statement.setString(3, disclosurePersonId);
-				statement.setString(4, homeUnit);
-				statement.setString(5, conflictStatusCodes != null && !conflictStatusCodes.isEmpty() ? String.join(",", conflictStatusCodes) : null);
-				statement.setString(6, disclosureCategoryTypeCodes != null && !disclosureCategoryTypeCodes.isEmpty() ? String.join(",", disclosureCategoryTypeCodes) : null);
-				statement.setString(7, startDate);
-				statement.setString(8, endDate);
-				statement.setString(9, entityName);
-				statement.setString(10, entityCountry);
-				statement.setString(11, proposalId);
-				statement.setString(12, title);
-				statement.setString(13, awardId);
-				statement.setString(14, personId);
-				statement.setString(15, setCOISortOrder(sort));
-				statement.setInt(16, (currentPage == null ? 0 : currentPage - 1));
-				statement.setInt(17, (pageNumber == null ? 0 : pageNumber));
-				statement.setString(18, tabName);
-				statement.setBoolean(19, isDownload);
-				statement.setString(20, isAdvancedSearch);
-				statement.setString(21, projectTypeCode);
-				statement.setString(22, hasSFIFlag);
-				statement.setString(23, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
-				statement.setString(24, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
-				statement.setString(25, certificationDate);
-				statement.execute();
-				resultSet = (ResultSet) statement.getObject(1);
-			}
-			while (resultSet.next()) {
-				if (tabName.equals("TRAVEL_DISCLOSURES")) {
-					travelDashboardViews.add(setTravelDisclosureDashboardValues(resultSet, "ADMIN_DASHBOARD"));
-				} else {
-					DisclosureView disclosureView =  new DisclosureView();
-					disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
-					disclosureView.setCoiDisclosureNumber(resultSet.getString("DISCLOSURE_NUMBER"));
-					disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
-					disclosureView.setConflictStatusCode(resultSet.getString("CONFLICT_STATUS_CODE"));
-					disclosureView.setConflictStatus(resultSet.getString("DISCLOSURE_STATUS"));
-					disclosureView.setDispositionStatusCode(resultSet.getString("DISPOSITION_STATUS_CODE"));
-					disclosureView.setDispositionStatus(resultSet.getString("DISPOSITION_STATUS"));
-					disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
-					disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
-					disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
-					disclosureView.setReviewStatus(resultSet.getString("EXPIRATION_DATE"));
-					disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
-					disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
-					disclosureView.setLastApprovedVersionDate(resultSet.getTimestamp("LAST_APPROVED_DATE"));
-					disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
-					disclosureView.setDisclosureVersionNumber(resultSet.getInt("VERSION_NUMBER"));
-					disclosureView.setNoOfProposalInActive(resultSet.getInt("NO_OF_ACTIVE_PROPOSAL"));
-					disclosureView.setNoOfAwardInActive(resultSet.getInt("NO_OF_ACTIVE_AWARD"));
-					disclosureView.setNoOfSfiInActive(resultSet.getInt("NO_OF_SFI_IN_ACTIVE"));
-					disclosureView.setNoOfSfiInPending(resultSet.getInt("NO_OF_SFI_IN_PENDING"));
-					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
-					disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER_FULL_NAME"));
-					disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
-					disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
-					disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
-					disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
-					disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
-					disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
-					disclosureView.setAwardId(resultSet.getString("AWARD_NUMBERS"));
-					disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
-					Unit unit = new Unit();
-					unit.setUnitNumber(resultSet.getString("HOME_UNIT"));
-					unit.setUnitName(resultSet.getString("HOME_UNIT_NAME"));
-					unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
-					unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
-					unit.setAcronym(resultSet.getString("ACRONYM"));
-					unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
-					disclosureView.setUnit(unit);
-					disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
-					disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
-					disclosureViews.add(disclosureView);
-				}
-			}
-			dashBoardProfile.setDisclosureViews(disclosureViews);
-			dashBoardProfile.setTravelDashboardViews(travelDashboardViews);
-			dashBoardProfile.setDisclosureCount(getCOIAdminDashboardCount(vo));
-			dashBoardProfile.setTravelDisclosureCount(getCOIAdminDashboardCount(vo));
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error in getCOIAdminDashboard {}", e.getMessage());
-			throw new ApplicationException("Error in getCOIAdminDashboard {}", e, Constants.JAVA_ERROR);
+
+		statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		statement.setString(1, disclosureId);
+		statement.setString(2, disclosurePersonId);
+		statement.setString(3, homeUnit);
+		statement.setString(4, conflictStatusCodes != null && !conflictStatusCodes.isEmpty() ? String.join(",", conflictStatusCodes) : null);
+		statement.setString(5, disclosureCategoryTypeCodes != null && !disclosureCategoryTypeCodes.isEmpty() ? String.join(",", disclosureCategoryTypeCodes) : null);
+		statement.setString(6, startDate);
+		statement.setString(7, endDate);
+		statement.setString(8, entityName);
+		statement.setString(9, entityCountry);
+		statement.setString(10, proposalId);
+		statement.setString(11, title);
+		statement.setString(12, awardId);
+		statement.setString(13, personId);
+		statement.setString(14, setCOISortOrder(sort));
+		statement.setInt(15, (currentPage == null ? 0 : currentPage - 1));
+		statement.setInt(16, (pageNumber == null ? 0 : pageNumber));
+		statement.setString(17, tabName);
+		statement.setBoolean(18, isDownload);
+		statement.setString(19, isAdvancedSearch);
+		statement.setString(20, projectTypeCode);
+		statement.setString(21, hasSFIFlag);
+		statement.setString(22, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
+		statement.setString(23, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
+		statement.setString(24, certificationDate);
+		statement.execute();
+		resultSet = statement.getResultSet();
+
+		while (resultSet.next()) {
+			DisclosureView disclosureView = new DisclosureView();
+			disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
+			disclosureView.setCoiDisclosureNumber(resultSet.getString("DISCLOSURE_NUMBER"));
+			disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
+			disclosureView.setConflictStatusCode(resultSet.getString("CONFLICT_STATUS_CODE"));
+			disclosureView.setConflictStatus(resultSet.getString("DISCLOSURE_STATUS"));
+			disclosureView.setDispositionStatusCode(resultSet.getString("DISPOSITION_STATUS_CODE"));
+			disclosureView.setDispositionStatus(resultSet.getString("DISPOSITION_STATUS"));
+			disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
+			disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
+			disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
+			disclosureView.setReviewStatus(resultSet.getString("EXPIRATION_DATE"));
+			disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
+			disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
+			disclosureView.setLastApprovedVersionDate(resultSet.getTimestamp("LAST_APPROVED_DATE"));
+			disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
+			disclosureView.setDisclosureVersionNumber(resultSet.getInt("VERSION_NUMBER"));
+			disclosureView.setNoOfProposalInActive(resultSet.getInt("NO_OF_ACTIVE_PROPOSAL"));
+			disclosureView.setNoOfAwardInActive(resultSet.getInt("NO_OF_ACTIVE_AWARD"));
+			disclosureView.setNoOfSfiInActive(resultSet.getInt("NO_OF_SFI_IN_ACTIVE"));
+			disclosureView.setNoOfSfiInPending(resultSet.getInt("NO_OF_SFI_IN_PENDING"));
+			disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
+			disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER_FULL_NAME"));
+			disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
+			disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
+			disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
+			disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
+			disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
+			disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
+			disclosureView.setAwardId(resultSet.getString("AWARD_NUMBERS"));
+			disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
+			Unit unit = new Unit();
+			unit.setUnitNumber(resultSet.getString("HOME_UNIT"));
+			unit.setUnitName(resultSet.getString("HOME_UNIT_NAME"));
+			unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
+			unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
+			unit.setAcronym(resultSet.getString("ACRONYM"));
+			unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+			disclosureView.setUnit(unit);
+			disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
+			disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
+			disclosureViews.add(disclosureView);
 		}
-		return dashBoardProfile;
 	}
-	
+
+	private ResultSet getTravelAdminDashboardResultSet(CoiDashboardVO vo, Connection connection, boolean isCount) throws SQLException {
+		ResultSet resultSet;
+		CallableStatement statement;
+		String disclosurePersonId = vo.getProperty2();
+		String endDate = vo.getProperty7();
+		String entityId = vo.getProperty8();
+		String homeUnit = vo.getProperty3();
+		List<String> travelStatusCodes = vo.getProperty4();
+		List<String> documentStatusCodes = vo.getProperty5();
+		List<String> reviewStatusCodes = vo.getProperty21();
+		String countryName = vo.getProperty9();
+		String state = vo.getProperty11();
+		Integer currentPage = vo.getCurrentPage();
+		Integer pageNumber = vo.getPageNumber();
+		String isAdvancedSearch = vo.getAdvancedSearch();
+		Boolean isDownload = vo.getIsDownload();
+		Map<String, String> sort = vo.getSort();
+		String certificationDate = vo.getProperty23();
+
+		statement = connection.prepareCall("{call GET_COI_TRAVEL_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+		statement.setString(1, disclosurePersonId);
+		statement.setString(2, endDate);
+		statement.setString(3, entityId);
+		statement.setString(4, certificationDate);
+		statement.setString(5, homeUnit);
+		statement.setString(6, travelStatusCodes != null && !travelStatusCodes.isEmpty() ? String.join(",", travelStatusCodes) : null);
+		statement.setString(7, documentStatusCodes != null && !documentStatusCodes.isEmpty() ? String.join(",", documentStatusCodes) : null);
+		statement.setString(8, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
+		statement.setString(9, countryName);
+		statement.setString(10, state);
+		statement.setString(11, setCOISortOrder(sort));
+		statement.setInt(12, (currentPage == null ? 0 : currentPage - 1));
+		statement.setInt(13, (pageNumber == null ? 0 : pageNumber));
+		statement.setBoolean(14, isDownload);
+		statement.setString(15, isAdvancedSearch);
+		statement.setBoolean(16, isCount);
+		statement.execute();
+		resultSet = statement.getResultSet();
+		return resultSet;
+	}
+
 	private CoiTravelDashboardDto setTravelDisclosureDashboardValues(ResultSet resultSet, String dashboardType) {
 		try {
 			CoiTravelDashboardDto travelDashboardDto = new CoiTravelDashboardDto();
@@ -1433,73 +1426,39 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		String isAdvancedSearch = vo.getAdvancedSearch();
 		String projectTypeCode = vo.getProperty14();
 		String hasSFIFlag = vo.getProperty15() != null ? (vo.getProperty15().equals(Boolean.TRUE) ? "YES" : "NO" ) : null;
-		Map<String, String> sort = vo.getSort();
 		List<String> dispositionStatusCodes = vo.getProperty20();
 		List<String> reviewStatusCodes = vo.getProperty21();
 		String personId = AuthenticatedUser.getLoginPersonId();
 		String certificationDate = vo.getProperty23();
-		Integer currentPage = vo.getCurrentPage();
-		Integer pageNumber = vo.getPageNumber();
-		Boolean isDownload = vo.getIsDownload();
 		try {
 			if (oracledb.equalsIgnoreCase("N")) {
-				if (tabName.equals("TRAVEL_DISCLOSURES")) {
-					statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-					statement.setNull(1, Types.INTEGER);
-					statement.setString(2, personId);
-					statement.setNull(3, Types.VARCHAR);
-					statement.setInt(4, Types.VARCHAR);
-					statement.setNull(5, Types.VARCHAR);
-					statement.setNull(6, Types.VARCHAR);
-					statement.setNull(7, Types.VARCHAR);
-					statement.setNull(8, Types.VARCHAR);
-					statement.setNull(9, Types.VARCHAR);
-					statement.setNull(10, Types.VARCHAR);
-					statement.setNull(11, Types.VARCHAR);
-					statement.setNull(12, Types.VARCHAR);
-					statement.setString(13, personId);
-					statement.setString(14, setCOISortOrder(sort));
-					statement.setInt(15, (currentPage == null ? 0 : currentPage - 1));
-					statement.setInt(16, (pageNumber == null ? 0 : pageNumber));
-					statement.setString(17, tabName);
-					statement.setBoolean(18, isDownload);
-					statement.setString(19, isAdvancedSearch);
-					statement.setNull(20, Types.VARCHAR);
-					statement.setNull(21, Types.VARCHAR);
-					statement.setNull(22, Types.VARCHAR);
-					statement.setNull(23, Types.VARCHAR);
-					statement.setNull(24, Types.VARCHAR);
-					statement.execute();
-					resultSet = statement.getResultSet();
-				} else {
-					statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
-					statement.setString(1, disclosureId);
-					statement.setString(2, disclosurePersonId);
-					statement.setString(3, homeUnit);
-					statement.setString(4, conflictStatusCode != null && !conflictStatusCode.isEmpty() ? String.join(",", conflictStatusCode) : null);
-					statement.setString(5, disclosureCategoryTypeCodes != null && !disclosureCategoryTypeCodes.isEmpty() ? String.join(",", disclosureCategoryTypeCodes) : null);
-					statement.setString(6, startDate);
-					statement.setString(7, endDate);
-					statement.setString(8, entityName);
-					statement.setString(9, entityCountry);
-					statement.setString(10, proposalId);
-					statement.setString(11, title);
-					statement.setString(12, awardId);
-					statement.setString(13, personId);
-					statement.setString(14, null);
-					statement.setInt(15, 0);
-					statement.setInt(16, 0);
-					statement.setString(17, tabName);
-					statement.setBoolean(18, true);
-					statement.setString(19, isAdvancedSearch);
-					statement.setString(20, projectTypeCode);
-					statement.setString(21, hasSFIFlag);
-					statement.setString(22, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
-					statement.setString(23, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
-					statement.setString(24, certificationDate);
-					statement.execute();
-					resultSet = statement.getResultSet();
-				}
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+				statement.setString(1, disclosureId);
+				statement.setString(2, disclosurePersonId);
+				statement.setString(3, homeUnit);
+				statement.setString(4, conflictStatusCode != null && !conflictStatusCode.isEmpty() ? String.join(",", conflictStatusCode) : null);
+				statement.setString(5, disclosureCategoryTypeCodes != null && !disclosureCategoryTypeCodes.isEmpty() ? String.join(",", disclosureCategoryTypeCodes) : null);
+				statement.setString(6, startDate);
+				statement.setString(7, endDate);
+				statement.setString(8, entityName);
+				statement.setString(9, entityCountry);
+				statement.setString(10, proposalId);
+				statement.setString(11, title);
+				statement.setString(12, awardId);
+				statement.setString(13, personId);
+				statement.setString(14, null);
+				statement.setInt(15, 0);
+				statement.setInt(16, 0);
+				statement.setString(17, tabName);
+				statement.setBoolean(18, true);
+				statement.setString(19, isAdvancedSearch);
+				statement.setString(20, projectTypeCode);
+				statement.setString(21, hasSFIFlag);
+				statement.setString(22, dispositionStatusCodes != null && !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
+				statement.setString(23, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
+				statement.setString(24, certificationDate);
+				statement.execute();
+				resultSet = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
 				String procedureName = "GET_COI_DISCLOSURE_ADMIN_DASHBOARD_COUNT";
 				String functionCall = "{call " + procedureName + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
