@@ -4,12 +4,14 @@ import {DataStoreService} from '../../disclosure/services/data-store.service';
 import {CoiService} from '../../disclosure/services/coi.service';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../../common/services/common.service';
+import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
 
 
 @Component({
     selector: 'app-certification',
     templateUrl: './certification.component.html',
-    styleUrls: ['./certification.component.scss']
+    styleUrls: ['./certification.component.scss'],
+    animations: [fadeInOutHeight]
 })
 export class CertificationComponent implements OnInit, OnDestroy {
 

@@ -175,9 +175,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.responseObject.documentStatus = responseObject.documentStatus;
         this.responseObject.updateTimestamp = responseObject.updateTimestamp;
         this.responseObject.reviewStatusCode = responseObject.reviewStatusCode;
-        this.responseObject.disclosureStatus = responseObject.disclosureStatus;
         this.responseObject.documentStatusCode = responseObject.documentStatusCode;
-        this.responseObject.disclosureStatusCode = responseObject.disclosureStatusCode;
         this._dataStore.manualDataUpdate(this.responseObject);
     }
 
@@ -226,7 +224,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     showReturnOrApproveButton(): boolean {
-        return this.checkAdministratorRight() && this.checkReviewStatusCode(['3', '2'], 'SOME');
+        return this.checkAdministratorRight() && this.checkReviewStatusCode(['3']);
     }
 
     showHomeButton(): boolean {

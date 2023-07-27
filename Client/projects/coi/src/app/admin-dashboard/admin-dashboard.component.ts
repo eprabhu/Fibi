@@ -20,7 +20,7 @@ import {
     POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { fadeInOutHeight, listAnimation, topSlideInOut } from 'projects/fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight, listAnimation, topSlideInOut } from '../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -117,7 +117,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
     ];
     readMoreOrLess = [];
-    travelState = '';
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -565,7 +564,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.coiAdminDashboardService.isAdvanceSearch = false;
         }
         this.lookupValues = [];
-        this.travelState = '';
         this.setSearchOptions();
     }
 
@@ -596,11 +594,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     selectedEvent(event) {
-        this.localCOIRequestObject.property8 = event ? event.entityName : null;
+        this.localCOIRequestObject.property8 = event ? event.entityId : null;
         this.localSearchDefaultValues.entityName = event ? event.entityName : null;
     }
 
     selectedCountryEvent(event) {
+        this.localCOIRequestObject.property9 = event ? event.countryName : null;
+        this.localSearchDefaultValues.travelCountryName = event ? event.countryName : null;
     }
 
     isActive(colName) {

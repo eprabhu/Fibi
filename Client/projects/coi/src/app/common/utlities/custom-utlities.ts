@@ -32,6 +32,9 @@ export function getSponsorSearchDefaultValue(sponsor: any): string {
  * @returns The formatted amount as a string.
  */
 export function getFormattedAmount(amount: number): string {
-    return amount.toFixed(amount % 1 === 0 ? 2 : amount.toString().split('.')[1]?.length || 0);
-  }
+    if (amount) {
+        return amount.toFixed(amount % 1 === 0 ? 2 : amount.toString().split('.')[1]?.length || 0);
+    }
+    return '0';
+}
 
