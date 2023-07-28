@@ -1203,8 +1203,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					}
 					dashBoardProfile.setTravelDashboardViews(travelDashboardViews);
 					ResultSet countResultSet = getTravelAdminDashboardResultSet(vo, connection, true);
-					while (resultSet.next()) {
-						dashBoardProfile.setTravelDisclosureCount(Integer.parseInt(resultSet.getString(1)));
+					while (countResultSet.next()) {
+						dashBoardProfile.setTravelDisclosureCount(Integer.parseInt(countResultSet.getString(1)));
 					}
 				} else {
 					getDisclosureAdminDashboardData(vo, connection, disclosureViews, tabName);
