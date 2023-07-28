@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
-import { ApplicableQuestionnaire, COI, getApplicableQuestionnaireData } from './coi-interface';
+import { ApplicableQuestionnaire, COI, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
 import { CoiService } from './services/coi.service';
 import { Location } from '@angular/common';
@@ -83,6 +83,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     relationshipError: any;
     questionnaireError: any;
     defaultAdminDetails = new DefaultAdminDetails();
+    count: number;
+    dependencies = ['coiDisclosure', 'numberOfSFI'];
+    reviewStatus: string;
+    filterType = 'ACTIVE';
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -299,7 +303,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             res.map((error) => {
                 this.coiService.submitResponseErrors.push( error.validationMessage) ;
             });
-            this.errorCheck();
+           this.getSfiDetails();
         }, err => {
             this.isSaving = false;
         }));
@@ -508,6 +512,27 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             case '2': case '3': return 'Project';
             default: return ;
         }
+    }
+
+    getSfiDetails() {
+        this.$subscriptions.push(this.sfiService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
+            if (data) {
+                this.count = data.count;
+                this.errorCheck();
+            }
+        }));
+    }
+
+    getRequestObject() {
+      const REQ_OBJ = new RO();
+      REQ_OBJ.currentPage = 0;
+      REQ_OBJ.disclosureId = this.coiData.coiDisclosure.disclosureId;
+      REQ_OBJ.filterType = this.filterType;
+      REQ_OBJ.pageNumber = 0;
+      REQ_OBJ.personId = this.coiData.coiDisclosure.person.personId;
+      REQ_OBJ.reviewStatusCode = this.coiData.coiDisclosure.reviewStatusCode;
+      REQ_OBJ.searchWord = '';
+      return REQ_OBJ;
     }
 
 }

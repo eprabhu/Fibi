@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
-import { GetSFIRequestObject } from '../../coi-interface';
+import { RO } from '../../coi-interface';
 
 class ProjectDetails {
 	projectNumber = '';
@@ -43,7 +43,7 @@ getProjectRelationships(id, disclosureStatusCode, personId) {
     'personId': personId});
 }
 
-getSfiDetails(params: GetSFIRequestObject) {
+getSfiDetails(params: RO) {
   return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
 }
 
