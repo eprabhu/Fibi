@@ -37,7 +37,7 @@ export class DisclosureHistoryCardComponent implements OnInit {
 
     getProjectTitle(): string {
         if (this.disclosure.fcoiTypeCode === '2' || this.disclosure.fcoiTypeCode === '3') {
-            return `#${this.disclosure.projectNumber} - ${this.disclosure.getProjectTitle}`;
+            return `#${this.disclosure.projectNumber} - ${this.disclosure.projectTitle}`;
         }
     }
 
