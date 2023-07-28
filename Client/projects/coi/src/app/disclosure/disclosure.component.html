@@ -616,12 +616,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
-                    <ng-container *ngIf="coiData?.coiDisclosure?.numberOfSFI > 0">
+                    <ng-container *ngIf="count > 0">
                         <div>
                            <p class="fs-14">Are you sure you want to submit the <strong>{{getDisclosureTypeMessage()}} </strong> disclosure?</p>
                         </div>
                     </ng-container>
-                         <div *ngIf="coiData?.coiDisclosure?.numberOfSFI == 0">
+                         <div *ngIf="count == 0">
                            <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTypeMessage()}} </strong> disclosure.</p>
                         </div>
                     </div>

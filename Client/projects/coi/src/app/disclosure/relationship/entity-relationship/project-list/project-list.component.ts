@@ -6,7 +6,7 @@ import { EntityRelationshipService } from '../entity-relationship.service';
 import {slideHorizontal} from "../../../../../../../fibi/src/app/common/utilities/animations";
 import {scrollIntoView} from "../../../../../../../fibi/src/app/common/utilities/custom-utilities";
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
-import { GetSFIRequestObject } from '../../../coi-interface';
+import { RO } from '../../../coi-interface';
 
 
 @Component({
@@ -159,7 +159,7 @@ export class ProjectListComponent implements OnInit {
 	}
 
 	getRequestObject() {
-		const REQ_OBJ = new GetSFIRequestObject();
+		const REQ_OBJ = new RO();
         REQ_OBJ.currentPage = 0;
         REQ_OBJ.disclosureId = this.disclosureId;
         REQ_OBJ.filterType = '';

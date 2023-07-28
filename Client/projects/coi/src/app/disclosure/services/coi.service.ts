@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
+import { RO } from '../coi-interface';
 
 @Injectable()
 export class CoiService {
@@ -86,5 +87,8 @@ export class CoiService {
   givecoiID(disclosureId: number) {
     return this._http.get(`${this._commonService.baseUrl}/evaluateValidation/${disclosureId}`);
   }
-  
+
+  getSfiDetails(params: RO) {
+    return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
+}
 }

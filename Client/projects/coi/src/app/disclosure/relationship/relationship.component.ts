@@ -8,7 +8,7 @@ import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
 import { SfiService } from '../sfi/sfi.service';
 import { Subscription } from 'rxjs';
-import { GetSFIRequestObject } from '../coi-interface';
+import { RO } from '../coi-interface';
 
 @Component({
   selector: 'app-relationship',
@@ -148,7 +148,7 @@ export class RelationshipComponent implements OnInit {
 }
 
 getRequestObject() {
-  const REQ_OBJ = new GetSFIRequestObject();
+  const REQ_OBJ = new RO();
   REQ_OBJ.currentPage = 0;
   REQ_OBJ.disclosureId = this.disclosureId;
   REQ_OBJ.filterType = this.filterType;
