@@ -67,12 +67,20 @@ export class ReviewerDashboardComponent implements OnInit {
         this.setAdvanceSearch();
         this.setDashboardTab();
         this.checkForSort();
+        this.checkForPagination();
         this.checkForAdvanceSearch();
     }
 
     actionsOnPageChange(event) {
         this.localCOIRequestObject.currentPage = event;
+        this.reviewerDashboardService.reviewerRequestObject.currentPage = event;
         this.$coiList.next();
+    }
+
+    checkForPagination() {
+        if (this._navigationService.previousURL.includes('coi/disclosure')) {
+            this.localCOIRequestObject.currentPage = this.reviewerDashboardService.reviewerRequestObject.currentPage;
+        }
     }
 
     getDashboardDetails() {
@@ -139,9 +147,9 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     performAdvanceSearch() {
+        this.localCOIRequestObject.currentPage = 1;
         this.setAdvanceSearchToServiceObject();
         this.localCOIRequestObject.advancedSearch = 'A';
-        this.localCOIRequestObject.currentPage = 1;
         this.isShowDisclosureList = true;
         this.reviewerDashboardService.isAdvanceSearch = true;
         this.isLoading = true;
@@ -456,6 +464,7 @@ export class ReviewerDashboardComponent implements OnInit {
         this.reviewerDashboardService.reviewerRequestObject.property7 =
             parseDateWithoutTimestamp(this.advanceSearchDates.expirationDate) || [];
         this.reviewerDashboardService.reviewerRequestObject.property8 = this.localCOIRequestObject.property8 || null;
+        this.reviewerDashboardService.reviewerRequestObject.currentPage = this.localCOIRequestObject.currentPage;
         this.reviewerDashboardService.searchDefaultValues.personName = this.localSearchDefaultValues.personName || null;
         this.reviewerDashboardService.searchDefaultValues.entityName = this.localSearchDefaultValues.entityName || null;
         this.reviewerDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;

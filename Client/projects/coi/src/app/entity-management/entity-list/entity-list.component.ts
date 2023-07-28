@@ -81,6 +81,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.checkUserHasRight();
     this.loadEntities();
   }
+
   loadEntities() {
     this.$entityList.subscribe((data) => {
       this.viewListOfEntity();
@@ -235,7 +236,7 @@ setEventTypeFlag() {
 
     checkForSort() {
         if (!isEmptyObject(this.entityManagementService.coiRequestObject.sort) &&
-            this._navigationService.previousURL) {
+            this._navigationService.previousURL.includes('entity-management/entity-details')) {
             this.localCOIRequestObject.sort = deepCloneObject(this.entityManagementService.coiRequestObject.sort);
             this.sortCountObj = deepCloneObject(this.entityManagementService.sortCountObject);
         } else {

@@ -132,6 +132,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.getDashboardDetails();
         this.getPermissions();
         this.checkForSort();
+        this.checkForPagination();
         this.checkForAdvanceSearch();
         this.checkTravelDisclosureRights();
     }
@@ -168,6 +169,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.sortCountObj = deepCloneObject(this.coiAdminDashboardService.sortCountObject);
         } else {
             this.resetSortObjects();
+        }
+    }
+
+    checkForPagination() {
+        if (this._navigationService.previousURL.includes('coi/disclosure')) {
+            this.localCOIRequestObject.currentPage = this.coiAdminDashboardService.coiRequestObject.currentPage;
         }
     }
 
@@ -283,6 +290,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     actionsOnPageChange(event) {
         this.localCOIRequestObject.currentPage = event;
+        this.coiAdminDashboardService.coiRequestObject.currentPage = event;
         this.$coiList.next();
     }
 
@@ -410,10 +418,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.personId = coi.personId;
         }
     }
+
     performAdvanceSearch() {
+        this.localCOIRequestObject.currentPage = 1;
         this.setAdvanceSearchToServiceObject();
         this.localCOIRequestObject.advancedSearch = 'A';
-        this.localCOIRequestObject.currentPage = 1;
         this.isShowDisclosureList = true;
         this.coiAdminDashboardService.isAdvanceSearch = true;
         this.$coiList.next();
@@ -726,6 +735,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.localCOIRequestObject.property6) || null;
         this.coiAdminDashboardService.coiRequestObject.property7 = parseDateWithoutTimestamp(
             this.advanceSearchDates.expirationDate) || null;
+        this.coiAdminDashboardService.coiRequestObject.currentPage = this.localCOIRequestObject.currentPage;
         this.coiAdminDashboardService.searchDefaultValues.personName = this.localSearchDefaultValues.personName || null;
         this.coiAdminDashboardService.searchDefaultValues.entityName = this.localSearchDefaultValues.entityName || null;
         this.coiAdminDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;

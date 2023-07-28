@@ -164,7 +164,7 @@
                         <button class="btn btn-outline-secondary  fs-14 py-2 mx-3" id="btn-clear"
                             (click)="clearAdvancedSearch()" title="Click here to clear all the fields"
                             area-describedby="Click here to clear all the fields">Clear</button>
-                        <button class="btn btn-primary fs-14" id="btn-search" (click)="advancedSearch()"
+                        <button class="btn btn-primary fs-14" id="btn-search" (click)="entityManagementService.coiRequestObject.currentPage = 1;advancedSearch()"
                             title="Click here to Initiate search"
                             area-describedby="Click here to get the search results with/without fields">Search</button>
                     </div>
@@ -260,7 +260,8 @@
         </ng-container>
         <div *ngIf="entityList.length>0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
             <nav aria-label="pagination section" class="pagination justify-content-end">
-                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount">
+                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount" 
+                [defaultCurrentPage]="entityManagementService.coiRequestObject.currentPage">
                 </app-pagination>
             </nav>
 
