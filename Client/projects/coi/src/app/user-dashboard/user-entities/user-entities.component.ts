@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { GetSFIRequestObject } from "../../disclosure/coi-interface";
+import { RO } from "../../disclosure/coi-interface";
 import { CoiService } from "../../disclosure/services/coi.service";
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { UserEntitiesService } from "./user-entities.service";
@@ -20,7 +20,7 @@ import { listAnimation, fadeInOutHeight, leftSlideInOut } from '../../../../../f
 })
 export class UserEntitiesComponent implements OnInit, OnDestroy {
   @ViewChild('viewMyEntitiesOverlay', { static: true }) viewMyEntitiesOverlay: ElementRef;
-  sfiDashboardRequestObject = new GetSFIRequestObject();
+  sfiDashboardRequestObject = new RO();
   $subscriptions = [];
   entityArray = [];
   filteredEntityArray = [];

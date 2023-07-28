@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { debounce, switchMap } from 'rxjs/operators';
-import { GetSFIRequestObject } from '../coi-interface';
+import { RO } from '../coi-interface';
 import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
@@ -96,7 +96,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     getRequestObject() {
-        let requestObj: GetSFIRequestObject = new GetSFIRequestObject();
+        let requestObj: RO = new RO();
         requestObj.currentPage = this.currentPage;
         requestObj.disclosureId = this.disclosureId;
         requestObj.filterType = this.filterType;

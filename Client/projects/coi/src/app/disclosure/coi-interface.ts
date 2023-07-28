@@ -262,12 +262,12 @@ export class CommentRequest {
     coiReviewCommentAttachment: any = [];
 }
 
-export class GetSFIRequestObject {
+export class RO {
     'disclosureId' = null;
-    'reviewStatusCode' = ''; 
-    'personId' : any; 
+    'reviewStatusCode' = '';
+    'personId': any;
     'filterType': string =  'ALL';
-    'currentPage': any =1; 
+    'currentPage': any = 1;
     'pageNumber': any = 20;
     'searchWord': any;
 }

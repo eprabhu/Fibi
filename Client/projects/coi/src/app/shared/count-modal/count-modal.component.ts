@@ -4,7 +4,7 @@ import { CountModalService } from './count-modal.service';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
 import { getSponsorSearchDefaultValue } from '../../common/utlities/custom-utlities';
-import { GetSFIRequestObject } from '../../disclosure/coi-interface';
+import { RO } from '../../disclosure/coi-interface';
 
 @Component({
     selector: 'app-count-modal',
@@ -57,7 +57,7 @@ export class CountModalComponent implements OnInit {
     }
 
     getRequestObject() {
-		const REQ_OBJ = new GetSFIRequestObject();
+		const REQ_OBJ = new RO();
         REQ_OBJ.currentPage = 0;
         REQ_OBJ.disclosureId = this.disclosureId;
         REQ_OBJ.filterType = '';
