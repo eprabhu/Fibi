@@ -7,5 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public interface EntityActionLogRepository extends JpaRepository<EntityActionLog, Integer> {
+public interface EntityActionLogRepository extends JpaRepository<EntityActionLog, Integer>, ActionLogRepositoryCustom {
 }
