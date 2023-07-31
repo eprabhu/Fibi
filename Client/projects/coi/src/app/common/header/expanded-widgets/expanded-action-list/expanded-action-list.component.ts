@@ -9,7 +9,7 @@ import { setFocusToElement } from '../../../../../../../fibi/src/app/common/util
 import { ExpandedActionListService } from './expanded-action-list.service';
 import { getTimeInterval, parseDateWithoutTimestamp } from '../../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { fadeInOutHeight } from '../../../../../../../fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight } from '../../../../common/utilities/animations';
 
 @Component({
     selector: 'app-expanded-action-list',

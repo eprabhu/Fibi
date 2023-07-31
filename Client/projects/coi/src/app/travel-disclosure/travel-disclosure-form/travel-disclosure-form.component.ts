@@ -11,7 +11,7 @@ import { CoiTravelDisclosure, EndpointOptions, TravelCreateModalDetails, TravelD
 import { CommonService } from '../../common/services/common.service';
 import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
 @Component({
     selector: 'app-travel-disclosure-form',
@@ -180,6 +180,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.entityName = event ? event.entityName : null;
         this.travelDisclosureRO.entityId = event ? event.entityId : null;
         this.travelDisclosureRO.entityNumber = event ? event.entityNumber : null;
+        this.setUnSavedChangesTrue();
     }
 
     selectTravelCountry(event: any): void {
@@ -206,7 +207,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    setUnSavedChanges(): void {
+    setUnSavedChangesTrue(): void {
         this._service.setUnSavedChanges(true, 'Travel Details');
     }
 

@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { TravelDataStoreService } from '../../../services/travel-data-store.service';
 import { EntityData, TravelDisclosure, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { getFormattedAmount } from '../../../../common/utlities/custom-utlities';
+import { getFormattedAmount } from '../../../../common/utilities/custom-utilities';
 import { Router } from '@angular/router';
 
 @Component({

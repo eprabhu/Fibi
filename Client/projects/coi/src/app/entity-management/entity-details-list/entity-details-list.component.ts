@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService, RelationshipDashboardRequest } from '../entity-management.service';
-import { slowSlideInOut, fadeInOutHeight, listAnimation } from '../../../../../fibi/src/app/common/utilities/animations';
+import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight, listAnimation } from '../../common/utilities/animations';
 import { Subject, Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';

@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { faqService } from './faq.service';
 import { deepCloneObject, fileDownloader } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
 declare const $: any;
 
