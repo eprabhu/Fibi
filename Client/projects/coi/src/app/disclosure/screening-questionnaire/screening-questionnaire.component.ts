@@ -10,7 +10,7 @@ import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/
 import {deepCloneObject} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
 import {SfiService} from "../sfi/sfi.service";
-import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 @Component({
     selector: 'app-screening-questionnaire',
     template: `

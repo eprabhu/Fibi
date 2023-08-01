@@ -1,9 +1,10 @@
-<div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;">
+<div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;" 
+  *ngIf="isShowFilterAndSearch">
     <div class="border-end fs-14 p-3" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" title="Sort by All Status"
-              role="button">All</span> 
+              role="button">All</span>
         <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" title="Sort by Active Status"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
         <span (click)="setFilter('DRAFT')" [class.filter-active]="sfiDashboardRequestObject.filterType=='DRAFT'" title="Sort by DRAFT Status"
@@ -29,17 +30,16 @@
 
   <!-- no data card -->
   <app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
+</ng-container>
 
  <!-- Pagination -->
- <div *ngIf="filteredEntityArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-    <nav aria-label="pagination section" class="pagination justify-content-end">
-        <app-pagination (pageChangeEvent)="actionsOnPageChangeEvent($event)"
-            [totalCount]="result.count">
-        </app-pagination>
-    </nav>
+ <div [hidden]="isLoading" *ngIf="filteredEntityArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+  <nav aria-label="pagination section" class="pagination justify-content-end">
+      <app-pagination (pageChangeEvent)="actionsOnPageChangeEvent($event)"
+          [totalCount]="result.count">
+      </app-pagination>
+  </nav>
 </div>
-
-</ng-container>
 
 <div #viewMyEntitiesOverlay [class.overlay]="showSlider">
     <div class="slider-base" *ngIf="showSlider">

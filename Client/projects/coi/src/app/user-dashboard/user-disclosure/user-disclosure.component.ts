@@ -8,7 +8,8 @@ import { UserDisclosure } from './user-disclosure-interface';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { listAnimation, leftSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
+import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
+
 @Component({
     selector: 'app-user-disclosure',
     templateUrl: './user-disclosure.component.html',
@@ -57,6 +58,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     isSearchTextHover = false;
     isLoading = false;
     readMoreOrLess = [];
+    isShowFilterAndSearch = false;
 
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
@@ -74,14 +76,17 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     loadDashboard() {
         this.isLoading = true;
         this.$subscriptions.push(this.$fetchDisclosures.pipe(
-            switchMap(() => this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject))).subscribe((res: any) => {
-            this.result = res;
-            if (this.result) {
-                this.filteredDisclosureArray =  this.getDashboardList();
+            switchMap(() => {
+                this.isLoading = true;
+                return this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject)
+            })).subscribe((res: any) => {
+                this.result = res;
+                if (this.result) {
+                    this.filteredDisclosureArray =  this.getDashboardList();
+                    this.loadingComplete();
+                }
+            }), (err) => {
                 this.loadingComplete();
-            }
-        }), (err) => {
-            this.loadingComplete();
         });
     }
 
@@ -99,7 +104,6 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         if(this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
             this.getDisclosureHistory();
         } else { 
-            this.isLoading = true;
             this.filteredDisclosureArray = [];
             this.$fetchDisclosures.next();
         }
@@ -122,7 +126,6 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     resetAndFetchDisclosure() {
         this.searchText = '';
-        this.isLoading = true;
         this.filteredDisclosureArray = [];
         this.dashboardRequestObject.property2 = '';
         this.getDashboardBasedOnTab();
@@ -130,14 +133,13 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     actionsOnPageChange(event) {
         this.dashboardRequestObject.currentPage = event;
-        this.isLoading = true;
-        this.filteredDisclosureArray = [];
         this.$fetchDisclosures.next();
     }
 
     loadDashboardCount() {
         this.userDisclosureService.getCOIDashboardCount(this.dashboardRequestObject).subscribe((res: any) => {
             this.dashboardCount = res;
+            this.isShowFilterAndSearch = !!res?.inProgressDisclosureCount;
         });
     }
 
@@ -153,12 +155,13 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    setTab(tabName) {
+    setTab(tabName: string, disclosureCount: number = 0) {
         this.currentSelected.tab = tabName;
         this.dashboardRequestObject.tabName = tabName;
         this.dashboardRequestObject.currentPage = '1';
         this.dashboardRequestObject.filterType = 'ALL';
         this.currentSelected.filter = 'ALL';
+        this.isShowFilterAndSearch = !!disclosureCount;
         this.resetAndFetchDisclosure();
     }
 

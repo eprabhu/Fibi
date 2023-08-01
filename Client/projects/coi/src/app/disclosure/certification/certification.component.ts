@@ -4,7 +4,7 @@ import {DataStoreService} from '../../disclosure/services/data-store.service';
 import {CoiService} from '../../disclosure/services/coi.service';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../../common/services/common.service';
-import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
 
 @Component({
