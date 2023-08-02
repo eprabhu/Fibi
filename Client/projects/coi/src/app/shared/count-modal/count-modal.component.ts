@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { CountModalService } from './count-modal.service';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
-import { getSponsorSearchDefaultValue } from '../../common/utlities/custom-utlities';
+import { getSponsorSearchDefaultValue } from '../../common/utilities/custom-utilities';
 import { RO } from '../../disclosure/coi-interface';
 
 @Component({

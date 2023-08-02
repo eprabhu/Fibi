@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
-import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
 declare const $: any;
 @Component({

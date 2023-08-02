@@ -7,8 +7,8 @@ import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { Router } from '@angular/router';
-import { getFormattedAmount } from '../../common/utlities/custom-utlities';
-import { fadeInOutHeight, listAnimation } from '../../../../../fibi/src/app/common/utilities/animations';
+import { getFormattedAmount } from '../../common/utilities/custom-utilities';
+import { fadeInOutHeight, listAnimation } from '../../common/utilities/animations';
 
 @Component({
     selector: 'app-travel-related-disclosures',

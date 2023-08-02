@@ -20,13 +20,17 @@ import {
     POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { fadeInOutHeight, listAnimation, topSlideInOut } from '../../../../fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
 
 @Component({
     selector: 'app-admin-dashboard',
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.scss'],
-    animations: [fadeInOutHeight, listAnimation, topSlideInOut]
+    animations: [fadeInOutHeight, listAnimation, topSlideInOut, 
+        slideInAnimation('0','12px', 400, 'slideUp'),
+        slideInAnimation('0','-12px', 400, 'slideDown'),
+        scaleOutAnimation('-2px','0', 200, 'scaleOut'),
+    ]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
 
@@ -93,7 +97,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     addAdmin: any = {};
     localCOIRequestObject: CoiDashboardRequest = new CoiDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
-    isShowNoDataCard = false;
+    isLoading = false;
     assignAdminPath: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' = 'DISCLOSURES';
     sortSectionsList = [];
     disclosureSortSections = [
@@ -251,14 +255,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     getDashboardDetails() {
-        this.isShowNoDataCard = false;
         this.$subscriptions.push(this.$coiList.pipe(
-            switchMap(() => this.coiAdminDashboardService.getCOIAdminDashboard(this.getRequestObject())))
+            switchMap(() => {
+                this.isLoading = true;
+                return this.coiAdminDashboardService.getCOIAdminDashboard(this.getRequestObject())
+            }))
             .subscribe((data: any) => {
                 this.result = data || [];
                 if (this.result) {
                     this.coiList = this.getAdminDashboardList();
-                    this.isShowNoDataCard = true;
+                    this.isLoading = false;
                     this.coiList.map(ele => {
                         ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
                         ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
@@ -295,7 +301,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     changeTab(tabName) {
-        this.isShowNoDataCard = false;
         this.coiList = [];
         this.isShowDisclosureList = false;
         this.coiAdminDashboardService.isAdvanceSearch = false;
@@ -382,6 +387,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     resetAndPerformAdvanceSearch() {
         this.resetAdvanceSearchFields();
+        this.coiList = [];
         this.$coiList.next(); 
     }
 
@@ -424,6 +430,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.setAdvanceSearchToServiceObject();
         this.localCOIRequestObject.advancedSearch = 'A';
         this.isShowDisclosureList = true;
+        this.coiList = [];
         this.coiAdminDashboardService.isAdvanceSearch = true;
         this.$coiList.next();
     }

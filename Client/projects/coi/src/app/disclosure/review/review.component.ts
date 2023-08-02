@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
 @Component({
     selector: 'app-review',

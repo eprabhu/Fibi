@@ -32,8 +32,8 @@
                 <label class="fw-500 fs-14 col-custom" for="travel-disclosure-entity-name">Entity Name :</label>
                 <div class="col">
                     <app-endpoint-search (onSelect)="selectedEntityEvent($event)" [clearField]="clearField"
-                        [httpOptions]="entitySearchOptions" (change)="setUnSavedChanges();"
-                        [isError]="(mandatoryList?.has('entity'))? true: false" class="w-100"
+                        [httpOptions]="entitySearchOptions" (change)="setUnSavedChangesTrue();"
+                        [isError]="(mandatoryList?.has('entity'))" class="w-100"
                         [uniqueId]="'travel-disclosure-entity-name'" autocomplete="off">
                     </app-endpoint-search>
                     <span *ngIf="mandatoryList?.has('entity')" class="fs-13 invalid-msg d-block position-absolute">
@@ -56,7 +56,7 @@
                             <input class="travelDisclosure-radio-checkbox ms-1 me-3 hand-cursor border-secondary"
                                 type="checkbox" value={{details.description}} id="traveller-checkbox{{i}}"
                                 [(ngModel)]=details.isChecked
-                                (ngModelChange)="getTravellerTypeCode(); setUnSavedChanges();">
+                                (ngModelChange)="getTravellerTypeCode(); setUnSavedChangesTrue();">
                             <label class="form-check-label fs-14 fw-normal hand-cursor" for="traveller-checkbox{{i}}">
                                 {{details.description}}
                             </label>
@@ -77,7 +77,7 @@
                 <div class="col">
                     <textarea id="travelDisclosure-title" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=200
                         class="form-control fs-14" autocomplete="off" [(ngModel)]="travelDisclosureRO.travelTitle"
-                        (ngModelChange)="setUnSavedChanges();"
+                        (ngModelChange)="setUnSavedChangesTrue();"
                         [ngClass]="(mandatoryList?.get('title')) ? 'invalid-border':''">
                     </textarea>
                     <span *ngIf="mandatoryList?.has('title')" class="fs-13 invalid-msg d-block position-absolute">
@@ -95,13 +95,13 @@
                 <div class="divCenter ms-1 col">
                     <input class=" me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
                         id="travelDisclosure-domestic" value="Domestic" [(ngModel)]="destination"
-                        (click)="setValuesForDestinationType(); setUnSavedChanges(); ">
+                        (click)="setValuesForDestinationType(); setUnSavedChangesTrue(); ">
                     <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-domestic">
                         Domestic
                     </label>
                     <input class=" ms-4 me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
                         id="travelDisclosure-international" value="International" [(ngModel)]="destination"
-                        (click)="setValuesForDestinationType(); setUnSavedChanges();">
+                        (click)="setValuesForDestinationType(); setUnSavedChangesTrue();">
                     <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-international">
                         International
                     </label>
@@ -116,7 +116,7 @@
                     <div class="col">
                         <app-endpoint-search (onSelect)="selectTravelCountry($event)" [clearField]="countryClearField"
                             [httpOptions]="countrySearchOptions" [uniqueId]="'travelDisclosure-countryList'"
-                            (change)="setUnSavedChanges();" autocomplete="off"
+                            (change)="setUnSavedChangesTrue();" autocomplete="off"
                             [isError]="(mandatoryList?.has('country'))? true: false">
                         </app-endpoint-search>
                         <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-msg d-block position-absolute">
@@ -134,7 +134,7 @@
                     <div class="col">
                         <input type="text" id="travelDisclosure-destinationState" autocomplete="off"
                             [(ngModel)]="travelDisclosureRO.travelState" class="form-control col"
-                            (ngModelChange)="setUnSavedChanges();"
+                            (ngModelChange)="setUnSavedChangesTrue();"
                             [ngClass]="(mandatoryList?.get('state')) ? 'invalid-border':''">
                         <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-msg d-block position-absolute">
                             {{mandatoryList?.get('state')}}
@@ -151,7 +151,7 @@
                     <div class="col">
                         <input type="text" id="travelDisclosure-cityList" autocomplete="off"
                             [(ngModel)]="travelDisclosureRO.destinationCity" class="form-control"
-                            (ngModelChange)="setUnSavedChanges();"
+                            (ngModelChange)="setUnSavedChangesTrue();"
                             [ngClass]="(mandatoryList?.get('city')) ? 'invalid-border':''">
                         <span *ngIf="mandatoryList?.has('city')" class="fs-13 invalid-msg d-block position-absolute">
                             {{mandatoryList?.get('city')}}
@@ -175,7 +175,7 @@
                             <input matInput [matDatepicker]="startDate" id="travelDisclosure-startDate"
                                 placeholder={{datePlaceHolder}} (click)="startDate.open()" autocomplete="off"
                                 class="d-inline-block form-control w-100" [(ngModel)]="travelDisclosureRO.travelStartDate"
-                                (ngModelChange)="validateDates(); setUnSavedChanges();"
+                                (ngModelChange)="validateDates(); setUnSavedChangesTrue();"
                                 (keypress)="commonService._keyPress($event, 'date')"
                                 [ngClass]="(dateValidationList?.get('startDate')) ? 'invalid-border':''" />
                             <i (click)="startDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
@@ -201,7 +201,7 @@
                                 placeholder="{{datePlaceHolder}}" (click)="endDate.open()" autocomplete="off"
                                 class="d-inline-block form-control w-100" [(ngModel)]="travelDisclosureRO.travelEndDate"
                                 (keypress)="commonService._keyPress($event, 'date')"
-                                (ngModelChange)="validateDates(); setUnSavedChanges();"
+                                (ngModelChange)="validateDates(); setUnSavedChangesTrue();"
                                 [ngClass]="(dateValidationList?.get('endDate')) ? 'invalid-border':''" />
                             <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor me-2"></i>
                             <mat-datepicker #endDate></mat-datepicker>
@@ -224,7 +224,7 @@
                 <div class="col-12">
                     <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
                         class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.purposeOfTheTrip"
-                        (ngModelChange)="setUnSavedChanges();"
+                        (ngModelChange)="setUnSavedChangesTrue();"
                         [ngClass]="(mandatoryList?.get('purpose')) ? 'invalid-border':''">
                         </textarea>
                     <span *ngIf="mandatoryList?.has('purpose')" class="fs-13 invalid-msg d-block position-absolute">
@@ -244,7 +244,7 @@
                 <div class="col-12">
                     <textarea id="travelDisclosure-relationship" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
                         class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.relationshipToYourResearch"
-                        (ngModelChange)="setUnSavedChanges();"
+                        (ngModelChange)="setUnSavedChangesTrue();"
                         [ngClass]="(mandatoryList?.get('relationship')) ? 'invalid-border':''">
                     </textarea>
                     <span *ngIf="mandatoryList?.has('relationship')" class="fs-13 invalid-msg d-block position-absolute">
@@ -265,7 +265,7 @@
                     <input appCurrencyFormat class="form-control" type="text"
                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0(?=[^.])/g, '0');"
                         [(ngModel)]="travelDisclosureRO.travelAmount" [initialValue]="travelDisclosureRO.travelAmount"
-                        id="travelDisclosure-estimation" autocomplete="off" (ngModelChange)="setUnSavedChanges();"
+                        id="travelDisclosure-estimation" autocomplete="off" (ngModelChange)="setUnSavedChangesTrue();"
                         [ngClass]="(mandatoryList?.get('amount')) ? 'invalid-border' : ''">
                     <span *ngIf="mandatoryList?.has('amount')" class="fs-13 invalid-msg d-block position-absolute">
                         {{mandatoryList?.get('amount')}}

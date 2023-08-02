@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {  Router} from '@angular/router';
-import { slideHorizontal, listAnimation } from '../../../../../fibi/src/app/common/utilities/animations';
+import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
 import { environment } from '../../../environments/environment';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
@@ -9,6 +9,7 @@ import { RelationshipService } from './relationship.service';
 import { SfiService } from '../sfi/sfi.service';
 import { Subscription } from 'rxjs';
 import { RO } from '../coi-interface';
+import { listAnimation } from '../../common/utilities/animations';
 
 @Component({
   selector: 'app-relationship',

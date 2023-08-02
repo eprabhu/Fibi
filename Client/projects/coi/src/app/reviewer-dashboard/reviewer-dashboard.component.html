@@ -1,4 +1,4 @@
-<div class="px-3" [@fadeInOutHeight] [@listAnimation]="coiList.length">
+<div class="px-3" [@fadeInOutHeight]>
     <!-- <section class="row justify-content-center">
     <div class="dash-card pointer">
       <div class="align-items-center d-flex h-100 justify-content-center">
@@ -162,100 +162,30 @@
         </div>
 
         <div class="sort-div border mt-2" *ngIf="isShowDisclosureList && coiList.length">
-            <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
-            <span tabindex="0" (keydown.enter)="sortResult('coiDisclosureNumber')" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']"    
-            (click)="sortResult('coiDisclosureNumber')" [class.filter-active]="isActive('coiDisclosureNumber')"
-                title="Click to sort by Disclosure Number" area-describedby="Click to sort by disclosure number"
-                class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 ml-15 border rounded-5 bg-white" role="button">
-                <div class="d-inline-flex align-items-center" >
-                    <label class="hand-cursor">Disclosure# 
+            <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
+            <button tabindex="0" *ngFor="let sortSection of sortSectionsList; let index = index"
+                title="Click to sort by {{sortSection?.fieldName}}"
+                area-describedby="Click to sort by {{sortSection?.fieldName}}"
+                (click)="sortResult(sortSection?.variableName)"
+                (keydown.enter)="sortResult(sortSection?.variableName)"
+                [ngClass]="index == 0 ? 'ml-15' : 'mx-1'"
+                [class.px-8]="!reviewerDashboardService.reviewerRequestObject.sort[sortSection?.variableName]"
+                [class.filter-active]="isActive(sortSection?.variableName)"
+                class="shadow-sm fw-medium pr-05 py-2 px-3 fs-13 border rounded-5 bg-white" role="button">
+                <div class="d-inline-flex align-items-center">
+                    <label class="hand-cursor">{{sortSection?.fieldName}} 
                         <ngContainer hidden="true">sorting in
-                            {{reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']=== 'asc'?
-                            'Ascending Order':
-                            'Descending Order'}}</ngContainer>
+                            {{reviewerDashboardService.reviewerRequestObject.sort[sortSection?.variableName]=== 'asc'?
+                            'Ascending Order': 'Descending Order'}}</ngContainer>
                     </label>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']=== 'asc'">arrow_downward</mat-icon>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['coiDisclosureNumber']=== 'desc' ">arrow_upward</mat-icon>
+                    <mat-icon class="arrow selected-arrow" [@slideDown]
+                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort[sortSection?.variableName]=== 'asc' ">arrow_downward</mat-icon>
+                    <mat-icon class="arrow selected-arrow" [@slideUp] [@scaleOut]
+                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort[sortSection?.variableName]=== 'desc' ">arrow_upward</mat-icon>
                 </div>
-            </span>
-            <span tabindex="0" (keydown.enter)="sortResult('disclosurePersonFullName')"
-                title="Click to sort by Person Name" area-describedby="Click to sort by person name"
-                (click)="sortResult('disclosurePersonFullName')" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['disclosurePersonFullName']"
-                [class.filter-active]="isActive('disclosurePersonFullName')"
-                class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
-                <div class="d-inline-flex align-items-center">
-                    <label class="hand-cursor">Person</label>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosurePersonFullName']=== 'asc' ">arrow_downward</mat-icon>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosurePersonFullName']=== 'desc' ">arrow_upward</mat-icon>
-                </div>
-            </span>
-            <span tabindex="0" (keydown.enter)="sortResult('disclosureCategoryType')"
-                (click)="sortResult('disclosureCategoryType')" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['disclosureCategoryType']"
-                [class.filter-active]="isActive('disclosureCategoryType')" title="Click to sort by Disclosure Type"
-                area-describedby="Click to sort by Disclosure Type"
-                class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
-                <div class="d-inline-flex align-items-center">
-                    <label class="hand-cursor">Disclosure Type</label>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosureCategoryType']=== 'asc' ">arrow_downward</mat-icon>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosureCategoryType']=== 'desc' ">arrow_upward</mat-icon>
-                </div>
-            </span>
-            <span tabindex="0" (keydown.enter)="sortResult('disclosureStatus')" (click)="sortResult('disclosureStatus')"
-                [class.filter-active]="isActive('disclosureStatus')" title="Click to sort by Disclosure Status"
-                area-describedby="Click to sort by disclosure status" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['disclosureStatus']"
-                class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
-                <div class="d-inline-flex align-items-center">
-                    <label class="hand-cursor">Disclosure Status</label>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosureStatus']=== 'asc' ">arrow_downward</mat-icon>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['disclosureStatus']=== 'desc' ">arrow_upward</mat-icon>
-                </div>
-            </span>
-            <span tabindex="0" (keydown.enter)="sortResult('certifiedAt')" (click)="sortResult('certifiedAt')"
-                [class.filter-active]="isActive('certifiedAt')" title="Click to sort by Certification Date"
-                area-describedby="Click to sort by certification date" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['certifiedAt']"
-                class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
-                <div class="d-inline-flex align-items-center">
-                    <label class="hand-cursor">Certification Date</label>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['certifiedAt']=== 'asc' ">arrow_downward</mat-icon>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['certifiedAt']=== 'desc' ">arrow_upward</mat-icon>
-                </div>
-            </span>
-            <span tabindex="0" (keydown.enter)="sortResult('expirationDate')" (click)="sortResult('expirationDate')"
-                [class.filter-active]="isActive('expirationDate')" title="Click to sort by Expiration Date"
-                area-describedby="Click to sort by expiration date" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['expirationDate']"
-                class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white mx-1" role="button">
-                <div class="d-inline-flex align-items-center">
-                    <label class="hand-cursor">Expiration Date</label>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['expirationDate']=== 'asc' ">arrow_downward</mat-icon>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['expirationDate']=== 'desc' ">arrow_upward</mat-icon>
-                </div>
-            </span>
-            <span tabindex="0" (keydown.enter)="sortResult('updateTimeStamp')" (click)="sortResult('updateTimeStamp')"
-                [class.filter-active]="isActive('updateTimeStamp')" title="Click to sort by Last Updated"
-                area-describedby="Click to sort by Last Updated By" [class.px-8] = "!reviewerDashboardService.reviewerRequestObject.sort['updateTimeStamp']"
-                class="shadow-sm fw-medium pl-15 pr-05 py-2 fs-13 border rounded-5 bg-white" role="button">
-                <div class="d-inline-flex align-items-center">
-                    <label class="hand-cursor">Last Updated</label>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['updateTimeStamp']=== 'asc'">arrow_downward</mat-icon>
-                    <mat-icon class="arrow selected-arrow"
-                        *ngIf="reviewerDashboardService.reviewerRequestObject.sort['updateTimeStamp']=== 'desc' ">arrow_upward</mat-icon>
-                </div>
-            </span>
+            </button>
         </div>
-        <ng-container *ngIf="isShowDisclosureList && !isLoading">
+        <div *ngIf="isShowDisclosureList && !isLoading" [@listAnimation]="coiList.length">
             <ng-container *ngFor="let coi of coiList;let index = index">
                 <section class="shadow-sm coi-card">
                     <div class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
@@ -439,16 +369,16 @@
                     </div>
                 </section>
             </ng-container>
-            <!-- Pagination -->
-            <div *ngIf="coiList.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-                <nav aria-label="pagination section" class="pagination justify-content-end">
-                    <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
-                        [totalCount]="result.disclosureCount" [defaultCurrentPage]="reviewerDashboardService.reviewerRequestObject.currentPage">
-                    </app-pagination>
-                </nav>
-            </div>
             <app-no-information *ngIf="!coiList.length"></app-no-information>
-        </ng-container>
+        </div>
+        <!-- Pagination -->
+        <div [hidden]="isLoading" *ngIf="coiList.length > 0 && isShowDisclosureList" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+            <nav aria-label="pagination section" class="pagination justify-content-end">
+                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
+                    [totalCount]="result.disclosureCount" [defaultCurrentPage]="reviewerDashboardService.reviewerRequestObject.currentPage">
+                </app-pagination>
+            </nav>
+        </div>
         <app-count-modal *ngIf="isShowCountModal" [moduleCode]="selectedModuleCode" [inputType]="inputType"
             [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType"
             (closeModal)="closeModalEvent($event)" [disclosureId]="currentDisclosureId" [personId]="personId"

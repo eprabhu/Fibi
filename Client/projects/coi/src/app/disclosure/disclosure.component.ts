@@ -21,7 +21,7 @@ import {
     POST_CREATE_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities';
+import { getSponsorSearchDefaultValue } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
 import { DefaultAdminDetails } from '../travel-disclosure/travel-disclosure-interface';
