@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {CommonService} from "../services/common.service";
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 
@@ -12,7 +12,7 @@ export class AppRouterComponent implements OnInit, OnDestroy {
     isShowLoader = false;
     $subscriptions = [];
 
-    constructor(public commonService: CommonService) {
+    constructor(public commonService: CommonService,private elementRef: ElementRef) {
     }
 
     ngOnInit(): void {
@@ -28,5 +28,11 @@ export class AppRouterComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    @HostListener('window:scroll', ['$event'])
+    scrollEvent(event) {
+        const pageYOffset = this.elementRef.nativeElement.querySelector('.canvas').scrollTop;
+        this.commonService.$ScrollAction.next({event,pageYOffset});
     }
 }
