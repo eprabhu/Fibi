@@ -37,4 +37,25 @@ export function getFormattedAmount(amount: number): string {
     }
     return '0';
 }
+/**
+ * '?' has to be added to path in function call; provided query param values are []
+ * @param path : <String>current path where to redirect to. eg: path = 'agreement/agreementhome?agreementId='
+ * @param queryParamKeys : Its accepts Array of all Keys queryParam eg: In awardId=8085, 'awardId' will be queryParamKey;
+ * for paths without query params, pass queryParamKeys as [],
+ * @param queryParamValues ; Its accepts Array of all Value, eg: In awardId=8085, '8085' is the queryParamValue;
+ * for paths without query params, pass queryParamValues as [],
+ * If index is 0, append key, value pair only, otherwise prefix '&' for each key value pair in the url
+ */
+export function openInNewTab(path: string, queryParamKeys: Array<any>, queryParamValues: Array<any>) {
+    if (path && queryParamKeys && queryParamValues && queryParamKeys.length === queryParamValues.length) {
+        let url = '';
+        queryParamKeys.forEach((key, index) => {
+            if (queryParamValues[index]) {
+                (index === 0) ? url = key + '=' + queryParamValues[index] : url = url + '&' + key + '=' + queryParamValues[index];
+            }
+        });
+        url = window.location.origin + window.location.pathname + '#/coi/' + path + url;
+        window.location.hash.split(/[/?]/).includes('dashboard') ? window.open(url, '_self') : window.open(url, url);
+    }
+}
 

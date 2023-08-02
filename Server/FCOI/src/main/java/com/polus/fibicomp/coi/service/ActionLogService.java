@@ -1,5 +1,8 @@
 package com.polus.fibicomp.coi.service;
 
+import org.springframework.http.ResponseEntity;
+
+import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 
 public interface ActionLogService {
@@ -11,4 +14,9 @@ public interface ActionLogService {
      * @param comment
      */
     void saveEntityActionLog(String actionLogTypeCode, CoiEntity coiEntity, String comment);
+
+	void saveDisclsoureActionLog(DisclosureActionLogDto actionLogDto);
+
+	ResponseEntity<Object> getDisclosureHistoryById(Integer disclosureId);
+
 }

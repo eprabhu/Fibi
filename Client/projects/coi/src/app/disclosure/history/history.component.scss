@@ -12,27 +12,6 @@
   height: 122px;
 }
 
-//.time-line::before {
-//  content: '';
-//  position: absolute;
-//  height: 139px ;
-//  border-left: 2px dashed #258CC7;
-//  left: 42px;
-//  margin-top: -5px;
-//}
-//
-//.time-line::after {
-//  content: '';
-//  width: 20px;
-//  height: 20px;
-//  position: absolute;
-//  left: 33px;
-//  margin-top: -68px;
-//  border-radius: 50%;
-//  border: 8px solid rgba(255, 255, 255, 0.74);
-//  background: #258CC7;
-//}
-
 .last-item::before {
   height: 72px !important;
 }
@@ -116,4 +95,106 @@ article {
   color: #424242;
   cursor: pointer;
 }
-// padding: 5px 11px 5px 9px !important;
+
+$color: #278cbb;
+
+.hovering-card {
+    border: .1px solid #bcd4df;
+}
+
+.custom-margin-left {
+    margin-left: 150px !important;
+}
+
+.col-custom {
+    width: 140px;
+}
+
+.grey-text {
+    color: #6A7980;
+}
+
+.start-date {
+    width: 150px;
+    left: 12.5px;
+    top: -19px;
+}
+
+.end-date {
+    width: 150px;
+    left: 12.5px;
+    top: 15px;
+}
+
+.remaining-timeline,
+.first-timeline {
+    position: relative;
+    border: 8px solid rgba(255, 255, 255, 0.74);
+    background: $color;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.remaining-timeline:before,
+.first-timeline:before {
+    content: "";
+    border-left: 2px dashed $color;
+    position: absolute;
+    left: 46.6%;
+    z-index: 1;
+}
+
+.remaining-timeline:before {
+    height: 32px;
+    top: -35px;
+}
+
+.first-timeline:before {
+    height: 26px;
+    top: -28px;
+}
+
+.remaining-timeline:after,
+.first-timeline:after {
+    content: "";
+    border-bottom: 2px dashed $color;
+    width: 154px;
+    height: 0%;
+    font-size: 2.8rem;
+    color: $color;
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 1;
+}
+
+.history-date {
+  background-color: #cbe8f6;
+}
+
+
+.history-username {
+  color: black;
+}
+
+.history-attachment {
+  color: black;
+  font-weight: 500;
+}
+
+ul {
+  list-style-type: none;
+}
+
+ul>li:nth-child(even) {
+  background: #f4f5f7;
+}
+
+.history-date {
+  background-color: #E2F1FF;
+}
+
+.border-left-line {
+  border-left:solid #007DEC; 
+}

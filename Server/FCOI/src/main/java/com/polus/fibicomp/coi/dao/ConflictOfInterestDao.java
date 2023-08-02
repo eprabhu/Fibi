@@ -3,18 +3,16 @@ package com.polus.fibicomp.coi.dao;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
-import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -44,6 +42,10 @@ import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
+import com.polus.fibicomp.coi.pojo.DisclosureActionType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
@@ -51,14 +53,11 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
-import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
-import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
-import com.polus.fibicomp.proposal.pojo.Proposal;
 
 @Transactional
 @Service
@@ -1003,5 +1002,9 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	PersonEntity getPersonEntityByNumberAndStatus(Integer personEntityNumber, String versionStatus);
+
+	public DisclosureActionType fetchDisclosureActionTypeById(String actionLogCreated);
+
+	public void saveOrUpdateDisclosureActionLog(DisclosureActionLog disclosureActionLog);
 
 }
