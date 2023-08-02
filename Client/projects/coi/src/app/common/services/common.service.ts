@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
 import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
@@ -57,6 +57,7 @@ export class CommonService {
     dashboardModules: any = {};
     previousURL = null;
     fibiApplicationUrl = '';
+    $ScrollAction = new Subject<{event: Event,pageYOffset: number}>();
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
@@ -330,5 +331,9 @@ export class CommonService {
       } else {
         return rightsArray.some((right) => this.rightsArray.includes(right));
       }
+    }
+
+    onScrollEvent() {
+        return this.$ScrollAction.asObservable();
     }
 }

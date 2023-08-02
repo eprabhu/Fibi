@@ -57,6 +57,7 @@ export class AddSfiComponent implements OnInit {
     isViewMode: any;
     sfiType: string;
     existingEntityDetails: any = {};
+    canShowEntityFields = false;
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -76,6 +77,9 @@ export class AddSfiComponent implements OnInit {
         this.setDefaultRiskLevel();
         if (this.coiEntityManageId) {
             this.getEntityDetails();
+        }
+        if (this.isEntityManagement) {
+            this.canShowEntityFields = true;
         }
         this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
@@ -191,6 +195,7 @@ export class AddSfiComponent implements OnInit {
 
     selectNewEntity(event): void {
         this.entityDetails.coiEntity.entityName = event.searchString;
+        this.canShowEntityFields = true;
     }
 
     selectedEvent(event): void {
@@ -198,6 +203,7 @@ export class AddSfiComponent implements OnInit {
             this.clearField = new String('false');
             this.checkIfSFIAlreadyAdded(event.entityId, event);
         } else {
+            this.canShowEntityFields = false;
             this.clearSFIFields();
         }
     }
@@ -378,4 +384,7 @@ export class AddSfiComponent implements OnInit {
       this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId, mode: 'view' } });
     }
 
+    viewEntityDetails(event) {
+        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: event } });
+    }
 }

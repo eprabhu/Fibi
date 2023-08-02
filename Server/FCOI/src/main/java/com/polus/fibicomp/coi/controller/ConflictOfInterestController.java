@@ -534,4 +534,24 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.loadTravelDisclosureHistory(vo.getPersonId(), vo.getEntityNumber());
 	}
 
+	@PutMapping("/personEntity")
+	public ResponseEntity<Object> updatePersonEntity(@RequestBody PersonEntityDto personEntityDto) {
+		return conflictOfInterestService.updatePersonEntity(personEntityDto);
+	}
+
+	@DeleteMapping("/personEntity/relationship/{personEntityRelId}/{personEntityId}")
+	public ResponseEntity<Object> deletePersonEntityRelationship(@PathVariable(name = "personEntityRelId") Integer personEntityRelId,
+																 @PathVariable(name = "personEntityId") Integer personEntityId) {
+		return conflictOfInterestService.deletePersonEntityRelationship(personEntityRelId, personEntityId);
+	}
+
+	@PostMapping("/personEntity/modify")
+	public ResponseEntity<Object> modifyPersonEntity( @RequestBody PersonEntityDto personEntityDto) {
+		return conflictOfInterestService.modifyPersonEntity(personEntityDto.getPersonEntityId());
+	}
+
+	@PutMapping("/personEntity/finalize")
+	public ResponseEntity<Object> finalizePersonEntity(@RequestBody PersonEntityDto personEntityDto) {
+		return conflictOfInterestService.finalizePersonEntity(personEntityDto);
+	}
 }

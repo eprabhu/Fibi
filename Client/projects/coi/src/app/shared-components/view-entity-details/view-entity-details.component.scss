@@ -297,6 +297,9 @@ mat-icon {
 
 .slider-header-color {
   background-color: #fff;
+  top:0;
+  z-index:2;
+  position: sticky;
 }
 
 .fa-bolt {
