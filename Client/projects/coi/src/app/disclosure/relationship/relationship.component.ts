@@ -42,6 +42,14 @@ export class RelationshipComponent implements OnInit {
   $subscriptions: Subscription[] = [];
   dependencies = ['coiDisclosure', 'numberOfSFI'];
   isShowNoDataCard = false;
+  awardList = [];
+  isShowCollapsedConflictRelationship = false;
+  entityProjectDetails: Array<any> = [];
+  coiValidationMap: Map<string, string> = new Map();
+  coiTableValidation: Map<string, string> = new Map();
+  coiStatusCode: any = null;
+
+
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
@@ -95,9 +103,13 @@ export class RelationshipComponent implements OnInit {
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
         this.isShowNoDataCard = true;
-        this.proposalArray = data.awards;
-        data.proposals.every(ele => this.proposalArray.push(ele));
+        this.awardList = data.awards;
+        data.proposals.every(ele => this.awardList.push(ele));
         this.coiStatusList = data.coiProjConflictStatusTypes;
+        if (this.awardList.length === 1) {
+          this.isShowCollapsedConflictRelationship = true;
+          this.getEntityList();
+        }
       }
     });
   }
@@ -109,7 +121,7 @@ export class RelationshipComponent implements OnInit {
    */
   getDisclosureStatus(): any {
    let test : any;
-    this.proposalArray.forEach(ele => {
+    this.awardList.forEach(ele => {
          test = ele.disclosureStatusCount.find(ele => ele[3] > 0) ? '3' :
                 ele.disclosureStatusCount.find(ele => ele[2] > 0) ? '2' :
                 ele.disclosureStatusCount.find(ele => ele[1] > 0) ? '1' : null;
@@ -165,5 +177,15 @@ getDependencyDetails() {
     this.reviewStatus = DATA && DATA.coiDisclosure ? DATA.coiDisclosure.reviewStatusCode : '';
     this.disclosureId =  DATA && DATA.coiDisclosure ? DATA.coiDisclosure.disclosureId : null;
     this.personId = DATA && DATA.coiDisclosure ? DATA.coiDisclosure.personId : '';
+  }
+
+  getEntityList() {
+    this.$subscriptions.push(  this._relationShipService.getEntityList(
+      this.moduleCode, this.moduleId, this.coiData.coiDisclosure.disclosureId,
+      this.coiData.coiDisclosure.disclosureStatusCode, this.coiData.coiDisclosure.personId).subscribe((data: any) => {
+      this.entityProjectDetails = data;
+    }, err => {
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong!');
+    }));
   }
 }

@@ -90,16 +90,6 @@ export class DefineRelationComponent implements OnInit {
       });
    }
 
-    applyToAll() {
-      this.coiValidationMap.clear();
-      this.coiTableValidation.clear();
-      this.entityProjectDetails.forEach((ele: any) => {
-          ele.projectConflictStatusCode = this.coiStatusCode;
-          ele.disclComment.comment = this.coiDescription;
-      });
-      this.saveClick();
-    }
-
     getEntityList() {
       this.$subscriptions.push(  this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode,this.coiData.coiDisclosure.personId).subscribe((data: any) => {
         this.entityProjectDetails = data;
@@ -121,19 +111,6 @@ export class DefineRelationComponent implements OnInit {
 
     isAnyOneEntityAnswered() {
        return !!this.entityProjectDetails.find(ele => ele.projectConflictStatusCode);
-    }
-
-    openSaveAllConfirmationModal() {
-      this.coiValidationMap.clear();
-      if (this.coiStatusCode && this.coiDescription) {
-        document.getElementById('hidden-save-all-button').click();
-      } 
-      if(!this.coiStatusCode){
-        this.coiValidationMap.set('coiStatus', 'Please select COI Status');
-      } 
-      if(!this.coiDescription){
-        this.coiValidationMap.set('coiDescription', 'Please enter description');
-      }
     }
 
     clearAll() {
@@ -174,27 +151,6 @@ export class DefineRelationComponent implements OnInit {
       }
     }
 
-    saveSingleEntity(index, test) {
-      this.coiTableValidation.delete('save-status'+index );
-      this.coiTableValidation.delete('save-description'+index );
-      if ([null, 'null'].includes(this.entityProjectDetails[index].projectConflictStatusCode)) {
-        this.coiTableValidation.set('save-status'+index , 'Please select COI Status');
-      } 
-      if (!this.entityProjectDetails[index].disclComment.comment) {
-        this.coiTableValidation.set('save-description'+index , 'Please enter description');
-      }
-      if(!this.coiTableValidation.has('save-status'+index) && !this.coiTableValidation.has('save-description'+index) ) {
-        test.personEntityId = test.personEntityId;
-        test.disclosureId = this.coiData.coiDisclosure.disclosureId;
-        test.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
-        test.moduleCode = this.selectedProject.moduleCode;
-        test.moduleItemKey = this.selectedProject.moduleItemId;
-        // this.getCommentObject(test.comment);
-        test.coiProjConflictStatusType = this.getStatusObject(test.projectConflictStatusCode);
-        this.singleSaveClick(test, index);
-      }
-    }
-
     prepareSaveObject() {
       this.entityProjectDetails.forEach((ele: any) => {
         ele.personEntityId = ele.personEntityId;
@@ -210,11 +166,11 @@ export class DefineRelationComponent implements OnInit {
       return this.coiStatusList.find(ele => ele.projectConflictStatusCode === code);
     }
 
-    getCommentObject(comment: any) {
-        comment.disclosureNumber = this.coiData.disclosureNumber;
-        comment.commentTypeCode = 1;
-        comment.comments = comment.comments ? comment.comments : null;
-    }
+    // getCommentObject(comment: any) {
+    //     comment.disclosureNumber = this.coiData.disclosureNumber;
+    //     comment.commentTypeCode = 1;
+    //     comment.comments = comment.comments ? comment.comments : null;
+    // }
 
     saveClick() {
       this.prepareSaveObject();
@@ -317,11 +273,6 @@ export class DefineRelationComponent implements OnInit {
   ngOnDestroy() {
     this.addBodyScroll();
     subscriptionHandler(this.$subscriptions);
-  }
-
-  clearValues() {
-    this.coiDescription = '';
-    this.coiStatusCode = null;
   }
 
 }
