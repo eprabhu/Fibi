@@ -5,8 +5,8 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,9 +23,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.pojo.Country;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -40,7 +37,12 @@ import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
 import com.polus.fibicomp.coi.dto.COIValidateDto;
+import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -70,6 +72,10 @@ import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
+import com.polus.fibicomp.coi.pojo.DisclosureActionType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
@@ -77,21 +83,17 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
-import com.polus.fibicomp.coi.pojo.EntityRelationship;
-import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.person.dao.PersonDao;
+import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.security.AuthenticatedUser;
 import com.polus.fibicomp.view.DisclosureView;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
-import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 
 import oracle.jdbc.OracleTypes;
 
@@ -3650,6 +3652,21 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			return  null;
 		}
 		return (PersonEntity) result.get(0);
+	}
+
+	@Override
+	public DisclosureActionType fetchDisclosureActionTypeById(String actionLogCreated) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<DisclosureActionType> query = builder.createQuery(DisclosureActionType.class);
+		Root<DisclosureActionType> root = query.from(DisclosureActionType.class);
+        query.where(builder.equal(root.get("actionTypeCode"), actionLogCreated));
+		return session.createQuery(query).getSingleResult();
+	}
+
+	@Override
+	public void saveOrUpdateDisclosureActionLog(DisclosureActionLog disclosureActionLog) {
+		hibernateTemplate.saveOrUpdate(disclosureActionLog);
 	}
 
 }

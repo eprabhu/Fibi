@@ -1,20 +1,27 @@
 package com.polus.fibicomp.coi.repository;
 
-import com.polus.fibicomp.coi.dao.GeneralDaoImpl;
-import com.polus.fibicomp.coi.pojo.EntityActionLog;
-import com.polus.fibicomp.common.dao.CommonDao;
+import java.util.List;
+
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Query;
-import java.util.List;
+import com.polus.fibicomp.coi.dao.GeneralDaoImpl;
+import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
+import com.polus.fibicomp.coi.pojo.EntityActionLog;
 
 @Repository
+@Primary
 @Transactional
 public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
 
@@ -22,9 +29,6 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
 
     @Autowired
     private HibernateTemplate hibernateTemplate;
-
-    @Autowired
-    private CommonDao commonDao;
 
     @Override
     public List<EntityActionLog> fetchEntityActionLog(Integer entityId, String actionTypeCode) {
@@ -36,4 +40,16 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
         query.setParameter("entityId", entityId);
         return query.getResultList();
     }
+
+    @Override
+	public List<DisclosureActionLog> fetchDisclosureActionLogsBasedOnDisclosureId(Integer disclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<DisclosureActionLog> query = builder.createQuery(DisclosureActionLog.class);
+		Root<DisclosureActionLog> root = query.from(DisclosureActionLog.class);
+        query.where(builder.equal(root.get("disclosureId"), disclosureId));
+        query.orderBy(builder.desc(root.get("updateTimestamp")));
+		return session.createQuery(query).getResultList();
+	}
+
 }
