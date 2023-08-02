@@ -1350,7 +1350,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		statement.setString(8, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
 		statement.setString(9, countryName);
 		statement.setString(10, state);
-		statement.setString(11, setCOISortOrder(sort));
+		statement.setString(11, setSortOrderForTravelDisclosure(sort));
 		statement.setInt(12, (currentPage == null ? 0 : currentPage - 1));
 		statement.setInt(13, (pageNumber == null ? 0 : pageNumber));
 		statement.setBoolean(14, isDownload);
@@ -3288,28 +3288,30 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public void activateOrInactivatePersonEntity(PersonEntityDto personEntityDto) {
+	public Timestamp activateOrInactivatePersonEntity(PersonEntityDto personEntityDto) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE PersonEntity e SET e.isRelationshipActive = :isRelationshipActive , e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser, ");
 		hqlQuery.append("e.versionStatus = :versionStatus WHERE e.personEntityId = : personEntityId");
 		Query query = session.createQuery(hqlQuery.toString());
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
 		query.setParameter("isRelationshipActive", personEntityDto.getIsRelationshipActive());
 		query.setParameter("personEntityId", personEntityDto.getPersonEntityId());
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
-		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateTimestamp", updateTimestamp);
 		query.setParameter("versionStatus", Constants.COI_ACTIVE_STATUS);
 		query.executeUpdate();
+		return updateTimestamp;
 	}
 
 	@Override
-	public void archivePersonEntity(Integer personEntityId) {
+	public void patchPersonEntityVersionStatus(Integer personEntityId, String versionStatus) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("UPDATE PersonEntity pe SET pe.versionStatus = :versionStatus,pe.updateTimestamp = :updateTimestamp, pe.updateUser = :updateUser where pe.personEntityId = :personEntityId");
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("personEntityId", personEntityId);
-		query.setParameter("versionStatus", Constants.COI_ARCHIVE_STATUS);
+		query.setParameter("versionStatus", versionStatus);
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
 		query.executeUpdate();
@@ -3346,11 +3348,13 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public boolean checkPersonEntityAdded(Integer personEntityId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("select (CASE WHEN count(PERSON_ENTITY_ID) > 0 THEN true ELSE false END) from (SELECT pe.PERSON_ENTITY_ID FROM " +
-				"COI_DISCL_ENT_PROJ_DETAILS pe where pe.PERSON_ENTITY_ID = :personEntityId UNION SELECT t.PERSON_ENTITY_ID FROM COI_TRAVEL_DISCLOSURE t " +
-				"WHERE t.ENTITY_ID = :personEntityId ) T1");
+		hqlQuery.append("select (CASE WHEN count(PERSON_ENTITY_ID) > 0 THEN true ELSE false END) from (SELECT pe.PERSON_ENTITY_ID FROM ");
+		hqlQuery.append("COI_DISCL_ENT_PROJ_DETAILS pe INNER JOIN COI_DISCLOSURE cd ON cd.DISCLOSURE_ID = pe.DISCLOSURE_ID");
+		hqlQuery.append(" WHERE pe.PERSON_ENTITY_ID = :personEntityId AND cd.REVIEW_STATUS_CODE != :reviewStatusCode ");
+		hqlQuery.append("UNION SELECT t.PERSON_ENTITY_ID FROM COI_TRAVEL_DISCLOSURE t WHERE t.ENTITY_ID = :personEntityId ) T1");
 		org.hibernate.query.Query<BigInteger> value = session.createSQLQuery(hqlQuery.toString());
 		value.setParameter("personEntityId", personEntityId);
+		value.setParameter("reviewStatusCode", 1);
 		if (value.getSingleResult().intValue() > 0) {
 			return true;
 		} else {
@@ -3577,6 +3581,75 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.select(root.get("personId"));
         query.where(builder.equal(root.get("disclosureId"), disclosureId));
 		return session.createQuery(query).getSingleResult();
+	}
+
+
+	@Override
+	public Timestamp updatePersonEntity(PersonEntityDto personEntityDto) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE PersonEntity pe SET pe.updateTimestamp = :updateTimestamp, pe.updateUser = :updateUser, ");
+		hqlQuery.append("pe.involvementEndDate = :involvementEndDate, pe.sponsorsResearch = :sponsorsResearch, pe.studentInvolvement = :studentInvolvement, ");
+		hqlQuery.append("pe.involvementStartDate =:involvementStartDate, pe.staffInvolvement = :staffInvolvement, pe.instituteResourceInvolvement = :instituteResourceInvolvement ");
+		hqlQuery.append("where pe.personEntityId = :personEntityId");
+
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personEntityId", personEntityDto.getPersonEntityId());
+		query.setParameter("updateTimestamp", updateTimestamp);
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.setParameter("involvementEndDate", personEntityDto.getInvolvementEndDate());
+		query.setParameter("involvementStartDate", personEntityDto.getInvolvementStartDate());
+		query.setParameter("sponsorsResearch", personEntityDto.getSponsorsResearch());
+		query.setParameter("studentInvolvement", personEntityDto.getStudentInvolvement());
+		query.setParameter("staffInvolvement", personEntityDto.getStaffInvolvement());
+		query.setParameter("instituteResourceInvolvement", personEntityDto.getInstituteResourceInvolvement());
+		query.executeUpdate();
+		return updateTimestamp;
+	}
+
+	@Override
+	public void updateEntityUpdateDetails(Integer entityId, Timestamp updateTimestamp) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiEntity e SET e.updateTimestamp = :updateTimestamp, e.updateUser = :updateUser where e.entityId = :entityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("updateTimestamp", updateTimestamp);
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.executeUpdate();
+	}
+
+	@Override
+	public boolean hasPersonEntityVersionStatusOf(Integer personEntityNumber, String versionStatus) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("select (CASE WHEN count(PERSON_ENTITY_ID) > 0 THEN true ELSE false END) FROM PERSON_ENTITY ");
+		hqlQuery.append("WHERE PERSON_ENTITY_NUMBER = :personEntityNumber AND VERSION_STATUS = :versionStatus");
+		org.hibernate.query.Query<BigInteger> value = session.createSQLQuery(hqlQuery.toString());
+		value.setParameter("personEntityNumber", personEntityNumber);
+		value.setParameter("versionStatus", versionStatus);
+		if (value.getSingleResult().intValue() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public PersonEntity getPersonEntityByNumberAndStatus(Integer personEntityNumber, String versionStatus) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("select p  FROM PersonEntity p ");
+		hqlQuery.append("WHERE p.personEntityNumber = :personEntityNumber AND p.versionStatus = :versionStatus");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personEntityNumber", personEntityNumber);
+		query.setParameter("versionStatus", versionStatus);
+		List result = query.getResultList();
+		if (result ==null || result.isEmpty()) {
+			return  null;
+		}
+		return (PersonEntity) result.get(0);
 	}
 
 }

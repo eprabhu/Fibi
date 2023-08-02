@@ -449,4 +449,35 @@ public interface ConflictOfInterestService {
 
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 
+	/**
+	 * This method is used to update person entity
+	 * @param personEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> updatePersonEntity(PersonEntityDto personEntityDto);
+
+	/**
+	 * This method is used to delete Person Entity Relationship
+	 * @param personEntityRelId
+	 * @param personEntityId
+	 * @return
+	 */
+	ResponseEntity<Object> deletePersonEntityRelationship(Integer personEntityRelId, Integer personEntityId);
+
+	/**
+	 * This method is used to validate and modify a person entity based on following condition
+	 * 1) if the current version of person entity is not used anywhere, makes this version to draft
+	 * 2) if the current version of person entity is used anywhere, creates a new version in draft status
+	 * @param personEntityId
+	 * @return person entity
+	 */
+	ResponseEntity<Object> modifyPersonEntity(Integer personEntityId);
+
+	/**
+	 * This method is used to finalize Person Entity
+	 * @param personEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> finalizePersonEntity(PersonEntityDto personEntityDto);
+
 }
