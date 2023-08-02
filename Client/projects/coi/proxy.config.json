@@ -360,15 +360,27 @@
     "secure": false
   },
   "/downloadQuesAttachment": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://192.168.1.149/",
     "secure": false
   },
-  "loadAwardsForDisclosure": {
-    "target": "http://192.168.1.189:9090/coi",
+  "/withdrawDisclosure": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/returnDisclosure": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/loadAwardsForDisclosure": {
+    "target": "http://192.168.1.149/coi",
     "secure":false
   },
   "/disclosure/historyDashboard": {
     "target": "http://192.168.1.80:9090/coi/",
+    "secure": false
+  },
+  "/disclosureHistory": {
+    "target": "http://192.168.1.149/coi/",
     "secure": false
   }
 }

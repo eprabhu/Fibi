@@ -1,115 +1,73 @@
 import { Component, OnInit } from '@angular/core';
 import { CoiService } from '../services/coi.service';
+import { Subscription } from 'rxjs';
+import { CommonService } from '../../common/services/common.service';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { DataStoreService } from '../services/data-store.service';
+import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
 
 @Component({
-  selector: 'app-history',
-  templateUrl: './history.component.html',
-  styleUrls: ['./history.component.scss']
+    selector: 'app-history',
+    templateUrl: './history.component.html',
+    styleUrls: ['./history.component.scss']
 })
 export class HistoryComponent implements OnInit {
 
-  coiActionLogs: any[] = [
-    {
-      eventType: 'Annual',
-      coiDepositionStatus: {
-        code: 1,
-        description: 'Active'
-      },
-      reviewStatus: {
-        code: 1,
-        description: 'Active'
-      },
-      disclStatus: {
-        code: 1,
-        description: 'Active'
-      },
-      requestTitle: 'Revision Request',
-      activeDate: '12/08/2022',
-      certifiedDate: '12/08/2022',
-      value: [
-        {
-          eventType: 'Revision',
-          coiDepositionStatus: {
-            code: 2,
-            description: 'Pending'
-          },
-          reviewStatus: {
-            code: 2,
-            description: 'Pending'
-          },
-          disclStatus: {
-            code: 3,
-            description: 'Archive'
-          },
-          requestTitle: 'Revision Request',
-          activeDate: '2/07/2022',
-          certifiedDate: '1/07/2022'
-        },
-        {
-          eventType: 'Revision',
-          coiDepositionStatus: {
-            code: 1,
-            description: 'Active'
-          },
-          reviewStatus: {
-            code: 1,
-            description: 'Active'
-          },
-          disclStatus: {
-            code: 3,
-            description: 'Archive'
-          },
-          requestTitle: 'Revision Request',
-          activeDate: '21/05/2022',
-          certifiedDate: '21/05/2022'
-        },
-        {
-          eventType: 'Revision',
-          coiDepositionStatus: {
-            code: 1,
-            description: 'Active'
-          },
-          reviewStatus: {
-            code: 1,
-            description: 'Active'
-          },
-          disclStatus: {
-            code: 3,
-            description: 'Archive'
-          },
-          requestTitle: 'Revision Request',
-          activeDate: '22/03/2022',
-          certifiedDate: '22/03/2022'
+    $subscriptions: Subscription[] = [];
+    dependencies = ['coiDisclosure'];
+    coiDisclosure: any = {};
+    disclosureHistoryLogs: any = {};
+
+    constructor(public _coiService: CoiService, private _commonService: CommonService, private _dataStore: DataStoreService,
+        public _dataFormatPipe: DateFormatPipeWithTimeZone) { }
+
+    ngOnInit() {
+        this.getDataFromStore();
+        this.listenDataChangeFromStore();
+    }
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
+    }
+
+    private getDataFromStore() {
+        const DATA = this._dataStore.getData(this.dependencies);
+        this.coiDisclosure = DATA.coiDisclosure;
+        this.getDisclosureHistory();
+    }
+
+    private listenDataChangeFromStore() {
+        this.$subscriptions.push(
+            this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
+                if (dependencies.some((dep) => this.dependencies.includes(dep))) {
+                    this.getDataFromStore();
+                }
+            })
+        );
+    }
+
+    getDisclosureHistory() {
+        this.$subscriptions.push(this._coiService.disclosureHistory(this.coiDisclosure.disclosureId).subscribe((data: any) => {
+            this.updateHistoryLogs(data);
+        }, _err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+        }));
+    }
+
+    sortNull() { return 0; }
+
+    updateHistoryLogs(data: any) {
+        if (data.length) {
+            this.disclosureHistoryLogs = [];
+            data.forEach((historyObj) => {
+                const date = this._dataFormatPipe.transform(historyObj.updateTimestamp);
+                this.disclosureHistoryLogs[date] = this.disclosureHistoryLogs[date] ? this.disclosureHistoryLogs[date] : [];
+                this.disclosureHistoryLogs[date].push(historyObj);
+            });
         }
-      ]
-    },
-
-  ];
-
-  constructor(public _coiService: CoiService) { }
-
-  ngOnInit() {
-    this._coiService.isShowHistoryInfo = true;
-  }
-
-  closeHistoryInfo() {
-    this._coiService.isShowHistoryInfo = false;
-  }
-
-  getBadge(code) {
-    switch (code) {
-      case 1: return 'success';
-      case 2: return 'warning';
-      case 3: return 'info';
-      default: return '';
     }
-  }
-  getBadgeTextColor(code) {
-    switch (code) {
-      case 1: return 'white';
-      case 2: return 'black';
-      case 3: return 'white';
-      default: return '';
+
+    closeHistoryInfo() {
+        this._coiService.isShowHistoryInfo = false;
     }
-  }
 }
