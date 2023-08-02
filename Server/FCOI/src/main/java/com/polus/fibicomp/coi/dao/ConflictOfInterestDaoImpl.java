@@ -1350,7 +1350,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		statement.setString(8, reviewStatusCodes != null && !reviewStatusCodes.isEmpty() ? String.join(",", reviewStatusCodes) : null);
 		statement.setString(9, countryName);
 		statement.setString(10, state);
-		statement.setString(11, setCOISortOrder(sort));
+		statement.setString(11, setSortOrderForTravelDisclosure(sort));
 		statement.setInt(12, (currentPage == null ? 0 : currentPage - 1));
 		statement.setInt(13, (pageNumber == null ? 0 : pageNumber));
 		statement.setBoolean(14, isDownload);
