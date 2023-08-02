@@ -874,14 +874,16 @@ public interface ConflictOfInterestDao {
 	/**
 	 * This method is used to activate/inactive  person entity
 	 * @param personEntityDto
+	 * @return Timestamp
 	 */
-	void activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
+	Timestamp activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
 
 	/**
-	 * This method is used to archive person entity
+	 * This method is used to change version status of person entity
 	 * @param personEntityId
+	 * @param versionStatus
 	 */
-	void archivePersonEntity(Integer personEntityId);
+	void patchPersonEntityVersionStatus(Integer personEntityId, String versionStatus);
 
 	/**
 	 * This method is used to get the max of version number
@@ -971,5 +973,35 @@ public interface ConflictOfInterestDao {
 	List<DisclosureHistoryDto> getDisclosureHistory(CoiDashboardVO dashboardVO);
 
 	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
+
+
+	/**
+	 * This method is used to update person entity
+	 * @param personEntityDto
+	 */
+	Timestamp updatePersonEntity(PersonEntityDto personEntityDto);
+
+	/**
+	 * This method is used to update Entity Update Details
+	 * @param entityId
+	 * @param updateTimestamp
+	 */
+	void updateEntityUpdateDetails(Integer entityId, Timestamp updateTimestamp);
+
+	/**
+	 * This method is used to check a peron entity has a version status of @param versionStatus
+	 * @param personEntityNumber
+	 * @param versionStatus
+	 * @return true/false
+	 */
+	boolean hasPersonEntityVersionStatusOf(Integer personEntityNumber, String versionStatus);
+
+	/**
+	 * This method is used to fetch draft version of person entity by params
+	 * @param personEntityNumber
+	 * @param versionStatus
+	 * @return
+	 */
+	PersonEntity getPersonEntityByNumberAndStatus(Integer personEntityNumber, String versionStatus);
 
 }
