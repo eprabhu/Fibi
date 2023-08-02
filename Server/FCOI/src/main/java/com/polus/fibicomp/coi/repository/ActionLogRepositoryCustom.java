@@ -1,5 +1,6 @@
 package com.polus.fibicomp.coi.repository;
 
+import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 
 import java.util.List;
@@ -13,4 +14,7 @@ public interface ActionLogRepositoryCustom {
      * @return
      */
     List<EntityActionLog> fetchEntityActionLog(Integer entityId, String actionTypeCode);
+
+    public List<DisclosureActionLog> fetchDisclosureActionLogsBasedOnDisclosureId(Integer disclosureId);
+
 }

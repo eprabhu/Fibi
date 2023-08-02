@@ -480,4 +480,8 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> finalizePersonEntity(PersonEntityDto personEntityDto);
 
+	ResponseEntity<Object> withdrawDisclosure(Integer disclosureId, String description);
+
+    ResponseEntity<Object> returnDisclosure(Integer disclosureId, String description);
+
 }
