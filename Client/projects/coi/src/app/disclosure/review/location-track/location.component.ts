@@ -97,16 +97,6 @@ export class LocationComponent implements OnInit, OnDestroy {
     getCoiReview() {
       const DATA = this._dataStore.getData(['coiReviewerList']);
       this.reviewerList = DATA.coiReviewerList || [];
-      if (this.coiDisclosure.coiReviewStatusType?.reviewStatusCode !== '3') {
-        this.$subscriptions.push(this.coiService.getCoiReview(this.coiDisclosure.disclosureId).subscribe((res: any) => {
-            this.reviewerList = res;
-            if (this.reviewerList.length) {
-              this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
-            }
-        }, _err => {
-           // this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
-        }));
-      }
     }
 
     adminGroupSelect(event: any): void {

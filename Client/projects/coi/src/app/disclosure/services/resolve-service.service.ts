@@ -37,8 +37,8 @@ export class ResolveServiceService {
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
                     this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure.reviewStatusCode, route);
-                    if (res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode === '3') {
-                           this.getCoiReview(res[0].coiDisclosure.disclosureId, observer);
+                    if (['3', '4'].includes(res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode)) {
+                        this.getCoiReview(res[0].coiDisclosure.disclosureId, observer);
                     } else {
                         observer.next(true);
                         observer.complete();
