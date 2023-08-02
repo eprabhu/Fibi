@@ -61,81 +61,9 @@
           </div>
         </div>
       </div>
-      <div class="relationship-sfi-header card">
-        <div class="row m-0">
-          <div title="List of SFIs" class="col-4 fs-14 border-end" [ngClass] = "!isEditMode ? 'p-10' : '' ">
-              <div class="fw-600">Significant Financial Interest</div>
-          </div>
-          <div class="col-2 fs-14 border-end" [ngClass] = "!isEditMode ? 'p-10' : ''">
-            <span class="mandatory fw-600">*</span>
-             <span title="List of COI status" class="fw-600">COI Status</span>
-             <div [class.mt-2]="isEditMode" *ngIf="isEditMode">
-              <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode" class="form-select form-control"
-              [ngClass] ="coiValidationMap.has('coiStatus') ? 'is-invalid d-block' : ''">
-                <option [value]=null>--Select--</option>
-                <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList">{{status?.description}}</option>
-              </select>
-            </div>
-            <div>
-              <span class="invalid-feedback fw-400" *ngIf="coiValidationMap.has('coiStatus')">
-                {{coiValidationMap.get('coiStatus')}}
-              </span>
-            </div>
-          </div>
-          <div class="fs-14 border-end" [ngClass] = "isEditMode ? 'col' : 'col-6 p-10'">
-            <span class="mandatory fw-600">*</span>
-            <span class="fw-600">Define Project - SFI Relation</span>
-            <textarea *ngIf="isEditMode" class="form-control comment-text-box textarea-height mt-2" id="coi_description"
-            [(ngModel)]="coiDescription" appAutoGrow  appLengthValidator rows="1"
-            [ngClass] ="coiValidationMap.has('coiDescription') ? 'is-invalid d-block' : ''"
-            placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
-            <span class="invalid-feedback fw-400" *ngIf="coiValidationMap.has('coiDescription')">
-              {{coiValidationMap.get('coiDescription')}}
-            </span>
-          </div>
-          <div class="col-auto fs-14 mt-27"  *ngIf="isEditMode">
-            <button type="button" class="btn btn-primary btn-sm fs-14" id="apply common coi status and description and save" title="Click to apply for all SFIs  and save" (click)="openSaveAllConfirmationModal()">Apply & Save</button>
-          </div>
-        </div>
-      </div>
-      <ng-container *ngFor="let test of entityProjectDetails; let i = index">
-        <div class="relationship-sfi-data row m-0" [class.white-bg]="i%2==0" [class.border-bottom]="i==entityProjectDetails.length-1" [class.border-top]="i==0">
-            <div class="col-4 fs-14 border-end">
-             <div class="table-text my-4">
-              {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' : test?.coiEntity?.entityName}}
-             </div>
-            </div>
-            <div class="col-2 fs-14 border-end">
-              <select [(ngModel)]="test.projectConflictStatusCode"
-              class="form-select form-control mt-3" 
-              [ngClass] ="coiTableValidation.has('save-status'+i) ? 'is-invalid d-block' : ''"
-              [disabled]="!isEditMode">
-              <option value=null>--Select--</option>
-              <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList; let i = index">
-                  {{status?.description}}</option>
-              </select>
-              <div>
-                <span class="invalid-feedback" *ngIf="coiTableValidation.has('save-status'+i)">
-                  {{coiTableValidation.get('save-status'+i)}}
-                </span>
-              </div>
-            </div>
-            <div class="col fs-14 border-end" [class.col-6]="!isEditMode">
-              <textarea  class="form-control comment-text-box textarea-height mt-3" id="main-panel-comnt"
-              appAutoGrow [(ngModel)]="test.disclComment.comment"
-              [disabled]="!isEditMode" rows="1" appLengthValidator
-              [ngClass] ="coiTableValidation.has('save-description'+i) ? 'is-invalid d-block' : ''"
-              placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
-              <span class="invalid-feedback" *ngIf="coiTableValidation.has('save-description'+i)">
-                {{coiTableValidation.get('save-description'+i)}}
-              </span>
-            </div>
-            <div class="col-auto fs-14" *ngIf="isEditMode" >
-              <button title="Click to save for individual SFI" type="button" class="btn btn-primary btn-sm fs-14 my-3 ml-11" id="save {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="saveSingleEntity(i, test)"
-              >Save</button>
-            </div>
-        </div>
-      </ng-container>
+      <app-SFI-conflict-relationship [isEditMode]="isEditMode" [coiStatusCode]="coiStatusCode" [coiStatusList]="coiStatusList"
+      [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription"
+      [selectedProject]="selectedProject" [coiData]="coiData" [clearIndex]="clearIndex" [moduleCode]="moduleCode"></app-SFI-conflict-relationship>
   </div>
 </div>
 </div>
@@ -154,25 +82,6 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
         <button type="button" class="btn btn-primary fs-14" (click)="clearAll()" data-bs-dismiss="modal">Yes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-save-all-button" data-bs-toggle="modal" data-bs-target="#applyToAllConfirmationModal"></button>
-<div class="modal fade" id="applyToAllConfirmationModal" tabindex="-1" aria-labelledby="applyToAllConfirmationModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p class="fs-14">Do you want to update all your Project - SFI relations?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary w-14" data-bs-dismiss="modal" (click)="clearValues()">No</button>
-        <button type="button" class="btn btn-primary fs-14" (click)="applyToAll()" data-bs-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>
