@@ -1,8 +1,12 @@
 <div>
-  <app-view-entity-sfi-details (emitRelationshipModal)="addRelationship($event)" [entityIdFromSlider]="entityId" [isTriggeredFromSlider]="isTriggeredFromSlider" 
-  [sfiRelationStatus]="sfiRelationStatus" [isEditMode]="isEditMode" [personEntityRelationships]="personEntityRelationships" [personEntity]="personEntity"></app-view-entity-sfi-details>
-  <app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"  (sfiRelationshipDetails)="getRelationshipDetails($event)"></app-view-relationship-details>
-  <app-entity-questionnaire  [entityId]="entityId" id="focusQuestionnaire" (updateRelationship)="updateRelationship($event)" (isEmitModalClose)="closedRelationshipModal($event)" [isAddRelationship]="isEnableRelationshipModal" (positionsToView)="scrollPosition($event)" [isEditMode]="isEditMode"></app-entity-questionnaire>
+    <app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
+        [isEditMode]="isEditMode" [entityDetails]="entityDetails" [onDeleteTimestamp]="onDeleteTimestamp"
+        [isTriggeredFromSlider]="isTriggeredFromSlider"></app-view-relationship-details>
+    <app-entity-questionnaire (mouseout)="entityDetailService.isHoverEntityCard = false" [entityId]="entityId"
+        id="focusQuestionnaire" (updateRelationship)="updateRelationship($event)" [isEditMode]="isEditMode"
+        (positionsToView)="scrollPosition($event)" (emitLeaveModal)="showLeaveConfirmModal($event)"
+        [isSwitchCurrentTab]="isSwitchCurrentTab"
+        (onDeleteTimestamp)="emittedDeletedRelationship($event)"></app-entity-questionnaire>
 </div>
 
 <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-unsaved-changes-button" data-bs-toggle="modal"

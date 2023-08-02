@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit,  ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService, RelationshipDashboardRequest } from '../entity-management.service';
 import { slowSlideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
@@ -49,6 +49,9 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   isViewTravelDisclosure = false;
   isViewFcoiDisclosure = false;
   isLoading = false;
+  showSlider = false;
+  @ViewChild('viewSFIDetailsOverlay', { static: true }) viewSFIDetailsOverlay: ElementRef;
+  personEntityId = null;
 
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService, public commonService: CommonService) { }
@@ -69,9 +72,15 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
     subscriptionHandler(this.$subscriptions);
   }
 
-  viewDetails(data) {
-    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: data.personEntityId, mode: 'view' } });
-  }
+    viewDetails(data) {
+        this.showSlider = true;
+        this.personEntityId = data.personEntityId;
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
+        setTimeout(() => {
+            const slider = document.querySelector('.slider-base');
+            slider.classList.add('slider-opened');
+        });
+    }
 
   redirectToEntity(event) {
     this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
@@ -207,4 +216,19 @@ convertDisclosureStatus(status): string {
     return  lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1);
   }
 }
+
+    hideSfiNavBar() {
+        this.addBodyScroll();
+        let slider = document.querySelector('.slider-base');
+        slider.classList.remove('slider-opened');
+        setTimeout(() => {
+            this.showSlider = false;
+        }, 500);
+    }
+
+    addBodyScroll() {
+        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
+    }
+
 }
