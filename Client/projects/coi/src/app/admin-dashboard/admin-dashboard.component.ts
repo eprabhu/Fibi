@@ -141,8 +141,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.checkTravelDisclosureRights();
     }
 
+    checkForPreviousURL() {
+        return ['coi/disclosure', 'coi/travel-disclosure'].some((url) => this._navigationService.previousURL.includes(url));
+    }
+
     checkForAdvanceSearch() {
-        if (this.isAdvancedSearchMade() && this._navigationService.previousURL.includes('coi/disclosure')) {
+        if (this.isAdvancedSearchMade() && this.checkForPreviousURL()) {
             this.isShowDisclosureList = true;
             if (this.coiAdminDashboardService.isAdvanceSearch) {
                 this.isViewAdvanceSearch = true;
@@ -168,7 +172,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     checkForSort() {
-        if (!isEmptyObject(this.coiAdminDashboardService.coiRequestObject.sort) && this._navigationService.previousURL.includes('coi/disclosure')) {
+        if (!isEmptyObject(this.coiAdminDashboardService.coiRequestObject.sort) && this.checkForPreviousURL()) {
             this.localCOIRequestObject.sort = deepCloneObject(this.coiAdminDashboardService.coiRequestObject.sort);
             this.sortCountObj = deepCloneObject(this.coiAdminDashboardService.sortCountObject);
         } else {
@@ -177,7 +181,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     checkForPagination() {
-        if (this._navigationService.previousURL.includes('coi/disclosure')) {
+        if (this.checkForPreviousURL()) {
             this.localCOIRequestObject.currentPage = this.coiAdminDashboardService.coiRequestObject.currentPage;
         }
     }
@@ -193,6 +197,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.elasticPersonSearchOptions.defaultValue = this.coiAdminDashboardService.searchDefaultValues.personName || '';
         this.entitySearchOptions.defaultValue = this.coiAdminDashboardService.searchDefaultValues.entityName || '';
         this.leadUnitSearchOptions.defaultValue = this.coiAdminDashboardService.searchDefaultValues.departmentName || '';
+        this.countrySearchOptions.defaultValue = this.coiAdminDashboardService.searchDefaultValues.travelCountryName || '';
     }
 
     generateLookupArrayForDropdown() {
@@ -746,6 +751,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.coiAdminDashboardService.searchDefaultValues.personName = this.localSearchDefaultValues.personName || null;
         this.coiAdminDashboardService.searchDefaultValues.entityName = this.localSearchDefaultValues.entityName || null;
         this.coiAdminDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;
+        this.coiAdminDashboardService.searchDefaultValues.travelCountryName = this.localSearchDefaultValues.travelCountryName || null;
     }
 
     showAssignAdminButton(coi): boolean {

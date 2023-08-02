@@ -7,8 +7,8 @@ import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { Router } from '@angular/router';
-import { getFormattedAmount } from '../../common/utilities/custom-utilities';
 import { fadeInOutHeight, listAnimation } from '../../common/utilities/animations';
+import { getFormattedAmount, openInNewTab } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-travel-related-disclosures',
@@ -109,8 +109,6 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
     }
 
     viewTravelDisclosure(travelDisclosureId: number) {
-        const url = '/#' + this._router.createUrlTree([POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
-            { queryParams: { disclosureId: travelDisclosureId } }).toString();
-        window.open(url, '_blank');
+        openInNewTab('travel-disclosure/summary?', ['disclosureId'], [travelDisclosureId]);
     }
 }
