@@ -13,19 +13,8 @@
                 </button>
             </div>
             <div class="modal-body m-0 p-0">
-                <div class="d-flex grey-info align-items-center position-relative" *ngIf="helpText.length > 0">
-                    <span data-bs-toggle="tooltip" title="{{primaryBtnName}} Help Text" data-bs-placement="top" class="d-inline-block">
-                        <mat-icon role="img"
-                            class="mat-icon me-2 info-icon material-icons mat-icon-no-color"
-                            aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
-                    </span>
-                    <div class="info-text fs-14 mt-1">
-                        <div class="d-flex" *ngFor="let helpText of helpText">
-                            <i class="fa fa-angle-double-right me-2 mt-1" aria-hidden="true"></i>
-                            <span>{{helpText}}</span>
-                        </div>
-                    </div>
-                </div>
+                <app-help-text *ngIf="helpText.length > 0" [helpTextList]="helpText"></app-help-text>
+
                 <div class="p-2 m-2">
                     <!-- warning msg -->
                     <ng-content select="[content]"></ng-content>

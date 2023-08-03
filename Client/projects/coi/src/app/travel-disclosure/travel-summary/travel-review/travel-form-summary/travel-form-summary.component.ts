@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TravelDataStoreService } from '../../../services/travel-data-store.service';
-import { EntityData, TravelDisclosure, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
+import { EntityDetails, TravelDisclosure, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { getFormattedAmount } from '../../../../common/utilities/custom-utilities';
 import { Router } from '@angular/router';
@@ -20,7 +20,7 @@ export class TravelFormSummaryComponent implements OnInit, OnDestroy {
     traveller = '';
     isReadMorePurpose = false;
     isReadMoreRelation = false;
-    entityData: EntityData = new EntityData();
+    entityDetails: EntityDetails = new EntityDetails();
     travellerTypeCodeList = [];
 
     constructor(private _dataStore: TravelDataStoreService, private _router: Router) { }
@@ -36,20 +36,8 @@ export class TravelFormSummaryComponent implements OnInit, OnDestroy {
 
     private getDataFromStore(): void {
         this.travelDisclosure = this._dataStore.getData();
-        this.setEntityData();
+        this.entityDetails = this._dataStore.getEntityDetails();
         this.setTravellerType();
-    }
-
-    private setEntityData(): void {
-        this.entityData = {
-            isActive: this.travelDisclosure.entityIsActive,
-            country: { countryName: this.travelDisclosure.country },
-            entityId: this.travelDisclosure.entityId,
-            entityType: { description: this.travelDisclosure.entityType },
-            entityName: this.travelDisclosure.travelEntityName,
-            emailAddress: this.travelDisclosure.entityEmail,
-            address: this.travelDisclosure.entityAddress
-        };
     }
 
     private listenDataChangeFromStore(): void {

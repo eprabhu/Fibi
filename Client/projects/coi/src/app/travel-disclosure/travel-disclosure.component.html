@@ -4,7 +4,7 @@
             <div class="disclosure-heading px-3 d-flex">
                 <div class="align-self-center flex-fill">
                     <p class="m-0">
-                        <ng-container *ngIf="!responseObject?.travelDisclosureId">
+                        <ng-container *ngIf="!travelDisclosure?.travelDisclosureId">
                             <strong>Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
                                     <u (click)="isPersonDetailsModalOpen = true;"
@@ -14,9 +14,9 @@
                                 </span>
                             </strong>
                         </ng-container>
-                        <ng-container *ngIf="responseObject?.travelDisclosureId">
+                        <ng-container *ngIf="travelDisclosure?.travelDisclosureId">
                             <strong title="">
-                                #{{responseObject?.travelDisclosureId}} : Travel Disclosure By
+                                #{{travelDisclosure?.travelDisclosureId}} : Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
                                     <u (click)="isPersonDetailsModalOpen = true;"
                                         title="Show the details of {{userDetails?.fullName}}">
@@ -63,9 +63,9 @@
                                     <i class="fa fa-user-o fw-700 mr-2" aria-hidden="true"></i>
                                     Administrator :
                                 </label>
-                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="responseObject?.adminPersonName">
-                                    <div title="{{responseObject?.adminPersonName}}">
-                                        {{responseObject?.adminPersonName}}
+                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="travelDisclosure?.adminPersonName">
+                                    <div title="{{travelDisclosure?.adminPersonName}}">
+                                        {{travelDisclosure?.adminPersonName}}
                                     </div>
                                 </app-no-data-label>
                             </div>
@@ -77,9 +77,9 @@
                                         alt="add-adminGroup icon">
                                     Admin Group :
                                 </label>
-                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="responseObject?.adminGroupName">
-                                    <div title="{{responseObject?.adminGroupName}}">
-                                        {{responseObject?.adminGroupName}}
+                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="travelDisclosure?.adminGroupName">
+                                    <div title="{{travelDisclosure?.adminGroupName}}">
+                                        {{travelDisclosure?.adminGroupName}}
                                     </div>
                                 </app-no-data-label>
                             </div>
@@ -94,8 +94,8 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14">Create : </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="responseObject?.createTimestamp">
-                                        <span>{{responseObject?.createTimestamp | dateFormatter}}</span>
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.createTimestamp">
+                                        <span>{{travelDisclosure?.createTimestamp | dateFormatter}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -104,8 +104,8 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14">Certification : </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="responseObject?.certifiedAt">
-                                        <span>{{responseObject?.certifiedAt | dateFormatter}}</span>
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.certifiedAt">
+                                        <span>{{travelDisclosure?.certifiedAt | dateFormatter}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -114,8 +114,8 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14">Approved : </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="responseObject?.acknowledgeAt">
-                                        <span>{{responseObject?.acknowledgeAt | dateFormatter}}</span>
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.acknowledgeAt">
+                                        <span>{{travelDisclosure?.acknowledgeAt | dateFormatter}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -130,9 +130,9 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4">Document : </label>
                                 <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="responseObject?.documentStatusCode">
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.documentStatusCode">
                                         <span
-                                            class="fs-14 {{commonService.getDocumentStatusBadge(responseObject?.documentStatusCode)}}">{{responseObject?.documentStatus}}</span>
+                                            class="fs-14 {{commonService.getDocumentStatusBadge(travelDisclosure?.documentStatusCode)}}">{{travelDisclosure?.documentStatus}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -141,9 +141,9 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4">Review : </label>
                                 <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="responseObject?.reviewStatusCode">
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.reviewStatusCode">
                                         <span
-                                            class="fs-14 {{commonService.getTravelReviewStatusBadge(responseObject?.reviewStatusCode)}}">{{responseObject?.reviewStatus}}</span>
+                                            class="fs-14 {{commonService.getTravelReviewStatusBadge(travelDisclosure?.reviewStatusCode)}}">{{travelDisclosure?.reviewStatus}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -211,7 +211,7 @@
             <div  class="row m-0 py-3 px-3">
                 <!-- home -->
                 <button (click)="navigateBack()" title="Go to home"
-                    [ngClass]="(responseObject?.reviewStatusCode != '2' && !isCreateMode && responseObject?.reviewStatusCode != '7') ? 'col-2' : 'col'"
+                    [ngClass]="(travelDisclosure?.reviewStatusCode != '2' && !isCreateMode && travelDisclosure?.reviewStatusCode != '7') ? 'col-2' : 'col'"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14">
                     <mat-icon>home</mat-icon>
                     <span class="ms-2" *ngIf="showHomeButton() && isCardExpanded">Home</span>
@@ -236,13 +236,21 @@
                 <!-- more options -->
                 <mat-menu #beforeMenu="matMenu" xPosition="before">
                     <!-- reassigned admin -->
-                    <ng-container *ngIf="responseObject?.adminPersonId">
+                    <ng-container *ngIf="travelDisclosure?.adminPersonId && isTravelAdministrator && checkReviewStatusCode(['3'])">
                         <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
                             class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
-                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['3'])"
                             (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2">Reassign Admin</span>
+                        </button>
+                    </ng-container>
+                    <!-- manage disclosure status -->
+                    <ng-container *ngIf="isTravelAdministrator && checkReviewStatusCode(['2','3'], 'SOME')">
+                        <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                            class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
+                            (click)="openConflictSlider()">
+                            <mat-icon>mode</mat-icon>
+                            <span class="ms-2">Manage Disclosure Status</span>
                         </button>
                     </ng-container>
 
@@ -250,7 +258,7 @@
                     <button title="Click to Withdraw Travel Disclosure"
                         (click)="openConfirmationModal('Withdraw', true, withdrawHelpText, true, withdrawError);"
                         class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3" 
-                        *ngIf="checkReviewStatusCode(['2']) && responseObject?.personId == currentPersonId">
+                        *ngIf="checkReviewStatusCode(['2']) && travelDisclosure?.personId == currentPersonId">
                         <mat-icon>logout</mat-icon>
                         <span class="ms-2">Withdraw</span>
                     </button>
@@ -265,7 +273,7 @@
 
                 <ng-container *ngIf="!isCreateMode">
                     <!-- assign admin -->
-                    <ng-container *ngIf="!(responseObject?.adminPersonId)">
+                    <ng-container *ngIf="!(travelDisclosure?.adminPersonId)">
                         <button title="Click to Assign Administrator/Admin Group"
                             area-describedby="Click to assign administrator"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
@@ -326,7 +334,7 @@
                 <!-- last update date -->
                 <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'my-3' : 'mt-1'">
                     <div class="fw-medium me-3">Last Updated By :</div>
-                    <div>{{responseObject?.personFullName}} On {{responseObject?.updateTimestamp |
+                    <div>{{travelDisclosure?.personFullName}} On {{travelDisclosure?.updateTimestamp |
                         dateFormatterWithTimeZone:'long'}}</div>
                 </div>
             </div>            
@@ -367,8 +375,8 @@
     [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionError]="descriptionError">
     <!-- modal header -->
     <ng-container header>
-        <span>{{modalActionBtnName}} Disclosure #{{responseObject?.travelDisclosureId}}
-            : Travel Disclosure By {{responseObject?.personFullName}}</span>
+        <span>{{modalActionBtnName}} Disclosure #{{travelDisclosure?.travelDisclosureId}}
+            : Travel Disclosure By {{travelDisclosure?.personFullName}}</span>
     </ng-container>
     <!-- modal content -->
     <ng-container content>
@@ -386,5 +394,11 @@
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen"
     [defaultAdminDetails]="defaultAdminDetails"
     [path]="'TRAVEL_DISCLOSURES'" (closeModal)="closeAssignAdministratorModal($event)"
-    [disclosureId]="responseObject?.travelDisclosureId">
+    [disclosureId]="travelDisclosure?.travelDisclosureId">
 </app-assign-administrator-modal>
+
+
+<app-travel-add-conflict-slider *ngIf="isOpenSlider" 
+    [entityDetails]="entityDetails" [travelDisclosure]="travelDisclosure"
+    [isEditMode]="showReturnOrApproveButton()" (closePage)="closeConflictSlider()" >
+</app-travel-add-conflict-slider>

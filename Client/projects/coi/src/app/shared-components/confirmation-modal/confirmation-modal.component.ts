@@ -141,12 +141,15 @@ export class ConfirmationModalComponent implements OnDestroy {
     /**
      * Close the modal and perform cleanup.
      *
-     * Purpose: Clears the mandatory field errors, resets the description field, and closes the modal.
+     * Purpose: Clears the mandatory field errors, resets the description field.
+     *          Closes the modal if the confirmation component exist.
+     *
      */
     private closeModal() {
         this.mandatoryList.clear();
         this.description = '';
-        document.getElementById(`${this.modalName}-dismiss-btn`).click();
+        const closeBtn = document.getElementById(`${this.modalName}-dismiss-btn`);
+        if (closeBtn) { closeBtn.click(); }
     }
 
     /**

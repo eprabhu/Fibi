@@ -44,7 +44,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     }
 
     showConflictNavBar() {
-        if(this.isOpenSlider) {
+        if (this.isOpenSlider) {
             setTimeout(() => {
                 const slider = document.querySelector('.slider-base');
                 slider.classList.add('slider-opened');
@@ -57,7 +57,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
           document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }    
 
-    closeNavBar() {
+    validateSliderClose() {
         (this.conflictStatus || this.comment) ? openModal('conflictConfirmationModal') : this.hideConflictNavBar();
     }
 
