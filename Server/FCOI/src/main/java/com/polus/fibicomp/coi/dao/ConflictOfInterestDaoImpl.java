@@ -23,6 +23,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import com.polus.fibicomp.coi.dto.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -35,14 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.applicationexception.dto.ApplicationException;
-import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
-import com.polus.fibicomp.coi.dto.COIValidateDto;
-import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
-import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
-import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -3492,7 +3485,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber) { 
+	public List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<CoiTravelDisclosure> queryCoiDisclosureOld = builder.createQuery(CoiTravelDisclosure.class);
@@ -3572,6 +3565,22 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			throw new ApplicationException("Unable to fetch Disclosure history", e, Constants.JAVA_ERROR);
 		}
 		return disclosureHistoryList;
+	}
+
+	@Override
+	public Timestamp updateEntityRiskCategory(CoiEntityDto entityDto) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiEntity e SET e.updateTimestamp = :updateTimestamp, e.riskCategoryCode = :riskCategoryCode, ");
+		hqlQuery.append("e.updateUser = :updateUser where e.entityId = :entityId");
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityDto.getEntityId());
+		query.setParameter("riskCategoryCode", entityDto.getRiskCategoryCode());
+		query.setParameter("updateTimestamp", updateTimestamp);
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.executeUpdate();
+		return updateTimestamp;
 	}
 
 	@Override
@@ -3669,4 +3678,40 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		hibernateTemplate.saveOrUpdate(disclosureActionLog);
 	}
 
+	@Override
+	public void syncDisclosureRisk(Integer disclosureId, Integer disclosureNumber) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		try {
+			CallableStatement statement = connection.prepareCall("{call COI_SYNC_DISCLOSURE_RISK(?,?,?)}");
+			statement.setInt(1, disclosureId);
+			statement.setInt(2, disclosureNumber);
+			statement.setString(3, AuthenticatedUser.getLoginUserName());
+			statement.execute();
+		} catch (Exception e) {
+			logger.error("Exception on syncDisclosureRisk {}", e.getMessage());
+		}
+	}
+
+	@Override
+	public Timestamp updateDisclosureRiskCategory(CoiDisclosureDto coiDisclosureDto) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE CoiEntity e SET e.updateTimestamp = :updateTimestamp, e.riskCategoryCode = :riskCategoryCode, ");
+		hqlQuery.append("e.updateUser = :updateUser where e.entityId = :entityId");
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", coiDisclosureDto.getDisclosureId());
+		query.setParameter("riskCategoryCode", coiDisclosureDto.getRiskCategoryCode());
+		query.setParameter("updateTimestamp", updateTimestamp);
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		query.executeUpdate();
+		return updateTimestamp;
+	}
+
+	@Override
+	public List<CoiRiskCategory> fetchDisclosureRiskCategory() {
+		return hibernateTemplate.loadAll(CoiRiskCategory.class);
+	}
 }

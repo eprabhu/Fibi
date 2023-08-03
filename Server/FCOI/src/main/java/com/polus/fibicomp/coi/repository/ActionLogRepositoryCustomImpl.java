@@ -7,6 +7,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import com.polus.fibicomp.coi.dao.GeneralDaoImpl;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.pojo.EntityActionLog;
+import com.polus.fibicomp.coi.pojo.EntityActionType;
+import com.polus.fibicomp.common.dao.CommonDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -16,6 +22,9 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
+import java.util.List;
+import java.util.Optional;
 import com.polus.fibicomp.coi.dao.GeneralDaoImpl;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
@@ -29,6 +38,9 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
 
     @Autowired
     private HibernateTemplate hibernateTemplate;
+
+    @Autowired
+    private CommonDao commonDao;
 
     @Override
     public List<EntityActionLog> fetchEntityActionLog(Integer entityId, String actionTypeCode) {
@@ -52,4 +64,42 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
 		return session.createQuery(query).getResultList();
 	}
 
+
+    @Override
+    public void saveObject(Object e) {
+        hibernateTemplate.saveOrUpdate(e);
+    }
+
+    @Override
+    public EntityActionType getEntityActionType(String actionLogTypeCode) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT ea FROM EntityActionType ea WHERE ea.actionTypeCode = :actionTypeCode");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("actionTypeCode", actionLogTypeCode);
+        return (EntityActionType) query.getResultList().get(0);
+    }
+
+    @Override
+    public List<EntityActionLog> fetchAllEntityActionLog(CoiEntityDto coiEntityDto) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT ea FROM EntityActionLog ea WHERE ea.entityNumber = :entityNumber ");
+        hqlQuery.append(" ORDER BY updateTimestamp DESC");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("actionTypeCode", coiEntityDto.getEntityNumber());
+        return query.getResultList();
+    }
+
+    @Override
+    public List<DisclosureActionLog> fetchDisclosureActionLog(DisclosureActionLogDto actionLogDto) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT al FROM DisclosureActionLog al WHERE al.disclosureId = :disclosureId AND " );
+        hqlQuery.append("al.actionTypeCode = :actionTypeCode ORDER BY al.updateTimestamp DESC");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("actionTypeCode", actionLogDto.getActionTypeCode());
+        query.setParameter("disclosureId", actionLogDto.getDisclosureId());
+        return query.getResultList();
+    }
 }

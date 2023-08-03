@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.dto.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
-import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
-import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
@@ -529,6 +524,21 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> getDisclosureHistory(@RequestBody CoiDashboardVO dashboardVO) {
 		return conflictOfInterestService.getDisclosureHistory(dashboardVO);
 	}
+
+	@PostMapping("/entity/modifyRisk")
+	public ResponseEntity<Object> modifyRisk(@RequestBody CoiEntityDto entityDto) {
+		return conflictOfInterestService.modifyRisk(entityDto);
+	}
+
+	@GetMapping("/entity/riskHistory/{entityId}")
+	public ResponseEntity<Object> fetchEntityRiskHistory(@PathVariable("entityId") Integer entityId) {
+		return conflictOfInterestService.fetchEntityRiskHistory(entityId);
+	}
+
+	@PostMapping("/entity/history")
+	public ResponseEntity<Object> fetchEntityHistory(@RequestBody CoiEntityDto coiEntityDto) {
+		return conflictOfInterestService.fetchEntityHistory(coiEntityDto);
+	}
 	
 	@PostMapping(value = "/loadTravelDisclosureHistory")
 	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(@RequestBody ConflictOfInterestVO vo) {
@@ -574,4 +584,18 @@ public class ConflictOfInterestController {
 		return actionLogService.getDisclosureHistoryById(disclosureId);
 	}
 
+	@PutMapping("/disclosure/modifyRisk")
+	public ResponseEntity<Object> modifyRisk(@RequestBody CoiDisclosureDto disclosureDto) {
+		return conflictOfInterestService.modifyDisclosureRisk(disclosureDto);
+	}
+
+	@GetMapping("/disclosure/risk")
+	public ResponseEntity<Object> fetchAllDisclosureRisk() {
+		return conflictOfInterestService.fetchAllDisclosureRisk();
+	}
+
+	@PostMapping("/disclosure/history")
+	public ResponseEntity<Object> fetchDisclosureHistory(@RequestBody DisclosureActionLogDto actionLogDto) {
+		return conflictOfInterestService.fetchDisclosureHistory(actionLogDto);
+	}
 }

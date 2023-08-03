@@ -5,11 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
@@ -447,6 +443,27 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> getDisclosureHistory(CoiDashboardVO dashboardVO);
 
+	/**
+	 * This method is used to modify risk
+	 * @param entityDto
+	 * @return
+	 */
+	ResponseEntity<Object> modifyRisk(CoiEntityDto entityDto);
+
+	/**
+	 * This method is used to fetch all risk history of an entity
+	 * @param entityId
+	 * @return
+	 */
+	ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId);
+
+	/**
+	 * This method is used to fetch Entity Action Log
+	 * @param coiEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> fetchEntityHistory(CoiEntityDto coiEntityDto);
+
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
 
 	/**
@@ -484,4 +501,23 @@ public interface ConflictOfInterestService {
 
     ResponseEntity<Object> returnDisclosure(Integer disclosureId, String description);
 
+	/**
+	 * This method is used to modify disclosure risk
+	 * @param disclosureDto
+	 * @return
+	 */
+	ResponseEntity<Object> modifyDisclosureRisk(CoiDisclosureDto disclosureDto);
+
+	/**
+	 * This method is used to fetch all disclosure risk
+	 * @return
+	 */
+	ResponseEntity<Object> fetchAllDisclosureRisk();
+
+	/**
+	 * This method is used to fetch disclosure history
+	 * @param actionLogDto
+	 * @return
+	 */
+	ResponseEntity<Object> fetchDisclosureHistory(DisclosureActionLogDto actionLogDto);
 }

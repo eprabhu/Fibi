@@ -4,13 +4,14 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
+import com.polus.fibicomp.coi.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.polus.fibicomp.coi.dto.COIValidateDto;
-import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
@@ -53,11 +54,14 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
+import com.polus.fibicomp.proposal.pojo.Proposal;
 
 @Transactional
 @Service
@@ -601,7 +605,7 @@ public interface ConflictOfInterestDao {
 	 * @param moduleCode
 	 * @param personId
 	 * @param disclosureId
-	 * @param searchString 
+	 * @param searchString
 	 * @return
 	 */
 	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString);
@@ -971,6 +975,13 @@ public interface ConflictOfInterestDao {
 	 */
 	List<DisclosureHistoryDto> getDisclosureHistory(CoiDashboardVO dashboardVO);
 
+	/**
+	 * This method is used to update risk category of an entity
+	 * @param entityDto
+	 * @return
+	 */
+	Timestamp updateEntityRiskCategory(CoiEntityDto entityDto);
+
 	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
 
 
@@ -1007,4 +1018,23 @@ public interface ConflictOfInterestDao {
 
 	public void saveOrUpdateDisclosureActionLog(DisclosureActionLog disclosureActionLog);
 
+	/**
+	 * This method is used to sync disclosure risk
+	 * @param disclosureId
+	 * @param disclosureNumber
+	 */
+	void syncDisclosureRisk(Integer disclosureId, Integer disclosureNumber);
+
+	/**
+	 * This method is used to update disclosure risk
+	 * @param coiDisclosureDto
+	 * @return
+	 */
+	Timestamp updateDisclosureRiskCategory(CoiDisclosureDto coiDisclosureDto);
+
+	/**
+	 * This method is used to fetch all disclosure risk
+	 * @return
+	 */
+	List<CoiRiskCategory> fetchDisclosureRiskCategory();
 }
