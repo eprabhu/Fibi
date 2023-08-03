@@ -192,25 +192,26 @@
                         (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
                         <div class="row mt-2">
                             <div class="col">
-                                <span class="align-items-center d-flex">
+                                <span class="d-flex">
                                     <span
-                                        class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(coi.fcoiTypeCode)}}">
+                                        class="entity-status shadow-sm align-items-center d-flex mt-2 {{getColorBadges(coi.fcoiTypeCode)}}">
                                         <span>{{coi?.fcoiType}}</span>
                                     </span>
-                                    <h4 class="mb-0 ml-2 mt-2">
-                                        <strong>
-                                            <span class="me-2 mb-0 ml-2 mt-2 fa fa-user label-text align-items-center fs-16"><strong class="me-1 ml-2">{{coi.disclosurePersonFullName}}</strong></span>
-                                            <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="pipe"></span>
-                                            <span *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="label-text ms-2 fs-16">
-                                            <img *ngIf="coi.fcoiTypeCode==2" class="proposal-icon" src="{{deployMap}}assets/images/proposal.png">
-                                            <img *ngIf="coi.fcoiTypeCode==3" class="award-icon" src="{{deployMap}}assets/images/award.png">
-                                                Project : </span>
-                                            <span class="title-text"> {{(readMoreOrLess[index]) ? modalHeader(coi) : modalHeader(coi) | slice:0:90}}</span>
-                                            <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>90">...
-                                                <a (click)="readMoreOrLess[index]=true"><span class="readMore">Read More</span></a>
+                                    <h4 class="mb-0 mt-2 d-flex label-text">
+                                        <i class="fa fa-user mt-2" aria-hidden="true"></i>
+                                        <strong class="me-2 ml-2 text-nowrap mt-2">{{coi.disclosurePersonFullName}}</strong>
+                                        <ng-container *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="ms-1">
+                                            <span class="pipe me-2 mt-1"></span>
+                                            <img *ngIf="coi?.fcoiTypeCode==2" class="proposal-icon mt-1" src="{{deployMap}}assets/images/proposal.png">
+                                            <img *ngIf="coi?.fcoiTypeCode==3" class="award-icon mt-1" src="{{deployMap}}assets/images/award.png">
+                                            <span class="text-nowrap mt-2">Project :</span>
+                                            <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(coi) : modalHeader(coi) | slice:0:180)}}
+                                            <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>180">...
+                                                <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span class="readMore fw-500">Read More</span></a>
                                             </span>
-                                            <span *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1">Read Less</span></span>
-                                        </strong>
+                                            <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1 fw-500">Read Less</span></a>
+                                            </span>
+                                        </ng-container>  
                                     </h4>
                                 </span>
                             </div>

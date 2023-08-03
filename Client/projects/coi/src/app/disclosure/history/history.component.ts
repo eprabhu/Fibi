@@ -19,8 +19,10 @@ export class HistoryComponent implements OnInit {
     coiDisclosure: any = {};
     disclosureHistoryLogs: any = {};
 
-    constructor(public _coiService: CoiService, private _commonService: CommonService, private _dataStore: DataStoreService,
-        public _dataFormatPipe: DateFormatPipeWithTimeZone) { }
+    constructor( public _coiService: CoiService, 
+                 private _commonService: CommonService, 
+                 private _dataStore: DataStoreService,
+                 public _dataFormatPipe: DateFormatPipeWithTimeZone ) { }
 
     ngOnInit() {
         this.getDataFromStore();
