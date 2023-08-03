@@ -34,6 +34,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
+import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
@@ -1006,5 +1007,15 @@ public interface ConflictOfInterestDao {
 	public DisclosureActionType fetchDisclosureActionTypeById(String actionLogCreated);
 
 	public void saveOrUpdateDisclosureActionLog(DisclosureActionLog disclosureActionLog);
+
+	public List<CoiTravelDisclosureStatusType> getTravelConflictStatusType();
+
+	public DisclComment getTravelConflictComment(Integer travelDisclosureId);
+
+	public void saveOrUpdateCoiTravelConflictHistory(CoiTravelConflictHistory coiTravelConflictHistory);
+
+	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
+
+	public String getCoiTravelConflictStatusByStatusCode(String conflictStatusCode);
 
 }

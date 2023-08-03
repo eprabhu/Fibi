@@ -36,6 +36,7 @@ import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ActionLogService;
@@ -572,6 +573,24 @@ public class ConflictOfInterestController {
     @GetMapping("/disclosureHistory/{disclosureId}")
 	public ResponseEntity<Object> getDisclosureHistoryById(@PathVariable("disclosureId") Integer disclosureId) {
 		return actionLogService.getDisclosureHistoryById(disclosureId);
+	}
+
+    @GetMapping("/getTravelConflictStatusType")
+	public ResponseEntity<Object> getTravelConflictStatusType() {
+		logger.info("Requesting for getTravelConflictStatusType");
+		return conflictOfInterestService.getTravelConflictStatusType();
+	}
+
+    @PostMapping(value = "/manageTravelConflict")
+    public ResponseEntity<Object> manageTravelConflict(@RequestBody ConflictOfInterestVO vo) {
+        logger.info("Request for managing travel conflict");
+        return conflictOfInterestService.manageTravelConflict(vo);
+    }
+
+    @GetMapping("/loadTravelConflictHistory/{travelDisclosureId}")
+	public List<CoiTravelConflictHistory> loadTravelConflictHistory(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Request for loadTravelConflictHistory");
+		return conflictOfInterestService.getCoiTravelConflictHistory(travelDisclosureId);
 	}
 
 }
