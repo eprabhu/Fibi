@@ -86,6 +86,10 @@ public class COIImportGraphDataDao {
 	}
 
 	private void importEntity() {
+
+		var start = Instant.now();
+		logger.debug("--------- Import Entity: starts at ------------ " + start);
+
 		String query = "SELECT \r\n" + "CONCAT('ENT',t1.ENTITY_ID) as ID,\r\n" + "t1.ENTITY_NUMBER,\r\n"
 				+ "t1.ENTITY_NAME as NAME,\r\n" + "t2.DESCRIPTION as STATUS,\r\n" + "t3.DESCRIPTION as TYPE,\r\n"
 				+ "t1.COUNTRY_CODE,\r\n" + "t4.COUNTRY_NAME,\r\n" + "t1.WEB_URL\r\n" + "FROM entity t1\r\n"
@@ -93,26 +97,55 @@ public class COIImportGraphDataDao {
 				+ "inner join entity_type t3 on t1.entity_type_code = t3.entity_type_code\r\n"
 				+ "left outer join country t4 on t1.COUNTRY_CODE = t4.COUNTRY_CODE\r\n"
 				+ "WHERE t1.VERSION_NUMBER IN  (select MAX(s1.VERSION_NUMBER) from entity s1 where s1.ENTITY_NUMBER = t1.ENTITY_NUMBER and s1.VERSION_STATUS = 'ACTIVE' )";
-		List<COIEntity> ls = jdbcTemplate.query(query, (resultSet, rowNum) -> {
-			COIEntity entity = new COIEntity();
-			entity.setId(resultSet.getString("ID"));
-			entity.setEntityNumber(resultSet.getString("ENTITY_NUMBER"));
-			entity.setEntityName(resultSet.getString("NAME"));
-			entity.setStatus(resultSet.getString("STATUS"));
-			entity.setType(resultSet.getString("TYPE"));
-			entity.setCountryName(resultSet.getString("COUNTRY_NAME"));
-			entity.setCountryCode(resultSet.getString("COUNTRY_CODE"));
 
+		int pageSize = 1000; // Number of records to fetch in each batch
+
+		// Get the total count of records for pagination
+		int totalCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM entity", Integer.class);
+
+		// Create a thread pool for parallel processing
+		ExecutorService executorService = Executors.newFixedThreadPool(5);
+
+		// Create batches using pagination and process them in parallel
+		List<CompletableFuture<Void>> futureList = Stream.iterate(0, i -> i + pageSize)
+				.limit((totalCount + pageSize - 1) / pageSize) // Calculate the number of batches
+				.map(offset -> CompletableFuture.supplyAsync(() -> fetchEntityData(query, pageSize, offset),
+						executorService))
+				.map(futureEntity -> futureEntity.thenAccept(this::saveEntityToNeo4j)).collect(Collectors.toList());
+
+		// Wait for all CompletableFuture instances to complete
+		CompletableFuture.allOf(futureList.toArray(CompletableFuture[]::new)).join();
+
+		// Shutdown the executor service
+		executorService.shutdown();
+
+		var end = Duration.between(start, Instant.now()).toMillis();
+		logger.debug("--------- Import Entity: Total duration ------------ " + end);
+
+	}
+
+	private List<COIEntity> fetchEntityData(String query, int pageSize, int offset) {
+		String paginatedQuery = query + " LIMIT " + pageSize + " OFFSET " + offset;
+		return jdbcTemplate.query(paginatedQuery, (resultSet, rowNum) -> {
+
+			COIEntity entity = COIEntity.builder().id(resultSet.getString("ID"))
+					.entityNumber(resultSet.getString("ENTITY_NUMBER")).entityName(resultSet.getString("NAME"))
+					.status(resultSet.getString("STATUS")).type(resultSet.getString("TYPE"))
+					.countryName(resultSet.getString("COUNTRY_NAME")).countryCode(resultSet.getString("COUNTRY_CODE"))
+					.build();
 			return entity;
+
 		});
-		entityRepository.saveAll(ls);
+	}
+
+	private void saveEntityToNeo4j(List<COIEntity> entity) {
+		entityRepository.saveAll(entity);
 	}
 
 	private void importPerson() {
 
 		var start = Instant.now();
-		logger.debug("--------- START TIME PARALLEL ------------ " + start);
-		System.out.println("--------- START TIME PARALLEL------------ " + start);
+		logger.debug("--------- Import Person: starts at ------------ " + start);
 
 		String query = "select CONCAT('PER',PERSON_ID) AS ID, PERSON_ID,FULL_NAME,UNIT_NAME as HOME_UNIT,t1.COUNTRY_OF_CITIZENSHIP as COUNTRY_CODE, t4.COUNTRY_NAME,\r\n"
 				+ "CASE   WHEN STATUS = 'A' THEN 'Active' ELSE 'Inactive' END AS STATUS \r\n" + "from person t1\r\n"
@@ -132,8 +165,9 @@ public class COIImportGraphDataDao {
 		// Create batches using pagination and process them in parallel
 		List<CompletableFuture<Void>> futureList = Stream.iterate(0, i -> i + pageSize)
 				.limit((totalCount + pageSize - 1) / pageSize) // Calculate the number of batches
-				.map(offset -> CompletableFuture.supplyAsync(() -> fetchData(query, pageSize, offset), executorService))
-				.map(futurePersons -> futurePersons.thenAccept(this::saveToNeo4j)).collect(Collectors.toList());
+				.map(offset -> CompletableFuture.supplyAsync(() -> fetchPersonData(query, pageSize, offset),
+						executorService))
+				.map(futurePersons -> futurePersons.thenAccept(this::savePersonToNeo4j)).collect(Collectors.toList());
 
 		// Wait for all CompletableFuture instances to complete
 		CompletableFuture.allOf(futureList.toArray(CompletableFuture[]::new)).join();
@@ -141,12 +175,11 @@ public class COIImportGraphDataDao {
 		// Shutdown the executor service
 		executorService.shutdown();
 		var end = Duration.between(start, Instant.now()).toMillis();
-		logger.debug("--------- END TIME PARALLEL ------------ " + end);
-		System.out.println("--------- END TIME PARALLEL------------ " + end);
+		logger.debug("--------- Import Person: Total duration ------------ " + end);
 
 	}
 
-	private List<Person> fetchData(String query, int pageSize, int offset) {
+	private List<Person> fetchPersonData(String query, int pageSize, int offset) {
 		String paginatedQuery = query + " LIMIT " + pageSize + " OFFSET " + offset;
 		return jdbcTemplate.query(paginatedQuery, (resultSet, rowNum) -> {
 			Person person = Person.builder().id(resultSet.getString("ID")).personId(resultSet.getString("PERSON_ID"))
@@ -157,7 +190,7 @@ public class COIImportGraphDataDao {
 		});
 	}
 
-	private void saveToNeo4j(List<Person> persons) {
+	private void savePersonToNeo4j(List<Person> persons) {
 		personRepository.saveAll(persons);
 	}
 
