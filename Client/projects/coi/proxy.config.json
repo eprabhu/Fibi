@@ -347,6 +347,18 @@
     "target": "http://192.168.1.149/coi/",
     "secure": false
   },
+  "/getTravelConflictStatusType": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/manageTravelConflict": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/loadTravelConflictHistory/*": {
+    "target": "http://192.168.1.149/coi",
+    "secure": false
+  },
   "/evaluateValidation/*" : {
     "target": "http://192.168.1.149/coi/",
     "secure": false
