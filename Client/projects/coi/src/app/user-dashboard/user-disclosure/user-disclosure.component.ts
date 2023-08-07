@@ -210,8 +210,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     redirectToDisclosure(disclosure: UserDisclosure) {
-        const redirectUrl = disclosure.travelDisclosureId ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : (disclosure.reviewStatusCode === '1' ?
-            CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL);
+        const redirectUrl = disclosure.travelDisclosureId ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : (disclosure.reviewStatusCode === '1' || disclosure.reviewStatusCode === '5') ?
+            CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         this._router.navigate([redirectUrl],
             { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId } });
     }
