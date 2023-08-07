@@ -632,3 +632,11 @@
     </div>
   </ng-container>
 </div>
+<div #viewSFIDetailsOverlay [class.overlay]="showSlider">
+  <div class="slider-base" *ngIf="showSlider">
+    <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
+    <div class="slider-container">
+      <app-entity-details [entityId]="personEntityId"></app-entity-details>
+    </div>
+  </div>
+</div>

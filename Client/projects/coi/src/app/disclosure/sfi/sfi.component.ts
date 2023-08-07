@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { debounce, switchMap } from 'rxjs/operators';
-import { GetSFIRequestObject } from '../coi-interface';
-import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../../../../fibi/src/app/common/utilities/animations';
+import { RO } from '../coi-interface';
+import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/utilities/animations';
 
 @Component({
     selector: 'app-sfi',
@@ -59,7 +59,6 @@ export class SfiComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this._coiService.isShowSFIInfo = true;
-        this.isLoading = true;
         this.getEditMode();
         this.getSfiDetails();
         this.$fetchSFIList.next();
@@ -86,7 +85,10 @@ export class SfiComponent implements OnInit, OnDestroy {
 
     getSfiDetails() {
         this.$subscriptions.push(this.$fetchSFIList.pipe(
-            switchMap(() => this._sfiService.getSfiDetails(this.getRequestObject()))).subscribe((data: any) => {
+            switchMap(() => {
+                this.isLoading = true;
+                return this._sfiService.getSfiDetails(this.getRequestObject())
+            })).subscribe((data: any) => {
             if (data) {
                 this.count = data.count;
                 this.coiFinancialEntityDetails = data.personEntities;
@@ -96,7 +98,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     getRequestObject() {
-        let requestObj: GetSFIRequestObject = new GetSFIRequestObject();
+        let requestObj: RO = new RO();
         requestObj.currentPage = this.currentPage;
         requestObj.disclosureId = this.disclosureId;
         requestObj.filterType = this.filterType;
@@ -141,7 +143,6 @@ export class SfiComponent implements OnInit, OnDestroy {
         this.filterType = filterType;
         this.currentPage = 1;
         this.searchText = '';
-        this.isLoading = true;
         this.coiFinancialEntityDetails = [];
         this.$fetchSFIList.next();
     }
@@ -158,11 +159,8 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     actionsOnPageChange(event) {
-        if(this.currentPage != event) {
             this.currentPage = event;
-            this.searchText = '';
             this.$fetchSFIList.next();
-        }
     }
 
     hideSfiNavBar() {

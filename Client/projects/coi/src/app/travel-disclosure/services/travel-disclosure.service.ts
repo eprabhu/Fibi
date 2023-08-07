@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { TravelActionAfterSubmitRO, TravelDisclosure, TravelHistoryRO } from '../travel-disclosure-interface';
+import { TravelActionAfterSubmitRO, TravelConflictRO, TravelDisclosure, TravelHistoryRO } from '../travel-disclosure-interface';
 
 
 @Injectable()
@@ -66,5 +66,17 @@ export class TravelDisclosureService {
 
     loadTravelDisclosureHistory(travelHistoryRO: TravelHistoryRO) {
         return this._http.post(`${this._commonService.baseUrl}/loadTravelDisclosureHistory`, travelHistoryRO);
+    }
+
+    getTravelConflictStatusType() {
+        return this._http.get( `${this._commonService.baseUrl}/getTravelConflictStatusType`);
+    }
+
+    manageTravelConflict(params: TravelConflictRO) {
+        return this._http.post(`${this._commonService.baseUrl}/manageTravelConflict`, params);
+    }
+
+    loadTravelConflictHistory(travelDisclosureId: number) {
+        return this._http.get(`${this._commonService.baseUrl}/loadTravelConflictHistory/${travelDisclosureId}`);
     }
 }

@@ -277,6 +277,7 @@ CREATE TABLE `coi_project_award` (
   `FED_AT` datetime DEFAULT NULL,
   `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
   `UPDATE_USER` varchar(60) DEFAULT NULL,
+  `PROJECT_ROLE` VARCHAR(60) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `COI_PROJECT_AWARD_FK1_idx` (`COI_PROJECT_TYPE_CODE`),
   CONSTRAINT `COI_PROJECT_AWARD_FK1` FOREIGN KEY (`COI_PROJECT_TYPE_CODE`) REFERENCES `coi_project_type` (`COI_PROJECT_TYPE_CODE`)
@@ -878,6 +879,104 @@ CREATE TABLE `coi_quest_table_answer` (
   CONSTRAINT `COI_QUESTIONNAIRE_ANS_HEADER_ID_FK1` FOREIGN KEY (`QUESTIONNAIRE_ANS_HEADER_ID`) REFERENCES `quest_answer_header` (`QUESTIONNAIRE_ANS_HEADER_ID`)
 );
 
+DROP TABLE IF EXISTS disclosure_action_type;
+CREATE TABLE `disclosure_action_type` (
+  `ACTION_TYPE_CODE` varchar(3) NOT NULL,
+  `MESSAGE` varchar(200) DEFAULT NULL,
+  `DESCRIPTION` varchar(200) DEFAULT NULL,
+  `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
+  `UPDATE_USER` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`ACTION_TYPE_CODE`)
+);
+
+DROP TABLE IF EXISTS entity_action_type;
+CREATE TABLE `entity_action_type` (
+  `ACTION_TYPE_CODE` varchar(3) NOT NULL,
+  `MESSAGE` varchar(200) DEFAULT NULL,
+  `DESCRIPTION` varchar(200) DEFAULT NULL,
+  `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
+  `UPDATE_USER` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`ACTION_TYPE_CODE`)
+);
+
+DROP TABLE IF EXISTS disclosure_action_log;
+CREATE TABLE `disclosure_action_log` (
+  `ACTION_LOG_ID` int NOT NULL AUTO_INCREMENT,
+  `DISCLOSURE_ID` int DEFAULT NULL,
+  `DISCLOSURE_NUMBER` int DEFAULT NULL,
+  `ACTION_TYPE_CODE` varchar(3) DEFAULT NULL,
+  `DESCRIPTION` varchar(200) DEFAULT NULL,
+  `COMMENT` varchar(4000) DEFAULT NULL,
+  `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
+  `UPDATE_USER` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`ACTION_LOG_ID`),
+  KEY `DISCLOSURE_ACTION_LOG_FK1` (`ACTION_TYPE_CODE`),
+  KEY `DISCLOSURE_ACTION_LOG_FK2` (`DISCLOSURE_ID`),
+  CONSTRAINT `DISCLOSURE_ACTION_LOG_FK1` FOREIGN KEY (`ACTION_TYPE_CODE`) REFERENCES `disclosure_action_type` (`ACTION_TYPE_CODE`),
+  CONSTRAINT `DISCLOSURE_ACTION_LOG_FK2` FOREIGN KEY (`DISCLOSURE_ID`) REFERENCES `coi_disclosure` (`DISCLOSURE_ID`)
+);
+
+DROP TABLE IF EXISTS entity_action_log;
+CREATE TABLE `entity_action_log` (
+  `ACTION_LOG_ID` int NOT NULL AUTO_INCREMENT,
+  `ENTITY_ID` int DEFAULT NULL,
+  `ENTITY_NUMBER` int DEFAULT NULL,
+  `ACTION_TYPE_CODE` varchar(3) DEFAULT NULL,
+  `DESCRIPTION` varchar(200) DEFAULT NULL,
+  `COMMENT` varchar(4000) DEFAULT NULL,
+  `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
+  `UPDATE_USER` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`ACTION_LOG_ID`),
+  KEY `ENTITY_ACTION_LOG_FK1` (`ACTION_TYPE_CODE`),
+  KEY `ENTITY_ACTION_LOG_FK2` (`ENTITY_ID`),
+  CONSTRAINT `ENTITY_ACTION_LOG_FK1` FOREIGN KEY (`ACTION_TYPE_CODE`) REFERENCES `entity_action_type` (`ACTION_TYPE_CODE`),
+  CONSTRAINT `ENTITY_ACTION_LOG_FK2` FOREIGN KEY (`ENTITY_ID`) REFERENCES `entity` (`ENTITY_ID`)
+);
+
+DROP TABLE IF EXISTS travel_disclosure_action_log;
+CREATE TABLE `travel_disclosure_action_log` (
+  `ACTION_LOG_ID` int NOT NULL AUTO_INCREMENT,
+  `TRAVEL_DISCLOSURE_ID` int DEFAULT NULL,
+  `TRAVEL_NUMBER` int DEFAULT NULL,
+  `ACTION_TYPE_CODE` varchar(3) DEFAULT NULL,
+  `DESCRIPTION` varchar(200) DEFAULT NULL,
+  `COMMENT` varchar(4000) DEFAULT NULL,
+  `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
+  `UPDATE_USER` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`ACTION_LOG_ID`),
+  KEY `TRAVEL_DISCLOSURE_ACTION_LOG_FK1` (`ACTION_TYPE_CODE`),
+  KEY `TRAVEL_DISCLOSURE_ACTION_LOG_FK2` (`TRAVEL_DISCLOSURE_ID`),
+  CONSTRAINT `TRAVEL_DISCLOSURE_ACTION_LOG_FK1` FOREIGN KEY (`ACTION_TYPE_CODE`) REFERENCES `disclosure_action_type` (`ACTION_TYPE_CODE`),
+  CONSTRAINT `TRAVEL_DISCLOSURE_ACTION_LOG_FK2` FOREIGN KEY (`TRAVEL_DISCLOSURE_ID`) REFERENCES `coi_travel_disclosure` (`TRAVEL_DISCLOSURE_ID`)
+);
+
+CREATE TABLE `coi_travel_conflict_history` (
+  `COI_TRAVEL_CONFLICT_HISTORY_ID` int NOT NULL AUTO_INCREMENT,
+  `TRAVEL_DISCLOSURE_ID` int NOT NULL,
+  `COMMENT` varchar(4000) DEFAULT NULL,
+  `CONFLICT_STATUS_CODE` varchar(3) DEFAULT NULL,
+  `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
+  `UPDATE_USER` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`COI_TRAVEL_CONFLICT_HISTORY_ID`),
+  KEY `COI_TRAVEL_CONFLICT_HISTORY_FK1_idx` (`CONFLICT_STATUS_CODE`)
+);
+
+INSERT INTO `discl_component_type` (`COMPONENT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', 'Travel disclosure conflict comment', 'Y', now(), 'quickstart');
+INSERT INTO `discl_comment_type` (`COMMENT_TYPE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', 'Travel disclosure conflict comment', 'Y', now(), 'quickstart');
+
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('1', 'New {FCOI /Project /Travel} application has been created', 'Created', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', '{FCOI /Project /Travel} application has been submitted', 'Submitted', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '{FCOI /Project /Travel} application has been recalled', 'Withdraw', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('4', 'New Admin <b>{ADMIN_ONE}</b> has been assigned', 'Assigned to admin /Admin Group', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('5', 'Admin <b>{ADMIN_ONE}</b> reassigned to <b>{ADMIN_TWO}</b>', 'Re Assigned to admin /Admin Group', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('6', '{FCOI /Project /Travel} application has been returned', 'Returned', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('7', '<b>{Reviewer Name}</b> assigned to review {FCOI /Project /Travel} application', 'Assigned For Review', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('8', '{FCOI /Project /Travel} Disclosure review has been completed', 'Assigned Review Completed', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('9', 'Risk Level <b>{LOW}</b> has been added', 'Added Risk', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('10', 'Risk for  {FCOI /Project /Travel} Disclosure changed from {LOW} to {HIGH}', 'Manage Risk', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('11', '{FCOI /Project /Travel}  Disclosure admin-review has been completed', 'Admin  Review Completed', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('12', '{FCOI /Project /Travel} Disclosure has been expired', 'Expired', now(), 'quickstart');
+
 SET FOREIGN_KEY_CHECKS=1;
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
@@ -910,6 +1009,7 @@ DROP PROCEDURE IF EXISTS INSERT_QUESTIONNAIRE_ANSWERS;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_HISTORY;
 DROP VIEW IF EXISTS `coi_project_award_v`;
 DROP VIEW IF EXISTS `coi_project_proposal_v`;
+DROP PROCEDURE IF EXISTS GET_COI_TRAVEL_DISCLOSURE_ADMIN_DASHBOARD;
 
 \. ./Procedures/GET_COI_DISCLOSURE_DASHBOARD.sql
 \. ./Procedures/GET_COI_DISCLOSURE_DASHBOARD_COUNT.sql
@@ -940,5 +1040,6 @@ DROP VIEW IF EXISTS `coi_project_proposal_v`;
 \. ./Procedures/GET_COI_DISCLOSURE_HISTORY.sql
 \. ./views/coi_project_award_v.sql;
 \. ./views/coi_project_proposal_v.sql;
+\. ./Procedures/GET_COI_TRAVEL_DISCLOSURE_ADMIN_DASHBOARD.sql;
 
 

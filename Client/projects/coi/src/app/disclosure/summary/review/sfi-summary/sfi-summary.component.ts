@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { CoiSummaryService } from '../../coi-summary.service';
 import { environment } from '../../../../../environments/environment';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
-import { CommentConfiguration, GetSFIRequestObject } from '../../../coi-interface';
+import { CommentConfiguration, RO } from '../../../coi-interface';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Router } from '@angular/router';
 
@@ -63,7 +63,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     }
 
     getRequestObject() {
-		const REQ_OBJ = new GetSFIRequestObject();
+		const REQ_OBJ = new RO();
         REQ_OBJ.currentPage = 0;
         REQ_OBJ.disclosureId = Number(this.coiDetails.disclosureId);
         REQ_OBJ.filterType = '';

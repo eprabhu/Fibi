@@ -1,6 +1,6 @@
 <div #addCommentOverlay [class.overlay]="isOpenSlider">
     <div class="slider-base" *ngIf="isOpenSlider">
-        <app-slider-close-btn (closeAction)="hideConflictNavBar()"></app-slider-close-btn>
+        <app-slider-close-btn (closeAction)="validateSliderClose()"></app-slider-close-btn>
         <div class="slider-container p-0">
             <div class="card card-header bg-white px-4 py-2 pt-3">
                 <div class="justify-content-between d-flex align-items-center">

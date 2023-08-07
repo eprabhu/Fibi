@@ -1,123 +1,48 @@
 <div class="mt-3 mx-0 row" *ngIf="_coiService.isShowHistoryInfo">
-  <div class="align-items-center col-12 d-flex font highlight-node justify-content-between p-3">
-    <p class="fs-14 m-0">Here you can view and access the Active / Pending
-      versions of the disclosure.All the modifications done on disclosures are saved as separate versions, used for
-      future reference.</p>
-    <button id="disclosure-info-close" type="button" class="btn-close" (click)="closeHistoryInfo()"
-      aria-label="Close">
-    </button>
-  </div>
+    <div class="align-items-center col-12 d-flex font highlight-node justify-content-between p-3">
+        <p class="fs-14 m-0">View the list of actions performed on the disclosure against the respective date and time.
+        </p>
+        <button id="disclosure-info-close" type="button" class="btn-close fs-12" (click)="closeHistoryInfo()"
+            aria-label="Close">
+        </button>
+    </div>
 </div>
-<article>
-  <ng-container *ngFor="let log of coiActionLogs;let first = first">
-    <div class=" mt-3 mb-1">
-      <div class=" w-100">
-        <div class="px-0">
-          <div class="row form-row top-card border m-1">
-            <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-              <label>Event type : </label>
-              <span class="fs-14 ">
-                {{log.eventType}}</span>
-            </div>
-            <div class="py-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-              <label>COI Disposition Status : </label>
-              <span
-                class="badge badge-pill bg-{{getBadge(log.coiDepositionStatus.code)}} text-{{getBadgeTextColor(log.coiDepositionStatus.code)}} pb-1 ms-2">
-                {{log.coiDepositionStatus.description}}</span>
-            </div>
-            <div class="py-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-              <label>Review Status : </label>
-              <span
-                class=" badge badge-pill bg-{{getBadge(log.reviewStatus.code)}} text-{{getBadgeTextColor(log.reviewStatus.code)}} pb-1 ms-2">
-                {{log.reviewStatus.description}}</span>
-            </div>
-            <div class="py-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-              <label>Disclosure Status : </label>
-              <span
-                class="badge badge-pill bg-{{getBadge(log.disclStatus.code)}} text-{{getBadgeTextColor(log.disclStatus.code)}} pb-1 ms-2">
-                {{log.disclStatus.description}}</span>
-            </div>
-            <hr class="text-dark col-12 p-0">
-            <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-              <label for="name">Revision Reason : </label>
-              <span class="fs-14">{{log.requestTitle}}</span>
-            </div>
-            <div class="py-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-              <label for="name">Active Date : </label>
-              <span class="fs-14">{{log.activeDate}}</span>
-            </div>
-            <div class="py-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-              <label for="name">Certified Date : </label>
-              <span class="fs-14">{{log.certifiedDate}}</span>
-            </div>
-            <div class="py-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-              <button class="btn btn-primary fs-14">View FCOI</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col mt-2 ml-5 p-0 pb-1">
-        <ng-container *ngFor="let historyEntry of log.value;let index = index;let last = last;let first=first">
-          <div class="align-items-center ml-5 mx-0">
-            <div class="col mb-3 p-2" [class.last-item]="last" [class.first-item]="first">
-              <div class=" w-100 border px-0">
-                <div class="row form-row px-2">
-                    <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-                      <label class="fs-14 fw-700">Event type : </label>
-                      <span class="fs-14">
-                        {{historyEntry.eventType}}</span>
-                    </div>
-                    <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-                      <label class="fs-14 fw-700">COI Disposition. Status : </label>
-                      <span
-                        class="badge badge-pill bg-{{getBadge(historyEntry.coiDepositionStatus.code)}}  text-{{getBadgeTextColor(historyEntry.coiDepositionStatus.code)}} pb-1 ms-2 ">
-                        {{historyEntry.coiDepositionStatus.description}}</span>
-                    </div>
-                    <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-                      <label class="fs-14 fw-700 ">Review Status : </label>
-                      <span
-                        class="badge badge-pill bg-{{getBadge(historyEntry.reviewStatus.code)}} text-{{getBadgeTextColor(historyEntry.reviewStatus.code)}} pb-1 ms-2">
-                        {{historyEntry.reviewStatus.description}}</span>
-                    </div>
-                    <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-                      <label class="fs-14 fw-700">Disclosure Status : </label>
-                      <span
-                        class=" badge badge-pill bg-{{getBadge(historyEntry.disclStatus.code)}} text-{{getBadgeTextColor(historyEntry.disclStatus.code)}} pb-1 ms-2">
-                        {{historyEntry.disclStatus.description}}</span>
-                    </div>
-                  <hr class="col-12 text-dark p-0">
-                  <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-                    <label for="name" class="fs-14 fw-700">Revision Reason : </label>
-                    <span class="fs-14">{{historyEntry.requestTitle}}</span>
-                  </div>
-                  <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-                    <label for="name" class="fs-14 fw-700">Active Date : </label>
-                    <span class="fs-14">{{historyEntry.activeDate}}</span>
-                  </div>
-                  <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-                    <label for="name" class="fs-14 fw-700">Certified Date : </label>
-                    <span class="fs-14">{{historyEntry.certifiedDate}}</span>
-                  </div>
-                  <div class="py-3 pl-3 col-lg-3 col-md-6 col-12 no-hover-effect">
-                    <button class="btn btn-primary previous-fcoi-viewbutton previousFcoi-button fs-14">View FCOI</button>
-                  </div>
 
+<div class="card mt-3" id="agreement-history">
+    <div class="card-content">
+        <div class="card-body">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="sr-none"></thead>
+                        <tbody>
+                            <tr *ngFor="let disclosure of disclosureHistoryLogs | keyvalue: sortNull">
+                                <h4 class="border-left-line pl-3 fw-700 history-date py-2 px-3">{{disclosure.key}}</h4>
+                                <ul class="pl-4 pr-3">
+                                    <li *ngFor="let historyEntry of disclosure.value;" class="p-3">
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <p class="fs-14 mb-0">
+                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                    <label class="fw-700 mx-3">{{historyEntry?.updateTimestamp|
+                                                        dateFormatterWithTimeZone:'time'}}</label>
+                                                    <span [innerHTML]="historyEntry?.message"></span>
+                                                    <span class="pl-2" *ngIf="historyEntry?.updateUserFullName"></span>
+                                                    by<span
+                                                        class="history-username fw-700 ml-2">{{historyEntry?.updateUserFullName}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-              </div>
+                <div class="noDataExists p-2" *ngIf="!disclosureHistoryLogs?.length">
+                    <app-no-information> </app-no-information>
+                </div>
             </div>
-          </div>
-        </ng-container>
-      </div>
+        </div>
     </div>
-
-  </ng-container>
-</article>
-<div *ngIf="!(coiActionLogs).length" class="no-data-container">
-  <span class="no-data-icon-outer">
-    <div class="no-data-icon">
-      <i aria-hidden="true" class="fa fa-file-o"></i>
-      <i aria-hidden="true" class="fa fa-times-circle-o"></i>
-    </div>
-  </span>
-  <h4>There is no information found.</h4>
 </div>

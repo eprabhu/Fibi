@@ -1,9 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityDetailsService } from './entity-details.service';
-import { hideModal, openModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { hideModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { NavigationService } from '../../common/services/navigation.service';
+import { SfiService } from '../sfi/sfi.service';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { CommonService } from '../../common/services/common.service';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
   selector: 'app-entity-details',
@@ -15,43 +19,39 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   @Input() entityId: any;
   isTriggeredFromSlider = false;
   $subscriptions: Subscription[] = [];
+  isSwitchCurrentTab = false;
+  onDeleteTimestamp = null;
 
-  constructor(public entityDetailService: EntityDetailsService,private _navigationService: NavigationService, private _route: ActivatedRoute, private _router: Router) {
+  constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
+    private _sfiService: SfiService, private _commonService: CommonService, private _navigationService: NavigationService) {
     this.clearSfiNavBarStyle();
   }
+
   updateRelationshipDetails: any;
-  isEnableRelationshipModal = false;
-  sfiRelationStatus: any = {};
   isEditMode = false;
-  personEntityRelationships = [];
-  personEntity = {};
+  entityDetails = {};
 
   ngOnInit() {
     this.isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
     this.entityId = this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId;
     this.isTriggeredFromSlider = this.checkForUrl();
-    if (this.isEditMode) {
-      this.entityDetailService.isExpanded = false;
-    }
+    this.getSfiEntityDetails();
     this.getQueryParams();
   }
 
   getQueryParams() {
     this.$subscriptions.push(this._route.queryParams.subscribe(params => {
       this.isEditMode = params['mode'] === 'edit';
-      this.entityId = params['personEntityId']  || this.entityId;
-      if (this.isEditMode) {
-        this.entityDetailService.isExpanded = false;
-      }
+      this.entityId = params['personEntityId'] || this.entityId;
     }));
   }
 
   checkForUrl() {
-   return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary'].some(ele => this._router.url.includes(ele))
+   return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary','entity-management/entity-details'].some(ele => this._router.url.includes(ele))
   }
 
   ngOnDestroy(): void {
-    this.entityDetailService.isExpanded = true;
+    subscriptionHandler(this.$subscriptions);
   }
    clearSfiNavBarStyle() {
     document.getElementById('COI_SCROLL').style.removeProperty('overflow');
@@ -61,13 +61,6 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
     this.updateRelationshipDetails = event;
   }
 
-  addRelationship(event) {
-    this.isEnableRelationshipModal = event;
-  }
-
-  closedRelationshipModal(event) {
-    this.isEnableRelationshipModal = event;
-  }
 
   scrollPosition(event) {
     if (event) {
@@ -75,20 +68,34 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
     }
   }
 
-  getRelationshipDetails(event) {
-    this.sfiRelationStatus = event.relationSFiStatus;
-    this.personEntityRelationships = event.personEntityRelationships;
-    this.personEntity = event.personEntity;
-  }
+	leavePage() {
+		this.entityDetailService.isRelationshipQuestionnaireChanged = false;
+		this.$subscriptions.push(this.entityDetailService.$relationshipTabSwitch.subscribe((res: any) => {
+			res ? this.isSwitchCurrentTab = true : this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
+		}))
+		this.closeUnsavedChangesModal();
+	}
 
-  leavePage() {
-      this.entityDetailService.isRelationshipQuestionnaireChanged = false;
-      this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
-      this.closeUnsavedChangesModal();
-  }
-  
   closeUnsavedChangesModal() {
     hideModal('hiddenUnsavedChanges');
   }
+
+	getSfiEntityDetails() {
+		this.$subscriptions.push(this.entityDetailService.getCoiEntityDetails(this.entityId).subscribe((res: any) => {
+			this.entityDetails = res.coiEntity;
+		}, _error => {
+			this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+		}));
+	}
+
+	showLeaveConfirmModal(event) {
+		if (event) {
+			document.getElementById('hidden-unsaved-changes-button').click();
+		}
+	}
+
+	emittedDeletedRelationship(event) {
+		this.onDeleteTimestamp = event;
+	}
 
 }

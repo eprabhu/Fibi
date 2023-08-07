@@ -99,7 +99,7 @@ export interface EndpointOptions {
     params: string;
 }
 
-export class EntityData {
+export class EntityDetails {
     isActive: boolean;
     country: { countryName: string };
     entityId: string | number;
@@ -140,4 +140,11 @@ export class DefaultAdminDetails {
 export interface TravelActionAfterSubmitRO {
     travelDisclosureId: number;
     description: string;
+}
+
+export class TravelConflictRO {
+    travelDisclosureId: number;
+    personId: string;
+    description: string;
+    disclosureStatusCode: string;
 }

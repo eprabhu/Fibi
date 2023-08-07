@@ -13,22 +13,24 @@
                 <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than
                     government entities, institution of higher education and affiliated organizations.</p>
             </div>
-            <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center">
-                <div class="card custom-padding mt-15 mb-15"
+            <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center mb-15 mt-15">
+                <div class="card custom-padding"
                 [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
-                    <div class="custom-size">
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label ps-5 color-black"><b>Select Relation:
+                    <div class="d-flex flex-row">
+                        <div class="form-check form-check-inline color-black">
+                            <label class="form-check-label ps-5"><b>Select Relation:
                                 </b></label>
                         </div>
-                        <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
-                            <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
-                                [value]="relation?.relationshipTypeCode"
-                                [(ngModel)]="isChecked[relation.relationshipTypeCode]"
-                                title = "Click to select {{relation?.description}} relation">
-                            <label  class="text-secondary r-title fs-14">
-                                {{relation?.description}}
-                            </label>
+                        <div class="col d-flex">
+                            <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
+                                <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
+                                    [value]="relation?.relationshipTypeCode"
+                                    [(ngModel)]="isChecked[relation.relationshipTypeCode]"
+                                    title = "Click to select {{relation?.description}} relation">
+                                <label  class="text-secondary r-title fs-14">
+                                    {{relation?.description}}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -3,10 +3,10 @@
   "fibiUrl": "https://coi.fibiweb.com/fibii",
   "authUrl": "https://coi.fibiweb.com/auth",
   "enableSSO": false,
-  "isElasticAuthentiaction" : false,
+  "isElasticAuthentiaction": false,
   "elasticUserName": "elastic",
   "elasticDelimiter": ":",
-  "elasticPassword":"changeme",
+  "elasticPassword": "changeme",
   "elasticAuthScheme": "Basic",
   "elasticIndexUrl": "https://coi.fibiweb.com/elastic/",
   "fibiApplicationUrl":"https://stage.fibiweb.com/fibi"

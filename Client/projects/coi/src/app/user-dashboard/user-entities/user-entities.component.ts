@@ -1,15 +1,14 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { GetSFIRequestObject } from "../../disclosure/coi-interface";
-import { CoiService } from "../../disclosure/services/coi.service";
+import { RO } from "../../disclosure/coi-interface";
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { UserEntitiesService } from "./user-entities.service";
 import { CommonService } from '../../common/services/common.service';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
-import { listAnimation, fadeInOutHeight, leftSlideInOut } from 'projects/fibi/src/app/common/utilities/animations';
+import { listAnimation, fadeInOutHeight, leftSlideInOut } from '../../common/utilities/animations';
 
 @Component({
   selector: 'app-user-entities',
@@ -20,7 +19,7 @@ import { listAnimation, fadeInOutHeight, leftSlideInOut } from 'projects/fibi/sr
 })
 export class UserEntitiesComponent implements OnInit, OnDestroy {
   @ViewChild('viewMyEntitiesOverlay', { static: true }) viewMyEntitiesOverlay: ElementRef;
-  sfiDashboardRequestObject = new GetSFIRequestObject();
+  sfiDashboardRequestObject = new RO();
   $subscriptions = [];
   entityArray = [];
   filteredEntityArray = [];
@@ -36,6 +35,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   $fetchSFI = new Subject();
   isSearchTextHover = false;
   isLoading = false;
+  isShowFilterAndSearch = false;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService) {
@@ -51,12 +51,15 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   }
 
  fetchMyEntities() {
-  this.isLoading = true;
     this.sfiDashboardRequestObject.personId = this._commonService.getCurrentUserDetail('personId');
     this.$subscriptions.push(this.$fetchSFI.pipe(
-      switchMap(() => this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject))).subscribe((data: any) => {
+      switchMap(() => {
+        this.isLoading = true;
+        return this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject)
+      })).subscribe((data: any) => {
       this.result = data;
       if (this.result) {
+        this.isShowFilterAndSearch = !!data.personEntities.length;
         this.filteredEntityArray = data.personEntities || [];
         this.loadingComplete();
       }
@@ -75,7 +78,6 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
 
   setFilter(type = 'ALL') {
     this.searchText = '';
-    this.isLoading = true;
     this.filteredEntityArray = [];
     this.sfiDashboardRequestObject.filterType = type;
     this.sfiDashboardRequestObject.currentPage = 1;

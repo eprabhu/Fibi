@@ -12,4 +12,7 @@ activateAndInactivateSfi(prams) {
   return this._http.put(this._commonService.baseUrl + '/personEntity/activateInactivate', prams);
 }
 
+  finalizeSfi(params) {
+    return this._http.put(this._commonService.baseUrl + '/personEntity/finalize', params);
+  }
 }

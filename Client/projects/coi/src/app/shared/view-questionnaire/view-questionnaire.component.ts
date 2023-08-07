@@ -25,7 +25,7 @@
 import {easeIn} from "../../../../../fibi/src/app/common/utilities/animations";
 import {WafAttachmentService} from "../../../../../fibi/src/app/common/services/waf-attachment.service";
 import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
-import { scrollIntoView, setFocusToElement } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { scrollIntoView, setFocusToElement } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import {Question, TableAnswer} from "./questionnaire.interface";
 import {

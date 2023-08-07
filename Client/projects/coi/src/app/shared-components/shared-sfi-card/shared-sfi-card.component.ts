@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedSfiService } from './shared-sfi.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
+import { Subscription } from 'rxjs';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 class SFI_OBJECT {
   isActive = 'INACTIVE';
@@ -22,7 +24,7 @@ class SFI_OBJECT {
   providers: [SharedSfiService]
 })
 
-export class SharedSfiCardComponent implements OnInit {
+export class SharedSfiCardComponent implements OnInit, OnDestroy {
 
   @Input() reqObject: any;
   @Input() referredFrom: 'SFI_SUMMARY' | 'SFI_EDIT_AND_DASHBOARD' | 'TRAVEL_DISCLOSURE';
@@ -31,11 +33,16 @@ export class SharedSfiCardComponent implements OnInit {
   @Output() activateDeactivateEvent =  new EventEmitter<any>();
 
   SFIObject = new SFI_OBJECT();
+  $subscriptions: Subscription[] = [];
 
   constructor(private _router: Router, private _sharedSFIService: SharedSfiService, private _commonService: CommonService) { }
 
     ngOnInit() {
       this.updateSFIObject();
+    }
+
+    ngOnDestroy() {
+      subscriptionHandler(this.$subscriptions);
     }
 
   private updateSFIObject(): void {
@@ -52,15 +59,14 @@ export class SharedSfiCardComponent implements OnInit {
   }
 
   setActiveInEditMode() {
-    return   this.reqObject.versionStatus === 'PENDING' ? 'DRAFT' : 
-              this.reqObject.versionStatus === 'ACTIVE' && this.reqObject.isRelationshipActive ? 'ACTIVE' : 
+    return   this.reqObject.versionStatus === 'PENDING' ? 'DRAFT' :
+              this.reqObject.versionStatus === 'ACTIVE' && this.reqObject.isRelationshipActive ? 'ACTIVE' :
               this.reqObject.versionStatus === 'ACTIVE' && !this.reqObject.isRelationshipActive ? 'INACTIVE' : '';
-           
   }
 
   setActiveInViewMode() {
-    return  this.reqObject.versionStatus === 'PENDING' ? 'DRAFT' : 
-    (this.reqObject.versionStatus === 'ACTIVE' || this.reqObject.versionStatus === 'ARCHIVE') && this.reqObject.isRelationshipActive ? 'ACTIVE' : 
+    return  this.reqObject.versionStatus === 'PENDING' ? 'DRAFT' :
+    (this.reqObject.versionStatus === 'ACTIVE' || this.reqObject.versionStatus === 'ARCHIVE') && this.reqObject.isRelationshipActive ? 'ACTIVE' :
     this.reqObject.versionStatus === 'ACTIVE' && !this.reqObject.isRelationshipActive ? 'INACTIVE' : '';
   }
 
@@ -80,9 +86,11 @@ export class SharedSfiCardComponent implements OnInit {
     this.viewSlider.emit({flag: true, entityId: entityId});
   }
 
-  modifySfiDetails(entityId: number, mode: string): void {
-    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entityId, mode: mode } });
-  }
+    modifySfiDetails(entityId: number, mode: string): void {
+        this.$subscriptions.push(this._sharedSFIService.modifySfi({ personEntityId: entityId }).subscribe((res: any) => {
+            this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: res.personEntityId, mode: mode } });
+        }));
+    }
 
   deleteConfirmation() {
     this.deleteEvent.emit({eId: this.SFIObject.entityId});

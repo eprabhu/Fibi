@@ -56,22 +56,23 @@
 </div>
 <ng-container *ngIf="!isLoading">
   <div class="margin-left-5" [@listAnimation]="coiFinancialEntityDetails.length">
-    <div
-      *ngFor="let item of coiFinancialEntityDetails ; let i =index">
+    <div *ngFor="let item of coiFinancialEntityDetails ; let i =index">
       <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'"></app-shared-sfi-card>
     </div>
-    <div *ngIf="coiFinancialEntityDetails?.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-        <nav aria-label="pagination section" class="pagination justify-content-end">
-            <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="count" [pageCount]="10">
-            </app-pagination>
-        </nav>
-    </div>
-  
+  <!-- no data card -->
     <div *ngIf="!coiFinancialEntityDetails?.length">
       <app-no-information> </app-no-information>
     </div>
   </div>
 </ng-container>
+
+<!-- pagination -->
+<div [hidden]="isLoading" *ngIf="coiFinancialEntityDetails?.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+  <nav aria-label="pagination section" class="pagination justify-content-end">
+      <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="count" [pageCount]="10">
+      </app-pagination>
+  </nav>
+</div>
 
 <div #viewSFIDetailsOverlay [class.overlay]="showSlider">
 <div class="slider-base" *ngIf="showSlider">

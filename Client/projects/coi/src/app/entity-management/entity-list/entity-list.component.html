@@ -1,5 +1,5 @@
 <div>
-    <div class="px-3" [@fadeInOutHeight] [@listAnimation]="entityList.length">
+    <div class="px-3" [@fadeInOutHeight]>
         <div *ngIf="isManageEntity" class="row bg-white mx-0 d-flex py-1 pb-2 align-items-center border ">
             <nav class="coi-admin-dash mx-0 borderlist">
                 <ul
@@ -164,7 +164,7 @@
                         <button class="btn btn-outline-secondary  fs-14 py-2 mx-3" id="btn-clear"
                             (click)="clearAdvancedSearch()" title="Click here to clear all the fields"
                             area-describedby="Click here to clear all the fields">Clear</button>
-                        <button class="btn btn-primary fs-14" id="btn-search" (click)="advancedSearch()"
+                        <button class="btn btn-primary fs-14" id="btn-search" (click)="entityManagementService.coiRequestObject.currentPage = 1;advancedSearch()"
                             title="Click here to Initiate search"
                             area-describedby="Click here to get the search results with/without fields">Search</button>
                     </div>
@@ -174,24 +174,24 @@
         <!-- <app-entity-list  [entityActiveTabName]="activeTabName" (entityListResult)="addEntityList($event)"
     (modifyEntityId)="selectedEntity($event); isViewAdvanceSearch = false" (navNextPage)="navigateNextPage($event)"
     [entityList]="entityList" [resultCount]="resultCount"></app-entity-list> -->
-    <div class="sort-div border mt-2" *ngIf="isManageEntity && entityList.length">
+    <div class="sort-div border mt-2" *ngIf="isShowEntityList && isManageEntity && entityList.length">
         <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
-        <span tabindex="0" *ngFor="let sortSection of sortSectionsList"
+        <button tabindex="0" *ngFor="let sortSection of sortSectionsList"
             (keydown.enter)="sortResult(sortSection.variableName)" (click)="sortResult(sortSection.variableName)"
             [class.filter-active]="isActive(sortSection.variableName)" title="Click to sort by {{sortSection.fieldName}}"
             area-describedby="Click to sort by {{sortSection.fieldName}}"
             class="shadow-sm fw-medium pl-15 pr-05 py-2 px-3 fs-13 border rounded-5 bg-white ml-5 mr-2" role="button">
             <div class="d-inline-flex align-items-center">
                 <label class="cursor-pointer">{{sortSection.fieldName}}</label>
-                <mat-icon class="arrow selected-arrow"
+                <mat-icon class="arrow selected-arrow" [@slideDown]
                     *ngIf="entityManagementService.coiRequestObject.sort[sortSection.variableName]=== 'asc' ">arrow_downward</mat-icon>
-                <mat-icon class="arrow selected-arrow"
+                <mat-icon class="arrow selected-arrow" [@slideUp] [@scaleOut]
                     *ngIf="entityManagementService.coiRequestObject.sort[sortSection.variableName]=== 'desc' ">arrow_upward</mat-icon>
             </div>
-        </span>
+        </button>
     </div>
-        <ng-container *ngIf="isSearchData">
-            <div *ngIf="entityList.length; else noData">
+        <ng-container *ngIf="isShowEntityList && !isLoading">
+            <div *ngIf="entityList.length; else noData" [@listAnimation]="entityList.length">
                 <div *ngFor="let entityListData of entityList;let i=index">
                     <div class="border bg-white rounded-3 p-2 mt-2 hovering-card">
                         <div class="m-0 mb-2 row">
@@ -258,9 +258,11 @@
                 </div>
             </div>
         </ng-container>
-        <div *ngIf="entityList.length>0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+        <!-- pagination -->
+        <div [hidden]="isLoading" *ngIf="entityList.length>0 && isShowEntityList" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
             <nav aria-label="pagination section" class="pagination justify-content-end">
-                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount">
+                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount" 
+                [defaultCurrentPage]="entityManagementService.coiRequestObject.currentPage">
                 </app-pagination>
             </nav>
 
@@ -269,3 +271,5 @@
             </ng-template>
 
         </div>
+    </div>
+</div>

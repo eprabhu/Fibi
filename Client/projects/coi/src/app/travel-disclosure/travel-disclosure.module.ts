@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { TravelDataStoreService } from './services/travel-data-store.service';
 import { CoiService } from '../disclosure/services/coi.service';
+import { TravelAddConflictSliderComponent } from './travel-add-conflict-slider/travel-add-conflict-slider.component';
+import { AddSfiModule } from '../add-sfi/add-sfi.module';
 
 const routes: Routes = [
     {
@@ -44,11 +46,13 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         TravelDisclosureComponent,
+        TravelAddConflictSliderComponent
     ],
     imports: [
         CommonModule,
         SharedModule,
         FormsModule,
+        AddSfiModule,
         RouterModule.forChild(routes),
         SharedComponentModule
     ],

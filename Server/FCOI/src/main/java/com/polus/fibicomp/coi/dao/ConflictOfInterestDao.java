@@ -3,18 +3,16 @@ package com.polus.fibicomp.coi.dao;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
-import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -36,6 +34,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
+import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
@@ -44,6 +43,10 @@ import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
+import com.polus.fibicomp.coi.pojo.DisclosureActionType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
@@ -51,14 +54,11 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
-import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
-import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
-import com.polus.fibicomp.proposal.pojo.Proposal;
 
 @Transactional
 @Service
@@ -874,14 +874,16 @@ public interface ConflictOfInterestDao {
 	/**
 	 * This method is used to activate/inactive  person entity
 	 * @param personEntityDto
+	 * @return Timestamp
 	 */
-	void activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
+	Timestamp activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
 
 	/**
-	 * This method is used to archive person entity
+	 * This method is used to change version status of person entity
 	 * @param personEntityId
+	 * @param versionStatus
 	 */
-	void archivePersonEntity(Integer personEntityId);
+	void patchPersonEntityVersionStatus(Integer personEntityId, String versionStatus);
 
 	/**
 	 * This method is used to get the max of version number
@@ -971,5 +973,49 @@ public interface ConflictOfInterestDao {
 	List<DisclosureHistoryDto> getDisclosureHistory(CoiDashboardVO dashboardVO);
 
 	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
+
+
+	/**
+	 * This method is used to update person entity
+	 * @param personEntityDto
+	 */
+	Timestamp updatePersonEntity(PersonEntityDto personEntityDto);
+
+	/**
+	 * This method is used to update Entity Update Details
+	 * @param entityId
+	 * @param updateTimestamp
+	 */
+	void updateEntityUpdateDetails(Integer entityId, Timestamp updateTimestamp);
+
+	/**
+	 * This method is used to check a peron entity has a version status of @param versionStatus
+	 * @param personEntityNumber
+	 * @param versionStatus
+	 * @return true/false
+	 */
+	boolean hasPersonEntityVersionStatusOf(Integer personEntityNumber, String versionStatus);
+
+	/**
+	 * This method is used to fetch draft version of person entity by params
+	 * @param personEntityNumber
+	 * @param versionStatus
+	 * @return
+	 */
+	PersonEntity getPersonEntityByNumberAndStatus(Integer personEntityNumber, String versionStatus);
+
+	public DisclosureActionType fetchDisclosureActionTypeById(String actionLogCreated);
+
+	public void saveOrUpdateDisclosureActionLog(DisclosureActionLog disclosureActionLog);
+
+	public List<CoiTravelDisclosureStatusType> getTravelConflictStatusType();
+
+	public DisclComment getTravelConflictComment(Integer travelDisclosureId);
+
+	public void saveOrUpdateCoiTravelConflictHistory(CoiTravelConflictHistory coiTravelConflictHistory);
+
+	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
+
+	public String getCoiTravelConflictStatusByStatusCode(String conflictStatusCode);
 
 }

@@ -4,24 +4,24 @@ import { EntityDashDefaultValues, EntityDashboardRequest, EntityManagementServic
 import { Subject, Subscription } from 'rxjs';
 import { ElasticConfigService } from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import { CommonService } from '../../common/services/common.service';
-import { slideInOut , listAnimation, topSlideInOut, fadeInOutHeight } from '../../../../../fibi/src/app/common/utilities/animations';
+import { slideInOut } from '../../../../../fibi/src/app/common/utilities/animations';
+import { listAnimation, topSlideInOut, fadeInOutHeight, scaleOutAnimation, slideInAnimation } from '../../common/utilities/animations';
 import { getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
-import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { CoiDashboardRequest } from '../../admin-dashboard/admin-dashboard.service';
+import { deepCloneObject, isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { NavigationService } from '../../common/services/navigation.service';
-import { switchMap } from 'rxjs/operators';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
-import { CoiService } from '../../disclosure/services/coi.service';
-import { UserDashboardService } from '../../user-dashboard/user-dashboard.service';
 
 @Component({
   selector: 'app-entity-list',
   templateUrl: './entity-list.component.html',
   styleUrls: ['./entity-list.component.scss'],
-  animations: [slideInOut, listAnimation, topSlideInOut, fadeInOutHeight]
+  animations: [slideInOut, listAnimation, topSlideInOut, fadeInOutHeight,
+    slideInAnimation('0','12px', 400, 'slideUp'),
+    slideInAnimation('0','-12px', 400, 'slideDown'),
+    scaleOutAnimation('-2px','0', 200, 'scaleOut'),
+]
 })
 export class EntityListComponent implements OnDestroy, OnInit {
 
@@ -45,7 +45,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   entityList: any = [];
   $subscriptions: Subscription[] = [];
   resultCount = 0;
-  isSearchData = false;
+  isShowEntityList = false;
   showEntityList = false;
   isShowAllProposalList = false;
   rightList: string;
@@ -54,6 +54,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   localCOIRequestObject: EntityDashboardRequest = new EntityDashboardRequest();
   result: any;
   isActiveDisclosureAvailable: boolean;
+  isLoading = false;
   sortSectionsList = [
     { variableName: 'name', fieldName: 'Name' },
     { variableName: 'entityType', fieldName: 'Entity Type' },
@@ -86,6 +87,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.checkUserHasRight();
     this.loadEntities();
   }
+
   loadEntities() {
     this.$entityList.subscribe((data) => {
       this.viewListOfEntity();
@@ -111,10 +113,10 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
     this.isShowAllProposalList = true;
     if (this.activeTabName === 'ALL_ENTITIES') {
-      this.isSearchData = false;
+      this.isShowEntityList = false;
       this.isViewAdvanceSearch = true;
     } else {
-      this.isSearchData = true;
+      this.isShowEntityList = true;
       this.viewListOfEntity();
       this.isViewAdvanceSearch = false;
       this.isShowAllProposalList = true;
@@ -126,14 +128,17 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   viewListOfEntity() {
+    this.isLoading = true;
     this.$subscriptions.push(
       this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject)
         .subscribe((res: any) => {
           this.entityList = res.coiEntityList || [];
           this.resultCount = res.entityCount;
+          this.isLoading = false;
         }, _error => {
           this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
           this.entityList = [];
+          this.isLoading = false;
         }));
   }
 
@@ -168,6 +173,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   clearAdvancedSearch() {
     this.resetAdvanceSearchFields();
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
+    this.entityList = [];
     this.viewListOfEntity();
   }
   navigateNextPage(event) {
@@ -175,8 +181,9 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   advancedSearch() {
+    this.entityList = [];
     this.viewListOfEntity();
-    this.isSearchData = true;
+    this.isShowEntityList = true;
     this.isShowAllProposalList = true;
   }
 
@@ -240,7 +247,7 @@ setEventTypeFlag() {
 
     checkForSort() {
         if (!isEmptyObject(this.entityManagementService.coiRequestObject.sort) &&
-            this._navigationService.previousURL) {
+            this._navigationService.previousURL.includes('entity-management/entity-details')) {
             this.localCOIRequestObject.sort = deepCloneObject(this.entityManagementService.coiRequestObject.sort);
             this.sortCountObj = deepCloneObject(this.entityManagementService.sortCountObject);
         } else {

@@ -248,9 +248,9 @@
                         <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
                             area-describedby="Click to view the reviews">Reviews</div>
                     </div>
-                    <!-- <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge' role="button">
+                    <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active">History</div>
-                    </div> -->
+                    </div>
                 </div>
             </ng-container>
         </div>
@@ -309,8 +309,7 @@
                 <div class="row m-0 px-3 d-flex justify-content-between {{isCardExpanded ? 'py-3' : 'pt-2'}}">
                     <button title="Go to COI home page" (click)="goToHomeUrl()"
                     [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
-                    [ngClass]="coiData?.coiDisclosure?.reviewStatusCode != '4' && isCardExpanded ? 'col-2' :'col'"
-                    class="btn btn-outline-secondary home-btn-cente me-2 d-flex justify-content-center {{isCardExpanded ? 'mb-3' : ''}}">
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-10">
                     <mat-icon>home</mat-icon>
                     <span class="fs-14 mt-1 ml-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4 && isCardExpanded">Home</span>
                     </button>
@@ -328,16 +327,65 @@
                         *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         [ngClass]="isCardExpanded ? 'mb-3' : ''"
                         (click)="coiService.isShowCommentNavBar = !coiService.isShowCommentNavBar"
-                        class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2">
+                        class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 mb-10">
                         <mat-icon class="me-2">rate_review</mat-icon>
                         <span *ngIf="isCardExpanded">Comments</span>
                     </button>
-                    <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" 
-                    class="fs-14 btn btn-outline-secondary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12 mb-3' : 'col me-2'}}" (click)="isAddAssignModalOpen = true;"
-                    [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn btn-outline-grey':'btn btn-primary'">
-                    <mat-icon class="me-1">group_add</mat-icon>
-                    <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
+
+                    <!-- more option button for expanded & collapsed card -->
+                    <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
+                    <button *ngIf="coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode != 3 && (coiData.coiDisclosure.adminPersonId || (coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId)))
+                    && (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.personId) || coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '3'" [matMenuTriggerFor]="beforeMenu"
+                        class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2 mb-10"
+                        role="button" title="Click for More Actions">
+                        <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                        <span *ngIf="isCardExpanded">More Actions</span>
                     </button>
+
+                    <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiService.isCOIAdministrator && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2'">
+                        <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                            class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12 mb-3' : 'col ms-2'}}"
+                            (click)="isAddAssignModalOpen = true;">
+                            <mat-icon class="me-1">group_add</mat-icon>
+                            <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
+                        </button>
+                    </ng-container>
+                    
+                    <!-- dispositionStatusCode(3-Approved) -->
+                    <mat-menu #beforeMenu="matMenu" xPosition="before">
+                        <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode != 3">
+                            <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2"
+                                (click)="isAddAssignModalOpen = true;"
+                                [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
+                                <mat-icon>group_add</mat-icon>
+                                <span class="ms-2 fw-medium">Reassign Admin</span>
+                            </button>
+                        </ng-container>
+                    
+                        <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
+                        <!-- check logged person & disclosure created person is same -->
+                        <button *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId) && 
+                        (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw" 
+                            area-describedby="Click to Withdraw"
+                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2"
+                            (click)="openWithdrawModal()">
+                            <mat-icon>logout</mat-icon>
+                            <span class="ms-2">Withdraw</span>
+                        </button>
+
+                       <!-- return to pi -->
+                       <!-- reviewStatusCode-(3-Review In Progress) -->
+                       <!-- Check logged person and administrator are same -->
+                    <button *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '3' && coiData.coiDisclosure.adminPersonId &&
+                    (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)" title="Click to Return Disclosure"
+                        (click)="openReturnModal();"
+                        [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2">
+                        <mat-icon class="returnIcon">refresh</mat-icon>
+                        <span class="ms-1" *ngIf="isCardExpanded">Return</span>
+                    </button>
+                    </mat-menu>
 
                     <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'"  title="Click to start review" area-describedby="Click to start review" (click)="updateCoiReview('START')"
                     id="start-review-btn"
@@ -356,9 +404,10 @@
                   <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                   </button>
 
-                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3'"
+                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3'
+                  && (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
-                        [ngClass]="isCardExpanded? 'col-12' : 'col'"
+                        [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
                         data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
                         <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
@@ -373,9 +422,8 @@
                 </div>
             </div>
         </div>
+    </div>
 </div>
-</div>
-
 
 <!-- Complete review modal -->
 <div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard" role="dialog">
@@ -616,12 +664,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
-                    <ng-container *ngIf="coiData?.coiDisclosure?.numberOfSFI > 0">
+                    <ng-container *ngIf="count > 0">
                         <div>
                            <p class="fs-14">Are you sure you want to submit the <strong>{{getDisclosureTypeMessage()}} </strong> disclosure?</p>
                         </div>
                     </ng-container>
-                         <div *ngIf="coiData?.coiDisclosure?.numberOfSFI == 0">
+                         <div *ngIf="count == 0">
                            <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTypeMessage()}} </strong> disclosure.</p>
                         </div>
                     </div>
@@ -651,6 +699,261 @@
 <app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
+
+
+<!-- Disclosure Withdraw Modal -->
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-withdraw-modal-trigger"
+    data-bs-toggle="modal" data-bs-target="#withdrawModal"></button>
+<div class="modal fade mySkinDialog modal-lg" id="withdrawModal" role="dialog" aria-labelledby="withdrawModal"
+    aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header ct-footer-padding">
+                <h4 class="modal-title">Withdraw Disclosure </h4>
+                <button type="button" class="btn-close fs-12 " title="Close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="closeWithdrawModal()"></button>
+            </div>
+            <div class="modal-body ct-modal-padding">
+                <div class="info-card info-card-border mt-2 rounded-2 shadow-medium bg-light">
+                    <div class="row ml-15 mt-2">
+                        <div class="position-relative p-2 fs-14 pl-5 fw-500">
+                            <div class="row">
+                                <ng-container
+                                    *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
+                                    <div class="row">
+                                        <div class="col d-flex">
+                                            <label class="label-text left-margin">Person:
+                                            </label>
+                                            <span
+                                                class="ml-2 grey-text">{{coiData?.coiDisclosure?.person?.fullName}}</span>
+                                        </div>               
+                                        <div class="mt-1">
+                                            <label class="label-text left-margin">Project: </label>
+                                            <span class="ml-2 grey-text">#{{coiData?.projectDetail?.moduleItemId}} :
+                                                <span *ngIf="!isShowMore && coiData?.projectDetail?.title?.length > 180; else showFullInfo">
+                                                    {{(coiData?.projectDetail?.title | slice:0:180)}}
+                                                    <span (click)="isShowMore = !isShowMore" class="hand-cursor"><span class="fw-medium">...
+                                                            <strong><u>Read more</u></strong>
+                                                            <i aria-hidden="true"></i></span>
+                                                    </span>
+                                                </span>
+                                                <ng-template #showFullInfo>
+                                                    <span>{{coiData?.projectDetail?.title}}</span>
+                                                    <span *ngIf="coiData?.projectDetail?.title?.length > 180" (click)="isShowMore = !isShowMore"
+                                                        aria-hidden="true" class="hand-cursor"><span class="fw-medium"> <strong><u>Show
+                                                                    Less</u></strong>
+                                                            <i aria-hidden="true"></i></span>
+                                                    </span>
+                                                </ng-template>
+                                            </span>
+                                        </div>
+                                        <div class="col d-flex mt-1">
+                                            <label class="label-text left-margin">Department: </label>
+                                            <span
+                                                class="ml-2 grey-text">{{coiData?.coiDisclosure?.unit?.unitDetail}}</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                    *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1'">
+                                    <div class="row mt-2">
+                                        <div class="col d-flex">
+                                            <label class="label-text left-margin">Person:
+                                            </label>
+                                            <span
+                                                class="ml-2 grey-text">{{coiData?.coiDisclosure?.person?.fullName}}</span>
+                                        </div>
+                                        <div class="mt-1">
+                                            <label class="label-text left-margin">Department: </label>
+                                            <span
+                                                class="ml-2 grey-text">{{coiData?.coiDisclosure?.unit?.unitDetail}}</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="help-text mt-2">
+                    <div class="col-12 py-2 grey-info font px-3 d-flex align-items-center position-relative">
+                        <span data-bs-toggle="tooltip" title="Withdraw Disclosure." data-bs-placement="top"
+                            class="d-inline-block pe-2">
+                            <mat-icon role="img"
+                                class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color"
+                                aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                        </span>
+                        <span class="fs-13">
+                            <div class="mt-2 ml-15">
+                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                                Withdraw any disclosure in 'Submitted' status.
+                            </div>
+                            <div class="mt-2 ml-15">
+                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                                Describe the reason for withdrawal in the field provided.
+                            </div>
+                            <div class="mt-2 ml-15">
+                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                                Click on “Withdraw disclosure' button to recall your disclosure for any edits.
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-2 m-2">
+                    <ng-container>
+                        <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12">
+                            <span class="text-danger">*</span>
+                            Reason for withdrawal
+                        </label>
+                        <div class="col-12">
+                            <textarea id="travelDisclosure-tripPurpose" appAutoGrow [limit]="500" rows="1"
+                                appLengthValidator [(ngModel)]="withdrawDescription" [isShowLimiter]='true'
+                                class="form-control fs-14" autocomplete="off"
+                                [ngClass]="(withdrawError?.get('description')) ? 'invalid-border':''">
+                        </textarea>
+                            <span *ngIf="withdrawError?.has('description')"
+                                class="fs-13 invalid-feedback d-block position-absolute">
+                                {{withdrawError?.get('description')}}
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                    (click)="closeWithdrawModal()"> Cancel </button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="withdrawDisclosure()"> Withdraw
+                    Disclosure </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Disclosure Return Modal -->
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-return-modal-trigger"
+    data-bs-toggle="modal" data-bs-target="#returnModal"></button>
+<div class="modal fade mySkinDialog modal-lg" id="returnModal" role="dialog" aria-labelledby="returnModal"
+    aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header ct-footer-padding">
+                <h4 class="modal-title">Return Disclosure </h4>
+                <button type="button" class="btn-close fs-12 " title="Close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="closeReturnModal()"></button>
+            </div>
+            <div class="modal-body ct-modal-padding">
+                <div class="info-card info-card-border mt-2 rounded-2 shadow-medium bg-light">
+                    <div class="row ml-15 mt-2">
+                        <div class="position-relative p-2 fs-14 pl-5 fw-500">
+                            <div class="row">
+                                <ng-container
+                                    *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
+                                    <div class="row">
+                                        <div class="col d-flex">
+                                            <label class="label-text left-margin">Person:
+                                            </label>
+                                            <span
+                                                class="ml-2 grey-text">{{coiData?.coiDisclosure?.person?.fullName}}</span>
+                                        </div>               
+                                        <div class="mt-1">
+                                            <label class="label-text left-margin">Project: </label>
+                                            <span class="ml-2 grey-text">#{{coiData?.projectDetail?.moduleItemId}} :
+                                                <span *ngIf="!isShowMore && coiData?.projectDetail?.title?.length > 180; else showFullInfo">
+                                                    {{(coiData?.projectDetail?.title | slice:0:180)}}
+                                                    <span (click)="isShowMore = !isShowMore" class="hand-cursor"><span class="fw-medium">...
+                                                            <strong><u>Read more</u></strong>
+                                                            <i aria-hidden="true"></i></span>
+                                                    </span>
+                                                </span>
+                                                <ng-template #showFullInfo>
+                                                    <span>{{coiData?.projectDetail?.title}}</span>
+                                                    <span *ngIf="coiData?.projectDetail?.title?.length > 180" (click)="isShowMore = !isShowMore"
+                                                        aria-hidden="true" class="hand-cursor"><span class="fw-medium"> <strong><u>Show
+                                                                    Less</u></strong>
+                                                            <i aria-hidden="true"></i></span>
+                                                    </span>
+                                                </ng-template>
+                                            </span>
+                                        </div>
+                                        <div class="col d-flex mt-1">
+                                            <label class="label-text left-margin">Department: </label>
+                                            <span
+                                                class="ml-2 grey-text">{{coiData?.coiDisclosure?.unit?.unitDetail}}</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                    *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '1'">
+                                    <div class="row mt-2">
+                                        <div class="col d-flex">
+                                            <label class="label-text left-margin">Person:
+                                            </label>
+                                            <span
+                                                class="ml-2 grey-text">{{coiData?.coiDisclosure?.person?.fullName}}</span>
+                                        </div>
+                                        <div class="mt-1">
+                                            <label class="label-text left-margin">Department: </label>
+                                            <span
+                                                class="ml-2 grey-text">{{coiData?.coiDisclosure?.unit?.unitDetail}}</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="help-text mt-2">
+                    <div class="col-12 py-2 grey-info font px-3 d-flex align-items-center position-relative">
+                        <span data-bs-toggle="tooltip" title="Return Disclosure." data-bs-placement="top"
+                            class="d-inline-block pe-2">
+                            <mat-icon role="img"
+                                class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color"
+                                aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                        </span>
+                        <span class="fs-13">
+                            <div class="mt-2 ml-15">
+                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                                Return any disclosure in 'Review in progress' status.
+                            </div>
+                            <div class="mt-2 ml-15">
+                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                                Describe the reason for returning in the field provided.
+                            </div>
+                            <div class="mt-2 ml-15">
+                                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                                Click on 'Return Disclosure' button to return the disclosure for any modification.
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-2 m-2">
+                    <ng-container>
+                        <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12">
+                            <span class="text-danger">*</span>
+                            Reason for Return
+                        </label>
+                        <div class="col-12">
+                            <textarea id="travelDisclosure-tripPurpose" appAutoGrow [limit]="500" rows="1"
+                                appLengthValidator [(ngModel)]="returnDescription" [isShowLimiter]='true'
+                                class="form-control fs-14" autocomplete="off"
+                                [ngClass]="(returnError?.get('return')) ? 'invalid-border':''">
+                        </textarea>
+                            <span *ngIf="returnError?.has('return')"
+                                class="fs-13 invalid-feedback d-block position-absolute">
+                                {{returnError?.get('return')}}
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                    (click)="closeReturnModal()"> Cancel </button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="returnDisclosure()"> Return
+                    Disclosure </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div *ngIf="coiService.isShowCommentNavBar">
     <app-review-comments-slider></app-review-comments-slider>
