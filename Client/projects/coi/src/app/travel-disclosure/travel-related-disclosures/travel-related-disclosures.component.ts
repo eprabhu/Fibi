@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { TravelDisclosure, EntityData, TravelHistoryRO, TravelHistory } from '../travel-disclosure-interface';
+import { TravelDisclosure, EntityDetails, TravelHistoryRO, TravelHistory } from '../travel-disclosure-interface';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
@@ -21,7 +21,7 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
     isLoading = false;
     historyData: Array<TravelHistory> = [];
     travelDisclosure = new TravelDisclosure();
-    entityData: EntityData = new EntityData();
+    entityDetails: EntityDetails = new EntityDetails();
     $subscriptions: Subscription[] = [];
 
     constructor(
@@ -42,20 +42,8 @@ export class TravelRelatedDisclosureComponent implements OnInit, OnDestroy {
 
     private getDataFromStore(): void {
         this.travelDisclosure = this._dataStore.getData();
-        this.setEntityData();
+        this.entityDetails = this._dataStore.getEntityDetails();
         this.loadTravelDisclosureHistory();
-    }
-
-    private setEntityData(): void {
-        this.entityData = {
-            isActive: this.travelDisclosure.entityIsActive,
-            country: { countryName: this.travelDisclosure.country },
-            entityId: this.travelDisclosure.entityId,
-            entityType: { description: this.travelDisclosure.entityType },
-            entityName: this.travelDisclosure.travelEntityName,
-            emailAddress: this.travelDisclosure.entityEmail,
-            address: this.travelDisclosure.entityAddress
-        };
     }
 
     private listenDataChangeFromStore(): void {

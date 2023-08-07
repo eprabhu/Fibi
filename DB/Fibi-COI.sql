@@ -277,6 +277,7 @@ CREATE TABLE `coi_project_award` (
   `FED_AT` datetime DEFAULT NULL,
   `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
   `UPDATE_USER` varchar(60) DEFAULT NULL,
+  `PROJECT_ROLE` VARCHAR(60) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `COI_PROJECT_AWARD_FK1_idx` (`COI_PROJECT_TYPE_CODE`),
   CONSTRAINT `COI_PROJECT_AWARD_FK1` FOREIGN KEY (`COI_PROJECT_TYPE_CODE`) REFERENCES `coi_project_type` (`COI_PROJECT_TYPE_CODE`)
@@ -948,6 +949,20 @@ CREATE TABLE `travel_disclosure_action_log` (
   CONSTRAINT `TRAVEL_DISCLOSURE_ACTION_LOG_FK1` FOREIGN KEY (`ACTION_TYPE_CODE`) REFERENCES `disclosure_action_type` (`ACTION_TYPE_CODE`),
   CONSTRAINT `TRAVEL_DISCLOSURE_ACTION_LOG_FK2` FOREIGN KEY (`TRAVEL_DISCLOSURE_ID`) REFERENCES `coi_travel_disclosure` (`TRAVEL_DISCLOSURE_ID`)
 );
+
+CREATE TABLE `coi_travel_conflict_history` (
+  `COI_TRAVEL_CONFLICT_HISTORY_ID` int NOT NULL AUTO_INCREMENT,
+  `TRAVEL_DISCLOSURE_ID` int NOT NULL,
+  `COMMENT` varchar(4000) DEFAULT NULL,
+  `CONFLICT_STATUS_CODE` varchar(3) DEFAULT NULL,
+  `UPDATE_TIMESTAMP` datetime DEFAULT NULL,
+  `UPDATE_USER` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`COI_TRAVEL_CONFLICT_HISTORY_ID`),
+  KEY `COI_TRAVEL_CONFLICT_HISTORY_FK1_idx` (`CONFLICT_STATUS_CODE`)
+);
+
+INSERT INTO `discl_component_type` (`COMPONENT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', 'Travel disclosure conflict comment', 'Y', now(), 'quickstart');
+INSERT INTO `discl_comment_type` (`COMMENT_TYPE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', 'Travel disclosure conflict comment', 'Y', now(), 'quickstart');
 
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('1', 'New {FCOI /Project /Travel} application has been created', 'Created', now(), 'quickstart');
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', '{FCOI /Project /Travel} application has been submitted', 'Submitted', now(), 'quickstart');

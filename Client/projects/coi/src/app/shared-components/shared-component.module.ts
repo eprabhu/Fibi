@@ -17,6 +17,8 @@ import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.com
 import { ActivateInactivateSfiModalComponent } from './activate-inactivate-sfi-modal/activate-inactivate-sfi-modal.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { ReviewCommentsSliderComponent } from './review-comments-slider/review-comments-slider.component';
+import { CoiSliderComponent } from './coi-slider/coi-slider.component';
+import { HelpTextComponent } from './help-text/help-text.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +40,9 @@ import { ReviewCommentsSliderComponent } from './review-comments-slider/review-c
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
     ConfirmationModalComponent,
-    ReviewCommentsSliderComponent
+    ReviewCommentsSliderComponent,
+    CoiSliderComponent,
+    HelpTextComponent
   ],
   exports: [
     NoInformationComponent,
@@ -51,7 +55,9 @@ import { ReviewCommentsSliderComponent } from './review-comments-slider/review-c
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
     ConfirmationModalComponent,
-    ReviewCommentsSliderComponent
+    ReviewCommentsSliderComponent,
+    CoiSliderComponent,
+    HelpTextComponent
   ]
 })
 export class SharedComponentModule { }

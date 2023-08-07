@@ -234,26 +234,44 @@
                 (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false" >
                 <div class="row mt-2">
                     <div class="col">
-                        <span class="align-items-center d-flex">
+                        <span class="d-flex">
                             <span
-                                class="entity-status shadow-sm align-items-center d-flex mt-3 {{getColorBadges(disclosure)}}">
+                                class="entity-status shadow-sm align-items-center d-flex mt-2 {{getColorBadges(disclosure)}}">
                                 <span>{{disclosure?.travelDisclosureId? 'Travel' :
                                     disclosure?.fcoiType}}</span>
                             </span>
-                            <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex align-items-center fa fa-user label-text fs-16"><strong class="ml-2">{{disclosure?.travellerName}}</strong>
-                                <span class="ms-2 d-flex align-items-center me-1"><span class="pipe"></span>
-                                <img class="entity-icon" src="{{deployMap}}assets/images/entity.svg">Entity : </span ><span class="title-text">{{disclosure.travelEntityName}}</span></h4>
-                            <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex align-items-center fa fa-user label-text fs-16"><strong class="me-1 ml-2">{{disclosure.disclosurePersonFullName}}</strong>
-                                <span *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="ms-1 d-flex align-items-center"><span class="pipe me-1"></span>
-                                <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon" src="{{deployMap}}assets/images/proposal.png">
-                                <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon" src="{{deployMap}}assets/images/award.png">
-                                Project :
-                                </span> 
-                                <span class="title-text"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:90)}}</span>
-                                <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>90">...
-                                    <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span class="readMore">Read More</span></a>
-                                </span>
-                                <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1">Read Less</span></a>
+
+                            <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
+                                <i class="fa fa-user mt-2" aria-hidden="true"></i>
+                                <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.travellerName}}</strong>
+                                <ng-container>
+                                <span class="pipe me-1 mt-1"></span>
+                                <mat-icon class="fs-2">apartment</mat-icon>
+                                <span class="text-nowrap mt-2">Entity :</span>
+                                <span class="title-text ml-2 mt-2">{{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:180)}}
+                                        <span *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>180">...
+                                            <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span class="readMore fw-500">Read More</span></a>
+                                        </span>
+                                        <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1 fw-500">Read Less</span></a>
+                                        </span>
+                             </ng-container>
+                            </h4>
+
+                           <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
+                                <i class="fa fa-user mt-2" aria-hidden="true"></i>
+                                <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.disclosurePersonFullName}}</strong>
+                                <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="ms-1">
+                                    <span class="pipe me-2 mt-1"></span>
+                                    <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon mt-1" src="{{deployMap}}assets/images/proposal.png">
+                                    <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon mt-1" src="{{deployMap}}assets/images/award.png">
+                                    <span class="text-nowrap mt-2">Project :</span>
+                                    <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:180)}}
+                                    <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>180">...
+                                        <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span class="readMore fw-500">Read More</span></a>
+                                    </span>
+                                    <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1 fw-500">Read Less</span></a>
+                                    </span>
+                                </ng-container>  
                             </h4>
                         </span>
                     </div>
