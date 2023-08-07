@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CoiTravelDisclosure, TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, EntityDetails, TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure-interface';
 import { Subject } from 'rxjs';
 import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { getTotalNoOfDays, parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
@@ -31,6 +31,20 @@ export class TravelDataStoreService {
         });
         return this.structuredClone(data);
     }
+
+    getEntityDetails(): EntityDetails {
+        const data = this.getData();
+        return {
+            isActive: data.entityIsActive,
+            country: { countryName: data.country },
+            entityId: data.entityId,
+            entityType: { description: data.entityType },
+            entityName: data.travelEntityName,
+            emailAddress: data.entityEmail,
+            address: data.entityAddress
+        };
+    }
+
 
     getTravelDisclosureRO(): CoiTravelDisclosure {
         const data = this.getData();

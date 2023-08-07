@@ -18,7 +18,7 @@
 
 <div class="card row py-4 px-4 d-flex align-items-center shadow mx-1 mt-3" *ngIf="isCollapsed">
     <div class="col-12 mb-3 pb-2 px-0">
-        <app-shared-entity-info-card [entityDetails]="entityData" [viewMore]="true" (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
+        <app-shared-entity-info-card [entityDetails]="entityDetails" [viewMore]="true" (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
     </div>
 
     <div class="d-flex align-items-center col-12 px-3 mb-3 py-2">

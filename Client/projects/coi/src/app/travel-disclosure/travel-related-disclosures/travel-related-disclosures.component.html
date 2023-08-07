@@ -1,6 +1,6 @@
 <div [@listAnimation]="historyData.length" [@fadeInOutHeight]>
     <!-- entity card -->
-    <app-shared-entity-info-card [entityDetails]="entityData" [viewMore]="true"
+    <app-shared-entity-info-card [entityDetails]="entityDetails" [viewMore]="true"
         (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
 
     <ng-container *ngIf="!isLoading">
