@@ -5,22 +5,24 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.dto.*;
-import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
-import com.polus.fibicomp.coi.pojo.CoiReview;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
-import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
-import com.polus.fibicomp.coi.pojo.EntityRelationship;
-import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
+import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 
@@ -500,6 +502,12 @@ public interface ConflictOfInterestService {
 	ResponseEntity<Object> withdrawDisclosure(Integer disclosureId, String description);
 
     ResponseEntity<Object> returnDisclosure(Integer disclosureId, String description);
+
+	ResponseEntity<Object> getTravelConflictStatusType();
+
+	ResponseEntity<Object> manageTravelConflict(ConflictOfInterestVO vo);
+
+	List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
 
 	/**
 	 * This method is used to modify disclosure risk

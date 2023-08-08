@@ -23,7 +23,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import com.polus.fibicomp.coi.dto.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -36,6 +35,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.agreements.pojo.AdminGroup;
 import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+import com.polus.fibicomp.coi.dto.COIFinancialEntityDto;
+import com.polus.fibicomp.coi.dto.COIValidateDto;
+import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
+import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -57,6 +64,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
+import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
@@ -3485,7 +3493,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber) {
+	public List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber) { 
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<CoiTravelDisclosure> queryCoiDisclosureOld = builder.createQuery(CoiTravelDisclosure.class);
@@ -3676,6 +3684,62 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public void saveOrUpdateDisclosureActionLog(DisclosureActionLog disclosureActionLog) {
 		hibernateTemplate.saveOrUpdate(disclosureActionLog);
+	}
+
+	@Override
+	public List<CoiTravelDisclosureStatusType> getTravelConflictStatusType() {
+		return hibernateTemplate.loadAll(CoiTravelDisclosureStatusType.class);
+	}
+
+	@Override
+	public DisclComment getTravelConflictComment(Integer travelDisclosureId) {
+		DisclComment disclComment = new DisclComment();
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<DisclComment> query = builder.createQuery(DisclComment.class);
+			Root<DisclComment> rootDisclComment = query.from(DisclComment.class);
+			Predicate Condition1 = builder.equal(rootDisclComment.get("componentReferenceId"), travelDisclosureId);
+			Predicate condition2 = builder.equal(rootDisclComment.get("componentTypeCode"), "2");
+			Predicate condition3 = builder.equal(rootDisclComment.get("commentType"), "2");
+			Predicate combinedConditions = builder.and(Condition1, condition2, condition3);
+			query.where(combinedConditions);
+			disclComment = session.createQuery(query).getSingleResult();
+			return disclComment;
+		} catch (Exception ex) {
+			return disclComment;
+		}
+	}
+
+	@Override
+	public void saveOrUpdateCoiTravelConflictHistory(CoiTravelConflictHistory coiTravelConflictHistory) {
+		hibernateTemplate.saveOrUpdate(coiTravelConflictHistory);
+	}
+
+	@Override
+	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiTravelConflictHistory> query = builder.createQuery(CoiTravelConflictHistory.class);
+		Root<CoiTravelConflictHistory> root = query.from(CoiTravelConflictHistory.class);
+		query.where(root.get("travelDisclosureId").in(travelDisclosureId));
+		query.orderBy(builder.desc(root.get("updateTimestamp")));
+		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public String getCoiTravelConflictStatusByStatusCode(String conflictStatusCode) {
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<String> query = builder.createQuery(String.class);
+			Root<CoiTravelDisclosureStatusType> rootCoiConflictStatusType = query.from(CoiTravelDisclosureStatusType.class);
+			query.where(builder.equal(rootCoiConflictStatusType.get("travelDisclosureStatusCode"), conflictStatusCode));
+			query.select(rootCoiConflictStatusType.get("description"));
+			return session.createQuery(query).getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@Override

@@ -4,16 +4,16 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
-import com.polus.fibicomp.coi.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.polus.fibicomp.award.pojo.Award;
+import com.polus.fibicomp.coi.dto.COIValidateDto;
+import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -35,6 +35,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
+import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
@@ -61,7 +62,6 @@ import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
-import com.polus.fibicomp.proposal.pojo.Proposal;
 
 @Transactional
 @Service
@@ -605,7 +605,7 @@ public interface ConflictOfInterestDao {
 	 * @param moduleCode
 	 * @param personId
 	 * @param disclosureId
-	 * @param searchString
+	 * @param searchString 
 	 * @return
 	 */
 	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString);
@@ -1017,6 +1017,16 @@ public interface ConflictOfInterestDao {
 	public DisclosureActionType fetchDisclosureActionTypeById(String actionLogCreated);
 
 	public void saveOrUpdateDisclosureActionLog(DisclosureActionLog disclosureActionLog);
+
+	public List<CoiTravelDisclosureStatusType> getTravelConflictStatusType();
+
+	public DisclComment getTravelConflictComment(Integer travelDisclosureId);
+
+	public void saveOrUpdateCoiTravelConflictHistory(CoiTravelConflictHistory coiTravelConflictHistory);
+
+	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
+
+	public String getCoiTravelConflictStatusByStatusCode(String conflictStatusCode);
 
 	/**
 	 * This method is used to sync disclosure risk

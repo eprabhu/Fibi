@@ -1,0 +1,17 @@
+<div id="{{sliderName}}-overlay">
+    <div class="slider-base" id="{{sliderName}}">
+        <app-slider-close-btn (closeAction)="emitCloseSlider()"></app-slider-close-btn>
+        <div class="slider-container p-0">
+            <div class="sticky-0">
+                <div class="card card-header bg-white px-4 py-2 pt-3">
+                    <h5 class="fs-16">
+                        <ng-content select="[header]"></ng-content>
+                    </h5>
+                </div>
+                <ng-content select="[content-sticky]"></ng-content>
+            </div>
+
+            <ng-content select="[content]"></ng-content>
+        </div>
+    </div>
+</div>

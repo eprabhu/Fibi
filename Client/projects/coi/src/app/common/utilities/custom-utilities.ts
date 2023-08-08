@@ -59,3 +59,22 @@ export function openInNewTab(path: string, queryParamKeys: Array<any>, queryPara
     }
 }
 
+export function openSlider(sliderName: string= 'coi-slider'): void {
+    document.getElementById(`${sliderName}-overlay`).style.display = 'block';
+    document.getElementById(`${sliderName}-overlay`).classList.add('overlay');
+    document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
+
+    setTimeout(() => {
+        document.getElementById(sliderName).classList.add('slider-opened');
+    });
+}
+
+export function closeSlider(sliderName: string = 'coi-slider'): void {
+    document.getElementById(sliderName).classList.remove('slider-opened');
+
+    setTimeout(() => {
+        document.getElementById(`${sliderName}-overlay`).style.display = 'none';
+        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
+    }, 500);
+}

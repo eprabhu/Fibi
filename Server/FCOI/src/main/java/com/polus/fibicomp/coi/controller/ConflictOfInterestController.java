@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.dto.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
+import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ActionLogService;
@@ -524,7 +530,7 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> getDisclosureHistory(@RequestBody CoiDashboardVO dashboardVO) {
 		return conflictOfInterestService.getDisclosureHistory(dashboardVO);
 	}
-
+	
 	@PostMapping("/entity/modifyRisk")
 	public ResponseEntity<Object> modifyRisk(@RequestBody CoiEntityDto entityDto) {
 		return conflictOfInterestService.modifyRisk(entityDto);
@@ -539,7 +545,7 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> fetchEntityHistory(@RequestBody CoiEntityDto coiEntityDto) {
 		return conflictOfInterestService.fetchEntityHistory(coiEntityDto);
 	}
-	
+
 	@PostMapping(value = "/loadTravelDisclosureHistory")
 	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for loadTravelDisclosureHistory");
@@ -598,4 +604,22 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> fetchDisclosureHistory(@RequestBody DisclosureActionLogDto actionLogDto) {
 		return conflictOfInterestService.fetchDisclosureHistory(actionLogDto);
 	}
+    @GetMapping("/getTravelConflictStatusType")
+	public ResponseEntity<Object> getTravelConflictStatusType() {
+		logger.info("Requesting for getTravelConflictStatusType");
+		return conflictOfInterestService.getTravelConflictStatusType();
+	}
+
+    @PostMapping(value = "/manageTravelConflict")
+    public ResponseEntity<Object> manageTravelConflict(@RequestBody ConflictOfInterestVO vo) {
+        logger.info("Request for managing travel conflict");
+        return conflictOfInterestService.manageTravelConflict(vo);
+    }
+
+    @GetMapping("/loadTravelConflictHistory/{travelDisclosureId}")
+	public List<CoiTravelConflictHistory> loadTravelConflictHistory(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		logger.info("Request for loadTravelConflictHistory");
+		return conflictOfInterestService.getCoiTravelConflictHistory(travelDisclosureId);
+	}
+
 }
