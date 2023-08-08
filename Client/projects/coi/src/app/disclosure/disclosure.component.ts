@@ -93,6 +93,22 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     returnDescription: any;
     returnError = new Map();
     isShowMore = false;
+    primaryBtnName = '';
+    descriptionErrorMsg = '';
+    textAreaLabelName = '';
+    withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
+    returnErrorMsg = 'Describe the reason for returning the disclosure';
+    helpTexts = [];
+    withdrawHelpTexts = [
+        `Withdraw any disclosure in 'Submitted' status.`,
+        `Describe the reason for withdrawal in the field provided.`,
+        `Click on 'Withdraw' button to recall your disclosure for any modification.`
+    ];
+    returnHelpTexts = [
+        `Return any disclosure in 'Submitted/Review In Progress' status.`,
+        `Describe the reason for returning  in the field provided.`,
+        `Click on 'Return' button to return the disclosure for any modification.`
+    ];
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -614,6 +630,25 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 }));
         }
 
+    }
+
+    openConfirmationModal(actionBtnName: string, helpTexts: string [] = [], descriptionErrorMsg: string = ''): void {
+        this.helpTexts = helpTexts;
+        this.primaryBtnName = actionBtnName;
+        this.descriptionErrorMsg = descriptionErrorMsg;
+        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Return';
+        document.getElementById('disclosure-confirmation-modal-trigger-btn').click();
+    }
+
+    performDisclosureAction(): void {
+        switch (this.primaryBtnName) {
+            case 'Return':
+                return this.returnDisclosure();
+            case 'Withdraw':
+                return this.withdrawDisclosure();
+            default:
+                return;
+        }
     }
 
 }
