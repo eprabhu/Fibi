@@ -19,6 +19,7 @@ export class EntityManagementService {
   searchDefaultValues: NameObject = new NameObject();
   sortCountObject: SortCountObj = new SortCountObj();
   relationshipDashboardRequest = new RelationshipDashboardRequest();
+  isAdvanceSearch: any;
   statusCodes: any = [
     {code: 'Y', description: 'Active'},
     {code: 'N', description: 'Inactive'}
@@ -50,6 +51,10 @@ export class EntityManagementService {
 
   activateInactivate(params) {
     return this._http.put(this._commonService.baseUrl + '/entity/activateInactivate', params);
+  }
+
+  getApplicableQuestionnaire(requestObject: any) {
+    return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
   }
 
   getRelationshipTypes() {
