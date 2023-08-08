@@ -976,6 +976,8 @@ INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTIO
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('10', 'Risk for  {FCOI /Project /Travel} Disclosure changed from {LOW} to {HIGH}', 'Manage Risk', now(), 'quickstart');
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('11', '{FCOI /Project /Travel}  Disclosure admin-review has been completed', 'Admin  Review Completed', now(), 'quickstart');
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('12', '{FCOI /Project /Travel} Disclosure has been expired', 'Expired', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('13', '{FCOI /Project /Travel} application has been approved', 'Approved', now(), 'quickstart');
+
 
 SET FOREIGN_KEY_CHECKS=1;
 

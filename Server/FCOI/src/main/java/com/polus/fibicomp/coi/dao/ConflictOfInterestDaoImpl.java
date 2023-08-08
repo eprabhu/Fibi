@@ -83,6 +83,7 @@ import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
@@ -3724,6 +3725,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	@Override
+	public void saveOrUpdateTravelDisclosureActionLog(TravelDisclosureActionLog travelDisclosureActionLog) {
+		hibernateTemplate.saveOrUpdate(travelDisclosureActionLog);
 	}
 
 }

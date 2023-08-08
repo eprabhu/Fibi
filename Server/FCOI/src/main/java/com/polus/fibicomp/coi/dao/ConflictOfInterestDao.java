@@ -53,6 +53,7 @@ import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
@@ -1017,5 +1018,7 @@ public interface ConflictOfInterestDao {
 	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
 
 	public String getCoiTravelConflictStatusByStatusCode(String conflictStatusCode);
+	
+	public void saveOrUpdateTravelDisclosureActionLog(TravelDisclosureActionLog travelDisclosureActionLog);
 
 }
