@@ -4,16 +4,16 @@
             data-mat-icon-type="font">info</mat-icon>
     </span>
     <div class="custom-margin fs-14 pb-2">
-        <ng-container *ngFor="let helpText of helpTextList; let last = last; let first = first">
-            <div title="{{helpText}}" class="d-flex grey-text align-items-center mt-2" *ngIf="first || isExpanded">
+        <ng-container *ngFor="let helpText of helpTextList; let isLast = last; let index = index">
+            <div title="{{helpText}}" class="d-flex grey-text align-items-center mt-2" *ngIf="index <= rowLimit-1 || isExpanded">
                 <i class="fa fa-angle-double-right me-2" aria-hidden="true"></i>
-                <span class="grey-text">{{helpText}}</span>
+                <span class="grey-text me-1">{{helpText}}</span>
                 <!-- for read more and less -->
                 <ng-container *ngIf="helpTextList.length > rowLimit && isReadMoreLess">
-                    <span *ngIf="!isExpanded" (click)="isExpanded = true" class="fw-700 cursor-pointer">...<u
+                    <span *ngIf="index == rowLimit-1 && !isExpanded" (click)="isExpanded = true" class="fw-700 cursor-pointer">...<u
                         title="Expand {{tooltip}}" class="fw-700">Read More</u></span>
-                    <span *ngIf="last && isExpanded" (click) = "isExpanded = false" class="fw-700 cursor-pointer"><u 
-                        title="Collapse {{tooltip}}">Show Less</u></span>
+                    <span *ngIf="isLast && isExpanded" (click) = "isExpanded = false" class="fw-700 cursor-pointer"><u 
+                        title="Collapse {{tooltip}}">Read Less</u></span>
                 </ng-container>
             </div>
         </ng-container>

@@ -38,6 +38,12 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
     destination: 'Domestic' | 'International' = 'Domestic';
 
+    helpText = [
+        'All the fields of travel disclosure form are mandatory.',
+        'Fill in all the fields of the disclosure form and to save your progress, click on the ‘Save’ button.',
+        'Navigate to the Certification section to certify and submit the disclosure.'
+    ];
+
     constructor(public commonService: CommonService,
         private _router: Router,
         private _service: TravelDisclosureService,
