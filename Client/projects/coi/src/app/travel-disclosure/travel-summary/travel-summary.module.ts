@@ -5,12 +5,11 @@ import { TravelReviewComponent } from './travel-review/travel-review.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { TravelToolKitComponent } from './travel-tool-kit/travel-tool-kit.component';
-import { MatIconModule } from '@angular/material/icon';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { SharedModule } from '../../shared/shared.module';
 import { TravelFormSummaryComponent } from './travel-review/travel-form-summary/travel-form-summary.component';
 import { TravelCertifySummaryComponent } from './travel-review/travel-certify-summary/travel-certify-summary.component';
-import { TravelEntityCardComponent } from './travel-review/travel-form-summary/travel-entity-card/travel-entity-card.component';
+import { AddSfiModule } from '../../add-sfi/add-sfi.module';
 
 const routes: Routes = [
     {
@@ -25,15 +24,14 @@ const routes: Routes = [
         TravelToolKitComponent,
         TravelFormSummaryComponent,
         TravelCertifySummaryComponent,
-        TravelEntityCardComponent
     ],
     imports: [
         CommonModule,
         SharedModule,
         FormsModule,
         RouterModule.forChild(routes),
+        AddSfiModule,
         SharedComponentModule,
-        MatIconModule
     ]
 })
 export class TravelSummaryModule { }

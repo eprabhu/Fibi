@@ -19,9 +19,7 @@ public class FileDataDetailsSaveService {
 	protected void saveFileDetails(FileManagementOutputDto fileManagementOutputDto) {
 		try {
 			switch (fileManagementOutputDto.getModuleCode()) {
-
 			case FileManagmentConstant.COI_MODULE_CODE:
-
 				hibernateTemplate.saveOrUpdate(DisclFileData.builder()
 						.fileDataId(fileManagementOutputDto.getFileDataId())
 						.fileName(fileManagementOutputDto.getFileName())
@@ -33,14 +31,10 @@ public class FileDataDetailsSaveService {
 						.data(fileManagementOutputDto.getData())
 						.build());
 				break;
-
 			}
-
 		} catch (Exception e) {
-			throw new FileStorageException(
-					"Exception in saveFileDetails in FileDataDetailsSaveService." + e.getMessage());
+			throw new FileStorageException("Exception in saveFileDetails in FileDataDetailsSaveService." + e.getMessage());
 		}
-
 	}
 
 	public FileManagementOutputDto getFileDataDetails(String moduleCode, String fileDataId) {
@@ -56,37 +50,29 @@ public class FileDataDetailsSaveService {
 						.originalFileName(fileData.getOriginalFileName())
 						.filePath(fileData.getFilePath())
 						.build();
-
 			}
-
 		} catch (Exception e) {
-			throw new FileStorageException(
-					"Exception in getFileDataDetails in FileDataDetailsSaveService." + e.getMessage());
+			throw new FileStorageException("Exception in getFileDataDetails in FileDataDetailsSaveService." + e.getMessage());
 		}
 		return fileManagementOutputDto;
 	}
 
 	public void deleteFileDataDetails(String moduleCode, String fileDataId) {
-
 		try {
 			switch (moduleCode) {
 			case FileManagmentConstant.COI_MODULE_CODE:
 				DisclFileData fileData = hibernateTemplate.get(DisclFileData.class, fileDataId);
 				hibernateTemplate.delete(fileData);
 				break;
-
 			}
-
 		} catch (Exception e) {
-			throw new FileStorageException(
-					"Exception in deleteFileDataDetails in FileDataDetailsSaveService." + e.getMessage());
+			throw new FileStorageException("Exception in deleteFileDataDetails in FileDataDetailsSaveService." + e.getMessage());
 		}
 	}
 
 	protected void updateArchiveFlag(String moduleCode, String fileDataId, String archiveFlag) {
 		try {
 			switch (moduleCode) {
-
 			case FileManagmentConstant.COI_MODULE_CODE:
 				DisclFileData entity = hibernateTemplate.load(DisclFileData.class, fileDataId);
 				if (entity != null) {
@@ -94,14 +80,10 @@ public class FileDataDetailsSaveService {
 					hibernateTemplate.update(entity);
 				}
 				break;
-
 			}
-
 		} catch (Exception e) {
-			throw new FileStorageException(
-					"Exception in updateArchiveFlag in FileDataDetailsSaveService." + e.getMessage());
+			throw new FileStorageException("Exception in updateArchiveFlag in FileDataDetailsSaveService." + e.getMessage());
 		}
-
 	}
 
 }

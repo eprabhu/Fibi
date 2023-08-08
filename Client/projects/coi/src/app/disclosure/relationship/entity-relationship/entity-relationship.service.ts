@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
+import { RO } from '../../coi-interface';
 
 class ProjectDetails {
 	projectNumber = '';
@@ -42,9 +43,8 @@ getProjectRelationships(id, disclosureStatusCode, personId) {
     'personId': personId});
 }
 
-getSfiDetails(id, disclosureStatusCode, personId) {
-  return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure',
-  {'disclosureId': id, 'disclosureStatusCode': disclosureStatusCode, 'personId': personId});
+getSfiDetails(params: RO) {
+  return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
 }
 
 saveEntityProjectRelation(params, moduleCode, moduleItemId, did, personId) {
@@ -59,7 +59,7 @@ saveEntityProjectRelation(params, moduleCode, moduleItemId, did, personId) {
 
 getEntityProjectRelations(moduleCode, moduleItemId, disclosureId, disclosureStatusCode, personId, isProposalDisclosure) {
   if (!isProposalDisclosure) {
-      return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations',
+      return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations',
     {
     'moduleCode': moduleCode,
     'moduleItemId': moduleItemId,
@@ -69,7 +69,7 @@ getEntityProjectRelations(moduleCode, moduleItemId, disclosureId, disclosureStat
     'personId': personId
     });
   } else {
-    return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations',
+    return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations',
   {
   'moduleCode': moduleCode,
   'moduleItemId': moduleItemId,

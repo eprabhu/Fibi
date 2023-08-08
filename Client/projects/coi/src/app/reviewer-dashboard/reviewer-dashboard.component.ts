@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
@@ -9,11 +8,17 @@ import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../
 import { NameObject, ReviewerDashboardRequest, ReviewerDashboardService, SortCountObj } from './reviewer-dashboard.service';
 import { CommonService } from '../common/services/common.service';
 import { NavigationService } from '../common/services/navigation.service';
+import { listAnimation, topSlideInOut, fadeInOutHeight, scaleOutAnimation, slideInAnimation} from '../common/utilities/animations';
 
 @Component({
     selector: 'app-reviewer-dashboard',
     templateUrl: './reviewer-dashboard.component.html',
-    styleUrls: ['./reviewer-dashboard.component.scss']
+    styleUrls: ['./reviewer-dashboard.component.scss'],
+    animations: [listAnimation, topSlideInOut, fadeInOutHeight, 
+        slideInAnimation('0','12px', 400, 'slideUp'),
+        slideInAnimation('0','-12px', 400, 'slideDown'),
+        scaleOutAnimation('-2px','0', 200, 'scaleOut'),
+    ]
 })
 export class ReviewerDashboardComponent implements OnInit {
 
@@ -47,11 +52,23 @@ export class ReviewerDashboardComponent implements OnInit {
     fcoiTypeCode: any;
     isShowCountModal = false;
     inputType: any;
-    ishover: [] = [];
+    isHover: [] = [];
     isViewAdvanceSearch = true;
     isShowDisclosureList = false;
     localCOIRequestObject: ReviewerDashboardRequest = new ReviewerDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
+    isLoading = false;
+    readMoreOrLess = [];
+    sortSectionsList = [
+        { variableName: 'coiDisclosureNumber', fieldName: 'Disclosure#' },
+        { variableName: 'disclosurePersonFullName', fieldName: 'Person' },
+        { variableName: 'disclosureCategoryType', fieldName: 'Disclosure Type' },
+        { variableName: 'disclosureStatus', fieldName: 'Disclosure Status' },
+        { variableName: 'certifiedAt', fieldName: 'Certification Date' },
+        { variableName: 'expirationDate', fieldName: 'Expiration Date' },
+        { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
+    ];
+
     constructor(
         public reviewerDashboardService: ReviewerDashboardService,
         public commonService: CommonService,
@@ -59,30 +76,36 @@ export class ReviewerDashboardComponent implements OnInit {
         private _navigationService: NavigationService) { }
 
     ngOnInit() {
-        this.getCount();
         this.getDashboardDetails();
         this.setSearchOptions();
         this.setAdvanceSearch();
         this.setDashboardTab();
         this.checkForSort();
+        this.checkForPagination();
         this.checkForAdvanceSearch();
     }
 
     actionsOnPageChange(event) {
         this.localCOIRequestObject.currentPage = event;
+        this.reviewerDashboardService.reviewerRequestObject.currentPage = event;
         this.$coiList.next();
     }
 
-    getCount() {
-        this.$subscriptions.push(this.reviewerDashboardService.loadDisclosureReviewerQuickCardCounts().subscribe((data: any) => {
-        }));
+    checkForPagination() {
+        if (this._navigationService.previousURL.includes('coi/disclosure')) {
+            this.localCOIRequestObject.currentPage = this.reviewerDashboardService.reviewerRequestObject.currentPage;
+        }
     }
 
     getDashboardDetails() {
         this.$subscriptions.push(this.$coiList.pipe(
-            switchMap(() => this.reviewerDashboardService.getCOIReviewerDashboard(this.getRequestObject())))
+            switchMap(() => {
+                this.isLoading = true;
+                return this.reviewerDashboardService.getCOIReviewerDashboard(this.getRequestObject())
+        }))
             .subscribe((data: any) => {
                 this.result = data || [];
+                this.loadingComplete();
                 if (this.result) {
                     this.coiList = this.result.disclosureViews || [];
                     this.coiList.map(ele => {
@@ -91,12 +114,18 @@ export class ReviewerDashboardComponent implements OnInit {
                     });
                 }
                 this.setEventTypeFlag();
+            }, (err) => {
+                this.loadingComplete();
             }));
+    }
+
+    private loadingComplete() {
+        this.isLoading = false;
     }
 
     getRequestObject() {
         this.setAdvanceSearchValuesToServiceObject();
-        this.localCOIRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab');
+        this.localCOIRequestObject.tabName = sessionStorage.getItem('currentCOIReviewTab');
         return this.localCOIRequestObject;
     }
 
@@ -123,6 +152,7 @@ export class ReviewerDashboardComponent implements OnInit {
 
     resetAndPerformAdvanceSearch() {
         this.resetAdvanceSearchFields();
+        this.coiList = [];
         this.$coiList.next();
     }
 
@@ -132,11 +162,12 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     performAdvanceSearch() {
+        this.localCOIRequestObject.currentPage = 1;
         this.setAdvanceSearchToServiceObject();
         this.localCOIRequestObject.advancedSearch = 'A';
-        this.localCOIRequestObject.currentPage = 1;
         this.isShowDisclosureList = true;
         this.reviewerDashboardService.isAdvanceSearch = true;
+        this.coiList = [];
         this.$coiList.next();
     }
 
@@ -251,11 +282,12 @@ export class ReviewerDashboardComponent implements OnInit {
         }
     }
 
-    modalHeader(coi) {
-        if (coi.fcoiTypeCode == 1) {
-            return `#${coi.coiDisclosureNumber}: FCOI Disclosure By ${coi.disclosurePersonFullName}`;
-        } else if (coi.fcoiTypeCode == 2 || coi.fcoiTypeCode == 3) {
-            return `#${coi.coiDisclosureNumber}: Project Disclosure By ${coi.disclosurePersonFullName}`;
+    modalHeader(coi) { if (coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3') {
+            if (coi.fcoiTypeCode === '2') {
+                return `# ${coi.proposalId} - ${coi.proposalTitle}`;
+            } else if (coi.fcoiTypeCode === '3') {
+                return `# ${coi.awardId} - ${coi.awardTitle}`;
+            }
         }
     }
 
@@ -280,7 +312,7 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     setAdvanceSearch() {
-        sessionStorage.setItem('currentCOIAdminTab', this.reviewerDashboardService.reviewerRequestObject.tabName);
+        sessionStorage.setItem('currentCOIReviewTab', this.reviewerDashboardService.reviewerRequestObject.tabName);
         if (this.reviewerDashboardService.reviewerRequestObject.tabName === 'HISTORY') {
             this.isViewAdvanceSearch = true;
         } else {
@@ -299,11 +331,12 @@ export class ReviewerDashboardComponent implements OnInit {
 
     changeTab(tabName) {
         this.coiList = [];
+        this.isLoading = true;
         this.isShowDisclosureList = false;
         this.reviewerDashboardService.isAdvanceSearch = false;
         this.reviewerDashboardService.reviewerRequestObject.tabName = tabName;
         this.reviewerDashboardService.reviewerRequestObject.sort = { 'updateTimeStamp': 'desc' };
-        sessionStorage.setItem('currentCOIAdminTab', tabName);
+        sessionStorage.setItem('currentCOIReviewTab', tabName);
         if (this.isAdvanceSearchTab(tabName)) {
             this.resetAdvanceSearchFields();
             this.setAdvanceSearch();
@@ -317,7 +350,7 @@ export class ReviewerDashboardComponent implements OnInit {
 
     private resetAdvanceSearchFields() {
         this.sortCountObj = new SortCountObj();
-        this.reviewerDashboardService.reviewerRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab');
+        this.reviewerDashboardService.reviewerRequestObject.tabName = sessionStorage.getItem('currentCOIReviewTab');
         this.localCOIRequestObject = new ReviewerDashboardRequest(this.reviewerDashboardService.reviewerRequestObject.tabName);
         this.localSearchDefaultValues = new NameObject();
         this.reviewerDashboardService.searchDefaultValues = new NameObject();
@@ -333,8 +366,8 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     setDashboardTab() {
-        this.reviewerDashboardService.reviewerRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab') ?
-            sessionStorage.getItem('currentCOIAdminTab') : 'NEW_SUBMISSIONS';
+        this.reviewerDashboardService.reviewerRequestObject.tabName = sessionStorage.getItem('currentCOIReviewTab') ?
+            sessionStorage.getItem('currentCOIReviewTab') : 'NEW_SUBMISSIONS';
     }
 
     checkForSort() {
@@ -369,9 +402,8 @@ export class ReviewerDashboardComponent implements OnInit {
             }
             this.$coiList.next();
         } else {
-            this.resetAndPerformAdvanceSearch();
             this.resetSortObjects();
-            this.$coiList.next();
+            this.resetAndPerformAdvanceSearch();
         }
     }
 
@@ -404,6 +436,7 @@ export class ReviewerDashboardComponent implements OnInit {
         this.localCOIRequestObject.property9 = this.reviewerDashboardService.reviewerRequestObject.property9 ?
             this.reviewerDashboardService.reviewerRequestObject.property9 : null;
         this.localCOIRequestObject.advancedSearch = 'A';
+        this.localSearchDefaultValues = this.reviewerDashboardService.searchDefaultValues;
     }
 
     generateLookupArrayForDropdown() {
@@ -446,6 +479,7 @@ export class ReviewerDashboardComponent implements OnInit {
         this.reviewerDashboardService.reviewerRequestObject.property7 =
             parseDateWithoutTimestamp(this.advanceSearchDates.expirationDate) || [];
         this.reviewerDashboardService.reviewerRequestObject.property8 = this.localCOIRequestObject.property8 || null;
+        this.reviewerDashboardService.reviewerRequestObject.currentPage = this.localCOIRequestObject.currentPage;
         this.reviewerDashboardService.searchDefaultValues.personName = this.localSearchDefaultValues.personName || null;
         this.reviewerDashboardService.searchDefaultValues.entityName = this.localSearchDefaultValues.entityName || null;
         this.reviewerDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;

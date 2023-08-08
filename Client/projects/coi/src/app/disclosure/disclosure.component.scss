@@ -12,6 +12,10 @@
   background-color: #E4F1FF;
 }
 
+.collapsed-nav-tabs {
+  height: 58px;
+}
+
 .notes {
   height: 43px;
   margin-top: -51px;
@@ -217,7 +221,7 @@ table {
 
 .header-sticky {
   position: sticky;
-  top: 51px;
+  top: 0;
   z-index: 50;
 }
 
@@ -262,4 +266,56 @@ table {
 
 .validation-Message-box {
   width: 99%;
+}
+
+.margin-5 {
+  margin-top: 4px;
+}
+
+.m-04 {
+  margin-top: 0.4rem;
+}
+.moreActionIcon {
+  transform: scale(.9);
+  width: 20px;
+}
+
+.info-icon {
+  top: 11px;
+  height: 22px;
+  width: 22px;
+  font-size: 16px;
+  position: absolute;
+  margin-left: 2px;
+  color: #6f7395;
+  cursor: pointer;
+}
+
+.help-text{
+  margin: 0 -7px 0 -7px;
+  position: relative;
+  bottom: 0.6rem;
+}
+
+.grey-info {
+  background: #EEEEEE;
+  color: #202c2e;
+  font-size: 16px;
+  font-weight: 400;
+  border: 1px solid #caced2;
+}
+
+.undo-icon {
+  width: 2.5rem;
+}
+
+.info-card{
+  margin: 0 -8px 0 -8px;
+  position: relative;
+  bottom: 0.6rem;
+}
+
+.returnIcon {
+  transform: rotate(-0.25turn);
+  transform: scaleX(-1);
 }

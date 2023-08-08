@@ -23,8 +23,8 @@
   height: 27px;
   background: #949494;
   position: relative;
-  left: -13px;
-  top: -3px;
+  left: -6px;
+  top: 7px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -149,7 +149,7 @@
   background-color: #fff;
   height: 100vh;
   padding: 0px 10px 10px 10px;
-  overflow: auto;
+  overflow-y: scroll;
 }
 
 .btn-container {
@@ -208,10 +208,6 @@
   margin-top: 10px;
 }
 
-.mt-27 {
-  margin-top: 27px;
-}
-
 .relationship-sfi-data {
   width: 100%;
   display: flex;
@@ -252,3 +248,5 @@
   background:rgb(74 74 74 / 32%);
   z-index: 50; /* Specify a stack order in case you're using a different order for other elements */
 }
+
+

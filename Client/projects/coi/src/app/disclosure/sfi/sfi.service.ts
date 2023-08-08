@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
 // import { SFI } from './add-sfi.interface';
 import { Subject } from 'rxjs';
+import { RO } from '../coi-interface';
 
 @Injectable()
 export class SfiService {
@@ -13,9 +14,8 @@ export class SfiService {
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-    getSfiDetails(id, reviewStatusCode, personId, filterType, currentPage) {
-        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure',
-            {'disclosureId': id, 'reviewStatusCode': reviewStatusCode, 'personId': personId, 'filterType': filterType, 'currentPage': currentPage, 'pageNumber': 10});
+    getSfiDetails(params: RO) {
+        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
     }
 
     deleteSFI(params) {
@@ -35,7 +35,7 @@ export class SfiService {
     }
 
     isEntityAdded(entityId) {
-        return this._http.get(`${this._commonService.baseUrl}/checkEntity/${entityId}/added`)
+        return this._http.get(`${this._commonService.baseUrl}/entity/isLinked/${entityId}/personEntity`);
     }
 
     addSFILookUp() {

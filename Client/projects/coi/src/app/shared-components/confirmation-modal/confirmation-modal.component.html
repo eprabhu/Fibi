@@ -1,0 +1,52 @@
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="{{modalName}}-trigger-btn"
+    data-bs-toggle="modal" [attr.data-bs-target]="'#'+modalName"></button>
+<div class="modal modal-coi fade mySkinDialog" id="{{modalName}}" role="dialog" [attr.aria-labelledby]="modalName"
+    aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog {{getModalSize()}}" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <ng-content select="[header]"></ng-content>
+                </h5>
+                <button type="button" id="{{modalName}}-dismiss-btn" class="btn-close fs-12"
+                    data-bs-dismiss="modal" aria-label="Close" (click)="performSecondaryAction(false)">
+                </button>
+            </div>
+            <div class="modal-body m-0 p-0">
+                <app-help-text *ngIf="helpText.length > 0" [helpTextList]="helpText"></app-help-text>
+
+                <div class="p-2 m-2">
+                    <!-- warning msg -->
+                    <ng-content select="[content]"></ng-content>
+
+                    <!-- description text area -->
+                    <ng-container *ngIf="needDescriptionField">
+                        <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12">
+                            <span class="text-danger" *ngIf="isMandatory">*</span>
+                            Description
+                        </label>
+                        <div class="col-12">
+                            <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator
+                                [isShowLimiter]='true' [limit]=500 class="form-control fs-14" autocomplete="off"
+                                [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty();"
+                                [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''">
+                        </textarea>
+                            <span *ngIf="mandatoryList?.has('description')"
+                                class="fs-13 invalid-feedback d-block position-absolute">
+                                {{mandatoryList?.get('description')}}
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction(true)">
+                    {{secondaryBtnName}}
+                </button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performPrimaryAction()">
+                    {{primaryBtnName}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

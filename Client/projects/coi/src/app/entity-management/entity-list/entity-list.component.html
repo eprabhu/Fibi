@@ -1,5 +1,5 @@
 <div>
-    <div class="px-3" [@slideInOut]>
+    <div class="px-3" [@fadeInOutHeight]>
         <div *ngIf="isManageEntity" class="row bg-white mx-0 d-flex py-1 pb-2 align-items-center border ">
             <nav class="coi-admin-dash mx-0 borderlist">
                 <ul
@@ -29,15 +29,14 @@
                 </ul>
             </nav>
             <div class="align-items-center d-flex justify-content-end">
-                <button class="btn btn-tertiary mt-1 fs-13 d-flex align-items-center" id="advanced-search"
-                    title="Click here to expand / collapse  Advanced Search fields"
-                    (click)="isViewAdvanceSearch=!isViewAdvanceSearch" aria-controls="view-advance-search"
-                    aria-expanded="true" aria-label="Toggle Advanced Search"><mat-icon class="add-icon mt-1"
-                        area-describedby="Click here to collapse/un-collapse advanced search">tune</mat-icon> Advanced
-                    Search
+                <button role="button" class="btn btn-tertiary d-flex align-items-center mt-1 ms-auto fs-14"
+                     (click)="toggleAdvanceSearch()" aria-controls="view-advance-search"
+                    aria-expanded="false" title="Click here to expand / collapse Advanced Search fields"
+                    aria-label="Toggle Advanced Search"><mat-icon class="me-3">tune</mat-icon>
+                    Advanced Search
                 </button>
                 <div class="mx-4">
-                    <span class="btn btn-outline-secondary d-flex fs-13 align-items-center px-3" id="add-new-entity"
+                    <span class="btn btn-outline-secondary d-flex fs-14 align-items-center px-3" id="add-new-entity"
                         title="Click here to add an entity" area-describedby="Click here to add a new entity"
                         (click)="addNewEntity()"><mat-icon class="add-icon mt-1">add</mat-icon> Add New
                         Entity</span>
@@ -61,7 +60,7 @@
       </div> -->
             </div>
         </div>
-        <div *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow-sm rounded-3" id="view-advance-search">
+        <div *ngIf="isViewAdvanceSearch" class="card mt-2 border shadow-sm rounded-3" id="view-advance-search" [@topSlideInOut]>
             <div *ngIf="isManageEntity" class="card-body mb-3">
                 <div class="form-row row mx-2">
                     <div class="col-3" title="Click to search by Entity name">
@@ -148,18 +147,25 @@
           </div>
         </div> -->
                     <div class="col-3" title="Click to search by Risk Level">
-                        <label class="fw-bold fs-14 d-block" for="adv-entity-type">Risk Level</label>
+                        <label class="fw-bold fs-14 d-block" for="adv-entity-type">Risk</label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'property22')"
                             [options]="riskLevelTypeOptions" [selectedLookUpList]="lookupValues['property22']"
                             class=" text-secondary fs-13" [uniqueId]="'adv-entity-type'">
                         </app-look-up>
                     </div>
-                    <div class="col-2 d-flex justify-content-end align-items-end">
+                        <div *ngIf="activeTabName !== 'UNVERIFIED'" class="col-3" title="Click to search by verification">
+                            <label class="fw-bold fs-14 d-block">Verification</label>
+                            <app-look-up (selectedResult)="onLookupSelect($event, 'property24')" [options]="verificationTypeOptions"
+                                [selectedLookUpList]="lookupValues['property24']" [externalArray]="entityManagementService.statusCode"
+                                [isExternalArray]="true" class=" text-secondary fs-13" [uniqueId]="'adv-disclosure-type'">
+                            </app-look-up>
+                        </div>
+                    <div class="col-6 d-flex justify-content-end align-items-end">
                         <button class="btn btn-outline-secondary  fs-14 py-2 mx-3" id="btn-clear"
                             (click)="clearAdvancedSearch()" title="Click here to clear all the fields"
                             area-describedby="Click here to clear all the fields">Clear</button>
-                        <button class="btn btn-primary fs-14" id="btn-search" (click)="advancedSearch()"
-                            title="Click here to initiate search"
+                        <button class="btn btn-primary fs-14" id="btn-search" (click)="entityManagementService.coiRequestObject.currentPage = 1;advancedSearch()"
+                            title="Click here to Initiate search"
                             area-describedby="Click here to get the search results with/without fields">Search</button>
                     </div>
                 </div>
@@ -168,16 +174,34 @@
         <!-- <app-entity-list  [entityActiveTabName]="activeTabName" (entityListResult)="addEntityList($event)"
     (modifyEntityId)="selectedEntity($event); isViewAdvanceSearch = false" (navNextPage)="navigateNextPage($event)"
     [entityList]="entityList" [resultCount]="resultCount"></app-entity-list> -->
-        <ng-container *ngIf="isSearchData">
-            <div *ngIf="entityList.length; else noData">
+    <div class="sort-div border mt-2" *ngIf="isShowEntityList && isManageEntity && entityList.length">
+        <span class="fs-14 fw-medium me-2 text-secondary">Sort By : </span>
+        <button tabindex="0" *ngFor="let sortSection of sortSectionsList"
+            (keydown.enter)="sortResult(sortSection.variableName)" (click)="sortResult(sortSection.variableName)"
+            [class.filter-active]="isActive(sortSection.variableName)" title="Click to sort by {{sortSection.fieldName}}"
+            area-describedby="Click to sort by {{sortSection.fieldName}}"
+            class="shadow-sm fw-medium pl-15 pr-05 py-2 px-3 fs-13 border rounded-5 bg-white ml-5 mr-2" role="button">
+            <div class="d-inline-flex align-items-center">
+                <label class="cursor-pointer">{{sortSection.fieldName}}</label>
+                <mat-icon class="arrow selected-arrow" [@slideDown]
+                    *ngIf="entityManagementService.coiRequestObject.sort[sortSection.variableName]=== 'asc' ">arrow_downward</mat-icon>
+                <mat-icon class="arrow selected-arrow" [@slideUp] [@scaleOut]
+                    *ngIf="entityManagementService.coiRequestObject.sort[sortSection.variableName]=== 'desc' ">arrow_upward</mat-icon>
+            </div>
+        </button>
+    </div>
+        <ng-container *ngIf="isShowEntityList && !isLoading">
+            <div *ngIf="entityList.length; else noData" [@listAnimation]="entityList.length">
                 <div *ngFor="let entityListData of entityList;let i=index">
                     <div class="border bg-white rounded-3 p-2 mt-2 hovering-card">
-                        <div class="m-0 mb-2 ">
-                            <span class="align-items-center  d-flex">
+                        <div class="m-0 mb-2 row">
+                            <div class="col-11"> 
+                            <span class="align-items-center d-flex">
                                 <span
                                     [ngClass]="entityListData?.isActive ? 'entity-status-active' : 'entity-status-inactive'">
                                     <span class="ps-3"> {{ entityListData?.isActive ? 'Active' : 'Inactive' }}</span>
                                 </span>
+                                
                                 <p class="entity-title mt-3 d-flex justify-content-between align-items-center">
                                     <strong class="fs-16 me-3">{{entityListData?.entityName}}</strong>
                                     <span *ngIf="entityListData?.statusDescription === 'Unverified'"
@@ -187,9 +211,18 @@
                                         </span>
                                         <span class="text">Unverified</span>
                                     </span>
-                                </p>
+                                </p>   
+                            
                             </span>
                         </div>
+                        </div>
+                        <!-- <mat-menu #beforeMenu>
+                            <button class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
+                                id="edit-location-btn" data-bs-toggle="modal" data-bs-target="#add-location-modal">
+                                <mat-icon class="me-2 invalid material-icons-round">warning</mat-icon>
+                                <span>Risk</span>
+                            </button>
+                        </mat-menu>  -->
                         <div class="m-0 mb-2 row">
                             <div class="col-4 text-secondary fs-14 mt-3">
                                 <span class="fw-bold me-2">Entity Type:</span>
@@ -225,9 +258,11 @@
                 </div>
             </div>
         </ng-container>
-        <div *ngIf="entityList.length>0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+        <!-- pagination -->
+        <div [hidden]="isLoading" *ngIf="entityList.length>0 && isShowEntityList" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
             <nav aria-label="pagination section" class="pagination justify-content-end">
-                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount">
+                <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount" 
+                [defaultCurrentPage]="entityManagementService.coiRequestObject.currentPage">
                 </app-pagination>
             </nav>
 
@@ -236,3 +271,5 @@
             </ng-template>
 
         </div>
+    </div>
+</div>

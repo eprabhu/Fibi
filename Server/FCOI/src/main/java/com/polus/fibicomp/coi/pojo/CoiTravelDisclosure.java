@@ -180,6 +180,9 @@ public class CoiTravelDisclosure implements Serializable {
 	
 	@Column(name = "DOCUMENT_STATUS_CODE")
 	private String documentStatusCode;
+	
+	@Column(name = "EXPIRATION_DATE")
+	private Date expirationDate;
 
 	@Transient
 	private Unit travellerUnitDetails;
@@ -646,6 +649,14 @@ public class CoiTravelDisclosure implements Serializable {
 
 	public void setCreateTimestamp(Timestamp createTimestamp) {
 		this.createTimestamp = createTimestamp;
+	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
 }

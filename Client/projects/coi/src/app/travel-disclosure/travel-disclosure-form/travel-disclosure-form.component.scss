@@ -1,3 +1,27 @@
+.info-icon {
+  top: 7px;
+  height: 22px;
+  width: 22px;
+  font-size: 1.6rem;
+  position: absolute;
+  margin-left: 2px;
+  color: #6f7395;
+  cursor: pointer;
+}
+
+.grey-info {
+  background: #EEEEEE;
+  color: #202c2e;
+  font-size: 1.6rem;
+  font-weight: 400;
+  border: 1px solid #caced2;
+}
+
+.info-text {
+  margin-bottom: 5px;
+  margin-left  : 27px;
+}
+
 .col-custom {
   width: 100px !important;
 }
@@ -12,7 +36,7 @@
   margin-left: 10px !important;
 }
 
-.invalid-feedback {
+.invalid-msg {
   color: rgb(176 42 55);
 }
 

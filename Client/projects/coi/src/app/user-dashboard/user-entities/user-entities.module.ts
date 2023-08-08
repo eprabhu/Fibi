@@ -6,6 +6,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
 import {SharedComponentModule} from "../../shared-components/shared-component.module";
 import { SharedModule } from '../../shared/shared.module';
+import { EntityDetailsModule } from '../../disclosure/entity-details/entity-details.module';
 
 const routes: Routes = [{path: '', component: UserEntitiesComponent}];
 
@@ -19,7 +20,8 @@ const routes: Routes = [{path: '', component: UserEntitiesComponent}];
         MatIconModule,
         SharedModule,
         FormsModule,
-        SharedComponentModule
+        SharedComponentModule,
+        EntityDetailsModule
     ]
 })
 export class UserEntitiesModule {

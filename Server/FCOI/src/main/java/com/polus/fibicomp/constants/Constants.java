@@ -1627,6 +1627,8 @@ public interface Constants {
     String TYPE_REVISE_FCOI = "RF";
     String TYPE_SFI = "S";
     String TYPE_INACTIVATE_SFI = "IS";
+    String TYPE_FINALIZE_SFI = "FS";
+
     Integer COI_ADMINISTRATOR = 1335;
     Integer VIEW_ADMIN_GROUP_COI = 1356;
     
@@ -1646,5 +1648,5 @@ public interface Constants {
     String TRAVEL_VERSION_STATUS_PENDING = "PENDING";
     String TRAVE_VERSION_STATUS_ACTIVE = "ACTIVE";
     Integer DEFAULT_TRAVEL_VERSION_NUMBER = 1;
-    Integer COI_ENTITY_STATUS_ACTIVE = 1;
+    String COI_ENTITY_STATUS_VERIFIED = "1";
 }

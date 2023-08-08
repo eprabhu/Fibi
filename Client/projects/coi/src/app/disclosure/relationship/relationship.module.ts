@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { SearchFilterPipe } from './directives/search-filter.pipe';
 import { SharedModule } from '../../shared/shared.module';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
+import { SFIConflictRelationshipComponent } from './SFI-conflict-relationship/SFI-conflict-relationship.component';
 
 
 const routes: Routes = [{path: '', component: RelationshipComponent}];
@@ -20,7 +21,8 @@ const routes: Routes = [{path: '', component: RelationshipComponent}];
     declarations: [
         RelationshipComponent,
         DefineRelationComponent,
-        SearchFilterPipe
+        SearchFilterPipe,
+        SFIConflictRelationshipComponent
     ],
     imports: [
         CommonModule,

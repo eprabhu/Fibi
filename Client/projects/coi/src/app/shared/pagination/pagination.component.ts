@@ -15,6 +15,7 @@ export class PaginationComponent implements OnInit, OnChanges {
 
   @Input() totalCount = 0;
   @Input() pageCount = 20;
+  @Input() defaultCurrentPage = 0;
   @Output() pageChangeEvent: EventEmitter<number> = new EventEmitter<number>();
   currentPage = 1;
   paginationCount = 1;
@@ -26,7 +27,7 @@ export class PaginationComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.findPaginationCount();
-    this.updateCurrentPage(this.currentPage);
+    this.updateCurrentPage(this.defaultCurrentPage ? this.defaultCurrentPage : this.currentPage);
   }
 
   ngOnChanges() {
@@ -40,7 +41,7 @@ export class PaginationComponent implements OnInit, OnChanges {
     } else {
       this.paginationCount = 1;
     }
-    this.updateCurrentPage(1);
+    this.updateCurrentPage(this.defaultCurrentPage ? this.defaultCurrentPage : 1);
   }
 
   /**

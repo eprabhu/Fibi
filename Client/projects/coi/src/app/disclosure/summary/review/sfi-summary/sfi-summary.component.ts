@@ -1,10 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CoiService } from '../../../services/coi.service';
 import { CoiSummaryService } from '../../coi-summary.service';
 import { environment } from '../../../../../environments/environment';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
-import { CommentConfiguration } from '../../../coi-interface';
+import { CommentConfiguration, RO } from '../../../coi-interface';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Router } from '@angular/router';
 
@@ -16,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class SfiSummaryComponent implements OnInit, OnDestroy {
 
+    @ViewChild('viewSFISummaryDetailsOverlay', { static: true }) viewSFISummaryDetailsOverlay: ElementRef;
     coiFinancialEntityDetails: any[] = [];
     $subscriptions: Subscription[] = [];
     deployMap = environment.deployUrl;
@@ -23,6 +23,9 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     coiDetails: any = {};
     searchText: string;
     isCollapsed = true;
+    showSlider = false;
+    entityId: any;
+    isShowNoDataCard = false;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
@@ -49,19 +52,26 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     }
 
     getSfiDetails() {
-        this.$subscriptions.push(this._coiSummaryService.getSfiDetails({
-            disclosureId: Number(this.coiDetails.disclosureId),
-            disclosureStatusCode: this.coiDetails.disclosureStatusCode,
-            personId: this.coiDetails.personId,
-            filterType: '',
-            currentPage: 0,
-            pageNumber: 0
-        }).subscribe((data: any) => {
+        this.isShowNoDataCard = false;
+        this.$subscriptions.push(this._coiSummaryService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
             if (data) {
+                this.isShowNoDataCard = true;
                 this.coiFinancialEntityDetails = data.personEntities;
                 this.setSubSectionList();
             }
         }));
+    }
+
+    getRequestObject() {
+		const REQ_OBJ = new RO();
+        REQ_OBJ.currentPage = 0;
+        REQ_OBJ.disclosureId = Number(this.coiDetails.disclosureId);
+        REQ_OBJ.filterType = '';
+        REQ_OBJ.pageNumber = 0;
+        REQ_OBJ.personId = this.coiDetails.personId;
+        REQ_OBJ.reviewStatusCode = '';
+        REQ_OBJ.searchWord = '';
+        return REQ_OBJ;
     }
 
     setSubSectionList() {
@@ -80,4 +90,27 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
         this._dataStoreAndEventsService.modifyReviewComment(this.commentConfiguration);
     }
 
+    viewSlider(event) {
+        this.showSlider = event.flag;
+        this.entityId = event.entityId;
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
+        setTimeout(() => {
+            const slider = document.querySelector('.slider-base');
+            slider.classList.add('slider-opened');
+        });
+    }
+
+    hideSfiNavBar() {
+        this.addBodyScroll();
+        let slider = document.querySelector('.slider-base');
+        slider.classList.remove('slider-opened');        
+        setTimeout(() => {
+            this.showSlider = false;
+        },500);
+    }
+
+    addBodyScroll() {
+        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
+    }
 }

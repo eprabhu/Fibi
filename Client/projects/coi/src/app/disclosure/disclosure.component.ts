@@ -3,12 +3,13 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
-import { ApplicableQuestionnaire, COI, getApplicableQuestionnaireData } from './coi-interface';
+import { ApplicableQuestionnaire, COI, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
 import { CoiService } from './services/coi.service';
 import { Location } from '@angular/common';
 import {
     deepCloneObject,
+    hideModal,
     isEmptyObject,
     openModal,
 } from '../../../../fibi/src/app/common/utilities/custom-utilities';
@@ -16,19 +17,23 @@ import { ElasticConfigService } from '../../../../fibi/src/app/common/services/e
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../fibi/src/app/app-constants';
 import { CommonService } from '../common/services/common.service';
 import {
-    CREATE_DISCLOSURE_ROUTE_URL,
     NO_DATA_FOUND_MESSAGE,
     HOME_URL,
-    POST_CREATE_DISCLOSURE_ROUTE_URL
+    POST_CREATE_DISCLOSURE_ROUTE_URL,
+    CREATE_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { getSponsorSearchDefaultValue } from '../common/utlities/custom-utlities';
+import { getSponsorSearchDefaultValue } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
+import { DefaultAdminDetails } from '../travel-disclosure/travel-disclosure-interface';
+import { slideHorizontal } from '../../../../fibi/src/app/common/utilities/animations';
+
 @Component({
     selector: 'app-disclosure',
     templateUrl: './disclosure.component.html',
-    styleUrls: ['./disclosure.component.scss']
+    styleUrls: ['./disclosure.component.scss'],
+    animations: [slideHorizontal],   
 })
 
 
@@ -38,6 +43,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     isCreateMode = false;
     isSaving = false;
     isCOIAdministrator = true;
+    isAddAssignModalOpen = false;
     certificationText = 'I certify that the information provided for the Financial conflict of interest, including, responses to screening questions, list of my pertinent Significant Financial interests and possible relationship to my sponsored activity is an accurate and current statement of my reportable outside interests and activities.';
     $subscriptions: Subscription[] = [];
     coiData = new COI();
@@ -77,7 +83,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     showConfirmation = false;
     relationshipError: any;
     questionnaireError: any;
-
+    defaultAdminDetails = new DefaultAdminDetails();
+    count: number;
+    dependencies = ['coiDisclosure', 'numberOfSFI'];
+    reviewStatus: string;
+    filterType = 'ACTIVE';
+    withdrawError = new Map();
+    withdrawDescription: any;
+    returnDescription: any;
+    returnError = new Map();
+    isShowMore = false;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -87,7 +102,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         public coiService: CoiService,
         public location: Location,
         public dataStore: DataStoreService, public navigationService: NavigationService) {
-        window.scrollTo(0, 0);
+        document.getElementById('COI_SCROLL').scrollTo(0, 0);
         this.isCreateMode = this.router.url.includes('create-disclosure');
         this.setStepFirstTime(this.router.url);
         this.$subscriptions.push(this.router.events.subscribe(event => {
@@ -102,8 +117,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiService.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
         this.canShowReviewerTab = this.commonService.getAvailableRight(['MANAGE_DISCLOSURE_REVIEW', 'VIEW_DISCLOSURE_REVIEW']);
         this.getDataFromStore();
-        // this.validateRelationship();
-        // this.certifyIfQuestionnaireCompleted(res:)
+        this.getDisclosureTypeMessage();
         this.listenDataChangeFromStore();
         this.prevURL = this.navigationService.previousURL;
         this._route.queryParams.subscribe(params => {
@@ -117,6 +131,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 });
             }
         });
+        this.updateTimeStampEvent();
     }
 
     ngOnDestroy(): void {
@@ -245,15 +260,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     private certifyIfQuestionnaireCompleted(res: getApplicableQuestionnaireData) {
         if (res && res.applicableQuestionnaire && res.applicableQuestionnaire.length) {
-            if (this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
-                this.validateRelationship();
-            } else {
-                this.isSaving = false;
+            if (!this.isAllQuestionnaireCompleted(res.applicableQuestionnaire)) {
                 this.error = 'Please complete the following mandatory Questionnaire(s) in the Screening Questionniare section.';
                 this.coiService.submitResponseErrors.push(this.error);
-                this.validateRelationship();
-                return false;
             }
+            this.validateRelationship();
         }
     }
 
@@ -278,7 +289,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             coiDisclosure: {
                 disclosureId: this.coiData.coiDisclosure.disclosureId,
                 certificationText: this.coiData.coiDisclosure.certificationText ?
-                    this.coiData.coiDisclosure.certificationText : this.certificationText
+                    this.coiData.coiDisclosure.certificationText : this.certificationText,
+                    conflictStatusCode: this.dataStore.disclosureStatus
             }
         };
         this.$subscriptions.push(this.coiService.certifyDisclosure(REQUESTREPORTDATA).subscribe((res: any) => {
@@ -286,8 +298,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.dataStore.updateStore(['coiDisclosure'], { coiDisclosure: res });
             this.isSaving = false;
             this.router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], { queryParamsHandling: 'preserve' });
+            this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure Submitted Successfully.');
         }, err => {
             this.isSaving = false;
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Error In Certifying Disclosure.');
         }));
     }
     validateRelationship() {
@@ -295,7 +309,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             res.map((error) => {
                 this.coiService.submitResponseErrors.push( error.validationMessage) ;
             });
-            this.errorCheck();
+           this.getSfiDetails();
+        }, err => {
+            this.isSaving = false;
         }));
     }
     private getDataFromStore() {
@@ -305,6 +321,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.disclosureDetailsForSFI.disclosureId = this.coiData.coiDisclosure.disclosureId;
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
         this.setAdminGroupOptions();
+        this.setAssignAdminModalDetails();
+    }
+
+    private setAssignAdminModalDetails(): void {
+        this.defaultAdminDetails.adminGroupId = this.coiData.coiDisclosure.adminGroupId;
+        this.defaultAdminDetails.adminGroupName = this.coiData.coiDisclosure.adminGroupName;
+        this.defaultAdminDetails.adminPersonId = this.coiData.coiDisclosure.adminPersonId;
+        this.defaultAdminDetails.adminPersonName = this.coiData.coiDisclosure.adminPersonName;
     }
 
     getDisclosureStatusBadgeTextColor(statusCode) {
@@ -324,6 +348,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             .completeDisclosureReview(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureNumber)
             .subscribe((res: any) => {
                 this.updateDisclosureReviewStatus(res.body.coiDisclosure);
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             }, _err => {
                 if (_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
                     document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();
@@ -336,7 +361,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     updateDisclosureReviewStatus(res) {
         this.coiData.coiDisclosure = deepCloneObject(res);
         this.dataStore.updateStore(['coiDisclosure'], this.coiData);
-        this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
     }
 
     triggerSave() {
@@ -447,15 +471,18 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     closeAssignAdministratorModal(event) {
-        if (event.adminPersonId || event.adminGroupId) {
+        if (event && (event.adminPersonId || event.adminGroupId)) {
             this.coiData.coiDisclosure.adminPersonId = event.adminPersonId;
             this.coiData.coiDisclosure.adminPersonName = event.adminPersonName;
             this.coiData.coiDisclosure.adminGroupId = event.adminGroupId;
             this.coiData.coiDisclosure.adminGroupName = event.adminGroupName;
             this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = event.reviewStatusCode;
             this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
+            this.coiData.coiDisclosure.reviewStatusCode = event.reviewStatusCode;
+            this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
             this.dataStore.updateStore(['coiDisclosure'], this.coiData);
         }
+        this.isAddAssignModalOpen = false;
     }
 
     public updateCoiReview(modalType: ModalType) {
@@ -470,11 +497,123 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     errorCheck() {
         if (this.coiService.submitResponseErrors.length) {
-            openModal('ValidateAwardModal');
+            this.isSaving = false;
+            openModal('ValidatedModal');
         } else {
             openModal('confirmModal');
         }
     }
 
+    updateTimeStampEvent() {
+        this.dataStore.updateTimestampEvent.subscribe((value) => {
+            this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
+            this.coiData = JSON.parse(JSON.stringify(this.coiData));
+        });
+    }
+
+    getDisclosureTypeMessage(): string {
+        const FCOITYPECODE = this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode;
+        switch (FCOITYPECODE) {
+            case '1': return 'FCOI';
+            case '2': case '3': return 'Project';
+            default: return ;
+        }
+    }
+
+    getSfiDetails() {
+        this.$subscriptions.push(this.sfiService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
+            if (data) {
+                this.count = data.count;
+                this.errorCheck();
+            }
+        }));
+    }
+
+    getRequestObject() {
+      const REQ_OBJ = new RO();
+      REQ_OBJ.currentPage = 0;
+      REQ_OBJ.disclosureId = this.coiData.coiDisclosure.disclosureId;
+      REQ_OBJ.filterType = this.filterType;
+      REQ_OBJ.pageNumber = 0;
+      REQ_OBJ.personId = this.coiData.coiDisclosure.person.personId;
+      REQ_OBJ.reviewStatusCode = this.coiData.coiDisclosure.reviewStatusCode;
+      REQ_OBJ.searchWord = '';
+      return REQ_OBJ;
+    }
+    
+    openWithdrawModal() {
+        openModal('withdrawModal');
+    }
+
+    descriptionChangedOrEmpty() {
+        if (!this.withdrawDescription) {
+            this.withdrawError.set('description', `Describe the reason for withdrawing the disclosure.`);
+        }
+        return this.withdrawError.size === 0 ? true : false;
+    }
+
+    closeWithdrawModal() {
+        this.withdrawError.clear();
+        this.withdrawDescription = '';
+    }
+
+    withdrawDisclosure() {
+        this.withdrawError.clear();
+        if (this.descriptionChangedOrEmpty()) {
+            this.$subscriptions.push(this.coiService
+                .withdrawDisclosure({
+                    disclosureId: this.coiData.coiDisclosure.disclosureId,
+                    description: this.withdrawDescription
+                })
+                .subscribe((res: any) => {
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, `Disclosure withdrawn successfully.`);
+                    hideModal('withdrawModal');
+                    this.closeWithdrawModal();
+                    this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = res.reviewStatusCode;
+                    this.coiData.coiDisclosure.coiReviewStatusType.description = res.reviewStatusDescription;
+                    this.coiData.coiDisclosure.reviewStatusCode = res.reviewStatusCode;
+                    this.router.navigate([CREATE_DISCLOSURE_ROUTE_URL],
+                        { queryParams: { disclosureId: this.coiData.coiDisclosure.disclosureId } });
+                }, _err => {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+                }));
+        }
+    }
+
+    openReturnModal() {
+        openModal('returnModal');
+    }
+
+    returnDescriptionChangedOrEmpty() {
+        if (!this.returnDescription) {
+            this.returnError.set('return', `Kindly provide the reason for returning the disclosure.`);
+        }
+        return this.returnError.size === 0 ? true : false;
+    }
+
+    closeReturnModal(): void {
+        this.returnError.clear();
+        this.returnDescription = '';
+    }
+
+    returnDisclosure() {
+        this.returnError.clear();
+        if (this.returnDescriptionChangedOrEmpty()) {
+            this.$subscriptions.push(this.coiService
+                .returnDisclosure({
+                    disclosureId: this.coiData.coiDisclosure.disclosureId,
+                    description: this.returnDescription
+                })
+                .subscribe((res: any) => {
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, `Disclosure returned successfully.`);
+                    hideModal('returnModal');
+                    this.closeReturnModal();
+                    this.goToHomeUrl();
+                }, _err => {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in returning disclosure.`);
+                }));
+        }
+
+    }
 
 }

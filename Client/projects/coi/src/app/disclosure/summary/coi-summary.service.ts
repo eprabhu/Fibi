@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { CommonService } from '../../common/services/common.service';
+import { RO } from '../coi-interface';
 
 @Injectable()
 export class CoiSummaryService {
@@ -17,7 +18,7 @@ export class CoiSummaryService {
 
     getEntityProjectRelations(moduleCode, moduleId, id, status, personId) {
       if (moduleCode == 3) {
-        return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
+        return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations', {
           'disclosureId': id,
           'proposalIdlinkedInDisclosure': moduleId,
           'disclosureStatusCode': status,
@@ -26,7 +27,7 @@ export class CoiSummaryService {
           'personId': personId,
         });
       } else {
-        return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
+        return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations', {
           'disclosureId': id,
           'disclosureStatusCode': status,
           'moduleCode': moduleCode,
@@ -36,7 +37,7 @@ export class CoiSummaryService {
       }
     }
 
-    getSfiDetails(params: any) {
+    getSfiDetails(params: RO) {
         return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
     }
 

@@ -14,21 +14,15 @@ public class DatabaseFileStorageService implements FileStorageService {
 
 	@Override
 	public FileManagementOutputDto saveFile(FileManagmentInputDto fileManagmentInputDto) {
-
 		if (fileManagmentInputDto == null) {
 			throw new FileStorageException("FileManagmentInputDto is null in DatabaseFileStorageService");
 		}
-
 		MultipartFile file = fileManagmentInputDto.getFile();
-
 		if (file == null) {
 			throw new FileStorageException("File is null in DatabaseFileStorageService");
 		}
-
 		try {
-
 			String fileDataId = UniqueFileIdGenerator.generateFileDataId();
-
 			FileManagementOutputDto fileManagementOutputDto = FileManagementOutputDto.builder()
 																		.fileDataId(fileDataId)
 																		.originalFileName(file.getOriginalFilename())
@@ -36,11 +30,8 @@ public class DatabaseFileStorageService implements FileStorageService {
 																		.moduleCode(fileManagmentInputDto.getModuleCode())
 																		.updateUser(fileManagmentInputDto.getUpdateUser())
 																		.build();
-
 			fileDataDetailsSaveService.saveFileDetails(fileManagementOutputDto);
-
 			return fileManagementOutputDto;
-
 		} catch (Exception ex) {
 			throw new FileStorageException("Failed to store file in DatabaseFileStorageService " + file.getName(), ex);
 		}
@@ -49,34 +40,23 @@ public class DatabaseFileStorageService implements FileStorageService {
 	@Override
 	public FileManagementOutputDto downloadFile(String moduleCode, String fileDataId) {
 		try {
-
 			return fileDataDetailsSaveService.getFileDataDetails(moduleCode, fileDataId);
-
 		} catch (Exception e) {
-			throw new FileStorageException(
-					"An error occurred while downloading the file in DatabaseFileStorageService : " + e.getMessage());
+			throw new FileStorageException("An error occurred while downloading the file in DatabaseFileStorageService : " + e.getMessage());
 		}
 	}
 
 	@Override
 	public void deleteFile(String moduleCode, String fileDataId) {
 		try {
-
 			if ("Y".equalsIgnoreCase(isArchiveFileEnabled)) {
-
 				fileDataDetailsSaveService.updateArchiveFlag(moduleCode, fileDataId, "Y");
-
 			} else {
-
 				fileDataDetailsSaveService.deleteFileDataDetails(moduleCode, fileDataId);
-
 			}
-
 		} catch (Exception e) {
-			throw new FileStorageException(
-					"Failed to delete the file in FileSystemFileStorageService, fileDataId = " + fileDataId, e);
+			throw new FileStorageException("Failed to delete the file in FileSystemFileStorageService, fileDataId = " + fileDataId, e);
 		}
-
 	}
 
 }

@@ -16,7 +16,7 @@
                   <div class="fw-medium py-1">Awards</div>
                   <div class="bg-sub-goto border fw-medium p-2 rounded-1">
                       <ng-container *ngFor="let award of projectList?.awards; let i = index">
-                        <div (click)="jumpToSection(award?.moduleItemId); openProjectRelationships(award, i)" title="{{award?.title}}" class="sub-goto bg-white border mb-1 p-1">
+                        <div (click)="jumpToProjectSection(award?.moduleItemId); openProjectRelationships(award, i)" title="{{award?.title}}" class="sub-goto bg-white border mb-1 p-1">
                           {{award?.moduleItemKey}} {{award?.title}}
                         </div>
                       </ng-container>
@@ -30,7 +30,7 @@
                     <div class="fw-medium py-1">Proposals</div>
                     <div class="bg-sub-goto border fw-medium p-2 rounded-1">
                         <ng-container *ngFor="let proposals of projectList?.proposals; let i = index">
-                            <div (click)="jumpToSection(proposals?.moduleItemId); openProjectRelationships(proposals, i)" title="{{proposals?.title}}" class="sub-goto bg-white border mb-1 p-1">
+                            <div (click)="jumpToProjectSection(proposals?.moduleItemId); openProjectRelationships(proposals, i)" title="{{proposals?.title}}" class="sub-goto bg-white border mb-1 p-1">
                                 {{proposals?.moduleItemId}} {{proposals?.title}}
                             </div>
                         </ng-container>

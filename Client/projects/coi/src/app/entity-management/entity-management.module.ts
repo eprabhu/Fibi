@@ -11,6 +11,8 @@ import { FormsModule } from '@angular/forms';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import { EntityManagementGuardService } from './entity-management-guard.service';
 import { SfiService } from '../disclosure/sfi/sfi.service';
+import { EntityDetailsService } from '../disclosure/entity-details/entity-details.service';
+import { EntityDetailsModule } from '../disclosure/entity-details/entity-details.module';
 
 const routes: Routes = [
   {
@@ -37,9 +39,10 @@ const routes: Routes = [
     SharedModule,
     FormsModule,
     SharedComponentModule,
+    EntityDetailsModule
   ],
   exports: [
-  ], providers: [ElasticConfigService, EntityManagementGuardService, SfiService, EntityManagementGuardService]
+  ], providers: [ElasticConfigService,EntityDetailsService, EntityManagementGuardService, SfiService, EntityManagementGuardService]
 })
 export class EntityManagementModule {
 }

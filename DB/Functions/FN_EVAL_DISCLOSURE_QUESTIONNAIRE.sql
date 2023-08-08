@@ -23,7 +23,7 @@ WHERE
         
 SELECT QUESTIONNAIRE_ID into LI_QUESTIONNAIRE_ID FROM quest_answer_header  where QUESTIONNAIRE_ANS_HEADER_ID =LI_QUES_ANS_HEADER_ID;
 
-SELECT COUNT(1) INTO LI_ANS_COUNT FROM quest_answer where QUESTIONNAIRE_ANS_HEADER_ID = LI_QUES_ANS_HEADER_ID and QUESTION_ID in (SELECT QUESTION_ID FROM quest_question where QUESTIONNAIRE_ID = LI_QUESTIONNAIRE_ID and 
+SELECT COUNT(1) INTO LI_ANS_COUNT FROM coi_quest_answer where QUESTIONNAIRE_ANS_HEADER_ID = LI_QUES_ANS_HEADER_ID and QUESTION_ID in (SELECT QUESTION_ID FROM quest_question where QUESTIONNAIRE_ID = LI_QUESTIONNAIRE_ID and 
 QUESTION ='3.Over the last 12 months, or do you expect to receive over the next 12 months: Payments for intellectual property such as copyrights or royalties from any source other than the University (excludes scholarly works)?'
 or QUESTION = '4.Over the last 12 months, or do you expect to receive over the next 12 months: Compensation for any board positions, including science advisory boards?'
 or QUESTION = '5.Over the last 12 months, or do you expect to receive over the next 12 months: Consulting, salary or other income for services work performed or other services provided?'
@@ -33,7 +33,7 @@ or QUESTION = '8.Publically traded stock or stock options in excess of $5,000 mu
 IF LI_ANS_COUNT > 0 THEN
    RETURN 0;
 ELSE
-    SELECT ANSWER INTO  LI_ANSWER FROM quest_answer where QUESTIONNAIRE_ANS_HEADER_ID = LI_QUES_ANS_HEADER_ID and 
+    SELECT ANSWER INTO  LI_ANSWER FROM coi_quest_answer where QUESTIONNAIRE_ANS_HEADER_ID = LI_QUES_ANS_HEADER_ID and 
     QUESTION_ID = (SELECT QUESTION_ID FROM quest_question where QUESTIONNAIRE_ID = LI_QUESTIONNAIRE_ID and 
     QUESTION ='7.What is the range of publically traded stock in leu of payment for services provided?');
      

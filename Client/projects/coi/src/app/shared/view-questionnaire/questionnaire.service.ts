@@ -27,9 +27,9 @@ export class QuestionnaireService {
     return this._http.post(this._commonService.fibiUrl + '/saveQuestionnaire', formData);
   }
 
-  downloadAttachment(attachmentId) {
+  downloadAttachment(attachmentId, moduleItemCode) {
     return this._http.post(this._commonService.baseUrl + '/downloadQuesAttachment',
-    {'questionnaireAnsAttachmentId': attachmentId }, {responseType: 'blob'});
+    {'questionnaireAnsAttachmentId': attachmentId, 'moduleItemCode': moduleItemCode }, {responseType: 'blob'});
   }
 
   generateQuestionnaireReport(params) {

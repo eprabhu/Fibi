@@ -16,6 +16,9 @@ public class CoiTravelDisclosureDto {
 	private Integer entityId;
 	private Integer entityNumber;
 	private String travelEntityName;
+	private String entityEmail;
+	private String entityAddress;
+	private Boolean entityIsActive;
 	private String travelTitle;
 	private String purposeOfTheTrip;
 	private BigDecimal travelAmount;
@@ -27,10 +30,6 @@ public class CoiTravelDisclosureDto {
 	private String relationshipToYourResearch;
 	private String acknowledgeBy;
 	private Timestamp acknowledgeAt;
-	private Timestamp updateTimestamp;
-	private String updateUser;
-	private String createUser;
-	private Timestamp createTimestamp;
 	private String travellerHomeUnit;
 	private String description;
 	private Date travelSubmissionDate;
@@ -40,12 +39,11 @@ public class CoiTravelDisclosureDto {
 	private String reviewStatusCode;
 	private String adminPersonId;
 	private Integer adminGroupId;
-	private String adminPersonName; 
+	private String adminPersonName;
 	private String adminGroupName;
 	private String homeUnitNumber;
 	private String homeUnitName;
 	private Boolean isInterNationalTravel;
-	Map<String, String> travellerTypeCodeList;
 	private String personId;
 	private String personFullName;
 	private String entityTypeCode;
@@ -57,174 +55,12 @@ public class CoiTravelDisclosureDto {
 	private String documentStatusCode;
 	private String documentStatus;
 	private String riskLevel;
-
-	public String getRiskLevel() {
-		return riskLevel;
-	}
-
-	public void setRiskLevel(String riskLevel) {
-		this.riskLevel = riskLevel;
-	}
-
-	public Timestamp getAcknowledgeAt() {
-		return acknowledgeAt;
-	}
-
-	public void setAcknowledgeAt(Timestamp acknowledgeAt) {
-		this.acknowledgeAt = acknowledgeAt;
-	}
-
-	public String getDocumentStatusCode() {
-		return documentStatusCode;
-	}
-
-	public void setDocumentStatusCode(String documentStatusCode) {
-		this.documentStatusCode = documentStatusCode;
-	}
-
-	public String getDocumentStatus() {
-		return documentStatus;
-	}
-
-	public void setDocumentStatus(String documentStatus) {
-		this.documentStatus = documentStatus;
-	}
-
-	public String getCertifiedBy() {
-		return certifiedBy;
-	}
-
-	public void setCertifiedBy(String certifiedBy) {
-		this.certifiedBy = certifiedBy;
-	}
-
-	public Timestamp getCertifiedAt() {
-		return certifiedAt;
-	}
-
-	public void setCertifiedAt(Timestamp certifiedAt) {
-		this.certifiedAt = certifiedAt;
-	}
-
-	public Map<String, String> getTravellerTypeCodeList() {
-		return travellerTypeCodeList;
-	}
-
-	public void setTravellerTypeCodeList(Map<String, String> travellerTypeCodeList) {
-		this.travellerTypeCodeList = travellerTypeCodeList;
-	}
-
-	public String getCountryCode() {
-		return countryCode;
-	}
-
-	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getEntityTypeCode() {
-		return entityTypeCode;
-	}
-
-	public void setEntityTypeCode(String entityTypeCode) {
-		this.entityTypeCode = entityTypeCode;
-	}
-
-	public String getEntityType() {
-		return entityType;
-	}
-
-	public void setEntityType(String entityType) {
-		this.entityType = entityType;
-	}
-
-	public String getPersonFullName() {
-		return personFullName;
-	}
-
-	public void setPersonFullName(String personFullName) {
-		this.personFullName = personFullName;
-	}
-
-	public String getPersonId() {
-		return personId;
-	}
-
-	public void setPersonId(String personId) {
-		this.personId = personId;
-	}
-
-	public Boolean getIsInterNationalTravel() {
-		return isInterNationalTravel;
-	}
-
-	public void setIsInterNationalTravel(Boolean isInterNationalTravel) {
-		this.isInterNationalTravel = isInterNationalTravel;
-	}
-
-	public String getTravelEntityName() {
-		return travelEntityName;
-	}
-
-	public void setTravelEntityName(String travelEntityName) {
-		this.travelEntityName = travelEntityName;
-	}
-
-	public String getHomeUnitNumber() {
-		return homeUnitNumber;
-	}
-
-	public void setHomeUnitNumber(String homeUnitNumber) {
-		this.homeUnitNumber = homeUnitNumber;
-	}
-
-	public String getHomeUnitName() {
-		return homeUnitName;
-	}
-
-	public void setHomeUnitName(String homeUnitName) {
-		this.homeUnitName = homeUnitName;
-	}
-
-	public String getAdminPersonId() {
-		return adminPersonId;
-	}
-
-	public void setAdminPersonId(String adminPersonId) {
-		this.adminPersonId = adminPersonId;
-	}
-
-	public String getAdminGroupName() {
-		return adminGroupName;
-	}
-
-	public void setAdminGroupName(String adminGroupName) {
-		this.adminGroupName = adminGroupName;
-	}
-
-	public String getDispositionStatusCode() {
-		return dispositionStatusCode;
-	}
-
-	public void setDispositionStatusCode(String dispositionStatusCode) {
-		this.dispositionStatusCode = dispositionStatusCode;
-	}
-
-	public String getReviewStatusCode() {
-		return reviewStatusCode;
-	}
-
-	public void setReviewStatusCode(String reviewStatusCode) {
-		this.reviewStatusCode = reviewStatusCode;
-	}
+	Map<String, String> travellerTypeCodeList;
+	private Date expirationDate;
+	private String createUser;
+	private Timestamp createTimestamp;
+	private String updateUser;
+	private Timestamp updateTimestamp;
 
 	public Integer getTravelDisclosureId() {
 		return travelDisclosureId;
@@ -256,6 +92,38 @@ public class CoiTravelDisclosureDto {
 
 	public void setEntityNumber(Integer entityNumber) {
 		this.entityNumber = entityNumber;
+	}
+
+	public String getTravelEntityName() {
+		return travelEntityName;
+	}
+
+	public void setTravelEntityName(String travelEntityName) {
+		this.travelEntityName = travelEntityName;
+	}
+
+	public String getEntityEmail() {
+		return entityEmail;
+	}
+
+	public void setEntityEmail(String entityEmail) {
+		this.entityEmail = entityEmail;
+	}
+
+	public String getEntityAddress() {
+		return entityAddress;
+	}
+
+	public void setEntityAddress(String entityAddress) {
+		this.entityAddress = entityAddress;
+	}
+	
+	public Boolean getEntityIsActive() {
+		return entityIsActive;
+	}
+
+	public void setEntityIsActive(Boolean entityIsActive) {
+		this.entityIsActive = entityIsActive;
 	}
 
 	public String getTravelTitle() {
@@ -338,36 +206,12 @@ public class CoiTravelDisclosureDto {
 		this.acknowledgeBy = acknowledgeBy;
 	}
 
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
+	public Timestamp getAcknowledgeAt() {
+		return acknowledgeAt;
 	}
 
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	public String getCreateUser() {
-		return createUser;
-	}
-
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
-	}
-
-	public Timestamp getCreateTimestamp() {
-		return createTimestamp;
-	}
-
-	public void setCreateTimestamp(Timestamp createTimestamp) {
-		this.createTimestamp = createTimestamp;
+	public void setAcknowledgeAt(Timestamp acknowledgeAt) {
+		this.acknowledgeAt = acknowledgeAt;
 	}
 
 	public String getTravellerHomeUnit() {
@@ -402,12 +246,28 @@ public class CoiTravelDisclosureDto {
 		this.dispositionStatus = dispositionStatus;
 	}
 
+	public String getDispositionStatusCode() {
+		return dispositionStatusCode;
+	}
+
+	public void setDispositionStatusCode(String dispositionStatusCode) {
+		this.dispositionStatusCode = dispositionStatusCode;
+	}
+
 	public String getReviewStatus() {
 		return reviewStatus;
 	}
 
 	public void setReviewStatus(String reviewStatus) {
 		this.reviewStatus = reviewStatus;
+	}
+
+	public String getReviewStatusCode() {
+		return reviewStatusCode;
+	}
+
+	public void setReviewStatusCode(String reviewStatusCode) {
+		this.reviewStatusCode = reviewStatusCode;
 	}
 
 	public Integer getAdminGroupId() {
@@ -418,12 +278,188 @@ public class CoiTravelDisclosureDto {
 		this.adminGroupId = adminGroupId;
 	}
 
+	public String getAdminGroupName() {
+		return adminGroupName;
+	}
+
+	public void setAdminGroupName(String adminGroupName) {
+		this.adminGroupName = adminGroupName;
+	}
+
+	public String getAdminPersonId() {
+		return adminPersonId;
+	}
+
+	public void setAdminPersonId(String adminPersonId) {
+		this.adminPersonId = adminPersonId;
+	}
+
 	public String getAdminPersonName() {
 		return adminPersonName;
 	}
 
+	public String getHomeUnitNumber() {
+		return homeUnitNumber;
+	}
+
+	public void setHomeUnitNumber(String homeUnitNumber) {
+		this.homeUnitNumber = homeUnitNumber;
+	}
+
+	public String getHomeUnitName() {
+		return homeUnitName;
+	}
+
+	public void setHomeUnitName(String homeUnitName) {
+		this.homeUnitName = homeUnitName;
+	}
+
+	public Boolean getIsInterNationalTravel() {
+		return isInterNationalTravel;
+	}
+
+	public void setIsInterNationalTravel(Boolean isInterNationalTravel) {
+		this.isInterNationalTravel = isInterNationalTravel;
+	}
+
+	public String getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(String personId) {
+		this.personId = personId;
+	}
+
+	public String getPersonFullName() {
+		return personFullName;
+	}
+
+	public void setPersonFullName(String personFullName) {
+		this.personFullName = personFullName;
+	}
+
+	public String getEntityTypeCode() {
+		return entityTypeCode;
+	}
+
+	public void setEntityTypeCode(String entityTypeCode) {
+		this.entityTypeCode = entityTypeCode;
+	}
+
+	public String getEntityType() {
+		return entityType;
+	}
+
+	public void setEntityType(String entityType) {
+		this.entityType = entityType;
+	}
+
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getCertifiedBy() {
+		return certifiedBy;
+	}
+
+	public void setCertifiedBy(String certifiedBy) {
+		this.certifiedBy = certifiedBy;
+	}
+
+	public Timestamp getCertifiedAt() {
+		return certifiedAt;
+	}
+
+	public void setCertifiedAt(Timestamp certifiedAt) {
+		this.certifiedAt = certifiedAt;
+	}
+
+	public String getDocumentStatusCode() {
+		return documentStatusCode;
+	}
+
+	public void setDocumentStatusCode(String documentStatusCode) {
+		this.documentStatusCode = documentStatusCode;
+	}
+
+	public String getDocumentStatus() {
+		return documentStatus;
+	}
+
+	public void setDocumentStatus(String documentStatus) {
+		this.documentStatus = documentStatus;
+	}
+
+	public String getRiskLevel() {
+		return riskLevel;
+	}
+
+	public void setRiskLevel(String riskLevel) {
+		this.riskLevel = riskLevel;
+	}
+
+	public Map<String, String> getTravellerTypeCodeList() {
+		return travellerTypeCodeList;
+	}
+
+	public void setTravellerTypeCodeList(Map<String, String> travellerTypeCodeList) {
+		this.travellerTypeCodeList = travellerTypeCodeList;
+	}
+
 	public void setAdminPersonName(String adminPersonName) {
 		this.adminPersonName = adminPersonName;
+	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
+	public String getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
+
+	public Timestamp getCreateTimestamp() {
+		return createTimestamp;
+	}
+
+	public void setCreateTimestamp(Timestamp createTimestamp) {
+		this.createTimestamp = createTimestamp;
+	}
+
+	public String getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public Timestamp getUpdateTimestamp() {
+		return updateTimestamp;
+	}
+
+	public void setUpdateTimestamp(Timestamp updateTimestamp) {
+		this.updateTimestamp = updateTimestamp;
 	}
 
 }

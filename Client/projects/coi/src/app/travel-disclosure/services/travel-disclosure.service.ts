@@ -2,18 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { TravelDisclosureResponseObject, TravelHistoryRO } from '../travel-disclosure-interface';
+import { TravelActionAfterSubmitRO, TravelConflictRO, TravelDisclosure, TravelHistoryRO } from '../travel-disclosure-interface';
 
 
 @Injectable()
 export class TravelDisclosureService {
 
-    coiTravelDisclosure = new TravelDisclosureResponseObject();
+    coiTravelDisclosure = new TravelDisclosure();
     saveSubject = new Subject();
     travelDataChanged = false;
     isTravelCertified = false;
     unSavedTabName = '';
-    isChildRouting = false;
+    isChildRouteTriggered = false;
     isAdminDashboard = false;
     PREVIOUS_MODULE_URL = '';
 
@@ -23,6 +23,10 @@ export class TravelDisclosureService {
     setUnSavedChanges(dataChange: boolean, tabName: string): void {
         this.unSavedTabName = tabName;
         this.travelDataChanged = dataChange;
+    }
+
+    checkCreateUserRight(personId: string): boolean {
+        return personId === this._commonService.getCurrentUserDetail('personId');
     }
 
     createCoiTravelDisclosure(travelDisclosureRO: object) {
@@ -48,19 +52,31 @@ export class TravelDisclosureService {
         return this._http.get(`${this._commonService.baseUrl}/loadTravelDisclosure/${travelDisclosureId}`);
     }
 
-    withdrawTravelDisclosure(travelDisclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/withdrawTravelDisclosure/${travelDisclosureId}`);
+    withdrawTravelDisclosure(travelDisclosureRO: TravelActionAfterSubmitRO) {
+        return this._http.post(`${this._commonService.baseUrl}/withdrawTravelDisclosure`, travelDisclosureRO);
     }
 
-    approveTravelDisclosure(travelDisclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/approveTravelDisclosure/${travelDisclosureId}`);
+    approveTravelDisclosure(travelDisclosureRO: TravelActionAfterSubmitRO) {
+        return this._http.post(`${this._commonService.baseUrl}/approveTravelDisclosure`, travelDisclosureRO);
     }
 
-    returnTravelDisclosure(travelDisclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/returnTravelDisclosure/${travelDisclosureId}`);
+    returnTravelDisclosure(travelDisclosureRO: TravelActionAfterSubmitRO) {
+        return this._http.post(`${this._commonService.baseUrl}/returnTravelDisclosure`, travelDisclosureRO);
     }
 
     loadTravelDisclosureHistory(travelHistoryRO: TravelHistoryRO) {
         return this._http.post(`${this._commonService.baseUrl}/loadTravelDisclosureHistory`, travelHistoryRO);
+    }
+
+    getTravelConflictStatusType() {
+        return this._http.get( `${this._commonService.baseUrl}/getTravelConflictStatusType`);
+    }
+
+    manageTravelConflict(params: TravelConflictRO) {
+        return this._http.post(`${this._commonService.baseUrl}/manageTravelConflict`, params);
+    }
+
+    loadTravelConflictHistory(travelDisclosureId: number) {
+        return this._http.get(`${this._commonService.baseUrl}/loadTravelConflictHistory/${travelDisclosureId}`);
     }
 }

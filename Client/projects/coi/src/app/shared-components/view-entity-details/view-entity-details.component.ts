@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component,OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityManagementService } from '../../entity-management/entity-management.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -10,46 +10,30 @@ import { environment } from '../../../environments/environment';
 import { EntityDetailsService } from '../../disclosure/entity-details/entity-details.service';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
-declare var $: any;
+declare const $: any;
 @Component({
   selector: 'app-view-entity-sfi-details',
   templateUrl: './view-entity-details.component.html',
-  styleUrls: ['./view-entity-details.component.scss']
+  styleUrls: ['./view-entity-details.component.scss'],
+  animations: [fadeInOutHeight]
 })
-export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges {
+export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
 
   entityDetails: any = {};
   entityId: any;
   $subscriptions: Subscription[] = [];
   previousURL = '';
   deployMap = environment.deployUrl;
-  isEntityManagement = false;
   isModifyEntity = false;
-  @Input() isEditMode = false;
-  @Input() sfiRelationStatus: any = {};
-  @Input() personEntityRelationships = [];
-  @Input() personEntity = {};
-  @Input() entityIdFromSlider: boolean = false;
-  @Input() isTriggeredFromSlider: boolean = false;
-  @Output() emitRelationshipModal: EventEmitter<boolean> = new EventEmitter<boolean>();
   valueOfModify = '';
   mandatoryList = new Map();
   modifyType = '';
   modifyDescription = '';
   inactivateReason = '';
   reasonValidateMapEntity = new Map();
-  isEnableActivateInactivateSfiModal = false;
-  isRelationshipActive = false;
-  sfiStatus = '';
-  canMangeSfi = false;
   revisionReason = '';
-  entityRelationships = [
-    {value: 1, description: 'New'},
-    {value: 2, description: 'Duplicate'},
-    {value: 3, description: 'Subsidiary'},
-    {value: 4, description: 'Parent'}
-  ];
   entityRelationshipValue = null;
   clearField: String;
   EntitySearchOptions: any = {};
@@ -57,8 +41,8 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
   relationshipEntityName: String = '';
   relationshipEntityId = null;
   entityRelationshipDescription = '';
-  isQuestionnaireCompleted = false;
-  allRelationQuestionnaires = [];
+  relationshipLookUpList: any = [];
+  entityRelationshipNumber = null;
 
   constructor(private _router: Router, private _route: ActivatedRoute,
     public entityManagementService: EntityManagementService,
@@ -68,38 +52,19 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
   }
 
   ngOnInit() {
-    this.isEntityManagement = this._router.url.includes('entity-management');
     this.isModifyEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
     this.getEntityID();
-    this.listenForQuestionnaireSave();
+    this.getRelationshipTypes();
   }
 
   getEntityID() {
     this.$subscriptions.push(this._route.queryParams.subscribe(params => {
-      this.entityId = this.isEntityManagement ? params.entityManageId : params.personEntityId;
-      this.entityId = this.entityId ? this.entityId : this.entityIdFromSlider;
-      this.getEntityDetails();
+      this.entityId = params.entityManageId;
+      this.viewEntityDetails();
     }));
   }
 
-  listenForQuestionnaireSave() { 
-    this.$subscriptions.push(this.entityDetailsServices.$saveQuestionnaireAction.subscribe((params: any) => {
-      if (params) {
-        this.getQuestionnaire();
-        this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Relationship saved successfully `);
-      }
-    }));
-  }
-
-  ngOnChanges() {
-    if (!this.isEntityManagement) {
-      this.sfiStatus = this.getSfiStatus();
-      this.canMangeSfi = this.sfiRelationStatus.personId === this._commonServices.currentUserDetails.personId ? true : false;
-      if (this.isEditMode && this.sfiStatus == 'Draft') {
-        this.getQuestionnaire();
-      }
-    }
-  }
+ 
 
   ngOnDestroy() {
     this.sfiService.isShowSfiNavBar = false;
@@ -107,30 +72,14 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
   }
 
   navigateBack() {
-    if (this.isEntityManagement) {
-      if (this._navigationService.previousURL.includes('entityManageId') ||
-        this._navigationService.previousURL.includes('entity-details') || this._navigationService.previousURL === '') {
+      if (this._navigationService.previousURL.includes('entityManageId') || this._navigationService.previousURL === '') {
         this._router.navigate(['/coi/entity-management']);
       } else {
         this._router.navigateByUrl(this._navigationService.previousURL);
       }
-    } else {
-      if (this._navigationService.previousURL.includes('personEntityId') ||
-        this._navigationService.previousURL.includes('create-sfi/create') || this._navigationService.previousURL === '') {
-        this._router.navigate(['/coi/user-dashboard/entities']);
-      } else {
-        this._router.navigateByUrl(this._navigationService.previousURL);
-      }
-    }
+
   }
 
-  getEntityDetails() {
-    if (this.isEntityManagement) {
-      this.viewEntityDetails();
-    } else {
-      this.getSfiEntityDetails();
-    }
-  }
 
   viewEntityDetails() {
     this.$subscriptions.push(this.entityManagementService.getEntityDetails(this.entityId).subscribe((res: any) => {
@@ -140,20 +89,13 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     }));
   }
 
-  getSfiEntityDetails() {
-    this.$subscriptions.push(this.entityDetailsServices.getCoiEntityDetails(this.entityId).subscribe((res: any) => {
-      this.entityDetails = res.coiEntity;
-    }, _error => {
-      this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-    }));
-  }
 
   updatedEntityDetails(event) {
     if (event) {
       this.revisionReason = '';
       this.modifyType = '';
       this.entityId = event;
-      this.getEntityDetails();
+      this.viewEntityDetails();
       this._router.navigate(['/coi/entity-management/entity-details'],{ queryParams: { entityManageId: this.entityId }, queryParamsHandling: 'merge'});
     }
   }
@@ -164,14 +106,6 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     } else {
       window.open('//' + url, '_blank');
     }
-  }
-
-  addNewRelationship() {
-    this.emitRelationshipModal.emit(true);
-  }
-
-  saveRelationship() {
-    this.entityDetailsServices.globalSave$.next();
   }
 
   openConfirmationModal() {
@@ -208,17 +142,13 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
    this.modifyDescription = '';
    $('#modifyEntityConfirmationModal').modal('hide');
   }
+
   goToHome() {
-    this.isEntityManagement ? this._router.navigate(['/coi/user-dashboard'])
-      : this._router.navigate(['/coi/user-dashboard/entities']);
+    this._router.navigate(['/coi/user-dashboard']);
   }
 
-  activateInactivateEntityOrSfi(moduleName: string) {
-    if (moduleName === 'ENTITY') {
+  activateInactivateEntity() {
       document.getElementById('inactivate-confirm-message').click();
-    } else {
-      this.isEnableActivateInactivateSfiModal = true;
-    }
   }
 
   entityRiskLevel(description): string {
@@ -235,7 +165,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     if (this.validForActivateAndInactivateEntity()) {
       const REQ_BODY = {
         entityId: this.entityId,
-        active: !this.entityDetails.isActive,
+        isActive: !this.entityDetails.isActive,
         revisionReason: this.inactivateReason
       };
       this.$subscriptions.push(this.entityManagementService.activateInactivate(REQ_BODY).subscribe((res: any) => {
@@ -263,37 +193,17 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     this.viewEntityDetails();
   }
 
-  closeActivateInactivateSfiModal(event) {
-    if (event) {
-      this.sfiRelationStatus.isRelationshipActive = event.isRelationshipActive;
-      if (event.versionStatus) {
-        this.sfiRelationStatus.versionStatus = event.versionStatus;
-        this.isQuestionnaireCompleted = false;
-      }
-      this.sfiStatus = this.getSfiStatus();
-      this.isEnableActivateInactivateSfiModal = false;
-      if (this.entityId !== event.personEntityId) {
-        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
-      }
-    } else {
-      this.isEnableActivateInactivateSfiModal = false;
-    }
-  }
 
-  getSfiStatus(): string {
-    if (this.sfiRelationStatus.isRelationshipActive && this.sfiRelationStatus.versionStatus === 'ACTIVE') {
-      return 'Active';
-    } else if (!this.sfiRelationStatus.isRelationshipActive && this.sfiRelationStatus.versionStatus === 'ACTIVE') {
-      return 'Inactive';
-    } else if (this.sfiRelationStatus.versionStatus === 'PENDING') {
-      return 'Draft';
-    }
+  getRelationshipTypes(): void {
+    this.$subscriptions.push(this.entityManagementService.getRelationshipTypes().subscribe((res: any) => {
+      this.relationshipLookUpList = res;
+    }));
   }
 
   selectEntityRelationship() {
     if (this.entityRelationshipValue) {
-      this.entityRelationshipDescription = this.entityRelationships.find(ele =>
-        Number(this.entityRelationshipValue) === ele.value).description;
+      this.entityRelationshipDescription = this.relationshipLookUpList.find(ele =>
+        this.entityRelationshipValue == ele.entityRelTypeCode).description;
     }
     if (this.entityRelationshipValue !== '1') {
       this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl);
@@ -303,23 +213,28 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
   approveEntity() {
     this.approveEntityValidateMap.clear();
     if (this.validateApproveEntity()) {
-      //  approve entity api call pending
       const REQ_BODY = {
-        entityId : this.entityId,
-        entityRelationshipValue : this.entityRelationshipValue,
-        entityRelationshipDescription : this.entityRelationshipDescription,
-        relationshipEntityId : this.relationshipEntityId,
-        relationshipEntityName : this.relationshipEntityName
+        entityId: this.entityId,
+        entityNumber: this.entityDetails.entityNumber,
+        entityRelTypeCode: this.entityRelationshipValue,
+        nodeId: this.entityRelationshipNumber,
+        nodeTypeCode: 1
       };
-      // after response
-      document.getElementById('hide-approve-entity-modal').click();
-      this.clearApproveEntityFiled();
+      this.$subscriptions.push(this.entityManagementService.approveEntity(REQ_BODY).subscribe((res: any) => {
+        this.entityDetails.entityStatus.entityStatusCode = res.entityStatusCode;
+        this.entityDetails.updateUserFullName = res.updatedUserFullName;
+        this.entityDetails.updateTimestamp = res.updateTimestamp;
+        document.getElementById('hide-approve-entity-modal')?.click();
+        this.clearApproveEntityFiled();
+        this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity verified successfully.`);
+      }));
     }
   }
 
   selectedEvent(event) {
     this.relationshipEntityName = event ? event.entityName : '';
     this.relationshipEntityId = event ? event.entityId : null;
+    this.entityRelationshipNumber = event ? event.entityNumber : null;
   }
 
   validateApproveEntity(): boolean {
@@ -339,50 +254,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy, OnChanges 
     this.relationshipEntityId = null;
     this.relationshipEntityName = '';
     this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl);
+    this.entityRelationshipNumber = null;
   }
-
-  getQuestionnaire() {
-    const QUEST_REQ_OBJ_LIST = [];
-    this.personEntityRelationships.forEach(rel => {
-      this.setQuestionnaireRequestObject(rel.validPersonEntityRelTypeCode, QUEST_REQ_OBJ_LIST);
-    });
-    this.checkQuestionnaireCompleted(QUEST_REQ_OBJ_LIST);
-  }
-
-  setQuestionnaireRequestObject(subItemCode, list) {
-    list.push(this.getApplicableQuestionnaire({
-      moduleItemCode: 8,
-      moduleSubItemCode: 801,
-      moduleSubItemKey: subItemCode,
-      moduleItemKey: this.entityId,
-      actionUserId: this._commonServices.getCurrentUserDetail('personId'),
-      actionPersonName: this._commonServices.getCurrentUserDetail('fullName'),
-      questionnaireNumbers: [],
-      questionnaireMode: 'ACTIVE_ANSWERED_UNANSWERED'
-    }));
-  }
-
-  getApplicableQuestionnaire(requestObject) {
-    requestObject = JSON.parse(JSON.stringify(requestObject));
-    return this.entityManagementService.getApplicableQuestionnaire(requestObject);
-  }
-
-  checkQuestionnaireCompleted(questionList) {
-    this.$subscriptions.push(forkJoin(...questionList).subscribe(data => {
-      this.allRelationQuestionnaires = [];
-      data.forEach((d: any) => this.combineQuestionnaireList(d.applicableQuestionnaire));
-      this.isQuestionnaireCompleted = this.isAllQuestionnaireCompleted(this.allRelationQuestionnaires);
-    }, err => {
-      this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-    }));
-  }
-
-  combineQuestionnaireList(newList) {
-    this.allRelationQuestionnaires = [...this.allRelationQuestionnaires, ...newList];
-  }
-
-  isAllQuestionnaireCompleted(questionnaireList) {
-    return questionnaireList.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
-  }
-
+  
 }

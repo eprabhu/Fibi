@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedSfiService } from './shared-sfi.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
+import { Subscription } from 'rxjs';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 class SFI_OBJECT {
   isActive = 'INACTIVE';
@@ -22,15 +24,16 @@ class SFI_OBJECT {
   providers: [SharedSfiService]
 })
 
-export class SharedSfiCardComponent implements OnInit {
+export class SharedSfiCardComponent implements OnInit, OnDestroy {
 
   @Input() reqObject: any;
-  @Input() referredFrom: 'SFI_SUMMARY' | 'ENTITIES_DASHBOARD' | 'SFI_EDIT_MODE' | 'TRAVEL_DISCLOSURE';
+  @Input() referredFrom: 'SFI_SUMMARY' | 'SFI_EDIT_AND_DASHBOARD' | 'TRAVEL_DISCLOSURE';
   @Output() viewSlider = new EventEmitter<any>();
   @Output() deleteEvent =  new EventEmitter<any>();
   @Output() activateDeactivateEvent =  new EventEmitter<any>();
 
   SFIObject = new SFI_OBJECT();
+  $subscriptions: Subscription[] = [];
 
   constructor(private _router: Router, private _sharedSFIService: SharedSfiService, private _commonService: CommonService) { }
 
@@ -38,44 +41,41 @@ export class SharedSfiCardComponent implements OnInit {
       this.updateSFIObject();
     }
 
+    ngOnDestroy() {
+      subscriptionHandler(this.$subscriptions);
+    }
+
   private updateSFIObject(): void {
     if (this.reqObject) {
-      this.SFIObject.isActive = this.isTriggeredFromDashboard() ?  this.getActiveStatus() : this.referredFrom =='SFI_EDIT_MODE' ? this.setActive() :this.reqObject.versionStatus;
-      this.SFIObject.entityId = this.isTriggeredFromDashboard() ? this.reqObject.coiFinancialEntityId : this.reqObject.personEntityId;
+      this.SFIObject.isActive = this.referredFrom =='SFI_EDIT_AND_DASHBOARD' ? this.setActiveInEditMode() : this.setActiveInViewMode();
+      this.SFIObject.entityId =  this.reqObject.personEntityId;
       this.SFIObject.entityType = this.getEntityDescription();
       this.SFIObject.countryName = this.getCountryName();
       this.SFIObject.involvementEndDate = this.reqObject.involvementEndDate;
       this.SFIObject.involvementStartDate = this.reqObject.involvementStartDate;
-      this.SFIObject.validPersonEntityRelTypes = this.isTriggeredFromDashboard() ? this.reqObject.relationshipTypes : this.reqObject.validPersonEntityRelTypes;
-      this.SFIObject.entityName = this.isTriggeredFromDashboard() ? this.reqObject.coiEntityName : this.getValuesFormCOIEntityObj('entityName');
+      this.SFIObject.validPersonEntityRelTypes = this.reqObject.validPersonEntityRelTypes;
+      this.SFIObject.entityName = this.getValuesFormCOIEntityObj('entityName');
     }
   }
 
-  setActive() {
-    return   this.reqObject.versionStatus !== 'ACTIVE' ? 'DRAFT' : 
-              this.reqObject.versionStatus === 'ACTIVE' && this.reqObject.isRelationshipActive ? 'ACTIVE' : 
+  setActiveInEditMode() {
+    return   this.reqObject.versionStatus === 'PENDING' ? 'DRAFT' :
+              this.reqObject.versionStatus === 'ACTIVE' && this.reqObject.isRelationshipActive ? 'ACTIVE' :
               this.reqObject.versionStatus === 'ACTIVE' && !this.reqObject.isRelationshipActive ? 'INACTIVE' : '';
-           
   }
 
-  private getActiveStatus(): String {
-    return this.reqObject.versionStatus === 'Active' ? 'ACTIVE' : 'INACTIVE';
+  setActiveInViewMode() {
+    return  this.reqObject.versionStatus === 'PENDING' ? 'DRAFT' :
+    (this.reqObject.versionStatus === 'ACTIVE' || this.reqObject.versionStatus === 'ARCHIVE') && this.reqObject.isRelationshipActive ? 'ACTIVE' :
+    this.reqObject.versionStatus === 'ACTIVE' && !this.reqObject.isRelationshipActive ? 'INACTIVE' : '';
   }
 
   private getEntityDescription(): string|null {
-    return this.isTriggeredFromDashboard() ? this.reqObject.coiEntityType
-                                           : this.getValuesFormCOIEntityObj('entityType')
-                                           ? this.getValuesFormCOIEntityObj('entityType').description : null;
+    return this.getValuesFormCOIEntityObj('entityType') ? this.getValuesFormCOIEntityObj('entityType').description : null;
   }
 
   private getCountryName(): string|null {
-    return this.isTriggeredFromDashboard() ? this.reqObject.coiEntityCountry
-                                           : this.getValuesFormCOIEntityObj('country')
-                                           ? this.getValuesFormCOIEntityObj('country').countryName : null;
-  }
-
-  private isTriggeredFromDashboard(): boolean {
-    return this.referredFrom === 'ENTITIES_DASHBOARD';
+    return this.getValuesFormCOIEntityObj('country') ? this.getValuesFormCOIEntityObj('country').countryName : null;
   }
 
   private getValuesFormCOIEntityObj(value): any {
@@ -86,9 +86,11 @@ export class SharedSfiCardComponent implements OnInit {
     this.viewSlider.emit({flag: true, entityId: entityId});
   }
 
-  modifySfiDetails(entityId: number, mode: string): void {
-    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entityId, mode: mode } });
-  }
+    modifySfiDetails(entityId: number, mode: string): void {
+        this.$subscriptions.push(this._sharedSFIService.modifySfi({ personEntityId: entityId }).subscribe((res: any) => {
+            this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: res.personEntityId, mode: mode } });
+        }));
+    }
 
   deleteConfirmation() {
     this.deleteEvent.emit({eId: this.SFIObject.entityId});

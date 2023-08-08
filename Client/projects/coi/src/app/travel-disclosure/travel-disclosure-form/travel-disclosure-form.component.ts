@@ -1,22 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'projects/admin-dashboard/src/environments/environment';
-import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/fibi/src/app/app-constants';
-import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from 'projects/fibi/src/app/common/services/end-point.config';
-import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from 'projects/fibi/src/app/common/utilities/date-utilities';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { environment } from '../../../../../admin-dashboard/src/environments/environment';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
+import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../../fibi/src/app/common/services/end-point.config';
+import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
-import { CoiTravelDisclosure, EndpointOptions, TravelCreateModalDetails, TravelDisclosureResponseObject, TravelDisclosureTraveller } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, EndpointOptions, TravelCreateModalDetails, TravelDisclosure, TravelDisclosureTraveller } from '../travel-disclosure-interface';
 import { CommonService } from '../../common/services/common.service';
-import { convertToValidAmount } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
-declare var $: any;
 @Component({
     selector: 'app-travel-disclosure-form',
     templateUrl: './travel-disclosure-form.component.html',
-    styleUrls: ['./travel-disclosure-form.component.scss']
+    styleUrls: ['./travel-disclosure-form.component.scss'],
+    animations: [fadeInOutHeight]
 })
 export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
@@ -28,10 +29,11 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     clearField = new String('true');
     countryClearField = new String('true');
     entityName = '';
+    isInfoExpanded = true;
     mandatoryList = new Map();
     dateValidationList = new Map();
     travelDisclosureRO = new CoiTravelDisclosure();
-    travelResObject = new TravelDisclosureResponseObject();
+    travelResObject = new TravelDisclosure();
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
     destination: 'Domestic' | 'International' = 'Domestic';
@@ -40,7 +42,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _service: TravelDisclosureService,
         private _dataStore: TravelDataStoreService) {
-        window.scrollTo(0, 0);
+        document.getElementById('COI_SCROLL').scrollTo(0, 0);
     }
 
     ngOnInit(): void {
@@ -65,7 +67,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private setDisclosureDetails(responseObject: TravelDisclosureResponseObject): void {
+    private setDisclosureDetails(responseObject: TravelDisclosure): void {
         this.entitySearchOptions.defaultValue = responseObject.travelEntityName;
         this.entityName = responseObject.travelEntityName;
         this.countrySearchOptions.defaultValue = responseObject.destinationCountry;
@@ -145,6 +147,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
         if (!this.entityName) {
             this.mandatoryList.set('entity', 'Please enter the entity name.');
+            this.clearField = new String('false');
         }
         if (!this.travelDisclosureRO.travelTitle) {
             this.mandatoryList.set('title', 'Please enter the trip title.');
@@ -167,19 +170,21 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
             }
         } else if (!this.travelDisclosureRO.destinationCountry) {
             this.mandatoryList.set('country', 'Please enter the country.');
+            this.countryClearField = new String('false');
         }
         this.validateDates();
         return this.mandatoryList.size !== 0 || !this.validateDates() ? false : true;
     }
 
     selectedEntityEvent(event: any): void {
-        this.entityName = event && event.entityName || null;
-        this.travelDisclosureRO.entityId = event && event.entityId || null;
-        this.travelDisclosureRO.entityNumber = event && event.entityNumber || null;
+        this.entityName = event ? event.entityName : null;
+        this.travelDisclosureRO.entityId = event ? event.entityId : null;
+        this.travelDisclosureRO.entityNumber = event ? event.entityNumber : null;
+        this.setUnSavedChangesTrue();
     }
 
     selectTravelCountry(event: any): void {
-        this.travelDisclosureRO.destinationCountry = event && event.countryName || null;
+        this.travelDisclosureRO.destinationCountry = event ? event.countryName : null;
     }
 
     getTravellerTypeCode(): void {
@@ -192,7 +197,6 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     setValuesForDestinationType(): void {
-        this.setUnSavedChanges();
         if (this.destination === 'Domestic') {
             this.travelDisclosureRO.destinationCountry = '';
             this.travelDisclosureRO.isInternationalTravel = false;
@@ -203,7 +207,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    setUnSavedChanges(): void {
+    setUnSavedChangesTrue(): void {
         this._service.setUnSavedChanges(true, 'Travel Details');
     }
 
@@ -226,7 +230,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     private saveTravelDisclosure(): void {
         this.getAllTravelDisclosureValues(this.travelDisclosureRO);
-        if (this.validateForm()) {
+        if (this.validateForm() && this._service.travelDataChanged) {
             this.$subscriptions.push(this._service.createCoiTravelDisclosure(this.travelDisclosureRO)
                 .subscribe((res: any) => {
                     if (res) {

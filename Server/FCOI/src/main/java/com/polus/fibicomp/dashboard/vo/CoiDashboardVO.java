@@ -83,6 +83,8 @@ public class CoiDashboardVO {
 
 	private String property23;
 
+	private List<@Pattern(regexp="^$|[0-9]*$", message="Verification Status must not include special characters and alphabets.") String> property24;
+
 	public Integer getId() {
 		return id;
 	}
@@ -354,4 +356,13 @@ public class CoiDashboardVO {
 	public void setProperty23(String property23) {
 		this.property23 = property23;
 	}
+
+	public List<String> getProperty24() {
+		return property24;
+	}
+
+	public void setProperty24(List<String> property24) {
+		this.property24 = property24;
+	}
+	
 }

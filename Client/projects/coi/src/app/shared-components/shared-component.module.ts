@@ -15,6 +15,10 @@ import { AddSfiSliderComponent } from './add-sfi-slider/add-sfi-slider.component
 import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
 import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
 import { ActivateInactivateSfiModalComponent } from './activate-inactivate-sfi-modal/activate-inactivate-sfi-modal.component';
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
+import { ReviewCommentsSliderComponent } from './review-comments-slider/review-comments-slider.component';
+import { CoiSliderComponent } from './coi-slider/coi-slider.component';
+import { HelpTextComponent } from './help-text/help-text.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,7 +38,11 @@ import { ActivateInactivateSfiModalComponent } from './activate-inactivate-sfi-m
     AddSfiSliderComponent,
     ViewEntityDetailsComponent,
     SliderCloseBtnComponent,
-    ActivateInactivateSfiModalComponent
+    ActivateInactivateSfiModalComponent,
+    ConfirmationModalComponent,
+    ReviewCommentsSliderComponent,
+    CoiSliderComponent,
+    HelpTextComponent
   ],
   exports: [
     NoInformationComponent,
@@ -45,7 +53,11 @@ import { ActivateInactivateSfiModalComponent } from './activate-inactivate-sfi-m
     AddSfiSliderComponent,
     ViewEntityDetailsComponent,
     SliderCloseBtnComponent,
-    ActivateInactivateSfiModalComponent
+    ActivateInactivateSfiModalComponent,
+    ConfirmationModalComponent,
+    ReviewCommentsSliderComponent,
+    CoiSliderComponent,
+    HelpTextComponent
   ]
 })
 export class SharedComponentModule { }

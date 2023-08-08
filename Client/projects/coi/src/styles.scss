@@ -18,7 +18,29 @@ body {
   background: #F5F5F5;
   -webkit-font-smoothing: antialiased;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+  overflow: hidden !important;
 }
+
+// scroll design
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track { 
+  width: 12px;
+  background-color: #e7e7e7;
+  border-radius: 5px;
+}
+ 
+::-webkit-scrollbar-thumb {
+	background: #b8b7b6;
+	border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #979797; 
+}
+// scroll design ends
 
 .fs-12 {
   font-size: 1.2rem !important;
@@ -307,6 +329,12 @@ nav ul li.active {
   color: #fff;
 }
 
+.grey-badge {
+  @extend .coi-badge;
+  background-color: #7f7b7b !important;
+  color: #fff;
+}
+
 .brown-badge {
   @extend .coi-badge;
   background-color: #997404;
@@ -385,4 +413,21 @@ nav ul li.active {
   border: 1px solid #caced2;
   font-size: 1.4rem;
   font-weight: 400;
+}
+
+.invalid-border {
+  border-color: #dc3545 !important;
+}
+
+.info-card-border {
+  border: #17a2b8 solid;
+  border-width: 1px 1px 1px 5px;
+}
+
+.mr-8 {
+  margin-right: 8px;
+}
+
+.ash-text {
+  color: #48647f!important;
 }

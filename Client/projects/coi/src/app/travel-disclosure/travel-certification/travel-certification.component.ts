@@ -2,12 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { CoiTravelDisclosure, TravelDisclosureResponseObject } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, TravelDisclosure } from '../travel-disclosure-interface';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
 @Component({
     selector: 'app-travel-certification',
     templateUrl: './travel-certification.component.html',
-    styleUrls: ['./travel-certification.component.scss']
+    styleUrls: ['./travel-certification.component.scss'],
+    animations: [fadeInOutHeight]
 })
 export class TravelCertificationComponent implements OnInit, OnDestroy {
 
@@ -18,7 +20,7 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
     coiDisclosure: any;
     isReadMore = false;
     travelReqObject = new CoiTravelDisclosure();
-    travelResObject: TravelDisclosureResponseObject = new TravelDisclosureResponseObject();
+    travelResObject: TravelDisclosure = new TravelDisclosure();
     certificationText = `I agree to abide by the University COI policy guidelines and certify that the information
     provided for the Financial conflict of interest, including, responses to screening questions, list of my pertinent
     Significant Financial interests and possible relationship to my sponsored activity is an accurate and current
@@ -36,7 +38,7 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
     proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
     constructor(public travelService: TravelDisclosureService, private _dataStore: TravelDataStoreService) {
-        window.scrollTo(0, 0);
+        document.getElementById('COI_SCROLL').scrollTo(0, 0);
     }
 
     ngOnInit(): void {
@@ -60,7 +62,7 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
     //         this._dataStore.getTravelDisclosureRO() : new CoiTravelDisclosure();
 
     //     this.travelResObject = this._dataStore.getData() ?
-    //         this._dataStore.getData() : new TravelDisclosureResponseObject();
+    //         this._dataStore.getData() : new TravelDisclosure();
 
     //     this.travelService.isTravelCertified = this.travelService.isTravelCertified ? true : false;
     // }

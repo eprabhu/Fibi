@@ -131,7 +131,7 @@
   background: #949494;
   position: relative;
   left: -19px;
-  top: -3px;
+  top: 0px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -149,7 +149,7 @@
   }
 
   .grey-text {
-    font-size: 13px;
+    font-size: 14px;
     color: #48647F;
     margin-left: 8px;
   }

@@ -1,9 +1,8 @@
 <app-header></app-header>
-<div class="canvas container">
-
-    <router-outlet></router-outlet>
+<div class="canvas" id="COI_SCROLL" (scroll)="scrollEvent($event)">
+    <div class="content container"><router-outlet></router-outlet> </div>
+    <div class="footer"><app-footer></app-footer></div>
 </div>
-<app-footer></app-footer>
 
 <div aria-atomic="true"
      aria-live="assertive"
