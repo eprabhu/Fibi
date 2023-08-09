@@ -2,7 +2,7 @@
     <div class="col-9 p-0">
         <div class="border shadow-sm">
             <div class="disclosure-heading px-3 d-flex">
-                <div class="align-self-center flex-fill">
+                <div class="align-self-center flex-fill d-flex">
                     <p class="m-0">
                         <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
                             <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span
@@ -24,6 +24,19 @@
                             </strong>
                         </ng-container>
                     </p>
+                    <div class="d-flex ms-auto mr-15">
+                        <div class="align-items-center d-flex ml-15">
+                          <label class="fw-500 fs-14 mr-2 mt-1">Risk :</label>
+                          <div class="text-color fs-14 d-flex align-items-center">
+                            <span class="text-secondary fs-14">
+                                <mat-icon class="{{getWarningClass(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                            </span>
+                            <span class="ml-2 mt-1"> 
+                                {{coiData?.coiDisclosure?.coiRiskCategory?.description}}
+                            </span>
+                          </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="d-flex">
                     <!-- <ng-container *ngIf="isCreateMode">
@@ -334,7 +347,8 @@
 
                     <!-- more option button for expanded & collapsed card -->
                     <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
-                    <button *ngIf="coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode != 3 && (coiData.coiDisclosure.adminPersonId || (coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId)))
+                    <button *ngIf="checkForModifyRisk() || coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode != 3 && 
+                    (coiData.coiDisclosure.adminPersonId || (coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId)))
                     && (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.personId) || coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '3'" [matMenuTriggerFor]="beforeMenu"
                         class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2 mb-10"
                         role="button" title="Click for More Actions">
@@ -360,6 +374,15 @@
                                 [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
                                 <mat-icon>group_add</mat-icon>
                                 <span class="ms-2 fw-medium">Reassign Admin</span>
+                            </button>
+                        </ng-container>
+
+                        <ng-container *ngIf="checkForModifyRisk()">
+                            <button title="Click to Modify Risk" area-describedby="Click to Modify Risk"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2"
+                                (click)="openRiskSlider();">
+                                <mat-icon class="material-icons-round">warning</mat-icon>
+                                <div class="ms-2 mt-1 fw-medium">Modify Risk</div>
                             </button>
                         </ng-container>
                     
@@ -393,7 +416,7 @@
                     class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                     <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
                     <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Start Review </span>
-                  </button>
+                </button>
 
                   <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" 
                   title="Click to complete review" area-describedby="Click to complete review" (click)="updateCoiReview('COMPLETE')"
@@ -1038,3 +1061,9 @@
         </div>
     </ng-container>
 </app-confirmation-modal>
+
+<div *ngIf="isOpenRiskSlider">
+    <app-entity-risk-slider [disclosureDetails]="coiData.coiDisclosure" 
+    (riskChange) = "changeDataStoreRisk($event)"
+    [projectDetails]="coiData.projectDetail" (closePage)="closeSlider($event)"></app-entity-risk-slider>
+</div>

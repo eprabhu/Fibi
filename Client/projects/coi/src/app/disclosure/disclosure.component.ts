@@ -109,6 +109,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         `Describe the reason for returning  in the field provided.`,
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
+    isOpenRiskSlider = false;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -338,6 +339,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
         this.setAdminGroupOptions();
         this.setAssignAdminModalDetails();
+    }
+
+    changeDataStoreRisk(event) {
+        this.coiData.coiDisclosure.riskCategoryCode = event.riskCategoryCode;
+        this.coiData.coiDisclosure.coiRiskCategory = event.riskCategory;
+        this.dataStore.setStoreData(this.coiData);
     }
 
     private setAssignAdminModalDetails(): void {
@@ -573,6 +580,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.withdrawDescription = '';
     }
 
+    /**
+     * 2 - Submitted
+     * 3 - Review In Progress
+     * To be done - Admin group id check needs to be added.
+     */
+    checkForModifyRisk() {
+        return ['2', '3'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) && 
+        (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personId'));
+    }
+
     withdrawDisclosure() {
         this.withdrawError.clear();
         if (this.descriptionChangedOrEmpty()) {
@@ -646,6 +663,27 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 return this.returnDisclosure();
             case 'Withdraw':
                 return this.withdrawDisclosure();
+            default:
+                return;
+        }
+    }
+    
+    openRiskSlider() {
+        this.isOpenRiskSlider = true;
+    }
+
+    closeSlider(event) {
+        this.isOpenRiskSlider = false;
+    }
+
+    getWarningClass(typeCode) {
+        switch (typeCode) {
+            case '1':
+                return 'invalid';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
             default:
                 return;
         }
