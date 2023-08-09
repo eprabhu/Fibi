@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,4 +63,6 @@ public class DisclosureActionLog implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
+	@Transient
+	private String updateUserFullName;
 }

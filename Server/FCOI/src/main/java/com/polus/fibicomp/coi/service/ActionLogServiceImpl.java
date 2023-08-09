@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -87,7 +89,6 @@ public class ActionLogServiceImpl implements ActionLogService {
 
     @Override
     public void saveEntityActionLog(String actionLogTypeCode, CoiEntity coiEntity, String comment) {
-
         EntityActionType entityActionType = actionLogRepositoryCustom.getEntityActionType(actionLogTypeCode);
         if (entityActionType != null) {
             String message = buildEntityLogMessage(entityActionType.getMessage(), coiEntity);
@@ -95,7 +96,9 @@ public class ActionLogServiceImpl implements ActionLogService {
                     .entityId(coiEntity.getEntityId())
                     .entityNumber(coiEntity.getEntityNumber())
                     .description(message)
-                    .comment(comment).build();
+                    .comment(comment)
+                    .updateTimestamp(commonDao.getCurrentTimestamp())
+                    .updateUser(AuthenticatedUser.getLoginUserName()).build();
             actionLogRepositoryCustom.saveObject(actionLog);
         }
     }
@@ -104,11 +107,11 @@ public class ActionLogServiceImpl implements ActionLogService {
         Map<String, String> placeholdersAndValues = new HashMap<>();
         placeholdersAndValues.put("{ENTITY_NAME}", coiEntity.getEntityName());
         placeholdersAndValues.put("{PERSON_NAME}", coiEntity.getCreateUserFullName());
-        placeholdersAndValues.put("{UPDATE_USER_FULL_NAME}", coiEntity.getUpdatedUserFullName());
+        placeholdersAndValues.put("{ADMIN_NAME}", coiEntity.getUpdatedUserFullName());
         placeholdersAndValues.put("{UPDATE_TIMESTAMP}", coiEntity.getUpdateTimestamp().toString());
         if (coiEntity.getNewtRiskCategory() != null) {
-            placeholdersAndValues.put("{RISK_CATEGORY}", coiEntity.getEntityRiskCategory().getDescription());
-            placeholdersAndValues.put("{NEW_RISK_CATEGORY}", coiEntity.getNewtRiskCategory().getDescription());
+            placeholdersAndValues.put("{RISK}", coiEntity.getEntityRiskCategory().getDescription());
+            placeholdersAndValues.put("{NEW_RISK}", coiEntity.getNewtRiskCategory().getDescription());
         }
         return renderPlaceholders(message, placeholdersAndValues);
     }
@@ -211,17 +214,38 @@ public class ActionLogServiceImpl implements ActionLogService {
 
 
     @Override
-    public List<EntityActionLog> fetchEntityActionLog(Integer entityId, String actionLogCode) {
-        return actionLogRepositoryCustom.fetchEntityActionLog(entityId, actionLogCode);
+    public List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, String actionLogCode) {
+        List<EntityActionLogDto> entityLogs = new ArrayList<>();
+        actionLogRepositoryCustom.fetchEntityActionLog(entityId, actionLogCode).forEach(entityActionLog -> {
+            EntityActionLogDto entityActionLogDto = new EntityActionLogDto();
+            BeanUtils.copyProperties(entityActionLog, entityActionLogDto);
+            entityActionLogDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(entityActionLog.getUpdateUser()));
+            entityLogs.add(entityActionLogDto);
+        });
+        return entityLogs;
     }
 
     @Override
-    public List<EntityActionLog> fetchAllEntityActionLog(CoiEntityDto coiEntityDto) {
-        return actionLogRepositoryCustom.fetchAllEntityActionLog(coiEntityDto);
+    public List<EntityActionLogDto> fetchAllEntityActionLog(CoiEntityDto coiEntityDto) {
+        List<EntityActionLogDto> entityLogs = new ArrayList<>();
+        actionLogRepositoryCustom.fetchAllEntityActionLog(coiEntityDto).forEach(entityActionLog -> {
+            EntityActionLogDto entityActionLogDto = new EntityActionLogDto();
+            BeanUtils.copyProperties(entityActionLog, entityActionLogDto);
+            entityActionLogDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(entityActionLog.getUpdateUser()));
+            entityLogs.add(entityActionLogDto);
+        });
+        return entityLogs;
     }
 
     @Override
     public List<DisclosureActionLog> fetchDisclosureActionLog(DisclosureActionLogDto actionLogDto) {
-        return actionLogRepositoryCustom.fetchDisclosureActionLog(actionLogDto);
+        List<DisclosureActionLog> actionLogList = new ArrayList<>();
+        actionLogRepositoryCustom.fetchDisclosureActionLog(actionLogDto).forEach(actionLog ->  {
+            DisclosureActionLog disclosureActionLog = new DisclosureActionLog();
+            BeanUtils.copyProperties(actionLog, disclosureActionLog, "disclosure", "disclosureActionType");
+            disclosureActionLog.setUpdateUserFullName(personDao.getUserFullNameByUserName(actionLog.getUpdateUser()));
+            actionLogList.add(disclosureActionLog);
+        });
+        return actionLogList;
     }
 }

@@ -643,7 +643,7 @@ public interface ConflictOfInterestDao {
 
 	public CoiProjectAward saveOrUpdateCoiProjectAward(CoiProjectAward coiProjectAward);
 
-	CoiEntity getCoiEntityDetailsByEntityId(Integer personEntityId);
+	CoiEntity getCoiEntityByPersonEntityId(Integer personEntityId);
 
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId);
 

@@ -43,6 +43,7 @@ import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -2309,7 +2310,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public CoiEntity getCoiEntityDetailsByEntityId(Integer personEntityId) {
+	public CoiEntity getCoiEntityByPersonEntityId(Integer personEntityId) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("select pe.coiEntity from PersonEntity pe where pe.personEntityId = :personEntityId");
@@ -3768,11 +3769,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public Timestamp updateDisclosureRiskCategory(CoiDisclosureDto coiDisclosureDto) {
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE CoiEntity e SET e.updateTimestamp = :updateTimestamp, e.riskCategoryCode = :riskCategoryCode, ");
-		hqlQuery.append("e.updateUser = :updateUser where e.entityId = :entityId");
+		hqlQuery.append("UPDATE CoiDisclosure d SET d.updateTimestamp = :updateTimestamp, d.riskCategoryCode = :riskCategoryCode, ");
+		hqlQuery.append("d.updateUser = :updateUser where d.disclosureId = :disclosureId");
 		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
 		Query query = session.createQuery(hqlQuery.toString());
-		query.setParameter("entityId", coiDisclosureDto.getDisclosureId());
+		query.setParameter("disclosureId", coiDisclosureDto.getDisclosureId());
 		query.setParameter("riskCategoryCode", coiDisclosureDto.getRiskCategoryCode());
 		query.setParameter("updateTimestamp", updateTimestamp);
 		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());

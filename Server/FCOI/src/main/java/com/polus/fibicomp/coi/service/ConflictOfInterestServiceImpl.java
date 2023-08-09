@@ -74,6 +74,7 @@ import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
@@ -1050,7 +1051,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getCoiEntityDetails(Integer personEntityId) {
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
-		vo.setCoiEntity(conflictOfInterestDao.getCoiEntityDetailsByEntityId(personEntityId));
+		vo.setCoiEntity(conflictOfInterestDao.getCoiEntityByPersonEntityId(personEntityId));
 		vo.getCoiEntity().setUpdatedUserFullName(personDao.getUserFullNameByUserName(vo.getCoiEntity().getUpdateUser()));
 		return new ResponseEntity<>(vo, HttpStatus.OK);
 	}
@@ -1879,6 +1880,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship) {
 		CoiEntityDto coiEntityDto = new CoiEntityDto();
+		coiEntityDto.setEntityId(entityRelationship.getEntityId());
 		coiEntityDto.setUpdateTimestamp(conflictOfInterestDao.approveEntity(entityRelationship.getEntityId()));
 		if (entityRelationship.getEntityRelTypeCode() != 1) { //  entityRelTypeCode = 1 (new)
 			entityRelationship.setUpdateUser(AuthenticatedUser.getLoginUserName());
@@ -1887,6 +1889,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		coiEntityDto.setEntityStatusCode(Constants.COI_ENTITY_STATUS_VERIFIED);
 		coiEntityDto.setUpdatedUserFullName(personDao.getUserFullNameByUserName(AuthenticatedUser.getLoginUserFullName()));
+		CoiEntity coiEntity = conflictOfInterestDao.getCoiEntityDetailsById(coiEntityDto.getEntityId());
+		CoiEntity coiEntityCopy = new CoiEntity();
+		BeanUtils.copyProperties(coiEntity, coiEntityCopy);
+		coiEntityCopy.setUpdatedUserFullName(personDao.getUserFullNameByUserName(coiEntity.getUpdateUser()));
+		actionLogService.saveEntityActionLog(Constants.COI_ENTITY_VERIFY_ACTION_LOG_CODE, coiEntityCopy, null);
 		return new ResponseEntity<>(coiEntityDto, HttpStatus.OK);
 	}
 
@@ -1903,20 +1910,19 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		BeanUtils.copyProperties(entity, entityCopy);
 		entityCopy.setNewtRiskCategory(riskCategory);
 		entityDto.setUpdateTimestamp(conflictOfInterestDao.updateEntityRiskCategory(entityDto));
-		actionLogService.saveEntityActionLog(Constants.COI_ENTITY_CHANGE_RISK_ACTION_LOG_CODE, entityCopy, entityDto.getRevisionReason());
+		entityCopy.setUpdatedUserFullName(personDao.getUserFullNameByUserName(AuthenticatedUser.getLoginUserName()));
+		actionLogService.saveEntityActionLog(Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE, entityCopy, entityDto.getRevisionReason());
 		return new ResponseEntity<>(entityDto, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId) {
-		List<EntityActionLog> entityActionLogs = actionLogService.fetchEntityActionLog(entityId, Constants.COI_ENTITY_CHANGE_RISK_ACTION_LOG_CODE);
-		return new ResponseEntity<>(entityActionLogs, HttpStatus.OK);
+		return new ResponseEntity<>(actionLogService.fetchEntityActionLog(entityId, Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Object> fetchEntityHistory(CoiEntityDto coiEntityDto) {
-		List<EntityActionLog> entityActionLogs = actionLogService.fetchAllEntityActionLog(coiEntityDto);
-		return new ResponseEntity<>(entityActionLogs, HttpStatus.OK);
+		return new ResponseEntity<>(actionLogService.fetchAllEntityActionLog(coiEntityDto), HttpStatus.OK);
 	}
 
 	@Override

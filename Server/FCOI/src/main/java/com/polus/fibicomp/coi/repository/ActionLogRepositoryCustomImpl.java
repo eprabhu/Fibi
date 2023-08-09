@@ -99,7 +99,7 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
         hqlQuery.append("SELECT ea FROM EntityActionLog ea WHERE ea.entityNumber = :entityNumber ");
         hqlQuery.append(" ORDER BY updateTimestamp DESC");
         Query query = session.createQuery(hqlQuery.toString());
-        query.setParameter("actionTypeCode", coiEntityDto.getEntityNumber());
+        query.setParameter("entityNumber", coiEntityDto.getEntityNumber());
         return query.getResultList();
     }
 

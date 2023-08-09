@@ -1,5 +1,6 @@
 package com.polus.fibicomp.coi.service;
 
+import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import org.springframework.http.ResponseEntity;
 
@@ -43,14 +44,14 @@ public interface ActionLogService {
      * @param actionLogCode
      * @return
      */
-    List<EntityActionLog> fetchEntityActionLog(Integer entityId, String actionLogCode);
+    List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, String actionLogCode);
 
     /**
      * This method is used to fetch all entity action log based on entity number
      * @param coiEntityDto
      * @return
      */
-    List<EntityActionLog> fetchAllEntityActionLog(CoiEntityDto coiEntityDto);
+    List<EntityActionLogDto> fetchAllEntityActionLog(CoiEntityDto coiEntityDto);
 
     /**
      * This method is used to fetch disclosure action log

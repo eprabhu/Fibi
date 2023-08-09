@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 @OpenAPIDefinition(info = @Info(title = "FCOI"))
 @EnableAutoConfiguration
 @EnableJpaRepositories
-//@EnableTransactionManagement
+@EnableTransactionManagement
 @ComponentScan
 @EnableScheduling
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")

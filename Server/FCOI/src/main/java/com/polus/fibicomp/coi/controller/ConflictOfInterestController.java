@@ -526,26 +526,6 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.approveEntity(entityRelationship);
 	}
 
-	@PostMapping("/disclosure/historyDashboard")
-	public ResponseEntity<Object> getDisclosureHistory(@RequestBody CoiDashboardVO dashboardVO) {
-		return conflictOfInterestService.getDisclosureHistory(dashboardVO);
-	}
-	
-	@PostMapping("/entity/modifyRisk")
-	public ResponseEntity<Object> modifyRisk(@RequestBody CoiEntityDto entityDto) {
-		return conflictOfInterestService.modifyRisk(entityDto);
-	}
-
-	@GetMapping("/entity/riskHistory/{entityId}")
-	public ResponseEntity<Object> fetchEntityRiskHistory(@PathVariable("entityId") Integer entityId) {
-		return conflictOfInterestService.fetchEntityRiskHistory(entityId);
-	}
-
-	@PostMapping("/entity/history")
-	public ResponseEntity<Object> fetchEntityHistory(@RequestBody CoiEntityDto coiEntityDto) {
-		return conflictOfInterestService.fetchEntityHistory(coiEntityDto);
-	}
-
 	@PostMapping(value = "/loadTravelDisclosureHistory")
 	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for loadTravelDisclosureHistory");
@@ -590,20 +570,6 @@ public class ConflictOfInterestController {
 		return actionLogService.getDisclosureHistoryById(disclosureId);
 	}
 
-	@PutMapping("/disclosure/modifyRisk")
-	public ResponseEntity<Object> modifyRisk(@RequestBody CoiDisclosureDto disclosureDto) {
-		return conflictOfInterestService.modifyDisclosureRisk(disclosureDto);
-	}
-
-	@GetMapping("/disclosure/risk")
-	public ResponseEntity<Object> fetchAllDisclosureRisk() {
-		return conflictOfInterestService.fetchAllDisclosureRisk();
-	}
-
-	@PostMapping("/disclosure/history")
-	public ResponseEntity<Object> fetchDisclosureHistory(@RequestBody DisclosureActionLogDto actionLogDto) {
-		return conflictOfInterestService.fetchDisclosureHistory(actionLogDto);
-	}
     @GetMapping("/getTravelConflictStatusType")
 	public ResponseEntity<Object> getTravelConflictStatusType() {
 		logger.info("Requesting for getTravelConflictStatusType");
