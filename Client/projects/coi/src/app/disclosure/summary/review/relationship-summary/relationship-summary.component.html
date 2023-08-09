@@ -16,7 +16,7 @@
         </ng-container>
       </span>
       <span class="align-items-center d-flex">
-        <button class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
+        <button (click)="openCommoncommentSlider()" class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
           <mat-icon>rate_review</mat-icon>
       </button>
       </span>
@@ -93,7 +93,7 @@
                         (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
                         <span class="btn-secondary-svg"></span>
                       </button>
-                      <button class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
+                      <button (click)="openReviewComment(i)" class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
                         <mat-icon>rate_review</mat-icon>
                       </button>
                       </div>
@@ -107,6 +107,5 @@
             </ng-container>
       </div>
 </div>
-
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
   [entityDetails]="entityDetails" [isEditMode]="coiDetails?.reviewStatusCode== 3 && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
