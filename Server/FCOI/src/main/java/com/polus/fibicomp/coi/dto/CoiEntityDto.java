@@ -22,4 +22,5 @@ public class CoiEntityDto {
 	private Timestamp updateTimestamp;
 	private String revisionReason;
 	private String updatedUserFullName;
+	private String riskCategoryCode;
 }
