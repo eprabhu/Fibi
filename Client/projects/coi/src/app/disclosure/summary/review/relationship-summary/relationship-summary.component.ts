@@ -8,6 +8,7 @@ import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-st
 import { CoiSummaryService } from '../../coi-summary.service';
 import { HTTP_ERROR_STATUS } from "../../../../../../../fibi/src/app/app-constants";
 import { DataStoreService } from '../../../services/data-store.service';
+import { CoiService } from '../../../services/coi.service';
 
 declare var $: any;
 
@@ -42,6 +43,7 @@ export class RelationshipSummaryComponent implements OnInit {
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
         public _commonService: CommonService,
         private _dataStore: DataStoreService,
+        private _coiService: CoiService
     ) { }
 
     ngOnInit() {
@@ -124,6 +126,16 @@ export class RelationshipSummaryComponent implements OnInit {
         this.coiDetails.coiConflictStatusType = status;
         this.coiDetails.conflictStatusCode = status.conflictStatusCode;
         this._dataStore.updateStore(['coiDisclosure'], { coiDisclosure: this.coiDetails });
+    }
+
+    // function for opening the slider in relationship section common comment
+    private openReviewComment(index) {
+        this._coiService.isShowCommentNavBar = !this._coiService.isShowCommentNavBar;
+    }
+
+    // function for opening the slider in SFI listing table section comment (relationship section)
+    private openCommoncommentSlider() {
+        this._coiService.isShowCommentNavBar = !this._coiService.isShowCommentNavBar;
     }
 
 }

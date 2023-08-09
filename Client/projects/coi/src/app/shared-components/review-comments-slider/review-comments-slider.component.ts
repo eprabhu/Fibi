@@ -1,10 +1,12 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { CoiService } from '../../disclosure/services/coi.service';
 import { CommonService } from '../../common/services/common.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { slideHorizontal } from '../../../../../fibi/src/app/common/utilities/animations';
+import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
+
 
 @Component({
     selector: 'app-review-comments-slider',
@@ -24,6 +26,9 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     isAddAssignee = false;
     dateTime: string;
     isReadMore = false;
+    comment = '';
+    @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
+
 
     constructor(
         public _commonService: CommonService,
@@ -31,29 +36,36 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
-        this.showCommentNavBar();
+        setTimeout(() => {
+            openSlider('review-comments-slider');
+        });
     }
 
-    ngOnDestroy(): void {
-        this.showCommentNavBar();
+    ngOnDestroy(): void {;
         subscriptionHandler(this.$subscriptions);
     }
 
-    hideCommentNavBar() {
-        if (!this.isSaving) {
-            this._coiService.isShowCommentNavBar = false;
-        }
+    openConformationModal() {
+        document.getElementById('review-comments-confirmation-modal-trigger-btn').click();
     }
 
-    showCommentNavBar() {
-        if (this._coiService.isShowCommentNavBar) {
-            this.scrollHeight = document.documentElement.scrollTop;
-            document.documentElement.classList.add('cdk-global-scrollblock');
-            document.documentElement.style.top = - this.scrollHeight + 'px';
-        }
-        else {
-            document.documentElement.classList.remove('cdk-global-scrollblock');
-            document.documentElement.scrollTop = this.scrollHeight;
+    validateSliderClose() {
+        (this.comment) ? this.openConformationModal() : this.closeReviewSlider();
+    }
+
+    closeReviewSlider() {
+        closeSlider('review-comments-slider');
+        setTimeout(() => {
+            this.closePage.emit();
+            this._coiService.isShowCommentNavBar = false;
+        }, 500);
+    }
+
+    leavePageClicked(event: boolean) {
+        if (event) {
+            setTimeout(() => {
+                this.closeReviewSlider();
+            }, 100);
         }
     }
 
