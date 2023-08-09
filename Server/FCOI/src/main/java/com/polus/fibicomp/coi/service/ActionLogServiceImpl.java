@@ -17,16 +17,20 @@ import org.springframework.transaction.annotation.Transactional;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.HistoryDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.repository.ActionLogRepositoryCustom;
 import com.polus.fibicomp.coi.repository.DisclosureActionLogRepository;
 import com.polus.fibicomp.coi.repository.DisclosureActionTypeRepository;
 import com.polus.fibicomp.coi.repository.EntityActionLogRepository;
 import com.polus.fibicomp.coi.repository.EntityActionTypeRepository;
+import com.polus.fibicomp.coi.repository.TravelDisclosureActionLogRepository;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.security.AuthenticatedUser;
@@ -59,9 +63,13 @@ public class ActionLogServiceImpl implements ActionLogService {
 
     @Autowired
 	private PersonDao personDao;
+    
+    @Autowired
+    private TravelDisclosureActionLogRepository travelDisclosureActionLogRepository;
 
     private static final String DISCLOSURE_TYPE_FCOI = "FCOI";
 	private static final String DISCLOSURE_TYPE_PROJECT = "Project";
+	private static final String DISCLOSURE_TYPE_TRAVEL = "Travel";
 	private static final String TYPE_CODE_FCOI = "1";
 	private static final String TYPE_CODE_PROPOSAL = "2";
 	private static final String TYPE_CODE_AWARD = "3";
@@ -152,5 +160,33 @@ public class ActionLogServiceImpl implements ActionLogService {
 		});
 		return new ResponseEntity<>(disclosureHistories, HttpStatus.OK);
 	}
+
+	@Override
+	public void saveTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto) {
+		DisclosureActionType disclosureActionType = conflictOfInterestDao.fetchDisclosureActionTypeById(actionLogDto.getActionTypeCode());
+		String message = buildTravelDisclosureLogMessage(actionLogDto, disclosureActionType.getMessage());
+		TravelDisclosureActionLog actionLog = TravelDisclosureActionLog.builder().actionTypeCode(actionLogDto.getActionTypeCode())
+				.travelDisclosureId(actionLogDto.getTravelDisclosureId()).travelNumber(actionLogDto.getTravelNumber())
+				.description(message)
+				.updateTimestamp(commonDao.getCurrentTimestamp()).updateUser(AuthenticatedUser.getLoginUserName())
+				.build();
+		conflictOfInterestDao.saveOrUpdateTravelDisclosureActionLog(actionLog);
+		
+	}
+	
+	private String buildTravelDisclosureLogMessage(TravelDisclosureActionLogDto actionLogDto, String message) {
+		 Map<String, String> placeholdersAndValues = new HashMap<>();
+		 message = message.replace("{FCOI /Project /Travel}", DISCLOSURE_TYPE_TRAVEL);
+	     if(actionLogDto.getOldAdmin()!=null) {
+	    	 placeholdersAndValues.put("{ADMIN_ONE}", actionLogDto.getOldAdmin());
+	         placeholdersAndValues.put("{ADMIN_TWO}", actionLogDto.getNewAdmin());
+	     }
+	     else if(actionLogDto.getNewAdmin()!=null) {
+	        placeholdersAndValues.put("{ADMIN_ONE}", actionLogDto.getNewAdmin());
+	     }
+	     return renderPlaceholders(message, placeholdersAndValues);
+    }
+	
+	
 
 }

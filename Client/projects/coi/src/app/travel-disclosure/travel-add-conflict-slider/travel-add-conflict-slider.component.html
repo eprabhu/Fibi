@@ -1,7 +1,7 @@
 <app-coi-slider (closeSlider)="validateSliderClose()" [sliderName]="'travel-conflict-slider'">
     <!-- slider header -->
     <ng-container header>
-        <span>Manage Travel Disclosure Status</span>
+        <span>{{isEditMode ? 'Manage' : 'View'}} Travel Disclosure Status</span>
     </ng-container>
 
     <!-- slider header card -->
