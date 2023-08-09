@@ -413,8 +413,7 @@
                         <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                     </button>
 
-                    <div class="fs-14 ash-text p-0 {{isCardExpanded ? '' : 'm-04'}}"  
-                        [class.mt-1] = "coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'">
+                    <div class="fs-14 ash-text p-0 {{isCardExpanded ? 'mt-3' : 'mt-0'}}">
                         <div><span class="fw-medium me-3">Last Updated By : </span></div>
                         <div>{{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp |
                             dateFormatterWithTimeZone:'long'}}</div>

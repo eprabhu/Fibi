@@ -50,15 +50,15 @@ h1 {
 
 .body-heading {
   height: 44px;
-  ;
   background-color: #f3f7fb;
-  border-bottom: 1px solid #dee2e6;
+}
 
+.border-bottom {
+  border-bottom: 1px solid #dee2e6;
 }
 
 .footer-body {
-  height: 55px;
-  ;
+  height: 45px;
   background-color: #f3f7fb;
   border-top: 1px solid #dee2e6;
 }
@@ -135,8 +135,8 @@ table {
   filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(106%);
 }
 
-mat-icon {
-  height: 18px;
+.icon-height {
+  height: 19px !important;
   overflow: initial;
 }
 
@@ -232,7 +232,7 @@ mat-icon {
 
 .btn-activate-content{
   position: relative;
-  right: 15px;
+  right: 6px;
 }
 
 .pill {
@@ -319,4 +319,20 @@ mat-icon {
 
 .text-colors {
   color: #505050;
+}
+
+.toggle-header-btn {
+  width: 30px;
+  color: #A64040;
+  height: 30px;
+
+  mat-icon {
+    transform: scale(1.2);
+  }
+}
+
+.icon-alignment {
+  font-size: 19px;
+  margin-top: 4px;
+  padding-top: 1px;
 }
