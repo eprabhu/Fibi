@@ -45,6 +45,7 @@ import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -61,6 +62,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
 import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
@@ -135,6 +137,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String ACTION_LOG_ADMIN_REVIEW_COMPLETED = "11";
 	private static final String ACTION_LOG_ASSIGNED_FOR_REVIEW = "7";
 	private static final String ACTION_LOG_ASSIGNED_REVIEW_COMPLETED = "8";
+	private static final String ACTION_LOG_APPROVED = "13";
 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
@@ -1180,6 +1183,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		if (coiTravelDisclosure.getAdminPersonId() != null) {
 			coiTravelDisclosure.setAdminPersonName(personDao.getPersonFullNameByPersonId(coiTravelDisclosure.getAdminPersonId()));
 		}
+		try {
+			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_CREATED)
+					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+					.build();
+			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+		} catch (Exception e) {
+			logger.error("createDisclosure : {}", e.getMessage());
+		}
 		return new ResponseEntity<>(coiTravelDisclosure, HttpStatus.OK);
 	}
 
@@ -1234,6 +1245,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	public ResponseEntity<Object> assignTravelDisclosureAdmin(CoiAssignTravelDisclosureAdminDto dto) {
+		try {
+			saveTravelDisclosureAssignAdminActionLog(dto.getAdminPersonId(), dto.getTravelDisclosureId());
+		} catch (Exception e) {
+			logger.error("assignDisclosureAdmin : {}", e.getMessage());
+		}
 		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(dto.getTravelDisclosureId());
 		conflictOfInterestDao.assignTravelDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getTravelDisclosureId());
 		if (dto.getAdminGroupId() != null) {
@@ -1255,6 +1271,29 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setUpdateTimestamp(commonDao.getCurrentTimestamp());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	public void saveTravelDisclosureAssignAdminActionLog(String adminPersonId, Integer travelDisclosureId) {
+		CoiTravelDisclosure coiTravelDisclosure = conflictOfInterestDao.loadTravelDisclosure(travelDisclosureId);
+		String oldAdminPerson = coiTravelDisclosure.getAdminPersonId() != null
+				? personDao.getPersonFullNameByPersonId(coiTravelDisclosure.getAdminPersonId())
+				: null;
+		String newAdminPerson = personDao.getPersonFullNameByPersonId(adminPersonId);
+		if (oldAdminPerson != null) {
+			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_REASSIGN_ADMIN)
+	                .travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId())
+	                .travelNumber(coiTravelDisclosure.getTravelNumber())
+	                .oldAdmin(oldAdminPerson)
+	                .newAdmin(newAdminPerson).build();
+			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+		}
+		else {
+			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_ASSIGN_ADMIN)
+	                .travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId())
+	                .travelNumber(coiTravelDisclosure.getTravelNumber())
+	                .newAdmin(newAdminPerson).build();
+			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+		}
 	}
 	
 	private Map<String, String> getTravellerTypeWithDescription(List<CoiTravelDisclosureTraveler> entries) {
@@ -1414,6 +1453,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setExpirationDate(getExpirationDate());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		CoiTravelDisclosure coiTravelDosclosureObject = conflictOfInterestDao.loadTravelDisclosure(coiTravelDisclosure.getTravelDisclosureId());
+		try {
+			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_SUBMITTED)
+					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+					.build();
+			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+		} catch (Exception e) {
+			logger.error("createDisclosure : {}", e.getMessage());
+		}
 		return new ResponseEntity<>(coiTravelDosclosureObject, HttpStatus.OK);
 	}
 
@@ -1438,6 +1485,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
 			coiTravelDisclosure.setDescription(description);
 			conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+			try {
+				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_WITHDRAWN)
+						.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+						.build();
+				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+			} catch (Exception e) {
+				logger.error("createDisclosure : {}", e.getMessage());
+			}
 			return new ResponseEntity<>(setDtoForAdminActions("WITHDRAW", coiTravelDisclosure, Constants.TRAVEL_VERSION_STATUS_PENDING,
 					coiTravelDocumentStatusType, coiTravelReviewStatusType, currentTimestamp), HttpStatus.OK);
 		}
@@ -1464,6 +1519,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
 		coiTravelDisclosure.setDescription(description);
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		try {
+			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_APPROVED)
+					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+					.build();
+			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+		} catch (Exception e) {
+			logger.error("createDisclosure : {}", e.getMessage());
+		}
 		return new ResponseEntity<>(setDtoForAdminActions("APPROVE", coiTravelDisclosure, Constants.TRAVE_VERSION_STATUS_ACTIVE,
 				coiTravelDocumentStatusType, coiTravelReviewStatusType, currentTimestamp), HttpStatus.OK);
 	}
@@ -1488,6 +1551,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
 		coiTravelDisclosure.setDescription(description);
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		try {
+			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_RETURNED)
+					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+					.build();
+			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+		} catch (Exception e) {
+			logger.error("createDisclosure : {}", e.getMessage());
+		}
 		return new ResponseEntity<>(setDtoForAdminActions("RETURN", coiTravelDisclosure, Constants.TRAVEL_VERSION_STATUS_PENDING,
 				coiTravelDocumentStatusType, coiTravelReviewStatusType, currentTimestamp), HttpStatus.OK);
 	}

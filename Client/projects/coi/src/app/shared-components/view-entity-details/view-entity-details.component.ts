@@ -26,7 +26,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   $subscriptions: Subscription[] = [];
   previousURL = '';
   deployMap = environment.deployUrl;
-  isModifyEntity = false;
+  hasManageEntity = false;
   valueOfModify = '';
   mandatoryList = new Map();
   modifyType = '';
@@ -43,6 +43,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   entityRelationshipDescription = '';
   relationshipLookUpList: any = [];
   entityRelationshipNumber = null;
+  isCardExpanded = true;
 
   constructor(private _router: Router, private _route: ActivatedRoute,
     public entityManagementService: EntityManagementService,
@@ -52,7 +53,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isModifyEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
+    this.hasManageEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
     this.getEntityID();
     this.getRelationshipTypes();
   }

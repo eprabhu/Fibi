@@ -15,9 +15,8 @@
  * modalName="confirmation-modal"
  *     [needDescriptionField]="true"
  *     [isMandatory]="true"
- *     [helpText]="['Please provide a description for the action.']"
  *     modalSize="lg"
- *     descriptionError="Description is required."
+ *     descriptionErrorMsg="Description is required."
  *     primaryBtnName="Proceed"
  *     secondaryBtnName="Cancel"
  *     (primaryBtnAction)="handlePrimaryAction($event)"
@@ -57,20 +56,20 @@ export class ConfirmationModalComponent implements OnDestroy {
     @Input() isMandatory = false;
 
     /**
-     * An array of strings that provide additional information or instructions to the user.
-     * Default value is an empty array.
-     *
-     * Purpose: Displays additional text to guide the user or provide context for the action.
-     */
-    @Input() helpText: string[] = [];
-
-    /**
      * Specifies the size of the modal.
      * Possible values are 'sm' (small), 'lg' (large), 'xl' (extra large), or '' (default size).
      *
      * Purpose: Sets the size of the modal dialog for visual customization.
      */
     @Input() modalSize: 'sm' | 'lg' | 'xl' | '' = '';
+
+    /**
+     * The initial value of the description field title.
+     * Default value is an empty string.
+     *
+     * Purpose: Sets the initial value of the description field title if needed.
+     */
+    @Input() textAreaLabelName = '';
 
     /**
      * The initial value of the description field.
@@ -85,7 +84,7 @@ export class ConfirmationModalComponent implements OnDestroy {
      *
      * Purpose: Sets the error message to be displayed if the description field is mandatory and left empty.
      */
-    @Input() descriptionError = '';
+    @Input() descriptionErrorMsg = '';
 
     /**
      * The label for the primary action button.
@@ -159,7 +158,7 @@ export class ConfirmationModalComponent implements OnDestroy {
      */
     descriptionChangedOrEmpty() {
         if (!this.description) {
-            this.mandatoryList.set('description', `${this.descriptionError}`);
+            this.mandatoryList.set('description', `${this.descriptionErrorMsg}`);
         } else {
             this.mandatoryList.clear();
         }

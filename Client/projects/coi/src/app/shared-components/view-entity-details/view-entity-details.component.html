@@ -2,7 +2,7 @@
   <div class="mx-4 row">
     <div class="col-9 p-0">
       <div class="border shadow-sm">
-        <div class="body-heading  px-3 d-flex">
+        <div class="body-heading  px-3 d-flex" [class.border-bottom]="isCardExpanded">
           <div class="col d-flex">
             <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-4"
               [ngClass]="entityDetails.isActive ?'':'inactive-pill'">
@@ -17,20 +17,26 @@
               <span class="unverified-label">{{entityDetails?.entityStatus?.description}}</span>
             </span>
           </div>
-          <div *ngIf="entityDetails?.entityRiskCategory?.description" class="d-flex">
+          <div *ngIf="entityDetails?.entityRiskCategory?.description" class="d-flex me-5 fs-14">
             <div class="align-items-center d-flex ml-15">
-              <label class="fw-500 fs-14 mr-2">Risk :</label>
-              <div class="text-color fs-14 d-flex">
+              <label class="fw-500 mr-2">Risk :</label>
+              <div class="text-color d-flex">
                 <mat-icon [ngClass]="entityRiskLevel(entityDetails?.entityRiskCategory?.description)"
-                  class="material-icons-round">warning</mat-icon>
+                  class="material-icons-round icon-alignment">warning</mat-icon>
                 <span *ngIf="entityDetails?.entityRiskCategory" class="mt-1">
                   {{entityDetails?.entityRiskCategory?.description}}
                 </span>
               </div>
             </div>
           </div>
+          <div class="align-items-center d-flex" >
+            <button title="Click here to {{isCardExpanded ? 'collapse' : 'expand'}}" (click)="isCardExpanded=!isCardExpanded" class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+              <mat-icon class="mb-2 icon-height">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+            </button>
+          </div>
         </div>
-        <div class="d-flex bg-white p-3">
+        <ng-container *ngIf="isCardExpanded">
+          <div class="d-flex bg-white p-3">
             <div class="col mr-10">
             <div class="border triple-card rounded-1 position-relative">
               <div class="ps-4 table-negative-margin">
@@ -100,6 +106,7 @@
             </div>
           </div>
         </div>
+        </ng-container>
         <div class="footer-body px-3 d-flex">
           <div class="align-self-center flex-fill">
             <label class="fw-500 fs-14 mx-3">Address :</label>
@@ -111,73 +118,74 @@
         </div>
       </div>
     </div>
-    <div class="col-3 px-0">
-      <div class="d-flex flex-column p-0">
-        <div class="flex-fill side-height border-end bg-color shadow-sm">
-          <div class="mt-3 mx-3 d-flex justify-content-around">
-            <button *ngIf="isModifyEntity;else noRightDesign2"
-              class="btn btn-outline-grey pb-0 col-2" title="Go to COI home page" (click)="goToHome()">
-              <mat-icon class="mb-2">home</mat-icon>
-            </button>
-            <ng-template #noRightDesign2>
-              <button class="btn btn-outline-grey pb-0 col-6 me-2" title="Go to COI home page" (click)="goToHome()">
-                <mat-icon class="mb-2">home</mat-icon>
-                <span class="fs-14 mx-1 btn-content-home">Home</span>
+    <div class="col-3 bg-white px-0">
+      <div class="d-flex position-relative flex-column p-0 bg-white">
+        <div  class="row m-0 pt-2 px-3">
+          <!-- home -->
+          <button (click)="goToHome()" *ngIf="hasManageEntity" title="Go to COI home page"
+              class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col text-nowrap">
+              <mat-icon>home</mat-icon>
+              <!-- <span class="ms-2" *ngIf="isCardExpanded">Home</span> -->
+          </button>
+
+          <!-- Modify Entity -->
+          <button title="Click to Modify Entity" *ngIf="hasManageEntity" 
+            (click)="openConfirmationModal()" id="btn-modify"
+            class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 text-nowrap">
+            <mat-icon>mode</mat-icon>
+            <span class="ms-2" *ngIf="isCardExpanded">Modify Entity</span>
+          </button>
+
+          <!-- Back -->
+          <button title="Click to go back to Entity list" *ngIf="hasManageEntity" 
+              (click)="navigateBack()" id="btn-modify"
+              class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 text-nowrap">
+              <mat-icon>reply</mat-icon>
+              <span class="ms-2" *ngIf="isCardExpanded">Back</span>
+          </button>
+
+          <ng-container *ngIf="hasManageEntity">
+            <!-- inactivate -->
+            <ng-container *ngIf="entityDetails.isActive">
+              <button title="Click to Inactivate Entity" id="btn-inactivate"
+                  [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                  class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center"
+                  (click)="activateInactivateEntity()">
+                  <mat-icon>schedule</mat-icon>
+                  <span class="ms-2" *ngIf="isCardExpanded">Inactivate</span>
               </button>
-            </ng-template>
-            <button *ngIf="isModifyEntity" (click)="openConfirmationModal()"  id="btn-modify"
-              class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center mx-3"
-              title="Click to Modify Entity">
-              <mat-icon class="mb-2 mx-1 pencil">mode</mat-icon>
-              <span class="btn-entity-position">Modify Entity</span>
+            </ng-container>
+
+            <!-- Activate -->
+            <ng-container *ngIf="!entityDetails.isActive">
+              <button title="Click to activate Entity" id="btn-activate"
+                [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center"
+                (click)="activateInactivateEntity()">
+                <mat-icon>flash_on</mat-icon>
+                <span class="ms-2" *ngIf="isCardExpanded">Activate</span>
             </button>
-            <button *ngIf="isModifyEntity;else noRightDesign3" 
-            class="btn btn-outline-grey fs-14 col-2 pb-0" (click)="navigateBack()" title="Click to go back to Entity list">
-              <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
-            </button>
-            <ng-template #noRightDesign3>
-              <button class="btn btn-outline-grey fs-14 col-6 py-2" (click)="navigateBack()" title="Click to go back to Entity list">
-                <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
-                <span class="fs-14 mx-2 btn-content-back">Back</span>
+            </ng-container>
+
+            <!-- Approve Entity -->
+            <ng-container *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'">
+              <button title="Click to access entity verification" id="btn-approve-entity"
+                  [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                  class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
+                  (click)="activateInactivateEntity()">
+                  <mat-icon>check_circle_outline</mat-icon>
+                  <span class="ms-2" *ngIf="isCardExpanded">Approve Entity</span>
               </button>
-            </ng-template>
+            </ng-container>
+          </ng-container>
+
+          <!-- last update date -->
+          <div class="fs-14 ash-text ps-0" [class.mt-3]="!isCardExpanded">
+            <div class="fw-medium me-3">Last Updated By :</div>
+            <div>{{entityDetails?.updatedUserFullName}} On 
+              {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}}</div>
           </div>
-            <div *ngIf="isModifyEntity && entityDetails.isActive" class="d-flex justify-content-around mt-3 mx-3">
-              <button id="btn-inactivate"
-                class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-                title="Click to Inactivate Entity'" (click)="activateInactivateEntity()">
-                <mat-icon class="mx-1 mb-2 icon-schedule-position">schedule</mat-icon>
-                <span class="btn-inactivate-content">
-                  Inactivate
-                </span>
-              </button>
-            </div>
-            <div *ngIf="isModifyEntity  && !entityDetails.isActive" class="d-flex justify-content-around mt-3 mx-3">
-              <button id="btn-activate" class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-                title="Click to activate Entity" (click)="activateInactivateEntity()">
-                <i class="fa fa-bolt fs-18 fw-700" aria-hidden="true"></i>
-                <span class="btn-activate-content">
-                  Activate
-                </span>
-              </button>
-            </div>
-          <div *ngIf="isModifyEntity && entityDetails?.entityStatus?.entityStatusCode === '2'" class="d-flex justify-content-around mt-3 mx-3">
-            <button id="btn-approve-entity"
-              class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
-              title="Click to access entity verification" data-bs-toggle="modal" data-bs-target="#approve-entity-modal">
-              <mat-icon class="mx-1 mb-2 icon-approve-position">check_circle_outline</mat-icon>
-              <span class="btn-approve-position">Approve Entity</span>
-            </button>
-          </div>
-          <div class="my-2 ml-2 fs-14 ash-text wrapping-text px-2">
-            <div><span class="fw-medium me-1">Last Updated By :</span></div>
-            <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.updatedUserFullName">
-              <span>
-                {{entityDetails?.updatedUserFullName}} On 
-                {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}}
-              </span>
-            </app-no-data-label>
-          </div>
+
         </div>
       </div>
     </div>
@@ -202,7 +210,7 @@
             <div class="help-text row">
               <div class="col-12 py-2 grey-info font d-flex">
                 <span data-bs-toggle="tooltip" title=" Modifie entity help text" data-bs-placement="top" class="d-inline-block">
-                  <mat-icon role="img" class="mat-icon me-2 info-icon material-icons mat-icon-no-color" aria-hidden="true"
+                  <mat-icon role="img" class="icon-height mat-icon me-2 info-icon material-icons mat-icon-no-color" aria-hidden="true"
                     data-mat-icon-type="font">info</mat-icon>
                 </span>
                 <div class="ms-5 text-colors mt-1 fs-14">
@@ -231,12 +239,12 @@
             </div>
             <div class="fs-14 text-secondary d-flex justify-content-start my-3 px-3">
               <span class="pr-25 d-flex">
-                <input type="radio" class="form-check-input" [(ngModel)]="valueOfModify" value="1"> <span
+                <input type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="1"> <span
                   class="px-3">Minor
                   modification</span>
               </span>
               <span class="d-flex">
-                <input type="radio" class="form-check-input" [(ngModel)]="valueOfModify" value="2"> <span
+                <input type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="2"> <span
                   class="px-3">Major
                   modification</span>
               </span>
@@ -302,7 +310,7 @@
         <div class="help-text">
           <div class="col-12 py-2 grey-info font px-3 d-flex align-items-center position-relative">
             <span data-bs-toggle="tooltip" title="Inactivate entity Help Text." data-bs-placement="top" class="d-inline-block pe-2">
-              <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+              <mat-icon role="img" class="icon-height mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
             </span>
             <span class="fs-14 ms-3 text-colors" *ngIf="entityDetails.isActive">
               <div class="mt-2 ml-15">
@@ -369,7 +377,7 @@
         <div class="help-text">
           <div class="col-12 py-2 grey-info font px-3 d-flex align-items-center position-relative">
             <span data-bs-toggle="tooltip" title="Approve entity help text." data-bs-placement="top" class="d-inline-block pe-2">
-              <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+              <mat-icon role="img" class="icon-height mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
             </span>
             <span class="fs-14 ms-3 text-colors">
               <div class="mt-2 ml-15">

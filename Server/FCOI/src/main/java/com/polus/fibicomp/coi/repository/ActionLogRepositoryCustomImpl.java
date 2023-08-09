@@ -28,6 +28,7 @@ import java.util.Optional;
 import com.polus.fibicomp.coi.dao.GeneralDaoImpl;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 
 @Repository
 @Primary
@@ -62,6 +63,17 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
         query.where(builder.equal(root.get("disclosureId"), disclosureId));
         query.orderBy(builder.desc(root.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
+	}
+    
+    @Override
+	public List<TravelDisclosureActionLog> fetchTravelDisclosureActionLog(Integer travelDisclosureId, String actionTypeCode) {
+		StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT tda FROM TravelDisclosureActionLog tda WHERE tda.travelDisclosureId = :travelDisclosureId AND tda.actionTypeCode = :actionTypeCode ORDER BY updateTimestamp DESC");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("actionTypeCode", actionTypeCode);
+        query.setParameter("entityId", travelDisclosureId);
+        return query.getResultList();
 	}
 
 

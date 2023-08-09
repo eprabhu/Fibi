@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 
 import java.util.List;
@@ -32,6 +34,8 @@ public interface ActionLogService {
      * @return
      */
 	ResponseEntity<Object> getDisclosureHistoryById(Integer disclosureId);
+
+	void saveTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto);
 
     /**
      * This method is used to fetch entity action log by following @params
