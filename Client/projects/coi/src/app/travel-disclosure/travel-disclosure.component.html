@@ -235,28 +235,30 @@
 
                 <!-- more options -->
                 <mat-menu #beforeMenu="matMenu" xPosition="before">
-                    <!-- reassigned admin -->
-                    <ng-container *ngIf="travelDisclosure?.adminPersonId && isTravelAdministrator && checkReviewStatusCode(['3'])">
-                        <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                    <!-- MANAGE_TRAVEL_DISCLOSURE rights person actions -->
+                    <ng-container *ngIf="isTravelAdministrator">
+                        <!-- reassigned admin -->
+                        <button *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode(['3'])"
+                            title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
                             class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
                             (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2">Reassign Admin</span>
                         </button>
-                    </ng-container>
-                    <!-- manage disclosure status -->
-                    <ng-container *ngIf="isTravelAdministrator && checkReviewStatusCode(['2','3'], 'SOME')">
-                        <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                    
+                        <!-- manage /view disclosure status -->
+                        <button *ngIf="checkReviewStatusCode(['2','3', '7'], 'SOME')" title="Click to Reassign Administrator/Admin Group"
+                            area-describedby="Click to assign administrator"
                             class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
                             (click)="openConflictSlider()">
-                            <mat-icon>mode</mat-icon>
-                            <span class="ms-2">Manage Disclosure Status</span>
+                            <mat-icon>{{checkReviewStatusCode(['2','3'], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
+                            <span class="ms-2">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure Status</span>
                         </button>
                     </ng-container>
 
                     <!-- Withdraw disclosure -->
                     <button title="Click to Withdraw Travel Disclosure"
-                        (click)="openConfirmationModal('Withdraw', true, withdrawHelpText, true, withdrawError);"
+                        (click)="openConfirmationModal('Withdraw', true, withdrawHelpTexts, true, withdrawErrorMsg);"
                         class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3" 
                         *ngIf="checkReviewStatusCode(['2']) && travelDisclosure?.personId == currentPersonId">
                         <mat-icon>logout</mat-icon>
@@ -288,7 +290,7 @@
                     <ng-container *ngIf="showReturnOrApproveButton()">
                         <!-- return to pi -->
                         <button title="Click to Return Travel Disclosure"
-                            (click)="openConfirmationModal('Return', true, returnHelpText, true, returnError);"
+                            (click)="openConfirmationModal('Return', true, returnHelpTexts, true, returnErrorMsg);"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
                             <mat-icon class="returnIcon">refresh</mat-icon>
@@ -371,13 +373,17 @@
 
 <!--Confirmation Modal-->
 <app-confirmation-modal [modalName] = "'travel-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
-    [primaryBtnName]="modalActionBtnName" [helpText]="helpText" [modalSize]="modalSize"
-    [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionError]="descriptionError">
+    [primaryBtnName]="modalActionBtnName" [modalSize]="modalSize" [textAreaLabelName]="'Reason for ' + textAreaLabelName"
+    [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionErrorMsg]="descriptionErrorMsg">
     <!-- modal header -->
     <ng-container header>
         <span>{{modalActionBtnName}} Disclosure #{{travelDisclosure?.travelDisclosureId}}
             : Travel Disclosure By {{travelDisclosure?.personFullName}}</span>
     </ng-container>
+
+    <div class="mx-3 mt-2" content-sticky>
+        <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "primaryBtnName + 'Help Text'" ></app-help-text>
+    </div>
     <!-- modal content -->
     <ng-container content>
         <p *ngIf="modalActionBtnName == 'Submit'" class="fs-14 ms-2">
@@ -398,7 +404,7 @@
 </app-assign-administrator-modal>
 
 
-<app-travel-add-conflict-slider *ngIf="isOpenSlider" 
+<app-travel-add-conflict-slider *ngIf="isOpenSlider"
     [entityDetails]="entityDetails" [travelDisclosure]="travelDisclosure"
-    [isEditMode]="showReturnOrApproveButton()" (closePage)="closeConflictSlider()" >
+    [isEditMode]="checkReviewStatusCode(['2','3'], 'SOME')" (closePage)="closeConflictSlider()" >
 </app-travel-add-conflict-slider>
