@@ -3,7 +3,9 @@ package com.polus.fibicomp.coi.service;
 import org.springframework.http.ResponseEntity;
 
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 
 public interface ActionLogService {
 
@@ -18,5 +20,7 @@ public interface ActionLogService {
 	void saveDisclsoureActionLog(DisclosureActionLogDto actionLogDto);
 
 	ResponseEntity<Object> getDisclosureHistoryById(Integer disclosureId);
+	
+	void saveTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto);
 
 }
