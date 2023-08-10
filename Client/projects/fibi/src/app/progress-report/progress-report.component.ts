@@ -6,7 +6,7 @@ import { ProgressReportService } from './services/progress-report.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { AWARD_ERR_MESSAGE, COMMON_APPROVE_LABEL, COMMON_RETURN_LABEL, DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
 import { subscriptionHandler } from '../common/utilities/subscription-handler';
-import { fileDownloader, setFocusToElement } from '../common/utilities/custom-utilities';
+import { deepCloneObject, fileDownloader, setFocusToElement } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
 import {concatUnitNumberAndUnitName} from '../common/utilities/custom-utilities';
@@ -73,11 +73,13 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.getEditMode();
+        this.autoSaveService.initiateAutoSave();
         this.getProgressReportData();
     }
 
     ngOnDestroy(): void {
         this.funderApprovalDateCopy = null;
+        this.autoSaveService.stopAutoSaveEvent();
         subscriptionHandler(this.$subscriptions);
     }
 
@@ -104,21 +106,25 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
      * Only in Overview tab Save button needed, after edition (Edit Mode)
      */
     checkWhetherToShowSaveButton(): void {
-        this.isShowSaveButton = this._router.url.includes('overview');
+        this.isShowSaveButton = ['overview', 'equipments'].some(tabName => this._router.url.includes(tabName));
     }
 
     submitReport(): void {
+        this._commonData.isDataChange = false;
         if (!this.isSaving) {
             this.isSaving = true;
             this._commonService.isShowOverlay = true;
-            this.$subscriptions.push(this._progressReportService.submitProgressReport(this.progressReportId).subscribe((res: any) => {
+            this.$subscriptions.push(this._progressReportService.submitProgressReport(
+                this.progressReportId, this.result.awardProgressReport.progressReportStatusCode).subscribe((res: any) => {
                 this.setupProgressReportStoreData(res);
-                $('#SubmitReportModal').modal('hide');
+                this._commonData.progressReportTitle = res.awardProgressReport.title;
                 this._progressReportService.$isQuestionnaireChange.next(true);
                 this._commonService.isShowOverlay = false;
             }, err => {
                 if (err.error && err.error.errorMessage  === 'Deadlock') {
                     this.showErrorMessage('Submitting Progress Report failed. Please try again.');
+                } else if (err && err.status === 405) {
+                    $('#invalidActionModal').modal('show');
                 } else {
                     this.showErrorMessage(`Transaction is not completed due to an error.
                     ${AWARD_ERR_MESSAGE}`);
@@ -145,7 +151,7 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
     }
 
     updateProgressReportStoreData(): void {
-        this._commonData.setProgressReportData(JSON.parse(JSON.stringify(this.result)));
+        this._commonData.setProgressReportData(deepCloneObject(this.result));
     }
 
     getProgressReportData(): void {
@@ -251,6 +257,9 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
                         if (err.error && err.error.errorMessage  === 'Deadlock') {
                             this.showErrorMessage(
                                 `Progress Report  ${COMMON_APPROVE_LABEL.toLowerCase()}/disapprove action failed. Please try again.`);
+                        } else if (err && err.status === 405) {
+                            $('#approveDisapproveReportModal').modal('hide');
+                            $('#invalidActionModal').modal('show');
                         } else {
                             this.showErrorMessage(`Transaction is not completed due to an error.
                             ${AWARD_ERR_MESSAGE}`);
@@ -324,8 +333,8 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
         }
     }
 
-    saveProgressReportDetails(): void {
-        this._commonData.setSaveButton(true);
+    initiateProgressReportSaveOnChild(): void {
+        this.autoSaveService.commonSaveTrigger$.next(true);
     }
 
     backToProgressReportListClick(): void {
@@ -333,6 +342,7 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
     }
 
     navigateUsingRedirectRoute(): void {
+        this._commonData.progressReportTitle = this.result.awardProgressReport.title;
         this._commonData.isDataChange = false;
         this.redirectBasedOnQueryParam();
     }
@@ -355,7 +365,8 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
                 {
                     'actionType': actionType,
                     'progressReportId': this.progressReportId,
-                    'funderApprovalDate': parseDateWithoutTimestamp(this.result.awardProgressReport.funderApprovalDate)
+                    'funderApprovalDate': parseDateWithoutTimestamp(this.result.awardProgressReport.funderApprovalDate),
+                    'progressReportStatusCode' : this.result.awardProgressReport.progressReportStatusCode,
                 })
                 .subscribe((data: any) => {
                     $('#HOLDConfirmProgressReportModal').modal('hide');
@@ -367,7 +378,12 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
                     this.isSaving = false;
                 }, err => {
                     this.isSaving = false;
-                    this.showErrorMessage('Updating Progress Report status failed. Please try again.');
+                    if (err && err.status === 405) {
+                        $('#HOLDConfirmProgressReportModal').modal('hide');
+                        $('#invalidActionModal').modal('show');
+                    } else {
+                        this.showErrorMessage('Updating Progress Report status failed. Please try again.');
+                    }
                 }));
         }
     }
@@ -393,7 +409,7 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
                             data.progressReportImported ? this.showSuccessMessage('Template imported successfully.') :
                             this.showSuccessMessage('The specified file not a valid template or contains no data to import.');
                         }
-                    }, err => this.showErrorMessage('Importing from Template failed . Please try again.')));
+                    }, err => this.showErrorMessage('Importing from template failed . Please try again.')));
         } else {
             this.validationMap.set('noFileSelected', 'Please add an excel file template to import.');
         }
@@ -440,14 +456,18 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
         return (this.result.awardProgressReport.reportClassCode === '2' ? 'Final_Report_#' : 'Progress_Report_#') + this.progressReportId;
     }
 
+    /**
+     * Validations before Submit are done here.
+     * Checking whether all mandatory fields are filled or not.
+     * validateViaServer() - this method is used to validate business rules.
+     * isValidationOnlyFlag - flag to check whether Validate or Submit button is clicked,
+     * for Validate button click this flag will be true.
+     */
     public validateProgressReport(validation = false): void {
-        if (this._commonData.isDataChange) {
-            return $('#unSavedChangesModal').modal('show');
-        }
         this.resetValidations();
         this.checkIfMandatoryFieldsFilled();
         this.isValidationOnlyFlag = validation;
-        this.validateViaServer();
+        this.errorList.length > 0 ?  $('#ValidateReportModal').modal('show') : this.validateViaServer();
     }
 
     private resetValidations(): void {
@@ -485,8 +505,13 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
                     res[0].forEach(validationMsg => (validationMsg.validationType === 'VW') ?
                         this.warningList.push(validationMsg) : this.errorList.push(validationMsg));
                 }
-                (this.isValidationOnlyFlag || this.errorList.length || this.warningList.length) ?
-                        $('#ValidateReportModal').modal('show') : $('#SubmitReportModal').modal('show');
+                if (this.isValidationOnlyFlag || this.errorList.length || this.warningList.length) {
+                    $('#ValidateReportModal').modal('show');
+                } else {
+                    this._commonData.isDataChange ? $('#progress-report-submit-without-save-modal').modal('show')
+                                                        : $('#SubmitReportModal').modal('show');
+
+                }
             }, err => {
                 this.showErrorMessage('Evaluating Progress Report failed. Please try again.');
                 this.isSaving = false;
@@ -542,7 +567,7 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
     }
 
     private getApplicableQuestionnaire(requestObject): any {
-        requestObject = JSON.parse(JSON.stringify(requestObject));
+        requestObject = deepCloneObject(requestObject);
         return this._progressReportService.getApplicableQuestionnaire(requestObject);
     }
 
@@ -578,14 +603,23 @@ export class ProgressReportComponent implements OnInit, OnDestroy {
         this.result.awardProgressReport.funderApprovalDate = getDateObjectFromTimeStamp(this.result.awardProgressReport.funderApprovalDate);
     }
 
+    reload() {
+        window.location.reload();
+    }
+
     public deleteProgressReport(): void {
         this.$subscriptions.push(this._progressReportService.deleteProgressReport(this.progressReportId)
         .subscribe((data: any) => {
             this._router.navigate(['fibi/dashboard/progressReportList']);
-            this.showSuccessMessage('Progress Report successfully deleted.');
+            this.showSuccessMessage('Progress Report deleted successfully.');
         }, err => {
-            this.showErrorMessage('Deleting Progress Report failed. Please try again.');
+            if (err && err.status === 405) {
+                $('#deleteProgressReportModal').modal('hide');
+                $('#invalidActionModal').modal('show');
+            } else {
+                this.showErrorMessage('Deleting Progress Report failed. Please try again.');
+            }
         }));
-      }
+    }
 
 }

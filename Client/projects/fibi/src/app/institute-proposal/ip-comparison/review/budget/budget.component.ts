@@ -95,7 +95,8 @@ export class BudgetComponent implements OnInit, OnDestroy {
 	private updateProposalHeader(data): void {
 		this.budgetData = data;
 		if (data.instituteProposalBudgetHeader) {
-			data.instituteProposalBudgetHeader.onOffCampusFlag = data.instituteProposalBudgetHeader.onOffCampusFlag === 'Y' ? 'ON' : 'OFF';
+			data.instituteProposalBudgetHeader.campusFlag = data.instituteProposalBudgetHeader.campusFlag === 'N' ? 'ON' 
+                                                            : (data.instituteProposalBudgetHeader.campusFlag === 'F' ? 'OFF' : 'BOTH');
 			data.instituteProposalBudgetHeader.isAutoCalc = data.instituteProposalBudgetHeader.isAutoCalc ? 'ON' : 'OFF';
 			this.setBudgetTemplate(data);
 			this.proposalBudgetHeader = data.instituteProposalBudgetHeader;

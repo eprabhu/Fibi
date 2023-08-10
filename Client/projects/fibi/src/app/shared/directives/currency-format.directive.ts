@@ -24,8 +24,8 @@ import { convertToValidAmount } from '../../common/utilities/custom-utilities';
 import { NgModel } from '@angular/forms';
 
 @Directive({
-    selector: '[appCurrencyFormat]',
-    providers: [NgModel],
+    selector: '[ngModel][appCurrencyFormat]',
+    providers: [],
 })
 export class CurrencyFormatDirective implements OnInit, OnChanges {
     private element: any;

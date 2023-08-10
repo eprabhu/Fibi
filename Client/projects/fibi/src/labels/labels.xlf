@@ -2384,16 +2384,20 @@
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="COMMON_APPROVE" datatype="html">
+      <trans-unit id="COMMON_APPROVE_FOR_PROPOSAL" datatype="html">
         <source>Approve</source>
         <target>Approve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">228</context>
+          <context context-type="linenumber">267</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="COMMON_APPROVE" datatype="html">
+        <source>Approve</source>
+        <target>Approve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">310</context>
+          <context context-type="linenumber">324</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/task-side-nav-bar/task-side-nav-bar.component.html</context>
@@ -3444,14 +3448,22 @@
       </trans-unit>
       <trans-unit id="REVIEW_TYPE" datatype="html">
         <source>Review Type</source>
-        <target>Type</target>
+        <target>Review Type</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-edit/special-review/special-review.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-edit/special-review/special-review.component.html</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">210</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-view/special-review-details-view/special-review-details-view.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/proposal/proposal-comparison/review/overview/special-review/special-review.component.html</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/special-review/special-review-edit/special-review-edit.component.html</context>
@@ -3460,6 +3472,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/special-review/special-review-edit/special-review-edit.component.html</context>
           <context context-type="linenumber">186</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/award/award-comparison/review\overview/specal-review/special-review.component.html</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/ip-comparison/review/overview/special-review/special-review.component.html</context>
@@ -3550,12 +3566,56 @@
         <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
+       <trans-unit id="REPORT_PREVIEW" datatype="html">
+        <source>Report Preview</source>
+        <target>Report Preview</target>
+         <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">79</context>
+        </context-group> 
+      </trans-unit>
+      <trans-unit id="REPORT_PREVIEW_HEADER" datatype="html">
+        <source>Report Preview</source>
+        <target>Report Preview</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">214</context>
+        </context-group> 
+		</trans-unit>
        <trans-unit id="AWARD_ERR_MESSAGE" datatype="html">
         <source>Please lodge issue at FIBI Support</source>
         <target>Please lodge issue at FIBI Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app-constants.ts</context>
           <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="MANPOWER_SETUP_REMINDER" datatype="html">
+        <source>Position ID will only be generated when a) Manpower Plan &amp; b) Confirm Project Details (HOD/DRSO approval) tasks are approved.</source>
+        <target>Position ID will only be generated when a) Manpower Plan &amp; b) Confirm Project Details (HOD/DRSO approval) tasks are approved.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/award/man-power/eom-category-detail/eom-category-detail.component.html</context>
+          <context context-type="linenumber">272</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="GRANT_CALL_LINK_UNLINK_WARNING" datatype="html">
+        <source> Please note that you can only add a Grant Call that is currently ‘Open’.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> You will not be able to add a Grant Call that is already ‘Closed’, including this current Grant Call if it has closed. </source>
+        <target> Please note that you can only add a Grant Call that is currently ‘Open’.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> You will not be able to add a Grant Call that is already ‘Closed’, including this current Grant Call if it has closed. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-edit/proposal-details/proposal-details.component.html</context>
+          <context context-type="linenumber">580</context>
         </context-group>
       </trans-unit>
     </body>

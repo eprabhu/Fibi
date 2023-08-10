@@ -32,6 +32,7 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
     @Input() uniqueId = 1;
 
     @Output() reportCreated: EventEmitter<number | null> = new EventEmitter<number | null>();
+    @Output() createdProgressReport: EventEmitter<{} | null> = new EventEmitter<{} | null>();
 
     isSaving = false;
     warningMessage = '';
@@ -41,10 +42,11 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
     prevReportEndDate: any;
     awardStartDate: any;
     $subscriptions: Subscription[] = [];
-
     datePlaceHolder = DEFAULT_DATE_FORMAT;
     setFocusToElement = setFocusToElement;
     awardLabel = AWARD_LABEL;
+    reportLabel: any;
+    lookUp: any;
 
 
     constructor(private _progressReportCreateService: ProgressReportCreateService, public _commonService: CommonService) {
@@ -52,10 +54,24 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
 
     ngOnInit() {
         this.setAwardEndPointObject();
+        this.getProgressReportLookUpData();
+    }
+
+    getProgressReportLookUpData() {
+        this.$subscriptions.push(this._progressReportCreateService.getProgressReportLookUpData()
+            .subscribe((result: any) => {
+                this.lookUp = result;
+            }));
     }
 
     ngOnChanges(changes: SimpleChanges) {
         this.convertTimestampsIfExistsAndOpenModal(changes);
+        if (this.createReportDetails && this.createReportDetails.reportClassCode) {
+            let reportType = this.lookUp.reportTypes.find((x) => x.reportCode == this.createReportDetails.reportCode);
+            reportType = reportType ? ` - ${reportType.report.description}` : '';
+            let reportClass = this.lookUp.reportClassList.find((x) => x.reportClassCode == this.createReportDetails.reportClassCode).description;
+            this.reportLabel = `${reportClass}${reportType}`;
+        }
     }
 
     ngOnDestroy() {
@@ -82,9 +98,10 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
         this.createReportDetails.reportEndDate = null;
         this.createReportDetails.dueDate = null;
         this.createReportDetails.frequencyCode = null;
-        if (!this.isAdhoc) {
-            this.createReportDetails.reportClassCode = null;
-        }
+        // if (!this.isAdhoc) {
+        //     
+        // }
+        this.createReportDetails.reportClassCode = null;
         this.createReportDetails.reportTrackingId = null;
         this.createReportDetails.sequenceNumber = null;
         this.isReportCreatable = true;
@@ -94,12 +111,20 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
     }
 
     setAwardDetails(event): void {
-        this.selectedAwardDetails = event || {};
-        this.createReportDetails.title = (event && event.awardId) ? event.title : null;
-        this.createReportDetails.awardId = (event && event.awardId) ? event.awardId : null;
-        this.createReportDetails.awardNumber = (event && event.awardNumber) ? event.awardNumber : null;
-        this.awardSearchHttpOptions.defaultValue = this.createReportDetails.awardNumber;
-        this.checkIfInProgressReportExist();
+        if (this.isAdhoc && !this.createReportDetails.reportClassCode) {
+            this.createModalFormMap.set('reportClass', '* Please provide report class.');
+            this.awardSearchHttpOptions.defaultValue = '';
+            this.awardSearchHttpOptions = JSON.parse(JSON.stringify(this.awardSearchHttpOptions));
+
+        } else {
+            this.selectedAwardDetails = event || {};
+            this.createReportDetails.title = (event && event.awardId) ? event.title : null;
+            this.createReportDetails.awardId = (event && event.awardId) ? event.awardId : null;
+            this.createReportDetails.awardNumber = (event && event.awardNumber) ? event.awardNumber : null;
+            this.awardSearchHttpOptions.defaultValue = this.createReportDetails.awardNumber;
+            this.awardSearchHttpOptions = JSON.parse(JSON.stringify(this.awardSearchHttpOptions));
+            this.checkIfInProgressReportExist();
+        }
     }
 
     checkStartDateOverlapping(): void {
@@ -135,16 +160,19 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
     private isFieldsValid(): boolean {
         this.createModalFormMap.clear();
         if (!this.createReportDetails.awardId) {
-            this.createModalFormMap.set('award', '* Please add an award');
+            this.createModalFormMap.set('award', '* Please add an award.');
+        }
+        if (this.isAdhoc && !this.createReportDetails.reportClassCode) {
+            this.createModalFormMap.set('reportClass', '* Please provide report class.');
         }
         if (!this.createReportDetails.reportStartDate) {
-            this.createModalFormMap.set('reportStartDate', '* Please provide start date');
+            this.createModalFormMap.set('reportStartDate', '* Please provide start date.');
         }
         if (!this.createReportDetails.reportEndDate) {
-            this.createModalFormMap.set('reportEndDate', '* Please provide end date');
+            this.createModalFormMap.set('reportEndDate', '* Please provide end date.');
         }
         if (!this.createReportDetails.dueDate) {
-            this.createModalFormMap.set('dueDate', '* Please provide due date');
+            this.createModalFormMap.set('dueDate', '* Please provide due date.');
         }
         if (this.createReportDetails.reportStartDate && this.createReportDetails.dueDate) {
             this.validateIfStartDateIsBeforeDueDate();
@@ -157,20 +185,20 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
 
     private validateIfStartDateIsBeforeEndDate(): void {
         if (compareDates(this.createReportDetails.reportStartDate, this.createReportDetails.reportEndDate) === 1) {
-            this.createModalFormMap.set('reportEndDate', '* End date should be after start date');
+            this.createModalFormMap.set('reportEndDate', '* End date should be after start date.');
         }
     }
 
     private validateIfStartDateIsBeforeDueDate(): void {
         if (compareDates(this.createReportDetails.reportStartDate, this.createReportDetails.dueDate) === 1) {
-            this.isAdhoc ? this.createModalFormMap.set('dueDate', '* Due date should be after start date') :
-                this.createModalFormMap.set('reportStartDate', '* Start date should be before due date');
+            this.isAdhoc ? this.createModalFormMap.set('dueDate', '* Due date should be after start date.') :
+                this.createModalFormMap.set('reportStartDate', '* Start date should be before due date.');
         }
     }
 
     private createProgressReportRequestObject(
         {
-            title, awardId, awardNumber, sequenceNumber, dueDate, reportClassCode,
+            uniqueId,title, awardId, awardNumber, sequenceNumber, dueDate, reportClassCode,
             reportTrackingId, reportStartDate, reportEndDate, frequencyCode
         }) {
         return {
@@ -184,6 +212,7 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
                 dueDate: parseDateWithoutTimestamp(dueDate),
                 reportClassCode,
                 awardReportTrackingId: reportTrackingId,
+                uniqueId
             },
             frequencyCode
         };
@@ -198,6 +227,7 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
                     document.getElementById('createModalClose').click();
                     const progressReportId = res.awardProgressReport.progressReportId;
                     this.reportCreated.emit(progressReportId);
+                    this.createdProgressReport.emit(res.awardProgressReport);
                     openInNewTab('progress-report/overview?', ['progressReportId'], [progressReportId]);
                 } else {
                     isAdhocCreation ? this.createModalFormMap.set('award', res.message) :
@@ -224,7 +254,7 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
                     this.isReportCreatable = !Boolean(res.inProgressPRExist);
                     if (!this.isReportCreatable && showModal) {
                         return this._commonService.showToast(HTTP_ERROR_STATUS,
-                                'A report is already in progress for this award. Hence unable to create');
+                            'A report is already in progress for this award. Hence unable to create');
                     }
                     this.isReportCreatable ?
                         this.createModalFormMap.delete('award') :
@@ -235,12 +265,12 @@ export class ProgressReportCreateModalComponent implements OnInit, OnDestroy, On
                     this.createReportDetails.reportStartDate = getDateObjectFromTimeStamp(defaultSelectedStartDate);
                     this.createReportDetails.reportEndDate = getDateObjectFromTimeStamp(res.reportEndDate);
                     this.warningMessage = '';
-                    if (showModal) {  this.showModal(); }
+                    if (showModal) { this.showModal(); }
                 }, err => {
-                    if (showModal) {  this.showModal(); }
+                    if (showModal) { this.showModal(); }
                 });
         } else {
-            this.clearCreateReportModalDetails();
+            this.selectedAwardDetails = {};
         }
     }
 

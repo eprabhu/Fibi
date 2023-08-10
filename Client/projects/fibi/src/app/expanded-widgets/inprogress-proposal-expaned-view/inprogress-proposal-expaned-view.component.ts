@@ -23,6 +23,7 @@ export class InprogressProposalExpanedViewComponent implements OnInit, OnDestroy
   direction: number = -1;
   isDesc: boolean;
   descentFlag = null;
+  sponsorCode: string;
 
   constructor(private _expandedWidgetsService: ExpandedWidgetsService,
     private _route: ActivatedRoute, public _commonService: CommonService,
@@ -36,8 +37,10 @@ export class InprogressProposalExpanedViewComponent implements OnInit, OnDestroy
   }
 
   loadDonutChartDataByType() {
+    const sponsorType = this._route.snapshot.queryParamMap.get('sponsorCode');
+    this.sponsorCode = sponsorType !== 'Other' ? `'${sponsorType}'` : sessionStorage.getItem('proposalBySponsorOther');
     const REQUEST_DATA = {
-      property1: this._route.snapshot.queryParamMap.get('sponsorCode'),
+      property1: this.sponsorCode,
       tabName: 'INPROGRESS_PROPOSALS_BY_SPONSOR',
       unitNumber: this.departmentUnitNumber,
       descentFlag: this.descentFlag
@@ -53,7 +56,7 @@ export class InprogressProposalExpanedViewComponent implements OnInit, OnDestroy
       researchSummaryIndex: 'INPROGRESS_PROPOSALS_BY_SPONSOR',
       documentHeading: this.heading,
       exportType: docType === 'excel' ? 'xlsx' : docType === 'pdf' ? 'pdf' : '',
-      property1: this._route.snapshot.queryParamMap.get('sponsorCode'),
+      property1: this.sponsorCode,
       unitNumber: this.departmentUnitNumber,
       descentFlag: this.descentFlag
     };

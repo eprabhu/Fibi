@@ -266,6 +266,7 @@
                           (pageChange)="loadSponsor();_commonService.pageScroll('pageScrollToTop')">
                       </ngb-pagination> -->
                       <app-pagination [totalCount]="result.totalSponsors"
+                      [pageCount]="4"
                       (pageChangeEvent)="loadSponsor($event);_commonService.pageScroll('pageScrollToTop')">
                   </app-pagination>
                   </nav>

@@ -180,6 +180,9 @@ export class InstituteProposalEditComponent implements OnInit, OnChanges, OnDest
         this.elasticSearchProposalOptions.defaultValue = '';
         this.clearField = new String('true');
         this.setupAwardStoreData(this.savedProposalsList);
+      },
+      err => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Award Funding proposal failed. Please try again.');
       }));
   }
 

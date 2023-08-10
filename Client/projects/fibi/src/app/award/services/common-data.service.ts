@@ -9,8 +9,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { WebSocketService } from '../../common/services/web-socket.service';
-
-import { CommonService } from '../../common/services/common.service';
+import { getParams } from '../../common/services/end-point.config';
 
 @Injectable()
 export class CommonDataService {
@@ -134,11 +133,18 @@ export class CommonDataService {
    * @param  {} formatString
    * @param  {} path
    *returns the endpoint search object with respect to the the inputs.
-   */
-  setSearchOptions(contextField, formatString, path) {
+  * @param params will have fetchLimit as one of the values 
+  * to specify limit of data to fetched,
+  * it should be given inside params as {'fetchLimit' : requiredLimit}
+  * requiredLimit can be either null or any valid number.
+  * if no limit is specified default fetch limit 50 will be used.
+  * if limit is null then full list will return, this may cause performance issue.
+  */
+  setSearchOptions(contextField, formatString, path, params = {}) {
     this.endpointSearchOptions.contextField = contextField;
     this.endpointSearchOptions.formatString = formatString;
     this.endpointSearchOptions.path = path;
+    this.endpointSearchOptions.params = getParams(params); 
     return JSON.parse(JSON.stringify(this.endpointSearchOptions));
   }
 

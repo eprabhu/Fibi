@@ -16,7 +16,7 @@ export class CommentsService {
         return this._http.post(this._commonService.baseUrl + '/saveOrUpdateAwardReviewComment',
          {'awardReviewComment': params,
           'awardId' : params.awardId,
-          'personId': this._commonService.getCurrentUserDetail('`personID`')});
+          'personId': this._commonService.getCurrentUserDetail('personID')});
     }
 
     getCommentslist(params) {

@@ -152,7 +152,7 @@
 .button-list .save-button {
 	border-radius: 0px !important;
 	border-bottom-left-radius: 3px !important;
-	border-bottom-right-radius: 3px !important;
+	border-bottom-right-radius: 3px !important;	
 }
 
 .button-list .btn {
@@ -1041,7 +1041,7 @@ button.qst-closeResultCard.qst-close-help {
 .f-18 {
 	font-size: 18px !important;
 }
-.fw-500 {font-weight: 500;}
+.fw-500 {font-weight: 600;}
 .fw-700{font-weight: 700;}
 
 .qst-action-icon i:nth-child(1){
@@ -1074,7 +1074,7 @@ tbody > .pull-up > td {
 .questionnaire-main-header {
     color: #0b0b0b;
     font-size: 17px;
-    font-weight: 600;
+    font-weight: 600;  
 }
 .switch-field-radio {
     display: flex;
@@ -1117,7 +1117,7 @@ tbody > .pull-up > td {
   .switch-field-radio label:last-of-type {
     border-radius: 0 4px 4px 0;
   }
-  .switch-field-radio input + label > i {
+  .switch-field-radio input + label > i {    
     visibility: hidden;
     opacity: 0;
     transition: visibility 0s linear 0s, opacity 300ms;
@@ -1221,7 +1221,7 @@ input:checked+.slider:before {
 }
 .mySkinDialog .modal-content {
     background-color: #fff;
-	/* border-left: 6px solid #aaa; */
+	border-left: 6px solid #aaa;
 }
 .actionButtonGroup {
 	list-style: none;

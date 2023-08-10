@@ -51,6 +51,7 @@ import { CompleterOptions } from '../service-request/service-request.interface';
 import { getCompleterOptionsForCategory } from '../common/services/completer.config';
 import { InstituteProposalSubmittedByLeadUnitComponent } from './institute-proposal-submitted-by-Lead-unit/institute-proposal-submitted-by-Lead-unit.component';
 import { InstituteProposalBySponsorComponent } from './institute-proposal-by-sponsor/institute-proposal-by-sponsor.component';
+import { PendingIpsBySponsorTypeComponent } from './pending-ips-by-sponsor-type/pending-ips-by-sponsor-type.component';
 
 @Component({
 	selector: 'app-research-summary-widgets',
@@ -104,7 +105,8 @@ export class ResearchSummaryWidgetsComponent implements OnInit, OnDestroy {
 		32: ResearchSummaryCountComponent,
 		33: ResearchSummaryDailyCheckComponent,
 		34: InstituteProposalSubmittedByLeadUnitComponent,
-		35: InstituteProposalBySponsorComponent
+		35: InstituteProposalBySponsorComponent,
+		36: PendingIpsBySponsorTypeComponent
 
 	};
 

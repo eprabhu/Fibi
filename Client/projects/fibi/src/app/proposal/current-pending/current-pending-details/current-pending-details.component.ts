@@ -96,8 +96,16 @@ export class CurrentPendingDetailsComponent implements OnInit, OnDestroy {
             'moduleItemKey': this._activatedRoute.snapshot.queryParamMap.get('proposalId'),
             'createUser': this._commonService.getCurrentUserDetail('userName'),
             'updateUser': this._commonService.getCurrentUserDetail('userName'),
-            'selectedPersons': list
+            'selectedPersonIds': this.getSelectedPersonsIdList(list)
         };
+    }
+
+    private getSelectedPersonsIdList(persons): string[] {
+        const personIdList = [];
+        persons.forEach(person => {
+            personIdList.push(person.personId);
+        });
+        return personIdList;
     }
 
     fetchGeneratedList(list) {

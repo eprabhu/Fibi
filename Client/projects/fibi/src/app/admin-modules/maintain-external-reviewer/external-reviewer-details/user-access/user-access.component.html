@@ -1,9 +1,6 @@
   <div class="person-details-outer mt-3">
-    <div class="card card-inner mb-3">
+    <div class="card mb-3">
       <div class="card-content">
-        <div class="card-header">
-          <h4 class="card-title p-2">User Access</h4>
-        </div>
         <div class="card-body" *ngIf="_extReviewerMaintenanceService.mode == 'edit'">
           <div class="col-lg-3 col-md-4 col-sm-6 col-12 pl-2">
             <div *ngFor='let item of lookUpData?.reviewerRights;let i = index' class=" d-flex align-items-center">

@@ -7,7 +7,7 @@ import {Subscription} from 'rxjs';
 import {CommonDataService} from '../services/common-data.service';
 import {subscriptionHandler} from '../../common/utilities/subscription-handler';
 import {CommonService} from '../../common/services/common.service';
-import {setFocusToElement} from '../../common/utilities/custom-utilities';
+import {setFocusToElement, concatUnitNumberAndUnitName, deepCloneObject} from '../../common/utilities/custom-utilities';
 import {
     compareDates,
     compareDatesWithoutTimeZone,
@@ -17,6 +17,7 @@ import {
 import {ProgressReportMilestonesService} from './progress-report-milestones.service';
 import {ActivatedRoute} from '@angular/router';
 import {DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../app-constants';
+import { AutoSaveService } from '../../common/services/auto-save.service';
 
 declare var $: any;
 
@@ -33,11 +34,8 @@ export class ProgressReportMilestonesComponent implements OnInit, OnDestroy {
     actualStartMonth = null;
     actualEndMonth = null;
     isEditMode = false;
-    isCommentView: boolean[] = [];
-    isLineItemEdit: boolean[] = [];
-    currentEditIndex: number = null;
     mandatoryList = new Map();
-    tempMilestone: any = {};
+    editedMilestone: any = {};
     awardDates: any = {};
     milestoneObject: any = {
         awardProgressReportMilestones: [],
@@ -48,6 +46,10 @@ export class ProgressReportMilestonesComponent implements OnInit, OnDestroy {
     direction: number = -1;
     isDesc: any;
     $subscriptions: Subscription[] = [];
+    progressReportData: any = {};
+    concatUnitNumberAndUnitName = concatUnitNumberAndUnitName;
+    editIndex: number;
+    openedMilestoneRemark: string;
 
     constructor(private _route: ActivatedRoute,
                 public _commonData: CommonDataService,
@@ -67,6 +69,7 @@ export class ProgressReportMilestonesComponent implements OnInit, OnDestroy {
 
     getProgressReportData() {
         this.$subscriptions.push(this._commonData.getProgressReportData().subscribe((reportData: any) => {
+            this.progressReportData = reportData.awardProgressReport;
             if (reportData && reportData.awardProgressReport && reportData.awardProgressReport.award) {
                 this.awardDates.awardStartDate = reportData.awardProgressReport.award.beginDate;
                 this.awardDates.awardEndDate = reportData.awardProgressReport.award.finalExpirationDate;
@@ -76,7 +79,6 @@ export class ProgressReportMilestonesComponent implements OnInit, OnDestroy {
 
     getEditMode() {
         this.$subscriptions.push(this._commonData.getEditMode().subscribe((editMode: boolean) => {
-            this.cancelEditIfAnyExists();
             this.isEditMode = editMode;
             this.loadMilestoneData(this.progressReportId);
         }));
@@ -89,66 +91,26 @@ export class ProgressReportMilestonesComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Toggle Remarks/Comments sections to hide and show.Only one remark is allowed to open at a time.
-     * @param editIndex - selected index number
+     * To show Remarks/Comments sections in a modal
+     * @param milestone - selected remark's milestone
      */
-    commentAction(editIndex: number) {
-        if (this._commonData.isDataChange) {
-            $('#unSavedChangesModal').modal('show');
-        } else {
-            this.cancelEditIfAnyExists();
-            if (this.isCommentView[editIndex]) {
-                this.isCommentView[editIndex] = false;
-            } else {
-                this.showRemarksForIndex(editIndex);
-            }
-        }
-    }
-
-    showRemarksForIndex(index) {
-        this.isCommentView = [];
-        this.isCommentView[index] = true;
-    }
-
-    cancelEditIfAnyExists() {
-        if (typeof(this.currentEditIndex) === 'number') {
-            this.cancelEditMode(this.currentEditIndex);
-        }
-    }
-
-    cancelEditMode(index, replaceOldData = true) {
-        this.isLineItemEdit[index] = false;
-        this._commonData.isDataChange = false;
-        this.mandatoryList.clear();
-        if (replaceOldData) {
-            this.milestoneObject.awardProgressReportMilestones[index] = this.tempMilestone;
-        }
-        this.tempMilestone = {};
-        this.currentEditIndex = null;
+    viewMilestoneRemarks(milestone: any): void {
+        $('#viewRemarksModal').modal('show');
+        this.openedMilestoneRemark = milestone.remark;
     }
 
     /**
-     * Toggle edit mode for each line element.
-     * Makes a temporary copy for cancel operation.
      * Clears all mandatory errors if any from previous edit.
      * populate editable fields with date and milestone status data.
      * @param milestone - select row data object
-     * @param editIndex - selected index number
      */
     editMilestone(milestone: any, editIndex: number) {
-        if (this._commonData.isDataChange) {
-            $('#unSavedChangesModal').modal('show');
-        } else {
-            this.cancelEditIfAnyExists();
-            this.currentEditIndex = editIndex;
-            this.showRemarksForIndex(editIndex);
-            this.isLineItemEdit = [];
-            this.isLineItemEdit[editIndex] = true;
-            this.tempMilestone = JSON.parse(JSON.stringify(milestone));
+            $('#progress-report-milestone-edit-modal').modal('show');
+            this.editedMilestone = deepCloneObject(milestone);
+            this.editIndex = editIndex;
             this.mandatoryList.clear();
             this.setJavascriptDates(milestone.actualStartMonth, milestone.actualEndMonth);
             this.setMilestoneStatusCode(milestone.milestoneStatusCode);
-        }
     }
 
     /**
@@ -171,21 +133,22 @@ export class ProgressReportMilestonesComponent implements OnInit, OnDestroy {
 
     checkMandatoryFields() {
         if (this.milestoneStatusCode === null || this.milestoneStatusCode === 'null') {
-            this.mandatoryList.set('status', 'Please select a status');
+            this.mandatoryList.set('status', '* Please select a status');
         } else {
             this.mandatoryList.delete('status');
         }
     }
 
-    updateMilestone(milestone: any) {
+    updateMilestone() {
         this.checkMandatoryFields();
         if (this.mandatoryList.size === 0) {
-            const requestObject = this.createRequestObject(milestone);
+            const requestObject = this.createRequestObject(this.editedMilestone);
             this.$subscriptions.push(this._milestoneService.saveOrUpdateProgressReportMilestone(requestObject).subscribe((res: any) => {
-                this.updateMilestoneEntry(res, milestone);
-                this.cancelEditMode(this.currentEditIndex, false);
+                this.updateMilestoneEntry(res, this.editIndex);
+                $('#progress-report-milestone-edit-modal').modal('hide');
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Milestone Saved Successfully');
-            }, err => this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to save milestone data! Please try again.')));
+            },
+            err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to save milestone data! Please try again.'); }));
         }
     }
 
@@ -207,11 +170,13 @@ export class ProgressReportMilestonesComponent implements OnInit, OnDestroy {
      * @param awardProgressReportMilestone
      * @param milestone
      */
-    updateMilestoneEntry({awardProgressReportMilestone}: any, milestone: any) {
-        milestone.actualEndMonth = awardProgressReportMilestone.actualEndMonth;
-        milestone.actualStartMonth = awardProgressReportMilestone.actualStartMonth;
-        milestone.milestoneStatusCode = awardProgressReportMilestone.milestoneStatusCode;
-        milestone.milestoneStatus = awardProgressReportMilestone.milestoneStatus;
+    updateMilestoneEntry({awardProgressReportMilestone}: any, editIndex) {
+        this.milestoneObject.awardProgressReportMilestones[editIndex].actualEndMonth = awardProgressReportMilestone.actualEndMonth;
+        this.milestoneObject.awardProgressReportMilestones[editIndex].actualStartMonth = awardProgressReportMilestone.actualStartMonth;
+        this.milestoneObject.awardProgressReportMilestones[editIndex].milestoneStatusCode =
+            awardProgressReportMilestone.milestoneStatusCode;
+        this.milestoneObject.awardProgressReportMilestones[editIndex].milestoneStatus = awardProgressReportMilestone.milestoneStatus;
+        this.milestoneObject.awardProgressReportMilestones[editIndex].remark = awardProgressReportMilestone.remark;
     }
 
     /**
@@ -231,28 +196,29 @@ export class ProgressReportMilestonesComponent implements OnInit, OnDestroy {
         this.mandatoryList.clear();
         if (this.actualStartMonth && this.actualEndMonth) {
             if (compareDates(this.actualStartMonth, this.actualEndMonth) === 1) {
-                this.mandatoryList.set('actualEndMonth', 'Choose an actual end date after the actual start date');
+                this.mandatoryList.set('actualEndMonth', '* Please select an actual end date after the actual start date');
             }
         }
         if (this.actualStartMonth &&
             compareDatesWithoutTimeZone(getDateObjectFromTimeStamp(this.awardDates.awardStartDate), this.actualStartMonth) === 1) {
-            this.mandatoryList.set('actualStartMonth', 'Choose an actual start date on or after the award start date');
+            this.mandatoryList.set('actualStartMonth', '* Please select an actual start date on or after the award start date');
         }
         if (this.actualEndMonth &&
             compareDatesWithoutTimeZone(getDateObjectFromTimeStamp(this.awardDates.awardEndDate), this.actualEndMonth) === -1) {
-            this.mandatoryList.set('actualEndMonth', 'Choose an actual end date on or before the award end date');
+            this.mandatoryList.set('actualEndMonth', '* Please select an actual end date on or before the award end date');
         }
     }
 
-    saveModifiedChanges() {
-        const milestone = this.milestoneObject.awardProgressReportMilestones[this.currentEditIndex];
-        this.updateMilestone(milestone);
-    }
-
     sortBy(property) {
-        this.cancelEditIfAnyExists();
         this.column = property;
         this.direction = this.isDesc ? 1 : -1;
+    }
+
+    cancelMilestoneEdit(): void {
+        this.editedMilestone = {};
+        this.editIndex = null;
+        this.mandatoryList.clear();
+        this.openedMilestoneRemark = null;
     }
 
 }

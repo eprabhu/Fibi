@@ -73,7 +73,7 @@
                         <label class="d-sm-block">
                             <ng-container i18n="@@COMMON_SPONSOR">Sponsor</ng-container>
                         </label>
-                        <span>{{generalDetails?.sponsorName}}</span>
+                        <span [class.noDataExists]="!generalDetails?.sponsorName">{{generalDetails?.sponsorName ? generalDetails?.sponsorName : 'No Sponsor Specified'}}</span>
                     </div>
                     <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12">
                         <label class="d-sm-block">Proposed Start Date</label>

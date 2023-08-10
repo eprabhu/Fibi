@@ -108,7 +108,7 @@ export class ProposalBySponsorPieChartComponent extends GoogleChartService imple
                 {
                   queryParams: {
                     sponsorCode: this.sponsorList[index][0],
-                    proposalHeading: 'Proposals by ' + sponsorType,
+                    proposalHeading: 'Proposals by Sponsor Types: ' + sponsorType,
                     UN: this.unitNumber,
                     DF: this.descentFlag
                   }

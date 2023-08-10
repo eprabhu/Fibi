@@ -163,9 +163,9 @@ export class PendingFeedsComponent implements OnInit {
           this.triggerFailedCasePopUp(data);
           this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully updated.');
         } else {
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating feed status failed. Please try again.');
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Feed Status failed. Please try again.');
         }
-      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating feed status failed. Please try again.'); }
+      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Feed Status failed. Please try again.'); }
       ));
   }
 

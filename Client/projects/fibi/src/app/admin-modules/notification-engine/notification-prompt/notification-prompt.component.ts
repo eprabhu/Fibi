@@ -204,7 +204,7 @@ export class NotificationPromptComponent implements OnInit, OnDestroy {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, data);
       },
         err => {
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'An error encountered');
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'An error encountered.');
         }));
     this._router.navigate(['/fibi/dashboard/proposalList']);
   }

@@ -193,7 +193,7 @@ export class SpecialReviewComponent implements OnInit, OnDestroy {
                 this.specialReview.isProtocolIntegrated = false;
                 this.isShowReviewResultCard = false;
                 this._commonService.showToast(HTTP_ERROR_STATUS, (this.editIndex === -1) ?
-                    ('Adding ${ETHICS_SAFETY_LABEL} failed. Please try again.') : ('Updating ${ETHICS_SAFETY_LABEL} failed. Please try again.'));
+                    (`Adding ${ETHICS_SAFETY_LABEL} failed. Please try again.`) : (`Updating ${ETHICS_SAFETY_LABEL} failed. Please try again.`));
                 $('#add-special-review-modal').modal('hide');
             }));
     }

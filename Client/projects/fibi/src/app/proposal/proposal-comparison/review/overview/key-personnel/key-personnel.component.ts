@@ -11,6 +11,7 @@ import {ProposalService} from '../../../../services/proposal.service';
 import { fileDownloader, setHelpTextForSubItems } from '../../../../../common/utilities/custom-utilities';
 import { CommonService } from '../../../../../common/services/common.service';
 import {concatUnitNumberAndUnitName} from '../../../../../common/utilities/custom-utilities';
+import { DataStoreService } from '../../../../services/data-store.service';
 declare var $: any;
 
 /**
@@ -62,13 +63,15 @@ sortListBy: any;
 direction = 1;
 uploadedFiles: any;
 attachmentPersonFullname: any;
+nonEmployeeCertification: Boolean = true;
 concatUnitNumberAndUnitName = concatUnitNumberAndUnitName;
 
 
   constructor(private _overviewService: OverviewService,
               private _toolKitEvents: ToolkitEventInteractionService,
               private _proposalService: ProposalService,
-              private _commonService: CommonService) {
+              private _commonService: CommonService,
+              private _dataStore: DataStoreService) {
   }
 
 
@@ -177,6 +180,7 @@ concatUnitNumberAndUnitName = concatUnitNumberAndUnitName;
         && this._proposalService.proposalSectionConfig['DP315'].isActive;
     this.canShowTraining = isViewMode && this._proposalService.proposalSectionConfig['347']
         && this._proposalService.proposalSectionConfig['347'].isActive;
+    this.nonEmployeeCertification = this._dataStore.getData(['nonEmployeeCertification']).nonEmployeeCertification;
   }
 
   personAttachment(dataObject) {

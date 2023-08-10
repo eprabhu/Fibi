@@ -152,9 +152,6 @@ export class ExternalReviewComponent implements OnInit, OnDestroy {
         if (!this.addExternalReviewObject.extReviewServiceTypeCode || this.addExternalReviewObject.extReviewServiceTypeCode === 'null') {
             this.mandatoryList.set('type', '* Please choose a review type.');
         }
-        if (!this.addExternalReviewObject.deadlineDate) {
-            this.mandatoryList.set('date', '* Please add a review deadline date.');
-        }
         if (!this.addExternalReviewObject.description) {
             this.mandatoryList.set('description', '* Please add description.');
         }

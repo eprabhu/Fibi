@@ -8,7 +8,7 @@ import { WebSocketService } from '../../common/services/web-socket.service';
 @Injectable()
 export class BudgetDataService {
 
-  constructor(private _budgetService: BudgetService,public webSocket:WebSocketService) { }
+  constructor(private _budgetService: BudgetService, public webSocket: WebSocketService) { }
 
   public awardBudgetData = new BehaviorSubject<any>({});
   public awardBudgetPersonData = new BehaviorSubject<any>([]);

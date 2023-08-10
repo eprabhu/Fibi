@@ -40,11 +40,10 @@
                         </div>
                     </div>
                     <div class="form-group col-12 px-2">
-                        <label for="prop-sub-date"><span class="mandatory">*</span>Review Deadline Date</label><span
+                        <label for="prop-sub-date">Review Deadline Date</label><span
                             class="dateField">
                             <input matInput [matDatepicker]="subDt" id="prop-sub-date" style="width: 100% !important" autocomplete="off"
                                 class="d-inline-block form-control" (click)="subDt.open()"
-                                [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''"
                                 [(ngModel)]="addExternalReviewObject.deadlineDate"
                                 (ngModelChange)="deadlineDateValidation()"
                                 placeholder="{{datePlaceHolder}}"/>
@@ -53,9 +52,6 @@
                             <mat-datepicker #subDt (opened)="setFocusToElement('prop-sub-date')">
                             </mat-datepicker>
                         </span>
-                        <div *ngIf="mandatoryList?.has('date')" class="invalid-feedback d-block">
-                            {{mandatoryList?.get('date')}}
-                        </div>
                         <div *ngIf="deadLineDateValidation" class="invalid-feedback d-block text-danger">
                             {{deadLineDateValidation}}
                         </div>

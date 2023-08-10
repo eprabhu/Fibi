@@ -17,7 +17,7 @@
     </h4>
   </div>
   <div class="card-content" [ngClass]="{'h-90 d-flex align-items-center': !summaryData.length}">
-    <div class="card-body">
+    <div class="card-body pt-1">
       <div *ngIf="helpInfo && summaryData.length">
         <div class="success-banner px-3 py-1 mb-2 mx-0">
           <i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
@@ -27,6 +27,10 @@
             <span *ngIf="!fromDate && toDate">before</span>
             <span>{{startDate | dateFormatterWithTimeZone}}
               <span *ngIf="fromDate && toDate">-</span> {{endDate | dateFormatterWithTimeZone}}</span></em>
+          <button type="button" id="modal-close" class="close close-button " data-dismiss="modal" (click)="helpInfo = false"
+            aria-label="Close">
+            <span class="d-block" aria-hidden="true">&times;</span>
+          </button>
         </div>
       </div>
 
@@ -43,22 +47,28 @@
           <span class="col dateField p-0">
             <input matInput [matDatepicker]="dueFromDt" [(ngModel)]="fromDate" id="start-date"
               placeholder="From ({{datePlaceHolder}})" class="form-control d-inline-block"
-              (click)="dueFromDt.open()" (ngModelChange)="getResearchSummaryTable()"
+              (click)="dueFromDt.open()" (ngModelChange)="checkForValidFormat($event, 'fromDate')"
               (keypress)="_commonService._keyPress($event, 'date')">
             <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor" title="open calendar"
               (click)="dueFromDt.open()"></span>
             <mat-datepicker #dueFromDt (opened)="setFocusToElement('start-date')">
             </mat-datepicker>
+		 <span class="invalid-feedback block-display" *ngIf="fromDateValidationMap">
+              <span>Entered date format is invalid.<br>Please use {{DEFAULT_DATE_FORMAT}} format.</span>
+            </span>
           </span>
           <label class="d-block m-2"> - </label>
           <span class="col dateField p-0">
             <input matInput [matDatepicker]="dueToDt" id="due-date" [(ngModel)]="toDate" placeholder="To ({{datePlaceHolder}})"
-              (ngModelChange)="getResearchSummaryTable()" class="form-control d-inline-block"
+              (ngModelChange)="checkForValidFormat($event, 'toDate')" class="form-control d-inline-block"
               (click)="dueToDt.open()" (keypress)="_commonService._keyPress($event, 'date')">
             <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor" title="open calendar"
               (click)="dueToDt.open()"></span>
             <mat-datepicker #dueToDt (opened)="setFocusToElement('due-date')">
             </mat-datepicker>
+              <span class="invalid-feedback block-display" *ngIf="toDateValidationMap">
+              <span>Entered date format is invalid.<br>Please use {{DEFAULT_DATE_FORMAT}} format.</span>
+            </span>
           </span>
           <span class="invalid-feedback block-display" *ngIf="dateValidationMap.get('endDate')">
             {{dateValidationMap.get('endDate')}}
@@ -73,18 +83,15 @@
           <thead>
             <th scope="col">Summary</th>
             <th scope="col" class="text-right">Count</th>
-            <th scope="col" class="text-right">Total Amount</th>
           </thead>
           <tbody>
-            <tr *ngFor="let summary of summaryData">
+            <tr *ngFor="let summary of summaryData last as islast">
               <td *ngIf="summary[1] != 0" tabindex="0">
-                <span>{{summary[0]}}</span>
+                <span [class.font-weight-bold]="islast">{{summary[0]}}</span>
               </td>
-              <td *ngIf="summary[1] == 0">{{summary[0]}}</td>
-              <td class="text-right" [ngClass]="summary[1] != 0 ? 'clickable' : ''"
+              <td *ngIf="summary[1] == 0" [class.font-weight-bold]="islast">{{summary[0]}}</td>
+              <td class="text-right" [class.font-weight-bold]="islast" [ngClass]="summary[1] != 0 ? 'clickable' : ''"
                 (click)="getDetailedResearchSummary(summary[0], summary[1])">{{summary[1]}}</td>
-              <td class="text-right" *ngIf="summary[2] != null">{{summary[2] | customCurrency}}</td>
-              <td class="text-right" *ngIf="summary[2] == null">{{_commonService.currencyFormat}} 0.00</td>
             </tr>
           </tbody>
         </table>

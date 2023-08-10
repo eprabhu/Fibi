@@ -16,7 +16,7 @@ export class LogoutComponent implements OnInit {
 
   ngOnInit() {
     if (!this._commonService.enableSSO) {
-      localStorage.clear();
+      ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
       this._commonService.currentUserDetails = {};
     }
     this._commonService.rightsArray = [];

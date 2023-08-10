@@ -30,6 +30,9 @@ export class ExternalReviewerAttachmentComponent implements OnInit, OnDestroy {
     externalReviewerDetails: any = {};
     isMaintainReviewer: any = {};
     isSaving = false;
+    isDesc: any;
+    direction = 1;
+    sortListBy = 'updateTimeStamp';
 
     constructor(public _extReviewerMaintenanceService: ExtReviewerMaintenanceService, private _commonService: CommonService) { }
 
@@ -98,12 +101,12 @@ export class ExternalReviewerAttachmentComponent implements OnInit, OnDestroy {
                             this._extReviewerMaintenanceService.setExternalReviewerDetails(this.externalReviewerDetails);
                             $('#externalReviewerAttachment').modal('hide');
                             this.clearAttachmentDetails();
-                            const toastMsg = 'Attachment added successfully';
+                            const toastMsg = 'Attachment added successfully.';
                             this._commonService.showToast(HTTP_SUCCESS_STATUS, toastMsg);
                             this.isSaving = false;
                         },
                             error => {
-                                const toastMsg = 'Failed to add attachment';
+                                const toastMsg = 'Failed to add Attachment.';
                                 this._commonService.showToast(HTTP_ERROR_STATUS, toastMsg);
                                 this.clearAttachmentDetails();
                                 this.isSaving = false;
@@ -152,7 +155,7 @@ export class ExternalReviewerAttachmentComponent implements OnInit, OnDestroy {
                     this.externalReviewerDetails.extReviewerAttachments.splice(this.deleteIndexId, 1);
                     this._extReviewerMaintenanceService.setExternalReviewerDetails(this.externalReviewerDetails);
                     $('#deleteAttachment').modal('hide');
-                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment deleted successfully');
+                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment deleted successfully.');
                     this.isSaving = false;
                 }));
         }
@@ -175,12 +178,12 @@ export class ExternalReviewerAttachmentComponent implements OnInit, OnDestroy {
                 this.externalReviewerDetails.extReviewerAttachments[this.editAttachmentIndex].description = data.description;
                 this._extReviewerMaintenanceService.setExternalReviewerDetails(this.externalReviewerDetails);
                 $('#editAttachmentModal').modal('hide');
-                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment successfully updated.');
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment updated successfully.');
                 this.clearEditAttachmentDetails();
                 this.isSaving = false;
             },
                 err => {
-                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating attachment for external reviewer failed. Please try again.');
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Attachment for External Reviewer failed. Please try again.');
                     this.isSaving = false;
                 }
             ));
@@ -199,6 +202,12 @@ export class ExternalReviewerAttachmentComponent implements OnInit, OnDestroy {
                     fileDownloader(data, attachment.fileName);
                 })
         );
+    }
+
+    sortResult(type) {
+        this.isDesc = !this.isDesc;
+        this.sortListBy = type;
+        this.direction = this.isDesc ? 1 : -1;
     }
 
     ngOnDestroy() {

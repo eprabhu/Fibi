@@ -279,55 +279,68 @@
                         <div class="col-lg-4 col-sm-3 col-12">
                             <label for="prop-special-revw-appldt"> Application Date</label>
                             <span class="dateField">
-                                <input matInput [matDatepicker]="appliDt" id="prop-special-revw-appldt"
+                                <input matInput [matDatepicker]="appliDt" id="prop-special-revw-appldt" (click)="clearDateOnValidation('prop-special-revw-applicationDate')"
                                     placeholder="{{datePlaceHolder}}" [(ngModel)]="specialReviewObject.applicationDate"
-                                    (ngModelChange)="specialReviewDatevalidation(); specialReviewApprovalDateValidation();"
+                                    (ngModelChange)="specialReviewDatevalidation(); specialReviewApprovalDateValidation(); checkForValidFormat($event, 'appliDt');"
                                     [disabled]="specialReviewObject.isProtocolIntegrated"
                                     class="form-control d-inline-block"
                                     (keypress)="_commonService._keyPress($event, 'date')" (click)="appliDt.open()" />
                                 <span class="fa fa-calendar fa-large hand-cursor insidePicker" title="open calendar"
-                                    (click)="appliDt.open()"></span>
-                                <mat-datepicker #appliDt (opened)="setFocusToElement('prop-special-revw-appldt')">
-                                </mat-datepicker>
+                                    (click)="appliDt.open();clearDateOnValidation('prop-special-revw-applicationDate')">
+                                </span>
+                                <i title="open calendar" id="prop-special-revw-applicationDate" (click)="appliDt.open()"></i>
+                                <mat-datepicker #appliDt (opened)="setFocusToElement('prop-special-revw-appldt')"></mat-datepicker>
                             </span>
+                            <div class="invalid-feedback d-block font-weight-normal" *ngIf="dateFormatValidation.applicationDateValidation">
+                                <span>*Entered date format is invalid.<br>Please use {{datePlaceHolder}} format.</span>
+                            </div>
                         </div>
                         <div class="col-lg-4 col-sm-3 col-12">
                             <label for="prop-special-revw-appovaldt">Approval Date</label>
                             <span class="dateField">
-                                <input matInput [matDatepicker]="approvDt" id="prop-special-revw-appovaldt"
+                                <input matInput [matDatepicker]="approvDt" id="prop-special-revw-appovaldt" (click)="clearDateOnValidation('prop-special-revw-appovalDate')"
                                     placeholder="{{datePlaceHolder}}" [(ngModel)]="specialReviewObject.approvalDate"
-                                    (ngModelChange)="specialReviewApprovalDateValidation()"
+                                    (ngModelChange)="specialReviewApprovalDateValidation();checkForValidFormat($event, 'approvDt');"
                                     [disabled]="specialReviewObject.isProtocolIntegrated"
                                     class="form-control d-inline-block"
                                     (keypress)="_commonService._keyPress($event, 'date')"
                                     [ngClass]="specialReviewdateWarningMsgApproval != null ? 'is-invalid d-block' : ''"
                                     (click)="approvDt.open()" />
-                                <i class="fa fa-calendar fa-large hand-cursor insidePicker" (click)="approvDt.open()"
-                                    aria-hidden="true"></i>
-                                <mat-datepicker #approvDt (opened)="setFocusToElement('prop-special-revw-appovaldt')">
-                                </mat-datepicker>
+                                <span class="fa fa-calendar fa-large hand-cursor insidePicker" title="open calendar"
+                                    (click)="approvDt.open();clearDateOnValidation('prop-special-revw-appovalDate')">
+                                </span>
+                                <i title="open calendar" id="prop-special-revw-appovalDate" (click)="approvDt.open()" aria-hidden="true"></i>
+                                <mat-datepicker #approvDt (opened)="setFocusToElement('prop-special-revw-appovaldt')"></mat-datepicker>
                             </span>
-                            <div class="invalid-feedback d-block font-weight-normal"
-                                *ngIf="specialReviewdateWarningMsgApproval != null">
-                                {{specialReviewdateWarningMsgApproval}}</div>
+                            <div class="invalid-feedback d-block font-weight-normal" *ngIf="specialReviewdateWarningMsgApproval != null">
+                                {{specialReviewdateWarningMsgApproval}}
+                            </div>
+                            <div class="invalid-feedback d-block font-weight-normal" *ngIf="dateFormatValidation.approveDateValidation">
+                                <span>*Entered date format is invalid.<br>Please use {{datePlaceHolder}} format.</span>
+                            </div>
                         </div>
                         <div class="col-lg-4 col-sm-3 col-12">
                             <label for="prop-special-revw-expdt"> Expiration Date</label>
-                            <span class="dateField"><input matInput [matDatepicker]="expDt" id="prop-special-revw-expdt"
+                            <span class="dateField"><input matInput [matDatepicker]="expDt" id="prop-special-revw-expdt" (click)="clearDateOnValidation('prop-special-revw-expireDate')"
                                     placeholder="{{datePlaceHolder}}" (click)="expDt.open()"
                                     [ngClass]="specialReviewdateWarningMsg != null ? 'is-invalid d-block' : ''"
                                     [disabled]="specialReviewObject.isProtocolIntegrated"
                                     [(ngModel)]="specialReviewObject.expirationDate"
-                                    (ngModelChange)="specialReviewDatevalidation()" class="form-control d-inline-block"
-                                    (keypress)="_commonService._keyPress($event, 'date')" /> <i
-                                    class="fa fa-calendar fa-large hand-cursor insidePicker" aria-hidden="true"
-                                    (click)="expDt.open()"></i>
-                                <mat-datepicker #expDt (opened)="setFocusToElement('prop-special-revw-expdt')">
-                                </mat-datepicker>
+                                    (ngModelChange)="specialReviewDatevalidation();checkForValidFormat($event, 'expDt');" 
+                                    class="form-control d-inline-block"
+                                    (keypress)="_commonService._keyPress($event, 'date')" />
+                                    <span class="fa fa-calendar fa-large hand-cursor insidePicker" title="open calendar"
+                                        (click)="approvDt.open();clearDateOnValidation('prop-special-revw-expireDate')">
+                                    </span>
+                                     <i class="fa fa-calendar fa-large hand-cursor insidePicker" aria-hidden="true" (click)="expDt.open()"></i>
+                                     <mat-datepicker #expDt (opened)="setFocusToElement('prop-special-revw-expdt')"> </mat-datepicker>
                             </span>
-                            <div class="invalid-feedback d-block font-weight-normal"
-                                *ngIf="specialReviewdateWarningMsg != null">
-                                {{specialReviewdateWarningMsg}}</div>
+                            <div class="invalid-feedback d-block font-weight-normal" *ngIf="specialReviewdateWarningMsg != null">
+                                {{specialReviewdateWarningMsg}}
+                            </div>
+                            <div class="invalid-feedback d-block font-weight-normal" *ngIf="dateFormatValidation.expirationDateValidation">
+                                <span>*Entered date format is invalid.<br>Please use {{datePlaceHolder}} format.</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">

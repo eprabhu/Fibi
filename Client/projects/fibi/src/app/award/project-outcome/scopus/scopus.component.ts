@@ -96,7 +96,8 @@ export class ScopusComponent implements OnInit, OnDestroy {
 				this.scopusWarningText = null;
                 this._commonData.isAwardDataChange = false;
 				this.isSaving = false;
-			}, err => { this.isSaving = false; }));
+			}, err => { this.isSaving = false;
+				this._commonService.showToast(HTTP_ERROR_STATUS, 'Linking Scopus failed. Please try again'); }));
 		} else {
 			this.scopusWarningText = 'Scopus already linked. Please use a different scopus.';
 		}
@@ -116,7 +117,7 @@ export class ScopusComponent implements OnInit, OnDestroy {
 			this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Scopus deleted successfully.');
 			this.scopusWarningText = null;
 		}, err => {
-			this._commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong! please try again');
+			this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Scopus failed. Please try again.');
 		}));
 	}
 

@@ -13,5 +13,6 @@ export class TempExtRequestObject {
         property12 = '';
         property13 = [];
         property14 = [];
+        property15 = [];
 }
 

@@ -54,6 +54,9 @@ export class KeyPerformanceIndicatorProposalComponent implements OnInit, OnDestr
                 this._dataStore.updateStore(['proposalKpis'], this.result);
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Key Performance Indicator saved.');
                 this.hasUnsavedChanges = false;
+                this.result.dataVisibilityObj.dataChangeFlag = false;
+                this._dataStore.updateStore(['dataVisibilityObj'], this.result);
+                this._autoSaveService.setUnsavedChanges('Key Performance Indicator', 'proposal-performace-indicator', false, true);
             }, err => {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving Target failed. Please try again.');
             }));

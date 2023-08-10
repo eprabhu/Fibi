@@ -250,7 +250,7 @@
           </label>
           <ng-container>
             <div class="ck-content">
-              <span [innerHTML]="proposal?.abstractDescription | safe | customTagRemover: currentMethod"></span>
+              <span [innerHTML]="proposal?.abstractDescription | safe"></span>
             </div>
           </ng-container>
           <span class="noDataExists" *ngIf="!proposal?.abstractDescription">No abstract for

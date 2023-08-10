@@ -52,7 +52,7 @@
               <span *ngIf="result?.award?.researchDescription != null">
                 <span class="textView" *ngIf="!isResearchDescriptionReadMore">
                    <p class="new-line-property" 
-                   [innerHTML] ="(result?.award?.researchDescription).length>240 ? (result?.award?.researchDescription | slice:0:240)+'...' : result?.award?.researchDescription"></p>
+                   [innerHTML] ="(result?.award?.researchDescription).length>240 ? (result?.award?.researchDescription | slice:0:240 | customTagRemover: currentMethod)+'...' : result?.award?.researchDescription | customTagRemover: currentMethod"></p>
                     <span *ngIf="(result?.award?.researchDescription?.length>240)" class="hand-cursor fibiDefaultColor italian"
                         (click)="isResearchDescriptionReadMore = !isResearchDescriptionReadMore" tabindex="0">Read
                         more<i aria-hidden="true"
@@ -60,7 +60,7 @@
                     </span>
                 </span>
                 <span *ngIf="isResearchDescriptionReadMore" class="textView">
-                    <p class="new-line-property" [innerHTML]="result?.award?.researchDescription"></p> 
+                    <p class="new-line-property" [innerHTML]="result?.award?.researchDescription | customTagRemover: currentMethod"></p> 
                   <span *ngIf="(result?.award?.researchDescription?.length>240)"
                     class="hand-cursor fibiDefaultColor italian"
                     (click)="isResearchDescriptionReadMore = !isResearchDescriptionReadMore">Show
@@ -84,7 +84,7 @@
               <span *ngIf="result?.award?.multiDisciplinaryDescription != null">
                 <span class="textView" *ngIf="!isMultiDisciplinaryDescriptionReadMore">
                     <p class="new-line-property"
-                        [innerHTML]="(result?.award?.multiDisciplinaryDescription).length>240 ? (result?.award?.multiDisciplinaryDescription | slice:0:240)+'...' : result?.award?.multiDisciplinaryDescription">
+                        [innerHTML]="(result?.award?.multiDisciplinaryDescription).length>240 ? (result?.award?.multiDisciplinaryDescription | slice:0:240 | customTagRemover: currentMethod)+'...' : result?.award?.multiDisciplinaryDescription | customTagRemover: currentMethod">
                     </p>
                     <span *ngIf="(result?.award?.multiDisciplinaryDescription?.length>240)" class="hand-cursor fibiDefaultColor italian"
                         (click)="isMultiDisciplinaryDescriptionReadMore = !isMultiDisciplinaryDescriptionReadMore" tabindex="0">Read
@@ -93,7 +93,7 @@
                     </span>
                 </span>
                 <span *ngIf="isMultiDisciplinaryDescriptionReadMore" class="textView">
-                    <p class="new-line-property" [innerHTML]="result?.award?.multiDisciplinaryDescription"></p>
+                    <p class="new-line-property" [innerHTML]="result?.award?.multiDisciplinaryDescription | customTagRemover: currentMethod"></p>
                     <span *ngIf="(result?.award?.multiDisciplinaryDescription?.length>240)" class="hand-cursor fibiDefaultColor italian"
                         (click)="isMultiDisciplinaryDescriptionReadMore = !isMultiDisciplinaryDescriptionReadMore">Show
                         less<i aria-hidden="true"

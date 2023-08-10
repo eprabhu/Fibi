@@ -207,7 +207,7 @@ export class SponsorTermsEditComponent implements OnInit, OnDestroy {
           this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Terms saved successfully.');
         }, err => {
             this.resetAfterSave();
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving terms failed. Please try again.');
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving Terms failed. Please try again.');
         }));
     }
   }

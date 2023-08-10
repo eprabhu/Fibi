@@ -38,7 +38,7 @@ export class AuthGuard implements CanActivate {
         if (!pathName) { return false; }
         const adminDashboardPaths = ['admin-dashboard', 'questionnaire', 'codetable', 'unitHierarchy', 'mapMaintainance',
             'training-maintenance', 'businessRule', 'notification', 'rolodex', 'customdata', 'sponsor-maintenance',
-            'user-activity', 'role-maintainance', 'feed-maintenance', 'person', 'sponsor-hierarchy', 'audit-log-report'];
+            'user-activity', 'role-maintainance', 'feed-maintenance', 'person', 'sponsor-hierarchy', 'audit-log-report', 'sponsor-report'];
         return adminDashboardPaths.includes(pathName);
     }
 
@@ -71,6 +71,7 @@ export class AuthGuard implements CanActivate {
                 'AGREEMENT_ADMINISTRATOR', 'MAINTAIN_KEY_PERSON_TIMESHEET', 'VIEW_KEY_PERSON_TIMESHEET', 'MAINTAIN_TRAINING']);
                 case 'maintain-external-reviewer' : return await this.checkIfRightsPresent(['MAINTAIN_EXTERNAL_REVIEW']);
                 case 'audit-log-report' : return await this.checkIfRightsPresent(['VIEW_AUDIT_LOG']);
+                case 'sponsor-report': return await this.checkIfRightsPresent(['APPLICATION_ADMINISTRATOR']);
             default: return true;
         }
     }

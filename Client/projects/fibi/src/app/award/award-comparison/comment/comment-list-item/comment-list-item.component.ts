@@ -93,11 +93,11 @@ export class CommentListItemComponent implements OnInit, OnDestroy {
           comment.replies[index] = data.awardReviewComment;
           this.isEditReply = false;
           this.editReplyCommentId[data.awardReviewComment.awardReviewCommentId] = null;
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Reply updated successfully');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Reply updated successfully.');
 
         } else {
           comment.replies.unshift(data.awardReviewComment);
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Reply added successfully');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Reply added successfully.');
         }
         this.replyObject = {};
         this.replyCommentId = null;

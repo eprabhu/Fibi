@@ -115,10 +115,10 @@ export class CreateMainComponent implements OnInit, OnDestroy {
           if (this.data.questionnaire.questions.length !== 0) {
             document.getElementById('saveQuestionnaire').click();
           } else {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Please add at least one question');
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Please add at least one Question.');
           }
         } else {
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Please enter a valid name ');
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Please enter a valid name.');
         }
     }
   }

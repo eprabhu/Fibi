@@ -212,9 +212,7 @@
                                     *ngIf="ruleDefinition.ruleIsUsedForToName == 'Validation-Error' || ruleDefinition.ruleIsUsedForToName == 'Validation-Warning'">If
                                     this condition is
                                     <span class="highlight-text">true</span>, the <span class="highlight-text">
-                                        {{ruleDefinition.ruleAppliedToName}}</span> is
-                                    <span class="highlight-text">valid
-                                    </span>and the following message will be displayed.</label>
+                                        {{ruleDefinition.ruleAppliedToName}}</span> is<span class="red-text">invalid </span>and the following message will be displayed.</label>
                                 <div class="col-md-12" *ngIf="ruleDefinition.ruleIsUsedForToName == 'Notification'">
                                     <label class="fnt-siz inline-block">If this condition is
                                         <span class="highlight-text">true</span>, the following notification

@@ -16,6 +16,8 @@ import {ClaimOverviewService} from './claim-overview.service';
 import {Router} from '@angular/router';
 import {ClaimsService} from '../services/claims.service';
 import { AutoSaveService } from '../../common/services/auto-save.service';
+declare var $: any;
+
 
 @Component({
     selector: 'app-claim-overview',
@@ -192,7 +194,12 @@ export class ClaimOverviewComponent implements OnInit, OnDestroy {
                     this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Overview Saved Successfully');
                     this.setUnsavedChanges(false);
                     this.updateClaimData(res);
-                }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Failed to save overview! Please try again')));
+                }, err => {
+                    if (err && err.status === 405) {
+                        $('#SubmitClaimModal').modal('hide');
+                        $('#invalidActionModal').modal('show');
+                    } else {this.commonService.showToast(HTTP_ERROR_STATUS, 'Failed to save overview! Please try again'); }
+                }));
         }
     }
 

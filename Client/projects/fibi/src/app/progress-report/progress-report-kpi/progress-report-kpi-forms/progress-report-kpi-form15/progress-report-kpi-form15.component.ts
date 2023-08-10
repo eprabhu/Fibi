@@ -129,9 +129,11 @@ export class ProgressReportKpiForm15Component implements OnInit, OnDestroy {
                     $('#form-modal' + this.kpiSummaryId).modal('hide');
                     this.isSaving = false;
                     this.resetFormData();
-                }, err => this._commonService
-                    .showToast(HTTP_ERROR_STATUS, 'Failed to ' + (this.mode === 'ADD' ? 'add' : 'update') + ' entry.')));
-            this.isSaving = false;
+                }, err => {
+                    this._commonService
+                        .showToast(HTTP_ERROR_STATUS, 'Failed to ' + (this.mode === 'ADD' ? 'add' : 'update') + ' entry.');
+                    this.isSaving = false;
+                }));
         }
     }
 

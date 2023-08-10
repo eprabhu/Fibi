@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Create {{ createReportDetails.reportClassCode == 1 ? 'Progress' : 'Final' }}
+                <h5 class="modal-title"> Create {{ reportLabel }}
                     Report</h5>
                 <button (click)="clearCreateReportModalDetails()" aria-label="Close" class="close" data-dismiss="modal"
                         type="button">
@@ -17,6 +17,22 @@
                         <div class="card-content">
                             <div class="card-body">
                                 <div class="form-row">
+                                    <div *ngIf="isAdhoc" class="mb-3">
+                                        <label for="award-report-class"><span class="mandatory">*</span>Report Class:
+                                        </label>
+                                        <select [(ngModel)]="createReportDetails.reportClassCode"
+                                            [ngClass]="(createModalFormMap.get('reportClass'))? 'is-invalid d-block' : ''"
+                                            class="form-control ml-2" id="award-report-class">
+                                            <option [ngValue]="null">--Select--</option>
+                                            <option *ngFor="let reportClass of lookUp?.reportClassList"
+                                                [hidden]="reportClass.isActive != true" [value]="reportClass.reportClassCode">
+                                                {{reportClass?.description}}</option>
+                                        </select>
+                                        <div *ngIf="createModalFormMap.get('reportClass')">
+                                            <span class="mandatory">{{createModalFormMap.get('reportClass')}}</span>
+                                        </div>
+                                    </div>
+                                    
                                     <div *ngIf="isAdhoc" class="form-group col-12">
                                         <label class="d-block" for="create-report-award-no">
                                             <ng-container i18n="@@COMMON_SEARCH_AWARD">Search Award</ng-container>

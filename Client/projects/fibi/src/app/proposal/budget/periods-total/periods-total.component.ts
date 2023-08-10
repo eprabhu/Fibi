@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, DEFAULT_DATE_FORMAT, COMMON_PERIODS_AND_TOTAL_LABEL } from '../../../app-constants';
 import {
     compareDates, getDateObjectFromTimeStamp,
-    parseDateWithoutTimestamp
+    parseDateWithoutTimestamp, isValidDateFormat
 } from '../../../common/utilities/date-utilities';
 import { setFocusToElement, inputRestrictionForAmountField } from '../../../common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
@@ -15,7 +15,7 @@ import {
     calculatePeriodTotalCost, periodWiseSalaryCalculation,
     reCalculatePersonsalary
 } from '../budget-calculations';
-import { checkPeriodDatesOutside, inputRestriction, toggleErrorToast } from '../budget-validations';
+import { checkPeriodDatesOutside, inputRestriction, toggleErrorToast, validateBudgetTotalCost } from '../budget-validations';
 import { ProposalService } from '../../services/proposal.service';
 import { AutoSaveService } from '../../../common/services/auto-save.service';
 
@@ -48,6 +48,8 @@ export class PeriodsTotalComponent implements OnInit, OnDestroy {
     isSaving = false;
     invalidPeriods: any = {};
     hasUnsavedChanges = false;
+    formatWarningMap: any =  new Map();
+    isTotalCostExceedsLimit = false;
 
     constructor(
         public _commonService: CommonService,
@@ -190,7 +192,7 @@ export class PeriodsTotalComponent implements OnInit, OnDestroy {
             this._proposalService.proposalEndDate))) {
             toggleErrorToast(this.budgetData, this._proposalService);
         } else if (!this.isSaving && this._budgetDataService.checkBudgetDatesFilled(this.budgetData.budgetHeader.budgetPeriods) &&
-            this.checkDatesValid() && this.map.size < 1) {
+            this.checkDatesValid() && this.map.size < 1 && !this.isTotalCostExceedsLimit) {
             this.saveOrUpdateProposalBudgetServiceCall(this.saveOrUpdateRequestData(this.budgetData, type), type);
         }
     }
@@ -209,10 +211,12 @@ export class PeriodsTotalComponent implements OnInit, OnDestroy {
             }, err => {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving Budget failed. Please try again.');
                 this.isSaving = false;
+                this.budgetData = this._budgetDataService.budgetDataBeforeSave;
             });
     }
 
     saveOrUpdateRequestData(budgetData = this.budgetData, type) {
+        this._budgetDataService.setBudgetDatesPriorToSave(budgetData);
         if (!type) {
             this._budgetDataService.setDateFormatFromWithoutTimeStamp(budgetData);
         }
@@ -499,15 +503,10 @@ export class PeriodsTotalComponent implements OnInit, OnDestroy {
         }
         if (ITEM && ITEM.length) {
             $('#budgetPersonexistwarnModal').modal('show');
-        } else {
-            this.triggerPicker();
         }
         setFocusToElement(this.periodDateId);
     }
 
-    triggerPicker() {
-        document.getElementById(this.periodDateId).click();
-    }
 
     ngOnDestroy() {
         this.setUnsavedChanges(false);
@@ -518,6 +517,50 @@ export class PeriodsTotalComponent implements OnInit, OnDestroy {
         this._budgetDataService.budgetDataChanged = flag;
         this.hasUnsavedChanges = flag;
         this._autoSaveService.setUnsavedChanges(COMMON_PERIODS_AND_TOTAL_LABEL, 'periods-total-tab', flag);
+    }
+
+    getSystemDate() {
+        return new Date(new Date().setHours(0, 0, 0, 0));
+    }
+
+    dateFormateValidator(date, type, period) {
+        const formatError = `* Entered date format is invalid.Please use ${DEFAULT_DATE_FORMAT} format.`;
+        if (!isValidDateFormat(date) && type === 'periodstart') {
+            this.formatWarningMap.set(period + 's', formatError);
+        } else if (!isValidDateFormat(date) && type === 'periodend') {
+            this.formatWarningMap.set(period + 'e', formatError);
+        } else if (isValidDateFormat(date) && type === 'periodstart') {
+            this.formatWarningMap.delete(period + 's');
+        } else if (isValidDateFormat(date) && type === 'periodend') {
+            this.formatWarningMap.delete(period + 'e');
+        }
+    }
+
+    clearDateOnValidation(period, id) {
+        if (id === 'period-start-date-icon' + period.budgetPeriod &&
+            this.formatWarningMap.has(period.budgetPeriod + 's')) {
+            period.startDate = this.getSystemDate();
+            this.formatWarningMap.delete(period.budgetPeriod + 's');
+            this.calenderOpener(id);
+        } else if (id === 'period-end-date-icon' + period.budgetPeriod &&
+            this.formatWarningMap.has(period.budgetPeriod + 'e')) {
+            period.endDate = this.getSystemDate();
+            this.formatWarningMap.delete(period.budgetPeriod + 'e');
+            this.calenderOpener(id);
+        } else {
+            this.calenderOpener(id);
+        }
+
+    }
+
+    calenderOpener(id) {
+        setTimeout(() => {
+            document.getElementById(id).click();
+        });
+    }
+
+    validateTotalCost() {
+        this.isTotalCostExceedsLimit = validateBudgetTotalCost(this.budgetData.budgetHeader.totalOfTotalCost);
     }
 
 }

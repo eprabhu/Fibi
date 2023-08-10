@@ -1,5 +1,5 @@
 <!--PROPOSAL-->
-<div class="row" *ngIf="researchSummaryIndex != 'AWARDSACTIVE' && researchSummaryIndex != 'RESEARCH_SUMMARY_BY_DEADLINE_DATE'">
+<div class="row" *ngIf="researchSummaryIndex != 'AWARDSACTIVE' && researchSummaryIndex != 'RESEARCH_SUMMARY_BY_DEADLINE_DATE' && (researchSummaryIndex !=='PROPOSAL_APPROVAL_IN_PROGRESS_BY_DEADLINE_DATE')&& (researchSummaryIndex !=='PROPOSAL_INPROGRESS_BY_DEADLINE_DATE')&& (researchSummaryIndex !=='PROPOSAL_SUBMITTED_BY_DEADLINE_DATE')&& (researchSummaryIndex !=='PROPOSAL_RESEARCH_SUMMARY_BY_DEADLINE_DATE')">
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 padding-tbx">
     <div class="card mb-3">
       <div class="card-header py-2">
@@ -177,7 +177,7 @@
 <!--AWARD ENDS-->
 
 <!-- RESEARCH SUMMARY BY DEADLINE DATE -->
-<div class="row" *ngIf="researchSummaryIndex == 'RESEARCH_SUMMARY_BY_DEADLINE_DATE'">
+<div class="row" *ngIf="researchSummaryIndex == 'RESEARCH_SUMMARY_BY_DEADLINE_DATE' || researchSummaryIndex =='PROPOSAL_APPROVAL_IN_PROGRESS_BY_DEADLINE_DATE'|| researchSummaryIndex =='PROPOSAL_INPROGRESS_BY_DEADLINE_DATE' || researchSummaryIndex =='PROPOSAL_SUBMITTED_BY_DEADLINE_DATE'|| researchSummaryIndex =='PROPOSAL_RESEARCH_SUMMARY_BY_DEADLINE_DATE'">
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 padding-tbx">
     <div class="card mb-3">
       <div class="card-header py-2">
@@ -221,8 +221,8 @@
                   <i [ngClass]="((column == 3) ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
                   aria-hidden="true"></i>    
                 </th>
-                <th scope="col" style="min-width: 15rem;"  (click)="isDesc =!isDesc;sortBy(5)">Lead Unit Name - (Abbreviation)
-                  <i [ngClass]="((column == 5) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-sort-numeric-desc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"
+                <th scope="col" style="min-width: 15rem;"  (click)="isDesc =!isDesc;sortBy(4)">Lead Unit Name - (Abbreviation)
+                  <i [ngClass]="((column == 4) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-sort-numeric-desc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"
                   aria-hidden="true"></i>    
                 </th>
                 <th scope="col" style="min-width: 10rem;"  (click)="isDesc =!isDesc;sortBy(6)">Lead PI
@@ -242,7 +242,7 @@
                   aria-hidden="true"></i>    
                 </th>
                 <th scope="col" style="min-width: 10rem;"  (click)="isDesc =!isDesc;sortBy(10)">Activity Type
-                  <i [ngClass]="((column == 10) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-ssort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                  <i [ngClass]="((column == 10) ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
                   aria-hidden="true"></i>    
                 </th>
                 <th scope="col" style="min-width: 12rem;" (click)="isDesc =!isDesc;sortBy(11)">Anticipated Award Type

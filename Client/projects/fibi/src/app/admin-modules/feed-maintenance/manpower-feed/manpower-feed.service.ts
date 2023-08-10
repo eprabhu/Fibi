@@ -71,37 +71,36 @@ export class ManpowerFeedService {
     return this._http.get(this._commonService.baseUrl + '/getWorkdayLongLeave');
   }
 
-  getCostingAllocationReconciliation() {
-    return this._http.get(this._commonService.baseUrl + '/getCostingAllocationReconciliation');
-  }
-
   getManpowerLogDetail(params) {
     return this._http.post(this._commonService.baseUrl + '/getManpowerLogDetail', params);
   }
 
   costAllocationWithManualDates(param) {
     return this._http.post(this._commonService.baseUrl + '/costAllocationWithManualDates', param);
-}
+  }
 
-positionStatusApiWithManualDates(param) {
-  return this._http.post(this._commonService.baseUrl + '/positionStatusApiWithManualDates', param);
-}
+  positionStatusApiWithManualDates(param) {
+    return this._http.post(this._commonService.baseUrl + '/positionStatusApiWithManualDates', param);
+  }
 
-startWorkdayTerminationsWithManualDates (param) {
-  return this._http.post(this._commonService.baseUrl + '/startWorkdayTerminationsWithManualDates ', param);
-}
+  startWorkdayTerminationsWithManualDates(param) {
+    return this._http.post(this._commonService.baseUrl + '/startWorkdayTerminationsWithManualDates ', param);
+  }
 
-startWorkdayLongLeaveWithManualDates (param) {
-  return this._http.post(this._commonService.baseUrl + '/startWorkdayLongLeaveWithManualDates ', param);
-}
+  startWorkdayLongLeaveWithManualDates(param) {
+    return this._http.post(this._commonService.baseUrl + '/startWorkdayLongLeaveWithManualDates ', param);
+  }
 
-getAwardManpowerErrors(params) {
-  return this._http.post(this._commonService.baseUrl + '/getAwardManpowerErrors', params);
-}
+  getAwardManpowerErrors(params) {
+    return this._http.post(this._commonService.baseUrl + '/getAwardManpowerErrors', params);
+  }
 
-retriggerAllAwardManpowerInterface(params) {
-  return this._http.post(this._commonService.baseUrl + '/retriggerAllAwardManpowerInterface', params);
-}
+  retriggerAllAwardManpowerInterface(params) {
+    return this._http.post(this._commonService.baseUrl + '/retriggerAllAwardManpowerInterface', params);
+  }
 
+  reconcileCostAllocation() {
+    return this._http.get(this._commonService.baseUrl + '/reconcileCostAllocation');
+  }
 
 }

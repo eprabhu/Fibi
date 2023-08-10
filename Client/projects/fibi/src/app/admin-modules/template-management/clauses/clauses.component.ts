@@ -95,7 +95,7 @@ export class ClausesComponent implements OnInit {
           this.addToClausesBank(newClause);
         }
       } else {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Clause Already Present!');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Clause already present.');
         this.clearClausesField = true;
         this.clauseRequestObject = null;
       }
@@ -275,7 +275,7 @@ export class ClausesComponent implements OnInit {
         );
       }
     } else {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Agreement Type Already Present!');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Agreement Type already present.');
       this.clearField = new Boolean('true');
     }
     this.agreementTypeSelected = false;
@@ -310,7 +310,7 @@ export class ClausesComponent implements OnInit {
       this._commonService.showToast(HTTP_SUCCESS_STATUS, data);
       this.selectClausesGroup(this.clausesGroupList[0], 0);
     }, err => { 
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Clause group delete failed');    
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Clause Group delete failed.');    
     });
   }
 }

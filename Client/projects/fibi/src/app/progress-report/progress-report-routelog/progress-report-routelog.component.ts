@@ -4,11 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonDataService } from '../services/common-data.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
+declare var $: any;
 
 @Component({
     selector: 'app-progress-report-routelog',
     template: `<workflow-engine *ngIf="_commonData.progressReportSectionConfig['1609'].isActive"
-                                [workFlowResult]="result" (workFlowResponse)='workFlowResponse($event)'
+                                [workFlowResult]="result" (workFlowResponse)='workFlowResponse($event)' (errorEvent)='errorEvent()'
                                 [workFlowDetailKey]="'awardProgressReport'"></workflow-engine>`
 })
 
@@ -46,5 +47,9 @@ export class ProgressReportRoutelogComponent implements OnInit, OnDestroy {
         this.result.workflowList = data.workflowList;
         this.result.canApproveRouting = data.canApproveRouting;
         this.result.awardProgressReport = data.awardProgressReport;
+    }
+
+    errorEvent() {
+        $('#invalidActionModal').modal('show');
     }
 }

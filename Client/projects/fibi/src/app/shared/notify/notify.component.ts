@@ -98,10 +98,10 @@ export class NotifyComponent implements OnInit, OnDestroy {
 
     getAllPersonCertifications() {
         this.$subscriptions.push(this._notifyService
-            .getProposalPersonsForCertification(this.moduleItemKey)
+            .getProposalPersonsForCertification({proposalId: this.moduleItemKey})
             .subscribe((res: { proposalPersons: ProposalPerson[] }) => {
                 this.proposalPersons = res.proposalPersons;
-            }, _err => this.showErrorMessage('Notification details fetch failed! Please try again.')));
+            }, _err => this.showErrorMessage('Notification details fetch failed. Please try again.')));
     }
 
     notifyAgain() {
@@ -113,7 +113,7 @@ export class NotifyComponent implements OnInit, OnDestroy {
                     document.getElementById('close-notification-modal').click();
                     this.showSuccessMessage('Notification sent successfully.');
                     setTimeout(() => this.isSaving = false);
-                }, _err => this.showErrorMessage('Notification failed to send! Please try again.')));
+                }, _err => this.showErrorMessage('Notification failed to send. Please try again.')));
         }
     }
 
@@ -192,10 +192,12 @@ export class NotifyComponent implements OnInit, OnDestroy {
                         document.getElementById('close-notification-modal').click();
                         this.emitNotificationFlag(false);
                         this.clearNotifyFields();
-                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Notification sent successfully');
+                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Notification sent successfully.');
                     } else {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Notification Failed');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Notification failed.');
                     }
+                }, err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Sending Notification failed. Please try again.');
                 }));
         }
     }
@@ -320,7 +322,7 @@ export class NotifyComponent implements OnInit, OnDestroy {
                 this.notificationMap[person.proposalPersonId] = res;
                 this.multiplePersonNotifications[index] = res;
                 this.togglePersons[index] = !this.togglePersons[index];
-            }, _err => this.showErrorMessage('Notification details fetch failed! Please try again.')));
+            }, _err => this.showErrorMessage('Notification details fetch failed. Please try again.')));
     }
 
     private showErrorMessage(message: string) {

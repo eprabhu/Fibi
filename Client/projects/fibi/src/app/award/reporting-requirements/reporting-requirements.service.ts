@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable , EventEmitter} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class ReportingRequirementsService {
@@ -36,8 +37,8 @@ export class ReportingRequirementsService {
     return this._http.post(this._commonService.baseUrl + serviceName, params);
   }
 
-  addAwardReportTrackingAttachment( formData ) {
-    return this._http.post( this._commonService.baseUrl + '/addAwardReportTrackingAttachment', formData );
+  deleteReportTrackingAttachment( formData ) {
+    return this._http.post( this._commonService.baseUrl + '/deleteReportTrackingAttachment', formData );
   }
 
   downloadAwardReportTrackingAttachment( attachmentId ) {
@@ -45,10 +46,6 @@ export class ReportingRequirementsService {
         headers: new HttpHeaders().set( 'awardReportTrackingFileId', attachmentId.toString() ),
         responseType: 'blob'
     } );
-  }
-
-  deleteAwardReportTrackingAttachment( params ) {
-    return this._http.post(this._commonService.baseUrl + '/deleteAwardReportTrackingAttachment', params);
   }
 
   fetchReportTypeByReportClass(reportClassCode) {
@@ -63,12 +60,16 @@ export class ReportingRequirementsService {
     return this._http.post(this._commonService.baseUrl + '/saveOrUpdateReportTracking ', params);
   }
 
-  deleteReportTracking(awardReportTrackingId) {
-    return this._http.delete(this._commonService.baseUrl + '/deleteReportTracking/' + awardReportTrackingId);
+  deleteReportTracking(awardReportTracking) {
+    return this._http.post(this._commonService.baseUrl + '/deleteReportTracking' , awardReportTracking);
   }
 
   fetchHelpText(param) {
     return this._http.post(this._commonService.baseUrl + '/fetchHelpTexts', param );
+  }
+
+  calculateOrGenerateOccurrence(params) {
+    return this._http.post(this._commonService.baseUrl + '/calculateOrGenerateOccurrence ', params);
   }
 }
 

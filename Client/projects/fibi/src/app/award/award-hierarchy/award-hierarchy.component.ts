@@ -224,8 +224,11 @@ export class AwardHierarchyComponent implements OnInit, OnDestroy {
                         this.viewAwardDetails(data.awardId);
                     }, 1000);
                 });
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, "Child Award added successfully.");
             }
-        }));
+        }, err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Child Award failed. Please try again.');
+          }));
         this.clearModalFlags();
     }
 
@@ -247,7 +250,7 @@ export class AwardHierarchyComponent implements OnInit, OnDestroy {
                 this.toast_message = 'Unable to delete.';
                 this._commonService.showToast(HTTP_ERROR_STATUS, this.toast_message);
             } else {
-                this.toast_message = 'Deletion of award failed! Please try again.';
+                this.toast_message = 'Deleting award failed. Please try again.';
                 this._commonService.showToast(HTTP_ERROR_STATUS, this.toast_message);
             }
         }));

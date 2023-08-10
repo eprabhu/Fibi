@@ -300,7 +300,7 @@ export class PeriodsTotalComponent implements OnInit, OnDestroy {
           this._commonDataService.isAwardDataChange = false;
           this._budgetDataService.isBudgetDatesFilled = true;
           this.isInvalidCost = false;
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, `${AWARD_LABEL} Budget saved successfully`);
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, `${AWARD_LABEL} Budget saved successfully.`);
           this.isSaving = false;
         }, err => {
           this._commonService.showToast(HTTP_ERROR_STATUS, `Saving ${AWARD_LABEL} Budget failed. Please try again.`);

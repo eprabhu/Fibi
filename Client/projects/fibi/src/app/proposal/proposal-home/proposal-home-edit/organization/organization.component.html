@@ -14,7 +14,7 @@
     </div>
     <div *ngIf="isShowCollapse" class="card-content">
     <div class="card-body p-2">
-          <div class="noDataOnChart noDataExists p-2" *ngIf="organizationDetails?.length == 0">
+          <div class="noDataOnChart noDataExists p-2" *ngIf="result?.proposalOrganizations?.length == 0">
             <div class="no-data-container">
               <span class="no-data-icon-outer">
                 <div class="no-data-icon">
@@ -25,7 +25,7 @@
               <h4>There is no information in this section.</h4>
             </div>
           </div>
-        <div class="table-responsive" *ngIf="organizationDetails?.length > 0">
+        <div class="table-responsive" *ngIf="result?.proposalOrganizations?.length > 0">
             <table aria-describedby="proposal-keyperson-edit"
                 class="table table-inner tableSkin grid2 key-person-table table-vertical-align">
                 <caption class="d-none">Organization Details</caption>
@@ -38,7 +38,7 @@
                     <th scope="col">Actions</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let propOrg of organizationDetails; let index = index">
+                    <tr *ngFor="let propOrg of result?.proposalOrganizations; let index = index">
                         <td>{{propOrg?.organizationType? propOrg?.organizationType?.description : ''}}</td>
                         <td>
                             <a *ngIf="propOrg?.rolodex && !propOrg?.rolodex.organizations" class="anchor-link" data-toggle="modal" 
@@ -58,20 +58,25 @@
                             <span  class="f-12" [innerHtml]="getOrganizationAddress(propOrg)"> </span>                                                  
                         </td>
                         <td>
-                            <a class="anchor-link ml-2" data-toggle="modal" 
+                            <a class="anchor-link ml-2" data-toggle="modal" *ngIf="isShowOrganizationEndpoint(propOrg?.organizationTypeCode)"
                                 (click)="getContactDetails(propOrg?.organization?.contactAddressId)">
                                 <i aria-hidden="true"></i>
-                                {{propOrg?.organization?.contactPersonName ? propOrg?.organization?.contactPersonName :
-                                ''}}
+                                {{propOrg?.organization?.contactPersonName ? propOrg?.organization?.contactPersonName : ''}}
 
                             </a>
+                            <span *ngIf="!isShowOrganizationEndpoint(propOrg?.organizationTypeCode)" class="noDataExists">Not Applicable</span>
                         </td>
-                        <td *ngIf="enableOrganizationLocation">{{propOrg?.location? propOrg?.location : ''}}</td>
+                        <td *ngIf="enableOrganizationLocation">
+                            <span *ngIf="isShowOrganizationEndpoint(propOrg?.organizationTypeCode)" class="noDataExists">Not Applicable</span>
+                            <span *ngIf="!isShowOrganizationEndpoint(propOrg?.organizationTypeCode)" [class.noDataExists]="!propOrg?.location">
+                                {{propOrg?.location ? propOrg?.location : 'No Data'}}</span>
+                        </td>
                         <td>
                             <span class="d-block"
                                 *ngFor="let dist of propOrg?.proposalCongDistricts; let distIndex = index;">
                                 {{dist.congressionalDistrict ? dist.congressionalDistrict.description : ''}}
                             </span>
+                            <span class="noDataExists" *ngIf="propOrg?.proposalCongDistricts?.length == 0">No Data</span>
                         </td>
                         <td>
                             <ul class="actionButtonGroup d-flex">
@@ -91,6 +96,9 @@
                                         <i aria-hidden="true" class="fa fa-trash-o" title="Click here to delete"></i>
                                     </a>
                                 </li>
+                                <ng-template #addSpace>
+                                    <li>&nbsp;</li>
+                                </ng-template>
                             </ul>
                         </td>
                     </tr>
@@ -141,7 +149,7 @@
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">Organization ID</label>
                         <p
-                            [ngClass]="viewOrganizationDetails?.organization?.organizationId !== null ? '' : 'noDataExists'">
+                            [class.noDataExists]="!viewOrganizationDetails?.organization?.organizationId">
                             {{viewOrganizationDetails?.organization?.organizationId !== null ?
                             viewOrganizationDetails?.organization?.organizationId : 'No Data'}}
                         </p>
@@ -149,14 +157,14 @@
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">Organization Name</label>
                         <p
-                            [ngClass]="viewOrganizationDetails?.organization?.organizationName !== null ? '' : 'noDataExists'">
+                            [class.noDataExists]="!viewOrganizationDetails?.organization?.organizationName">
                             {{viewOrganizationDetails?.organization?.organizationName !== null ?
                             viewOrganizationDetails?.organization?.organizationName : 'No Data'}}
                         </p>
                     </div>                  
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">Country</label>
-                        <p [ngClass]="viewOrganizationDetails?.organization?.country !== null ? '' : 'noDataExists'">
+                        <p [class.noDataExists]="!viewOrganizationDetails?.organization?.country">
                             {{viewOrganizationDetails?.organization?.country !== null ?
                             viewOrganizationDetails?.organization?.country?.countryName
                             : 'No Data'}}
@@ -164,7 +172,7 @@
                     </div>
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">Address</label>
-                        <p [ngClass]="viewOrganizationDetails?.organization?.address !== null ? '' : 'noDataExists'">
+                        <p [class.noDataExists]="!viewOrganizationDetails?.organization?.address">
                             {{viewOrganizationDetails?.organization?.address !== null ?
                             viewOrganizationDetails?.organization?.address
                             : 'No Data'}}
@@ -175,7 +183,7 @@
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">Telex Number</label>
                         <p
-                            [ngClass]="viewOrganizationDetails?.organization?.telexNumber !== null ? '' : 'noDataExists'">
+                            [class.noDataExists]="!viewOrganizationDetails?.organization?.telexNumber">
                             {{viewOrganizationDetails?.organization?.telexNumber !== null ?
                             viewOrganizationDetails?.organization?.telexNumber : 'No Data'}}
                         </p>
@@ -183,15 +191,15 @@
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">Congressional District</label>
                         <p
-                            [ngClass]="viewOrganizationDetails?.organization?.congressionalDistrict !== null ? '' : 'noDataExists'">
-                            {{viewOrganizationDetails?.organization?.congressionalDistrict !== null ?
-                            viewOrganizationDetails?.organization?.congressionalDistrict : 'No Data'}}
+                            [class.noDataExists]="!viewOrganizationDetails?.organization?.congressionalDistrict.description">
+                            {{viewOrganizationDetails?.organization?.congressionalDistrict.description !== null ?
+                            viewOrganizationDetails?.organization?.congressionalDistrict.description : 'No Data'}}
                         </p>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">Point of Contact</label>
                         <p
-                            [ngClass]="viewOrganizationDetails?.organization?.contactPersonName !== null ? '' : 'noDataExists'">
+                            [class.noDataExists]="!viewOrganizationDetails?.organization?.contactPersonName">
                             {{viewOrganizationDetails?.organization?.contactPersonName !== null ?
                             viewOrganizationDetails?.organization?.contactPersonName : 'No Data'}}
                         </p>
@@ -199,7 +207,7 @@
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">Cable Address</label>
                         <p
-                            [ngClass]="viewOrganizationDetails?.organization?.cableAddress !== null ? '' : 'noDataExists'">
+                            [class.noDataExists]="!viewOrganizationDetails?.organization?.cableAddress">
                             {{viewOrganizationDetails?.organization?.cableAddress !== null ?
                             viewOrganizationDetails?.organization?.cableAddress : 'No Data'}}
                         </p>
@@ -208,14 +216,14 @@
                 <div class="row mb-5">
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">Vendor Code</label>
-                        <p [ngClass]="viewOrganizationDetails?.organization?.vendorCode !== null ? '' : 'noDataExists'">
+                        <p [class.noDataExists]="!viewOrganizationDetails?.organization?.vendorCode">
                             {{viewOrganizationDetails?.organization?.vendorCode !== null ?
                             viewOrganizationDetails?.organization?.vendorCode : 'No Data'}}
                         </p>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">DUNS Number</label>
-                        <p [ngClass]="viewOrganizationDetails?.organization?.dunsNumber !== null ? '' : 'noDataExists'">
+                        <p [class.noDataExists]="!viewOrganizationDetails?.organization?.dunsNumber">
                             {{viewOrganizationDetails?.organization?.dunsNumber !== null ?
                             viewOrganizationDetails?.organization?.dunsNumber : 'No Data'}}
                         </p>
@@ -223,14 +231,14 @@
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">DODAC Number</label>
                         <p
-                            [ngClass]="viewOrganizationDetails?.organization?.dodacNumber !== null ? '' : 'noDataExists'">
+                            [class.noDataExists]="!viewOrganizationDetails?.organization?.dodacNumber">
                             {{viewOrganizationDetails?.organization?.dodacNumber !== null ?
                             viewOrganizationDetails?.organization?.dodacNumber : 'No Data'}}
                         </p>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-12">
                         <label class="d-block">CAGE Number</label>
-                        <p [ngClass]="viewOrganizationDetails?.organization?.cageNumber !== null ? '' : 'noDataExists'">
+                        <p [class.noDataExists]="!viewOrganizationDetails?.organization?.cageNumber">
                             {{viewOrganizationDetails?.organization?.cageNumber !== null ?
                             viewOrganizationDetails?.organization?.cageNumber : 'No Data'}}
                         </p>
@@ -367,95 +375,106 @@
                 <app-proposal-overview-modal-card></app-proposal-overview-modal-card>
                 <div class="w-100">
                     <div class="form-row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-3">
-                            <span class="mandatory">*</span> <label for="award-project-role">Organization Type</label>
-                            <select id="award-org-type" class="form-control"
-                                [(ngModel)]="organizationObject.organizationTypeCode"
-                                [ngClass]="((map.get('organizationType')) || (map.get('alreadyExist'))) ? 'is-invalid d-block' : ''"
-                                (ngModelChange)="getOrganizationTypeObject(organizationObject.organizationTypeCode);
-                                 map.clear();">
-                                <option [value]=null>--Select--</option>
-                                <option [value]="type.organizationTypeCode"
-                                    *ngFor="let type of result?.organizationType">
-                                    {{type.description}}</option>
-                            </select>
-                            <div *ngIf="(map.get('organizationType'))" class="invalid-feedback d-block">Please select an
-                                Organization Type.</div>
-                            <div *ngIf="(map.get('alreadyExist'))" class="invalid-feedback d-block">This organization
-                                type is
-                                already selected.</div>
+                <div class="col-lg col-md col-sm-12 col-12">
+                    <span class="mandatory">*</span> <label for="award-project-role">Organization Type</label>
+                    <select id="award-org-type" class="form-control"
+                        [(ngModel)]="organizationObject.organizationTypeCode"
+                        [ngClass]="((map.get('organizationType')) || (map.get('alreadyExist'))) ? 'is-invalid d-block' : ''"
+                        (ngModelChange)="getOrganizationTypeObject(organizationObject.organizationTypeCode);
+                         map.clear();">
+                        <option [value]=null>--Select--</option>
+                        <option [value]="type.organizationTypeCode" *ngFor="let type of result?.organizationType">
+                            {{type.description}}</option>
+                    </select>
+                    <div *ngIf="(map.get('organizationType'))" class="invalid-feedback d-block">Please select an
+                        Organization Type.</div>
+                    <div *ngIf="(map.get('alreadyExist'))" class="invalid-feedback d-block">This organization type is
+                        already selected.</div>
+                </div>
+                <div class="col-lg col-md col-sm-12 col-12 mb-3">
+                    <div *ngIf="isShowOrganizationEndpoint(organizationObject?.organizationTypeCode)"> <span class="mandatory">*</span>
+                        <label>Organization Name</label>
+                        <app-endpoint-search [httpOptions]="organizationSearchOptions"
+                            [clearField]="clearOrganizationField" [placeHolder]="'Type here for Organization Name'"
+                            (onSelect)="organizationSelectFunction($event)"
+                            [isError]="(map.get('organizationName')) ? true : false">
+                        </app-endpoint-search>
+                        <a *ngIf="_commonService.canAddOrganization" class="anchor-link fs-14 mt-1"
+                            id="org-mannual-add-btn" data-toggle="modal" title="Add New Organization"
+                            data-target="#addOrganizationModal" (click)="map.clear(); resetCongressionalDistrictObj()">
+                            <i aria-hidden="true" class="fa fa-university"></i>
+                            <span class="ml-1">Add New Organization</span></a>
+                    </div>
+                    <div *ngIf="!isShowOrganizationEndpoint(organizationObject?.organizationTypeCode)">
+                        <span class="mandatory">*</span><label>Organization Name</label>
+                        <app-elastic id="organization-rolodex-elastic"
+                            [options]="rolodexSearchOptions" [clearField]="clearRolodexField"
+                            [isError]="(map?.get('organizationName')) ? true : false"
+                            [placeHolder]="'Type here for Organization'" (selectedResult)="rolodexSelectFunction($event)">
+                        </app-elastic>
+                        <a *ngIf="_commonService.isEnableAddtoAddressBook" id="proposal-non-employee-add-btn"
+                            class="anchor-link d-block fs-14" (click)="isAddNonEmployeeModal = true; isShowPersonResultCard = false; hideAddOrganizationModal()">
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                            <ng-container i18n="@@COMMON_ADD_TO_ADDRESS_BOOK">Add to Address Book</ng-container>
+                        </a>
+                    </div>
+                    <div *ngIf="(map.get('organizationName'))" class="invalid-feedback d-block">Please select an
+                        Organization.
+                    </div>
+                    <div *ngIf="(map.get('rolodexName'))" class="invalid-feedback d-block">Please select an
+                        Non-Employee.
+                    </div>
+                </div>
+                <div *ngIf="!isShowOrganizationEndpoint(organizationObject?.organizationTypeCode) && enableOrganizationLocation"
+                    class="col-lg col-md col-sm-12 col-12">
+                    <label>Location</label>
+                    <input type="text" class="form-control" placeholder="Type here for Location"
+                        [(ngModel)]="organizationObject.location" (ngModelChange)="setUnsavedChanges(true)">
+                </div>
+                <div class="col-lg col-md col-sm-12 col-12">
+                    <label>Congressional District</label>
+                    <app-endpoint-search id="org-congressional-district" [httpOptions]="districtHttpOptions"
+                        [clearField]="clearDistrictField" [placeHolder]="'Type here for Congressional District'"
+                        (onSelect)="districtSelectFunction($event);" [addSearchText]="true"
+                        (onNewValueSelect)="addDistrictToDatabase($event)"
+                        [isError]="(map.get('duplicateDistrictExist')) ? true : false">
+                    </app-endpoint-search>
+                    <div *ngIf="(map.get('duplicateDistrictExist'))" class="invalid-feedback d-block">District already
+                        added.
+                    </div>
+                    <div *ngIf="organizationObject?.proposalCongDistricts?.length > 0"
+                        class="form-row col fileChips p-3" style="word-break: break-all;">
+                        <span *ngFor="let chip of organizationObject?.proposalCongDistricts;let index = index">
+                            {{chip?.congressionalDistrict?.description}}
+                            <i aria-hidden="true" class="fa fa-close hand-cursor" id="prop-keywrd-dlt"
+                                title="Remove this congressional district" (click)="deleteSelectedDistrict(chip, index)"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 pb-3" *ngIf="isShowPersonResultCard">
+                    <app-person-rolodex-card (ShowElasticResults)="setShowElasticResults($event)"
+                      [personRolodexObject]="selectedMemberObject"></app-person-rolodex-card>
+                  </div>
+
+                <div class="col-lg-12 col-12 viewMode resultCard mt-3" *ngIf="isShowCard">
+                    <button class="closeResultCard ontop" id="close-elastic-person" (click)="isShowCard = false;">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                    <div class="row shadow-lg bg-light">
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <label>Organization Name</label>
+                            <span>{{orgDetailsForCard.organizationName}}</span>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12 mb-3 mt-3">
-                            <div *ngIf="organizationObject?.organizationTypeCode !='3'"> <span
-                                    class="mandatory">*</span>
-                                <label>Organization Name</label>
-                                <app-endpoint-search [httpOptions]="organizationSearchOptions"
-                                    [clearField]="clearOrganizationField"
-                                    [placeHolder]="'Type here for Organization Name'"
-                                    (onSelect)="organizationSelectFunction($event)"
-                                    [isError]="(map.get('organizationName')) ? true : false">
-                                </app-endpoint-search>
-                                <a *ngIf="_commonService.canAddOrganization" class="anchor-link fs-14 mt-1"
-                                    id="org-mannual-add-btn" data-toggle="modal" title="Add New Organization"
-                                    data-target="#addOrganizationModal"
-                                    (click)="map.clear();clearManuallyAddedOrgValues();hideAddOrganizationModal();">
-                                    <i aria-hidden="true" class="fa fa-university"></i>
-                                    <span class="ml-1">Add New Organization</span></a>
-                            </div>
-                            <div *ngIf="organizationObject?.organizationTypeCode =='3'">
-                                <span class="mandatory">*</span><label>Organization Name</label>
-                                <app-elastic *ngIf="organizationObject?.organizationTypeCode=='3'"
-                                    id="organization-rolodex-elastic" [options]="rolodexSearchOptions"
-                                    [clearField]="clearRolodexField"
-                                    [isError]="(map?.get('rolodexName')) ? true : false"
-                                    [placeHolder]="'Type here for Organization'"
-                                    (selectedResult)="rolodexSelectFunction($event)">
-                                </app-elastic>
-                                <a *ngIf="_commonService.isEnableAddtoAddressBook" id="proposal-non-employee-add-btn"
-                                    class="anchor-link d-block fs-14"
-                                    (click)="isAddNonEmployeeModal = true; isShowPersonResultCard = false; switchToNonEmployeeModal();">
-                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                    <ng-container i18n="@@COMMON_ADD_TO_ADDRESS_BOOK">Add to Address Book</ng-container>
-                                </a>
-                            </div>
-                            <div *ngIf="(map.get('organizationName'))" class="invalid-feedback d-block">Please select an
-                                Organization.
-                            </div>
-                            <div *ngIf="(map.get('rolodexName'))" class="invalid-feedback d-block">Please select an
-                                Non-Employee.
-                            </div>
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <label>Point of Contact</label>
+                            <span [class.noDataExists]="!orgDetailsForCard?.contactPersonName">{{orgDetailsForCard?.contactPersonName ? orgDetailsForCard?.contactPersonName : 'No Data'}}</span>
                         </div>
-                        <div class="col-12 mb-2" *ngIf="isShowPersonResultCard">
-                            <app-person-rolodex-card (ShowElasticResults)="setShowElasticResults($event)"
-                                [personRolodexObject]="selectedMemberObject"></app-person-rolodex-card>
-                        </div>
-                        <div *ngIf="organizationObject?.organizationTypeCode =='3' && enableOrganizationLocation"
-                            class="col-lg-6 col-md-6 col-sm-12 col-12">
-                            <label>Location</label>
-                            <input type="text" class="form-control" placeholder="Type here for Location"
-                                [(ngModel)]="organizationObject.location">
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-md-6 col-12">
                             <label>Congressional District</label>
-                            <app-endpoint-search id="org-congressional-district" [httpOptions]="districtHttpOptions"
-                                [clearField]="clearDistrictField" [placeHolder]="'Type here for Congressional District'"
-                                (onSelect)="districtSelectFunction($event);" [addSearchText]="true"
-                                (onNewValueSelect)="addDistrictToDatabase($event)"
-                                [isError]="(map.get('duplicateDistrictExist')) ? true : false">
-                            </app-endpoint-search>
-                            <div *ngIf="(map.get('duplicateDistrictExist'))" class="invalid-feedback d-block">District
-                                already
-                                added.
-                            </div>
-                            <div *ngIf="organizationObject?.proposalCongDistricts?.length > 0"
-                                class="form-row col fileChips px-2" style="word-break: break-all;">
-                                <span *ngFor="let chip of organizationObject?.proposalCongDistricts;let index = index">
-                                    {{chip?.congressionalDistrict?.description}}
-                                    <i aria-hidden="true" class="fa fa-close hand-cursor" id="prop-keywrd-dlt"
-                                        title="Remove this keyword" (click)="deleteSelectedDistrict(chip, index)"></i>
-                                </span>
-                            </div>
+                            <span [class.noDataExists]="!orgDetailsForCard?.congressionalDistrict">{{orgDetailsForCard?.congressionalDistrict ? orgDetailsForCard?.congressionalDistrict : 'No Data'}}</span>
                         </div>
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>

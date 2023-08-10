@@ -41,33 +41,33 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <th id="sort-by-attach-type" scope="col" style="width: 20%;" (click)="isDesc = !isDesc;sortBy('progressReportAttachmentType.description')"
+                        <th id="sort-by-attach-type" class="hand-cursor" scope="col" style="width: 20%;" (click)="isDesc = !isDesc;sortBy('progressReportAttachmentType.description')"
                         title="Click to sort by Document Type">
-                            <label>Document Type
-                                <i [ngClass]="((column == 'progressReportAttachmentType.description') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
+                            <span>Document Type
+                                <i class="hand-cursor" [ngClass]="((column == 'progressReportAttachmentType.description') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
                                         aria-hidden="true"></i>
-                            </label>
+                            </span>
                         </th>
-                        <th id="sort-by-attach-desc" scope="col" style="width: 23%;" (click)="isDesc =!isDesc;sortBy('description')"
+                        <th id="sort-by-attach-desc" class="hand-cursor" scope="col" style="width: 23%;" (click)="isDesc =!isDesc;sortBy('description')"
                         title="Click to sort by Description">
-                            <label>Description
-                                <i [ngClass]="((column == 'description') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
+                            <span>Description
+                                <i class="hand-cursor" [ngClass]="((column == 'description') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
                                         aria-hidden="true"></i>
-                            </label>
+                            </span>
                         </th>
-                        <th id="sort-by-attach-name" scope="col" (click)="isDesc =!isDesc;sortBy('fileName')"
+                        <th id="sort-by-attach-name" class="hand-cursor" scope="col" (click)="isDesc =!isDesc;sortBy('fileName')"
                         title="Click to sort by File Name" >
-                            <label>File Name
-                                <i [ngClass]="((column == 'fileName') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
+                            <span>File Name
+                                <i class="hand-cursor" [ngClass]="((column == 'fileName') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
                                         aria-hidden="true"></i>
-                            </label>
+                            </span>
                         </th>
-                        <th id="sort-by-attach-update" scope="col" (click)="isDesc =!isDesc;sortBy('updateUser')"
+                        <th id="sort-by-attach-update" class="hand-cursor" scope="col" (click)="isDesc =!isDesc;sortBy('updateUser')"
                         title="Click to sort by Update User">
-                            <label>Updated by
-                                <i [ngClass]="((column == 'updateUser') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
+                            <span>Updated by
+                                <i class="hand-cursor" [ngClass]="((column == 'updateUser') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
                                         aria-hidden="true"></i>
-                            </label>
+                            </span>
                         </th>
                         <th scope="col" style="width: 12%;">Actions</th>
                     </tr>
@@ -76,20 +76,9 @@
                             <td><span class="d-block">{{getAttachmentType(attachment?.attachmentTypeCode)}}</span>
                                 <span *ngIf="attachment?.progressReportAttachmentType?.isPrivate" class="badge bg-danger text-white">Confidential</span>
                             </td>
-                            <td title="{{(attachment?.description?.length>30)?(attachment?.description):''}}">
-                                <ng-container *ngIf="!isEditAttachment[i]">
-                                    {{(attachment?.description?.length > 30) ? (attachment?.description | slice:0:30) + '...' : (attachment?.description)}}
-                                </ng-container>
-                                <ng-container *ngIf="isEditAttachment[i]">
-                                    <textarea  [(ngModel)]="attachment.description"
-                                               [isShowLimiter]='isEditAttachment[i]' [limit]=200
-                                               (ngModelChange)="_commonData.isDataChange = true"
-                                               appLengthValidator class="form-control dateBox" cols=2
-                                               id="award-doc-desc" placeholder=""
-                                               rows="1">
-                                </textarea>
-                                    </ng-container>
-                                </td>
+                            <td title="{{(attachment?.description?.length>30)?(attachment?.description):''}}">                               
+                                {{(attachment?.description?.length > 30) ? (attachment?.description | slice:0:30) + '...' : (attachment?.description)}} 
+                            </td>
                                 <td title="{{(attachment?.fileName?.length>30)?(attachment?.fileName):''}}">
                                     {{(attachment?.fileName?.length > 30) ? (attachment?.fileName |
                                         slice:0:30) + '...' : (attachment?.fileName)}}
@@ -100,24 +89,10 @@
                                 </td>
                                 <td>
                                     <ul class="actionButtonGroup">
-                                        <li
-                                                *ngIf="!isEditAttachment[i] &&  isAttachmentEdit">
+                                        <li *ngIf="isAttachmentEdit">
                                             <a (click)="editAttachment(i, attachment)" id="award-doc-edit-btn" tabindex="0">
                                                 <i aria-hidden="true" class="fa fa-pencil"
                                                    title="Click here to edit {{attachment?.fileName}}"></i>
-                                            </a>
-                                        </li>
-                                        <li
-                                                *ngIf="isEditAttachment[i] && isAttachmentEdit">
-                                            <a (click)="updateAttachment(attachment, i);" id="award-doc-save-btn"
-                                               tabindex="0">
-                                                <i aria-hidden="true" class="fa fa-save"
-                                                   title="Click here to save {{attachment?.fileName}}"></i>
-                                            </a>
-                                        </li>
-                                        <li *ngIf="isEditAttachment[i] && isAttachmentEdit" class="mx-2">
-                                            <a (click)="cancelAttachment(i)" title="Cancel Entry">
-                                                <i aria-hidden="true" class="fa fa-remove pointer"></i>
                                             </a>
                                         </li>
                                         <li *ngIf="isAttachmentEdit">
@@ -345,5 +320,52 @@
             </div>
         </div>
     </div>
+
+<!-- Edit attachment Modal -->
+<div class="modal fade mySkinDialog" id="progressReportEditAttachmentModal" tabindex="-1" role="dialog"
+aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Edit Attachment</h5>
+            <button type="button" class="close" data-dismiss="modal" id="progressreport-edit-popup-dismiss-btn"
+                aria-label="Close" (click)="cancelAttachmentEdit()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+                 <div class="gridSkin">`
+                    <div class="mb-2">
+                        <div class="form-row mb-2 p-0">
+                            <div class="col-lg-4 col-12">
+                                <label class="d-block">Document Type</label>
+                                <span>{{editedAttachment?.progressReportAttachmentType?.description}}</span>
+                            </div>
+                            <div class="col-lg-4 col-12">
+                                <label>File</label>
+                                <span class="d-block">
+                                    {{(editedAttachment?.fileName?.length > 50)?(editedAttachment?.fileName | slice:0:30)+'...':(editedAttachment?.fileName)}}
+                                </span>                                   
+                            </div>
+                            <div class="col-12">
+                                <label>Description</label>
+                                <textarea  id="prog-report-edit-attach-desc" cols=2 rows="1"
+                                [(ngModel)]="editedAttachment.description" class="form-control dateBox" appLengthValidator appAutoGrow
+                                [isShowLimiter]='true' [limit]=200>
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="progressreport-doc-popup-close-btn" data-dismiss="modal"
+                (click)="cancelAttachmentEdit()">Close</button>
+            <button type="button" class="btn btn-primary-sub" id="progressreport-doc-popup-update-btn"
+                (click)="updateAttachment();">Update</button>
+        </div>
+    </div>
+</div>
+</div>    
 
 </ng-container >

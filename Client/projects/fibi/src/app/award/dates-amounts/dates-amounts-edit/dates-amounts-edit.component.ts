@@ -12,7 +12,7 @@ import { DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, AWARD_LABE
 import { setFocusToElement } from '../../../common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
 import { ActivatedRoute } from '@angular/router';
-
+declare var $: any;
 @Component({
   selector: 'app-dates-amounts-edit',
   templateUrl: './dates-amounts-edit.component.html',
@@ -68,7 +68,7 @@ export class DatesAmountsEditComponent implements OnInit, OnDestroy {
   isSaving: boolean = false;
 
   constructor(private _datesAmountsService: DatesAmountsService,
-    private _commonData: CommonDataService, public _commonService: CommonService,
+    public commonData: CommonDataService, public _commonService: CommonService,
     private _route: ActivatedRoute
   ) { document.addEventListener('mouseup', this.offClickHandler.bind(this)); }
 
@@ -97,13 +97,13 @@ export class DatesAmountsEditComponent implements OnInit, OnDestroy {
   }
 
   getAwardGeneralData() {
-    this.$subscriptions.push(this._commonData.awardData.subscribe((data: any) => {
+    this.$subscriptions.push(this.commonData.awardData.subscribe((data: any) => {
       if (data) {
         this.awardNumber = data.award.awardNumber;
-        this.sequenceNumber = data.award.sequenceNumber
+        this.sequenceNumber = data.award.sequenceNumber;
         this.instituteProposalList = data.awardFundingProposals;
-        this.projectStartDate = getDateObjectFromTimeStamp(this._commonData.beginDate);
-        this.projectEndDate = getDateObjectFromTimeStamp(this._commonData.finalExpirationDate);
+        this.projectStartDate = getDateObjectFromTimeStamp(this.commonData.beginDate);
+        this.projectEndDate = getDateObjectFromTimeStamp(this.commonData.finalExpirationDate);
         if (data.award.awardId && this.datesAndAmountsData) {
           this.setDatesAndAmountsData(this.datesAndAmountsData);
         }
@@ -119,7 +119,7 @@ export class DatesAmountsEditComponent implements OnInit, OnDestroy {
         'awardSequenceNumber': this.sequenceNumber
       })
       .subscribe((result: any) => {
-        this.setDatesAndAmountsData(result)
+        this.setDatesAndAmountsData(result);
       }));
   }
 
@@ -150,13 +150,15 @@ export class DatesAmountsEditComponent implements OnInit, OnDestroy {
               this._commonService.showToast(HTTP_SUCCESS_STATUS, toastMessage);
               this.updateAwardFunds();
               this.resetTransactionObject();
+              $('#add-transaction-modal').modal('hide');
             }
-            this._commonData.isAwardDataChange = false;
+            this.commonData.isAwardDataChange = false;
             this.isSaving = false;
           }, err => {
-              this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving transaction failed. Please try again.');
-              this.isSaving = false;
-         }));
+            this._commonService.showToast(HTTP_ERROR_STATUS,
+              (this.awardAmountInfo.awardAmountInfoId ? 'Updating' : 'Saving') + ' Transaction failed. Please try again.');
+            this.isSaving = false;
+          }));
       }
     }
   }
@@ -205,7 +207,7 @@ export class DatesAmountsEditComponent implements OnInit, OnDestroy {
     }
   }
   resetTransactionObject() {
-    this._commonData.isAwardDataChange = false;
+    this.commonData.isAwardDataChange = false;
     this.awardAmountInfo.awardAmountTransaction = {};
     this.awardAmountInfo.awardAmountInfoId = '';
     this.awardAmountInfo.awardAmountTransaction.fundedProposalId = '';
@@ -357,7 +359,7 @@ export class DatesAmountsEditComponent implements OnInit, OnDestroy {
         this.updateAwardFunds();
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Transaction deleted successfully.');
       }, err => { 
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to deleted transaction! Please try again.'); 
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to delete Transaction. Please try again.'); 
       },));
   }
 

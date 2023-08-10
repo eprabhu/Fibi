@@ -14,11 +14,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">605</context>
+          <context context-type="linenumber">622</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">1011</context>
+          <context context-type="linenumber">1028</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_OVERVIEW" datatype="html">
@@ -36,7 +36,7 @@
         <source>Sponsor</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/shared/medusa/medusa.component.html</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">143</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
@@ -44,19 +44,19 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">366</context>
+          <context context-type="linenumber">365</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-list/proposal-list.component.html</context>
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">158</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-list/proposal-list.component.html</context>
-          <context context-type="linenumber">194</context>
+          <context context-type="linenumber">186</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-list/proposal-list.component.html</context>
-          <context context-type="linenumber">559</context>
+          <context context-type="linenumber">549</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/claims/claim-list/claim-list.component.html</context>
@@ -84,7 +84,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-edit/proposal-details/proposal-details.component.html</context>
-          <context context-type="linenumber">279</context>
+          <context context-type="linenumber">296</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/award-details/award-details-edit/award-details-edit.component.html</context>
@@ -92,11 +92,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/Institute-proposal/institute-proposal-edit/institute-proposal-edit.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/Institute-proposal/institute-proposal-edit/institute-proposal-edit.component.html</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">87</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/award-details/award-details-view/award-details-view.component.html</context>
@@ -116,7 +116,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-comparison/review/project-outcome/project-outcome.component.html</context>
-          <context context-type="linenumber">263</context>
+          <context context-type="linenumber">361</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-hierarchy/award-hierarchy.component.html</context>
@@ -148,7 +148,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/overview/general-section/general-section-view/general-section-view.component.html</context>
-            <context context-type="linenumber">74</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/ip-comparison/review/overview/general-information/general-information.component.html</context>
@@ -163,7 +163,7 @@
         <source>Award Effective Date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/shared/medusa/medusa.component.html</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">164</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/anticipated-distribution/anticipated-distribution.component.html</context>
@@ -206,7 +206,7 @@
         <source>Final Expiration Date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/shared/medusa/medusa.component.html</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">170</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/anticipated-distribution/anticipated-distribution.component.html</context>
@@ -249,7 +249,7 @@
         <source>Account Number</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/shared/medusa/medusa.component.html</context>
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">178</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
@@ -257,11 +257,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">206</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">208</context>
+          <context context-type="linenumber">207</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/claims/claim-list/claim-list.component.html</context>
@@ -400,11 +400,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">227</context>
+          <context context-type="linenumber">226</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">462</context>
+          <context context-type="linenumber">439</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-view/general-details-view.component.html</context>
@@ -423,7 +423,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">244</context>
+          <context context-type="linenumber">243</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-view/general-details-view.component.html</context>
@@ -442,7 +442,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">346</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-view/general-details-view.component.html</context>
@@ -477,7 +477,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">553</context>
+          <context context-type="linenumber">552</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/current-pending/declaration-section/declaration-section.component.html</context>
@@ -489,19 +489,19 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1412</context>
+          <context context-type="linenumber">1415</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1414</context>
+          <context context-type="linenumber">1417</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1422</context>
+          <context context-type="linenumber">1425</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1446</context>
+          <context context-type="linenumber">1449</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-comparison/review/review.component.html</context>
@@ -596,7 +596,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/institute-proposal.component.html</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_CREATE_NEW_AWARD_TLP" datatype="html">
@@ -607,7 +607,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/institute-proposal.component.html</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_AWARD_#" datatype="html">
@@ -622,7 +622,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">293</context>
+          <context context-type="linenumber">292</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/claims/claim-list/claim-list.component.html</context>
@@ -660,7 +660,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">396</context>
+          <context context-type="linenumber">395</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
@@ -699,11 +699,11 @@
         <source>Sponsor Award Number</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">213</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">325</context>
+          <context context-type="linenumber">324</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/current-pending/current-pending-details/current-pending-details.component.html</context>
@@ -730,7 +730,7 @@
         <source>Sponsor Award Number</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">214</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/award-details/award-details-edit/award-details-edit.component.html</context>
@@ -745,67 +745,67 @@
         <source>List of My Active Awards</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_LIST_OF_ALL_AWARDS_IN_MY_DEPARTMENT" datatype="html">
         <source>List of all awards in my department</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">249</context>
+          <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_LIST_OF_AWARDS_THAT_ARE_PENDING_MY_REVIEW" datatype="html">
         <source>List of Awards that are Pending my Review. This includes Awards &amp; Variation Requests</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">250</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_LIST_OF_AWARDS_THAT_ARE_BEING_CHANGED" datatype="html">
         <source>List of Awards that are being changed. This includes Awards &amp; Variation requests</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">253</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_LIST_OF_AWARDS" datatype="html">
         <source>List of Awards</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">288</context>
+          <context context-type="linenumber">287</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_CLICK_TO_SORT_BY_AWARD_#_TLP" datatype="html">
         <source>Click to sort by Award #</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">292</context>
+          <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_SPONSOR_AWARD_NUMBER_TLP" datatype="html">
         <source>Click to sort by Sponsor Award Number</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">324</context>
+          <context context-type="linenumber">323</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_CLICK_TO_SORT_BY_SPONSOR_TLP" datatype="html">
         <source>Click to sort by Sponsor</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">365</context>
+          <context context-type="linenumber">364</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-list/proposal-list.component.html</context>
-          <context context-type="linenumber">549</context>
+          <context context-type="linenumber">547</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_AWARD_TYPE" datatype="html">
         <source>Award Type</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">386</context>
+          <context context-type="linenumber">385</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/award-details/award-details-edit/award-details-edit.component.html</context>
@@ -824,14 +824,14 @@
         <source>Click to sort by award document type</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">385</context>
+          <context context-type="linenumber">384</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_AWARD_SETUP" datatype="html">
         <source>Award Setup</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">435</context>
+          <context context-type="linenumber">434</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
@@ -858,7 +858,7 @@
         <source>Admin Correction</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">438</context>
+          <context context-type="linenumber">437</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
@@ -873,7 +873,7 @@
         <source>There are In Progress Variation Request(s) for this award.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">512</context>
+          <context context-type="linenumber">511</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-hierarchy/award-hierarchy.component.html</context>
@@ -884,7 +884,7 @@
         <source>Award Number</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">522</context>
+          <context context-type="linenumber">521</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/shared-component/progress-report-create-modal/progress-report-create-modal.component.html</context>
@@ -911,7 +911,7 @@
         <source>View Award#<x id="INTERPOLATION" equiv-text="{{awardVersionObject?.activeAward?.awardNumber}}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">557</context>
+          <context context-type="linenumber">556</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-hierarchy/award-hierarchy.component.html</context>
@@ -923,7 +923,7 @@
         <source>In Progress variation request(s) for this award</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">567</context>
+          <context context-type="linenumber">566</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-hierarchy/award-hierarchy.component.html</context>
@@ -934,7 +934,7 @@
         <source>View Award#<x id="INTERPOLATION" equiv-text="{{award?.awardNumber}}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">577</context>
+          <context context-type="linenumber">576</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
@@ -966,15 +966,15 @@
         <source>Copy Award</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-list/award-list.component.html</context>
-          <context context-type="linenumber">602</context>
+          <context context-type="linenumber">601</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1592</context>
+          <context context-type="linenumber">1595</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1607</context>
+          <context context-type="linenumber">1610</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ALL_PROPOSALS" datatype="html">
@@ -992,7 +992,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-list/proposal-list.component.html</context>
-          <context context-type="linenumber">261</context>
+          <context context-type="linenumber">259</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/institute-proposal-list/institute-proposal-list.component.html</context>
@@ -1035,7 +1035,7 @@
         <source>Sponsor Proposal ID</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-list/proposal-list.component.html</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">280</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-view/general-proposal-information/general-proposal-information.component.html</context>
@@ -1066,7 +1066,7 @@
         <source>Sponsor Proposal ID</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-list/proposal-list.component.html</context>
-          <context context-type="linenumber">284</context>
+          <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_FUNDING_AGENCY_PLHDR" datatype="html">
@@ -1084,7 +1084,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_IP_LIST" datatype="html">
-        <source>IP List</source>
+        <source>Institute Proposal List</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/institute-proposal-list/institute-proposal-list.component.html</context>
           <context context-type="linenumber">182</context>
@@ -1092,6 +1092,32 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/Institute-proposal/institute-proposal-edit/institute-proposal-edit.component.html</context>
           <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="REPORT_PREVIEW" datatype="html">
+        <source>Report Preview</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="REPORT_PREVIEW_HEADER" datatype="html">
+        <source>Report Preview</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/report/template/template.component.html</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_SEARCH_AWARD" datatype="html">
@@ -1201,46 +1227,46 @@
         <source>Please select the name of funding agency</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
       <trans-unit id="GRANTCALL_ADD_NEW_FUNDING_AGENCY" datatype="html">
         <source>Add new Funding Agency</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">237</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">451</context>
+          <context context-type="linenumber">428</context>
         </context-group>
       </trans-unit>
       <trans-unit id="GRANTCALL_PROVIDE_FUNDING_AGENCY_ERR" datatype="html">
         <source>Please provide funding agency.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">466</context>
+          <context context-type="linenumber">443</context>
         </context-group>
       </trans-unit>
       <trans-unit id="GRANTCALL_FUNDING_AGENCY_TYPE" datatype="html">
         <source>Funding Agency Type</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">491</context>
+          <context context-type="linenumber">468</context>
         </context-group>
       </trans-unit>
       <trans-unit id="GRANTCALL_NO_FUNDING_AGENCY_TYPE_ERR" datatype="html">
         <source>Please select funding agency type.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">501</context>
+          <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
       <trans-unit id="GRANTCALL_FUNDING_AGENCY_LOCATION" datatype="html">
         <source>Funding Agency Location</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/grant-call/overview/general-details/general-details-edit/general-details-edit.component.html</context>
-          <context context-type="linenumber">536</context>
+          <context context-type="linenumber">513</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_AREA_OF_RESEARCH/SOCIETAL_CHALLENGE_AREA" datatype="html">
@@ -1322,7 +1348,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/ip-comparison/review/budget/budget.component.html</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
       <trans-unit id="PROPOSAL_SIMPLE_BUDGET" datatype="html">
@@ -1589,7 +1615,7 @@
           <context context-type="sourcefile">app/institute-proposal/overview/special-review/special-review.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
-          <context-group purpose="location">
+        <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/ip-comparison/review/overview/special-review/special-review.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
@@ -1610,7 +1636,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-edit/special-review/special-review.component.html</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">210</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/special-review/special-review-edit/special-review-edit.component.html</context>
@@ -1619,6 +1645,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/special-review/special-review-edit/special-review-edit.component.html</context>
           <context context-type="linenumber">186</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/award/award-comparison/review\overview/specal-review/special-review.component.html</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/overview/special-review/special-review.component.html</context>
@@ -1773,7 +1803,7 @@
         <source>Permissions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">151</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
@@ -1784,22 +1814,36 @@
         <source>Permissions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">143</context>
+          <context context-type="linenumber">145</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="CURRENT_PROJECTS_PENDING_PROPOSAL" datatype="html">
+        <source>Current &amp; Pending</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/proposal/proposal.component.html</context>
+          <context context-type="linenumber">158</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="CURRENT_PROJECTS_PENDING_PROPOSAL_TLP" datatype="html">
+        <source>Current &amp; Pending</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/proposal/proposal.component.html</context>
+          <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_SUPPORT" datatype="html">
         <source>Support</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">185</context>
+          <context context-type="linenumber">186</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">179</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">285</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/agreement/agreement/agreement.component.html</context>
@@ -1859,63 +1903,15 @@
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="COMMON_APPROVE" datatype="html">
+      <trans-unit id="COMMON_APPROVE_FOR_PROPOSAL" datatype="html">
         <source>Approve</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">264</context>
+          <context context-type="linenumber">267</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">324</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/award/task-side-nav-bar/task-side-nav-bar.component.html</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/task/details/task-overview/task-overview.component.html</context>
-          <context context-type="linenumber">44</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/agreement/agreement/agreement.component.html</context>
-          <context context-type="linenumber">132</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/service-request/service-request.component.html</context>
-          <context context-type="linenumber">154</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/service-request/service-request.component.html</context>
-          <context context-type="linenumber">152</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/service-request/service-request.component.html</context>
-          <context context-type="linenumber">236</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/service-request/service-request.component.html</context>
-          <context context-type="linenumber">284</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/claims/claims.component.html</context>
-          <context context-type="linenumber">158</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/claims/claims.component.html</context>
-          <context context-type="linenumber">563</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/progress-report/progress-report.component.html</context>
-          <context context-type="linenumber">138</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/negotiation/negotiation.component.html</context>
-          <context context-type="linenumber">106</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/negotiation/negotiation.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="sourcefile">app/proposal/proposal.component.html</context>
+          <context context-type="linenumber">265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="PROPOSAL_WITHDRAW" datatype="html">
@@ -1923,23 +1919,23 @@
                                                 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">355</context>
+          <context context-type="linenumber">374</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">348</context>
+          <context context-type="linenumber">365</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">547</context>
+          <context context-type="linenumber">568</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">883</context>
+          <context context-type="linenumber">906</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">923</context>
+          <context context-type="linenumber">946</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_NO_PRINCIPAL_INVESTIGATOR_ERR" datatype="html">
@@ -1947,7 +1943,7 @@
                                 Investigator in Key Personnel.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/proposal/proposal.component.html</context>
-          <context context-type="linenumber">441</context>
+          <context context-type="linenumber">463</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
@@ -2063,7 +2059,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-comparison/review/budget-comparison/budget-comparison.component.html</context>
-          <context context-type="linenumber">281</context>
+          <context context-type="linenumber">282</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/budget-expenses/award-budget/detailed-budget/detailed-budget.component.html</context>
@@ -2111,43 +2107,15 @@
           <context context-type="linenumber">304</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="PROTOCOL_STATUS" datatype="html">
-        <source>Protocol Status</source>
+      <trans-unit id="GRANT_CALL_LINK_UNLINK_WARNING" datatype="html">
+        <source> Please note that you can only add a
+                    Grant Call that is currently ‘Open’.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+                    You will not be able to add a Grant Call that is already ‘Closed’, including this current Grant Call
+                    if it has closed.
+                </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-edit/special-review/special-review.component.html</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-edit/special-review/special-review.component.html</context>
-          <context context-type="linenumber">105</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-edit/special-review/special-review.component.html</context>
-          <context context-type="linenumber">198</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/award/overview/special-review/special-review-edit/special-review-edit.component.html</context>
-          <context context-type="linenumber">60</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/award/overview/special-review/special-review-edit/special-review-edit.component.html</context>
-          <context context-type="linenumber">98</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/award/overview/special-review/special-review-edit/special-review-edit.component.html</context>
-          <context context-type="linenumber">187</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/institute-proposal/overview/special-review/special-review.component.html</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/institute-proposal/overview/special-review/special-review.component.html</context>
-          <context context-type="linenumber">86</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/institute-proposal/overview/special-review/special-review.component.html</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="sourcefile">app/proposal/proposal-home/proposal-home-edit/proposal-details/proposal-details.component.html</context>
+          <context context-type="linenumber">580</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_STUDY_SOCIETAL_CHALLENGE_DESCRIPTION_PLHDR" datatype="html">
@@ -2235,6 +2203,61 @@
           <context context-type="linenumber">776</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="COMMON_APPROVE" datatype="html">
+        <source>Approve</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/award/award.component.html</context>
+          <context context-type="linenumber">324</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/award/task-side-nav-bar/task-side-nav-bar.component.html</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/task/details/task-overview/task-overview.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/agreement/agreement/agreement.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/service-request/service-request.component.html</context>
+          <context context-type="linenumber">154</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/service-request/service-request.component.html</context>
+          <context context-type="linenumber">152</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/service-request/service-request.component.html</context>
+          <context context-type="linenumber">236</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/service-request/service-request.component.html</context>
+          <context context-type="linenumber">284</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/claims/claims.component.html</context>
+          <context context-type="linenumber">158</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/claims/claims.component.html</context>
+          <context context-type="linenumber">563</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/progress-report/progress-report.component.html</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/negotiation/negotiation.component.html</context>
+          <context context-type="linenumber">106</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/negotiation/negotiation.component.html</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="AWARD_CREATE_VARIATION_REQUEST + `# ${result?.award?.awardId}`" datatype="html">
         <source>Create variation request for Award #<x id="INTERPOLATION" equiv-text="{{result?.award?.awardId}}"/></source>
         <context-group purpose="location">
@@ -2307,11 +2330,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1324</context>
+          <context context-type="linenumber">1327</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1379</context>
+          <context context-type="linenumber">1382</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_WITHDRAW_CANCEL_AWARD" datatype="html">
@@ -2323,11 +2346,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1327</context>
+          <context context-type="linenumber">1330</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1382</context>
+          <context context-type="linenumber">1385</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_WITHDRAW_CANCEL_AWARD_CLOSURE" datatype="html">
@@ -2343,11 +2366,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1335</context>
+          <context context-type="linenumber">1338</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1390</context>
+          <context context-type="linenumber">1393</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_ADD_CHILD_AWARD" datatype="html">
@@ -2378,11 +2401,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1620</context>
+          <context context-type="linenumber">1623</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1636</context>
+          <context context-type="linenumber">1639</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_GENERATE_AWARD_NOTICE_TLP" datatype="html">
@@ -2401,7 +2424,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1652</context>
+          <context context-type="linenumber">1655</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_ADD_AWARD_COMMENTS_TLP" datatype="html">
@@ -2445,14 +2468,14 @@
                         hold this award for funding agency review?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1520</context>
+          <context context-type="linenumber">1523</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_MOVE_BACK_AWARD_APPROVAL_IN_PROGRESS_CONFIRM_ERR" datatype="html">
         <source>Enter the Funder Approval Date to move the status to Approval In Progress.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1525</context>
+          <context context-type="linenumber">1528</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_COPY_AWARD_CONFIRM_ERR" datatype="html">
@@ -2460,7 +2483,7 @@
                     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1600</context>
+          <context context-type="linenumber">1603</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_GENERATE_AWARD_NOTICE_CONFIRM_ERR" datatype="html">
@@ -2468,7 +2491,7 @@
                         award notice?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1628</context>
+          <context context-type="linenumber">1631</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_COMMENTS_ADDED_VIEW_ONLY_AWARD_TAB_ERR" datatype="html">
@@ -2476,7 +2499,7 @@
                             section can be viewed only in Award tab</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award.component.html</context>
-          <context context-type="linenumber">1664</context>
+          <context context-type="linenumber">1667</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_GENERAL_AWARD_INFORMATION" datatype="html">
@@ -2609,7 +2632,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_LINK_IP_TLP" datatype="html">
-        <source>Link IP</source>
+        <source>Link Institute Proposal</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/Institute-proposal/institute-proposal-edit/institute-proposal-edit.component.html</context>
           <context context-type="linenumber">5</context>
@@ -2635,7 +2658,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_NO_SUBCONTRACT_ADDED_ERR" datatype="html">
-        <source>There are no sub contracts added in this Award.</source>
+        <source>There_are no sub-contracts added in this Award.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/overview/sub-contracts/sub-contracts-view/sub-contracts-view.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2886,7 +2909,7 @@
         <source>Cost Element</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-comparison/review/budget-comparison/budget-comparison.component.html</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">242</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/budget-expenses/award-budget/detailed-budget/detailed-budget.component.html</context>
@@ -2897,15 +2920,15 @@
         <source>WBS Number (for OFIN use)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-comparison/review/budget-comparison/budget-comparison.component.html</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">243</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-comparison/review/budget-comparison/budget-comparison.component.html</context>
-          <context context-type="linenumber">278</context>
+          <context context-type="linenumber">279</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-comparison/review/budget-comparison/budget-comparison.component.html</context>
-          <context context-type="linenumber">309</context>
+          <context context-type="linenumber">310</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/budget-expenses/expense-edit/expense-edit.component.html</context>
@@ -2952,7 +2975,7 @@
         <source>Justification</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/award-comparison/review/budget-comparison/budget-comparison.component.html</context>
-          <context context-type="linenumber">245</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_INSTITUTIONAL_PROPOSAL" datatype="html">
@@ -3066,7 +3089,7 @@
             in line item costs to submit the award.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/budget-expenses/award-budget/budget-overview/budget-overview.component.html</context>
-          <context context-type="linenumber">412</context>
+          <context context-type="linenumber">415</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AWARD_BUDGET_VALIDATION-MESSAGE" datatype="html">
@@ -3099,7 +3122,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/award/role/role-view/role-view.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_AWARD_ID" datatype="html">
@@ -3188,6 +3211,13 @@
           <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="MANPOWER_SETUP_REMINDER" datatype="html">
+        <source>Position ID will only be generated when a) Manpower Plan &amp; b) Confirm Project Details (HOD/DRSO approval) tasks are approved.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/award/man-power/eom-category-detail/eom-category-detail.component.html</context>
+          <context context-type="linenumber">272</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="AGREEMENT_ORGANIZATION" datatype="html">
         <source>Sponsor/Organization</source>
         <context-group purpose="location">
@@ -3205,7 +3235,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/institute-proposal/institute-proposal.component.html</context>
-          <context context-type="linenumber">418</context>
+          <context context-type="linenumber">458</context>
         </context-group>
       </trans-unit>
       <trans-unit id="IP_INSTITUTE_PROPOSAL" datatype="html">
@@ -3231,11 +3261,11 @@
         <source>Is Medical Staff</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/admin-modules/person-maintenance/person-details/person-details.component.html</context>
-          <context context-type="linenumber">354</context>
+          <context context-type="linenumber">364</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/admin-modules/person-maintenance/person-details/person-details.component.html</context>
-          <context context-type="linenumber">668</context>
+          <context context-type="linenumber">678</context>
         </context-group>
       </trans-unit>
       <trans-unit id="COMMON_NAVIGATE_TO_RELEVANT_FIELD" datatype="html">

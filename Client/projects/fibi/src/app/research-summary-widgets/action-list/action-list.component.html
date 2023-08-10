@@ -71,24 +71,33 @@
             <label>Action Date</label>
             <div class="d-flex">
               <span class="dateField">
-                <input matInput [matDatepicker]="fromDt" class="d-inline-block form-control" [(ngModel)]="inboxObject.fromDate"
+                <input matInput [matDatepicker]="fromDt" class="d-inline-block form-control" [(ngModel)]="inboxObject.fromDate" (ngModelChange)="checkForValidFormat($event, 'fromDate')"
                   placeholder="{{datePlaceHolder}}" id="from-date" (click)="fromDt.open()">
                 <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor" title="open calendar"
                   (click)="fromDt.open()"></span>
                 <mat-datepicker #fromDt (opened)="setFocusToElement('from-date')">
                 </mat-datepicker>
+                <span class="invalid-feedback block-display" *ngIf="fromDateValidationMap">
+                  <span>Entered date format is invalid.<br>Please use {{DEFAULT_DATE_FORMAT}} format.</span>
+                </span>
               </span>
               <span>-</span>
               <span class="dateField">
-                <input matInput [matDatepicker]="toDt" class="d-inline-block form-control" [(ngModel)]="inboxObject.toDate"
+                <input matInput [matDatepicker]="toDt" class="d-inline-block form-control" [(ngModel)]="inboxObject.toDate" (ngModelChange)="checkForValidFormat($event, 'toDate')"
                   placeholder="{{datePlaceHolder}}" id="to-date" (click)="toDt">
                 <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor" title="open calendar"
                   (click)="toDt"></span>
                 <mat-datepicker #toDt (opened)="setFocusToElement('to-date')">
                 </mat-datepicker>
+				<span class="invalid-feedback block-display" *ngIf="toDateValidationMap">
+                  <span>Entered date format is invalid.<br>Please use {{DEFAULT_DATE_FORMAT}} format.</span>
+                </span>
               </span>
             </div>
           </div>
+          <span class="invalid-feedback block-display" *ngIf="dateValidationMap.get('endDate')">
+            {{dateValidationMap.get('endDate')}}
+          </span>
           <div class="text-right col-12 mt-3">
             <button id="adv-search-clear-grant" class="btn btn-secondary btn-sm btn-xs mr-sm-2 mr-0"
               (click)="clearInboxSearchField();getInboxTab()">Clear</button>

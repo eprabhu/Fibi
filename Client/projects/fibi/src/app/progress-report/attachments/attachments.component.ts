@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { AttachmentsService } from './attachments.service';
 import { environment } from '../../../environments/environment';
 import { CommonDataService } from '../services/common-data.service';
-import {fileDownloader} from '../../common/utilities/custom-utilities';
+import {deepCloneObject, fileDownloader} from '../../common/utilities/custom-utilities';
 
 
 
@@ -49,8 +49,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     selectedAttachmentType: any[] = [];
     deployMap = environment.deployUrl;
     isAttachmentEdit = true;
-    isEditAttachment = [];
-    tempAttachment: any = {};
+    editedAttachment: any = {};
     editIndex = null;
     $subscriptions: Subscription[] = [];
     isShowConfidentialAttachment = false;
@@ -131,7 +130,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     }
 
     showAddAttachmentPopUp(attachment, index) {
-        this.checkAndCancelIfEditAttachment();
         if (this.isReplaceAttachment) {
             this.replaceAttachment = attachment;
             this.replaceIndex = index;
@@ -139,7 +137,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     }
 
     clearAttachmentDetails() {
-        this.checkAndCancelIfEditAttachment();
         this.attachmentWarningMsg = null;
         this.uploadedFile = [];
         this.isReplaceAttachment = false;
@@ -279,13 +276,12 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     }
 
     getVersion(documentId, progressReportId, fileName) {
-        const requestObject={
+        const requestObject = {
             'progressReportId' : progressReportId,
             'awardId' : this.awardId,
             'awardLeadUnitNumber' : this.awardLeadUnitNumber,
             'documentId' : documentId,
-        }
-        this.checkAndCancelIfEditAttachment();
+        };
         this.isShowAttachmentVersionModal = true;
         this.attachmentVersions = [];
         this.fileName = fileName;
@@ -299,7 +295,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     }
 
     temprySaveAttachments(removeId, removeIndex, removeDocumentId, removeObj) {
-        this.checkAndCancelIfEditAttachment();
         this.removeObjId = removeId;
         this.removeObjIndex = removeIndex;
         this.removeObj = removeObj;
@@ -330,39 +325,32 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     }
 
     editAttachment(index: number, attachment) {
-        this.checkAndCancelIfEditAttachment();
-        this.isEditAttachment[index] = true;
         this.editIndex = index;
-        this.tempAttachment = JSON.parse(JSON.stringify(attachment));
+        this.editedAttachment = deepCloneObject(attachment);
+        $('#progressReportEditAttachmentModal').modal('show');
     }
 
-    cancelAttachment(index: number) {
-        this.progressReportAttachments[index] = this.tempAttachment;
-        this.tempAttachment = null;
-        this.isEditAttachment[index] = false;
-        this.editIndex = null;
+    cancelAttachmentEdit() {
         this._commonData.isDataChange = false;
+        this.editedAttachment = {};
+        this.editIndex = null;
+        $('#progressReportEditAttachmentModal').modal('hide');
     }
 
-    checkAndCancelIfEditAttachment() {
-        if (this.editIndex !== null) {
-            this.cancelAttachment(this.editIndex);
-        }
-    }
-
-    updateAttachment(attachment, index) {
-        attachment.updateUser = this.updateUser;
-        const requestObject = {awardProgressReportAttachments: [attachment], actionType: 'U'};
+    updateAttachment() {
+        this.editedAttachment.updateUser = this.updateUser;
+        this.editedAttachment.updateTimeStamp = new Date().getTime();
+        const requestObject = {awardProgressReportAttachments: [this.editedAttachment], actionType: 'U'};
         this.$subscriptions.push(this._attachmentsService.saveOrUpdateProgressReportAttachment(requestObject).subscribe((data: any) => {
-            this.progressReportAttachments.splice(index, 1);
+            this.progressReportAttachments.splice(this.editIndex, 1);
             this.progressReportAttachments.unshift(data.awardProgressReportAttachments[0]);
             this._commonData.isDataChange = false;
             }, err => {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to update attachment! Please try again.');
             },
             () => {
+                $('#progressReportEditAttachmentModal').modal('hide');
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment successfully updated.');
-                this.isEditAttachment[index] = false;
                 this.editIndex = null;
             }));
     }

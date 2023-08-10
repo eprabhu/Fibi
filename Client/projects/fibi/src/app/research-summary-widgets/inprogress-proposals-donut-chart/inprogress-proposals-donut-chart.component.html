@@ -22,7 +22,7 @@
         <div class="card-body">
             <div *ngIf="isShowLoader" appCustomPreloader></div>
             <div id="inprogress_proposal_donut_chart" (window:resize)="onResize($event)" tabindex="0" style="height: 250px;"></div>
-            <div class="no-data-container" *ngIf="!inProgressProposalChartData?.length">
+            <div class="no-data-container" *ngIf="!inProgressProposalChartData?.length && !isShowLoader">
                 <span class="no-data-icon-outer">
                     <div class="no-data-icon">
                         <i class="fa fa-file-o" aria-hidden="true"></i>

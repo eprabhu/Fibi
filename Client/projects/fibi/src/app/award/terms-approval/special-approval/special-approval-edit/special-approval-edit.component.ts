@@ -6,7 +6,7 @@ import { compareDates, parseDateWithoutTimestamp, getDateObjectFromTimeStamp } f
 import { SpecialApprovalService } from '../special-approval.service';
 import { setFocusToElement, inputRestrictionForAmountField } from '../../../../common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../common/utilities/subscription-handler';
-
+import {HTTP_SUCCESS_STATUS ,HTTP_ERROR_STATUS} from '../../../../app-constants';
 @Component({
   selector: 'app-special-approval-edit',
   templateUrl: './special-approval-edit.component.html',
@@ -145,6 +145,7 @@ export class SpecialApprovalEditComponent implements OnInit, OnDestroy {
         'awardAprovedForeignTravel': this.awardAprovedForeignTravel,
         'acType': this.getType(this.awardAprovedForeignTravel.awardApprovedForiegnTravelId)
       }).subscribe((data: any) => {
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, "Foreign Traveler added successfully.")
         this.awardAprovedForeignTravel = data.awardAprovedForeignTravel;
         (this.acType === 'I') ? this.specialForeignTravel.push(this.awardAprovedForeignTravel) :
           this.specialForeignTravel.splice(this.index.specialApprovalIndex, 1, this.awardAprovedForeignTravel);
@@ -153,7 +154,8 @@ export class SpecialApprovalEditComponent implements OnInit, OnDestroy {
         this.awardAprovedForeignTravel = {};
         this.awardAprovedForeignTravel.travellerName = '';
         this.isSaving = false;
-      }, err => { this.isSaving = false; }));
+      }, err => { this.isSaving = false; 
+        this._commonService.showToast(HTTP_ERROR_STATUS, "Adding Foreign Traveler failed. Please try again.")}));
     }
   }
   addEquipment() {
@@ -173,7 +175,9 @@ export class SpecialApprovalEditComponent implements OnInit, OnDestroy {
         this.isSpecialApproval = true;
         this.awardApprovedEquipment = {};
         this.isSaving = false;
-      }, err => { this.isSaving = false; }));
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, "Equipment added successfully.");
+      }, err => { this.isSaving = false; 
+        this._commonService.showToast(HTTP_ERROR_STATUS, "Adding Equipment failed. Please try again.");}));
     }
   }
   /**
@@ -223,8 +227,11 @@ export class SpecialApprovalEditComponent implements OnInit, OnDestroy {
     this.$subscriptions.push(this._specialApprovalService.addSpecialApproval(
       { 'awardAprovedForeignTravel': this.specialForeignTravel[this.index.specialApprovalIndex], 'acType': 'D' })
       .subscribe(data => {
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, "Foreign Traveler deleted successfully.")
         this.specialForeignTravel.splice(this.index.specialApprovalIndex, 1);
         this.specialApprovalSum();
+      },err => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Foreign Traveler failed. Please try again.');
       }));
   }
   deleteEquipment(removeEquipmentId) {
@@ -232,8 +239,11 @@ export class SpecialApprovalEditComponent implements OnInit, OnDestroy {
     this.$subscriptions.push(this._specialApprovalService.addSpecialApproval(
       { 'awardApprovedEquipment': this.specialEquipment[this.equipmentIndex], 'acType': 'D' })
       .subscribe(data => {
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, "Equipment deleted successfully.");
         this.specialEquipment.splice(this.equipmentIndex, 1);
         this.specialApprovalSum();
+      },err => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Equipment failed. Please try again.');
       }));
   }
 }

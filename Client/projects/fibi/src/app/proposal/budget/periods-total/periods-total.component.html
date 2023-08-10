@@ -4,6 +4,10 @@
             <div class="card-body pt-0">
                 <app-unsaved-change-warning [hasUnsavedChanges]="hasUnsavedChanges" [buttonName]="'Calculate & Save'">
                 </app-unsaved-change-warning>
+                <div *ngIf="isTotalCostExceedsLimit" class="alert alert-danger p-1 f-14 mb-2 d-flex align-items-center ease-in w-100 mt-2 shadow-sm ng-tns-c19-0 ng-trigger ng-trigger-enterAnimation ng-star-inserted">
+                    <i class="fa fa-info-circle info-icon mx-2" aria-hidden="true"></i>
+                    <em>Budget total cost cannot exceed {{_commonService.currencyFormat}}999,999,999.99</em>
+                </div>
                 <div id="proposal-periods-total">
 
                     <div class="row my-md-3 my-2">
@@ -58,12 +62,14 @@
                                                 id="{{'period-start-date' + period?.budgetPeriod}}"
                                                 (keypress)="_commonService._keyPress($event, 'date')"
                                                 class="form-control" [(ngModel)]="period.startDate"
-                                                (click)="checkPersonExistInPeriod(period, 'period-start-date' + period?.budgetPeriod)"
-                                                [ngClass]="{'is-invalid': startDatesWarningMap[period.budgetPeriod]?.startErrorMessage}"
-                                                (ngModelChange)="validatePeriodDates(period, 'STARTDATE');setUnsavedChanges(true);"
-                                                [disabled]="_budgetDataService.isBudgetViewMode || isViewMode"
-                                                (click)="periodstart.open()" />
-                                            <i class="fa fa-calendar fa-large insidePicker hand-cursor"
+                                                (click)="checkPersonExistInPeriod(period, 'period-start-date' + period?.budgetPeriod);clearDateOnValidation(period, 'period-start-date-icon' + period?.budgetPeriod);"
+                                                [ngClass]="startDatesWarningMap[period.budgetPeriod]?.startErrorMessage || formatWarningMap.has(period.budgetPeriod + 's')?'is-invalid d-block' : '' "
+                                                (ngModelChange)="validatePeriodDates(period, 'STARTDATE');dateFormateValidator($event,'periodstart',period.budgetPeriod);setUnsavedChanges(true);"
+                                                [disabled]="_budgetDataService.isBudgetViewMode || isViewMode" />
+                                                <span class="fa fa-calendar fa-large insidePicker hand-cursor" title="open calendar"
+                                                (click)="clearDateOnValidation(period, 'period-start-date-icon' + period?.budgetPeriod);"></span>
+                                            <i 
+                                                id="{{'period-start-date-icon' + period?.budgetPeriod}}"
                                                 (click)="periodstart.open()" aria-hidden="true"
                                                 (click)="checkPersonExistInPeriod(period, 'period-start-date' + period?.budgetPeriod)"></i>
                                             <mat-datepicker #periodstart (opened)="setFocusToElement('period-start-date' + period?.budgetPeriod)"
@@ -74,6 +80,10 @@
                                             class="invalid-feedback block-display">
                                             {{startDatesWarningMap[period.budgetPeriod]?.startErrorMessage}}
                                         </span>
+                                        <span *ngIf="formatWarningMap.has(period.budgetPeriod + 's')"
+                                        class="invalid-feedback block-display">
+                                        {{formatWarningMap.get(period.budgetPeriod + 's')}}
+                                        </span>
                                     </td>
                                     <td class="px-1">
                                         <span class="dateField">
@@ -82,11 +92,14 @@
                                                 (keypress)="_commonService._keyPress($event, 'date')"
                                                 class="form-control" [(ngModel)]="period.endDate"
                                                 [disabled]="_budgetDataService.isBudgetViewMode || isViewMode"
-                                                (click)="checkPersonExistInPeriod(period, 'period-end-date' + period?.budgetPeriod)"
-                                                [ngClass]="{'is-invalid': endDatesWarningMap[period.budgetPeriod]?.endErrorMessage}"
-                                                (ngModelChange)="validatePeriodDates(period, 'ENDDATE');setUnsavedChanges(true);"
-                                                (click)="periodend.open()">
-                                            <i class="fa fa-calendar fa-large insidePicker hand-cursor"
+                                               (click)="checkPersonExistInPeriod(period, 'period-end-date' + period?.budgetPeriod);clearDateOnValidation(period, 'period-end-date-icon' + period?.budgetPeriod);"
+                                                [ngClass]="endDatesWarningMap[period.budgetPeriod]?.endErrorMessage || formatWarningMap.has(period.budgetPeriod + 'e')?'is-invalid d-block' : '' "
+                                                (ngModelChange)="validatePeriodDates(period, 'ENDDATE');setUnsavedChanges(true);dateFormateValidator($event,'periodend',period.budgetPeriod)" />
+                                                <span class="fa fa-calendar fa-large insidePicker hand-cursor" title="open calendar"
+                                                (click)="clearDateOnValidation(period, 'period-end-date-icon' + period?.budgetPeriod);">
+                                                </span>
+                                            <i 
+                                                id="{{'period-end-date-icon' + period?.budgetPeriod}}"
                                                 aria-hidden="true" (click)="periodend.open()"
                                                 (click)="checkPersonExistInPeriod(period, 'period-end-date' + period?.budgetPeriod)"></i>
                                             <mat-datepicker #periodend (opened)="setFocusToElement('period-end-date' + period?.budgetPeriod)"
@@ -97,10 +110,15 @@
                                             class="invalid-feedback block-display">
                                             {{endDatesWarningMap[period.budgetPeriod]?.endErrorMessage}}
                                         </span>
+                                        <span *ngIf="formatWarningMap.has(period.budgetPeriod + 'e')"
+                                        class="invalid-feedback block-display">
+                                        {{formatWarningMap.get(period.budgetPeriod + 'e')}}
+                                        </span>
                                     </td>
                                     <td class="px-1">
                                         <input appCurrencyFormat type="text" class="form-control text-right"
-                                            [(ngModel)]="period.totalDirectCost" (ngModelChange)="calculatePeriodTotalCost(period, budgetData);inputDigitRestriction(period.totalDirectCost, 'directCost', index);
+                                            [(ngModel)]="period.totalDirectCost"
+                                            (ngModelChange)="calculatePeriodTotalCost(period, budgetData);inputDigitRestriction(period.totalDirectCost, 'directCost', index); validateTotalCost();
                     setUnsavedChanges(true);" [initialValue]="period.totalDirectCost"
                                             [disabled]="isPeriodsAndTotalEditable || period?.budgetDetails?.length > 0"
                                             (keypress)="inputRestriction($event)" autocomplete="off"
@@ -110,7 +128,8 @@
                                     </td>
                                     <td class="px-1" *ngIf="budgetData?.isShowModifiedDirectCost">
                                         <input appCurrencyFormat type="text" class="form-control text-right"
-                                            [(ngModel)]="period.totalModifiedDirectCost" (ngModelChange)="calculatePeriodTotalCost(period, budgetData);inputDigitRestriction(period.totalModifiedDirectCost, 'modifiedDirectCost', index);
+                                            [(ngModel)]="period.totalModifiedDirectCost"
+                                            (ngModelChange)="calculatePeriodTotalCost(period, budgetData);inputDigitRestriction(period.totalModifiedDirectCost, 'modifiedDirectCost', index); validateTotalCost();
                     setUnsavedChanges(true);" [initialValue]="period.totalModifiedDirectCost"
                                             [disabled]="isPeriodsAndTotalEditable || period?.budgetDetails?.length > 0"
                                             (keypress)="inputRestriction($event)" autocomplete="off"
@@ -121,7 +140,7 @@
                                     </td>
                                     <td class="px-1">
                                         <input appCurrencyFormat type="text" class="form-control text-right"
-                                            [(ngModel)]="period.totalIndirectCost" (ngModelChange)="calculatePeriodTotalCost(period, budgetData);inputDigitRestriction(period.totalIndirectCost, 'inDirectCost', index);
+                                            [(ngModel)]="period.totalIndirectCost" (ngModelChange)="calculatePeriodTotalCost(period, budgetData);inputDigitRestriction(period.totalIndirectCost, 'inDirectCost', index); validateTotalCost();
                     setUnsavedChanges(true);" [initialValue]="period.totalIndirectCost"
                                             [disabled]="period?.budgetDetails?.length > 0 || isPeriodsAndTotalEditable"
                                             (keypress)="inputRestriction($event)" autocomplete="off"
@@ -133,7 +152,7 @@
                                         <input appCurrencyFormat type="text" class="form-control text-right"
                                             [(ngModel)]="period.costSharingAmount"
                                             [initialValue]="period.costSharingAmount"
-                                            (ngModelChange)="calculatePeriodTotalCost(period, budgetData);setUnsavedChanges(true);inputDigitRestriction(period.costSharingAmount, 'costSharingAmount', index);"
+                                            (ngModelChange)="calculatePeriodTotalCost(period, budgetData);setUnsavedChanges(true);inputDigitRestriction(period.costSharingAmount, 'costSharingAmount', index); validateTotalCost();"
                                             [disabled]="period?.budgetDetails?.length > 0 || isPeriodsAndTotalEditable"
                                             (keypress)="inputRestriction($event)" autocomplete="off"
                                             [ngClass]="(map.get('costSharingAmount'+index)) ? 'is-invalid d-block' : ''" />
@@ -145,7 +164,7 @@
                                         <input appCurrencyFormat type="text" class="form-control text-right"
                                             [(ngModel)]="period.underrecoveryAmount"
                                             [initialValue]="period.underrecoveryAmount"
-                                            (ngModelChange)="calculatePeriodTotalCost(period, budgetData);setUnsavedChanges(true);inputDigitRestriction(period.underrecoveryAmount, 'underRecoveryAmount', index);"
+                                            (ngModelChange)="calculatePeriodTotalCost(period, budgetData);setUnsavedChanges(true);inputDigitRestriction(period.underrecoveryAmount, 'underRecoveryAmount', index); validateTotalCost();"
                                             [disabled]="period?.budgetDetails?.length > 0 || isPeriodsAndTotalEditable"
                                             (keypress)="inputRestriction($event)" autocomplete="off"
                                             [ngClass]="(map.get('underRecoveryAmount'+index)) ? 'is-invalid d-block' : ''" />
@@ -160,7 +179,7 @@
                                     <td class="px-1" *ngIf="budgetData?.isShowInKind">
                                         <input appCurrencyFormat type="text" class="form-control text-right"
                                             [(ngModel)]="period.totalInKind" [initialValue]="period.totalInKind"
-                                            (ngModelChange)="calculatePeriodTotalCost(period, budgetData);setUnsavedChanges(true);inputDigitRestriction(period.totalInKind, 'totalInKind', index);"
+                                            (ngModelChange)="calculatePeriodTotalCost(period, budgetData);setUnsavedChanges(true);inputDigitRestriction(period.totalInKind, 'totalInKind', index); validateTotalCost();"
                                             [disabled]="(budgetData?.isShowInKind && budgetData?.isShowCostShareAndUnderrecovery) || period?.budgetDetails?.length > 0 || isPeriodsAndTotalEditable"
                                             (keypress)="inputRestriction($event)" autocomplete="off"
                                             [ngClass]="(map.get('totalInKind'+index)) ? 'is-invalid d-block' : ''" />
@@ -184,7 +203,7 @@
                                             title="Delete Period {{period?.budgetPeriod}}"></i>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr [class.invalid-cost-bg]="isTotalCostExceedsLimit">
                                     <td colspan="2"></td>
                                     <td class="font-weight-bold text-right px-1">Total</td>
                                     <td class="font-weight-bold text-right px-1">
@@ -402,7 +421,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Warning</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="triggerPicker()">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -410,8 +429,7 @@
                 <p>Changes in budget period date(s) can affect the added budget personnel line item(s).</p>
             </div>
             <div class="modal-footer">
-                <button id="bdgt-extend-warn-ok" type="button" class="btn btn-primary-sub btn-sm" data-dismiss="modal"
-                    (click)="triggerPicker()">Ok</button>
+                <button id="bdgt-extend-warn-ok" type="button" class="btn btn-primary-sub btn-sm" data-dismiss="modal">Ok</button>
             </div>
         </div>
     </div>

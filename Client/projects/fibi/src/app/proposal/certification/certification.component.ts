@@ -10,6 +10,7 @@ import { WebSocketService } from '../../common/services/web-socket.service';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import { DataStoreService } from '../services/data-store.service';
 import {concatUnitNumberAndUnitName} from '../../common/utilities/custom-utilities';
+import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 
 
 @Component({
@@ -40,12 +41,13 @@ export class CertificationComponent implements OnInit, OnDestroy {
     bellIconHover: boolean[] = [];
     notifications: PersonNotificationMailLog[] = [];
     loggedInPersonId = this._commonService.getCurrentUserDetail('personID');
-    dataDependencies:any[] = ['proposal', 'dataVisibilityObj', 'availableRights', 'proposalPersons'];
+    dataDependencies = ['proposal', 'dataVisibilityObj', 'availableRights', 'proposalPersons'];
     dataVisibilityObj: any;
     result: any = {};
     currentMode = '';
     $subscriptions: Subscription[] = [];
     concatUnitNumberAndUnitName = concatUnitNumberAndUnitName;
+    isCertificationEditable = false;
 
     constructor(
         private _commonService: CommonService,
@@ -69,7 +71,9 @@ export class CertificationComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
-        this._websocketService.releaseCurrentModuleLock('Certification' + '#' + this.selectedPerson.proposalPersonId);
+        if (this.selectedPerson) {
+            this._websocketService.releaseCurrentModuleLock('Certification' + '#' + this.selectedPerson.proposalPersonId);
+        }
         this.setUnsavedChanges(false);
     }
 
@@ -77,9 +81,11 @@ export class CertificationComponent implements OnInit, OnDestroy {
 		this.result = this._dataStore.getData(this.dataDependencies);
         this.dataVisibilityObj = this.result.dataVisibilityObj;
         this.proposalId = this.result.proposal.proposalId;
-        if (this.selectedPerson && this.currentMode !== this.dataVisibilityObj.mode) {
+        if (this.currentMode !== this.dataVisibilityObj.mode) {
             this.currentMode = this.dataVisibilityObj.mode;
+            if (this.selectedPerson) {
             this.configureSelectedPersonDetails();
+            }
         }
     }
 
@@ -105,17 +111,35 @@ export class CertificationComponent implements OnInit, OnDestroy {
     }
 
     selectPerson(person: ProposalPerson): void {
+        this.isCertificationEditable = false;
         if (this.selectedPerson.proposalPersonId !== person.proposalPersonId) {
-            this._websocketService.releaseCurrentModuleLock('Certification' + '#' + this.selectedPerson.proposalPersonId);
-            this.selectedPerson = person;
+            this.removeLockForCertification();
+            this.setSelectedPerson(person);
             this.configureSelectedPersonDetails();
             this.configuration.enableViewMode = true;
         }
     }
 
+    setSelectedPerson(person: ProposalPerson): void {
+        this.selectedPerson = person;
+    }
+
+    removeLockForCertification(): void {
+        this._websocketService.releaseCurrentModuleLock('Certification' + '#' + this.selectedPerson.proposalPersonId);
+    }
+
     updatePersonCertificationStatus(saveEvent: any) {
-        if ((this.selectedPerson.personCertified && !saveEvent.IS_ALL_QUESTIONNAIRES_COMPLETE) ||
-            (!this.selectedPerson.personCertified && saveEvent.IS_ALL_QUESTIONNAIRES_COMPLETE)) {
+        const IS_QUEST_EDITABLE = this.isQuestionnaireEditMode();
+        if (IS_QUEST_EDITABLE && saveEvent.QUESTIONNAIRE_ANS_HEADER_ID) {
+            if (saveEvent) {
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Questionnaire saved successfully.');
+            } else {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving questionnaire failed. Please try again.');
+            }
+        }
+        if (IS_QUEST_EDITABLE && this.isCertificationEditable &&
+            ((this.selectedPerson.personCertified && !saveEvent.IS_ALL_QUESTIONNAIRES_COMPLETE) ||
+            (!this.selectedPerson.personCertified && saveEvent.IS_ALL_QUESTIONNAIRES_COMPLETE))) {
             const RO = this.generateUpdateCertificateRO(saveEvent.IS_ALL_QUESTIONNAIRES_COMPLETE);
             this.$subscriptions.push(this._certificationService
                 .updateProposalPersonCertification(RO)
@@ -246,21 +270,25 @@ export class CertificationComponent implements OnInit, OnDestroy {
 
     getLockForCertification() {
         this._websocketService.getLockForModule('Certification', this.selectedPerson.proposalPersonId, this.result.proposal.title);
-
     }
 
     async editCertification() {
-        this.selectPerson(this.personDetails);
+        this.removeLockForCertification();
+        this.setSelectedPerson(this.personDetails);
+        this.isCertificationEditable = true;
         const lockId = 'Certification' + '#' + this.selectedPerson.proposalPersonId;
         const isView = !this.isQuestionnaireEditMode();
+        this.configuration.moduleSubitemCodes = [3];
+        this.configuration.moduleSubItemKey = this.getSelectedPersonId().personId;
         const isModuleLocked = await this._websocketService.isModuleLocked('Certification', this.selectedPerson.proposalPersonId);
         if (!isView && this._websocketService.isLockAvailable(lockId)) {
             this.getLockForCertification();
-            this.configuration.enableViewMode = isView;
-            this.configuration = { ...this.configuration };
+            this.configuration.enableViewMode = false;
         } else if (!isView && !this._websocketService.isLockAvailable(lockId)) {
             this.getLockForCertification();
             this._websocketService.showModal(lockId);
+            this.configuration.enableViewMode = true;
         }
+        this.configuration = { ...this.configuration };
     }
 }

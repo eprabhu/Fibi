@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { PaymentService } from '../payment.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../../common/services/common.service';
-import { HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { CommonDataService } from '../../services/common-data.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
@@ -54,7 +54,9 @@ export class PaymentEditComponent implements OnInit, OnDestroy {
       this.updateAwardStoreData(data);
       this._commonData.isAwardDataChange = false;
       this.isSaving = false;
-    }, err => { this.isSaving = false; }));
+    }, err => {
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Payment failed. Please try again.'); 
+      this.isSaving = false; }));
    }
   }
 

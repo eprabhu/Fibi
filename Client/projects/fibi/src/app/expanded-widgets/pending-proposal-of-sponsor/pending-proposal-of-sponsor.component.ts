@@ -58,7 +58,7 @@ export class PendingProposalOfSponsorComponent implements OnInit, OnDestroy {
         if (this.researchSummaryIndex === 'PENDING_AWARDS_OF_SPONSORS') {
             this._router.navigate(['/fibi/award'], { queryParams: { awardId: proposalDetails[0] } });
         } else {
-            this._router.navigate(['/fibi/proposal/summary'], { queryParams: { proposalId: proposalDetails[0] } });
+            this._router.navigate(['/fibi/instituteproposal/overview'], { queryParams: { instituteProposalId : proposalDetails[0] } });
         }
     }
 

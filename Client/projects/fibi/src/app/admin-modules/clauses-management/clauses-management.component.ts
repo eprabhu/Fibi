@@ -46,7 +46,7 @@ export class ClausesManagementComponent implements OnInit {
     this.clausesservice.addToClausesBank(requestObject).subscribe((data: any) => {
       this.clausesList.push(data);
       this.loadAllBankClauses();
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Clauses added successfully');
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Clauses added successfully.');
       this.clauses = '';
    });
   }
@@ -62,7 +62,7 @@ export class ClausesManagementComponent implements OnInit {
     requestObject.clauseCode = code;
     this.clausesservice.deleteClausesById(requestObject).subscribe((data: any) => {
       this.clausesList.splice(index, 1);
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Clauses deleted successfully');
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Clauses deleted successfully.');
     });
   }
   cancelClauseEdit() {
@@ -81,7 +81,7 @@ export class ClausesManagementComponent implements OnInit {
       this.clausesList = data.clausesBanks;
       requestObject.description = {};
       this.cancelClauseEdit();
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Clauses updated successfully');
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Clauses updated successfully.');
    });
   }
 }
