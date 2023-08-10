@@ -73,6 +73,7 @@ export class ReviewComponent implements OnInit, OnDestroy {
     updateStatus(data) {
         this.reviewDetails.extReviewStatus = data.extReviewStatus;
         this.reviewDetails.extReviewStatusCode = data.extReviewStatusCode;
+        this.reviewDetails.deadlineDate = data.deadlineDate;
     }
 
     updateReview(data) {

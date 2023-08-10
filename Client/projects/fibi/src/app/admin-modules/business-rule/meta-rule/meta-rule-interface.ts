@@ -43,4 +43,5 @@ export class SelectedCriteria {
     ruleCode: any = null;
     ruleName: any = null;
     ruleId: any;
+    showActive:string;
 }

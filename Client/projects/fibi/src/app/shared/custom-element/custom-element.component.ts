@@ -14,7 +14,22 @@ import {
 } from '../../common/services/end-point.config';
 import { parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
 import { AutoSaveService } from '../../common/services/auto-save.service';
+import { DatePipe } from '@angular/common';
 
+class CustomAnswer {
+  columnId = null;
+  customDataElementsId = null;
+  customDataId = null;
+  description = null;
+  moduleItemCode = null;
+  moduleItemKey = null;
+  moduleSubItemCode = null;
+  moduleSubItemKey = null;
+  updateTimestamp = null;
+  updateUser = null;
+  value = null;
+  versionNumber = null;
+}
 @Component({
   selector: 'app-custom-element',
   templateUrl: './custom-element.component.html',
@@ -54,6 +69,7 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
   isDataChange = false;
   isShowOtherInfo = true;
   collapseViewMore = {};
+  selectedCheckBoxValues = [];
 
   searchObjectMapping = {
     'fibiperson': 'prncpl_id',
@@ -121,22 +137,27 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
     switch (object.lookupArgument) {
       case 'fibiproposal': this.elasticSearchOptions[object.columnName] = this._elasticConfig.getElasticForProposal();
         this.elasticSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : '';
-        this.elasticSearchOptions[object.columnName].contextField = object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
+        this.elasticSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
         break;
       case 'fibiperson': this.elasticSearchOptions[object.columnName] = this._elasticConfig.getElasticForPerson();
         this.elasticSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : '';
-        this.elasticSearchOptions[object.columnName].contextField = object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
+        this.elasticSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
         break;
       case 'awardfibi': this.elasticSearchOptions[object.columnName] = this._elasticConfig.getElasticForAward();
         this.elasticSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : '';
-        this.elasticSearchOptions[object.columnName].contextField = object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
+        this.elasticSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
         break;
       case 'instituteproposal': this.elasticSearchOptions[object.columnName] = this._elasticConfig.getElasticForProposal();
         this.elasticSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : '';
-        this.elasticSearchOptions[object.columnName].contextField = object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
+        this.elasticSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
         break;
       case 'grantcall_elastic': this.elasticSearchOptions[object.columnName] = this._elasticConfig.getElasticForGrantCall();
-        this.elasticSearchOptions[object.columnName].contextField = object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
+        this.elasticSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.elasticSearchOptions[object.columnName].contextField;
         this.elasticSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
         break;
       default: break;
@@ -147,43 +168,53 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
     switch (object.lookupArgument) {
       case 'sponsorName': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForSponsor();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       case 'unitName': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForLeadUnit();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       case 'fibiDepartment': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForDepartment();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       case 'fibiOrganization': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForOrganization();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       case 'fibiCountry': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForCountry();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       case 'profitCenterName': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForProfitCentre();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       case 'grantCodeName': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForGrandCode();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       case 'costCenterName': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForCostCentre();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       case 'fundCenterName': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForFundCentre();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       case 'claimTemplateName': this.endPointSearchOptions[object.columnName] = getEndPointOptionsForMappedClaimTemplate();
         this.endPointSearchOptions[object.columnName].defaultValue = object.answers[0].description ? object.answers[0].description : null;
-        this.endPointSearchOptions[object.columnName].contextField = object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
+        this.endPointSearchOptions[object.columnName].contextField =
+             object.defaultValue || this.endPointSearchOptions[object.columnName].contextField;
         break;
       default: break;
     }
@@ -196,7 +227,7 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
           answer.description = data[list.defaultValue];
           break;
         case 'Elastic Search':
-          answer.description = data[list.defaultValue]
+          answer.description = data[list.defaultValue];
           answer.value = data[this.searchObjectMapping[list.lookupArgument]] ? data[this.searchObjectMapping[list.lookupArgument]] : null;
           break;
       }
@@ -208,7 +239,7 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
   }
 
   onLookupSelect(data, answer) {
-    answer.value = data.length ? data[0].code : ''
+    answer.value = data.length ? data[0].code : '';
     answer.description = data.length ? data[0].description : '';
     this.emitDataChange();
   }
@@ -260,7 +291,7 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
       this.checkEmptyFlag = false;
       this.radioEmptyFlag = false;
       if (field.filterType === 'Check Box' && field.isRequired === 'Y') {
-        this.checkEmptyFlag = field.answers.find(item => item.value === true || item.value === 'true') ? false : true;
+        this.checkEmptyFlag = field.answers.find(item => item.description) ? false : true;
       }
       if (this.checkEmptyFlag === true) {
         this.checkEmpty[index] = false;
@@ -301,12 +332,11 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
           .subscribe(data => {
             this.result = data || [];
             if (this.result !== null) {
-                if (this.isShowSave) {
-                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Other Information(s) saved successfully.');
-                }
+              this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Other Information(s) saved successfully.');
               this.customElements = this.result.customElements;
               this.isRadioEmpty = true;
               this.isDataChange = false;
+              this.changeCheckBoxValues();
               this.dataChangeEvent.emit(false);
             }
             this.isSaving = false;
@@ -329,4 +359,42 @@ export class CustomElementComponent implements OnInit, OnInit, OnDestroy {
       this.dataChangeEvent.emit(this.isDataChange);
     }
   }
+
+  /**
+   * here checked answers are pushed into answers array
+   * and unchecked answers value and description are set to null
+   * if a checked value is unchecked and checked without saving in between
+   * save request will have 2 objects one with customDataId and value & desc removed(for delete),
+   * other with value in description & value with customDataId null for insert.
+   * We are not using same id in this case to avoid complex code logic.
+   */
+  setAnswerForCheckBox(list: any, event: boolean, option: any) {
+    if (event) {
+        const CUSTOM_ANSWER = new CustomAnswer();
+        CUSTOM_ANSWER.value = option.customDataOptionId;
+        CUSTOM_ANSWER.description = option.optionName;
+        list.answers.push(CUSTOM_ANSWER);
+    } else {
+     this.removeAnswer(list, option);
+    }
+  }
+
+  private removeAnswer(list: any, option: any) {
+    const ANSWER = list.answers.find(ele => ele.value === option.customDataOptionId);
+    ANSWER.description = null;
+    ANSWER.value = null;
+  }
+
+  private changeCheckBoxValues() {
+    this.customElements.forEach(customElement => {
+      if (customElement.filterType === 'Check Box') {
+         customElement.answers = customElement.answers.filter(ele => ele.customDataId != null);
+      }
+    });
+  }
+
+  checkIsSelected(answers: Array<any>, optionId: string) {
+    return answers.find(ele => ele.value === optionId) ? true : false;
+  }
+
 }

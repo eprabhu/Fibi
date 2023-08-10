@@ -9,6 +9,7 @@ import { CommonService } from '../../../../common/services/common.service';
 import { getEndPointOptionsForExtReviewerKeyWords } from '../../../../common/services/end-point.config';
 import { ElasticConfigService } from '../../../../common/services/elastic-config.service';
 import { deepCloneObject } from '../../../../common/utilities/custom-utilities';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-additional-details',
@@ -34,15 +35,16 @@ export class AdditionalDetailsComponent implements OnInit, OnDestroy {
     coiAlreadyExistMsg = '';
 
     constructor(public _extReviewerMaintenanceService: ExtReviewerMaintenanceService,
-        private _commonService: CommonService, private _elasticService: ElasticConfigService) { }
+        private _commonService: CommonService, private _elasticService: ElasticConfigService,
+        private _activatedRoute: ActivatedRoute) { }
 
     ngOnInit() {
-        this.setInitialValues();
+        this.onQueryParamsChange();
         this.getExternalReviewerData();
         this.makeDropdown(); 
     }
 
-    getExternalReviewerData(): void {
+    getExternalReviewerData(): void { 
         this.$subscriptions.push(this._extReviewerMaintenanceService.$externalReviewerDetails.subscribe((data: any) => {
             if (data.extReviewer) {
                  this.externalReviewerDetails = deepCloneObject(data);
@@ -176,6 +178,7 @@ export class AdditionalDetailsComponent implements OnInit, OnDestroy {
         if (!this.externalReviewerSpecializations.length || this.checkForDelete()) {
             this.map.set('keywords', 'keywords');
         }
+        return this.map.size > 0 ? false : true;
     }
 
     private checkForDelete(): boolean {
@@ -183,23 +186,36 @@ export class AdditionalDetailsComponent implements OnInit, OnDestroy {
     }
 
     setRequestObject() {
-        const REQUESTREPORTDATA: any = {};
+        const REQUEST_REPORT_DATA: any = {};
         this.externalReviewerExt.externalReviewerId = this.externalReviewerDetails.extReviewerId;
         if (this.externalReviewerExt.disciplinaryField) {
             this.externalReviewerExt.disciplinaryField = this.externalReviewerExt.disciplinaryField.trim();
         }
-        REQUESTREPORTDATA.externalReviewerExt = this.externalReviewerExt;
+        REQUEST_REPORT_DATA.externalReviewerExt = this.externalReviewerExt;
         if (this.externalReviewerSpecializations.length > 0) {
-            REQUESTREPORTDATA.externalReviewerSpecializations = this.externalReviewerSpecializations;
+            REQUEST_REPORT_DATA.externalReviewerSpecializations = this.externalReviewerSpecializations;
         }
         if (this.coiWithPersons.length > 0 ) {
-            REQUESTREPORTDATA.coiWithPersons = this.coiWithPersons;  
+            REQUEST_REPORT_DATA.coiWithPersons = this.coiWithPersons;  
         }
-        return REQUESTREPORTDATA;
+        return REQUEST_REPORT_DATA;
+    }
+
+    setCoiWithPerson(array) {
+        return array.map(e => { 
+            e.person = {
+                fullName: e.person.fullName,
+                personId: e.person.personId,
+                principalName: e.person.principalName
+            };
+            return e;
+        });
     }
 
     saveResponseData(data) {
         this.externalReviewerDetails.externalReviewerExt = data.externalReviewerExt;
+        this.externalReviewerDetails.externalReviewerSpecializations = data.externalReviewerSpecializations;
+        this.externalReviewerDetails.coiWithPersons = this.setCoiWithPerson(data.coiWithPersons);
         if (data.externalReviewerSpecializations) {
             this.externalReviewerDetails.externalReviewerSpecializations = data.externalReviewerSpecializations;
         }
@@ -211,25 +227,22 @@ export class AdditionalDetailsComponent implements OnInit, OnDestroy {
     }
 
     saveAdditionalDetails() {
-        if (!this.isSaving) {
-            this.additionalDetailsValidation();
-            if (this.map.size < 1) {
-                this.isSaving = true;
-                const REQUESTREPORTDATA = this.setRequestObject();
-                this.$subscriptions.push(this._extReviewerMaintenanceService.saveOrUpdateAdditionalDetails(REQUESTREPORTDATA)
-                    .subscribe((data: any) => {
-                        if (data.externalReviewerExt.externalReviewerExtId) {
-                            this.saveResponseData(data);
-                            this._commonService.showToast(HTTP_SUCCESS_STATUS, data.message);
-                            this.isSaving = false;
-                        }
-                    },
-                        err => {
-                            this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating additional details. Please try again.');
-                            this.isSaving = false;
-                        }
-                    ));
-            }
+        if (!this.isSaving && this.additionalDetailsValidation() && this._extReviewerMaintenanceService.isDataChange) {
+            this.isSaving = true;
+            const REQUEST_REPORT_DATA = this.setRequestObject();
+            this.$subscriptions.push(this._extReviewerMaintenanceService.saveOrUpdateAdditionalDetails(REQUEST_REPORT_DATA)
+                .subscribe((data: any) => {
+                    if (data.externalReviewerExt.externalReviewerExtId) {
+                        this.saveResponseData(data);
+                        this._commonService.showToast(HTTP_SUCCESS_STATUS, data.message);
+                        this.isSaving = false;
+                    }
+                },
+                    err => {
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Additional Details failed. Please try again.');
+                        this.isSaving = false;
+                    }
+                ));
         }
 
     }
@@ -243,7 +256,7 @@ export class AdditionalDetailsComponent implements OnInit, OnDestroy {
     }
 
     private updatePersonList(event: any) {
-        const PERSON_EXIST = this.coiWithPersons.find(person => person.personId === event.prncpl_id);
+        const PERSON_EXIST = this.coiWithPersons.find(person => person.personId === event.prncpl_id && person.actionType != 'D');
         if (!PERSON_EXIST) {
                 this.coiWithPersons.push({
                     personId: event.prncpl_id,
@@ -274,7 +287,7 @@ export class AdditionalDetailsComponent implements OnInit, OnDestroy {
                     this.setKeywordErrorMessage();
                 }
             }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding new keyword');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding new Keyword.');
             }));
     }
 
@@ -282,5 +295,11 @@ export class AdditionalDetailsComponent implements OnInit, OnDestroy {
         subscriptionHandler(this.$subscriptions);
     }
    
+    private onQueryParamsChange() {
+        this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
+            this.setInitialValues();
+            this._extReviewerMaintenanceService.isDataChange = false;
+        }));
+    }
    
 }

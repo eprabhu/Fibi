@@ -92,17 +92,18 @@ export class BudgetComparisonComponent implements OnChanges, OnDestroy {
       data => {
         this.updateCache(data[0], 'base');
         this.updateCache(data[1], 'current');
-        this.updateProposalHeader(data[0]);
-        this.updateProposalHeader(data[1]);
+        this.updateProposalBudgetHeader(data[0]);
+        this.updateProposalBudgetHeader(data[1]);
         this.compare(data[0], data[1]);
         this._CDRef.detectChanges();
       }));
   }
 
-  updateProposalHeader(data) {
+  updateProposalBudgetHeader(data) {
     this.budgetData = data;
     if (data.budgetHeader) {
-      data.budgetHeader.onOffCampusFlag = data.budgetHeader.onOffCampusFlag === 'Y' ? 'ON' : 'OFF';
+      data.budgetHeader.campusFlag = data.budgetHeader.campusFlag === 'N' ? 'ON' 
+                                     : (data.budgetHeader.campusFlag === 'F' ? 'OFF' : 'BOTH');
       data.budgetHeader.isAutoCalc = data.budgetHeader.isAutoCalc ? 'ON' : 'OFF';
       if(data.budgetTemplateTypes && data.budgetTemplateTypes.length) {
         const SELECTED_VALUE = data.budgetTemplateTypes.find(e => e.budgetTemplateTypeId === data.budgetHeader.budgetTemplateTypeId);
@@ -110,6 +111,9 @@ export class BudgetComparisonComponent implements OnChanges, OnDestroy {
       }
       this.proposalBudgetHeader = data.budgetHeader;
       this.budgetPeriods = data.budgetHeader.budgetPeriods;
+    } else {
+      this.proposalBudgetHeader = null;
+      this.budgetPeriods = [];
     }
     this.budgetModularVO = data.budgetModularVO;
     this.setPeriodId();
@@ -120,6 +124,9 @@ export class BudgetComparisonComponent implements OnChanges, OnDestroy {
       this.periodTotalCostShareSum = data.budgetSummary['periodTotalCostShareSum'].toString();
       this.periodTotalFundRequestedSum = data.budgetSummary['periodTotalFundRequestedSum'].toString();
       this.periodTotalSum = data.budgetSummary['periodTotalSum'].toString();
+    } else {
+      this.proposalBudgetSummary = [];
+      this.budgetSummaryVOs = [];
     }
   }
 
@@ -138,8 +145,8 @@ export class BudgetComparisonComponent implements OnChanges, OnDestroy {
    */
   setCurrentView(): void {
     this.$subscriptions.push(this.getBudgetData('base').subscribe((data: any) => {
-      this.updateCache(data, 'current');
-      this.updateProposalHeader(data);
+      this.updateCache(data, 'base');
+      this.updateProposalBudgetHeader(data);
       this._CDRef.detectChanges();
     }));
   }

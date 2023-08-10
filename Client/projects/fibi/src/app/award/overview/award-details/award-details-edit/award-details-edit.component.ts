@@ -469,6 +469,9 @@ export class AwardDetailsEditComponent implements OnInit, OnChanges, OnDestroy {
   addKeywordToDatabase(event) {
     if (event) {
       this.selectedKeyword = event.searchString;
+      if(this.selectedKeyword){
+        this.selectedKeyword = this.selectedKeyword.trim();
+      }
       this.$subscriptions.push(this._overviewService.addScienceKeyword({
         'scienceKeyword': this.selectedKeyword,
         'userName': this._commonService.getCurrentUserDetail('userName')
@@ -499,7 +502,7 @@ export class AwardDetailsEditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getSearchValue(event) {
-    this.selectedKeyword = event.target.value;
+    this.selectedKeyword = event;
   }
 
   /* comparing award end and start dates */

@@ -6,11 +6,13 @@ import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 import { ClaimsService } from '../services/claims.service';
 import { CommonDataService } from '../services/common-data.service';
+declare var $: any;
 
 @Component({
   selector: 'app-route-log',
-  template: `<workflow-engine *ngIf="_commonData.claimSectionConfig['1411'].isActive" [workFlowResult]="result" (workFlowResponse)='workFlowResponse($event)'
-   [workFlowDetailKey]="'claim'"></workflow-engine>`
+  template: `<workflow-engine *ngIf="_commonData.claimSectionConfig['1411'].isActive" [workFlowResult]="result"
+  (workFlowResponse)='workFlowResponse($event)'
+  (errorEvent)='errorEvent()' [workFlowDetailKey]="'claim'"></workflow-engine>`
 })
 export class RouteLogComponent implements OnInit, OnDestroy {
 
@@ -67,5 +69,9 @@ export class RouteLogComponent implements OnInit, OnDestroy {
     this.result = JSON.parse(JSON.stringify(this.result));
     this._commonData.setClaimData(this.result);
   }
+
+  errorEvent() {
+    $('#invalidActionModal').modal('show');
+    }
 
 }

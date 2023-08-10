@@ -16,7 +16,7 @@ export class AuditLog {
     changes: any;
 }
 
-const EXCLUDED_VALUES = ['UPDATE_TIMESTAMP'];
+const EXCLUDED_VALUES = ['UPDATE_TIMESTAMP', 'UPDATE_USER'];
 @Injectable()
 export class AuditLogService {
 
@@ -115,9 +115,14 @@ export class AuditLogService {
     getFinalChangeString(modified, unmodified, arrayModified, arrayUnModified, acType): string {
         const COMMON_MODIFIED_STRING = '\n\n--Changed Values--\n';
         const COMMON_UNMODIFIED_STRING = '--Unchanged Values--\n';
-        const COMBINED_STRING = COMMON_UNMODIFIED_STRING + unmodified + (arrayUnModified ? arrayUnModified : '') + COMMON_MODIFIED_STRING + (modified ? modified + '\n': '');
+        const COMBINED_STRING = COMMON_UNMODIFIED_STRING + unmodified + (arrayUnModified ? arrayUnModified.substring(0, arrayUnModified.length-1) : '') + 
+                                COMMON_MODIFIED_STRING + (modified ? modified + '\n': '');
         if (arrayModified) {
-            return COMBINED_STRING + arrayModified;
+            if (acType === 'U') {
+                return COMBINED_STRING + arrayModified;
+            } else {
+                return unmodified + (arrayUnModified ? arrayUnModified : '') + (arrayModified ? arrayModified : '');
+            }
         } else if (modified) {
             return COMBINED_STRING;
         } else {

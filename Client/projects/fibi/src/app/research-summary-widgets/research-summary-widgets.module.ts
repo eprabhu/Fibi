@@ -44,6 +44,7 @@ import { ResearchSummaryCountComponent } from './research-summary-count/research
 import { ResearchSummaryDailyCheckComponent } from './research-summary-daily-check/research-summary-daily-check.component';
 import { InstituteProposalSubmittedByLeadUnitComponent } from './institute-proposal-submitted-by-Lead-unit/institute-proposal-submitted-by-Lead-unit.component';
 import { InstituteProposalBySponsorComponent } from './institute-proposal-by-sponsor/institute-proposal-by-sponsor.component'
+import { PendingIpsBySponsorTypeComponent } from './pending-ips-by-sponsor-type/pending-ips-by-sponsor-type.component';
 
 @NgModule({
   imports: [
@@ -90,7 +91,8 @@ import { InstituteProposalBySponsorComponent } from './institute-proposal-by-spo
     ResearchSummaryCountComponent,
     ResearchSummaryDailyCheckComponent,
     InstituteProposalSubmittedByLeadUnitComponent,
-    InstituteProposalBySponsorComponent
+    InstituteProposalBySponsorComponent,
+    PendingIpsBySponsorTypeComponent
   ],
   entryComponents: [ResearchSummaryDetailsComponent,
     ActionListComponent,
@@ -127,7 +129,8 @@ import { InstituteProposalBySponsorComponent } from './institute-proposal-by-spo
     ResearchSummaryCountComponent,
     ResearchSummaryDailyCheckComponent,
     InstituteProposalSubmittedByLeadUnitComponent,
-    InstituteProposalBySponsorComponent
+    InstituteProposalBySponsorComponent,
+    PendingIpsBySponsorTypeComponent
   ],
   providers: [ResearchSummaryWidgetsService,
     GoogleChartService]

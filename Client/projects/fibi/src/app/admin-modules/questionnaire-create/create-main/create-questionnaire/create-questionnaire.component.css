@@ -83,3 +83,13 @@
     font-size:12px;
     margin-right: 8px;
 }
+
+.btn-hover {
+    transition: .5s;
+}
+
+.btn-hover:hover {
+    background-color: #c8f3ed80;
+    color: #26A69A;
+    border-radius: 4px;
+}

@@ -30,7 +30,7 @@ export class InstituteProposalLeadUnitExpandedViewComponent implements OnInit {
     this.tabName = this._route.snapshot.queryParamMap.get('tabName');
     this.unitNumber = this._route.snapshot.queryParamMap.get('UN');
     this.setStatus();
-    this.heading = this.currentStatus + ' Institute Proposal For ' + this._route.snapshot.queryParamMap.get('unitName');
+    this.heading = this.currentStatus + ' Institute Proposal by Lead Unit: ' + this._route.snapshot.queryParamMap.get('unitName');
     this.getDetailedData();
   }
 

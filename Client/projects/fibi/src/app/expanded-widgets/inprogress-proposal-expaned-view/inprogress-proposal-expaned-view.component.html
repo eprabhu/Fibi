@@ -49,6 +49,10 @@
                   <i [ngClass]="((column == 6) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-sort-numeric-desc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"
                   aria-hidden="true"></i>
                 </th>
+                <th scope="col" width="15%" (click)="isDesc =!isDesc;sortBy(7)">Sponsor
+                  <i [ngClass]="((column == 7) ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                  aria-hidden="true"></i>
+                </th>
                 <th scope="col" width="5%">Actions</th>
               </thead>
               <tbody>
@@ -59,6 +63,7 @@
                   <td>{{proposalDetails[5] | customCurrency}}</td>
                   <td>{{proposalDetails[2]}}</td>
                   <td>{{proposalDetails[6]| dateFormatter}}</td>
+                  <td>{{proposalDetails[7]}}</td>
                   <td>
                     <ul class="actionButtonGroup">
                       <li><a title="Open {{proposalDetails[0]}}" (click)="setCurrentProposalTab()" [routerLink]="['/fibi/proposal/summary']"

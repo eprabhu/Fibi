@@ -100,8 +100,8 @@
                 <span *ngIf="generalDetails.researchDescription != null">
                     <span class="textView" *ngIf="!isResearchDescriptionReadMore">
                         <p class="new-line-property" [innerHTML]="(generalDetails.researchDescription).length>240 ?
-                                    (generalDetails.researchDescription | slice:0:240)+'...' :
-                                    generalDetails.researchDescription"></p>
+                                    (generalDetails.researchDescription | slice:0:240 | customTagRemover: currentMethod)+'...' :
+                                    generalDetails.researchDescription | customTagRemover: currentMethod"></p>
                         <span *ngIf="(generalDetails.researchDescription?.length>240)" class="hand-cursor fibiDefaultColor italian"
                             (click)="isResearchDescriptionReadMore = !isResearchDescriptionReadMore" tabindex="0">Read
                             more<i aria-hidden="true"
@@ -109,7 +109,7 @@
                         </span>
                     </span>
                     <span *ngIf="isResearchDescriptionReadMore" class="textView">
-                        <p class="new-line-property" [innerHTML]="generalDetails.researchDescription"></p>
+                        <p class="new-line-property" [innerHTML]="generalDetails.researchDescription | customTagRemover: currentMethod"></p>
                         <span *ngIf="(generalDetails.researchDescription?.length>240)" class="hand-cursor fibiDefaultColor italian"
                             (click)="isResearchDescriptionReadMore = !isResearchDescriptionReadMore">Show
                             less<i aria-hidden="true"
@@ -137,8 +137,8 @@
                 <span *ngIf="generalDetails.multiDisciplinaryDescription != null">
                   <span class="textView" *ngIf="!isMultiDisciplinaryDescriptionReadMore">
                       <p class="new-line-property" [innerHTML]="(generalDetails.multiDisciplinaryDescription).length>240 ?
-                        (generalDetails.multiDisciplinaryDescription | slice:0:240)+'...' :
-                        generalDetails.multiDisciplinaryDescription"></p>
+                        (generalDetails.multiDisciplinaryDescription | slice:0:240 | customTagRemover: currentMethod)+'...' :
+                        generalDetails.multiDisciplinaryDescription | customTagRemover: currentMethod"></p>
                         <span
                       *ngIf="(generalDetails.multiDisciplinaryDescription?.length>240)"
                       class="hand-cursor fibiDefaultColor italian"
@@ -149,7 +149,7 @@
                     </span>
                 </span>
                   <span *ngIf="isMultiDisciplinaryDescriptionReadMore" class="textView">
-                      <p class="new-line-property" [innerHTML]="generalDetails.multiDisciplinaryDescription"></p><span
+                      <p class="new-line-property" [innerHTML]="generalDetails.multiDisciplinaryDescription | customTagRemover: currentMethod"></p><span
                       *ngIf="(generalDetails.multiDisciplinaryDescription?.length>240)"
                       class="hand-cursor fibiDefaultColor italian"
                       (click)="isMultiDisciplinaryDescriptionReadMore = !isMultiDisciplinaryDescriptionReadMore">Show
@@ -221,23 +221,22 @@
             </div>
             <div class="col-12">
               <label>
-                <span class="mandatory">*</span>Area:
+                <span class="mandatory">*</span>Area
               </label>
               <div class="searchBox">
                 <app-endpoint-search [isError]="errorMap.has('area')" id="prop-area-of-research"
-                  [httpOptions]="areaSearchOptions" [placeHolder]="'Type here for Area'" [clearField]="clearAreaField"
-                  (onSelect)="onResearchAreaSelect($event)" [searchOnFocus]=true></app-endpoint-search>
-                <div class="invalid-feedback d-block" *ngIf="errorMap.has('area')">
-                  {{errorMap.get('area')}}</div>
+				[httpOptions]="areaSearchOptions" [placeHolder]="'Type here for Area'"
+				(onSelect)="onResearchAreaSelect($event)" [searchOnFocus]=true></app-endpoint-search>
+				<div class="invalid-feedback d-block" *ngIf="errorMap.has('area')">
+				{{errorMap.get('area')}}</div>
               </div>
             </div>
             <div class="col-12">
               <label class="margin-left-label">
                 Sub-Area</label>
               <app-endpoint-search id="prop-sub-area-of-research" [httpOptions]="subAreaSearchOptions"
-                [clearField]="clearSubAreaField" [placeHolder]="'Type here for Sub-Area'"
-                (onSelect)="onResearchSubAreaSelect($event)" [searchOnFocus]=true>
-              </app-endpoint-search>
+				[placeHolder]="'Type here for Sub-Area'" (onSelect)="onResearchSubAreaSelect($event)" [searchOnFocus]=true>
+			  </app-endpoint-search>
             </div>
           </div>
         </div>

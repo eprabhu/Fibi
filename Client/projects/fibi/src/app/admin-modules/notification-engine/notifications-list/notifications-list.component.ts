@@ -68,7 +68,9 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
         this.result.notificationTypes.forEach((element, index) => {
           const MODULE = element.moduleCode;
           const SUBMODULE = element.subModuleCode;
-          this.moduleDescription = this.appliedList[MODULE].filter(item => item.SUB_MODULE_CODE === SUBMODULE)[0].DESCRIPTION;
+          if (MODULE && SUBMODULE) {
+            this.moduleDescription = this.appliedList[MODULE].filter(item => item.SUB_MODULE_CODE === SUBMODULE)[0].DESCRIPTION;
+          }
           this.result.notificationTypes[index].module = [];
           this.result.notificationTypes[index].module.push(this.moduleDescription);
         });

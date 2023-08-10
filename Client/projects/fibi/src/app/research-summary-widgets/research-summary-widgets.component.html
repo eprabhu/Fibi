@@ -17,6 +17,14 @@
       </a>
   </div>
 </div>
+<div *ngIf="!researchSummaryConfig?.RS5201?.isActive" class="configure-dashboard-btn">
+  <a id="config-dashboard-btn"
+    class="btn btn-sm btn-tertiary mt-0" data-toggle="modal" data-target="#configureWidgetsModal"
+    role="button" aria-expanded="false" title="Configure Dashboard">
+    <i aria-hidden="true" class="fa fa-cog settings-icon"></i>
+    Configure Dashboard
+  </a>
+</div>
 <div class="row mt-2 px-1" *ngIf="widgetList?.length">
   <ng-container *ngFor="let widget of widgetList">
     <div

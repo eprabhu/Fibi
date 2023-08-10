@@ -60,7 +60,7 @@
     <div class="form-row justify-content-center">
       <div class="col-12 searchBox mb-0">
         <app-elastic [options]="agreementElasticSearchOptions" [clearField]="clearAgreementField"
-          [placeHolder]="'Search: Agreement#, Title, Type, Lead Unit, Status, Administrator, Organization, Requestor '"
+          [placeHolder]="'Search: Agreement#, Title, Type, Lead Unit, Status, PI, Administrator, Organization, Requestor '"
           (selectedResult)="selectAgreementElasticResult($event)"></app-elastic>
       </div>
     </div>
@@ -349,29 +349,35 @@
                   <i aria-hidden="true"
                     [ngClass]="((_agreementList.agreementRequestObject.sortBy == 'unitNumber') ? (isReverse ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"></i>
                 </th>
-                <th scope="col" style="width: 12%;" class="p-0" id="sort-by-agreementOrganisation"
+                <th scope="col" style="width: 10%;" class="p-0" id="sort-by-agreementOrganisation"
                   (click)="sortResult('organization')">
                   <span class="hand-cursor" title="Click to sort by organisation">Organization</span>
                   <i aria-hidden="true"
                     [ngClass]="((_agreementList.agreementRequestObject.sortBy == 'organization') ? (isReverse ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"></i>
                 </th>
-                <th scope="col" style="width: 13%;" id="sort-by-agreementAdministrator"
+                <th scope="col" style="width: 10%;" id="sort-by-agreementAdministrator"
                   (click)="sortResult('agreementAdminFullName')">
                   <span class="hand-cursor" title="Click to sort by Administrator">Administrator</span>
                   <i aria-hidden="true"
                     [ngClass]="((_agreementList.agreementRequestObject.sortBy == 'agreementAdminFullName') ? (isReverse ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"></i>
                 </th>
-                <th scope="col" style="width: 11%;" class="p-0" id="sort-by-agreementCatalyst"
+                <th scope="col" style="width: 9%;" class="p-0" id="sort-by-agreementCatalyst"
                   (click)="sortResult('requestorName')">
                   <span class="hand-cursor" title="Click to sort by requestor">Requestor</span>
                   <i aria-hidden="true"
                     [ngClass]="((_agreementList.agreementRequestObject.sortBy == 'requestorName') ? (isReverse ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"></i>
                 </th>
-                <th scope="col" style="width: 10%;" id="sort-by-agreementPI" (click)="sortResult('piFullName')">
+                <th scope="col" style="width: 9%;" id="sort-by-agreementPI" (click)="sortResult('piFullName')">
                   <span class="hand-cursor" title="Click to sort by principal investigator">Principal
                     Investigator</span>
                   <i aria-hidden="true"
                     [ngClass]="((_agreementList.agreementRequestObject.sortBy == 'piFullName') ? (isReverse ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"></i>
+                </th>
+                <th scope="col" style="width: 8%;" id="sort-by-agreement-contract-Value"
+                  (click)="sortResult('contractValue')">
+                  <span class="hand-cursor" title="Click to sort by contract value">Contract Value</span>
+                  <i aria-hidden="true"
+                    [ngClass]="((_agreementList.agreementRequestObject.sortBy == 'contractValue') ? (isReverse ? 'fa fa-sort-numeric-desc sortIcon' : 'fa fa-sort-numeric-asc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"></i>
                 </th>
                 <th scope="col" style="width: 8%;" id="sort-by-agreementStatus"
                   (click)="sortResult('statusDescription')">
@@ -402,6 +408,9 @@
                   {{agreement?.requestorName}}</td>
                 <td (click)="viewAgreementById(agreement?.agreementRequestId)">
                   {{agreement?.piFullName}}</td>
+                <td (click)="viewAgreementById(agreement?.agreementRequestId)">
+                  {{agreement?.contractValue | currency: agreement?.currencyCode:'symbol' }}
+                </td>
                 <td (click)="viewAgreementById(agreement?.agreementRequestId)">
                   {{agreement?.statusDescription}}</td>
                 <td>

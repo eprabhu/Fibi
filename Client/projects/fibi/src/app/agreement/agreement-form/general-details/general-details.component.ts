@@ -244,6 +244,7 @@ export class GeneralDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.isGeneralDetailsFormChanged = false;
         this.setAgreementObject();
         this.proceedToAgreementForm();
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Agreement created successfully.')
       } else {
         this._autoSaveService.errorEvent(
           { name: 'General Info', documentId: 'agreement-basic-details', type: 'VALIDATION' });

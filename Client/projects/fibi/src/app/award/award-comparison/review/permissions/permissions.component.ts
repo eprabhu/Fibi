@@ -100,7 +100,12 @@ export class PermissionsComponent implements OnChanges, OnDestroy {
     if (this.checkInCache(AWARD_ID)) {
       return of(this.deepCopy(this.permissionCache[AWARD_ID]));
     } else {
-      return this._permissionService.fetchAwardPersonRoles(AWARD_ID);
+      const REQ_BODY = {
+        'awardId': AWARD_ID,
+        'awardNumber': this.comparisonDetails.awardNumber,
+        'isActiveAward': this.comparisonDetails.awardSequenceStatus === 'ACTIVE' ? true : false
+      };
+      return this._permissionService.fetchAwardPersonRoles(REQ_BODY);
     }
   }
   /**

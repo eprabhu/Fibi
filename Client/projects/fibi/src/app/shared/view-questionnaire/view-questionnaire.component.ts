@@ -27,6 +27,7 @@
  import { WafAttachmentService } from '../../common/services/waf-attachment.service';
  import { ElasticConfigService } from '../../common/services/elastic-config.service';
  import {
+     getEndPointOptionsForClaimTemplate,
      getEndPointOptionsForCostCentre,
      getEndPointOptionsForCountry,
      getEndPointOptionsForDepartment,
@@ -72,7 +73,8 @@
          'grantCodeName': 'grantCode',
          'costCenterName': 'costCenterCode',
          'fundCenterName': 'fundCenterCode',
-         'profitCenterName': 'profitCenterCode'
+         'profitCenterName': 'profitCenterCode',
+         'claimTemplateName' : 'claimTemplateCode'
      };
      setFocusToElement = setFocusToElement;
      questionnaire: any = {};
@@ -437,6 +439,9 @@
             case 'fundCenterName':
                 question.placeHolder = 'Search for fund center';
                  return getEndPointOptionsForFundCentre();
+            case 'claimTemplateName':
+                question.placeHolder = 'Search for claim template name';
+                return getEndPointOptionsForClaimTemplate();
             default :
                 question.placeHolder = 'Search for endpoint';
                 break;

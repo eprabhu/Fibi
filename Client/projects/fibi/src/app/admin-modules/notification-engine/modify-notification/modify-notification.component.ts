@@ -8,7 +8,7 @@ import { NotificationEngineService } from '../services/notification-engine.servi
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-import { deepCloneObject, removeUnwantedTags } from '../../../common/utilities/custom-utilities';
+import { deepCloneObject, removeUnwantedTags, scrollIntoView } from '../../../common/utilities/custom-utilities';
 import { AuditLogService } from '../../../common/services/audit-log.service';
 
 class AuditLog {
@@ -279,7 +279,7 @@ export class ModifyNotificationComponent implements OnInit, OnDestroy {
         this.notificationType = data.notificationType;
         this.updateEditorContent();
         this.saveAuditLog('U');
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Notification saved successfully');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Notification saved successfully.');
         this.isSaving = false;
       }, err => { this.isSaving = false; }));
     }
@@ -321,6 +321,13 @@ export class ModifyNotificationComponent implements OnInit, OnDestroy {
    * Sets the notification objects while creating a new notification.
    */
   createNotification() {
+    if (this.notificationType.description === '' || this.notificationType.moduleCode === ''
+      || this.notificationType.subModuleCode === '' || this.notificationType.description == null
+      || this.notificationType.moduleCode == null || this.notificationType.subModuleCode == null) {
+      setTimeout(() => {
+        scrollIntoView('notification-edit-card', 'start');
+      }, 100);
+    }
     if (this.warningMsgObj.isShowWarning === false && !this.isSaving) {
       this.isSaving = true;
       this.notificationType.createTimestamp = new Date().getTime();
@@ -329,11 +336,11 @@ export class ModifyNotificationComponent implements OnInit, OnDestroy {
         this._notificationService.createNotification(this.notificationType).subscribe((data: any) => {
           this.notificationType = data.notificationType;
           this.notificationId = data.notificationType.notificationTypeId;
-          this.saveAuditLog('I');       
+          this.saveAuditLog('I');
           this.updateEditorContent();
           this._router.navigate(['fibi/notification/modifynotification'],
             { queryParams: { notificationTypeId: data.notificationType.notificationTypeId } });
-            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Notification has been created successfully');
+            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Notification has been created successfully.');
             this.isSaving = false;
         }, err => { this.isSaving = false; }));
     }
@@ -430,6 +437,7 @@ export class ModifyNotificationComponent implements OnInit, OnDestroy {
     this.updateEditorContent();
     if (this.notificationType.description == null || this.notificationType.description === '' ||
       this.notificationType.moduleCode == null || this.notificationType.subModuleCode == null ||
+      this.notificationType.moduleCode === '' || this.notificationType.subModuleCode === '' ||
       this.notificationType.subject == null || this.notificationType.subject === '' ||
       this.notificationType.message === null || this.notificationType.message === '') {
       this.warningMsgObj.isShowWarning = true;

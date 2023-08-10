@@ -54,6 +54,7 @@ export interface Person {
     updateTimestamp?: number;
     updateUser?: string;
     password?: string;
+    jobCode?: string;
 }
 
 export interface Unit {

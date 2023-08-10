@@ -57,7 +57,7 @@
     <div class="row view-details" *ngFor="let map of resultMapArray; let k = index">
       <div class="col-12 ">
         <h5 class="card-header inner-card-header d-flex align-items-center pt-3 pb-1 px-4">
-          <span class="d-inline-block title-height">{{map.mapId}} - {{map.mapName}} - {{map.description}}
+          <span class="d-inline-block title-line-height col">{{map.mapId}} - {{map.mapName}} - {{map.description}}
             <span class="badge badge-success p-2"
               *ngIf="versionHistorySelected == latestVersion && map.mapType=='E' && map?.isScoringPanel">Scoring
               Panel</span>
@@ -67,8 +67,8 @@
           </span>
           <button *ngIf="versionHistorySelected == latestVersion && addApproverRight && map.mapType!='E' &&
               isStopActive(getMapListBasedOnMapNumber(map?.mapNumber) , map?.mapNumber)"
-            class="btn btn-secondary btn-sm text-right ml-auto" id="add-approver-btn" (click)="setSeqStopFocus(k);"
-            class="btn btn-tertiary btn-sm text-right ml-auto " id="add-seq-stop-btn">
+            class="btn btn-secondary btn-sm text-right ml-auto col-auto" id="add-approver-btn" (click)="setSeqStopFocus(k);"
+            class="btn btn-tertiary btn-sm text-right ml-auto col-auto" id="add-seq-stop-btn">
             <i class="fa fa-user-plus mr-2" aria-hidden="true"></i>Add New Sequential Stop</button>
         </h5>
         <div class="card-body">
@@ -479,7 +479,7 @@
                     <span>Bypass {{setBypassHeader()}}
                     </span>
                 </h5>
-                <button type="button" id="prop-approve-dismiss-btn" class="close" data-dismiss="modal" (click)="workflowDetail.approveComment='';isEmptyComments=false"
+                <button type="button" id="prop-approve-dismiss-btn" class="close" data-dismiss="modal" (click)="closeBypassModal()"
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -539,7 +539,7 @@
                     <div class="invalid-feedback d-block" *ngIf="isEmptyComments">*Please add comments.</div>
             </div>
             <div class="modal-footer">
-              <button id="award-sumbit-no-btn" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="workflowDetail.approveComment='';isEmptyComments=false">No</button>
+              <button id="award-sumbit-no-btn" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="closeBypassModal()">No</button>
               <button id="award-sumbit-bypass-btn" (click)="bypassReviewer(workflowDetail)" type="button" class="btn btn-primary-sub btn-sm ">Bypass</button>
             </div>
         </div>

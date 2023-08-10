@@ -101,7 +101,7 @@ export class DatesAmountsComponent implements OnInit, OnDestroy {
       this.$subscriptions.push(this._datesAmountsService.saveTotalProjectCostInForeignCurrency(this.foreignCurrencyObject)
         .subscribe((data: any) => {
           this.awardCostDetails = data;
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Amount updated');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Amount updated.');
           this.editCurrency = false;
           this.warningMsg = null;
         }));

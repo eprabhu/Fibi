@@ -129,6 +129,7 @@ export class PersonMaintenanceComponent implements OnInit, OnDestroy {
     this.personRequestObject.property7 = '';
     this.personRequestObject.property8 = '';
     this.personRequestObject.property9 = '';
+    this.personRequestObject.property10 = '';
     this.personRequestObject.property11 = '';
     this.personRequestObject.property12 = [];
     this.lookupValues = [];

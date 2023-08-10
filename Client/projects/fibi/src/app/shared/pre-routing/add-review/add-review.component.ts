@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
 import { CommonService } from '../../../common/services/common.service';
 import { parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 
 declare var $: any;
 
@@ -114,10 +115,11 @@ export class AddReviewComponent implements OnInit, OnDestroy {
                     this.preReviewRequest = {};
                     this.filterResults.emit(this.preReviews);
                     this.isSaving = false;
+                    this._commonService.showToast(HTTP_SUCCESS_STATUS, "Review requested successfully.");
                     if (this.dataStoreService) {
                         this.dataStoreService.updateStore(['preReviews'], this);
                     }
-                }, err => { },
+                }, err => {this._commonService.showToast(HTTP_ERROR_STATUS, "Requesting Review failed. Please try again."); },
                     () => {
                         $('#app-generic-pre-review-modal').modal('hide');
                         this.showRequestModal.isRequestNewReview = false;

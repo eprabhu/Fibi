@@ -225,7 +225,7 @@ export class TaskSideNavBarComponent implements OnInit, OnDestroy {
       this.showToast(HTTP_ERROR_STATUS, 'Completing Task failed. Please try again.', this.operatinOnTask);
       this.isSaving = false;
     }, () => {
-      this.showToast(HTTP_SUCCESS_STATUS, 'Task completed successfully', this.operatinOnTask);
+      this.showToast(HTTP_SUCCESS_STATUS, 'Task completed successfully.', this.operatinOnTask);
     }));
   }
 
@@ -241,6 +241,7 @@ export class TaskSideNavBarComponent implements OnInit, OnDestroy {
                 this.setTaskData(this.operatinOnTask, data);
                 this._commonData.taskCount = data.taskCount;
                 this.isSaving = false;
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, "Task rejected successfully.");
             }, err => {
                 this.isSaving = false;
                 this.showToast(HTTP_ERROR_STATUS, 'Cancelling Task failed. Please try again.', this.operatinOnTask);

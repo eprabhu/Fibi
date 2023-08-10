@@ -220,8 +220,8 @@ export class OrcidComponent implements OnInit {
       this.orcidData.personOrcidWorks[this.deleteIndex].linkedAwards.splice(index, 1);
       this.unlinkAward = {};
       this.deleteIndex = null;
-    }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Unliking award action failed. Please try again.'); },
-      () => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Award unlinked successfully'); }
+    }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Unliking Award Action failed. Please try again.'); },
+      () => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Award unlinked successfully.'); }
     ));
   }
 
@@ -246,9 +246,9 @@ export class OrcidComponent implements OnInit {
           if (orcidData) { this.pushAwardToWorks(orcidData, element); }
           this.clearElastic();
         });
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Award linked successfully');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Award linked successfully.');
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Linking award action failed. Please try again.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Linking Award Action failed. Please try again.');
         this.clearElastic();
       }));
     }

@@ -80,6 +80,7 @@ export class ProgressReportListComponent implements OnInit, OnDestroy {
 
     setAwardEndPointObject() {
         this.createReportDetails.awardId = null;
+        this.createReportDetails = JSON.parse(JSON.stringify(this.createReportDetails));
         this.awardSearchHttpOptions = getEndPointOptionsForAwardNumber();
     }
 
@@ -312,7 +313,7 @@ export class ProgressReportListComponent implements OnInit, OnDestroy {
         } = qualifiedAward;
         this.createReportDetails = {
             title, dueDate, awardNumber, reportClassCode, awardId, reportStartDate,
-            reportEndDate, reportTrackingId
+            reportEndDate, reportTrackingId , reportLabel: qualifiedAward.reportClassDescription
         };
         this.selectedAwardDetails = {title, awardNumber, accountNumber, principalInvestigator, sponsorName, unitName, awardStartDate};
     }

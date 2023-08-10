@@ -100,12 +100,12 @@ export class BatchHistoryComponent implements OnInit {
           reader.readAsText(data);
           reader.onload = () => {
             reader.result === '' ?
-            currentInstance._commonService.showToast(HTTP_ERROR_STATUS, 'There are no claim invoice files available for download') :
+            currentInstance._commonService.showToast(HTTP_ERROR_STATUS, 'There are no claim Invoice files available for download.') :
             fileDownloader(data, 'Claim_Invoice_Batch_# ' + currentInstance.downloadBatchId, 'csv');
             this.downloadBatchId = null;
           };
         }, err => {
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Downloading the attachment failed. Please try again.');
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Downloading the Attachment failed. Please try again.');
         }));
       }
   }

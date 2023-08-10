@@ -52,6 +52,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
 	@Input() questionnaireHeader = 'Questionnaire';
 	@Input() isShowBackButton = false;
 	@Input() isShowCollapse = false;
+	@Output() questionnaireCompletionStatusEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	requestObject = {
 		moduleItemCode: null,
@@ -119,8 +120,15 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
 				this.questionnaireList = [];
 				data.forEach((d: any) => this.combineQuestionnaireList(d.applicableQuestionnaire));
 				this.checkQuestionnaireOpened();
+				this.emitQuestionnaireCompletionStatus();
 				this._CDRef.markForCheck();
 			}));
+	}
+
+	emitQuestionnaireCompletionStatus(): void {
+		const QUESTIONNAIRE: any = {};
+		QUESTIONNAIRE.IS_ALL_QUESTIONNAIRES_COMPLETE = this.isAllQuestionnairesCompleted();
+		this.questionnaireCompletionStatusEvent.emit(QUESTIONNAIRE);
 	}
 
 	setRequestObject(subItemCode: number): void {
@@ -176,6 +184,8 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
 			this.isViewMode = this.checkViewMode(this.questionnaireList[index].MODULE_SUB_ITEM_CODE);
 			this.activeQuestionnaire.isChanged = false;
 			this.activeQuestionnaire = Object.assign({}, this.questionnaireList[index]);
+		} else {
+			this.activeQuestionnaire.QUESTIONNAIRE_ANS_HEADER_ID = '';
 		}
 	}
 

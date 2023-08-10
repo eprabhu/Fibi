@@ -190,6 +190,7 @@ export class ManPowerComponent implements OnInit, OnDestroy {
         $('#edit-adjusted-committed-amount').modal('hide');
         this.editActualCommittedData.resource.adjustedCommittedCost = data.adjustedCommittedCost;
         this.editActualCommittedData.category.unCommittedAmount = data.unCommittedAmount;
+        this.editActualCommittedData.category.sapCommittedAmount = data.sapCommittedAmount;
         this.editActualCommittedData.action = 'editActualCommitted';
         this.emitChildResponse.next(this.editActualCommittedData);
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully updated adjusted committed amount.');

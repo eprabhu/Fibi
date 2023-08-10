@@ -1,10 +1,10 @@
 <div class="person-details-outer mt-3">
-  <div class="card card-inner mb-3">
+  <div class="card mb-3">
     <div class="card-content">
-      <div class="card-header">
+      <div *ngIf="_extReviewerMaintenanceService.mode != 'view'" class="card-header">
         <span class="d-flex justify-content-between align-items-center" >
           <h4 class="card-title align-items-center d-flex px-1 py-2">
-            Attachment Details
+            Supporting Documents
           </h4>
           <button type="button" class="btn btn-primary add-attachment-btn"
             *ngIf="_extReviewerMaintenanceService.mode != 'view' && isMaintainReviewer" (click)="clearAttachmentDetails();viewAttachmentModal();"
@@ -15,7 +15,7 @@
       </div>
       <div class="card-body">
         <div class="noDataExists"
-          *ngIf="!externalReviewerDetails.extReviewerAttachments || externalReviewerDetails?.extReviewerAttachments?.length == 0">
+          *ngIf="externalReviewerDetails?.extReviewerAttachments?.length == 0">
           <div class="no-data-container">
             <span class="no-data-icon-outer">
               <div class="no-data-icon">
@@ -34,20 +34,38 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
+
+            <thead>
               <tr>
-                <th scope="col" style="width: 20%;" id="sort-by-attach-type">
-                  <label>Document Type</label>
-                </th>
-                <th scope="col" style="width: 23%;" id="sort-by-attach-desc">
-                  <label>Description</label>
-                </th>
-                <th scope="col" class="hand-cursor" id="sort-by-attach-name">
-                  <label>File Name</label>
-                </th>
-                <th style="width: 15%;" scope="col">Actions</th>
+                  <th style="width: 20%"
+                      (click)="sortResult('attachmentTypeCode')" scope="col"
+                      class="hand-cursor" id="sort-by-attach-type" title="Click to sort by Document Type">
+                      <span>Document Type
+                          <i [ngClass]="((sortListBy == 'attachmentTypeCode') ? (!isDesc ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                              aria-hidden="true"></i>
+                      </span>
+                  </th>
+                  <th style="width: 25%" (click)="sortResult('description')"
+                      scope="col" class="hand-cursor" id="sort-by-attach-desc"
+                      title="Click to sort by Description">
+                      <span>Description
+                          <i [ngClass]="((sortListBy == 'description') ? (!isDesc ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                              aria-hidden="true"></i>
+                      </span>
+                  </th>
+                  <th class="hand-cursor" (click)="sortResult('fileName')"
+                      scope="col" id="sort-by-attach-name" title="Click to sort by File Name">
+                      <span>File Name
+                          <i [ngClass]="((sortListBy == 'fileName') ? (!isDesc ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                              aria-hidden="true"></i>
+                      </span>
+                  </th>
+                  <th scope="col" style="width: 12%;">Actions</th>
               </tr>
-              <ng-container *ngFor="let attachment of externalReviewerDetails.extReviewerAttachments;let i = index">
+          </thead>
+
+            <tbody>
+              <ng-container *ngFor="let attachment of externalReviewerDetails.extReviewerAttachments | orderBy: {property: sortListBy , direction: direction}; let i = index">
                 <tr>
                   <td>{{attachment?.externalReviewerAttachmentType.description}}</td>
                   <td title="{{(attachment?.description?.length>30)?(attachment?.description):''}}">

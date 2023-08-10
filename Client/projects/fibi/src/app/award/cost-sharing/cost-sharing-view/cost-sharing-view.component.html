@@ -55,7 +55,7 @@
                                                     aria-hidden="true" title="Comment"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                                <p class="new-line-property" [innerHTML]="costshares?.comments ? costshares?.comments : 'Not Available'"></p>
+                                                <p class="new-line-property" [innerHTML]="costshares?.comments ? (costshares?.comments| customTagRemover: currentMethod) : 'Not Available'"></p>
                                             </div>
                                         </div>
                                     </li>

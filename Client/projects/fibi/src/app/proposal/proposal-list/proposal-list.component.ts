@@ -394,7 +394,10 @@ export class ProposalListComponent implements OnInit, OnDestroy {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Proposal failed. Please try again.');
             }
         } , err => {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Proposal failed. Please try again.');
+            $('#permissionCheckingModal').modal('hide');
+            this._commonService.showToast(HTTP_ERROR_STATUS,
+                (err && typeof err.error === 'string') ? err.error : 'Deleting Proposal failed. Please try again.'
+            );
         }));
     }
 

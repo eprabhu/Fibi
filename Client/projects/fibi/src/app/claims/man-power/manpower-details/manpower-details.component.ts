@@ -68,7 +68,7 @@ export class ManpowerDetailsComponent implements OnInit, OnDestroy {
             this.isManpowerDetailsOpen = [];
             this.isManpowerDetailsOpen[index] = true;
         }
-        this.populateCurrentEdit(manpower.claimManpower);
+        this.populateCurrentEdit(manpower);
     }
 
     populateCurrentEdit(claimManpower) {
@@ -87,18 +87,18 @@ export class ManpowerDetailsComponent implements OnInit, OnDestroy {
         const tempIndexValue = this.isManpowerDetailsOpen[index];
         this.isManpowerDetailsOpen = [];
         this.isManpowerDetailsOpen[index] = !tempIndexValue;
-        this.populateCurrentEdit(manpower.claimManpower);
+        this.populateCurrentEdit(manpower);
     }
 
     saveManpowerDetails(manpower: any, index: number) {
         this.limitKeypress(this.currentEditEntry.percntgeTimeSpentOnProg, 'percentage', this.progressPercentage);
        if (this.progressPercentage.size === 0) {
            this.$subscription.push(
-               this._manPowerService.saveOrUpdateClaimManpower(this.createRequestObject(manpower)).subscribe((res: any) => {
+               this._manPowerService.saveOrUpdateClaimManpower(this.createRequestObject()).subscribe((res: any) => {
                    if (res && res.claimManpower) {
-                       manpower.claimManpower = res.claimManpower;
+                       manpower = res.claimManpower;
                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Manpower Saved Successfully');
-                       this.populateCurrentEdit(manpower.claimManpower);
+                       this.populateCurrentEdit(manpower);
                        this.cancelEdit(index);
                    }
                }, err => this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to save manpower! Please try again'))
@@ -106,25 +106,11 @@ export class ManpowerDetailsComponent implements OnInit, OnDestroy {
        }
     }
 
-    createRequestObject(selectedManpower: any) {
-        return {
-            claimManpower: {
-                claimManpowerId: selectedManpower.claimManpower.claimManpowerId,
-                claimId: this.claimManpowerObject.claimId,
-                claimNumber: this.claimManpowerObject.claimNumber,
-                awardManpowerId: selectedManpower.awardManpowerId,
-                awardManpowerResourceId: selectedManpower.manpowerResourceId,
-                personId: selectedManpower.personId,
-                isGrantUsed: this.currentEditEntry.isGrantUsed,
-                sourceOfFunding: this.currentEditEntry.sourceOfFunding,
-                isApprovedForForeignStaff: this.currentEditEntry.isApprovedForForeignStaff,
-                dateOfApproval: parseDateWithoutTimestamp(this.currentEditEntry.dateOfApproval),
-                nationalityWaiverDesc: this.currentEditEntry.nationalityWaiverDesc,
-                isJobReqPHDQualification: this.currentEditEntry.isJobReqPHDQualification,
-                percntgeTimeSpentOnProg: this.currentEditEntry.percntgeTimeSpentOnProg,
-                institution: this.currentEditEntry.institution
-            }
-        };
+    createRequestObject() {
+        this.currentEditEntry.claimId = this.claimManpowerObject.claimId;
+        this.currentEditEntry.claimNumber = this.claimManpowerObject.claimNumber;
+        this.currentEditEntry.dateOfApproval = parseDateWithoutTimestamp(this.currentEditEntry.dateOfApproval);
+        return { claimManpower: this.currentEditEntry };
     }
 
     /**limitKeypress - limit the input field b/w 0 and 100 with 2 decimal points

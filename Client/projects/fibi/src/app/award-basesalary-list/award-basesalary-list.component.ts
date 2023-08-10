@@ -81,7 +81,7 @@ export class AwardBasesalaryListComponent implements OnInit, OnDestroy {
         this.awardBaseSalaryList = data;
         this.personDetails = JSON.parse(JSON.stringify(this.temporaryPerson));
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Base salary fetching failed. Please trya again.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Base Salary fetching failed. Please try again.');
       })
     );
   }

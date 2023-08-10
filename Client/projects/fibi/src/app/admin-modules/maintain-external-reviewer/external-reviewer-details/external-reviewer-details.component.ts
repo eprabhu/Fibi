@@ -23,6 +23,7 @@ export class ExternalReviewerDetailsComponent implements OnInit, OnDestroy {
     isMaintainReviewer = false;
     lookUpData: any;
     deployMap = environment.deployUrl;
+    externalReviewDetails: any = null;
 
     constructor(
         public _extReviewerMaintenanceService: ExtReviewerMaintenanceService,
@@ -35,12 +36,19 @@ export class ExternalReviewerDetailsComponent implements OnInit, OnDestroy {
         this.isMaintainReviewer = await this._extReviewerMaintenanceService.getMaintainReviewerPermission();
         this.setInitialValues();
         this.getExternalReviewerData();
+        this.setQueryParams();
+        this._extReviewerMaintenanceService.navigationUrl = this._router.url.split('?')[0];
+    }
+
+    private setQueryParams() {
         this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
+            if (this._extReviewerMaintenanceService.mode && this._extReviewerMaintenanceService.mode != params.mode) {
+                this._extReviewerMaintenanceService.$externalReviewerDetails.next(this.externalReviewDetails);
+            }
             if (params.mode) {
                 this._extReviewerMaintenanceService.mode = params.mode;
             }
         }));
-        this._extReviewerMaintenanceService.navigationUrl = this._router.url.split('?')[0];
     }
 
     setInitialValues() {
@@ -49,6 +57,7 @@ export class ExternalReviewerDetailsComponent implements OnInit, OnDestroy {
 
     getExternalReviewerData(): void {
         this.$subscriptions.push(this._extReviewerMaintenanceService.$externalReviewerDetails.subscribe((data: any) => {
+            this.externalReviewDetails = data;
             if (data.extReviewer) {
                 this.extReviewer = data.extReviewer;
                 this.externalReviewerRt = data.externalReviewerExt ? data.externalReviewerExt : null;
@@ -63,7 +72,7 @@ export class ExternalReviewerDetailsComponent implements OnInit, OnDestroy {
     }
 
     redirectToTabs() {
-        this._router.navigate([this._extReviewerMaintenanceService.navigationUrl], { queryParamsHandling: 'merge' });
+        this._router.navigate([this._extReviewerMaintenanceService.navigationUrl], { queryParamsHandling: "merge" });
         this._extReviewerMaintenanceService.navigationUrl = '';
     }
 
@@ -77,8 +86,8 @@ export class ExternalReviewerDetailsComponent implements OnInit, OnDestroy {
       this._extReviewerMaintenanceService
         .resetExternalReviewerPassword(this.extReviewer.externalReviewerId)
         .subscribe((data) => {
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Password regenerated and mailed to user successfully', 5000);
-        }, err => this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again'))
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Password Regenerated and Mailed to user successfully.', 5000);
+        }, err => this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.'))
     );
   }
 

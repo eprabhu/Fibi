@@ -11,22 +11,6 @@ const routes: Routes = [{
   children: [
     { path: '', redirectTo: 'manpower-interfaces', pathMatch: 'full' },
     {
-      path: 'award-retrigger',
-      loadChildren: () => import('./award-retrigger/award-retrigger.module').then(m => m.AwardRetriggerModule)
-    },
-    {
-      path: 'position-retrigger',
-      loadChildren: () => import('./position-retrigger/position-retrigger.module').then(m => m.PositionRetriggerModule)
-    },
-    {
-      path: 'manpower-lookup',
-      loadChildren: () => import('./manpower-lookup/manpower-lookup.module').then(m => m.ManpowerLookupModule)
-    },
-    {
-      path: 'cost-allocation',
-      loadChildren: () => import('./cost-allocation-retrigger/cost-allocation-retrigger.module').then(m => m.CostAllocationRetriggerModule)
-    },
-    {
       path: 'manpower-interfaces',
       loadChildren: () => import('./manpower-interfaces/manpower-interfaces.module').then(m => m.ManpowerInterfacesModule)
     },

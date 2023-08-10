@@ -57,7 +57,7 @@ export class ExternalReviewerDetailsResolverGuardService implements CanActivate 
     }
 
     loadExternalReviewerData(externalReviewerId: any) {
-        return this._extReviewerMaintenanceService.loadExternalReviewerDetails({ 'extReviewerId': +externalReviewerId })
+        return this._extReviewerMaintenanceService.loadExternalReviewerDetails({ 'extReviewerId': externalReviewerId })
             .pipe(catchError(error => this.redirectOnError(error)));
     }
 

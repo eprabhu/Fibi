@@ -57,6 +57,7 @@ export class ModifyCustomdataMainComponent implements OnInit, OnDestroy {
   clearModuleField: any;
   updatedModule: any;
   usageModuleList: any[];
+  currentElementAnswered = false;
   before: any;
   currentModuleName: string;
 
@@ -97,6 +98,7 @@ export class ModifyCustomdataMainComponent implements OnInit, OnDestroy {
     if (customElementId) {
       this.$subscriptions.push(this._customdataService.getCustomData(customElementId).subscribe((data: any) => {
         if (data.customDataElement) {
+          this.currentElementAnswered = data.elementAnswered;
           this.customDataElement = data.customDataElement;
           this.before = this.prepareAuditLogObject(data.customDataElement, data.elementOptions);
           this.customDataType = this.customDataElement.dataType;
@@ -108,6 +110,11 @@ export class ModifyCustomdataMainComponent implements OnInit, OnDestroy {
           this.customId = this.customDataElement.customElementId;
         }
       }));
+    } else {
+      this.currentElementAnswered = false;
+      this.elementOptions = [];
+      this.tempElementOptions = [];
+      this.customDataType = [];
     }
   }
 
@@ -140,7 +147,7 @@ export class ModifyCustomdataMainComponent implements OnInit, OnDestroy {
         foundModuleCode = true;
       } else if (element.moduleCode === module.moduleCode && (element.acType === 'I' || element.acType === 'U')) {
         foundModuleCode = true;
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Module already exists!');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Module already exists.');
       }
     });
     if (!foundModuleCode) {
@@ -202,7 +209,7 @@ export class ModifyCustomdataMainComponent implements OnInit, OnDestroy {
   addOptions() {
     if (this.elementOptions.length && (!this.elementOptions.find(x => x.optionName))) {
       this.map.set('customdataoption', 'option');
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Please fill the option');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Please fill the Option.');
     } else {
       this.elementOptions.push({
         'customDataElementsId': this.customDataElement.customElementId,
@@ -295,14 +302,14 @@ export class ModifyCustomdataMainComponent implements OnInit, OnDestroy {
       if (!this.elementOptions.find(x => x.optionName) || !this.elementOptions.length) {
         this.map.set('customdataoption', 'option');
         setTimeout(() => {
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Please add atleast one option');
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Please add atleast one Option.');
         }, 0);
       }
     }
     if (this.customDataElement.customDataElementUsage.length <= 0 ||
       !(this.customDataElement.customDataElementUsage.find(x => x.acType === 'I' || x.acType === 'U'))) {
       this.map.set('custommodule', 'module');
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Please select atleast one module');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Please select atleast one Module.');
     }
   }
 
@@ -323,7 +330,7 @@ export class ModifyCustomdataMainComponent implements OnInit, OnDestroy {
       REQUESTCUSTOMDATA.isDataChange = this.isDataChange;
       this.$subscriptions.push(this._customdataService.saveCustomdata(REQUESTCUSTOMDATA).subscribe(
         (data: any) => {
-          if (data && data.responseMessage === 'Custom data element saved successfully') {
+          if (data && data.responseMessage === 'Custom Data Element saved successfully.') {
             const newModules = [];
             this.customDataElement.customDataElementUsage.forEach(element => {
               const filteredModule = this.usageModuleList.findIndex(moduleEle => moduleEle.moduleCode === element.moduleCode);
@@ -337,14 +344,14 @@ export class ModifyCustomdataMainComponent implements OnInit, OnDestroy {
               this.currentModuleName = newModules[0].description
             } else {
               this.currentTab = data.customDataElement.customDataElementUsage[0].moduleCode;
-              this.currentModuleName =  data.customDataElement.customDataElementUsage[0].description
+              this.currentModuleName =  data.customDataElement.customDataElementUsage[0].module.description;
             }
             this.updatedModule = data;
             this.createEditCustomElementModalCloseClear();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, data.responseMessage);
             let after = this.prepareAuditLogObject(data.customDataElement, data.elementOptions);
             this.auditLogService.saveAuditLog('I', {}, after, null, Object.keys(after), data.customDataElement.customElementId);
-          } else if (data && data.responseMessage === 'Custom data element updated successfully') {
+          } else if (data && data.responseMessage === 'Custom Data Element updated successfully.') {
             this.customDataElement.customDataElementUsage.forEach(element => {
               const filteredModule = this.usageModuleList.findIndex(moduleEle => moduleEle.moduleCode === element.moduleCode);
               if (filteredModule < 0) {
@@ -356,10 +363,12 @@ export class ModifyCustomdataMainComponent implements OnInit, OnDestroy {
             this._commonService.showToast(HTTP_SUCCESS_STATUS, data.responseMessage);
             let after = this.prepareAuditLogObject(deepCloneObject(data.customDataElement),data.elementOptions);
             this.auditLogService.saveAuditLog('U', this.before, after, null, Object.keys(after), data.customDataElement.customElementId);
-          } else if (data && data.responseMessage === 'Custom element name already exists') {
+          } else if (data && data.responseMessage === 'Custom Element Name already exists.') {
             this.map.set('customelementname', 'elementname');
             this._commonService.showToast(HTTP_ERROR_STATUS, data.responseMessage);
           }
+        }, err =>{
+          this._commonService.showToast(HTTP_ERROR_STATUS,'Custom Data Element failed. Please try again.');
         }));
     }
   }

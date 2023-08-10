@@ -43,10 +43,10 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="col" style="width: 20%;" class="hand-cursor" id="sort-by-attach-type" (click)="isReverse =!isReverse;sortAttachmentDetails('typeCode')"
+                            <th scope="col" style="width: 20%;" class="hand-cursor" id="sort-by-attach-type" (click)="isReverse =!isReverse;sortAttachmentDetails('attachmentType.description')"
                                 title="Click to sort by Document  Type">
                                 <span>Document Type
-                                    <i [ngClass]="((sortBy == 'typeCode') ? (isReverse ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                                    <i [ngClass]="((sortBy == 'attachmentType.description') ? (isReverse ? 'fa fa-sort-alpha-asc sortIcon':'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
                                         aria-hidden="true"></i>
                                 </span>
                             </th>
@@ -64,17 +64,17 @@
                                         aria-hidden="true"></i>
                                 </span>
                             </th>
-                            <th scope="col" class="hand-cursor" id="sort-by-attach-status" (click)="isReverse =!isReverse;sortAttachmentDetails('narrativeStatus.description')"
+                            <th scope="col" class="hand-cursor" id="sort-by-attach-status" (click)="isReverse =!isReverse;sortAttachmentDetails('narrativeStatusCode')"
                                 title="Click to sort by Status">
                                 <span>Status
-                                    <i [ngClass]="((sortBy == 'narrativeStatus.description') ? (isReverse ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                                    <i [ngClass]="((sortBy == 'narrativeStatusCode') ? (isReverse ? 'fa fa-sort-alpha-desc sortIcon' : 'fa fa-sort-alpha-asc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
                                         aria-hidden="true"></i>
                                 </span>
                             </th>
-                            <th scope="col" class="hand-cursor" id="sort-by-attach-update" (click)="isReverse =!isReverse;sortAttachmentDetails('updateUser')"
+                            <th scope="col" class="hand-cursor" id="sort-by-attach-update" (click)="isReverse =!isReverse;sortAttachmentDetails('lastUpdateUserFullName')"
                                 title="Click to sort by Update User">
                                 <span>Updated by
-                                    <i [ngClass]="((sortBy == 'updateUser') ? (isReverse ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                                    <i [ngClass]="((sortBy == 'lastUpdateUserFullName') ? (isReverse ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
                                         aria-hidden="true"></i>
                                 </span>
                             </th>
@@ -82,8 +82,10 @@
                         </tr>
                         <ng-container *ngFor="let attachment of temporaryAttachments | orderBy: {property: sortBy, direction: reverse};let i = index">
                             <tr>
-                                <td><span class="d-block">{{getAttachmentType(attachment?.typeCode)}}</span>
-                                    <span *ngIf="attachment?.attachmentType?.isPrivate" class="badge bg-danger badge-info text-white">Confidential</span></td>
+                                <td>
+                                    <span class="d-block">{{getAttachmentType(attachment?.typeCode)}}</span>
+                                    <span *ngIf="attachment?.attachmentType?.isPrivate" class="badge bg-danger badge-info text-white">Confidential</span>
+                                </td>
 
                                 <td title="{{(attachment?.description?.length>30)?(attachment?.description):''}}">
                                     <ng-container >

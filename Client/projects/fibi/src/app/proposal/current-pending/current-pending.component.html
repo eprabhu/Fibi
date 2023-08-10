@@ -1,10 +1,10 @@
 <!-- Last updated by ARAVIND on 08-10-2020 -->
 <div>
-    <div class="left-div" id='cp_tab_content'>
+    <div [ngClass]="personDetails?.proposalPersons?.length > 0 ? 'left-div' : 'div'" id='cp_tab_content'>
         <app-current-pending-details (selected)="setGenerateFlag()" [personDetails]='personDetails'>
         </app-current-pending-details>
     </div>
-    <div class="right-div">
+    <div class="right-div" *ngIf="personDetails?.proposalPersons?.length > 0">
         <app-person-details [personDetails]='personDetails'></app-person-details>
     </div>
 </div>

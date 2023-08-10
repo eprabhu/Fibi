@@ -6,13 +6,17 @@ import { CommonDataService } from '../services/common-data.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 import { ProgressReportService } from '../services/progress-report.service';
+import { AutoSaveService } from '../../common/services/auto-save.service';
 @Component({
   selector: 'app-progress-report-equipments',
-  template: `<app-view-questionnaire-list *ngIf="_commonData.progressReportSectionConfig['1607'].isActive"
+  template: `<div id="progress-report-questionnaire">
+    <app-view-questionnaire-list *ngIf="_commonData.progressReportSectionConfig['1607'].isActive"
     [configuration] = "configuration"
+    [isShowSave]=false
     (QuestionnaireSaveEvent)= "getSaveEvent($event)"
-    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)">
-  </app-view-questionnaire-list>`,
+    (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)"
+    [externalSaveEvent] = '_autoSaveService.autoSaveTrigger$'>
+  </app-view-questionnaire-list></div>`,
 })
 
 export class ProgressReportEquipmentsComponent implements OnInit, OnDestroy {
@@ -29,8 +33,11 @@ export class ProgressReportEquipmentsComponent implements OnInit, OnDestroy {
   };
   $subscriptions: Subscription[] = [];
 
-  constructor(private _route: ActivatedRoute, public _commonService: CommonService, private _progressReportService: ProgressReportService,
-    public _commonData: CommonDataService) { }
+  constructor(private _route: ActivatedRoute,
+    public _commonService: CommonService,
+    private _progressReportService: ProgressReportService,
+    public _commonData: CommonDataService,
+    private _autoSaveService: AutoSaveService) { }
 
   ngOnInit() {
     this.configuration.moduleItemKey = this._route.snapshot.queryParamMap.get('progressReportId');
@@ -46,7 +53,7 @@ export class ProgressReportEquipmentsComponent implements OnInit, OnDestroy {
    * @param event
    */
   getSaveEvent(event) {
-    event ? this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Your Questionnaire saved successfully.') :
+    event ? this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Questionnaire saved successfully.') :
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving Questionnaire failed. Please try again.');
   }
 
@@ -69,5 +76,6 @@ export class ProgressReportEquipmentsComponent implements OnInit, OnDestroy {
 
   markQuestionnaireAsEdited(changeStatus: boolean): void {
     this._commonData.isDataChange = changeStatus;
+      this._autoSaveService.setUnsavedChanges('Questionnaire', 'progress-report-questionnaire', changeStatus, true);
   }
 }

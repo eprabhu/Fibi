@@ -104,8 +104,8 @@ export class CustomElementCompareComponent implements OnInit, OnDestroy {
     } else if (customElement.filterType === 'Check Box') {
       const answers = [];
       customElement.options.forEach((option, index) => {
-        if (customElement.answers[index].value === 'true') {
-          answers.push(option);
+        if (customElement.answers.find(ele => ele.value === option.customDataOptionId)) {
+          answers.push(option.optionName);
         }
       });
       return answers;

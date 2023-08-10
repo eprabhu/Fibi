@@ -169,10 +169,10 @@ export class AnticipatedDistributionComponent implements OnInit, OnDestroy {
                     this.setRequest()).subscribe((data: AnticipatedDistributionPeriod[]) => {
                         this.anticipatedPeriods = this.convertTimestamp(data);
                         this.calculateBudgetTotalCost();
-                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Anticipated distributed successfully saved.');
+                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Anticipated Funding Distribution saved successfully.');
                         this.isSaving = false;
                     }, err => {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving anticipated distribution failed. Please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving Anticipated Funding Distribution failed. Please try again.');
                         this.isSaving = false;
                     }));
         }

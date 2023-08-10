@@ -53,3 +53,12 @@ export class ReportService {
 		return this._http.post(this._commonService.baseUrl + '/getParameterDetails', {'reportTypeId': 93});
 	}
 }
+
+export function getAutoCompleterOptions(completerOptions,arrayList = [], defaultValue = '') {
+	completerOptions.arrayList = arrayList;
+	completerOptions.contextField = 'label';
+	completerOptions.formatString = 'label';
+	completerOptions.defaultValue = defaultValue;
+	completerOptions.filterFields = 'label';
+	return JSON.parse(JSON.stringify(completerOptions));
+}

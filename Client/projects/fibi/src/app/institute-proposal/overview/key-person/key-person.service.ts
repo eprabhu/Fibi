@@ -23,7 +23,7 @@ export class KeyPersonService {
   }
 
   downloadAttachment(attachmentId) {
-    return this._http.get(this._commonService.baseUrl + '/downloadAwardPersonAttachment', {
+    return this._http.get(this._commonService.baseUrl + '/downloadIPPersonAttachment', {
       headers: new HttpHeaders().set('attachmentId', attachmentId.toString()),
       responseType: 'blob'
     });

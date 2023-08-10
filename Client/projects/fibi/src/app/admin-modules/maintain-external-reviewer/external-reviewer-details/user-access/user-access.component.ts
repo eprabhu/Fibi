@@ -62,7 +62,7 @@ export class UserAccessComponent implements OnInit, OnDestroy {
     }
 
     saveReviewerRights() {
-        if (!this.isSaving) {
+        if (!this.isSaving && this._extReviewerMaintenanceService.isDataChange) {
             this.isSaving = true;
             const REQUESTREPORTDATA = this.setRequestObject();
             this.$subscriptions.push(this._extReviewerMaintenanceService.saveOrUpdateuserAccess(REQUESTREPORTDATA).subscribe(

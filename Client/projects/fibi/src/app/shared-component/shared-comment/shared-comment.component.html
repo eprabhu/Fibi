@@ -117,7 +117,7 @@
 								<div>
 									<i aria-hidden="true" class="fa fa-quote-left comment-icon"></i>
 									<sub> <span class="f-13  text-content-color new-line-property"
-											[innerHTML]="reviewerComment.comment"></span>
+											[innerHTML]="reviewerComment.comment| customTagRemover: currentMethod"></span>
 									</sub>
 									<!-- attachment  for proposal comments  -->
 									<ng-container *ngIf="requestModuleCode === 3">

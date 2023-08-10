@@ -145,8 +145,8 @@ export class DelegationComponent implements OnInit {
     this.$subscriptions.push(this._personService.saveOrUpdateDeligation({ "personId": this.delegationPersonId, "delegation": this.setDelegationData(type), 
     "previousDelegatedToPersonId": this.delegatedByPerson}).subscribe((data: any) => {
       if (data) {
-        type === 'R' ? this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation Requested  Successfully.') :
-            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation Removed Successfully.');
+        type === 'R' ? this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation Requested successfully.') :
+            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation Removed successfully.');
         this.isPersonCard = false;
         this.isviewMode = true;
         this.delegationId = (type === 'X') ? null : this.delegationId;
@@ -167,11 +167,11 @@ export class DelegationComponent implements OnInit {
     this.$subscriptions.push(this._personService.updateDeligationStatus({ "personId": this.delegationPersonId, "delegationId": this.delegationAcceptObject.delegateId, "delegationStatusCode": this.delegationAcceptObject.statusCode }).subscribe((data: any) => {
       if (data) {
         if(this.delegationAcceptObject.statusCode == 'A'){
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation Accepted Successfully.')
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation accepted successfully.')
         }else if (this.delegationAcceptObject.statusCode == 'D'){
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation Denied Successfully.'); 
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation denied successfully.'); 
        } else if (this.delegationAcceptObject.statusCode == 'X')
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation Deleted Successfully.');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Delegation deleted successfully.');
         } else {
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Delegation updation failed. Please try again.');
       }

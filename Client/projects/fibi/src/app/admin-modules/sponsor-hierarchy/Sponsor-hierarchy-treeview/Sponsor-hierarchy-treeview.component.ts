@@ -37,6 +37,7 @@ export class SponsorHierarchyTreeviewComponent implements OnInit {
     closedNodes = [];
     tempChildSponsorHierarchies: any = [];
     sponsorSearchValidationMap: Map<string, string> = new Map();
+    isSaving:boolean=false;
 
     constructor(private _sponsorService: SponsorHierarchyService, public _commonService: CommonService) { }
 
@@ -56,7 +57,7 @@ export class SponsorHierarchyTreeviewComponent implements OnInit {
             orderNumber = this.currentSelectedNode.childSponsorHierarchies[0].orderNumber + 1;
         }
         this.sponsorSearchValidationMap.clear();
-        const isSponsorExist = this.tempChildSponsorHierarchies.find(element =>
+        const isSponsorExist = this.currentSelectedNode.childSponsorHierarchies.find(element =>
             element.sponsorCode === sponsor.sponsorCode) ? true : false;
         if (!isSponsorExist) {
             const tempObj: any = {
@@ -71,6 +72,7 @@ export class SponsorHierarchyTreeviewComponent implements OnInit {
             this.sponsorSearchValidationMap.clear();
         } else {
             this.sponsorSearchValidationMap.set('newSponsor', 'Sponsor already exist');
+            this.clearField = new String('true');
         }
     }
 
@@ -182,43 +184,51 @@ export class SponsorHierarchyTreeviewComponent implements OnInit {
     }
 
     updateSponsorHierarchy(node) {
-        const sponsorHierarchy = Object.assign({}, node);
-        sponsorHierarchy.sponsorGroupName = node.sponsorGroupName;
-        sponsorHierarchy.childSponsorHierarchies = null;
-        delete sponsorHierarchy.visible;
-        delete sponsorHierarchy.isAddGroup;
-        delete sponsorHierarchy.isEditMode;
-        this.$subscriptions.push(this._sponsorService.updateSponsorHierarchy(sponsorHierarchy).subscribe((result: any) => {
-            if (result.data.sponsorOriginatingGroupId == null) {
-                this._sponsorService.triggerEventWithGroupId('update', result.data.sponsorGroupId, result.data);
-                const index = this.searchSponsorHierarchyList.findIndex(e =>
-                    e.groupId === sponsorHierarchy.sponsorGroupId);
+        if (!this.isSaving) {
+            this.isSaving = true;
+            const sponsorHierarchy = Object.assign({}, node);
+            sponsorHierarchy.sponsorGroupName = node.sponsorGroupName;
+            sponsorHierarchy.childSponsorHierarchies = null;
+            delete sponsorHierarchy.visible;
+            delete sponsorHierarchy.isAddGroup;
+            delete sponsorHierarchy.isEditMode;
+            this.$subscriptions.push(this._sponsorService.updateSponsorHierarchy(sponsorHierarchy).subscribe((result: any) => {
+                if (result.data.sponsorOriginatingGroupId == null) {
+                    this._sponsorService.triggerEventWithGroupId('update', result.data.sponsorGroupId, result.data);
+                    const index = this.searchSponsorHierarchyList.findIndex(e =>
+                        e.groupId === sponsorHierarchy.sponsorGroupId);
                     this.searchSponsorHierarchyList[index].groupName = result.data.sponsorGroupName;
-            } else if (sponsorHierarchy.sponsorGroupId == null) {
-                node.sponsorGroupId = result.data.sponsorGroupId;
-                this.updateSponsorHierarchyTraverse(result.data.sponsorOriginatingGroupId, this.sponsorHierarchyList);
-            } else {
-                node.sponsorGroupName = result.data.sponsorGroupName;
-                node.sponsorGroupId = result.data.sponsorGroupId;
-                const index = this.searchSponsorHierarchyList.findIndex(nde =>
-                    nde.groupId === sponsorHierarchy.sponsorGroupId);
+                } else if (sponsorHierarchy.sponsorGroupId == null) {
+                    node.sponsorGroupId = result.data.sponsorGroupId;
+                    this.updateSponsorHierarchyTraverse(result.data.sponsorOriginatingGroupId, this.sponsorHierarchyList);
+                } else {
+                    node.sponsorGroupName = result.data.sponsorGroupName;
+                    node.sponsorGroupId = result.data.sponsorGroupId;
+                    const index = this.searchSponsorHierarchyList.findIndex(nde =>
+                        nde.groupId === sponsorHierarchy.sponsorGroupId);
                     this.searchSponsorHierarchyList[index].groupName = result.data.sponsorGroupName;
-            }
-            if (node.isAddGroup) {
-                const type = '<span class="badge badge-warning ml-2">Sponsor Group</span>';
-                this.searchSponsorHierarchyList.push({
-                    'sponsorCode': '',
-                    'acronym': '',
-                    'groupId': result.data.sponsorGroupId,
-                    'groupName': result.data.sponsorGroupName,
-                    'type': type
-                });
-                node.emptyGroup = true;
-            }
-            this.setValidationMessage(result.data.emptyGroup);
-            node.isAddGroup = false;
-            node.isEditMode = false;
-        }));
+                }
+                if (node.isAddGroup) {
+                    const type = '<span class="badge badge-warning ml-2">Sponsor Group</span>';
+                    this.searchSponsorHierarchyList.push({
+                        'sponsorCode': '',
+                        'acronym': '',
+                        'groupId': result.data.sponsorGroupId,
+                        'groupName': result.data.sponsorGroupName,
+                        'type': type
+                    });
+                    node.emptyGroup = true;
+                }
+                this.setValidationMessage(result.data.emptyGroup);
+                node.isAddGroup = false;
+                node.isEditMode = false;
+                this.isSaving = false;
+            },
+                err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding to group failed. Please try again.');
+                    this.isSaving = false;
+                }));
+        }
     }
 
     updateSponsorHierarchyTraverse(sponsorGroupId, sponsorHierarchyList) {
@@ -234,12 +244,12 @@ export class SponsorHierarchyTreeviewComponent implements OnInit {
     deleteSponsorHierarchy(sponsorGroupId) {
         this.$subscriptions.push(this._sponsorService.deleteSponsorHierarchy(sponsorGroupId).subscribe((data: any) => {
             if (this.currentSelectedNode.sponsorOriginatingGroupId == null && this.currentSelectedNode.sponsorCode == null) {
-                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Hierarchy deleted successfully');
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Hierarchy deleted successfully.');
                 this.setValidationMessage(false);
             }else if (this.currentSelectedNode.sponsorCode == null) {
-                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Group deleted successfully');
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Group deleted successfully.');
             } else {
-                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Sponsor deleted successfully');
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Sponsor deleted successfully.');
             }
             if (sponsorGroupId === this.rootSponsorGroupId) {
                 this._sponsorService.triggerEventWithGroupId('delete', this.rootSponsorGroupId);
@@ -248,7 +258,7 @@ export class SponsorHierarchyTreeviewComponent implements OnInit {
                 item.groupId === sponsorGroupId);
             this.searchSponsorHierarchyList.splice(i, 1);
             this.deleteSponsorHierarchyTraverse(sponsorGroupId, this.sponsorHierarchyList, null);
-        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting sponsor from hierarchy failed. Please try again.'); }));
+        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Sponsor from Hierarchy failed. Please try again.'); }));
     }
 
     deleteSponsorHierarchyTraverse(sponsorGroupId, sponsorHierarchyList, parentSponsorHierarchyObject) {
@@ -304,50 +314,58 @@ export class SponsorHierarchyTreeviewComponent implements OnInit {
     }
 
     updateOrAddSponsor() {
-        const noChildSponsorPresent = (this.currentSelectedNode.childSponsorHierarchies == null ||
-             this.currentSelectedNode.childSponsorHierarchies.length === 0) && this.tempChildSponsorHierarchies.length < 1;
-       if (noChildSponsorPresent) {
-          this.sponsorSearchValidationMap.clear();
-          this.sponsorSearchValidationMap.set('newSponsor', 'Please select a sponsor');
-          return;
-       }
-        delete this.currentSelectedNode.visible;
-        delete this.currentSelectedNode.isAddGroup;
-        delete this.currentSelectedNode.isEditMode;
-        this.currentSelectedNode.childSponsorHierarchies = this.tempChildSponsorHierarchies;
-        this.$subscriptions.push(this._sponsorService.updateSponsorHierarchy(this.currentSelectedNode).subscribe((data: any) => {
-            for (let index = 0; index < data.data.childSponsorHierarchies.length; index++) {
-                if (data.data.childSponsorHierarchies[index].accType === 'I') {
-                    if (this.backRefSHNode.childSponsorHierarchies == null) {
-                        this.backRefSHNode.childSponsorHierarchies = [];
+        if (!this.isSaving) {
+            this.isSaving = true;
+            const noChildSponsorPresent = (this.currentSelectedNode.childSponsorHierarchies == null ||
+                this.currentSelectedNode.childSponsorHierarchies.length === 0) && this.tempChildSponsorHierarchies.length < 1;
+            if (noChildSponsorPresent) {
+                this.sponsorSearchValidationMap.clear();
+                this.sponsorSearchValidationMap.set('newSponsor', 'Please select a sponsor');
+                return;
+            }
+            delete this.currentSelectedNode.visible;
+            delete this.currentSelectedNode.isAddGroup;
+            delete this.currentSelectedNode.isEditMode;
+            this.currentSelectedNode.childSponsorHierarchies = this.tempChildSponsorHierarchies;
+            this.$subscriptions.push(this._sponsorService.updateSponsorHierarchy(this.currentSelectedNode).subscribe((data: any) => {
+                for (let index = 0; index < data.data.childSponsorHierarchies.length; index++) {
+                    if (data.data.childSponsorHierarchies[index].accType === 'I') {
+                        if (this.backRefSHNode.childSponsorHierarchies == null) {
+                            this.backRefSHNode.childSponsorHierarchies = [];
+                        }
+                        this.backRefSHNode.childSponsorHierarchies.push(data.data.childSponsorHierarchies[index]);
+                        this.searchSponsorHierarchyList.push({
+                            'sponsorCode': data.data.childSponsorHierarchies[index].sponsorCode,
+                            'acronym': data.data.childSponsorHierarchies[index].sponsor.acronym + ' :',
+                            'groupId': data.data.childSponsorHierarchies[index].sponsorGroupId,
+                            'groupName': data.data.childSponsorHierarchies[index].sponsor.sponsorName,
+                            'type': ''
+                        });
+                    } else if (data.data.childSponsorHierarchies[index].accType === 'D') {
+                        let i = this.backRefSHNode.childSponsorHierarchies.findIndex(nde =>
+                            nde.sponsorGroupId === data.data.childSponsorHierarchies[index].sponsorGroupId);
+                        this.backRefSHNode.childSponsorHierarchies.splice(i, 1);
+                        i = this.searchSponsorHierarchyList.findIndex(item =>
+                            item.groupId === data.data.childSponsorHierarchies[index].sponsorGroupId);
+                        this.searchSponsorHierarchyList.splice(i, 1);
                     }
-                    this.backRefSHNode.childSponsorHierarchies.push(data.data.childSponsorHierarchies[index]);
-                    this.searchSponsorHierarchyList.push({
-                        'sponsorCode': data.data.childSponsorHierarchies[index].sponsorCode,
-                        'acronym': data.data.childSponsorHierarchies[index].sponsor.acronym + ' :',
-                        'groupId': data.data.childSponsorHierarchies[index].sponsorGroupId,
-                        'groupName': data.data.childSponsorHierarchies[index].sponsor.sponsorName,
-                        'type': ''
-                    });
-                } else if (data.data.childSponsorHierarchies[index].accType === 'D') {
-                    let i = this.backRefSHNode.childSponsorHierarchies.findIndex(nde =>
-                        nde.sponsorGroupId === data.data.childSponsorHierarchies[index].sponsorGroupId);
-                    this.backRefSHNode.childSponsorHierarchies.splice(i, 1);
-                    i = this.searchSponsorHierarchyList.findIndex(item =>
-                        item.groupId === data.data.childSponsorHierarchies[index].sponsorGroupId);
-                    this.searchSponsorHierarchyList.splice(i, 1);
                 }
-            }
-            if (this.backRefSHNode.childSponsorHierarchies.length > 0 && this.backRefSHNode.emptyGroup) {
-                this.backRefSHNode.emptyGroup = false;
-            } else if (this.backRefSHNode.childSponsorHierarchies.length < 1 && !this.backRefSHNode.emptyGroup) {
-                this.backRefSHNode.emptyGroup = true;
-            }
-            this.setValidationMessage(data.emptyGroup);
-            $('#addSponsorModal').modal('hide');
-            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Sponsor added/removed successfully');
-        },
-        err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Add sponsor to hierarchy failed. Please try again.'); }));
+                if (this.backRefSHNode.childSponsorHierarchies.length > 0 && this.backRefSHNode.emptyGroup) {
+                    this.backRefSHNode.emptyGroup = false;
+                } else if (this.backRefSHNode.childSponsorHierarchies.length < 1 && !this.backRefSHNode.emptyGroup) {
+                    this.backRefSHNode.emptyGroup = true;
+                }
+                this.setValidationMessage(data.emptyGroup);
+                $('#addSponsorModal').modal('hide');
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Sponsor updated successfully.');
+                this.isSaving = false;
+            },
+                err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Add Sponsor to Hierarchy failed. Please try again.');
+                    this.isSaving = false;
+                }));
+
+        }
     }
 
     removeSponsor(node, index) {

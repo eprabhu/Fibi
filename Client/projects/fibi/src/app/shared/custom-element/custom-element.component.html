@@ -24,7 +24,7 @@
         <div id="custom-element-body" class="card-body" *ngIf="(customElements != null && customElements?.length != 0 && isShowOtherInfo)">
             <div class="form-row">
                 <div class="" *ngFor="let list of customElements; let i = index" 
-                    [ngClass]="list.filterType == 'Text'?'col-12':'col-xl-3 col-lg-4 col-sm-6 col-12'">
+                    [ngClass]="list.filterType == 'Text'?'col-12':'col-xl-4 col-lg-4 col-sm-12 col-12'">
                     <div [ngSwitch]="true">
                         <div *ngSwitchCase="list.filterType == 'String' || list.filterType =='Number'">
                             <span class="mandatory" *ngIf="list.isRequired == 'Y' && viewMode !== 'view'">*</span>
@@ -111,10 +111,11 @@
                                 <span class="mandatory" *ngIf="list.isRequired == 'Y'">*</span>
                                 <label class="f-16">{{ list.columnName }}</label>
                                 <div class="checkbox-inline col-12" *ngFor="let option of list.options;  let checkBoxIndex=index">
-                                    <input type="checkbox" [disabled]="viewMode == 'view'" [checked]="list.answers[checkBoxIndex].value == 'true'"
-                                        id="{{option}}{{i}}"
-                                        (change)="list.answers[checkBoxIndex].value = $event.target.checked ? 'true' : 'false';emitDataChange()" />
-                                    <label for="{{option}}{{i}}" [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option}}</label>
+                                    <input type="checkbox" [disabled]="viewMode == 'view'" 
+                                        [checked] = "checkIsSelected(list.answers, option.customDataOptionId)"
+                                        id="{{option.optionName}}{{i}}"
+                                        (change)="emitDataChange(); setAnswerForCheckBox(list, $event.target.checked, option)" />
+                                    <label for="{{option.optionName}}{{i}}" [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option.optionName}}</label>
                                 </div>
                             </span>
                             <span *ngIf="!checkEmpty[i]&&validationId[i]==i" class="invalid-feedback d-block">
@@ -126,10 +127,10 @@
                                 <span class="mandatory"
                                     *ngIf="list.isRequired == 'Y'">*</span><label class="f-16">{{ list.columnName }}</label>
                                 <div class="checkbox-inline col-12" *ngFor="let option of list.options">
-                                    <input type="radio" [disabled]="viewMode == 'view'" [value]="option"
-                                        name="{{option}}{{i}}" id="{{option}}{{i}}" [(ngModel)]="list.answers[0].value"  
+                                    <input type="radio" [disabled]="viewMode == 'view'" [value]="option.optionName"
+                                        name="{{option.optionName}}{{i}}" id="{{option}}{{i}}" [(ngModel)]="list.answers[0].value"  
                                         (ngModelChange)="emitDataChange()"/>
-                                        <label for="{{option}}{{i}}" [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option}}</label> 
+                                        <label for="{{option.optionName}}{{i}}" [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option.optionName}}</label> 
                                 </div>
                             </span>
                             <span *ngIf="!radioEmpty[i]&&validationId[i]==i" class="invalid-feedback d-block">

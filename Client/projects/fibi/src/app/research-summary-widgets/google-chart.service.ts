@@ -18,7 +18,7 @@ export class GoogleChartService implements OnInit {
     googleChartFunction() {
         if (!GoogleChartService.googleLoaded) {
             GoogleChartService.googleLoaded = true;
-            google.charts.load('current', { packages: ['corechart', 'bar'] });
+            google.charts.load('current', { packages: ['corechart', 'bar', 'line'] });
         }
         google.charts.setOnLoadCallback(() => this.drawGraph());
     }
@@ -50,5 +50,11 @@ export class GoogleChartService implements OnInit {
     }
     createcolumnChartTable() {
         return new google.visualization.DataTable();
+    }
+
+    createLineChart(element: any): any {
+        if (element) {
+            return new google.visualization.LineChart(element);
+        }
     }
 }
