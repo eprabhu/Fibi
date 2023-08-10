@@ -1,5 +1,4 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { slideHorizontal } from '../../../../../../../../fibi/src/app/common/utilities/animations';
 import { CoiSummaryEventsAndStoreService } from '../../../coi-summary-events-and-store.service';
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../app-constants';
@@ -10,8 +9,7 @@ import { subscriptionHandler } from '../../../../../../../../fibi/src/app/common
 @Component({
     selector: 'app-add-conflict-slider',
     templateUrl: './add-conflict-slider.component.html',
-    styleUrls: ['./add-conflict-slider.component.scss'],
-    animations: [slideHorizontal]
+    styleUrls: ['./add-conflict-slider.component.scss']
 })
 export class AddConflictSliderComponent implements OnInit, OnDestroy {
 
@@ -135,5 +133,4 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
         this.addBodyScroll();
         subscriptionHandler(this.$subscriptions);
     }
-    
 }

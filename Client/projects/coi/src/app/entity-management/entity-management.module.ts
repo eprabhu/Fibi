@@ -15,7 +15,7 @@ import { EntityHistoryComponent } from './entity-history/entity-history.componen
 import { EntityDetailsModule } from '../disclosure/entity-details/entity-details.module';
 import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
-
+import { EntityManagementService } from './entity-management.service';
 
 const routes: Routes = [
   {
@@ -46,7 +46,9 @@ const routes: Routes = [
     EntityDetailsModule
   ],
   exports: [
-  ], providers: [ElasticConfigService,EntityDetailsService, EntityManagementGuardService, SfiService, EntityManagementGuardService]
+  ],
+  providers: [ElasticConfigService, EntityDetailsService, EntityManagementGuardService, SfiService,
+     EntityManagementGuardService, EntityManagementService]
 })
 export class EntityManagementModule {
 }

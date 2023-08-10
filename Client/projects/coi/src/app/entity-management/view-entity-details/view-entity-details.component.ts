@@ -46,6 +46,9 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     isCardExpanded = true;
     @Output() modifiedEntityId = new EventEmitter<any>();
     @Output() approveEntityDetails = new EventEmitter<any>();
+    @Input() isTriggeredFromSlider: boolean = false;
+    isShowRiskHistory = false;
+    isOpenSlider = false;
 
     constructor(private _router: Router, private _route: ActivatedRoute,
         public entityManagementService: EntityManagementService,
@@ -237,5 +240,21 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl);
         this.entityRelationshipNumber = null;
     }
+
+    toggleSlider() {
+        this.isOpenSlider = !this.isOpenSlider;
+    }
+
+    riskSliderClosed(event) {
+        this.isOpenSlider = event;
+    }
+
+    getSfiEntityDetails() {
+        this.$subscriptions.push(this.entityDetailsServices.getCoiEntityDetails(this.entityId).subscribe((res: any) => {
+          this.entityDetails = res.coiEntity;
+        }, _error => {
+          this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+        }));
+      }
 
 }
