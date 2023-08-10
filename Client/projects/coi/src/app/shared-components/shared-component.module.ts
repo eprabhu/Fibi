@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { AssignAdministratorModalComponent } from './assign-administrator-modal/assign-administrator-modal.component';
 import { AddSfiModule } from '../add-sfi/add-sfi.module';
 import { AddSfiSliderComponent } from './add-sfi-slider/add-sfi-slider.component';
-import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
 import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
 import { ActivateInactivateSfiModalComponent } from './activate-inactivate-sfi-modal/activate-inactivate-sfi-modal.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
@@ -36,7 +35,6 @@ import { HelpTextComponent } from './help-text/help-text.component';
     DisclosureCreateModalComponent,
     AssignAdministratorModalComponent,
     AddSfiSliderComponent,
-    ViewEntityDetailsComponent,
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
     ConfirmationModalComponent,
@@ -51,7 +49,6 @@ import { HelpTextComponent } from './help-text/help-text.component';
     DisclosureCreateModalComponent,
     AssignAdministratorModalComponent,
     AddSfiSliderComponent,
-    ViewEntityDetailsComponent,
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
     ConfirmationModalComponent,

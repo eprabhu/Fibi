@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output } from '@angular/core';
 import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -45,7 +45,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     isChangesInFieldValue = false;
     isRelationshipActive = false;
     @Input() onDeleteTimestamp = null;
-
+    @Output() closeEntityInfoCard: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
         private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService) {
@@ -269,6 +269,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     viewEntityDetails() {
+        this.closeEntityInfoCard.emit(false);
         this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: this.entityDetails.entityId } });
     }
 
