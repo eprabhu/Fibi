@@ -18,6 +18,7 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
 import { ReviewCommentsSliderComponent } from './review-comments-slider/review-comments-slider.component';
 import { CoiSliderComponent } from './coi-slider/coi-slider.component';
 import { HelpTextComponent } from './help-text/help-text.component';
+import { PersonProjectEntityCardComponent } from './person-project-entity-card/person-project-entity-card.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -40,7 +41,8 @@ import { HelpTextComponent } from './help-text/help-text.component';
     ConfirmationModalComponent,
     ReviewCommentsSliderComponent,
     CoiSliderComponent,
-    HelpTextComponent
+    HelpTextComponent,
+    PersonProjectEntityCardComponent
   ],
   exports: [
     NoInformationComponent,
@@ -54,7 +56,8 @@ import { HelpTextComponent } from './help-text/help-text.component';
     ConfirmationModalComponent,
     ReviewCommentsSliderComponent,
     CoiSliderComponent,
-    HelpTextComponent
+    HelpTextComponent,
+    PersonProjectEntityCardComponent
   ]
 })
 export class SharedComponentModule { }
