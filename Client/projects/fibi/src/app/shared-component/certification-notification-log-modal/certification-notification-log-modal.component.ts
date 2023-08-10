@@ -119,7 +119,7 @@ export class CertificationNotificationLogModalComponent implements OnInit, OnDes
             .subscribe((res: PersonNotificationMailLog[]) => {
                 this.triggerModal('show');
                 this.notifications = res;
-            }, _err => this.showErrorMessage('Notification details fetch failed! Please try again.')));
+            }, _err => this.showErrorMessage('Notification details fetch failed. Please try again.')));
     }
 
     generateCertificationMailRO(type: string = null): PersonNotifyMailRO {
@@ -143,7 +143,7 @@ export class CertificationNotificationLogModalComponent implements OnInit, OnDes
                         this.showSuccessMessage('Notification sent successfully.');
                         setTimeout(() => { this.isSaving = false; this.hideManualLoader(); });
                     }, 1000);
-                }, _err => this.showErrorMessage('Notification failed to send! Please try again.')));
+                }, _err => this.showErrorMessage('Notification failed to send. Please try again.')));
         }
     }
 
@@ -183,7 +183,7 @@ export class CertificationNotificationLogModalComponent implements OnInit, OnDes
                 this.notificationMap[person.proposalPersonId] = res;
                 this.multiplePersonNotifications[index] = res;
                 this.togglePersons[index] = !this.togglePersons[index];
-            }, _err => this.showErrorMessage('Notification details fetch failed! Please try again.')));
+            }, _err => this.showErrorMessage('Notification details fetch failed. Please try again.')));
     }
 
     private showPersonNotificationFromMap(index: number, person: ProposalPerson) {
@@ -193,11 +193,11 @@ export class CertificationNotificationLogModalComponent implements OnInit, OnDes
 
     private getAllPersonsAndShowModal() {
         this.$subscriptions.push(this._certificationService
-            .getProposalPersonsForCertification(this.getProposalId())
+            .getProposalPersonsForCertification({proposalId: this.getProposalId()})
             .subscribe((res: { proposalPersons: ProposalPerson[] }) => {
                 this.proposalPersons = res.proposalPersons;
                 this.triggerModal('show');
-            }, _err => this.showErrorMessage('Notification details fetch failed! Please try again.')));
+            }, _err => this.showErrorMessage('Notification details fetch failed. Please try again.')));
     }
 
     private showSuccessMessage(message: string) {

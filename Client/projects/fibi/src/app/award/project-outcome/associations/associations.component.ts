@@ -5,7 +5,7 @@ import { ProjectOutcomeService } from '../project-outcome.service';
 import { CommonService } from '../../../common/services/common.service';
 import { CurrencyParserService } from '../../../common/services/currency-parser.service';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
-import { AWARD_LABEL, HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { AWARD_LABEL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { getEndPointOptionsForSponsor, getEndPointOptionsForDepartment } from '../../../common/services/end-point.config';
 import { CommonDataService } from '../../services/common-data.service';
 
@@ -162,7 +162,10 @@ export class AssociationsComponent implements OnInit, OnDestroy {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Association linked successfully.');
         this.clearAssociationField();
         this.isSaving = false;
-      }, err => { this.isSaving = false; }));
+      }, err => {
+        this.isSaving = false;
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Linking Association failed. Please try again');
+      }));
     }
   }
   /**
@@ -226,8 +229,10 @@ export class AssociationsComponent implements OnInit, OnDestroy {
       .subscribe(data => {
         this.associationList.splice(index, 1);
         this.sortAssociations();
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Association removed successfully');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Association removed successfully.');
         this.clearAssociationField();
+      }, err => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Removing association failed. Please try again');
       }));
   }
 

@@ -37,7 +37,7 @@ export class DataStoreService {
 
     setProposal(data: any) {
         this.proposalData = data;
-        if (this._proposalService.proposalSectionConfig['DP315'].isActive) {
+        if (this._proposalService.proposalSectionConfig['DP316'].isActive) {
             this._commonService.externalReviewRights = this.getExternalReviewerRights(data);
         }
     }

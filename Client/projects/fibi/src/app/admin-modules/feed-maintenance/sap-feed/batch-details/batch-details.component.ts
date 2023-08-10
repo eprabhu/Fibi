@@ -183,9 +183,9 @@ export class BatchDetailsComponent implements OnInit, OnDestroy {
           this.resetAllProperties();
           this.triggerFailedCasePopUp(data);
         } else {
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating feed status failed. Please try again.');
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Feed Status failed. Please try again.');
         }
-      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating feed status failed. Please try again.'); }
+      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Feed Status failed. Please try again.'); }
       ));
   }
 
@@ -248,7 +248,7 @@ export class BatchDetailsComponent implements OnInit, OnDestroy {
    * once length matches with selected feeds from list. It checks for Error feeds and not action taken by user.
    */
   updateSelectableFeeds() {
-    this.selectableFeeds = this.batchDetails.sapAwardFeeds.length ? this.getSelectableFieldsLength() : null
+    this.selectableFeeds = this.batchDetails.sapAwardFeeds.length ? this.getSelectableFieldsLength() : null;
   }
 
   getSelectableFieldsLength() {
@@ -278,7 +278,7 @@ export class BatchDetailsComponent implements OnInit, OnDestroy {
             reader.result == 'Empty_Zip' ? currentInstance._commonService.showToast(HTTP_ERROR_STATUS, 'There are no interface files available for download') :
             fileDownloader(data, 'SAP_Feed_Batch_# '+  currentInstance.batchDetails.sapAwardFeedHistory.batchId, 'zip');
           };
-      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Downloading interface files failed. Please try again.'); },
+      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Downloading Interface files failed. Please try again.'); },
       () => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Interface files downloaded successfully.'); }
       ));
     }
@@ -413,6 +413,8 @@ export class BatchDetailsComponent implements OnInit, OnDestroy {
     this.batchDetailsReqObj.currentPage = event;
     this.getBatchDetails();
     pageScroll('pageScrollToTop');
+    this.interfaceDetails = [];
+    this.isFeedExpand = [];
   }
 
   public sortResult(sortFieldBy) {

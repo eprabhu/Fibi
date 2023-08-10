@@ -3,11 +3,12 @@ import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 import { ServiceRequestRoot } from '../service-request.interface';
 import { CommonDataService } from '../services/common-data.service';
+declare var $: any;
 
 @Component({
     selector: 'app-route-log',
     template: `<workflow-engine *ngIf="result?.serviceRequest?.serviceRequestId" [workFlowResult]="result"
-    (workFlowResponse)='workFlowResponse($event)' [workFlowDetailKey]="'serviceRequest'"></workflow-engine>`,
+    (workFlowResponse)='workFlowResponse($event)' (errorEvent)='errorEvent()' [workFlowDetailKey]="'serviceRequest'"></workflow-engine>`,
 })
 export class RouteLogComponent implements OnInit, OnDestroy {
 
@@ -76,6 +77,10 @@ export class RouteLogComponent implements OnInit, OnDestroy {
     private updateServiceRequestStatus(data: ServiceRequestRoot): void {
         this.result.serviceRequest.statusCode = data.serviceRequest.statusCode;
         this.result.serviceRequest.serviceRequestStatus = data.serviceRequest.serviceRequestStatus;
+    }
+
+    errorEvent() {
+        $('#invalidActionModal').modal('show');
     }
 
 }

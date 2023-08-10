@@ -85,6 +85,8 @@ export class CoiDisclosure {
     moduleItemKey: string;
     title: string;
     numberOfSFI: any;
+    riskCategoryCode: any;
+    coiRiskCategory: any;
 }
 export interface UnitAdministratorType {
     code: string;

@@ -20,38 +20,7 @@ import {
 } from '../../app-constants';
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
-
-class Disclosure {
-    adminGroupId: any;
-    adminPersonId: any;
-    certifiedAt: any;
-    conflictStatus: any;
-    conflictStatusCode: any;
-    createTimestamp: any;
-    createUserFullName: any;
-    disclosureId: any;
-    disclosureNumber: any;
-    dispositionStatus: any;
-    dispositionStatusCode: any;
-    expirationDate: any;
-    homeUnit: any;
-    homeUnitName: any;
-    personId: any;
-    reviewStatus: any;
-    reviewStatusCode: any;
-    updateTimestamp: any;
-    updateUserFullName: any;
-    versionNumber: any;
-    versionStatus: any;
-    type: any;
-    disclosurePersonFullName: any;
-    disclosureType: any;
-}
-class RevisionObject {
-    revisionComment: null;
-    disclosureId: null;
-    homeUnit: null;
-}
+import { RevisionObject, Disclosure } from '../shared-interface';
 
 @Component({
     selector: 'app-disclosure-create-modal',

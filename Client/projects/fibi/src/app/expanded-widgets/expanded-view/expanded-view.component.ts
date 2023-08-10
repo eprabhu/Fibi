@@ -15,7 +15,7 @@ import { switchMap } from 'rxjs/operators';
 export class ExpandedViewComponent implements OnInit {
     $agreementList = new Subject();
     researchSummaryReqObj: any = {
-        property1: this._commonService.getCurrentUserDetail('personID'),
+        personId: this._commonService.getCurrentUserDetail('personID'),
         pageNumber: 20,
         sortBy: 'updateTimeStamp',
         currentPage: 1,

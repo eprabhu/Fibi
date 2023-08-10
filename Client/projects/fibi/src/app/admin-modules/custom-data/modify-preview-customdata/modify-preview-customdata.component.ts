@@ -72,31 +72,32 @@ export class ModifyPreviewCustomdataComponent implements OnInit, OnChanges {
         cusElement.columnName = this.updatedModule.customDataElement.columnLabel;
         cusElement.isRequired = cusUsage.isRequired;
         cusElement.filterType = this.updatedModule.customDataElement.customDataTypes.description;
-        const options = [];
-        if (this.updatedModule.elementOptions.length > 0) {
-          this.updatedModule.elementOptions.forEach(option => {options.push(option.optionName); });
-        }
-        cusElement.options = options;
+        cusElement.options = this.getOptionsArray();
         cusElement.isActive = this.updatedModule.customDataElement.isActive;
       } else if (!cusUsage && cusElement) {
         this.deleteElement(cusElement);
       } else if (cusUsage && !cusElement) {
-        const options = [];
-        if (this.updatedModule.elementOptions.length > 0) {
-          this.updatedModule.elementOptions.forEach(option => {options.push(option.optionName); });
-        }
         const element = {
           'columnName': this.updatedModule.customDataElement.columnLabel,
           'isRequired': cusUsage.isRequired,
           'filterType': this.updatedModule.customDataElement.customDataTypes.description,
-          'options': options,
+          'options': this.getOptionsArray(),
           'customDataElementId': this.updatedModule.customDataElement.customElementId,
           'orderNumber': cusUsage.orderNumber,
-          'isActive' : this.updatedModule.customDataElement.isActive
+          'isActive' : this.updatedModule.customDataElement.isActive,
+          'customElementName' : this.updatedModule.customDataElement.customElementName
         };
         this.customElements.push(element);
       }
     }
+  }
+
+  getOptionsArray() {
+    const options = [];
+    if (this.updatedModule.elementOptions.length > 0) {
+      this.updatedModule.elementOptions.forEach(option => {options.push(option); });
+    }
+    return options;
   }
 
   deleteElement(cusElement) {
@@ -126,7 +127,7 @@ export class ModifyPreviewCustomdataComponent implements OnInit, OnChanges {
       if (data.status) {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, data.message);
       }
-    }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Save custom data has failed. Please try again.'); }));
+    }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Save Custom Data has failed. Please try again.'); }));
   }
 
   setDefaultValues(customElementList) {
@@ -208,6 +209,6 @@ export class ModifyPreviewCustomdataComponent implements OnInit, OnChanges {
           after['isRequired'] = this.customElements[index].isRequired;
           this.auditLogService.saveAuditLog('U', before, after, null, Object.keys(after), customDataElementId.toString());
         }
-      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating custom data has failed. Please try again.'); }));
+      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Custom Data has failed. Please try again.'); }));
   }
 }

@@ -18,3 +18,9 @@ label {
   overflow-y: auto;
   max-height: 72vh;
 }
+
+.custom-dropdown-action-menu{
+  transform: none !important;
+  top: 36px !important;
+  left: -108px !important;
+}

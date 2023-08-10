@@ -33,7 +33,7 @@ export class ViewRightsModalComponent implements OnInit, OnDestroy {
 				this.roleOverview = data;
 				$('#roleModal').modal('show');
 			}, err => {
-				this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in loading rights list.Please try again');
+				this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in loading Rights list. Please try again.');
 			}));
 	}
 

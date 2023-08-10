@@ -26,7 +26,9 @@ export function calculateArraySum(list: any, value: string, manpowerResourceId: 
 export function calculateUncommittedAmount(resourceList: any, budgetAmount: number, sapCommittedAmount: number) {
   let initialCommitted: any = [], initialSum = 0;
   if (resourceList.length) {
-    initialCommitted = resourceList.filter(resource => resource.committedCost === null && (!resource.workdayPositionRequisition  || resource.workdayPositionRequisition &&  !['Filled', 'Closed'].includes(resource.workdayPositionRequisition.jobRequisitionStatus)));
+    initialCommitted = resourceList.filter(resource => resource.committedCost === null &&
+      (!resource.workdayPositionRequisition || resource.workdayPositionRequisition &&
+      !['Filled', 'Closed', 'Frozen'].includes(resource.workdayPositionRequisition.jobRequisitionStatus)));
     initialSum = calculateArraySum(initialCommitted, 'plannedSalary', null);
   }
   return budgetAmount - (sapCommittedAmount + initialSum);

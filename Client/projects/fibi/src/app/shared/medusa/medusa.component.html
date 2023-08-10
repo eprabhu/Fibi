@@ -344,8 +344,9 @@
                   </tr>
                   <tr>
                     <td colspan="2"><label>Application
-                        Procedure:</label>{{medusaResult?.applicationProcedure ? medusaResult?.applicationProcedure :
-                      'No data available'}}
+                        Procedure:</label>
+                        <span innerHTML="{{medusaResult?.applicationProcedure ? medusaResult?.applicationProcedure :
+                          'No data available'}}"></span>
                     </td>
                   </tr>
                   <tr>
@@ -353,7 +354,8 @@
                     <td><label>End Date:</label>{{medusaResult?.endDate | dateFormatter}}</td>
                   </tr>
                   <tr>
-                    <td colspan="2"><label>Description:</label>{{medusaResult?.description}}</td>
+                    <td colspan="2"><label>Description:</label>
+                      <span innerHTML="{{medusaResult?.description}}"></span></td>
                   </tr>
                 </tbody>
               </table>

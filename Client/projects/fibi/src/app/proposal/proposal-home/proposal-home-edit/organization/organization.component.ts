@@ -17,7 +17,7 @@ import { environment } from '../../../../../environments/environment';
 import { subscriptionHandler } from '../../../../common/utilities/subscription-handler';
 import { AutoSaveService } from '../../../../common/services/auto-save.service';
 import { DataStoreService } from '../../../services/data-store.service';
-import { getOrganizationAddress } from '../../../../common/utilities/custom-utilities';
+import { getOrganizationAddress, deepCloneObject } from '../../../../common/utilities/custom-utilities';
 import { ActivatedRoute } from '@angular/router';
 declare var $: any;
 
@@ -51,8 +51,8 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     };
     manuallyAddedDistricts: any = {
         proposalCongDistrictId: null,
-        congDistrictCode: null,
         congressionalDistrict: {
+            congDistrictCode: null,
             description: null,
             isActive: 'Y'
         },
@@ -71,7 +71,6 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     clearField;
     editIndex: number = null;
     districtArray: any = [];
-    organizationDetails: any = [];
     map = new Map();
     personDetails: any = {
         units: [],
@@ -93,7 +92,9 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         address: null,
         telexNumber: null,
         congressionalDistrict: {
-            description: null
+            congDistrictCode: null,
+            description: null,
+            isActive: 'Y'
         },
         contactAddressId: null,
         cableAddress: null,
@@ -131,7 +132,6 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.setEndPointSearchOptions();
         this.contactElasticOptions = this._elasticConfig.getElasticForRolodex();
         this.rolodexSearchOptions = this._elasticConfig.getElasticForOrganization();
-        this.organizationDetails = this.result.proposalOrganizations;
         this.enableOrganizationLocation = this.result.enableOrganizationLocation;
         this.setDefaultOrganizationType();
     }
@@ -167,11 +167,29 @@ export class OrganizationComponent implements OnInit, OnDestroy {
             this.setOrgDetailsForCard(event);
             this.organizationObject.organizationId = event.organizationId;
             this.organizationObject.organization = event;
+            if (event.congressionalDistrict && event.congressionalDistrict.congDistrictCode) {
+                this.setProposalCongDistricts(event.congressionalDistrict);
+            } else {
+                this.organizationObject.proposalCongDistricts = [];
+            }
             this.isShowCard = true;
         } else {
             this.organizationObject.organizationId = '';
             this.isShowCard = false;
             this.organizationSearchOptions.defaultValue = null;
+            this.organizationObject.proposalCongDistricts = [];
+        }
+    }
+
+    setProposalCongDistricts(congressionalDistrict: any): void {
+        const congDistrictObject: any = {};
+        let isDuplicate = false;
+        isDuplicate = this.organizationObject.proposalCongDistricts.find(
+            element => element.congDistrictCode === congressionalDistrict.congDistrictCode) ? true : false;
+        if (!isDuplicate) {
+            congDistrictObject.congDistrictCode = congressionalDistrict.congDistrictCode;
+            congDistrictObject.congressionalDistrict = congressionalDistrict;
+            this.organizationObject.proposalCongDistricts.push(congDistrictObject);
         }
     }
 
@@ -195,6 +213,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
             this.isShowPersonResultCard = false;
             this.rolodexSearchOptions.defaultValue = null;
         }
+        this.organizationObject.proposalCongDistricts = [];
     }
 
     setElasticRolodexDetails(event: any) {
@@ -279,6 +298,10 @@ export class OrganizationComponent implements OnInit, OnDestroy {
             if (rolodexObject.rolodex.organizations) {
                 this.rolodexSearchOptions.defaultValue = rolodexObject.rolodex.organizations ?
                 rolodexObject.rolodex.organizations.organizationName : null;
+                if (rolodexObject.rolodex.organizations.congressionalDistrict &&
+                        rolodexObject.rolodex.organizations.congressionalDistrict.congDistrictCode) {
+                    this.setProposalCongDistricts(rolodexObject.rolodex.organizations.congressionalDistrict);
+                }
             } else {
                 this.rolodexSearchOptions.defaultValue = rolodexObject.rolodex.organizationName ?
                 rolodexObject.rolodex.organizationName : null;
@@ -312,7 +335,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
     setOrgDetailsForCard(event: any) {
         this.orgDetailsForCard.organizationName = event ? event.organizationName : '';
-        this.orgDetailsForCard.congressionalDistrict = event ? event.congressionalDistrict : '';
+        this.orgDetailsForCard.congressionalDistrict = event && event.congressionalDistrict ? event.congressionalDistrict.description : '';
         this.orgDetailsForCard.contactPersonName = event ? event.contactPersonName : '';
     }
 
@@ -338,6 +361,14 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.organizationObject.location = null;
         this.organizationSearchOptions.defaultValue = null;
         this.clearOrganizationField = new String('true');
+        this.rolodexSearchOptions.defaultValue = null;
+        this.clearRolodexField = new String('true');
+        this.organizationObject.proposalCongDistricts = [];
+    }
+
+    /**organization types 1 & 2 will be added by default on proposal creation */
+    isShowOrganizationEndpoint(orgTypeCode: string) {
+        return ['1', '2'].includes(orgTypeCode);
     }
 
     findTypeCodeObject(typeCode: string) {
@@ -352,7 +383,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.editIndex = index;
         this.organizationObject = JSON.parse(JSON.stringify(data));
         this.organizationObject.proposalCongDistricts = this.organizationObject.proposalCongDistricts || [];
-        if (this.organizationObject.organizationTypeCode !== '3') {
+        if (this.isShowOrganizationEndpoint(this.organizationObject.organizationTypeCode)) {
             this.organizationSearchOptions.defaultValue =
                 data && data.organization ? data.organization.organizationName : null;
         }
@@ -360,14 +391,14 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.clearRolodexField = new String('false');
         this.isShowCard = false;
         this.isShowPersonResultCard = false;
-        if (this.organizationObject.organizationTypeCode === '3') {
+        if (!this.isShowOrganizationEndpoint(this.organizationObject.organizationTypeCode)) {
             if (data.rolodex.organizations) {
                 this.rolodexSearchOptions.defaultValue = data.rolodex.organizations.organizationName;
             } else {
                 this.rolodexSearchOptions.defaultValue = data.rolodex.organizationName;
             }
         }
-        if (this.organizationObject.organizationTypeCode !== '3') {
+        if (this.isShowOrganizationEndpoint(this.organizationObject.organizationTypeCode)) {
             this.isShowCard = true;
             this.setOrgDetailsForCard(data.organization);
 
@@ -383,6 +414,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
     setRequiredObjects() {
         this.organizationObject.proposalId = this.result.proposal.proposalId;
+        this.organizationObject.proposalCongDistricts = this.organizationObject.proposalCongDistricts || [];
         if (this.editIndex === null || this.editIndex === undefined) {
             this.organizationObject.proposalOrganizationId = null;
             this.clearOrganizationField = new String('false');
@@ -392,7 +424,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     }
 
     getProposalOrganizationId() {
-        return this.organizationDetails[this.editIndex].proposalOrganizationId;
+        return this.result.proposalOrganizations[this.editIndex].proposalOrganizationId;
     }
 
     validateOrganizationFields() {
@@ -400,11 +432,12 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         if (!this.organizationObject.organizationTypeCode || this.organizationObject.organizationTypeCode === 'null') {
             this.map.set('organizationType', 'organizationType');
         }
-        if (this.organizationObject.organizationTypeCode !== '3' &&
+        if (this.isShowOrganizationEndpoint(this.organizationObject.organizationTypeCode) &&
             (!this.organizationSearchOptions.defaultValue || !this.organizationObject.organization)) {
             this.map.set('organizationName', 'organizationName');
         }
-        if (this.organizationObject.organizationTypeCode === '3' && !this.organizationObject.rolodexId) {
+        if (!this.isShowOrganizationEndpoint(this.organizationObject.organizationTypeCode)
+                && (!this.organizationObject.rolodexId)) {
             this.map.set('organizationName', 'organizationName');
         }
         return this.map.size > 0 ? false : true;
@@ -416,7 +449,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
      * Performing Organization.
      */
     checkForTypeDuplication() {
-        if (this.organizationDetails.length && ['1', '2'].includes(this.organizationObject.organizationTypeCode)) {
+        if (this.result.proposalOrganizations.length && ['1', '2'].includes(this.organizationObject.organizationTypeCode)) {
             return this.validateTypeRestriction();
         } else {
             this.map.delete('alreadyExist');
@@ -434,7 +467,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
     validatePerformingOrganizationType() {
         let currentIndex;
-        currentIndex = this.organizationDetails.findIndex((org) => '2' === org.organizationTypeCode);
+        currentIndex = this.result.proposalOrganizations.findIndex((org) => '2' === org.organizationTypeCode);
         if (currentIndex === -1) {
             this.map.delete('alreadyExist');
             return true;
@@ -449,7 +482,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
     validateProposalOrganizationType() {
         let currentIndex;
-        currentIndex = this.organizationDetails.findIndex((org) => '1' === org.organizationTypeCode);
+        currentIndex = this.result.proposalOrganizations.findIndex((org) => '1' === org.organizationTypeCode);
         if (currentIndex === -1) {
             this.map.delete('alreadyExist');
             return true;
@@ -502,11 +535,11 @@ export class OrganizationComponent implements OnInit, OnDestroy {
      */
     pushDataToArray(data: any) {
         if (this.editIndex == null) {
-            this.organizationDetails.push(data.proposalOrganization);
+            this.result.proposalOrganizations.push(data.proposalOrganization);
         } else {
-            this.organizationDetails[this.editIndex] = data.proposalOrganization;
+            this.result.proposalOrganizations[this.editIndex] = data.proposalOrganization;
         }
-        this._dataStore.manualDataUpdate({ proposalOrganizations: this.organizationDetails });
+        this._dataStore.manualDataUpdate({ proposalOrganizations: this.result.proposalOrganizations });
     }
 
     clearProposalOrgValues() {
@@ -540,6 +573,12 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     addOrganizationManually() {
         if (this.validateFields() && !this.isSaving) {
             this.isSaving = true;
+            if (this.manuallyAddedDistricts.congressionalDistrict.description !== null) {
+                this.modalOrganizationObject.congressionalDistrict.description =
+                    this.manuallyAddedDistricts.congressionalDistrict.description;
+            } else if (!this.modalOrganizationObject.congressionalDistrict.congDistrictCode) {
+                this.modalOrganizationObject.congressionalDistrict = null;
+            }
             this.$subscriptions.push(
                 this._proposalHomeService.saveOrUpdateOrganization({ 'organization': this.modalOrganizationObject }).subscribe(
                     (data: any) => {
@@ -566,8 +605,8 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.organizationObject.organizationId = data.organization.organizationId;
         this.organizationSearchOptions.defaultValue = data && data.organization ? data.organization.organizationName : '';
         this.clearOrganizationField = new String('false');
-        if (this.manuallyAddedDistricts.congressionalDistrict.description !== null) {
-            this.organizationObject.proposalCongDistricts.push(JSON.parse(JSON.stringify(this.manuallyAddedDistricts)));
+        if (data.organization.congressionalDistrict && data.organization.congressionalDistrict.congDistrictCode) {
+            this.setProposalCongDistricts(data.organization.congressionalDistrict);
         }
     }
 
@@ -594,7 +633,6 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.modalOrganizationObject.contactAddressId = '';
         this.modalOrganizationObject.address = null;
         this.modalOrganizationObject.telexNumber = null;
-        this.modalOrganizationObject.congressionalDistrict = null;
         this.modalOrganizationObject.cableAddress = null;
         this.modalOrganizationObject.vendorCode = null;
         this.modalOrganizationObject.dunsNumber = null;
@@ -608,7 +646,19 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.clearCountryField = new String('true');
         this.districtOptions.defaultValue = null;
         this.clearDistField = new String('true');
-        this.manuallyAddedDistricts.congressionalDistrict.description = null;
+        if (this.modalOrganizationObject.congressionalDistrict) {
+            this.resetCongressionalDistrictObj();
+        }
+    }
+
+    resetCongressionalDistrictObj() {
+        const CONG_DIST_OBJ = {
+            congDistrictCode: null,
+            description: null,
+            isActive: 'Y'
+        };
+        this.modalOrganizationObject.congressionalDistrict = deepCloneObject(CONG_DIST_OBJ);
+        this.manuallyAddedDistricts.congressionalDistrict = deepCloneObject(CONG_DIST_OBJ);
     }
 
     deleteOrganization() {
@@ -617,11 +667,11 @@ export class OrganizationComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(
                 this._proposalHomeService.deleteProposalOrganization(this.orgDeleteId).subscribe(
                     () => {
-                        this.organizationDetails.splice(this.editIndex, 1);
+                        this.result.proposalOrganizations.splice(this.editIndex, 1);
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Organization deleted successfully.');
                         this.isSaving = false;
                         this.editIndex = null;
-                        this._dataStore.manualDataUpdate({ proposalOrganizations: this.organizationDetails });
+                        this._dataStore.manualDataUpdate({ proposalOrganizations: this.result.proposalOrganizations });
                     },
                     (err) => {
                         this.isSaving = false;
@@ -645,7 +695,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     }
 
     getOrganizationDetails(index: number) {
-        this.viewOrganizationDetails = this.organizationDetails[index];
+        this.viewOrganizationDetails = this.result.proposalOrganizations[index];
     }
 
     getContactDetails(rolodexId) {
@@ -722,8 +772,14 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     }
 
     districtSelectionFromAddModal(event: any, isNewValue = false) {
-        this.modalOrganizationObject.congressionalDistrict = event ? isNewValue ? event.searchString : event.description : null;
-        this.manuallyAddedDistricts.congressionalDistrict.description = event ? isNewValue ? event.searchString : event.description : null;
+        this.resetCongressionalDistrictObj();
+        if (isNewValue) {
+            this.manuallyAddedDistricts.congressionalDistrict.congDistrictCode = null;
+            this.manuallyAddedDistricts.congressionalDistrict.description = event ? event.searchString : null;
+        } else {
+            this.modalOrganizationObject.congressionalDistrict.congDistrictCode = event ? event.congDistrictCode : null;
+            this.modalOrganizationObject.congressionalDistrict.description = event ? event.description : null;
+        }
     }
 
     deleteSelectedDistrict(chip: any, index: number) {

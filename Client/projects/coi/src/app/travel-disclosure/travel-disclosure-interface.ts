@@ -1,3 +1,5 @@
+export type ModalSize = 'sm' | 'lg' | 'xl' | '';
+
 export class CoiTravelDisclosure {
     travellerTypeCode: Array<string> = [];
     entityId: number;
@@ -87,6 +89,8 @@ export class TravelDisclosure {
     certifiedAt: number;
     documentStatusCode: string;
     documentStatus: string;
+    disclosureStatusCode: string;
+    disclosureStatus: string;
     riskLevel: string;
     expirationDate: number;
   }

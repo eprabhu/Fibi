@@ -8,6 +8,7 @@ import { CommonDataService } from '../../../services/common-data.service';
 import { CommonService } from '../../../../common/services/common.service';
 import { areaOfResearchAward } from '../../../award-interfaces';
 
+declare var $: any;
 @Component({
   selector: 'app-area-of-research-edit',
   templateUrl: './area-of-research-edit.component.html',
@@ -63,6 +64,8 @@ ngOnChanges(): void {
   researchTypeChange(): void {
     this.researchWarningMsg = null;
     this.isError = false;
+    this.selectedArea = null;
+    this.selectedSubArea = null;
     this.setAreaOptions('');
     this.setSubAreaOptions('');
   }
@@ -203,14 +206,20 @@ ngOnChanges(): void {
         this.isError = false;
         this.clearResearchArea();
         this.updateAwardStoreData();
+        $('#add-area-modal').modal('hide');
       },
         err => { this.errorToastWhileAddingResearchArea(); },
         () => { this.successToastWhileAddingResearchArea(); }));
   }
 
   errorToastWhileAddingResearchArea(): void {
-    this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Area failed. Please try again.');
-    this.isEditAreaOfResearch = false;
+    if (this.isEditAreaOfResearch) {
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Area failed. Please try again');
+      this.isEditAreaOfResearch = true;
+    } else {
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Area failed. Please try again.');
+      this.isEditAreaOfResearch = false;
+    }
   }
 
   successToastWhileAddingResearchArea(): void {
@@ -276,7 +285,7 @@ ngOnChanges(): void {
   }
 
   successToastWhileDeletingResearchArea(): void {
-    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Area removed successfully');
+    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Area removed successfully.');
   }
 
   saveMoreInfo(): void {
@@ -342,15 +351,19 @@ ngOnChanges(): void {
      this.selectedArea =  this.areaOfResearchAwardEditObject.researchTypeArea;
      this.selectedSubArea = this.areaOfResearchAwardEditObject.researchTypeSubArea;
      this.setAreaOptions( this.areaOfResearchAwardEditObject.researchTypeArea.description);
-     this.setSubAreaOptions(this.areaOfResearchAwardEditObject.researchTypeSubArea.description);
+     if (this.areaOfResearchAwardEditObject.researchTypeSubArea) {
+      this.setSubAreaOptions(this.areaOfResearchAwardEditObject.researchTypeSubArea.description);
+     }  
   }
 
   resetAreaOfResearch() {
     this.isError = false;
     this.researchWarningMsg = null;
     this.isEditAreaOfResearch = false;
+    this.editIndex = -1;
     this.clearResearchArea();
     this.clearResearchSubArea();
+    this.awardObject.researchType = 1;
 
   }
 }

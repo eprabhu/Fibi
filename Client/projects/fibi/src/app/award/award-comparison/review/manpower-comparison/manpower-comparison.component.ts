@@ -153,7 +153,11 @@ export class ManpowerComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe((data: any) => {
         if (data.awardManpowerResources) {
             this.setAccountDetails(data);
-            this.manpowerStudentDetails[resourceDetails.awardManpowerId] = data.awardManpowerResources;
+            if (resourceDetails.manpowerType.description == "Staff") {
+              this.manpowerResourceDetails[resourceDetails.awardManpowerId] = data.awardManpowerResources;
+            } else{
+              this.manpowerStudentDetails[resourceDetails.awardManpowerId] = data.awardManpowerResources;
+            }
             this._CDRef.detectChanges(); // Manual Change detection
         }
       },
@@ -172,10 +176,8 @@ export class ManpowerComponent implements OnInit, OnChanges, OnDestroy {
   setAccountDetails(awardDetails) {
     if (awardDetails.awardManpowerResources) {
       awardDetails.awardManpowerResources.forEach((element) => {
-        if (element.isMultiAccount && element.isMainAccount) {
           element.isMultiAccount = element.isMultiAccount ? 'Yes' : 'No';
           element.isMainAccount = element.isMainAccount ? 'Yes' : 'No';
-        }
         element.costAllocation = element.costAllocation ? element.costAllocation + '%' : '';
       });
     }

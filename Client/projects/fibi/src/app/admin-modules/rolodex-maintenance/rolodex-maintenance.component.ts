@@ -49,6 +49,7 @@ export class RolodexMaintenanceComponent implements OnInit, OnDestroy {
   rolodexId: any;
   isAdvancedSearch = false;
   clearField: String;
+  clearFieldElastic: String;
   clearCountryField: String;
   $subscriptions: Subscription[] = [];
   elasticSearchOptions: any = {};
@@ -241,30 +242,6 @@ export class RolodexMaintenanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchOrganization() {
-    if (this.organizationName !== '') {
-      clearTimeout(this.debounceTimer);
-      this.debounceTimer = setTimeout(() => {
-        this.$subscriptions.push(this._rolodexService.fetchOrganization(this.organizationName).subscribe(data => {
-          this.organizationResults = data;
-        }));
-      }, 500);
-    } else {
-      this.organizationResults = [];
-    }
-  }
-  fetchSponsor() {
-    if (this.sponsorName !== '') {
-      clearTimeout(this.debounceTimer);
-      this.debounceTimer = setTimeout(() => {
-        this.$subscriptions.push(this._rolodexService.fetchSponsors(this.sponsorName).subscribe(data => {
-          this.sponsorResults = data;
-        }));
-      }, 500);
-    } else {
-      this.sponsorResults = [];
-    }
-  }
   /**
  * @param  {} type
  * Insert , update and delete rolodex details
@@ -279,7 +256,7 @@ export class RolodexMaintenanceComponent implements OnInit, OnDestroy {
       ROLODEX_DATA.rolodex = this.rolodex;
       this.$subscriptions.push(this._rolodexService.saveRolodexData(ROLODEX_DATA).subscribe((data: any) => {
         this.toast_message = data.message;
-        if (data.message === 'Email Address already exists') {
+        if (data.message === 'Email Address already exists.') {
           this._commonService.showToast(HTTP_ERROR_STATUS, this.toast_message);
           this.isRolodexView = false;
         } else {
@@ -327,6 +304,8 @@ export class RolodexMaintenanceComponent implements OnInit, OnDestroy {
     this.rolodexList = [];
     this.clearCountryField = new String('true');
     this.clearSponsorCountryField = new String('true');
+    this.clearField = new String('true');
+    // this.clearFieldElastic = new String('true');
   }
   /** fetch rolodex list */
   loadRolodex(pageNumber) {

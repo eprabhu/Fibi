@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { compareDates, parseDateWithoutTimestamp } from './../../common/utilities/date-utilities';
+import { compareDates, isValidDateFormat, parseDateWithoutTimestamp } from './../../common/utilities/date-utilities';
 import { DEFAULT_DATE_FORMAT } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { ResearchSummaryConfigService } from '../../common/services/research-summary-config.service';
@@ -34,7 +34,9 @@ export class ResearchSummaryCountComponent implements OnInit, OnDestroy {
   startDate: any;
   endDate: any;
   unitName = '';
-  descentFlag = null;
+  descentFlag = null;  
+  toDateValidationMap:boolean;
+  fromDateValidationMap: boolean;
   setFocusToElement = setFocusToElement;
 
   constructor(public _commonService: CommonService, private _router: Router,
@@ -60,6 +62,34 @@ export class ResearchSummaryCountComponent implements OnInit, OnDestroy {
       }
       this.getResearchSummaryTable();
     }));
+  }
+
+  checkForValidFormat(event, dateType) {
+    dateType === 'fromDate' ? this.fromDateValidationMap = false :
+      this.toDateValidationMap = false;
+    if (isValidDateFormat(event)) {
+      this.getResearchSummaryTable();
+    } else {
+      dateType === 'fromDate' ? this.fromDateValidationMap = true :
+        this.toDateValidationMap = true;
+    }
+  }
+
+  clearDateOnValidation(id) {
+    if (this.toDateValidationMap) {
+      this.toDate = this.getSystemDate();
+      this.endDate = this.toDate;
+      this.toDateValidationMap = false;
+    }
+    if (this.fromDateValidationMap) {
+      this.fromDate = this.getSystemDate();
+      this.startDate = this.fromDate;
+      this.fromDateValidationMap = false;
+    }
+    setTimeout(() => {
+      document.getElementById(id).click();
+      this.getResearchSummaryTable();
+    });
   }
 
   getResearchSummaryTable() {

@@ -5,10 +5,12 @@ import { subscriptionHandler } from '../../common/utilities/subscription-handler
 import { DataStoreService } from '../services/data-store.service';
 import { CommonService } from '../../common/services/common.service';
 import { ProposalService } from '../services/proposal.service';
+import { HTTP_SUCCESS_STATUS } from '../../app-constants';
+declare var $: any;
 
 @Component({
   selector: 'app-route-log',
-  template: `<workflow-engine [workFlowResult]="result" (workFlowResponse)='workFlowResponse($event)'
+  template: `<workflow-engine [workFlowResult]="result" (workFlowResponse)='workFlowResponse($event)' (errorEvent)='errorEvent()'
   	[workFlowDetailKey]="'proposal'"></workflow-engine>`
 })
 export class RouteLogComponent implements OnInit, OnDestroy {
@@ -65,4 +67,7 @@ export class RouteLogComponent implements OnInit, OnDestroy {
     });
   }
 
+  errorEvent() {
+	$('#invalidActionModal').modal('show');
+  }
 }

@@ -224,7 +224,10 @@ export class ClaimsComponent implements OnInit, OnDestroy {
       const CLAIM_OBJECT: any = {
         'claimId': this.claimId,
         'personId': this._commonService.getCurrentUserDetail('personID'),
-        'updateUser': this._commonService.getCurrentUserDetail('userName')
+        'updateUser': this._commonService.getCurrentUserDetail('userName'),
+        'awardNumber': this.result.claim.award.awardNumber,
+        'claimNumber': this.result.claim.claimNumber,
+        'claimStatusCode': this.result.claim.claimStatus.claimStatusCode,
       };
       this.$subscriptions.push(this._claimsService.submitClaim(CLAIM_OBJECT).subscribe((data: any) => {
         this.setupClaimStoreData(data);
@@ -239,6 +242,9 @@ export class ClaimsComponent implements OnInit, OnDestroy {
         this._commonService.isShowOverlay = false;
         if (err.error && err.error.errorMessage  === 'Deadlock') {
           this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating claim status failed. Please try again.');
+        }else if (err && err.status === 405) {
+          $('#SubmitClaimModal').modal('hide');
+          $('#invalidActionModal').modal('show');
         } else {
           this._commonService.showToast(HTTP_ERROR_STATUS, `Transaction is not completed due to an error.
           ${AWARD_ERR_MESSAGE}`);
@@ -254,6 +260,7 @@ export class ClaimsComponent implements OnInit, OnDestroy {
     this.requestObject.updateUser = this._commonService.getCurrentUserDetail('userName');
     this.requestObject.claimId = this.claimId;
     this.requestObject.approverStopNumber = null;
+    this.requestObject.claimStatusCode = this.result.claim.claimStatus.claimStatusCode;
   }
 
   /** approves or disapproves claim with respect to action type and
@@ -277,6 +284,9 @@ export class ClaimsComponent implements OnInit, OnDestroy {
             if (err.error && err.error.errorMessage  === 'Deadlock') {
               this._commonService.showToast(HTTP_ERROR_STATUS,
                 `${COMMON_APPROVE_LABEL.toLowerCase()}/disapprove claim failed. Please try again.`);
+            }else if (err && err.status === 405) {
+              $('#SubmitClaimModal').modal('hide');
+              $('#invalidActionModal').modal('show');
             } else {
               this._commonService.showToast(HTTP_ERROR_STATUS, `Transaction is not completed due to an error.
               ${AWARD_ERR_MESSAGE}`);
@@ -415,8 +425,13 @@ export class ClaimsComponent implements OnInit, OnDestroy {
       this.isSaving = false;
     },
       _err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating claim status failed. Please try again.');
         this.isSaving = false;
+        if (_err && _err.status === 405) {
+          $('#SubmitClaimModal').modal('hide');
+          $('#invalidActionModal').modal('show');
+        }else {
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating claim status failed. Please try again.');
+        }
       }));
   }
 
@@ -428,6 +443,11 @@ export class ClaimsComponent implements OnInit, OnDestroy {
         this.setClaimDetails(res);
         this._commonData.setClaimData(this.result);
         this.performFOActions(this.actionType);
+      }, err => {
+        if (err && err.status === 405) {
+          $('#FOConfirmClaimModal').modal('hide');
+          $('#invalidActionModal').modal('show');
+        }
       }));
   }
 
@@ -564,6 +584,7 @@ export class ClaimsComponent implements OnInit, OnDestroy {
     this.removeObject.claimId = claimId;
     this.removeObject.awardId = awardId;
     this.removeObject.unitNumber = unitNumber;
+    this.removeObject.claimStatusCode = this.result.claim.claimStatus.claimStatusCode;
   }
 
   deleteClaim() {
@@ -578,6 +599,12 @@ export class ClaimsComponent implements OnInit, OnDestroy {
                     this._commonService.showToast(HTTP_ERROR_STATUS, `You don't have the right to delete this claim.`);
                 }
                 this.isSaving = false;
+            }, err => {
+              if (err && err.status === 405) {
+                $('#SubmitClaimModal').modal('hide');
+                $('#invalidActionModal').modal('show');
+              }
+              this.isSaving = false;
             }));
     }
 }
@@ -589,5 +616,9 @@ export class ClaimsComponent implements OnInit, OnDestroy {
     }, err => {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Re-syncing claim details failed. Please try again.');
     }));
+  }
+
+  reload() {
+    window.location.reload();
   }
 }

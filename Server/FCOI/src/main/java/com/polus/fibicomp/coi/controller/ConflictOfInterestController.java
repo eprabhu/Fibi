@@ -526,11 +526,6 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.approveEntity(entityRelationship);
 	}
 
-	@PostMapping("/disclosure/historyDashboard")
-	public ResponseEntity<Object> getDisclosureHistory(@RequestBody CoiDashboardVO dashboardVO) {
-		return conflictOfInterestService.getDisclosureHistory(dashboardVO);
-	}
-	
 	@PostMapping(value = "/loadTravelDisclosureHistory")
 	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for loadTravelDisclosureHistory");
@@ -591,6 +586,11 @@ public class ConflictOfInterestController {
 	public List<CoiTravelConflictHistory> loadTravelConflictHistory(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
 		logger.info("Request for loadTravelConflictHistory");
 		return conflictOfInterestService.getCoiTravelConflictHistory(travelDisclosureId);
+	}
+
+    @GetMapping("/travelDisclosureHistory/{travelDisclosureId}")
+	public ResponseEntity<Object> getTravelDisclosureHistoryById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		return actionLogService.getTravelDisclosureHistoryById(travelDisclosureId);
 	}
 
 }

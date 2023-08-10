@@ -12,10 +12,10 @@
                                 [placeHolder]="'Search a person to assign a role'"
                                 (selectedResult)="selectedPerson($event)">
                             </app-elastic>
-                            <div class="position-absolute bottom-_18" *ngIf="map.get('person')">
+                            <div class="position-absolute" *ngIf="map.get('person')">
                                 <span class="mandatory">{{map.get('person')}}</span>
                             </div>
-                            <div class="position-absolute bottom-_18" *ngIf="map.get('repeat')">
+                            <div class="position-absolute" *ngIf="map.get('repeat')">
                                 <span class="mandatory">{{map.get('repeat')}}</span>
                             </div>
 
@@ -23,15 +23,17 @@
                         </div>
                         <div class="col-xl-5 col-sm-6 col-12 position-relative">
                             <label for="role-select"><span class="mandatory">*</span> <ng-container i18n="@@COMMON_ROLES">Roles</ng-container></label>
-                            <select id="role-select" class="form-control"
-                                [ngClass]="(map.get('role'))? 'is-invalid d-block' : ''" [(ngModel)]="selectRole"
-                                (ngModelChange)="_commonData.isAwardDataChange = true;">
-                                <option [ngValue]={}>--Select--</option>
-                                <option *ngFor="let role of roleList" [ngValue]="role" [hidden]="role.isActive != true">
-                                    {{role.roleName}}</option>
-                            </select>
-                            <div class="position-absolute bottom-_18" *ngIf="map.get('role')">
-                                <span class="mandatory">{{map.get('role')}}</span>
+                            <div class="position-relative">
+                                <select id="role-select" class="form-control"
+                                    [ngClass]="(map.get('role'))? 'is-invalid d-block' : ''" [(ngModel)]="selectRole"
+                                    (ngModelChange)="_commonData.isAwardDataChange = true;">
+                                    <option [value]={}>--Select--</option>
+                                    <option *ngFor="let role of roleList" [ngValue]="role" [hidden]="role.isActive != true">
+                                        {{role.roleName}}</option>
+                                </select>
+                                <div class="position-absolute" *ngIf="map.get('role')">
+                                    <span class="mandatory">{{map.get('role')}}</span>
+                                </div>
                             </div>
                         </div>
                         <div

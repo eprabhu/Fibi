@@ -124,7 +124,7 @@ export class KeyPerformanceIndicatorAwardComponent implements OnInit, OnChanges,
         this.result.awardKpis = this.kpiList;
         this.disabled = false;
         this.updateAwardStoreData();
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Key Performance Indicator saved successfully.');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Key Performance Indicator added successfully.');
       }, err => {
         if (isIndividualSave) {
           if (!criteriaIndex) {
@@ -135,7 +135,7 @@ export class KeyPerformanceIndicatorAwardComponent implements OnInit, OnChanges,
           }
         }
         this.disabled = false;
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving Key Performance Indicator failed. Please try again.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Key Performance Indicator failed. Please try again.');
       }));
   }
 
@@ -176,7 +176,7 @@ export class KeyPerformanceIndicatorAwardComponent implements OnInit, OnChanges,
       this.result.awardKpis = this.kpiList;
       this.updateAwardStoreData();
     }, err => {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Dleting Key Performance Indicator failed. Please try again.');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Key Performance Indicator failed. Please try again.');
       this.disabled = false;
       if (!criteriaIndex) {
         this.updateKPIModal(index, true);

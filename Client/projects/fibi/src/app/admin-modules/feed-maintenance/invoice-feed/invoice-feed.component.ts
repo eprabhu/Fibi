@@ -54,7 +54,7 @@ export class InvoiceFeedComponent implements OnInit, OnDestroy {
           this._invoiceFeedService.$invoiceFileProcess.next(true);
         }
       }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Trigger Invoice failed. Please click Trigger Invoice again.'); },
-        () => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully Triggered!'); }
+        () => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully Triggered.'); }
       ));
   }
 }

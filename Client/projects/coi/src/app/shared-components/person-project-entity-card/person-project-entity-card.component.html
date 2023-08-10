@@ -1,0 +1,63 @@
+<div class="info-card-border mt-2 rounded-2 shadow-medium bg-light mx-3">
+    <div class="py-2 px-4">
+        <!-- person -->
+        <div class="ms-2">
+            <label class="grey-text fs-14 fw-600 text-nowrap">Person : </label>
+            <app-no-data-label [valueToShow]="personProjectOrEntity?.personFullName">
+                <span class="ml-2 grey-text fs-14">{{personProjectOrEntity?.personFullName}}</span>
+            </app-no-data-label>
+        </div>
+
+        <!-- project  -->
+        <div class="ms-2 d-flex align-items-center" *ngIf="personProjectOrEntity?.projectDetails?.moduleItemId">
+            <label class="grey-text fs-14 fw-600 text-nowrap">Project : </label>
+            <app-no-data-label [valueToShow]="personProjectOrEntity?.projectDetails?.moduleItemId">
+                <span class="ml-2 grey-text fs-14">#{{personProjectOrEntity?.projectDetails?.moduleItemId}} :
+                    {{(!isReadMore && personProjectOrEntity?.projectDetails?.title?.length > 180)
+                    ? (personProjectOrEntity?.projectDetails?.title | slice:0:180) :
+                    personProjectOrEntity?.projectDetails?.title }}
+
+                    <!-- for read more and less -->
+                    <ng-container *ngIf="personProjectOrEntity?.projectDetails?.title?.length > 180">
+                        <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer">
+                            <strong>
+                                <span *ngIf="!isReadMore">... <u title="Expand Project">Read More</u></span>
+                                <u title="Collapse Project" *ngIf="isReadMore">Read Less</u>
+                            </strong>
+                        </span>
+                    </ng-container>
+                </span>
+            </app-no-data-label>
+        </div>
+
+        <!-- entity -->
+        <div class="ms-2" *ngIf="personProjectOrEntity?.entityName">
+            <label class="grey-text fs-14 fw-600 text-nowrap">Entity : </label>
+            <app-no-data-label [valueToShow]="personProjectOrEntity?.entityName">
+                <span class="ml-2 grey-text fs-14">{{(!isReadMore && personProjectOrEntity?.entityName?.length > 180)
+                    ? (personProjectOrEntity?.entityName | slice:0:180) :
+                    personProjectOrEntity?.entityName }}
+
+                    <!-- for read more and less -->
+                    <ng-container *ngIf="personProjectOrEntity?.entityName?.length > 180">
+                        <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer">
+                            <strong>
+                                <span *ngIf="!isReadMore">... <u title="Expand Project">Read More</u></span>
+                                <u title="Collapse Project" *ngIf="isReadMore">Read Less</u>
+                            </strong>
+                        </span>
+                    </ng-container>
+                </span>
+            </app-no-data-label>
+        </div>
+
+        <!-- department -->
+        <div class="ms-2">
+            <label class="grey-text fs-14 fw-600 text-nowrap">Department : </label>
+            <app-no-data-label [valueToShow]="personProjectOrEntity?.unitDetails">
+                <span class="ml-2 grey-text fs-14">{{personProjectOrEntity?.unitDetails}}</span>
+            </app-no-data-label>
+        </div>
+
+    </div>
+</div>

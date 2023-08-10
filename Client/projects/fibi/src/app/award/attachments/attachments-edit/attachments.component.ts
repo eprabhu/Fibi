@@ -304,7 +304,7 @@ export class AttachmentsEditComponent implements OnInit, OnDestroy {
 
   /** shows success toast based on attachment is replaced or not */
   showSuccessToast() {
-    const toastMsg = this.isReplaceAttachment ? 'Attachment replaced successfully' : 'Attachment added successfully';
+    const toastMsg = this.isReplaceAttachment ? 'Attachment replaced successfully.' : 'Attachment added successfully.';
     this._commonService.showToast(HTTP_SUCCESS_STATUS, toastMsg);
     this.isSaving = false;
   }
@@ -312,9 +312,9 @@ export class AttachmentsEditComponent implements OnInit, OnDestroy {
   showErrorToast() {
     let toastMsg;
     if (this.isReplaceAttachment) {
-      toastMsg = !this._commonService.isWafEnabled ? 'Failed to replace attachment' : 'Waf blocked request for replacing attachment';
+      toastMsg = !this._commonService.isWafEnabled ? 'Failed to replace Attachment.' : 'Waf blocked request for replacing Attachment.';
     } else {
-      toastMsg = !this._commonService.isWafEnabled ? 'Failed to add attachment' : 'Waf blocked request for uploading attachment';
+      toastMsg = !this._commonService.isWafEnabled ? 'Failed to add Attachment.' : 'Waf blocked request for uploading Attachment.';
     }
     this._commonService.showToast(HTTP_ERROR_STATUS, toastMsg);
     this.isSaving = false;
@@ -352,6 +352,8 @@ export class AttachmentsEditComponent implements OnInit, OnDestroy {
             this.result.newAttachments = this.result.newAttachments.filter(A => A.documentId !== this.removeObjDocId);
             this.filterAttachments();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment deleted successfully.');
+          },err=>{
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Attachments failed. Please try again.');
           }));
     }
   }
@@ -381,9 +383,9 @@ export class AttachmentsEditComponent implements OnInit, OnDestroy {
       }).subscribe((data: any) => {
         this.result.newAttachments = data;
         this.filterAttachments();
-      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to update attachment! Please try again.'); },
+      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to update Attachment. Please try again.'); },
         () => {
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment successfully updated.');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment updated successfully.');
         }));
   }
 

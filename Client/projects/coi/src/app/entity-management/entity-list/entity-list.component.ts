@@ -140,7 +140,6 @@ export class EntityListComponent implements OnDestroy, OnInit {
  viewListOfEntity() {
     this.$subscriptions.push(this.$entityList.pipe(
       switchMap(() => {
-        this.entityList = [];
         this.isLoading = true;
         return this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject);
       })).subscribe((res: any) => {

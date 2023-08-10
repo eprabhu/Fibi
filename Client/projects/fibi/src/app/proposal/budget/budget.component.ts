@@ -81,7 +81,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
         this.activityTypeCode = DATA.proposal.activityTypeCode;
         this.grantTypeCode = DATA.proposal.grantTypeCode;
         this.proposalStatusCode = DATA.proposal.statusCode;
-        this.proposalPI = DATA.proposal.investigator.fullName;
+        this.proposalPI =  DATA.proposal.investigator && DATA.proposal.investigator.fullName;
         this.initializeBudget();
     }
 

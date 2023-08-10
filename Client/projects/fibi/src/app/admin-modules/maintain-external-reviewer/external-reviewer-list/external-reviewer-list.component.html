@@ -35,9 +35,9 @@
 
         <div class="card-body">
             <div class="row justify-content-center">
-                <div class="form-group col-6 searchBox">
+                <div class="form-group col-8 searchBox">
                     <app-elastic [options]="externalReviewerElasticConfig"
-                        [placeHolder]="'Search: External reviewer#, Full Name, Last Name, Work Country, Email Address, Affiliation Institution, Specialism Keywords'"
+                        [placeHolder]="'Search: Reviewer #, Full Name, Country, Email Address, Affiliation Institution, Specialism Keywords, Academic Rank, H-Index'"
                         (selectedResult)="selectExternalElasticResult($event)"></app-elastic>
                 </div>
                 <div class="col-auto">
@@ -58,8 +58,8 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-3 col-sm-6 col-12">
-                                    <label for="adv-search-person-id">Person ID</label>
-                                    <input type="text" id="adv-search-person-id" placeholder="Person id"
+                                    <label for="adv-search-person-id">Reviewer #</label>
+                                    <input type="text" id="adv-search-person-id" placeholder="Reviewer #"
                                         class=" form-control" [(ngModel)]="tempExtRequestObject.property6">
                                 </div>
                                 <div class="form-group col-md-3 col-sm-6 col-12">
@@ -98,7 +98,7 @@
                                             class="form-control" id="adv-search-signed-date"
                                             (keypress)="_commonService._keyPress($event, 'date');"
                                             (click)="advSearchSignedDate.open()" maxlength="60"
-                                            [placeholder]="'Agreement Signed date'" type="text"
+                                            placeholder = "{{datePlaceHolder}}" type="text"
                                             (keyup.enter)="loadExternalReviewers()" />
                                         <span id="award-sub-date-icon" aria-hidden="true" title="Open Calender"
                                             class="fa fa-calendar fa-large insidePicker hand-cursor"
@@ -107,11 +107,9 @@
                                             (keyup.enter)="loadExternalReviewers()">
                                         </mat-datepicker>
                                     </span>
-
-
                                 </div>
-                                <div class="form-group col-md-3 col-sm-6 col-12">
 
+                                <div class="form-group col-md-3 col-sm-6 col-12">
                                     <label for="adv-search-expiry-date">Agreement Expiry Date</label>
                                     <span class="dateField">
                                         <input matInput [matDatepicker]="advSearchExpiryDate"
@@ -119,7 +117,7 @@
                                             class="form-control" id="adv-search-expiry-date"
                                             (keypress)="_commonService._keyPress($event, 'date');"
                                             (click)="advSearchExpiryDate.open()" maxlength="60"
-                                            [placeholder]="'Agreement Expiry date'" type="text"
+                                            placeholder = "{{datePlaceHolder}}" type="text"
                                             (keyup.enter)="loadExternalReviewers()" />
                                         <span id="award-sub-date-icon" aria-hidden="true" title="Open Calender"
                                             class="fa fa-calendar fa-large insidePicker hand-cursor"
@@ -180,6 +178,13 @@
                                     </app-look-up>
                                 </div>
 
+                                <div class="form-group col-md-3 col-sm-6 col-12">
+                                    <label for="adv-search-academic-rank">Academic Rank</label>
+                                    <app-look-up [options]='academicRankTypeOptions' [selectedLookUpList]="lookupValues['property15']"
+                                        (selectedResult)="onLookupSelect($event, 'property15')">
+                                    </app-look-up>
+                                </div>
+
                                 <div class="form-group col align-items-end d-flex justify-content-end">
                                     <button id="adv-search-clear-proposal" title="Clear"
                                         (click)="clearSearch(); extRequestObject.currentPage = 1; loadExternalReviewers(); "
@@ -206,18 +211,20 @@
                 <table class="table tableSkin mb-0">
                     <thead>
                         <tr class="header-border">
-                            <th style="width: 11%" scope="col" id="sortby-personId"
+
+                            <th style="width: 11%" scope="col" id="sortby-reviewer-id"
                                 (click)="sortResult('externalReviewerId')">
-                                <span class="hand-cursor" title="Click to sort by person id">Person ID</span>
+                                <span class="hand-cursor" title="Click to sort by reviewer-id">Reviewer #</span>
                                 <span class="fa-stack">
                                     <i *ngIf="!extRequestObject.sort['externalReviewerId']"
-                                        class="fa fa-sort-alpha-asc blrcolor" aria-hidden="true"></i>
-                                    <i [ngClass]="extRequestObject.sort['externalReviewerId'] === 'asc' ? 'fa fa-sort-alpha-asc sortIcon' : 'blrcolor'"
+                                        class="fa fa-sort-numeric-asc blrcolor" aria-hidden="true"></i>
+                                    <i [ngClass]="extRequestObject.sort['externalReviewerId'] === 'asc' ? 'fa fa-sort-numeric-asc sortIcon' : 'blrcolor'"
                                         aria-hidden="true"></i>
-                                    <i [ngClass]="extRequestObject.sort['externalReviewerId'] === 'desc' ? 'fa fa-sort-alpha-desc sortIcon' : ''"
+                                    <i [ngClass]="extRequestObject.sort['externalReviewerId'] === 'desc' ? 'fa fa-sort-numeric-desc sortIcon' : ''"
                                         aria-hidden="true"></i>
                                 </span>
                             </th>
+
                             <!-- <th style="width: 9%" scope="col" id="sortby-first-name" (click)="sortResult('firstName')">
                                 <span class="hand-cursor" title="Click to sort by first name">First
                                     Name</span>
@@ -254,16 +261,37 @@
                                         aria-hidden="true"></i>
                                 </span>
                             </th>
-                            <th style="width: 16%" scope="col" id="sortby-affiliationInstitution"
-                                (click)="sortResult('affiliationInstitution.description')">
-                                <span class="hand-cursor" title="Click to sort by Affiliated Institution">Affiliated
-                                    Institution</span>
+                            <th style="width: 11%" scope="col" id="sortby-h-index"
+                            (click)="sortResult('hindex')">
+                            <span class="hand-cursor" title="Click to sort by h-index">H-Index</span>
+                            <span class="fa-stack">
+                                <i *ngIf="!extRequestObject.sort['hindex']"
+                                    class="fa fa-sort-numeric-asc blrcolor" aria-hidden="true"></i>
+                                <i [ngClass]="extRequestObject.sort['hindex'] === 'asc' ? 'fa fa-sort-numeric-asc sortIcon' : 'blrcolor'"
+                                    aria-hidden="true"></i>
+                                <i [ngClass]="extRequestObject.sort['hindex'] === 'desc' ? 'fa fa-sort-numeric-desc sortIcon' : ''"
+                                    aria-hidden="true"></i>
+                            </span>
+                        </th>
+                            <th style="width: 16%" scope="col" id="sortby-academicrank" (click)="sortResult('academicRank.description')">
+                                <span class="hand-cursor" title="Click to sort by Academic Rank">Academic Rank</span>
                                 <span class="fa-stack">
-                                    <i *ngIf="!extRequestObject.sort['affiliationInstitution.description']"
-                                        class="fa fa-sort-alpha-asc blrcolor" aria-hidden="true"></i>
-                                    <i [ngClass]="extRequestObject.sort['affiliationInstitution.description'] === 'asc' ? 'fa fa-sort-alpha-asc sortIcon' : 'blrcolor'"
+                                    <i *ngIf="!extRequestObject.sort['academicRank.description']" class="fa fa-sort-alpha-asc blrcolor"
                                         aria-hidden="true"></i>
-                                    <i [ngClass]="extRequestObject.sort['affiliationInstitution.description'] === 'desc' ? 'fa fa-sort-alpha-desc sortIcon' : ''"
+                                    <i [ngClass]="extRequestObject.sort['academicRank.description'] === 'asc' ? 'fa fa-sort-alpha-asc sortIcon' : 'blrcolor'"
+                                        aria-hidden="true"></i>
+                                    <i [ngClass]="extRequestObject.sort['academicRank.description'] === 'desc' ? 'fa fa-sort-alpha-desc sortIcon' : ''"
+                                        aria-hidden="true"></i>
+                                </span>
+                            </th>
+                            <th style="width: 16%" scope="col" id="sortby-country" (click)="sortResult('countryDetails.countryName')">
+                                <span class="hand-cursor" title="Click to sort by Academic Rank">Country</span>
+                                <span class="fa-stack">
+                                    <i *ngIf="!extRequestObject.sort['countryDetails.countryName']" class="fa fa-sort-alpha-asc blrcolor"
+                                        aria-hidden="true"></i>
+                                    <i [ngClass]="extRequestObject.sort['countryDetails.countryName'] === 'asc' ? 'fa fa-sort-alpha-asc sortIcon' : 'blrcolor'"
+                                        aria-hidden="true"></i>
+                                    <i [ngClass]="extRequestObject.sort['countryDetails.countryName'] === 'desc' ? 'fa fa-sort-alpha-desc sortIcon' : ''"
                                         aria-hidden="true"></i>
                                 </span>
                             </th>
@@ -315,11 +343,19 @@
                                 [queryParams]="{externalReviewerId:externalReviewer?.externalReviewerId,mode:'view'}">
                                 {{externalReviewer.passportName}}</td>
 
+                            <td [routerLink]="['/fibi/maintain-external-reviewer/external-reviewer-details']" queryParamsHandling='merge'
+                                [queryParams]="{externalReviewerId:externalReviewer?.externalReviewerId,mode:'view'}">{{
+                                externalReviewer.hindex }}</td>
+
                             <td [routerLink]="['/fibi/maintain-external-reviewer/external-reviewer-details']"
                                 queryParamsHandling='merge'
                                 [queryParams]="{externalReviewerId:externalReviewer?.externalReviewerId,mode:'view'}">
-                                {{externalReviewer?.affiliationInstitution?.description}}</td>
-
+                                {{externalReviewer?.academicRank?.description}}</td>
+                            
+                            <td [routerLink]="['/fibi/maintain-external-reviewer/external-reviewer-details']"
+                                queryParamsHandling='merge'
+                                [queryParams]="{externalReviewerId:externalReviewer?.externalReviewerId,mode:'view'}">
+                                {{externalReviewer?.countryDetails?.countryName}}</td>
                             <td>
                                 <span *ngIf="!isReadMore[i] && externalReviewer?.specialismKeywords?.length > 50 else showFullInfo">
                                     <span [routerLink]="['/fibi/maintain-external-reviewer/external-reviewer-details']" queryParamsHandling='merge'

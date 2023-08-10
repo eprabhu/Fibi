@@ -1,3 +1,4 @@
+import { ETHICS_SAFETY_LABEL } from '../../app-constants';
 import {CompareType, Section} from './interfaces';
 
 export const GeneralDetails: CompareType = {
@@ -296,7 +297,7 @@ export const AwardManpowerResource: CompareType = {
     reviewSectionSubFields: [ 'costAllocation', 'committedCost', 'plannedSalary', 'manpowerPlanJobProfileType.description',
         'plannedBaseSalary', 'isMultiAccount', 'isMainAccount', 'planStartDate', 'planEndDate', 'expenseAmount',
          'sapCommittedAmount', 'balance', 'fullName', 'manpowerResourceType.description', 'resourceName', 'department',
-         'chargeStartDate', 'chargeEndDate']
+         'chargeStartDate', 'chargeEndDate', 'positionId', 'planDuration', 'chargeDuration', 'manpowerPositionStatus.description']
 };
 
 export const AwardSection: Array<Section> = [
@@ -304,7 +305,7 @@ export const AwardSection: Array<Section> = [
     { reviewSectionCode: 104, reviewSectionDescription: 'Key Personnel', documentId: 'Award104', subSectionCode: '165' },
     { reviewSectionCode: 105, reviewSectionDescription: 'Project Team', documentId: 'Award105', subSectionCode: '166' },
     { reviewSectionCode: 106, reviewSectionDescription: 'Contacts', documentId: 'Award106', subSectionCode: '167' },
-    { reviewSectionCode: 113, reviewSectionDescription: 'Special Review', documentId: 'Award113', subSectionCode: '189' },
+    { reviewSectionCode: 113, reviewSectionDescription: ETHICS_SAFETY_LABEL, documentId: 'Award113', subSectionCode: '189' },
     { reviewSectionCode: 112, reviewSectionDescription: 'Sub Contracts', documentId: 'Award112', subSectionCode: '168' },
     { reviewSectionCode: 125, reviewSectionDescription: 'Area Of Research', documentId: 'Award125', subSectionCode: '169' },
     { reviewSectionCode: 123, reviewSectionDescription: 'Milestone', documentId: 'Award123', subSectionCode: '170' },

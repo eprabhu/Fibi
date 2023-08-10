@@ -5,15 +5,9 @@ import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
 import { DefaultAdminDetails } from '../../travel-disclosure/travel-disclosure-interface';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { AssignAdminRO } from '../shared-interface';
 
 declare const $: any;
-
-class AssignAdminRO {
-    adminPersonId = '';
-    adminGroupId = null;
-    travelDisclosureId?: '';
-    disclosureId?: '';
-}
 
 @Component({
     selector: 'app-assign-administrator-modal',

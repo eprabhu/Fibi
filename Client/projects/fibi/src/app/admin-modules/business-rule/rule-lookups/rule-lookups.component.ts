@@ -24,6 +24,7 @@ import { SelectedCriteria } from '../meta-rule/meta-rule-interface';
 })
 export class RuleLookupsComponent implements OnInit, OnDestroy {
 
+  showAll = 'Y';
   businessRuleList: any = [];
   isMapName: boolean;
   isDesc: any;
@@ -125,10 +126,10 @@ export class RuleLookupsComponent implements OnInit, OnDestroy {
       data => {
         this.businessRuleList.splice(deleteIndex, 1);
         this._auditLogService.saveAuditLog('D', before, null, 'BUSINESS_RULE', Object.keys(before), this.deleteRuleId)
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Business Rule Deleted Successfully');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Business Rule deleted successfully.');
         this.deleteRuleId = null;
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting business rule failed. Please try again.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Business Rule failed. Please try again.');
         this.deleteRuleId = null;
       }));
   }
@@ -179,6 +180,7 @@ export class RuleLookupsComponent implements OnInit, OnDestroy {
     requestObject.subModuleCode = this.selectedCriteria.subModuleCode;
     requestObject.unitNumber = this.selectedCriteria.unitNumber;
     requestObject.ruleType = this.selectedCriteria.ruleCode;
+    requestObject.showActive= this.selectedCriteria.showActive =this.showAll;
     return requestObject;
   }
 

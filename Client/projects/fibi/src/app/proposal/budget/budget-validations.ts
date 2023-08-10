@@ -245,3 +245,9 @@ export function checkDatesAreNotEqual(proposalData, budgetStartDate, budgetEndDa
   }
 }
 
+/**Method to validate budget total amount - budget total cost should not exceed maximum of 999,999,999.99 */
+export function validateBudgetTotalCost(totalCost): boolean {
+  const PATTERN = /^[+-]?(?:[0-9][0-9]{0,8}(?:\.\d{0,2})?|999999999|999999999.00|999999999.99)$/;
+  return (totalCost > 0 && !PATTERN.test(totalCost)) ? true : false;
+}
+

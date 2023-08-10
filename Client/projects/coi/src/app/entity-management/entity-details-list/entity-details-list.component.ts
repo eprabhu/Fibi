@@ -21,7 +21,7 @@ import { DATE_PLACEHOLDER } from '../../../../../fibi/src/app/app-constants';
 })
 export class EntityDetailsListComponent implements OnInit, OnDestroy {
 
-  entityDetails: any = [];
+  entityRelations: any = [];
   isviewDetails: true;
   currentSelected = 'PERSON';
   entityManageId = null;
@@ -52,6 +52,8 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   showSlider = false;
   @ViewChild('viewSFIDetailsOverlay', { static: true }) viewSFIDetailsOverlay: ElementRef;
   personEntityId = null;
+  entityDetails: any = {};
+
 
   constructor(private _router: Router, private _route: ActivatedRoute, public entityManagementService: EntityManagementService,
     private _elasticConfig: ElasticConfigService, public commonService: CommonService) { }
@@ -65,6 +67,22 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
     this.$subscriptions.push(this._route.queryParams.subscribe(params => {
       this.getRelationshipEntityList();
       this.$relationshipEntityList.next();
+    }));
+    this.getEntityID();
+  }
+
+  getEntityID() {
+    this.$subscriptions.push(this._route.queryParams.subscribe(params => {
+      this.entityDetails.entityId = params.entityManageId;
+      this.viewEntityDetails();
+    }));
+  }
+
+  viewEntityDetails() {
+    this.$subscriptions.push(this.entityManagementService.getEntityDetails(this.entityDetails.entityId).subscribe((res: any) => {
+      this.entityDetails = res.coiEntity;
+    }, _error => {
+      this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
     }));
   }
 
@@ -96,7 +114,7 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
       this.entityManagementService.getPersonEntityDashboard(this.entityManagementService.relationshipDashboardRequest)
         ))
         .subscribe((res: any) => {
-          this.entityDetails = res.data || [];
+          this.entityRelations = res.data || [];
           this.resultCount = res.count;
           this.loadingComplete();
         }, error => {
@@ -113,7 +131,7 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
     this.resetAdvanceSearchFields();
     this.entityManagementService.relationshipDashboardRequest.filterType = tab;
     this.entityManagementService.relationshipDashboardRequest.id =  parseInt(this._route.snapshot.queryParamMap.get('entityManageId'));
-    this.entityDetails = [];
+    this.entityRelations = [];
     this.getPermissions();
     // this.getRelationshipEntityList();
     this.$relationshipEntityList.next();
@@ -229,6 +247,15 @@ convertDisclosureStatus(status): string {
     addBodyScroll() {
         document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
         document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
+    }
+
+    getUpdatedEntityId(data) {
+      this.entityDetails.entityId = data.entityId;
+      this.viewEntityDetails();
+    }
+
+    updateApprovedEntityDetails(data) {
+      this.entityDetails = Object.assign({}, data);
     }
 
 }

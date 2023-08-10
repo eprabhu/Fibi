@@ -20,7 +20,7 @@
     <div class="card-body">
       <div *ngIf="isShowLoader" appCustomPreloader></div>
       <div id="award-by-sponsor" (window:resize)="onResize($event)" tabindex="0" style="height: 250px;"></div>
-      <div class="no-data-container" *ngIf="!awardBySponsorData?.length">
+      <div class="no-data-container" *ngIf="!awardBySponsorData?.length && !isShowLoader">
         <span class="no-data-icon-outer">
           <div class="no-data-icon">
             <i class="fa fa-file-o" aria-hidden="true"></i>

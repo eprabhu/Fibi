@@ -1,6 +1,6 @@
-import * as bootstrap from 'bootstrap';
 import { ENDPOINT_SPONSOR_OUTPUT_FORMAT } from '../../app-constants';
 import { LEAD_UNIT_OUTPUT_FORMAT } from '../../app-constants';
+import * as bootstrap from 'bootstrap';
 
 /**
  * @param  {string} elementId
@@ -25,9 +25,9 @@ export const scrollIntoView = (elementId: string, position: scrollPositions  = '
 export const setFocusToElement = (id: string) => {
     setTimeout(() => {
         const ELEMENT: HTMLElement = document.getElementById(id);
-        return ELEMENT ? ELEMENT.focus() : false;
+        return ELEMENT ? ELEMENT.focus() : false; 
     },300);
-
+    
 };
 
 export function pageScroll(elementId) {
@@ -85,7 +85,7 @@ export function openInNewTab(path: string, queryParamKeys: Array<any>, queryPara
             }
         });
         url = window.location.origin + window.location.pathname + '#/fibi/' + path + url;
-        window.location.hash.split(/[/?]/).includes('dashboard') ? window.open(url, '_self') : window.open(url, url);
+        window.location.hash.split(/[/?]/).includes('dashboard') ? window.open(url, '_self') : window.open(url, '_blank');
     }
 }
 /**
@@ -119,7 +119,7 @@ export function convertToValidAmount(value) {
  */
 export function removeUnwantedTags(data) {
     if (data) {
-        data = data.replace(/<.*?script.*?>.*?<\/.*?script.*?>/igm, '')
+        data = data.replace(/<.?script.*?>.*?<\/.*?script.*?>/igm, '')
             .replace(/<svg|<img .*?>/g, '').replace(/&nbsp;/gi, ' ');
     }
     return data;
@@ -300,43 +300,19 @@ export function getOrganizationAddress(data: any) {
     return address;
 }
 
-export function copyToClipboard(textToCopy: string) {
-    if (!navigator.clipboard) {
-        fallbackCopyTextToClipboard(textToCopy);
-        return;
-    }
-    navigator.clipboard.writeText(textToCopy);
-}
+export const range = (min, max) => [...Array(max - min + 1).keys()].map(i => i + min);
 
-function fallbackCopyTextToClipboard(textToCopy: string) {
-    let textArea = document.createElement("textarea");
-    textArea.value = textToCopy;
-
-    // Avoid scrolling to bottom
-    textArea.style.top = "0";
-    textArea.style.left = "0";
-    textArea.style.position = "fixed";
-
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
+export function hideModal(elementId: string) {
+    let myModal = document.querySelector(`#${elementId} .btn-close`) as HTMLElement;
+    myModal.click();
 }
 
 export function openModal(elementId: string, options = null) {
-  options = options || {
-    backdrop: 'static',
-    keyboard: false,
-    focus: true
+    options = options || {
+      backdrop: 'static',
+      keyboard: false,
+      focus: true
+    }
+    let myModal = new bootstrap.Modal(document.getElementById(elementId), options);
+    myModal.show();
   }
-  let myModal = new bootstrap.Modal(document.getElementById(elementId), options);
-  myModal.show();
-}
-
-export function hideModal(elementId: string) {
-  let myModal = document.querySelector(`#${elementId} .btn-close`) as HTMLElement;
-  myModal.click();
-}
-

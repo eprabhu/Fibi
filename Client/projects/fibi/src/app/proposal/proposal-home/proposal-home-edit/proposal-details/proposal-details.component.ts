@@ -1,11 +1,11 @@
 /** last updated by Greeshma on 20-11-2019 **/
 import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
-import { Router , ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { ProposalHomeService } from '../../proposal-home.service';
 import { CommonService } from '../../../../common/services/common.service';
 import { ElasticConfigService } from '../../../../common/services/elastic-config.service';
-import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, EDITOR_CONFIURATION, DATE_PLACEHOLDER } from '../../../../app-constants';
+import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, EDITOR_CONFIURATION } from '../../../../app-constants';
 import { ProposalService } from '../../../services/proposal.service';
 import {
     compareDates, getCurrentTimeStamp, getDateObjectFromTimeStamp, getDuration,
@@ -23,7 +23,7 @@ import { AutoSaveService } from '../../../../common/services/auto-save.service';
 import { DataStoreService } from '../../../services/data-store.service';
 import { WebSocketService } from '../../../../common/services/web-socket.service';
 import { concatUnitNumberAndUnitName } from '../../../../common/utilities/custom-utilities';
-
+import { isValidDateFormat } from '../../../../common/utilities/date-utilities';
 // KKI Specific Change Don't Delete
 // import { HttpClient } from '@angular/common/http';
 // import { environment } from '../../../../../environments/environment';
@@ -71,7 +71,7 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
     personDetails: any = {};
     fundingScheme: string;
     fundingSourceTypeCode: string;
-    datePlaceHolder = DATE_PLACEHOLDER;
+    datePlaceHolder = DEFAULT_DATE_FORMAT;
     setFocusToElement = setFocusToElement;
     $subscriptions: Subscription[] = [];
     isEmployeeFlag = true;
@@ -83,10 +83,15 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
     awardDetails: any = {};
     isDateFieldChanged = false;
     dataDependencies = ['proposal', 'isPINameAutoFilledRequired', 'piPersonId', 'rcbfTypeCode', 'isNonEmployee', 'availableRights'
-    , 'grantEligibilityStatus', 'grantCall'];
+        , 'grantEligibilityStatus', 'grantCall'];
     hasUnsavedChanges = false;
     concatUnitNumberAndUnitName = concatUnitNumberAndUnitName;
     tempProposal: any = {};
+    nonMandatoryField = false;
+    formatChecker = {
+        'startDateValidation': false,
+        'endDateValidation': false
+    };
 
     // KKI Specific Change Don't Delete
     // internalDeadlineWarningMsg: string;
@@ -149,7 +154,7 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
     private setEndpointOptions() {
         this.sponsorHttpOptions = getEndPointOptionsForSponsor({ defaultValue: this.result.proposal.sponsorName });
         this.primeSponsorHttpOptions = getEndPointOptionsForSponsor({ defaultValue: this.result.proposal.primeSponsorName });
-        this.keywordHttpOptions = this._proposalService.setHttpOptions('description', 'description', 'findKeyWords', '', null);
+        this.keywordHttpOptions = this._proposalService.setHttpOptions('description', 'description', 'findKeyWords', '');
         this.unitHttpOptions = this.constructDepartmentHttpOptions(this.result.proposal.homeUnitNumber, this.result.proposal.homeUnitName);
         // tslint:disable-next-line:max-line-length
         this.grantHttpOptions = this._proposalService.setHttpOptions('grantCallId - grantCallName', 'grantCallId | grantCallName', 'findGrantCall', '', { 'moduleCode': '3' });
@@ -367,7 +372,9 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     dateValidation() {
+        if (!this.nonMandatoryField ) {
         this.proposalDataBindObj.dateWarningList.clear();
+        }
         if (this.result.proposal.endDate != null) {
             this.proposalDataBindObj.mandatoryList.delete('endDate');
             if (compareDates(this.result.proposal.startDate, this.result.proposal.endDate, 'dateObject', 'dateObject') === 1) {
@@ -507,7 +514,7 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     getSearchValue(event) {
-        this.proposalDataBindObj.selectedKeyword = event.target.value;
+        this.proposalDataBindObj.selectedKeyword = event;
     }
 
     /**
@@ -556,6 +563,9 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
     addKeywordToDatabase(event) {
         if (event) {
             this.proposalDataBindObj.selectedKeyword = event.searchString;
+            if (this.proposalDataBindObj.selectedKeyword) {
+                this.proposalDataBindObj.selectedKeyword = this.proposalDataBindObj.selectedKeyword.trim();
+            }
             this.$subscriptions.push(this._proposalHomeService.addScienceKeyword({
                 'scienceKeyword': this.proposalDataBindObj.selectedKeyword,
                 'userName': this._commonService.getCurrentUserDetail('userName')
@@ -722,6 +732,10 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
                     'updateType': TYPE, 'piPersonId': this.result.piPersonId,
                     'percentageOfEffort': this.result.percentageOfEffort,
                 }).subscribe(async (data: any) => {
+                    this._proposalService.proposalStartDate = data.proposal.startDate;
+                    this._proposalService.proposalEndDate = data.proposal.endDate;
+                    this._proposalService.internalDeadLineDate = data.proposal.internalDeadLineDate;
+                    this._proposalService.sponsorDeadlineDate = data.proposal.sponsorDeadlineDate;
                     if (data.grantEligibilityStatus && data.grantEligibilityStatus.status === 'TRUE') {
                         this.updateStoreOnSave(data);
                         this.dataVisibilityObj.dataChangeFlag = false;
@@ -729,8 +743,6 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
                         this._proposalService.proposalTitle = data.proposal.title;
                         this.dataVisibilityObj.grantCallId = data.grantCall ? data.grantCall.grantCallId : null;
                         this.departmentLevelRightsForProposal = this._proposalService.checkDepartmentLevelPermission(data.availableRights);
-                        this._proposalService.proposalStartDate = data.proposal.startDate;
-                        this._proposalService.proposalEndDate = data.proposal.endDate;
                         this.enableOrDisableGrantCall();
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Proposal saved successfully.');
                         this.dataVisibilityObj.isProposalSaved = true;
@@ -795,7 +807,7 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
             this.proposalDate();
             this._proposalService.$isShowDateWarning.next(false);
         } else if ((compareDates(getDateObjectFromTimeStamp(this._proposalService.proposalStartDate), this.result.proposal.startDate) === 1)
-             || (compareDates(getDateObjectFromTimeStamp(this._proposalService.proposalEndDate), this.result.proposal.endDate) === 1)) {
+            || (compareDates(getDateObjectFromTimeStamp(this._proposalService.proposalEndDate), this.result.proposal.endDate) === 1)) {
             this._proposalService.proposalDateChangeType = 'DEC';
             this.proposalDate();
             this._proposalService.$isShowDateWarning.next(false);
@@ -923,7 +935,6 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             return false;
         }
-        
     }
 
     editorValidation(abstract) {
@@ -986,7 +997,7 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
     listenForGlobalSave() {
         this.$subscriptions.push(this._autoSaveService.autoSaveTrigger$.subscribe(_saveClick => {
             if (this._proposalHomeService.hasProposalOverviewChanged) {
-                this.openDateChangeModal()
+                this.openDateChangeModal();
             }
         }));
     }
@@ -1002,7 +1013,9 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
         this.proposalDataBindObj.isUnitError = false;
         this.proposalDataBindObj.isPiError = false;
         this.proposalDataBindObj.clearPIField = String(false);
-        this.proposalDataBindObj.mandatoryList.clear();
+        if (!this.formatChecker.endDateValidation && !this.formatChecker.startDateValidation) {
+            this.proposalDataBindObj.mandatoryList.clear();
+        }
         this.dataVisibilityObj.isBudgetPeriodDate = false;
     }
 
@@ -1047,6 +1060,9 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
             !this.dataVisibilityObj.isBudgetPeriodDate) {
             return false;
         }
+        if (this.formatChecker.endDateValidation && this.formatChecker.startDateValidation) {
+            return false;
+        }
         return true;
     }
 
@@ -1064,5 +1080,82 @@ export class ProposalDetailsComponent implements OnInit, OnDestroy, OnChanges {
             this.proposalDataBindObj.mandatoryList.set('percentageOfEffort', validatePercentage(value));
         }
     }
+
+    getSystemDate() {
+        return new Date(new Date().setHours(0, 0, 0, 0));
+    }
+
+    checkForValidFormat(date, type) {
+        if (!isValidDateFormat(date)) {
+            if (type === 'startDate') {
+                this.formandatoryFields('startDateFormat');
+            } else if (type === 'endDate') {
+                this.formandatoryFields('endDateFormat');
+            } else if (type == 'subDt') {
+                this.forNonMandatoryFields('subdtFormat');
+            }
+        } else if (isValidDateFormat(date)) {
+            if (type === 'startDate') {
+                this.validationRemoverForMandatoryFields('startDateFormat');
+            } else if (type === 'endDate') {
+                this.validationRemoverForMandatoryFields('endDateFormat');
+            } else if (type == 'subDt') {
+                this.validationRemoverForNonMandatoryFields('subdtFormat');
+            }
+        }
+    }
+
+    formandatoryFields(flag) {
+        this.proposalDataBindObj.mandatoryList.set(flag, true);
+        if (flag === 'startDateFormat') {
+            this.formatChecker.startDateValidation = true;
+        } else if (flag === 'endDateFormat') {
+            this.formatChecker.endDateValidation = true;
+        }
+    }
+
+    validationRemoverForMandatoryFields(flag) {
+        this.proposalDataBindObj.mandatoryList.delete(flag);
+        if (flag === 'startDateFormat') {
+            this.formatChecker.startDateValidation = false;
+        } else if (flag === 'endDateFormat') {
+            this.formatChecker.endDateValidation = false;
+        }
+    }
+
+    forNonMandatoryFields(flag) {
+        this.proposalDataBindObj.dateWarningList.set(flag, true);
+        this.nonMandatoryField = true;
+    }
+
+    validationRemoverForNonMandatoryFields(flag) {
+        this.proposalDataBindObj.dateWarningList.delete(flag);
+        this.nonMandatoryField = false;
+    }
+
+    clearDateOnValidation(id) {
+        if (id === 'prop-start-date-icon' && this.formatChecker.startDateValidation) {
+            this.result.proposal.startDate = this.getSystemDate();
+            this.validationRemoverForMandatoryFields('startDateFormat');
+            this.calenderOpener(id);
+        } else if (id === 'prop-end-date-icon' && this.formatChecker.endDateValidation) {
+            this.result.proposal.endDate = this.getSystemDate();
+            this.validationRemoverForMandatoryFields('endDateFormat');
+            this.calenderOpener(id);
+        } else if (id === 'prop-sub-date-icon' && this.nonMandatoryField) {
+            this.result.proposal.sponsorDeadlineDate = this.getSystemDate();
+            this.validationRemoverForNonMandatoryFields('subdtFormat');
+            this.calenderOpener(id);
+        } else {
+            this.calenderOpener(id);
+        }
+    }
+
+    calenderOpener(id) {
+        setTimeout(() => {
+            document.getElementById(id).click();
+        });
+    }
+
 
 }

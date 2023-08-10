@@ -27,13 +27,12 @@ import { getSponsorSearchDefaultValue } from '../common/utilities/custom-utiliti
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
 import { DefaultAdminDetails } from '../travel-disclosure/travel-disclosure-interface';
-import { slideHorizontal } from '../../../../fibi/src/app/common/utilities/animations';
+import { PersonProjectOrEntity } from '../shared-components/shared-interface';
 
 @Component({
     selector: 'app-disclosure',
     templateUrl: './disclosure.component.html',
     styleUrls: ['./disclosure.component.scss'],
-    animations: [slideHorizontal],   
 })
 
 
@@ -84,6 +83,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     relationshipError: any;
     questionnaireError: any;
     defaultAdminDetails = new DefaultAdminDetails();
+    personProjectDetails = new PersonProjectOrEntity();
     count: number;
     dependencies = ['coiDisclosure', 'numberOfSFI'];
     reviewStatus: string;
@@ -105,10 +105,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
     returnHelpTexts = [
-        `Return any disclosure in 'Submitted/Review In Progress' status.`,
+        `Return any disclosure in 'Review in progress' status.`,
         `Describe the reason for returning  in the field provided.`,
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
+    isOpenRiskSlider = false;
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -338,6 +339,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.disclosureDetailsForSFI.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
         this.setAdminGroupOptions();
         this.setAssignAdminModalDetails();
+    }
+
+    changeDataStoreRisk(event) {
+        this.coiData.coiDisclosure.riskCategoryCode = event.riskCategoryCode;
+        this.coiData.coiDisclosure.coiRiskCategory = event.riskCategory;
+        this.dataStore.setStoreData(this.coiData);
     }
 
     private setAssignAdminModalDetails(): void {
@@ -573,6 +580,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.withdrawDescription = '';
     }
 
+    /**
+     * 2 - Submitted
+     * 3 - Review In Progress
+     * To be done - Admin group id check needs to be added.
+     */
+    checkForModifyRisk() {
+        return ['2', '3'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) && 
+        (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personId'));
+    }
+
     withdrawDisclosure() {
         this.withdrawError.clear();
         if (this.descriptionChangedOrEmpty()) {
@@ -637,7 +654,14 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.primaryBtnName = actionBtnName;
         this.descriptionErrorMsg = descriptionErrorMsg;
         this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Return';
+        this.setPersonProjectDetails();
         document.getElementById('disclosure-confirmation-modal-trigger-btn').click();
+    }
+
+    private setPersonProjectDetails(): void {
+        this.personProjectDetails.personFullName = this.coiData?.coiDisclosure?.person?.fullName;
+        this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
+        this.personProjectDetails.unitDetails = this.coiData?.coiDisclosure?.person.unit?.unitDetail;
     }
 
     performDisclosureAction(): void {
@@ -646,6 +670,27 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 return this.returnDisclosure();
             case 'Withdraw':
                 return this.withdrawDisclosure();
+            default:
+                return;
+        }
+    }
+
+    openRiskSlider() {
+        this.isOpenRiskSlider = true;
+    }
+
+    closeSlider(event) {
+        this.isOpenRiskSlider = false;
+    }
+
+    getWarningClass(typeCode) {
+        switch (typeCode) {
+            case '1':
+                return 'invalid';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
             default:
                 return;
         }

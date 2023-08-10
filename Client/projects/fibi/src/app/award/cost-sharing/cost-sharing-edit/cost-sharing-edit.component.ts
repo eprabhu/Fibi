@@ -9,7 +9,8 @@ import { setFocusToElement, validatePercentage, inputRestrictionForAmountField }
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
 import { scrollIntoView } from '../../../common/utilities/custom-utilities';
-import { HTTP_SUCCESS_STATUS, AWARD_LABEL } from '../../../app-constants';
+import { HTTP_SUCCESS_STATUS, AWARD_LABEL, HTTP_ERROR_STATUS } from '../../../app-constants';
+declare var $: any;
 
 @Component({
   selector: 'app-cost-sharing-edit',
@@ -40,7 +41,7 @@ export class CostSharingEditComponent implements OnInit, OnChanges, OnDestroy {
   @Input() map: any = {};
   @Input() result: any = {};
   costShareData: any = [];
-  isCostShare = true;
+  isCostShareEdit = true;
   @Input() costShareResult: any = {};
   removeCostShareId: string;
   currency: any;
@@ -55,7 +56,7 @@ export class CostSharingEditComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private _costShareService: CostSharingService,
     public _commonService: CommonService,
-    private _commonData: CommonDataService,
+    public _commonData: CommonDataService,
   ) { }
 
   ngOnInit() {
@@ -131,7 +132,7 @@ export class CostSharingEditComponent implements OnInit, OnChanges, OnDestroy {
 
   addCostShare() {
     this.checkMandatoryFilled();
-    if (this.map.size < 1 && this.isPercentageValueErrorMsg == null && !this.isSaving) {
+    if (this.map.size < 1 && this.isPercentageValueErrorMsg == null && !this.isSaving && this._commonData.isAwardDataChange) {
       this.isSaving = true;
       this.setCostShareObject();
       this.$subscriptions.push(this._costShareService.addCostShare({
@@ -148,13 +149,25 @@ export class CostSharingEditComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.costShareSum();
         this.costshare = {};
-        this.isCostShare = true;
+        this.isCostShareEdit = true;
         this.costshare.costShareTypeCode = '';
         this.selectedResult.emit(true);
         this.setupAwardStoreData(this.costShareData);
         this._commonData.isAwardDataChange = false;
         this.isSaving = false;
-      }, err => { this.isSaving = false; }));
+        $('#add-subcontract-modal').modal('hide');
+      }, err => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, (this.isCostShareEdit ? 'Adding ' : 'Updating ') + 'Cost Share failed. Please try again.');
+        this.isSaving = false;
+      }));
+    } else {
+      if (!this.isCostShareEdit && this.map.size < 1 && !this.isSaving && this.isPercentageValueErrorMsg == null ) {
+      this.isSaving = true;
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Cost Share updated successfully.');
+      this.clearCostShareData();
+      $('#add-subcontract-modal').modal('hide');
+      this.isSaving = false;
+      }
     }
   }
   validYear() {
@@ -180,6 +193,7 @@ export class CostSharingEditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   editCostShare(index: any) {
+    this.isCostShareEdit = false;
     this.map.clear();
     this.index = index;
     scrollIntoView('award-type');
@@ -212,6 +226,9 @@ export class CostSharingEditComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedResult.emit(true);
         this.setupAwardStoreData(this.costShareData);
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Cost Share deleted successfully.');
+      },
+      err => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Cost Share failed. Please try again.');
       }));
     }
   }
@@ -229,5 +246,12 @@ export class CostSharingEditComponent implements OnInit, OnChanges, OnDestroy {
   updateAwardStoreData() {
     this.result = JSON.parse(JSON.stringify(this.result));
     this._commonData.setAwardData(this.result);
+  }
+
+  clearCostShareData() {
+    this.costshare = {};
+     this.isCostShareEdit  = true;
+     this.costshare.costShareTypeCode = '';
+     this.map.clear();
   }
 }

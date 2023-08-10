@@ -548,12 +548,13 @@ export class ClaimListComponent implements OnInit, OnDestroy {
         });
     }
 
-    deleteClaimTempObject(claimId, index, awardId, unitNumber) {
+    deleteClaimTempObject(claimId, index, awardId, unitNumber, claimStatusCode) {
         $('#deleteClaimModal').modal('show');
         this.removeObject.claimId = claimId;
         this.removeObject.index = index;
         this.removeObject.awardId = awardId;
         this.removeObject.unitNumber = unitNumber;
+        this.removeObject.claimStatusCode = claimStatusCode;
     }
 
     deleteClaim() {
@@ -567,7 +568,16 @@ export class ClaimListComponent implements OnInit, OnDestroy {
                         this._commonService.showToast(HTTP_ERROR_STATUS, `You don't have the right to delete this claim.`);
                     }
                     this.isSaving = false;
+                }, err => {
+                    if (err && err.status === 405) {
+                        $('#invalidActionModalInClaims').modal('show');
+                    }
+                    this.isSaving = false;
                 }));
         }
     }
+
+    reload() {
+        window.location.reload();
+      }
 }

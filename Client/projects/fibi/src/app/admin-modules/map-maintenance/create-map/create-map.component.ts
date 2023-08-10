@@ -498,13 +498,12 @@ export class CreateMapComponent implements OnInit, OnDestroy {
         this.mapDetailsObject.PRIMARY_APPROVER_FLAG = approver.PRIMARY_APPROVER_FLAG;
         this.mapDetailsObject.IS_ROLE = approver.IS_ROLE;
         this.mapDetailsObject.ROLE_TYPE_CODE = approver.ROLE_TYPE_CODE;
-        this.mapDetailsObject.STOP_NAME = stopData.STOP_NAME;              
-        if (approver.DESCRIPTION.length > 60) {
-          this.validationText = 'The maximum description length is limited to 60 characters';
-          document.getElementById('validatebutton').click();
-        } else {
-          this.mapDetailsObject.DESCRIPTION = approver.DESCRIPTION;
+        this.mapDetailsObject.STOP_NAME = stopData.STOP_NAME;
+        if (approver.DESCRIPTION && approver.DESCRIPTION.length > 60) {
+            this.validationText = 'The maximum description length is limited to 60 characters';
+            document.getElementById('validatebutton').click();
         }
+        this.mapDetailsObject.DESCRIPTION = approver.DESCRIPTION;
         this.mapDetailsObject.UPDATE_USER = this.updatedUser;
         this.mapDetailsObject.MAP_DETAIL_ID = approver.MAP_DETAIL_ID;
         this.mapDetailsObject.MAP_ID = approver.MAP_ID;

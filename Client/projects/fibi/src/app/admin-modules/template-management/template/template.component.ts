@@ -176,7 +176,7 @@ export class TemplateComponent implements OnInit {
     }).subscribe((data: any) => {
       this.templateList.agreementTypeTemplates = data.agreementTypeTemplates;
       this.getTemplateLatestVersion();
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Template deleted successfully');
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Template deleted successfully.');
     }));
   }
 

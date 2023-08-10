@@ -26,8 +26,8 @@
                         <table class="table tableSkin" *ngIf="serviceRequestResult?.length">
                             <caption class="sr-only">submitted & inprogress proposals</caption>
                             <thead>
-                                <th scope="col" width="8%" (click)="isDesc =!isDesc;sortBy(0)">
-                                    {{researchSummaryIndex=='PENDING_PROPOSALS_OF_SPONSORS'?"Proposal":"Award"}} #
+                                <th scope="col" width="18%" (click)="isDesc =!isDesc;sortBy(0)">
+                                    {{researchSummaryIndex=='PENDING_PROPOSALS_OF_SPONSORS'?"Institute Proposal":"Award"}} #
                                     <i [ngClass]="((column == 0) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-sort-numeric-desc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"
                                         aria-hidden="true"></i>
                                 </th>
@@ -52,7 +52,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let proposalDetails of serviceRequestResult | orderByIndex: {property: column, direction: direction};">
-                                    <td>{{proposalDetails[0]}}</td>
+                                    <td>{{proposalDetails[5]}}</td>
                                     <td class="text-break">{{proposalDetails[1]}}</td>
                                     <td>{{proposalDetails[2]}}</td>
                                     <td>{{proposalDetails[3]}}</td>

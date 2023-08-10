@@ -9,6 +9,7 @@ import { subscriptionHandler } from '../../../common/utilities/subscription-hand
 import { scrollIntoView } from '../../../common/utilities/custom-utilities';
 import { CommonService } from '../../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
+declare var $: any;
 
 @Component({
   selector: 'app-contacts',
@@ -133,6 +134,7 @@ export class ContactsComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedContactMember = rolodexObject.rolodex;
     }
     this.contactDataFlag.isAddNonEmployeeContactModal = rolodexObject.nonEmployeeFlag;
+    $('#add-contact-modal').modal('show');
   }
 
   /**saveOrUpdateAwardContact - maintain contact details such us add and edit contact
@@ -162,6 +164,7 @@ export class ContactsComponent implements OnInit, OnDestroy, OnChanges {
         this.resetContactFields();
         this.updateAwardStoreData();
         this.isSaving = false;
+        $('#add-contact-modal').modal('hide');
       }, err => {
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Contact failed. Please try again.');
         this.isSaving = false;
@@ -357,5 +360,9 @@ export class ContactsComponent implements OnInit, OnDestroy, OnChanges {
 
   setShowElasticResults(elasticResultShow) {
     this.contactDataFlag.isShowElasticResults = elasticResultShow.isShowElasticResults;
+  }
+
+  switchToNonEmployeeModal(){
+    $('#add-contact-modal').modal('hide');
   }
 }

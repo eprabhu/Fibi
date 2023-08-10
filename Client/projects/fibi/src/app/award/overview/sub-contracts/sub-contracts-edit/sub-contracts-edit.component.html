@@ -3,52 +3,29 @@
         <h4 class="card-title">Sub Contracts
             <button id="subContractsExpandBtn" class="updown-arrow"
                 (click)="isShowCollapse = !isShowCollapse">
-                <i [ngClass]="isShowCollapse?'fa fa-angle-double-down':'fa fa-angle-double-up'"
+                <i [ngClass]="isShowCollapse?'fa fa-angle-double-up':'fa fa-angle-double-down'"
                     class="fa-large" aria-hidden="true"></i>
             </button>
+            <span *ngIf="(isSubContract||index != null)">
+                <button class="btn btn-sm btn-tertiary ml-3 float-right mr-5" data-toggle="modal" data-target="#add-subcontract-modal"> Add Sub Contract</button>
+              </span>
         </h4>
     </div>
-    <div class="card-content" *ngIf="!isShowCollapse">
+    <div class="card-content" *ngIf="isShowCollapse">
         <div class="card-body">
-            <div class="form-row mb-3">
-                <div class="col-md-8 col-sm-7 col-12">
-                    <label><span class="mandatory">*</span> Organization Name</label>
-                    <div>
-                        <div class="searchBox">
-                            <app-endpoint-search [httpOptions]="organizationSearchOptions" [clearField]="clearField"
-                                [placeHolder]="'Type here for Organization Name'"
-                                [isError]="(map.get('organization')) ? true : false"
-                                (onSelect)="organizationChangeFunction($event)"
-                                [addSearchText]="_commonService.canAddOrganization" (onNewValueSelect) = newOrganizationSelect($event)>
-                            </app-endpoint-search>
-                        </div>
+            <div class="noDataOnChart noDataExists p-2" *ngIf="(subContractData.length == 0)">
+                <div class="no-data-container">
+                  <span class="no-data-icon-outer">
+                    <div class="no-data-icon">
+                      <i aria-hidden="true" class="fa fa-file-o"></i>
+                      <i aria-hidden="true" class="fa fa-times-circle-o"></i>
                     </div>
+                  </span>
+                  <h4>There is no information in this section.</h4>
                 </div>
-                <div class="col-md-4 col-sm-5 col-12">
-                    <label class="d-inline-block"><span class="mandatory">*</span>Amount({{currency}})</label>
-                    <span>
-                        <input type="text" id="award-subcontract-amount" step="any"
-                            [ngClass]="(map.get('amount')) ? 'is-invalid d-block' : ''" class="form-control"
-                            [(ngModel)]="subcontracts.amount"  appCurrencyFormat 
-                            (ngModelChange)="inputDigitRestriction(subcontracts.amount, 'subContractAmount');subContractValidation();"
-                            [initialValue]="subcontracts.amount" [ngClass]="(map.get('subContractAmount')) ? 'is-invalid d-block' : ''">
-                        <div *ngIf="(map.get('amount'))" class="invalid-feedback d-block">Please type an amount.</div>
-                        <div *ngIf="(map.get('subContractAmount'))" class="invalid-feedback d-block"> {{map.get('subContractAmount')}}</div>
-                    </span>
-                </div>
-                <div class="col-12 text-center text-md-right m-0">
-                    <button *ngIf="isSubContract" id="award-subcontranct-add-btn" class="btn btn-primary-sub btn-xs"
-                        (click)="addSubcontract()">Add
-                        Sub Contract</button>
-                    <button *ngIf="!isSubContract" id="award-subcontranct-edit-cancel" class="btn btn-secondary btn-xs"
-                        (click)="clearSubcontract();this.subcontracts = {};isSubContract = true;organizationName = null;">Cancel</button>
-                    <button *ngIf="!isSubContract" id="award-subcontranct-save-btn" class="btn btn-primary-sub btn-xs"
-                        (click)="addSubcontract()">Save
-                        Sub Contract</button>
-                </div>
-            </div>
+              </div>
             <table class="table tableSkin grid2"
-                *ngIf="(!isShowCollapse) && (subContractData?.length > 0)">
+                *ngIf="(isShowCollapse) && (subContractData?.length > 0)">
                 <caption class="sr-only">SubContract</caption>
                 <thead class="thead-light">
                     <th scope="col" colspan="2">Organization Name</th>
@@ -66,7 +43,7 @@
                                     <a href="#" id="award-project-team-delete-btn" data-toggle="modal" tabindex="0">
                                         <i class="fa fa-pencil hand-cursor hoverColor" aria-hidden="true"
                                             title="Click here to edit {{subcontract?.organization?.organizationName}}"
-                                            (click)="editSubContract(i);isSubContract = false;"></i>
+                                            (click)="editSubContract(i);isSubContract = false;" data-toggle="modal" data-target="#add-subcontract-modal"></i>
                                     </a>
                                 </li>
                                 <li *ngIf="isSubContract || (!isSubContract && index !== i)">
@@ -118,3 +95,69 @@
         </div>
     </div>
 </div>
+
+
+<!-- Add sub contract modal -->
+<div class="modal fade mySkinDialog" id="add-subcontract-modal" role="dialog" aria-labelledby="skippedSchedulesTitle"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{isSubContract ? 'Add' : 'Update'}} Sub Contract</h5>
+          <button type="button" class="close" (click)="clearSubcontract();" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body py-1 px-3">
+          <app-award-overview-modal-card></app-award-overview-modal-card>
+          <div class="w-100">
+            <div class="form-row">
+              <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-3">
+                <label><span class="mandatory">*</span> Organization Name</label>
+                <div>
+                    <div class="searchBox">
+                        <app-endpoint-search [httpOptions]="organizationSearchOptions" [clearField]="clearField"
+                            [placeHolder]="'Type here for Organization Name'"
+                            [isError]="(map.get('organization')) ? true : false"
+                            (onSelect)="organizationChangeFunction($event)"
+                            [addSearchText]="_commonService.canAddOrganization" (onNewValueSelect) = newOrganizationSelect($event)>
+                        </app-endpoint-search>
+                    </div>
+                </div>
+
+              </div>
+              <div class="col-lg col-md-3 col-sm col-9 mt-3">
+                <label class="d-inline-block"><span class="mandatory">*</span>Amount({{currency}})</label>
+                <span>
+                    <input type="text" id="award-subcontract-amount" step="any"
+                        [ngClass]="(map.get('amount')) ? 'is-invalid d-block' : ''" class="form-control"
+                        [(ngModel)]="subcontracts.amount"  appCurrencyFormat 
+                        (ngModelChange)="inputDigitRestriction(subcontracts.amount, 'subContractAmount');subContractValidation();"
+                        [initialValue]="subcontracts.amount" [ngClass]="(map.get('subContractAmount')) ? 'is-invalid d-block' : ''">
+                    <div *ngIf="(map.get('amount'))" class="invalid-feedback d-block">Please type an amount.</div>
+                    <div *ngIf="(map.get('subContractAmount'))" class="invalid-feedback d-block"> {{map.get('subContractAmount')}}</div>
+                </span>
+              </div>
+            </div>
+            <div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="text-center text-md-right">
+            <button id="award-key-personnel-cancel-btn" data-dismiss="modal" class="btn btn btn-secondary btn-xs mx-2"
+              (click)="clearSubcontract(); isSubContract = true;">Cancel</button>
+            <button *ngIf="isSubContract" id="award-key-personnel-add-btn" class="btn btn-primary-sub btn-xs"
+              (click)="addSubcontract()">
+              Add Sub Contract
+            </button>
+            <button *ngIf="!isSubContract" id="award-key-personnel-update-btn"
+              class="d-inline-block btn btn-primary-sub btn-xs px-2" (click)="addSubcontract()">
+              Update Sub Contract
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

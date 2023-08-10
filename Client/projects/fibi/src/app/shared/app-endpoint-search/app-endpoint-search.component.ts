@@ -35,14 +35,15 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
 	timer: any;
 	results = [];
 	counter = -1;
-	isActive = false;
 	$subscriptions: Subscription[] = [];
 	newSearchText = '';
+
 	constructor(private _appEndpointSearchService: AppEndpointSearchService, private _ref: ChangeDetectorRef) { }
 
 	ngOnInit() {
 		this.searchText = this.httpOptions && this.httpOptions.defaultValue || '';
 	}
+
 	ngOnChanges() {
 		if (!this.isError) {
 			this.searchText = this.httpOptions && this.httpOptions.defaultValue || '';
@@ -72,7 +73,6 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
 					this._appEndpointSearchService.endpointSearch(this.httpOptions.path, temporaryText, this.httpOptions.params)
 						.subscribe((resultArray: any) => {
 							this.results = [];
-							this.isActive = true;
 							this._ref.markForCheck();
 							this.isResultSelected = this.httpOptions.defaultValue === this.searchText ? true : false;
 							this.counter = -1;
@@ -105,7 +105,6 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
 
 	/**
 	 * @param  {} value emit results on key enter mouse click to parent components
-	 * @param label formatted string
 	 */
 	emitSelectedObject(value: any): void {
 		this.counter = -1;
@@ -118,110 +117,31 @@ export class AppEndpointSearchComponent implements OnChanges, OnInit, OnDestroy 
 		}
 		this.httpOptions.defaultValue = this.searchText;
 		this.results = [];
-		this.isActive = false;
 	}
 
 	backSpaceEvent(): void {
 		this.onSelect.emit(null);
 		this.getEndpointSearchResult();
 	}
-	/**
-	 * @param  {} event used to update counter value for keyboard event listener
-	 */
-	upArrowEvent(event: Event): void {
-		event.preventDefault();
-		this.removeHighlight();
-		this.counter >= 0 ? this.counter-- : this.counter = document.getElementsByClassName('search-result-item').length - 1;
-		this.addHighlight();
-		this.updateSearchField();
-	}
-	/**
-	 * @param  {} event  used to update counter value for keyboard event listener and adds a highlight class
-	 */
-	downArrowEvent(event: Event): void {
-		event.preventDefault();
-		this.removeHighlight();
-		this.counter < document.getElementsByClassName('search-result-item').length - 1 ? this.counter++ : this.counter = -1;
-		this.addHighlight();
-		this.updateSearchField();
-	}
-	/**
-	 * @param  {} event
-	 *  handles the click outside the result box updates counter and clear results
-	 */
+	
 	hideSearchResults(): void {
-		this.isActive = false;
 		this.results = [];
 		this.counter = -1;
 	}
-	/** listens for enter key event . triggers the click on selected li
-	 */
-	enterKeyEvent(): void {
-		if (this.counter > -1) {
-			this.isResultSelected = true;
-			(document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement).click();
-			(document.activeElement as HTMLInputElement).blur();
-			this.hideSearchResults();
-		}
-	}
-	/**
-	 * removes the highlight from the previous li node if true
-	 * updates the temp search value with user typed value for future reference
-	 */
-	removeHighlight(): void {
-		const el = (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement);
-		if (el) {
-			el.classList.remove('highlight');
-		} else {
-			this.tempSearchText = this.searchText;
-		}
-	}
-	/**
-	 * updates the li with 'highlight' class
-	 */
-	addHighlight(): void {
-		const el = (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement);
-		if (el) {
-			el.scrollIntoView({ block: 'nearest' });
-			el.classList.add('highlight');
-		}
-	}
-	/**
-	 * updates the search field with temp value once user reaches the bottom or top of the list
-	 */
-	updateSearchField(): void {
-		if (document.getElementById('add-field') &&
-			(document.getElementById('add-field') as HTMLInputElement).classList.contains('highlight')) {
-			this.searchText = this.newSearchText;
-		} else {
-			this.counter === -1 || this.counter === document.getElementsByClassName('search-result-item').length ?
-				this.searchText = this.tempSearchText :
-				this.searchText = this.results[this.addSearchText ? this.counter - 1 : this.counter].value[this.httpOptions.contextField];
-		}
-	}
 
-	getEndPointSearchValueOnFocusOut(event): void {
-		this.searchValue.emit(event);
+	getEndPointSearchValueOnFocusOut(): void {
+		this.searchValue.emit(this.searchText === 'ADD_NEW_SEARCH_TEXT' ? this.newSearchText : this.searchText);
 		this.searchText = this.isResultSelected ? this.searchText : '';
-		this.isActive = false;
 	}
 
-	emitSearchText(): void {
-		this.onNewValueSelect.emit({ 'searchString': this.searchText });
-		this.isActive = false;
+	emitSearchText(searchText): void {
+		this.onNewValueSelect.emit({ 'searchString': searchText });
 	}
 
-	// checkDuplication(searchText) {
-	//   const searchResult = this.results.find((list) => list.label === searchText);
-	//   if (searchResult) {
-	//     (this.confirmProceedBtn.nativeElement as HTMLInputElement).click();
-	//   } else {
-	//     this.emitSearchText();
-	//   }
-	// }
-
-	// setFocusOnSearchField() {
-	//   (this.searchField.nativeElement as HTMLInputElement).focus();
-	// }
+	controlSearchEmit(event) {
+		this.isResultSelected = true;
+		event.option.value === 'ADD_NEW_SEARCH_TEXT' ? this.emitSearchText(this.newSearchText) : this.emitSelectedObject(event.option.value ? event.option.value.value : null);
+		this.newSearchText = '';
+	}
 }
 

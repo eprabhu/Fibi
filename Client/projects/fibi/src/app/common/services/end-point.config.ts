@@ -1,23 +1,30 @@
-import { ENDPOINT_SPONSOR_OUTPUT_FORMAT, LEAD_UNIT_OUTPUT_FORMAT } from '../../app-constants';
+import { DEFAULT_ENDPOINT_FETCH_LIMIT, ENDPOINT_SPONSOR_OUTPUT_FORMAT, LEAD_UNIT_OUTPUT_FORMAT } from '../../app-constants';
 
 const endPointOptions = {
     contextField: '',
     formatString: '',
     path: '',
     defaultValue: '',
-    params: '',
+    params: {},
     filterFields: ''
 };
 
-
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
 export function getEndPointOptionsForSponsor(
-    { contextField = ENDPOINT_SPONSOR_OUTPUT_FORMAT, formatString = ENDPOINT_SPONSOR_OUTPUT_FORMAT, defaultValue = '', params = null } = {}
+    { contextField = ENDPOINT_SPONSOR_OUTPUT_FORMAT, formatString = ENDPOINT_SPONSOR_OUTPUT_FORMAT, defaultValue = '', params = {}} = {}
 ) {
     endPointOptions.contextField = contextField;
     endPointOptions.formatString = formatString;
     endPointOptions.path = 'findSponsors';
     endPointOptions.defaultValue = defaultValue;
-    endPointOptions.params = params;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
@@ -32,21 +39,30 @@ export function getEndPointOptionsForSponsorHierarchy(defaultValue = '', params 
 
 export function getEndPointOptionsForSponsorGroup(
     { contextField = ENDPOINT_SPONSOR_OUTPUT_FORMAT, formatString = ENDPOINT_SPONSOR_OUTPUT_FORMAT,
-        defaultValue = '', rootGroupId = '' } = {}
+        defaultValue = '', rootGroupId = '', params = {}} = {}
 ) {
     endPointOptions.contextField = contextField;
     endPointOptions.formatString = formatString;
-    endPointOptions.path = `sponsorHierarchy/${rootGroupId}/sponsors/`;
+    endPointOptions.path = `sponsorHierarchy/sponsors/`;
     endPointOptions.defaultValue = defaultValue;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForSponsorByType(sponsorName, sponsorTypeCode) {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForSponsorByType(sponsorName, sponsorTypeCode, params = {}) {
     endPointOptions.contextField = ENDPOINT_SPONSOR_OUTPUT_FORMAT;
     endPointOptions.formatString = ENDPOINT_SPONSOR_OUTPUT_FORMAT;
     endPointOptions.path = 'fetchSponsorsBySponsorType';
     endPointOptions.defaultValue = sponsorName;
-    endPointOptions.params = sponsorTypeCode ? sponsorTypeCode : null;
+    endPointOptions.params = getParams({...sponsorTypeCode, ...params});
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
@@ -62,12 +78,20 @@ export function getEndPointOptionsForLeadUnit(defaultValue = '', baseUrl = '', f
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForSchoolUnit(defaultValue = '') {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForSchoolUnit( params = {}, defaultValue = '') {
     endPointOptions.contextField = LEAD_UNIT_OUTPUT_FORMAT;
     endPointOptions.formatString = LEAD_UNIT_OUTPUT_FORMAT;
     endPointOptions.path = 'getSchoolUnitDetails';
     endPointOptions.defaultValue = defaultValue;
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     endPointOptions.filterFields = 'unitName, unitNumber';
     return JSON.parse(JSON.stringify(endPointOptions));
 }
@@ -81,45 +105,71 @@ export function getEndPointOptionsForGrantCall() {
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForOrganization() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForOrganization(params = {}) {
     endPointOptions.contextField = 'organizationName';
     endPointOptions.formatString = 'organizationName';
     endPointOptions.path = 'findOrganizations';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForCountry(baseUrl = '') {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForCountry(params = {}) {
     endPointOptions.contextField = 'countryName';
     endPointOptions.formatString = 'countryName';
-    endPointOptions.path = baseUrl + '/' + 'findCountry';
+    endPointOptions.path = 'findCountry';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
-export function getEndPointOptionsForCongressionalDistrict() {
+
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForCongressionalDistrict(params = {}) {
     endPointOptions.contextField = 'description';
     endPointOptions.formatString = 'description';
     endPointOptions.path = 'findCongressionalDistricts';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
-export function getEndPointOptionsForEntity(baseUrl= '') {
-    endPointOptions.contextField = 'entityName';
-    endPointOptions.formatString = 'entityName';
-    endPointOptions.path = baseUrl + '/' + 'searchEntity';
-    endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
-    return JSON.parse(JSON.stringify(endPointOptions));
-}
-export function getEndPointOptionsForRolodexSearch() {
+
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForRolodexSearch(params = {}) {
     endPointOptions.contextField = 'fullName';
     endPointOptions.formatString = 'fullName';
     endPointOptions.path = 'findRolodex';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 export function getEndPointOptionsForDepartment() {
@@ -131,12 +181,21 @@ export function getEndPointOptionsForDepartment() {
     endPointOptions.filterFields = 'unitName, unitNumber';
     return JSON.parse(JSON.stringify(endPointOptions));
 }
-export function getEndPointOptionsForCostElements(path, params) {
+
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForCostElements(path, params = {}) {
     endPointOptions.contextField = 'description';
     endPointOptions.formatString = 'costElement - description';
     endPointOptions.path = path;
-    endPointOptions.defaultValue = '';
-    endPointOptions.params = params;
+    endPointOptions.defaultValue = '';   
+    endPointOptions.params = getParams(params);       
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
@@ -149,114 +208,192 @@ export function getEndPointOptionsForManpower(contextField, formatString, path, 
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForProfitCentre() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForProfitCentre(params = {}) {
     endPointOptions.contextField = 'profitCenterCode';
     endPointOptions.formatString = 'profitCenterDetails';
     endPointOptions.path = 'findProfitCenter';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);   
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForFundCentre() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForFundCentre(params = {}) {
     endPointOptions.contextField = 'fundCenterCode';
     endPointOptions.formatString = 'fundCenterCode - description';
     endPointOptions.path =  'findFundCenter';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);   
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForCostCentre() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForCostCentre(params = {}) {
     endPointOptions.contextField = 'costCenterCode';
     endPointOptions.formatString = 'costCenterDetails';
     endPointOptions.path = 'findCostCenter';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);   
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForGrandCode() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForGrandCode(params = {}) {
     endPointOptions.contextField = 'grantCode';
     endPointOptions.formatString = 'grantDetails';
     endPointOptions.path = 'findGrantCode';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForKeyWords() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForKeyWords(params = {}) {
     endPointOptions.contextField = 'description';
     endPointOptions.formatString = 'description';
     endPointOptions.path = 'findKeyWords';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForAffiliationKeyWords() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForAffiliationKeyWords(params = {}) {
     endPointOptions.contextField = 'description';
     endPointOptions.formatString = 'description';
     endPointOptions.path = 'findAffiliationInstitution';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForExtReviewerKeyWords() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForExtReviewerKeyWords(params = {}) {
     endPointOptions.contextField = 'description';
     endPointOptions.formatString = 'description';
     endPointOptions.path = 'findSpecialismKeywords';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForAwardNumber(baseUrl = '') {
-    endPointOptions.contextField = 'title';
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForAwardNumber(params = {}) {
+    endPointOptions.contextField = 'awardNumber';
     endPointOptions.formatString =
     ' awardNumber | accountNumber | title | sponsorName | sponsorAwardNumber | unitName | principalInvestigator ';
-    endPointOptions.path = baseUrl + '/' + 'findAward';
+    endPointOptions.path =  'findAward';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);  
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForCoiAwardNumber (baseUrl = '') {
-    endPointOptions.contextField = 'title';
-    endPointOptions.formatString =
-        'moduleItemKey | accountNumber | title | sponsorName | sponsorAwardNumber | unitName | PrincipalInvestigator';
-    endPointOptions.path = baseUrl + '/' + 'loadAwardsForDisclosure';
-    endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
-    return JSON.parse(JSON.stringify(endPointOptions));
-}
-
-export function getEndPointOptionsForScopus() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForScopus(params = {}) {
     endPointOptions.contextField =  'title';
     endPointOptions.formatString = 'scopusId | creator | title';
     endPointOptions.path =  'findScopus';
-    endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.defaultValue = '';    
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForArea(param = null) {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForArea(params = {}) {
     endPointOptions.contextField = 'description';
     endPointOptions.formatString = 'description';
     endPointOptions.path = 'findResearchTypeArea';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = param;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForSubArea(param = null) {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForSubArea(params = {}) {
     endPointOptions.contextField = 'description';
     endPointOptions.formatString = 'description';
     endPointOptions.path = 'findResearchTypeSubArea';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = param;
-  return JSON.parse(JSON.stringify(endPointOptions));
+    endPointOptions.params = getParams(params);
+    return JSON.parse(JSON.stringify(endPointOptions));
 }
 
 export function getEndPointOptionsForRole() {
@@ -268,12 +405,20 @@ export function getEndPointOptionsForRole() {
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
-export function getEndPointOptionsForTraining() {
+/**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ */
+export function getEndPointOptionsForTraining( params = {}) {
     endPointOptions.contextField = 'description';
     endPointOptions.formatString = 'description';
     endPointOptions.path =  'loadTrainingList';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    endPointOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
@@ -313,6 +458,18 @@ export function getEndPointOptionsForClaimTemplate() {
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
+/**this function will return params after
+ * setting fetchLimit, if no fetchLimit is given 
+ * in params, then DEFAULT_ENDPOINT_FETCH_LIMIT 
+ * will set, otherwise passed value will be used.
+ **/
+export function getParams(params) {
+    if (params && !params.hasOwnProperty('fetchLimit')) {
+        params['fetchLimit'] = DEFAULT_ENDPOINT_FETCH_LIMIT;
+    }
+    return params;
+}
+
 export function getEndPointOptionsForPosititonId() {
     endPointOptions.contextField = 'positionId';
     endPointOptions.formatString = 'positionId';
@@ -322,10 +479,29 @@ export function getEndPointOptionsForPosititonId() {
     return JSON.parse(JSON.stringify(endPointOptions));
 }
 
+export function getEndPointOptionsForEntity(baseUrl= '') {
+    endPointOptions.contextField = 'entityName';
+    endPointOptions.formatString = 'entityName';
+    endPointOptions.path = baseUrl + '/' + 'searchEntity';
+    endPointOptions.defaultValue = '';
+    endPointOptions.params = null;
+    return JSON.parse(JSON.stringify(endPointOptions));
+}
+
 export function getEndPointOptionsForProposalDisclosure(baseUrl = '') {
     endPointOptions.contextField = 'title';
     endPointOptions.formatString = '#moduleItemId - title';
     endPointOptions.path = baseUrl + '/' + 'loadProposalsForDisclosure';
+    endPointOptions.defaultValue = '';
+    endPointOptions.params = null;
+    return JSON.parse(JSON.stringify(endPointOptions));
+}
+
+export function getEndPointOptionsForCoiAwardNumber (baseUrl = '') {
+    endPointOptions.contextField = 'title';
+    endPointOptions.formatString =
+        'moduleItemKey | accountNumber | title | sponsorName | sponsorAwardNumber | unitName | PrincipalInvestigator';
+    endPointOptions.path = baseUrl + '/' + 'loadAwardsForDisclosure';
     endPointOptions.defaultValue = '';
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));

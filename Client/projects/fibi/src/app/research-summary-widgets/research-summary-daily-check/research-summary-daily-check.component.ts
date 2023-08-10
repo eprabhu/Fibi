@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { compareDates, parseDateWithoutTimestamp } from './../../common/utilities/date-utilities';
+import { compareDates, isValidDateFormat, parseDateWithoutTimestamp } from './../../common/utilities/date-utilities';
 import { DEFAULT_DATE_FORMAT } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { ResearchSummaryConfigService } from '../../common/services/research-summary-config.service';
@@ -19,7 +19,7 @@ import { setFocusToElement } from '../../common/utilities/custom-utilities'
   styleUrls: ['./research-summary-daily-check.component.css'],
   animations: [fadeDown]
 })
-export class ResearchSummaryDailyCheckComponent  implements OnInit, OnDestroy {
+export class ResearchSummaryDailyCheckComponent implements OnInit, OnDestroy {
   $subscriptions: Subscription[] = [];
   summaryData: any = {};
   isShowLoader = false;
@@ -35,6 +35,9 @@ export class ResearchSummaryDailyCheckComponent  implements OnInit, OnDestroy {
   endDate: any;
   unitName = '';
   descentFlag = null;
+  DEFAULT_DATE_FORMAT = DEFAULT_DATE_FORMAT;
+  fromDateValidationMap: boolean;
+  toDateValidationMap: boolean;
   setFocusToElement = setFocusToElement;
 
   constructor(public _commonService: CommonService, private _router: Router,
@@ -51,7 +54,7 @@ export class ResearchSummaryDailyCheckComponent  implements OnInit, OnDestroy {
   getSelectedUnit() {
     this.$subscriptions.push(this._researchSummaryConfigService.selectedUnit$.subscribe(data => {
       if (data) {
-        this.unitNumber =  data.unitNumber;
+        this.unitNumber = data.unitNumber;
         this.unitName = data.unitName;
         this.descentFlag = data.descentFlag;
       } else {
@@ -95,13 +98,26 @@ export class ResearchSummaryDailyCheckComponent  implements OnInit, OnDestroy {
 
   getQueryParams(summaryLabel) {
     const QUERY_PARAMS = {
-      summaryIndex: 'RESEARCH_SUMMARY_BY_DEADLINE_DATE',
-      summaryHeading: 'All Proposals By Deadline',
+      summaryIndex: '',
+      summaryHeading: '',
       fromDate: parseDateWithoutTimestamp(this.startDate),
       toDate: parseDateWithoutTimestamp(this.endDate),
       UN: this.unitNumber,
       DF: this.descentFlag
     };
+
+    switch (summaryLabel) {
+      case 'Approval In Progress Proposals': QUERY_PARAMS.summaryIndex = 'PROPOSAL_APPROVAL_IN_PROGRESS_BY_DEADLINE_DATE';
+        QUERY_PARAMS.summaryHeading = 'Approval In Progress Proposals'; break;
+      case 'In Progress Proposals': QUERY_PARAMS.summaryIndex = 'PROPOSAL_INPROGRESS_BY_DEADLINE_DATE';
+        QUERY_PARAMS.summaryHeading = 'In Progress Proposals'; break;
+      case 'Submitted Proposals': QUERY_PARAMS.summaryIndex = 'PROPOSAL_SUBMITTED_BY_DEADLINE_DATE';
+        QUERY_PARAMS.summaryHeading = 'Submitted Proposals'; break;
+      case 'Total': QUERY_PARAMS.summaryIndex = 'PROPOSAL_RESEARCH_SUMMARY_BY_DEADLINE_DATE';
+        QUERY_PARAMS.summaryHeading = 'All Proposals'; break;
+      default: QUERY_PARAMS.summaryIndex = 'RESEARCH_SUMMARY_BY_DEADLINE_DATE';
+        QUERY_PARAMS.summaryHeading = 'All Proposals By Deadline'; break;
+    }
     return QUERY_PARAMS;
   }
 
@@ -141,6 +157,31 @@ export class ResearchSummaryDailyCheckComponent  implements OnInit, OnDestroy {
 
   getSystemDate() {
     return new Date(new Date().setHours(0, 0, 0, 0));
+  }
+
+  checkForValidFormat(event, dateType) {
+    dateType === 'fromDate' ? this.fromDateValidationMap = false :
+      this.toDateValidationMap = false;
+    if (isValidDateFormat(event)) {
+      this.getResearchSummaryTable();
+    } else {
+      dateType === 'fromDate' ? this.fromDateValidationMap = true :
+        this.toDateValidationMap = true;
+    }
+  }
+
+  clearDateOnValidation(id) {
+    if (this.toDateValidationMap) {
+      this.toDate = this.getSystemDate();
+      this.toDateValidationMap = false;
+    }
+    if (this.fromDateValidationMap) {
+      this.fromDate = this.getSystemDate();
+      this.fromDateValidationMap = false;
+    }
+    setTimeout(() => {
+      document.getElementById(id).click();
+    });  
   }
 
 }

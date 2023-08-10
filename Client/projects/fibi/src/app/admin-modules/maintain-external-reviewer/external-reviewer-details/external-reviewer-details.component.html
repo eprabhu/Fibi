@@ -1,12 +1,4 @@
 <div class="card mt-3 mb-3 hide-overflow">
-    <div class="card-header main-header"
-        *ngIf="_extReviewerMaintenanceService.mode == 'create' || _extReviewerMaintenanceService.mode == 'edit'">
-        <h4 class="align-items-center card-title d-flex justify-content-between">
-            <span *ngIf="_extReviewerMaintenanceService.mode == 'create'">Create New External Reviewer</span>
-            <span *ngIf="_extReviewerMaintenanceService.mode == 'edit'">Edit External Reviewer</span>
-        </h4>
-    </div>
-
     <div class=" p-0 mt-2 mx-1 mb-3 card-body">
         <div class="row" *ngIf="extReviewer.externalReviewerId">
             <div class="col-10">
@@ -38,7 +30,7 @@
                         </div>
                         <div class="ml-3">
                             <span class="badge-title bg-transparent px-0 mr-3 fs-14-nav ng-star-inserted" *ngIf="extReviewer.academicRank">
-                                <span class="d-none d-md-inline-block header-label">Institution Rank : </span>
+                                <span class="d-none d-md-inline-block header-label">Academic Rank : </span>
                                 <span class="header-text">{{extReviewer?.academicRank?.description}}</span>
                             </span>
                             <span class="badge-title bg-transparent px-0 mr-3 fs-14-nav ng-star-inserted" *ngIf="extReviewer.affiliationInstitution">
@@ -69,8 +61,8 @@
                         <a class="subTabLink"
                             [routerLink]="['/fibi/maintain-external-reviewer/external-reviewer-details/additional-details']"
                             queryParamsHandling='merge'
-                            (click)="_extReviewerMaintenanceService.navigationUrl = '/fibi/maintain-external-reviewer/external-reviewer-details/additional-details'">Additional
-                            Details</a>
+                            (click)="_extReviewerMaintenanceService.navigationUrl = '/fibi/maintain-external-reviewer/external-reviewer-details/additional-details'">Other 
+                            Information</a>
                     </li>
                     <li routerLinkActive="active" *ngIf="extReviewer?.externalReviewerId">
                         <a class="subTabLink"

@@ -7,16 +7,17 @@ import { RoleEditComponent } from './role-edit/role-edit.component';
 import { RoleViewComponent } from './role-view/role-view.component';
 import { SharedModule } from '../../shared/shared.module';
 import { RoleService } from './role.service';
+import { PersonRoleResolveGuardService } from './person-role-guard.service';
 
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild([{ path: '', component: RoleComponent }]),
+    RouterModule.forChild([{ path: '', component: RoleComponent, canActivate: [PersonRoleResolveGuardService]}]),
     FormsModule,
     SharedModule
   ],
   declarations: [RoleComponent, RoleEditComponent, RoleViewComponent],
-  providers: [RoleService]
+  providers: [RoleService, PersonRoleResolveGuardService]
 })
 export class RoleModule { }

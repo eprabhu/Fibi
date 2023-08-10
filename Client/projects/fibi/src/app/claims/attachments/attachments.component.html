@@ -41,32 +41,32 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <th id="sort-by-attach-type" scope="col" style="width: 20%;" (click)="isDesc =!isDesc;sortBy('attachmentType.description')"
+                        <th id="sort-by-attach-type" class="hand-cursor" scope="col" style="width: 20%;" (click)="isDesc =!isDesc;sortBy('attachmentType.description')"
                         title="Click to sort by Document Type">
-                            <label>Document Type
-                                <i [ngClass]="((column == 'attachmentType.description') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
+                            <span>Document Type
+                                <i  class="hand-cursor" [ngClass]="((column == 'attachmentType.description') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
                                         aria-hidden="true"></i>
-                            </label>
+                            </span>
                         </th>
-                        <th id="sort-by-attach-desc" scope="col" style="width: 23%;" (click)="isDesc =!isDesc;sortBy('description')"
+                        <th id="sort-by-attach-desc" class="hand-cursor" scope="col" style="width: 23%;" (click)="isDesc =!isDesc;sortBy('description')"
                         title="Click to sort by Description">
-                            <label>Description
-                                <i [ngClass]="((column == 'description') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
+                            <span>Description
+                                <i class="hand-cursor" [ngClass]="((column == 'description') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
                                         aria-hidden="true"></i>
-                            </label>
+                            </span>
                         </th>
-                        <th id="sort-by-attach-name" scope="col" (click)="isDesc =!isDesc;sortBy('fileName')"
+                        <th id="sort-by-attach-name" class="hand-cursor" scope="col" (click)="isDesc =!isDesc;sortBy('fileName')"
                         title="Click to sort by File Name">
-                            <label>File Name
-                                    <i [ngClass]="((column == 'fileName') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
+                            <span>File Name
+                                    <i class="hand-cursor" [ngClass]="((column == 'fileName') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
                                         aria-hidden="true"></i>
-                            </label>
+                            </span>
                         </th>
-                        <th id="sort-by-attach-update" scope="col" (click)="isDesc =!isDesc;sortBy('updateUser')">
-                            <label>Updated by
-                                <i [ngClass]="((column == 'updateUser') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
+                        <th id="sort-by-attach-update" class="hand-cursor" scope="col" (click)="isDesc =!isDesc;sortBy('updateUser')">
+                            <span>Updated by
+                                <i class="hand-cursor" [ngClass]="((column == 'updateUser') ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-desc blrcolor')"
                                             aria-hidden="true"></i>
-                            </label>
+                            </span>
                         </th>
                         <th scope="col" style="width: 12%;">Actions</th>
                     </tr>

@@ -1,34 +1,77 @@
-import { Directive, Input, HostListener, ElementRef } from '@angular/core';
+
+import { Directive, Input, HostListener, ElementRef, OnChanges, OnInit } from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 @Directive({
-  selector: '[appAutoGrow]'
+  selector: '[appAutoGrow]',
+  providers: [NgModel],
 })
-export class AutoGrowDirective {
+export class AutoGrowDirective implements OnChanges, OnInit {
 
+  @Input() ngModel;
+  height: string;
   private el: HTMLElement;
+
   @HostListener('input', ['$event.target'])
-  onInput(textArea: HTMLTextAreaElement): void {
-    this.updateHeight();
+  onInput(): void {
+    setTimeout(() => {
+      this.updateHeight();
+    });
   }
 
   @HostListener('focus', ['$event.target'])
-  onFocus(textArea: HTMLTextAreaElement): void {
-    this.updateHeight();
+  onFocus(): void {
+    setTimeout(() => {
+      this.updateHeight();
+    });
+  }
+
+  @HostListener('paste', ['$event.target'])
+  onPaste(): void {
+    setTimeout(() => {
+      this.updateHeight();
+    });
+  }
+
+  @HostListener('cut', ['$event.target'])
+  onCut(): void {
+    setTimeout(() => {
+      this.updateHeight();
+    });
   }
 
   constructor(public element: ElementRef) {
     this.el = element.nativeElement;
+    this.el.style.overflow = 'hidden';
+    this.height = this.el.style.height ? this.el.style.height : '35px';
     setTimeout(() => {
       this.updateHeight();
     }, 500);
   }
 
+  ngOnInit(): void {
+    this.el.setAttribute('rows', '1');
+    setTimeout(() => {
+      this.updateHeight();
+    }, 500);
+  }
+
+  ngOnChanges() {
+    setTimeout(() => {
+      this.updateHeight();
+    }, 200);
+  }
+
   updateHeight(): void {
     // perform height adjustments after input changes, if height is different
-    if (this.el.style.height == this.element.nativeElement.scrollHeight + 'px') {
-      return;
-    }
     this.el.style.overflow = 'hidden';
-    this.el.style.height = this.el.scrollHeight + 'px';
+    const textAreaElement = this.element.nativeElement;
+    textAreaElement.style.height = 'auto';
+    textAreaElement.style.height = `${textAreaElement.scrollHeight}px`;
+    const height = parseInt(this.height.slice(0, -2));
+    if (!this.ngModel || textAreaElement.scrollHeight <= height) {
+      this.el.style.height = this.height;
+    }
   }
 }
+

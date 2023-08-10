@@ -8,6 +8,7 @@ export class PersonDetails {
     directoryTitle = '';
     isExternalUser = false;
     unit_number = '';
+    homeUnitName = '';
 }
 
 export class UnitDetails {

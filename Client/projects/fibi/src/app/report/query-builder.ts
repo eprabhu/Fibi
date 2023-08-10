@@ -252,9 +252,9 @@ function addCriteriaForBETWEEN(filter: any, values: any) {
     if (TO !== '' && FROM !== '') {
         BETWEEN_CRITERIA = filter.columnName + addSpace() + 'BETWEEN' + addSpace() + FROM + addSpace() + 'AND' + addSpace() + TO;
     } else if (TO === '' && FROM !== '') {
-        BETWEEN_CRITERIA = filter.columnName + addSpace() + '>' + addSpace() + FROM;
+        BETWEEN_CRITERIA = filter.columnName + addSpace() + '>=' + addSpace() + FROM;
     } else if (TO !== '' && FROM === '') {
-        BETWEEN_CRITERIA = filter.columnName + addSpace() + '<' + addSpace() + TO;
+        BETWEEN_CRITERIA = filter.columnName + addSpace() + '<=' + addSpace() + TO;
     }
     return BETWEEN_CRITERIA;
 }
@@ -286,9 +286,9 @@ function selectedCriteriaForBETWEEN(filter: any, values: any) {
     if (TO !== '' && FROM !== '') {
         BETWEEN_CRITERIA = filter.displayName + addSpace() + 'between' + addSpace() + FROM + addSpace() + '&' + addSpace() + TO;
     } else if (TO === '' && FROM !== '') {
-        BETWEEN_CRITERIA = filter.displayName + addSpace() + 'greater than' + addSpace() + FROM;
+        BETWEEN_CRITERIA = filter.displayName + addSpace() + 'greater than or equal to' + addSpace() + FROM;
     } else if (TO !== '' && FROM === '') {
-        BETWEEN_CRITERIA = filter.displayName + addSpace() + 'less than' + addSpace() + TO;
+        BETWEEN_CRITERIA = filter.displayName + addSpace() + 'less than or equal to' + addSpace() + TO;
     }
     return BETWEEN_CRITERIA;
 }

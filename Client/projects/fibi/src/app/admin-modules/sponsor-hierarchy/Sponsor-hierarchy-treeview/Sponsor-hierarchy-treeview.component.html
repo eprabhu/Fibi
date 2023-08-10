@@ -159,10 +159,11 @@
                 <div class="col-12 p-0">
                     <div class="form-row">
                         <div class="col-md-12">
-                            <div class="searchBox mb-3">
+                            <div class=" searchBox mb-3 ">
                                 <app-endpoint-search [httpOptions]="sponsorSearchOptions" [clearField]="clearField"
                                     [placeHolder]="'Type here for Sponsor with Sponsor Name, Sponsor Code, Acronym'"
-                                    (onSelect)="addNewSponsor($event)">
+                                    (onSelect)="addNewSponsor($event)"
+                                    [isError]="sponsorSearchValidationMap.has('newSponsor')? true:false">
                                 </app-endpoint-search>
                             </div>
                             <div *ngIf="sponsorSearchValidationMap.has('newSponsor')" class="invalid-feedback d-block">

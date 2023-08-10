@@ -50,7 +50,7 @@ dashboardRequestExtraData = {
 
   deleteClaimDetail(params) {
     return this._http.post(this._commonService.baseUrl + '/deleteClaimDetail', {'claimId': params.claimId,
-      'awardLeadUnitNumber': params.unitNumber, 'awardId': params.awardId});
+      'awardLeadUnitNumber': params.unitNumber, 'awardId': params.awardId, 'claimStatusCode': params.claimStatusCode});
   }
 
 }

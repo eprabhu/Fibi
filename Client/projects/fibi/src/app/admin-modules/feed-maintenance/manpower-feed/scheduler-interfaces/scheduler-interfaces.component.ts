@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ManpowerFeedService } from '../manpower-feed.service';
 import { ManpowerInterface, ManpowerLogDetailsReqObj } from '../manpower-feed.interface';
 import { Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ declare var $: any;
   styleUrls: ['./scheduler-interfaces.component.css'],
   providers: [DateParserService]
 })
-export class SchedulerInterfacesComponent implements OnInit {
+export class SchedulerInterfacesComponent implements OnInit, OnDestroy {
 
   selectedTab = '';
   schedulerDetails = [];
@@ -103,7 +103,7 @@ export class SchedulerInterfacesComponent implements OnInit {
         break;
       case '10': this.getNationalityDetails();
         break;
-      case '11': this.getCostingAllocationReconciliation();
+      case '11': this.reconcileCostAllocation();
         break;
       case '12': this.startWorkdayLongLeaveWithManualDates();
         break;
@@ -133,6 +133,7 @@ export class SchedulerInterfacesComponent implements OnInit {
     this.$subscriptions.push(
       this._manpowerFeedService.getManpowerDetails().subscribe((data: any) => {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Workday Manpower Details Successfully synced.');
+        this.getManpowerLogDetail(this.selectedTab, 'search');
       }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Workday Manpower Details failed. Please try again.'); }
       ));
   }
@@ -141,6 +142,7 @@ export class SchedulerInterfacesComponent implements OnInit {
     this.$subscriptions.push(
       this._manpowerFeedService.getNationalityDetails().subscribe((data: any) => {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Workday Nationality Details Successfully synced.');
+        this.getManpowerLogDetail(this.selectedTab, 'search');
       }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Workday Nationality Details failed. Please try again.'); }
       ));
   }
@@ -149,16 +151,21 @@ export class SchedulerInterfacesComponent implements OnInit {
     this.$subscriptions.push(
       this._manpowerFeedService.getJobProfileChanges().subscribe((data: any) => {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Workday Job Profile Successfully synced.');
+        this.getManpowerLogDetail(this.selectedTab, 'search');
       }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Workday Job Profile failed. Please try again.'); }
       ));
   }
 
 
-  private getCostingAllocationReconciliation(): void {
+  private reconcileCostAllocation(): void {
     this.$subscriptions.push(
-      this._manpowerFeedService.getCostingAllocationReconciliation().subscribe((data: any) => {
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Workday Cost Allocations Successfully synced.');
-      }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Workday Cost Allocations failed. Please try again.'); }
+      this._manpowerFeedService.reconcileCostAllocation().subscribe((data: any) => {
+        $('#ConfirmModal').modal('hide');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Workday cost allocations reconciliation completed successfully.');
+        this.getManpowerLogDetail(this.selectedTab, 'search');
+      }, err => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Workday cost allocations reconciliation failed. Please try again.');
+      }
       ));
   }
 
@@ -173,10 +180,11 @@ export class SchedulerInterfacesComponent implements OnInit {
 
       this._manpowerFeedService.costAllocationWithManualDates(reqObj).subscribe(
         (data: any) => {
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Cost allocation triggerd successfully .');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Cost allocation triggered successfully .');
           $('#ConfirmModal').modal('hide');
           this.StartDate = this.EndDate = null;
-        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Trigerring Cost Allocations failed. Please try again.'); }
+          this.getManpowerLogDetail(this.selectedTab, 'search');
+        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Triggering Cost Allocations failed. Please try again.'); }
       );
     }
   }
@@ -191,10 +199,11 @@ export class SchedulerInterfacesComponent implements OnInit {
       };
       this._manpowerFeedService.positionStatusApiWithManualDates(reqObj).subscribe(
         (data: any) => {
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Job requisition triggerd successfully .');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Job requisition triggered successfully .');
           $('#ConfirmModal').modal('hide');
           this.StartDate = this.EndDate = null;
-        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Trigerring Job requisition failed. Please try again.'); }
+          this.getManpowerLogDetail(this.selectedTab, 'search');
+        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Triggering Job requisition failed. Please try again.'); }
       );
     }
   }
@@ -209,10 +218,11 @@ export class SchedulerInterfacesComponent implements OnInit {
       };
       this._manpowerFeedService.startWorkdayLongLeaveWithManualDates(reqObj).subscribe(
         (data: any) => {
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Workday long leave triggerd successfully.');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Workday long leave triggered successfully.');
           $('#ConfirmModal').modal('hide');
           this.StartDate = this.EndDate = null;
-        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Trigerring Workday long leave failed. Please try again.'); });
+          this.getManpowerLogDetail(this.selectedTab, 'search');
+        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Triggering Workday long leave failed. Please try again.'); });
     }
   }
 
@@ -226,10 +236,11 @@ export class SchedulerInterfacesComponent implements OnInit {
       };
       this._manpowerFeedService.startWorkdayTerminationsWithManualDates(reqObj).subscribe(
         (data: any) => {
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Workday termination triggerd successfully .');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Workday termination triggered successfully .');
           $('#ConfirmModal').modal('hide');
+          this.getManpowerLogDetail(this.selectedTab, 'search');
           this.StartDate = this.EndDate = null;
-        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Trigerring Workday termination failed. Please try again.'); });
+        }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Triggering Workday termination failed. Please try again.'); });
     }
   }
 

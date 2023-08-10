@@ -36,7 +36,7 @@
                         class="form-control" (ngModelChange)="_commonData.isAwardDataChange = true">
                         <option [ngValue]=null>--Select--</option>
                         <option *ngFor="let frequency of paymentLookUpList?.frequencies"
-                            [hidden]="frequency.active != true" [value]="frequency.frequencyCode">
+                            [hidden]="frequency.active != true" [value]="frequency.invoiceFrequencyCode">
                             {{frequency.description}}</option>
                     </select>
                 </div>

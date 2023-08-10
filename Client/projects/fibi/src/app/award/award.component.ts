@@ -24,6 +24,7 @@ import { fileDownloader, openInNewTab, pageScroll } from '../common/utilities/cu
 import { setFocusToElement } from '../common/utilities/custom-utilities';
 import { concatUnitNumberAndUnitName } from '../common/utilities/custom-utilities';
 import { WebSocketService } from '../common/services/web-socket.service';
+import { HttpErrorResponse } from '@angular/common/http';
 declare var $: any;
 @Component({
   selector: 'app-award',
@@ -246,8 +247,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
 
   showApproveDisapprove() {
     this.isShowApproveDisapproveButton = this.result && this.result.canApproveRouting === '1' &&
-      this.result.award.workflowAwardStatusCode === '2' &&
-      !['11', '13'].includes(this.result.award.awardStatus.statusCode) ? true : false;
+      this.result.award.workflowAwardStatusCode === '2';
   }
 
   getSectionEditableList() {
@@ -631,7 +631,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
               reject();
           }));
 			  }, err => {
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Evaluating closure questionnaire failed.Please inform Support.');
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Evaluating closure questionnaire failed. Please Inform Support.');
         }));
       } else {
         resolve(true);
@@ -730,6 +730,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
       this.isSaving = true;
       this.awardObject.awardId = awardId;
       this.awardObject.awardNumber = awardNumber;
+      this.awardObject.awardWorkFlowStatus = this.result.award.awardWorkflowStatus.workflowAwardStatusCode;
       this._commonService.isShowOverlay = true;
       this.$subscriptions.push(this._awardService.submitAward(this.awardObject).subscribe((data: any) => {
         this.setupAwardStoreData(data);
@@ -755,8 +756,11 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
         this._commonService.isShowOverlay = false;
         if (err.error && err.error.errorMessage  === 'Deadlock') {
           this._commonService.showToast(HTTP_ERROR_STATUS, `Submit Award failed as another transaction
-          is being processed in current Award. Please click Submit again`);
-        } else {
+          is being processed in current Award. Please click Submit again.`);
+        }else if ( err && err.status === 405) {
+          $('#ConfirmAwardModal').modal('hide');
+          $('#invalidActionModal').modal('show');
+        }else {
           this._commonService.showToast(HTTP_ERROR_STATUS, `Action cannot be completed due to a system error.
           ${AWARD_ERR_MESSAGE}`);
         }
@@ -789,6 +793,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
     this.requestObject.updateUser = this._commonService.getCurrentUserDetail('userName');
     this.requestObject.awardId = this.result.award.awardId;
     this.requestObject.awardNumber = this.result.award.awardNumber;
+    this.requestObject.awardWorkFlowStatus = this.result.award.awardWorkflowStatus.workflowAwardStatusCode;
     this.requestObject.approverStopNumber = null;
   }
   /**
@@ -849,8 +854,11 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
               this._commonService.showToast(HTTP_ERROR_STATUS,
                 `Action failed as another update is being processed in current Award.
                 Please click ${COMMON_APPROVE_LABEL.toLowerCase()}/${COMMON_RETURN_LABEL.toLowerCase()} again. If error persistent after 2 mins, ${AWARD_ERR_MESSAGE} for assistance`);
+            } else if (err && err.status === 405) {
+              $('#ConfirmAwardModal').modal('hide');
+              $('#invalidActionModal').modal('show');
             } else {
-                this._commonService.showToast(HTTP_ERROR_STATUS, `Action cannot be completed due to a system error.
+              this._commonService.showToast(HTTP_ERROR_STATUS, `Action cannot be completed due to a system error.
                 ${AWARD_ERR_MESSAGE} for assistance.`);
             }
             this.isSaving = false;
@@ -933,10 +941,10 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
   showErrorToast() {
     if (this.requestObject.actionType === 'A') {
       this._commonService.showToast(HTTP_ERROR_STATUS,
-        `Waf blocked request for ${COMMON_APPROVE_LABEL.toLowerCase().slice(0, -1)}ing the ${AWARD_LABEL.toLowerCase()}`);
+        `Waf blocked request for ${COMMON_APPROVE_LABEL.toLowerCase().slice(0, -1)}ing the ${AWARD_LABEL.toLowerCase()}.`);
     } else if (this.requestObject.actionType === 'R') {
       this._commonService.showToast(HTTP_ERROR_STATUS,
-        `Waf blocked request for ${COMMON_RETURN_LABEL.toLowerCase().slice(0, -1)}ing the ${AWARD_LABEL.toLowerCase()}`);
+        `Waf blocked request for ${COMMON_RETURN_LABEL.toLowerCase().slice(0, -1)}ing the ${AWARD_LABEL.toLowerCase()}.`);
     }
   }
   /**
@@ -1014,6 +1022,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
             } else {
               $('#createVariationRequestModal').modal('hide');
               this.createVariationRequestActions(data);
+              this.checkVariationCreated(data);
             }
             this.isSaving = false;
           }, err => { 
@@ -1087,9 +1096,9 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
     this.removeLoader();
     if (data && !data.error) {
       this.createVariationRequestActions(data);
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Variation Request created successfully .');
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Variation Request created successfully.');
     } else {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Waf blocked creating variation request');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Waf blocked creating variation request.');
       this.clearVariationRequestObject();
     }
   }
@@ -1347,7 +1356,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
       this.projectClosureActions(data);
     } else {
       $('#createProjectClosureModal').modal('hide');
-      this._commonService.showToast(HTTP_ERROR_STATUS, `Waf blocked request for creating ${AWARD_LABEL.toLowerCase()} closure`);
+      this._commonService.showToast(HTTP_ERROR_STATUS, `Waf blocked request for creating ${AWARD_LABEL.toLowerCase()} closure.`);
     }
   }
   /**
@@ -1420,13 +1429,18 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
         this.$subscriptions.push(this._awardService.withdrawAward(this.withdrawAwardObject, this.uploadedFiles).subscribe((data: any) => {
           this.setActionsAfterWithdraw(data);
           this.isSaving = false;
-          this.webSocket.releaseCurrentModuleLock('Award' + '#' + this.route.snapshot.queryParamMap.get('awardId'));
-          this._commonData.isAlreadyLocked = false;
-          this.isLocked = false;
+          this.webSocket.getLockForModule('Award', data.award.awardId, data.award.title);
+          this._commonData.isAlreadyLocked = true;
+          this.isLocked = true;
         },
           error => {
-            this.setWithdrawError();
             this.isSaving = false;
+            if (error && error.status === 405) {
+              $('#ConfirmAwardModal').modal('hide');
+              $('#invalidActionModal').modal('show');
+            }else {
+              this.setWithdrawError();
+            }
           }));
       } else {
         this.withdrawAwardWaf();
@@ -1451,7 +1465,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
       }).catch(error => {
         this.isButtonDisabled = false;
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Waf blocked ' +
-          (this.withdrawAwardObject.cancelRequest ? 'cancel action' : 'withdraw action'));
+          (this.withdrawAwardObject.cancelRequest ? 'cancel action.' : 'withdraw action.'));
       });
     }
   }
@@ -1465,7 +1479,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
     this.uploadedFiles = [];
     this._commonService.showToast(HTTP_SUCCESS_STATUS, (type === '1' ? `${AWARD_LABEL} ` : type === '2' ? 'Admin Correction ' : type === '3'
       && this.result.award.serviceRequestType.typeCode !== 7 ? 'Variation Request ' :
-         `${AWARD_LABEL} Closure `) + action + ' successfully');
+         `${AWARD_LABEL} Closure `) + action + ' successfully.');
     this.result = data;
     this._commonData.beginDate = data.award.beginDate;
     this._commonData.finalExpirationDate = data.award.finalExpirationDate;
@@ -1481,7 +1495,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
     this.closeModal.nativeElement.click();
     this._commonService.showToast(HTTP_ERROR_STATUS, 'Unable to ' + action + (type === '1' ? ` ${AWARD_LABEL}` : type === '2' ?
       ' Admin Correction' : type === '3' &&
-        this.result.award.serviceRequestType.typeCode !== 7 ? ' Variation Request ' : ` ${AWARD_LABEL} Closure `));
+        this.result.award.serviceRequestType.typeCode !== 7 ? ' Variation Request. ' : ` ${AWARD_LABEL} Closure. `));
   }
 
   setWithdrawAwardObject(awardId, type) {
@@ -1504,6 +1518,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
     this.withdrawAwardObject.workFlowPersonId = this.withdrawAwardObject.personId = this._commonService.getCurrentUserDetail('personID');
     this.withdrawAwardObject.awardNumber = this.result.award.awardNumber;
     this.withdrawAwardObject.leadUnitNumber = this.result.award.leadUnitNumber;
+    this.withdrawAwardObject.awardWorkFlowStatus = this.result.award.awardWorkflowStatus.workflowAwardStatusCode;
   }
   /**
   * @param  {} award
@@ -1521,6 +1536,8 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, `Child ${AWARD_LABEL} added successfully.`);
         this._awardService.isAwardTreeTrigger.next(true);
       }
+    },err=>{
+    this._commonService.showToast(HTTP_ERROR_STATUS, `Adding Child Award failed. Please try again`);  
     }));
     this.clearModalFlags();
   }
@@ -1539,7 +1556,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
     this.$subscriptions.push(this._awardService.editVariationRequest(serviceRequestObject).subscribe((data: any) => {
       this._commonData.isAwardDataChange = false;
       if (data) {
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Variation Request successfully updated.');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Variation Request updated successfully.');
       }
     }));
   }
@@ -1581,7 +1598,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
     this.warningMsgObj.attachment = null;
   }
 
-  saveAwardWorkflowStatusForSponsor() {
+  saveAwardWorkflowStatusForSponsor(type) {
     if (!this.isSaving) {
       this.isSaving = true;
       this.$subscriptions.push(this._awardService.saveAwardWorkflowStatusForSponsor(
@@ -1590,6 +1607,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
           'personId': this._commonService.getCurrentUserDetail('personID'),
           'updateUser': this.currentUser,
           'funderApprovalDate': parseDateWithoutTimestamp(this.result.award.funderApprovalDate),
+          'awardWorkFlowStatus': this.result.award.awardWorkflowStatus.workflowAwardStatusCode,
         }
       ).subscribe((data: any) => {
         $('#sponsorAprovalModal').modal('hide');
@@ -1597,17 +1615,26 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
         this.updateAwardStoreData();
         this.isSaving = false;
         this.showApproveDisapprove();
-      }, err => { this.isSaving = false; }));
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, type == 'approvalInProgress' ? 'Workflow Status : Approval In Progress.' : 'Workflow Status : Hold For Funding Agency Review.');
+      }, err => {
+        this.isSaving = false;
+        if (err && err.status === 405) {
+          $('#ConfirmAwardModal').modal('hide');
+          $('#invalidActionModal').modal('show');
+        } else {
+          this._commonService.showToast(HTTP_ERROR_STATUS, `Couldn't update Workflow Status. Please try again.`);
+        }
+      }));
       this.map.clear();
     }
   }
 
   saveAwardWorkflowStatusForSponsorData(type: any): void {
     if (type === 'approvalInProgress'  && this.validateDates()) {
-      this.saveAwardWorkflowStatusForSponsor();
+      this.saveAwardWorkflowStatusForSponsor(type);
     }
     if (type === 'holdForFunding') {
-      this.saveAwardWorkflowStatusForSponsor(); }
+      this.saveAwardWorkflowStatusForSponsor(type); }
   }
 
   cancelFunderApprovalDate(): void {
@@ -1640,7 +1667,7 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
     this.$subscriptions.push(this._awardService.generateWBSNumber(requestObject).subscribe((data: any) => {
       if (data) {
         this.setupAwardStoreData(data);
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'WBS Number successfully generated');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'WBS Number successfully generated.');
       }
     }, err => {
       this._commonService.showToast(HTTP_ERROR_STATUS, err.error);
@@ -1664,10 +1691,10 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
       this.result.isAwardNoticeGenerated = true;
     },
       err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, err.error);
+        this._commonService.showToast(HTTP_ERROR_STATUS, `Generating ${AWARD_LABEL} Notice failed. Please try again`);
       },
       () => {
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, `${AWARD_LABEL} notice successfully generated`);
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, `${AWARD_LABEL} Notice successfully generated.`);
         this.setupAwardStoreData(this.result);
       }));
   }
@@ -1723,8 +1750,15 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
       }
       $('#deleteAwardModal').modal('show');
     }
-      , err => { this._commonService.showToast(HTTP_ERROR_STATUS,
-        'Delete Award failed as another transaction is being processed in current Award. Please try again.'); }));
+      , err => {
+        if (err && err.status === 405) {
+          $('#ConfirmAwardModal').modal('hide');
+          $('#invalidActionModal').modal('show');
+        }else {
+          this._commonService.showToast(HTTP_ERROR_STATUS,
+            'Delete Award failed as another transaction is being processed in current Award. Please try again.');
+        }
+      }));
   }
 
   fetchHelpText() {
@@ -1737,6 +1771,10 @@ export class AwardComponent implements OnInit, OnDestroy, OnChanges {
 
   deleteFromClosureUploadedFileList(index) {
     this.uploadedFiles.splice(index, 1);
+  }
+
+  reload() {
+    window.location.reload();
   }
 
 }

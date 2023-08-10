@@ -66,7 +66,7 @@ export class DegreeComponent implements OnInit, OnDestroy {
                     this.isShowTable = true;
                 },
                     (err: any) => {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Listing of degrees failed. Please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Listing of Degrees failed. Please try again.');
                         this.isShowTable = true;
                     }
                 )
@@ -84,12 +84,12 @@ export class DegreeComponent implements OnInit, OnDestroy {
                         $('#addDegreeModal').modal('hide');
                         this.clearRequestObject();
                         setTimeout(() => {
-                            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Degree added successfully');
+                            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Degree added successfully.');
                         }, 500);
                         this.isSaving = false;
                     },
                     (err: any) => {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding degree failed. Please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Degree failed. Please try again.');
                         this.isSaving = false;
                     }
                 )
@@ -119,12 +119,12 @@ export class DegreeComponent implements OnInit, OnDestroy {
             this.isDeleting = true;
             this.$subscriptions.push(this._personService.deletePersonDegree(this.degreeDeleteId).subscribe((data: any) => {
                 this.degreeList.splice(this.degreeList.findIndex((el: any) => el.personDegreeId === this.degreeDeleteId), 1);
-                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Degree deleted successfully');
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Degree deleted successfully.');
                 this.isDeleting = false;
                 this.degreeDeleteId = null;
                 this.deleteDegreeType = null;
             }, (err: any) => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting degree failed. Please try again');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Degree failed. Please try again.');
                 this.isDeleting = false;
             }));
         }

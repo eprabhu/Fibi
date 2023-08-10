@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { CommonService } from '../../../../common/services/common.service';
 import { ProposalHomeService } from '../../proposal-home.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, ETHICS_SAFETY_LABEL } from '../../../../app-constants';
-import { compareDates, parseDateWithoutTimestamp, getDateObjectFromTimeStamp } from '../../../../common/utilities/date-utilities';
+import { compareDates, parseDateWithoutTimestamp, getDateObjectFromTimeStamp, isValidDateFormat } from '../../../../common/utilities/date-utilities';
 import { DEFAULT_DATE_FORMAT } from '../../../../app-constants';
 import { scrollIntoView, setFocusToElement } from '../../../../common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
@@ -51,6 +51,12 @@ export class SpecialReviewDetailsComponent implements OnInit, OnDestroy {
     hasUnsavedChanges = false;
     proposalIdBackup = null;
     ETHICS_SAFETY_LABEL = ETHICS_SAFETY_LABEL;
+    // dateFormatValidation = false;
+    dateFormatValidation = {
+        'approveDateValidation' : false,
+        'expirationDateValidation' : false,
+        'applicationDateValidation' : false
+    };
 
     constructor(public _commonService: CommonService,
         private _proposalHomeService: ProposalHomeService,
@@ -264,7 +270,8 @@ export class SpecialReviewDetailsComponent implements OnInit, OnDestroy {
                     this.result.proposalSpecialReviews = data.proposalSpecialReviews;
                     this._dataStore.updateStore(['proposalSpecialReviews'], this.result);
                 },
-                    err => { this._commonService.showToast(HTTP_ERROR_STATUS, `Removing ${ETHICS_SAFETY_LABEL} failed. Please try again.`); },
+                    err => { this._commonService.showToast(HTTP_ERROR_STATUS,
+                                    `Removing ${ETHICS_SAFETY_LABEL} failed. Please try again.`); },
                     () => { this._commonService.showToast(HTTP_SUCCESS_STATUS, `${ETHICS_SAFETY_LABEL} removed successfully.`); }));
         }
     }
@@ -414,5 +421,56 @@ export class SpecialReviewDetailsComponent implements OnInit, OnDestroy {
         }
         this.hasUnsavedChanges = flag;
     }
+
+    getSystemDate() {
+        return new Date(new Date().setHours(0, 0, 0, 0));
+    }
+
+    checkForValidFormat(date, type) {
+        if (!isValidDateFormat(date)) {
+            if (type === 'approvDt') {
+                this.dateFormatValidation.approveDateValidation = true;
+            } else if (type === 'expDt') {
+                this.dateFormatValidation.expirationDateValidation = true;
+            } else if (type === 'appliDt') {
+                this.dateFormatValidation.applicationDateValidation = true;
+            }
+        } else if (isValidDateFormat(date)) {
+            if (type === 'approvDt') {
+                this.dateFormatValidation.approveDateValidation = false;
+            } else if (type === 'expDt') {
+                this.dateFormatValidation.expirationDateValidation = false;
+            } else if (type === 'appliDt') {
+                this.dateFormatValidation.applicationDateValidation = false;
+            }
+        }
+
+    }
+
+    clearDateOnValidation(id) {
+        if (id === 'prop-special-revw-appovalDate' && this.dateFormatValidation.approveDateValidation) {
+            this.specialReviewObject.approvalDate = this.getSystemDate();
+            this.dateFormatValidation.approveDateValidation = false;
+            this.calenderOpener(id);
+        } else if (id === 'prop-special-revw-expireDate' && this.dateFormatValidation.expirationDateValidation) {
+            this.specialReviewObject.expirationDate = this.getSystemDate();
+            this.dateFormatValidation.expirationDateValidation = false;
+            this.calenderOpener(id);
+        } else if (id === 'prop-special-revw-applicationDate' && this.dateFormatValidation.applicationDateValidation) {
+            this.specialReviewObject.applicationDate = this.getSystemDate();
+            this.dateFormatValidation.applicationDateValidation = false;
+            this.calenderOpener(id);
+        } else {
+            this.calenderOpener(id);
+        }
+    }
+
+    calenderOpener(id) {
+        setTimeout(() => {
+            document.getElementById(id).click();
+        });
+    }
+
+
 
 }

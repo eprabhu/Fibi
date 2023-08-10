@@ -464,7 +464,7 @@
                             <span *ngFor="let item of approveModalUploadedFile; let index=index">{{
                                 item?.name }} <i id="task-approve-attach-delete" class="fa fa-close hand-cursor"
                                     aria-hidden="true" title="Remove File"
-                                    (click)="deleteFromUploadedFileList(item)"></i>
+                                    (click)="deleteFromApproveModalUploadedFile(item)"></i>
                             </span>
                         </div>
                     </div>
@@ -542,6 +542,10 @@
                 <div class="row">
                     <div class="col-12">
                         <ng-container *ngFor="let msg of createTaskValidations">
+                            <div *ngIf="msg.type == 'A'" class="alert alert-primary p-2" role="alert">
+                                <i class="fa fa-check-square icon" aria-hidden="true"></i>
+                                <strong> Acknowledgment: </strong>{{msg.message}}
+                            </div>
                             <div *ngIf="msg.type == 'E'" class="alert alert-danger p-2" role="alert">
                                 <i class="fa fa-exclamation-circle icon text-danger" aria-hidden="true"></i>
                                 <strong>Error:</strong>

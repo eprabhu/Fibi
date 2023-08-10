@@ -3610,5 +3610,17 @@
     "/getAwardsByDepartment": {
         "target": "http://192.168.1.139:8080/fibi4",
         "secure": false
+    },
+    "/disclosure/risk": {
+        "target": "http://192.168.1.139:8080/fibi4",
+        "secure": false
+    },
+    "/disclosure/modifyRisk": {
+        "target": "http://192.168.1.139:8080/fibi4",
+        "secure": false
+    },
+    "/disclosure/history": {
+        "target": "http://192.168.1.139:8080/fibi4",
+        "secure": false
     }
 }

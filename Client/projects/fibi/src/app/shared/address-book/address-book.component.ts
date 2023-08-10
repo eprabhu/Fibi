@@ -74,13 +74,13 @@ export class AddressBookComponent implements OnInit, OnDestroy {
     if (!this.nonEmployeeMap.size && !this.isSaving) {
       this.isSaving = true;
       this.$subscriptions.push(this._addressBookService.saveRolodexData(this.makeRequestReportData(type)).subscribe((data: any) => {
-        if (data && data.message === 'Rolodex saved Successfully') {
+        if (data && data.message === 'Rolodex saved successfully.') {
           this.rolodex = data.rolodex;
           this.clearRolodexDetails();
           this.emitRolodexResult(data.rolodex);
           document.getElementById('add-non-employee-KP-dissmiss').click();
           this._commonService.showToast(HTTP_SUCCESS_STATUS, data.message);
-        } else if (data && data.message === 'Email Address already exists') {
+        } else if (data && data.message === 'Email Address already exists.') {
           this.nonEmployeeMap.set('emailAddress', 'Email Address already exists');
           this.rolodex['genderType'] = null;
         }

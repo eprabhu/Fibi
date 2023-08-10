@@ -45,10 +45,10 @@ export class ProposalHomeEditComponent implements OnInit, OnDestroy {
     }
 
     private convertProposalDates(proposalObject) {
-        proposalObject.startDate = getDateObjectFromTimeStamp(proposalObject.startDate);
-        proposalObject.sponsorDeadlineDate = getDateObjectFromTimeStamp(proposalObject.sponsorDeadlineDate);
-        proposalObject.internalDeadLineDate = getDateObjectFromTimeStamp(proposalObject.internalDeadLineDate);
-        proposalObject.endDate = getDateObjectFromTimeStamp(proposalObject.endDate);
+        proposalObject.startDate = getDateObjectFromTimeStamp(this._proposalService.proposalStartDate);
+        proposalObject.sponsorDeadlineDate = getDateObjectFromTimeStamp(this._proposalService.sponsorDeadlineDate);
+        proposalObject.internalDeadLineDate = getDateObjectFromTimeStamp(this._proposalService.internalDeadLineDate);
+        proposalObject.endDate = getDateObjectFromTimeStamp(this._proposalService.proposalEndDate);
     }
 
     private getUpdatedKeyDataFromStore(dependencies) {

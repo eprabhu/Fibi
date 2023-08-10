@@ -44,7 +44,8 @@
               "projects/fibi/src/assets/js/jquery-3.2.1.slim.min.js",
               "projects/fibi/src/assets/js/popper.min.js",
               "projects/fibi/src/assets/js/bootstrap.min.js",
-              "projects/fibi/src/assets/js/design.js"
+              "projects/fibi/src/assets/js/design.js",
+              "projects/fibi/src/assets/js/loader.js"
             ]
           },
           "configurations": {

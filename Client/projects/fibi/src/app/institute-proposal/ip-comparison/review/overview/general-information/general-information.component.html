@@ -75,6 +75,7 @@
                             <ng-container i18n="@@COMMON_SPONSOR">Sponsor</ng-container>
                         </label>
                         <span [innerHTML]="proposal?.sponsorName | customTagRemover: currentMethod"></span>
+                        <span class="noDataExists" *ngIf="!proposal?.sponsorName">No Sponsor Specified</span>
                     </div>
                     <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12">
                         <label class="d-sm-block">Proposed Start Date</label>
@@ -172,7 +173,7 @@
                         <label class="block-display">Abstract</label>
                         <ng-container>
                             <div class="ck-content">
-                                <span [innerHTML]="proposal?.abstractDescription |safe  | customTagRemover: currentMethod"></span>
+                                <span [innerHTML]="proposal?.abstractDescription | safe"></span>
                             </div>
                         </ng-container>
                         <div class="noDataExists" *ngIf="!proposal?.abstractDescription">No abstract for

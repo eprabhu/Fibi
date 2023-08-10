@@ -4,3 +4,7 @@
 
     /* overflow-x: hidden; */
 }
+th{
+  position: sticky;
+  top: 0;
+}

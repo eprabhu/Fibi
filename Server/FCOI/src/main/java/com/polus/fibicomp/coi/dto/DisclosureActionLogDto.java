@@ -21,5 +21,9 @@ public class DisclosureActionLogDto {
 	private String comment;
 	private String fcoiTypeCode;
 	private String message;
+	private String riskCategoryCode;
+	private String riskCategory;
+	private String newRiskCategoryCode;
+	private String newRiskCategory;
 
 }

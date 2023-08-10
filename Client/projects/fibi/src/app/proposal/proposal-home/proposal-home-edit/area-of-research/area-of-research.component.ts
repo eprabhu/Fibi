@@ -76,6 +76,8 @@ export class AreaOfResearchDetailsComponent implements OnInit {
         this.researchAreaSelectedFunction(null);
         this.researchWarningMsg = null;
         this.isError = false;
+        this.selectedArea = null;
+        this.selectedSubArea = null;
         this.setAreaOptions('');
     }
 
@@ -312,6 +314,7 @@ export class AreaOfResearchDetailsComponent implements OnInit {
         const editedSubAreaOption = this.areaOfResearchProposalEditObject.researchTypeSubArea ?
             this.areaOfResearchProposalEditObject.researchTypeSubArea.description : '';
         this.setSubAreaOptions(editedSubAreaOption);
+        this.setUnsavedChanges(true);
     }
 
     resetAreaOfResearch() {

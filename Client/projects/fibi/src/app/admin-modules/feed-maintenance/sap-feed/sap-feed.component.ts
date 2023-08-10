@@ -49,7 +49,7 @@ export class SapFeedComponent implements OnInit {
     this.$subscriptions.push(
       this._sapFeedService.manualResponseProcess().subscribe((data: any) => {
         }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Position Trigger list failed. Please try again.'); },
-        () => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully Triggered!'); }
+        () => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully Triggered.'); }
         ));
   }
 }

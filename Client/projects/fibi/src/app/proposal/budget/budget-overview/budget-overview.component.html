@@ -30,55 +30,77 @@
 
                 <div class="form-row">
                     <!-- Budget Template -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12"
+                    <div class="col-md-2 col-sm col-6"
                         *ngIf="budgetData.budgetTemplateTypes && budgetData.budgetTemplateTypes.length">
                         <label for="proposal-budget-template">Budget Template</label>
-                        <select [disabled]="_budgetDataService?.isBudgetViewMode" id="proposal-budget-template"
-                            class="form-control" [(ngModel)]="budgetData.budgetHeader.budgetTemplateTypeId"
-                            (ngModelChange)="triggerConfirmationPopup()">
+                        <select  *ngIf="!_budgetDataService?.isBudgetViewMode; else budgetTemplateSpan" 
+                                id="proposal-budget-template"
+                                class="form-control" [(ngModel)]="budgetData.budgetHeader.budgetTemplateTypeId"
+                                (ngModelChange)="triggerConfirmationPopup()">
                             <option [ngValue]="null">--Select--</option>
                             <option *ngFor="let template of budgetData.budgetTemplateTypes"
-                                [value]="template.budgetTemplateTypeId">
+                                [ngValue]="template.budgetTemplateTypeId">
                                 {{template?.description}}
                             </option>
                         </select>
-                    </div>
+                        <ng-template #budgetTemplateSpan> 
+                            <span class="d-inline-block d-sm-block content-color">
+                                    {{!budgetData.budgetHeader.budgetTemplateTypeId ? 'No Budget Template specified': budgetData.budgetHeader.budgetTemplateType.description}}
+                            </span> 
+                        </ng-template>     
+                    </div> 
                     <!-- Over Head Rate Type -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12"
+                    <div class="col-md-2 col-sm col-6"
                         *ngIf="budgetData?.isOverHeadRateTypeEnabled && budgetData.rateTypes.length">
                         <label for="prop-doc-status">
                             <ng-container i18n="@@PROPOSAL_OVER_HEAD_RATE_TYPE">Over Head Rate Type</ng-container>
                         </label>
-                        <select [disabled]="_budgetDataService?.isBudgetViewMode" id="prop-doc-status"
-                            class="form-control" [(ngModel)]="budgetData.budgetHeader.rateType"
-                            (ngModelChange)="setObjectofDropdown(budgetData.budgetHeader, 'oh')">
+                        <select *ngIf="!_budgetDataService?.isBudgetViewMode; else overHeadRateTypeSpan"
+                                 id="prop-doc-status"
+                                 class="form-control"
+                                 [(ngModel)]="budgetData.budgetHeader.rateType"
+                                (ngModelChange)="setObjectofDropdown(budgetData.budgetHeader, 'oh')">
+                            <option [ngValue]= "null">--Select--</option>
                             <option *ngFor="let rate of budgetData.rateTypes;" [ngValue]="rate"
                                 [hidden]="rate.isActive != true">
                                 {{rate?.rateClassDescription}}</option>
                         </select>
+                        <ng-template #overHeadRateTypeSpan> 
+                            <span class="d-inline-block d-sm-block content-color">
+                                    {{!budgetData.budgetHeader.rateType ? 'No Over Head Rate Type specified': budgetData.budgetHeader.rateType.rateClassDescription}}
+                            </span> 
+                        </ng-template> 
                     </div>
                     <!-- Under Recovery Rate Type -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12"
+                    <div class="col-md-2 col-sm col-6"
                         *ngIf=" budgetData.rateTypes.length &&( budgetData?.isShowCostShareAndUnderrecovery || budgetData?.isShowInKind)">
                         <label for="prop-doc-status">Under Recovery Rate Type</label>
-                        <select [disabled]="_budgetDataService?.isBudgetViewMode" id="prop-doc-status"
-                            class="form-control" [(ngModel)]="budgetData.budgetHeader.underrecoveryRateType"
-                            (ngModelChange)="setObjectofDropdown(budgetData.budgetHeader, 'ur');setUnsavedChanges(true)">
+                        <select *ngIf="!_budgetDataService?.isBudgetViewMode; else underRecoveryRateSpan" 
+                                id="prop-doc-status"
+                                class="form-control" 
+                                [(ngModel)]="budgetData.budgetHeader.underrecoveryRateType"
+                                (ngModelChange)="setObjectofDropdown(budgetData.budgetHeader, 'ur');setUnsavedChanges(true)">
+                            <option [ngValue]= "null">--Select--</option>
                             <option *ngFor="let rate of budgetData.rateTypes;" [ngValue]="rate"
                                 [hidden]="rate.isActive != true">
                                 {{rate?.rateClassDescription}}</option>
                         </select>
+                        <ng-template #underRecoveryRateSpan>
+                            <span class="d-inline-block d-sm-block content-color">
+                                {{!budgetData.budgetHeader.underrecoveryRateType ? 'No Under Recovery Rate Type specified': budgetData.budgetHeader.underrecoveryRateType.rateClassDescription}}
+                           </span> 
+                        </ng-template>
                     </div>
                     <!-- Budget Status -->
                     <div *ngIf="!budgetData?.budgetHeader?.isApprovedBudget"
-                        class="col-xl col-lg col-md-6 col-sm-6 col-12">
+                        class="col-md-2 col-sm col-6">
                         <label for="prop-doc-status">Budget Status</label>
-                        <select
-                            [disabled]="_budgetDataService?.isBudgetViewMode || (budgetData.budgetHeader.isFinalBudget && !isbudgetStatusComplete) && budgetData.isBudgetVersionEnabled"
+                        <select *ngIf="!_budgetDataService?.isBudgetViewMode || (budgetData.budgetHeader.isFinalBudget && isbudgetStatusComplete) && budgetData.isBudgetVersionEnabled; else budgetStatusSpan"
                             id="prop-doc-status" class="form-control"
                             [ngClass]="{'is-invalid d-block': isbudgetStatusComplete && budgetData.isBudgetVersionEnabled}"
                             [(ngModel)]="budgetData.budgetHeader.budgetStatusCode"
-                            (ngModelChange)="setObjectofDropdown(budgetData.budgetHeader, 'status');setUnsavedChanges(true)">
+                            (ngModelChange)="setObjectofDropdown(budgetData.budgetHeader, 'status');setUnsavedChanges(true)"
+                            [disabled]="budgetData.budgetHeader.isFinalBudget">
                             <option *ngFor="let budgetStatus of budgetData.budgetStatus;"
                                 [value]="budgetStatus.budgetStatusCode" [hidden]="budgetStatus.isActive != true">
                                 {{budgetStatus?.description}}</option>
@@ -87,9 +109,14 @@
                             class="invalid-feedback d-block">
                             * Budget Status should be complete for final budget version.
                         </span>
+                        <ng-template #budgetStatusSpan>
+                            <span class="d-inline-block d-sm-block content-color">
+                                {{!budgetData.budgetHeader.budgetStatusCode ? 'No Budget Status specified': budgetData.budgetHeader.budgetStatus.description}}
+                           </span> 
+                        </ng-template>
                     </div>
                     <!-- Final -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12 text-center"
+                    <div class="col-md-2 col-sm col-6 text-center"
                         *ngIf="!budgetData?.budgetHeader?.isApprovedBudget && budgetData.isBudgetVersionEnabled">
                         <label for="final-check" class="d-block pt-1">Final</label>
                         <input id="final-check" type="checkbox" class="checkBoxClass"
@@ -98,7 +125,7 @@
                             (ngModelChange)="checkFinalBudget($event);setUnsavedChanges(true)">
                     </div>
                     <!-- Auto Calculate -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12" *ngIf="budgetData?.isAutoCalculateEnabled">
+                    <div class="col-md-2 col-sm col-6" *ngIf="budgetData?.isAutoCalculateEnabled">
                         <label class="d-block">Auto Calculate</label>
                         <span>
                             <a *ngIf="!budgetData.budgetHeader.isAutoCalc">
@@ -119,10 +146,10 @@
                             </a>
                         </span>
                     </div>
-                </div>
-                <div class="form-row">
+                    <!-- </div> -->
+                    <!-- <div class="form-row"> -->
                     <!-- Direct Cost -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12">
+                    <div class="col-md-2 col-sm col-6">
                         <label>Direct Cost</label>
                         <span class="d-inline-block d-sm-block content-color"
                             *ngIf="budgetData?.budgetHeader?.totalDirectCost != null">
@@ -130,7 +157,7 @@
                         </span>
                     </div>
                     <!-- Modified Direct Cost -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12" *ngIf="budgetData?.isShowModifiedDirectCost">
+                    <div class="col-md-2 col-sm col-6" *ngIf="budgetData?.isShowModifiedDirectCost">
                         <label>Modified Direct Cost</label>
                         <span *ngIf="budgetData?.budgetHeader?.totalModifiedDirectCost != null"
                             class="d-block content-color">{{budgetData?.budgetHeader?.totalModifiedDirectCost |
@@ -138,7 +165,7 @@
                         </span>
                     </div>
                     <!-- Indirect Cost -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12">
+                    <div class="col-md-2 col-sm col-6">
                         <label>Indirect Cost</label>
                         <span class="d-inline-block d-sm-block content-color"
                             *ngIf="budgetData?.budgetHeader?.totalIndirectCost != null">
@@ -146,7 +173,7 @@
                         </span>
                     </div>
                     <!-- Cost Share -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12"
+                    <div class="col-md-2 col-sm col-6"
                         *ngIf="budgetData?.isShowCostShareAndUnderrecovery">
                         <label>Cost Share</label>
                         <span class="d-inline-block d-sm-block content-color"
@@ -155,7 +182,7 @@
                         </span>
                     </div>
                     <!-- Under Recovery -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12"
+                    <div class="col-md-2 col-sm col-6"
                         *ngIf="budgetData?.isShowCostShareAndUnderrecovery">
                         <label>Under Recovery</label>
                         <span class="d-inline-block d-sm-block content-color"
@@ -164,7 +191,7 @@
                         </span>
                     </div>
                     <!-- Total Requested Cost -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12" *ngIf="budgetData?.isShowInKind">
+                    <div class="col-md-2 col-sm col-6" *ngIf="budgetData?.isShowInKind">
                         <label>Total Requested Cost</label>
                         <span class="d-inline-block d-sm-block content-color"
                             *ngIf="budgetData?.budgetHeader?.totalCost != null">
@@ -172,7 +199,7 @@
                         </span>
                     </div>
                     <!-- Total In-Kind -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12" *ngIf="budgetData?.isShowInKind">
+                    <div class="col-md-2 col-sm col-6" *ngIf="budgetData?.isShowInKind">
                         <label>Total In-Kind</label>
                         <span class="d-inline-block d-sm-block content-color"
                             *ngIf="budgetData?.budgetHeader?.totalInKind != null">
@@ -180,71 +207,105 @@
                         </span>
                     </div>
                     <!-- Total Cost -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12">
+                    <div class="col-md-2 col-sm col-6">
                         <label>Total Cost</label>
                         <span class="d-inline-block d-sm-block content-color"
                             *ngIf="budgetData?.budgetHeader?.totalOfTotalCost != null">
                             {{budgetData?.budgetHeader?.totalOfTotalCost | customCurrency}}
                         </span>
                     </div>
-                </div>
-                <div class="form-row">
+                    <!-- </div> -->
+                    <!-- <div class="form-row"> -->
                     <!-- Campus Flag -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12" *ngIf="budgetData.isCampusFlagEnabled">
+                    <div class="col-md-2 col-sm col-6" *ngIf="budgetData.isCampusFlagEnabled">
                         <label for="prop-doc-status">Campus Flag</label>
-                        <select [disabled]="_budgetDataService?.isBudgetViewMode" id="prop-doc-status"
-                            class="form-control" [(ngModel)]="budgetData.budgetHeader.campusFlag"
-                            (ngModelChange)="setUnsavedChanges(true)">
+                        <select *ngIf="!_budgetDataService?.isBudgetViewMode; else campusFlagSpan" 
+                                 id="prop-doc-status"
+                                 class="form-control" 
+                                 [(ngModel)]="budgetData.budgetHeader.campusFlag"
+                                 (ngModelChange)="setUnsavedChanges(true)">
                             <option *ngFor="let flag of campusFlagList" [value]="flag.value">
                                 {{flag?.description}}
                             </option>
                         </select>
+                        <ng-template #campusFlagSpan>
+                            <span class="d-inline-block d-sm-block content-color">
+                                {{!budgetData.budgetHeader.campusFlag ? 'No Campus Flag specified': getCampusFlagDescription(budgetData.budgetHeader.campusFlag)}}
+                           </span> 
+                        </ng-template>
                     </div>
                     <!-- Cost Sharing Type -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12" *ngIf="budgetData?.enableCostShareStatus">
+                    <div class="col-md-2 col-sm col-6" *ngIf="budgetData?.enableCostShareStatus">
                         <label for="prop-doc-status">Cost Sharing</label>
-                        <select [disabled]="_budgetDataService?.isBudgetViewMode" id="prop-doc-status"
-                            class="form-control" [(ngModel)]="budgetData.budgetHeader.costSharingTypeCode"
-                            (ngModelChange)="setUnsavedChanges(true)">
-                            <option [value]="null">--Select--</option>
-                            <option *ngFor="let flag of budgetData?.costSharingType" [value]="flag.costSharingTypeCode">
+                        <select *ngIf="!_budgetDataService?.isBudgetViewMode; else costSharingSpan" 
+                                id="prop-doc-status"
+                                class="form-control" 
+                                [(ngModel)]="budgetData.budgetHeader.costSharingTypeCode"
+                                (ngModelChange)="setUnsavedChanges(true)">
+                            <option [ngValue]="null">--Select--</option>
+                            <option *ngFor="let flag of budgetData?.costSharingType" [ngValue]="flag.costSharingTypeCode">
                                 {{flag?.description}}
                             </option>
                         </select>
+                        <ng-template #costSharingSpan>
+                            <span class="d-inline-block d-sm-block content-color">
+                                {{!budgetData.budgetHeader.costSharingTypeCode ? 'No Cost Sharing specified': budgetData.budgetHeader.costSharingType.description}}
+                           </span> 
+                        </ng-template>
                     </div>
                     <!-- On-Campus rates -->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12"
+                    <div class="col-md-2 col-sm col-6"
                         *ngIf="budgetData?.isShowBudgetOHRatePercentage">
                         <label for="prop-doc-status">On-Campus Rate</label>
-                        <input type="text" [disabled]="_budgetDataService?.isBudgetViewMode" id="on-campus-rates"
-                            class="form-control" [(ngModel)]="budgetData.budgetHeader.onCampusRates"
-                            placeholder="Enter On-Campus Rate" (ngModelChange)="setUnsavedChanges(true)">
+                        <input type="text" *ngIf="!_budgetDataService?.isBudgetViewMode; else onCampusRateSpan" 
+                               id="on-campus-rates"
+                               class="form-control" 
+                               [(ngModel)]="budgetData.budgetHeader.onCampusRates"
+                               placeholder="Enter On-Campus Rate" (ngModelChange)="setUnsavedChanges(true)">
+                        <ng-template #onCampusRateSpan>
+                                <span class="d-inline-block d-sm-block content-color">
+                                    {{!budgetData.budgetHeader.onCampusRates ? 'No On-Campus Rate specified': budgetData.budgetHeader.onCampusRates}}
+                               </span> 
+                        </ng-template>
                     </div>
                     <!-- Off-Campus rates-->
-                    <div class="col-xl col-lg col-md-6 col-sm-6 col-12"
+                    <div class="col-md-2 col-sm col-6"
                         *ngIf="budgetData?.isShowBudgetOHRatePercentage">
                         <label for="prop-doc-status">Off-Campus Rate</label>
-                        <input type="text" [disabled]="_budgetDataService?.isBudgetViewMode" id="off-campus-rates"
-                            class="form-control" [(ngModel)]="budgetData.budgetHeader.offCampusRates"
-                            placeholder="Enter Off-Campus Rate" (ngModelChange)="setUnsavedChanges(true)">
+                        <input type="text" *ngIf="!_budgetDataService?.isBudgetViewMode; else offCampusRateSpan" 
+                               id="off-campus-rates"
+                               class="form-control" 
+                               [(ngModel)]="budgetData.budgetHeader.offCampusRates"
+                               placeholder="Enter Off-Campus Rate" (ngModelChange)="setUnsavedChanges(true)">
+                        <ng-template #offCampusRateSpan>
+                                <span class="d-inline-block d-sm-block content-color">
+                                    {{!budgetData.budgetHeader.offCampusRates ? 'No Off-Campus Rate specified': budgetData.budgetHeader.offCampusRates}}
+                               </span> 
+                        </ng-template>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <!-- Description -->
-                    <div class="col-xl col-lg col-md-10 col-12">
+                    <div class="col-xl col-lg col-md-6 col-12">
                         <label for="budget-description">Description</label>
-                        <textarea id="budget-description" [disabled]="_budgetDataService?.isBudgetViewMode"
-                            name="details" class="form-control txtarea-ht"
+                        <textarea id="budget-description" *ngIf="!_budgetDataService?.isBudgetViewMode; else descriptionSpan"
+                            name="details" 
+                            class="form-control txtarea-ht"
                             [(ngModel)]="budgetData.budgetHeader.comments" appLengthValidator [isShowLimiter]='true'
                             [limit]=4000 (ngModelChange)="setUnsavedChanges(true)">
-              </textarea>
+                        </textarea>
+                        <ng-template #descriptionSpan>
+                            <span class="d-inline-block d-sm-block content-color">
+                                {{!budgetData.budgetHeader.comments ? 'No Description specified': budgetData.budgetHeader.comments}}
+                           </span> 
+                    </ng-template>
                     </div>
                     <!-- <div class="col-xl-auto col-md col-12 text-md-right text-center" *ngIf="!_budgetDataService?.isBudgetViewMode">
-            <button class="btn btn-primary-sub btn-xs btn-aligner-2" (click)="saveOrUpdateProposalBudget()">
-              Save
-            </button>
-          </div> -->
+                   <button class="btn btn-primary-sub btn-xs btn-aligner-2" (click)="saveOrUpdateProposalBudget()">
+                      Save
+                    </button>
+                   </div> -->
                 </div>
 
             </div>
@@ -258,8 +319,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 *ngIf="budgetData?.budgetHeader?.isAutoCalc" class="modal-title">Auto Calculate On</h5>
-                <h5 *ngIf="!budgetData?.budgetHeader?.isAutoCalc" class="modal-title">Auto Calculate Off</h5>
+                <h5 *ngIf="budgetData?.budgetHeader?.isAutoCalc" class="modal-title">Enable Auto Calculate</h5>
+                <h5 *ngIf="!budgetData?.budgetHeader?.isAutoCalc" class="modal-title">Disable Auto Calculate</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                     (click)="onAutoCalcChange()">
                     <span aria-hidden="true">&times;</span>
