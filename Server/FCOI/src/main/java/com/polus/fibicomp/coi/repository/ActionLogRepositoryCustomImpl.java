@@ -114,4 +114,15 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
         query.setParameter("disclosureId", actionLogDto.getDisclosureId());
         return query.getResultList();
     }
+
+	@Override
+	public List<TravelDisclosureActionLog> fetchTravelDisclosureActionLogsBasedOnId(Integer travelDisclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<TravelDisclosureActionLog> query = builder.createQuery(TravelDisclosureActionLog.class);
+		Root<TravelDisclosureActionLog> root = query.from(TravelDisclosureActionLog.class);
+        query.where(builder.equal(root.get("travelDisclosureId"), travelDisclosureId));
+        query.orderBy(builder.desc(root.get("updateTimestamp")));
+		return session.createQuery(query).getResultList();
+	}
 }

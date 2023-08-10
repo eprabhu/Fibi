@@ -139,6 +139,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String ACTION_LOG_ASSIGNED_FOR_REVIEW = "7";
 	private static final String ACTION_LOG_ASSIGNED_REVIEW_COMPLETED = "8";
 	private static final String ACTION_LOG_APPROVED = "13";
+	private static final String TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT = "1";
 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
@@ -1243,6 +1244,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setCoiDocumentStatusTypeDetalis(coiTravelDocumentStatusType);
 		dto.setDocumentStatus(coiTravelDocumentStatusType.getDescription());
 		dto.setDocumentStatusCode(coiTravelDocumentStatusType.getDocumentStatusCode());
+		if (coiTravelDisclosure.getDisclosureStatusCode() != null) {
+			CoiTravelDisclosureStatusType coiTravelDisclosureStatusType =
+					conflictOfInterestDao.getTravelDisclosureStatusDetails(coiTravelDisclosure.getDisclosureStatusCode());
+			dto.setDisclosureStatusCode(coiTravelDisclosureStatusType.getDisclosureStatusCode());
+			dto.setDisclosureStatus(coiTravelDisclosureStatusType.getDescription());
+		}
 	}
 
 	public ResponseEntity<Object> assignTravelDisclosureAdmin(CoiAssignTravelDisclosureAdminDto dto) {
@@ -1335,6 +1342,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				conflictOfInterestDao.getDocumentStatusDetails(coiTravelDisclosure.getDocumentStatusCode());
 		dto.setDocumentStatus(coiTravelDocumentStatusType.getDescription());
 		dto.setDocumentStatusCode(coiTravelDocumentStatusType.getDocumentStatusCode());
+		if (coiTravelDisclosure.getDisclosureStatusCode() != null) {
+			CoiTravelDisclosureStatusType coiTravelDisclosureStatusType =
+					conflictOfInterestDao.getTravelDisclosureStatusDetails(coiTravelDisclosure.getDisclosureStatusCode());
+			dto.setDisclosureStatusCode(coiTravelDisclosureStatusType.getDisclosureStatusCode());
+			dto.setDisclosureStatus(coiTravelDisclosureStatusType.getDescription());
+		}
 	}
 	
 	private Date getExpirationDate() {
@@ -1452,6 +1465,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setExpirationDate(getExpirationDate());
+		coiTravelDisclosure.setDisclosureStatusCode(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
+		CoiTravelDisclosureStatusType coiTravelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
+		coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(coiTravelDisclosureStatusType);
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		CoiTravelDisclosure coiTravelDosclosureObject = conflictOfInterestDao.loadTravelDisclosure(coiTravelDisclosure.getTravelDisclosureId());
 		try {

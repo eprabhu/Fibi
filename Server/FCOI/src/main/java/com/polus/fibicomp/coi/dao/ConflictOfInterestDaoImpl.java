@@ -1372,6 +1372,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			travelDashboardDto.setTravelDisclosureId(resultSet.getInt("TRAVEL_DISCLOSURE_ID"));
 			travelDashboardDto.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
 			travelDashboardDto.setTravellerTypeDescription(resultSet.getString("TRAVELER_TYPE_DESCRIPTION"));
+			travelDashboardDto.setTravelDisclosureStatusCode(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_CODE"));
 			travelDashboardDto.setTravelDisclosureStatusDescription(resultSet.getString("TRAVEL_DISCLOSURE_STATUS_DESCRIPTION"));
 			travelDashboardDto.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
 			travelDashboardDto.setTravelCity(resultSet.getString("DESTINATION_CITY"));
@@ -3070,12 +3071,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 	
 	@Override
-	public CoiTravelDisclosureStatusType getTravelDisclosureStatusDetails(String travelDisclosureStatusCode) {
+	public CoiTravelDisclosureStatusType getTravelDisclosureStatusDetails(String disclosureStatusCode) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<CoiTravelDisclosureStatusType> query = builder.createQuery(CoiTravelDisclosureStatusType.class);
 		Root<CoiTravelDisclosureStatusType> rootDisclComment = query.from(CoiTravelDisclosureStatusType.class);
-		query.where(builder.equal(rootDisclComment.get("travelDisclosureStatusCode"), travelDisclosureStatusCode));
+		query.where(builder.equal(rootDisclComment.get("disclosureStatusCode"), disclosureStatusCode));
 		return session.createQuery(query).getSingleResult();
 	}
 

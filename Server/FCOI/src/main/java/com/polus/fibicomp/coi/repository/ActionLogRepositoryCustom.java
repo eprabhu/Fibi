@@ -46,5 +46,7 @@ public interface ActionLogRepositoryCustom {
      * @return
      */
     List<DisclosureActionLog> fetchDisclosureActionLog(DisclosureActionLogDto actionLogDto);
+    
+    public List<TravelDisclosureActionLog> fetchTravelDisclosureActionLogsBasedOnId(Integer travelDisclosureId);
 
 }
