@@ -20,6 +20,7 @@ export class EntityDetailsService {
   canMangeSfi = false;
   $relationshipTabSwitch = new BehaviorSubject<object>(null)
   isSwitchCurrentTab = false;
+  isShowHistoryInfo = true;
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
@@ -45,6 +46,18 @@ export class EntityDetailsService {
 
   getPersonEntityRelationship(params) {
     return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship', params);
+  }
+
+  loadSFILookups() {
+    return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
+  }
+
+  entityRisk(params) {
+    return this._http.post(this._commonService.baseUrl + '/entity/modifyRisk', params);
+  }
+
+  riskHistory(entityId) {
+    return this._http.get(`${this._commonService.baseUrl}/entity/riskHistory/${entityId}`);
   }
 
   deletePersonEntityRelationship(personEntityRelId, personEntityId) {

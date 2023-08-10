@@ -3,7 +3,6 @@ import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import {
-    getEndPointOptionsForAwardNumber,
     getEndPointOptionsForDepartment,
     getEndPointOptionsForLeadUnit,
     getEndPointOptionsForProposalDisclosure,
@@ -247,7 +246,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.clearProjectField = new String('true');
         switch (this.selectedProjectType) {
             case 'Award':
-                return this.projectSearchOptions = getEndPointOptionsForCoiAwardNumber(this.commonService.fibiUrl);
+                return this.projectSearchOptions = getEndPointOptionsForCoiAwardNumber(this.commonService.baseUrl);
             case 'Development Proposal':
                 return this.projectSearchOptions = getEndPointOptionsForProposalDisclosure(this.commonService.baseUrl);
             default:

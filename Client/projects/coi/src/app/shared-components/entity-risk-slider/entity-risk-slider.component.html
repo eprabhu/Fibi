@@ -48,7 +48,7 @@
                             <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all"
                                 placeholder="Description" [(ngModel)]="revisionComment" appAutoGrow appLengthValidator
                                 rows="1" [limit]="2000" [isShowLimiter]="true"
-                                (ngModelChange)="setCoiProjConflictStatusType('COMMENT')"
+                                (ngModelChange)="setCoiProjConflictStatusType('COMMENT'); revisionComment = revisionComment.trim()"
                                 [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
                             <div *ngIf="riskValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
                                 {{riskValidationMap?.get('comment')}}
