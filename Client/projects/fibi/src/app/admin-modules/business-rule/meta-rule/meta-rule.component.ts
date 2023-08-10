@@ -168,7 +168,7 @@ export class MetaRuleComponent implements OnInit, OnDestroy {
       this.metaRule.metaRuleDetails.push(this.metaRuleDetails);
       this.createMetaRule();
     } else {
-      this.commonService.showToast(HTTP_ERROR_STATUS, 'Please select one rule to add new node');
+      this.commonService.showToast(HTTP_ERROR_STATUS, 'Please select one rule to add new node.');
     }
   }
 
@@ -260,7 +260,7 @@ export class MetaRuleComponent implements OnInit, OnDestroy {
   deleteRule(): void {
     this.$subscriptions.push(this.ruleService.deleteMetaRule
       (this.deleteObject).subscribe((data: any) => {
-        this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Node deleted Successfully');
+        this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Node deleted successfully.');
         $('#deleteConfirmationModal').modal('hide');
         this.updateTree(this.metaRulesDto);
         if (this.metaRule.metaRuleDetails) {
@@ -270,7 +270,7 @@ export class MetaRuleComponent implements OnInit, OnDestroy {
         this.metaRuleDesc = !this.metaRulesDto || this.metaRulesDto.length === 0 ? '' : this.metaRuleDesc;
         this.deleteObject = new DeleteObject();
       }, err => {
-        this.commonService.showToast(HTTP_ERROR_STATUS, 'Deleting node from meta rule failed. Please try again.');
+        this.commonService.showToast(HTTP_ERROR_STATUS, 'Deleting node from Meta Rule failed. Please try again.');
       }));
   }
 

@@ -3,7 +3,7 @@
  * last updated by Archana R  on 21/11/2019
  */
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CommonDataService } from '../../services/common-data.service';
 import { RoleService } from '../role.service';
 import { Subscription } from 'rxjs';
@@ -22,6 +22,8 @@ export class RoleViewComponent implements OnInit, OnDestroy {
   personRolesList = [];
   awardData: any;
   $subscriptions: Subscription[] = [];
+  @Input() isAdminCorrectionPending = false;
+  isHelpTextEnable = false;
 
   constructor(private _commonData: CommonDataService, public _roleService: RoleService) { }
 
@@ -32,6 +34,8 @@ export class RoleViewComponent implements OnInit, OnDestroy {
       }
     }));
     this.fetchPersonRoles();
+    this.isHelpTextEnable = this.isAdminCorrectionPending &&
+    this._commonData.checkDepartmentLevelRightsInArray('MODIFY_DOCUMENT_PERMISSION');
   }
 
   ngOnDestroy() {
@@ -41,9 +45,7 @@ export class RoleViewComponent implements OnInit, OnDestroy {
  * Loads the role list and person role list
  */
   fetchPersonRoles() {
-    this.$subscriptions.push(this._roleService.fetchAwardPersonRoles
-      ({ 'awardId': this.awardData.awardId })
-      .subscribe((data: any) => {
+    this.$subscriptions.push(this._roleService.$awardPersonRolesDetails.subscribe((data: any) => {
         this.roleList = data.moduleDerivedRoles;
         this.personRolesList = data.awardPersonRoles ? data.awardPersonRoles : [];
         this.roleList.forEach(element => {

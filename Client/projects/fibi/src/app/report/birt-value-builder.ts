@@ -1,6 +1,8 @@
 
 
+import { DEFAULT_DATE_FORMAT } from '../app-constants';
 import { parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
+import { DatePipe } from '@angular/common';
 
 export function getValuesForBirt(filter, values) {
 	const birtValues = {};
@@ -122,6 +124,10 @@ function getCriteria(filters: any[], values: any) {
 					selectedCriteria = getSelectedCriteriaForLIKE(filter, values[filter.columnName]);
 					selectedCriteria ? queryCriteria.push(selectedCriteria) : '';
 					break;
+				case 'BIRTEQUAL':
+					selectedCriteria = getSelectedCriteriaForBirtDate(filter, values[filter.columnName]);
+					selectedCriteria ? queryCriteria.push(selectedCriteria) : '';
+					break;
 			}
 		}
 	});
@@ -214,11 +220,30 @@ function getSelectedCriteriaForLIKE(filter: any, values: any) {
 function selectedCriteriaForLIKE(filter: any, values: any) {
 	const LIKE_CRITERIA_CONSTANT = filter.displayName + addSpace() + 'contains' + addSpace();
 	let LIKE_CRITERIA = '';
-	values = values[0].toString().split(',').map(f => f.trim()).filter(Boolean);
+	values = values.map(f => f.trim()).filter(Boolean);
 	values.forEach(value => {
-		LIKE_CRITERIA += LIKE_CRITERIA_CONSTANT + addQuotation(value) + addSpace() + 'or';
+		if (filter.filterType === 'year_start' || filter.filterType === 'year_end') {
+			value = parseDate(value);
+		}
+		LIKE_CRITERIA +=  addQuotation(value) + addSpace() + 'or' + addSpace();
 	});
-	return removeTrailingLowerCaseOR(LIKE_CRITERIA);
+	return removeTrailingLowerCaseOR(LIKE_CRITERIA_CONSTANT + LIKE_CRITERIA);
+}
+
+function getSelectedCriteriaForBirtDate(filter, values) {
+	return Object.keys(values).length > 0 ? selectedCriteriaForBirtDate(filter, values) : '';
+}
+
+function selectedCriteriaForBirtDate(filter, values) {
+	let FROM = '';
+	let BETWEEN_CRITERIA = '';
+	if (values.from) {
+		FROM = parseDate(values.from);
+	}
+	if (FROM !== '') {
+		BETWEEN_CRITERIA = filter.displayName + 'contains' + addSpace() + FROM;
+	}
+	return BETWEEN_CRITERIA;
 }
 
 function findInValues(KeysInValue: any[], columnName: string) {
@@ -232,4 +257,11 @@ function addQuotation(value) {
 function removeTrailingLowerCaseOR(value) {
 	value = value.replace(/or([^or]*)$/, '$1');
 	return value;
+}
+
+function parseDate(date) {
+    date = parseDateWithoutTimestamp(date);
+    const datePipe = new DatePipe('en-US');
+    date = datePipe.transform(date, DEFAULT_DATE_FORMAT);
+    return addSingleQuotes(date);
 }

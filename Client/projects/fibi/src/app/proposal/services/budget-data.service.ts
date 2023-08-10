@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { WebSocketService } from '../../common/services/web-socket.service';
 import { CommonService } from '../../common/services/common.service';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
+import { deepCloneObject } from '../../common/utilities/custom-utilities';
 import { ActivatedRoute } from '@angular/router';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 
@@ -29,6 +30,7 @@ export class BudgetDataService implements OnDestroy {
   $budgetHelpText = new BehaviorSubject<any>(null);
   proposalId: string | number ;
   $subscriptions: Subscription[] = [];
+  budgetDataBeforeSave: any;
 
   constructor(public _commonService: CommonService , private websocket: WebSocketService, private _activatedRoute: ActivatedRoute) {
     this.$subscriptions.push(this._activatedRoute.queryParams.subscribe((data: any) => {
@@ -132,6 +134,18 @@ export class BudgetDataService implements OnDestroy {
     if (!this.isBudgetViewMode) {
       this.isBudgetViewMode = !this.websocket.isLockAvailable('Proposal' + '#' + this.proposalId);
     }
+  }
+
+/**
+ * Before save/update of the proposal budget data, we'll be converting the budget dates to string and passing it via API.
+ * The budget dates in the save API response will be in timestamp, which will be converted to date object.
+ * If the save API undergoes an error response, the budget dates has to be converted back to the date format from the string,
+ * so that if user clicks on save button again after the error, the date validations will be working fine
+ * (for string dates, date validations will be failed since we are comparing with date objects).
+ * @param budgetData - budgetData object
+ */
+  setBudgetDatesPriorToSave(budgetData: any): void {
+    this.budgetDataBeforeSave = deepCloneObject(budgetData);
   }
 
 }

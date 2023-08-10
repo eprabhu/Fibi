@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
-import { setFocusToElement } from '../../common/utilities/custom-utilities';
+import { deepCloneObject, setFocusToElement } from '../../common/utilities/custom-utilities';
 import {
     compareDates,
     getDateObjectFromTimeStamp,
@@ -34,7 +34,6 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
     tempReportingPeriod: any = {};
     isFuturePlanUpdating = false;
     warningMessage = '';
-    isReportingDatesChanged = false;
 
     datePlaceHolder = DEFAULT_DATE_FORMAT;
     setFocusToElement = setFocusToElement;
@@ -48,7 +47,7 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.getFuturePlansNSummaryDetails();
-        this.saveClickListener();
+        this.triggerAutoSaveEvent();
         this.getEditMode();
         this._commonData.progressReportTitle = this.progressReportDetails.awardProgressReport.title;
         this._autoSaveService.initiateAutoSave();
@@ -59,6 +58,12 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
         this._autoSaveService.stopAutoSaveEvent();
     }
 
+    triggerAutoSaveEvent() {
+        this.$subscriptions.push(this._autoSaveService.autoSaveTrigger$.subscribe(event =>
+            this.validateAndSaveSummaryAndReportingPeriod()
+        ));
+    }
+
     /**
      * this.progressReportDetails {} variable used to show award details in html.
      * futurePlansNSummaryData [] used to pass Future Plans and Summary of Progress to child component.
@@ -66,10 +71,10 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
     getFuturePlansNSummaryDetails() {
         this.$subscriptions.push(this._commonData.getProgressReportData().subscribe((data: any) => {
             if (data && data.awardProgressReport) {
-                this.progressReportDetails = JSON.parse(JSON.stringify(data));
+                this.progressReportDetails = deepCloneObject(data);
                 this.reportClassCode = this.progressReportDetails.awardProgressReport.reportClassCode;
-                this.futurePlansNSummaryData = JSON.parse(JSON.stringify(data.awardProgressReport.awardProgressReportAchievements));
-                this.tempFuturePlansNSummaryData = JSON.parse(JSON.stringify(data.awardProgressReport.awardProgressReportAchievements));
+                this.futurePlansNSummaryData = deepCloneObject(data.awardProgressReport.awardProgressReportAchievements);
+                this.tempFuturePlansNSummaryData = deepCloneObject(data.awardProgressReport.awardProgressReportAchievements);
             }
         }));
     }
@@ -90,17 +95,6 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
         this.reportingPeriod.title = this.progressReportDetails.awardProgressReport.title;
     }
 
-    /**
-     * Check if Save button in Progress Report Component is clicked.
-     */
-    saveClickListener() {
-        this.$subscriptions.push(this._commonData.getSaveButton().subscribe((clicked: boolean) => {
-            if (clicked) {
-               this.validateAndSaveSummaryAndReportingPeriod();
-            }
-        }));
-    }
-
     async validateAndSaveSummaryAndReportingPeriod() {
         const dataToValidate = {
             overviewFields: this.futurePlansNSummaryData,
@@ -109,11 +103,9 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
             dueDate: this.progressReportDetails.awardProgressReport.dueDate,
             title: this.progressReportDetails.awardProgressReport.title
         };
-        if (this._commonData.isOverviewTabFieldsValid(this.validationMap, dataToValidate)) {
+        if (this._commonData.isOverviewTabFieldsValid(this.validationMap, dataToValidate) && this._commonData.isDataChange) {
             await this.UpdateFuturePlanNSummary();
-            if (this.isReportingDatesChanged) {
-                this.updateReportingPeriod();
-            }
+            this.updateReportingPeriod();
         }
     }
 
@@ -131,6 +123,8 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
                 .updateProgressReportAchievements(this.getFuturePlanNSummaryRequestObj())
                 .subscribe((progressReport: any) => {
                     this.progressReportDetails.awardProgressReport.awardProgressReportAchievements = this.futurePlansNSummaryData;
+                    this.progressReportDetails.awardProgressReport.updateTimeStamp = progressReport.updateTimeStamp;
+                    this.progressReportDetails.awardProgressReport.updatedPersonName = progressReport.updateUser;
                     this._commonData.setProgressReportData(this.progressReportDetails);
                     this.setUnsavedChanges(false);
                     this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Overview successfully saved');
@@ -152,12 +146,14 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
                     this.progressReportDetails.awardProgressReport.reportStartDate = res.reportStartDate;
                     this.progressReportDetails.awardProgressReport.reportEndDate = res.reportEndDate;
                     this.progressReportDetails.awardProgressReport.title = res.title;
+                    this.progressReportDetails.awardProgressReport.updateTimeStamp = res.updateTimeStamp;
+                    this.progressReportDetails.awardProgressReport.updatedPersonName = res.updateUser;
                     this._commonData.setProgressReportData(this.progressReportDetails);
+                    this._commonData.progressReportTitle = res.title;
                     this.setUnsavedChanges(false);
                     if (this.warningMessage) {
                         this.warningMessage = '';
                     }
-                    this.isReportingDatesChanged = false;
                 }
             }));
     }
@@ -177,7 +173,7 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
     cancelSave() {
         this.validationMap = new Map();
         this.setUnsavedChanges(false);
-        this.futurePlansNSummaryData = JSON.parse(JSON.stringify(this.tempFuturePlansNSummaryData));
+        this.futurePlansNSummaryData = deepCloneObject(this.tempFuturePlansNSummaryData);
         this.progressReportDetails.awardProgressReport.reportEndDate = this.tempReportingPeriod.reportEndDate;
         this.progressReportDetails.awardProgressReport.reportStartDate = this.tempReportingPeriod.reportStartDate;
         this.progressReportDetails.awardProgressReport.title = this.tempReportingPeriod.title;
@@ -186,7 +182,6 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
 
     checkStartDateOverlapping(): void {
         this.setUnsavedChanges(true);
-        this.isReportingDatesChanged = true;
         if (this.reportingPeriod.reportStartDate && this.progressReportDetails.awardProgressReport.award.beginDate) {
             if (this.isStartDateBeforeAwardDate()) {
                 this.warningMessage = ' Warning: Selected start date is before award start date.';
@@ -224,7 +219,7 @@ export class ProgressReportOverviewComponent implements OnInit, OnDestroy {
             progressReportId: this.progressReportDetails.awardProgressReport.progressReportId,
             reportStartDate: parseDateWithoutTimestamp(this.reportingPeriod.reportStartDate),
             reportEndDate: parseDateWithoutTimestamp(this.reportingPeriod.reportEndDate),
-            title: this.progressReportDetails.awardProgressReport.title
+            title: this._commonData.progressReportTitle
         };
     }
 

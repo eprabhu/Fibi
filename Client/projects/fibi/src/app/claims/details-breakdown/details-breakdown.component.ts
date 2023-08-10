@@ -69,7 +69,8 @@ export class DetailsBreakdownComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(
             this._detailsBreakdownService
                 .loadClaimDetailBreakDown({ 'claimId': this.claimDetails.claimId,
-                'leadUnitNumber': this.claimDetails.award.leadUnitNumber })
+                'leadUnitNumber': this.claimDetails.award.leadUnitNumber,
+                'awardNumber': this.claimDetails.award.awardNumber})
                 .subscribe((res: any) => {
                 if (res) {
                     this.claimBreakDownDetails = this.colSpanAddedResponse(res);
@@ -131,11 +132,12 @@ export class DetailsBreakdownComponent implements OnInit, OnDestroy {
             'prevExcludedSummaryDetId': transaction.prevExcludedSummaryDetId
         };
         this.isSaving = true;
+        this._commonService.isShowOverlay = true;
         this.$subscriptions.push(
             this._detailsBreakdownService.updateClaimSummaryExcludeFlag(
                 {
                     'claimSummaryDetail': claimSummaryDetail, 'claimId': this.claimDetails.claimId,
-                    'leadUnitNumber': this.claimDetails.award.leadUnitNumber
+                    'leadUnitNumber': this.claimDetails.award.leadUnitNumber, 'awardNumber': this.claimDetails.award.awardNumber
                 })
                 .subscribe((res: any) => {
                     if (res) {
@@ -151,9 +153,15 @@ export class DetailsBreakdownComponent implements OnInit, OnDestroy {
                             this.setEditFlag();
                         }
                     }
-                }, err => this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating transaction failed. Please try again.'),
-                    () => this.isSaving = false)
-        );
+                }, err => {
+                    this._commonService.isShowOverlay = false;
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating transaction failed. Please try again.')
+                },
+                () => {
+                        this.isSaving = false;
+                        this._commonService.isShowOverlay = false;
+                    }
+                ));
     }
 
     getToastMessage(isExcludedFlag) {
@@ -183,7 +191,8 @@ export class DetailsBreakdownComponent implements OnInit, OnDestroy {
                     .saveOrUpdateClaimBreakDown(
                         {
                             'claimSummaryDetail': claimSummaryDetail,
-                            'leadUnitNumber': this.claimDetails.award.leadUnitNumber
+                            'leadUnitNumber': this.claimDetails.award.leadUnitNumber,
+                            'awardNumber': this.claimDetails.award.awardNumber
                         })
                     .subscribe((res: any) => {
                         if (res) {

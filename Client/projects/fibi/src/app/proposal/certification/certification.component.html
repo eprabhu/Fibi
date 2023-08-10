@@ -73,6 +73,7 @@
                                          [externalSaveEvent] = '_autoSaveService.autoSaveTrigger$'
                                          [isShowSave]=false
                                          (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)"
+                                         (questionnaireCompletionStatusEvent)="updatePersonCertificationStatus($event)"
                                          [configuration]="configuration"></app-view-questionnaire-list>
         </main>
     </section>

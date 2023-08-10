@@ -24,14 +24,14 @@
                                 [isRuleAvailable]="isRuleAvailable">	
                                 </app-rule-summary>
                                 <div class="col-md-auto col-12 text-md-right text-muted" *ngIf="!isViewMode">
-                                    <span class="mr-3 delete-question"><a (click)="setDeleteData(question,'question')"
+                                    <span class="delete-question"><a (click)="setDeleteData(question,'question')"
                                             class="" data-toggle="modal" data-target="#confirmDeleteModal"><i
-                                                class="fa fa-trash-o" title="delete" aria-hidden="true"></i></a>
+                                                class="fa fa-trash-o btn-hover px-3 py-2" title="delete" aria-hidden="true"></i></a>
                                     </span>
                                     <span class="dropdown">
                                         <span class="delete-question" id="questdropdownMenuButton"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fa fa-ellipsis-v hand-cursor" title="More Actions"
+                                            <i class="fa fa-ellipsis-v hand-cursor btn-hover px-3 py-2" title="More Actions"
                                                 aria-hidden="true"></i>
                                         </span>
                                         <div class="dropdown-menu qst-dropdown-patch f-14"

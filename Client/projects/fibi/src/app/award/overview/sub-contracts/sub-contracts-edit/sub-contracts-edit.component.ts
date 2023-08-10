@@ -9,6 +9,7 @@ import { subscriptionHandler } from '../../../../common/utilities/subscription-h
 import { scrollIntoView, inputRestrictionForAmountField } from '../../../../common/utilities/custom-utilities';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../../../app-constants';
 import { convertToValidAmount } from '../../../../common/utilities/custom-utilities';
+declare var $: any;
 
 @Component({
   selector: 'app-sub-contracts-edit',
@@ -91,6 +92,7 @@ export class SubContractsEditComponent implements OnInit, OnChanges, OnDestroy {
         this._commonService.showToast(HTTP_ERROR_STATUS, acType === 'SAVE' ? 'Adding Sub Contract failed. Please try again.' : 'Updating Sub Contract failed. Please try again.');
       }, () => {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, acType === 'SAVE' ? 'Sub Contract added successfully.' : 'Sub Contract updated successfully.');
+        $('#add-subcontract-modal').modal('hide');
       }));
     }
   }
@@ -130,6 +132,7 @@ export class SubContractsEditComponent implements OnInit, OnChanges, OnDestroy {
     this.organizationSearchOptions.defaultValue = '';
     this.organizationName = '';
     this.clearField = new String('true');
+    this.subcontracts = {};
   }
   editSubContract(index: any) {
     this.clearField = new String('false');

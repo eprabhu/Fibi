@@ -24,7 +24,6 @@ export class AppAutocompleterComponent implements OnChanges, OnInit {
   timer: any;
   results = [];
   counter = -1;
-  isActive = false;
   arrayList: any[];
   tempResults: any[];
 
@@ -60,7 +59,6 @@ export class AppAutocompleterComponent implements OnChanges, OnInit {
       this.results = [];
       searchText = searchText.toLowerCase();
       this.arrayList = this.getFilteredList(items, searchText);
-      this.isActive = true;
       this.counter = -1;
       if (this.arrayList.length > 0) {
         this.arrayList.forEach((el, i) => {
@@ -113,7 +111,6 @@ export class AppAutocompleterComponent implements OnChanges, OnInit {
     }
     this.completerOptions.defaultValue = this.searchText;
     this.results = [];
-    this.isActive = false;
   }
 
   getSearchTextValue(value): string {
@@ -122,40 +119,12 @@ export class AppAutocompleterComponent implements OnChanges, OnInit {
 		return lbl || this.searchText;
 	}
   /**
-   * @param  {} event used to update counter value for keyboard event listner
-   */
-  upArrowEvent(event) {
-    event.preventDefault();
-    this.removeHighlight();
-    this.counter >= 0 ? this.counter-- : this.counter = document.getElementsByClassName('search-result-item').length - 1;
-    this.addHighlight();
-    this.updateSearchFeild();
-  }
-  /**
-   * @param  {} event  used to update counter value for keyboard event listner and adds a highlight class
-   */
-  downArrowEvent(event) {
-    event.preventDefault();
-    this.removeHighlight();
-    this.counter < document.getElementsByClassName('search-result-item').length - 1 ? this.counter++ : this.counter = -1;
-    this.addHighlight();
-    this.updateSearchFeild();
-  }
-  /**
    * @param  {} event
    *  handles the click outside the result box updates counter and slear results
    */
   hideSearchResults() {
-    this.isActive = false;
     this.results = [];
     this.counter = -1;
-  }
-  /** listens for enter key event . triggers the click on selected li
-   */
-  enterKeyEvent() {
-    (document.getElementsByClassName('search-result-item')[this.counter] as HTMLInputElement).click();
-    (document.activeElement as HTMLInputElement).blur();
-    this.hideSearchResults();
   }
   /**
    * removes the highlight from the previous li node if true

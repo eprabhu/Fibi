@@ -77,6 +77,7 @@ export class CommonService {
 	timer: any
 	priorityNotificationMessage = null;
 	lockActiveModuleDetails: any = [];
+	isElasticSyncSQSEnable = false;
 
 	constructor(private _http: HttpClient, private _elasticConfig: ElasticConfigService) {
 	}
@@ -117,7 +118,6 @@ export class CommonService {
 	}
 
 	getRequiredParameters() {
-		console.trace();
 		return this._http.get(this.baseUrl + '/fetchRequiredParams').toPromise();
 	}
 	/**
@@ -166,6 +166,7 @@ export class CommonService {
 		this.isEnableLock = parameters.isEnableLock;
 		this.isEnableSocket = parameters.isEnableSocket;
 		this.lockActiveModuleDetails = parameters.lockConfiguration;
+		this.isElasticSyncSQSEnable = parameters.isElasticsyncSQSEnable;
 	}
 
 	showLoader(loaderContent = 'Loading...', overlay: boolean = false) {
@@ -178,25 +179,27 @@ export class CommonService {
 		this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
 			'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
 		const toastEl = document.getElementById('app-toast');
-		const LAST_SAVED_TOAST = document.getElementById('last-saved-toast');
-		if (LAST_SAVED_TOAST) {
-			LAST_SAVED_TOAST.classList.add('invisible');
-		}
-		toastEl.className = status === HTTP_SUCCESS_STATUS ? 'app-toast visible alert-warning' :
-			status === 'HTTP_INFO' ? 'app-toast visible alert-primary' :
-				' app-toast visible alert-danger';
-		if (toastContent.length > 200) {
-			toastEl.style.width = '95%';
-		}
-		this.timer = setTimeout(() => {
-			toastEl.className = this.appToastContent = '';
-			this.appLoaderContent = 'Loading...';
-			this.isShowOverlay = false;
-			toastEl.style.width = 'max-content';
+		if (toastEl) {
+			const LAST_SAVED_TOAST = document.getElementById('last-saved-toast');
 			if (LAST_SAVED_TOAST) {
-				LAST_SAVED_TOAST.classList.remove('invisible');
+				LAST_SAVED_TOAST.classList.add('invisible');
 			}
-		}, time);
+			toastEl.className = status === HTTP_SUCCESS_STATUS ? 'app-toast visible alert-warning' :
+				status === 'HTTP_INFO' ? 'app-toast visible alert-primary' :
+					' app-toast visible alert-danger';
+			if (toastContent.length > 200) {
+				toastEl.style.width = '95%';
+			}
+			this.timer = setTimeout(() => {
+				toastEl.className = this.appToastContent = '';
+				this.appLoaderContent = 'Loading...';
+				this.isShowOverlay = false;
+				toastEl.style.width = 'max-content';
+				if (LAST_SAVED_TOAST) {
+					LAST_SAVED_TOAST.classList.remove('invisible');
+				}
+			}, time);
+		}
 	}
 
 	pageScroll(elementId) {

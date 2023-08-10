@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { HTTP_ERROR_STATUS } from '../../../app-constants';
+import { HTTP_ERROR_STATUS, ETHICS_SAFETY_LABEL, AREA_OF_RESEARCH } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 import { slideHorizontal } from '../../../common/utilities/animations';
 import { scrollIntoView } from '../../../common/utilities/custom-utilities';
@@ -59,11 +59,19 @@ export class ToolKitComponent implements OnInit, OnDestroy {
 		this.$subscriptions.push(this._toolKitService.getIPHistory(IP.instProposal.proposalNumber)
 			.subscribe((result: any) => {
 				this.parameterValue = result.parameterValue;
+				this.renameSectionDescription();
 				this.ipHistories = result.instituteProposalHistories;
 				this.proposalVersionsData = this.formatProposalHistory(result.instituteProposalHistories);
 				this.masterVersion = this.setActiveVersion(result.instituteProposalHistories);
 				this.viewProposal(this.masterVersion);
 			}));
+	}
+
+	renameSectionDescription(): void {
+		const specialReviewSection = this.sections.find((eachSection) => eachSection.reviewSectionCode === 204);
+        specialReviewSection.reviewSectionDescription = ETHICS_SAFETY_LABEL;
+        const areaOfResearchSection = this.sections.find((eachSection) => eachSection.reviewSectionCode === 205);
+        areaOfResearchSection.reviewSectionDescription = AREA_OF_RESEARCH;
 	}
 
 	private getCompareValue(): any {

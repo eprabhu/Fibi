@@ -183,6 +183,12 @@ export const SearchConstants = {
 
         { key: 'Fund Center Code', value: 'fundCenterCode' },
         { key: 'Fund Center Name', value: 'fundCenterName' }
+    ],
+    
+    claimTemplate: [
+
+        { key: 'Claim Code', value: 'claimTemplateCode' },
+        { key: 'Claim Template Name', value: 'description' }
     ]
 
 };

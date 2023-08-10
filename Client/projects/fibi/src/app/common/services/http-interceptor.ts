@@ -54,6 +54,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
                     this._commonService.enableSSO ? window.location.reload() : this._router.navigate(['/login']);
                 }
                 if (error.status === SSO_TIMEOUT_ERROR_CODE && this._commonService.enableSSO) {
+                    const TOAST_ELEMENT = document.getElementById('app-toast');
+                    TOAST_ELEMENT.remove();
                     document.getElementById('timeoutModalButton').click();
                 }
                 if (error.error instanceof Blob) {

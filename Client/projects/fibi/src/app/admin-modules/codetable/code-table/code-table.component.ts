@@ -73,7 +73,7 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
     autoCompleterSearchOptions: any = {};
 
     beforeObj: any;
-    fieldMetaData: any = [];
+    changedFieldsForAuditLog: any = [];
 
     constructor(private _codeTableService: CodeTableService,
         public commonService: CommonService,
@@ -148,6 +148,7 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
             if (field.filterType === 'switch') {
                 this.newCodeTableEntry[field.columnName] = 'Y';
                 this.markAsChanged(field.columnName);
+                this.getAuditLogChangedFields(field.columnName);
             }
         });
     }
@@ -223,8 +224,15 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
             if (!this.commonService.isWafEnabled) {
                 this.$subscriptions.push(this._codeTableService.addNewCodeTableData(this.updatedCodeTable, this.attachmentColumnName)
                     .subscribe((data: any) => {
-                        this.saveAuditLog('I', null, AFTER);
+                        if (data && !data.error && data.promptCode === 1) {
+                            this.saveAuditLog('I', null, AFTER);
+                        } else {
+                            this.changedFieldsForAuditLog = [];
+                        }
                         this.actionsAfterSave(data);
+                        this.isSaving = false;
+                    }, err => {
+                        this.changedFieldsForAuditLog = [];
                         this.isSaving = false;
                     }));
             } else {
@@ -313,11 +321,16 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
         this.$subscriptions.push(
             this._codeTableService.getUpdatedTableValues(this.updatedCodeTable, this.attachmentColumnName)
                 .subscribe((data: any) => {
-                    this.saveAuditLog('U', this.beforeObj, this.updatedCodeTable.tableData[0]);
+                    if (data && !data.error && data.promptCode === 1) {
+                        this.saveAuditLog('U', this.beforeObj, this.updatedCodeTable.tableData[0]);
+                    } else {
+                        this.changedFieldsForAuditLog = [];
+                    }
                     this.actionsAfterSave(data);
                 }, err => {
                     this.revertCodeTableEntry();
-                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong! please contact Support');
+                    this.changedFieldsForAuditLog = [];
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please contact Support.');
                 }));
     }
 
@@ -338,7 +351,7 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
                 this.revertCodeTableEntry();
             }
         } else {
-            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong! please contact Support');
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please contact Support.');
         }
         this.attachmentColumnName = '';
         this.isActiveStatusUpdated = false;
@@ -390,6 +403,7 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
         this.previousStatus = values[columnName];
         this.previousColumName = columnName;
         this.markAsChanged(columnName);
+        this.getAuditLogChangedFields(columnName);
         values[columnName] = status;
         this.newCodeTableEntry = Object.assign({}, values);
         this.setPrimaryFieldValues(values);
@@ -399,6 +413,12 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
     markAsChanged(columnName: string): void {
         if (!this.updatedCodeTable.changedMap.includes(columnName)) {
             this.updatedCodeTable.changedMap.push(columnName);
+        }
+    }
+
+    getAuditLogChangedFields(fieldName: string): void {
+        if (!this.changedFieldsForAuditLog.includes(fieldName)) {
+            this.changedFieldsForAuditLog.push(fieldName);
         }
     }
 
@@ -421,7 +441,7 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
                     this.commonService.showToast(HTTP_ERROR_STATUS, data.promptMessage);
                 }
             }, err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong! please contact Support');
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please contact Support.');
             }, () => {
                 this.searchText = tempSearchText;
             }));
@@ -444,6 +464,8 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
             this.attachmentColumnName = columnName;
             this.markAsChanged(columnName);
             this.markAsChanged(this.codeTableProperty.content.fileColumnName);
+            this.getAuditLogChangedFields(columnName);
+            this.getAuditLogChangedFields(this.codeTableProperty.content.fileColumnName);
         }
     }
 
@@ -460,36 +482,51 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
         }
     }
 
-    onLookupSelect(data: any, columnName: string): void {
+    onLookupSelect(data: any, columnName: string, defaultValue: string): void {
         if (data.length) {
             this.newCodeTableEntry[columnName] = data[0].code;
+            this.newCodeTableEntry[defaultValue] = data[0].description;
         } else {
             this.newCodeTableEntry[columnName] = '';
+            this.newCodeTableEntry[defaultValue] = '';
         }
         this.markAsChanged(columnName);
+        this.getAuditLogChangedFields(columnName);
+        this.getAuditLogChangedFields(defaultValue);
     }
 
-    onEndPointSelect(data: any, columnName: string, valueField: string): void {
+    onEndPointSelect(data: any, columnName: string, valueField: string, defaultValue: string, index): void {
         if (data) {
             this.newCodeTableEntry[columnName] = data[valueField] || '';
+            this.newCodeTableEntry[defaultValue] = data[index] || '';
         } else {
             this.newCodeTableEntry[columnName] = '';
+            this.newCodeTableEntry[defaultValue] = '';
         }
         this.markAsChanged(columnName);
+        this.getAuditLogChangedFields(columnName);
+        this.getAuditLogChangedFields(defaultValue);
     }
 
-    onElasticSelect(data: any, columnName: string, valueField: string): void {
+    onElasticSelect(data: any, columnName: string, valueField: string, defaultValue: string): void {
         if (data) {
             this.newCodeTableEntry[columnName] = data[valueField] || '';
+            this.newCodeTableEntry[defaultValue] = data[defaultValue.toLowerCase()] || '';
         } else {
             this.newCodeTableEntry[columnName] = '';
+            this.newCodeTableEntry[defaultValue] = '';
         }
         this.markAsChanged(columnName);
+        this.getAuditLogChangedFields(columnName);
+        this.getAuditLogChangedFields(defaultValue);
     }
 
-    onAutoCompleterSelect(data: any, columnName: string, valueField: string): void {
+    onAutoCompleterSelect(data: any, columnName: string, valueField: string, defaultValue: string, index: string): void {
         this.newCodeTableEntry[columnName] = (data && data[valueField]) || '';
-        this.markAsChanged(columnName);       
+        this.newCodeTableEntry[defaultValue] = (data && data[index]) || '';
+        this.markAsChanged(columnName); 
+        this.getAuditLogChangedFields(columnName); 
+        this.getAuditLogChangedFields(defaultValue);
 	}
 
     sortOnDisplayName(sortColumn: string, type: string): void {
@@ -524,10 +561,11 @@ export class CodeTableComponent implements OnChanges, OnDestroy {
 
     private saveAuditLog(acType: any, before: any, after: any): void {
         if (this.codeTableProperty.isAuditLogEnabledInTable) {
-            let FIELD_METADATA = acType === 'U' ? this.updatedCodeTable.changedMap : [] ;
+            let FIELD_METADATA = acType === 'U' ? this.changedFieldsForAuditLog : [] ;
             FIELD_METADATA = FIELD_METADATA.filter(ele => ele != 'UPDATE_TIMESTAMP');
             this._auditService.saveAuditLog(acType, before, after, this.updatedCodeTable.tableName, FIELD_METADATA);
         }
+        this.changedFieldsForAuditLog = [];
     }
 
 }

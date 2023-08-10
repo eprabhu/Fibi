@@ -38,9 +38,9 @@ export class AwardListService {
 	getAwardDashBoardList(params) {
 		return this._http.post(this._commonService.baseUrl + '/fibiAwardDashBoard', params).pipe(catchError((err) => {
 			if (err.status === 400) {
-				this._commonService.showToast(HTTP_ERROR_STATUS, 'Invalid character(s) found in search');
+				this._commonService.showToast(HTTP_ERROR_STATUS, 'Invalid character(s) found in search.');
 			} else {
-				this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching award list failed.Please try again.');
+				this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching Award List failed. Please try again.');
 			}
 			return of();
 		}));

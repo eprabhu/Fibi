@@ -8,7 +8,7 @@ import { Component, OnInit, Input, EventEmitter, Output, OnChanges, OnDestroy, C
 import { Subscription } from 'rxjs';
 import { CommentsService } from '../comments.service';
 import { subscriptionHandler } from '../../../../common/utilities/subscription-handler';
-import { HTTP_SUCCESS_STATUS } from '../../../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../app-constants';
 import { CommonService } from '../../../../common/services/common.service';
 import { CommonDataService } from '../../../services/common-data.service';
 import { ToolkitEventInteractionService } from '../../toolkit-event-interaction.service';
@@ -99,15 +99,17 @@ export class AddCommentComponent implements OnInit, OnDestroy {
           comment['replies'] = [];
           this.commentSaved.emit(comment);
           this.clearCommentObject();
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment added successfully');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment added successfully.');
         } else {
           this.commentObject.updateTimeStamp = data.awardReviewComment.updateTimeStamp;
           this.editCommentSaved.emit(this.commentObject);
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment updated successfully');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment updated successfully.');
         }
         this.isSaving = false;
         this.cancelEvent();
-      }, err => { this.isSaving = false; });
+      }, err => { this.isSaving = false; 
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Comments failed. Please try again.');
+      });
     }
   }
   /**

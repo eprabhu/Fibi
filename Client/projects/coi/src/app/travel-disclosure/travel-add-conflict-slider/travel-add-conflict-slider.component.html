@@ -1,7 +1,7 @@
 <app-coi-slider (closeSlider)="validateSliderClose()" [sliderName]="'travel-conflict-slider'">
     <!-- slider header -->
     <ng-container header>
-        <span>Manage Travel Disclosure Status</span>
+        <span>{{isEditMode ? 'Manage' : 'View'}} Travel Disclosure Status</span>
     </ng-container>
 
     <!-- slider header card -->
@@ -11,7 +11,7 @@
         </div>
     </ng-container>
 
-    <!-- modal content -->
+    <!-- slider content -->
     <ng-container content>
         <!-- help text -->
         <div class="mx-4 mt-3" *ngIf="isEditMode">
@@ -23,17 +23,17 @@
                 <div class="col-4 ml-15 align-items-center">
                     <label class="fs-14 fw-500">Disclosure Status:</label>
                     <span>
-                        <select class="form-control form-select" [(ngModel)]="conflictStatus"
-                            [ngClass]="travelConflictValidationMap?.has('coiConflictStatusCode') ? 'is-invalid d-block' : ''"
+                        <select class="form-control form-select" [(ngModel)]="disclosureStatusCode"
+                            [ngClass]="travelConflictValidationMap?.has('disclosureStatusCode') ? 'is-invalid d-block' : ''"
                             (ngModelChange)="setCoiTravelConflictStatusType()">
                             <option [value]=null>--Select--</option>
                             <option *ngFor="let status of conflictLookUpList"
                                 [value]="status.travelDisclosureStatusCode">
                                 {{status?.description}}</option>
                         </select>
-                        <div *ngIf="travelConflictValidationMap?.has('coiConflictStatusCode')"
+                        <div *ngIf="travelConflictValidationMap?.has('disclosureStatusCode')"
                             class="invalid-feedback d-block fs-12">
-                            {{travelConflictValidationMap?.get('coiConflictStatusCode')}}
+                            {{travelConflictValidationMap?.get('disclosureStatusCode')}}
                         </div>
                     </span>
                 </div>

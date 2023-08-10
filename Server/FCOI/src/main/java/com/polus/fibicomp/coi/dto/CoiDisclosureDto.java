@@ -31,6 +31,8 @@ public class CoiDisclosureDto {
 	private String disclosurePersonFullName;
 	private String adminGroupName;
 	private String adminPersonName;
+	private String riskCategoryCode;
+	private String revisionComment;
 
 	public Integer getDisclosureId() {
 		return disclosureId;
@@ -223,5 +225,20 @@ public class CoiDisclosureDto {
 	public void setAdminPersonName(String adminPersonName) {
 		this.adminPersonName = adminPersonName;
 	}
-	
+
+	public String getRiskCategoryCode() {
+		return riskCategoryCode;
+	}
+
+	public void setRiskCategoryCode(String riskCategoryCode) {
+		this.riskCategoryCode = riskCategoryCode;
+	}
+
+	public String getRevisionComment() {
+		return revisionComment;
+	}
+
+	public void setRevisionComment(String revisionComment) {
+		this.revisionComment = revisionComment;
+	}
 }

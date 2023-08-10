@@ -72,7 +72,7 @@ export class SimpleBudgetComponent implements OnInit, OnDestroy {
         this.actionsModalObj.selectedIndex = 0;
         this.actionsModalObj.selectedCategoryCode = null;
         this.lineItemObj.yearCosts = [];
-        this.costElementHttpOptions = getEndPointOptionsForCostElements('findCostElement', null);
+        this.costElementHttpOptions = getEndPointOptionsForCostElements('findCostElement');
         /* HttpOptions of cost elements endpoint search if system generated costs are not enabled*/
         if (this.budgetData.isSysGeneratedCostElementEnabled) {
             this.systemGeneratedCostCodes.push(this.budgetData.sysGeneratedCostElements[0].budgetCategoryCode);

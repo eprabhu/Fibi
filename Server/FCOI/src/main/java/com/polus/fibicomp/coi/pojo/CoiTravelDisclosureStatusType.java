@@ -19,7 +19,7 @@ public class CoiTravelDisclosureStatusType implements Serializable {
 
 	@Id
 	@Column(name = "TRAVEL_DISCLOSURE_STATUS_CODE")
-	private String travelDisclosureStatusCode;
+	private String disclosureStatusCode;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -34,12 +34,12 @@ public class CoiTravelDisclosureStatusType implements Serializable {
 	@Convert(converter = JpaCharBooleanConversion.class)
 	private Boolean isActive;
 
-	public String getTravelDisclosureStatusCode() {
-		return travelDisclosureStatusCode;
+	public String getDisclosureStatusCode() {
+		return disclosureStatusCode;
 	}
 
-	public void setTravelDisclosureStatusCode(String travelDisclosureStatusCode) {
-		this.travelDisclosureStatusCode = travelDisclosureStatusCode;
+	public void setDisclosureStatusCode(String disclosureStatusCode) {
+		this.disclosureStatusCode = disclosureStatusCode;
 	}
 
 	public String getDescription() {

@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="col mr-10">
                                     <label class="fs-14 fw-500">Describe the reason for Conflict status change:</label>
-                                    <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description"
+                                    <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all" placeholder="Description"
                                         row="1" [(ngModel)]="comment" appLengthValidator [limit]="2000"
                                         [isShowLimiter]="true"
                                         [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>

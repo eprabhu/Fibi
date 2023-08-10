@@ -21,7 +21,7 @@
     <div [ngClass]="{'h-100 d-flex align-items-center': !summaryData.length}" class="card-content">
         <div class="card-body">
             <div *ngIf="isShowLoader" appCustomPreloader></div>
-            <div class="table-responsive widget-container">
+            <div class="table-responsive widget-container fixed-header-table">
                 <table *ngIf="summaryData.length" class="table tableSkin table-bordered grid2 mb-0">
                     <caption class="sr-only">Pending Proposal by Sponsor Type</caption>
                     <thead>

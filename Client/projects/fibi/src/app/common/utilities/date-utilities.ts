@@ -378,6 +378,34 @@ function getEndDateAfterRemovingIncompleteMonth(endDate: Date, actualStartDate: 
     }
 }
 
+/**
+ * this function date object from date picker is given 
+ * in valid date format. input value for this function will
+ * be moment object.
+ * Here, if date is selected from picker the type of _i will be 
+ * date object, so it will be in correct format.
+ * if it is typed value, type of _i will be string.
+ * in that case _i will be checked with date regular expression.
+ * If incorrect date or month is entered momentObject will be null and
+ * false will be return.
+ * @param event
+ */
+export function isValidDateFormat(event: any) {
+    if (event) {
+        if (typeof (event._i) == 'object') {
+            return true;
+        } else {
+            if ((event._i.match(/^\d{2}\/\d{2}\/(\d{4})$/))) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    } else {
+        return false;
+    }
+}
+
 // calculation of no. of days between two date
 export function getTotalNoOfDays(startDate, endDate): number {
     startDate = new Date(startDate);
@@ -386,3 +414,5 @@ export function getTotalNoOfDays(startDate, endDate): number {
     const Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
     return Difference_In_Days;
 }
+
+

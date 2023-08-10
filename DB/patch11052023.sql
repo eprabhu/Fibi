@@ -315,9 +315,28 @@ INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTIO
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('7', '<b>{Reviewer Name}</b> assigned to review {FCOI /Project /Travel} application', 'Assigned For Review', now(), 'quickstart');
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('8', '{FCOI /Project /Travel} Disclosure review has been completed', 'Assigned Review Completed', now(), 'quickstart');
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('9', 'Risk Level <b>{LOW}</b> has been added', 'Added Risk', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('10', 'Risk for  {FCOI /Project /Travel} Disclosure changed from {LOW} to {HIGH}', 'Manage Risk', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('10', 'Risk for  {FCOI /Project /Travel} Disclosure changed from <b>{LOW}</b> to <b>{HIGH}</b>', 'Manage Risk', now(), 'quickstart');
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('11', '{FCOI /Project /Travel}  Disclosure admin-review has been completed', 'Admin  Review Completed', now(), 'quickstart');
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('12', '{FCOI /Project /Travel} Disclosure has been expired', 'Expired', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('13', '{FCOI /Project /Travel} application has been approved', 'Approved', now(), 'quickstart');
+
+INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+VALUES ('1', 'New Entity <b>{ENTITY_NAME}</b>  has been created', 'Create', now(), 'quickstart');
+
+INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+VALUES ('2', '<b>{ENTITY_NAME}</b> has been Activated', 'Activate', now(), 'quickstart');
+
+INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+VALUES ('3', '<b>{ENTITY_NAME}</b> has been Inactivated', 'Inactivate', now(), 'quickstart');
+
+INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+VALUES ('4', '<b>{ENTITY_NAME}</b> has been verified', 'Inactivate', now(), 'quickstart');
+
+INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+VALUES ('5', 'Admin <b>{ADMIN_NAME}</b> changed the risk status from <b>{RISK}</b> to <b>{NEW_RISK}</b>', 'Modify Risk', now(), 'quickstart');
+
+INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+VALUES ('6', '<b>{ENTITY_NAME}</b> has been modified', 'Modify Entity', now(), 'quickstart');
 
 SET FOREIGN_KEY_CHECKS=1;
 

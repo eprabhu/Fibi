@@ -55,5 +55,11 @@ export class OrganizationViewComponent {
             }
             return fullAddress;
         }
+
+        /** default organization types which will be added on proposal creation are
+         * 'Proposal Organization' (type code-1) & 'Performing Organization' (type code-2)*/
+        isDefaultOrganizationType(orgTypeCode: string) {
+            return ['1', '2'].includes(orgTypeCode);
+        }
     }
 

@@ -13,6 +13,7 @@ import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -53,7 +54,10 @@ import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.Country;
@@ -639,7 +643,7 @@ public interface ConflictOfInterestDao {
 
 	public CoiProjectAward saveOrUpdateCoiProjectAward(CoiProjectAward coiProjectAward);
 
-	CoiEntity getCoiEntityDetailsByEntityId(Integer personEntityId);
+	CoiEntity getCoiEntityByPersonEntityId(Integer personEntityId);
 
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId);
 
@@ -972,6 +976,13 @@ public interface ConflictOfInterestDao {
 	 */
 	List<DisclosureHistoryDto> getDisclosureHistory(CoiDashboardVO dashboardVO);
 
+	/**
+	 * This method is used to update risk category of an entity
+	 * @param entityDto
+	 * @return
+	 */
+	Timestamp updateEntityRiskCategory(CoiEntityDto entityDto);
+
 	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
 
 
@@ -1017,5 +1028,26 @@ public interface ConflictOfInterestDao {
 	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
 
 	public String getCoiTravelConflictStatusByStatusCode(String conflictStatusCode);
+	
+	public void saveOrUpdateTravelDisclosureActionLog(TravelDisclosureActionLog travelDisclosureActionLog);
 
+	/**
+	 * This method is used to sync disclosure risk
+	 * @param disclosureId
+	 * @param disclosureNumber
+	 */
+	void syncDisclosureRisk(Integer disclosureId, Integer disclosureNumber);
+
+	/**
+	 * This method is used to update disclosure risk
+	 * @param coiDisclosureDto
+	 * @return
+	 */
+	Timestamp updateDisclosureRiskCategory(CoiDisclosureDto coiDisclosureDto);
+
+	/**
+	 * This method is used to fetch all disclosure risk
+	 * @return
+	 */
+	List<CoiRiskCategory> fetchDisclosureRiskCategory();
 }

@@ -57,7 +57,7 @@
               <tr *ngFor="let award of budgetAwardList | orderByIndex: {property: column, direction: direction}">
                 <td >{{award[0]}}
                 </td>
-                <td class="clickable" (click)="openInNewTab([award[9]])">
+                <td class="clickable" (click)="openInNewTab([award[10]])">
                   {{award[1]}}
                 </td>
                 <td >{{award[2] | dateFormatter}}

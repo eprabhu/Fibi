@@ -261,6 +261,7 @@ export class AttachmentComponent implements OnInit, OnDestroy {
     this.modalDropdownArray =  this.result.proposalAttachmentTypes;
     this.textAreaEdit = this.editAttachmentDetails.description;
     this.isShowPersonalAttachmentStatus = true;
+    this.attachmentStatus = null;
     $('#editAttachmentModal').modal('show');
   }
 
@@ -462,4 +463,18 @@ export class AttachmentComponent implements OnInit, OnDestroy {
     attachment.attachmentType = TYPE_OBJECT;
   }
 
+  /**Method to set attachment updation flags and type
+   * Since same method has been called for add new attachment and replace,
+   * we are setting the flags and updating the replaced attachment via this method
+   * @param attachment - replaced attachment object, it will be null in case of add new attachment
+   */
+  setAttachmentFlagsOnAddOrReplace(attachment: any): void {
+    this.attachmentFlags.isReplaceAttachment = attachment ? true : false;
+    this.attachmentFlags.isShowAddAttachment = true;
+    if (attachment) {
+      this.replaceAttachment = attachment;
+    }
+    this.attachmentType = 'general';
+    this.attachmentStatus = null;
+  }
 }

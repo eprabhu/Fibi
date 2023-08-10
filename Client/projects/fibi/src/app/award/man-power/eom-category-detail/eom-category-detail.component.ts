@@ -31,7 +31,6 @@ export class EomCategoryDetailComponent implements OnInit, OnDestroy, OnChanges 
   canViewPayrollDetails = false;
   compareSequenceNumber = compareSequenceNumber;
   canEditCommittedAmount = false;
-  canEditNewHire: boolean = false;
   awardManpowerResources: any = [];
   workdayResourceData: any = [];
   isManpowerAdminCorrection: any;
@@ -58,8 +57,7 @@ export class EomCategoryDetailComponent implements OnInit, OnDestroy, OnChanges 
     this.canViewPayrollDetails = this._commonData.checkDepartmentLevelRightsInArray('MANPOWER_VIEW_STAFF_PAYROLL');
     this.canEditCommittedAmount = this._commonData.getSectionEditableFlag('133') &&
       this._commonData.checkDepartmentLevelRightsInArray('MANPOWER_MODIFY_STAFF_COMMITTED_AMOUNT');
-      this.isManpowerAdminCorrection = this._commonData.getSectionEditableFlag('136');
-      this.canEditNewHire = this._commonData.getSectionEditableFlag('131');
+    this.isManpowerAdminCorrection = this._commonData.getSectionEditableFlag('136');
   }
 
   /**

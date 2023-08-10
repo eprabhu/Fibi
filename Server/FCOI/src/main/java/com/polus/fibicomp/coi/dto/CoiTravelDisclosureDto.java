@@ -57,6 +57,8 @@ public class CoiTravelDisclosureDto {
 	private String riskLevel;
 	Map<String, String> travellerTypeCodeList;
 	private Date expirationDate;
+	private String disclosureStatusCode;
+	private String disclosureStatus;
 	private String createUser;
 	private Timestamp createTimestamp;
 	private String updateUser;
@@ -428,6 +430,22 @@ public class CoiTravelDisclosureDto {
 
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	public String getDisclosureStatusCode() {
+		return disclosureStatusCode;
+	}
+
+	public void setDisclosureStatusCode(String disclosureStatusCode) {
+		this.disclosureStatusCode = disclosureStatusCode;
+	}
+
+	public String getDisclosureStatus() {
+		return disclosureStatus;
+	}
+
+	public void setDisclosureStatus(String disclosureStatus) {
+		this.disclosureStatus = disclosureStatus;
 	}
 
 	public String getCreateUser() {

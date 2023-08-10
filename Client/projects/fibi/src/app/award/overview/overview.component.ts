@@ -218,7 +218,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
           this.awardId = !this.awardId ? data.award.awardId : this.awardId; // setting awardId after initial save
           this.isSaving = false;
         }, err => {
-          this._commonService.showToast(HTTP_ERROR_STATUS, `Saving ${AWARD_LABEL.toLowerCase()} failed as another transaction is being processed in current ${AWARD_LABEL.toLowerCase()}. Please click submit again.`);
+          this._commonService.showToast(HTTP_ERROR_STATUS, `Saving ${AWARD_LABEL} failed as another transaction is being processed in current ${AWARD_LABEL.toLowerCase()}. Please click submit again.`);
           this.isSaving = false;
         }));
     }

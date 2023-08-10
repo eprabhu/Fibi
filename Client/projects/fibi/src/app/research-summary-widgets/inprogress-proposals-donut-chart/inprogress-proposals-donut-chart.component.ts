@@ -69,7 +69,7 @@ export class InprogressProposalsDonutChartComponent extends GoogleChartService i
   drawInProgressProposalDonutChart() {
     const element = document.getElementById('inprogress_proposal_donut_chart');
     if (this.inProgressProposalChartData.length) {
-      if (element && element.classList.contains('d-none')) { element.classList.remove("d-none") }
+      if (element && element.classList.contains('d-none')) { element.classList.remove('d-none'); }
       this.proposalStateList = [];
       this.proposalStateList.push(['Sponsor', 'ProposalCount']);
       for (let index = 0; index < this.inProgressProposalChartData.length; index++) {
@@ -78,7 +78,7 @@ export class InprogressProposalsDonutChartComponent extends GoogleChartService i
       }
       super.googleChartFunction();
     } else {
-      element.classList.add("d-none");
+      element.classList.add('d-none');
       this.isShowLoader = false;
     }
   }
@@ -102,13 +102,23 @@ export class InprogressProposalsDonutChartComponent extends GoogleChartService i
         let sponsorType = '';
         if (this.proposalChart.getSelection()[0].row !== null && this.proposalChart.getSelection()[0].row !== undefined) {
           sponsorType = this.proposalData.getFormattedValue(this.proposalChart.getSelection()[0].row, 0);
+          sessionStorage.removeItem('proposalBySponsorOther');
+          if (sponsorType.toLowerCase() === 'others') {
+            const sponsorCodes: any = [];
+            this.sponsorList.forEach(element => {
+              if (element[1].toLowerCase() !== 'others') {
+                sponsorCodes.push(`'` + element[0] + `'`);
+              }
+            });
+            sessionStorage.setItem('proposalBySponsorOther', sponsorCodes.toString());
+          }
           for (let index = 0; index < this.sponsorList.length; index++) {
             if (sponsorType === this.sponsorList[index][1]) {
               this.router.navigate(['/fibi/expanded-widgets/inprogress-proposal-by-sponsor'],
                 {
                   queryParams: {
                     sponsorCode: this.sponsorList[index][0],
-                    donutProposalHeading: 'Proposals by ' + sponsorType,
+                    donutProposalHeading: 'Proposals by Sponsor: ' + this.sponsorList[index][1],
                     UN: this.deptUnitNumber,
                     DF: this.descentFlag
                   }

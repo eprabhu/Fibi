@@ -30,6 +30,7 @@
                 <div class="col-4">
                     <label for="review-date" class="d-block fs-14">Review Deadline Date</label>
                     <span class="content-color">{{reviewDetails?.deadlineDate | dateFormatter}}</span>
+                    <span *ngIf="!reviewDetails?.deadlineDate" class="noDataExists">No review deadline date specified</span>
                 </div>
                 <div *ngIf="reviewDetails?.extReviewID" class="col-3">
                     <strong><label class="d-block fs-14">Created by</label></strong>

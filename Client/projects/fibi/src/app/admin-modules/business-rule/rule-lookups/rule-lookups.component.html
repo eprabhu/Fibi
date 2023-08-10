@@ -48,6 +48,21 @@
                     </div>
                   </div>
               </div>
+              <div class=" col-2">
+                <label for="showingBusinessRule" class="block-display" > Show </label>
+                <div class="form-check form-check-inline">
+                  <input type="radio" class="form-check-input" id="radioAll" name="optradio" value="O" [(ngModel)]="showAll" >
+                  <label class="form-check-label" for="radioAll">All</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input type="radio" class="form-check-input" id="radioActive" name="optradio" value="Y" [(ngModel)]="showAll"  checked>
+                  <label class="form-check-label" for="radioActive">Active</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input type="radio" class="form-check-input"  id="radioInActive" name="optradio" value="N" [(ngModel)]="showAll">
+                  <label class="form-check-label" for="radioInActive">Inactive</label>
+                </div>
+            </div> 
               <div class="form-group col-1 mt-3 ml-0">
                   <button class="btn btn-primary btn-sm mt-3 form-control" aria-expanded="false"
                       id="search-person-role" (click)="getFilteredRuleList()">Search</button>

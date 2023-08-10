@@ -1,9 +1,23 @@
 <!-- New/Edit Person -->
 <div class="card mt-3 mb-3" *ngIf="_personService.isPersonEdit">
-  <div class="card-header position-relative">
-    <h4 class="card-title">
-      <span *ngIf="person?.personId == null">Create New Person</span>
-      <span *ngIf="person?.personId">Edit Person</span>
+  <div class="card-header position-relative py-0">
+    <h4 class="card-title align-items-center d-flex">
+      <span class="mr-auto" *ngIf="person?.personId == null">Create New Person</span>
+      <span class="mr-auto" *ngIf="person?.personId">Edit Person</span>
+      <div class="align-items-center d-flex">
+          <label style="font-size: 1.4rem !important;font-weight: 700;">Activate</label>
+          <a class="ml-3 mr-5 pt-1">
+              <label class="switch">
+                  <input type="checkbox" [(ngModel)]="isPersonActive" id="personDefaultCheck"
+                      [checked]="isPersonActive">
+                  <span class="slider round fs-15">
+                      <small [ngClass]="{'deactivate-text': !isPersonActive}">
+                          {{isPersonActive ? 'Yes': 'No'}}
+                      </small>
+                  </span>
+              </label>
+          </a>
+      </div>
       <button class="btn more-btn  back-btn-header" title="Back"
       [routerLink]="['/fibi/person']" (click)="_personService.isPersonEditOrView = false">
         <i class="fa fa-reply" aria-hidden="true"></i>
@@ -14,12 +28,8 @@
     <div class="person-details-outer">
       <div class="card card-inner mb-3">
         <div class="card-content">
-          <div class="card-header px-3 py-2">
+          <div class="card-header p-3">
             <h4 class="card-title align-items-center d-flex">Person Details
-              <span class="status-badge-success ml-auto mt-0 float-right" *ngIf="person?.status == 'A'">Status:
-                Active</span>
-              <span class="status-badge-danger ml-auto mt-0 float-right" *ngIf="person?.status != 'A'">Status:
-                Inactive</span>
             </h4>
           </div>
           <div class="card-body">

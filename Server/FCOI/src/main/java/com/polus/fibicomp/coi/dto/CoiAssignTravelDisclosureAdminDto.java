@@ -18,6 +18,8 @@ public class CoiAssignTravelDisclosureAdminDto {
 	private String documentStatusCode;
 	private String documentStatus;
 	private String versionStatus;
+	private String disclosureStatusCode;
+	private String disclosureStatus;
 	private Timestamp updateTimestamp;
 
 	public Timestamp getUpdateTimestamp() {
@@ -50,6 +52,22 @@ public class CoiAssignTravelDisclosureAdminDto {
 
 	public void setVersionStatus(String versionStatus) {
 		this.versionStatus = versionStatus;
+	}
+
+	public String getDisclosureStatusCode() {
+		return disclosureStatusCode;
+	}
+
+	public void setDisclosureStatusCode(String disclosureStatusCode) {
+		this.disclosureStatusCode = disclosureStatusCode;
+	}
+
+	public String getDisclosureStatus() {
+		return disclosureStatus;
+	}
+
+	public void setDisclosureStatus(String disclosureStatus) {
+		this.disclosureStatus = disclosureStatus;
 	}
 
 	public Integer getTravelDisclosureId() {

@@ -2,10 +2,16 @@
 <div id="Award123" class="card mb-3" [ngClass]="{'item-highlighted': isHighlighted}">
   <div class="card-header px-4">
     <h4 class="card-title" id="award-milestone">Milestone
-      <button id="project-expand-btn" class="updown-arrow" (click)="isShowCollapse = !isShowCollapse">
-        <i [ngClass]="isShowCollapse?'fa fa-angle-double-up':'fa fa-angle-double-down'" aria-hidden="true"
-          class="fa-large"></i>
-      </button>
+       <div class="float-right">
+          <button *ngIf="isEditable" class="btn btn-tertiary btn-sm mr-5 mt-0 button-right" id="add-btn"
+                    data-toggle="modal" data-target="#add-milestone-modal">
+                    Add Milestone
+          </button>
+          <button id="project-expand-btn" class="updown-arrow mt-2" (click)="isShowCollapse = !isShowCollapse">
+            <i [ngClass]="isShowCollapse?'fa fa-angle-double-up':'fa fa-angle-double-down'" aria-hidden="true"
+              class="fa-large"></i>
+          </button>
+      </div>
     </h4>
   </div>
   <div class="card-content">
@@ -14,100 +20,17 @@
         <ng-container i18n="@@AWARD_NO_RESEARCH_MILESTONE">There are no research milestones
           added in this Award.</ng-container>
       </div>
-      <div class="form-row" *ngIf="isEditable">
-        <div [ngClass]="result.canEnableMilestoneStatus ?'col-lg-3 col-sm-8 col-12':'col-12 col-lg-4 col-md-6'">
-          <label for="milestone-title"><span class="mandatory">*</span>Research Milestone</label>
-          <span>
-            <input id="milestone-title" placeholder="(eg.Milestone-1, Milestone-2)" class="form-control dateBox"
-            autocomplete="off" [ngClass]="mandatoryList?.has('mileStone') ? 'is-invalid d-block' : ''"
-            [(ngModel)]="awardMilestone.milestone"
-            appLengthValidator [styleList]="'p2 float-right word-count'"
-            [isShowLimiter]='true' [limit]=1000  />
+      <div class="noDataOnChart noDataExists p-2" *ngIf="isEditable && awardMileStones?.length == 0">
+        <div class="no-data-container">
+          <span class="no-data-icon-outer">
+            <div class="no-data-icon">
+              <i aria-hidden="true" class="fa fa-file-o"></i>
+              <i aria-hidden="true" class="fa fa-times-circle-o"></i>
+            </div>
           </span>
-          <span *ngIf="mandatoryList?.has('mileStone')" class="invalid-feedback d-block">{{
-            mandatoryList?.get('mileStone')}}</span>
+          <h4>There is no information in this section.</h4>
         </div>
-        <div *ngIf="result.canEnableMilestoneStatus" class="col-lg-2 col-sm-4 col-6">
-          <label>Status</label>
-          <select aria-label="milestone status" class="form-control" [(ngModel)]="milestoneStatusCodes"
-            (ngModelChange)="_commonData.isDataChange = true"
-            [ngClass]="mandatoryList.has('status') ? 'is-invalid d-block' : ''">
-            <option value=null>--Select--</option>
-            <option *ngFor="let statuses of lookupData.milestoneStatus" [value]="statuses.milestoneStatusCode"
-              [hidden]="statuses.isActive != true">
-              {{statuses.description}}</option>
-          </select>
-        </div>
-        <div [ngClass]="result.canEnableMilestoneStatus ?'col-lg-2 col-sm-4 col-6':'col-md-3 col-sm-4'">
-          <label for="award-milestone-start-date"><span class="mandatory">*</span>Start Date</label>
-          <span class="dateField">
-            <input matInput [matDatepicker]="milestoneStartDate" id="award-milestone-start-date" placeholder="{{datePlaceHolder}}" autocomplete="off"
-              [(ngModel)]="awardMilestone.startDate" (keypress)="_commonService._keyPress($event, 'date')"
-              (ngModelChange)="dateValidation();dateValidationBeforeAction(awardMilestone.startDate, 'startDate', 'Please pick a valid Start Date.')"
-              class="d-inline-block form-control" [ngClass]="mandatoryList?.has('startDate') ? 'is-invalid d-block' : ''"
-              (click)="milestoneStartDate.open()">
-            <i class="fa fa-calendar fa-large pointer hand-cursor insidePicker" aria-hidden="true" title="open calendar"
-              (click)="milestoneStartDate.open()"></i>
-            <mat-datepicker #milestoneStartDate (opened)="setFocusToElement('award-milestone-start-date')"
-              (closed)="dateValidation()">
-            </mat-datepicker>
-          </span>
-          <div class="invalid-feedback d-block" *ngIf="mandatoryList?.has('startDate')">
-            {{mandatoryList?.get('startDate')}}</div>
-        </div>
-        <div [ngClass]="result.canEnableMilestoneStatus ?'col-lg-2  col-sm-4 col-6':'col-lg col-md-3 col-sm-4 col-6'">
-          <label><span class="mandatory">*</span>End Date</label>
-          <span class="dateField">
-            <input matInput [matDatepicker]="milestoneEndDate" id="award-milestone-end-date" placeholder="{{datePlaceHolder}}" autocomplete="off"
-              [(ngModel)]="awardMilestone.endDate" (keypress)="_commonService._keyPress($event, 'date')"
-              (ngModelChange)="dateValidation();
-              dateValidationBeforeAction(awardMilestone.endDate, 'endDate', 'Please pick a valid End Date.')"
-              class="d-inline-block form-control"
-              [ngClass]="mandatoryList?.has('endDate') ? 'is-invalid d-block' : ''"
-              (click)="milestoneEndDate.open()">
-            <i class="fa fa-calendar fa-large pointer hand-cursor insidePicker" title="open calendar" aria-hidden="true"
-              (click)="milestoneEndDate.open()"></i>
-            <mat-datepicker #milestoneEndDate (opened)="setFocusToElement('award-milestone-end-date')" (closed)="dateValidation()">
-            </mat-datepicker>
-          </span>
-          <div class="invalid-feedback d-block" *ngIf="mandatoryList?.has('endDate')">
-            {{mandatoryList?.get('endDate')}}</div>
-        </div>
-        <div class="col-lg-auto col-md-6 col-sm-4 col-12">
-          <label class="d-block">Duration</label>
-          <span>
-            {{duration}}
-          </span>
-        </div>
-      <div  *ngFor="let item of warningMsg" class="col-12 mb-0">
-        <span class="invalid-feedback d-block">
-          {{item}}
-        </span>
       </div>
-      </div>
-      <div *ngIf="isEditable" class="row">
-        <div *ngIf="result.canEnableMilestoneStatus" class='col-9 pb-4'>
-          <label class="d-block">Remarks</label>
-        <textarea rows="1" appAutoGrow [(ngModel)]="awardMilestone.comment" aria-label="milestone-comments"
-                  (ngModelChange)="_commonData.isDataChange = true"
-                  appLengthValidator
-                  class="form-control"
-                  limit=1000>
-            </textarea>
-          </div>
-          <div class="align-self-end pb-4 col-lg-3 col-md-6 col-12 text-right ml-auto">
-            <button class="btn btn-primary-sub btn-xs" title="Add Milestone" id="add-btn" *ngIf="isEditMilestone !== true"
-              (click)="setMilestoneObject()">
-              Add Milestone</button>
-            <button class="btn btn-secondary btn-xs" title="Cancel" id="save-btn" *ngIf="isEditMilestone === true"
-              (click)="clearMilestoneObject();">
-              Cancel</button>
-            <button class="btn btn-primary-sub btn-xs" title="Save Milestone" id="save-btn"
-              *ngIf="isEditMilestone === true" (click)="setMilestoneObject();">
-              Update Milestone</button>
-          </div>
-        </div>
-
       <div class="table-responsive" *ngIf="isShowCollapse && awardMileStones?.length > 0">
         <table class="table tableSkin grid2" aria-describedby="award-milestone">
           <caption class="d-none">Milestone</caption>
@@ -154,8 +77,8 @@
                            class="fa fa-commenting-o hand-cursor"></i>
                     </a>
                 </li>
-                  <li *ngIf="isEditable"><a id="edit-btn" (click)="editMilestone(milestones, milestoneIndex)" tabindex="0"><i
-                        aria-hidden="true" class="fa fa-pencil " title="Edit this milestone"></i></a>
+                  <li *ngIf="isEditable"><a id="edit-btn" (click)="editMilestone(milestones, milestoneIndex)" tabindex="0">
+                     <i aria-hidden="true" data-toggle="modal" data-target="#add-milestone-modal" class="fa fa-pencil " title="Edit this milestone"></i></a>
                   </li>
                   <li *ngIf="isEditable"><a *ngIf="!isEditMilestone || (isEditMilestone && awardMilestoneIndex != milestoneIndex)"
                       data-toggle="modal" data-target="#deleteAwardMilestone"
@@ -204,6 +127,118 @@
           (click)="deleteMilestoneIndex= null; awardMileStoneId=null">Cancel</button>
         <button type="button" class="btn btn-primary-sub btn-sm" (click)="deleteMilestone()"
           data-dismiss="modal">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Milestone Modal -->
+<div class="modal fade mySkinDialog" id="add-milestone-modal" role="dialog" aria-labelledby="skippedSchedulesTitle"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{isEditMilestone == true ? 'Update' : 'Add'}} Milestone</h5>
+        <button type="button" class="close" (click)="clearMilestoneObject();" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body py-1 px-3">
+        <app-award-overview-modal-card></app-award-overview-modal-card>
+        <div class="w-100">
+          <div class="form-row">
+            <div [ngClass]="result.canEnableMilestoneStatus ?'col-lg-12 col-sm-12 col-12':'col-12 col-lg-4 col-md-6'">
+              <label for="milestone-title"><span class="mandatory">*</span>Research Milestone</label>
+              <span>
+                  <textarea rows="1" appAutoGrow id="milestone-title" placeholder="(eg.Milestone-1, Milestone-2)" class="form-control dateBox"
+                  autocomplete="off" [ngClass]="mandatoryList?.has('mileStone') ? 'is-invalid d-block' : ''"
+                  [(ngModel)]="awardMilestone.milestone" appLengthValidator [styleList]="'p2 float-right word-count'"
+                  [isShowLimiter]='true' [limit]=1000>
+                  </textarea>
+              </span>
+              <span *ngIf="mandatoryList?.has('mileStone')" class="invalid-feedback d-block">{{
+                mandatoryList?.get('mileStone')}}
+              </span>
+            </div>
+            <div *ngIf="result.canEnableMilestoneStatus" class="col-lg-3 col-sm-4 col-6">
+              <label>Status</label>
+              <select aria-label="milestone status" class="form-control" [(ngModel)]="milestoneStatusCodes"
+                (ngModelChange)="_commonData.isDataChange = true"
+                [ngClass]="mandatoryList.has('status') ? 'is-invalid d-block' : ''">
+                <option value=null>--Select--</option>
+                <option *ngFor="let statuses of lookupData.milestoneStatus" [value]="statuses.milestoneStatusCode"
+                  [hidden]="statuses.isActive != true">
+                  {{statuses.description}}</option>
+              </select>
+            </div>
+            <div [ngClass]="result.canEnableMilestoneStatus ?'col-lg-3 col-sm-4 col-6':'col-md-3 col-sm-4'">
+              <label for="award-milestone-start-date"><span class="mandatory">*</span>Start Date</label>
+              <span class="dateField">
+                <input matInput [matDatepicker]="milestoneStartDate" id="award-milestone-start-date"
+                  placeholder="{{datePlaceHolder}}" autocomplete="off" [(ngModel)]="awardMilestone.startDate"
+                  (keypress)="_commonService._keyPress($event, 'date')"
+                  (ngModelChange)="dateValidation();dateValidationBeforeAction(awardMilestone.startDate, 'startDate', 'Please pick a valid Start Date.')"
+                  class="d-inline-block form-control"
+                  [ngClass]="mandatoryList?.has('startDate') ? 'is-invalid d-block' : ''"
+                  (click)="milestoneStartDate.open()">
+                <i class="fa fa-calendar fa-large pointer hand-cursor insidePicker" aria-hidden="true"
+                  title="open calendar" (click)="milestoneStartDate.open()"></i>
+                <mat-datepicker #milestoneStartDate (opened)="setFocusToElement('award-milestone-start-date')"
+                  (closed)="dateValidation()">
+                </mat-datepicker>
+              </span>
+              <div class="invalid-feedback d-block" *ngIf="mandatoryList?.has('startDate')">
+                {{mandatoryList?.get('startDate')}}</div>
+            </div>
+            <div
+              [ngClass]="result.canEnableMilestoneStatus ?'col-lg-3  col-sm-4 col-6':'col-lg col-md-3 col-sm-4 col-6'">
+              <label><span class="mandatory">*</span>End Date</label>
+              <span class="dateField">
+                <input matInput [matDatepicker]="milestoneEndDate" id="award-milestone-end-date"
+                  placeholder="{{datePlaceHolder}}" autocomplete="off" [(ngModel)]="awardMilestone.endDate"
+                  (keypress)="_commonService._keyPress($event, 'date')"
+                  (ngModelChange)="dateValidation();
+                            dateValidationBeforeAction(awardMilestone.endDate, 'endDate', 'Please pick a valid End Date.')" class="d-inline-block form-control"
+                  [ngClass]="mandatoryList?.has('endDate') ? 'is-invalid d-block' : ''"
+                  (click)="milestoneEndDate.open()">
+                <i class="fa fa-calendar fa-large pointer hand-cursor insidePicker" title="open calendar"
+                  aria-hidden="true" (click)="milestoneEndDate.open()"></i>
+                <mat-datepicker #milestoneEndDate (opened)="setFocusToElement('award-milestone-end-date')"
+                  (closed)="dateValidation()">
+                </mat-datepicker>
+              </span>
+              <div class="invalid-feedback d-block" *ngIf="mandatoryList?.has('endDate')">
+                {{mandatoryList?.get('endDate')}}</div>
+            </div>
+            <div class="col-lg-auto col-md-6 col-sm-4 col-12">
+              <label class="d-block">Duration</label>
+              <span>
+                {{duration}}
+              </span>
+            </div>
+            <div *ngFor="let item of warningMsg" class="col-12 mb-0">
+              <span class="invalid-feedback d-block">
+                {{item}}
+              </span>
+            </div>
+            <div *ngIf="isEditable" class="row col-12 pb-4">
+              <div *ngIf="result.canEnableMilestoneStatus" class='col-12 pb-4'>
+                <label class="d-block">Remarks</label>
+                <textarea rows="1" appAutoGrow [(ngModel)]="awardMilestone.comment" aria-label="milestone-comments"
+                    style="width: 104%;" (ngModelChange)="_commonData.isDataChange = true" appLengthValidator
+                    class="form-control auto-grow-height" limit=1000>
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer mt-3">
+        <button class="btn btn-secondary btn-sm  btn-xs mr-2" data-dismiss="modal"
+          (click)="clearMilestoneObject();">Close</button>
+        <button (click)="setMilestoneObject()" class="btn btn-primary-sub btn-xs mt-3 mt-sm-0" id="add-btn">
+          {{isEditMilestone == true ? 'Update' : 'Add'}}
+        </button>
       </div>
     </div>
   </div>

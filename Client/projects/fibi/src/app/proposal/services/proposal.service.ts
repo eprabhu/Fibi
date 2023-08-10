@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { CommonService } from '../../common/services/common.service';
-import { getDateObjectFromTimeStamp } from '../../common/utilities/date-utilities';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Subject } from 'rxjs';
 import { NotificationModalConfig } from '../interface/proposal.interface';
+import { getParams } from '../../common/services/end-point.config';
 
 @Injectable()
 export class ProposalService {
@@ -212,14 +212,24 @@ export class ProposalService {
      * @param formatString
      * @param path
      * @param defaultValue
-     * @param params
-     */
-    setHttpOptions(contextField, formatString, path, defaultValue, params) {
+     * @param params  will have fetchLimit as one of the values 
+    * to specify limit of data to fetched,
+    * it should be given inside params as {'fetchLimit' : requiredLimit}
+    * requiredLimit can be either null or any valid number.
+    * if no limit is specified default fetch limit 50 will be used.
+    * if limit is null then full list will return, this may cause performance issue.
+    * /findGrantCall endpoint do not have limit in backend, so condition check added.
+    */
+    setHttpOptions(contextField, formatString, path, defaultValue, params = {}) {
         this.httpOptions.contextField = contextField;
         this.httpOptions.formatString = formatString;
         this.httpOptions.path = path;
         this.httpOptions.defaultValue = defaultValue;
-        this.httpOptions.params = params;
+        if (['findGrantCall'].includes(path)) {
+            this.httpOptions.params = params; 
+        } else {
+            this.httpOptions.params = getParams(params);   
+        }
         return JSON.parse(JSON.stringify(this.httpOptions));
     }
 
@@ -340,8 +350,8 @@ export class ProposalService {
         return this._http.post(this._commonService.baseUrl + '/loadProposalKeyPersonAttachments', params);
     }
 
-    createProposalAdminCorrection(proposalId) {
-        return this._http.post(`${this._commonService.baseUrl}/createProposalAdminCorrection/${proposalId}`, {}, { observe: 'response' });
+    createProposalAdminCorrection(params) {
+        return this._http.post(this._commonService.baseUrl + '/createProposalAdminCorrection', params);
     }
 
     completeProposalAdminCorrection(proposalId) {
@@ -396,6 +406,10 @@ export class ProposalService {
             headers: new HttpHeaders().set('attachmentId', attachmentId.toString()),
             responseType: 'blob'
         });
+    }
+    
+    cancelAdminCorrection(params) {
+        return this._http.post(this._commonService.baseUrl + '/cancelProposalAdminCorrection', params);
     }
 }
 

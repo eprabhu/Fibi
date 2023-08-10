@@ -1,11 +1,3 @@
-function escape(escpaeString) {
-    let current = escpaeString;
-    current = current.replace(/&/g, '&amp;');
-    current = current.replace(/</g, '&lt;');
-    current = current.replace(/>/g, '&gt;');
-    current = current.replace(/"/g, '&quot;');
-    return current;
-}
 export function compareString(base, current) {
     base = base ? base : '';
     current = current ? current : '';
@@ -31,17 +23,17 @@ export function compareString(base, current) {
     }
     if (out.current.length === 0) {
       for (let i = 0; i < out.base.length; i++) {
-        str += '<del>' + escape(out.base[i]) + oSpace[i] + '</del>';
+        str += '<del>' + out.base[i] + oSpace[i] + '</del>';
       }
     } else {
       if (out.current[0].text == null) {
         for (current = 0; current < out.base.length && out.base[current].text == null; current++) {
-          str += '<del>' + escape(out.base[current]) + oSpace[current] + '</del>';
+          str += '<del>' + out.base[current] + oSpace[current] + '</del>';
         }
       }
       for (let i = 0; i < out.current.length; i++) {
         if (out.current[i].text == null) {
-          str += '<ins>' + escape(out.current[i]) + nSpace[i] + '</ins>';
+          str += '<ins>' + out.current[i] + nSpace[i] + '</ins>';
         } else {
           let pre = '';
           for (
@@ -49,7 +41,7 @@ export function compareString(base, current) {
             current < out.base.length && out.base[current].text == null;
             current++
           ) {
-            pre += '<del>' + escape(out.base[current]) + oSpace[current] + '</del>';
+            pre += '<del>' + out.base[current] + oSpace[current] + '</del>';
           }
           str += '' + out.current[i].text + nSpace[i] + pre;
         }

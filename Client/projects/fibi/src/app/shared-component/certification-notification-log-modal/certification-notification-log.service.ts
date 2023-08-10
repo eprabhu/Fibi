@@ -17,7 +17,7 @@ export class CertificationNotificationLogService {
         return this._http.post(`${this._commonService.baseUrl}/sendPersonCertificationMail`, params);
     }
 
-    getProposalPersonsForCertification(proposalId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/proposalPersonsForCertification/${proposalId}`);
+    getProposalPersonsForCertification(params) {
+        return this._http.post(`${this._commonService.baseUrl}/proposalPersonsForCertification`, params);
     }
 }

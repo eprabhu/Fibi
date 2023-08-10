@@ -1,126 +1,114 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonService } from '../../../common/services/common.service';
-import { DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
-import { fileDownloader, openInNewTab, setFocusToElement } from '../../../common/utilities/custom-utilities';
-import { Subscription } from 'rxjs';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { fileDownloader, openInNewTab } from '../../../common/utilities/custom-utilities';
+import { Subject, Subscription } from 'rxjs';
 import { ReportingRequirementsService } from '../reporting-requirements.service';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
-import { WafAttachmentService } from '../../../common/services/waf-attachment.service';
-import { environment } from '../../../../environments/environment';
-import { ElasticConfigService } from '../../../common/services/elastic-config.service';
 import { CommonDataService } from '../../services/common-data.service';
+import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
+import { AwardReport, AwardReportTracking, AwardReportTrackingFile, DataChange } from '../reporting-requirements-interface';
 
+declare var $;
 @Component({
     selector: 'app-reporting-requirement-details',
     templateUrl: './reporting-requirement-details.component.html',
     styleUrls: ['./reporting-requirement-details.component.css']
 })
-export class ReportingRequirementDetailsComponent implements OnChanges {
+export class ReportingRequirementDetailsComponent implements OnChanges, OnDestroy, OnInit {
 
     @Input() reportStatusList = [];
-    @Input() awardReport = {
-        awardReportTracking: [],
-        awardReportTermsId: null,
-        frequencyCode: null,
-        reportClassCode: null
-    };
+    @Input() awardReport: AwardReport;
     @Input() awardData;
-    @Input() isEditMode = false;
-    @Input() rowData;
-    @Input() isProgressReportEnabled;
-    @Input() isReplaceAttachmentEnabled;
+    @Input() isEditMode;
     @Input() isEditEnabledForSection;
-    @Output() dataChange: EventEmitter<boolean> = new EventEmitter();
-    @Output() refreshReport: EventEmitter<null> = new EventEmitter();
-    @Output() cancelAddReminder: EventEmitter<boolean> = new EventEmitter();
-    @Input() isAddNewReporting: boolean;
-
-    datePlaceHolder = DEFAULT_DATE_FORMAT;
-    setFocusToElement = setFocusToElement;
-    deployMap = environment.deployUrl;
-    mandatoryMsg = null;
-    elasticSearchOptions: any = [];
-    clearField: string;
-    reportTrackingList: any = {};
-    selectedIndex = null;
+    @Input() manageOnActiveAward;
+    @Output() updateDataForSearch: any = new EventEmitter();
+    @Output() setDataToModal: any = new EventEmitter();
+    @Input() uniqueComponentId;
+    @Input() dataChange: Subject<DataChange>;
+    reportTrackingList: AwardReportTracking = new AwardReportTracking();
     isReplaceAttachment = false;
     isDeleteAttachment = false;
     attachmentVersions = [];
     fileName;
-    editedRowCopy = null;
-    editIndex = null;
-    isRowEdit = [];
-    uploadIndex = null;
-    createIndex = null;
     isModifiable = false;
     isReportCreatable = false;
     isActiveReport = false;
     validateMap = new Map();
     isSaving = false;
-    childReport: any = {awardReportTracking: [], awardReportTermsId: null, frequencyCode: null, reportClassCode: null};
-    createReportDetails: any = {
-        dueDate: null,
-        awardNumber: null,
-        reportClassCode: null,
-        awardId: null,
-        reportStartDate: null,
-        reportEndDate: null
-    };
-    uniqueModalId: number;
+    childReport: AwardReport = new AwardReport();
     $subscriptions: Subscription[] = [];
+    hasRight: boolean;
+    isExpandComment: any = [];
 
     constructor(public _commonService: CommonService,
-                private _commonData: CommonDataService,
-                private _reportTermsService: ReportingRequirementsService,
-                private _wafAttachmentService: WafAttachmentService,
-                private _elasticConfig: ElasticConfigService) {
+        private _commonData: CommonDataService,
+        private _reportTermsService: ReportingRequirementsService) {
+
+    }
+
+    ngOnInit(): void {
+        this.getDataFromParent();
     }
 
     /**
-     * Restricting to external data changes happening on childReport.(add/edit report changes)
-     */
+    * Restricting to external data changes happening on childReport.(add/edit report changes)
+    */
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.awardReport && changes.awardReport.currentValue) {
             this.childReport = JSON.parse(JSON.stringify(this.awardReport));
             this.convertTimestampToDate();
-            this.setElasticOptions(this.childReport.awardReportTracking);
-            this.setUploadCreateIndex(this.childReport.awardReportTracking);
-            this.cancelIfEditMode();
+            this.childReport.awardReportTracking = this.childReport.awardReportTracking;
             this.setPermissions();
             this.checkIfReportIsActive(this.awardData);
         }
-        if (this.isEditMode && this.isAddNewReporting) {
-            this.childReport.awardReportTracking.unshift(this.addNewReportTracking());
-            this.setElasticOptions(this.childReport.awardReportTracking);
-            this.editRow(this.addNewReportTracking(), 0);
-        }
     }
+
+    getDataFromParent() {
+        this.$subscriptions.push(this.dataChange.subscribe((data) => {
+            if (data.uniqueComponentId === this.uniqueComponentId) {
+                this.parentEventHandler(data);
+            }
+        }));
+    }
+
+    expandComment(i) {
+        this.isExpandComment[i] = !this.isExpandComment[i];
+    }
+
+    getStatus(code) {
+        const status = this.reportStatusList.find((el) => el.statusCode == code);
+        if (status) {
+            return status.description;
+        }
+        return '';
+    }
+
     /**
-     * function creates a dummy object for new report tracking value
-     */
-    addNewReportTracking(): any {
-        return {
-            activityDate: null,
-            awardId: this.awardData.awardId,
-            awardNumber: this.awardData.awardNumber,
-            awardProgressReport: null,
-            awardReportTermsId: null,
-            awardReportTrackingFile: null,
-            awardReportTrackingId: null,
-            comments: null,
-            dueDate: null,
-            preparerId: null,
-            preparerName: null,
-            progressReportId: null,
-            sequenceNumber: this.awardData.sequenceNumber,
-            statusCode: '1'
-        };
+    * this function sets colour for status badge, need to make css class and add here for future use
+    */
+    getColorForStatus(code: string, isProgressReport): string {
+        if (isProgressReport) {
+            if (code === '4') {
+                return 'approved-status';
+            }
+            if (code === '1') {
+                return 'inProgress-status';
+            }
+            return 'inProgress-status';
+        } else {
+            if (code === '1') {
+                return 'pending-status';
+            }
+            return 'inProgress-status';
+        }
     }
 
     /**
      * statusCode = 5 : Closed Award status.
      */
-    checkIfReportIsActive({awardSequenceStatus = '', awardStatus = {statusCode: null}}) {
+    checkIfReportIsActive({ awardSequenceStatus = '', awardStatus = { statusCode: null } }) {
         if (awardSequenceStatus && awardStatus.statusCode) {
             const inactiveStatuses = ((awardSequenceStatus !== 'ACTIVE') ||
                 (awardSequenceStatus === 'ACTIVE' && awardStatus.statusCode === '5'));
@@ -128,11 +116,11 @@ export class ReportingRequirementDetailsComponent implements OnChanges {
         }
     }
 
-
     setPermissions() {
-        this.isModifiable = (this.isEditMode &&  this.awardData.awardSequenceStatus === 'PENDING') ? true :
+        this.isModifiable = (this.awardData.awardSequenceStatus === 'PENDING') ? true :
             this._commonData.checkDepartmentLevelRightsInArray('MAINTAIN_REPORTING_REQUIREMENTS');
         this.isReportCreatable = this._commonData.checkDepartmentLevelRightsInArray('CREATE_PROGRESS_REPORT');
+        this.hasRight = this._commonData.checkDepartmentLevelRightsInArray('MAINTAIN_REPORTING_REQUIREMENTS');
     }
 
     convertTimestampToDate() {
@@ -142,183 +130,118 @@ export class ReportingRequirementDetailsComponent implements OnChanges {
         });
     }
 
-    /**
-     * progressReportStatusCode : 4 => Approved.
-     * @param awardReportTracking
-     */
-    setUploadCreateIndex(awardReportTracking: any) {
-        this.uploadIndex = awardReportTracking.findIndex(item => !item.awardReportTrackingFile);
-        if (this.isProgressReportEnabled && ['1', '2'].includes(this.childReport.reportClass.reportClassCode) && !this.isEditMode) {
-            const isProgressReportPresent = awardReportTracking.findIndex(item => item.progressReportId) >= 0;
-            if (isProgressReportPresent) {
-                const lastIndexWithoutProgressReport = awardReportTracking.findIndex(item => !item.progressReportId);
-                if (lastIndexWithoutProgressReport < 0) {
-                    return this.createIndex = null;
-                }
-                const approvedReport = awardReportTracking[(lastIndexWithoutProgressReport - 1)]
-                    .awardProgressReport.progressReportStatus.progressReportStatusCode === '4';
-                this.createIndex = approvedReport ? lastIndexWithoutProgressReport : null;
-            } else {
-                this.createIndex = 0;
-            }
-        }
-    }
-
-    setElasticOptions(awardReportTrackList) {
-        if (awardReportTrackList) {
-            awardReportTrackList.forEach((element, index) => {
-                this.elasticSearchOptions[index] = this._elasticConfig.getElasticForPerson();
-                if (element.preparerName) {
-                    this.elasticSearchOptions[index].defaultValue = element.preparerName;
-                }
-            });
-        }
-    }
-
-    selectedPerson(event, index) {
-        if (event !== null) {
-            this.childReport.awardReportTracking[index].preparerId = event.prncpl_id;
-            this.childReport.awardReportTracking[index].preparerName = event.full_name;
-        } else {
-            this.childReport.awardReportTracking[index].preparerId = null;
-            this.childReport.awardReportTracking[index].preparerName = '';
-        }
-    }
-
-    clearAttachmentDetails() {
-        this.isReplaceAttachment = false;
-    }
-
-    toggleAttachmentModal() {
-        document.getElementById('triggerAddAttachmentModal' + this.childReport.awardReportTermsId).click();
-    }
-
-    toggleVersionModal() {
-        document.getElementById('triggerAttachmentVersionModal' + this.childReport.awardReportTermsId).click();
-    }
-
-    showUploadModal(index, reportTrackingList) {
-        this.reportTrackingList = reportTrackingList;
-        this.selectedIndex = index;
-        this.toggleAttachmentModal();
-    }
-
-    addReportAttachment(files: any) {
-        if (files.length === 1) {
-            this.performAttachmentOperation(files[0]);
-        }
-    }
-
-    private performAttachmentOperation(file: any): void {
-        const requestObject = this.generateAttachmentRequestObject(file);
-        this.generateRequestUsingStrategy(requestObject, file);
-        if (this.isReplaceAttachment) { this.isReplaceAttachment = false; }
-    }
-
-    private generateRequestUsingStrategy(requestObject: any, file: any): void {
-        if (!this._commonService.isWafEnabled) {
-            this.uploadWithoutWaf(requestObject);
-        } else {
-            this.uploadWithWaf(requestObject, file);
-        }
-    }
-
-    private generateAttachmentRequestObject(file: any): any {
-        if (this.isDeleteAttachment) {
-            return this.generateDeleteReqObj();
-        }
-        return this.generateAddOrReplaceReqObj(file);
-    }
-
-    private uploadWithoutWaf(requestObject: any): void {
-        this.$subscriptions.push(this._reportTermsService.addAwardReportTrackingAttachment(requestObject).subscribe((data: any) => {
-            if (this.isDeleteAttachment) {
-                this.saveToAttachmentObject(null);
-                return this.isDeleteAttachment = false;
-            }
-            this.saveToAttachmentObject(data.awardReportTrackingFiles[0]);
-            this.setUploadCreateIndex(this.childReport.awardReportTracking);
-            this.toggleAttachmentModal();
-        }, _err => {
-            if (this.isDeleteAttachment) { this.isDeleteAttachment = false; }
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to upload attachment, Please try again.');
-        }));
-    }
-
-    private async uploadWithWaf(requestObject: any, file: any): Promise<void> {
-        const wafRequestObject = {
-            awardReportTrackingFile: requestObject,
-            awardReportTrackingId: this.reportTrackingList.awardReportTrackingId,
-            personId: this._commonService.getCurrentUserDetail('personID'),
-            awardId: this.awardData.awardId,
-            actionType: this.isDeleteAttachment ? 'D' : this.isReplaceAttachment ? 'R' : 'I'
-        };
-        const response = await this.performWafRequest(wafRequestObject, file);
-        this.checkIfAttachmentSaved(response);
-    }
-
-    private async performWafRequest(wafRequestObject: any, file: any): Promise<any> {
-        let response: any;
-        if (this.isDeleteAttachment) {
-            response = await this._wafAttachmentService.saveWafRequest(wafRequestObject, '/addAwardReportTrackingAttachmentForWaf');
-        } else {
-            response = await this._wafAttachmentService.saveAttachment(wafRequestObject, null, [file],
-                '/addAwardReportTrackingAttachmentForWaf', null, null);
-        }
-        return response;
-    }
-
-    private checkIfAttachmentSaved(data: any): any {
-        if (data && data.error) {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Waf blocked request for uploading the attachment');
-            if (this.isDeleteAttachment) { return this.isDeleteAttachment = false; }
-        }
-        if (data && !data.error && !this.isDeleteAttachment) {
-            this.saveToAttachmentObject(data.awardReportTrackingFile);
-            this.setUploadCreateIndex(this.childReport.awardReportTracking);
-        } else if (this.isDeleteAttachment) {
-            this.saveToAttachmentObject(null);
-            return this.isDeleteAttachment = false;
-        }
-        this.toggleAttachmentModal();
-    }
-
     downloadReportAttachment(attachment: any) {
         this.$subscriptions.push(this._reportTermsService.downloadAwardReportTrackingAttachment(attachment.awardReportTrackingFileId)
             .subscribe(data => {
                 fileDownloader(data, attachment.fileName);
-            }, _err => this._commonService.showToast(HTTP_ERROR_STATUS, 'Downloading reporting requirement attachment failed. Please try again.')));
+            }, _err => this._commonService.showToast(HTTP_ERROR_STATUS,
+                'Downloading reporting requirement attachment failed. Please try again.')));
     }
 
-    deleteReportTracking(index: number) {
+    navigateToReport(progressReportId: any) {
+        openInNewTab('progress-report/overview?', ['progressReportId'], [progressReportId]);
+    }
+
+    openFormModalForNonProgressReport(trackingObj: AwardReportTracking): void {
+        this.reportTrackingList = JSON.parse(JSON.stringify(trackingObj));
+        this.sendDataForModal(this.reportTrackingList, 'nonProgressReport');
+    }
+
+    openDueDateEditModal(trackingObj: AwardReportTracking): void {
+        this.reportTrackingList = JSON.parse(JSON.stringify(trackingObj));
+        this.sendDataForModal(this.reportTrackingList, 'dueDate');
+    }
+
+    openCreateProgressReportModal(trackingObj: AwardReportTracking): void {
+        this.reportTrackingList = JSON.parse(JSON.stringify(trackingObj));
+        const data = {
+            trackingObj: JSON.parse(JSON.stringify(trackingObj)),
+            reportClassCode: this.childReport.reportClassCode,
+            reportCode: this.childReport.reportCode,
+            frequency: this.childReport.frequencyCode
+        };
+        this.sendDataForModal(data, 'progressReport');
+    }
+
+    sendDataForModal(data, flag): void {
+        this.setDataToModal.next(new DataChange(data, flag, this.uniqueComponentId));
+    }
+
+    deleteTrackingModal(trackingObj: AwardReportTracking): void {
+        this.reportTrackingList = JSON.parse(JSON.stringify(trackingObj));
+        this.sendDataForModal(JSON.parse(JSON.stringify(trackingObj)), 'deleteTracking');
+    }
+
+    /**
+    * this function calls apis for delete tracking, save tracking, delete attachment, progress report and updates this component
+    */
+    parentEventHandler(action): void {
+        switch (action.flag) {
+            case 'deleteTracking':
+                this.deleteReportTracking(action.data.reportTracking);
+                break;
+            case 'saveTracking':
+                this.saveReportTrackingDetails(action.data);
+                break;
+            case 'deleteAttachment':
+                this.deleteAttachment(action.data);
+                break;
+            case 'progressReport':
+                this.updateProgressReport(action.data);
+                break;
+        }
+    }
+
+    deleteReportTracking(reportTracking): void {
+        const reqObj = {
+            awardReportTrackingId: reportTracking.awardReportTrackingId,
+            awardNumber: this.awardData.awardNumber,
+            uniqueId: reportTracking.uniqueId,
+            awardId: this.awardData.awardId
+        };
         this.$subscriptions.push(this._reportTermsService
-            .deleteReportTracking(this.childReport.awardReportTracking[index].awardReportTrackingId).subscribe((res: any) => {
-                this.rowData.awardReportTracking.splice(index, 1);
-                this.childReport.awardReportTracking.splice(index, 1);
-                this.setElasticOptions(this.childReport.awardReportTracking);
-                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entry deleted successfully.');
-            }, err => this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to delete entry, Please try again.')));
+            .deleteReportTracking(reqObj).subscribe((res: any) => {
+                if (res.existInActive !== 'true') {
+                    this.updateDataForSearch.emit({
+                        data: { reportTracking: { awardReportTrackingId: reportTracking.awardReportTrackingId } },
+                        flag: 'delete'
+                    });
+                    const index = this.childReport.awardReportTracking.
+                        findIndex((x) => x.awardReportTrackingId === reportTracking.awardReportTrackingId);
+                    this.childReport.awardReportTracking.splice(index, 1);
+                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entry deleted successfully.');
+                    return null;
+                } else {
+                    $('#activeDataExist').modal('show');
+                }
+            },
+                err => this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to delete entry. Please try again.'))
+        );
     }
 
-    saveReportTrackingDetails(reportTrackingList, index) {
-        if (this.isEditMode && (!this.isFormValid(reportTrackingList) || this.isSaving)) {
-            return;
+    saveReportTrackingDetails(data): void {
+        if (this.isEditMode && (!this.validateReportingReq(data.reportTracking) || this.isSaving)) {
+            return null;
         }
         this.isSaving = true;
-        const requestObject = this.setDateFormat(reportTrackingList);
-        requestObject.awardReportTermsId = this.childReport.awardReportTermsId;
-        this.$subscriptions.push(this._reportTermsService.saveOrUpdateReportTracking({
-            'awardReportTracking': requestObject
-        }).subscribe((data: any) => {
-            if (this.isAddNewReporting) {
-                this.rowData.awardReportTracking.push(data.awardReportTracking);
-                this.cancelAddReminder.emit(false);
-            } else {
-                this.rowData.awardReportTracking[index] = JSON.parse(JSON.stringify(requestObject));
-            }
-            this.childReport.awardReportTracking = this.sortAwardReportTracking(this.childReport.awardReportTracking);
-            this.cancelEditRow(false);
+        const requestObject = this.setDateFormat(data.reportTracking);
+        requestObject.awardReportTermsId = data.reportTracking.awardReportTermsId;
+        requestObject.createProgressReport = data.reportTracking.createProgressReport;
+        const formData = new FormData();
+        if (data.file[0] && data.file[0] instanceof Blob ) {
+            this.setAttachmentToRequestObject(data, requestObject, formData);
+        }
+        formData.append('formDataJson', JSON.stringify({
+            awardReportTracking: requestObject,
+        }));
+        this.$subscriptions.push(this._reportTermsService.saveOrUpdateReportTracking(
+            formData
+        ).subscribe( (res: any) => {
             this.isSaving = false;
+            this.updateDataForSearch.emit({ data: { reportTracking: res.awardReportTracking}, flag: 'save' });
+            this.updateReportList(res.awardReportTracking.awardReportTrackingId, res);
+            $('#nonProgressReportCreateModal').modal('hide');
+            $('#dueDateEditModal').modal('hide');
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Entry saved successfully.');
         }, err => {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to save entry, Please try again.');
@@ -326,23 +249,35 @@ export class ReportingRequirementDetailsComponent implements OnChanges {
         }));
     }
 
-    sortAwardReportTracking(list: any[]): any[] {
-        list.sort((a: any, b: any) => {
-            let first: any, second: any;
-            first = new Date(a.dueDate);
-            second = new Date(b.dueDate);
-            if (first < second) {
-                return -1;
-            }
-            if (first > second) {
-                return 1;
-            }
-            return 0;
-        });
-        return list;
+    private setAttachmentToRequestObject(data: any, requestObject: AwardReportTracking, formData: FormData) {
+        const awardReportTrackingFiles: AwardReportTrackingFile[] = [];
+        const awardReportTrackingFile: AwardReportTrackingFile = this.getReportTrackingFile(data);
+        awardReportTrackingFiles.push(awardReportTrackingFile);
+        requestObject.awardReportTrackingFiles = awardReportTrackingFiles;
+        formData.append('files', data.file[0], data.file[0].name);
     }
 
-    isFormValid(reportTrackingList: any) {
+    private getReportTrackingFile(data: any): AwardReportTrackingFile {
+        return {
+            awardReportTermsId: data.reportTracking.awardReportTermsId,
+            awardReportTrackingId: data.reportTracking.awardReportTrackingId,
+            awardId: this.awardData.awardId,
+            awardNumber: this.awardData.awardNumber,
+            sequenceNumber: this.awardData.sequenceNumber,
+            fileName: data.file[0] ? data.file[0].name : null,
+            contentType: data.file[0] ? data.file[0].type : null,
+            versionNumber: data.reportTracking.awardReportTrackingFile
+                ? data.reportTracking.awardReportTrackingFile.versionNumber || null : null,
+            uniqueId: data.reportTracking.uniqueId
+        };
+    }
+
+    private updateReportList(awardReportTrackingId: number, data: any): void {
+        const index = this.childReport.awardReportTracking.findIndex((x) => x.awardReportTrackingId === awardReportTrackingId);
+        this.childReport.awardReportTracking[index] = data.awardReportTracking;
+    }
+
+    validateReportingReq(reportTrackingList: any): boolean {
         this.validateMap.clear();
         if (!reportTrackingList.dueDate) {
             this.validateMap.set('dueDate', 'Please enter a due date');
@@ -351,152 +286,48 @@ export class ReportingRequirementDetailsComponent implements OnChanges {
         return true;
     }
 
-    setDateObject(awardReportTracking) {
-        return {
-            ...awardReportTracking,
-            dueDate: getDateObjectFromTimeStamp(awardReportTracking.dueDate),
-            activityDate: getDateObjectFromTimeStamp(awardReportTracking.activityDate)
-        };
-    }
-
-    setDateFormat(reportTrackingList) {
+    setDateFormat(reportTrackingList: AwardReportTracking): AwardReportTracking {
         return {
             ...reportTrackingList,
             dueDate: parseDateWithoutTimestamp(reportTrackingList.dueDate),
-            activityDate: parseDateWithoutTimestamp(reportTrackingList.activityDate)
+            activityDate: parseDateWithoutTimestamp(reportTrackingList.activityDate),
         };
     }
 
-    showAttachmentVersions(reportTrackingList: any) {
-        this.attachmentVersions = [];
-        this.fileName = reportTrackingList.awardReportTrackingFile.fileName;
-        const awardReportTrackingId = reportTrackingList.awardReportTrackingFile.awardReportTrackingId;
-        this.$subscriptions.push(this._reportTermsService
-            .getReportTrackingAttachmentVersions(awardReportTrackingId).subscribe((res: any) => {
-                this.attachmentVersions = res.attachmentVersions;
-                this.toggleVersionModal();
-            }));
-    }
-
-    navigateToReport(progressReportId: any) {
-        openInNewTab('progress-report/overview?', ['progressReportId'], [progressReportId]);
-    }
-
-    editRow(reportTrackingList: any, index: number) {
-        this.isRowEdit = [];
-        this.isRowEdit[index] = true;
-        if (typeof this.editIndex === 'number' && this.editedRowCopy) {
-            this.restoreEditedRowData();
-        }
-        this.editedRowCopy = JSON.parse(JSON.stringify(reportTrackingList));
-        this.editIndex = index;
-    }
-
-    cancelEditRow(restoreRowData = true) {
-        this.isRowEdit = [];
-        if (restoreRowData && typeof this.editIndex === 'number' && this.editedRowCopy) {
-            this.restoreEditedRowData();
-        }
-        this.editIndex = null;
-        this.editedRowCopy = {};
-    }
-
-    restoreEditedRowData() {
-        this.childReport.awardReportTracking[this.editIndex] = this.editedRowCopy;
-        this.setElasticOptions(this.childReport.awardReportTracking);
-        this.validateMap.clear();
-    }
-
-    cancelIfEditMode() {
-        if (typeof this.editIndex === 'number') {
-            this.cancelEditRow();
-        }
-    }
-
-    cancelAddNewReporting(): void {
-        this.cancelEditRow();
-        this.childReport.awardReportTracking.splice(0, 1);
-        this.cancelAddReminder.emit(false);
-    }
-
-    createProgressReportRequestObject({awardId, awardNumber, sequenceNumber, dueDate, awardReportTrackingId},
-                                      reportClassCode, frequencyCode) {
-        this.createReportDetails = {
-            title: this.awardData.title,
-            dueDate, reportTrackingId: awardReportTrackingId, sequenceNumber,
-            awardNumber, reportClassCode, awardId, reportStartDate: null, reportEndDate: null, frequencyCode
-        };
-    }
-
-    runPostReportCreationProcesses(_progressId: number | null): void {
-        this.uniqueModalId = null;
-        this.setUploadCreateIndex(this.childReport.awardReportTracking);
-        this.dataChange.emit(true);
-        this.refreshReport.next();
-    }
-
-    public triggerConfirmDeleteAttachment(index: number, reportTrackingList: any): void {
-        this.selectedIndex = index;
-        this.reportTrackingList = reportTrackingList;
-        this.cancelIfEditMode();
-    }
-
-    /**
-     * Delete an attachment (if attachment id is present) or delete a single line item.
-     */
-    public performDelete(): void {
-        if (this.isDeleteAttachment) {
-            return this.performAttachmentOperation(null);
-        }
-        this.deleteReportTracking(this.selectedIndex);
-    }
-
-    private generateAddOrReplaceReqObj(file: any): FormData | any {
-        const awardReportTrackingFiles: any = [];
-        const awardReportTrackingFile: any = {};
-        awardReportTrackingFile.awardReportTermsId = this.childReport.awardReportTermsId;
-        awardReportTrackingFile.awardReportTrackingId = this.reportTrackingList.awardReportTrackingId;
-        this.reportTrackingList.dueDate = parseDateWithoutTimestamp(this.reportTrackingList.dueDate);
-        this.reportTrackingList.activityDate = parseDateWithoutTimestamp(this.reportTrackingList.activityDate);
-        awardReportTrackingFile.awardId = this.awardData.awardId;
-        awardReportTrackingFile.awardNumber = this.awardData.awardNumber;
-        awardReportTrackingFile.sequenceNumber = this.awardData.sequenceNumber;
-        awardReportTrackingFile.fileName = file ? file.name : null;
-        awardReportTrackingFile.contentType = file ? file.type : null;
-        awardReportTrackingFile.versionNumber = this.reportTrackingList.awardReportTrackingFile ?
-            this.reportTrackingList.awardReportTrackingFile.versionNumber : null;
-        awardReportTrackingFiles.push(awardReportTrackingFile);
-        if (!this._commonService.isWafEnabled) {
-            const formData = new FormData();
-            formData.append('files', file, file.name);
-            formData.append('formDataJson', JSON.stringify({
-                'awardReportTrackingFiles': awardReportTrackingFiles,
-                'awardReportTrackingId': this.reportTrackingList.awardReportTrackingId,
-                'awardId': this.awardData.awardId,
-                'actionType': this.isReplaceAttachment ? 'R' : 'I'
-            }));
-            return formData;
-        } else {
-            return awardReportTrackingFile;
-        }
-    }
-
-    private generateDeleteReqObj(): FormData | null {
-        if (this._commonService.isWafEnabled) {
-            return null;
-        }
-        const formData = new FormData();
-        formData.append('formDataJson', JSON.stringify({
-            'awardReportTrackingId': this.reportTrackingList.awardReportTrackingId,
-            'awardId': this.awardData.awardId,
-            'actionType': 'D'
+    deleteAttachment(data): void {
+        this.$subscriptions.push(this._reportTermsService.deleteReportTrackingAttachment(this.generateDeleteRO(data.reportTracking))
+        .subscribe( (res: any) => {
+                this.updateDataForSearch.emit({
+                    data: { reportTracking: {awardReportTrackingId: res.awardReportTrackingId} },
+                    flag: 'deleteAttachment'
+                });
+                this.removeAttachmentFromModalReference();
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment Deleted successfully.');
+        }, err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to Delete Attachment. Please try again.');
         }));
-        return formData;
     }
 
-    private saveToAttachmentObject(fileData: any): void {
-        return this.childReport.awardReportTracking[this.selectedIndex].awardReportTrackingFile =
-            this.rowData.awardReportTracking[this.selectedIndex].awardReportTrackingFile = fileData;
+    private removeAttachmentFromModalReference() {
+        this.reportTrackingList.awardReportTrackingFile = null;
+        this.reportTrackingList.awardReportTrackingFiles = [];
+    }
+
+    private generateDeleteRO(reportTracking): AwardReportTracking {
+        return reportTracking;
+    }
+
+    updateProgressReport(progressReport): void {
+        const index = this.childReport.awardReportTracking
+            .findIndex((x) => x.awardReportTrackingId === this.reportTrackingList.awardReportTrackingId);
+        if (index !== -1) {
+            this.childReport.awardReportTracking[index].progressReportId = progressReport.progressReportId;
+            this.childReport.awardReportTracking[index].awardProgressReport = progressReport;
+        }
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
     }
 
 }

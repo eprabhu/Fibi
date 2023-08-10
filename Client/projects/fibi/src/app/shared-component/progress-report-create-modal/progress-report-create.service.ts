@@ -22,4 +22,8 @@ export class ProgressReportCreateService {
     saveOrUpdateProgressReport(params) {
         return this._http.post(this._commonService.baseUrl + '/saveOrUpdateProgressReport', params);
     }
+
+    getProgressReportLookUpData() {
+        return this._http.get(this._commonService.baseUrl + '/getProgressReportLookUpData');
+      }
 }

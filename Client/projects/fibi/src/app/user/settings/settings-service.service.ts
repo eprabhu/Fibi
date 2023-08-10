@@ -148,4 +148,8 @@ export class SettingsServiceService {
     costAllocationWithManualDates(param) {
         return this._http.post(this._commonService.baseUrl + '/costAllocationWithManualDates',param);
     }
+
+    updateFeedStatusManually(awardNumber: string) {
+        return this._http.get(`${this._commonService.baseUrl}/updateFeedStatusManually/${awardNumber}`);
+    }    
 }

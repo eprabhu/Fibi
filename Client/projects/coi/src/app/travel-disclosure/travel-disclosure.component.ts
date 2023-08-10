@@ -10,14 +10,14 @@ import { environment } from '../../environments/environment';
 import { TravelDataStoreService } from './services/travel-data-store.service';
 import {
     CoiTravelDisclosure, DefaultAdminDetails, TravelCreateModalDetails,
-    TravelActionAfterSubmitRO, TravelDisclosure, EntityDetails } from './travel-disclosure-interface';
+    TravelActionAfterSubmitRO, TravelDisclosure, EntityDetails, ModalSize } from './travel-disclosure-interface';
 import {
     HOME_URL, HTTP_ERROR_STATUS, ADMIN_DASHBOARD_URL, HTTP_SUCCESS_STATUS,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
+import { PersonProjectOrEntity } from '../shared-components/shared-interface';
 
 type Method = 'SOME' | 'EVERY';
-type ModalSize = 'sm' | 'lg' | 'xl' | '';
 
 @Component({
     selector: 'app-travel-disclosure',
@@ -33,6 +33,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     defaultAdminDetails = new DefaultAdminDetails();
     travelDisclosure: TravelDisclosure = new TravelDisclosure();
     entityDetails: EntityDetails = new EntityDetails();
+    personEntityDetails: PersonProjectOrEntity = new PersonProjectOrEntity();
 
     isCreateMode = true;
     isMandatory = false;
@@ -47,9 +48,10 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     currentPersonId = '';
     modalHeaderTitle = '';
     modalActionBtnName = '';
-    descriptionError = '';
-    withdrawError = 'Describe the reason for withdrawing the disclosure';
-    returnError = 'Describe the reason for returning the disclosure';
+    descriptionErrorMsg = '';
+    textAreaLabelName = '';
+    withdrawErrorMsg = 'Describe the reason for withdrawing the disclosure';
+    returnErrorMsg = 'Describe the reason for returning the disclosure';
     confirmationModalDescription = '';
 
     userDetails = {
@@ -58,14 +60,14 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         homeUnit: null,
         homeUnitName: null
     };
-    helpText = [];
-    withdrawHelpText = [
+    helpTexts = [];
+    withdrawHelpTexts = [
         `Withdraw any disclosure in 'Submitted' status.`,
         `Describe the reason for withdrawal in the field provided.`,
         `Click on 'Withdraw' button to recall your disclosure for any modification.`
     ];
-    returnHelpText = [
-        `Return any disclosure in 'Submitted/Review In Progress' status.`,
+    returnHelpTexts = [
+        `Return any disclosure in 'Review In Progress' status.`,
         `Describe the reason for returning  in the field provided.`,
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
@@ -249,21 +251,31 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             this.travelDisclosure.reviewStatusCode = event.reviewStatusCode;
             this.travelDisclosure.reviewStatus = event.reviewStatus;
             this.travelDisclosure.updateTimestamp = event.updateTimestamp;
+            this.travelDisclosure.disclosureStatusCode = event.disclosureStatusCode;
+            this.travelDisclosure.disclosureStatus = event.disclosureStatus;
             this._dataStore.manualDataUpdate(this.travelDisclosure);
         }
         this.isAddAssignModalOpen = false;
     }
 
     openConfirmationModal(actionBtnName: string, needDescriptionField: boolean,
-            helpText: [] = [], isMandatory: boolean = false, descriptionError: string = ''): void {
+            helpTexts: string [] = [], isMandatory: boolean = false, descriptionErrorMsg: string = ''): void {
         this.modalActionBtnName = actionBtnName;
         this.needDescriptionField = needDescriptionField;
         this.isMandatory = isMandatory;
-        this.helpText = helpText;
-        this.modalSize = actionBtnName === 'Submit' ? '' : 'lg';
+        this.helpTexts = helpTexts;
+        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Return';
+        this.modalSize = 'lg';
+        this.setPersonEntityDetails();
         this.setModalHeaderTitle(actionBtnName);
-        this.descriptionError = descriptionError;
+        this.descriptionErrorMsg = descriptionErrorMsg;
         document.getElementById('travel-confirmation-modal-trigger-btn').click();
+    }
+
+    private setPersonEntityDetails(): void {
+        this.personEntityDetails.personFullName = this.travelDisclosure?.personFullName;
+        this.personEntityDetails.entityName = this.travelDisclosure?.travelEntityName;
+        this.personEntityDetails.unitDetails = `${this.travelDisclosure?.homeUnitNumber} - ${this.travelDisclosure?.homeUnitName}`;
     }
 
     openConflictSlider(): void {
@@ -273,6 +285,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     closeConflictSlider(): void {
         this.isOpenSlider = false;
     }
+
 
     performDisclosureAction(event: string): void {
         this.needDescriptionField = false;

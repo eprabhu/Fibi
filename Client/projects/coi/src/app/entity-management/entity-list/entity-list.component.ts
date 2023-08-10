@@ -12,21 +12,22 @@ import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { deepCloneObject, isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { NavigationService } from '../../common/services/navigation.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-entity-list',
   templateUrl: './entity-list.component.html',
   styleUrls: ['./entity-list.component.scss'],
   animations: [slideInOut, listAnimation, topSlideInOut, fadeInOutHeight,
-    slideInAnimation('0','12px', 400, 'slideUp'),
-    slideInAnimation('0','-12px', 400, 'slideDown'),
-    scaleOutAnimation('-2px','0', 200, 'scaleOut'),
+    slideInAnimation('0', '12px', 400, 'slideUp'),
+    slideInAnimation('0', '-12px', 400, 'slideDown'),
+    scaleOutAnimation('-2px', '0', 200, 'scaleOut'),
 ]
 })
 export class EntityListComponent implements OnDestroy, OnInit {
 
   activeTabName = 'ALL_ENTITIES';
-  isViewAdvanceSearch = true;
+  isViewAdvanceSearch = false;
   coiElastic = null;
   $coiList = new Subject();
   coiList = [];
@@ -74,24 +75,19 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.coiElastic = this._elasticConfig.getElasticForCoi();
     this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
     this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+    this.isViewAdvanceSearch = false;
     if (!this.entityManagementService.coiRequestObject.tabName) {
       this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
     } else {
       this.activeTabName = this.entityManagementService.coiRequestObject.tabName;
-      this.isViewAdvanceSearch = true;
       this.EntitySearchOptions.defaultValue = this.entityManagementService.entityDashDefaultValues.entitySearch;
       this.countrySearchOptions.defaultValue = this.entityManagementService.entityDashDefaultValues.countrySearch;
       this.generateLookupArrayForDropdown();
-      this.advancedSearch();
     }
     this.checkUserHasRight();
-    this.loadEntities();
-  }
-
-  loadEntities() {
-    this.$entityList.subscribe((data) => {
-      this.viewListOfEntity();
-    });
+    this.viewListOfEntity();
+    this.checkForAdvanceSearch();
+    this.showEntities();
   }
 
   ngOnDestroy() {
@@ -112,14 +108,28 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.activeTabName = tabName;
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
     this.isShowAllProposalList = true;
+    this.entityManagementService.isAdvanceSearch = false;
     if (this.activeTabName === 'ALL_ENTITIES') {
-      this.isShowEntityList = false;
+        this.isShowEntityList = false;
       this.isViewAdvanceSearch = true;
     } else {
       this.isShowEntityList = true;
-      this.viewListOfEntity();
+      this.$entityList.next();
       this.isViewAdvanceSearch = false;
       this.isShowAllProposalList = true;
+    }
+  }
+  checkForAdvanceSearch() {
+    if ( this.entityManagementService.isAdvanceSearch) {
+       this.isViewAdvanceSearch = true;
+    }
+    if (this.activeTabName === 'ALL_ENTITIES') {
+      this.isViewAdvanceSearch = true;
+      this.isShowEntityList = false;
+      if (this.entityManagementService.isAdvanceSearch) {
+        this.isShowEntityList = true;
+        this.$entityList.next();
+      }
     }
   }
 
@@ -127,19 +137,20 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: coi.id } });
   }
 
-  viewListOfEntity() {
-    this.isLoading = true;
-    this.$subscriptions.push(
-      this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject)
-        .subscribe((res: any) => {
-          this.entityList = res.coiEntityList || [];
-          this.resultCount = res.entityCount;
-          this.isLoading = false;
-        }, _error => {
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-          this.entityList = [];
-          this.isLoading = false;
-        }));
+ viewListOfEntity() {
+    this.$subscriptions.push(this.$entityList.pipe(
+      switchMap(() => {
+        this.isLoading = true;
+        return this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject);
+      })).subscribe((res: any) => {
+        this.entityList = res.coiEntityList || [];
+        this.resultCount = res.entityCount;
+        this.isLoading = false;
+      }, _error => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+        this.entityList = [];
+        this.isLoading = false;
+      }));
   }
 
   addNewEntity() {
@@ -150,6 +161,16 @@ export class EntityListComponent implements OnDestroy, OnInit {
   selectedEvent(event) {
     this.entityManagementService.coiRequestObject.property1 = event ? event.entityName : '';
     this.entityManagementService.entityDashDefaultValues.entitySearch = event ? event.entityName : '';
+  }
+  showEntities() {
+    if (this.activeTabName !== 'ALL_ENTITIES' ) {
+      this.$entityList.next();
+      this.isShowEntityList = true;
+      this.isShowAllProposalList = true;
+      if (this.isViewAdvanceSearch) {
+       this. isViewAdvanceSearch = true;
+      }
+    }
   }
 
   selectEntityCountry(country: any) {
@@ -174,18 +195,19 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.resetAdvanceSearchFields();
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
     this.entityList = [];
-    this.viewListOfEntity();
+    this.$entityList.next();
   }
   navigateNextPage(event) {
-    this.viewListOfEntity();
+    this.$entityList.next();
   }
 
   advancedSearch() {
     this.entityList = [];
-    this.viewListOfEntity();
+    this.$entityList.next();
     this.isShowEntityList = true;
     this.isShowAllProposalList = true;
-  }
+    this.entityManagementService.isAdvanceSearch = true;
+    }
 
 
   generateLookupArrayForDropdown() {
@@ -220,7 +242,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
 
   actionsOnPageChange(event) {
     this.entityManagementService.coiRequestObject.currentPage = event;
-    this.viewListOfEntity();
+    this.$entityList.next();
   }
 
   checkUserHasRight(): void {
@@ -270,5 +292,10 @@ setEventTypeFlag() {
         }
 
     }
+
+   toggleAdvanceSearch() {
+     this.isViewAdvanceSearch = !this.isViewAdvanceSearch;
+     this.entityManagementService.isAdvanceSearch = this.isViewAdvanceSearch;
+  }
 
 }

@@ -90,6 +90,7 @@ export class ProposalEvaluationComponent implements OnInit, OnDestroy {
     storeDependencies = ['proposal', 'availableRights', 'proposalReviews', 'personRoles', 'evaluationReviewStop', 'hasQuestionnaire',
         'finalEvaluationStatus', 'evaluationRecommendation', 'hasRecommendation', 'hasRank', 'dataVisibilityObj'];
     isChanged = false;
+    validationMessage: any = {};
 
     constructor(
         private _proposalService: ProposalService,
@@ -1091,5 +1092,35 @@ export class ProposalEvaluationComponent implements OnInit, OnDestroy {
         $('#addReviewModal').modal('show');
     }
 
+    triggerValidationModal() {
+        const validationRequest: any = {
+            moduleCode: 3,
+            subModuleCode: 4,
+            moduleItemKey: this.result.proposal.proposalId,
+            subModuleItemKey: this.proposalReviewerReview.reviewId
+        };
+        if (!this.isSaving) {
+            this.isSaving = true;
+            this.validationMessage.errorMessage = [];
+            this.validationMessage.warningMessage = [];
+            this.$subscriptions.push(this._commonService.evaluateValidation(validationRequest).subscribe((data) => {
+                this.validationMessage.errorList = data;
+                if (this.validationMessage.errorList.length > 0) {
+                    this.validationMessage.errorList.forEach(element => {
+                        element.validationType === 'VE' ?
+                        this.validationMessage.errorMessage.push(element) :
+                        this.validationMessage.warningMessage.push(element);
+                        $('#ValidateApproveBudgetModal').modal('show');
+                    });
+                } else {
+                    this.getChangesWithOutSave();
+                }
+            }));
+            this.isSaving = false;
+        } else {
+            this.getChangesWithOutSave();
+            this.isSaving = false;
+        }
+    }
 
 }

@@ -109,10 +109,10 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService implemen
         if (this.awardChart.getSelection()[0].row !== null && this.awardChart.getSelection()[0].row !== undefined) {
           sponsorType = this.awardData.getFormattedValue(this.awardChart.getSelection()[0].row, 0);
           sessionStorage.removeItem('awardBySponsorOther');
-          if (sponsorType === 'Others') {
+          if (sponsorType.toLowerCase() === 'others') {
             const sponsorCodes: any = [];
             this.sponsorList.forEach(element => {
-              if (element[1] !== 'Others') {
+              if (element[1].toLowerCase !== 'others') {
                 sponsorCodes.push(`'` + element[0] + `'`);
               }
             });
@@ -124,7 +124,7 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService implemen
                 {
                   queryParams: {
                     'sponsorCode': this.sponsorList[index][0],
-                    'expandedViewAwardHeading': 'Awards by ' + sponsorType,
+                    'expandedViewAwardHeading': 'Active Awards by Sponsor: ' + sponsorType,
                     'UN': this.unitNumber,
                     'DF': this.descentFlag
                   }

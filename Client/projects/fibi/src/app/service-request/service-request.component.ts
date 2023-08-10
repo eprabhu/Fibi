@@ -232,6 +232,9 @@ export class ServiceRequestComponent implements OnInit, OnDestroy {
                     this.isSaving = false;
                     if (err.error && err.error.errorMessage  === 'Deadlock') {
                         this.showErrorMessage('Submit Service Request failed. Please try again.');
+                    }else if (err && err.status === 405) {
+                        $('#submit-approve-service-request').modal('hide');
+                        $('#invalidActionModal').modal('show');
                     } else {
                         this.showErrorMessage(`Transaction is not completed due to an error.
                         ${AWARD_ERR_MESSAGE}`);
@@ -256,7 +259,8 @@ export class ServiceRequestComponent implements OnInit, OnDestroy {
         return {
             comment: this.setComment(),
             attachment: this.newAttachments,
-            uploadedFile: this.uploadedFile
+            uploadedFile: this.uploadedFile,
+            serviceRequestStatus: this.serviceRequest.statusCode
         };
     }
 
@@ -437,14 +441,15 @@ export class ServiceRequestComponent implements OnInit, OnDestroy {
         this.requestObject.updateUser = this._commonService.getCurrentUserDetail('userName');
         this.requestObject.serviceRequestId = this.serviceRequest.serviceRequestId;
         this.requestObject.approveComment = this.submitComment;
+
     }
 
     /**shows success toast based on approve or disapprove Service request*/
     private showSuccessToast(): void {
         if (this.requestObject.actionType === 'A') {
-            this.showSuccessMessage(`Service request ${COMMON_APPROVE_LABEL.toLowerCase()}d successfully.`);
+            this.showSuccessMessage(`Service Request ${COMMON_APPROVE_LABEL.toLowerCase()}d successfully.`);
         } else if (this.requestObject.actionType === 'R') {
-            this.showSuccessMessage(`Service request ${COMMON_RETURN_LABEL.toLowerCase()}ed successfully.`);
+            this.showSuccessMessage(`Service Request ${COMMON_RETURN_LABEL.toLowerCase()}ed successfully.`);
         }
     }
 
@@ -466,7 +471,9 @@ export class ServiceRequestComponent implements OnInit, OnDestroy {
                     this.closeApproveDisapproveModal();
                     if (err.error && err.error.errorMessage  === 'Deadlock') {
                         this.showErrorMessage(`Service Request ${COMMON_APPROVE_LABEL.toLowerCase()}/${COMMON_RETURN_LABEL.toLowerCase()} action failed. Please try again.`);
-                    } else {
+                    } else if  (err && err.status === 405) {
+                            $('#invalidActionModal').modal('show');
+                     } else {
                         this.showErrorMessage(`Transaction is not completed due to an error.
                         ${AWARD_ERR_MESSAGE}`);
                     }
@@ -515,8 +522,13 @@ export class ServiceRequestComponent implements OnInit, OnDestroy {
                     this.clearAssign();
                     this.isSaving = false;
                 }, err => {
-                    this.assignErrorToast();
-                    this.isSaving = false;
+                    if (err && err.status === 405) {
+                        $('#assign-service-request').modal('hide');
+                        $('#invalidActionModal').modal('show');
+                    } else {
+                        this.assignErrorToast();
+                        this.isSaving = false;
+                    }
                 })
         );
 
@@ -571,7 +583,7 @@ export class ServiceRequestComponent implements OnInit, OnDestroy {
     private assignErrorToast(): void {
         this.assignRequest.isReturnServiceRequest ?
             this.showErrorMessage('Returning Service Request failed. Please try again.') :
-            this.showErrorMessage('Asigning Service Request failed. Please try again.');
+            this.showErrorMessage('Assigning Service Request failed. Please try again.');
     }
 
     clearAssign(): void {
@@ -599,7 +611,12 @@ export class ServiceRequestComponent implements OnInit, OnDestroy {
                     this.clearResolve();
                     this.isSaving = false;
                 }, err => {
-                    this.showErrorMessage('Resolving Service Request failed. Please try again.');
+                    if (err && err.status === 405) {
+                        $('#resolve-service-request').modal('hide');
+                        $('#invalidActionModal').modal('show');
+                    } else {
+                        this.showErrorMessage('Resolving Service Request failed. Please try again.');
+                    }
                     this.isSaving = false;
                 })
             );
@@ -668,7 +685,7 @@ export class ServiceRequestComponent implements OnInit, OnDestroy {
                 this.printTemplates = res.data || [];
                 $('#printServiceRequestModal').modal('show');
             }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching print templates failed. Please try again');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching print templates failed. Please try again.');
             }
         ));
     }
@@ -713,13 +730,17 @@ export class ServiceRequestComponent implements OnInit, OnDestroy {
                     }, (err) => {
                         this.closePrintModal();
                         setTimeout(() => {
-                            this._commonService.showToast(HTTP_ERROR_STATUS, 'Printing Service request failed. Please try again.');
+                            this._commonService.showToast(HTTP_ERROR_STATUS, 'Printing Service Request failed. Please try again.');
                         }, 500);
                         this.isDownloading = false;
                     }
 
                 ));
         }
+    }
+
+    reload() {
+        window.location.reload();
     }
 
     setTypeCodeArray() {

@@ -5,6 +5,9 @@
       <span class="d-block d-sm-block float-sm-right font-weight-normal mr-sm-5 fs-14">
         <i aria-hidden="true" class="fa fa-user-o mr-2"></i>Employee |
         <i aria-hidden="true" class="fa fa-user-circle text-danger mr-2"></i>Non-Employee
+        <span *ngIf="isEditable">
+          <button class="btn btn-sm btn-tertiary ml-3" data-toggle="modal" data-target="#add-person-modal" (click)="resetTeamFields();showTeamCard=false;"> Add Person</button>
+        </span>
       </span>
       <button id="project-expand-btn" class="updown-arrow" (click)="isShowCollapse = !isShowCollapse">
         <i [ngClass]="isShowCollapse?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"
@@ -13,99 +16,18 @@
   </div>
   <div class="card-content" *ngIf="isShowCollapse">
     <div class="card-body">
-      <ng-container *ngIf="isEditable">
-        <div class="form-row">
-          <div class="col-lg-4 col-sm-8 col-12">
-            <input id="employee_radio" type="radio" class="radio-inline" name='employee_nonemployee_team' [value]='true'
-              [(ngModel)]="isProjectTeamEmployee" (ngModelChange)="changeMemberType()">
-              <label for="employee_radio" class="mr-3">Employee</label>
-            <input id="non-employee-radio" type="radio" class="radio-inline" name='employee_nonemployee_team' [value]='false'
-              [(ngModel)]="isProjectTeamEmployee" (ngModelChange)="changeMemberType()">
-            <label for="non-employee-radio">Non-Employee</label>
-            <div class="searchBox mb-0">
-              <app-elastic [options]="projectTeamElasticOptions"
-                [placeHolder]="awardProjectTeam.nonEmployeeFlag ? 'Search a non-employee' :'Search an employee'"
-                [isError]="(map.get('projectfullname')) ? true : false"
-                (selectedResult)="selectProjectTeamPerson($event)" [clearField]="clearField"></app-elastic>
-                <div *ngIf="awardProjectTeam.nonEmployeeFlag && _commonService.isEnableAddtoAddressBook">
-                  <a id="prop-non-employee-add-btn" class="anchor-link" data-toggle="modal"
-                    data-target="#addNonEmployeeProjectTeam" (click)="isAddNonEmployeeTeamModal = true; showTeamCard = false;">
-                    <i aria-hidden="true" class="fa fa-user-plus"></i> <ng-container i18n="@@COMMON_ADD_TO_ADDRESS_BOOK">Add to Address Book</ng-container></a>
-                </div>
+      <div class="noDataOnChart noDataExists p-2"
+        *ngIf="(result?.awardProjectTeams?.length == 0 || !result?.awardProjectTeams) && isEditable">
+        <div class="no-data-container">
+          <span class="no-data-icon-outer">
+            <div class="no-data-icon">
+              <i aria-hidden="true" class="fa fa-file-o"></i>
+              <i aria-hidden="true" class="fa fa-times-circle-o"></i>
             </div>
-          </div>
-          <div class="col-lg-2 col-sm-4 col-6">
-            <span class="mandatory">*</span><label for="teamrole">Role</label>
-            <input class="form-control" id="teamrole" [(ngModel)]="awardProjectTeam.projectRole"
-              [ngClass]="(map.get('projectrole')) ? 'is-invalid block-display' : ''">
-            <div *ngIf="(map.get('projectrole'))" class="invalid-feedback block-display">{{map.get('projectrole')}}
-            </div>
-          </div>
-          <div class="col-lg-2 col-md-4 col-sm col-6">
-            <span class="mandatory">*</span><label>% Charged</label>
-            <input type="number" class="form-control"
-              [ngClass]="(map.get('projectpercentage')) ? 'is-invalid block-display' : ''"
-              [(ngModel)]="awardProjectTeam.percentageCharged"
-              placeholder="eg: 100, 99.99, 10.22, 25 etc"
-              (keyup)="limitKeypress(awardProjectTeam.percentageCharged)">
-            <div *ngIf="(map.get('projectpercentage'))" class="invalid-feedback block-display">
-              {{map.get('projectpercentage')}}</div>
-          </div>
-          <div class="col-lg-2 col-md-4 col-sm col-6">
-            <span class="mandatory">*</span><label>Start Date</label>
-            <span class="dateField">
-              <input matInput [matDatepicker]="openingDt" id="project-start-date" placeholder="Start Date"
-                [ngClass]="(map.get('projectstartdate'))? 'is-invalid block-display' : ''"
-                [(ngModel)]="awardProjectTeam.startDate" (keypress)="_commonService._keyPress($event, 'date');"
-                class="d-inline-block form-control" (click)="openingDt.open()"
-                (ngModelChange)="validateDate();
-                dateValidationBeforeAction(awardProjectTeam.startDate, 'projectstartdate', 'Please select start date.')" />
-              <span class="fa fa-calendar fa-large pointer insidePicker position hand-cursor" title="open calendar"
-                (click)="openingDt.open()"></span>
-              <mat-datepicker #openingDt (opened)="setFocusToElement('project-start-date')"
-                (closed)="validateDate()">
-              </mat-datepicker>
-            </span>
-            <div *ngIf="(map.get('projectstartdate'))" class="invalid-feedback block-display">
-              {{map.get('projectstartdate')}}</div>
-          </div>
-          <div class="col-lg-2 col-md-4 col-sm col-6">
-            <span class="mandatory">*</span><label>End Date</label>
-            <span class="dateField">
-              <input matInput [matDatepicker]="closingDt" closingDt id="project-end-date" placeholder="End Date"
-                [ngClass]="(map.get('projectenddate')) ? 'is-invalid block-display' : ''"
-                [(ngModel)]="awardProjectTeam.endDate" (ngModelChange)="validateDate();"
-                class="d-inline-block form-control" (click)="closingDt.open()"
-                (ngModelChange)="validateDate();
-                dateValidationBeforeAction(awardProjectTeam.endDate, 'projectenddate', 'Please select end date.')" />
-              <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor" title="open calendar"
-                (click)="closingDt.open()"></span>
-              <mat-datepicker #closingDt (opened)="setFocusToElement('project-end-date')"
-                (closed)="validateDate()">
-              </mat-datepicker>
-            </span>
-            <div *ngIf="(map.get('projectenddate'))" class="invalid-feedback block-display">
-              {{map.get('projectenddate')}}</div>
-          </div>
-          <div class="col-12" *ngIf="showTeamCard">
-            <app-person-rolodex-card (ShowElasticResults)="setShowElasticResults($event)"
-              [personRolodexObject]="selectedMemberObject"></app-person-rolodex-card>
-          </div>
-            <div class="col-12 text-center text-md-right">
-              <button *ngIf="isTeamEdit" class="btn btn-secondary btn-xs"
-                (click)="resetTeamFields();showTeamCard = false;">Cancel
-              </button>
-              <button *ngIf="!isTeamEdit" class="btn btn-primary-sub btn-xs"
-                (click)="saveOrUpdateProjectTeam('I')">
-                <ng-container i18n="@@AWARD_ADD_PROJECT_TEAM">Add Project Team</ng-container>
-              </button>
-              <button *ngIf="isTeamEdit" class="btn btn-primary-sub btn-xs"
-                (click)="saveOrUpdateProjectTeam('U')">
-                <ng-container i18n="@@AWARD_UPDATE_PROJECT_TEAM">Update Project Team</ng-container>
-              </button>
-            </div>
+          </span>
+          <h4>There is no information in this section.</h4>
         </div>
-      </ng-container>
+      </div>
       <div *ngIf="(result?.awardProjectTeams?.length == 0 || !result?.awardProjectTeams) && !isEditable"
         class="noDataExists px-2"><ng-container i18n="@@AWARD_NO_PROJECT_TEAM_ADDED_ERR">There are no project
         team members added in this Award</ng-container></div>
@@ -141,7 +63,7 @@
                   </li>
                   <ng-container *ngIf="isEditable">
                     <li>
-                      <a id="award-project-team-edit-btn" (click)="editProjectTeam(i); editIndex = i;isTeamEdit = true">
+                      <a id="award-project-team-edit-btn" data-toggle="modal" data-target="#add-person-modal" (click)="editProjectTeam(i); editIndex = i;isTeamEdit = true">
                         <i class="fa fa-pencil" aria-hidden="true" title="Click here to edit {{team.fullName}}"></i>
                       </a>
                     </li>
@@ -191,3 +113,115 @@
   <app-person-rolodex-view (personRolodexViewModal)="setPersonRolodexModalView($event)" *ngIf="isRolodexViewModal"
    [personRolodexType]="type" [personRolodexId]="id" [personRolodexIsTraining]="isTraining"
     [personRolodexPersonDescription]="personDescription" ></app-person-rolodex-view>
+
+<!-- Add Person Modal -->
+<div class="modal fade mySkinDialog" id="add-person-modal" role="dialog" aria-labelledby="skippedSchedulesTitle"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{isTeamEdit ? 'Update' : 'Add'}} Person</h5>
+        <button type="button" class="close" (click)="resetTeamFields()" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body py-1 px-3">
+        <app-award-overview-modal-card></app-award-overview-modal-card>
+        <div class="w-100">
+          <div class="form-row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-3">
+              <div class="form-check form-check-inline">
+                <input id="employee_radio" type="radio" class="radio-inline" name='employee_nonemployee_team'
+                  [value]='true' [(ngModel)]="isProjectTeamEmployee" (ngModelChange)="changeMemberType()">
+                <label for="employee_radio" class="mr-3 ml-1">Employee</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input id="non-employee-radio" type="radio" class="radio-inline" name='employee_nonemployee_team'
+                  [value]='false' [(ngModel)]="isProjectTeamEmployee" (ngModelChange)="changeMemberType()">
+                <label for="non-employee-radio" class="ml-1">Non-Employee</label>
+              </div>
+              <div class="searchBox position-relative mb-0">
+                <app-elastic [options]="projectTeamElasticOptions"
+                  [placeHolder]="awardProjectTeam.nonEmployeeFlag ? 'Search a non-employee' :'Search an employee'"
+                  [isError]="(map.get('projectfullname')) ? true : false"
+                  (selectedResult)="selectProjectTeamPerson($event)" [clearField]="clearField"></app-elastic>
+                <div *ngIf="awardProjectTeam.nonEmployeeFlag && _commonService.isEnableAddtoAddressBook">
+                  <a id="prop-non-employee-add-btn" class="anchor-link" data-toggle="modal"
+                    data-target="#addNonEmployeeProjectTeam"
+                    (click)="isAddNonEmployeeTeamModal = true; showTeamCard = false; switchToNonEmployeeModal()">
+                    <i aria-hidden="true" class="fa fa-user-plus"></i> <ng-container
+                      i18n="@@COMMON_ADD_TO_ADDRESS_BOOK">Add to Address Book</ng-container></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-3">
+              <span class="mandatory">*</span><label for="teamrole">Role</label>
+              <input class="form-control" id="teamrole" [(ngModel)]="awardProjectTeam.projectRole"
+                [ngClass]="(map.get('projectrole')) ? 'is-invalid block-display' : ''">
+              <div *ngIf="(map.get('projectrole'))" class="invalid-feedback block-display">{{map.get('projectrole')}}
+              </div>
+            </div>
+            <div class="col-12" *ngIf="showTeamCard">
+              <app-person-rolodex-card (ShowElasticResults)="setShowElasticResults($event)"
+                [personRolodexObject]="selectedMemberObject"></app-person-rolodex-card>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+              <span class="mandatory">*</span><label>% Charged</label>
+              <input type="number" class="form-control"
+                [ngClass]="(map.get('projectpercentage')) ? 'is-invalid block-display' : ''"
+                [(ngModel)]="awardProjectTeam.percentageCharged" placeholder="eg: 100, 99.99, 10.22, 25 etc"
+                (keyup)="limitKeypress(awardProjectTeam.percentageCharged)">
+              <div *ngIf="(map.get('projectpercentage'))" class="invalid-feedback block-display">
+                {{map.get('projectpercentage')}}</div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+              <span class="mandatory">*</span><label>Start Date</label>
+              <span class="dateField">
+                <input matInput [matDatepicker]="openingDt" id="project-start-date" placeholder="Start Date"
+                  [ngClass]="(map.get('projectstartdate'))? 'is-invalid block-display' : ''"
+                  [(ngModel)]="awardProjectTeam.startDate" (keypress)="_commonService._keyPress($event, 'date');"
+                  class="d-inline-block form-control" (click)="openingDt.open()"
+                  (ngModelChange)="validateDate();
+                          dateValidationBeforeAction(awardProjectTeam.startDate, 'projectstartdate', 'Please select start date.')" />
+                <span class="fa fa-calendar fa-large pointer insidePicker position hand-cursor" title="open calendar"
+                  (click)="openingDt.open()"></span>
+                <mat-datepicker #openingDt (opened)="setFocusToElement('project-start-date')" (closed)="validateDate()">
+                </mat-datepicker>
+              </span>
+              <div *ngIf="(map.get('projectstartdate'))" class="invalid-feedback block-display">
+                {{map.get('projectstartdate')}}</div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+              <span class="mandatory">*</span><label>End Date</label>
+              <span class="dateField">
+                <input matInput [matDatepicker]="closingDt" closingDt id="project-end-date" placeholder="End Date"
+                  [ngClass]="(map.get('projectenddate')) ? 'is-invalid block-display' : ''"
+                  [(ngModel)]="awardProjectTeam.endDate" (ngModelChange)="validateDate();"
+                  class="d-inline-block form-control" (click)="closingDt.open()"
+                  (ngModelChange)="validateDate();
+                            dateValidationBeforeAction(awardProjectTeam.endDate, 'projectenddate', 'Please select end date.')" />
+                <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor" title="open calendar"
+                  (click)="closingDt.open()"></span>
+                <mat-datepicker #closingDt (opened)="setFocusToElement('project-end-date')" (closed)="validateDate()">
+                </mat-datepicker>
+              </span>
+              <div *ngIf="(map.get('projectenddate'))" class="invalid-feedback block-display">
+                {{map.get('projectenddate')}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="text-center text-md-right">
+            <button class="btn btn btn-secondary btn-xs mx-2" data-dismiss="modal"
+              (click)="resetTeamFields()">Cancel</button>
+            <button *ngIf="!isTeamEdit" class="btn btn-primary-sub btn-xs" (click)="saveOrUpdateProjectTeam('I')">
+              Add Person
+            </button>
+            <button *ngIf="isTeamEdit" class="btn btn-primary-sub btn-xs" (click)="saveOrUpdateProjectTeam('U')">
+              Update Person
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

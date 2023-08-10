@@ -190,7 +190,7 @@
                         [ngClass]="(invoiceWarningMap.get('customerNumber')) ? 'is-warning d-block' : ''"
                         [(ngModel)]="claimInvoiceDetails.customerNumber"
                         class="form-control" placeholder="Customer Number" id="customerNumber" 
-                        type="text" (keypress) = "filterNumbers($event)"> 
+                        type="number" (keypress) = "filterNumbers($event)"> 
                     <div *ngIf="(invoiceWarningMap.get('customerNumber'))" class="invalid-warning d-block">
                         {{invoiceWarningMap.get('customerNumber')}}
                     </div>

@@ -70,16 +70,16 @@ export class InvoiceLineItemComponent implements OnDestroy, OnChanges {
                     if (res && res.claimInvoiceDetail) {
                         if (this.isIndex(this.selectedInvoiceIndex)) { // edit mode
                             this.updateLineItemEntry(res);
-                            this.showSuccessMessage('Line item updated successfully.');
+                            this.showSuccessMessage('Line Item updated successfully.');
                         } else { // add mode
                             this.addLineItemEntry(res);
-                            this.showSuccessMessage('Line item added successfully.');
+                            this.showSuccessMessage('Line Item added successfully.');
                         }
                         $('#line-item-modal').modal('hide');
                         this.resetModal();
                         this.showDataChangeInView();
                     }
-                }, _err => this.showErrorMessage('Adding line item failed. Please try again.')));
+                }, _err => this.showErrorMessage('Adding line Item failed. Please try again.')));
         }
     }
 
@@ -100,10 +100,10 @@ export class InvoiceLineItemComponent implements OnDestroy, OnChanges {
                     if (res.status) {
                         this.config.invoiceLineItems.splice(this.selectedInvoiceIndex, 1);
                         this.selectedInvoiceIndex = null;
-                        this.showSuccessMessage('Line item deleted successfully.');
+                        this.showSuccessMessage('Line Item deleted successfully.');
                         this.showDataChangeInView();
                     }
-                }, _err => this.showErrorMessage('Deleting line item failed. Please try again.')));
+                }, _err => this.showErrorMessage('Deleting Line Item failed. Please try again.')));
         }
     }
 

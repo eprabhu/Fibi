@@ -112,7 +112,11 @@ export class WatchersComponent implements OnInit, OnDestroy {
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Watcher added successfully.');
                         this.resetWatcherSearch();
                     }, err => {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding watcher failed. Please try again.');
+                        if (err && err.status === 405) {
+                            $('#invalidActionModal').modal('show');
+                        } else {
+                            this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding watcher failed. Please try again.');
+                        }
                         this.resetWatcherSearch();
                     })
                 );
@@ -141,7 +145,11 @@ export class WatchersComponent implements OnInit, OnDestroy {
                 this.checkLoggedUserIsWatcher();
                 this.updateStore();
             }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting watcher failed. Please try again.');
+                if (err && err.status === 405) {
+                    $('#invalidActionModal').modal('show');
+                }else {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting watcher failed. Please try again.');
+                }
             })
         );
     }

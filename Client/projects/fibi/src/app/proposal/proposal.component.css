@@ -152,3 +152,7 @@ table.tableSection tbody {
   overflow-x: hidden;
   height: auto;
 }
+
+.larger-font {
+  font-size: larger;
+}

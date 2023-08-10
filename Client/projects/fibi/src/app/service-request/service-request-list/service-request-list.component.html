@@ -2,32 +2,38 @@
     <div class="col-8">
         <ul class="subTabs mb-0">
             <li role="presentation" [ngClass]="{'active': advanceSearch.tabName == 'MY_REQUEST'}"
-                (click)="clearServiceRequest();setCurrentTab('MY_REQUEST');">
+                (click)="clearServiceRequest();setCurrentTab('MY_REQUEST');isShowSearchList= true">
                 <a class="subTabLink" title="View my service requests" tabindex="0">My Service Requests
+                </a>
+            </li>
+            <li role="presentation" [ngClass]="{'active': advanceSearch.tabName == 'ALL_REQUEST'}"
+                (click)="clearServiceRequest();setCurrentTab('ALL_REQUEST');isShowSearchList= false">
+                <a class="subTabLink"  title="View all search service requests" tabindex="0">Service Request Search
                 </a>
             </li>
             <li *ngIf="canViewAllReviewTabs" role="presentation"
                 [ngClass]="{'active': advanceSearch.tabName == 'ALL_PENDING_SERVICE_REQUEST'}"
-                (click)="clearServiceRequest();setCurrentTab('ALL_PENDING_SERVICE_REQUEST');">
-                <a class="subTabLink" title="View all service requests" tabindex="0">All Pending Service Requests
+                (click)="clearServiceRequest();setCurrentTab('ALL_PENDING_SERVICE_REQUEST');isShowSearchList= true">
+                <a class="subTabLink" title="View all pending service requests" tabindex="0">All Pending Service Requests
                 </a>
             </li>
             <li *ngIf="canViewAllReviewTabs" role="presentation"
                 [ngClass]="{'active': advanceSearch.tabName == 'NEW_SUBMISSIONS'}"
-                (click)="clearServiceRequest();setCurrentTab('NEW_SUBMISSIONS');">
-                <a class="subTabLink" title="View draft service requests" tabindex="0">New Service Requests
+                (click)="clearServiceRequest();setCurrentTab('NEW_SUBMISSIONS');isShowSearchList= true">
+                <a class="subTabLink" title="View new service requests" tabindex="0">New Service Requests
                 </a>
             </li>
             <li role="presentation" [ngClass]="{'active': advanceSearch.tabName == 'MY_PENDING_SERVICE_REQUEST'}"
-                (click)="clearServiceRequest();setCurrentTab('MY_PENDING_SERVICE_REQUEST');">
-                <a class="subTabLink" title="View service requests my review" tabindex="0">Service Requests Pending My
+                (click)="clearServiceRequest();setCurrentTab('MY_PENDING_SERVICE_REQUEST');isShowSearchList= true">
+                <a class="subTabLink" title="View service requests pending review" tabindex="0">Service Requests Pending My
                     Review
                 </a>
             </li>
+            
         </ul>
     </div>
     <div class="col-4 text-right">
-        <div>
+        <div> 
             <a id="advance-search-service-request" class="btn btn-sm btn-tertiary mt-0" data-toggle="collapse"
                 href="#collapseAdvanceSearch" role="button" aria-expanded="false" aria-controls="collapseAdvanceSearch"
                 title="Advanced Search"> <i aria-hidden="true" class="fa fa-sliders"></i>
@@ -42,12 +48,13 @@
         </div>
     </div>
 </div>
+
 <div id="collapseAdvanceSearch" class="card collapse">
     <div class="card-body">
         <div class="form-row">
             <div class="col-3">
-                <label for="ID" class="d-block">ID</label>
-                <input type="text" placeholder="ID" class="form-control"
+                <label for="ID" class="d-block">Service Request #</label>
+                <input type="text" placeholder="Service Request #" class="form-control"
                     [(ngModel)]="advanceSearch.serviceRequestId" (keyup.enter)="searchServiceRequest()">
             </div>
             <div class="col-3">
@@ -76,7 +83,7 @@
             </div>
             <div class="col-3">
                 <!-- property -->
-                <label for="department" class="d-block">Department</label>
+                <label for="department" class="d-block">Department..</label>
                 <app-endpoint-search [httpOptions]="departmentSearchOptions" [clearField]="clearFieldLeadUnit"
                     [placeHolder]="'Department'" (onSelect)="selectDepartment($event)">
                 </app-endpoint-search>
@@ -87,16 +94,16 @@
                     (selectedResult)="onLookupSelect($event, 'srPriorities')">
                 </app-look-up>
             </div>
-            <div class="col-3 d-flex justify-content-end pt-4">
-                <button id="adv-search-clear-request form-control" class="btn btn-sm btn-secondary mr-2 mt-2"
+            <div class="col-3 d-flex d-flex flex-sm-row flex-column justify-content-end align-items-end">
+                <button id="adv-search-clear-request form-control" title="clear" class="btn btn-sm btn-secondary mr-2 mt-2"
                     (click)="clearServiceRequest();$dashboardList.next()">Clear</button>
-                <button class="btn btn-primary btn-sm mt-2" id="adv-search-service-request"
-                    (click)="searchServiceRequest()">Search</button>
+                <button class="btn btn-primary btn-sm mt-2" title="search" id="adv-search-service-request"
+                    (click)="searchServiceRequest();">Search</button>
             </div>
         </div>
     </div>
 </div>
-<div class="card card-table-box rounded-0" *ngIf="isShowRequestList">
+<div class="card card-table-box rounded-0" *ngIf="isShowRequestList && isShowSearchList">
     <div class="card-content">
         <div class="card-header px-3">
             <p class="align-items-center card-title d-flex justify-content-between">{{getDocumentHeading()}}
@@ -114,20 +121,23 @@
             </p>
         </div>
 
-        <div *ngIf="serviceRequestDashboard?.serviceRequestList?.length ; else noDataContainer"
+        <div *ngIf="serviceRequestDashboard?.serviceRequestList?.length > 0 && isShowSearchList ; else noDataContainer"
             class="table-responsive">
             <table class="table tableSkin mb-0">
-                <caption class="sr-only">List of Service Request</caption>
+                <caption class="sr-only">List of Service Requests</caption>
                 <thead>
-                    <th style="width: 6%" scope="col" (click)="sortResult('serviceRequestId')" tabindex="0"
-                        class="hand-cursor">
-                        <span title="Click to sort by Service Request ID">ID</span>
-                        <i *ngIf="!advanceSearch.sort['serviceRequestId']" class="fa fa-sort-numeric-asc blrcolor"
-                            aria-hidden="true"></i>
-                        <i [ngClass]="advanceSearch.sort['serviceRequestId'] === 'asc' ? 'fa fa-sort-numeric-asc sortIcon' : 'blrcolor'"
-                            aria-hidden="true"></i>
-                        <i [ngClass]="advanceSearch.sort['serviceRequestId'] === 'desc' ? 'fa fa-sort-numeric-desc sortIcon' : ''"
-                            aria-hidden="true"></i>
+                    <th style="width: 8%" scope="col" (click)="sortResult('serviceRequestId')" tabindex="0" class="hand-cursor">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span title="Click to sort by Service Request ID">Service Request #</span>
+                                <div class="ml-1">
+                                    <i *ngIf="!advanceSearch.sort['serviceRequestId']" class="fa fa-sort-numeric-asc blrcolor"
+                                        aria-hidden="true"></i>
+                                    <i [ngClass]="advanceSearch.sort['serviceRequestId'] === 'asc' ? 'fa fa-sort-numeric-asc sortIcon' : 'blrcolor'"
+                                        aria-hidden="true"></i>
+                                    <i [ngClass]="advanceSearch.sort['serviceRequestId'] === 'desc' ? 'fa fa-sort-numeric-desc sortIcon' : ''"
+                                        aria-hidden="true"></i>
+                                </div>
+                           </div>
                     </th>
                     <th style="width: 17%" scope="col" (click)="sortResult('serviceRequestType')" tabindex="0"
                         class="hand-cursor">

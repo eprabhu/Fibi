@@ -15,6 +15,8 @@ import { fileDownloader, scrollIntoView, setHelpTextForSubItems, validatePercent
 import { WafAttachmentService } from '../../../common/services/waf-attachment.service';
 import { environment } from '../../../../environments/environment';
 import {concatUnitNumberAndUnitName} from '../../../common/utilities/custom-utilities';
+import { HttpErrorResponse } from '@angular/common/http';
+declare var $: any;
 
 @Component({
   selector: 'app-key-person',
@@ -162,6 +164,7 @@ export class KeyPersonComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedMemberObject = rolodexObject.rolodex;
       this.isPersonCard = true;
     }
+    $('#add-key-person-modal').modal('show');
     this.isAddNonEmployeeModal = rolodexObject.nonEmployeeFlag;
   }
 
@@ -316,10 +319,10 @@ export class KeyPersonComponent implements OnInit, OnDestroy, OnChanges {
       this.result.awardPersons.splice(deleteindex, 1);
       this.result.award.principalInvestigator = data.awardPIPerson;
       this.updateAwardStoreData();
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, `${KEY_PERSON_LABEL} removed successfully`);
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, `${KEY_PERSON_LABEL} removed successfully.`);
     },
     (err) => {
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, `Removing ${KEY_PERSON_LABEL}  failed. Please try again.`);
+      this._commonService.showToast(HTTP_ERROR_STATUS, `Removing ${KEY_PERSON_LABEL}  failed. Please try again.`);
     }));
   }
 
@@ -478,6 +481,8 @@ export class KeyPersonComponent implements OnInit, OnDestroy, OnChanges {
           .subscribe((data: any) => {
             this.personDetails.awardPersonAttachment = data.newPersonAttachments;
             this.saveKeyPerson(type);
+          }, err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS,"Adding CV failed. please try again.")
           }));
       } else {
         this.addPersonAttachmentWaf(type);
@@ -524,7 +529,7 @@ export class KeyPersonComponent implements OnInit, OnDestroy, OnChanges {
       this.personDetails.awardPersonAttachment = data.newPersonAttachments;
       this.saveKeyPerson(type);
     } else {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Waf blocked adding CV');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Waf blocked adding CV.');
     }
   }
   /**saveKeyPerson - Add or Update person details to the database
@@ -551,6 +556,7 @@ export class KeyPersonComponent implements OnInit, OnDestroy, OnChanges {
           (`${KEY_PERSON_LABEL} updated successfully.`) : (`${KEY_PERSON_LABEL} added successfully.`));
         this.resetPersonFields();
         this.isSaving = false;
+        $('#add-key-person-modal').modal('hide');
       }));
     }
   }
@@ -705,6 +711,20 @@ export class KeyPersonComponent implements OnInit, OnDestroy, OnChanges {
 
   setShowElasticResults(elasticResultShow) {
     this.isPersonCard = elasticResultShow.isShowElasticResults;
+  }
+
+  showDeleteModal(){
+    $('#add-key-person-modal').modal('hide');
+    $('#deleteAwardCvAttachment').modal('show');
+  }
+  hideCvDeleteConfirmation(){
+    $('#add-key-person-modal').modal('show');
+    $('#deleteAwardCvAttachment').modal('hide');
+  }
+
+  switchToNonEmployeeModal(){
+      $('#add-key-person-modal').modal('hide');
+      this.isAddNonEmployeeModal = true;
   }
 
 }

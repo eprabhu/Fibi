@@ -124,7 +124,7 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
    */
   showToast() {
     if (!this.newUsage.MODULE_ITEM_CODE || this.newUsage.MODULE_ITEM_CODE === '0') {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Please select atleast one module');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Please select atleast one Module.');
     }
   }
   /**

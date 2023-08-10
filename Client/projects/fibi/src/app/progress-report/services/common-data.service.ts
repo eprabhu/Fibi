@@ -47,14 +47,6 @@ export class CommonDataService {
         this.setEditMode(Boolean(isEditMode));
     }
 
-    setSaveButton(flag: boolean): void {
-        this.$save.next(flag);
-    }
-
-    getSaveButton(): Observable<boolean> {
-        return this.$save.asObservable();
-    }
-
     /**
      * @param validationMap : mapping function to identify which all fields are not filled.
      * @param dataToValidate

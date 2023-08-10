@@ -637,7 +637,7 @@ select::-ms-expand {
 		opacity: 0;
 	}
 }
-@media all and(-ms-high-contrast: none),(-ms-high-contrast: active) {
+@media all and (-ms-high-contrast: none),(-ms-high-contrast: active) {
 	#login_username {
 		height: 30px !important;
 	}
@@ -1478,7 +1478,7 @@ ul.actionButtonGroup{
 	position: sticky;
     z-index: 90;
     background: #fff;
-    top: 40px;
+    top: 47px;
 	padding: 15px;
 	padding-bottom: 0;
 }
@@ -1831,3 +1831,17 @@ ul.actionButtonsGroup {
 	}
 }
 
+.mat-option:hover {
+	background: rgba(44,119,244,.1) !important;
+	color: #333 !important;
+}
+
+.mat-option {
+	white-space: normal !important;
+	text-overflow: inherit !important;
+	line-height: normal !important;
+	height: auto !important;
+	padding: 11px 16px !important;
+	border-bottom: 1px dotted #ccc !important;
+	font-size: 1.28rem !important;
+}

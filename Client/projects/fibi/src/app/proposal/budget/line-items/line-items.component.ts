@@ -71,7 +71,7 @@ export class LineItemsComponent implements OnDestroy, OnChanges {
             this.endpointSearchOptions =
                 getEndPointOptionsForCostElements('findCostElementsByParams', { 'budgetCategoryCodes': this.systemGeneratedCostCodes });
         } else {
-            this.endpointSearchOptions = getEndPointOptionsForCostElements('findCostElement', null);
+            this.endpointSearchOptions = getEndPointOptionsForCostElements('findCostElement');
         }
         this.endpointSearchOptions.defaultValue = this.lineItemData.costElement ? this.lineItemData.costElement.costElementDetail : '';
     }

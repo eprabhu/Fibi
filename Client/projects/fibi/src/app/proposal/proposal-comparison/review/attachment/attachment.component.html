@@ -74,7 +74,7 @@
                               <td [innerHTML]= 'attachment?.narrativeStatus?.description | customTagRemover: currentMethod'></td>
                               <td>
                                   <span [innerHTML] = 'attachment.lastUpdateUserFullName | customTagRemover: currentMethod'> on</span>
-                                  <span [innerHTML] = "dateFormatter.parseDate(attachment.updateTimestamp, 'long', true) | customTagRemover: currentMethod"></span>
+                                  <span [innerHTML] = "dateFormatter.parseDate(attachment.updateTimeStamp, 'long', true) | customTagRemover: currentMethod"></span>
                               </td>
                               <td>
                                   <ul class="actionButtonGroup">
@@ -145,7 +145,7 @@
                             </td>
                             <td>
                                 <span>{{version.lastUpdateUserFullName}} on
-                                    {{version.updateTimestamp | dateFormatterWithTimeZone  : 'long'}}</span>
+                                    {{version.updateTimeStamp | dateFormatterWithTimeZone  : 'long'}}</span>
                             </td>
                             <td style="width: 5%;">
                                 <ul class="actionButtonGroup">

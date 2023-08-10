@@ -15,8 +15,8 @@ export class ProgressReportService {
         return this._http.get(`${this._commonService.baseUrl}/loadAwardProgressReport/${progressReportId}`);
     }
 
-    submitProgressReport(progressReportId: number) {
-        return this._http.post(`${this._commonService.baseUrl}/submitProgressReport/${progressReportId}`, {});
+    submitProgressReport(progressReportId: number, progressReportStatusCode: any) {
+        return this._http.post(`${this._commonService.baseUrl}/submitProgressReport/${progressReportId}/${progressReportStatusCode}`, {});
     }
 
     maintainReportWorkFlow(requestObject, uploadedFile) {

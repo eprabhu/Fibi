@@ -234,6 +234,7 @@ export class UserRolesListingComponent implements OnInit, OnDestroy {
 		this._roleMaintenanceService.editPersonDetails.primaryTitle = person.primaryTitle;
 		this._roleMaintenanceService.editPersonDetails.directoryTitle = person.directoryTitle;
 		this._roleMaintenanceService.editPersonDetails.personId = person.personId;
+		this._roleMaintenanceService.editPersonDetails.homeUnitName = person.personHomeUnitName;
 		this._roleMaintenanceService.editUnitDetails.unitName = person.unitName;
 		this._roleMaintenanceService.editUnitDetails.unitNumber = person.unitNumber;
 		this._router.navigate(['fibi/role-maintainance/userRoleMaintain'],

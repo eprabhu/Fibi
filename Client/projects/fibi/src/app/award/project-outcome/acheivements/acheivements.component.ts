@@ -133,7 +133,7 @@ export class AcheivementsComponent implements OnInit, OnDestroy {
 
   /* shows message in toast according to whether the achievement is added or updated */
   showSuccessToast() {
-    const toastMsg = this.awardAcheivement.awardAcheivementAttachId ? 'Achievement successfully updated.' :
+    const toastMsg = this.awardAcheivement.awardAcheivementAttachId ? 'Achievement updated successfully.' :
       'Achievement added successfully.';
     this._commonService.showToast(HTTP_SUCCESS_STATUS, toastMsg);
   }
@@ -141,11 +141,11 @@ export class AcheivementsComponent implements OnInit, OnDestroy {
   showErrorToast() {
     let toastMsg;
     if (this.awardAcheivement.awardAcheivementAttachId) {
-      toastMsg = this._commonService.isWafEnabled ? 'Waf blocked request for updating the achievement' :
-        'Failed to update achievement';
+      toastMsg = this._commonService.isWafEnabled ? 'Waf blocked request for updating the achievement.' :
+        'Updating Achievement failed. Please try again.';
     } else {
-      toastMsg = this._commonService.isWafEnabled ? 'Waf blocked request for adding the achievement' :
-        'Failed to add achievement';
+      toastMsg = this._commonService.isWafEnabled ? 'Waf blocked request for adding the achievement.' :
+        'Adding Achievement failed. Please try again.';
     }
     this._commonService.showToast(HTTP_ERROR_STATUS, toastMsg);
   }
@@ -180,6 +180,8 @@ export class AcheivementsComponent implements OnInit, OnDestroy {
       'updateUser': this._commonService.getCurrentUserDetail('userName')
     }).subscribe(data => {
       this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Achievement deleted successfully.');
+    },err=>{
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Achievement failed. Please try again.');
     }));
   }
 

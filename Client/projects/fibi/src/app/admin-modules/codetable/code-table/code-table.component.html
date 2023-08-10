@@ -198,7 +198,7 @@
                                         <textarea appAutoGrow class="form-control mt-10" appLengthValidator
                                             [limit]="column.length" [styleList]="'pt-2 float-right word-count d-inline'"
                                             [(ngModel)]="newCodeTableEntry[column.columnName]"
-                                            (ngModelChange)="markAsChanged(column.columnName)" rows="1">
+                                            (ngModelChange)="markAsChanged(column.columnName);getAuditLogChangedFields(column.columnName)" rows="1">
                                         </textarea>
                                     </ng-container>
                                     <ng-container *ngIf="!column.filterType && column.dataType == 'INTEGER'">
@@ -206,13 +206,13 @@
                                             [limit]="column.length" class="form-control mt-10"
                                             [styleList]="'pt-2 float-right word-count d-inline'"
                                             [(ngModel)]="newCodeTableEntry[column.columnName]"
-                                            (ngModelChange)="markAsChanged(column.columnName)" />
+                                            (ngModelChange)="markAsChanged(column.columnName);getAuditLogChangedFields(column.columnName)" />
                                     </ng-container>
                                     <ng-container *ngIf="column.filterType == 'lookUp'">
                                         <div class="position-relative">
                                             <app-look-up [options]='column.valueField'
                                                 [defaultValue]="this.lookupDefaultValues[column.columnName]"
-                                                (selectedResult)="onLookupSelect($event, column.columnName)">
+                                                (selectedResult)="onLookupSelect($event, column.columnName, column.defaultValue)">
                                             </app-look-up>
                                         </div>
                                     </ng-container>
@@ -221,7 +221,7 @@
                                             <app-endpoint-search
                                                 [httpOptions]="endPointSearchOptions[column.columnName]"
                                                 [placeHolder]="'Type here for ' + column.displayName"
-                                                (onSelect)="onEndPointSelect($event, column.columnName,column.valueField)">
+                                                (onSelect)="onEndPointSelect($event, column.columnName, column.valueField, column.defaultValue, column.index)">
                                             </app-endpoint-search>
                                         </div>
                                     </ng-container>
@@ -229,7 +229,7 @@
                                         <div class="position-relative">
                                             <app-elastic [options]="elasticSearchOptions[column.columnName]"
                                                 [placeHolder]="'Type here for ' + column.displayName"
-                                                (selectedResult)="onElasticSelect($event, column.columnName,column.valueField)">
+                                                (selectedResult)="onElasticSelect($event, column.columnName,column.valueField, column.defaultValue)">
                                             </app-elastic>
                                         </div>
                                     </ng-container>
@@ -237,14 +237,14 @@
                                         <div *ngIf="autoCompleterSearchOptions[column.columnName]" class="position-relative">
                                             <app-autocompleter [completerOptions]="autoCompleterSearchOptions[column.columnName]"
                                                 [placeHolder]="'Type here for ' + column.displayName"
-                                                (onSelect)="onAutoCompleterSelect($event, column.columnName,column.valueField)">
+                                                (onSelect)="onAutoCompleterSelect($event, column.columnName,column.valueField, column.defaultValue, column.index)">
                                             </app-autocompleter>
                                         </div>
                                     </ng-container>
                                     <ng-container *ngIf="column.filterType == 'systemDropdown'">
                                         <div class="position-relative">
                                             <select [(ngModel)]="newCodeTableEntry[column.columnName]"
-                                                (ngModelChange)="markAsChanged(column.columnName);"
+                                                (ngModelChange)="markAsChanged(column.columnName);getAuditLogChangedFields(column.columnName)"
                                                 class="form-control">
                                                 <option *ngIf="currentEditIndex == -1" value = "undefined">--select--</option>
                                                 <option *ngIf="currentEditIndex >= 0" value = null>--select--</option>
@@ -260,7 +260,7 @@
                                                 *ngIf="!newCodeTableEntry[column.columnName] || newCodeTableEntry[column.columnName] == 'N' || newCodeTableEntry[column.columnName] == 'n' || newCodeTableEntry[column.columnName] == false">
                                                 <label class="switch">
                                                     <input type="checkbox"
-                                                        (click)="newCodeTableEntry[column.columnName] = 'Y'; markAsChanged(column.columnName)">
+                                                        (click)="newCodeTableEntry[column.columnName] = 'Y'; markAsChanged(column.columnName);getAuditLogChangedFields(column.columnName)">
                                                     <span class="slider round"><small
                                                             class="deactivate-text">No</small></span>
                                                 </label>
@@ -269,7 +269,7 @@
                                                 *ngIf="newCodeTableEntry[column.columnName] == 'Y' || newCodeTableEntry[column.columnName] == 'y' || newCodeTableEntry[column.columnName] == true">
                                                 <label class="switch">
                                                     <input type="checkbox" checked
-                                                        (click)="newCodeTableEntry[column.columnName] = 'N'; markAsChanged(column.columnName)">
+                                                        (click)="newCodeTableEntry[column.columnName] = 'N'; markAsChanged(column.columnName);getAuditLogChangedFields(column.columnName)">
                                                     <span class="slider round"><small>Yes</small></span>
                                                 </label>
                                             </a>
@@ -293,7 +293,7 @@
                                     <input matInput [matDatepicker]="dt3" [(ngModel)]="newCodeTableEntry[column.columnName]"
                                         placeholder="{{newCodeTableEntry[column.columnName] | dateFormatter}}"
                                         id="code-table-date" class="form-control"
-                                        (ngModelChange)="markAsChanged(column.columnName)" (click)="dt3.open()">
+                                        (ngModelChange)="markAsChanged(column.columnName);getAuditLogChangedFields(column.columnName)" (click)="dt3.open()">
                                     <span class="trigger ct-date-i action-icon" (click)="dt3.open()">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                     </span>

@@ -39,7 +39,7 @@ export class BudgetOverviewComponent implements OnInit, OnDestroy {
     costShareStatus: any;
     dataDependencies = ['instituteProposalBudgetHeader', 'isBudgetMerge', 'isCampusFlagEnabled', 'isFundingSupportDeclarationRequired',
         'isKeyPersonMerge', 'isReplaceAttachmentEnabled', 'isShowCostShareAndUnderrecovery', 'isShowInKind', 'costSharingTypes',
-        'isShowModifiedDirectCost', 'isSpecialReviewMerge',
+        'isShowModifiedDirectCost', 'isSpecialReviewMerge', 'overHeadRateTypeEnabled',
         'isShowBudgetOHRatePercentage', 'enableCostShareStatus', 'costShareTypeCode', 'rateTypes'];
     hasUnsavedChanges = false;
 
@@ -85,6 +85,20 @@ export class BudgetOverviewComponent implements OnInit, OnDestroy {
         this.costShareStatus = this.budgetData.costSharingTypes.find(ele => ele.costSharingTypeCode == code).description;
     }
 
+
+    getCostSharingType(code) {
+        this.budgetData.instituteProposalBudgetHeader.costSharingType = this.budgetData.costSharingTypes.find(
+            ele => ele.costSharingTypeCode === code);
+    }
+
+    setObjectOfDropdown() {
+        this.budgetData.instituteProposalBudgetHeader.rateType = this.budgetData.rateTypes.find(
+            element => element.rateClassCode === this.budgetData.instituteProposalBudgetHeader.rateClassCode);
+        this.budgetData.instituteProposalBudgetHeader.underRecoveryRateType = this.budgetData.rateTypes.find(
+            element => element.rateClassCode === this.budgetData.instituteProposalBudgetHeader.underRecoveryRateClassCode);
+        this._budgetDataService.updateBudgetData({ instituteProposalBudgetHeader: this.budgetData.instituteProposalBudgetHeader });
+    }
+
     setUnsavedChanges(flag: boolean) {
         this._instituteService.isInstituteProposalDataChange = flag;
         this._budgetDataService.isBudgetOverviewChanged = flag;
@@ -120,6 +134,12 @@ export class BudgetOverviewComponent implements OnInit, OnDestroy {
     }
 
     setBudgetData() {
-        this._budgetDataService.updateBudgetData({ instituteProposalBudgetHeader: this.budgetData.instituteProposalBudgetHeader });
+        this.getCostSharingType(this.budgetData.instituteProposalBudgetHeader.costSharingTypeCode);
+        this._budgetDataService.updateBudgetData(
+            { instituteProposalBudgetHeader: this.budgetData.instituteProposalBudgetHeader});
+    }
+
+    getCampusFlagDescription(code) {
+        return this.campusFlagList.find(item => item.value === code).description;
     }
 }

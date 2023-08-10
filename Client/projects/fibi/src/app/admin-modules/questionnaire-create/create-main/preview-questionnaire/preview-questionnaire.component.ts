@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import * as _ from 'lodash';
 import {
+    getEndPointOptionsForClaimTemplate,
     getEndPointOptionsForCostCentre,
     getEndPointOptionsForCountry,
     getEndPointOptionsForDepartment,
@@ -183,6 +184,9 @@ export class PreviewQuestionnaireComponent implements OnInit {
             case 'fundCenterName':
                 question.placeHolder = 'Search for fund center';
                 return getEndPointOptionsForFundCentre();
+            case 'claimTemplateName':
+                question.placeHolder = 'Search for claim template name';
+                return getEndPointOptionsForClaimTemplate();
             default :
                 question.placeHolder = 'Search for endpoint';
                 break;

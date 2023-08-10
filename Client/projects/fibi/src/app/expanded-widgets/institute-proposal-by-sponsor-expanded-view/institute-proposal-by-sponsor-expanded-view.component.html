@@ -20,7 +20,8 @@
       <div class="card-content">
         <div class="card-body">
           <div class="table-responsive" *ngIf="detailedViewOfWidget !=null && detailedViewOfWidget?.length !=0">
-            <table class="table tableSkin">
+            <!-- Institute Proposal By Sponsor - Current FY (2022) widget's expanded view table -->
+            <table class="table tableSkin" *ngIf="!isPendingIPWidget">
               <thead>
                 <th width="10%" (click)="isDesc =!isDesc;sortBy(0)">ID
                   <i [ngClass]="((column == 0) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-sort-numeric-desc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"
@@ -79,6 +80,53 @@
                 </tr>
               </tbody>
             </table>
+            <!-- Pending Institute Proposal By Sponsor Type widget's expanded view table -->
+            <table *ngIf="isPendingIPWidget" class="table tableSkin">
+              <caption class="sr-only">Proposal List</caption>
+              <thead>
+                  <tr>
+                      <th scope="col" width="12%" (click)="isDesc =!isDesc;sortBy(0)">Institute Proposal#
+                          <i [ngClass]="((column == 0) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-sort-numeric-desc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"
+                          aria-hidden="true"></i>     
+                      </th>
+                      <th scope="col" width="20%" (click)="isDesc =!isDesc;sortBy(1)">Title
+                          <i [ngClass]="((column == 1) ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                          aria-hidden="true"></i>     
+                      </th>
+                      <th scope="col" width="20%" (click)="isDesc =!isDesc;sortBy(2)">Sponsor
+                          <i [ngClass]="((column == 2) ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                          aria-hidden="true"></i>     
+                      </th>
+                      <th scope="col" width="10%" (click)="isDesc =!isDesc;sortBy(3)" class = "text-right">Budget
+                          <i [ngClass]="((column == 3) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-sort-numeric-desc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"
+                          aria-hidden="true"></i>      
+                      </th>
+                      <th scope="col" width="18%" (click)="isDesc =!isDesc;sortBy(4)">Principal Investigator
+                          <i [ngClass]="((column == 4) ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
+                          aria-hidden="true"></i>     
+                      </th>
+                      <th scope="col" width="5%">Actions</th>
+                  </tr>
+                  </thead>    
+              <tbody>
+              <tr *ngFor="let proposalDetails of detailedViewOfWidget  | orderByIndex: {property: column, direction: direction}">                                    <td>{{proposalDetails[0]}}</td>
+                  <td class="text-break">{{proposalDetails[1]}}</td>
+                  <td>{{proposalDetails[2]}}</td>
+                  <td class = "text-right">
+                          {{proposalDetails[3] ? (proposalDetails[3] | customCurrency: 2) : '-'}}
+                  </td>
+                  <td>{{proposalDetails[4]}}</td>
+                  <td>
+                      <ul class="actionButtonGroup">
+                          <li><a (click)="openInstituteProposal(proposalDetails[5])">
+                            <i aria-hidden="true" class="fa fa-eye"></i>
+                          </a>
+                          </li>
+                      </ul>
+                  </td>
+              </tr>
+              </tbody>
+          </table>
           </div>
           <div *ngIf="detailedViewOfWidget?.length == 0" class="noDataOnChart noDataExists">
             <div class="no-data-container">

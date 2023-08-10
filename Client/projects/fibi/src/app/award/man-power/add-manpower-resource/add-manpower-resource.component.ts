@@ -57,7 +57,7 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
     setFocusToElement = setFocusToElement;
     isAddNonEmployeeModal = false;
     isSaving = false;
-    manpowerWarning: any = [];
+    manpowerWarning: Set<String> = new Set();
     canModifyChargeEndDate = false;
     isCostAllocationFocused = false;
     previousUpgradeType: any;
@@ -107,7 +107,7 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
 
     initializeModal(): void {
         this.map.clear();
-        this.manpowerWarning = [];
+        this.manpowerWarning = new Set();
         this.manpowerReminder = [];
         this.resourceDetails = {};
         this.resourceType = null;
@@ -121,7 +121,7 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
 
     setJobProfileOptions(): void {
         this.jobProfileSearchOption = getEndPointOptionsForManpower('description (jobFamily)', 'description (jobFamily)', 'findManpowerJobProfile',
-            { costElementCode: this.manpowerCategory.costElement.costElement });
+            { costElementCode: this.manpowerCategory.costElementCode });
     }
 
     setDataForNewResource(): void {
@@ -159,7 +159,7 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
 
     setHeadCountWarning(): void {
         if (this.validateHeadCount()) {
-            this.manpowerWarning.push('Exceed headcount please ensure there is no overlap unless approved by the funder.');
+            this.manpowerWarning.add('Exceed headcount please ensure there is no overlap unless approved by the funder.');
         }
     }
 
@@ -189,7 +189,7 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
 
     costAllocationValidation(): void {
         this.limitKeypress(this.resourceDetails.costAllocation);
-        if (!this.resourceDetails.costAllocation) {
+        if (this.resourceDetails.costAllocation == null || this.resourceDetails.costAllocation === '' ) {
             this.map.set('costAllocation', '* Enter cost allocation %');
         }
     }
@@ -209,25 +209,24 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
 
     plannedSalaryValidations(): void {
         this.limitAmount(this.resourceDetails.plannedBaseSalary, 'plannedBaseSalary');
-        if (!this.resourceDetails.plannedBaseSalary) {
+        if (this.resourceDetails.costAllocation != 0 && !convertToValidAmount(this.resourceDetails.plannedBaseSalary)) {
             this.map.set('plannedBaseSalary', '* Enter proposed base salary');
         }
         if (this.resourceDetails.plannedBaseSalary > this.manpowerCategory.budgetAmount) {
-            this.map.set('plannedBaseSalary', '* Proposed commitment amount cannot be more than the Cost Element Budget Amount.');
+            this.map.set('plannedBaseSalary', '* Proposed base salary cannot be more than the Cost Element Budget Amount.');
         }
-        if (this.resourceCategory.index == null && !(this.manpowerCategory.uncommittedAmount < 0)
-            && (this.resourceDetails.plannedBaseSalary > this.manpowerCategory.uncommittedAmount)) {
+        if (!(this.manpowerCategory.uncommittedAmount < 0) && (this.resourceDetails.plannedBaseSalary > this.manpowerCategory.uncommittedAmount)) {
             this.map.set('plannedSalary', '* Proposed commitment amount cannot be more than the Uncommitted Amount.');
         }
-        if (this.resourceCategory.index != null && !(this.manpowerCategory.uncommittedAmount < 0)
-            && (this.manpowerCategory.uncommittedAmount + this.resourceDetails.plannedSalary) < this.resourceDetails.plannedBaseSalary) {
+        if (!(this.manpowerCategory.uncommittedAmount < 0) && (this.manpowerCategory.uncommittedAmount + this.resourceDetails.plannedSalary) < this.resourceDetails.plannedBaseSalary) {
             this.map.set('plannedSalary', '* Proposed commitment amount cannot be more than the Uncommitted Amount.');
         }
-        if (this.resourceCategory.index !== null) {
-            this.limitAmount(this.resourceDetails.plannedSalary, 'plannedSalary');
-            if (this.resourceDetails.plannedSalary > this.manpowerCategory.budgetAmount) {
-                this.map.set('plannedSalary', '* Proposed commitment amount cannot be more than the Cost Element Budget Amount.');
-            }
+        this.limitAmount(this.resourceDetails.plannedSalary, 'plannedSalary');
+        if (this.resourceDetails.costAllocation != 0 && !convertToValidAmount(this.resourceDetails.plannedSalary)) {
+            this.map.set('plannedSalary', '* Proposed committed amount is empty. Click CALCULATE or Enter Proposed Commitment Amount manually.');
+        }
+        if (this.resourceDetails.plannedSalary > this.manpowerCategory.budgetAmount) {
+            this.map.set('plannedSalary', '* Proposed commitment amount cannot be more than the Cost Element Budget Amount.');
         }
     }
 
@@ -245,6 +244,9 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
         this.map.delete(fieldName);
         if (inputRestrictionForAmountField(value)) {
             this.map.set(fieldName, inputRestrictionForAmountField(value));
+        }
+        if (value < 0) {
+            this.map.set(fieldName, 'Enter the field with a non negative value');
         }
     }
 
@@ -281,7 +283,7 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
     }
 
     getDateFromParent(valueString: string): any {
-        return getDateObjectFromTimeStamp(this.resourceCategory[valueString]);
+        return getDateObjectFromTimeStamp(this.resourceCategory.resourceObject[valueString]);
     }
     /**
      * for validating the approved head count of a resource in staff or student category
@@ -295,12 +297,22 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
     dateValidation(): void {
         if (this.resourceCategory.index == null || (this.resourceCategory.index != null && this.isDateChanged)) {
             this.map.clear();
-            this.manpowerWarning = [];
+            this.manpowerWarning = new Set();
             this.setHeadCountWarning();
             this.validatePlanDates();
             this.calculateDuration();
         }
         this.planStartDateExtendedValidation();
+        this.detectChangeRelatedToCommittedCost();
+    }
+
+    detectChangeRelatedToCommittedCost() {
+        if (this.resourceCategory.index !== null && this.resourceCategory.categoryType === 'Staff') {
+            this.detectChangeInCalculationRelatedFields(this.awardManpowerResources[this.resourceCategory.index]);
+            if (this.isChangeInCalculationRelatedFields) {
+                this.manpowerWarning.add('Click CALCULATE after making changes to update Proposed Commitment Amount.');
+            }
+        }
     }
 
     private planStartDateExtendedValidation() {
@@ -374,7 +386,7 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
      */
     startDate45DaysWarning(date: any, mapValue: string, msgVariable: string): void {
         if (mapValue === 'planStartDate' && !this.map.has(mapValue) && this.staffStartDate45Days(date, mapValue)) {
-            this.manpowerWarning.push(this.capitalizeFirstLetter(msgVariable) +
+            this.manpowerWarning.add(this.capitalizeFirstLetter(msgVariable) +
                 ' is less than 45 days as hiring process may not be completed in time.');
         }
     }
@@ -485,9 +497,6 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
     saveOrUpdateManpowerResource(): void {
         if (!this.isSaving) {
             this.isSaving = true;
-            if (this.resourceCategory.index !== null) {
-                this.detectChangeInCalculationRelatedFields(this.awardManpowerResources[this.resourceCategory.index]);
-            }
             this.setRequestObject();
             this.$subscriptions.push(this._manpowerService.saveOrUpdateManpowerResource(
                 this.setSaveRequestObject()).subscribe((data: any) => {
@@ -495,8 +504,7 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
                     this.isSaving = false;
                     this.isPositionIdChanged =  false ;
                 }, err => {
-                    this.resourceCategory.index !== null ? this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating resources failed. Please try again') :
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding resources failed. Please try again.');
+                    this._commonService.showToast(HTTP_ERROR_STATUS, (this.resourceCategory.index !== null ? 'updating ' : 'Adding ') + 'Resource failed. Please try again.');
                     $('#addManpowerResource').modal('hide');
                     this.resourceOperations.emit({});
                     this.isSaving = false;
@@ -511,14 +519,10 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
     detectChangeInCalculationRelatedFields(editedObject: any): void {
         const PLAN_START_DATE = getDateObjectFromTimeStamp(editedObject.planStartDate);
         const PLAN_END_DATE = getDateObjectFromTimeStamp(editedObject.planEndDate);
-        const CHARGE_START_DATE = getDateObjectFromTimeStamp(editedObject.chargeStartDate);
-        const CHARGE_END_DATE = getDateObjectFromTimeStamp(editedObject.chargeEndDate);
         this.isChangeInCalculationRelatedFields = (this.resourceDetails.plannedBaseSalary !== editedObject.plannedBaseSalary ||
             this.resourceDetails.costAllocation !== editedObject.costAllocation ||
             compareDates(this.resourceDetails.planStartDate, PLAN_START_DATE) !== 0 ||
-            compareDates(this.resourceDetails.chargeStartDate, CHARGE_START_DATE) !== 0 ||
-            compareDates(this.resourceDetails.planEndDate, PLAN_END_DATE) !== 0 ||
-            compareDates(this.resourceDetails.chargeEndDate, CHARGE_END_DATE) !== 0);
+            compareDates(this.resourceDetails.planEndDate, PLAN_END_DATE) !== 0);
     }
 
     /**
@@ -533,8 +537,7 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
             this.manpowerCategory.actualHeadCount = data.awardManpowerDetail.actualHeadCount;
             this.manpowerCategory.sapCommittedAmount = data.awardManpowerDetail.sapCommittedAmount;
         }
-        this.resourceCategory.index !== null ? this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Resource successfully updated.') :
-            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Resource successfully added.');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS,'Resource ' + (this.resourceCategory.index !== null ? 'updated' : 'added') + ' successfully.');
         $('#addManpowerResource').modal('hide');
 
         const RESOURCE = {
@@ -565,8 +568,9 @@ export class AddManpowerResourceComponent implements OnChanges, OnDestroy {
      * To calculate the initial committed cost
      */
     calculatePlannedSalary(): void {
-        this.resourceDetails.plannedSalary = null;
-        if (this.addResourceValidation()) {
+        this.addResourceValidation();
+        this.map.delete('plannedSalary');
+        if (this.map.size === 0) {
             this.setRequestObject();
             this.$subscriptions.push(this._manpowerService.calculatePlannedSalary({
                 'awardManpowerResource': this.resourceDetails, 'awardId': this.awardData.award.awardId

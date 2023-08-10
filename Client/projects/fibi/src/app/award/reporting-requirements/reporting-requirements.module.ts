@@ -5,10 +5,9 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { ReportingRequirementsService } from './reporting-requirements.service';
-import { ReportingRequirementsEditComponent } from './reporting-requirements-edit/reporting-requirements-edit.component';
-import { ReportingRequirementsViewComponent } from './reporting-requirements-view/reporting-requirements-view.component';
 import { ReportingRequirementDetailsComponent } from './reporting-requirement-details/reporting-requirement-details.component';
 import { SharedComponentModule } from '../../shared-component/shared-component.module';
+import { AddReportingRequirementsComponent } from './addReportingRequirements/addReportingRequirements.component';
 
 @NgModule({
     imports: [
@@ -20,9 +19,8 @@ import { SharedComponentModule } from '../../shared-component/shared-component.m
     ],
     declarations: [
         ReportingRequirementsComponent,
-        ReportingRequirementsEditComponent,
-        ReportingRequirementsViewComponent,
-        ReportingRequirementDetailsComponent
+        ReportingRequirementDetailsComponent,
+        AddReportingRequirementsComponent
     ],
     providers: [ReportingRequirementsService]
 })
