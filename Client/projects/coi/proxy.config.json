@@ -8,7 +8,7 @@
     "target": "http://192.168.1.149/coi"
   },
   "/getAllSystemRights": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/fetchAllCoiRights": {
@@ -40,11 +40,11 @@
     "secure": false
   },
   "/getApplicableQuestionnaire": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/getQuestionnaire": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/createDisclosure": {
@@ -84,7 +84,7 @@
     "secure": false
   },
   "/findCountry": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/addCOIReviewComment": {
@@ -108,7 +108,7 @@
     "secure": false
   },
   "/saveQuestionnaire": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/certifyDisclosure": {
@@ -168,11 +168,11 @@
     "secure": false
   },
   "/findLeadUnits": {
-    "target": "http://192.168.1.149",
+    "target": "http://10.199.100.62:9090",
     "secure": false
   },
   "/getLookUpDatas": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/getCOIReviewerDashboard": {
@@ -200,7 +200,7 @@
     "secure": false
   },
   "/findAward": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/getCoiProjectTypes": {
@@ -224,7 +224,7 @@
     "secure": false
   },
   "/auth/login": {
-    "target": "http://192.168.1.149/auth",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/fetchFaqDetails": {
@@ -252,11 +252,11 @@
     "secure": false
   },
   "/getPersonDetailById": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/getTrainingDashboard": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/validate/*": {
@@ -272,7 +272,7 @@
     "secure": false
   },
   "/getPersonGroup": {
-    "target": "http://192.168.1.149/fibii",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/disclosure/*": {
@@ -304,59 +304,59 @@
     "secure": false
   },
   "/loadTravellerTypesLookup": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://10.199.100.123:8070/coi",
     "secure": false
   },
   "/loadTravelStatusTypesLookup": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://10.199.100.123:8070/coi",
     "secure": false
   },
   "/createCoiTravelDisclosure": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://10.199.100.123:8070/coi",
     "secure": false
   },
   "/loadTravelDisclosure/*": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/certifyTravelDisclosure": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/submitTravelDisclosure": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/travelDisclosure/assignAdmin": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/withdrawTravelDisclosure/*": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/approveTravelDisclosure/*": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/returnTravelDisclosure/*": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/loadTravelDisclosureHistory": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/getTravelConflictStatusType": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/manageTravelConflict": {
-    "target": "http://192.168.1.149/coi/",
+    "target": "http://10.199.100.123:8070/coi/",
     "secure": false
   },
   "/loadTravelConflictHistory/*": {
-    "target": "http://192.168.1.149/coi",
+    "target": "http://10.199.100.123:8070/coi",
     "secure": false
   },
   "/evaluateValidation/*" : {
@@ -372,7 +372,7 @@
     "secure": false
   },
   "/downloadQuesAttachment": {
-    "target": "http://192.168.1.149/",
+    "target": "http://10.199.100.62:9090/",
     "secure": false
   },
   "/withdrawDisclosure": {
@@ -388,10 +388,18 @@
     "secure":false
   },
   "/disclosure/historyDashboard": {
-    "target": "http://192.168.1.80:9090/coi/",
+    "target": "http://192.168.1.149/coi/",
     "secure": false
   },
   "/disclosureHistory": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/entity/riskHistory/": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/entity/modifyRisk/": {
     "target": "http://192.168.1.149/coi/",
     "secure": false
   },

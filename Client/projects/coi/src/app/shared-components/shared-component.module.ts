@@ -15,17 +15,20 @@ import { AddSfiSliderComponent } from './add-sfi-slider/add-sfi-slider.component
 import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
 import { ActivateInactivateSfiModalComponent } from './activate-inactivate-sfi-modal/activate-inactivate-sfi-modal.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
+ import { EntityRiskSliderComponent } from './entity-risk-slider/entity-risk-slider.component';
 import { ReviewCommentsSliderComponent } from './review-comments-slider/review-comments-slider.component';
 import { CoiSliderComponent } from './coi-slider/coi-slider.component';
 import { HelpTextComponent } from './help-text/help-text.component';
 import { PersonProjectEntityCardComponent } from './person-project-entity-card/person-project-entity-card.component';
+
 @NgModule({
   imports: [
     CommonModule,
     MatIconModule,
     SharedModule,
     FormsModule,
-    AddSfiModule
+    AddSfiModule,
+
   ],
   declarations: [
     NoInformationComponent,
@@ -42,7 +45,8 @@ import { PersonProjectEntityCardComponent } from './person-project-entity-card/p
     ReviewCommentsSliderComponent,
     CoiSliderComponent,
     HelpTextComponent,
-    PersonProjectEntityCardComponent
+    PersonProjectEntityCardComponent,
+    EntityRiskSliderComponent
   ],
   exports: [
     NoInformationComponent,
@@ -54,10 +58,12 @@ import { PersonProjectEntityCardComponent } from './person-project-entity-card/p
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
     ConfirmationModalComponent,
+
     ReviewCommentsSliderComponent,
     CoiSliderComponent,
     HelpTextComponent,
-    PersonProjectEntityCardComponent
+    PersonProjectEntityCardComponent,
+    EntityRiskSliderComponent
   ]
 })
 export class SharedComponentModule { }

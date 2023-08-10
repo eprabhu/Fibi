@@ -129,20 +129,34 @@
           </button>
 
           <!-- Modify Entity -->
-          <button title="Click to Modify Entity" *ngIf="hasManageEntity" 
-            (click)="openConfirmationModal()" id="btn-modify"
+          <button title="Click to Modify Entity" *ngIf="hasManageEntity"  id="btn-modify" [matMenuTriggerFor]="beforeMenu"
             class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 text-nowrap">
-            <mat-icon>mode</mat-icon>
-            <span class="ms-2" *ngIf="isCardExpanded">Modify Entity</span>
-          </button>
+            <mat-icon class="more-options-icon">more_vert</mat-icon>
+            <span class="ms-2" *ngIf="isCardExpanded">More Actions</span>
+          </button>	
+          <mat-menu #beforeMenu="matMenu" xPosition="before">
+            <button *ngIf="hasManageEntity" (click)="openConfirmationModal()"
+              class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5">
+              <mat-icon class="me-2 actions-icon">edit</mat-icon>
+              <span class="pt-2">Modify Entity</span>
+            </button>
+            <button (click)="toggleSlider()"
+              class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5"
+              id="edit-location-btn">
+              <mat-icon class="actions-icon me-2">warning</mat-icon>
+              <span class="pt-2">Manage Risk</span>
+            </button>
+          </mat-menu>
 
           <!-- Back -->
           <button title="Click to go back to Entity list" *ngIf="hasManageEntity" 
               (click)="navigateBack()" id="btn-modify"
-              class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 text-nowrap">
+             class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 text-nowrap">
               <mat-icon>reply</mat-icon>
               <span class="ms-2" *ngIf="isCardExpanded">Back</span>
           </button>
+
+         
 
           <ng-container *ngIf="hasManageEntity">
             <!-- inactivate -->
@@ -433,3 +447,6 @@ projects/coi/src/app/entity-management/entity-history/entity-history.component.t
     </div>
   </div>
 </div>
+
+<app-entity-risk-slider *ngIf="isOpenSlider" [isOpenSlider]="isOpenSlider"
+(closePage)="riskSliderClosed($event)" [entityDetails]="entityDetails"  ></app-entity-risk-slider> 
