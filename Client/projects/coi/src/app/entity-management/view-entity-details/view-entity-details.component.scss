@@ -330,8 +330,17 @@ table {
     transform: scale(1.2);
   }
 }
+
 .icon-alignment {
   font-size: 19px;
   margin-top: 4px;
   padding-top: 1px;
+}
+
+.more-options-icon {
+  transform: scale(.7);
+}
+
+.actions-icon {
+  transform: scale(.8);
 }
