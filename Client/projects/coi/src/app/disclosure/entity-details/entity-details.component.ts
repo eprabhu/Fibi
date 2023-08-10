@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityDetailsService } from './entity-details.service';
 import { hideModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
@@ -21,6 +21,9 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   $subscriptions: Subscription[] = [];
   isSwitchCurrentTab = false;
   onDeleteTimestamp = null;
+  @Output() closeAction: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  
 
   constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService, private _navigationService: NavigationService) {
@@ -97,5 +100,9 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
 	emittedDeletedRelationship(event) {
 		this.onDeleteTimestamp = event;
 	}
+
+  closeSlider(event) {
+    this.closeAction.emit(false);
+  }
 
 }
