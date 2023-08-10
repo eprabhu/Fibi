@@ -248,4 +248,21 @@ public class ActionLogServiceImpl implements ActionLogService {
         });
         return actionLogList;
     }
+
+	@Override
+	public ResponseEntity<Object> getTravelDisclosureHistoryById(Integer travelDisclosureId) {
+		List<TravelDisclosureActionLog> travelDisclosureActionLogs = actionLogRepositoryCustom.fetchTravelDisclosureActionLogsBasedOnId(travelDisclosureId);
+		List<HistoryDto> travelDisclosureHistories = new ArrayList<>();
+		travelDisclosureActionLogs.forEach(actionLog -> {
+			HistoryDto historyDto = new HistoryDto();
+			historyDto.setUpdateTimestamp(actionLog.getUpdateTimestamp());
+			if (actionLog.getUpdateUser() != null) {
+				historyDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(actionLog.getUpdateUser()));
+			}
+			historyDto.setActionTypeCode(actionLog.getActionTypeCode());
+			historyDto.setMessage(actionLog.getDescription());
+			travelDisclosureHistories.add(historyDto);
+		});
+		return new ResponseEntity<>(travelDisclosureHistories, HttpStatus.OK);
+	}
 }

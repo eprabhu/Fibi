@@ -59,4 +59,6 @@ public interface ActionLogService {
      * @return
      */
     List<DisclosureActionLog> fetchDisclosureActionLog(DisclosureActionLogDto actionLogDto);
+	
+	ResponseEntity<Object> getTravelDisclosureHistoryById(Integer travelDisclosureId);
 }

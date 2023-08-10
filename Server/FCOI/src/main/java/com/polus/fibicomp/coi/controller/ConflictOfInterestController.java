@@ -588,4 +588,9 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getCoiTravelConflictHistory(travelDisclosureId);
 	}
 
+    @GetMapping("/travelDisclosureHistory/{travelDisclosureId}")
+	public ResponseEntity<Object> getTravelDisclosureHistoryById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		return actionLogService.getTravelDisclosureHistoryById(travelDisclosureId);
+	}
+
 }
