@@ -5,17 +5,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-
-class SFI_OBJECT {
-  isActive = 'INACTIVE';
-  validPersonEntityRelTypes = [];
-  entityType = '';
-  involvementStartDate = '';
-  involvementEndDate = '';
-  countryName = '';
-  entityId = '';
-  entityName = '';
-}
+import { SfiObject } from '../shared-interface';
 
 @Component({
   selector: 'app-shared-sfi-card',
@@ -32,7 +22,7 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   @Output() deleteEvent =  new EventEmitter<any>();
   @Output() activateDeactivateEvent =  new EventEmitter<any>();
 
-  SFIObject = new SFI_OBJECT();
+  SFIObject = new SfiObject();
   $subscriptions: Subscription[] = [];
 
   constructor(private _router: Router, private _sharedSFIService: SharedSfiService, private _commonService: CommonService) { }
