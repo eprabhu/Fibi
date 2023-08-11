@@ -59,7 +59,6 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
       })).subscribe((data: any) => {
       this.result = data;
       if (this.result) {
-        this.isShowFilterAndSearch = !!data.personEntities.length;
         this.filteredEntityArray = data.personEntities || [];
         this.loadingComplete();
       }
@@ -69,6 +68,10 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   }
 
   private loadingComplete() {
+    if (this.sfiDashboardRequestObject.filterType === 'ALL') {
+      this.isShowFilterAndSearch = !!this.filteredEntityArray.length;
+    }
+
     this.isLoading = false;
 }
 

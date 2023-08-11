@@ -26,8 +26,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
-import { DefaultAdminDetails } from '../travel-disclosure/travel-disclosure-interface';
-import { PersonProjectOrEntity } from '../shared-components/shared-interface';
+import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
 
 @Component({
     selector: 'app-disclosure',
@@ -82,7 +81,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     showConfirmation = false;
     relationshipError: any;
     questionnaireError: any;
-    defaultAdminDetails = new DefaultAdminDetails();
+    defaultAdminDetails = new DefaultAssignAdminDetails();
     personProjectDetails = new PersonProjectOrEntity();
     count: number;
     dependencies = ['coiDisclosure', 'numberOfSFI'];
@@ -345,6 +344,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiData.coiDisclosure.riskCategoryCode = event.riskCategoryCode;
         this.coiData.coiDisclosure.coiRiskCategory = event.riskCategory;
         this.dataStore.setStoreData(this.coiData);
+    }
+
+    openAddAssignModal(): void {
+        this.isAddAssignModalOpen = true;
+        this.setAssignAdminModalDetails();
     }
 
     private setAssignAdminModalDetails(): void {

@@ -134,13 +134,6 @@ export interface TravelHistory {
     travelEndDate: number;
 }
 
-export class DefaultAdminDetails {
-    adminPersonId = '';
-    adminGroupId = null;
-    adminPersonName = '';
-    adminGroupName = '';
-}
-
 export interface TravelActionAfterSubmitRO {
     travelDisclosureId: number;
     description: string;

@@ -59,7 +59,7 @@ export function openInNewTab(path: string, queryParamKeys: Array<any>, queryPara
     }
 }
 
-export function openSlider(sliderName: string= 'coi-slider'): void {
+export function openSlider(sliderName: string = 'coi-slider'): void {
     document.getElementById(`${sliderName}-overlay`).style.display = 'block';
     document.getElementById(`${sliderName}-overlay`).classList.add('overlay');
     document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
@@ -77,4 +77,18 @@ export function closeSlider(sliderName: string = 'coi-slider'): void {
         document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
         document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }, 500);
+}
+
+export function openCommonModal(modalName: string = 'confirmation-modal'): void {
+    const triggerBtn = document.getElementById(`${modalName}-trigger-btn`);
+    if (triggerBtn) {
+        triggerBtn.click();
+    }
+}
+
+export function closeCommonModal(modalName: string = 'confirmation-modal'): void {
+    const closeBtn = document.getElementById(`${modalName}-dismiss-btn`);
+    if (closeBtn) {
+        closeBtn.click();
+    }
 }

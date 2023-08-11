@@ -5,6 +5,13 @@ export class AssignAdminRO {
     disclosureId?: '';
 }
 
+export class DefaultAssignAdminDetails {
+    adminPersonId = '';
+    adminGroupId = null;
+    adminPersonName = '';
+    adminGroupName = '';
+}
+
 export class PersonProjectOrEntity {
     personFullName = '';
     projectDetails ? = {};

@@ -9,13 +9,14 @@ import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/s
 import { environment } from '../../environments/environment';
 import { TravelDataStoreService } from './services/travel-data-store.service';
 import {
-    CoiTravelDisclosure, DefaultAdminDetails, TravelCreateModalDetails,
+    CoiTravelDisclosure, TravelCreateModalDetails,
     TravelActionAfterSubmitRO, TravelDisclosure, EntityDetails, ModalSize } from './travel-disclosure-interface';
 import {
     HOME_URL, HTTP_ERROR_STATUS, ADMIN_DASHBOARD_URL, HTTP_SUCCESS_STATUS,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { PersonProjectOrEntity } from '../shared-components/shared-interface';
+import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
+import { openCommonModal } from '../common/utilities/custom-utilities';
 
 type Method = 'SOME' | 'EVERY';
 
@@ -30,7 +31,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
 
     deployMap = environment.deployUrl;
     $subscriptions: Subscription[] = [];
-    defaultAdminDetails = new DefaultAdminDetails();
+    defaultAdminDetails = new DefaultAssignAdminDetails();
     travelDisclosure: TravelDisclosure = new TravelDisclosure();
     entityDetails: EntityDetails = new EntityDetails();
     personEntityDetails: PersonProjectOrEntity = new PersonProjectOrEntity();
@@ -264,12 +265,12 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.needDescriptionField = needDescriptionField;
         this.isMandatory = isMandatory;
         this.helpTexts = helpTexts;
-        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Return';
+        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : actionBtnName;
         this.modalSize = 'lg';
         this.setPersonEntityDetails();
         this.setModalHeaderTitle(actionBtnName);
         this.descriptionErrorMsg = descriptionErrorMsg;
-        document.getElementById('travel-confirmation-modal-trigger-btn').click();
+        openCommonModal('travel-confirmation-modal');
     }
 
     private setPersonEntityDetails(): void {
@@ -304,12 +305,10 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    leavePageClicked(event: boolean): void {
-        if (event) {
-            this.service.setUnSavedChanges(false, '');
-            this.handleChildRouting();
-            this.redirectBasedOnQueryParam();
-        }
+    leavePageClicked(): void {
+        this.service.setUnSavedChanges(false, '');
+        this.handleChildRouting();
+        this.redirectBasedOnQueryParam();
     }
 
     private handleChildRouting(): void {

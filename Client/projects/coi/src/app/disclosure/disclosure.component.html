@@ -359,7 +359,7 @@
                     <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiService.isCOIAdministrator && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2'">
                         <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
                             class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12 mb-3' : 'col ms-2'}}"
-                            (click)="isAddAssignModalOpen = true;">
+                            (click)="openAddAssignModal();">
                             <mat-icon class="me-1">group_add</mat-icon>
                             <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
                         </button>
@@ -370,7 +370,7 @@
                         <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode != 3">
                             <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2"
-                                (click)="isAddAssignModalOpen = true;"
+                                (click)="openAddAssignModal();"
                                 [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
                                 <mat-icon>group_add</mat-icon>
                                 <span class="ms-2 fw-medium">Reassign Admin</span>
@@ -717,7 +717,9 @@
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
 
-<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
+<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)" 
+    [disclosureId]="coiData?.coiDisclosure?.disclosureId" [defaultAdminDetails]="defaultAdminDetails">
+</app-assign-administrator-modal>
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
