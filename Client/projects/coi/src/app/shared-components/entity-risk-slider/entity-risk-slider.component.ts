@@ -4,7 +4,7 @@ import { EntityDetailsService } from '../../disclosure/entity-details/entity-det
 import { CoiEntity, EntityDetails, RiskHistoryRO } from '../../entity-management/entity-details-interface';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
-import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
 @Component({
     selector: 'app-entity-risk-slider',
@@ -47,12 +47,8 @@ export class EntityRiskSliderComponent implements OnInit {
         });
     }
 
-    openConformationModal() {
-        document.getElementById('risk-conflict-confirmation-modal-trigger-btn').click();
-    }
-
     validateSliderClose() {
-        (this.isStatusEdited || this.revisionComment) ? this.openConformationModal() : this.closeConflictSlider();
+        (this.isStatusEdited || this.revisionComment) ? openCommonModal('risk-conflict-confirmation-modal') : this.closeConflictSlider();
     }
 
     closeConflictSlider() {
@@ -62,12 +58,10 @@ export class EntityRiskSliderComponent implements OnInit {
         }, 500);
     }
 
-    leavePageClicked(event: boolean) {
-        if (event) {
-            setTimeout(() => {
-                this.closeConflictSlider();
-            }, 100);
-        }
+    leavePageClicked() {
+        setTimeout(() => {
+            this.closeConflictSlider();
+        }, 100);
     }
 
     sortNull() { return 0; }

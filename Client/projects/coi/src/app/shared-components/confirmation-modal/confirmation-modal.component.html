@@ -9,7 +9,7 @@
                     <ng-content select="[header]"></ng-content>
                 </h5>
                 <button type="button" id="{{modalName}}-dismiss-btn" class="btn-close fs-12"
-                    data-bs-dismiss="modal" aria-label="Close" (click)="performSecondaryAction(false)">
+                    data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()">
                 </button>
             </div>
 
@@ -17,7 +17,7 @@
 
             <div class="modal-body m-0 p-0">
                 <div class="p-2 m-2">
-                    <!-- warning msg -->
+                    <!-- content -->
                     <ng-content select="[content]"></ng-content>
 
                     <!-- description text area -->
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="modal-footer mx-2">
-                <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction(true)">
+                <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction()">
                     {{secondaryBtnName}}
                 </button>
                 <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performPrimaryAction()">

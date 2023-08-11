@@ -6,7 +6,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { EntityDetails, TravelConflictRO, TravelDisclosure } from '../travel-disclosure-interface';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-travel-add-conflict-slider',
@@ -26,7 +26,7 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
     disclosureStatus = null;
     conflictHistory: any = [];
     isReadMore: boolean[] = [];
-    conflictLookUpList: any = [];
+    disclosureStatusLookUpList: any = [];
     $subscriptions: Subscription[] = [];
     travelConflictValidationMap = new Map();
     travelConflictRO: TravelConflictRO = new TravelConflictRO();
@@ -36,7 +36,7 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
         'Provide an adequate reason for your decision in the description field provided.'
     ];
 
-    constructor( private _commonService: CommonService,
+    constructor( public commonService: CommonService,
                  private _service: TravelDisclosureService,
                  private _dataStore: TravelDataStoreService ) { }
 
@@ -61,12 +61,8 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
             this._service.loadTravelConflictHistory(this.travelDisclosure.travelDisclosureId).subscribe((data: any) => {
                 this.conflictHistory = data;
             }, _err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching conflict status history. Please try again.');
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching conflict status history. Please try again.');
             }));
-    }
-
-    private openConformationModal(): void {
-        document.getElementById('travel-conflict-confirmation-modal-trigger-btn').click();
     }
 
     private closeConflictSlider(): void {
@@ -78,38 +74,44 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
 
     private travelConflictValidation(): boolean {
         this.travelConflictValidationMap.clear();
-        if (this.disclosureStatusCode === 'null' || !this.disclosureStatusCode) {
-            this.travelConflictValidationMap.set('disclosureStatusCode', 'Please select conflict status.');
-        }
+
         if (!this.comment) {
             this.travelConflictValidationMap.set('comment', 'Please add a reason.');
         }
-        return this.travelConflictValidationMap.size === 0 ? true : false;
+
+        if (this.disclosureStatusCode === 'null' || !this.disclosureStatusCode) {
+            this.travelConflictValidationMap.set('disclosureStatusCode', 'Please select disclosure status.');
+        }
+
+        if (this.disclosureStatusCode  === this.travelDisclosure.disclosureStatusCode) {
+            this.travelConflictValidationMap.set('duplicateDisclosure', 'You are trying to update the disclosure status with the current disclosure status.');
+            this.travelConflictValidationMap.delete('disclosureStatusCode');
+        }
+
+        return this.travelConflictValidationMap.size === 0;
     }
 
     private getTravelConflictStatusType(): void {
         this.$subscriptions.push(this._service.getTravelConflictStatusType().subscribe((res: any) => {
-            this.conflictLookUpList = res;
+            this.disclosureStatusLookUpList = res;
         }));
     }
 
     validateSliderClose(): void {
-        (this.disclosureStatusCode || this.comment) ? this.openConformationModal() : this.closeConflictSlider();
+        (this.disclosureStatusCode || this.comment) ? openCommonModal('travel-conflict-confirmation-modal') : this.closeConflictSlider();
     }
 
     setCoiTravelConflictStatusType(): void {
-        const disclosureStatusDetails = this.conflictLookUpList.find( status => {
-            return status.travelDisclosureStatusCode === this.disclosureStatusCode;
+        const disclosureStatusDetails = this.disclosureStatusLookUpList.find( status => {
+            return status.disclosureStatusCode === this.disclosureStatusCode;
         });
         this.disclosureStatus = disclosureStatusDetails.description;
     }
 
-    leavePageClicked(event: boolean): void {
-        if (event) {
-            setTimeout(() => {
-                this.closeConflictSlider();
-            }, 100);
-        }
+    leavePageClicked(): void {
+        setTimeout(() => {
+            this.closeConflictSlider();
+        }, 100);
     }
 
     clearConflictModal(): void {
@@ -129,9 +131,9 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
                     this.travelDisclosure.disclosureStatus = this.disclosureStatus;
                     this._dataStore.manualDataUpdate(this.travelDisclosure);
                     this.clearConflictModal();
-                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure Status updated successfully.');
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure Status updated successfully.');
                 }, _err => {
-                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating disclosure status. Please try again.');
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating disclosure status. Please try again.');
                 }));
         }
     }

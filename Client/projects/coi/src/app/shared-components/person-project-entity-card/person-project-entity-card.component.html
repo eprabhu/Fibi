@@ -21,7 +21,7 @@
                     <ng-container *ngIf="personProjectOrEntity?.projectDetails?.title?.length > 180">
                         <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer">
                             <strong>
-                                <span *ngIf="!isReadMore">... <u title="Expand Project">Read More</u></span>
+                                <span *ngIf="!isReadMore">...<u title="Expand Project">Read More</u></span>
                                 <u title="Collapse Project" *ngIf="isReadMore">Read Less</u>
                             </strong>
                         </span>
