@@ -744,7 +744,7 @@
 </app-confirmation-modal>
 
 <div *ngIf="isOpenRiskSlider">
-    <app-entity-risk-slider [disclosureDetails]="coiData.coiDisclosure" 
+    <app-disclosure-risk-slider [disclosureDetails]="coiData.coiDisclosure" 
     (riskChange) = "changeDataStoreRisk($event)"
-    [projectDetails]="coiData.projectDetail" (closePage)="closeSlider($event)"></app-entity-risk-slider>
+    [projectDetails]="coiData.projectDetail" (closePage)="closeSlider($event)"></app-disclosure-risk-slider>
 </div>
