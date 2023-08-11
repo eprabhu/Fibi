@@ -11,7 +11,7 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
 import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
-	selector: 'app-entity-risk-slider',
+	selector: 'app-disclosure-risk-slider',
 	templateUrl: './entity-risk-slider.component.html',
 	styleUrls: ['./entity-risk-slider.component.scss']
 })
