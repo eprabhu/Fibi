@@ -45,7 +45,7 @@
                         <div class="row">
                             <div class="col-md-8 col-12 mb-10">
                                 <div class="col-12 d-flex" *ngIf="relation.moduleCode == 3">
-                                    <span class="active-ribbon shadow-sm align-items-center d-flex">Proposal</span>
+                                    <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
                                     <p class="entity-title">
                                         <strong title="Click to view project details" class="fs-18" (click)="selectedProjectForView=relation;" data-bs-toggle="modal"
                                             data-bs-target="#moduleViewModal">#{{relation?.moduleItemId}} - {{relation?.title?.length >
@@ -60,7 +60,7 @@
                                     </p>
                                 </div>
                                 <div class="col-12 d-flex" *ngIf="relation.moduleCode == 1">
-                                    <span class="active-ribbon shadow-sm align-items-center d-flex">Award</span>
+                                    <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex">Award</span>
                                     <p title="Click to view project details" class="entity-title m-0" (click)="selectedProjectForView=relation" data-bs-toggle="modal"
                                         data-bs-target="#moduleViewModal">
                                         <strong class="fs-16">#{{relation?.moduleItemKey}} - {{relation?.title}} </strong>

@@ -6,25 +6,25 @@
                             <div class="col">Assigned Review</div>
                             <div *ngIf="coiService.isCOIAdministrator && coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" class="col-auto me-2">
                                 <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center" data-bs-toggle="modal"
-                                    title="Add Review Location" data-bs-target="#add-location-modal">
+                                    title="Add Review Location" data-bs-target="#add-coi-reviewer-modal">
                                     <mat-icon class="me-2">person_add</mat-icon>
                                     Assign Reviewer
                                 </button>
                             </div>    
-                            <button (click)="isCollapsed = !isCollapsed" title="Click here to collapse / expand"
+                            <button (click)="isExpanded = !isExpanded" title="Click here to collapse / expand"
                                 class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
-                                <mat-icon>{{!!isCollapsed? 'expand_less' : 'expand_more'}}</mat-icon>
+                                <mat-icon>{{!!isExpanded? 'expand_less' : 'expand_more'}}</mat-icon>
                             </button>
                                
-                            <!-- <button class=" updown-arrow mt-1" (click)="isCollapsed = !isCollapsed">
-                                <i [ngClass]="!isCollapsed?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
+                            <!-- <button class=" updown-arrow mt-1" (click)="isExpanded = !isExpanded">
+                                <i [ngClass]="!isExpanded?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
                                     class="fa-large" aria-hidden="true"></i>
                             </button> -->
                             
                         </div>
                     </h4>
     </div>
-    <div class="card-body" *ngIf="isCollapsed">
+    <div class="card-body" *ngIf="isExpanded">
         <div *ngIf="!reviewerList?.length">
             <div class="noDataExists">
                 <div class="no-data-container">
@@ -122,7 +122,7 @@
                                           </li> -->
                             <mat-menu #beforeMenu="matMenu" xPosition="before">
                                 <button class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
-                                    id="edit-location-btn" data-bs-toggle="modal" data-bs-target="#add-location-modal"
+                                    id="edit-location-btn" data-bs-toggle="modal" data-bs-target="#add-coi-reviewer-modal"
                                     (click)="editReview(reviewer, index)">
                                     <mat-icon class="me-2 more-options-icon">edit</mat-icon>
                                     <span>Edit Review</span>
@@ -165,8 +165,8 @@
     </div>
 </div>
 
-<div class="modal modal-coi fade mySkinDialog" id="add-location-modal" role="dialog" aria-labelledby="skippedSchedulesTitle"
-    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal modal-coi fade mySkinDialog" id="add-coi-reviewer-modal" role="dialog"
+    data-bs-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -220,5 +220,5 @@
         </div>
     </div>
 </div>
-<span (click)="clearReviewModal()" id="add-review-modal-trigger" data-bs-target="#add-location-modal"
+<span (click)="clearReviewModal()" id="add-review-modal-trigger" data-bs-target="#add-coi-reviewer-modal"
     data-bs-toggle="modal" class="d-none"></span>
