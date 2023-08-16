@@ -13,7 +13,7 @@ export class UserDisclosureService {
 
     getCOIDashboard(param) {
         return this._http.post(this._commonService.baseUrl + '/getCOIDashboard', param).pipe(catchError((err) => {
-              this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching Proposal list failed. Please try again.');
+              this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching disclosure list failed. Please try again.');
               return of();
           }));
     }

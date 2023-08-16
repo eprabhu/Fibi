@@ -358,7 +358,7 @@
 
                     <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiService.isCOIAdministrator && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2'">
                         <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
-                            class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12 mb-3' : 'col ms-2'}}"
+                            class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12' : 'col ms-2'}}"
                             (click)="openAddAssignModal();">
                             <mat-icon class="me-1">group_add</mat-icon>
                             <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
@@ -410,9 +410,11 @@
                     </button>
                     </mat-menu>
 
-                    <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'"  title="Click to start review" area-describedby="Click to start review" (click)="updateCoiReview('START')"
+                    <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'"  
+                    title="Click to start review" area-describedby="Click to start review" 
+                    (click)="updateCoiReview('START')"
                     id="start-review-btn"
-                    [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                    [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
                     class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                     <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
                     <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Start Review </span>
@@ -421,7 +423,7 @@
                   <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" 
                   title="Click to complete review" area-describedby="Click to complete review" (click)="updateCoiReview('COMPLETE')"
                   id="complete-review-btn"
-                  [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                  [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
                   class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                   <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                   <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
