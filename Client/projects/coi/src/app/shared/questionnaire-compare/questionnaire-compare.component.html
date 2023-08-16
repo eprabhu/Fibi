@@ -4,10 +4,10 @@
 <div class="col-md-12 users-list-tbl mb-3 px-0"
     *ngIf="comparedQuestionnaire.questions != undefined && comparedQuestionnaire.questions != null">
     <div class="qst-list-padding">
-        <ng-container *ngFor='let question of comparedQuestionnaire.questions; let indexQuestion = index'>
+        <ng-container *ngFor='let question of comparedQuestionnaire.questions; let indexQuestion = index;let isLast = last'>
             <div  [ngClass]="{ 'delete-background': question.status == -1,
             'add-background': question.status == 1}"
-             class="card questionnaire-card mb-4 p-4" *ngIf="question.SHOW_QUESTION == true">
+             class="card questionnaire-card p-4" [class.mb-4]="!isLast" *ngIf="question.SHOW_QUESTION == true">
                 <ul class="qst-list m-0 p-0">
                     <li id="ques_{{question.QUESTION_ID}}">
                         <div *ngIf="question?.ANSWER_TYPE !== 'Table'; else QUESTIONNAIRE_TABLE" class="">
