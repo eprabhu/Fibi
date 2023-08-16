@@ -730,7 +730,7 @@
 </div>
 
 <!--Disclosure Withdraw/Return Confirmation Modal-->
-<app-confirmation-modal [modalName] = "'disclosure-confirmation-modal'" (primaryBtnAction)="performDisclosureAction()"
+<app-confirmation-modal [modalName] = "'disclosure-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
     [primaryBtnName]="primaryBtnName" [modalSize]="'lg'" [textAreaLabelName]="'Reason for ' + textAreaLabelName"
     [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg">
     <!-- modal header -->

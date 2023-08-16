@@ -93,6 +93,7 @@ export class TravelDisclosure {
     disclosureStatus: string;
     riskLevel: string;
     expirationDate: number;
+    riskCategoryCode: number;
   }
 
 export interface EndpointOptions {

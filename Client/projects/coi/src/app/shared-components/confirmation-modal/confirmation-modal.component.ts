@@ -217,12 +217,12 @@ export class ConfirmationModalComponent implements OnDestroy {
     performPrimaryAction() {
         if (this.isMandatory) {
             if (this.validateDescription()) {
-                this.closeModal();
                 this.primaryBtnAction.emit(this.description);
+                this.closeModal();
             }
         } else {
-            this.closeModal();
             this.primaryBtnAction.emit(this.needDescriptionField ? this.description : null);
+            this.closeModal();
         }
     }
 
