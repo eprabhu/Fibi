@@ -321,22 +321,22 @@ INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTIO
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('13', '{FCOI /Project /Travel} application has been approved', 'Approved', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('1', 'New Entity <b>{ENTITY_NAME}</b>  has been created', 'Create', now(), 'quickstart');
+VALUES ('1', 'New Entity <b>{ENTITY_NAME}</b>  has been <b>created</b>', 'Create', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('2', '<b>{ENTITY_NAME}</b> has been Activated', 'Activate', now(), 'quickstart');
+VALUES ('2', '<b>{ENTITY_NAME}</b> has been <b>activated</b>', 'Activate', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('3', '<b>{ENTITY_NAME}</b> has been Inactivated', 'Inactivate', now(), 'quickstart');
+VALUES ('3', '<b>{ENTITY_NAME}</b> has been <b>inactivated</b>', 'Inactivate', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('4', '<b>{ENTITY_NAME}</b> has been verified', 'Inactivate', now(), 'quickstart');
+VALUES ('4', '<b>{ENTITY_NAME}</b> has been <b>verified</b>', 'Inactivate', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('5', 'Admin <b>{ADMIN_NAME}</b> changed the risk status from <b>{RISK}</b> to <b>{NEW_RISK}</b>', 'Modify Risk', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('6', '<b>{ENTITY_NAME}</b> has been modified', 'Modify Entity', now(), 'quickstart');
+VALUES ('6', '<b>{ENTITY_NAME}</b> has been <b>modified</b>', 'Modify Entity', now(), 'quickstart');
 
 SET FOREIGN_KEY_CHECKS=1;
 
