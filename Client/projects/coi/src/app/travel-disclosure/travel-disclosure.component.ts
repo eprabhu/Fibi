@@ -72,6 +72,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         `Describe the reason for returning  in the field provided.`,
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
+    isOpenRiskSlider = false;
 
     constructor(
         public router: Router,
@@ -382,6 +383,33 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Approving Travel Disclosure');
             })
         );
+    }
+
+    openRiskSlider() {
+        this.isOpenRiskSlider = true;
+    }
+
+    closeSlider(event) {
+        this.isOpenRiskSlider = false;
+    }
+
+    getWarningClass(typeCode) {
+        switch (typeCode) {
+            case '1':
+                return 'invalid';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return;
+        }
+    }
+
+    changeDataStoreRisk(event) {
+        this.travelDisclosure.riskCategoryCode = event.riskCategoryCode;
+        this.travelDisclosure.riskLevel = event.riskLevel;
+        this._dataStore.setStoreData(this.travelDisclosure);
     }
 
 }

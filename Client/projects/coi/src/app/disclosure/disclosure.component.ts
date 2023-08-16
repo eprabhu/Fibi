@@ -88,8 +88,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     reviewStatus: string;
     filterType = 'ACTIVE';
     withdrawError = new Map();
-    withdrawDescription: any;
-    returnDescription: any;
+    description: any;
     returnError = new Map();
     isShowMore = false;
     primaryBtnName = '';
@@ -567,23 +566,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
       REQ_OBJ.searchWord = '';
       return REQ_OBJ;
     }
-    
-    openWithdrawModal() {
-        openModal('withdrawModal');
-    }
-
-    descriptionChangedOrEmpty() {
-        if (!this.withdrawDescription) {
-            this.withdrawError.set('description', `Describe the reason for withdrawing the disclosure.`);
-        }
-        return this.withdrawError.size === 0 ? true : false;
-    }
-
-    closeWithdrawModal() {
-        this.withdrawError.clear();
-        this.withdrawDescription = '';
-    }
-
+ 
     /**
      * 2 - Submitted
      * 3 - Review In Progress
@@ -595,62 +578,34 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     withdrawDisclosure() {
-        this.withdrawError.clear();
-        if (this.descriptionChangedOrEmpty()) {
-            this.$subscriptions.push(this.coiService
-                .withdrawDisclosure({
-                    disclosureId: this.coiData.coiDisclosure.disclosureId,
-                    description: this.withdrawDescription
-                })
-                .subscribe((res: any) => {
-                    this.commonService.showToast(HTTP_SUCCESS_STATUS, `Disclosure withdrawn successfully.`);
-                    hideModal('withdrawModal');
-                    this.closeWithdrawModal();
-                    this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = res.reviewStatusCode;
-                    this.coiData.coiDisclosure.coiReviewStatusType.description = res.reviewStatusDescription;
-                    this.coiData.coiDisclosure.reviewStatusCode = res.reviewStatusCode;
-                    this.router.navigate([CREATE_DISCLOSURE_ROUTE_URL],
-                        { queryParams: { disclosureId: this.coiData.coiDisclosure.disclosureId } });
-                }, _err => {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
-                }));
-        }
-    }
-
-    openReturnModal() {
-        openModal('returnModal');
-    }
-
-    returnDescriptionChangedOrEmpty() {
-        if (!this.returnDescription) {
-            this.returnError.set('return', `Kindly provide the reason for returning the disclosure.`);
-        }
-        return this.returnError.size === 0 ? true : false;
-    }
-
-    closeReturnModal(): void {
-        this.returnError.clear();
-        this.returnDescription = '';
+        this.$subscriptions.push(this.coiService
+            .withdrawDisclosure({
+                disclosureId: this.coiData.coiDisclosure.disclosureId,
+                description: this.description
+            })
+            .subscribe((res: any) => {
+                this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode = res.reviewStatusCode;
+                this.coiData.coiDisclosure.coiReviewStatusType.description = res.reviewStatusDescription;
+                this.coiData.coiDisclosure.reviewStatusCode = res.reviewStatusCode;
+                this.router.navigate([CREATE_DISCLOSURE_ROUTE_URL],
+                    { queryParams: { disclosureId: this.coiData.coiDisclosure.disclosureId } });
+            }, _err => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+            }));
     }
 
     returnDisclosure() {
-        this.returnError.clear();
-        if (this.returnDescriptionChangedOrEmpty()) {
-            this.$subscriptions.push(this.coiService
-                .returnDisclosure({
-                    disclosureId: this.coiData.coiDisclosure.disclosureId,
-                    description: this.returnDescription
-                })
-                .subscribe((res: any) => {
-                    this.commonService.showToast(HTTP_SUCCESS_STATUS, `Disclosure returned successfully.`);
-                    hideModal('returnModal');
-                    this.closeReturnModal();
-                    this.goToHomeUrl();
-                }, _err => {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in returning disclosure.`);
-                }));
-        }
-
+        this.$subscriptions.push(this.coiService
+            .returnDisclosure({
+                disclosureId: this.coiData.coiDisclosure.disclosureId,
+                description: this.description
+            })
+            .subscribe((res: any) => {
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, `Disclosure returned successfully.`);
+                this.goToHomeUrl();
+            }, _err => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in returning disclosure.`);
+            }));
     }
 
     openConfirmationModal(actionBtnName: string, helpTexts: string [] = [], descriptionErrorMsg: string = ''): void {
@@ -668,7 +623,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.personProjectDetails.unitDetails = this.coiData?.coiDisclosure?.person.unit?.unitDetail;
     }
 
-    performDisclosureAction(): void {
+    performDisclosureAction(event): void {
+        this.description = event;
         switch (this.primaryBtnName) {
             case 'Return':
                 return this.returnDisclosure();
