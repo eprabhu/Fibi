@@ -128,7 +128,7 @@
                             <textarea id="main-panel-comnt" class="form-control fs-14" placeholder="Description" row="1"
                                 [(ngModel)]="riskComment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
                                 [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
-                                (ngModelChange)="clearValidationOnValueChange('COMMENT')"></textarea>
+                                (ngModelChange)="clearValidationOnValueChange('COMMENT');riskComment = riskComment.trim()"></textarea>
                             <div *ngIf="riskValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
                                 {{riskValidationMap?.get('comment')}}
                             </div>
