@@ -83,6 +83,7 @@ public class QuestionnaireDAO {
 	private static final String UPDATE_USER_PARAM = "<<UPDATE_USER>>";
 	private static final String UPDATE_USER = "UPDATE_USER";
 	private static final String DESCRIPTION = "<<DESCRIPTION>>";
+	private static final String FOOTER_DESCRIPTION = "<<FOOTER_DESCRIPTION>>";
 	private static final String GROUP_NAME = "GROUP_NAME";
 	private static final String QUESTION_ID_PARAM = "<<QUESTION_ID>>";
 	private static final String QUESTION_OPTION_ID_PARAM = "<<QUESTION_OPTION_ID>>";
@@ -350,6 +351,7 @@ public class QuestionnaireDAO {
 			inParam.add(new Parameter(SORT_ORDER_PARAM, DBEngineConstants.TYPE_INTEGER, hmQuestion.get(SORT_ORDER)));
 			inParam.add(new Parameter("<<QUESTION>>", DBEngineConstants.TYPE_STRING, hmQuestion.get("QUESTION")));
 			inParam.add(new Parameter(DESCRIPTION, DBEngineConstants.TYPE_STRING, hmQuestion.get("DESCRIPTION")));
+			inParam.add(new Parameter(FOOTER_DESCRIPTION, DBEngineConstants.TYPE_STRING, hmQuestion.get("FOOTER_DESCRIPTION")));
 			inParam.add(new Parameter("<<PARENT_QUESTION_ID>>", DBEngineConstants.TYPE_INTEGER, hmQuestion.get("PARENT_QUESTION_ID")));
 			inParam.add(new Parameter("<<HELP_LINK>>", DBEngineConstants.TYPE_STRING, hmQuestion.get("HELP_LINK")));
 			inParam.add(new Parameter("<<ANSWER_TYPE>>", DBEngineConstants.TYPE_STRING, hmQuestion.get("ANSWER_TYPE")));
@@ -376,6 +378,7 @@ public class QuestionnaireDAO {
 			ArrayList<Parameter> inParam = new ArrayList<>();
 			inParam.add(new Parameter("<<QUESTION>>", DBEngineConstants.TYPE_STRING, hmQuestion.get("QUESTION")));
 			inParam.add(new Parameter(DESCRIPTION, DBEngineConstants.TYPE_STRING, hmQuestion.get("DESCRIPTION")));
+			inParam.add(new Parameter(FOOTER_DESCRIPTION, DBEngineConstants.TYPE_STRING, hmQuestion.get("FOOTER_DESCRIPTION")));
 			inParam.add(new Parameter("<<PARENT_QUESTION_ID>>", DBEngineConstants.TYPE_INTEGER,	hmQuestion.get("PARENT_QUESTION_ID")));
 			inParam.add(new Parameter("<<HELP_LINK>>", DBEngineConstants.TYPE_STRING, hmQuestion.get("HELP_LINK")));
 			inParam.add(new Parameter("<<ANSWER_TYPE>>", DBEngineConstants.TYPE_STRING, hmQuestion.get("ANSWER_TYPE")));
