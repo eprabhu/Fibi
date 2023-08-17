@@ -53,7 +53,7 @@
                 <div class="col">
                     <textarea id="travelDisclosure-title" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=200
                         class="form-control fs-14" autocomplete="off" [(ngModel)]="travelDisclosureRO.travelTitle"
-                        (ngModelChange)="setUnSavedChangesTrue();"
+                        (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.travelTitle = travelDisclosureRO.travelTitle.trim()"
                         [ngClass]="(mandatoryList?.get('title')) ? 'invalid-border':''">
                     </textarea>
                     <span *ngIf="mandatoryList?.has('title')" class="fs-13 invalid-msg d-block position-absolute">
@@ -127,7 +127,7 @@
                     <div class="col">
                         <input type="text" id="travelDisclosure-cityList" autocomplete="off"
                             [(ngModel)]="travelDisclosureRO.destinationCity" class="form-control"
-                            (ngModelChange)="setUnSavedChangesTrue();"
+                            (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.destinationCity = travelDisclosureRO.destinationCity.trim()"
                             [ngClass]="(mandatoryList?.get('city')) ? 'invalid-border':''">
                         <span *ngIf="mandatoryList?.has('city')" class="fs-13 invalid-msg d-block position-absolute">
                             {{mandatoryList?.get('city')}}
@@ -200,7 +200,7 @@
                 <div class="col-12">
                     <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
                         class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.purposeOfTheTrip"
-                        (ngModelChange)="setUnSavedChangesTrue();"
+                        (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.purposeOfTheTrip = travelDisclosureRO.purposeOfTheTrip.trim()"
                         [ngClass]="(mandatoryList?.get('purpose')) ? 'invalid-border':''">
                         </textarea>
                     <span *ngIf="mandatoryList?.has('purpose')" class="fs-13 invalid-msg d-block position-absolute">
@@ -220,7 +220,7 @@
                 <div class="col-12">
                     <textarea id="travelDisclosure-relationship" appAutoGrow rows="1" appLengthValidator [isShowLimiter]='true' [limit]=500
                         class="form-control" autocomplete="off" [(ngModel)]="travelDisclosureRO.relationshipToYourResearch"
-                        (ngModelChange)="setUnSavedChangesTrue();"
+                        (ngModelChange)="setUnSavedChangesTrue(); travelDisclosureRO.relationshipToYourResearch = travelDisclosureRO.relationshipToYourResearch.trim()"
                         [ngClass]="(mandatoryList?.get('relationship')) ? 'invalid-border':''">
                     </textarea>
                     <span *ngIf="mandatoryList?.has('relationship')" class="fs-13 invalid-msg d-block position-absolute">
