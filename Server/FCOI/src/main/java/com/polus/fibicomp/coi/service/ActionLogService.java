@@ -41,10 +41,10 @@ public interface ActionLogService {
     /**
      * This method is used to fetch entity action log by following @params
      * @param entityId
-     * @param actionLogCode
+     * @param actionLogCodes
      * @return
      */
-    List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, String actionLogCode);
+    List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes);
 
     /**
      * This method is used to fetch all entity action log based on entity number

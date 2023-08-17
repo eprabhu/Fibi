@@ -44,12 +44,12 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
     private CommonDao commonDao;
 
     @Override
-    public List<EntityActionLog> fetchEntityActionLog(Integer entityId, String actionTypeCode) {
+    public List<EntityActionLog> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes) {
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-        hqlQuery.append("SELECT ea FROM EntityActionLog ea WHERE ea.entityId = :entityId AND ea.actionTypeCode = :actionTypeCode ORDER BY updateTimestamp DESC");
+        hqlQuery.append("SELECT ea FROM EntityActionLog ea WHERE ea.entityId = :entityId AND ea.actionTypeCode IN :actionTypeCode ORDER BY updateTimestamp DESC");
         Query query = session.createQuery(hqlQuery.toString());
-        query.setParameter("actionTypeCode", actionTypeCode);
+        query.setParameter("actionTypeCode", actionLogCodes);
         query.setParameter("entityId", entityId);
         return query.getResultList();
     }
@@ -108,9 +108,9 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("SELECT al FROM DisclosureActionLog al WHERE al.disclosureId = :disclosureId AND " );
-        hqlQuery.append("al.actionTypeCode = :actionTypeCode ORDER BY al.updateTimestamp DESC");
+        hqlQuery.append("al.actionTypeCode IN :actionTypeCode ORDER BY al.updateTimestamp DESC");
         Query query = session.createQuery(hqlQuery.toString());
-        query.setParameter("actionTypeCode", actionLogDto.getActionTypeCode());
+        query.setParameter("actionTypeCode", actionLogDto.getActionTypeCodes());
         query.setParameter("disclosureId", actionLogDto.getDisclosureId());
         return query.getResultList();
     }
