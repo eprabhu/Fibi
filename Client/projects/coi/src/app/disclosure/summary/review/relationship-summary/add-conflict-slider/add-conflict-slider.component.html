@@ -111,7 +111,7 @@
                                 <div class="col mr-10">
                                     <label class="fs-14 fw-500">Describe the reason for Conflict status change:</label>
                                     <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all" placeholder="Description"
-                                        row="1" [(ngModel)]="comment" appLengthValidator [limit]="2000"
+                                        row="1" [(ngModel)]="comment" (ngModelChange)="comment= comment.trim()" appLengthValidator [limit]="2000"
                                         [isShowLimiter]="true"
                                         [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
                                     <div *ngIf="projectConflictValidationMap?.has('comment')"
@@ -177,7 +177,7 @@
                     </div>
                 </ng-container>
             </ng-container>
-            <ng-template #noData>
+            <ng-template *ngIf="isEmptyHistory()">
                 <app-no-information></app-no-information>
             </ng-template>
         </div>
