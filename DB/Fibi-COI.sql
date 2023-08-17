@@ -962,6 +962,8 @@ VALUES ('5', 'Admin <b>{ADMIN_NAME}</b> changed the risk status from <b>{RISK}</
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('6', '<b>{ENTITY_NAME}</b> has been <b>modified</b>', 'Modify Entity', now(), 'quickstart');
 
+ALTER TABLE `quest_question` ADD COLUMN `FOOTER_DESCRIPTION` TEXT NULL;
+
 SET FOREIGN_KEY_CHECKS=1;
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;

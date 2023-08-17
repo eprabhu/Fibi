@@ -147,7 +147,7 @@ public class CoiEntity implements Serializable {
 	private boolean majorVersion; // status of modification, is major change or minor change
 
 	@Transient
-	private EntityRiskCategory newtRiskCategory;
+	private EntityRiskCategory newRiskCategory;
 
 	public String getCreateUserFullName() {
 		return createUserFullName;
@@ -421,11 +421,11 @@ public class CoiEntity implements Serializable {
 		this.revisionReason = revisionReason;
 	}
 
-	public EntityRiskCategory getNewtRiskCategory() {
-		return newtRiskCategory;
+	public EntityRiskCategory getNewRiskCategory() {
+		return newRiskCategory;
 	}
 
-	public void setNewtRiskCategory(EntityRiskCategory newtRiskCategory) {
-		this.newtRiskCategory = newtRiskCategory;
+	public void setNewRiskCategory(EntityRiskCategory newRiskCategory) {
+		this.newRiskCategory = newRiskCategory;
 	}
 }

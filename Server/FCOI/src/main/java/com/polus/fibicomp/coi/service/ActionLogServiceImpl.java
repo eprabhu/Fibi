@@ -109,9 +109,9 @@ public class ActionLogServiceImpl implements ActionLogService {
         placeholdersAndValues.put("{PERSON_NAME}", coiEntity.getCreateUserFullName());
         placeholdersAndValues.put("{ADMIN_NAME}", coiEntity.getUpdatedUserFullName());
         placeholdersAndValues.put("{UPDATE_TIMESTAMP}", coiEntity.getUpdateTimestamp().toString());
-        if (coiEntity.getNewtRiskCategory() != null) {
-            placeholdersAndValues.put("{RISK}", coiEntity.getEntityRiskCategory().getDescription());
-            placeholdersAndValues.put("{NEW_RISK}", coiEntity.getNewtRiskCategory().getDescription());
+        placeholdersAndValues.put("{RISK}", coiEntity.getEntityRiskCategory() != null ? coiEntity.getEntityRiskCategory().getDescription() : "");
+        if (coiEntity.getNewRiskCategory() != null) {
+            placeholdersAndValues.put("{NEW_RISK}", coiEntity.getNewRiskCategory().getDescription());
         }
         return renderPlaceholders(message, placeholdersAndValues);
     }
@@ -210,13 +210,10 @@ public class ActionLogServiceImpl implements ActionLogService {
 	     return renderPlaceholders(message, placeholdersAndValues);
     }
 
-
-
-
     @Override
-    public List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, String actionLogCode) {
+    public List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes) {
         List<EntityActionLogDto> entityLogs = new ArrayList<>();
-        actionLogRepositoryCustom.fetchEntityActionLog(entityId, actionLogCode).forEach(entityActionLog -> {
+        actionLogRepositoryCustom.fetchEntityActionLog(entityId, actionLogCodes).forEach(entityActionLog -> {
             EntityActionLogDto entityActionLogDto = new EntityActionLogDto();
             BeanUtils.copyProperties(entityActionLog, entityActionLogDto);
             entityActionLogDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(entityActionLog.getUpdateUser()));

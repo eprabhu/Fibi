@@ -3525,17 +3525,19 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		try {
 			String filterType = dashboardVO.getFilterType();
 			if (oracledb.equalsIgnoreCase("N")) {
-				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_HISTORY(?,?)}");
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_HISTORY(?,?,?)}");
 				statement.setString(1, AuthenticatedUser.getLoginPersonId());
 				statement.setString(2, filterType);
+				statement.setBoolean(3, false);
 				statement.execute();
 				rset = statement.getResultSet();
 			} else if (oracledb.equalsIgnoreCase("Y")) {
-				String functionCall = "{call GET_COI_DISCLOSURE_HISTORY(?,?,?)}";
+				String functionCall = "{call GET_COI_DISCLOSURE_HISTORY(?,?,?,?)}";
 				statement = connection.prepareCall(functionCall);
 				statement.registerOutParameter(1, OracleTypes.CURSOR);
 				statement.setString(2, AuthenticatedUser.getLoginUserName());
 				statement.setString(3, filterType);
+				statement.setBoolean(4, false);
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
 			}
@@ -3751,7 +3753,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public void syncDisclosureRisk(Integer disclosureId, Integer disclosureNumber) {
+	public CoiRiskCategory syncDisclosureRisk(Integer disclosureId, Integer disclosureNumber) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		SessionImpl sessionImpl = (SessionImpl) session;
 		Connection connection = sessionImpl.connection();
@@ -3761,9 +3763,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			statement.setInt(2, disclosureNumber);
 			statement.setString(3, AuthenticatedUser.getLoginUserName());
 			statement.execute();
+			ResultSet rset = statement.getResultSet();
+			if (rset != null && rset.next()) {
+				CoiRiskCategory riskCategory = new CoiRiskCategory();
+				riskCategory.setRiskCategoryCode(rset.getString(1));
+				riskCategory.setDescription(rset.getString(2));
+				return riskCategory;
+			}
 		} catch (Exception e) {
 			logger.error("Exception on syncDisclosureRisk {}", e.getMessage());
 		}
+		return null;
 	}
 
 	@Override
@@ -3785,5 +3795,42 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public List<CoiRiskCategory> fetchDisclosureRiskCategory() {
 		return hibernateTemplate.loadAll(CoiRiskCategory.class);
+	}
+
+	public Integer getDisclosureHistoryCount(CoiDashboardVO dashboardVO) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		ResultSet rset = null;
+		Integer count = 0;
+		try {
+			String filterType = dashboardVO.getFilterType();
+			if (oracledb.equalsIgnoreCase("N")) {
+				statement = connection.prepareCall("{call GET_COI_DISCLOSURE_HISTORY(?,?,?)}");
+				statement.setString(1, AuthenticatedUser.getLoginPersonId());
+				statement.setString(2, filterType);
+				statement.setBoolean(3, true);
+				statement.execute();
+				rset = statement.getResultSet();
+			} else if (oracledb.equalsIgnoreCase("Y")) {
+				String functionCall = "{call GET_COI_DISCLOSURE_HISTORY(?,?,?,?)}";
+				statement = connection.prepareCall(functionCall);
+				statement.registerOutParameter(1, OracleTypes.CURSOR);
+				statement.setString(2, AuthenticatedUser.getLoginUserName());
+				statement.setString(3, filterType);
+				statement.setBoolean(4, true);
+				statement.execute();
+				rset = (ResultSet) statement.getObject(1);
+			}
+			while (rset.next()) {
+				count = Integer.parseInt(rset.getString(1));
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception on getDisclosureHistoryCount {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch Disclosure history count", e, Constants.JAVA_ERROR);
+		}
+		return count;
 	}
 }
