@@ -34,11 +34,6 @@
   position: absolute;
 }
 
-.grey-text {
-  color: #6A7980;
-  font-size: 1.4rem;
-}
-
 .badge-width {
   width: 135px;
   padding: 5px;
@@ -51,3 +46,19 @@
 textarea::placeholder {
   font-size: 1.4rem !important;
 }
+
+.invalid {
+  position: relative;
+  color: #ff0000;
+}
+
+.medium-risk {
+  position: relative;
+  color: #ff8c00;
+}
+
+.low-risk {
+  position: relative;
+  color: rgb(26, 172, 62);
+}
+

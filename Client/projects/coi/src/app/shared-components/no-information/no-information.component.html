@@ -1,5 +1,5 @@
 <div [@fadeInOutHeight]>
-  <div class="no-data-container w-100 shadow-sm">
+  <div class="no-data-container w-100" [class.shadow-sm]= "isBorderNeeded">
     <span class="no-data-icon-outer">
         <div class="no-data-icon">
           <mat-icon class="no-file">folder_off</mat-icon>
