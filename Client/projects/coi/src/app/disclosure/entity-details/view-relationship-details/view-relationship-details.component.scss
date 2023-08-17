@@ -265,4 +265,14 @@ small {
   text-decoration: underline !important;
 }
 
+.text-area-height {
+  height: 75px !important;
+}
 
+.text-area-height::-webkit-scrollbar {
+  width: .4em;
+}
+
+.text-area-height::-webkit-scrollbar-button {
+  display: none;
+}

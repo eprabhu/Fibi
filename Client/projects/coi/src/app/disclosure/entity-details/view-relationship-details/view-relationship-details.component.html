@@ -268,7 +268,7 @@
                       class="mandatory px-2">*</span></label>
                 </div>
                 <div class="col mx-1 px-2">
-                  <textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
+                  <textarea class="form-control text-area-height" id="releationship-entity"
                     [(ngModel)]="additionalDetails.staffInvolvement" (ngModelChange)="isChangesInFieldValue = true"
                     [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
                     [limit]=2000>
@@ -295,7 +295,7 @@
                     :<span class="mandatory px-2">*</span></label>
                 </div>
                 <div class="col mx-1 px-3">
-                  <textarea appAutoGrow class="form-control" rows="1" [(ngModel)]="additionalDetails.studentInvolvement"
+                  <textarea class="form-control text-area-height" [(ngModel)]="additionalDetails.studentInvolvement"
                     (ngModelChange)="isChangesInFieldValue = true"
                     [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''" appLengthValidator
                     [limit]=2000>
@@ -315,7 +315,7 @@
                     University responsibilities :<span class="mandatory px-2">*</span></label>
                 </div>
                 <div class="col mx-1 px-3">
-                  <textarea appAutoGrow class="form-control" rows="1"
+                  <textarea class="form-control text-area-height"
                     [(ngModel)]="additionalDetails.instituteResourceInvolvement"
                     (ngModelChange)="isChangesInFieldValue = true"
                     [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''" appLengthValidator

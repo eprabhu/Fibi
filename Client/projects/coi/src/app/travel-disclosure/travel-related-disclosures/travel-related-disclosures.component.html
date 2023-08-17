@@ -1,7 +1,9 @@
 <div [@listAnimation]="historyData.length" [@fadeInOutHeight]>
     <!-- entity card -->
-    <app-shared-entity-info-card [entityDetails]="entityDetails" [viewMore]="true"
+    <ng-container *ngIf="historyData.length > 0">
+        <app-shared-entity-info-card [entityDetails]="entityDetails" [viewMore]="true"
         (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
+    </ng-container>
 
     <ng-container *ngIf="!isLoading">
         <!-- disclosure histories -->
@@ -64,8 +66,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- no data component -->
-        <app-no-information *ngIf="historyData.length == 0"> </app-no-information>
     </ng-container>
 </div>
+
+<!-- no data component -->
+<app-no-information *ngIf="historyData.length == 0 && !isLoading"> </app-no-information>
