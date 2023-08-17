@@ -6,6 +6,7 @@ import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
+import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 @Component({
     selector: 'app-entity-risk-slider',
     templateUrl: './entity-risk-slider.component.html',
@@ -33,6 +34,7 @@ export class EntityRiskSliderComponent implements OnInit {
         'Provide an adequate reason for your decision in the description field provided.'
     ];
     riskCategoryCode: string;
+    isEmptyObject = isEmptyObject;
 
     constructor(public entityDetailsService: EntityDetailsService,
         private _commonService: CommonService,
@@ -119,16 +121,13 @@ export class EntityRiskSliderComponent implements OnInit {
     }
     updateHistoryLogs(data: any) {
         if (data.length) {
-            this.riskHistoryLogs = [];
+            this.riskHistoryLogs = {};
             data.forEach((historyObj) => {
                 const date = this.dataFormatPipe.transform(historyObj.updateTimestamp);
                 this.riskHistoryLogs[date] = this.riskHistoryLogs[date] ? this.riskHistoryLogs[date] : [];
                 this.riskHistoryLogs[date].push(historyObj);
             });
         }
-    }
-    closeHistoryInfo() {
-        this.entityDetailsService.isShowHistoryInfo = false;
     }
 
     setCoiProjConflictStatusType(TYPE): void {
