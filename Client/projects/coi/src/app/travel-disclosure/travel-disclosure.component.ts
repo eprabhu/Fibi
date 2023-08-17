@@ -194,7 +194,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private reRoutePage(): void {
-        if (!this.service.checkCreateUserRight(this.travelDisclosure.personId)) {
+        if (!this.service.isCheckLoggedUser(this.travelDisclosure.personId)) {
             this.navigateBack();
         } else {
             this.router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
@@ -227,7 +227,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     checkAdministratorRight(): boolean {
-        return this.service.checkCreateUserRight(this.travelDisclosure.adminPersonId);
+        return this.service.isCheckLoggedUser(this.travelDisclosure.adminPersonId);
     }
 
     showReturnOrApproveButton(): boolean {

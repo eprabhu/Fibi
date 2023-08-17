@@ -8,6 +8,7 @@ import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { TravelDisclosure } from '../travel-disclosure-interface';
 import { fadeInOutHeight } from '../../common/utilities/animations';
+import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-travel-history',
@@ -20,6 +21,7 @@ export class TravelHistoryComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     travelDisclosure: TravelDisclosure = new TravelDisclosure();
     disclosureHistoryLogs: any = {};
+    isEmptyObject = isEmptyObject;
 
     constructor( public service: TravelDisclosureService,
                  private _commonService: CommonService,
@@ -56,17 +58,13 @@ export class TravelHistoryComponent implements OnInit, OnDestroy {
 
     private updateHistoryLogs(data: any): void {
         if (data.length) {
-            this.disclosureHistoryLogs = [];
+            this.disclosureHistoryLogs = {};
             data.forEach((historyObj) => {
                 const date = this._dataFormatPipe.transform(historyObj.updateTimestamp);
                 this.disclosureHistoryLogs[date] = this.disclosureHistoryLogs[date] ? this.disclosureHistoryLogs[date] : [];
                 this.disclosureHistoryLogs[date].push(historyObj);
             });
         }
-    }
-
-    closeHistoryInfo(): void {
-        this.service.isShowHistoryInfo = false;
     }
 
     sortNull(): number {

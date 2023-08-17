@@ -12,7 +12,6 @@ export class TravelDisclosureService {
     saveSubject = new Subject();
 
     isAdminDashboard = false;
-    isShowHistoryInfo = true;
     travelDataChanged = false;
     isTravelCertified = false;
     isChildRouteTriggered = false;
@@ -28,7 +27,7 @@ export class TravelDisclosureService {
         this.travelDataChanged = dataChange;
     }
 
-    checkCreateUserRight(personId: string): boolean {
+    isCheckLoggedUser(personId: string): boolean {
         return personId === this._commonService.getCurrentUserDetail('personId');
     }
 

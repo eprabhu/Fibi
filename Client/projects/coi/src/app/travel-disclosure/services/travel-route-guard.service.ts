@@ -80,7 +80,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
 
     private reRouteIfWrongPath(currentPath: string, reviewStatusCode: string, personId: string, route): void {
         const hasCreateTravelPath = currentPath.includes('create-travel-disclosure');
-        const hasCreateUserRight = this._service.checkCreateUserRight(personId);
+        const hasCreateUserRight = this._service.isCheckLoggedUser(personId);
         const isEditPage = ['1', '4', '5'].includes(reviewStatusCode);
 
         let reRoutePath = null;

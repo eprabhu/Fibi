@@ -28,7 +28,6 @@ export class EntityManagementService {
     {code: '1', description: 'verified'},
     {code: '2', description: 'unverified'}
   ];
-  isShowHistoryInfo = true;
 
   getAllSystemEntityList(params) {
     return this._http.post(this._commonService.baseUrl + '/getAllSystemEntityList', params);

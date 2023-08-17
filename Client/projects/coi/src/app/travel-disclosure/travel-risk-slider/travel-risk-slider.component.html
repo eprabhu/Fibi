@@ -118,7 +118,7 @@
       </div>
 
       <!-- risk history heading -->
-      <div class="main-title mt-2 mx-4" id="">
+      <div class="main-title mt-3 mx-4" id="">
           <h3 class="d-flex align-items-center"><strong>Travel Risk History</strong>
               <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Click to view Risk history."
                   data-bs-placement="top">
@@ -182,8 +182,8 @@
                               </tbody>
                           </table>
                       </div>
-                      <div class="noDataExists p-2" *ngIf="isEmptyHistory()">
-                          <app-no-information> </app-no-information>
+                      <div *ngIf="isEmptyHistory()">
+                          <app-no-information [isBorderNeeded]="false"> </app-no-information>
                       </div>
                   </div>
               </div>

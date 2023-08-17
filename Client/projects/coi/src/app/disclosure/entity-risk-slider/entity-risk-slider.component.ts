@@ -8,7 +8,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CoiSummaryEventsAndStoreService } from '../summary/coi-summary-events-and-store.service';
 import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
 	selector: 'app-disclosure-risk-slider',
@@ -35,6 +35,7 @@ export class EntityRiskSliderComponent implements OnInit {
 		'Modify the risk level associated with the entity using the Risk level field.',
 		'Provide an adequate reason for your decision in the description field provided.'
 	]
+	isStatusEdited = false;
 
 	constructor(private _entityRiskSliderService: EntityRiskSliderService,
 		public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
@@ -47,25 +48,13 @@ export class EntityRiskSliderComponent implements OnInit {
 	}
 
 	clearValidationOnValueChange(TYPE): void {
-		TYPE === 'COMMENT' ? this.riskValidationMap.delete('comment') :  this.riskValidationMap.delete('riskLevelCode');
+		TYPE === 'COMMENT' ? this.riskValidationMap.delete('comment') :  this.riskValidationMap.delete('riskLevelCode'), this.isStatusEdited = true;
 	}
 
 	private getRiskLookup(): void {
 		this.$subscriptions.push(this._entityRiskSliderService.getRiskLookup().subscribe((data: any) => {
 			this.riskLookup = data;
 		}))
-	}
-
-	hideSfiNavBar(event): void {
-		closeSlider('disclosure-entity-risk-slider');
-        setTimeout(() => {
-            this.closePage.emit(false);
-        }, 1000);
-	}
-
-	addBodyScroll(): void {
-		document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
-		document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
 	}
 
 	saveRisk(): void {
@@ -76,6 +65,7 @@ export class EntityRiskSliderComponent implements OnInit {
 				this.riskComment = null;
 				this.emitRiskChange(data);
 				this.getDisclosureRiskHistory();
+				this.isStatusEdited = false;
 			}, err => {
 				this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in modifying risk');
 			}));
@@ -98,7 +88,6 @@ export class EntityRiskSliderComponent implements OnInit {
 		if (this.riskCategoryCode == this.disclosureDetails.riskCategoryCode) {
 			this.riskValidationMap.set('duplicateRisk', 'You are trying to update the risk with the current risk level of the disclosure.');
 			this.riskValidationMap.delete('riskLevelCode');
-			this.riskValidationMap.delete('comment');
 		}
 		return this.riskValidationMap.size === 0 ? true : false;
 	}
@@ -107,6 +96,7 @@ export class EntityRiskSliderComponent implements OnInit {
 		this.riskValidationMap.clear();
 		this.riskCategoryCode = null;
 		this.riskComment = null;
+		this.isStatusEdited = false;
 	}
 
 	private getRequestObject(): any {
@@ -200,4 +190,20 @@ export class EntityRiskSliderComponent implements OnInit {
 
 	sortNull() {return 0;}
 
+	validateSliderClose() {
+		(this.isStatusEdited || this.riskComment) ? openCommonModal('risk-conflict-confirmation-modal') : this.closeConflictSlider();
+	}
+	
+	closeConflictSlider() {
+		closeSlider('disclosure-entity-risk-slider');
+		setTimeout(() => {
+			this.closePage.emit();
+		}, 500);
+	}
+	
+	leavePageClicked() {
+		setTimeout(() => {
+			this.closeConflictSlider();
+		}, 100);
+	}
 }

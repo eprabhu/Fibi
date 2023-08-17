@@ -265,9 +265,10 @@
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2 fw-medium">Reassign Admin</span>
                         </button>
-                    
+                    </ng-container>
+                    <ng-container *ngIf="checkReviewStatusCode(['2','3', '7'], 'SOME') && checkAdministratorRight()">               
                         <!-- manage /view disclosure status -->
-                        <button *ngIf="checkReviewStatusCode(['2','3', '7'], 'SOME')" (click)="openConflictSlider()"
+                        <button (click)="openConflictSlider()"
                             title="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
                             area-describedby="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2">
@@ -277,7 +278,7 @@
                         </button>
                         
                         <!-- manage /view travel risk status -->
-                        <button *ngIf="checkReviewStatusCode(['2','3', '7'], 'SOME')" (click)="openRiskSlider()"
+                        <button (click)="openRiskSlider()"
                             title="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk"
                             area-describedby="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk"
                             class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2">
@@ -285,7 +286,7 @@
                                 'visibility'}}</mat-icon>
                             <span class="ms-2 fw-medium">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk</span>
                         </button>
-                        </ng-container>
+                    </ng-container>
 
                     <!-- Withdraw disclosure -->
                     <button title="Click to Withdraw Travel Disclosure"

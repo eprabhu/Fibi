@@ -141,4 +141,17 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
     }
+
+    getWarningClass(typeCode): string {
+        switch (typeCode) {
+            case '1':
+                return 'invalid';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return;
+        }
+    }
 }
