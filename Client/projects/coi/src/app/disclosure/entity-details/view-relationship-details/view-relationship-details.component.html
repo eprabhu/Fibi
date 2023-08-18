@@ -103,8 +103,8 @@
               <div class="row">
                 <label class="fs-14 fw-500">Start Date Of Involvement</label>
                 <app-no-data-label [classesToApply]="'fs-14'"
-                  [valueToShow]="relationshipsDetails?.involvementStartDate">
-                  <span class="text-color fs-14">{{relationshipsDetails?.involvementStartDate |
+                  [valueToShow]="involvementStartDate">
+                  <span class="text-color fs-14">{{involvementStartDate |
                     dateFormatterWithTimeZone}}</span>
                 </app-no-data-label>
               </div>
@@ -112,8 +112,8 @@
             <div class="col-3">
               <div class="row">
                 <label class="fs-14 fw-500">End Date Of Involvement</label>
-                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementEndDate">
-                  <span class="text-color fs-14">{{relationshipsDetails?.involvementEndDate |
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="involvementEndDate">
+                  <span class="text-color fs-14">{{involvementEndDate |
                     dateFormatterWithTimeZone}}</span>
                 </app-no-data-label>
               </div>
@@ -203,8 +203,9 @@
                 <span class="dateField w-100">
                   <input matInput [matDatepicker]="startDate" id="start-date-involvement"
                     placeholder="{{datePlaceHolder}}" (click)="startDate.open()" autocomplete="off"
-                    class="d-inline-block form-control w-100" [(ngModel)]="additionalDetails.involvementStartDate"
-                    (keypress)="commonService._keyPress($event, 'date')" (ngModelChange)="isChangesInFieldValue = true"
+                    class="d-inline-block form-control w-100" [(ngModel)]="involvementStartDate"
+                    (keypress)="commonService._keyPress($event, 'date')" 
+                    (ngModelChange)="addUnSavedChanges()"
                     [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''" />
                   <i (click)="startDate.open()" [class.date-field-error]="mandatoryList?.has('date')"
                     class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click to select date"></i>
@@ -223,8 +224,8 @@
               <div>
                 <span class="dateField">
                   <input matInput [matDatepicker]="endDate" id="end-date-involvement" placeholder="{{datePlaceHolder}}"
-                    (click)="endDate.open()" autocomplete="off" (ngModelChange)="isChangesInFieldValue = true"
-                    class="d-inline-block form-control w-100" [(ngModel)]="additionalDetails.involvementEndDate"
+                    (click)="endDate.open()" autocomplete="off" (ngModelChange)="addUnSavedChanges()"
+                    class="d-inline-block form-control w-100" [(ngModel)]="involvementEndDate"
                     (ngModelChange)="endDateValidation()" (keypress)="commonService._keyPress($event, 'date')" />
                   <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"
                     title="Click to select end date"></i>
@@ -244,14 +245,14 @@
                 <span class="py-1" aria-label="Disclosures_has_sfi" role="switch">
                   <a *ngIf="additionalDetails.sponsorsResearch" class="pl-2">
                     <label class="switch"
-                      (click)="additionalDetails.sponsorsResearch = false;isChangesInFieldValue = true">
+                      (click)="additionalDetails.sponsorsResearch = false;addUnSavedChanges()">
                       <input type="checkbox" checked>
                       <span class="slider round"><small class="fs-12 mt-1">Yes</small></span>
                     </label>
                   </a>
                   <a *ngIf="!additionalDetails.sponsorsResearch" class="pl-2">
                     <label class="switch"
-                      (click)="additionalDetails.sponsorsResearch = true;isChangesInFieldValue = true">
+                      (click)="additionalDetails.sponsorsResearch = true;addUnSavedChanges()">
                       <input type="checkbox">
                       <span class="slider round"><small class="deactivate-text fs-12 mt-1">No</small></span>
                     </label>
@@ -269,7 +270,7 @@
                 </div>
                 <div class="col mx-1 px-2">
                   <textarea class="form-control text-area-height" id="releationship-entity"
-                    [(ngModel)]="additionalDetails.staffInvolvement" (ngModelChange)="isChangesInFieldValue = true"
+                    [(ngModel)]="additionalDetails.staffInvolvement" (ngModelChange)="addUnSavedChanges()"
                     [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
                     [limit]=2000>
                   </textarea>
@@ -296,7 +297,7 @@
                 </div>
                 <div class="col mx-1 px-3">
                   <textarea class="form-control text-area-height" [(ngModel)]="additionalDetails.studentInvolvement"
-                    (ngModelChange)="isChangesInFieldValue = true"
+                    (ngModelChange)="addUnSavedChanges()"
                     [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''" appLengthValidator
                     [limit]=2000>
                   </textarea>
@@ -317,7 +318,7 @@
                 <div class="col mx-1 px-3">
                   <textarea class="form-control text-area-height"
                     [(ngModel)]="additionalDetails.instituteResourceInvolvement"
-                    (ngModelChange)="isChangesInFieldValue = true"
+                    (ngModelChange)="isChangesInFieldValue = true;addUnSavedChanges()"
                     [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''" appLengthValidator
                     [limit]=2000>
                   </textarea>
@@ -408,7 +409,8 @@
               </button>
             </div>
             <div
-              *ngIf="entityDetailsServices.canMangeSfi && isQuestionnaireCompleted &&  (sfiStatus ==='Inactive' || sfiStatus == 'Draft')"
+              *ngIf="entityDetailsServices.canMangeSfi && isQuestionnaireCompleted &&  
+              (sfiStatus ==='Inactive' || sfiStatus == 'Draft')"
               class="d-flex justify-content-around mt-3 mx-3">
               <button id="btn-activate"
                 class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"

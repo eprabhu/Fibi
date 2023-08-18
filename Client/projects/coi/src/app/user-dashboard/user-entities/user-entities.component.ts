@@ -9,6 +9,7 @@ import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { listAnimation, fadeInOutHeight, leftSlideInOut } from '../../common/utilities/animations';
+import { UserDashboardService } from '../user-dashboard.service';
 
 @Component({
   selector: 'app-user-entities',
@@ -35,7 +36,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   $fetchSFI = new Subject();
   isSearchTextHover = false;
   isLoading = false;
-  isShowFilterAndSearch = false;
+  isHideFilterSearchAndShowCreate = false;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService) {
@@ -64,14 +65,14 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
       }
     }), (err) => {
       this.loadingComplete();
+      this.filteredEntityArray = [];
     });
   }
 
   private loadingComplete() {
-    if (this.sfiDashboardRequestObject.filterType === 'ALL') {
-      this.isShowFilterAndSearch = !!this.filteredEntityArray.length;
+    if (this.sfiDashboardRequestObject.filterType === 'ALL' && !this.searchText && this.sfiDashboardRequestObject.currentPage === 1) {
+      this.isHideFilterSearchAndShowCreate = this.filteredEntityArray.length == 0 ? true : false;
     }
-
     this.isLoading = false;
 }
 

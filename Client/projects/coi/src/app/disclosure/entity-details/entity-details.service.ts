@@ -12,6 +12,7 @@ export class EntityDetailsService {
   globalSave$: Subject<any> = new Subject<any>();
   isShowRelationButton: any;
   isRelationshipQuestionnaireChanged = false;
+  isAdditionalDetailsChanged = false;
 
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
@@ -21,6 +22,7 @@ export class EntityDetailsService {
   $relationshipTabSwitch = new BehaviorSubject<object>(null)
   isSwitchCurrentTab = false;
   isShowHistoryInfo = true;
+  unSavedSections = [];
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
