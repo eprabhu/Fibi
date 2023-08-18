@@ -105,6 +105,10 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
         if (!this.comment) {
             this.projectConflictValidationMap.set('comment', 'Please add a reason.');
         }
+        if (this.conflictStatus == this.entityDetails.coiProjConflictStatusType.projectConflictStatusCode) {
+			this.projectConflictValidationMap.set('duplicateStatus', 'You are trying to update the conflict with the current conflict status of the disclosure.');
+			this.projectConflictValidationMap.delete('riskLevelCode');
+		}
         return this.projectConflictValidationMap.size === 0 ? true : false;
     }
 
