@@ -7,12 +7,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import com.polus.fibicomp.coi.dao.GeneralDaoImpl;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
-import com.polus.fibicomp.coi.pojo.EntityActionLog;
-import com.polus.fibicomp.coi.pojo.EntityActionType;
-import com.polus.fibicomp.common.dao.CommonDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -22,13 +16,15 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Query;
-import java.util.List;
-import java.util.Optional;
 import com.polus.fibicomp.coi.dao.GeneralDaoImpl;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
+import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
+import com.polus.fibicomp.common.dao.CommonDao;
 
 @Repository
 @Primary
@@ -44,12 +40,12 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
     private CommonDao commonDao;
 
     @Override
-    public List<EntityActionLog> fetchEntityActionLog(Integer entityId, String actionTypeCode) {
+    public List<EntityActionLog> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes) {
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-        hqlQuery.append("SELECT ea FROM EntityActionLog ea WHERE ea.entityId = :entityId AND ea.actionTypeCode = :actionTypeCode ORDER BY updateTimestamp DESC");
+        hqlQuery.append("SELECT ea FROM EntityActionLog ea WHERE ea.entityId = :entityId AND ea.actionTypeCode IN :actionTypeCode ORDER BY updateTimestamp DESC");
         Query query = session.createQuery(hqlQuery.toString());
-        query.setParameter("actionTypeCode", actionTypeCode);
+        query.setParameter("actionTypeCode", actionLogCodes);
         query.setParameter("entityId", entityId);
         return query.getResultList();
     }
@@ -108,9 +104,9 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
         StringBuilder hqlQuery = new StringBuilder();
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         hqlQuery.append("SELECT al FROM DisclosureActionLog al WHERE al.disclosureId = :disclosureId AND " );
-        hqlQuery.append("al.actionTypeCode = :actionTypeCode ORDER BY al.updateTimestamp DESC");
+        hqlQuery.append("al.actionTypeCode IN :actionTypeCode ORDER BY al.updateTimestamp DESC");
         Query query = session.createQuery(hqlQuery.toString());
-        query.setParameter("actionTypeCode", actionLogDto.getActionTypeCode());
+        query.setParameter("actionTypeCode", actionLogDto.getActionTypeCodes());
         query.setParameter("disclosureId", actionLogDto.getDisclosureId());
         return query.getResultList();
     }
@@ -125,4 +121,17 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
         query.orderBy(builder.desc(root.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
+
+	@Override
+	public List<TravelDisclosureActionLog> fetchTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<TravelDisclosureActionLog> query = builder.createQuery(TravelDisclosureActionLog.class);
+		Root<TravelDisclosureActionLog> root = query.from(TravelDisclosureActionLog.class);
+		query.where(builder.equal(root.get("travelDisclosureId"), actionLogDto.getTravelDisclosureId()),
+				builder.equal(root.get("actionTypeCode"), actionLogDto.getActionTypeCode()));
+		query.orderBy(builder.desc(root.get("updateTimestamp")));
+		return session.createQuery(query).getResultList();
+	}
+
 }

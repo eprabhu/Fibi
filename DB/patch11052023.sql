@@ -321,22 +321,24 @@ INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTIO
 INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('13', '{FCOI /Project /Travel} application has been approved', 'Approved', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('1', 'New Entity <b>{ENTITY_NAME}</b>  has been created', 'Create', now(), 'quickstart');
+VALUES ('1', 'New Entity <b>{ENTITY_NAME}</b>  has been <b>created</b>', 'Create', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('2', '<b>{ENTITY_NAME}</b> has been Activated', 'Activate', now(), 'quickstart');
+VALUES ('2', '<b>{ENTITY_NAME}</b> has been <b>activated</b>', 'Activate', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('3', '<b>{ENTITY_NAME}</b> has been Inactivated', 'Inactivate', now(), 'quickstart');
+VALUES ('3', '<b>{ENTITY_NAME}</b> has been <b>inactivated</b>', 'Inactivate', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('4', '<b>{ENTITY_NAME}</b> has been verified', 'Inactivate', now(), 'quickstart');
+VALUES ('4', '<b>{ENTITY_NAME}</b> has been <b>verified</b>', 'Inactivate', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('5', 'Admin <b>{ADMIN_NAME}</b> changed the risk status from <b>{RISK}</b> to <b>{NEW_RISK}</b>', 'Modify Risk', now(), 'quickstart');
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('6', '<b>{ENTITY_NAME}</b> has been modified', 'Modify Entity', now(), 'quickstart');
+VALUES ('6', '<b>{ENTITY_NAME}</b> has been <b>modified</b>', 'Modify Entity', now(), 'quickstart');
+
+ALTER TABLE `quest_question` ADD COLUMN `FOOTER_DESCRIPTION` TEXT NULL;
 
 SET FOREIGN_KEY_CHECKS=1;
 
@@ -352,6 +354,41 @@ ADD COLUMN `KEY_PERSON_NAME` VARCHAR(60) DEFAULT NULL,
 ADD COLUMN `KEY_PERSON_ROLE_CODE` INT DEFAULT NULL,
 ADD COLUMN `ACCOUNT_NUMBER` VARCHAR(100) DEFAULT NULL,
 ADD COLUMN `SPONSOR_AWARD_NUMBER` VARCHAR(70) DEFAULT NULL;
+
+INSERT INTO `discl_comment_type` (`COMMENT_TYPE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', 'General', 'Y', now(), 'quickstart');
+INSERT INTO `discl_comment_type` (`COMMENT_TYPE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('4', 'Questionnaire', 'Y', now(), 'quickstart');
+INSERT INTO `discl_comment_type` (`COMMENT_TYPE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('5', 'SFIs', 'Y', now(), 'quickstart');
+INSERT INTO `discl_comment_type` (`COMMENT_TYPE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('6', 'Project relationships', 'Y', now(), 'quickstart');
+INSERT INTO `discl_comment_type` (`COMMENT_TYPE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('7', 'Certification', 'Y', now(), 'quickstart');
+SET SQL_SAFE_UPDATES = 0;
+SET FOREIGN_KEY_CHECKS = 0;
+UPDATE `coi_sections_type` SET `COI_SECTIONS_TYPE_CODE` = '7' WHERE (`DESCRIPTION` = 'Certification');
+UPDATE `coi_sections_type` SET `COI_SECTIONS_TYPE_CODE` = '6' WHERE (`DESCRIPTION` = 'Project relationships');
+UPDATE `coi_sections_type` SET `COI_SECTIONS_TYPE_CODE` = '5' WHERE (`DESCRIPTION` = 'SFIs');
+UPDATE `coi_sections_type` SET `COI_SECTIONS_TYPE_CODE` = '4' WHERE (`DESCRIPTION` = 'Questionnaire');
+INSERT INTO `coi_sections_type` (`COI_SECTIONS_TYPE_CODE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `IS_ACTIVE`) VALUES ('3', 'General', now(), 'quickstart', 'Y');
+SET SQL_SAFE_UPDATES = 1;
+SET FOREIGN_KEY_CHECKS = 1;
+ALTER TABLE `coi_review_comment_tags` 
+DROP FOREIGN KEY `COI_REVIEW_CMT_TAGS_FK2`;
+ALTER TABLE `coi_review_comment_tags`;
+ALTER TABLE `coi_review_comment_tags` RENAME INDEX `COI_REVIEW_CMT_TAGS_FK2` TO `COI_REVIEW_CMT_TAGS_FK2_idx`;
+ALTER TABLE `coi_review_comment_tags` ALTER INDEX `COI_REVIEW_CMT_TAGS_FK2_idx` VISIBLE;
+ALTER TABLE `coi_review_comment_tags` 
+ADD CONSTRAINT `COI_REVIEW_CMT_TAGS_FK2`
+FOREIGN KEY (`COI_REVIEW_COMMENT_ID`)
+REFERENCES `discl_comment` (`COMMENT_ID`);
+ALTER TABLE `coi_travel_disclosure` 
+ADD COLUMN `RISK_CATEGORY_CODE` VARCHAR(3) NULL AFTER `DOCUMENT_STATUS_CODE`,
+ADD INDEX `COI_TRAVEL_DISCLOSURE_FK5_idx` (`RISK_CATEGORY_CODE` ASC) VISIBLE;
+ALTER TABLE `coi_travel_disclosure` 
+ADD CONSTRAINT `COI_TRAVEL_DISCLOSURE_FK5`
+  FOREIGN KEY (`RISK_CATEGORY_CODE`)
+  REFERENCES `coi_risk_category` (`RISK_CATEGORY_CODE`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+ALTER TABLE `discl_comment` 
+ADD COLUMN `COMPONENT_SUB_REFERENCE_ID` INT DEFAULT NULL;
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;

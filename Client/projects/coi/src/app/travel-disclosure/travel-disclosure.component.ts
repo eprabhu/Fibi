@@ -9,13 +9,14 @@ import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/s
 import { environment } from '../../environments/environment';
 import { TravelDataStoreService } from './services/travel-data-store.service';
 import {
-    CoiTravelDisclosure, DefaultAdminDetails, TravelCreateModalDetails,
+    CoiTravelDisclosure, TravelCreateModalDetails,
     TravelActionAfterSubmitRO, TravelDisclosure, EntityDetails, ModalSize } from './travel-disclosure-interface';
 import {
     HOME_URL, HTTP_ERROR_STATUS, ADMIN_DASHBOARD_URL, HTTP_SUCCESS_STATUS,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { PersonProjectOrEntity } from '../shared-components/shared-interface';
+import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
+import { openCommonModal } from '../common/utilities/custom-utilities';
 
 type Method = 'SOME' | 'EVERY';
 
@@ -30,7 +31,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
 
     deployMap = environment.deployUrl;
     $subscriptions: Subscription[] = [];
-    defaultAdminDetails = new DefaultAdminDetails();
+    defaultAdminDetails = new DefaultAssignAdminDetails();
     travelDisclosure: TravelDisclosure = new TravelDisclosure();
     entityDetails: EntityDetails = new EntityDetails();
     personEntityDetails: PersonProjectOrEntity = new PersonProjectOrEntity();
@@ -71,6 +72,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         `Describe the reason for returning  in the field provided.`,
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
+    isOpenRiskSlider = false;
 
     constructor(
         public router: Router,
@@ -192,7 +194,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     private reRoutePage(): void {
-        if (!this.service.checkCreateUserRight(this.travelDisclosure.personId)) {
+        if (!this.service.isCheckLoggedUser(this.travelDisclosure.personId)) {
             this.navigateBack();
         } else {
             this.router.navigate([CREATE_TRAVEL_DISCLOSURE_ROUTE_URL],
@@ -225,7 +227,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
     }
 
     checkAdministratorRight(): boolean {
-        return this.service.checkCreateUserRight(this.travelDisclosure.adminPersonId);
+        return this.service.isCheckLoggedUser(this.travelDisclosure.adminPersonId);
     }
 
     showReturnOrApproveButton(): boolean {
@@ -264,12 +266,12 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.needDescriptionField = needDescriptionField;
         this.isMandatory = isMandatory;
         this.helpTexts = helpTexts;
-        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Return';
+        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : actionBtnName;
         this.modalSize = 'lg';
         this.setPersonEntityDetails();
         this.setModalHeaderTitle(actionBtnName);
         this.descriptionErrorMsg = descriptionErrorMsg;
-        document.getElementById('travel-confirmation-modal-trigger-btn').click();
+        openCommonModal('travel-confirmation-modal');
     }
 
     private setPersonEntityDetails(): void {
@@ -304,12 +306,10 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    leavePageClicked(event: boolean): void {
-        if (event) {
-            this.service.setUnSavedChanges(false, '');
-            this.handleChildRouting();
-            this.redirectBasedOnQueryParam();
-        }
+    leavePageClicked(): void {
+        this.service.setUnSavedChanges(false, '');
+        this.handleChildRouting();
+        this.redirectBasedOnQueryParam();
     }
 
     private handleChildRouting(): void {
@@ -383,6 +383,33 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Approving Travel Disclosure');
             })
         );
+    }
+
+    openRiskSlider() {
+        this.isOpenRiskSlider = true;
+    }
+
+    closeSlider(event) {
+        this.isOpenRiskSlider = false;
+    }
+
+    getWarningClass(typeCode) {
+        switch (typeCode) {
+            case '1':
+                return 'invalid';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return;
+        }
+    }
+
+    changeDataStoreRisk(event) {
+        this.travelDisclosure.riskCategoryCode = event.riskCategoryCode;
+        this.travelDisclosure.riskLevel = event.riskLevel;
+        this._dataStore.setStoreData(this.travelDisclosure);
     }
 
 }

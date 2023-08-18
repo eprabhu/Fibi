@@ -18,4 +18,9 @@ public class TravelDisclosureActionLogDto {
 	private String newAdmin;
 	private String comment;
 	private String message;
+	private String riskCategoryCode;
+	private String riskCategory;
+	private String newRiskCategoryCode;
+	private String newRiskCategory;
+
 }

@@ -93,6 +93,7 @@ export class TravelDisclosure {
     disclosureStatus: string;
     riskLevel: string;
     expirationDate: number;
+    riskCategoryCode: number;
   }
 
 export interface EndpointOptions {
@@ -132,13 +133,6 @@ export interface TravelHistory {
     travelAmount: number;
     travelStartDate: number;
     travelEndDate: number;
-}
-
-export class DefaultAdminDetails {
-    adminPersonId = '';
-    adminGroupId = null;
-    adminPersonName = '';
-    adminGroupName = '';
 }
 
 export interface TravelActionAfterSubmitRO {

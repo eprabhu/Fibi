@@ -15,7 +15,7 @@ export class UserEntitiesService {
 
   getSFIDashboard(param: RO) {
     return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', param).pipe(catchError((err) => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching Proposal list failed. Please try again.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching entities list failed. Please try again.');
         return of();
     }));
   }

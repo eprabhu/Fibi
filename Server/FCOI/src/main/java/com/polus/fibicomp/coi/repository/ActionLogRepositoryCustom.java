@@ -1,24 +1,24 @@
 package com.polus.fibicomp.coi.repository;
 
+import java.util.List;
+
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface ActionLogRepositoryCustom {
 
     /**
      * This method is used to fetch Entity Action log by @params
      * @param entityId
-     * @param actionTypeCode
+     * @param actionLogCodes
      * @return
      */
-    List<EntityActionLog> fetchEntityActionLog(Integer entityId, String actionTypeCode);
+    List<EntityActionLog> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes);
 
     public List<DisclosureActionLog> fetchDisclosureActionLogsBasedOnDisclosureId(Integer disclosureId);
 
@@ -46,7 +46,9 @@ public interface ActionLogRepositoryCustom {
      * @return
      */
     List<DisclosureActionLog> fetchDisclosureActionLog(DisclosureActionLogDto actionLogDto);
-    
+
     public List<TravelDisclosureActionLog> fetchTravelDisclosureActionLogsBasedOnId(Integer travelDisclosureId);
+
+    List<TravelDisclosureActionLog> fetchTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto);
 
 }

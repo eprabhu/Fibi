@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.service.COIFileAttachmentService;
+import com.polus.fibicomp.common.dao.CommonDao;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -30,6 +31,9 @@ public class COIFileAttachmentController {
 
 	@Autowired
 	COIFileAttachmentService coiFileAttachmentService;
+
+	@Autowired
+	private CommonDao commonDao;
 
 	@Value("${app.filemanagement.storage.type}")
 	private String storageType;
@@ -72,9 +76,9 @@ public class COIFileAttachmentController {
 
 	@Operation(description ="Consumes: fileDataId, attachmentId") 
 	@PostMapping(value = "/deleteDisclAttachment", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<String> deleteDisclAttachment(@RequestBody COIFileRequestDto request) {
+	public String deleteDisclAttachment(@RequestBody COIFileRequestDto request) {
 		String response = coiFileAttachmentService.deleteDisclAttachment(request);
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+		return commonDao.convertObjectToJSON(response);
 	}
 
 	@Operation(description ="Consumes: attachmentId")

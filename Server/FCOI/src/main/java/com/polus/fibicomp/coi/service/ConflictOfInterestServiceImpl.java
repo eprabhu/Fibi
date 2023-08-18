@@ -1,9 +1,9 @@
 
 package com.polus.fibicomp.coi.service;
 
-import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,12 +31,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.fibicomp.applicationexception.dto.ApplicationException;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
+import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiReviewCommentsDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureCertifyDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
@@ -59,7 +61,7 @@ import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
-import com.polus.fibicomp.coi.pojo.CoiReviewComments;
+import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
@@ -74,7 +76,6 @@ import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
-import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
@@ -111,6 +112,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Autowired
     private ActionLogService actionLogService;
 
+	@Autowired
+    private COIFileAttachmentService coiFileAttachmentService;
+
 	private static final String DISPOSITION_STATUS_TYPE_CODE = "1";
 	private static final String DISPOSITION_STATUS_PENDING = "1";
 	private static final String REVIEW_STATUS_TYPE_CODE = "1";
@@ -140,6 +144,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String ACTION_LOG_ASSIGNED_REVIEW_COMPLETED = "8";
 	private static final String ACTION_LOG_APPROVED = "13";
 	private static final String TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT = "1";
+	private static final String ACTION_LOG_RISK_ADDED = "9";
 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
@@ -347,16 +352,22 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setExpirationDate(cal.getTime());
 		conflictOfInterestDao.certifyDisclosure(coiDisclosure);
 		conflictOfInterestDao.validateConflicts(coiDisclosure.getDisclosureId());
-		conflictOfInterestDao.syncDisclosureRisk(coiDisclosure.getDisclosureId(), coiDisclosure.getDisclosureNumber());
 		CoiDisclosure coiDisclosureObj = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
+		CoiRiskCategory riskCategory = conflictOfInterestDao.syncDisclosureRisk(coiDisclosureObj.getDisclosureId(), coiDisclosureObj.getDisclosureNumber());
 		coiDisclosureObj.setCreateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getCreateUser()));
 		coiDisclosureObj.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getUpdateUser()));
 		try {
-			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_SUBMITTED)
+			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_RISK)
 					.disclosureId(coiDisclosureObj.getDisclosureId())
 					.disclosureNumber(coiDisclosureObj.getDisclosureNumber())
 					.fcoiTypeCode(coiDisclosureObj.getFcoiTypeCode()).build();
+			if (riskCategory != null) {
+				actionLogDto.setRiskCategory(riskCategory.getDescription());
+				actionLogService.saveDisclosureActionLog(actionLogDto);
+			}
+			actionLogDto.setActionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_SUBMITTED);
 			actionLogService.saveDisclosureActionLog(actionLogDto);
+
 		} catch (Exception e) {
 			logger.error("certifyDisclosure : {}", e.getMessage());
 		}
@@ -586,59 +597,73 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 	
 	@Override
-	public String saveOrUpdateCoiReviewComments(MultipartFile[] files,String formDataJSON){
+	public ResponseEntity<Object> saveOrUpdateCoiReviewComments(MultipartFile[] files,String formDataJSON){
 		ConflictOfInterestVO vo = new ConflictOfInterestVO();
-		CoiReviewComments coiReviewComment = new CoiReviewComments();
+		CoiReviewCommentsDto coiReviewComment = new CoiReviewCommentsDto();
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			vo = mapper.readValue(formDataJSON, ConflictOfInterestVO.class);
-			coiReviewComment = vo.getCoiReviewComment();
-			vo.getCoiReviewComment().setCommentedByPersonId(AuthenticatedUser.getLoginPersonId());
-			conflictOfInterestDao.saveOrUpdateCoiReviewComments(coiReviewComment);
+			coiReviewComment = vo.getCoiReviewCommentDto();
+			vo.getCoiReviewCommentDto().setCommentedByPersonId(AuthenticatedUser.getLoginPersonId());
+			DisclComment disclComment = DisclComment.builder()
+					.commentId(coiReviewComment.getCommentId())
+					.componentTypeCode("1")	//Disclosure detail comment
+					.componentReferenceId(coiReviewComment.getDisclosureId())
+					.componentReferenceNumber(coiReviewComment.getCoiSubSectionsId())	//PersonEntityId in case of SFI
+					.commentType(coiReviewComment.getCoiSectionsTypeCode())	//mapped with coi_sections_type
+					.componentSubReferenceId(coiReviewComment.getComponentSubRefId())
+					.commentPersonId(coiReviewComment.getCommentedByPersonId())
+					.documentOwnerPersonId(vo.getDocumentOwnerPersonId())
+					.isPrivate(false)
+					.parentCommentId(coiReviewComment.getCoiParentCommentId())
+					.comment(coiReviewComment.getComment())
+					.updateUser(AuthenticatedUser.getLoginUserName())
+					.build();
+			conflictOfInterestDao.saveOrUpdateDisclComment(disclComment);
 			coiReviewComment.setUpdateUserFullName(personDao.getUserFullNameByUserName(coiReviewComment.getUpdateUser()));
-		    vo.setCoiReviewComment(coiReviewComment);
-		    List<CoiReviewCommentTag> coiReviewCommentTag = addTagPerson(coiReviewComment.getCoiReviewCommentTag(), coiReviewComment.getCoiReviewCommentId(),
-		    		coiReviewComment.getCoiReviewId());
+		    vo.setCoiReviewCommentDto(coiReviewComment);
+		    List<CoiReviewCommentTag> coiReviewCommentTag = addTagPerson(coiReviewComment.getCoiReviewCommentTag(), disclComment.getCommentId(), coiReviewComment.getCoiReviewId());
 		    coiReviewComment.setCoiReviewCommentTag(coiReviewCommentTag);
-		    List<CoiReviewCommentAttachment> coiReviewCommentAttachments = addReviewAttachment(files, vo.getCoiReviewComment().getCoiReviewCommentId());
-		    vo.setCoiReviewCommentAttachment(coiReviewCommentAttachments);
+		    COIFileRequestDto request = COIFileRequestDto.builder()
+		    								.componentReferenceId(coiReviewComment.getDisclosureId())
+		    								.componentReferenceNumber(coiReviewComment.getDisclosureId().toString())
+		    								.attaStatusCode(null)
+		    								.attaTypeCode(null)
+		    								.commentId(disclComment.getCommentId())
+		    								.componentTypeCode(null)
+		    								.file(null)
+		    								.documentOwnerPersonId(null)
+		    								.description(null)
+		    								.build();
+		    addReviewAttachment(files, request);
 			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReviewComment.getDisclosureId());
 		} catch (Exception e) {
 			throw new ApplicationException("error in saveOrUpdateCoiReviewComments", e, Constants.JAVA_ERROR);
 		}
-		return commonDao.convertObjectToJSON(vo);
+		return new ResponseEntity<>(vo.getCoiReviewCommentDto(), HttpStatus.OK);
 	}
 
-	private List<CoiReviewCommentAttachment> addReviewAttachment(MultipartFile[] files, Integer coiReviewCommentId) {
-		List<CoiReviewCommentAttachment> CoiDisclosureOldAttachments = new ArrayList<>();
+	private void addReviewAttachment(MultipartFile[] files, COIFileRequestDto request) {
 		try {
 			if (files != null) {
 				for (int i = 0; i < files.length; i++) {
-					CoiReviewCommentAttachment attachment = new CoiReviewCommentAttachment();
-					File file = new File(files[i].getOriginalFilename());
-					CoiFileData fileData = new CoiFileData();
-					fileData.setData(files[i].getBytes());
-					fileData = conflictOfInterestDao.saveFileData(fileData);
-					attachment.setFileDataId(fileData.getFileDataId());
-					attachment.setCoiReviewCommentId(coiReviewCommentId);
-					attachment.setFileName(file.getName());
-					attachment.setMimeType(files[i].getContentType());
-					attachment = conflictOfInterestDao.saveOrUpdateAttachment(attachment);
-					CoiDisclosureOldAttachments.add(attachment);
+					request.setFile(files[i]);
+					coiFileAttachmentService.saveFileAttachment(request);
 				}
 			}
 		} catch (Exception e) {
 			throw new ApplicationException("error in addReviewAttachment", e, Constants.JAVA_ERROR);
 		}
-		return CoiDisclosureOldAttachments;
 	}
 
 	private List<CoiReviewCommentTag> addTagPerson(List<CoiReviewCommentTag> coiReviewCommentTags, Integer coiReviewCommentId,  Integer coiReviewId) {
 		try {
-			coiReviewCommentTags.forEach(coiReviewCommentTag ->{
-				coiReviewCommentTag.setCoiReviewCommentId(coiReviewCommentId);
-				coiReviewCommentTag.setCoiReviewId(coiReviewId);
-				conflictOfInterestDao.saveOrUpdateCoiReviewCommentTag(coiReviewCommentTag);
+			coiReviewCommentTags.forEach(coiReviewCommentTag -> {
+				if (coiReviewCommentTag.getCoiReviewCommentTagsId() == null) {
+					coiReviewCommentTag.setCoiReviewCommentId(coiReviewCommentId);
+					coiReviewCommentTag.setCoiReviewId(coiReviewId);
+					conflictOfInterestDao.saveOrUpdateCoiReviewCommentTag(coiReviewCommentTag);
+				}
 			});
 		} catch (Exception e) {
 			throw new ApplicationException("error in addTagPerson", e, Constants.JAVA_ERROR);
@@ -647,19 +672,21 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public String loadCoiReviewComments(ConflictOfInterestVO vo){
+	public ResponseEntity<Object> loadCoiReviewComments(ConflictOfInterestVO vo){
 		if (vo.getPersonId() != null) {
 			vo.setTagGroupId(commonDao.getAdminGroupIdsBasedOnPersonId(vo.getPersonId()));
 		}
 		conflictOfInterestDao.loadCoiReviewComments(vo);
-		List<CoiReviewComments> coiReviewComments = vo.getCoiReviewComments();
+		List<DisclComment> coiReviewComments = vo.getDisclComments();
+		Map<Integer, List<DisclComment>> replyComments = new HashMap<>();
 		coiReviewComments.forEach(reviewComments -> {
-			reviewComments.setCoiReviewCommentAttachment(conflictOfInterestDao.fetchReviewCommentAttachment(reviewComments.getCoiReviewCommentId()));
+			Integer parentCommentId = reviewComments.getParentCommentId();
+			if (parentCommentId != null) {
+				replyComments.computeIfAbsent(parentCommentId, k -> new ArrayList<>()).add(reviewComments);
+			}
+			reviewComments.setDisclAttachments(coiFileAttachmentService.getDisclAttachByCommentId(reviewComments.getCommentId()));
 			reviewComments.setUpdateUserFullName(personDao.getUserFullNameByUserName(reviewComments.getUpdateUser()));
-			CoiDisclosure coiDisclosure = reviewComments.getCoiDisclosure();
-			coiDisclosure.setCreateUserFullName(personDao.getUserFullNameByUserName(coiDisclosure.getCreateUser()));
-			coiDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(coiDisclosure.getUpdateUser()));
-			reviewComments.setCoiReviewCommentTag(conflictOfInterestDao.fetchCoiReviewCommentTag(reviewComments.getCoiReviewCommentId()));
+			reviewComments.setCoiReviewCommentTag(conflictOfInterestDao.fetchCoiReviewCommentTag(reviewComments.getCommentId()));
 			reviewComments.getCoiReviewCommentTag().forEach(reviewCommentTag -> {
 				if (reviewCommentTag.getTagPersonId() != null) {
 					reviewCommentTag.setTagPersonFullName(personDao.getPersonFullNameByPersonId(reviewCommentTag.getTagPersonId()));
@@ -670,17 +697,27 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			});
 			loadSubSection(reviewComments);
 		});
-		return commonDao.convertObjectToJSON(vo);
+		coiReviewComments.stream().forEach(parentComment -> {
+			Integer parentId = parentComment.getCommentId();
+			if (parentId != null) {
+				List<DisclComment> childComments = replyComments.get(parentId);
+				if (childComments != null) {
+					parentComment.setReply(childComments);
+				}
+			}
+		});
+		coiReviewComments.removeIf(comment -> replyComments.containsKey(comment.getCommentId()));
+		return new ResponseEntity<>(vo.getDisclComments(), HttpStatus.OK);
 	}
 
-	private void loadSubSection(CoiReviewComments reviewComments){
-		if (reviewComments.getCoiSubSectionsId() != null) {
-			switch (reviewComments.getCoiSectionsTypeCode()) {
+	private void loadSubSection(DisclComment reviewComments){
+		if (reviewComments.getCommentType() != null) {
+			switch (reviewComments.getCommentType()) {
 			case Constants.SFI:
-				reviewComments.setPersonEntity(conflictOfInterestDao.getSFIDetails(reviewComments.getCoiSubSectionsId()));
+				reviewComments.setPersonEntity(conflictOfInterestDao.getSFIDetails(Integer.parseInt(reviewComments.getComponentReferenceNumber())));
 				break;
 			case Constants.PROJECT_RELATIONSHIP:
-				reviewComments.setDisclEntProjDetails(conflictOfInterestDao.getProjectRelationship(reviewComments.getCoiSubSectionsId()));
+				reviewComments.setDisclEntProjDetails(conflictOfInterestDao.getProjectRelationship(Integer.parseInt(reviewComments.getComponentReferenceNumber())));
 				break;
 			default:
 				break;
@@ -727,7 +764,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			});
 			conflictOfInterestDao.deleteReviewTagByReviewId(coiReviewId);
 			conflictOfInterestDao.deleteReviewCommentAttachment(coiReviewId);
-			conflictOfInterestDao.deleteReviewComment(coiReviewId);
+			conflictOfInterestDao.deleteReviewComment(coiReview.getAssigneePersonId(),coiReview.getDisclosureId());
 			conflictOfInterestDao.deleteReview(coiReviewId);
 			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 			return commonDao.convertObjectToJSON(DELETE_MSG);
@@ -739,15 +776,15 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public String deleteReviewComment(Integer coiReviewCommentId){
 		try {
-			CoiReviewComments coiReviewComment = conflictOfInterestDao.loadCoiReviewCommentById(coiReviewCommentId);
-			List<CoiReviewCommentAttachment> coiReviewCommentAttachments = conflictOfInterestDao.fetchReviewAttachmentByCommentId(coiReviewCommentId);
-			coiReviewCommentAttachments.forEach(coiReviewCommentAttachment -> {
-				conflictOfInterestDao.deleteFileData(conflictOfInterestDao.getFileDataById(coiReviewCommentAttachment.getFileDataId()));
-			});
+			DisclComment coiReviewComment = conflictOfInterestDao.loadCoiReviewCommentById(coiReviewCommentId);
 			conflictOfInterestDao.deleteReviewTagByCommentId(coiReviewCommentId);
-			conflictOfInterestDao.deleteReviewAttachmentByCommentId(coiReviewCommentId);
+			conflictOfInterestDao.loadDisclAttachmentByCommentId(coiReviewCommentId).stream().forEach(attachment -> {
+				COIFileRequestDto request = COIFileRequestDto.builder().attachmentId(attachment.getAttachmentId())
+						.fileDataId(attachment.getFileDataId()).build();
+				coiFileAttachmentService.deleteDisclAttachment(request);
+			});
 			conflictOfInterestDao.deleteReviewCommentByCommentId(coiReviewCommentId);
-			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReviewComment.getDisclosureId());
+			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReviewComment.getComponentReferenceId());
 			return commonDao.convertObjectToJSON(DELETE_MSG);
 		}  catch(Exception e) {
 			throw new ApplicationException("deleteCoiReviewComment",e, Constants.JAVA_ERROR);
@@ -912,8 +949,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 			coiEntity.setVersionNumber(Constants.COI_INITIAL_VERSION_NUMBER);
 			coiEntity.setRiskCategoryCode(RISK_CAT_CODE_LOW);
+			coiEntity.setEntityRiskCategory(conflictOfInterestDao.getEntityRiskDetails(RISK_CAT_CODE_LOW));
 			coiEntity.setEntityNumber(conflictOfInterestDao.generateMaxCoiEntityNumber());
 			conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
+			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE, coiEntity, null);
 			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_CREATE_ACTION_LOG_CODE, coiEntity, null);
 		} else { // on update or patch checks its a major change or not
 			Integer entityId = coiEntity.getEntityId();
@@ -981,11 +1020,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestVO.setApprovedDisclosureCount(approvedDisclosureCount);
 		vo.setTabName("TRAVEL_DISCLOSURES");
 		Integer travelDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
-//		Integer travelDisclosureCount = 0;
 		conflictOfInterestVO.setTravelDisclosureCount(travelDisclosureCount);
 		vo.setTabName("DISCLOSURE_HISTORY");
-		Integer disclosureHistoryCount = conflictOfInterestDao.getCOIDashboardCount(vo);
-//		Integer disclosureHistoryCount = 0;
+		vo.setFilterType("ALL");
+		Integer disclosureHistoryCount = conflictOfInterestDao.getDisclosureHistoryCount(vo);
 		conflictOfInterestVO.setDisclosureHistoryCount(disclosureHistoryCount);
 		return commonDao.convertObjectToJSON(conflictOfInterestVO);
 	}
@@ -1316,9 +1354,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return null;
 	}
 	
-	@SuppressWarnings("unused")
-	private void setAdminDetailsToDtoOnLoad(CoiTravelDisclosureDto dto, CoiTravelDisclosure coiTravelDisclosure,
-											Integer travelDisclosureId) {
+	private void setAdminDetailsToDtoOnLoad(CoiTravelDisclosureDto dto, CoiTravelDisclosure coiTravelDisclosure, Integer travelDisclosureId) {
 		if (coiTravelDisclosure.getAdminGroupId() != null) {
 			coiTravelDisclosure.setAdminGroupName(commonDao.getAdminGroupByGroupId(coiTravelDisclosure.getAdminGroupId()).getAdminGroupName());
 			dto.setAdminGroupName(coiTravelDisclosure.getAdminGroupName());
@@ -1330,6 +1366,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			dto.setAdminPersonName(coiTravelDisclosure.getAdminPersonName());
 		}
 		dto.setTravelDisclosureId(travelDisclosureId);
+		dto.setTravelNumber(coiTravelDisclosure.getTravelNumber());
 	}
 	
 	private void setAllStatusToDtoOnLoad(CoiTravelDisclosureDto dto, CoiTravelDisclosure coiTravelDisclosure) {
@@ -1370,8 +1407,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setEntityEmail(entityDetails.getEmailAddress());
 		dto.setEntityAddress(entityDetails.getAddress());
 		dto.setEntityIsActive(entityDetails.getIsActive());
-		EntityRiskCategory riskCategory = conflictOfInterestDao.getEntityRiskDetails(entityDetails.getRiskCategoryCode());
-		dto.setRiskLevel(riskCategory.getDescription());
+		dto.setRiskLevel(coiTravelDisclosure.getCoiRiskCategory() != null ? coiTravelDisclosure.getCoiRiskCategory().getDescription() : null);
+		dto.setRiskCategoryCode(coiTravelDisclosure.getRiskCategoryCode());
 		EntityType entityTypeDetails = conflictOfInterestDao.getEntityTypeDetails(entityDetails.getEntityTypeCode());
 		dto.setEntityType(entityTypeDetails.getDescription());
 		dto.setEntityNumber(entityDetails.getEntityNumber());
@@ -1468,11 +1505,31 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setDisclosureStatusCode(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
 		CoiTravelDisclosureStatusType coiTravelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
 		coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(coiTravelDisclosureStatusType);
+		CoiEntity coiEntity = conflictOfInterestDao.getCoiEntityDetailsById(vo.getEntityId());
+		coiTravelDisclosure.setRiskCategoryCode(coiEntity.getRiskCategoryCode());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
+		DisclComment disclComment = DisclComment.builder()
+				.comment("This is a system-generated Disclosure Status")
+				.componentTypeCode("2")
+				.commentType("2")
+				.commentPersonId(null)
+				.documentOwnerPersonId(AuthenticatedUser.getLoginPersonId())
+				.isPrivate(false)
+				.componentReferenceId(coiTravelDisclosure.getTravelDisclosureId())
+				.updateUser(null)
+				.build();
+		conflictOfInterestDao.saveOrUpdateDisclComment(disclComment);
 		CoiTravelDisclosure coiTravelDosclosureObject = conflictOfInterestDao.loadTravelDisclosure(coiTravelDisclosure.getTravelDisclosureId());
 		try {
 			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_SUBMITTED)
 					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+					.build();
+			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+			actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_RISK_ADDED)
+					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+					.riskCategoryCode(coiEntity.getRiskCategoryCode())
+					.riskCategory(coiEntity.getEntityRiskCategory().getDescription())
+					.comment("This is a system-generated Risk.")
 					.build();
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
@@ -1924,7 +1981,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		EntityRiskCategory riskCategory = conflictOfInterestDao.getEntityRiskDetails(entityDto.getRiskCategoryCode());
 		CoiEntity entityCopy = new CoiEntity();
 		BeanUtils.copyProperties(entity, entityCopy);
-		entityCopy.setNewtRiskCategory(riskCategory);
+		entityCopy.setNewRiskCategory(riskCategory);
 		entityDto.setUpdateTimestamp(conflictOfInterestDao.updateEntityRiskCategory(entityDto));
 		entityCopy.setUpdatedUserFullName(personDao.getUserFullNameByUserName(AuthenticatedUser.getLoginUserName()));
 		actionLogService.saveEntityActionLog(Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE, entityCopy, entityDto.getRevisionReason());
@@ -1933,7 +1990,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId) {
-		return new ResponseEntity<>(actionLogService.fetchEntityActionLog(entityId, Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE), HttpStatus.OK);
+		return new ResponseEntity<>(actionLogService.fetchEntityActionLog(entityId, Arrays.asList(Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE,
+				Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE)), HttpStatus.OK);
 	}
 
 	@Override
@@ -2125,6 +2183,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	private void updateTravelDisclConflictComment(DisclComment disclComment, String description) {
 		disclComment.setComment(description);
+		disclComment.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		conflictOfInterestDao.saveOrUpdateDisclComment(disclComment);
 	}
 
@@ -2185,7 +2244,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().disclosureId(disclosure.getDisclosureId())
 				.disclosureNumber(disclosure.getDisclosureNumber()).riskCategory(disclosure.getCoiRiskCategory().getDescription())
 				.riskCategoryCode(disclosure.getRiskCategoryCode()).newRiskCategory(risk.getDescription())
-				.newRiskCategoryCode(risk.getRiskCategoryCode()).actionTypeCode(Constants.COI_DISCLOSURE_MODIFY_RISK)
+				.newRiskCategoryCode(risk.getRiskCategoryCode()).actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK)
 				.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(disclosureDto.getRevisionComment()).build();
 		actionLogService.saveDisclosureActionLog(actionLogDto);
 		return new ResponseEntity<>(disclosureDto, HttpStatus.OK);
@@ -2198,6 +2257,43 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> fetchDisclosureHistory(DisclosureActionLogDto actionLogDto) {
+		actionLogDto.setActionTypeCodes(Arrays.asList(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_RISK, Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK));
 		return new ResponseEntity<>(actionLogService.fetchDisclosureActionLog(actionLogDto), HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity<Object> getCoiSectionsTypeCode() {
+		return new ResponseEntity<>(conflictOfInterestDao.getCoiSectionsTypeCode(),HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> modifyTravelDisclosureRisk(CoiTravelDisclosureDto travelDisclosureDto) {
+		CoiTravelDisclosure traveldisclosure = conflictOfInterestDao.loadTravelDisclosure(travelDisclosureDto.getTravelDisclosureId());
+		CoiRiskCategory risk = conflictOfInterestDao.getRiskCategoryStatusByCode(travelDisclosureDto.getRiskCategoryCode());
+		travelDisclosureDto.setUpdateTimestamp(conflictOfInterestDao.updateTravelDisclosureRiskCategory(travelDisclosureDto));
+		TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder()
+				.travelDisclosureId(traveldisclosure.getTravelDisclosureId())
+				.travelNumber(traveldisclosure.getTravelNumber())
+				.riskCategory(traveldisclosure.getCoiRiskCategory() != null ? traveldisclosure.getCoiRiskCategory().getDescription() : null)
+				.riskCategoryCode(traveldisclosure.getRiskCategoryCode()).newRiskCategory(risk.getDescription())
+				.newRiskCategoryCode(risk.getRiskCategoryCode()).actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK)
+				.comment(travelDisclosureDto.getComment()).build();
+		actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+		traveldisclosure.setRiskCategoryCode(risk.getRiskCategoryCode());
+		traveldisclosure.setRiskLevel(risk.getDescription());
+		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(traveldisclosure);
+		return new ResponseEntity<>(traveldisclosure, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> fetchTravelDisclosureHistory(TravelDisclosureActionLogDto actionLogDto) {
+		return new ResponseEntity<>(actionLogService.fetchTravelDisclosureActionLog(actionLogDto), HttpStatus.OK);
+	}
+
+	@Override
+	public String deleteReviewCommentTag(Integer coiReviewCommentTagId) {
+		conflictOfInterestDao.deleteReviewTagByCommentTagId(coiReviewCommentTagId);
+		return commonDao.convertObjectToJSON(DELETE_MSG);
+	}
+
 }

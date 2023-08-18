@@ -95,7 +95,7 @@
                                     <label class="fs-14 fw-500">Conflict Status:</label>
                                     <span>
                                         <select class="form-control form-select" [(ngModel)]="conflictStatus"
-                                            [ngClass]="projectConflictValidationMap?.has('coiConflictStatusCode') ? 'is-invalid d-block' : ''"
+                                            [ngClass]="projectConflictValidationMap?.has('coiConflictStatusCode') || projectConflictValidationMap?.has('duplicateStatus')  ? 'is-invalid d-block' : ''"
                                             (ngModelChange)="setCoiProjConflictStatusType()">
                                             <option [value]=null>--Select--</option>
                                             <option *ngFor="let status of conflictLookUpList"
@@ -106,13 +106,17 @@
                                             class="invalid-feedback d-block fs-12">
                                             {{projectConflictValidationMap?.get('coiConflictStatusCode')}}
                                         </div>
+                                        <div *ngIf="projectConflictValidationMap?.has('duplicateStatus')"
+                                        class="invalid-feedback d-block fs-12">
+                                        {{projectConflictValidationMap?.get('duplicateStatus')}}
+                                    </div>
                                     </span>
                                 </div>
                                 <div class="col mr-10">
                                     <label class="fs-14 fw-500">Describe the reason for Conflict status change:</label>
-                                    <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all" placeholder="Description"
-                                        row="1" [(ngModel)]="comment" appLengthValidator [limit]="2000"
-                                        [isShowLimiter]="true"
+                                    <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all new-line-property" placeholder="Description"
+                                        row="1" [(ngModel)]="comment" appAutoGrow rows="1" appLengthValidator [limit]="2000" [isShowLimiter]="true"
+                                        (ngModelChange)="comment = comment.trim()"
                                         [ngClass]="projectConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
                                     <div *ngIf="projectConflictValidationMap?.has('comment')"
                                         class="invalid-feedback d-block fs-12">
@@ -154,20 +158,20 @@
                                     <label class="fw-700 fs-14 ml-2">{{historyEntry?.updateUserFullName}}</label>
                                     <span class="ml-15 fs-12">{{historyEntry?.updateTimestamp |
                                         dateFormatterWithTimeZone:'long'}}</span></span>
-                                <div class="p-3 person-card fs-13">
+                                <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
                                     <span
                                         *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
-                                        <span> {{(historyEntry?.comment | slice:0:230)}}</span>
+                                        <span class="word-break-all new-line-property"> {{(historyEntry?.comment | slice:0:230)}}</span>
                                         <span (click)="isReadMore[index] = !isReadMore[index]" class="hand-cursor"><span
                                                 class="fw-medium">... <u>Read more</u>
                                                 <i aria-hidden="true"></i></span>
                                         </span>
                                     </span>
                                     <ng-template #showFullInfo>
-                                        <span>{{historyEntry?.comment}}</span>
+                                        <span class="word-break-all new-line-property">{{historyEntry?.comment}}</span>
                                         <span *ngIf="historyEntry?.comment?.length > 230"
                                             (click)="isReadMore[index] = !isReadMore[index]" aria-hidden="true"
-                                            class="hand-cursor"><span class="fw-medium">. <u>Show Less</u>
+                                            class="hand-cursor"><span class="fw-medium"> <u>Read Less</u>
                                                 <i aria-hidden="true"></i></span>
                                         </span>
                                     </ng-template>
@@ -177,7 +181,7 @@
                     </div>
                 </ng-container>
             </ng-container>
-            <ng-template #noData>
+            <ng-template *ngIf="isEmptyHistory()">
                 <app-no-information></app-no-information>
             </ng-template>
         </div>

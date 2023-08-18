@@ -37,6 +37,7 @@ export class RelationshipSummaryComponent implements OnInit {
     isReadMore: boolean[] = [];
     projectConflictValidationMap = new Map();
     isShowNoDataCard = false;
+    isShowMore = false;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,

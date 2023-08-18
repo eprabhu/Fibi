@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { fadeInOutHeight } from '../../common/utilities/animations';
 
 @Component({
@@ -9,4 +9,5 @@ import { fadeInOutHeight } from '../../common/utilities/animations';
 })
 export class NoInformationComponent {
 
+  @Input() isBorderNeeded = true;
 }

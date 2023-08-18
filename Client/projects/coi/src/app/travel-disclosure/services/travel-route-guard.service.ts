@@ -8,6 +8,7 @@ import { NavigationService } from '../../common/services/navigation.service';
 import { TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure-interface';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot} from '@angular/router';
 import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, HOME_URL, HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { openCommonModal } from '../../common/utilities/custom-utilities';
 
 
 @Injectable()
@@ -48,12 +49,11 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
     }
 
     canDeactivate(): boolean {
-        const triggerButton = document.getElementById('travel-unsaved-changes-modal-trigger-btn');
         const shouldShowUnsavedModal = (!this._service.isChildRouteTriggered && this.hasHomeAndPersonId())
                                         || this._service.travelDataChanged;
 
         if (shouldShowUnsavedModal) {
-            triggerButton?.click();
+            openCommonModal('travel-unsaved-changes-modal');
             return false;
         }
 
@@ -80,7 +80,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
 
     private reRouteIfWrongPath(currentPath: string, reviewStatusCode: string, personId: string, route): void {
         const hasCreateTravelPath = currentPath.includes('create-travel-disclosure');
-        const hasCreateUserRight = this._service.checkCreateUserRight(personId);
+        const hasCreateUserRight = this._service.isCheckLoggedUser(personId);
         const isEditPage = ['1', '4', '5'].includes(reviewStatusCode);
 
         let reRoutePath = null;

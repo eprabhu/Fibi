@@ -3,7 +3,7 @@ import { CoiSummaryEventsAndStoreService } from '../../../coi-summary-events-and
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../app-constants';
 import { CommonService } from '../../../../../common/services/common.service';
-import { openModal } from '../../../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { isEmptyObject, openModal } from '../../../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
@@ -105,6 +105,10 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
         if (!this.comment) {
             this.projectConflictValidationMap.set('comment', 'Please add a reason.');
         }
+        if (this.conflictStatus == this.entityDetails.coiProjConflictStatusType.projectConflictStatusCode) {
+			this.projectConflictValidationMap.set('duplicateStatus', 'You are trying to update the conflict with the current conflict status of the disclosure.');
+			this.projectConflictValidationMap.delete('riskLevelCode');
+		}
         return this.projectConflictValidationMap.size === 0 ? true : false;
     }
 
@@ -128,6 +132,11 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching conflict status history. Please try again.');
             }));
     }
+
+
+isEmptyHistory(): boolean {
+    return isEmptyObject(this.conflictHistory);
+}
 
     ngOnDestroy(): void {
         this.addBodyScroll();

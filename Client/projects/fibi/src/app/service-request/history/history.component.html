@@ -2,7 +2,7 @@
     <div class="card-content">
         <div class="card-body py-0">
             <div class="form-row">
-                <div *ngIf="serviceRequestHistory; else noDataContainer" class="table-responsive">
+                <div *ngIf="serviceRequestHistory; " class="table-responsive">
                     <table class="table">
                         <caption class="sr-only">Service Request History </caption>
                         <thead class="sr-none">
@@ -58,7 +58,7 @@
                     </table>
                 </div>
             </div>
-            <ng-template #noDataContainer>
+            <ng-template *ngIf="isEmptyObject(serviceRequestHistory)">
                 <div class="noDataExists">
                     <div class="no-data-container">
                         <span class="no-data-icon-outer">
