@@ -200,4 +200,9 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 		return "SUCCESS";
 	}
 
+	@Override
+	public List<DisclAttachment> getDisclAttachByCommentId(Integer commentId) {
+		return coiFileAttachmentDao.getDisclAttachByCommentId(commentId);
+	}
+
 }

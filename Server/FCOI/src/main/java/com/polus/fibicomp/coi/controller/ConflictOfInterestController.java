@@ -29,9 +29,11 @@ import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.SearchDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
@@ -186,14 +188,14 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping(value = "/addCOIReviewComment")
-	public String addExtReviewerAttachment(@RequestParam(value = "files", required = false) MultipartFile[] files,
+	public ResponseEntity<Object> addExtReviewerAttachment(@RequestParam(value = "files", required = false) MultipartFile[] files,
 			@RequestParam("formDataJson") String formDataJson) {
 		logger.info("Requesting for addCOIReviewComment");
 		return conflictOfInterestService.saveOrUpdateCoiReviewComments(files, formDataJson);
 	}
 
 	@PostMapping("/loadCoiReviewComments")
-	public String loadCoiReviewComments(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> loadCoiReviewComments(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for loadCoiReviewComments");
 		return conflictOfInterestService.loadCoiReviewComments(vo);
 	}
@@ -214,6 +216,12 @@ public class ConflictOfInterestController {
 	public String deleteReviewComment(@PathVariable(value = "coiReviewCommentId", required = true) final Integer coiReviewCommentId) {
 		logger.info("Requesting for deleteReviewComment");
 		return conflictOfInterestService.deleteReviewComment(coiReviewCommentId);
+	}
+
+	@DeleteMapping(value = "/deleteCOIReviewCommentTags/{coiReviewCommentTagId}")
+	public String deleteReviewCommentTag(@PathVariable(value = "coiReviewCommentTagId", required = true) final Integer coiReviewCommentTagId) {
+		logger.info("Requesting for deleteReviewCommentTag");
+		return conflictOfInterestService.deleteReviewCommentTag(coiReviewCommentTagId);
 	}
 	
 	@DeleteMapping(value = "/deleteReviewAttachment/{coiReviewCommentAttId}")
@@ -592,5 +600,21 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> getTravelDisclosureHistoryById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
 		return actionLogService.getTravelDisclosureHistoryById(travelDisclosureId);
 	}
+
+    @GetMapping("/getCoiSectionsTypeCode")
+	public ResponseEntity<Object> getCoiSectionsTypeCode() {
+		logger.info("Requesting for getCoiSectionsTypeCode");
+		return conflictOfInterestService.getCoiSectionsTypeCode();
+	}
+
+    @PutMapping("/travelDisclosure/modifyRisk")
+    public ResponseEntity<Object> modifyRisk(@RequestBody CoiTravelDisclosureDto travelDisclosureDto) {
+        return conflictOfInterestService.modifyTravelDisclosureRisk(travelDisclosureDto);
+    }
+
+    @PostMapping("/travelDisclosure/history")
+    public ResponseEntity<Object> fetchtravelDisclosureHistory(@RequestBody TravelDisclosureActionLogDto actionLogDto) {
+        return conflictOfInterestService.fetchTravelDisclosureHistory(actionLogDto);
+    }
 
 }

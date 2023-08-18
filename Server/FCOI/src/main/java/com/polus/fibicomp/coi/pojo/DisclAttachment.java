@@ -18,6 +18,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,6 +44,7 @@ public class DisclAttachment implements Serializable {
 	@Column(name = "COMMENT_ID")
 	private Integer commentId;
 
+	@JsonBackReference
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "DISCL_ATTACHMENT_FK1"), name = "COMMENT_ID", referencedColumnName = "COMMENT_ID", insertable = false, updatable = false)
 	private DisclComment disclComment;

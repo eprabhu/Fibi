@@ -16,10 +16,18 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "COI_REVIEW_COMMENT_TAGS")
 @EntityListeners(AuditingEntityListener.class)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CoiReviewCommentTag implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -51,91 +59,11 @@ public class CoiReviewCommentTag implements Serializable {
 	@LastModifiedBy
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
-	
+
 	@Transient
 	private String tagPersonFullName;
-	
+
 	@Transient
 	private String tagGroupName;
-
-	public Integer getCoiReviewCommentTagsId() {
-		return coiReviewCommentTagsId;
-	}
-
-	public void setCoiReviewCommentTagsId(Integer coiReviewCommentTagsId) {
-		this.coiReviewCommentTagsId = coiReviewCommentTagsId;
-	}
-
-	public Integer getCoiReviewCommentId() {
-		return coiReviewCommentId;
-	}
-
-	public void setCoiReviewCommentId(Integer coiReviewCommentId) {
-		this.coiReviewCommentId = coiReviewCommentId;
-	}
-
-	public String getTagRef() {
-		return tagRef;
-	}
-
-	public void setTagRef(String tagRef) {
-		this.tagRef = tagRef;
-	}
-
-	public String getTagPersonId() {
-		return tagPersonId;
-	}
-
-	public void setTagPersonId(String tagPersonId) {
-		this.tagPersonId = tagPersonId;
-	}
-
-	public Integer getTagGroupId() {
-		return tagGroupId;
-	}
-
-	public void setTagGroupId(Integer tagGroupId) {
-		this.tagGroupId = tagGroupId;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	public String getTagPersonFullName() {
-		return tagPersonFullName;
-	}
-
-	public void setTagPersonFullName(String tagPersonFullName) {
-		this.tagPersonFullName = tagPersonFullName;
-	}
-
-	public String getTagGroupName() {
-		return tagGroupName;
-	}
-
-	public void setTagGroupName(String tagGroupName) {
-		this.tagGroupName = tagGroupName;
-	}
-
-	public Integer getCoiReviewId() {
-		return coiReviewId;
-	}
-
-	public void setCoiReviewId(Integer coiReviewId) {
-		this.coiReviewId = coiReviewId;
-	}
 
 }
