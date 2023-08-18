@@ -1,17 +1,16 @@
 package com.polus.fibicomp.coi.service;
 
-import com.polus.fibicomp.coi.dto.EntityActionLogDto;
-import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 
-import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
-import com.polus.fibicomp.coi.pojo.EntityActionLog;
-
-import java.util.List;
+import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 
 public interface ActionLogService {
 
@@ -61,4 +60,7 @@ public interface ActionLogService {
     List<DisclosureActionLog> fetchDisclosureActionLog(DisclosureActionLogDto actionLogDto);
 	
 	ResponseEntity<Object> getTravelDisclosureHistoryById(Integer travelDisclosureId);
+
+	List<TravelDisclosureActionLog> fetchTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto);
+
 }

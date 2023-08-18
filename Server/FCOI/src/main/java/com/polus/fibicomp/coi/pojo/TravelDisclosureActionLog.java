@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class TravelDisclosureActionLog implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -35,7 +36,7 @@ public class TravelDisclosureActionLog implements Serializable {
 
 	@Column(name = "TRAVEL_DISCLOSURE_ID")
 	private Integer travelDisclosureId;
-	
+
 	@Column(name = "TRAVEL_NUMBER")
 	private Integer travelNumber;
 
@@ -52,7 +53,7 @@ public class TravelDisclosureActionLog implements Serializable {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
-	
+
 	@Column(name = "COMMENT")
 	private String comment;
 
@@ -61,5 +62,8 @@ public class TravelDisclosureActionLog implements Serializable {
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
+
+	@Transient
+	private String updateUserFullName;
 
 }

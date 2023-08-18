@@ -1610,8 +1610,8 @@ public interface Constants {
 	String DISCLOSURE_CONFLICT_STATUS_PENDING = "4";
 	String DISCLOSURE_STATUS_ACTIVE = "3";
 	String SUBMITTED_FOR_REVIEW = "2";
-	String SFI ="2";
-	String PROJECT_RELATIONSHIP ="3";
+	String SFI ="5";
+	String PROJECT_RELATIONSHIP ="6";
     /** COI */
     Integer COI_MODULE_CODE = 8;
     Integer COI_SUBMODULE_CODE = 0;

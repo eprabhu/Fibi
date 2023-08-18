@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.coi.dto.HistoryDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
@@ -31,22 +29,11 @@ import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.repository.ActionLogRepositoryCustom;
 import com.polus.fibicomp.coi.repository.DisclosureActionLogRepository;
 import com.polus.fibicomp.coi.repository.DisclosureActionTypeRepository;
-import com.polus.fibicomp.coi.repository.ActionLogRepositoryCustom;
-import com.polus.fibicomp.coi.repository.EntityActionLogRepository;
-import com.polus.fibicomp.coi.repository.EntityActionTypeRepository;
 import com.polus.fibicomp.coi.repository.TravelDisclosureActionLogRepository;
 import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.security.AuthenticatedUser;
-import com.polus.fibicomp.constants.Constants;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -192,23 +179,29 @@ public class ActionLogServiceImpl implements ActionLogService {
 				.travelDisclosureId(actionLogDto.getTravelDisclosureId()).travelNumber(actionLogDto.getTravelNumber())
 				.description(message)
 				.updateTimestamp(commonDao.getCurrentTimestamp()).updateUser(AuthenticatedUser.getLoginUserName())
+				.comment(actionLogDto.getComment())
 				.build();
 		conflictOfInterestDao.saveOrUpdateTravelDisclosureActionLog(actionLog);
-
 	}
 
 	private String buildTravelDisclosureLogMessage(TravelDisclosureActionLogDto actionLogDto, String message) {
-		 Map<String, String> placeholdersAndValues = new HashMap<>();
-		 message = message.replace("{FCOI /Project /Travel}", DISCLOSURE_TYPE_TRAVEL);
-	     if(actionLogDto.getOldAdmin()!=null) {
-	    	 placeholdersAndValues.put("{ADMIN_ONE}", actionLogDto.getOldAdmin());
-	         placeholdersAndValues.put("{ADMIN_TWO}", actionLogDto.getNewAdmin());
-	     }
-	     else if(actionLogDto.getNewAdmin()!=null) {
-	        placeholdersAndValues.put("{ADMIN_ONE}", actionLogDto.getNewAdmin());
-	     }
-	     return renderPlaceholders(message, placeholdersAndValues);
-    }
+		Map<String, String> placeholdersAndValues = new HashMap<>();
+		message = message.replace("{FCOI /Project /Travel}", DISCLOSURE_TYPE_TRAVEL);
+		if (actionLogDto.getOldAdmin() != null) {
+			placeholdersAndValues.put("{ADMIN_ONE}", actionLogDto.getOldAdmin());
+			placeholdersAndValues.put("{ADMIN_TWO}", actionLogDto.getNewAdmin());
+		} else if (actionLogDto.getNewAdmin() != null) {
+			placeholdersAndValues.put("{ADMIN_ONE}", actionLogDto.getNewAdmin());
+		}
+		if (actionLogDto.getNewRiskCategory() != null) {
+			placeholdersAndValues.put("{LOW}", actionLogDto.getRiskCategory());
+			placeholdersAndValues.put("{HIGH}", actionLogDto.getNewRiskCategory());
+		}
+		if (actionLogDto.getActionTypeCode().equals(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_RISK)) {
+			placeholdersAndValues.put("{LOW}", actionLogDto.getRiskCategory());
+		}
+		return renderPlaceholders(message, placeholdersAndValues);
+	}
 
     @Override
     public List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes) {
@@ -262,4 +255,23 @@ public class ActionLogServiceImpl implements ActionLogService {
 		});
 		return new ResponseEntity<>(travelDisclosureHistories, HttpStatus.OK);
 	}
+
+	@Override
+	public List<TravelDisclosureActionLog> fetchTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto) {
+		List<TravelDisclosureActionLog> actionLogList = new ArrayList<>();
+		actionLogRepositoryCustom.fetchTravelDisclosureActionLog(actionLogDto).forEach(actionLog -> {
+			TravelDisclosureActionLog travelDisclosureActionLog = new TravelDisclosureActionLog();
+			BeanUtils.copyProperties(actionLog, travelDisclosureActionLog, "coiTravelDisclosure", "disclosureActionType");
+			travelDisclosureActionLog.setUpdateUserFullName(personDao.getUserFullNameByUserName(actionLog.getUpdateUser()));
+			actionLogList.add(travelDisclosureActionLog);
+		});
+		actionLogDto.setActionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_RISK);
+		actionLogRepositoryCustom.fetchTravelDisclosureActionLog(actionLogDto).forEach(actionLog -> {
+			TravelDisclosureActionLog travelDisclosureActionLog = new TravelDisclosureActionLog();
+			BeanUtils.copyProperties(actionLog, travelDisclosureActionLog, "coiTravelDisclosure", "disclosureActionType");
+			actionLogList.add(travelDisclosureActionLog);
+		});
+		return actionLogList;
+	}
+
 }
