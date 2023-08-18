@@ -356,7 +356,7 @@
                         <span *ngIf="isCardExpanded">More Actions</span>
                     </button>
 
-                    <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiService.isCOIAdministrator && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2'">
+                    <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2' && getManageDisclosureRight()">
                         <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
                             class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12' : 'col ms-2'}}"
                             (click)="openAddAssignModal();">
@@ -367,7 +367,7 @@
                     
                     <!-- dispositionStatusCode(3-Approved) -->
                     <mat-menu #beforeMenu="matMenu" xPosition="before">
-                        <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode != 3">
+                        <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3' && getManageDisclosureRight()">
                             <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2"
                                 (click)="openAddAssignModal();"
