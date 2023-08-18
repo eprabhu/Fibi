@@ -756,11 +756,41 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     showAssignAdminButton(coi): boolean {
         const tabName = this.coiAdminDashboardService.coiRequestObject.tabName;
-        const isTabForNewSubmission = tabName === 'NEW_SUBMISSIONS' || tabName === 'NEW_SUBMISSIONS_WITHOUT_SFI';
-        if (tabName === 'TRAVEL_DISCLOSURES' && coi.reviewStatusCode === '2') {
+        const IS_TAB_FOR_NEW_SUBMISSION = ['NEW_SUBMISSIONS', 'NEW_SUBMISSIONS_WITHOUT_SFI'].includes(tabName);
+        const IS_TRAVEL_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_TRAVEL_DISCLOSURE');
+        if (tabName === 'TRAVEL_DISCLOSURES' && coi.reviewStatusCode === '2' && IS_TRAVEL_ADMINISTRATOR) {
             return true;
+        } else if (IS_TAB_FOR_NEW_SUBMISSION && this.getManageDisclosureRight(coi.fcoiTypeCode)) {
+            return true;
+        } else {
+            return false;
         }
-        return isTabForNewSubmission;
+    }
+
+    getManageDisclosureRight(fcoiTypeCode: string): boolean {
+        const IS_FCOI_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_FCOI_DISCLOSURE');
+        const IS_PROJECT_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_PROJECT_DISCLOSURE');
+        switch (fcoiTypeCode) {
+            case '1':
+            case '4':
+                return IS_FCOI_ADMINISTRATOR;
+            case '2':
+            case '3':
+                return IS_PROJECT_ADMINISTRATOR;
+        }
+    }
+
+    getDisclosureTitleName(fcoiTypeCode: any): string {
+        switch (fcoiTypeCode) {
+            case '1':
+                return 'FCOI';
+            case '2':
+                return 'Proposal';
+            case '3':
+                return 'Award';
+            case '4':
+                return 'FCOI';
+        }
     }
 
     openAssignAdminModal(coi): void {

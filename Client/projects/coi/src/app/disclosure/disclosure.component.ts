@@ -656,4 +656,17 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
+    getManageDisclosureRight(): boolean {
+        const IS_FCOI_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_FCOI_DISCLOSURE');
+        const IS_PROJECT_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_PROJECT_DISCLOSURE');
+        switch (this.coiData?.coiDisclosure?.fcoiTypeCode) {
+			case '1':
+			case '4':
+				return IS_FCOI_ADMINISTRATOR;
+			case '2':
+			case '3':
+				return IS_PROJECT_ADMINISTRATOR;
+		}
+    }
+
 }

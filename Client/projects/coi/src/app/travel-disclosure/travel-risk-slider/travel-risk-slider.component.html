@@ -127,7 +127,7 @@
       </div>
 
       <!-- risk history log -->
-      <div class="card mt-3 mx-4" id="agreement-history">
+      <div class="card mt-3 mx-4" id="travel-risk-history">
           <div class="card-content">
               <div class="card-body">
                   <div class="form-row">
@@ -156,10 +156,10 @@
                                                       </p>
                                                   </div>
                                               </div>
-                                              <div class="p-3 person-card risk-comment fs-13">
+                                              <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
                                                   <span
                                                       *ngIf="!isReadMore[index] && historyEntry?.comment?.length > 230; else showFullInfo">
-                                                      <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fw-600'"> {{(historyEntry?.comment | slice:0:230)}}</span>
+                                                      <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fst-italic'"> {{(historyEntry?.comment | slice:0:230)}}</span>
                                                       <span (click)="isReadMore[index] = !isReadMore[index]"
                                                           class="hand-cursor"><span class="fw-medium">... <u>Read
                                                                   more</u>
@@ -167,7 +167,7 @@
                                                       </span>
                                                   </span>
                                                   <ng-template #showFullInfo>
-                                                      <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fw-600'">{{historyEntry?.comment}}</span>
+                                                      <span class="word-break-all new-line-property"  [ngClass]="historyEntry?.updateUserFullName ? '': 'fst-italic'">{{historyEntry?.comment}}</span>
                                                       <span *ngIf="historyEntry?.comment?.length > 230"
                                                           (click)="isReadMore[index] = !isReadMore[index]"
                                                           aria-hidden="true" class="hand-cursor"><span
