@@ -7,7 +7,7 @@
     <!-- slider header card -->
     <ng-container content-sticky>
         <div class="px-4 mt-1">
-            <app-shared-entity-info-card [entityDetails]="entityDetails"></app-shared-entity-info-card>
+            <app-shared-entity-info-card [entityDetails]="entityDetails" [isShowRisk]="true"></app-shared-entity-info-card>
         </div>
     </ng-container>
 
@@ -29,7 +29,8 @@
                         <span>
                             <select class="form-control form-select" [(ngModel)]="currentRiskCategorycode"
                                 [ngClass]="riskValidationMap?.has('riskLevelCode') || riskValidationMap?.has('duplicateRisk')  ? 'is-invalid d-block' : ''"
-                                (ngModelChange)="setCoiProjConflictStatusType('LEVEL')">
+                                (ngModelChange)="removeValidationMap('LEVEL'); setCoiProjConflictStatusType();">
+                                <option [value]=null>--Select--</option>
                                 <option *ngFor="let riskLevel of riskLevelLookup" [value]="riskLevel.riskCategoryCode">
                                     {{riskLevel?.description}}</option>
                             </select>
@@ -48,7 +49,7 @@
                             <textarea id="main-panel-comnt" class="form-control fs-14 word-break-all"
                                 placeholder="Description" [(ngModel)]="revisionComment" appAutoGrow appLengthValidator
                                 rows="1" [limit]="2000" [isShowLimiter]="true"
-                                (ngModelChange)="setCoiProjConflictStatusType('COMMENT'); revisionComment = revisionComment.trim()"
+                                (ngModelChange)="removeValidationMap('COMMENT'); revisionComment = revisionComment.trim()"
                                 [ngClass]="riskValidationMap?.has('comment') ? 'is-invalid d-block' : ''"></textarea>
                             <div *ngIf="riskValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
                                 {{riskValidationMap?.get('comment')}}
@@ -93,7 +94,7 @@
                                                         <span [innerHTML]="historyEntry?.description"></span>
                                                     </p>
                                                 </div>
-                                                <div class="col-12 pb-4 mx-auto comment-box-height mt-2">
+                                                <div class="col-12 mx-auto comment-box-height mt-2">
                                                     <div class="align-items-center ml-5 mx-0">
                                                         <div class="p-3 person-card fs-13">
                                                             <span

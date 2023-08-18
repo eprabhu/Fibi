@@ -5,7 +5,7 @@
         </div>
         <div class="col-3 text-secondary fs-14 pt-1">
             <span class="fw-bold me-2">Entity Status :</span>
-            <span class="fs-14 fw-400">{{entityDetails?.isActive ?'Active':'Inactive'}}</span>
+            <span class="fs-14 fw-400"[ngClass]="entityDetails?.isActive ? 'active' : 'inactive'">{{entityDetails?.isActive ?'Active':'Inactive'}}</span>
         </div>
     </div>
     <div class="mx-1 row pt-1 d-flex align-items-center">
@@ -22,11 +22,26 @@
             <span class="fs-14 fw-400">{{entityDetails?.entityType?.description}}</span>
         </div>
     </div>
-    <div class="mx-1 mb-3 mt-2 row d-flex align-items-center" [ngClass]="viewMore && commonServices.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME') ? 'mt-2':'mt-3'">
+    <div class="mx-1 mb-3 mt-2 row d-flex" [ngClass]="viewMore && commonServices.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME') ? 'mt-2':'mt-3'">
       <div class="col text-secondary fs-14">
         <span class="fw-bold me-2"> Address :</span>
-        <span class="fs-14 fw-400">{{entityDetails?.address}}</span>
-      </div>
+        <span *ngIf="!isReadMore && entityDetails?.address?.length > 110; else showFullInfo">
+          <span> {{(entityDetails?.address |
+            slice:0:110)}}</span>
+          <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span class="fw-medium">...
+              <u>Read more</u>
+              <i aria-hidden="true"></i></span>
+          </span>
+        </span>
+        <ng-template #showFullInfo>
+          <span class="word-break-all">{{entityDetails?.address}}</span>
+          <span *ngIf="entityDetails?.address?.length > 110" (click)="isReadMore = !isReadMore" aria-hidden="true"
+            class="hand-cursor"><span class="fw-medium">. <u>Read
+                Less</u>
+              <i aria-hidden="true"></i></span>
+          </span>
+        </ng-template>
+        </div>
       <div *ngIf="viewMore && commonServices.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME')" class="col-1 align-items-center d-flex justify-content-end text-secondary"
         title="Click to view entity details">
         <button (click)="viewEntityDetails(entityDetails?.entityId)"
@@ -34,6 +49,20 @@
           <mat-icon class="me-1">visibility</mat-icon>
           View
         </button>
+      </div>
+      <div *ngIf="isShowRisk" class="col-3 d-flex text-secondary">
+        <span class="fw-bold me-2 fs-14 "> Risk :</span>
+        <div class=" text-secondary fs-14  d-flex">
+          <span class="text-secondary fs-14"><mat-icon *ngIf="entityDetails?.entityRiskCategory?.description === 'High'"
+              class="invalid material-icons-round mb-3">warning</mat-icon>
+            <mat-icon *ngIf="entityDetails?.entityRiskCategory?.description === 'Medium'"
+              class="medium-risk material-icons-round mb-3">warning</mat-icon>
+            <mat-icon *ngIf="entityDetails?.entityRiskCategory?.description === 'Low'"
+              class="low-risk material-icons-round mb-3">warning</mat-icon>
+            <mat-icon *ngIf="entityDetails?.entityRiskCategory?.description === ''"
+              class="low-risk material-icons-round mb-3">warning</mat-icon></span>
+          <span class="fs-14 fw-400 ml-2">{{entityDetails?.entityRiskCategory?.description}}</span>
+        </div>
       </div>
     </div>
 </div>
