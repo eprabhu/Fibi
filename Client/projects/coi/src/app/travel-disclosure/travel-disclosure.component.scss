@@ -202,3 +202,21 @@
   transform: rotate(-0.25turn);
   transform: scaleX(-1);
 }
+
+.invalid {
+  position: relative;
+  top: 2px;
+  color: #ff0000;
+}
+
+.medium-risk {
+  position: relative;
+  top: 2px;
+  color: #ff8c00;
+}
+
+.low-risk {
+  position: relative;
+  top: 2px;
+  color: rgb(26, 172, 62);
+}

@@ -3,9 +3,8 @@ import { CompleterOptions } from '../../../../../fibi/src/app/service-request/se
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
-import { DefaultAdminDetails } from '../../travel-disclosure/travel-disclosure-interface';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { AssignAdminRO } from '../shared-interface';
+import { AssignAdminRO, DefaultAssignAdminDetails } from '../shared-interface';
 
 declare const $: any;
 
@@ -28,7 +27,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     isSaving = false;
 
     @Input() disclosureId = null;
-    @Input() defaultAdminDetails = new DefaultAdminDetails();
+    @Input() defaultAdminDetails = new DefaultAssignAdminDetails();
     @Input() path: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' = 'DISCLOSURES';
     @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
 

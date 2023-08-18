@@ -4,8 +4,9 @@ import { EntityDetailsService } from '../../disclosure/entity-details/entity-det
 import { CoiEntity, EntityDetails, RiskHistoryRO } from '../../entity-management/entity-details-interface';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
-import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
+import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 @Component({
     selector: 'app-entity-risk-slider',
     templateUrl: './entity-risk-slider.component.html',
@@ -27,12 +28,15 @@ export class EntityRiskSliderComponent implements OnInit {
     isStatusEdited = false;
     riskHistoryLogs: any = {};
     currentRiskCategorycode: any;
+    currentRiskType: any;
     revisionComment: any;
+    isShowRisk: true;
     helpText = [
         'Modify the Risk of this Entity from the Risk field.',
         'Provide an adequate reason for your decision in the description field provided.'
     ];
     riskCategoryCode: string;
+    isEmptyObject = isEmptyObject;
 
     constructor(public entityDetailsService: EntityDetailsService,
         private _commonService: CommonService,
@@ -47,12 +51,8 @@ export class EntityRiskSliderComponent implements OnInit {
         });
     }
 
-    openConformationModal() {
-        document.getElementById('risk-conflict-confirmation-modal-trigger-btn').click();
-    }
-
     validateSliderClose() {
-        (this.isStatusEdited || this.revisionComment) ? this.openConformationModal() : this.closeConflictSlider();
+        (this.isStatusEdited || this.revisionComment) ? openCommonModal('risk-conflict-confirmation-modal') : this.closeConflictSlider();
     }
 
     closeConflictSlider() {
@@ -62,12 +62,10 @@ export class EntityRiskSliderComponent implements OnInit {
         }, 500);
     }
 
-    leavePageClicked(event: boolean) {
-        if (event) {
-            setTimeout(() => {
-                this.closeConflictSlider();
-            }, 100);
-        }
+    leavePageClicked() {
+        setTimeout(() => {
+            this.closeConflictSlider();
+        }, 100);
     }
 
     sortNull() { return 0; }
@@ -76,7 +74,7 @@ export class EntityRiskSliderComponent implements OnInit {
     private getSFILookup(): void {
         this.$subscriptions.push(this.entityDetailsService.loadSFILookups().subscribe((res: any) => {
             this.riskLevelLookup = res.entityRiskCategories;
-            this.currentRiskCategorycode = this.entityDetails?.riskCategoryCode;
+            this.currentRiskCategorycode = null;
         }));
     }
 
@@ -86,7 +84,8 @@ export class EntityRiskSliderComponent implements OnInit {
         this.entityRiskRO = new RiskHistoryRO;
         this.revisionComment = '';
         this.isStatusEdited = false;
-        this.currentRiskCategorycode  = this.entityDetails.riskCategoryCode;
+        this.currentRiskType  = this.entityDetails.entityRiskCategory.description;
+        this.currentRiskCategorycode = null;
     }
 
     private getEntityRiskRO(): RiskHistoryRO {
@@ -105,6 +104,7 @@ export class EntityRiskSliderComponent implements OnInit {
                         this.coiConflictStatusType = data;
                         this.entityDetails.revisionReason = this.revisionComment;
                         this.entityDetails.riskCategoryCode = this.currentRiskCategorycode;
+                        this.entityDetails.entityRiskCategory.description = this.currentRiskType;
                         this.clearConflictModal();
                         this.riskHistory();
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
@@ -125,7 +125,7 @@ export class EntityRiskSliderComponent implements OnInit {
     }
     updateHistoryLogs(data: any) {
         if (data.length) {
-            this.riskHistoryLogs = [];
+            this.riskHistoryLogs = {};
             data.forEach((historyObj) => {
                 const date = this.dataFormatPipe.transform(historyObj.updateTimestamp);
                 this.riskHistoryLogs[date] = this.riskHistoryLogs[date] ? this.riskHistoryLogs[date] : [];
@@ -133,13 +133,15 @@ export class EntityRiskSliderComponent implements OnInit {
             });
         }
     }
-    closeHistoryInfo() {
-        this.entityDetailsService.isShowHistoryInfo = false;
-    }
 
-    setCoiProjConflictStatusType(TYPE): void {
+    removeValidationMap(TYPE): void {
         TYPE === 'COMMENT' ? this.riskValidationMap.delete('comment') :  this.riskValidationMap.delete('riskLevelCode');
         this.isStatusEdited = true;
+    }
+
+    setCoiProjConflictStatusType(): void {
+        this.currentRiskType = this.riskLevelLookup.find
+        (details => details.riskCategoryCode === this.currentRiskCategorycode)?.description || null;
     }
 
     public checkForMandatory(): boolean {

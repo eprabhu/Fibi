@@ -31,6 +31,7 @@
  */
 
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { closeCommonModal } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-confirmation-modal',
@@ -129,6 +130,15 @@ export class ConfirmationModalComponent implements OnDestroy {
     @Output() secondaryBtnAction: EventEmitter<any> = new EventEmitter<any>();
 
     /**
+     * An event emitted when the close button is clicked.
+     * It passes a boolean indicating whether the action was performed.
+     *
+     * Purpose: Notifies the parent component when the close button is clicked,
+     *          providing a boolean value indicating whether the action was performed.
+     */
+    @Output() close: EventEmitter<any> = new EventEmitter<any>();
+
+    /**
      * Map to store mandatory field errors.
      */
     mandatoryList = new Map();
@@ -144,11 +154,11 @@ export class ConfirmationModalComponent implements OnDestroy {
      *          Closes the modal if the confirmation component exist.
      *
      */
-    private closeModal() {
+    closeModal() {
         this.mandatoryList.clear();
         this.description = '';
-        const closeBtn = document.getElementById(`${this.modalName}-dismiss-btn`);
-        if (closeBtn) { closeBtn.click(); }
+        this.close.emit();
+        closeCommonModal(this.modalName);
     }
 
     /**
@@ -174,7 +184,7 @@ export class ConfirmationModalComponent implements OnDestroy {
      */
     validateDescription(): boolean {
         this.descriptionChangedOrEmpty();
-        return this.mandatoryList.size === 0 ? true : false;
+        return this.mandatoryList.size === 0;
     }
     /**
      * Get the CSS class for the modal size.
@@ -194,8 +204,8 @@ export class ConfirmationModalComponent implements OnDestroy {
      *
      * @param event The event indicating whether the action was performed.
      */
-    performSecondaryAction(event: boolean) {
-        this.secondaryBtnAction.emit(event);
+    performSecondaryAction() {
+        this.secondaryBtnAction.emit();
         this.closeModal();
     }
 
@@ -207,12 +217,12 @@ export class ConfirmationModalComponent implements OnDestroy {
     performPrimaryAction() {
         if (this.isMandatory) {
             if (this.validateDescription()) {
-                this.closeModal();
                 this.primaryBtnAction.emit(this.description);
+                this.closeModal();
             }
         } else {
-            this.closeModal();
             this.primaryBtnAction.emit(this.needDescriptionField ? this.description : null);
+            this.closeModal();
         }
     }
 

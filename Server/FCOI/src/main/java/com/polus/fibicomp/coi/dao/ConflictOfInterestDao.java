@@ -1035,8 +1035,9 @@ public interface ConflictOfInterestDao {
 	 * This method is used to sync disclosure risk
 	 * @param disclosureId
 	 * @param disclosureNumber
+	 * @return CoiRiskCategory
 	 */
-	void syncDisclosureRisk(Integer disclosureId, Integer disclosureNumber);
+	CoiRiskCategory syncDisclosureRisk(Integer disclosureId, Integer disclosureNumber);
 
 	/**
 	 * This method is used to update disclosure risk
@@ -1050,4 +1051,12 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	List<CoiRiskCategory> fetchDisclosureRiskCategory();
+
+	/**
+	 * This method is used to get disclosure history count
+	 *
+	 * @param dashboardVO
+	 * @return
+	 */
+	Integer getDisclosureHistoryCount(CoiDashboardVO dashboardVO);
 }

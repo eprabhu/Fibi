@@ -2,7 +2,7 @@
     <div class="col-9 p-0">
         <div class="border shadow-sm bg-white" [class.min-height-189]="isCardExpanded">
             <div class="disclosure-heading px-3 d-flex">
-                <div class="align-self-center flex-fill">
+                <div class="align-self-center flex-fill d-flex">
                     <p class="m-0">
                         <ng-container *ngIf="!travelDisclosure?.travelDisclosureId">
                             <strong>Travel Disclosure By
@@ -25,7 +25,20 @@
                                 </span>
                             </strong>
                         </ng-container>
-                    </p>
+                        </p>
+                        <div class="d-flex ms-auto mr-15">
+                            <div class="align-items-center d-flex ml-15">
+                              <label class="fw-500 fs-14 mr-2 mt-1">Risk :</label>
+                              <div class="text-color fs-14 d-flex align-items-center">
+                                <span class="text-secondary fs-14">
+                                    <mat-icon class="{{getWarningClass(travelDisclosure?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                                </span>
+                                <span class="ml-2 mt-1"> 
+                                    {{travelDisclosure?.riskLevel}}
+                                </span>
+                              </div>
+                            </div>
+                        </div>
                 </div>
                 <div class="d-flex" *ngIf="!isCreateMode">
                     <ng-container>
@@ -152,7 +165,7 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4">Disclosure : </label>
                                 <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]=travelDisclosure?.disclosureStatus>
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
                                         <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}">{{travelDisclosure?.disclosureStatus}}</span>
                                     </app-no-data-label>
                                 </span>
@@ -201,6 +214,13 @@
                             Related Disclosures
                         </div>
                     </button>
+                     <!-- History -->
+                    <button [routerLink]="['history']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
+                        role="button" [title]="isRouteComplete(['history'])? 'History' : 'Go to step History'">
+                        <div class="navigation-box-content" routerLinkActive="active" area-describedby="">
+                            History
+                        </div>
+                    </button>
                 </div>
             </ng-container>
         </div>
@@ -245,14 +265,26 @@
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2 fw-medium">Reassign Admin</span>
                         </button>
-                    
+                    </ng-container>
+                    <ng-container *ngIf="checkReviewStatusCode(['2','3', '7'], 'SOME') && checkAdministratorRight()">               
                         <!-- manage /view disclosure status -->
-                        <button *ngIf="checkReviewStatusCode(['2','3', '7'], 'SOME')" title="Click to Reassign Administrator/Admin Group"
-                            area-describedby="Click to assign administrator"
-                            class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
-                            (click)="openConflictSlider()">
+                        <button (click)="openConflictSlider()"
+                            title="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
+                            area-describedby="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
+                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2">
                             <mat-icon>{{checkReviewStatusCode(['2','3'], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
-                            <span class="ms-2">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure Status</span>
+                            <span class="ms-2 fw-medium">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure
+                                Status</span>
+                        </button>
+                        
+                        <!-- manage /view travel risk status -->
+                        <button (click)="openRiskSlider()"
+                            title="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk"
+                            area-describedby="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk"
+                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2">
+                            <mat-icon class="material-icons-round">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'warning' :
+                                'visibility'}}</mat-icon>
+                            <span class="ms-2 fw-medium">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk</span>
                         </button>
                     </ng-container>
 
@@ -352,7 +384,7 @@
 </div>
 
 <!--Unsaved Changes confirmation Modal-->
-<app-confirmation-modal [modalName] = "'travel-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked($event)"
+<app-confirmation-modal [modalName] = "'travel-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked()"
     [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
     <!-- modal header -->
     <ng-container header>
@@ -365,7 +397,7 @@
             <strong>{{service.unSavedTabName? service.unSavedTabName : 'Travel Disclosure Creation'}}.</strong>
         </p>
         <p class="fs-14">Do you want to leave the
-            <strong  *ngIf="service.unSavedTabName == 'Certification'">Certification </strong>
+            <strong *ngIf="service.unSavedTabName == 'Certification'">Certification </strong>
             {{service.unSavedTabName == 'Certification' ? 'Page' : 'page without saving' }} ?
         </p>
     </div>
@@ -384,7 +416,7 @@
         <app-person-project-entity-card [personProjectOrEntity]="personEntityDetails"></app-person-project-entity-card>
         <!-- help text -->
         <div class="mx-3 mt-2" >
-            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "primaryBtnName + 'Help Text'" ></app-help-text>
+            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "modalActionBtnName" ></app-help-text>
         </div>
     </ng-container>
 
@@ -413,3 +445,7 @@
     [entityDetails]="entityDetails" [travelDisclosure]="travelDisclosure"
     [isEditMode]="checkReviewStatusCode(['2','3'], 'SOME')" (closePage)="closeConflictSlider()" >
 </app-travel-add-conflict-slider>
+
+<div *ngIf="isOpenRiskSlider">
+    <app-travel-risk-slider (closePage)="closeSlider($event)" [travelDisclosure]="travelDisclosure" (riskChange)= "changeDataStoreRisk($event)" [isEditMode]="checkReviewStatusCode(['2','3'], 'SOME')"></app-travel-risk-slider>
+</div>

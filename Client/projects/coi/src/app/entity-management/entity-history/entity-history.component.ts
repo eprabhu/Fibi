@@ -55,8 +55,4 @@ export class EntityHistoryComponent implements OnChanges {
         }
     }
 
-    closeEntityHistoryInfo() {
-        this.entityManagementService.isShowHistoryInfo = false;
-    }
-
 }

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
@@ -347,16 +348,22 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setExpirationDate(cal.getTime());
 		conflictOfInterestDao.certifyDisclosure(coiDisclosure);
 		conflictOfInterestDao.validateConflicts(coiDisclosure.getDisclosureId());
-		conflictOfInterestDao.syncDisclosureRisk(coiDisclosure.getDisclosureId(), coiDisclosure.getDisclosureNumber());
 		CoiDisclosure coiDisclosureObj = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
+		CoiRiskCategory riskCategory = conflictOfInterestDao.syncDisclosureRisk(coiDisclosureObj.getDisclosureId(), coiDisclosureObj.getDisclosureNumber());
 		coiDisclosureObj.setCreateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getCreateUser()));
 		coiDisclosureObj.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getUpdateUser()));
 		try {
-			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_SUBMITTED)
+			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_RISK)
 					.disclosureId(coiDisclosureObj.getDisclosureId())
 					.disclosureNumber(coiDisclosureObj.getDisclosureNumber())
 					.fcoiTypeCode(coiDisclosureObj.getFcoiTypeCode()).build();
+			if (riskCategory != null) {
+				actionLogDto.setRiskCategory(riskCategory.getDescription());
+				actionLogService.saveDisclosureActionLog(actionLogDto);
+			}
+			actionLogDto.setActionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_SUBMITTED);
 			actionLogService.saveDisclosureActionLog(actionLogDto);
+
 		} catch (Exception e) {
 			logger.error("certifyDisclosure : {}", e.getMessage());
 		}
@@ -912,8 +919,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 			coiEntity.setVersionNumber(Constants.COI_INITIAL_VERSION_NUMBER);
 			coiEntity.setRiskCategoryCode(RISK_CAT_CODE_LOW);
+			coiEntity.setEntityRiskCategory(conflictOfInterestDao.getEntityRiskDetails(RISK_CAT_CODE_LOW));
 			coiEntity.setEntityNumber(conflictOfInterestDao.generateMaxCoiEntityNumber());
 			conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
+			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE, coiEntity, null);
 			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_CREATE_ACTION_LOG_CODE, coiEntity, null);
 		} else { // on update or patch checks its a major change or not
 			Integer entityId = coiEntity.getEntityId();
@@ -981,11 +990,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestVO.setApprovedDisclosureCount(approvedDisclosureCount);
 		vo.setTabName("TRAVEL_DISCLOSURES");
 		Integer travelDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
-//		Integer travelDisclosureCount = 0;
 		conflictOfInterestVO.setTravelDisclosureCount(travelDisclosureCount);
 		vo.setTabName("DISCLOSURE_HISTORY");
-		Integer disclosureHistoryCount = conflictOfInterestDao.getCOIDashboardCount(vo);
-//		Integer disclosureHistoryCount = 0;
+		vo.setFilterType("ALL");
+		Integer disclosureHistoryCount = conflictOfInterestDao.getDisclosureHistoryCount(vo);
 		conflictOfInterestVO.setDisclosureHistoryCount(disclosureHistoryCount);
 		return commonDao.convertObjectToJSON(conflictOfInterestVO);
 	}
@@ -1924,7 +1932,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		EntityRiskCategory riskCategory = conflictOfInterestDao.getEntityRiskDetails(entityDto.getRiskCategoryCode());
 		CoiEntity entityCopy = new CoiEntity();
 		BeanUtils.copyProperties(entity, entityCopy);
-		entityCopy.setNewtRiskCategory(riskCategory);
+		entityCopy.setNewRiskCategory(riskCategory);
 		entityDto.setUpdateTimestamp(conflictOfInterestDao.updateEntityRiskCategory(entityDto));
 		entityCopy.setUpdatedUserFullName(personDao.getUserFullNameByUserName(AuthenticatedUser.getLoginUserName()));
 		actionLogService.saveEntityActionLog(Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE, entityCopy, entityDto.getRevisionReason());
@@ -1933,7 +1941,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId) {
-		return new ResponseEntity<>(actionLogService.fetchEntityActionLog(entityId, Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE), HttpStatus.OK);
+		return new ResponseEntity<>(actionLogService.fetchEntityActionLog(entityId, Arrays.asList(Constants.COI_ENTITY_MODIFY_RISK_ACTION_LOG_CODE,
+				Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE)), HttpStatus.OK);
 	}
 
 	@Override
@@ -2185,7 +2194,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().disclosureId(disclosure.getDisclosureId())
 				.disclosureNumber(disclosure.getDisclosureNumber()).riskCategory(disclosure.getCoiRiskCategory().getDescription())
 				.riskCategoryCode(disclosure.getRiskCategoryCode()).newRiskCategory(risk.getDescription())
-				.newRiskCategoryCode(risk.getRiskCategoryCode()).actionTypeCode(Constants.COI_DISCLOSURE_MODIFY_RISK)
+				.newRiskCategoryCode(risk.getRiskCategoryCode()).actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK)
 				.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(disclosureDto.getRevisionComment()).build();
 		actionLogService.saveDisclosureActionLog(actionLogDto);
 		return new ResponseEntity<>(disclosureDto, HttpStatus.OK);
@@ -2198,6 +2207,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> fetchDisclosureHistory(DisclosureActionLogDto actionLogDto) {
+		actionLogDto.setActionTypeCodes(Arrays.asList(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_RISK, Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK));
 		return new ResponseEntity<>(actionLogService.fetchDisclosureActionLog(actionLogDto), HttpStatus.OK);
 	}
 }

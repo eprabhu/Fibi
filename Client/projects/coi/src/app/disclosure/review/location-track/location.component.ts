@@ -23,7 +23,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     adminGroups: any = [];
     deployMap = environment.deployUrl;
 
-    isCollapsed = true;
+    isExpanded = true;
     modifyIndex = -1;
     reviewerList: any = [];
     validationMap = new Map();
@@ -63,6 +63,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(
             this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
                 if (dependencies.some((dep) => this.dependencies.includes(dep))) {
+                    this.isExpanded = true;
                     this.getDataFromStore();
                 }
             })
@@ -128,6 +129,7 @@ export class LocationComponent implements OnInit, OnDestroy {
                 this.reviewDetails = {};
                 this._dataStore.updateTimestampEvent.next();
                 document.getElementById('add-review-modal-trigger').click();
+                this.isExpanded = true;
                 //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
             }, _err => {
                 //this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);

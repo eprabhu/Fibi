@@ -9,8 +9,8 @@
         </div>
 
         <!-- project  -->
-        <div class="ms-2 d-flex align-items-center" *ngIf="personProjectOrEntity?.projectDetails?.moduleItemId">
-            <label class="grey-text fs-14 fw-600 text-nowrap">Project : </label>
+        <div class="ms-2 d-flex" *ngIf="personProjectOrEntity?.projectDetails?.moduleItemId">
+            <label class="grey-text fs-14 fw-600 text-nowrap mt-1">Project : </label>
             <app-no-data-label [valueToShow]="personProjectOrEntity?.projectDetails?.moduleItemId">
                 <span class="ml-2 grey-text fs-14">#{{personProjectOrEntity?.projectDetails?.moduleItemId}} :
                     {{(!isReadMore && personProjectOrEntity?.projectDetails?.title?.length > 180)
@@ -21,7 +21,7 @@
                     <ng-container *ngIf="personProjectOrEntity?.projectDetails?.title?.length > 180">
                         <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer">
                             <strong>
-                                <span *ngIf="!isReadMore">... <u title="Expand Project">Read More</u></span>
+                                <span *ngIf="!isReadMore">...<u title="Expand Project">Read More</u></span>
                                 <u title="Collapse Project" *ngIf="isReadMore">Read Less</u>
                             </strong>
                         </span>

@@ -76,10 +76,10 @@ export class ReviewerDashboardComponent implements OnInit {
         private _navigationService: NavigationService) { }
 
     ngOnInit() {
+        this.setDashboardTab();
         this.getDashboardDetails();
         this.setSearchOptions();
         this.setAdvanceSearch();
-        this.setDashboardTab();
         this.checkForSort();
         this.checkForPagination();
         this.checkForAdvanceSearch();

@@ -15,7 +15,6 @@ export class CoiService {
     isShowInfo = true;
     isShowSFIInfo = true;
     isShowCertifyInfo = true;
-    isShowHistoryInfo = true;
     isShowAttachmentInfo = true;
     stepTabName = '';
     isCertified = false;
