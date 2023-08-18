@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityDetailsService } from './entity-details.service';
-import { hideModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { hideModal, openModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { NavigationService } from '../../common/services/navigation.service';
 import { SfiService } from '../sfi/sfi.service';
@@ -20,10 +20,10 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   isTriggeredFromSlider = false;
   $subscriptions: Subscription[] = [];
   isSwitchCurrentTab = false;
-  onDeleteTimestamp = null;
+  deleteRelationshipEvent = null;
   @Output() closeAction: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  
+  questionnaireSection: any = '';
+  currentRelationshipDetails: any;
 
   constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService, private _navigationService: NavigationService) {
@@ -71,11 +71,10 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
     }
   }
 
-	leavePage() {
+	fullPageNavigationLeavePage() {
 		this.entityDetailService.isRelationshipQuestionnaireChanged = false;
-		this.$subscriptions.push(this.entityDetailService.$relationshipTabSwitch.subscribe((res: any) => {
-			res ? this.isSwitchCurrentTab = true : this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
-		}))
+    this.entityDetailService.unSavedSections = [];
+    this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
 		this.closeUnsavedChangesModal();
 	}
 
@@ -91,14 +90,27 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
 		}));
 	}
 
-	showLeaveConfirmModal(event) {
+	showQuestionnaireLeaveConfirmationModal(event) {
 		if (event) {
-			document.getElementById('hidden-unsaved-changes-button').click();
+      this.currentRelationshipDetails = event.details;
+      this.questionnaireSection = this.entityDetailService.unSavedSections.find(ele => ele.includes('Relationship Questionnaire'));
+      openModal('questionnaireUnsavedChanges');
 		}
 	}
 
+  questionnaireChangeModalLeaveTab() {
+    this.entityDetailService.isRelationshipQuestionnaireChanged = false;
+    let index = this.entityDetailService.unSavedSections.findIndex(ele => ele.includes('Relationship Questionnaire'));
+    if (index >= 0) {
+      this.entityDetailService.unSavedSections.splice(index, 1);    
+    }
+    this.entityDetailService.$relationshipTabSwitch.next(this.currentRelationshipDetails);
+    this.isSwitchCurrentTab = true;
+    hideModal('questionnaireUnsavedChanges');
+  }
+
 	emittedDeletedRelationship(event) {
-		this.onDeleteTimestamp = event;
+		this.deleteRelationshipEvent = event;
 	}
 
   closeSlider(event) {

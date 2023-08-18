@@ -1,5 +1,5 @@
 <div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;" 
-  *ngIf="isShowFilterAndSearch">
+  *ngIf="!isHideFilterSearchAndShowCreate">
     <div class="border-end fs-14 p-3" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'"
@@ -30,7 +30,6 @@
 
   <!-- no data card -->
   <app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
-</ng-container>
 
  <!-- Pagination -->
  <div [hidden]="isLoading" *ngIf="filteredEntityArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">

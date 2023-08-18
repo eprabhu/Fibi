@@ -47,8 +47,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   isHoverAddRelationship = false;
   @Output() emitLeaveModal: EventEmitter<any> = new EventEmitter<any>();
   @Input() isSwitchCurrentTab = false;
-  @Output() onDeleteTimestamp: EventEmitter<any> = new EventEmitter<any>();
-
+  @Output() deleteRelationshipEvent: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private _commonService: CommonService, private _router: Router,
     public entityDetailsServices: EntityDetailsService,
@@ -117,10 +116,12 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   }
 
   getQuestionnaire(data: any) {
-    this.currentRelationshipDetails = data;
-    this.activeRelationship = data.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode;
-    this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
-    this.configuration = Object.assign({}, this.configuration);
+    if(data) {
+      this.currentRelationshipDetails = data;
+      this.activeRelationship = data.validPersonEntityRelType.personEntityRelType.relationshipTypeCode;
+      this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
+      this.configuration = Object.assign({}, this.configuration);
+    }
   }
 
   openRelationshipQuestionnaire(data: any) {
@@ -128,7 +129,6 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   }
 
   leaveCurrentRelationship(data: any) {
-    this.entityDetailsServices.$relationshipTabSwitch.next(data);
     this.emitLeaveModal.emit({ details : data, isLeaveFromRelationTab : true });
   }
 
@@ -209,24 +209,28 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
 
   questionnaireEdit(event) {
     this.entityDetailsServices.isRelationshipQuestionnaireChanged = true;
+    let nameOfQuestionnaire = this.definedRelationships.find(ele => ele.validPersonEntityRelType.personEntityRelType.relationshipTypeCode == this.activeRelationship);
+    if(!this.entityDetailsServices.unSavedSections.some(ele => ele.includes('Relationship Questionnaire'))) {
+      this.entityDetailsServices.unSavedSections.push( nameOfQuestionnaire.validPersonEntityRelType.personEntityRelType.description +' Relationship Questionnaire');
+    }
   }
 
   deleteRelationship() {
+    let removeRelId = this.currentRelationshipDetails.personEntityRelId;
     this.$subscriptions.push(this.entityDetailsServices.deletePersonEntityRelationship
       (this.currentRelationshipDetails.personEntityRelId, this.currentRelationshipDetails.personEntityId).subscribe(async (updatedTimestamp) => {
         this.availableRelationships = await this.getRelationshipLookUp();
         await this.getDefinedRelationships();
+        this.deleteRelationshipEvent.emit({'updatedTimestamp': updatedTimestamp,'removeRelId': removeRelId, 'isDeleted': true}); 
         if(this.definedRelationships.length) {
           this.getQuestionnaire(this.definedRelationships[0]);
         }
-        this.onDeleteTimestamp.emit(updatedTimestamp); 
       }));
   }
 
   leaveCurrentTab() {
     this.$subscriptions.push(this.entityDetailsServices.$relationshipTabSwitch.subscribe(selectedQuestionnaire => {
       this.getQuestionnaire(selectedQuestionnaire);
-      this.entityDetailsServices.$relationshipTabSwitch.next(null);
     }));
   }
 }
