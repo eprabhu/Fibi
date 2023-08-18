@@ -28,7 +28,9 @@ export class EntityRiskSliderComponent implements OnInit {
     isStatusEdited = false;
     riskHistoryLogs: any = {};
     currentRiskCategorycode: any;
+    currentRiskType: any;
     revisionComment: any;
+    isShowRisk: true;
     helpText = [
         'Modify the Risk of this Entity from the Risk field.',
         'Provide an adequate reason for your decision in the description field provided.'
@@ -72,7 +74,7 @@ export class EntityRiskSliderComponent implements OnInit {
     private getSFILookup(): void {
         this.$subscriptions.push(this.entityDetailsService.loadSFILookups().subscribe((res: any) => {
             this.riskLevelLookup = res.entityRiskCategories;
-            this.currentRiskCategorycode = this.entityDetails?.riskCategoryCode;
+            this.currentRiskCategorycode = null;
         }));
     }
 
@@ -82,7 +84,8 @@ export class EntityRiskSliderComponent implements OnInit {
         this.entityRiskRO = new RiskHistoryRO;
         this.revisionComment = '';
         this.isStatusEdited = false;
-        this.currentRiskCategorycode  = this.entityDetails.riskCategoryCode;
+        this.currentRiskType  = this.entityDetails.entityRiskCategory.description;
+        this.currentRiskCategorycode = null;
     }
 
     private getEntityRiskRO(): RiskHistoryRO {
@@ -101,6 +104,7 @@ export class EntityRiskSliderComponent implements OnInit {
                         this.coiConflictStatusType = data;
                         this.entityDetails.revisionReason = this.revisionComment;
                         this.entityDetails.riskCategoryCode = this.currentRiskCategorycode;
+                        this.entityDetails.entityRiskCategory.description = this.currentRiskType;
                         this.clearConflictModal();
                         this.riskHistory();
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
@@ -130,9 +134,14 @@ export class EntityRiskSliderComponent implements OnInit {
         }
     }
 
-    setCoiProjConflictStatusType(TYPE): void {
+    removeValidationMap(TYPE): void {
         TYPE === 'COMMENT' ? this.riskValidationMap.delete('comment') :  this.riskValidationMap.delete('riskLevelCode');
         this.isStatusEdited = true;
+    }
+
+    setCoiProjConflictStatusType(): void {
+        this.currentRiskType = this.riskLevelLookup.find
+        (details => details.riskCategoryCode === this.currentRiskCategorycode)?.description || null;
     }
 
     public checkForMandatory(): boolean {
