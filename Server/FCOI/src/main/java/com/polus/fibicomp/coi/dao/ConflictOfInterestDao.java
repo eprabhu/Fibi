@@ -9,11 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -43,6 +44,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
@@ -56,8 +58,6 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
-import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
-import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.Country;
@@ -375,9 +375,10 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * This method is used for deleteReviewComment 
-	 * @param coiReviewId
+	 * @param personId 
+	 * @param disclosureId
 	 */
-	public void deleteReviewComment(Integer coiReviewId);
+	public void deleteReviewComment(String personId, Integer disclosureId);
 
 	/**
 	 * This method is used for deleteReview 
@@ -541,12 +542,6 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(Integer disclosureNumber);
-
-	/**
-	 * This method is used for get count of comments
-	 * @return count
-	 */
-	public Integer getReviewCommentsCount();
 
 	/**
 	 * @param disclosureId
@@ -925,7 +920,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewCommentId
 	 * @return
 	 */
-	CoiReviewComments loadCoiReviewCommentById(Integer coiReviewCommentId);
+	DisclComment loadCoiReviewCommentById(Integer coiReviewCommentId);
 
 	/**
 	 * This method is used to update PersonEntity header update details
@@ -1059,4 +1054,13 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	Integer getDisclosureHistoryCount(CoiDashboardVO dashboardVO);
+
+	public List<CoiSectionsType> getCoiSectionsTypeCode();
+
+	public Timestamp updateTravelDisclosureRiskCategory(CoiTravelDisclosureDto travelDisclosureDto);
+
+	public void deleteReviewTagByCommentTagId(Integer coiReviewCommentTagId);
+
+	public List<DisclAttachment> loadDisclAttachmentByCommentId(Integer coiReviewCommentId);
+
 }

@@ -10,14 +10,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "COI_REVIEW_COMMENT_ATTACHMENT")
 @EntityListeners(AuditingEntityListener.class)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CoiReviewCommentAttachment implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -50,68 +60,10 @@ public class CoiReviewCommentAttachment implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
-	public Integer getCoiReviewCommentAttId() {
-		return coiReviewCommentAttId;
-	}
+	@Transient
+	private Integer attachmentId;
 
-	public void setCoiReviewCommentAttId(Integer coiReviewCommentAttId) {
-		this.coiReviewCommentAttId = coiReviewCommentAttId;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	public String getMimeType() {
-		return mimeType;
-	}
-
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
-	}
-
-	public String getFileDataId() {
-		return fileDataId;
-	}
-
-	public void setFileDataId(String fileDataId) {
-		this.fileDataId = fileDataId;
-	}
-
-	public Integer getCoiReviewId() {
-		return coiReviewId;
-	}
-
-	public void setCoiReviewId(Integer coiReviewId) {
-		this.coiReviewId = coiReviewId;
-	}
-
-	public Integer getCoiReviewCommentId() {
-		return coiReviewCommentId;
-	}
-
-	public void setCoiReviewCommentId(Integer coiReviewCommentId) {
-		this.coiReviewCommentId = coiReviewCommentId;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
+	@Transient
+	private Integer commentId;
 
 }
