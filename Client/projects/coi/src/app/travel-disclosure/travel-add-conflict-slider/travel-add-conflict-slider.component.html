@@ -74,37 +74,42 @@
         </div>
         <!-- disclosure status update -->
         <div *ngIf="isEditMode" class="mx-4 mt-3 card comment-card shadow-sm">
-            <div class="col-4 ml-15 align-items-center">
-                <label class="fs-14 fw-500">Disclosure Status:</label>
-                <span>
-                    <select class="form-control form-select" [(ngModel)]="disclosureStatusCode"
-                        [ngClass]="travelConflictValidationMap?.has('disclosureStatusCode') || travelConflictValidationMap?.has('duplicateDisclosure') ?
-                            'is-invalid d-block' : ''" (ngModelChange)="setCoiTravelConflictStatusType()">
-                        <option [value]=null>--Select--</option>
-                        <option *ngFor="let status of disclosureStatusLookUpList"
-                            [value]="status.disclosureStatusCode">
-                            {{status?.description}}</option>
-                    </select>
-                    <div *ngIf="travelConflictValidationMap?.has('disclosureStatusCode')"
-                        class="invalid-feedback d-block fs-12">
-                        {{travelConflictValidationMap?.get('disclosureStatusCode')}}
+            <div class="row ml-15 mt-4">
+                <!-- disclosure status lookup -->
+                <div class="col-4 ml-15 align-items-center">
+                    <label class="fs-14 fw-500">Disclosure Status:</label>
+                    <span>
+                        <select class="form-control form-select" [(ngModel)]="disclosureStatusCode"
+                            [ngClass]="travelConflictValidationMap?.has('disclosureStatusCode') || travelConflictValidationMap?.has('duplicateDisclosure') ?
+                                'is-invalid d-block' : ''" (ngModelChange)="setCoiTravelConflictStatusType()">
+                            <option [value]=null>--Select--</option>
+                            <option *ngFor="let status of disclosureStatusLookUpList"
+                                [value]="status.disclosureStatusCode">
+                                {{status?.description}}</option>
+                        </select>
+                        <div *ngIf="travelConflictValidationMap?.has('disclosureStatusCode')"
+                            class="invalid-feedback d-block fs-12">
+                            {{travelConflictValidationMap?.get('disclosureStatusCode')}}
+                        </div>
+                        <div *ngIf="travelConflictValidationMap?.has('duplicateDisclosure')" class="d-block fs-12 invalid-feedback">
+                            {{travelConflictValidationMap?.get('duplicateDisclosure')}}
+                        </div>
+                    </span>
+                </div>
+                <!-- description -->
+                <div class="col mr-10">
+                    <label class="fs-14 fw-500">Describe the reason for Disclosure status change:</label>
+                    <textarea appAutoGrow id="main-panel-comnt" class="form-control fs-14" placeholder="Description"
+                        rows="1" [(ngModel)]="comment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
+                        [ngClass]="travelConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
+                        (ngModelChange)="comment = comment.trim()">
+                    </textarea>
+                    <div *ngIf="travelConflictValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
+                        {{travelConflictValidationMap?.get('comment')}}
                     </div>
-                    <div *ngIf="travelConflictValidationMap?.has('duplicateDisclosure')" class="d-block fs-12 invalid-feedback">
-                        {{travelConflictValidationMap?.get('duplicateDisclosure')}}
-                    </div>
-                </span>
-            </div>
-            <div class="col mr-10">
-                <label class="fs-14 fw-500">Describe the reason for Disclosure status change:</label>
-                <textarea appAutoGrow id="main-panel-comnt" class="form-control fs-14" placeholder="Description"
-                    rows="1" [(ngModel)]="comment" appLengthValidator [limit]="2000" [isShowLimiter]="true"
-                    [ngClass]="travelConflictValidationMap?.has('comment') ? 'is-invalid d-block' : ''"
-                    (ngModelChange)="comment = comment.trim()">
-                </textarea>
-                <div *ngIf="travelConflictValidationMap?.has('comment')" class="invalid-feedback d-block fs-12">
-                    {{travelConflictValidationMap?.get('comment')}}
                 </div>
             </div>
+            <!-- save clear btn -->
             <div class="text-muted mb-3 mr-10 mt-2">
                 <button type="button" class="btn btn-primary float-end fs-14" data-bs-dismiss="modal"
                     (click)="manageTravelConflict()">
@@ -134,35 +139,33 @@
                             class="badge rounded-pill badge-width {{commonService.getDisclosureConflictBadge(historyEntry?.conflictStatusCode)}}">{{historyEntry?.conflictStatusDescription}}</span>
                     </div>
                     <div class="col pb-4 mx-auto comment-box-height">
-                        <div class="align-items-center ml-5 mx-0">
-                            <span class="d-flex align-items-center text-muted">
-                                <!-- updateUserFullName -->
-                                <ng-container *ngIf="historyEntry?.updateUser">
-                                    <i class="fa fa-user grey-text fs-16" aria-hidden="true"></i>
-                                    <label class="fw-700 fs-14 ml-2 me-4">{{historyEntry?.updateUserFullName}}</label>
+                        <span class="d-flex align-items-center text-muted">
+                            <!-- updateUserFullName -->
+                            <ng-container *ngIf="historyEntry?.updateUser">
+                                <i class="fa fa-user grey-text fs-16" aria-hidden="true"></i>
+                                <label class="fw-700 fs-14 ml-2 me-4">{{historyEntry?.updateUserFullName}}</label>
+                            </ng-container>
+
+                            <!-- updateTimestamp -->
+                            <span class="fs-12">{{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
+                        </span>
+
+                        <!-- comment -->
+                        <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
+                            <span [ngClass]="historyEntry?.updateUser ? '': 'fst-italic'">{{
+                                (!isReadMore[index] && historyEntry?.comment?.length > 230) ?
+                                (historyEntry?.comment | slice:0:230) : historyEntry?.comment }}
+            
+                                <!-- for read more and less -->
+                                <ng-container *ngIf="historyEntry?.comment?.length > 230">
+                                    <span (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium cursor-pointer">
+                                        <strong>
+                                            <span *ngIf="!isReadMore[index]">...<u title="Expand comment">Read More</u></span>
+                                            <u title="Collapse comment" *ngIf="isReadMore[index]">Read Less</u>
+                                        </strong>
+                                    </span>
                                 </ng-container>
-
-                                <!-- updateTimestamp -->
-                                <span class="fs-12">{{historyEntry?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</span>
                             </span>
-
-                            <!-- comment -->
-                            <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
-                                <span [ngClass]="historyEntry?.updateUser ? '': 'fst-italic'">{{
-                                    (!isReadMore[index] && historyEntry?.comment?.length > 230) ?
-                                    (historyEntry?.comment | slice:0:230) : historyEntry?.comment }}
-                
-                                    <!-- for read more and less -->
-                                    <ng-container *ngIf="historyEntry?.comment?.length > 230">
-                                        <span (click)="isReadMore[index] = !isReadMore[index]" class="fw-medium cursor-pointer">
-                                            <strong>
-                                                <span *ngIf="!isReadMore[index]">...<u title="Expand comment">Read More</u></span>
-                                                <u title="Collapse comment" *ngIf="isReadMore[index]">Read Less</u>
-                                            </strong>
-                                        </span>
-                                    </ng-container>
-                                </span>
-                            </div>
                         </div>
                     </div>
                 </div>
