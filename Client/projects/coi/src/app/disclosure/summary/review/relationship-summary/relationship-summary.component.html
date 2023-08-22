@@ -1,20 +1,40 @@
 
 <div [id]= selectedProject?.moduleItemId class="left-margin card border shadow mt-2" *ngIf="selectedProject?.moduleCode">
     <div class="card-header px-4 d-flex align-items-center justify-content-between">
-      <span class="align-items-center d-flex">
-        <ng-container *ngIf="selectedProject?.moduleCode == 3">
+      <span class="d-flex mt-3 mb-3">
+        <ng-container *ngIf="selectedProject?.moduleCode == 3 ">
           <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
-          <p class="entity-title mt-2">
-            <strong class="fs-16">#{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
-          </p>
+          <span class="title-text mt-2 word-break-all new-line-property badge-margin">
+            <strong>#{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}</strong>
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
+              <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
+                <span class="readMore fw-500 hand-cursor">Read More</span>
+              </a>
+            </span>
+            <a *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
+              <span class="readMore ms-1 fw-500 hand-cursor">Read Less</span>
+            </a>
+          </span>
         </ng-container>
+      
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
           <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex">Award</span>
-          <p class="entity-title mt-2">
-            <strong class="fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
-          </p>
+          <span class="title-text mt-2 word-break-all new-line-property badge-margin">
+            <strong>#{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}</strong>
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
+              <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
+                <span class="readMore fw-500 hand-cursor">Read More</span>
+              </a>
+            </span>
+            <a *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
+              <span class="readMore ms-1 fw-500 hand-cursor">Read Less</span>
+            </a>
+          </span>
         </ng-container>
       </span>
+
       <span class="align-items-center d-flex">
         <button (click)="openCommoncommentSlider()" class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
           <mat-icon>rate_review</mat-icon>
@@ -76,7 +96,7 @@
                         <ng-template #showFullInfo>
                           <span>{{relation?.disclComment?.comment}}</span>
                           <span *ngIf="relation?.disclComment?.comment?.length > 60" (click)="isReadMore[i] = !isReadMore[i]"
-                            aria-hidden="true" class="hand-cursor"> <strong><u>Show Less</u></strong>
+                            aria-hidden="true" class="hand-cursor"> <strong><u>Read Less</u></strong>
                           </span>
                         </ng-template>
                       </div>
