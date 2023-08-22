@@ -275,5 +275,16 @@ export class DefineRelationComponent implements OnInit {
     subscriptionHandler(this.$subscriptions);
   }
 
+  getColorBadges(typeCode) {
+    switch (typeCode) {
+        case 3:
+            return 'bg-proposal-clip';
+        case 1:
+            return 'bg-award-clip';
+        default:
+            return;
+    }
+  }
+
 }
 

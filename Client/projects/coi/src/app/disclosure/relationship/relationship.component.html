@@ -47,7 +47,7 @@
                                 <div class="col-12 d-flex" *ngIf="relation.moduleCode == 3">
                                     <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
                                     <p class="entity-title">
-                                        <strong title="Click to view project details" class="fs-18" (click)="selectedProjectForView=relation;" data-bs-toggle="modal"
+                                        <strong title="Click to view project details" class="fs-16" (click)="selectedProjectForView=relation;" data-bs-toggle="modal"
                                             data-bs-target="#moduleViewModal">#{{relation?.moduleItemId}} - {{relation?.title?.length >
                                             75 && !collapseViewMore[relation?.moduleItemId] ? (relation?.title | slice:0:75)+'...' :
                                             relation?.title}}
