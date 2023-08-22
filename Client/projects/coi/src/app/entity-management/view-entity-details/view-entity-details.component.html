@@ -265,7 +265,7 @@
             </span>
             <div class="mx-1">
               <span class="fs-14 fw-bold "><span class="mandatory px-1">*</span> Description :</span>
-              <textarea [(ngModel)]="modifyDescription" placeholder="Please enter a description" [isShowLimiter]='true' [limit]=2000
+              <textarea [(ngModel)]="modifyDescription" (ngModelChange)="modifyDescription = modifyDescription.trim()" placeholder="Please enter a description" [isShowLimiter]='true' [limit]=2000
                 [ngClass]="mandatoryList.has('description')?'invalid-border':'' " appLengthValidator appAutoGrow class="form-control mt-1"
                 id="description" rows="1"></textarea>
                 <span class="invalid-feedback d-block fs-13" *ngIf="mandatoryList.has('description')">

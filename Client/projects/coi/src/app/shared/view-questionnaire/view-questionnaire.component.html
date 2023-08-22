@@ -1,6 +1,6 @@
 <div class="success-banner px-3 mb-2 d-flex justify-content-between align-items-center"
 	*ngIf="result?.header?.QUESTIONNAIRE_DESCRIPTION && isQuestionnaireInfo">
-	<span><i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
+	<span><i class="fa fa-info-circle mr-1 info-icon" title = "disclosure screening form" aria-hidden="true"></i>
 		<em class="ml-2">{{result?.header?.QUESTIONNAIRE_DESCRIPTION}}</em></span>
 	<button (click)="isQuestionnaireInfo = false" type="button" id="modal-close" class="btn close fs-16 p-0 close-button"
 		aria-label="Close">

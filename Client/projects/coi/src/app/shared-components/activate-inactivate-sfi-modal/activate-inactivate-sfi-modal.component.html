@@ -37,7 +37,7 @@
         <div class="row">
           <div class="col">
             <span class="block-display fw-bold fs-14"><span *ngIf="isRelationshipActive" class="mandatory px-1">*</span>Reason for {{isRelationshipActive?'Inactivation' :'Activation'}} :</span>
-            <textarea placeholder="Please enter the reason."  [(ngModel)]="activateInactivateReason" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
+            <textarea placeholder="Please enter the reason."  [(ngModel)]="activateInactivateReason" (ngModelChange)="activateInactivateReason = activateInactivateReason.trim()" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
               appAutoGrow appLengthValidator [class.invalid-border]="reasonValidateMapSfi.has('reason')"></textarea>
             <span *ngIf="reasonValidateMapSfi.has('reason')" class="invalid-feedback d-block fs-13">
               {{reasonValidateMapSfi.get('reason')}}
