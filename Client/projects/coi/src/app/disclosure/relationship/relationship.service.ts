@@ -17,7 +17,7 @@ getProjectRelations(id, status) {
 
 getEntityList(moduleCode, moduleId, id, status,personId) {
   if (moduleCode == 3) {
-    return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
+    return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations', {
       'disclosureId': id,
       'proposalIdlinkedInDisclosure': moduleId,
       'disclosureStatusCode': status,
@@ -26,7 +26,7 @@ getEntityList(moduleCode, moduleId, id, status,personId) {
       'personId': personId,
     });
   } else {
-    return this._http.post(this._commonService.baseUrl + '/getEntityProjectRelations', {
+    return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations', {
       'disclosureId': id,
       'disclosureStatusCode': status,
       'moduleCode': moduleCode,

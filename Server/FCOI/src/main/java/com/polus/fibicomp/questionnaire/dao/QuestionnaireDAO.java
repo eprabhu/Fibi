@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.applicationexception.dto.ApplicationException;
+import com.polus.fibicomp.coi.pojo.CoiQuestTableAnswer;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dbengine.DBEngine;
@@ -633,7 +634,7 @@ public class QuestionnaireDAO {
 	}
 
 	private ArrayList<HashMap<String, Object>> getAllApplicableQuestionnaire(String moduleItemKey,String moduleSubItemKey,
-			Integer moduleItemCode, Integer moduleSubItemCode) throws Exception {		
+			Integer moduleItemCode, Integer moduleSubItemCode) throws Exception {
 		ArrayList<HashMap<String, Object>> output = new ArrayList<HashMap<String, Object>>();
 		try {
 			ArrayList<Parameter> inParam = new ArrayList<>();
@@ -752,12 +753,14 @@ public class QuestionnaireDAO {
 		}
 	}
 
-	public List<HashMap<String, Object>> getQuestionnaireAttachment(Integer questionnaireAnsAttachmentId) 
+	public List<HashMap<String, Object>> getQuestionnaireAttachment(Integer questionnaireAnsAttachmentId, Integer moduleCode) 
 		throws Exception {
 			try {
+				String genericSQL = Constants.COI_MODULE_CODE.equals(moduleCode) ? "GET_COI_QUESTIONNAIRE_ATTACHMENT"
+						: "GET_QUESTIONNAIRE_ATTACHMENT";
 				ArrayList<Parameter> inputParam = new ArrayList<>();
 				inputParam.add(new Parameter("<<AV_QUESTIONNAIRE_ANS_ATTACHMENT_ID>>", DBEngineConstants.TYPE_INTEGER, questionnaireAnsAttachmentId));
-				return dbEngine.executeQuery(inputParam, "GET_QUESTIONNAIRE_ATTACHMENT");
+				return dbEngine.executeQuery(inputParam, genericSQL);
 			} catch (Exception e) {
 				logger.error("Exception in getQuestionnaireQuestionsOptions : {} ", e.getMessage());
 				return new ArrayList<>();
@@ -890,7 +893,12 @@ public class QuestionnaireDAO {
 	public void deleteQuestAnswerAttachment(String moduleItemKey, Integer moduleItemCode, Integer moduleSubItemCode, String subModuleItemKey) {
 		try {
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-			StringBuilder hqlQuery = new StringBuilder().append("delete QuestAnswerAttachment t1 where t1.questAnswer.questAnswerId in (select t2.questAnswerId from QuestAnswer t2 ");
+			StringBuilder hqlQuery = new StringBuilder();
+			if(Constants.COI_MODULE_CODE.equals(moduleItemCode)) {
+				hqlQuery.append("delete CoiQuestAnswerAttachment t1 where t1.questAnswer.questAnswerId in (select t2.questAnswerId from CoiQuestAnswer t2 ");
+			} else {
+				hqlQuery.append("delete QuestAnswerAttachment t1 where t1.questAnswer.questAnswerId in (select t2.questAnswerId from QuestAnswer t2 ");
+			}
 			hqlQuery.append("where t2.questAnswerHeader.questAnsHeaderId in (select t3.questAnsHeaderId from QuestAnswerHeader t3 where t3.moduleItemKey=:moduleItemKey ");
 			hqlQuery.append("and t3.moduleItemCode =:moduleItemCode and t3.moduleSubItemCode =:moduleSubItemCode and t3.moduleSubItemKey =:moduleSubItemKey)) ");
 			Query query = session.createQuery(hqlQuery.toString());
@@ -907,7 +915,12 @@ public class QuestionnaireDAO {
 	public void deleteQuestAnswer(String moduleItemKey, Integer moduleItemCode, Integer moduleSubItemCode, String subModuleItemKey) {
 		try {
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-			StringBuilder hqlQuery = new StringBuilder().append("delete QuestAnswer t1 where t1.questAnswerHeader.questAnsHeaderId in (select t2.questAnsHeaderId from QuestAnswerHeader ");
+			StringBuilder hqlQuery = new StringBuilder();
+			if(Constants.COI_MODULE_CODE.equals(moduleItemCode)) {
+				hqlQuery.append("delete CoiQuestAnswer t1 where t1.questAnswerHeader.questAnsHeaderId in (select t2.questAnsHeaderId from QuestAnswerHeader ");
+			} else {
+				hqlQuery.append("delete QuestAnswer t1 where t1.questAnswerHeader.questAnsHeaderId in (select t2.questAnsHeaderId from QuestAnswerHeader ");
+			}
 			hqlQuery.append("t2 where t2.moduleItemKey=:moduleItemKey and t2.moduleItemCode =:moduleItemCode and t2.moduleSubItemCode =:moduleSubItemCode and t2.moduleSubItemKey =:moduleSubItemKey) ");
 			Query query = session.createQuery(hqlQuery.toString());
 			query.setParameter("moduleItemKey", moduleItemKey);
@@ -932,8 +945,29 @@ public class QuestionnaireDAO {
 		delete.where(builder.and(predicateModuleItemKey, predicateModuleItemCode, predicateModuleSubItemCode, predicateModuleSubItemkey));
 		session.createQuery(delete).executeUpdate();
 	}
-	
-	
+
+	public void deleteQuestTableAnswers(String moduleItemKey, Integer moduleItemCode, Integer moduleSubItemCode, String subModuleItemKey) {
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			StringBuilder hqlQuery = new StringBuilder();
+			if(Constants.COI_MODULE_CODE.equals(moduleItemCode)) {
+				hqlQuery.append("delete CoiQuestTableAnswer t1 where t1.questAnsHeaderId in ");
+			} else {
+				hqlQuery.append("delete QuestTableAnswer t1 where t1.questAnsHeaderId in ");
+			}
+			hqlQuery.append("(select t3.questAnsHeaderId from QuestAnswerHeader t3 where t3.moduleItemKey=:moduleItemKey ");
+			hqlQuery.append("and t3.moduleItemCode =:moduleItemCode and t3.moduleSubItemCode =:moduleSubItemCode and t3.moduleSubItemKey =:moduleSubItemKey)");
+			Query query = session.createQuery(hqlQuery.toString());
+			query.setParameter("moduleItemKey", moduleItemKey);
+			query.setParameter("moduleItemCode", moduleItemCode);
+			query.setParameter("moduleSubItemCode", moduleSubItemCode);
+			query.setParameter("moduleSubItemKey", subModuleItemKey);
+			query.executeUpdate();
+		} catch (Exception e) {
+			logger.error("error occurred in deleteQuestTableAnswers : {}", e.getMessage());
+		}
+	}
+
 	public List<HashMap<String, Object>> getQuestionsByModule(Integer moduleItemCode, Integer moduleSubItemCode) {
 		ArrayList<HashMap<String, Object>> output = new ArrayList<>();
 		try {
@@ -947,15 +981,18 @@ public class QuestionnaireDAO {
 		return output;
 	}
 
-	public Integer copyAnswerToNewVersion(Integer questionnaireAnswerHeaderId, Integer newQuestionnaireId) {	
+	public Integer copyAnswerToNewVersion(Integer questionnaireAnswerHeaderId, Integer newQuestionnaireId, Integer moduleCode) {	
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		return (Integer) session.createStoredProcedureCall("UPD_ANS_TO_NEW_QUEST_VERSN")
-				.registerStoredProcedureParameter("AV_QUESTIONNAIRE_ID", Integer.class, ParameterMode.IN)
-				.setParameter("AV_QUESTIONNAIRE_ID", newQuestionnaireId)
-				.registerStoredProcedureParameter("AV_QNR_ANS_HEADER_ID", Integer.class, ParameterMode.IN)
-				.setParameter("AV_QNR_ANS_HEADER_ID", questionnaireAnswerHeaderId)
-				.registerStoredProcedureParameter("AV_UPDATE_USER", String.class, ParameterMode.IN)
-				.setParameter("AV_UPDATE_USER", AuthenticatedUser.getLoginUserName()).getSingleResult();
+		String storedProcedureName = Constants.COI_MODULE_CODE.equals(moduleCode) ? "COI_UPD_ANS_TO_NEW_QUEST_VERSN"
+				: "UPD_ANS_TO_NEW_QUEST_VERSN";
+		return (Integer) session.createStoredProcedureCall(storedProcedureName)
+		        .registerStoredProcedureParameter("AV_QUESTIONNAIRE_ID", Integer.class, ParameterMode.IN)
+		        .setParameter("AV_QUESTIONNAIRE_ID", newQuestionnaireId)
+		        .registerStoredProcedureParameter("AV_QNR_ANS_HEADER_ID", Integer.class, ParameterMode.IN)
+		        .setParameter("AV_QNR_ANS_HEADER_ID", questionnaireAnswerHeaderId)
+		        .registerStoredProcedureParameter("AV_UPDATE_USER", String.class, ParameterMode.IN)
+		        .setParameter("AV_UPDATE_USER", AuthenticatedUser.getLoginUserName())
+		        .getSingleResult();
 	}
 
 	public synchronized Integer getNextQuestionnaireAnswerTableId() {
@@ -1109,6 +1146,35 @@ public class QuestionnaireDAO {
 			logger.error("checkInCompleteQuestionnaireExists {}" , e.getMessage());
 		}
 		return count > 0 ? Boolean.TRUE : Boolean.FALSE;
+	}
+
+	public Integer getModuleByQuestAnswerHeaderId(Integer questionnaireAnswerHeaderId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+		Root<QuestAnswerHeader> rootQuestAnswerHeader = query.from(QuestAnswerHeader.class);
+		query.select(rootQuestAnswerHeader.get("moduleItemCode"))
+				.where(builder.equal(rootQuestAnswerHeader.get("questAnsHeaderId"), questionnaireAnswerHeaderId));
+		return session.createQuery(query).uniqueResult();
+	}
+
+	public List<CoiQuestTableAnswer> getCoiQuestTableAnswers(Integer questionnaireAnsHeaderId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CoiQuestTableAnswer> query = builder.createQuery(CoiQuestTableAnswer.class);
+		Root<CoiQuestTableAnswer> rootCoiQuestTableAnswer = query.from(CoiQuestTableAnswer.class);
+		Predicate predicateQuestionnaireAnsHeaderId = builder.equal(rootCoiQuestTableAnswer.get("questAnsHeaderId"), questionnaireAnsHeaderId);
+		query.where(builder.and(predicateQuestionnaireAnsHeaderId));
+		return session.createQuery(query).getResultList();
+	}
+
+	public void saveCoiQuestTableAnswers(CoiQuestTableAnswer questTableAnswer) {
+		try {
+			hibernateTemplate.saveOrUpdate(questTableAnswer);
+		} catch (Exception e) {
+			logger.info("Error ocuured in saveQuestTableAnswers {}", e.getMessage());
+			throw new ApplicationException("Error in saveCoiQuestTableAnswers", e, Constants.JAVA_ERROR);
+		}
 	}
 
 }

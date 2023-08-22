@@ -1,5 +1,7 @@
 package com.polus.fibicomp.filemanagement;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,7 +13,7 @@ public class FileManagementService {
 		this.fileStorageService = fileStorageService;
 	}
 
-	public FileManagementOutputDto saveFile(FileManagmentInputDto fileManagementInputDto) throws FileStorageException {
+	public FileManagementOutputDto saveFile(FileManagmentInputDto fileManagementInputDto) throws FileStorageException, IOException {
 		return fileStorageService.saveFile(fileManagementInputDto);
 	}
 

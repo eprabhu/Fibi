@@ -28,6 +28,16 @@
 }
 
 
+.toggle-header-btn {
+  width: 30px;
+  color: #A64040;
+  height: 30px;
+
+  mat-icon {
+    transform: scale(1.2);
+  }
+}
+
 /* Hide the browser's default checkbox */
 
 .custom-checkbox input {
@@ -79,7 +89,5 @@
   }
 
   .updown-arrow-relation {
-    position: absolute;
-    right: 363px;
-    top: auto;
+    position: relative;
   }

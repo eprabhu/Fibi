@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ExpandedActionListComponent } from 'projects/fibi/src/app/expanded-widgets/expanded-action-list/expanded-action-list.component';
+import { ExpandedActionListComponent } from '../../../../../../fibi/src/app/expanded-widgets/expanded-action-list/expanded-action-list.component';
 import { UserDashboardComponent } from '../../../user-dashboard/user-dashboard.component';
 
 

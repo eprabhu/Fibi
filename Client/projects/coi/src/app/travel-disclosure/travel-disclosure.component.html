@@ -4,23 +4,23 @@
             <div class="disclosure-heading px-3 d-flex">
                 <div class="align-self-center flex-fill">
                     <p class="m-0">
-                        <ng-container *ngIf="!responseObject?.travelDisclosureId">
+                        <ng-container *ngIf="!travelDisclosure?.travelDisclosureId">
                             <strong>Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="ispersondetailsmodal = true;"
-                                        title="Show the details of {{userDetails.fullName}}">
-                                        {{userDetails.fullName}}
+                                    <u (click)="isPersonDetailsModalOpen = true;"
+                                        title="Show the details of {{userDetails?.fullName}}">
+                                        {{userDetails?.fullName}}
                                     </u>
                                 </span>
                             </strong>
                         </ng-container>
-                        <ng-container *ngIf="responseObject?.travelDisclosureId">
+                        <ng-container *ngIf="travelDisclosure?.travelDisclosureId">
                             <strong title="">
-                                #{{responseObject?.travelDisclosureId}} : Travel Disclosure By
+                                #{{travelDisclosure?.travelDisclosureId}} : Travel Disclosure By
                                 <span class="text-primary cursor-pointer">
-                                    <u (click)="ispersondetailsmodal = true;"
-                                        title="Show the details of {{userDetails.fullName}}">
-                                        {{userDetails.fullName}}
+                                    <u (click)="isPersonDetailsModalOpen = true;"
+                                        title="Show the details of {{userDetails?.fullName}}">
+                                        {{userDetails?.fullName}}
                                     </u>
                                 </span>
                             </strong>
@@ -49,10 +49,10 @@
                                     Department :
                                 </label>
                                 <app-no-data-label class="text-slice grey-text fs-14 ml-2"
-                                    [valueToShow]="userDetails.homeUnit || userDetails.homeUnitName">
-                                    <div title="{{userDetails.homeUnit}} - {{userDetails.homeUnitName}}">
-                                        {{userDetails.homeUnit}} -
-                                        {{userDetails.homeUnitName}}
+                                    [valueToShow]="userDetails?.homeUnit || userDetails?.homeUnitName">
+                                    <div title="{{userDetails?.homeUnit}} - {{userDetails?.homeUnitName}}">
+                                        {{userDetails?.homeUnit}} -
+                                        {{userDetails?.homeUnitName}}
                                     </div>
                                 </app-no-data-label>
                             </div>
@@ -63,9 +63,9 @@
                                     <i class="fa fa-user-o fw-700 mr-2" aria-hidden="true"></i>
                                     Administrator :
                                 </label>
-                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="responseObject?.adminPersonName">
-                                    <div title="{{responseObject?.adminPersonName}}">
-                                        {{responseObject?.adminPersonName}}
+                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="travelDisclosure?.adminPersonName">
+                                    <div title="{{travelDisclosure?.adminPersonName}}">
+                                        {{travelDisclosure?.adminPersonName}}
                                     </div>
                                 </app-no-data-label>
                             </div>
@@ -77,9 +77,9 @@
                                         alt="add-adminGroup icon">
                                     Admin Group :
                                 </label>
-                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="responseObject?.adminGroupName">
-                                    <div title="{{responseObject?.adminGroupName}}">
-                                        {{responseObject?.adminGroupName}}
+                                <app-no-data-label class="text-slice grey-text fs-14 ml-2" [valueToShow]="travelDisclosure?.adminGroupName">
+                                    <div title="{{travelDisclosure?.adminGroupName}}">
+                                        {{travelDisclosure?.adminGroupName}}
                                     </div>
                                 </app-no-data-label>
                             </div>
@@ -94,8 +94,8 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14">Create : </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="responseObject?.createTimestamp">
-                                        <span>{{responseObject?.createTimestamp | dateFormatter}}</span>
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.createTimestamp">
+                                        <span>{{travelDisclosure?.createTimestamp | dateFormatter}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -104,8 +104,8 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14">Certification : </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="responseObject?.certifiedAt">
-                                        <span>{{responseObject?.certifiedAt | dateFormatter}}</span>
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.certifiedAt">
+                                        <span>{{travelDisclosure?.certifiedAt | dateFormatter}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -114,8 +114,8 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14">Approved : </label>
                                 <span class="grey-text fs-14 ml-2">
-                                    <app-no-data-label [valueToShow]="responseObject?.acknowledgeAt">
-                                        <span>{{responseObject?.acknowledgeAt | dateFormatter}}</span>
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.acknowledgeAt">
+                                        <span>{{travelDisclosure?.acknowledgeAt | dateFormatter}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -130,9 +130,9 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4">Document : </label>
                                 <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="responseObject?.documentStatusCode">
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.documentStatusCode">
                                         <span
-                                            class="fs-14 {{commonService.getDocumentStatusBadge(responseObject?.documentStatusCode)}}">{{responseObject?.documentStatus}}</span>
+                                            class="fs-14 {{commonService.getDocumentStatusBadge(travelDisclosure?.documentStatusCode)}}">{{travelDisclosure?.documentStatus}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -141,9 +141,9 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4">Review : </label>
                                 <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="responseObject?.reviewStatusCode">
+                                    <app-no-data-label [valueToShow]="travelDisclosure?.reviewStatusCode">
                                         <span
-                                            class="fs-14 {{commonService.getTravelReviewStatusBadge(responseObject?.reviewStatusCode)}}">{{responseObject?.reviewStatus}}</span>
+                                            class="fs-14 {{commonService.getTravelReviewStatusBadge(travelDisclosure?.reviewStatusCode)}}">{{travelDisclosure?.reviewStatus}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -152,9 +152,8 @@
                             <div class="col d-flex">
                                 <label class="text-nowrap grey-text fw-600 fs-14 col-4">Disclosure : </label>
                                 <span class="grey-text fs-14 ms-3 col">
-                                    <app-no-data-label [valueToShow]="responseObject?.disclosureStatusCode">
-                                        <span
-                                            class="fs-14 {{commonService.getDisclosureConflictBadge(responseObject?.disclosureStatusCode)}}">{{responseObject?.disclosureStatus}}</span>
+                                    <app-no-data-label [valueToShow]=null>
+                                        <span class="fs-14 {{commonService.getDisclosureConflictBadge(null)}}"></span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -164,21 +163,8 @@
             </div>
             <ng-container *ngIf="isCreateMode">
                 <div class="nav-progress row mt-1">
-                    <!-- Screening Questionnaire tab -->
-                    <!-- <div class="col h-100 m-0 fs-14"
-                        [routerLink]="['screening']"
-                        [class.complete]="isRouteComplete(['screening', 'travel-details', 'certification'])"
-                        [class.cursor-pointer]="!isRouteComplete(['screening'])"
-                        queryParamsHandling='merge'
-                        title="Go to step Screening Questionnaire">
-                        Screening Questionnaire
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
-                    </div> -->
-                    <div class="col h-100 m-0 fs-14" (click)="service.isChildRouting = true"
+                    <!-- travel details -->
+                    <div class="col h-100 m-0 fs-14" (click)="service.isChildRouteTriggered = true"
                         [class.complete]="isRouteComplete(['travel-details', 'certification'])"
                         [routerLink]="['travel-details']" queryParamsHandling='merge'
                         [class.cursor-pointer]="!isRouteComplete(['travel-details'])"
@@ -190,7 +176,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col fs-14" (click)="service.isChildRouting = true"
+                    <!-- certification -->
+                    <div class="col fs-14" (click)="service.isChildRouteTriggered = true"
                         [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
                         queryParamsHandling='merge' [class.cursor-pointer]="!isRouteComplete(['certification'])"
                         [title]="isRouteComplete(['certification'])? 'Certification' : 'Go to step Certification'">
@@ -200,17 +187,18 @@
             </ng-container>
             <ng-container *ngIf="!isCreateMode">
                 <div class="navigation-tabs d-flex align-items-center">
+                     <!-- Disclosure -->
                     <button [routerLink]="['summary']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
                         role="button" [title]="isRouteComplete(['summary'])? 'Disclosure' : 'Go to step Disclosure'">
                         <div class="navigation-box-content" routerLinkActive="active" area-describedby="">
                             Disclosure
                         </div>
                     </button>
-                    <button [routerLink]="['history']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
-                        role="button" [title]="isRouteComplete(['history'])? 'Travel History' : 'Go to step Travel History'"
-                        (click)="loadTravelDisclosureHistory()">
+                     <!-- Related Disclosures -->
+                    <button [routerLink]="['related-disclosures']" class="border-0 btn navigation-box border-end" queryParamsHandling='merge'
+                        role="button" [title]="isRouteComplete(['related-disclosures'])? 'Related Disclosures' : 'Go to step Related Disclosures'">
                         <div class="navigation-box-content" routerLinkActive="active" area-describedby="">
-                            Travel History
+                            Related Disclosures
                         </div>
                     </button>
                 </div>
@@ -223,17 +211,16 @@
             <div  class="row m-0 py-3 px-3">
                 <!-- home -->
                 <button (click)="navigateBack()" title="Go to home"
-                    [ngClass]="(responseObject?.reviewStatusCode != '2' && !isCreateMode && responseObject?.reviewStatusCode != '7') ? 'col-2' : 'col'"
+                    [ngClass]="(travelDisclosure?.reviewStatusCode != '2' && !isCreateMode && travelDisclosure?.reviewStatusCode != '7') ? 'col-2' : 'col'"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14">
                     <mat-icon>home</mat-icon>
                     <span class="ms-2" *ngIf="showHomeButton() && isCardExpanded">Home</span>
                 </button>
 
                 <!-- Comments -->
-                <button title="Click to add new review commments" aria-expanded="false"
-                    *ngIf="!isCreateMode && checkReviewStatusCode(['3'])"
-                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col 0 ms-2"
-                    data-bs-target="#coi-review-comment" data-bs-toggle="modal" role="button">
+                <button title="Click to add new review comments" aria-expanded="false"
+                    *ngIf="checkReviewStatusCode(['2', '3'], 'SOME')"
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2">
                     <mat-icon>rate_review</mat-icon>
                     <span class="ms-2" *ngIf="isCardExpanded">Comments</span>
                 </button>
@@ -247,22 +234,31 @@
                 </button>
 
                 <!-- more options -->
-                <mat-menu #beforeMenu="matMenu" xPosition="after">
+                <mat-menu #beforeMenu="matMenu" xPosition="before">
                     <!-- reassigned admin -->
-                    <ng-container *ngIf="responseObject?.adminPersonId">
+                    <ng-container *ngIf="travelDisclosure?.adminPersonId && isTravelAdministrator && checkReviewStatusCode(['3'])">
                         <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
                             class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
-                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2', '3'], 'SOME')"
-                            data-bs-toggle="modal" data-bs-target="#assign-to-admin-modal">
+                            (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2">Reassign Admin</span>
                         </button>
                     </ng-container>
+                    <!-- manage disclosure status -->
+                    <ng-container *ngIf="isTravelAdministrator && checkReviewStatusCode(['2','3'], 'SOME')">
+                        <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                            class="text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
+                            (click)="openConflictSlider()">
+                            <mat-icon>mode</mat-icon>
+                            <span class="ms-2">Manage Disclosure Status</span>
+                        </button>
+                    </ng-container>
 
                     <!-- Withdraw disclosure -->
-                    <button title="Click to Withdraw Travel Disclosure" (click)="withdrawTravelDisclosure();"
+                    <button title="Click to Withdraw Travel Disclosure"
+                        (click)="openConfirmationModal('Withdraw', true, withdrawHelpText, true, withdrawError);"
                         class="border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3" 
-                        *ngIf="checkReviewStatusCode(['2']) && responseObject?.personId == currentPersonId">
+                        *ngIf="checkReviewStatusCode(['2']) && travelDisclosure?.personId == currentPersonId">
                         <mat-icon>logout</mat-icon>
                         <span class="ms-2">Withdraw</span>
                     </button>
@@ -277,13 +273,13 @@
 
                 <ng-container *ngIf="!isCreateMode">
                     <!-- assign admin -->
-                    <ng-container *ngIf="!(responseObject?.adminPersonId)">
+                    <ng-container *ngIf="!(travelDisclosure?.adminPersonId)">
                         <button title="Click to Assign Administrator/Admin Group"
                             area-describedby="Click to assign administrator"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-primary fs-14 d-flex justify-content-center align-items-center"
-                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2'])" data-bs-toggle="modal"
-                            data-bs-target="#assign-to-admin-modal">
+                            *ngIf="isTravelAdministrator && checkReviewStatusCode(['2'])"
+                            (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2" *ngIf="isCardExpanded">Assign Admin</span>
                         </button>
@@ -292,7 +288,7 @@
                     <ng-container *ngIf="showReturnOrApproveButton()">
                         <!-- return to pi -->
                         <button title="Click to Return Travel Disclosure"
-                            (click)="returnTravelDisclosure();"
+                            (click)="openConfirmationModal('Return', true, returnHelpText, true, returnError);"
                             [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                             class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center">
                             <mat-icon class="returnIcon">refresh</mat-icon>
@@ -301,7 +297,7 @@
 
                         <!-- approve disclosure -->
                         <button title="Click to Approve Travel Disclosure"
-                            (click)="approveTravelDisclosure();"
+                            (click)="openConfirmationModal('Approve', true);"
                             [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
                             class="btn btn-primary fs-14 d-flex justify-content-center align-items-center">
                             <mat-icon>check_circle_outline</mat-icon>
@@ -314,14 +310,14 @@
                     <!-- save -->
                     <button *ngIf="isRouteComplete(['screening', 'travel-details'])"
                         class="col-12 mt-3  fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        (click)="SaveTravelDisclosure()" title="Click to Save Travel Disclosure">
+                        (click)="saveTravelDisclosure()" title="Click to Save Travel Disclosure">
                         <mat-icon class="me-2">save</mat-icon>
                         Save
                     </button>
 
                     <!-- submit -->
                     <button class="col-12 mt-3 fs-14 btn btn-primary d-flex justify-content-center align-items-center"
-                        (click)="submitTravelDisclosure();" *ngIf="isRouteComplete(['certification'])"
+                        (click)="openConfirmationModal('Submit', false);" *ngIf="isRouteComplete(['certification'])"
                         [disabled]="!service.isTravelCertified" title="Click to Submit Travel Disclosure">
                         <mat-icon class="me-2">done</mat-icon>
                         Submit
@@ -338,28 +334,10 @@
                 <!-- last update date -->
                 <div class="fs-14 ash-text ps-0" *ngIf="!isCreateMode" [ngClass]="isCardExpanded? 'my-3' : 'mt-1'">
                     <div class="fw-medium me-3">Last Updated By :</div>
-                    <div>{{responseObject?.personFullName}} On {{responseObject?.updateTimestamp |
+                    <div>{{travelDisclosure?.personFullName}} On {{travelDisclosure?.updateTimestamp |
                         dateFormatterWithTimeZone:'long'}}</div>
                 </div>
             </div>            
-                
-            <!-- <div class="d-flex justify-content-around px-3 pb-2"
-                    *ngIf="isRouteComplete(['screening', 'travel-details'])"
-                    title="Click here to add a new financial interest">
-                    <button (click)="sfiService.isShowSfiNavBar = true"
-                        class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
-                        <mat-icon class="me-2">add</mat-icon>
-                        Add Significant Financial Interest
-                    </button>
-                </div>
-                
-                <button class="btn border-0 d-flex justify-content-around px-3 pb-3 w-100"
-                    *ngIf="isRouteComplete(['certification'])" [disabled]="!service.isTravelCertified">
-                    <span class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center">
-                        <i class="me-2 fs-4 fa fa-clipboard"></i>
-                        Certify & Copy
-                    </span>
-                </button> -->
 
             <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes w-100" *ngIf="isCreateMode">
                 Notes & Attachments
@@ -371,21 +349,56 @@
     <router-outlet></router-outlet>
 </div>
 
-<!--Unsaved Changes Modal-->
-<app-unsaved-changes-warning></app-unsaved-changes-warning>
+<!--Unsaved Changes confirmation Modal-->
+<app-confirmation-modal [modalName] = "'travel-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked($event)"
+    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
+    <!-- modal header -->
+    <ng-container header>
+        <span>Confirmation</span>
+    </ng-container>
+    <!-- modal content -->
+    <div content class="ms-2">
+        <p *ngIf="service.unSavedTabName != 'Certification'" class="fs-14">
+            You have unsaved changes in
+            <strong>{{service.unSavedTabName? service.unSavedTabName : 'Travel Disclosure Creation'}}.</strong>
+        </p>
+        <p class="fs-14">Do you want to leave the
+            <strong  *ngIf="service.unSavedTabName == 'Certification'">Certification </strong>
+            {{service.unSavedTabName == 'Certification' ? 'Page' : 'page without saving' }} ?
+        </p>
+    </div>
+</app-confirmation-modal>
 
-<!-- Add SFI Slider-->
-<!-- <div>
-    <app-add-sfi-slider></app-add-sfi-slider>
-</div> -->
-
-<!-- review comment Modal-->
-<!-- <app-coi-review-comment-modal></app-coi-review-comment-modal> -->
+<!--Confirmation Modal-->
+<app-confirmation-modal [modalName] = "'travel-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
+    [primaryBtnName]="modalActionBtnName" [helpText]="helpText" [modalSize]="modalSize"
+    [needDescriptionField]="needDescriptionField" [isMandatory]="isMandatory" [descriptionError]="descriptionError">
+    <!-- modal header -->
+    <ng-container header>
+        <span>{{modalActionBtnName}} Disclosure #{{travelDisclosure?.travelDisclosureId}}
+            : Travel Disclosure By {{travelDisclosure?.personFullName}}</span>
+    </ng-container>
+    <!-- modal content -->
+    <ng-container content>
+        <p *ngIf="modalActionBtnName == 'Submit'" class="fs-14 ms-2">
+            Are you sure you want to <strong class="text-lowercase">{{modalActionBtnName}}</strong> this disclosure?
+        </p>
+    </ng-container>
+</app-confirmation-modal>
 
 <!-- personal details Modal-->
-<app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
-    [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails">
+<app-personal-details-modal *ngIf="isPersonDetailsModalOpen"
+    (closeModalPersonDetails)="closePersonDetailsModal($event)" [userdetails]="userDetails">
 </app-personal-details-modal>
 
-<app-assign-administrator-modal *ngIf="checkReviewStatusCode(['2','3'], 'SOME')" [path]="'travelDisclosure'" (closeModal)="closeAssignAdministratorModal($event)"
-    [disclosureId]="responseObject?.travelDisclosureId"></app-assign-administrator-modal>
+<app-assign-administrator-modal *ngIf="isAddAssignModalOpen"
+    [defaultAdminDetails]="defaultAdminDetails"
+    [path]="'TRAVEL_DISCLOSURES'" (closeModal)="closeAssignAdministratorModal($event)"
+    [disclosureId]="travelDisclosure?.travelDisclosureId">
+</app-assign-administrator-modal>
+
+
+<app-travel-add-conflict-slider *ngIf="isOpenSlider" 
+    [entityDetails]="entityDetails" [travelDisclosure]="travelDisclosure"
+    [isEditMode]="showReturnOrApproveButton()" (closePage)="closeConflictSlider()" >
+</app-travel-add-conflict-slider>

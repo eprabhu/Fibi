@@ -15,10 +15,23 @@
 }
 
 .canvas {
-  min-height: 100%;
-  padding-top: 60px;
-  padding-bottom: 40px;
+  height: calc(100% - 60px);
+  margin-top: 60px;
   background-color: #F5F5F5;
+}
+
+#COI_SCROLL {
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+#COI_SCROLL::-webkit-scrollbar-track {
+  margin-bottom: 30px;
+}
+
+.content {
+  min-height: 100%;
+  padding-bottom: 40px;
 }
 
 .grid {

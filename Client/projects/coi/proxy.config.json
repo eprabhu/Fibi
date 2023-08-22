@@ -1,4 +1,3 @@
-
 {
   "/login": {
     "target": "http://192.168.1.149/coi",
@@ -28,7 +27,7 @@
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
-  "/getEntityProjectRelations": {
+  "/disclosure/project/relations": {
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
@@ -168,10 +167,6 @@
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
-  "/loadDisclosureAdminDashboardCounts": {
-    "target": "http://192.168.1.149/coi",
-    "secure": false
-  },
   "/findLeadUnits": {
     "target": "http://192.168.1.149",
     "secure": false
@@ -181,10 +176,6 @@
     "secure": false
   },
   "/getCOIReviewerDashboard": {
-    "target": "http://192.168.1.149/coi",
-    "secure": false
-  },
-  "/loadDisclosureReviewerQuickCardCounts": {
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
@@ -266,10 +257,6 @@
   },
   "/getTrainingDashboard": {
     "target": "http://192.168.1.149/fibii",
-    "secure": false
-  },
-  "/getDisclosureRelationForSFI": {
-    "target": "http://192.168.1.149/coi",
     "secure": false
   },
   "/validate/*": {
@@ -360,11 +347,51 @@
     "target": "http://192.168.1.149/coi/",
     "secure": false
   },
+  "/getTravelConflictStatusType": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/manageTravelConflict": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/loadTravelConflictHistory/*": {
+    "target": "http://192.168.1.149/coi",
+    "secure": false
+  },
   "/evaluateValidation/*" : {
     "target": "http://192.168.1.149/coi/",
     "secure": false
   },
   "/personEntity/*": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/entity/*": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/downloadQuesAttachment": {
+    "target": "http://192.168.1.149/",
+    "secure": false
+  },
+  "/withdrawDisclosure": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/returnDisclosure": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/loadAwardsForDisclosure": {
+    "target": "http://192.168.1.149/coi",
+    "secure":false
+  },
+  "/disclosure/historyDashboard": {
+    "target": "http://192.168.1.80:9090/coi/",
+    "secure": false
+  },
+  "/disclosureHistory": {
     "target": "http://192.168.1.149/coi/",
     "secure": false
   }

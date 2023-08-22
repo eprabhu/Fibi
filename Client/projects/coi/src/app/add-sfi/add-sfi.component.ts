@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../../fibi/src/app/app-constants';
@@ -13,7 +13,7 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
 import { CoiEntity, EntityDetails } from '../entity-management/entity-details-interface';
 
 
-declare var $: any;
+declare const $: any;
 export interface EndpointOptions {
     contextField: string;
     formatString: string;
@@ -56,6 +56,8 @@ export class AddSfiComponent implements OnInit {
     btnTitle = '';
     isViewMode: any;
     sfiType: string;
+    existingEntityDetails: any = {};
+    canShowEntityFields = false;
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -75,6 +77,9 @@ export class AddSfiComponent implements OnInit {
         this.setDefaultRiskLevel();
         if (this.coiEntityManageId) {
             this.getEntityDetails();
+        }
+        if (this.isEntityManagement) {
+            this.canShowEntityFields = true;
         }
         this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
@@ -108,6 +113,8 @@ export class AddSfiComponent implements OnInit {
     hideRelationshipModal(event): void {
         this.showRelationshipModal = event;
         this.clearSFIFields();
+        this.clearField = new String('true');
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
     }
 
     private createOrUpdateEntitySFI(): void {
@@ -128,14 +135,15 @@ export class AddSfiComponent implements OnInit {
     }
 
     private getEntityStatusCode() {
-        return (this._router.url.includes('entity-management') || this.sfiType === 'ENTITY') ? '1' : '3';
+        return (this._router.url.includes('entity-management') || this.sfiType === 'ENTITY') ? '1' : '2';
     }
 
     private checkIfSFIAlreadyAdded(entityId, event): void {
         this.mandatoryList.delete('entityAlreadyAdded');
-        this.$subscriptions.push(this.sfiService.isEntityAdded(entityId).subscribe((isSFIAdded: boolean) => {
-            if (isSFIAdded) {
-                this.mandatoryList.set('entityAlreadyAdded', 'Selected Entity is already added.');
+        this.$subscriptions.push(this.sfiService.isEntityAdded(entityId).subscribe((res: any) => {
+            if (res) {
+                this.existingEntityDetails = res;
+                this.mandatoryList.set('entityAlreadyAdded', 'An SFI has already been created against the entity you are trying to add. To view the SFI, please click on the View button on the SFI card.');
             } else {
                 this.isResultFromSearch = true;
                 this.entityDetails.coiEntity = event;
@@ -187,6 +195,7 @@ export class AddSfiComponent implements OnInit {
 
     selectNewEntity(event): void {
         this.entityDetails.coiEntity.entityName = event.searchString;
+        this.canShowEntityFields = true;
     }
 
     selectedEvent(event): void {
@@ -194,7 +203,7 @@ export class AddSfiComponent implements OnInit {
             this.clearField = new String('false');
             this.checkIfSFIAlreadyAdded(event.entityId, event);
         } else {
-            this.entityDetails = new EntityDetails();
+            this.canShowEntityFields = false;
             this.clearSFIFields();
         }
     }
@@ -214,8 +223,6 @@ export class AddSfiComponent implements OnInit {
             sponsorsResearch: false
         };
         this.clearCountryField = new String('true');
-        this.clearField = new String('true');
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
         this.isResultFromSearch = false;
         this.mandatoryList.clear();
@@ -373,5 +380,11 @@ export class AddSfiComponent implements OnInit {
         this.entityDetails.coiEntity.majorVersion = this.modifyType === '2' ? true : false;
         this.createOrUpdateEntitySFI();
     }
+    viewSfiDetails() {
+      this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId, mode: 'view' } });
+    }
 
+    viewEntityDetails(event) {
+        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: event } });
+    }
 }

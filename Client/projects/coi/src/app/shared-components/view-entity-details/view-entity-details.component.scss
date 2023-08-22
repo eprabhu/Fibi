@@ -286,17 +286,37 @@ mat-icon {
     background: #9fc5f8;
 }
 .sticky-0 {
-  top:0;
-  z-index:1;
+  top: 0;
+  z-index: 1;
   position: sticky;
 }
 
-.sticky-top-50 {
-  top:52px;
-  z-index:1;
+.page-header-color {
+  background-color: #F5F5F5;
+}
+
+.slider-header-color {
+  background-color: #fff;
+  top:0;
+  z-index:2;
   position: sticky;
 }
 
 .fa-bolt {
   margin-right: 23px;
+}
+
+.info-icon {
+  top:11px;
+  height: 22px;
+  width: 22px;
+  font-size: 16px;
+  position: absolute;
+  margin-left: 2px;
+  color: #6f7395;
+  cursor: pointer;
+}
+
+.text-colors {
+  color: #505050;
 }

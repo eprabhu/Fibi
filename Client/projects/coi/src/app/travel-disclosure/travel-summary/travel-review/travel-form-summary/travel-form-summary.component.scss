@@ -13,10 +13,20 @@
   cursor: pointer;
 }
 
+.toggle-header-btn {
+  width: 30px;
+  color: #A64040;
+  height: 30px;
+
+  mat-icon {
+    transform: scale(1.2);
+  }
+}
+
 .main-title {
   border-bottom: 1px solid #dbdbdb;
 }
 
-.text-color {
+.grey-text {
   color: #6A7980;
 }

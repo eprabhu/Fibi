@@ -1,17 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
 import { CREATE_DISCLOSURE_ROUTE_URL, CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { Router } from '@angular/router';
-import { ActiveDisclosure , UserDisclosure } from './user-disclosure-interface';
+import { UserDisclosure } from './user-disclosure-interface';
+import { Subject, interval } from 'rxjs';
+import { debounce, switchMap } from 'rxjs/operators';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
+
 @Component({
     selector: 'app-user-disclosure',
     templateUrl: './user-disclosure.component.html',
-    styleUrls: ['./user-disclosure.component.scss']
+    styleUrls: ['./user-disclosure.component.scss'],
+    animations: [listAnimation, leftSlideInOut]
+
 })
 
-export class UserDisclosureComponent implements OnInit {
+export class UserDisclosureComponent implements OnInit, OnDestroy {
     isShowCountModal = false;
     searchText = '';
     currentSelected = {
@@ -26,6 +33,7 @@ export class UserDisclosureComponent implements OnInit {
         isDownload: false,
         filterType: 'ALL',
         currentPage: '1',
+        property2: ''
     };
     filteredDisclosureArray: UserDisclosure[] = [];
     dashboardCount: any;
@@ -36,7 +44,7 @@ export class UserDisclosureComponent implements OnInit {
     disclosureType: any;
     inputType: string;
     coiList: [];
-    ishover: [] = [];
+    isHover: [] = [];
     disclosureSequenceStatusCode: any;
     personId: any;
     onButtonHovering: any = true;
@@ -44,6 +52,14 @@ export class UserDisclosureComponent implements OnInit {
     fcoiTypeCode: any;
     disclosures: any;
     result: any;
+    $subscriptions = [];
+    $debounceEventForDisclosureList = new Subject();
+    $fetchDisclosures = new Subject();
+    isSearchTextHover = false;
+    isLoading = false;
+    readMoreOrLess = [];
+    isShowFilterAndSearch = false;
+
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
         public commonService: CommonService,
@@ -52,25 +68,78 @@ export class UserDisclosureComponent implements OnInit {
 
     ngOnInit() {
         this.loadDashboard();
+        this.getDashboardBasedOnTab();
         this.loadDashboardCount();
+        this.getSearchList();
     }
 
     loadDashboard() {
-        this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject).subscribe((res: any) => {
-            this.result = res;
-            this.filteredDisclosureArray =  res.disclosureViews ? res.disclosureViews : [];
-            this.searchText = '';
+        this.isLoading = true;
+        this.$subscriptions.push(this.$fetchDisclosures.pipe(
+            switchMap(() => {
+                this.isLoading = true;
+                return this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject)
+            })).subscribe((res: any) => {
+                this.result = res;
+                if (this.result) {
+                    this.filteredDisclosureArray =  this.getDashboardList();
+                    this.loadingComplete();
+                }
+            }), (err) => {
+                this.loadingComplete();
         });
+    }
+
+    private getDashboardList(): any {
+        const disclosureViews = this.result.disclosureViews || [];
+        const travelDashboardViews = this.result.travelDashboardViews || [];
+        return disclosureViews.concat(travelDashboardViews);
+    }
+
+    private loadingComplete() {
+        this.isLoading = false;
+    }
+    
+    getDashboardBasedOnTab() {
+        if(this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
+            this.getDisclosureHistory();
+        } else { 
+            this.filteredDisclosureArray = [];
+            this.$fetchDisclosures.next();
+        }
+    }
+
+    getDisclosures() {
+        this.dashboardRequestObject.currentPage = '1';
+        this.$debounceEventForDisclosureList.next();
+    }
+
+    getSearchList() {
+        this.$subscriptions.push(this.$debounceEventForDisclosureList.pipe(debounce(() => interval(800))).subscribe((data: any) => {
+        this.dashboardRequestObject.property2 = this.searchText;
+            this.isLoading = true;
+            this.filteredDisclosureArray = [];
+            this.$fetchDisclosures.next();
+        }
+        ));
+      }
+
+    resetAndFetchDisclosure() {
+        this.searchText = '';
+        this.filteredDisclosureArray = [];
+        this.dashboardRequestObject.property2 = '';
+        this.getDashboardBasedOnTab();
     }
 
     actionsOnPageChange(event) {
         this.dashboardRequestObject.currentPage = event;
-        this.loadDashboard();
+        this.$fetchDisclosures.next();
     }
 
     loadDashboardCount() {
         this.userDisclosureService.getCOIDashboardCount(this.dashboardRequestObject).subscribe((res: any) => {
             this.dashboardCount = res;
+            this.isShowFilterAndSearch = !!res?.inProgressDisclosureCount;
         });
     }
 
@@ -86,13 +155,18 @@ export class UserDisclosureComponent implements OnInit {
         }
     }
 
-    setTab(tabName) {
+    setTab(tabName: string, disclosureCount: number = 0) {
         this.currentSelected.tab = tabName;
         this.dashboardRequestObject.tabName = tabName;
         this.dashboardRequestObject.currentPage = '1';
         this.dashboardRequestObject.filterType = 'ALL';
         this.currentSelected.filter = 'ALL';
-        this.loadDashboard();
+        this.isShowFilterAndSearch = !!disclosureCount;
+        this.resetAndFetchDisclosure();
+    }
+
+    ngOnDestroy() {
+        subscriptionHandler(this.$subscriptions);
     }
 
     setSelectedModuleCode(moduleName, id, disclosure, noOfcount) {
@@ -126,7 +200,7 @@ export class UserDisclosureComponent implements OnInit {
         this.currentSelected.filter = type;
         this.dashboardRequestObject.filterType = type;
         this.dashboardRequestObject.currentPage = '1';
-        this.loadDashboard();
+        this.resetAndFetchDisclosure();
     }
 
     closeModalEvent(event) {
@@ -136,8 +210,8 @@ export class UserDisclosureComponent implements OnInit {
     }
 
     redirectToDisclosure(disclosure: UserDisclosure) {
-        const redirectUrl = disclosure.travelDisclosureId ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : (disclosure.reviewStatusCode === '1' ?
-            CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL);
+        const redirectUrl = disclosure.travelDisclosureId ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : (disclosure.reviewStatusCode === '1' || disclosure.reviewStatusCode === '5') ?
+            CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         this._router.navigate([redirectUrl],
             { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId } });
     }
@@ -159,17 +233,34 @@ export class UserDisclosureComponent implements OnInit {
     }
 
     modalHeader(disclosure: UserDisclosure) {
-        if (disclosure.fcoiTypeCode === '1') {
-            return `#${disclosure.coiDisclosureNumber}: FCOI Disclosure By ${disclosure.disclosurePersonFullName}`;
-        } else if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
-            return `#${disclosure.coiDisclosureNumber}: Project Disclosure By ${disclosure.disclosurePersonFullName}`;
-        } else if (disclosure.travelDisclosureId) {
-            return `#${disclosure.travelDisclosureId}: ${disclosure.travelEntityName}`;
+        if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
+            if (disclosure.fcoiTypeCode === '2') {
+                return `#${disclosure.proposalId} - ${disclosure.proposalTitle}`;
+            } else if (disclosure.fcoiTypeCode === '3') {
+                return `#${disclosure.awardId} - ${disclosure.awardTitle}`;
+            }
         }
     }
 
     formatTravellerTypes(travellerTypes: string): string {
         return travellerTypes ? (travellerTypes.split(',').map(travellerType => travellerType.trim()).join(', ')) : '';
+    }
+
+    getSearchPlaceHolder() {
+        if (this.currentSelected.tab !== 'TRAVEL_DISCLOSURES') {
+            return 'Search by #Disclosure Number, Disclosure Id, Project Title, Disclosure Status, Disposition Status, Review Status, Department Name';
+        } else {
+            return 'Search by #Travel Disclosure Id, Entity Name, Department Name, Traveller Type, Destination, Review Status, Document Status, Purpose';
+        }
+    }
+
+    getDisclosureHistory() {
+        this.isLoading = true;
+        this.filteredDisclosureArray =  [];
+        this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({'filterType':this.currentSelected.filter}).subscribe((data: any) => {
+            this.filteredDisclosureArray =  data;
+            this.loadingComplete();
+        })); 
     }
 
 }

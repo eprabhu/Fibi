@@ -92,3 +92,70 @@
 .r-title::first-letter {
   text-transform: uppercase;
 }
+.slider-base {
+  position: fixed;
+  z-index: 51;
+  top: 0;
+  right: -83%;
+  width: 80%;
+  height: 100%;
+  padding-left: 0;
+  background-color: #ffecec85;
+  box-shadow: -1px 0px 6px 1px rgba(0, 0, 0, 0.12);
+  transition: right 600ms cubic-bezier(.42, .8, .67, 1.06);
+}
+
+.slider-opened {
+  right: 0 !important;
+}
+
+.slider-container {
+  background-color: #fff;
+  height: 100vh;
+  padding: 0px 10px 10px 10px;
+  overflow-y: scroll;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(74 74 74 / 32%);
+  z-index: 50;
+}
+
+.searchButton {
+  left:10px;
+  position: absolute;
+  top: 10px;
+  color: #9E9E9E;
+  cursor: pointer;
+}
+
+.closeButton {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #9E9E9E;
+  cursor: pointer;
+}
+
+.fs-25px {
+font-size: 25px;
+}
+
+.pl-28 {
+padding-left: 28px;
+}
+
+.search-area {
+background-color: white !important;
+}
+
+.mr-025 {
+  margin-right: 0.25rem;
+}

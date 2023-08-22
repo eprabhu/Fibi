@@ -3,20 +3,24 @@ import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../../app/common/services/common.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EntityDetailsService {
 
   previousURL = '';
   lookups: any;
   $entityDetailsTest = new BehaviorSubject<object>({});
   globalSave$: Subject<any> = new Subject<any>();
-
+  isShowRelationButton: any;
+  isRelationshipQuestionnaireChanged = false;
 
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
-  isExpanded = true;
+  isExpanded = false;
+  isHoverEntityCard = false;
+  canMangeSfi = false;
+  $relationshipTabSwitch = new BehaviorSubject<object>(null)
+  isSwitchCurrentTab = false;
+
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
   getSFIDetails(coiFinancialEntityId) {
@@ -41,6 +45,22 @@ export class EntityDetailsService {
 
   getPersonEntityRelationship(params) {
     return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship', params);
+  }
+
+  deletePersonEntityRelationship(personEntityRelId, personEntityId) {
+    return this._http.delete(`${this._commonService.baseUrl}/personEntity/relationship/${personEntityRelId}/${personEntityId}`);
+  }
+
+  getApplicableQuestionnaire(requestObject: any) {
+    return this._http.post(this._commonService.fibiUrl + '/getApplicableQuestionnaire', requestObject);
+  }
+
+  updateAdditionalDetails(params) {
+    return this._http.put(this._commonService.baseUrl + '/personEntity', params);
+  }
+
+  modifyPersonEntity(params) {
+    return this._http.post(this._commonService.baseUrl + '/personEntity/modify', params);
   }
 
 }

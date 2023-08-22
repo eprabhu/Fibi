@@ -17,6 +17,7 @@ export const slideInOut = trigger('slideInOut', [
     ])
   ])
 ]);
+
 export const slowSlideInOut = trigger('slowSlideInOut', [
   state('in', style({ height: '*', opacity: 0 })),
   transition(':leave', [

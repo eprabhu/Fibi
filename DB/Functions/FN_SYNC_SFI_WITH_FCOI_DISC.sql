@@ -23,7 +23,7 @@ AV_ENTITY_NUMBER         VARCHAR(30)
                 DECLARE DONE2 INT DEFAULT FALSE;
        
                     DECLARE CUR_AWARDS CURSOR FOR SELECT DISTINCT T1.EXTERNAL_SYSTEM_REF_ID AS AWARD_ID, T1.AWARD_NUMBER FROM COI_PROJECT_AWARD_V T1 
-                    WHERE T1.AWARD_STATUS IN ('Active','Pending') and T1.PI_PERSON_ID = AV_PERSON_ID;
+                    WHERE T1.AWARD_STATUS IN ('Active','Pending') and T1.KEY_PERSON_ID = AV_PERSON_ID;
 
                     DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE2 = TRUE;
 
@@ -50,7 +50,7 @@ AV_ENTITY_NUMBER         VARCHAR(30)
                     DECLARE CUR_PROPOSALS CURSOR FOR SELECT DISTINCT T1.EXTERNAL_SYSTEM_REF_ID AS PROPOSAL_ID 
                     FROM COI_PROJECT_PROPOSAL_V T1 WHERE T1.PROPOSAL_STATUS not IN ("In Progress","Unsuccessful","Inactive","Revision Requested",
                     "ORT Director Review Completed","Pending Revisions By PI","Pending Revisions By PI","Not Submitted","Returned","Withdrawn","Awarded") 
-                    AND T1.PI_PERSON_ID = AV_PERSON_ID;
+                    AND T1.KEY_PERSON_ID = AV_PERSON_ID;
                     
                     DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE3 = TRUE;
 

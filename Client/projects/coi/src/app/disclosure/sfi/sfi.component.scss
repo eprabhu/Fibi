@@ -79,12 +79,27 @@
 }
 
 .searchButton {
-  position : absolute;
-  right    : 10px;
-  top      : 9px;
-  font-size: 1.5rem;
-  color    : #9E9E9E;
-  cursor   : pointer;
+  left:10px;
+  position: absolute;
+  top: 10px;
+  color: #9E9E9E;
+  cursor: pointer;
+}
+
+.closeButton {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #9E9E9E;
+  cursor: pointer;
+}
+
+.fs-25px {
+font-size: 25px;
+}
+
+.pl-28 {
+padding-left: 28px;
 }
 
 .grey-info {
@@ -163,7 +178,7 @@
   background-color: #fff;
   height: 100vh;
   padding: 0px 10px 10px 10px;
-  overflow: auto;
+  overflow-y: scroll;
 }
 
 .overlay {
@@ -176,4 +191,12 @@
   bottom: 0;
   background:rgb(74 74 74 / 32%);
   z-index: 50;
+}
+
+.search-area {
+  background-color: white !important;
+  }
+
+.mr-025 {
+  margin-right: 0.25rem;
 }

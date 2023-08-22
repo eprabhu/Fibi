@@ -7,44 +7,40 @@
               <h1 class="modal-title f-16" id="exampleModalLabel">Add Relationship</h1>
               <button type="button" title="Click to close the relationship button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="closeRelationModal();"></button>
           </div>
-        <div class="modal-body ">
+        <div class="modal-body p-0">
             <!-- Paragraph -->
-            <div class="row">
+            <div class="row m-0">
                 <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than
                     government entities, institution of higher education and affiliated organizations.</p>
             </div>
-            <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center">
-                <div class="card custom-padding mt-15 mb-15"
+            <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center mb-15 mt-15">
+                <div class="card custom-padding"
                 [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
-                    <div class="custom-size">
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label ps-5 color-black"><b>Select Relation:
+                    <div class="d-flex flex-row">
+                        <div class="form-check form-check-inline color-black">
+                            <label class="form-check-label ps-5"><b>Select Relation:
                                 </b></label>
                         </div>
-                        <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
-                            <input type="radio" name="relation" class="form-check-input text-secondary"
-                                [value]="relation?.relationshipTypeCode"
-                                [(ngModel)]="entityDetail.validPersonEntityRelTypes.relationshipTypeCode"
-                                (ngModelChange)="setRelationship()" title = "Click to select {{relation?.description}} relation">
-                            <label  class="text-secondary r-title fs-14">
-                                {{relation?.description}}
-                            </label>
+                        <div class="col d-flex">
+                            <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
+                                <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
+                                    [value]="relation?.relationshipTypeCode"
+                                    [(ngModel)]="isChecked[relation.relationshipTypeCode]"
+                                    title = "Click to select {{relation?.description}} relation">
+                                <label  class="text-secondary r-title fs-14">
+                                    {{relation?.description}}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div *ngIf="relationValidationMap.has('relationRadio')"
-              class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
+            class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
             </div>
             <ng-template #noData>
-                <div class="no-data-container">
-                    <span class="no-data-icon-outer">
-                        <div class="no-data-icon">
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                        </div>
-                    </span>
-                    <h4>There are no relationships.</h4>
+                <div class="m-3">
+                <app-no-information></app-no-information>
                 </div>
             </ng-template>
         </div>

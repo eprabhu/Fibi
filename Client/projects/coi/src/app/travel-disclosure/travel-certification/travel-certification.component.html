@@ -1,28 +1,30 @@
-<div class="border pi-info-text p-3 rounded-1">
-    <p class="fs-14 m-0">
-        <span *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
-            {{headerInfoText | slice:0:650}}...
-            <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read More</u></span>
-        </span>
-        <ng-template #showFullInfo>
-            {{headerInfoText}}
-            <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Show Less</u></span>
-        </ng-template>
-    </p>
-</div>
-<div class="card mt-3">
-    <div class="card-body d-flex justify-content-center">
-        <div class="gridSkin p-15 text-center d-flex mx-5 custom-margin">
-            <div class="me-3">
-                <input type="checkbox" (change)="certify();" [checked]="travelService.isTravelCertified"
-                [disabled]="!isEditMode" class="certify-box mt-1">
+<div [@fadeInOutHeight]>
+    <div class="border pi-info-text p-3 rounded-1">
+        <p class="fs-14 m-0">
+            <span *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
+                {{headerInfoText | slice:0:650}}...
+                <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read More</u></span>
+            </span>
+            <ng-template #showFullInfo>
+                {{headerInfoText}}
+                <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Show Less</u></span>
+            </ng-template>
+        </p>
+    </div>
+    <div class="card mt-3">
+        <div class="card-body d-flex justify-content-center">
+            <div class="gridSkin p-15 text-center d-flex mx-5 custom-margin">
+                <div class="me-3">
+                    <input type="checkbox" (change)="certify();" [checked]="travelService.isTravelCertified"
+                    [disabled]="!isEditMode" class="certify-box mt-1">
+                </div>
+                <p>
+                    I agree to abide by the University COI policy guidelines and certify that the information provided for
+                    the Financial conflict of interest, including, responses to screening questions, list of my pertinent
+                    Significant Financial interests and possible relationship to my sponsored activity is an accurate and
+                    current statement of my reportable outside interests and activities.
+                </p>
             </div>
-            <p>
-                I agree to abide by the University COI policy guidelines and certify that the information provided for
-                the Financial conflict of interest, including, responses to screening questions, list of my pertinent
-                Significant Financial interests and possible relationship to my sponsored activity is an accurate and
-                current statement of my reportable outside interests and activities.
-            </p>
         </div>
     </div>
 </div>

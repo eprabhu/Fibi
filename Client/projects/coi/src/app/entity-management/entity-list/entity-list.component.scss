@@ -154,10 +154,6 @@ small {
   right: 2px;
 }
 
-.border:focus {
-  border: 2px solid #54bf5b !important;
-}
-
 .coi-admin-dash {
   position: relative;
   left: -0.7rem;
@@ -319,4 +315,27 @@ td {
 .advanced-search-row {
   display: flex;
   justify-content: space-between;
+}
+
+.sort-div {
+  background-color: #eeeeee;
+  padding: 9px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.arrow {
+  font-size: 18px;
+  height: 18px;
+  width: 16px;;
+  margin-left: 5px;
+}
+
+.selected-arrow {
+  color: #52bf5a;
+}
+
+.filter-active {
+  border: 2px solid #54BF5B !important;
+  background: #F5FEF5 !important;
 }

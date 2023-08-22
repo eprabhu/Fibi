@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CommonService} from '../../common/services/common.service';
+import { RO } from '../../disclosure/coi-interface';
 
 @Injectable()
 export class CountModalService {
@@ -9,13 +10,8 @@ export class CountModalService {
                 private _commonService: CommonService) {
     }
 
-    getAwardProposalSFIList(id) {
-        return this._http.post(this._commonService.baseUrl + '/getDisclosureRelationForSFI', {'coiFinancialEntityId': id});
-    }
-
-    getSFICount(id, disclosureStatusCode, personId) {
-        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure',
-        {'disclosureId': id, 'disclosureStatusCode': disclosureStatusCode, 'personId': personId});
+    getSFICount(params: RO) {
+        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
     }
 
     getProjectsCount(id, disclosureSequenceStatusCode, personId) {

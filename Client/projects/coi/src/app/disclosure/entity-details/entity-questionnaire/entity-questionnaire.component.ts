@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
 import { EntityDetailsService } from '../entity-details.service';
-import { hideModal, openModal } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { EntityDetail } from '../../sfi/add-sfi.interface';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS } from '../../../app-constants';
@@ -27,7 +26,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
     isChangeWarning: true,
     isEnableVersion: true,
   };
-  relationLookup: any = [];
+  availableRelationships: any = [];
   definedRelationships: any = [];
   isAddRelationButtonToggled = false;
   activeRelationship: any = 0;
@@ -38,13 +37,18 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   coiFinancialEntityDetail: EntityDetail = new EntityDetail();
   isSaving = false;
   relationValidationMap = new Map();
-  isEditMode = false;
   $subscriptions: Subscription[] = [];
   @Output() updateRelationship: EventEmitter<any> = new EventEmitter<any>();
-  @Input() isAddRelationship = false;
-  @Output() isEmitModalClose: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() isEditMode = false;
   @Output() positionsToView: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() entityId: any;
+  isChecked = {};
+  currentRelationshipDetails: any = {};
+  isHoverAddRelationship = false;
+  @Output() emitLeaveModal: EventEmitter<any> = new EventEmitter<any>();
+  @Input() isSwitchCurrentTab = false;
+  @Output() onDeleteTimestamp: EventEmitter<any> = new EventEmitter<any>();
+
 
   constructor(private _commonService: CommonService, private _router: Router,
     public entityDetailsServices: EntityDetailsService,
@@ -52,25 +56,25 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   ) { }
 
   ngOnInit() {
-    this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit';
     this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
+      this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit';
       this.getDataFromService();
+      this.configuration.enableViewMode = !this.isEditMode;
     }));
-    this.configuration.enableViewMode = !this.isEditMode;
   }
   ngOnChanges() {
-    if (this.isAddRelationship) {
-      this.openAddRelationshipModal('addRelationshipModal');
+    this.configuration.enableViewMode = !this.isEditMode;
+    if (this.isSwitchCurrentTab) {
+      this.leaveCurrentTab();
     }
-
   }
+
   ngOnDestroy() {
     subscriptionHandler(this.$subscriptions);
-    hideModal('addRelationshipModal');
   }
 
   async getDataFromService() {
-    this.relationLookup = await this.getRelationshipLookUp();
+    this.availableRelationships = await this.getRelationshipLookUp();
     await this.getDefinedRelationships();
     if (this.definedRelationships.length > 0) {
       this.getQuestionnaire(this.definedRelationships[0]);
@@ -102,7 +106,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
     return new Promise<boolean>((resolve) => {
       this.$subscriptions.push(this.entityDetailsServices.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
         this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;
-        this.definedRelationships = res.personEntityRelationships;
+        this.definedRelationships = res.personEntityRelationships || [];
         (this.isEditMode && this.definedRelationships.length > 0) ? this.positionsToView.emit(true) : this.positionsToView.emit(false);
         this.removeExistingRelation();
         resolve(true);
@@ -113,9 +117,26 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   }
 
   getQuestionnaire(data: any) {
+    this.currentRelationshipDetails = data;
     this.activeRelationship = data.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode;
     this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
     this.configuration = Object.assign({}, this.configuration);
+  }
+
+  openRelationshipQuestionnaire(data: any) {
+    this.entityDetailsServices.isRelationshipQuestionnaireChanged ? this.leaveCurrentRelationship(data) : this.getQuestionnaire(data);
+  }
+
+  leaveCurrentRelationship(data: any) {
+    this.entityDetailsServices.$relationshipTabSwitch.next(data);
+    this.emitLeaveModal.emit({ details : data, isLeaveFromRelationTab : true });
+  }
+
+  saveOrAddRelationshipModal() {
+    if(this.entityDetailsServices.isRelationshipQuestionnaireChanged) {
+      this.entityDetailsServices.globalSave$.next();
+    }
+    document.getElementById('open-relationship-modal').click();
   }
 
   addRelation() {
@@ -124,49 +145,41 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
       const REQ_BODY = {
         'questionnaireAnsHeaderId': null,
         'personEntityId': this._activatedRoute.snapshot.queryParamMap.get('personEntityId'),
-        'validPersonEntityRelTypeCode': this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode
+        'validPersonEntityRelTypeCodes': this.getSelectedRelationTypeCodes().map(typeCode => Number(typeCode))
       };
       this.$subscriptions.push(this.entityDetailsServices.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
-        this.definedRelationships.push(res);
-        this.getQuestionnaire(res);
-        this.findRelation(res.validPersonEntityRelType.relationshipTypeCode);
+        res.forEach(ele => {
+          this.definedRelationships.push(ele);
+          this.findRelation(ele.validPersonEntityRelType.relationshipTypeCode);
+        });
+        this.getQuestionnaire(res[0]);
+        this.entityDetailsServices.isShowRelationButton = this.availableRelationships.length;
         this.clearRelationModal();
         this.isSaving = false;
         this.updateRelationship.emit(res);
-      }, error => {
+       }, error => {
         this.isSaving = false;
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
       }));
     }
   }
 
-  closeModal(elementId) {
-    hideModal(elementId);
+  getSelectedRelationTypeCodes() {
+    return Object.keys(this.isChecked).filter(key => this.isChecked[key]);
   }
-
-  openAddRelationshipModal(elementId) {
-    openModal(elementId);
-  }
-
-  setRelationship() {
-    this.coiFinancialEntityDetail.personEntityRelType = this.relationLookup.find(
-      ele => ele.personEntityRelType.relationshipTypeCode === this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode);
-  }
-
-
 
   private findRelation(financialEntityRelTypeCode: string) {
-    const RELATION_INDEX = this.relationLookup.findIndex(element =>
+    const RELATION_INDEX = this.availableRelationships.findIndex(element =>
       element.personEntityRelType.relationshipTypeCode === financialEntityRelTypeCode);
     if (RELATION_INDEX !== -1) {
-      this.relationLookup.splice(RELATION_INDEX, 1);
+      this.availableRelationships.splice(RELATION_INDEX, 1);
     }
   }
 
   clearRelationModal() {
-    hideModal('addRelationshipModal');
+    document.getElementById('hide-relationship-modal').click();
     this.coiFinancialEntityDetail.personEntityRelType = null;
-    this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode = null;
+    this.isChecked = {};
   }
   private removeExistingRelation() {
     if (this.definedRelationships.length) {
@@ -175,11 +188,11 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         this.findRelation(element.validPersonEntityRelType.personEntityRelType.relationshipTypeCode);
       });
     }
+    this.entityDetailsServices.isShowRelationButton = this.availableRelationships.length;
   }
   validateRelationship() {
     this.relationValidationMap.clear();
-
-    if (!this.coiFinancialEntityDetail.validPersonEntityRelTypes.relationshipTypeCode) {
+    if (!this.getSelectedRelationTypeCodes().length) {
       this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
     }
     return this.relationValidationMap.size === 0 ? true : false;
@@ -187,11 +200,33 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
 
   clearModal() {
     this.relationValidationMap.clear();
-    this.isEmitModalClose.emit(false);
+    this.isChecked = {};
   }
 
   questionnaireSaveAction(event) {
     this.entityDetailsServices.$saveQuestionnaireAction.next(event);
   }
 
+  questionnaireEdit(event) {
+    this.entityDetailsServices.isRelationshipQuestionnaireChanged = true;
+  }
+
+  deleteRelationship() {
+    this.$subscriptions.push(this.entityDetailsServices.deletePersonEntityRelationship
+      (this.currentRelationshipDetails.personEntityRelId, this.currentRelationshipDetails.personEntityId).subscribe(async (updatedTimestamp) => {
+        this.availableRelationships = await this.getRelationshipLookUp();
+        await this.getDefinedRelationships();
+        if(this.definedRelationships.length) {
+          this.getQuestionnaire(this.definedRelationships[0]);
+        }
+        this.onDeleteTimestamp.emit(updatedTimestamp); 
+      }));
+  }
+
+  leaveCurrentTab() {
+    this.$subscriptions.push(this.entityDetailsServices.$relationshipTabSwitch.subscribe(selectedQuestionnaire => {
+      this.getQuestionnaire(selectedQuestionnaire);
+      this.entityDetailsServices.$relationshipTabSwitch.next(null);
+    }));
+  }
 }

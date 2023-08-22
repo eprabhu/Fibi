@@ -102,14 +102,10 @@
   display: inline-block;
   margin-right: 3rem;
 }
-.seperator {
-  border: 1px solid #ededed;
-    margin: 1px 0;
-}
 
 .on-data-position{
   position: relative;
-  bottom: 7px;
+  bottom: 14px;
 }
 
 .card-br{
@@ -172,10 +168,43 @@
 .custom-padding {
   padding: 25px;
   padding-left:0px;
-  width: 514px;
+  width: max-content;
 }
 
-.colour-black {
+.color-black {
   font-size: 14px;
   color: rgb(0, 0, 0);
+}
+
+.btn-delete-position {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  right: 6px;
+}
+
+.material-icons-outlined{
+    position: relative;
+    top: 7px;
+}
+
+.delete-content-position {
+  position: relative;
+  bottom: 5px;
+}
+
+.btn-tertiary {
+  font-size: 14px;
+  min-width: 5em;
+  font-weight: 600;
+  margin-top: -8px;
+  letter-spacing: normal;
+  cursor: pointer;
+  background-color: rgba(44, 119, 244, .1);
+  color: #2c77f4 !important;
+}
+
+.btn-tertiary:hover {
+  background-color: rgba(44, 119, 244, .27);
+  color: #043e9e !important;
 }

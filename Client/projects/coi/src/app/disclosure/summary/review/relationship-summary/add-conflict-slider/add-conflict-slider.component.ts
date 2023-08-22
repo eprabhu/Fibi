@@ -18,6 +18,8 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     @Input() isOpenSlider = true;
     @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
     @Input() entityDetails: any = null;
+    @Input() isEditMode: any = null;
+    @Input() disclosureMetaData: any = null;
     @ViewChild('addCommentOverlay', { static: true }) addCommentOverlay: ElementRef;
 
     conflictHistory = [];
@@ -35,14 +37,14 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
                  private _commonService: CommonService ) { }
 
     ngOnInit() {
-        document.body.classList.add('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         this.showConflictNavBar();
         this.getConflictStatusLookup();
         this.loadProjectConflictHistory();
     }
 
     showConflictNavBar() {
-        if(this.isOpenSlider) {
+        if (this.isOpenSlider) {
             setTimeout(() => {
                 const slider = document.querySelector('.slider-base');
                 slider.classList.add('slider-opened');
@@ -51,11 +53,11 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     }
 
     addBodyScroll() {
-          document.body.classList.remove('overflow-hidden');
-          document.body.classList.add('overflow-auto');
+          document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+          document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }    
 
-    closeNavBar() {
+    validateSliderClose() {
         (this.conflictStatus || this.comment) ? openModal('conflictConfirmationModal') : this.hideConflictNavBar();
     }
 
@@ -89,6 +91,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
                     this.entityDetails.coiProjConflictStatusType = this.coiProjConflictStatusType;
                     this.entityDetails.comment = this.comment;
                     this.clearConflictModal();
+                    this.loadProjectConflictHistory();
                     this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
                 }, _err => {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');

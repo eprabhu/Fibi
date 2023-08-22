@@ -38,12 +38,15 @@ export interface TravelCreateModalDetails {
     homeUnitName: null;
 }
 
-export class TravelDisclosureResponseObject {
+export class TravelDisclosure {
     travelDisclosureId: number;
     versionStatus: string;
     entityId: number;
     entityNumber: number;
     travelEntityName: string;
+    entityEmail: string;
+    entityAddress: string;
+    entityIsActive: boolean;
     travelTitle: string;
     purposeOfTheTrip: string;
     travelAmount: number;
@@ -60,18 +63,16 @@ export class TravelDisclosureResponseObject {
     createUser: string;
     createTimestamp: number;
     travellerHomeUnit: string;
-    description: any;
+    description: string;
     travelSubmissionDate: number;
-    travelDisclosureStatus: string;
-    travelDisclosureStatusCode: string;
-    dispositionStatus: any;
-    dispositionStatusCode: any;
+    dispositionStatus: string;
+    dispositionStatusCode: string;
     reviewStatus: string;
     reviewStatusCode: string;
     adminPersonId: string;
-    adminGroupId: any;
+    adminGroupId: number;
     adminPersonName: string;
-    adminGroupName: any;
+    adminGroupName: string;
     homeUnitNumber: string;
     homeUnitName: string;
     isInterNationalTravel: boolean;
@@ -79,16 +80,16 @@ export class TravelDisclosureResponseObject {
     personId: string;
     personFullName: string;
     entityTypeCode: string;
-    entityType: any;
+    entityType: string;
     countryCode: string;
     country: string;
     certifiedBy: string;
     certifiedAt: number;
     documentStatusCode: string;
     documentStatus: string;
-    disclosureStatus: string;
-    disclosureStatusCode: string;
-}
+    riskLevel: string;
+    expirationDate: number;
+  }
 
 export interface EndpointOptions {
     contextField: string;
@@ -98,14 +99,52 @@ export interface EndpointOptions {
     params: string;
 }
 
-export class EntityData {
-    country: string;
+export class EntityDetails {
+    isActive: boolean;
+    country: { countryName: string };
     entityId: string | number;
-    entityType: string;
+    entityType: { description: string };
     entityName: string;
+    emailAddress: string;
+    address: string;
 }
 
 export interface TravelHistoryRO {
-    personId: String;
+    personId: string;
     entityNumber: number;
+}
+
+export interface TravelHistory {
+    travelDisclosureId: number;
+    travelEntityName: string;
+    entityType: string;
+    country: string;
+    travelTitle: string;
+    purposeOfTheTrip: string;
+    destinationCity: string;
+    destinationCountry: string;
+    destinationState: string;
+    travellerTypeCodeList: [];
+    travelAmount: number;
+    travelStartDate: number;
+    travelEndDate: number;
+}
+
+export class DefaultAdminDetails {
+    adminPersonId = '';
+    adminGroupId = null;
+    adminPersonName = '';
+    adminGroupName = '';
+}
+
+export interface TravelActionAfterSubmitRO {
+    travelDisclosureId: number;
+    description: string;
+}
+
+export class TravelConflictRO {
+    travelDisclosureId: number;
+    personId: string;
+    description: string;
+    disclosureStatusCode: string;
 }

@@ -28,23 +28,24 @@
 
 .btn-close-task-nav:hover {
     color: rgb(87, 87, 87);
-    /* background-color: #d1d0d0; */
 }
 
-.card-header-slider {
-    position: sticky;
-    top: 0;
-    z-index: 2;
+.card-border {
+    border-top: none;
 }
 
-.card-header-page {
+.card-header {
   position: sticky;
-  top: 51px;
+  top: 0;
   z-index: 2;
+  border-top: 1px solid var(--bs-border-color-translucent);
 }
-// select {
-//     background-color: #eef5ff;
-// }
+
+
+.card-color {
+    background-color: #FBFBFF;
+    border-radius: 5px;
+}
 
 select option {
     background-color: #fff;
@@ -117,14 +118,6 @@ select option {
 .toast-visible {
     display: block;
 }
-
-.card-height {
-    border-radius:10px 0px 0px 10px;
-}
-
-// .card-border {
-//     border-radius:20px 0px 0px 0px;
-// }
 
 .close-btn {
     color: #a92034;
@@ -314,10 +307,6 @@ small {
     margin-right: 1rem;
 }
 
-.card-color {
-    background-color: #FBFBFF;
-}
-
 .right-align {
     padding-left: 11rem;
 }
@@ -330,4 +319,8 @@ small {
 
 .btn-primary-submit {
   height: 35px
+}
+
+.modal {
+  z-index: 1501;
 }

@@ -3,7 +3,8 @@ import { Subscription } from 'rxjs';
 import { CountModalService } from './count-modal.service';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
-import { getSponsorSearchDefaultValue } from '../../common/utlities/custom-utlities';
+import { getSponsorSearchDefaultValue } from '../../common/utilities/custom-utilities';
+import { RO } from '../../disclosure/coi-interface';
 
 @Component({
     selector: 'app-count-modal',
@@ -48,11 +49,23 @@ export class CountModalComponent implements OnInit {
 
     getSFIDatas() {
         this.$subscriptions.push(this._countModalService
-            .getSFICount(this.disclosureId, this.disclosureSequenceStatusCode, this.personId)
+            .getSFICount(this.getRequestObject())
             .subscribe((data: any) => {
-                this.coiFinancialEntityDetails = data;
+                this.coiFinancialEntityDetails = data.personEntities;
                 document.getElementById('hidden-open-button').click();
             }));
+    }
+
+    getRequestObject() {
+		const REQ_OBJ = new RO();
+        REQ_OBJ.currentPage = 0;
+        REQ_OBJ.disclosureId = this.disclosureId;
+        REQ_OBJ.filterType = '';
+        REQ_OBJ.pageNumber = 0;
+        REQ_OBJ.personId = this.personId;
+        REQ_OBJ.reviewStatusCode = '';
+        REQ_OBJ.searchWord = '';
+        return REQ_OBJ;
     }
 
     getProjectDatas() {
@@ -60,16 +73,6 @@ export class CountModalComponent implements OnInit {
             this.$subscriptions.push(this._countModalService
                 .getProjectsCount(this.disclosureId, this.disclosureSequenceStatusCode, this.personId)
                 .subscribe((data: any) => {
-                    this.projectDatas = data;
-                    this.currentModalTab = this.moduleCode === 1 ? 'Award' : 'Proposal';
-                    this.switchTableData();
-                    document.getElementById('hidden-open-button').click();
-                }, err => {
-                    this.closeCountModal();
-                }));
-        } else {
-            this.$subscriptions.push(this._countModalService
-                .getAwardProposalSFIList(this.disclosureId).subscribe((data: any) => {
                     this.projectDatas = data;
                     this.currentModalTab = this.moduleCode === 1 ? 'Award' : 'Proposal';
                     this.switchTableData();

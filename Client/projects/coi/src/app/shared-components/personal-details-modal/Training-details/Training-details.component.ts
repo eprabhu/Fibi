@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Person_details_modalService } from '../person-details-modal.service';
+import { PersonDetailsModalService } from '../person-details-modal.service';
 import { TrainingDashboardRequest } from '../person-details-modal.interface';
 import { CommonService } from '../../../common/services/common.service';
 import { HTTP_ERROR_STATUS } from '../../../app-constants';
@@ -15,7 +15,7 @@ export class TrainingDetailsComponent implements OnInit {
     $subscriptions: Subscription[] = [];
     traniningDetails: [];
 
-    constructor(private _personDetailService: Person_details_modalService, private _commonservice: CommonService) { }
+    constructor(private _personDetailService: PersonDetailsModalService, private _commonservice: CommonService) { }
 
     ngOnInit() {
         this.loadTrainigDetails();

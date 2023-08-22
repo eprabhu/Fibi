@@ -81,22 +81,13 @@ export class NavigationService {
     }
 
     setCurrentSubTabForModules(event) {
-        const proposalSubTabName = sessionStorage.getItem('currentProposalDashboardTab');
-        const awardSubTabName = sessionStorage.getItem('currentAwardDashboardTab');
-        const agreementSubTab = sessionStorage.getItem('currentAgreementDashboardTab');
-        const serviceRequestSubTab = sessionStorage.getItem('currentServiceRequestTab');
         const coiAdminTab = sessionStorage.getItem('currentCOIAdminTab');
+        const coiReviewTab = sessionStorage.getItem('currentCOIReviewTab');
         this.removeCurrentTab();
-        if (this.awardModulePermission(event) && awardSubTabName) {
-            sessionStorage.setItem('currentAwardDashboardTab', awardSubTabName);
-        } else if (this.proposalModulePermission(event) && proposalSubTabName) {
-            sessionStorage.setItem('currentProposalDashboardTab', proposalSubTabName);
-        } else if (this.agreementModule(event) && agreementSubTab) {
-            sessionStorage.setItem('currentAgreementDashboardTab', agreementSubTab);
-        } else if (this.serviceRequestModulePermission(event) && serviceRequestSubTab) {
-            sessionStorage.setItem('currentServiceRequestTab', serviceRequestSubTab);
-        } else if (this.coiPermissionList(event) && coiAdminTab) {
+        if (this.coiPermissionList(event) && coiAdminTab) {
             sessionStorage.setItem('currentCOIAdminTab', coiAdminTab);
+        } else if (this.coiReviewerPermissionList(event) && coiReviewTab) {
+            sessionStorage.setItem('currentCOIReviewTab', coiReviewTab);
         }
     }
 
@@ -104,49 +95,22 @@ export class NavigationService {
      * Remove all Dashboard tabs
      */
     removeCurrentTab() {
-        sessionStorage.removeItem('currentProposalDashboardTab');
-        sessionStorage.removeItem('currentAwardDashboardTab');
-        sessionStorage.removeItem('currentAgreementDashboardTab');
-        sessionStorage.removeItem('currentServiceRequestTab');
         sessionStorage.removeItem('currentCOIAdminTab');
-    }
-
-    /**
-     * @param  {} event
-     * check whether the current url has 'award' or 'awardList'
-     */
-    awardModulePermission(event) {
-        return event.url.split('/').includes('award') || event.url.split('/').includes('awardList') ? true : false;
-    }
-
-    /**
-     * @param  {} event
-     * check whether the current url has 'proposal' or 'proposalList'
-     */
-    proposalModulePermission(event) {
-        return event.url.split(/[/?]/).includes('proposal') || event.url.split('/').includes('proposalList') ? true : false;
-    }
-
-    /**
-     * check whether current url has agreement or agreementsList.
-     * @param event
-     */
-    agreementModule(event) {
-        return event.url.split('/').includes('agreement') || event.url.split('/').includes('agreementsList') ? true : false;
-     }
-    /**
-     * @param  {} event
-     * check whether the current url has 'service request' or 'serviceRequestList'
-     */
-     serviceRequestModulePermission(event) {
-        return event.url.split(/[/?]/).includes('service-request') || event.url.split('/').includes('serviceRequestList') ? true : false;
+        sessionStorage.removeItem('currentCOIReviewTab');
     }
      /**
      * @param  {} event
      * check whether the current url has 'coi' or 'coiList'
      */
      coiPermissionList(event) {
-        return event.url.split(/[/?]/).includes('disclosure') || event.url.split('/').includes('admin-dashboard') ? true : false;
+        return event.url.split(/[/?]/).includes('disclosure') || event.url.split(/[/?]/).includes('travel-disclosure') || event.url.split('/').includes('admin-dashboard') ? true : false;
+    }
+    /**
+     * @param  {} event
+     * check whether the current url has 'disclosure' or 'reviewer-dashboard' and return true so that the value can be reset.
+     */
+    coiReviewerPermissionList(event) {
+    return event.url.split(/[/?]/).includes('disclosure') || event.url.split('/').includes('reviewer-dashboard') ? true : false;
     }
     /**
      * @param  {} pathDetails

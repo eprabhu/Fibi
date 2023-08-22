@@ -19,7 +19,9 @@ BEGIN
 		-- If questionnaire evaluates to true, then check if SFI is added
 		SELECT COUNT(*) > 0 INTO LI_SFI_FLAG 
 		FROM PERSON_ENTITY 
-		WHERE PERSON_ID = AV_PERSON_ID;
+		WHERE PERSON_ID = AV_PERSON_ID
+		AND VERSION_STATUS = 'ACTIVE'
+        AND IS_RELATIONSHIP_ACTIVE = 'Y';
 
 		IF NOT LI_SFI_FLAG THEN
     
@@ -29,6 +31,22 @@ BEGIN
       
 		END IF;
     
+  END IF;
+  
+  SET LI_SFI_FLAG = 0;
+
+  -- Check if any draft SFI is present
+  SELECT COUNT(*) > 0 INTO LI_SFI_FLAG 
+  FROM PERSON_ENTITY 
+  WHERE PERSON_ID = AV_PERSON_ID 
+  AND VERSION_STATUS = 'PENDING';
+            
+  IF LI_SFI_FLAG THEN
+    
+  	SET LS_ERROR_MSG = "You have draft SFI(s) in your SFI list, either define relationships and activate the SFI or delete the draft SFI (if not required) to certify the disclosure.";
+			  
+	INSERT INTO ERROR_MESSAGE (MESSAGE) VALUES (LS_ERROR_MSG);
+              
   END IF;
   
   -- If any SFI is present, check if relationship is defined

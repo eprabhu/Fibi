@@ -6,27 +6,19 @@
       <div class="relationship-details-box card" id="relationship-details-box">
         <div class="col-12 d-flex">
           <span class="active-ribbon shadow-sm align-items-center d-flex ps-2"><span class="px-2">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}}</span></span>
-          <p class="entity-title" *ngIf="selectedProject?.moduleCode == 3">
+          <p class="entity-title mt-3" *ngIf="selectedProject?.moduleCode == 3">
               <span class="fw-600 fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </span>
           </p>
-          <p class="entity-title" *ngIf="selectedProject?.moduleCode == 1">
+          <p class="entity-title mt-3" *ngIf="selectedProject?.moduleCode == 1">
             <span class=" fw-600 fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </span>
           </p>
         </div>
-        <div class="row m-2">
+        <div class="row ml-2 mb-3">
           <div class="col-4">
-            <label class="label-text">Principal Investigator :</label>
-            <span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
-          </div>
-          <div class="col-8">
             <label class="label-text">Sponsor :</label>
             <span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
           </div>
           <div class="col-4">
-            <label class="label-text">Period :</label>
-            <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
-          </div>
-          <div class="col-8">
             <label class="label-text">Prime Sponsor :</label>
           <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
           <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">--No Data--</span>
@@ -35,10 +27,24 @@
             <label class="label-text">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}} Status : </label>
             <span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
           </div>
+
+          <div class="col-4">
+            <label class="label-text">{{selectedProject?.reporterRole}} :</label>
+            <span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
+          </div>
           <div class="col-8">
             <label class="label-text">Lead Unit :</label>
           <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
           <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
+          </div>
+
+          <div class="col-4">
+            <label class="label-text">Project Role : </label>
+            <span class="ml-2 grey-text">{{selectedProject?.reporterRole}}</span>
+          </div>
+          <div class="col-8">
+            <label class="label-text">Period :</label>
+            <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
           </div>
         </div>
       </div>
@@ -47,75 +53,17 @@
           <mat-icon role="img" class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
         </span>
         <div class="info-text fs-14">
-          1. For marking all your SFI conflict status/ relationship description use "Apply and Save".
-          <br> 2. For marking individual SFI conflict status/ relationship description use "Save".
-        </div>
-      </div>
-      <div class="relationship-sfi-header card">
-        <div class="row m-0">
-          <div class="col-4 fs-14 border-end" [ngClass] = "!isEditMode ? 'p-10' : '' ">
-              <div class="fw-600">Significant Financial Interest</div>
+          <div>
+            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>For marking all your SFI conflict status/ relationship description use "Apply and Save".
           </div>
-          <div class="col-2 fs-14 border-end" [ngClass] = "!isEditMode ? 'p-10' : ''">
-            <span class="mandatory fw-600">*</span>
-             <span class="fw-600"> COI Status</span>
-            <div [class.mt-2]="isEditMode" *ngIf="isEditMode">
-              <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode"
-              class="form-control select-default">
-              <option [value]=null>--Select--</option>
-              <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList">
-                {{status?.description}}</option>
-              </select>
-            </div>
-            <div>
-              <span class="invalid-feedback fw-400" *ngIf="coiValidationMap.get('coiStatus')">
-                {{coiValidationMap.get('coiStatus')}}
-              </span>
-            </div>
-          </div>
-          <div class="fs-14 fw-600 border-end" [ngClass] = "isEditMode ? 'col' : 'col-6 p-10'">
-            Define Project - SFI Relation
-            <textarea *ngIf="isEditMode" class="form-control comment-text-box textarea-height mt-2" id="coi_description"
-            [(ngModel)]="coiDescription" appAutoGrow  appLengthValidator rows="1"
-            placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
-          </div>
-          <div class="col-auto fs-14 mt-27"  *ngIf="isEditMode">
-            <button type="button" class="btn btn-primary btn-sm fs-14" id="apply common coi status and description and save"(click)="openSaveAllConfirmationModal()">Apply & Save</button>
+          <div>
+            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>For marking individual SFI conflict status/ relationship description use "Save".
           </div>
         </div>
       </div>
-      <ng-container *ngFor="let test of entityProjectDetails; let i = index">
-        <div class="relationship-sfi-data row m-0" [class.white-bg]="i%2==0" [class.border-bottom]="i==entityProjectDetails.length-1" [class.border-top]="i==0">
-            <div class="col-4 fs-14 border-end">
-             <div class="table-text my-4">
-              {{test?.personEntity?.coiEntity?.entityName?.length > 100 ? (test?.personEntity?.coiEntity?.entityName | slice:0:100)+'...' : test?.personEntity?.coiEntity?.entityName}}
-             </div>
-            </div>
-            <div class="col-2 fs-14 border-end">
-              <select [(ngModel)]="test.projectConflictStatusCode"
-              class="form-control select-default my-3" [disabled]="!isEditMode">
-              <option value=null>--Select--</option>
-              <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList; let i = index">
-                  {{status?.description}}</option>
-              </select>
-              <div>
-                <span class="invalid-feedback" *ngIf="coiTableValidation.get('save'+i)">
-                  {{coiTableValidation.get('save'+i)}}
-                </span>
-              </div>
-            </div>
-            <div class="col fs-14 border-end" [class.col-6]="!isEditMode">
-              <textarea  class="form-control comment-text-box textarea-height mt-3" id="main-panel-comnt"
-              appAutoGrow [(ngModel)]="test.disclComment.comment"
-              [disabled]="!isEditMode" rows="1" appLengthValidator
-              placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
-            </div>
-            <div class="col-auto fs-14" *ngIf="isEditMode" >
-              <button type="button" class="btn btn-primary btn-sm fs-14 my-3 ml-11" id="save {{test?.personEntity?.coiEntity?.entityName}} coi status and description" (click)="saveSingleEntity(i, test)"
-              >Save</button>
-            </div>
-        </div>
-      </ng-container>
+      <app-SFI-conflict-relationship [isEditMode]="isEditMode" [coiStatusCode]="coiStatusCode" [coiStatusList]="coiStatusList"
+      [entityProjectDetails]="entityProjectDetails" [coiDescription]="coiDescription"
+      [selectedProject]="selectedProject" [coiData]="coiData" [clearIndex]="clearIndex" [moduleCode]="moduleCode"></app-SFI-conflict-relationship>
   </div>
 </div>
 </div>
@@ -126,7 +74,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Click to close Project -SFI slider"></button>
       </div>
       <div class="modal-body fs-14">
         <p>Do you want to clear all the data entered?</p>
@@ -134,25 +82,6 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
         <button type="button" class="btn btn-primary fs-14" (click)="clearAll()" data-bs-dismiss="modal">Yes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-save-all-button" data-bs-toggle="modal" data-bs-target="#applyToAllConfirmationModal"></button>
-<div class="modal fade" id="applyToAllConfirmationModal" tabindex="-1" aria-labelledby="applyToAllConfirmationModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fs-16" id="exampleModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p class="fs-14">Do you want to update all your Project - SFI relations?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary w-14" data-bs-dismiss="modal">No</button>
-        <button type="button" class="btn btn-primary fs-14" (click)="applyToAll()" data-bs-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>

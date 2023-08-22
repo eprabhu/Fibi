@@ -3,14 +3,14 @@
     <div class="card-header px-4 d-flex align-items-center justify-content-between">
       <span class="align-items-center d-flex">
         <ng-container *ngIf="selectedProject?.moduleCode == 3">
-          <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
-          <p class="entity-title mt-3">
+          <span class="active-ribbon shadow-sm align-items-center d-flex">Proposal</span>
+          <p class="entity-title mt-2">
             <strong class="fs-16">#{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
           </p>
         </ng-container>
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
-          <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
-          <p class="entity-title mt-3">
+          <span class="active-ribbon shadow-sm align-items-center d-flex">Award</span>
+          <p class="entity-title mt-2">
             <strong class="fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
           </p>
         </ng-container>
@@ -52,55 +52,61 @@
                 </app-no-data-label>
             </div>
             </div>
-            <table class="table fs-14 fw-medium" *ngIf="projectRelations.length > 0">
-              <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
-              <thead>
-                  <tr class="header-border table-light">
-                    <th style="width: 29%;" class="border-end px-3">Significant Financial Interest</th>
-                    <th style="width: 34%;" class="border-end px-3">Relationship between SFIs and Projects</th>
-                    <th style="width: 14%;" class="border-end px-3">COI Status</th>
-                    <th style="width: 8%;" class="border-end px-3">Actions</th>
+            <ng-container *ngIf="isShowNoDataCard">
+              <table class="table fs-14 fw-medium mt-3" *ngIf="projectRelations.length > 0">
+                <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
+                <thead>
+                    <tr class="header-border table-light">
+                      <th style="width: 29%;" class="border-end px-3">Significant Financial Interest</th>
+                      <th style="width: 34%;" class="border-end px-3">Relationship between SFIs and Projects</th>
+                      <th style="width: 14%;" class="border-end px-3">COI Status</th>
+                      <th style="width: 8%;" class="border-end px-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="white-bg" >
+                  <tr *ngFor="let relation of projectRelations; let i = index" class="tr-hover" id="{{relation.disclosureDetailsId}}">
+                    <td class="table-data border-end border-top-0 fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{relation?.coiEntity?.entityName}}</td>
+                    <td class="border-end border-top-0 px-3" [class.border-0]="i != projectRelations?.length-1">
+                      <div class="p-3 person-card fs-13 grey-text">
+                        <span *ngIf="!isReadMore[i] && relation?.disclComment?.comment?.length > 60; else showFullInfo">
+                          <span> {{(relation?.disclComment?.comment | slice:0:60)}}</span>
+                          <span (click)="isReadMore[i] = !isReadMore[i]" class="hand-cursor">... <strong><u>Read more</u></strong>
+                          </span>
+                        </span>
+                        <ng-template #showFullInfo>
+                          <span>{{relation?.disclComment?.comment}}</span>
+                          <span *ngIf="relation?.disclComment?.comment?.length > 60" (click)="isReadMore[i] = !isReadMore[i]"
+                            aria-hidden="true" class="hand-cursor"> <strong><u>Show Less</u></strong>
+                          </span>
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td class="border-end border-top-0 px-3 text-center" [class.border-0]="i != projectRelations?.length-1">
+                      <span class="{{_commonService.getDisclosureConflictBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}">{{relation?.coiProjConflictStatusType?.description}}</span>
+                    </td>
+                    <td class="border-0  border-top-0 pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
+                      <div class="d-flex">
+                        <!-- reviewStatusCode-(3-Review In Progress, 4-completed),  dispositionStatusCode(1-pending, 3-Approved)-->
+                        <button *ngIf="(coiDetails?.reviewStatusCode== 3 && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 4 && coiDetails?.dispositionStatusCode == 3)
+                        && (_commonService.getCurrentUserDetail('userName') == coiDetails?.createUser || _commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"
+                        class="btn-primary-icon-svg me-1" type="button" (mouseenter)="isShowHoverWhite[i]= true"
+                        (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
+                        <span class="btn-secondary-svg"></span>
+                      </button>
+                      <button class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
+                        <mat-icon>rate_review</mat-icon>
+                      </button>
+                      </div>
+                    </td>
                   </tr>
-              </thead>
-              <tbody class="white-bg" >
-                <tr *ngFor="let relation of projectRelations; let i = index" class="tr-hover" id="{{relation.disclosureDetailsId}}">
-                  <td class="table-data border-end fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{relation?.personEntity?.coiEntity?.entityName}}</td>
-                  <td class="border-end px-3" [class.border-0]="i != projectRelations?.length-1">
-                    <div class="p-3 person-card fs-13 grey-text">
-                      <span *ngIf="!isReadMore[i] && relation?.disclComment?.comment?.length > 60; else showFullInfo">
-                        <span> {{(relation?.disclComment?.comment | slice:0:60)}}</span>
-                        <span (click)="isReadMore[i] = !isReadMore[i]" class="hand-cursor">... <strong><u>Read more</u></strong>
-                        </span>
-                      </span>
-                      <ng-template #showFullInfo>
-                        <span>{{relation?.disclComment?.comment}}</span>
-                        <span *ngIf="relation?.disclComment?.comment?.length > 60" (click)="isReadMore[i] = !isReadMore[i]"
-                          aria-hidden="true" class="hand-cursor"> <strong><u>Show Less</u></strong>
-                        </span>
-                      </ng-template>
-                    </div>
-                  </td>
-                  <td class="border-end px-3 text-center" [class.border-0]="i != projectRelations?.length-1">
-                    <span class="{{_commonService.getDisclosureConflictBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}">{{relation?.coiProjConflictStatusType?.description}}</span>
-                  </td>
-                  <td class="border-0 d-flex pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
-                    <button *ngIf="coiDetails.reviewStatusCode== 3 && coiDetails.dispositionStatusCode == 1"
-                      class="btn-primary-icon-svg me-1" type="button" (mouseenter)="isShowHoverWhite[i]= true"
-                      (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
-                      <span class="btn-secondary-svg"></span>
-                    </button>
-                    <button class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
-                      <mat-icon>rate_review</mat-icon>
-                  </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div *ngIf="projectRelations.length == 0">
-              <app-no-information> </app-no-information>
-            </div>
+                </tbody>
+              </table>
+              <div *ngIf="!projectRelations.length">
+                <app-no-information> </app-no-information>
+              </div>
+            </ng-container>
       </div>
 </div>
 
-<app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider"
-  [entityDetails]="entityDetails"></app-add-conflict-slider>
+<app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
+  [entityDetails]="entityDetails" [isEditMode]="coiDetails?.reviewStatusCode== 3 && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>

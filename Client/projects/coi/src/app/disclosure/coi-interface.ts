@@ -84,6 +84,7 @@ export class CoiDisclosure {
     adminGroupName: string;
     moduleItemKey: string;
     title: string;
+    numberOfSFI: any;
 }
 export interface UnitAdministratorType {
     code: string;
@@ -261,18 +262,14 @@ export class CommentRequest {
     coiReviewCommentAttachment: any = [];
 }
 
-export class SFIDashboardRequestObject {
-    advancedSearch = 'L';
-    pageNumber = 20;
-    sort = {};
-    isDownload = false;
-    property16 = '';
-    property8 = '';
-    property17 = null;
-    property18 = null;
-    property19 = null;
-    currentPage = '1';
-    filterType = 'ALL';
+export class RO {
+    'disclosureId' = null;
+    'reviewStatusCode' = '';
+    'personId': any;
+    'filterType': string =  'ALL';
+    'currentPage': any = 1;
+    'pageNumber': any = 20;
+    'searchWord': any;
 }
 
 export interface getApplicableQuestionnaireData {

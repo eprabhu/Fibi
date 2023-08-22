@@ -1,18 +1,18 @@
 package com.polus.fibicomp.coi.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.polus.fibicomp.award.pojo.Award;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -34,6 +34,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewComments;
 import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.pojo.CoiSectionsType;
+import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureTraveler;
@@ -42,6 +43,10 @@ import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
 import com.polus.fibicomp.coi.pojo.DisclComment;
+import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
+import com.polus.fibicomp.coi.pojo.DisclosureActionType;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
@@ -49,14 +54,11 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
-import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
-import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
-import com.polus.fibicomp.proposal.pojo.Proposal;
 
 @Transactional
 @Service
@@ -208,7 +210,7 @@ public interface ConflictOfInterestDao {
 	 * @param 
 	 * @return check if SFI Completed For Project
 	 */
-	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId);
+	public Boolean checkIsSFICompletedForProject(Integer moduleCode, Integer moduleItemId, Integer disclosureId);
 
 	/**
 	 * 
@@ -255,20 +257,6 @@ public interface ConflictOfInterestDao {
 	 * @return list of ModuleItemKeys
 	 */
 	public List<String> getModuleItemKeysByCOIFinancialEntityIdAndModuleCode(Integer coiFinancialEntityId, Integer moduleCode);
-
-	/**
-	 * This method is used for get Proposal Details based on proposalIds
-	 * @param proposalIds
-	 * @return list of Proposal
-	 */
-	public List<Proposal> getProposalsBasedOnProposalIds(List<Integer> proposalIds);
-
-	/**
-	 * This method is used for get Proposal Details based on proposalIds
-	 * @param awardIds
-	 * @return list of Award
-	 */
-	public List<Award> getAwardsBasedOnAwardIds(List<Integer> awardIds);
 
 	/**
 	 * This method is used for fetchCoiSections
@@ -568,10 +556,9 @@ public interface ConflictOfInterestDao {
 	 * @param moduleCode module code
 	 * @param moduleItemId module item key
 	 * @param disclosureId disclosure id
-	 * @param personId login person id
 	 * @return list of count objects
 	 */
-	List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId, String personId);
+	List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId);
 
 	/**
 	 * This method is used to get Entity Details by Entity Id
@@ -611,14 +598,14 @@ public interface ConflictOfInterestDao {
 
 
 	/**
-	 *
+	 *This method is used to get the project based in the given parameters
 	 * @param moduleCode
 	 * @param personId
 	 * @param disclosureId
-	 * @param status
+	 * @param searchString 
 	 * @return
 	 */
-	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String status);
+	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString);
 
 	public List<CoiEntity> getAllSystemEntityList(CoiDashboardVO vo);
 
@@ -647,14 +634,6 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	DashBoardProfile getCOIReviewerDashboard(CoiDashboardVO vo);
-
-	/**
-	 *
-	 * @param dashboardType
-	 * @param loginPersonId
-	 * @return
-	 */
-	ConflictOfInterestVO loadDisclosureQuickCardCounts(String dashboardType, String loginPersonId);
 	
 	public CoiProjectProposal saveOrUpdateCoiProjectProposal(CoiProjectProposal coiProjectProposal);
 
@@ -664,9 +643,23 @@ public interface ConflictOfInterestDao {
 
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId);
 
-	public List<ValidPersonEntityRelType> getRelatioshipDetails(String tabName);
+	public List<ValidPersonEntityRelType> getRelationshipDetails(String tabName);
 
-	public List<PersonEntityRelationship> getRelatioshipDetails(ConflictOfInterestVO vo);
+	public List<PersonEntityRelationship> getRelationshipDetails(ConflictOfInterestVO vo);
+
+	/**
+	 * This method is used to get Relationship Details personEntityId
+	 * @param personEntityId
+	 * @return
+	 */
+	List<PersonEntityRelationship> getRelationshipDetails(Integer personEntityId);
+
+	/**
+	 * This method is used to get Relationship Details By personEntityRelId
+	 * @param personEntityRelId
+	 * @return
+	 */
+	PersonEntityRelationship getRelationshipDetailsById(Integer personEntityRelId);
 
 	public CoiReviewStatusType getReviewStatusByCode(String reviewStatusPending);
 
@@ -881,14 +874,16 @@ public interface ConflictOfInterestDao {
 	/**
 	 * This method is used to activate/inactive  person entity
 	 * @param personEntityDto
+	 * @return Timestamp
 	 */
-	void activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
+	Timestamp activateOrInactivatePersonEntity(PersonEntityDto personEntityDto);
 
 	/**
-	 * This method is used to archive person entity
+	 * This method is used to change version status of person entity
 	 * @param personEntityId
+	 * @param versionStatus
 	 */
-	void archivePersonEntity(Integer personEntityId);
+	void patchPersonEntityVersionStatus(Integer personEntityId, String versionStatus);
 
 	/**
 	 * This method is used to get the max of version number
@@ -945,13 +940,82 @@ public interface ConflictOfInterestDao {
 	 * @param entityId
 	 * @return
 	 */
-	void approveEntity(Integer entityId);
+	Timestamp approveEntity(Integer entityId);
 
 	/**
 	 * Save or Update Entity Relationship
 	 * @param entityRelationship
 	 */
 	void saveOrUpdateEntityRelationship(EntityRelationship entityRelationship);
-	
+
+	/**
+	 * This method is used to delete person entity relationship
+	 * @param personEntityRelId
+	 */
+	void deletePersonEntityRelationship(Integer personEntityRelId);
+	/**
+	 * This method is used to get person entity by entity id and person id
+	 * @param entityId
+	 * @param personId
+	 * @return
+	 */
+	PersonEntity fetchPersonEntityById(Integer entityId, String personId);
+
 	List<CoiTravelDisclosure> loadTravelDisclosureHistory(String personId, Integer entityNumber);
+
+	public List<ValidPersonEntityRelType> getValidPersonEntityRelType();
+
+	/**
+	 * This method is used to fetch disclosure
+	 * @param dashboardVO
+	 * @return
+	 */
+	List<DisclosureHistoryDto> getDisclosureHistory(CoiDashboardVO dashboardVO);
+
+	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
+
+
+	/**
+	 * This method is used to update person entity
+	 * @param personEntityDto
+	 */
+	Timestamp updatePersonEntity(PersonEntityDto personEntityDto);
+
+	/**
+	 * This method is used to update Entity Update Details
+	 * @param entityId
+	 * @param updateTimestamp
+	 */
+	void updateEntityUpdateDetails(Integer entityId, Timestamp updateTimestamp);
+
+	/**
+	 * This method is used to check a peron entity has a version status of @param versionStatus
+	 * @param personEntityNumber
+	 * @param versionStatus
+	 * @return true/false
+	 */
+	boolean hasPersonEntityVersionStatusOf(Integer personEntityNumber, String versionStatus);
+
+	/**
+	 * This method is used to fetch draft version of person entity by params
+	 * @param personEntityNumber
+	 * @param versionStatus
+	 * @return
+	 */
+	PersonEntity getPersonEntityByNumberAndStatus(Integer personEntityNumber, String versionStatus);
+
+	public DisclosureActionType fetchDisclosureActionTypeById(String actionLogCreated);
+
+	public void saveOrUpdateDisclosureActionLog(DisclosureActionLog disclosureActionLog);
+
+	public List<CoiTravelDisclosureStatusType> getTravelConflictStatusType();
+
+	public DisclComment getTravelConflictComment(Integer travelDisclosureId);
+
+	public void saveOrUpdateCoiTravelConflictHistory(CoiTravelConflictHistory coiTravelConflictHistory);
+
+	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
+
+	public String getCoiTravelConflictStatusByStatusCode(String conflictStatusCode);
+
 }

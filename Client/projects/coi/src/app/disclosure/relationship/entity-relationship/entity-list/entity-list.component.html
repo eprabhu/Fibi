@@ -82,7 +82,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let test of newArray; let i = index">
-          <td class="table-data fw-600">{{test?.coiFinancialEntity?.coiEntity?.coiEntityName}}</td>
+          <td class="table-data fw-600">{{test?.coiEntity?.coiEntityName}}</td>
           <td>
             <select [(ngModel)]="test.discDetStatusCode"
             class="form-control" [disabled]="!isEditMode">

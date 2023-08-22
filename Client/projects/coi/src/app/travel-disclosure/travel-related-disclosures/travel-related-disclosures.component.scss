@@ -1,0 +1,71 @@
+$color: #278cbb;
+
+.hovering-card {
+    border: .1px solid #bcd4df;
+}
+
+.custom-margin-left {
+    margin-left: 150px !important;
+}
+
+.col-custom {
+    width: 140px;
+}
+
+.grey-text {
+    color: #6A7980;
+}
+
+.start-date {
+    width: 150px;
+    left: 12.5px;
+    top: -19px;
+}
+
+.end-date {
+    width: 150px;
+    left: 12.5px;
+    top: 15px;
+}
+
+.remaining-timeline,
+.first-timeline {
+    position: relative;
+    background-color: $color;
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+}
+
+.remaining-timeline:before,
+.first-timeline:before {
+    content: "";
+    border-left: 2px dashed $color;
+    position: absolute;
+    left: 46.6%;
+    z-index: 1;
+}
+
+.remaining-timeline:before {
+    height: 117px;
+    top: -117px;
+}
+
+.first-timeline:before {
+    height: 68px;
+    top: -67px;
+}
+
+.remaining-timeline:after,
+.first-timeline:after {
+    content: "";
+    border-bottom: 2px solid $color;
+    width: 160px;
+    height: 0%;
+    font-size: 2.8rem;
+    color: $color;
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 1;
+}

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, interval } from 'rxjs';
 
 import { SfiService } from './sfi.service';
 import { DataStoreService } from '../services/data-store.service';
@@ -8,11 +8,15 @@ import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/
 import { Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
+import { debounce, switchMap } from 'rxjs/operators';
+import { RO } from '../coi-interface';
+import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/utilities/animations';
 
 @Component({
     selector: 'app-sfi',
     templateUrl: './sfi.component.html',
-    styleUrls: ['./sfi.component.scss']
+    styleUrls: ['./sfi.component.scss'],
+    animations: [listAnimation, fadeInOutHeight, leftSlideInOut]
 })
 export class SfiComponent implements OnInit, OnDestroy {
 
@@ -28,7 +32,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     personId: any;
     isSFINotAvailable = false;
     reviewStatus: any;
-    filterType = 'ACTIVE';
+    filterType = 'ALL';
     currentPage = 1;
     count: any;
     showSlider = false;
@@ -40,7 +44,11 @@ export class SfiComponent implements OnInit, OnDestroy {
     entityDetails: any;
     expandInfo = true;
     isEnableActivateInactivateSfiModal: boolean;
-    
+    $debounceEvent = new Subject();
+    $fetchSFIList = new Subject();
+    isSearchTextHover = false;
+    isLoading = false;
+
     constructor(
         private _sfiService: SfiService,
         private _dataStore: DataStoreService,
@@ -53,6 +61,8 @@ export class SfiComponent implements OnInit, OnDestroy {
         this._coiService.isShowSFIInfo = true;
         this.getEditMode();
         this.getSfiDetails();
+        this.$fetchSFIList.next();
+        this.getSearchList();
         this.listenDataChangeFromStore();
         this.listenForAdd();
     }
@@ -74,12 +84,29 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     getSfiDetails() {
-        this.$subscriptions.push(this._sfiService.getSfiDetails(this.disclosureId, this.reviewStatus, this.personId, this.filterType, this.currentPage).subscribe((data: any) => {
+        this.$subscriptions.push(this.$fetchSFIList.pipe(
+            switchMap(() => {
+                this.isLoading = true;
+                return this._sfiService.getSfiDetails(this.getRequestObject())
+            })).subscribe((data: any) => {
             if (data) {
                 this.count = data.count;
                 this.coiFinancialEntityDetails = data.personEntities;
+                this.isLoading = false;
             }
         }));
+    }
+
+    getRequestObject() {
+        let requestObj: RO = new RO();
+        requestObj.currentPage = this.currentPage;
+        requestObj.disclosureId = this.disclosureId;
+        requestObj.filterType = this.filterType;
+        requestObj.pageNumber = '10';
+        requestObj.personId = this.personId;
+        requestObj.reviewStatusCode = this.reviewStatus;
+        requestObj.searchWord = this.searchText;
+        return requestObj;
     }
 
     listenDataChangeFromStore() {
@@ -95,7 +122,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     listenForAdd() {
         this.$subscriptions.push(
             this._sfiService.$addSfi.subscribe((data: boolean) => {
-                this.getSfiDetails();
+                this.$fetchSFIList.next();
                 this._sfiService.isShowSfiNavBar = false;
                 this.removeEntityId();
             })
@@ -105,7 +132,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
-        document.body.classList.add('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         setTimeout(() => {
             const slider = document.querySelector('.slider-base');
             slider.classList.add('slider-opened');
@@ -116,7 +143,8 @@ export class SfiComponent implements OnInit, OnDestroy {
         this.filterType = filterType;
         this.currentPage = 1;
         this.searchText = '';
-        this.getSfiDetails();
+        this.coiFinancialEntityDetails = [];
+        this.$fetchSFIList.next();
     }
 
     removeEntityId() {
@@ -131,11 +159,8 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     actionsOnPageChange(event) {
-        if(this.currentPage != event) {
             this.currentPage = event;
-            this.searchText = '';
-            this.getSfiDetails();
-        }
+            this.$fetchSFIList.next();
     }
 
     hideSfiNavBar() {
@@ -148,8 +173,8 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     addBodyScroll() {
-        document.body.classList.remove('overflow-hidden');
-        document.body.classList.add('overflow-auto');
+        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }
 
     deleteSFIConfirmation(event, i) {
@@ -161,7 +186,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     deleteSFI() {
         this._sfiService.deleteSFI(this.personEntityId).subscribe((data:any) => {
             this.currentPage = 1;
-            this.getSfiDetails();
+            this.$fetchSFIList.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'SFI deleted successfully.');
         }, err=> {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'SFI deletion canceled.');
@@ -178,8 +203,24 @@ export class SfiComponent implements OnInit, OnDestroy {
       closeActivateInactivateSfiModal(event) {
           this.isEnableActivateInactivateSfiModal = false;
           if(event) {
-            this.getSfiDetails();
-          }
+            this.$fetchSFIList.next();
+        }
       }
 
+      getEntities() {
+        this.currentPage = 1;
+        this.$debounceEvent.next('');
+      }
+    
+      getSearchList() {
+        this.$subscriptions.push(this.$debounceEvent.pipe(debounce(() => interval(1000))).subscribe((data: any) => {
+          this.$fetchSFIList.next();
+        }
+        ));
+      }
+
+      clearSearchText() {
+        this.searchText = '';
+        this.$fetchSFIList.next(); 
+      }
 }
