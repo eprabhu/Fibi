@@ -73,6 +73,7 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
 
 	fullPageNavigationLeavePage() {
 		this.entityDetailService.isRelationshipQuestionnaireChanged = false;
+    this.entityDetailService.isAdditionalDetailsChanged = false;
     this.entityDetailService.unSavedSections = [];
     this._router.navigateByUrl(this._navigationService.navigationGuardUrl);
 		this.closeUnsavedChangesModal();
