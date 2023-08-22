@@ -91,7 +91,7 @@
                         <label for="desc-award mb-2" *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                             Description
                         </label>
-                        <textarea [(ngModel)]="reviseObject.revisionComment" [isShowLimiter]='true' [limit]=2000
+                        <textarea [(ngModel)]="reviseObject.revisionComment" (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
                                   appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"
                                   [ngClass]="(mandatoryList?.get('reviseComment')) ? 'invalid-border':''">
                         </textarea>

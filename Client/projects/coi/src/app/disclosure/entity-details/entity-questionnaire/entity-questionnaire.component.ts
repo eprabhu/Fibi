@@ -5,7 +5,7 @@ import { CommonService } from '../../../common/services/common.service';
 import { EntityDetailsService } from '../entity-details.service';
 import { EntityDetail } from '../../sfi/add-sfi.interface';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { HTTP_ERROR_STATUS } from '../../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 
 @Component({
   selector: 'app-entity-questionnaire',
@@ -225,6 +225,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         if(this.definedRelationships.length) {
           this.getQuestionnaire(this.definedRelationships[0]);
         }
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship deleted successfully.');
       }));
   }
 

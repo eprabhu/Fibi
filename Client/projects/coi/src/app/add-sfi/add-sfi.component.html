@@ -155,7 +155,8 @@
                </label>
              </div>
              <div class="col px-3">
-               <textarea appAutoGrow class="form-control" rows="1" [(ngModel)]="entityDetails.coiEntity.address"
+               <textarea appAutoGrow class="form-control" rows="1" [(ngModel)]="entityDetails.coiEntity.address" 
+               (ngModelChange)="entityDetails.coiEntity.address = entityDetails.coiEntity.address.trim()"
                  [ngClass]="mandatoryList?.has('address') ? 'is-invalid d-block' : ''" appLengthValidator [limit]=2000
                  [disabled]="isResultFromSearch || isViewMode">
                                            </textarea>
@@ -176,6 +177,7 @@
              <div class="col px-1">
                <div>
                  <input class="form-control" [(ngModel)]="entityDetails.coiEntity.phone"
+                 (ngModelChange)="entityDetails.coiEntity.phone = entityDetails.coiEntity.phone.trim()"
                    (keypress)="inputRestriction($event)" [disabled]="isResultFromSearch || isViewMode"
                    [ngClass]="mandatoryList?.has('phone') ? 'is-invalid d-block' : ''"
                    (keyup)="phoneNumberValidation(entityDetails.coiEntity.phone)">
@@ -195,6 +197,7 @@
              </div>
              <div class="col pe-1">
                <input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.zipCode"
+               (ngModelChange)="entityDetails.coiEntity.zipCode = entityDetails.coiEntity.zipCode.trim()"
                  (keypress)="inputRestriction($event)"
                  [ngClass]="(mandatoryList?.has('zipCode')) ? 'is-invalid d-block' : ''"
                  [disabled]="isResultFromSearch || isViewMode">
@@ -273,7 +276,7 @@
              </div>
              <div class="col pl-85">
                <div *ngIf="isEntityManagement" class="d-flex px-1 py-1">
-                 <label class="d-block fs-14 fw-500 px-1" for="risk-level">Risk Level :
+                 <label class="d-block fs-14 fw-500 px-1" for="risk-level">Risk :
                  </label>
                </div>
                <div *ngIf="isEntityManagement" class="col px-1">
@@ -395,6 +398,7 @@
                                 <div class="col mx-1 pe-0 px-2">
                                     <textarea appAutoGrow class="form-control" id="releationship-entity" rows="1"
                                         [(ngModel)]="additionalDetails.staffInvolvement"
+                                        (ngModelChange)="additionalDetails.staffInvolvement = additionalDetails.staffInvolvement.trim()"
                                         [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''"
                                         appLengthValidator [limit]=2000>
                 </textarea>
@@ -421,6 +425,7 @@
                                 <div class="col mx-1 pe-0 px-3">
                                     <textarea appAutoGrow class="form-control" rows="1"
                                         [(ngModel)]="additionalDetails.studentInvolvement"
+                                        (ngModelChange)="additionalDetails.studentInvolvement = additionalDetails.studentInvolvement.trim()"
                                         [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''"
                                         appLengthValidator [limit]=2000>
                 </textarea>
@@ -440,6 +445,7 @@
                                 <div class="col mx-1 pe-0 px-3">
                                     <textarea appAutoGrow class="form-control" rows="1"
                                         [(ngModel)]="additionalDetails.instituteResourceInvolvement"
+                                        (ngModelChange)="additionalDetails.instituteResourceInvolvement = additionalDetails.instituteResourceInvolvement.trim()"
                                         [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''"
                                         appLengthValidator [limit]=2000>
                 </textarea>

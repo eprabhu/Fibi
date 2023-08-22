@@ -270,7 +270,7 @@
                 </div>
                 <div class="col mx-1 px-2">
                   <textarea class="form-control text-area-height" id="releationship-entity"
-                    [(ngModel)]="additionalDetails.staffInvolvement" (ngModelChange)="addUnSavedChanges()"
+                    [(ngModel)]="additionalDetails.staffInvolvement" (ngModelChange)="addUnSavedChanges();additionalDetails.staffInvolvement = additionalDetails.staffInvolvement.trim()"
                     [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
                     [limit]=2000>
                   </textarea>
@@ -297,7 +297,7 @@
                 </div>
                 <div class="col mx-1 px-3">
                   <textarea class="form-control text-area-height" [(ngModel)]="additionalDetails.studentInvolvement"
-                    (ngModelChange)="addUnSavedChanges()"
+                    (ngModelChange)="addUnSavedChanges();additionalDetails.studentInvolvement = additionalDetails.studentInvolvement.trim()"
                     [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''" appLengthValidator
                     [limit]=2000>
                   </textarea>
