@@ -24,7 +24,7 @@
         <span class="mandatory fw-600">*</span>
         <span class="fw-600">Define Project - SFI Relation</span>
         <textarea *ngIf="isEditMode" class="form-control comment-text-box textarea-height mt-2" id="coi_description"
-        [(ngModel)]="coiDescription" appAutoGrow  appLengthValidator rows="1"
+        [(ngModel)]="coiDescription" (ngModelChange)="coiDescription = coiDescription.trim()" appAutoGrow  appLengthValidator rows="1"
         [ngClass] ="coiValidationMap.has('coiDescription') ? 'is-invalid d-block' : ''"
         placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
         <span class="invalid-feedback fw-400" *ngIf="coiValidationMap.has('coiDescription')">
