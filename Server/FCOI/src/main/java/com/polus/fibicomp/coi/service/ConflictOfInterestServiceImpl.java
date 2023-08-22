@@ -145,6 +145,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String ACTION_LOG_APPROVED = "13";
 	private static final String TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT = "1";
 	private static final String ACTION_LOG_RISK_ADDED = "9";
+	private static final String DEFAULT_DISCLOSURE_RISK = "This is the default status set by the system.";
+	private static final String DEFAULT_ENTITY_RISK = "This is the status set by the user at the time of Entity creation.";
+	private static final String DEFAULT_TRAVEL_RISK = "This is the status set by the user against the entity, which is now the current status of the disclosure.";
 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
@@ -185,7 +188,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
 		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
 		coiDisclosure.setReviewStatusCode(REVIEW_STATUS_PENDING);
-		coiDisclosure.setRiskCategoryCode(RISK_CATEGORY_LOW);
 		coiDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		conflictOfInterestDao.saveOrUpdateCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
@@ -360,6 +362,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_RISK)
 					.disclosureId(coiDisclosureObj.getDisclosureId())
 					.disclosureNumber(coiDisclosureObj.getDisclosureNumber())
+					.revisionComment(DEFAULT_DISCLOSURE_RISK)
 					.fcoiTypeCode(coiDisclosureObj.getFcoiTypeCode()).build();
 			if (riskCategory != null) {
 				actionLogDto.setRiskCategory(riskCategory.getDescription());
@@ -706,7 +709,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				}
 			}
 		});
-		coiReviewComments.removeIf(comment -> replyComments.containsKey(comment.getCommentId()));
+		coiReviewComments.removeIf(comment -> comment.getParentCommentId() != null);
 		return new ResponseEntity<>(vo.getDisclComments(), HttpStatus.OK);
 	}
 
@@ -776,6 +779,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public String deleteReviewComment(Integer coiReviewCommentId){
 		try {
+			conflictOfInterestDao.loadCoiReviewCommentsByParentId(coiReviewCommentId).stream().forEach(comment -> {
+				conflictOfInterestDao.deleteReviewCommentByCommentId(comment);
+			});
 			DisclComment coiReviewComment = conflictOfInterestDao.loadCoiReviewCommentById(coiReviewCommentId);
 			conflictOfInterestDao.deleteReviewTagByCommentId(coiReviewCommentId);
 			conflictOfInterestDao.loadDisclAttachmentByCommentId(coiReviewCommentId).stream().forEach(attachment -> {
@@ -948,11 +954,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiEntity.setIsActive(true); // Y
 			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 			coiEntity.setVersionNumber(Constants.COI_INITIAL_VERSION_NUMBER);
-			coiEntity.setRiskCategoryCode(RISK_CAT_CODE_LOW);
-			coiEntity.setEntityRiskCategory(conflictOfInterestDao.getEntityRiskDetails(RISK_CAT_CODE_LOW));
 			coiEntity.setEntityNumber(conflictOfInterestDao.generateMaxCoiEntityNumber());
 			conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
-			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE, coiEntity, null);
+			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE, coiEntity, DEFAULT_ENTITY_RISK);
 			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_CREATE_ACTION_LOG_CODE, coiEntity, null);
 		} else { // on update or patch checks its a major change or not
 			Integer entityId = coiEntity.getEntityId();
@@ -1529,7 +1533,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
 					.riskCategoryCode(coiEntity.getRiskCategoryCode())
 					.riskCategory(coiEntity.getEntityRiskCategory().getDescription())
-					.comment("This is a system-generated Risk.")
+					.comment(DEFAULT_TRAVEL_RISK)
 					.build();
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {

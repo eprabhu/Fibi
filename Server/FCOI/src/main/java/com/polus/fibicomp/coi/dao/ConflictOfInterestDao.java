@@ -1063,4 +1063,6 @@ public interface ConflictOfInterestDao {
 
 	public List<DisclAttachment> loadDisclAttachmentByCommentId(Integer coiReviewCommentId);
 
+	public List<Integer> loadCoiReviewCommentsByParentId(Integer coiReviewCommentId);
+
 }
