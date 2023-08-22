@@ -6,6 +6,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
 import { fadeInOutHeight } from '../../common/utilities/animations';
+import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-entity-history',
@@ -18,6 +19,7 @@ export class EntityHistoryComponent implements OnChanges {
     $subscriptions: Subscription[] = [];
     entityHistoryLogs: any = {};
     @Input() entityDetails: any;
+    isEmptyObject = isEmptyObject;
 
     constructor( private _commonService: CommonService,
                  public entityManagementService: EntityManagementService,

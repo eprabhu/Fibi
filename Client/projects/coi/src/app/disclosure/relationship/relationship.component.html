@@ -13,7 +13,7 @@
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>Before proceeding to the next step, ensure that all your Project-SFI relationships have been marked.
-          <span *ngIf="expandInfo && !isShowCollapsedConflictRelationship" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse Relationship help text">Show Less</u></span>
+          <span *ngIf="expandInfo && !isShowCollapsedConflictRelationship" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse Relationship help text">Read Less</u></span>
         </div>
         <div *ngIf="isShowCollapsedConflictRelationship">
             <div class="mt-2">
@@ -21,7 +21,7 @@
               </div>
               <div class="mt-2">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>For marking individual SFI conflict status/ relationship description use "Save".
-                <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse Relationship help text">Show Less</u></span>
+                <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse Relationship help text">Read Less</u></span>
               </div>
         </div>
       </ng-container>
@@ -55,7 +55,7 @@
                                         <span
                                             (click)="collapseViewMoreOption(relation?.moduleItemId, collapseViewMore[relation?.moduleItemId])"
                                             *ngIf="relation?.title?.length > 75" class="collapse-text fs-13">
-                                            {{collapseViewMore[relation?.moduleItemId] ? "Show Less" : "Read More"}}
+                                            {{collapseViewMore[relation?.moduleItemId] ? "Read Less" : "Read More"}}
                                         </span>
                                     </p>
                                 </div>

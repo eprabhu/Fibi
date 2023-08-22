@@ -31,6 +31,9 @@
                             </tbody>
                         </table>
                     </div>
+                    <div *ngIf="isEmptyObject(entityHistoryLogs)">
+                        <app-no-information [isBorderNeeded]="false"> </app-no-information>
+                    </div>
                 </div>
             </div>
         </div>
