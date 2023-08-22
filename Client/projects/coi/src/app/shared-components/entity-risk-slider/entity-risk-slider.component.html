@@ -94,7 +94,7 @@
                                                         <span [innerHTML]="historyEntry?.description"></span>
                                                     </p>
                                                 </div>
-                                                <div class="col-12 mx-auto comment-box-height mt-2">
+                                                <div *ngIf="historyEntry?.comment" class="col-12 mx-auto comment-box-height mt-2">
                                                     <div class="align-items-center ml-5 mx-0">
                                                         <div class="p-3 person-card fs-13 word-break-all new-line-property shadow-sm bg-light border">
                                                             <span

@@ -268,6 +268,8 @@ export class CommonService {
                 return 'green-badge';
             case '4':
                 return 'green-badge';
+            case '5':
+                return 'review-status-badge';
             default:
                 return 'red-badge';
         }

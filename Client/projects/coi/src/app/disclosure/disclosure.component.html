@@ -24,7 +24,7 @@
                             </strong>
                         </ng-container>
                     </p>
-                    <div class="d-flex ms-auto mr-15">
+                    <div *ngIf="coiData?.coiDisclosure?.riskCategoryCode" class="d-flex ms-auto mr-15">
                         <div class="align-items-center d-flex ml-15">
                           <label class="fw-500 fs-14 mr-2 mt-1">Risk :</label>
                           <div class="text-color fs-14 d-flex align-items-center">
@@ -344,12 +344,10 @@
                         <mat-icon class="me-2">rate_review</mat-icon>
                         <span *ngIf="isCardExpanded">Comments</span>
                     </button>
-
                     <!-- more option button for expanded & collapsed card -->
                     <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
-                    <button *ngIf="checkForModifyRisk() || coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode != 3 && 
-                    (coiData.coiDisclosure.adminPersonId || (coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId)))
-                    && (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.personId) || coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '3'" [matMenuTriggerFor]="beforeMenu"
+                    <button 
+                    [matMenuTriggerFor]="beforeMenu"
                         class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2 mb-10"
                         role="button" title="Click for More Actions">
                         <mat-icon class="moreActionIcon">more_vert</mat-icon>
@@ -403,10 +401,15 @@
                     <button *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '3' && coiData.coiDisclosure.adminPersonId &&
                     (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)" title="Click to Return Disclosure"
                         (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
-                        [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
                         class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2">
                         <mat-icon class="returnIcon">refresh</mat-icon>
-                        <span class="ms-1" *ngIf="isCardExpanded">Return</span>
+                        <span class="ms-1">Return</span>
+                    </button>
+
+                    <button title="Click to Return Disclosure"
+                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2">
+                        <mat-icon class="returnIcon">notifications</mat-icon>
+                        <span class="ms-1">Notify</span>
                     </button>
                     </mat-menu>
 
@@ -428,7 +431,6 @@
                   <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                   <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                   </button>
-
                   <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3'
                   && (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"

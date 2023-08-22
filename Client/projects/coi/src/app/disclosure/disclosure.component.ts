@@ -147,7 +147,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             }
         });
         this.updateTimeStampEvent();
+        this.routerEventSubscription();
     }
+
+    routerEventSubscription() {
+        this.$subscriptions.push(this.router.events.subscribe(event => {
+          if (event instanceof NavigationEnd) {
+            this.setStepFirstTime(this.router.url);
+          }
+        }));
+      }
 
     ngOnDestroy(): void {
         this.dataStore.dataChanged = false;
@@ -506,9 +515,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.coiData.coiDisclosure.coiReviewStatusType.description = event.reviewStatus;
             this.coiData.coiDisclosure.reviewStatusCode = event.reviewStatusCode;
             this.coiData.coiDisclosure.updateTimestamp = new Date().getTime();
+            this.getCoiReview();
             this.dataStore.updateStore(['coiDisclosure'], this.coiData);
         }
         this.isAddAssignModalOpen = false;
+    }
+
+    getCoiReview() {
+        this.$subscriptions.push(this.coiService.getCoiReview(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+            this.coiService.isReviewActionCompleted = data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
+        }))
     }
 
     public updateCoiReview(modalType: ModalType) {

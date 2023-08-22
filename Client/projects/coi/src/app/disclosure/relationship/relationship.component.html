@@ -13,7 +13,7 @@
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>Before proceeding to the next step, ensure that all your Project-SFI relationships have been marked.
-          <span *ngIf="expandInfo && !isShowCollapsedConflictRelationship" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse Relationship help text">Show Less</u></span>
+          <span *ngIf="expandInfo && !isShowCollapsedConflictRelationship" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse Relationship help text">Read Less</u></span>
         </div>
         <div *ngIf="isShowCollapsedConflictRelationship">
             <div class="mt-2">
@@ -21,7 +21,7 @@
               </div>
               <div class="mt-2">
                 <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>For marking individual SFI conflict status/ relationship description use "Save".
-                <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse Relationship help text">Show Less</u></span>
+                <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse Relationship help text">Read Less</u></span>
               </div>
         </div>
       </ng-container>
@@ -47,7 +47,7 @@
                                 <div class="col-12 d-flex" *ngIf="relation.moduleCode == 3">
                                     <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
                                     <p class="entity-title">
-                                        <strong title="Click to view project details" class="fs-18" (click)="selectedProjectForView=relation;" data-bs-toggle="modal"
+                                        <strong title="Click to view project details" class="fs-16" (click)="selectedProjectForView=relation;" data-bs-toggle="modal"
                                             data-bs-target="#moduleViewModal">#{{relation?.moduleItemId}} - {{relation?.title?.length >
                                             75 && !collapseViewMore[relation?.moduleItemId] ? (relation?.title | slice:0:75)+'...' :
                                             relation?.title}}
@@ -55,7 +55,7 @@
                                         <span
                                             (click)="collapseViewMoreOption(relation?.moduleItemId, collapseViewMore[relation?.moduleItemId])"
                                             *ngIf="relation?.title?.length > 75" class="collapse-text fs-13">
-                                            {{collapseViewMore[relation?.moduleItemId] ? "Show Less" : "Read More"}}
+                                            {{collapseViewMore[relation?.moduleItemId] ? "Read Less" : "Read More"}}
                                         </span>
                                     </p>
                                 </div>

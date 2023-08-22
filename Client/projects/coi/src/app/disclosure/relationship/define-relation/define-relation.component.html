@@ -5,7 +5,7 @@
   <div class="slider-container">
       <div class="relationship-details-box card" id="relationship-details-box">
         <div class="col-12 d-flex">
-          <span class="active-ribbon shadow-sm align-items-center d-flex ps-2"><span class="px-2">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}}</span></span>
+          <span class="active-ribbon shadow-sm align-items-center d-flex ps-2 {{getColorBadges(selectedProject?.moduleCode)}}"><span class="px-2">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}}</span></span>
           <p class="entity-title mt-3" *ngIf="selectedProject?.moduleCode == 3">
               <span class="fw-600 fs-16">{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </span>
           </p>
