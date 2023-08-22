@@ -28,18 +28,24 @@
                             <div class="row mt-2">
                                 <div class="col d-flex">
                                     <label class="label-text">Project: </label>
-                                    <span class="ml-2 grey-text">
-                                        <app-no-data-label
-                                            [valueToShow]="(entityDetails?.moduleCode == 3) || (entityDetails?.moduleCode == 1)">
-                                            <span *ngIf="entityDetails?.moduleCode == 3" id="id"
-                                                class="grey-text">#{{entityDetails?.moduleItemId}}
-                                                -
-                                                {{entityDetails?.title}}</span>
-                                            <span *ngIf="entityDetails?.moduleCode == 1" id="id"
-                                                class="grey-text">#{{entityDetails?.moduleItemKey}}
-                                                -
-                                                {{entityDetails?.title}}</span></app-no-data-label>
-                                    </span>
+                                    <ng-container *ngIf="entityDetails?.moduleCode == 3 || entityDetails?.moduleCode == 1">
+                                        <span class="ml-2 grey-text">
+                                            <app-no-data-label [valueToShow]="(entityDetails?.moduleCode == 3) || (entityDetails?.moduleCode == 1)">
+                                                <span class="title-text ml-2 mt-2 word-break-all new-line-property">
+                                                    <strong>#{{entityDetails?.moduleItemId}} - {{!titleReadMore ? (entityDetails?.title | slice:0:120) :
+                                                        entityDetails?.title}}</strong>
+                                                    <span *ngIf="!titleReadMore && entityDetails?.title?.length>120">...
+                                                        <a *ngIf="!titleReadMore" (click)="titleReadMore=true">
+                                                            <span class="readMore fw-500 hand-cursor">Read More</span>
+                                                        </a>
+                                                    </span>
+                                                    <a *ngIf="titleReadMore" (click)="titleReadMore= false">
+                                                        <span class="readMore ms-1 fw-500 hand-cursor">Read Less</span>
+                                                    </a>
+                                                </span>
+                                            </app-no-data-label>
+                                        </span>
+                                    </ng-container>
                                 </div>
                             </div>
                         </div>

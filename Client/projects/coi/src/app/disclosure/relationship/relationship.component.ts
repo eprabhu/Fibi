@@ -95,7 +95,7 @@ export class RelationshipComponent implements OnInit {
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    this.isEditMode = this.coiData.coiDisclosure.reviewStatusCode == '1';
+    this.isEditMode = ['1', '5', '6'].includes(this.coiData.coiDisclosure.reviewStatusCode);
   }
 
   loadProjectRelations() {
