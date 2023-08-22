@@ -329,6 +329,12 @@ nav ul li.active {
   color: #fff;
 }
 
+.review-status-badge {
+  @extend .coi-badge;
+  background-color: #FF5733!important;
+  color: #fff;
+}
+
 .grey-badge {
   @extend .coi-badge;
   background-color: #7f7b7b !important;

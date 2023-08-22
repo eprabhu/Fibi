@@ -432,7 +432,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     private assignSelectedProject(event): void {
         if (event) {
             this.manualProjectAddDetails.moduleItemId = this.selectedProjectType == 'Award' ? event.moduleItemId : event.moduleItemId;
-            this.manualProjectAddDetails.title = this.selectedProjectType == 'Award' ? event.moduleItemId + '-' + event.title : event.title;
+            this.manualProjectAddDetails.title = (this.selectedProjectType == 'Award' ? event.moduleItemKey : event.moduleItemId)  + ' - ' + event.title ;
             this.manualProjectAddDetails.principalInvestigator = this.selectedProjectType == 'Award' ? event.principalInvestigator : event.principalInvestigator;
             this.manualProjectAddDetails.unitName = this.selectedProjectType == 'Award' ? event.unitName : event.unitName;
             this.manualProjectAddDetails.startDate = this.selectedProjectType == 'Award' ? event.startDate : event.startDate;
