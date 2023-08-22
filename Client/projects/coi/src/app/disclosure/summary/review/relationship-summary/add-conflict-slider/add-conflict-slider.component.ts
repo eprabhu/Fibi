@@ -28,7 +28,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     comment: any = null;
     coiProjConflictStatusType = null;
     isReadMore: boolean[] = [];
-    isShowMore = false;
+    titleReadMore = false;
     coiConflictStatusType: any = null;
 
     constructor( public dataStoreService: CoiSummaryEventsAndStoreService,

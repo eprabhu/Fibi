@@ -129,8 +129,8 @@
   width: max-content;
   height: 27px;
   position: relative;
-  left: -19px;
-  top: 0px;
+  left: -22px;
+  top: 2px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 0 50px 50px 0;
@@ -276,4 +276,8 @@
 
 tr.tr-hover {
   vertical-align: middle;
+}
+
+.badge-margin {
+  margin-left: -10px;
 }

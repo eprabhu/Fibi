@@ -61,7 +61,7 @@
                                       {{answer.value.length > 480 && !collapseViewMore[list?.customDataElementId] ?
                                       (answer.value | slice:0:480)+'...' : answer.value}}
                                       <span *ngIf="answer.value.length > 480" class="collapse-text">
-                                        {{collapseViewMore[list?.customDataElementId] ? "Show Less" : "Read More"}}
+                                        {{collapseViewMore[list?.customDataElementId] ? "Read Less" : "Read More"}}
                                       </span>
                                     </span>
                                   </div>
