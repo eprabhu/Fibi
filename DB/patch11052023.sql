@@ -392,6 +392,20 @@ ADD COLUMN `COMPONENT_SUB_REFERENCE_ID` INT DEFAULT NULL;
 
 INSERT INTO `entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('7', 'Risk Level <b>{RISK}</b> has been added', 'Add Risk', now(), 'quickstart');
 
+UPDATE `disclosure_action_type` SET MESSAGE = 'New {FCOI /Project /Travel} disclosure has been created' WHERE ACTION_TYPE_CODE = '1';
+UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure has been submitted' WHERE ACTION_TYPE_CODE = '2';
+UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure has been recalled' WHERE ACTION_TYPE_CODE = '3';
+UPDATE `disclosure_action_type` SET MESSAGE = 'New admin <b>{ADMIN_ONE}</b> has been assigned' WHERE ACTION_TYPE_CODE = '4';
+UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure has been returned' WHERE ACTION_TYPE_CODE = '6';
+UPDATE `disclosure_action_type` SET MESSAGE = '<b>{Reviewer Name}</b> assigned to review {FCOI /Project /Travel} disclosure' WHERE ACTION_TYPE_CODE = '7';
+UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure review has been completed' WHERE ACTION_TYPE_CODE = '8';
+UPDATE `disclosure_action_type` SET MESSAGE = 'Risk <b>{LOW}</b> has been added' WHERE ACTION_TYPE_CODE = '9';
+UPDATE `disclosure_action_type` SET MESSAGE = 'Risk for  {FCOI /Project /Travel} disclosure changed from <b>{LOW}</b> to <b>{HIGH}</b>' WHERE ACTION_TYPE_CODE = '10';
+UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure admin-review has been completed' WHERE ACTION_TYPE_CODE = '11';
+UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure has been expired' WHERE ACTION_TYPE_CODE = '12';
+UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure has been approved' WHERE ACTION_TYPE_CODE = '13';
+UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure status has been added as <b>No Conflict</b>' WHERE ACTION_TYPE_CODE = '14';
+UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure status has been changed from <b>{STATUS_ONE}</b> to <b>{STATUS_TWO}</b>' WHERE ACTION_TYPE_CODE = '15';
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;
