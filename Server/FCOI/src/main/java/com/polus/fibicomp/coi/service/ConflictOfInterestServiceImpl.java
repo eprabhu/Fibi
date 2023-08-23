@@ -1506,11 +1506,15 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setExpirationDate(getExpirationDate());
-		coiTravelDisclosure.setDisclosureStatusCode(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
-		CoiTravelDisclosureStatusType coiTravelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
-		coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(coiTravelDisclosureStatusType);
 		CoiEntity coiEntity = conflictOfInterestDao.getCoiEntityDetailsById(vo.getEntityId());
-		coiTravelDisclosure.setRiskCategoryCode(coiEntity.getRiskCategoryCode());
+		if (coiTravelDisclosure.getDisclosureStatusCode() == null) {
+			coiTravelDisclosure.setDisclosureStatusCode(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
+			CoiTravelDisclosureStatusType coiTravelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
+			coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(coiTravelDisclosureStatusType);
+		}
+		if (coiTravelDisclosure.getRiskCategoryCode() == null) {
+			coiTravelDisclosure.setRiskCategoryCode(coiEntity.getRiskCategoryCode());
+		}
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		DisclComment disclComment = DisclComment.builder()
 				.comment("This is a system-generated Disclosure Status")
