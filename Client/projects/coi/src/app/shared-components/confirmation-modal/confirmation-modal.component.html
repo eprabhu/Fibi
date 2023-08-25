@@ -1,15 +1,15 @@
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="{{modalName}}-trigger-btn"
+<button type="button" class="btn btn-primary btn-sm" hidden="true" id="{{modalName}}-trigger-btn"
     data-bs-toggle="modal" [attr.data-bs-target]="'#'+modalName"></button>
 <div class="modal modal-coi fade mySkinDialog" id="{{modalName}}" role="dialog" [attr.aria-labelledby]="modalName"
     aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog {{getModalSize()}}" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">
+                <h5 class="modal-title" tabindex="0" id="modal-header">
                     <ng-content select="[header]"></ng-content>
                 </h5>
                 <button type="button" id="{{modalName}}-dismiss-btn" class="btn-close fs-12"
-                    data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()">
+                    data-bs-dismiss="modal" aria-label="click to Close popup" role="button" (click)="closeModal()">
                 </button>
             </div>
 
@@ -22,7 +22,8 @@
 
                     <!-- description text area -->
                     <ng-container *ngIf="needDescriptionField">
-                        <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12">
+                        <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12" 
+                            [attr.aria-label]="'please enter the' + textAreaLabelName + (isMandatory? '. It is mandatory' : '')">
                             <span class="text-danger" *ngIf="isMandatory">*</span>
                             {{textAreaLabelName}}
                         </label>
@@ -41,10 +42,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction()">
+                <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction()"
+                    [attr.aria-label]="'click to ' + secondaryBtnName" role="button">
                     {{secondaryBtnName}}
                 </button>
-                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performPrimaryAction()">
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performPrimaryAction()"
+                    [attr.aria-label]="'click to ' + primaryBtnName" role="button">
                     {{primaryBtnName}}
                 </button>
             </div>
