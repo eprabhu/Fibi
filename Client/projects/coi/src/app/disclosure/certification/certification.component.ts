@@ -67,6 +67,12 @@ export class CertificationComponent implements OnInit, OnDestroy {
         );
     }
 
+  checkBoxChanged() {
+    this._coiService.isCertified = !this._coiService.isCertified;
+    this._dataStore.dataChanged = true;
+    this._coiService.unSavedModules = 'Certification';
+  }
+
     certifyDisclosure() {
         if (!this.isSaving) {
             this.isSaving = true;
