@@ -8,8 +8,8 @@
         <span class="mandatory fw-600">*</span>
          <span title="List of COI status" class="fw-600">COI Status</span>
          <div [class.mt-2]="isEditMode" *ngIf="isEditMode">
-          <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode" class="form-select form-control cursor-pointer"
-          [ngClass] ="coiValidationMap.has('coiStatus') ? 'is-invalid d-block' : ''">
+          <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode" class="form-select form-control cursor-pointer" 
+          [ngClass] ="coiValidationMap.has('coiStatus') ? 'is-invalid d-block' : ''" (ngModelChange)="setUnsavedModuleTrue()">
             <option [value]=null>--Select--</option>
             <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList">{{status?.description}}</option>
           </select>
@@ -24,7 +24,7 @@
         <span class="mandatory fw-600">*</span>
         <span class="fw-600">Define Project - SFI Relation</span>
         <textarea *ngIf="isEditMode" class="form-control comment-text-box textarea-height mt-2" id="coi_description"
-        [(ngModel)]="coiDescription" (ngModelChange)="coiDescription = coiDescription.trim()" appAutoGrow  appLengthValidator rows="1"
+        [(ngModel)]="coiDescription" (ngModelChange)="coiDescription = coiDescription.trim(); setUnsavedModuleTrue()" appAutoGrow  appLengthValidator rows="1"
         [ngClass] ="coiValidationMap.has('coiDescription') ? 'is-invalid d-block' : ''"
         placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
         <span class="invalid-feedback fw-400" *ngIf="coiValidationMap.has('coiDescription')">
