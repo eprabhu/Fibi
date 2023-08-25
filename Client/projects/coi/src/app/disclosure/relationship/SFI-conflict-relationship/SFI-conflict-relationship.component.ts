@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { RelationshipService } from '../relationship.service';
 import { CommonService } from '../../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { CoiService } from '../../services/coi.service';
 
 @Component({
   selector: 'app-SFI-conflict-relationship',
@@ -30,7 +31,10 @@ export class SFIConflictRelationshipComponent implements OnInit {
   coiValidationMap: Map<string, string> = new Map();
   coiTableValidation: Map<string, string> = new Map();
 
-  constructor(private _relationShipService: RelationshipService, private _commonService: CommonService) { }
+  constructor(private _relationShipService: RelationshipService,
+              private _commonService: CommonService,
+              private _coiService: CoiService,
+              private _dataStore: DataStoreService) { }
 
   ngOnInit() {
   }
@@ -46,6 +50,11 @@ export class SFIConflictRelationshipComponent implements OnInit {
     if (!this.coiDescription) {
       this.coiValidationMap.set('coiDescription', 'Please enter description');
     }
+  }
+
+  setUnsavedModuleTrue() {
+    this._coiService.unSavedModules = 'Relationships';
+    this._dataStore.dataChanged = true;
   }
 
   applyToAll() {

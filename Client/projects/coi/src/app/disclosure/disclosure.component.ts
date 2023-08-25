@@ -23,7 +23,7 @@ import {
     CREATE_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
-import { getSponsorSearchDefaultValue } from '../common/utilities/custom-utilities';
+import { getSponsorSearchDefaultValue, openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
@@ -187,7 +187,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     goToStep(stepPosition?: any) {
         if (this.dataStore.dataChanged) {
             this.tempStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
-            document.getElementById('hidden-validate-button').click();
+             openCommonModal('disclsoure-unsaved-changes-modal');
         } else {
             if (!stepPosition && this.currentStepNumber === 4) {
                 return;
@@ -211,7 +211,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     goBackStep() {
         if (this.dataStore.dataChanged) {
             this.tempStepNumber = this.currentStepNumber - 1;
-            document.getElementById('hidden-validate-button').click();
+             openCommonModal('disclsoure-unsaved-changes-modal');
         } else {
             if (this.currentStepNumber === 1) {
                 return;
