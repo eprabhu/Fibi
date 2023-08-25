@@ -14,8 +14,8 @@
 <div class="col-md-12 users-list-tbl mb-3 px-0"
 	*ngIf="questionnaire?.questions != undefined && questionnaire?.questions != null">
 	<div class="qst-list-padding">
-		<ng-container *ngFor='let question of questionnaire?.questions; let indexQuestion = index'>
-			<div class="card questionnaire-card mb-4 p-4"
+		<ng-container *ngFor='let question of questionnaire?.questions; let indexQuestion = index; let isLast = last'>
+			<div class="card questionnaire-card p-4" [class.mb-4]="!isLast"
 				[ngClass]="{'card-active-line': highlight == question.QUESTION_ID}"
 				(click)="highlight = question.QUESTION_ID" *ngIf="question.SHOW_QUESTION == true">
 				<ul [ngSwitch]="true" class="qst-list m-0 p-0">
