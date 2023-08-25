@@ -58,6 +58,7 @@ export class CommonService {
     previousURL = null;
     fibiApplicationUrl = '';
     $ScrollAction = new Subject<{event: Event,pageYOffset: number}>();
+    $commentConfigurationDetails =  new BehaviorSubject<any>({});
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }

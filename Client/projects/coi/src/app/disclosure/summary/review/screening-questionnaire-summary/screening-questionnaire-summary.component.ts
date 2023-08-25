@@ -1,16 +1,21 @@
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 
 import { environment } from '../../../../../environments/environment';
 import { CommentConfiguration } from '../../../coi-interface';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
 import {CommonService} from "../../../../common/services/common.service";
+import { Subscription } from 'rxjs';
+import { CoiService } from '../../../services/coi.service';
+import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { DataStoreService } from '../../../services/data-store.service';
+import { coiReviewComment } from '../../../../shared-components/shared-interface';
 
 @Component({
     selector: 'app-screening-questionnaire-summary',
     templateUrl: './screening-questionnaire-summary.component.html',
     styleUrls: ['./screening-questionnaire-summary.component.css']
 })
-export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck {
+export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, OnDestroy {
 
     configuration: any = {
         moduleItemCode: 8,
@@ -26,10 +31,12 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck {
     deployMap = environment.deployUrl;
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
     isQuestionnaireCollapsed = false;
+    $subscriptions: Subscription[] = [];
+
 
     constructor(
         private _commonService: CommonService,
-        private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService
+        private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,private _coiService: CoiService,private _dataStore: DataStoreService
     ) { }
 
     ngOnInit() {
@@ -46,8 +53,22 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck {
         }
     }
 
+    ngOnDestroy() {
+     subscriptionHandler(this.$subscriptions);
+    }
+
     modifyReviewComment() {
-        this._dataStoreAndEventsService.modifyReviewComment(this.commentConfiguration);
+        let coiData = this._dataStore.getData();
+        const disclosureDetails:coiReviewComment = {
+            disclosureId: coiData.coiDisclosure.disclosureId,
+            coiSectionsTypeCode: '4',
+            documentOwnerPersonId: coiData.coiDisclosure.person.personId,
+            coiSubSectionsId: null,
+            headerName: '',
+            componentSubRefId: null
+        }
+        this._commonService.$commentConfigurationDetails.next(disclosureDetails);
+        this._coiService.isShowCommentNavBar = true;
     }
 
 }

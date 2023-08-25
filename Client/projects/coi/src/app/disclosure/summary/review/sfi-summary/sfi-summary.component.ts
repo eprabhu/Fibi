@@ -6,6 +6,10 @@ import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-st
 import { CommentConfiguration, RO } from '../../../coi-interface';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Router } from '@angular/router';
+import { CommonService } from '../../../../../app/common/services/common.service';
+import { CoiService } from '../../../services/coi.service';
+import { DataStoreService } from '../../../services/data-store.service';
+import { coiReviewComment } from '../../../../shared-components/shared-interface';
 
 
 @Component({
@@ -30,7 +34,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     constructor(
         private _coiSummaryService: CoiSummaryService,
         private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _router: Router
+        private _router: Router,private _commonService :CommonService,private _coiService: CoiService,private _dataStore: DataStoreService
     ) { }
 
     ngOnInit() {
@@ -112,5 +116,19 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     addBodyScroll() {
         document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
         document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
+    }
+
+    openReviewerComment(event) {
+        let coiData = this._dataStore.getData();
+        const REQ_BODY:coiReviewComment = {
+            documentOwnerPersonId: coiData.coiDisclosure.disclosureId,
+            disclosureId: coiData.coiDisclosure.disclosureId,
+            coiSectionsTypeCode: '5',
+            headerName: event.personEntityHeader,
+            coiSubSectionsId: event.personEntityId,
+            componentSubRefId: null
+        }
+        this._commonService.$commentConfigurationDetails.next(REQ_BODY);
+        this._coiService.isShowCommentNavBar = true;
     }
 }

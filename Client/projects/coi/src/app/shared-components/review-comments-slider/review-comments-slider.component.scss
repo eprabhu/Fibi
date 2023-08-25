@@ -161,7 +161,7 @@ select option {
 .border-color {
     border: #54bf5b 1.6px solid !important;
     border-radius: 8px;
-    background: #f5fef5;
+    background: #f5fef5 !important;
     color: #5a5a5a;
 }
 
@@ -269,5 +269,57 @@ select option {
 .comment-card {
     background: #d8e6f6;
     border: 1px solid #dbdbdb;
-    border-radius: 0px 0px 20px 20px;
+    border-radius: 0px 15px 0px 15px;
+    width: max-content;
+}
+ 
+.badge {
+    color: #5a5a5a !important;
+}
+
+.fileChips {
+    position: relative;
+    bottom: 3px;
+}
+
+.user-dashboard-nav {
+    min-height: 42px;
+}
+
+.navigation-icons {
+    border: 1px solid #007DEC !important;
+    color: #007DEC !important;
+    font-weight: bold;
+}
+
+.person-icon-position {
+    height: 20px;
+    position: relative;
+    top: 2px;
+}
+
+.material-symbols-outlined {
+    color: #98989e;
+}
+//  .attachment-icon-position {
+//     position: relative;
+//     top: 4px;
+//  }
+// }
+.comment-card-position-child {
+    position: relative;
+    left: 196px;
+}
+
+.comment-card-position-parent {
+    position: relative;
+    left: 85px;
+}
+
+.attachment-icon {
+    transform: rotate(271deg);
+    position: relative;
+    top: 4px;
+    right: 4px;
+    height: 20px;
 }

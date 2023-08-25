@@ -1,5 +1,5 @@
 export class AssignAdminRO {
-    adminPersonId = '';
+    adminPersonId;
     adminGroupId = null;
     travelDisclosureId?: '';
     disclosureId?: '';
@@ -62,3 +62,12 @@ export class SfiObject {
     entityId = '';
     entityName = '';
   }
+
+export interface coiReviewComment {
+    documentOwnerPersonId:string;
+    disclosureId:number;
+    coiSectionsTypeCode:string;
+    headerName:string;
+    coiSubSectionsId:any;
+    componentSubRefId:number;
+}

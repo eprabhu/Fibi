@@ -9,6 +9,7 @@ import { CoiSummaryService } from '../../coi-summary.service';
 import { HTTP_ERROR_STATUS } from "../../../../../../../fibi/src/app/app-constants";
 import { DataStoreService } from '../../../services/data-store.service';
 import { CoiService } from '../../../services/coi.service';
+import { coiReviewComment } from '../../../../shared-components/shared-interface';
 
 declare var $: any;
 
@@ -129,14 +130,19 @@ export class RelationshipSummaryComponent implements OnInit {
         this._dataStore.updateStore(['coiDisclosure'], { coiDisclosure: this.coiDetails });
     }
 
-    // function for opening the slider in relationship section common comment
-    private openReviewComment(index) {
-        this._coiService.isShowCommentNavBar = !this._coiService.isShowCommentNavBar;
-    }
-
-    // function for opening the slider in SFI listing table section comment (relationship section)
-    private openCommoncommentSlider() {
-        this._coiService.isShowCommentNavBar = !this._coiService.isShowCommentNavBar;
+    openReviewerComment(details,section) {
+// const  disclosureDetails  need to re-check.reasons loadCoiReviewComments api payload  not correct  
+            let coiData = this._dataStore.getData();
+            const disclosureDetails:coiReviewComment = {
+                documentOwnerPersonId: coiData.coiDisclosure.person.personId,
+                disclosureId: coiData.coiDisclosure.disclosureId,
+                coiSectionsTypeCode: '6',
+                headerName: section === 'PROJECT' ? details.title : details.coiEntity.entityName,
+                coiSubSectionsId: 'PROJECT' ? details.moduleItemId : details.moduleItemKey,
+                componentSubRefId: section === 'RELATIONSHIP' ? details.disclosureDetailsId : null
+            }
+            this._commonService.$commentConfigurationDetails.next(disclosureDetails);
+            this._coiService.isShowCommentNavBar = true;
     }
 
 }
