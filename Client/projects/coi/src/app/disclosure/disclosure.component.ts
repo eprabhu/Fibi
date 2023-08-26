@@ -26,7 +26,7 @@ import { NavigationService } from '../common/services/navigation.service';
 import { getSponsorSearchDefaultValue, openCommonModal } from '../common/utilities/custom-utilities';
 import { environment } from '../../environments/environment';
 import { ModalType} from '../disclosure/coi-interface';
-import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
+import { DefaultAssignAdminDetails, PersonProjectOrEntity, coiReviewComment } from '../shared-components/shared-interface';
 
 @Component({
     selector: 'app-disclosure',
@@ -684,5 +684,24 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 				return IS_PROJECT_ADMINISTRATOR;
 		}
     }
+    
+    openReviewComment() {	
+        const disclosureDetails:coiReviewComment = {
+            disclosureId: this.coiData.coiDisclosure.disclosureId,
+            coiSectionsTypeCode: '3',
+            documentOwnerPersonId: this.coiData.coiDisclosure.person.personId,
+            coiSubSectionsId: null,
+            headerName: '',
+            componentSubRefId: null
+        }
+        this.commonService.$commentConfigurationDetails.next(disclosureDetails);	
+        this.coiService.isShowCommentNavBar = true;	
+    }
+
+    closeReviewComment(event) {
+        this.coiService.isShowCommentNavBar = event;
+    }
+
+    
 
 }

@@ -20,6 +20,7 @@ import { ReviewCommentsSliderComponent } from './review-comments-slider/review-c
 import { CoiSliderComponent } from './coi-slider/coi-slider.component';
 import { HelpTextComponent } from './help-text/help-text.component';
 import { PersonProjectEntityCardComponent } from './person-project-entity-card/person-project-entity-card.component';
+import { ReviewCommentListViewComponent } from './review-comment-list-view/review-comment-list-view.component';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { PersonProjectEntityCardComponent } from './person-project-entity-card/p
     CoiSliderComponent,
     HelpTextComponent,
     PersonProjectEntityCardComponent,
-    EntityRiskSliderComponent
+    EntityRiskSliderComponent,
+    ReviewCommentListViewComponent
   ],
   exports: [
     NoInformationComponent,
@@ -63,7 +65,8 @@ import { PersonProjectEntityCardComponent } from './person-project-entity-card/p
     CoiSliderComponent,
     HelpTextComponent,
     PersonProjectEntityCardComponent,
-    EntityRiskSliderComponent
+    EntityRiskSliderComponent,
+    ReviewCommentListViewComponent
   ]
 })
 export class SharedComponentModule { }

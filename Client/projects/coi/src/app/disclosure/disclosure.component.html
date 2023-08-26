@@ -339,7 +339,7 @@
                         title="Click here to add new review comment"
                         *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         [ngClass]="isCardExpanded ? 'mb-3' : ''"
-                        (click)="coiService.isShowCommentNavBar = !coiService.isShowCommentNavBar"
+                        (click)="openReviewComment()"
                         class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 mb-10">
                         <mat-icon class="me-2">rate_review</mat-icon>
                         <span *ngIf="isCardExpanded">Comments</span>
@@ -714,7 +714,7 @@
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
 <div *ngIf="coiService.isShowCommentNavBar">
-    <app-review-comments-slider></app-review-comments-slider>
+    <app-review-comments-slider  (closePage)="closeReviewComment($event)"></app-review-comments-slider>
 </div>
 
 <!--Disclosure Withdraw/Return Confirmation Modal-->

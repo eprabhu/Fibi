@@ -11,6 +11,7 @@ export class COI {
     proposalIdlinkedInDisclosure: any;
     projectDetail: any;
     coiReviewerList: ReviewerList[];
+    documentOwnerPersonId: string;
 }
 
 export interface CoiConflictStatusType {
