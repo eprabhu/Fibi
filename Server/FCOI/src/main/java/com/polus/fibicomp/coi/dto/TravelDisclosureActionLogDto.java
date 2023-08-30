@@ -22,5 +22,7 @@ public class TravelDisclosureActionLogDto {
 	private String riskCategory;
 	private String newRiskCategoryCode;
 	private String newRiskCategory;
+	private String oldDisclosureStatus;
+	private String newDisclosureStatus;
 
 }

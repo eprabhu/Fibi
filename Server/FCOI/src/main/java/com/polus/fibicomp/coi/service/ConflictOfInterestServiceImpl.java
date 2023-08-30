@@ -145,6 +145,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String ACTION_LOG_APPROVED = "13";
 	private static final String TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT = "1";
 	private static final String ACTION_LOG_RISK_ADDED = "9";
+	private static final String ACTION_LOG_DISCLOSURE_STATUS_CREATED = "14";
+	private static final String ACTION_LOG_DISCLOSURE_STATUS_CHANGED = "15";
 	private static final String DEFAULT_DISCLOSURE_RISK = "This is the default status set by the system.";
 	private static final String DEFAULT_ENTITY_RISK = "This is the status set by the user at the time of Entity creation.";
 	private static final String DEFAULT_TRAVEL_RISK = "This is the status set by the user against the entity, which is now the current status of the disclosure.";
@@ -1227,6 +1229,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		if (coiTravelDisclosure.getAdminPersonId() != null) {
 			coiTravelDisclosure.setAdminPersonName(personDao.getPersonFullNameByPersonId(coiTravelDisclosure.getAdminPersonId()));
 		}
+		if (coiTravelDisclosure.getRiskCategoryCode() != null) {
+			CoiRiskCategory coiRiskCategory = conflictOfInterestDao.getRiskCategoryStatusByCode(coiTravelDisclosure.getRiskCategoryCode());
+			coiTravelDisclosure.setRiskLevel(coiRiskCategory.getDescription());
+		}
 		try {
 			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_CREATED)
 					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
@@ -1486,6 +1492,35 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 	}
 
+	
+	private void setActionLogForTravelDisclosureStatusAndRisk(CoiTravelDisclosure coiTravelDisclosure, Integer entityId) {
+		CoiEntity coiEntity = conflictOfInterestDao.getCoiEntityDetailsById(entityId);
+		try {
+			if (coiTravelDisclosure.getDisclosureStatusCode() == null) {
+				coiTravelDisclosure.setDisclosureStatusCode(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
+				CoiTravelDisclosureStatusType coiTravelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
+				coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(coiTravelDisclosureStatusType);
+				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_DISCLOSURE_STATUS_CREATED)
+						.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+						.build();
+				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+			}
+			if (coiTravelDisclosure.getRiskCategoryCode() == null) {
+				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_RISK_ADDED)
+						.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+						.riskCategoryCode(coiEntity.getRiskCategoryCode())
+						.riskCategory(coiEntity.getEntityRiskCategory().getDescription())
+						.comment(DEFAULT_TRAVEL_RISK)
+						.build();
+				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+				coiTravelDisclosure.setRiskCategoryCode(coiEntity.getRiskCategoryCode());
+			}
+		} catch (Exception e) {
+			logger.error("SubmitDisclosure : {}", e.getMessage());
+		}
+		
+	}
+
 	/** On Submitting travel disclosure, Review Status -> Submitted, Document Status -> Draft and Version Status -> PENDING */
 	@Override
 	public ResponseEntity<Object> submitTravelDisclosure(ConflictOfInterestVO vo) {
@@ -1506,15 +1541,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setExpirationDate(getExpirationDate());
-		CoiEntity coiEntity = conflictOfInterestDao.getCoiEntityDetailsById(vo.getEntityId());
-		if (coiTravelDisclosure.getDisclosureStatusCode() == null) {
-			coiTravelDisclosure.setDisclosureStatusCode(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
-			CoiTravelDisclosureStatusType coiTravelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
-			coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(coiTravelDisclosureStatusType);
-		}
-		if (coiTravelDisclosure.getRiskCategoryCode() == null) {
-			coiTravelDisclosure.setRiskCategoryCode(coiEntity.getRiskCategoryCode());
-		}
+		setActionLogForTravelDisclosureStatusAndRisk(coiTravelDisclosure, vo.getEntityId());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		DisclComment disclComment = DisclComment.builder()
 				.comment("This is a system-generated Disclosure Status")
@@ -1533,15 +1560,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
 					.build();
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
-			actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_RISK_ADDED)
-					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
-					.riskCategoryCode(coiEntity.getRiskCategoryCode())
-					.riskCategory(coiEntity.getEntityRiskCategory().getDescription())
-					.comment(DEFAULT_TRAVEL_RISK)
-					.build();
-			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
-			logger.error("createDisclosure : {}", e.getMessage());
+			logger.error("SubmitDisclosure : {}", e.getMessage());
 		}
 		return new ResponseEntity<>(coiTravelDosclosureObject, HttpStatus.OK);
 	}
@@ -2167,6 +2187,27 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> getTravelConflictStatusType() {
 		return new ResponseEntity<>(conflictOfInterestDao.getTravelConflictStatusType(),HttpStatus.OK);
 	}
+	
+	private void setTravelActionLogWhileDisclosureStatusChange(ConflictOfInterestVO vo, CoiTravelDisclosure coiTravelDisclosure) {
+		String oldDisclosureStatus = coiTravelDisclosure.getDisclosureStatusCode() != null ?
+				conflictOfInterestDao.getTravelDisclosureStatusDetails(coiTravelDisclosure.getDisclosureStatusCode()).getDescription() : null;
+		String newDisclosureStatus = conflictOfInterestDao.getTravelDisclosureStatusDetails(vo.getDisclosureStatusCode()).getDescription();
+		if (oldDisclosureStatus != null) {
+			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_DISCLOSURE_STATUS_CHANGED)
+	                .travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId())
+	                .travelNumber(coiTravelDisclosure.getTravelNumber())
+	                .oldDisclosureStatus(oldDisclosureStatus)
+	                .newDisclosureStatus(newDisclosureStatus).build();
+			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+		}
+		else {
+			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_DISCLOSURE_STATUS_CREATED)
+	                .travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId())
+	                .travelNumber(coiTravelDisclosure.getTravelNumber())
+	                .newDisclosureStatus(newDisclosureStatus).build();
+			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
+		}
+	}
 
 	@Override
 	public ResponseEntity<Object> manageTravelConflict(ConflictOfInterestVO vo) {
@@ -2176,6 +2217,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			saveTravelDisclConflictComment(vo);
 		}
 		else {
+			setTravelActionLogWhileDisclosureStatusChange(vo, coiTravelDisclosure);
 			DisclComment disclComment = conflictOfInterestDao.getTravelConflictComment(vo.getTravelDisclosureId());
 			saveTravelConflictHistory(coiTravelDisclosure, disclComment);
 			updateTravelDisclConflictComment(disclComment, vo.getDescription());

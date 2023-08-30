@@ -200,6 +200,12 @@ public class ActionLogServiceImpl implements ActionLogService {
 		if (actionLogDto.getActionTypeCode().equals(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_RISK)) {
 			placeholdersAndValues.put("{LOW}", actionLogDto.getRiskCategory());
 		}
+		if (actionLogDto.getOldDisclosureStatus() != null) {
+			placeholdersAndValues.put("{STATUS_ONE}", actionLogDto.getOldDisclosureStatus());
+			placeholdersAndValues.put("{STATUS_TWO}", actionLogDto.getNewDisclosureStatus());
+		} else if (actionLogDto.getNewAdmin() != null) {
+			placeholdersAndValues.put("{STATUS_ONE}", actionLogDto.getNewDisclosureStatus());
+		}
 		return renderPlaceholders(message, placeholdersAndValues);
 	}
 
