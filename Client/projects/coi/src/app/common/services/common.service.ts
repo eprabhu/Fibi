@@ -58,6 +58,7 @@ export class CommonService {
     previousURL = null;
     fibiApplicationUrl = '';
     $ScrollAction = new Subject<{event: Event,pageYOffset: number}>();
+    $commentConfigurationDetails =  new BehaviorSubject<any>({});
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
@@ -235,11 +236,20 @@ export class CommonService {
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
         this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' : 'bg-danger';
-        if(toast && toast_body) {
+        if (toast && toast_body) {
             ['bg-success', 'bg-danger'].forEach(className => toast._element.classList.remove(className));
             toast_body.innerText =  this.appToastContent;
             toast._element.classList.add(this.toastClass);
             toast.show();
+
+            // Focus the toast element
+            toast_body.focus();
+
+            // Unfocus after 5000 milliseconds
+            setTimeout(() => {
+                toast_body.innerText = '';
+                toast.hide();
+            }, 5000);
         }
 
 

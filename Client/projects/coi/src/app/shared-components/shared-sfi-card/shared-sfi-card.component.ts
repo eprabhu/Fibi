@@ -21,6 +21,7 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   @Output() viewSlider = new EventEmitter<any>();
   @Output() deleteEvent =  new EventEmitter<any>();
   @Output() activateDeactivateEvent =  new EventEmitter<any>();
+  @Output() reviewSlider = new EventEmitter<any>();
 
   SFIObject = new SfiObject();
   $subscriptions: Subscription[] = [];
@@ -90,4 +91,8 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
     this.activateDeactivateEvent.emit(this.reqObject);
   }
 
+  openReviewComment(relationshipDetails) {
+    this.reviewSlider.emit({personEntityId: relationshipDetails.entityId, personEntityHeader :relationshipDetails.entityName});
+  }
+  
 }

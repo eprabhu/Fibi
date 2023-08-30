@@ -6,6 +6,7 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { CoiService } from './coi.service';
 import { map } from 'rxjs/operators';
+import { openCommonModal } from '../../common/utilities/custom-utilities';
 
 @Injectable()
 export class RouterGuardService  {
@@ -43,7 +44,7 @@ export class RouterGuardService  {
         }
     canDeactivate(): boolean {
         if (this._dataStore.dataChanged) {
-            document.getElementById('hidden-validate-button').click();
+            openCommonModal('disclsoure-unsaved-changes-modal');
             return false;
         } else {
             return true;

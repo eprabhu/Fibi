@@ -70,7 +70,7 @@
         (click)="openSfiDetails(SFIObject?.entityId, 'view')">
         <mat-icon>remove_red_eye</mat-icon>
       </span>
-      <span class="btn btn-primary-icon btn btn-sm d-flex" id="add-activity" title="Comments" type="button">
+      <span (click)="openReviewComment(SFIObject);" class="btn btn-primary-icon btn btn-sm d-flex" id="add-activity" title="Comments" type="button">
         <mat-icon>rate_review</mat-icon>
       </span>
     </div>

@@ -339,7 +339,7 @@
                         title="Click here to add new review comment"
                         *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
                         [ngClass]="isCardExpanded ? 'mb-3' : ''"
-                        (click)="coiService.isShowCommentNavBar = !coiService.isShowCommentNavBar"
+                        (click)="openReviewComment()"
                         class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 mb-10">
                         <mat-icon class="me-2">rate_review</mat-icon>
                         <span *ngIf="isCardExpanded">Comments</span>
@@ -604,42 +604,28 @@
     </div>
 </div>
 <!--questionnaire evalution messge end-->
-<!--Unsaved Changes Modal-->
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-validate-button" data-bs-toggle="modal"
-    data-bs-target="#saveAndExitModal"></button>
-<div class="modal modal-coi fade mySkinDialog" id="saveAndExitModal" role="dialog" aria-labelledby="saveAndExitModal"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirmation</h5>
-                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
-                    aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'" class="fs-14">You have unsaved changes
-                    in
-                    <strong>{{coiService.unSavedModules}}.</strong>
-                </p>
-                <p class="fs-14">Do you want to leave the
-                    <ng-container *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">page without
-                        saving</ng-container>
-                    <ng-container
-                        *ngIf="coiService.unSavedModules != 'Screening Questionnaire'"><strong>Certification</strong>
-                        Page</ng-container>
-                    ?
-                </p>
-            </div>
-            <div class="modal-footer mx-2">
-                <button type="button" class="btn btn-outline-secondary" (click)="leavePageClicked();"
-                    data-bs-dismiss="modal">Leave Page</button>
-                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="stayOnPageClicked()"
-                    data-bs-dismiss="modal">Stay On Page</button>
-            </div>
-        </div>
+
+<!--Unsaved Changes confirmation Modal-->
+<app-confirmation-modal [modalName] = "'disclsoure-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked()"
+    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
+    <!-- modal header -->
+    <ng-container header>
+        <span>Confirmation</span>
+    </ng-container>
+    <!-- modal content -->
+    <div content class="ms-2">
+        <p *ngIf="coiService.unSavedModules != 'Certification'" class="fs-14">
+            You have unsaved changes in
+            <strong>{{coiService?.unSavedModules}}.</strong>
+        </p>
+        <p class="fs-14">Do you want to leave the
+            <strong *ngIf="coiService.unSavedModules == 'Certification'">Certification </strong>
+            {{coiService.unSavedModules == 'Certification' ? 'Page' : 'page without saving' }} ?
+        </p>
     </div>
-</div>
+</app-confirmation-modal>
+<!--Unsaved Changes confirmation Modal end-->
+
 <!--validation modal-->
 <div class="modal fade mySkinDialog" tabindex="-1" id="ValidatedModal" tabindex="-1" role="dialog"
     data-backdrop="static" data-keyboard="false" aria-hidden="true">
@@ -728,7 +714,7 @@
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
 <div *ngIf="coiService.isShowCommentNavBar">
-    <app-review-comments-slider></app-review-comments-slider>
+    <app-review-comments-slider  (closePage)="closeReviewComment($event)"></app-review-comments-slider>
 </div>
 
 <!--Disclosure Withdraw/Return Confirmation Modal-->
