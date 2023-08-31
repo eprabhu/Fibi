@@ -51,8 +51,9 @@ export class SortCountObj {
     disclosureCategoryType = 0;
     disclosureStatus = 0;
     expirationDate = 0;
-    updateTimeStamp = 2;
     certificationDate = 0;
+    certifiedAt = 0;
+    updateTimeStamp = 2;
 }
 
 export class NameObject {
