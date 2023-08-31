@@ -1,5 +1,6 @@
 package com.polus.fibicomp.coi.repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -25,6 +26,7 @@ import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.fibicomp.constants.Constants;
 
 @Repository
 @Primary
@@ -51,12 +53,13 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
     }
 
     @Override
-	public List<DisclosureActionLog> fetchDisclosureActionLogsBasedOnDisclosureId(Integer disclosureId) {
+	public List<DisclosureActionLog> fetchDisclosureActionLogsBasedOnDisclosureId(Integer disclosureId, List<String> reviewActionTypeCodes) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<DisclosureActionLog> query = builder.createQuery(DisclosureActionLog.class);
 		Root<DisclosureActionLog> root = query.from(DisclosureActionLog.class);
-        query.where(builder.equal(root.get("disclosureId"), disclosureId));
+		query.where(builder.and(builder.equal(root.get("disclosureId"), disclosureId),
+				builder.not(root.get("actionTypeCode").in(reviewActionTypeCodes))));
         query.orderBy(builder.desc(root.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
@@ -130,6 +133,18 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
 		Root<TravelDisclosureActionLog> root = query.from(TravelDisclosureActionLog.class);
 		query.where(builder.equal(root.get("travelDisclosureId"), actionLogDto.getTravelDisclosureId()),
 				builder.equal(root.get("actionTypeCode"), actionLogDto.getActionTypeCode()));
+		query.orderBy(builder.desc(root.get("updateTimestamp")));
+		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public List<DisclosureActionLog> fetchReviewActionLogs(Integer disclosureId, List<String> actionTypeCodes) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<DisclosureActionLog> query = builder.createQuery(DisclosureActionLog.class);
+		Root<DisclosureActionLog> root = query.from(DisclosureActionLog.class);
+		query.where(builder.and(builder.equal(root.get("disclosureId"), disclosureId),
+				root.get("actionTypeCode").in(actionTypeCodes)));
 		query.orderBy(builder.desc(root.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}

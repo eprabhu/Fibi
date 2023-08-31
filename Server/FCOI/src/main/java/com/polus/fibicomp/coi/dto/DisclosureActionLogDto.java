@@ -28,4 +28,8 @@ public class DisclosureActionLogDto {
 	private String newRiskCategoryCode;
 	private String newRiskCategory;
 	private List<String> actionTypeCodes;
+	private String administratorName;
+	private String oldReviewer;
+	private String newReviewer;
+
 }

@@ -148,7 +148,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String ACTION_LOG_DISCLOSURE_STATUS_CREATED = "14";
 	private static final String ACTION_LOG_DISCLOSURE_STATUS_CHANGED = "15";
 	private static final String DEFAULT_DISCLOSURE_RISK = "This is the default status set by the system.";
-	private static final String DEFAULT_ENTITY_RISK = "This is the status set by the user at the time of Entity creation.";
+	private static final String SYS_GENERATED_ENTITY_RISK = "This is the default status set by the system.";
+	private static final String USER_DEFINED_ENTITY_RISK = "This is the status set by the user at the time of Entity creation.";
 	private static final String DEFAULT_TRAVEL_RISK = "This is the status set by the user against the entity, which is now the current status of the disclosure.";
 
 	@Override
@@ -544,16 +545,32 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public CoiReview saveOrUpdateCoiReview(ConflictOfInterestVO vo){
+		String actionTypeCode = null;
 		CoiReview coiReview = vo.getCoiReview();
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
 		if (coiReview.getCoiReviewId() == null) {
 		 coiReview.setReviewStatusTypeCode(REVIEW_STATUS_TYPE_CODE);
 		 coiReview.setCoiReviewStatus(conflictOfInterestDao.getReviewStatus(REVIEW_STATUS_TYPE_CODE));
+		 actionTypeCode = Constants.COI_DISCLOSURE_ACTION_LOG_ADD_REVIEWER;
 		}
+		else {
+			actionTypeCode = Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REASSIGNED;
+		}
+		String assigneePersonId = coiReview.getCoiReviewId() != null ? conflictOfInterestDao.loadCoiReviewAssigneePersonName(coiReview.getCoiReviewId()) : null;
+		String assigneePersonName = assigneePersonId != null ? personDao.getPersonFullNameByPersonId(assigneePersonId) : null;
 		conflictOfInterestDao.saveOrUpdateCoiReview(vo.getCoiReview());
 		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(coiReview.getDisclosureId());
 		try {
-			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
+			DisclosureActionLogDto  actionLogDto = DisclosureActionLogDto.builder()
+					.actionTypeCode(actionTypeCode).disclosureId(disclosure.getDisclosureId())
+					.disclosureNumber(disclosure.getDisclosureNumber()).fcoiTypeCode(disclosure.getFcoiTypeCode())
+					.revisionComment(coiReview.getDescription())
+					.oldReviewer(assigneePersonName!=null ? assigneePersonName :coiReview.getAssigneePersonName())
+					.newReviewer(coiReview.getAssigneePersonName())
+					.administratorName(AuthenticatedUser.getLoginUserFullName())
+					.build();
+			actionLogService.saveDisclosureActionLog(actionLogDto);
+			actionLogDto = DisclosureActionLogDto.builder()
 					.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ASSIGNED_FOR_REVIEW).disclosureId(disclosure.getDisclosureId())
 					.disclosureNumber(disclosure.getDisclosureNumber()).fcoiTypeCode(disclosure.getFcoiTypeCode())
 					.reviewername(coiReview.getAssigneePersonName()).revisionComment(coiReview.getDescription())
@@ -598,6 +615,21 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiReviewAssigneeHistory.setCoiReviewActivityId(START_ACTIVIVITY);
 		conflictOfInterestDao.saveOrUpdateCoiReviewAssigneeHistory(coiReviewAssigneeHistory);
 		conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
+		try {
+			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
+					.actionTypeCode(personName.equalsIgnoreCase(AuthenticatedUser.getLoginUserFullName())
+							? Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_START_REVIEW
+							: Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW)
+					.disclosureId(coiReview.getDisclosureId())
+					.disclosureNumber(coiReview.getCoiDisclosure().getDisclosureNumber())
+					.fcoiTypeCode(coiReview.getCoiDisclosure().getFcoiTypeCode())
+					.reviewername(coiReview.getAssigneePersonName())
+					.administratorName(AuthenticatedUser.getLoginUserFullName())
+					.build();
+			actionLogService.saveDisclosureActionLog(actionLogDto);
+		} catch (Exception e) {
+			logger.error("saveOrUpdateCoiReview : {}", e.getMessage());
+		}
 		return coiReview;
 	}
 	
@@ -751,6 +783,16 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.disclosureNumber(disclosure.getDisclosureNumber()).fcoiTypeCode(disclosure.getFcoiTypeCode())
 					.revisionComment(disclosure.getRevisionComment()).build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
+			actionLogDto = DisclosureActionLogDto.builder()
+					.actionTypeCode(personName.equalsIgnoreCase(AuthenticatedUser.getLoginUserFullName())
+							? Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_COMPLETE_REVIEW
+							: Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW)
+					.disclosureId(disclosure.getDisclosureId())
+					.disclosureNumber(disclosure.getDisclosureNumber()).fcoiTypeCode(disclosure.getFcoiTypeCode())
+					.reviewername(coiReview.getAssigneePersonName())
+					.administratorName(AuthenticatedUser.getLoginUserFullName())
+					.build();
+			actionLogService.saveDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
 			logger.error("completeReview : {}", e.getMessage());
 		}
@@ -772,6 +814,19 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			conflictOfInterestDao.deleteReviewComment(coiReview.getAssigneePersonId(),coiReview.getDisclosureId());
 			conflictOfInterestDao.deleteReview(coiReviewId);
 			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
+			try {
+				DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
+						.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REMOVED)
+						.disclosureId(coiReview.getDisclosureId())
+						.disclosureNumber(coiReview.getCoiDisclosure().getDisclosureNumber())
+						.fcoiTypeCode(coiReview.getCoiDisclosure().getFcoiTypeCode())
+						.reviewername(personDao.getPersonFullNameByPersonId(coiReview.getAssigneePersonId()))
+						.administratorName(AuthenticatedUser.getLoginUserFullName())
+						.build();
+				actionLogService.saveDisclosureActionLog(actionLogDto);
+			} catch (Exception e) {
+				logger.error("saveOrUpdateCoiReview : {}", e.getMessage());
+			}
 			return commonDao.convertObjectToJSON(DELETE_MSG);
 		} catch(Exception e) {
 			throw new ApplicationException("deleteCoiReview",e, Constants.JAVA_ERROR);
@@ -950,6 +1005,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> saveOrUpdateCoiEntity(ConflictOfInterestVO vo) {
 		CoiEntity coiEntity = vo.getCoiEntity();
 		coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		String entityRiskComment = null;
 		if (coiEntity.getEntityId() == null) { // on creation
 			coiEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
 			coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
@@ -957,8 +1013,15 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 			coiEntity.setVersionNumber(Constants.COI_INITIAL_VERSION_NUMBER);
 			coiEntity.setEntityNumber(conflictOfInterestDao.generateMaxCoiEntityNumber());
+			if (coiEntity.getRiskCategoryCode() == null) {
+				coiEntity.setRiskCategoryCode(RISK_CAT_CODE_LOW);
+				coiEntity.setEntityRiskCategory(conflictOfInterestDao.getEntityRiskDetails(RISK_CAT_CODE_LOW));
+				entityRiskComment = SYS_GENERATED_ENTITY_RISK;
+			} else {
+				entityRiskComment = USER_DEFINED_ENTITY_RISK;
+			}
 			conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
-			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE, coiEntity, DEFAULT_ENTITY_RISK);
+			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_RISK_ADD_ACTION_LOG_CODE, coiEntity, entityRiskComment);
 			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_CREATE_ACTION_LOG_CODE, coiEntity, null);
 		} else { // on update or patch checks its a major change or not
 			Integer entityId = coiEntity.getEntityId();
