@@ -568,5 +568,8 @@
       }
     }
   }
-  "defaultProject": "coi"
+  "defaultProject": "coi",
+  "cli": {
+    "analytics": false
+  }
 }
