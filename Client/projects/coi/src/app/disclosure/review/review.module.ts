@@ -9,6 +9,8 @@ import { LocationComponent } from './location-track/location.component';
 import { GeneralCommentsComponent } from './general-comments/general-comments.component';
 import {SharedModule} from "../../shared/shared.module";
 import { SharedDisclosureModule } from '../shared-disclosure/shared-disclosure.module';
+import { ReviewHistoryComponent } from './review-history/review-history.component';
+import { SharedComponentModule } from '../../shared-components/shared-component.module';
 
 @NgModule({
     imports: [
@@ -16,12 +18,14 @@ import { SharedDisclosureModule } from '../shared-disclosure/shared-disclosure.m
         RouterModule.forChild([{ path: '', component: ReviewComponent }]),
         FormsModule,
         SharedModule,
-        SharedDisclosureModule
+        SharedDisclosureModule,
+        SharedComponentModule
       ],
     declarations: [
         ReviewComponent,
         LocationComponent,
-        GeneralCommentsComponent
+        GeneralCommentsComponent,
+        ReviewHistoryComponent
     ],
     providers: [ReviewService]
 })

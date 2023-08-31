@@ -90,7 +90,7 @@ export class CoiReviewCommentsComponent implements OnInit, OnDestroy, OnChanges 
 
     setCommentArray(commentArray: any) {
         const COMMENT_ARRAY = [];
-        commentArray.forEach(comment => {
+        commentArray?.forEach(comment => {
             if (!comment.coiParentCommentId) {
                 const COMMENT = JSON.parse(JSON.stringify(comment));
                 COMMENT.childComments = this.filterChildComments(comment.coiReviewCommentId, commentArray);

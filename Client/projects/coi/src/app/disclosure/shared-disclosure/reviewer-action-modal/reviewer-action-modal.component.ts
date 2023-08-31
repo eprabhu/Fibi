@@ -17,8 +17,9 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     currentReviewer: any = {};
     $subscriptions: Subscription[] = [];
 
-    constructor(private _coiService: CoiService, private _dataStore: DataStoreService,
-        private _commonService: CommonService) { }
+    constructor( private _coiService: CoiService, 
+                 private _dataStore: DataStoreService,
+                 private _commonService: CommonService ) { }
 
     ngOnInit() {
         this.getReviewerDetails();
