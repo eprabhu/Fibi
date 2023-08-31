@@ -180,7 +180,7 @@
                  (ngModelChange)="entityDetails.coiEntity.phone = entityDetails.coiEntity.phone.trim()"
                    (keypress)="inputRestriction($event)" [disabled]="isResultFromSearch || isViewMode"
                    [ngClass]="mandatoryList?.has('phone') ? 'is-invalid d-block' : ''"
-                   (keyup)="phoneNumberValidation(entityDetails.coiEntity.phone)">
+                   (keyup)="phoneNumberValidation(entityDetails.coiEntity.phone)" maxlength="15">
                </div>
                <div *ngIf="mandatoryList?.has('phone')" class="invalid-feedback d-block fs-13">
                  {{mandatoryList?.get('phone')}}
@@ -198,7 +198,7 @@
              <div class="col pe-1">
                <input type="text" class="form-control" [(ngModel)]="entityDetails.coiEntity.zipCode"
                (ngModelChange)="entityDetails.coiEntity.zipCode = entityDetails.coiEntity.zipCode.trim()"
-                 (keypress)="inputRestriction($event)"
+                 (keypress)="inputRestriction($event)" maxlength="15"
                  [ngClass]="(mandatoryList?.has('zipCode')) ? 'is-invalid d-block' : ''"
                  [disabled]="isResultFromSearch || isViewMode">
                  <div *ngIf="mandatoryList?.has('zipCode')" class="invalid-feedback d-block fs-13">
