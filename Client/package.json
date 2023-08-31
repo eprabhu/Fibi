@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --host 192.168.1.12 --port 4900",
+    "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve coi",
     "build": "ng build",
     "start-coi": "ng serve coi --host 0.0.0.0",
     "start-fibi": "ng serve fibi --host 0.0.0.0",
