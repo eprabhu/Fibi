@@ -1,7 +1,7 @@
 
-<div #defineRelationOverlay class="overlay">
+<div #defineRelationOverlay class="overlay" >
 <div class="slider-base">
-  <app-slider-close-btn (closeAction)="hideSfiNavBar($event)"></app-slider-close-btn>
+  <app-slider-close-btn (closeAction)="validateProjectSfiSliderOnClose()"></app-slider-close-btn>
   <div class="slider-container">
       <div class="relationship-details-box card" id="relationship-details-box">
         <div class="col-12 d-flex">
@@ -103,5 +103,32 @@
         <button type="button" class="btn btn-primary fs-14" (click)="clearSingleEntity()" data-bs-dismiss="modal">Yes</button>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="modal fade mySkinDialog" id="projectSfiConfirmationModal" role="dialog">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">
+                  Confirmation
+              </h5>
+              <button type="button" class="fs-12 btn-close" data-bs-dismiss="modal" aria-label="Close">
+              </button>
+          </div>
+          <div class="modal-body title-descriptions">
+              <p> You have unsaved changes in the <strong>Project SFI relationships</strong>, do you want to leave?
+              </p>
+          </div>
+          <div class="modal-footer mx-2">
+              <button type="button" class="btn btn-outline-secondary fs-14" data-bs-dismiss="modal"
+                  (click)="hideConflictNavBar()">
+                  Leave Page
+              </button>
+              <button type="button" class="btn btn-primary fs-14" data-bs-dismiss="modal">
+                  Stay On Page
+              </button>
+          </div>
+      </div>
   </div>
 </div>

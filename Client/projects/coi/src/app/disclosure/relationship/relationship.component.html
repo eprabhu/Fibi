@@ -38,7 +38,7 @@
       *ngIf="(awardList| SearchFilter : searchText:
   ['title', 'moduleItemId', 'moduleItemKey', 'moduleStatus', 'principalInvestigator', 'sponsor', 'primeSponsor']) as searchResult; let i = index">
       <ng-container *ngIf="isShowNoDataCard">
-        <div *ngIf="searchResult.length" [@listAnimation]="searchResult.length">
+        <div *ngIf="searchResult.length" [@listAnimation]="searchResult.length" [@.disabled]="isAnimationPaused">
             <ng-container *ngFor="let relation of searchResult;let i = index">
                 <div class="card outer-card">
                     <div class="card-body">

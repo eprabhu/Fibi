@@ -48,6 +48,7 @@ export class RelationshipComponent implements OnInit {
   coiValidationMap: Map<string, string> = new Map();
   coiTableValidation: Map<string, string> = new Map();
   coiStatusCode: any = null;
+  isAnimationPaused = false;
 
 
 
@@ -55,15 +56,19 @@ export class RelationshipComponent implements OnInit {
               private _dataStore: DataStoreService,
               public _router: Router,
               private _commonService: CommonService,
-              private _sfiService: SfiService) { }
+              private _sfiService: SfiService) {
+                setTimeout(() => {
+                  this.isAnimationPaused = false;
+                }, 1000);
+               }
 
-  closePage() {
+  closePage(event: any) {
     this.isShowRelation = false;
     this.moduleCode = null;
     this.moduleId = null;
-    if(this.isEditMode) {
+    if (this._relationShipService.isSliderDataUpdated) {
       this.updateConflictStatus();
-      this.loadProjectRelations(); 
+      this.loadProjectRelations();
     }
   }
 
@@ -109,6 +114,7 @@ export class RelationshipComponent implements OnInit {
         if (this.awardList.length === 1) {
           this.isShowCollapsedConflictRelationship = true;
           this.getEntityList();
+          this.isAnimationPaused = false;
         }
       }
     });
