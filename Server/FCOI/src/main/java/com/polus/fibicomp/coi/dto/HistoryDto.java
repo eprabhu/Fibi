@@ -13,5 +13,6 @@ public class HistoryDto {
     private String updateUserFullName;
     private String actionTypeCode;
     private String message;
+    private String comment;
 
 }

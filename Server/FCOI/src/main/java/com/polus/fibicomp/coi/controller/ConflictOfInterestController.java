@@ -617,4 +617,9 @@ public class ConflictOfInterestController {
         return conflictOfInterestService.fetchTravelDisclosureHistory(actionLogDto);
     }
 
+    @GetMapping("/reviewHistory/{disclosureId}")
+   	public ResponseEntity<Object> getReviewHistoryById(@PathVariable("disclosureId") Integer disclosureId) {
+   		return actionLogService.getReviewHistoryById(disclosureId);
+   	}
+
 }

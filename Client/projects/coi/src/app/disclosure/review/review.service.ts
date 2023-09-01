@@ -23,4 +23,9 @@ export class ReviewService {
     deleteReview(coiReviewId: any) {
         return this._http.delete(`${this._commonService.baseUrl}/deleteReview/${coiReviewId}`);
     }
+
+    reviewHistory(disclosureId: any) {
+        return this._http.get(`${this._commonService.baseUrl}/reviewHistory/${disclosureId}`);
+    }
+
 }

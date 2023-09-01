@@ -3877,4 +3877,14 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	    return session.createQuery(query).getResultList();
 	}
 
+	@Override
+	public String loadCoiReviewAssigneePersonName(Integer coiReviewId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+	    CriteriaBuilder builder = session.getCriteriaBuilder();
+	    CriteriaQuery<String> query = builder.createQuery(String.class);
+	    Root<CoiReview> root = query.from(CoiReview.class);
+	    query.select(root.get("assigneePersonId")).where(builder.equal(root.get("coiReviewId"), coiReviewId));
+	    return session.createQuery(query).getSingleResult();
+	}
+
 }
