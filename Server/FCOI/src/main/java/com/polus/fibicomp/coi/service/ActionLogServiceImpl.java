@@ -1,6 +1,7 @@
 package com.polus.fibicomp.coi.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,18 +146,29 @@ public class ActionLogServiceImpl implements ActionLogService {
         	placeholdersAndValues.put("{ADMIN_ONE}", actionLogDto.getNewAdmin());
         }
         if(actionLogDto.getReviewername()!=null) {
-        	placeholdersAndValues.put("{Reviewer Name}", actionLogDto.getReviewername());
+        	placeholdersAndValues.put("{REVIEWER_NAME}", actionLogDto.getReviewername());
         }
         if (actionLogDto.getRiskCategory() != null) {
             placeholdersAndValues.put("{LOW}", actionLogDto.getRiskCategory());
             placeholdersAndValues.put("{HIGH}", actionLogDto.getNewRiskCategory());
+        }
+        if (actionLogDto.getAdministratorName() != null) {
+            placeholdersAndValues.put("{ADMIN_NAME}", actionLogDto.getAdministratorName());
+        }
+        if (actionLogDto.getOldReviewer() != null) {
+            placeholdersAndValues.put("{REVIEWER_ONE}", actionLogDto.getOldReviewer());
+            placeholdersAndValues.put("{REVIEWER_TWO}", actionLogDto.getNewReviewer());
+            
         }
         return renderPlaceholders(message, placeholdersAndValues);
     }
 
 	@Override
 	public ResponseEntity<Object> getDisclosureHistoryById(Integer disclosureId) {
-		List<DisclosureActionLog> disclsouretActionLogs = actionLogRepositoryCustom.fetchDisclosureActionLogsBasedOnDisclosureId(disclosureId);
+		List<String> reviewActionTypeCodes = Arrays.asList(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_START_REVIEW,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_COMPLETE_REVIEW,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REMOVED,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REASSIGNED);
+		List<DisclosureActionLog> disclsouretActionLogs = actionLogRepositoryCustom.fetchDisclosureActionLogsBasedOnDisclosureId(disclosureId, reviewActionTypeCodes);
 		List<HistoryDto> disclosureHistories = new ArrayList<>();
 		disclsouretActionLogs.forEach(disclsouretActionLog -> {
 			HistoryDto historyDto = new HistoryDto();
@@ -166,6 +178,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 			}
 			historyDto.setActionTypeCode(disclsouretActionLog.getActionTypeCode());
 			historyDto.setMessage(disclsouretActionLog.getDescription());
+			historyDto.setComment(disclsouretActionLog.getComment());
 			disclosureHistories.add(historyDto);
 		});
 		return new ResponseEntity<>(disclosureHistories, HttpStatus.OK);
@@ -278,6 +291,27 @@ public class ActionLogServiceImpl implements ActionLogService {
 			actionLogList.add(travelDisclosureActionLog);
 		});
 		return actionLogList;
+	}
+
+	@Override
+	public ResponseEntity<Object> getReviewHistoryById(Integer disclosureId) {
+		List<String> actionTypeCodes = Arrays.asList(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_START_REVIEW,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_COMPLETE_REVIEW,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REMOVED,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REASSIGNED);
+		List<DisclosureActionLog> disclsouretActionLogs = actionLogRepositoryCustom.fetchReviewActionLogs(disclosureId, actionTypeCodes);
+		List<HistoryDto> disclosureHistories = new ArrayList<>();
+		disclsouretActionLogs.forEach(disclsouretActionLog -> {
+			HistoryDto historyDto = new HistoryDto();
+			historyDto.setUpdateTimestamp(disclsouretActionLog.getUpdateTimestamp());
+			if (disclsouretActionLog.getUpdateUser() != null) {
+				historyDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(disclsouretActionLog.getUpdateUser()));
+			}
+			historyDto.setActionTypeCode(disclsouretActionLog.getActionTypeCode());
+			historyDto.setMessage(disclsouretActionLog.getDescription());
+			historyDto.setComment(disclsouretActionLog.getComment());
+			disclosureHistories.add(historyDto);
+		});
+		return new ResponseEntity<>(disclosureHistories, HttpStatus.OK);
 	}
 
 }

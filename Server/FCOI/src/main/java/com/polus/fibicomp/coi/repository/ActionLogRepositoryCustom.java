@@ -20,7 +20,7 @@ public interface ActionLogRepositoryCustom {
      */
     List<EntityActionLog> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes);
 
-    public List<DisclosureActionLog> fetchDisclosureActionLogsBasedOnDisclosureId(Integer disclosureId);
+    public List<DisclosureActionLog> fetchDisclosureActionLogsBasedOnDisclosureId(Integer disclosureId, List<String> reviewActionTypeCodes);
 
     List<TravelDisclosureActionLog> fetchTravelDisclosureActionLog(Integer travelDisclosureId, String actionTypeCode);
 
@@ -50,5 +50,13 @@ public interface ActionLogRepositoryCustom {
     public List<TravelDisclosureActionLog> fetchTravelDisclosureActionLogsBasedOnId(Integer travelDisclosureId);
 
     List<TravelDisclosureActionLog> fetchTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto);
+
+    /**
+     * This method is used to fetch review action log
+     * @param disclosureId
+     * @param actionTypeCodes
+     * @return
+     */
+	List<DisclosureActionLog> fetchReviewActionLogs(Integer disclosureId, List<String> actionTypeCodes);
 
 }

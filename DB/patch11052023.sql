@@ -407,6 +407,18 @@ UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosur
 UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure status has been added as <b>No Conflict</b>' WHERE ACTION_TYPE_CODE = '14';
 UPDATE `disclosure_action_type` SET MESSAGE = '{FCOI /Project /Travel} disclosure status has been changed from <b>{STATUS_ONE}</b> to <b>{STATUS_TWO}</b>' WHERE ACTION_TYPE_CODE = '15';
 
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('14', '{FCOI /Project /Travel} disclosure status has been added as <b>No Conflict</b>', 'Created', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('15', '{FCOI /Project /Travel} disclosure status has been changed from <b>{STATUS_ONE}</b> to <b>{STATUS_TWO}</b>', 'Manage Status', now(), 'quickstart');
+
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('16', 'New reviewer <b>{REVIEWER_ONE}</b> has been added by the Administartor <b>{ADMIN_NAME}</b>', 'Reviewer has been added', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('17', '<b>{REVIEWER_NAME}</b> has started the review', 'Reviewer has started the review', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('18', 'Review of <b>{REVIEWER_NAME}</b> has been started by the Administartor <b>{ADMIN_NAME}</b>', 'Admin has started the review', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('19', '<b>{REVIEWER_NAME}</b> has Completed the review', 'Reviewer has completed the review', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('20', 'Review of <b>{REVIEWER_NAME}</b> has been Completed by the Administartor <b>{ADMIN_NAME}</b>', 'Admin has completed the review', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('21', '<b>{REVIEWER_NAME}</b> has been removed by the Administartor <b>{ADMIN_NAME}</b>', 'Reviewer Removed', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('22', 'Reviewer <b>{REVIEWER_ONE}</b> reassigned to <b>{REVIEWER_TWO}</b>', 'Reviewer ressigned', now(), 'quickstart');
+UPDATE `disclosure_action_type` SET MESSAGE = '<b>{REVIEWER_NAME}</b> assigned to review {FCOI /Project /Travel} disclosure' WHERE ACTION_TYPE_CODE = '7';
+
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_ADMIN_DASHBOARD;

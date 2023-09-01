@@ -1065,4 +1065,12 @@ public interface ConflictOfInterestDao {
 
 	public List<Integer> loadCoiReviewCommentsByParentId(Integer coiReviewCommentId);
 
+	/**
+	 * This method is used to get review assignee person name
+	 *
+	 * @param coiReviewId
+	 * @return
+	 */
+	public String loadCoiReviewAssigneePersonName(Integer coiReviewId);
+
 }

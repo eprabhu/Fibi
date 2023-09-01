@@ -63,4 +63,11 @@ public interface ActionLogService {
 
 	List<TravelDisclosureActionLog> fetchTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto);
 
+	/**
+     * This method is used to fetch review history
+     * @param disclosureId
+     * @return
+     */
+	ResponseEntity<Object> getReviewHistoryById(Integer disclosureId);
+
 }

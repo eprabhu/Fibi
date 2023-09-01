@@ -26,17 +26,7 @@
     </div>
     <div class="card-body" *ngIf="isExpanded">
         <div *ngIf="!reviewerList?.length">
-            <div class="noDataExists">
-                <div class="no-data-container">
-                    <span class="no-data-icon-outer">
-                        <div class="no-data-icon">
-                            <i aria-hidden="true" class="fa fa-file-o"></i>
-                            <i aria-hidden="true" class="fa fa-times-circle-o"></i>
-                        </div>
-                    </span>
-                    <h4>There is no information in this section.</h4>
-                </div>
-            </div>
+            <app-no-information> </app-no-information>
         </div>
         <table *ngIf="reviewerList?.length" class=" table tableSkin">
             <caption class="sr-only">Review</caption>
