@@ -349,7 +349,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	public ResponseEntity<Object> certifyDisclosure(CoiDisclosure coiDisclosure) {
 		coiDisclosure.setCertifiedBy(AuthenticatedUser.getLoginPersonId());
 		coiDisclosure.setCertifiedAt(commonDao.getCurrentTimestamp());
-		setDisclosureReviewStatusCode(coiDisclosure);
+		CoiDisclosure coiDisclosureObj = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
+		setDisclosureReviewStatusCode(coiDisclosure, coiDisclosureObj);
 		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.YEAR, 1);
@@ -357,8 +358,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setExpirationDate(cal.getTime());
 		conflictOfInterestDao.certifyDisclosure(coiDisclosure);
 		conflictOfInterestDao.validateConflicts(coiDisclosure.getDisclosureId());
-		CoiDisclosure coiDisclosureObj = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
-		CoiRiskCategory riskCategory = conflictOfInterestDao.syncDisclosureRisk(coiDisclosureObj.getDisclosureId(), coiDisclosureObj.getDisclosureNumber());
+		CoiRiskCategory riskCategory = null;
+		if (coiDisclosureObj.getReviewStatusCode().equals(REVIEW_STATUS_PENDING)) {
+			riskCategory = conflictOfInterestDao.syncDisclosureRisk(coiDisclosureObj.getDisclosureId(), coiDisclosureObj.getDisclosureNumber());
+		}
 		coiDisclosureObj.setCreateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getCreateUser()));
 		coiDisclosureObj.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getUpdateUser()));
 		try {
@@ -380,8 +383,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(coiDisclosureObj, HttpStatus.OK);
 	}
 	
-	private void setDisclosureReviewStatusCode(CoiDisclosure coiDisclosure) {
-		CoiDisclosure coiDisclosureObj = conflictOfInterestDao.loadDisclosure(coiDisclosure.getDisclosureId());
+	private void setDisclosureReviewStatusCode(CoiDisclosure coiDisclosure, CoiDisclosure coiDisclosureObj ) {
 		String reviewStatusCode = coiDisclosureObj.getReviewStatusCode();
 		if (reviewStatusCode.equals(REVIEW_STATUS_RETURNED)
 				&& ((coiDisclosureObj.getAdminGroupId() != null) || (coiDisclosureObj.getAdminPersonId() != null))) {
