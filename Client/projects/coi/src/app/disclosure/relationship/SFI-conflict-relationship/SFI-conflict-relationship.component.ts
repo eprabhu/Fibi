@@ -37,12 +37,14 @@ export class SFIConflictRelationshipComponent implements OnInit {
               private _dataStore: DataStoreService) { }
 
   ngOnInit() {
+    this._relationShipService.isSliderDataUpdated = false;
   }
 
   openSaveAllConfirmationModal() {
     this.coiValidationMap.clear();
     if (this.coiStatusCode && this.coiDescription) {
       document.getElementById('hidden-save-all-button').click();
+      this.sliderDataChanges();
     }
     if (!this.coiStatusCode) {
       this.coiValidationMap.set('coiStatus', 'Please select COI Status');
@@ -55,6 +57,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
   setUnsavedModuleTrue() {
     this._coiService.unSavedModules = 'Relationships';
     this._dataStore.dataChanged = true;
+    this._relationShipService.isSliderInputModified = true;
   }
 
   applyToAll() {
@@ -70,17 +73,19 @@ export class SFIConflictRelationshipComponent implements OnInit {
   saveClick() {
     this.prepareSaveObject();
     this.$subscriptions.push(this._relationShipService.saveEntityProjectRelation(
-      this.entityProjectDetails, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.personId).subscribe((data: any) => {
-      this.entityProjectDetails = data.coiDisclEntProjDetails;
-      this.coiDescription = '';
-      this.coiStatusCode = null;
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
-      this.closePage.emit();
-    }, err => {
-      this.coiDescription = '';
-      this.coiStatusCode = null;
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
-    }));
+      this.entityProjectDetails, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.personId)
+      .subscribe((data: any) => {
+        this.entityProjectDetails = data.coiDisclEntProjDetails;
+        this.coiDescription = '';
+        this.coiStatusCode = null;
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
+        this._relationShipService.isSliderDataUpdated = true;
+        this.closePage.emit();
+      }, err => {
+        this.coiDescription = '';
+        this.coiStatusCode = null;
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
+      }));
   }
 
   prepareSaveObject() {
@@ -123,6 +128,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
       // this.getCommentObject(test.comment);
       test.coiProjConflictStatusType = this.getStatusObject(test.projectConflictStatusCode);
       this.singleSaveClick(test, index);
+      this.sliderDataChanges();
     }
   }
 
@@ -138,5 +144,10 @@ export class SFIConflictRelationshipComponent implements OnInit {
   }, err => {
     this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
   }));
+}
+
+sliderDataChanges() {
+  this._dataStore.dataChanged = false;
+  this._relationShipService.isSliderInputModified = false;
 }
 }

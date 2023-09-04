@@ -17,9 +17,13 @@
                                 *ngIf="location?.description">({{location?.description}})</span></option>
                     </select>
                 </div> -->
-                <button class="updown-arrow mt-2 " (click)="isShow = !isShow">
+                <!-- <button class="updown-arrow mt-2 " (click)="isShow = !isShow">
                     <i [ngClass]="!isShow?'fa-large fa fa-angle-double-down':'fa-large fa fa-angle-double-up'"
                         class="fa-large" aria-hidden="true"></i>
+                </button> -->
+                <button (click)="isShow = !isShow" title="Click here to collapse / expand"
+                    class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                    <mat-icon>{{!!!isShow? 'expand_less' : 'expand_more'}}</mat-icon>
                 </button>
             </div>
         </h4>

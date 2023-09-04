@@ -47,7 +47,7 @@
         <div class="col-2 fs-14 border-end">
           <select [(ngModel)]="test.projectConflictStatusCode"
           class="form-select form-control mt-3" 
-          [ngClass] ="coiTableValidation.has('save-status'+i) ? 'is-invalid d-block' : ''"
+          [ngClass] ="coiTableValidation.has('save-status'+i) ? 'is-invalid d-block' : ''"(ngModelChange)="setUnsavedModuleTrue()"
           [disabled]="!isEditMode">
           <option value=null>--Select--</option>
           <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList; let i = index">
@@ -63,7 +63,7 @@
           <textarea  class="form-control comment-text-box textarea-height mt-3" id="main-panel-comnt"
           appAutoGrow [(ngModel)]="test.disclComment.comment"
           [disabled]="!isEditMode" rows="1" appLengthValidator
-          [ngClass] ="coiTableValidation.has('save-description'+i) ? 'is-invalid d-block' : ''"
+          [ngClass] ="coiTableValidation.has('save-description'+i) ? 'is-invalid d-block' : ''" (ngModelChange)="setUnsavedModuleTrue()"
           placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
           <span class="invalid-feedback" *ngIf="coiTableValidation.has('save-description'+i)">
             {{coiTableValidation.get('save-description'+i)}}

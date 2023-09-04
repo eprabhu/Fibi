@@ -9,6 +9,7 @@ import { RelationshipService } from '../relationship.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subject, Subscription, interval, of, timer } from 'rxjs';
 import { debounce } from 'rxjs/operators';
+import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-define-relation',
@@ -33,6 +34,7 @@ export class DefineRelationComponent implements OnInit {
   coiStatusCode: any = null;
   coiDescription: any;
   reviewStatusCode: any;
+  validStatusCodes = ['1', '5', '6'];
   sfiDetails: any;
   dependencies = ['coiDisclosure'];
   currentProjectId: any;
@@ -53,6 +55,8 @@ export class DefineRelationComponent implements OnInit {
   imgUrl = this.deployMap + 'assets/images/close-black.svg';
   debounceTimer: any;
   $triggerEvent = new Subject();
+  isOpenSlider: boolean;
+  isDataModified = false;
 
   constructor(private _relationShipService: RelationshipService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
 
@@ -64,22 +68,13 @@ export class DefineRelationComponent implements OnInit {
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    this.isEditMode = this.coiData.coiDisclosure.reviewStatusCode == '1';
+    this.isEditMode = this.validStatusCodes.includes(this.coiData.coiDisclosure.reviewStatusCode);
   }
 
   showTaskNavBar() {
     document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
     const slider = document.querySelector('.slider-base');
     slider.classList.add('slider-opened');
-  }
-
-  hideSfiNavBar(event) {
-    this.addBodyScroll();
-    let slider = document.querySelector('.slider-base');
-    slider.classList.remove('slider-opened');
-    setTimeout(() => {
-        this.closePage.emit(false);
-    }, 1000);
   }
 
     openSnackBar(message: string, action: string) {
@@ -286,5 +281,24 @@ export class DefineRelationComponent implements OnInit {
     }
   }
 
+
+  hideConflictNavBar() {
+    const slider = document.querySelector('.slider-base');
+    slider.classList.remove('slider-opened');
+    setTimeout(() => {
+        this.isOpenSlider = false;
+        this.closePage.emit();
+    }, 500);
+    this._dataStore.dataChanged = false;
+    this._relationShipService.isSliderInputModified = false;
+}
+
+validateProjectSfiSliderOnClose() {
+  if (this._relationShipService.isSliderInputModified) {
+    openModal('projectSfiConfirmationModal');
+  } else {
+    this.hideConflictNavBar();
+  }
+}
 }
 

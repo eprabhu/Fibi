@@ -6,6 +6,8 @@ import { CommonService } from '../../common/services/common.service';
 
 export class RelationshipService {
 
+isSliderInputModified = false;
+isSliderDataUpdated = false;
 constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
 getProjectRelations(id, status) {
