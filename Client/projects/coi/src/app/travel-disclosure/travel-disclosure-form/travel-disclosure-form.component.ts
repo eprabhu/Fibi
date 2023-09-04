@@ -191,6 +191,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     selectTravelCountry(event: any): void {
         this.travelDisclosureRO.destinationCountry = event ? event.countryName : null;
+        this.setUnSavedChangesTrue();
     }
 
     getTravellerTypeCode(): void {

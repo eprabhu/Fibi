@@ -63,3 +63,13 @@
 .updown-arrow {
   width: 32px;
 }
+
+.toggle-header-btn {
+    width: 30px;
+    color: #A64040;
+    height: 30px;
+  
+    mat-icon {
+      transform: scale(1.2);
+    }
+  }

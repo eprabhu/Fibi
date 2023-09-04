@@ -6,6 +6,7 @@ import { TravelRiskSliderService } from './travel-risk-slider.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { TravelDataStoreService } from '../services/travel-data-store.service';
 
 @Component({
   selector: 'app-travel-risk-slider',
@@ -33,7 +34,8 @@ export class TravelRiskSliderComponent implements OnInit {
   
   constructor( public commonService: CommonService, 
 			   public travelRiskSliderService: TravelRiskSliderService,
-			   public dataFormatPipe: DateFormatPipeWithTimeZone ) { }
+			   public dataFormatPipe: DateFormatPipeWithTimeZone,
+			   private _dataStore: TravelDataStoreService ) { }
 
   ngOnInit() {
     setTimeout(() => {
@@ -121,6 +123,9 @@ export class TravelRiskSliderComponent implements OnInit {
 		if (this.checkForMandatory()) {
 			this.$subscriptions.push(this.travelRiskSliderService.saveRisk(this.getRequestObject()).subscribe((data: any) => {
 				this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk modified successfully');
+				this.travelDisclosure.riskCategoryCode = data.riskCategoryCode;
+                this.travelDisclosure.riskLevel = data.riskLevel;
+                this._dataStore.manualDataUpdate(this.travelDisclosure);
 				this.riskCategoryCode = null;
 				this.riskComment = null;
 				this.emitRiskChange(data);
