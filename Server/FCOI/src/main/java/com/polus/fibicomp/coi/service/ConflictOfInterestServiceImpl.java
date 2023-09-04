@@ -2205,7 +2205,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
         disclosure.setCertifiedAt(null);
         disclosure.setCertifiedBy(null);
         disclosure.setExpirationDate(null);
-        disclosure.setRevisionComment(description);
         disclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclosure.setReviewStatusCode(REVIEW_STATUS_WITHDRAWN);
         disclosure = conflictOfInterestDao.saveOrUpdateCoiDisclosure(disclosure);
@@ -2219,7 +2218,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		try {
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_WITHDRAWN)
 					.disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber())
-					.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(disclosure.getRevisionComment())
+					.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(description)
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
@@ -2238,14 +2237,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
         disclosure.setCertifiedAt(null);
         disclosure.setCertifiedBy(null);
         disclosure.setExpirationDate(null);
-        disclosure.setRevisionComment(description);
         disclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclosure.setReviewStatusCode(REVIEW_STATUS_RETURNED);
         disclosure = conflictOfInterestDao.saveOrUpdateCoiDisclosure(disclosure);
 		try {
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_RETURNED)
 					.disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber())
-					.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(disclosure.getRevisionComment())
+					.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(description)
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
