@@ -12,7 +12,7 @@ import {fileDownloader} from "../../../../../fibi/src/app/common/utilities/custo
 @Component({
     selector: 'app-coi-review-comments',
     templateUrl: './coi-review-comments.component.html',
-    styleUrls: ['./coi-review-comments.component.css'],
+    styleUrls: ['./coi-review-comments.component.scss'],
     providers: [CoiReviewCommentsService]
 })
 export class CoiReviewCommentsComponent implements OnInit, OnDestroy, OnChanges {

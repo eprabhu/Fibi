@@ -21,6 +21,7 @@ import { CoiSliderComponent } from './coi-slider/coi-slider.component';
 import { HelpTextComponent } from './help-text/help-text.component';
 import { PersonProjectEntityCardComponent } from './person-project-entity-card/person-project-entity-card.component';
 import { ReviewCommentListViewComponent } from './review-comment-list-view/review-comment-list-view.component';
+import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { ReviewCommentListViewComponent } from './review-comment-list-view/revie
     HelpTextComponent,
     PersonProjectEntityCardComponent,
     EntityRiskSliderComponent,
-    ReviewCommentListViewComponent
+    ReviewCommentListViewComponent,
+    CoiReviewCommentsComponent
   ],
   exports: [
     NoInformationComponent,
@@ -66,7 +68,8 @@ import { ReviewCommentListViewComponent } from './review-comment-list-view/revie
     HelpTextComponent,
     PersonProjectEntityCardComponent,
     EntityRiskSliderComponent,
-    ReviewCommentListViewComponent
+    ReviewCommentListViewComponent,
+    CoiReviewCommentsComponent
   ]
 })
 export class SharedComponentModule { }
