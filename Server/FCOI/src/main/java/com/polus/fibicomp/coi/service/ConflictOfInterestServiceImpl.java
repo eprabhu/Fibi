@@ -75,6 +75,7 @@ import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
@@ -151,6 +152,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String SYS_GENERATED_ENTITY_RISK = "This is the default status set by the system.";
 	private static final String USER_DEFINED_ENTITY_RISK = "This is the status set by the user at the time of Entity creation.";
 	private static final String DEFAULT_TRAVEL_RISK = "This is the status set by the user against the entity, which is now the current status of the disclosure.";
+	private static final String DEFAULT_DISCLOSURE_STATUS = "This is the default status set by the system.";
 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
@@ -1563,6 +1565,17 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		try {
 			if (coiTravelDisclosure.getDisclosureStatusCode() == null) {
 				coiTravelDisclosure.setDisclosureStatusCode(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
+				DisclComment disclComment = DisclComment.builder()
+						.comment(DEFAULT_DISCLOSURE_STATUS)
+						.componentTypeCode("2")
+						.commentType("2")
+						.commentPersonId(null)
+						.documentOwnerPersonId(AuthenticatedUser.getLoginPersonId())
+						.isPrivate(false)
+						.componentReferenceId(coiTravelDisclosure.getTravelDisclosureId())
+						.updateUser(null)
+						.build();
+				conflictOfInterestDao.saveOrUpdateDisclComment(disclComment);
 				CoiTravelDisclosureStatusType coiTravelDisclosureStatusType = conflictOfInterestDao.getTravelDisclosureStatusDetails(TRAVEL_DISCLOSURE_STATUS_NO_CONFLICT);
 				coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(coiTravelDisclosureStatusType);
 				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_DISCLOSURE_STATUS_CREATED)
@@ -1570,8 +1583,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 						.build();
 				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 			}
-			if (coiTravelDisclosure.getRiskCategoryCode() == null) {
-				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_RISK_ADDED)
+			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK)
+					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).build();
+			List<TravelDisclosureActionLog> actionLogs = actionLogService.fetchTravelDisclosureActionLog(actionLogDto);
+			if (coiTravelDisclosure.getRiskCategoryCode() == null || 
+					(actionLogs.get(0).getComment().equalsIgnoreCase(DEFAULT_TRAVEL_RISK) && (!coiTravelDisclosure.getRiskCategoryCode().equalsIgnoreCase(coiEntity.getRiskCategoryCode())))) {
+				actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_RISK_ADDED)
 						.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
 						.riskCategoryCode(coiEntity.getRiskCategoryCode())
 						.riskCategory(coiEntity.getEntityRiskCategory().getDescription())
@@ -1608,17 +1625,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setExpirationDate(getExpirationDate());
 		setActionLogForTravelDisclosureStatusAndRisk(coiTravelDisclosure, vo.getEntityId());
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
-		DisclComment disclComment = DisclComment.builder()
-				.comment("This is a system-generated Disclosure Status")
-				.componentTypeCode("2")
-				.commentType("2")
-				.commentPersonId(null)
-				.documentOwnerPersonId(AuthenticatedUser.getLoginPersonId())
-				.isPrivate(false)
-				.componentReferenceId(coiTravelDisclosure.getTravelDisclosureId())
-				.updateUser(null)
-				.build();
-		conflictOfInterestDao.saveOrUpdateDisclComment(disclComment);
 		CoiTravelDisclosure coiTravelDosclosureObject = conflictOfInterestDao.loadTravelDisclosure(coiTravelDisclosure.getTravelDisclosureId());
 		try {
 			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_SUBMITTED)
