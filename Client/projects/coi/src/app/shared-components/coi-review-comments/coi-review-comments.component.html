@@ -147,15 +147,7 @@
                         </ng-container>
                     </div>
                     <ng-template #noDataContainer>
-                        <div class="no-data-container">
-                            <span class="no-data-icon-outer">
-                                <div class="no-data-icon">
-                                    <i class="fa fa-file-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                                </div>
-                            </span>
-                            <h4>There is no information in this section.</h4>
-                        </div>
+                        <app-no-information [isBorderNeeded]="false"> </app-no-information>
                     </ng-template>
                 </div>
             </div>
