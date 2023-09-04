@@ -48,7 +48,6 @@ import {CdkMenuModule} from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
 import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
 import { CountModalComponent } from './count-modal/count-modal.component';
-import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
 import { ActivityComponent } from '../disclosure/activity-track/activity.component';
 import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
 import { SfiService } from '../disclosure/sfi/sfi.service';
@@ -74,7 +73,6 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
         DragNDragDirective, CustomTagRemoverPipe,PaginationComponent,
         AddRelationshipModalComponent,
         CountModalComponent,
-        CoiReviewCommentsComponent,
         ActivityComponent,
         NoDataLabelComponent],
     exports: [
@@ -118,7 +116,6 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
         MatMenuModule,
         AddRelationshipModalComponent,
         CountModalComponent,
-        CoiReviewCommentsComponent,
         ActivityComponent,
         NoDataLabelComponent,
     ],
