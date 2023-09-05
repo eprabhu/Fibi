@@ -172,13 +172,13 @@ public class COIEntityGraphDao {
 			} else if ("ENTITIES_BELONGS_WITH".equalsIgnoreCase(relationship)) {
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher
-						.concat("MATCH p=(e1:Country)-[r1:BELONGS_TO]->(e2:Entity)  where <WHERE_CLAUSE> RETURN p");
+						.concat("MATCH p=(e1:Country)<-[r1:BELONGS_TO]-(e2:Entity)  where <WHERE_CLAUSE> RETURN p");
 
 			} else if ("ALL_CITIZENS".equalsIgnoreCase(relationship)) {
 
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher
-						.concat("MATCH p=(e1:Country)-[r1:CITIZEN_OF]->(e2:Person)  where <WHERE_CLAUSE> RETURN p");
+						.concat("MATCH p=(e1:Country)<-[r1:CITIZEN_OF]-(e2:Person)  where <WHERE_CLAUSE> RETURN p");
 
 			}else if ("ASSOCIATED_PERSONS_WITH_CITIZEN_INFO".equalsIgnoreCase(relationship)) {
 

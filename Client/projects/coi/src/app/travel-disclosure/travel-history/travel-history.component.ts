@@ -22,6 +22,7 @@ export class TravelHistoryComponent implements OnInit, OnDestroy {
     travelDisclosure: TravelDisclosure = new TravelDisclosure();
     disclosureHistoryLogs: any = {};
     isEmptyObject = isEmptyObject;
+    isReadMore = false;
 
     constructor( public service: TravelDisclosureService,
                  private _commonService: CommonService,
