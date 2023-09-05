@@ -59,6 +59,7 @@ export class CommonService {
     fibiApplicationUrl = '';
     $ScrollAction = new Subject<{event: Event,pageYOffset: number}>();
     $commentConfigurationDetails =  new BehaviorSubject<any>({});
+    enableGraph = false;
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
@@ -114,6 +115,7 @@ export class CommonService {
         this.elasticAuthScheme = configurationData.elasticAuthScheme;
         this.elasticConfigService.url = configurationData.elasticIndexUrl;
         this.fibiApplicationUrl = configurationData.fibiApplicationUrl;
+        this.enableGraph = configurationData.enableGraph;
     }
 
     pageScroll(elementId) {
