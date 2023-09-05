@@ -147,12 +147,26 @@ public class COIImportGraphDataDao {
 		var start = Instant.now();
 		logger.debug("--------- Import Person: starts at ------------ " + start);
 
+/*
 		String query = "select CONCAT('PER',PERSON_ID) AS ID, PERSON_ID,FULL_NAME,UNIT_NAME as HOME_UNIT,t1.COUNTRY_OF_CITIZENSHIP as COUNTRY_CODE, t4.COUNTRY_NAME,\r\n"
 				+ "CASE   WHEN STATUS = 'A' THEN 'Active' ELSE 'Inactive' END AS STATUS \r\n" + "from person t1\r\n"
 				+ "left outer join unit t2 on t1.home_unit = t2.unit_number\r\n"
 				+ "left outer join country t4 on t1.COUNTRY_OF_CITIZENSHIP = t4.COUNTRY_CODE \r\n"
 				+ "where PERSON_ID in ( select person_id from coi_disclosure UNION select person_id from coi_travel_disclosure UNION\r\n"
 				+ "select person_id from person_entity)";
+*/
+				
+		String query = """
+				select CONCAT('PER',PERSON_ID) AS ID, PERSON_ID,FULL_NAME,UNIT_NAME as HOME_UNIT,t1.COUNTRY_OF_CITIZENSHIP as COUNTRY_CODE, t4.COUNTRY_NAME,
+				CASE   WHEN STATUS = 'A' THEN 'Active' ELSE 'Inactive' END AS STATUS from person t1
+				left outer join unit t2 on t1.home_unit = t2.unit_number
+				left outer join country t4 on t1.COUNTRY_OF_CITIZENSHIP = t4.COUNTRY_CODE 
+				where PERSON_ID in ( select person_id from coi_disclosure UNION select person_id from coi_travel_disclosure UNION
+				select person_id from person_entity)
+				OR
+				t1.COUNTRY_OF_CITIZENSHIP is not null	
+				""";	
+						
 
 		int pageSize = 10000; // Number of records to fetch in each batch
 
