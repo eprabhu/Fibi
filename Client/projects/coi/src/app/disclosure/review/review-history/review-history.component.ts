@@ -23,6 +23,7 @@ export class ReviewHistoryComponent implements OnInit {
     coiDisclosure: CoiDisclosure = new CoiDisclosure();
     reviewHistoryLogs: any = {};
     dependencies = ['coiDisclosure', 'coiReviewerList'];
+    isReadMore = false;
 
     constructor( private _reviewService: ReviewService,
                  public _dataFormatPipe: DateFormatPipeWithTimeZone,

@@ -167,7 +167,7 @@
                     </div>
                 </div>
                 <div *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'" [class.mt-3]="triggeredFrom == 'PROJECT_DISCLOSURE' && isShowExistingDisclosure">
-                    <span class="project-types-label">Project Type :</span>
+                    <label class="project-types-label"><span class="mandatory fs-14 fw-600">*</span> Project Type : </label>
                     <div>
                         <ul class="project-types mb-0">
                             <li *ngFor="let type of projectTypes" class="me-5 d-flex align-items-center">
@@ -178,7 +178,7 @@
                                     for="{{type?.description}}">{{type?.description}}</label>
                             </li>
                         </ul>
-                        <div *ngIf="projectDisclosureValidation?.has('projectSelect')" class="invalid-feedback d-block">
+                        <div *ngIf="projectDisclosureValidation?.has('projectSelect')" class="invalid-feedback d-block fs-13">
                             {{projectDisclosureValidation?.get('projectSelect')}}
                         </div>
                     </div>
