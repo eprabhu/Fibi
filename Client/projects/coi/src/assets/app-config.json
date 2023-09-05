@@ -3,7 +3,7 @@
   "fibiUrl": "http://192.168.1.149/fibii",
   "authUrl": "http://192.168.1.149/auth",
   "enableSSO": false,
-  "enableGraph":true,
+  "enableGraph":false,
   "isElasticAuthentiaction": false,
   "elasticUserName": "elastic",
   "elasticDelimiter": ":",
