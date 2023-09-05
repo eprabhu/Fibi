@@ -324,3 +324,26 @@ small {
 .modal {
   z-index: 1501;
 }
+
+.info {
+    top: 7px;
+    font-size: 16px;
+    position: absolute;
+    color: #6f7395;
+    cursor: pointer;
+    height: 15px;
+    width: 16px;
+}
+
+.entity-type-info {
+    top:2px
+}
+
+.risk-info {
+    top: 5px;
+}
+
+.entity-padding {
+    padding-left: 2.5rem;
+    padding-right: 3rem;
+}

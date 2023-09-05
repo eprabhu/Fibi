@@ -1,57 +1,37 @@
-
-<!-- Modal -->
-<div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-mdb-backdrop="true">
-  <div class="modal-dialog modal-lg ">
-      <div class="modal-content">
-          <div class="modal-header add-relationship">
-              <h1 class="modal-title f-16" id="exampleModalLabel">Add Relationship</h1>
-              <button type="button" title="Click to close the relationship button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close" (click)="closeRelationModal();"></button>
-          </div>
-        <div class="modal-body p-0">
-            <!-- Paragraph -->
-            <div class="row m-0">
-                <p class="fs-13"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than
-                    government entities, institution of higher education and affiliated organizations.</p>
-            </div>
-            <div *ngIf="relationLookup.length; else noData" class="relation d-flex justify-content-center mb-15 mt-15">
-                <div class="card custom-padding"
-                [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
-                    <div class="d-flex flex-row">
-                        <div class="form-check form-check-inline color-black">
-                            <label class="form-check-label ps-5"><b>Select Relation:
-                                </b></label>
-                        </div>
-                        <div class="col d-flex">
-                            <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
-                                <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
-                                    [value]="relation?.relationshipTypeCode"
-                                    [(ngModel)]="isChecked[relation.relationshipTypeCode]"
-                                    title = "Click to select {{relation?.description}} relation">
-                                <label  class="text-secondary r-title fs-14">
-                                    {{relation?.description}}
-                                </label>
-                            </div>
+<div class="card card-body p-0 my-4">
+            <span class="col-4 px-4 pt-4">
+                <div class="d-flex position-relative">
+                    <h5 class="fs-18 fw-500">Relationship Details</h5>
+                    <span data-bs-toggle="tooltip" [title]="RELATION_TITLE_HELP_TEXT" data-bs-placement="top" class="d-inline-block">
+                        <mat-icon role="img" class="mat-icon info fs-16 ml-2">info</mat-icon>
+                    </span>
+                </div>
+            </span>
+        <hr class="m-2">
+        <div *ngIf="relationLookup.length; else noData" class="relation select-margin mb-15 mt-15">
+            <div class=""
+            [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
+                <div class="d-flex flex-row">
+                    <div class="col d-flex">
+                        <div *ngFor="let relation of relationLookup;" class="form-check form-check-inline">
+                            <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
+                                [value]="relation?.relationshipTypeCode"
+                                [(ngModel)]="isChecked[relation.relationshipTypeCode]"
+                                title = "Click to select {{relation?.description}} relation">
+                            <label  class="text-secondary r-title fs-14">
+                                {{relation?.description}}
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
-            <div *ngIf="relationValidationMap.has('relationRadio')"
-            class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
+        </div>
+        <div *ngIf="relationValidationMap.has('relationRadio')"
+        class="invalid-feedback d-block fs-13 justify-content-center d-flex">{{relationValidationMap.get('relationRadio')}}
+        </div>
+        <ng-template #noData>
+            <div class="m-3">
+            <app-no-information></app-no-information>
             </div>
-            <ng-template #noData>
-                <div class="m-3">
-                <app-no-information></app-no-information>
-                </div>
-            </ng-template>
-        </div>
-        <div class="modal-footer">
-            <button *ngIf="isWithOutRelationship" type="button" class="btn btn-outline-secondary fs-14 py-2" title="Click to Add Relationship"
-                data-dismiss="modal" (click)="continueWithoutRelation()">Continue without Relationship
-            </button>
-            <button id="add-review-btn" type="button" class="btn btn-primary btn-sm fs-14" data-dismiss="modal"
-                (click)="addRelation()" title="Click to Continue without Relationship">Add Relationship
-            </button>
-        </div>
-      </div>
-  </div>
+        </ng-template>
 </div>

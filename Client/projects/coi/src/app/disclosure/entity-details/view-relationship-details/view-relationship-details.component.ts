@@ -49,7 +49,10 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     previousUrlBeforeActivate = '';
     involvementStartDate: any;
     involvementEndDate: any;
-
+    RELATION_HELP_TEXT_1 = "This description is presented in the Relationship section to help you relate this entity to your research projects. Please enter an adequate description of the organization, and of your role with them,to aid both you, and a reviewers' understanding of the association between the entity and work";
+    RELATION_HELP_TEXT_2 = "Please enter an adequate description of the entity's principal are of business.";
+    RELATION_HELP_TEXT_3 = "Please enter an adequate description of the entity's relationship to your University responsibilities.";
+    
     constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
         private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService) {
     }
@@ -359,5 +362,6 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             this.entityDetailsServices.unSavedSections.push(SFI_ADDITIONAL_DETAILS_SECTION_NAME);
         }
     }
+
 }
 

@@ -280,3 +280,19 @@ small {
 .date-field-error {
   padding-right: 16px !important;
 }
+
+.info {
+  top: 7px;
+  font-size: 16px;
+  position: absolute;
+  margin-left: -6px;
+  color: #6f7395;
+  cursor: pointer;
+  height: 15px;
+  width: 16px;
+}
+
+.info-padding {
+  padding-right: 12px;
+  padding-left: 4px;
+}
