@@ -397,7 +397,24 @@
                                             <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-5">
                                                 <label for="id" class="label-text">Description :</label>
                                                 <app-no-data-label [valueToShow]="coi?.reviseComment">
-                                                    <span id="id" class="grey-text">{{coi?.reviseComment}}</span>
+                                                    <span *ngIf="coi?.reviseComment" class="fs-14">
+                                                        <span class="word-break-all new-line-property mx-2"
+                                                            *ngIf="!isReadMore && coi?.reviseComment?.length > 175; else showFullInfo">
+                                                            <span class="grey-text mt-2">{{(coi?.reviseComment | slice:0:175)}}</span>
+                                                            <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span class="fw-medium">... <u>Read
+                                                                        More</u>
+                                                                    <i aria-hidden="true"></i></span>
+                                                            </span>
+                                                        </span>
+                                                        <ng-template #showFullInfo>
+                                                            <span class="word-break-all new-line-property grey-text">{{coi?.reviseComment}}</span>
+                                                            <span class="hand-cursor mt-2 fw-medium" *ngIf="coi?.reviseComment?.length > 175"
+                                                                (click)="isReadMore = !isReadMore" aria-hidden="true">
+                                                                <span class="fw-medium"><u> Read Less</u>
+                                                                    <i aria-hidden="true"></i></span>
+                                                            </span>
+                                                        </ng-template>
+                                                    </span>
                                                 </app-no-data-label>
                                             </div>
                                             <div class="col">

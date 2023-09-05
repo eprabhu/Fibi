@@ -121,6 +121,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
     ];
     readMoreOrLess = [];
+    isReadMore = false;
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
