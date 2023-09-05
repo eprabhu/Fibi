@@ -60,6 +60,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     isLoading = false;
     readMoreOrLess = [];
     isShowFilterAndSearch = false;
+    isReadMore = false;
 
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
