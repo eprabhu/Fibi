@@ -1041,7 +1041,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
 			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 			conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
-			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_MODIFY_ACTION_LOG_CODE, coiEntity, null);
+			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_MODIFY_ACTION_LOG_CODE, coiEntity, coiEntity.getRevisionReason());
 		}
 		return new ResponseEntity<>(coiEntity, HttpStatus.OK);
 	}
@@ -1661,7 +1661,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			try {
 				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_WITHDRAWN)
 						.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
-						.build();
+						.comment(description).build();
 				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 			} catch (Exception e) {
 				logger.error("createDisclosure : {}", e.getMessage());
@@ -1727,7 +1727,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		try {
 			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_RETURNED)
 					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
-					.build();
+					.comment(description).build();
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
 			logger.error("createDisclosure : {}", e.getMessage());
