@@ -16,6 +16,7 @@ import { EntityDetailsModule } from '../disclosure/entity-details/entity-details
 import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
 import { EntityManagementService } from './entity-management.service';
+import { SharedLibraryModule } from '../../../../shared/src/lib/shared.module' ;
 
 const routes: Routes = [
   {
@@ -43,7 +44,8 @@ const routes: Routes = [
     SharedModule,
     FormsModule,
     SharedComponentModule,
-    EntityDetailsModule
+    EntityDetailsModule,
+    SharedLibraryModule
   ],
   exports: [
   ],

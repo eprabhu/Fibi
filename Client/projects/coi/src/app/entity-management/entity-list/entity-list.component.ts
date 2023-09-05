@@ -13,6 +13,8 @@ import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { deepCloneObject, isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { NavigationService } from '../../common/services/navigation.service';
 import { switchMap } from 'rxjs/operators';
+import { GraphDetail } from '../../../../../shared/src/lib/graph/interface';
+
 
 @Component({
   selector: 'app-entity-list',
@@ -26,6 +28,7 @@ import { switchMap } from 'rxjs/operators';
 })
 export class EntityListComponent implements OnDestroy, OnInit {
 
+  graphEvent: Subject<GraphDetail> = new Subject<GraphDetail>();
   activeTabName = 'ALL_ENTITIES';
   isViewAdvanceSearch = false;
   coiElastic = null;
@@ -56,6 +59,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   result: any;
   isActiveDisclosureAvailable: boolean;
   isLoading = false;
+  isShowGraph = false;
   sortSectionsList = [
     { variableName: 'name', fieldName: 'Name' },
     { variableName: 'entityType', fieldName: 'Entity Type' },
@@ -88,6 +92,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.viewListOfEntity();
     this.checkForAdvanceSearch();
     this.showEntities();
+    this.isShowGraph = this._commonService.enableGraph;
   }
 
   ngOnDestroy() {
@@ -293,9 +298,13 @@ setEventTypeFlag() {
 
     }
 
-   toggleAdvanceSearch() {
-     this.isViewAdvanceSearch = !this.isViewAdvanceSearch;
-     this.entityManagementService.isAdvanceSearch = this.isViewAdvanceSearch;
-  }
+    toggleAdvanceSearch() {
+        this.isViewAdvanceSearch = !this.isViewAdvanceSearch;
+        this.entityManagementService.isAdvanceSearch = this.isViewAdvanceSearch;
+    }
+
+    openGraph(entityId) {
+        this.graphEvent.next({ visible: true, id: entityId });
+    }
 
 }

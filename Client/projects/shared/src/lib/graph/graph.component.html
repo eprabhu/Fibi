@@ -1,0 +1,84 @@
+<button type="button" class="btn btn-primary btn-sm" hidden="true" id="d3GraphModalbutton" data-bs-toggle="modal"
+    data-bs-target="#d3GraphModal"></button>
+
+<div class="modal modal-coi fade mySkinDialog" id="d3GraphModal" tabindex="-1" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-bs-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-custom-width" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="mb-0">{{graphDataService.graphTypeConfiguration.header}}</h4>
+                <!-- <div (click)="isShowFilter = !isShowFilter" class="ml-2">
+                    <button class="btn btn-outline-primary" *ngIf="!isShowFilter"> Show more information</button>
+                    <button class="btn btn-outline-info" *ngIf="isShowFilter"> Hide more information</button>
+                </div> -->
+                <!-- <div class="container" *ngIf="isShowFilter">
+                    <span>information about graph</span>
+                    <div class="success-banner px-3 my-4 mx-4 d-flex justify-content-between align-items-center ng-tns-c9-0 ng-star-inserted">
+                        <div> 
+                          <em>{{graphDataService.graphTypeConfiguration.additional_info}}</em>
+                        </div>
+                    </div>
+                    <span>information about graph events</span>
+                    <div class="success-banner px-3 my-4 mx-4 d-flex justify-content-between align-items-center ng-tns-c9-0 ng-star-inserted">
+                        <div>
+                            <em>{{graphDataService.graphTypeConfiguration.action_info}}</em>
+                        </div>
+                    </div>
+
+                    <div class="dropdown-wrapper">
+                        <span *ngFor="let node of graphDataService.graphMetaData.nodes | keyvalue">
+                            <img [src]="node.value.image" [alt]="node.key.name" class="image-frame mr-1"> {{node.value.name}}
+                        </span>
+                    </div>
+                </div> -->
+                <button type="button" data-bs-dismiss="modal" class="btn-close fs-12" id="graph-modal-dismiss-btn"
+                    aria-label="Close" (click)="popOverEvents.next(false); clearGraph();"></button>
+            </div> 
+            <div class="modal-body modal-custom-height">
+                <div id="chart-container"></div>
+            </div>
+    </div>
+</div>
+
+<app-dynamic-popover [positionDetails]="popOverPositions" [showPopupEvent]="popOverEvents">
+    <div class="card">
+        <ng-container *ngIf="cardData.label === 'Person'">
+            <app-person-card [data]="cardData"></app-person-card>
+        </ng-container>
+        <ng-container *ngIf="cardData.label === 'Unit'">
+            <app-unit-card [data]="cardData"></app-unit-card>
+        </ng-container>
+        <ng-container *ngIf="cardData.label === 'Award'">
+            <app-award-card [data]="cardData"></app-award-card>
+        </ng-container>
+        <ng-container *ngIf="cardData.label === 'COIDisclosure'">
+            <app-coi-card [data]="cardData"></app-coi-card>
+        </ng-container>
+        <ng-container *ngIf="cardData.label === 'Country'">
+            <app-country-card [data]="cardData"></app-country-card>
+        </ng-container>
+        <ng-container *ngIf="cardData.label === 'Entity'">
+            <app-entity-card [data]="cardData"></app-entity-card>
+        </ng-container>
+        <ng-container *ngIf="cardData.label === 'Proposal'">
+            <app-proposal-card [data]="cardData"></app-proposal-card>
+        </ng-container>
+        <ng-container *ngIf="cardData.label === 'Sponsor'">
+            <app-sponsor-card [data]="cardData"></app-sponsor-card>
+        </ng-container>
+        <ng-container *ngIf="cardData.label === 'TravelDisclosure'">
+            <app-travel-card [data]="cardData"></app-travel-card>
+        </ng-container>
+        <button type="button" class="modal-close" aria-label="Close" (click)="popOverEvents.next(false)">X</button>
+        <hr>
+        <div class="interests" *ngIf="cardData.elementId">
+            <p class="interests_title">Show Connections </p>
+            <ng-container *ngFor="let relation of relations">
+                <span class="interests_item">
+                    <input type="checkbox" class="mr-2" [(ngModel)]="selectedRelations[cardData.elementId][relation.relation]" id="{{relation.relation}}" (click)="drillDownEvent($event, relation.relation)">
+                    <label class="form-check-label" for="{{relation.relation}}">{{relation.description}}</label>
+                </span>
+            </ng-container>
+        </div>
+    </div>
+</app-dynamic-popover>

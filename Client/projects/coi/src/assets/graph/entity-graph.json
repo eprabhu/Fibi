@@ -1,0 +1,50 @@
+{
+  "id": 101,
+  "end_point": "/graph-connect/coi/v1/entitygraph",
+  "module_code": 15,
+  "header": "something",
+  "additional_info": "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+  "action_info": "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+  "root_node": ["Entity"],
+  "root_relations": [
+    "ASSOCIATED_PERSONS_WITH_CITIZEN_INFO",
+    "AFFILIATED_ENTITIES",
+    "BELONGS_TO"
+  ],
+  "relations": [
+    {
+      "node": "Person",
+      "relationships": [
+        {
+          "relation": "ASSOCIATED_ENTITIES",
+          "description": "Associated entities"
+        },
+        { "relation": "CITIZEN_OF", "description": "Citizenship Of" }
+      ]
+    },
+    {
+      "node": "Entity",
+      "relationships": [
+        { "relation": "BELONGS_TO", "description": "Belongs To" },
+        {
+          "relation": "ASSOCIATED_PERSONS",
+          "description": "Associated Persons"
+        },
+        {
+          "relation": "AFFILIATED_ENTITIES",
+          "description": "Affiliates Entities"
+        }
+      ]
+    },
+    {
+      "node": "Country",
+      "relationships": [
+        {
+          "relation": "ENTITIES_BELONGS_WITH",
+          "description": "Entities in relation"
+        },
+        { "relation": "ALL_CITIZENS", "description": "All Citizens" }
+      ]
+    }
+  ]
+}
