@@ -17,12 +17,12 @@
           <div *ngIf="entityDetailsServices.isExpanded"
             class="bg-white border btn mt-2 mx-4 p-1 rounded-5 shadow-sm toggle-header-btn">
             <mat-icon title="Click to collapse Relationships"
-              (click)="entityDetailsServices.isExpanded = !entityDetailsServices.isExpanded;hasUserExpanded = true">expand_less</mat-icon>
+            (click)="entityDetailsServices.isExpanded = !entityDetailsServices.isExpanded;hasUserExpanded = true">expand_less</mat-icon>
           </div>
           <div *ngIf="!entityDetailsServices.isExpanded"
             class=" bg-white border btn mt-2 mx-4 p-1 rounded-5 shadow-sm toggle-header-btn">
             <mat-icon title="Click to expand Relationships"
-              (click)="entityDetailsServices.isExpanded = !entityDetailsServices.isExpanded;hasUserExpanded = true">expand_more</mat-icon>
+            (click)="entityDetailsServices.isExpanded = !entityDetailsServices.isExpanded;hasUserExpanded = true">expand_more</mat-icon>
           </div>
         </div>
       </div>
@@ -263,13 +263,19 @@
           </div>
           <ng-container *ngIf="entityDetailsServices.isExpanded">
             <div [@slideInOut]>
-              <div class="row px-4 py-3">
-                <div class="d-flex px-4">
-                  <label class="d-block fs-14 fw-500 py-2 row">Relationship with Entity :<span
-                      class="mandatory px-2">*</span></label>
+              <div class="row px-4">
+                <div class="d-flex">
+                  <label class="fw-500 fs-14 py-2 position-relative">
+                    Relationship with Entity :
+                    <span class="mandatory info-padding">*</span>
+                    <span data-bs-toggle="tooltip" [title]="RELATION_HELP_TEXT_1" data-bs-placement="top" class="d-inline-block">
+                      <mat-icon role="img" class="mat-icon info fs-16">info</mat-icon>
+                    </span>
+                  </label>
                 </div>
-                <div class="col mx-1 px-2">
-                  <textarea class="form-control text-area-height" id="releationship-entity"
+                <div class="col">
+                  <textarea appAutoGrow class="form-control " id="releationship-entity"
+                  [rows]="1"
                     [(ngModel)]="additionalDetails.staffInvolvement" (ngModelChange)="addUnSavedChanges();additionalDetails.staffInvolvement = additionalDetails.staffInvolvement.trim()"
                     [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
                     [limit]=2000>
@@ -277,26 +283,21 @@
                   <div *ngIf="mandatoryList?.has('staff')" class="invalid-feedback d-block fs-13">
                     {{mandatoryList?.get('staff')}}
                   </div>
-                  <p *ngIf="!mandatoryList?.has('staff')" class="new-line-property text-secondary fs-13 mt-2 mb-0">This
-                    description is
-                    presented in the Relationship
-                    section to help you relate this entity to your research
-                    projects.
-                    Please enter an adequate description of the organization, and of your role with
-                    them,to aid both
-                    you, and
-                    a
-                    reviewers' understanding of the association between the entity and work.
-                  </p>
                 </div>
               </div>
-              <div class="row px-3">
-                <div class="d-flex px-3">
-                  <label class="d-block fw-500 fs-14 px-1 py-2">Principle Business Area of Entity
-                    :<span class="mandatory px-2">*</span></label>
+              <div class="row px-4">
+                <div class="d-flex">
+                  <label class="fw-500 fs-14 py-2 position-relative">
+                    <span class="ml-10">Principle Business Area of Entity</span>
+                      : <span class="mandatory info-padding">*</span>
+                      <span data-bs-toggle="tooltip" [title]="RELATION_HELP_TEXT_2" data-bs-placement="top" class="d-inline-block">
+                        <mat-icon role="img" class="mat-icon info fs-16">info</mat-icon>
+                      </span>
+                    </label>
                 </div>
-                <div class="col mx-1 px-3">
-                  <textarea class="form-control text-area-height" [(ngModel)]="additionalDetails.studentInvolvement"
+                <div class="col">
+                  <textarea appAutoGrow class="form-control " [(ngModel)]="additionalDetails.studentInvolvement"
+                  [rows]="1"
                     (ngModelChange)="addUnSavedChanges();additionalDetails.studentInvolvement = additionalDetails.studentInvolvement.trim()"
                     [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''" appLengthValidator
                     [limit]=2000>
@@ -304,19 +305,22 @@
                   <div *ngIf="mandatoryList?.has('student')" class="invalid-feedback d-block fs-13">
                     {{mandatoryList?.get('student')}}
                   </div>
-                  <p *ngIf="!mandatoryList?.has('student')" class="new-line-property text-secondary fs-13 mt-2 mb-0">
-                    Please enter an adequate
-                    description of the entity's principal are of business.
-                  </p>
                 </div>
               </div>
-              <div class="row px-3">
-                <div class="d-flex px-3">
-                  <label class="d-block fw-500 fs-14 px-1 py-2">Relationship of Entity to your
-                    University responsibilities :<span class="mandatory px-2">*</span></label>
+              <div class="row px-4">
+                <div class="d-flex">
+                  <label class="d-block fw-500 fs-14 py-2 position-relative">
+                      Relationship of Entity to your
+                      University responsibilities :
+                    <span class="mandatory info-padding">*</span>
+                    <span data-bs-toggle="tooltip" [title]="RELATION_HELP_TEXT_3" data-bs-placement="top" class="d-inline-block">
+                      <mat-icon role="img" class="mat-icon info fs-16">info</mat-icon>
+                    </span>
+                  </label>
                 </div>
-                <div class="col mx-1 px-3">
-                  <textarea class="form-control text-area-height"
+                <div class="col">
+                  <textarea appAutoGrow class="form-control "
+                  [rows]="1"
                     [(ngModel)]="additionalDetails.instituteResourceInvolvement"
                     (ngModelChange)="isChangesInFieldValue = true;addUnSavedChanges()"
                     [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''" appLengthValidator
@@ -325,11 +329,6 @@
                   <div *ngIf="mandatoryList?.has('resource')" class="invalid-feedback d-block fs-13">
                     {{mandatoryList?.get('resource')}}
                   </div>
-                  <p *ngIf="!mandatoryList?.has('resource')"
-                    class="new-line-property text-secondary fs-14-nav mt-2 mb-0">Please enter an
-                    adequate description of the entity's relationship to your University
-                    responsibilities.
-                  </p>
                 </div>
               </div>
             </div>

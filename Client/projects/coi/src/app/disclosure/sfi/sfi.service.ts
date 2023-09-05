@@ -11,6 +11,7 @@ export class SfiService {
     isSFIRequired = false;
     previousURL= '';
     $addSfi = new Subject<Boolean>();
+    $addRelationService = new Subject();
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 

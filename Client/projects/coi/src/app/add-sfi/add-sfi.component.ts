@@ -38,7 +38,6 @@ export class AddSfiComponent implements OnInit {
     dateTime: string;
     datePlaceHolder = DATE_PLACEHOLDER;
     isReadMore: false;
-    showRelationshipModal = false;
     clearField: any = false;
     EntitySearchOptions: any = {};
     countrySearchOptions: EndpointOptions;
@@ -58,6 +57,10 @@ export class AddSfiComponent implements OnInit {
     sfiType: string;
     existingEntityDetails: any = {};
     canShowEntityFields = false;
+    ENTITY_NAME_HELP_TEXT = "Type in the official name of the business or organization you need to report. Entities to report include foreign, domestic, public or private entities, but not federal agencies.";
+    RELATION_HELP_TEXT_1 = "This description is presented in the Relationship section to help you relate this entity to your research projects. Please enter an adequate description of the organization, and of your role with them,to aid both you, and a reviewers' understanding of the association between the entity and work";
+    RELATION_HELP_TEXT_2 = "Please enter an adequate description of the entity's principal are of business.";
+    RELATION_HELP_TEXT_3 = "Please enter an adequate description of the entity's relationship to your University responsibilities.";
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -106,12 +109,7 @@ export class AddSfiComponent implements OnInit {
             this.entityDetails.coiEntity.entityTypeCode === ele.entityTypeCode);
     }
 
-    addEntityToggle(event): void {
-        hideModal(event);
-    }
-
     hideRelationshipModal(event): void {
-        this.showRelationshipModal = event;
         this.clearSFIFields();
         this.clearField = new String('true');
         this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
@@ -182,18 +180,23 @@ export class AddSfiComponent implements OnInit {
                 },
                 ...this.disclosureDetails
             }).subscribe((data: any) => {
-                this.additionalDetails = data.personEntity;
-                this.isSaving = false;
-                this.showRelationshipModal = true;
-                this.additionalDetails.involvementStartDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementStartDate);
-                this.additionalDetails.involvementEndDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementEndDate);
+                if(data) {
+                    this.additionalDetails = data.personEntity;
+                    this.isSaving = false;
+                    this.additionalDetails.involvementStartDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementStartDate);
+                    this.additionalDetails.involvementEndDate = getDateObjectFromTimeStamp(this.additionalDetails.involvementEndDate);
+                    if(data.personEntity) {
+                        this.sfiService.$addRelationService.next(data.personEntity.personEntityId);
+                    }
+                }
             }, _err => {
                 this.isSaving = false;
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating SFI Please try again.');
             }));
     }
 
     selectNewEntity(event): void {
+        this.clearSFIFields();
         this.entityDetails.coiEntity.entityName = event.searchString;
         this.canShowEntityFields = true;
     }
@@ -205,6 +208,7 @@ export class AddSfiComponent implements OnInit {
         } else {
             this.canShowEntityFields = false;
             this.clearSFIFields();
+            this.sfiService.$addRelationService.next(null);
         }
     }
 
@@ -267,13 +271,7 @@ export class AddSfiComponent implements OnInit {
         if (!this.entityDetails.coiEntity.address) {
             this.mandatoryList.set('address', 'Please enter an address.');
         }
-        if (!this.entityDetails.coiEntity.phone) {
-            this.mandatoryList.set('phone', 'Please enter phone number.');
-        }
         this.emailValidation();
-        if (!this.entityDetails.coiEntity.zipCode) {
-            this.mandatoryList.set('zipCode', 'Please enter a zipCode.');
-        }
     }
 
     private emailValidation(): void {
