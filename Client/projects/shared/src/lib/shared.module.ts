@@ -3,9 +3,7 @@ import {AppAutocompleterComponent} from './app-autocompleter/app-autocompleter.c
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import { GraphComponent } from './graph/graph.component';
-import { TakeATourComponent } from './take-a-tour/take-a-tour.component';
 import { DynamicPopoverComponent } from './dynamic-popover/dynamic-popover.component';
-import { DragDirective } from './directives/drag.directive';
 import { PersonCardComponent } from './graph/data-cards/person-card.component';
 import { AwardCardComponent } from './graph/data-cards/award-card.component';
 import { SponsorCardComponent } from './graph/data-cards/sponsor-card.component';
@@ -20,9 +18,7 @@ import { CountryCardComponent } from './graph/data-cards/country-card.component'
   declarations: [
     AppAutocompleterComponent,
     GraphComponent,
-    TakeATourComponent,
     DynamicPopoverComponent,
-    DragDirective
   ],
   imports: [
       FormsModule,
@@ -41,9 +37,7 @@ import { CountryCardComponent } from './graph/data-cards/country-card.component'
   exports: [
     AppAutocompleterComponent,
     GraphComponent,
-    TakeATourComponent,
     DynamicPopoverComponent,
-    DragDirective
   ]
 })
 export class SharedLibraryModule { }
