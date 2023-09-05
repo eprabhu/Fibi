@@ -22,6 +22,7 @@ export class HistoryComponent implements OnInit {
     coiDisclosure: any = {};
     disclosureHistoryLogs: any = {};
     isEmptyObject = isEmptyObject;
+    isReadMore = false;
 
     constructor( public _coiService: CoiService, 
                  private _commonService: CommonService, 

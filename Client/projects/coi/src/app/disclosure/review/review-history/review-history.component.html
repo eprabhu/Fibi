@@ -31,8 +31,8 @@
                                                   <span *ngIf="historyEntry?.comment" class="px-4 fs-14">
                                                     <span class="fa fa-quote-left comment-icon grey-text ml-2 fs-13"></span>
                                                     <span class="word-break-all new-line-property fst-italic mx-2"
-                                                        *ngIf="!isReadMore && historyEntry?.comment?.length > 470; else showFullInfo">
-                                                        <span class="grey-text mt-2">{{(historyEntry?.comment | slice:0:470)}}</span>
+                                                        *ngIf="!isReadMore && historyEntry?.comment?.length > 460; else showFullInfo">
+                                                        <span class="grey-text mt-2">{{(historyEntry?.comment | slice:0:460)}}</span>
                                                         <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span class="fw-medium">... <u>Read
                                                                     more</u>
                                                                 <i aria-hidden="true"></i></span>
@@ -40,9 +40,9 @@
                                                     </span>
                                                     <ng-template #showFullInfo>
                                                         <span class="word-break-all new-line-property fst-italic mx-2 grey-text">{{historyEntry?.comment}}</span>
-                                                        <span class="hand-cursor mt-2 fw-medium" *ngIf="historyEntry?.comment?.length > 470" 
+                                                        <span class="hand-cursor mt-2 fw-medium" *ngIf="historyEntry?.comment?.length > 460" 
                                                             (click)="isReadMore = !isReadMore" aria-hidden="true">
-                                                            <span class="fw-medium">. <u>Read Less</u>
+                                                            <span class="fw-medium"><u>Read Less</u>
                                                                 <i aria-hidden="true"></i></span>
                                                         </span>
                                                     </ng-template>
