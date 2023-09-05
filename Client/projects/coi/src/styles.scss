@@ -21,6 +21,15 @@ body {
   overflow: hidden !important;
 }
 
+.link {
+  stroke: #000;
+  stroke-width: 1px;
+}
+.active {
+  stroke: #3d2cff;
+  stroke-width: 1.5px;
+}
+
 // scroll design
 ::-webkit-scrollbar {
   width: 12px;

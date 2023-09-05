@@ -1,7 +1,7 @@
 {
-  "/login": {
-    "target": "http://192.168.1.149/coi",
-    "secure": false
+  "/graph-connect/coi/v1/entitygraph": {
+  "secure": false,
+  "target": "http://10.199.100.34:9090"
   },
   "/fetchRequiredParams": {
     "secure": false,
@@ -223,7 +223,7 @@
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
-  "/auth/login": {
+  "/login": {
     "target": "http://192.168.1.149/auth",
     "secure": false
   },
