@@ -382,8 +382,8 @@
                                                 <label for="disp-status" class="label-text">Disposition Status :</label>
                                                 <app-no-data-label [valueToShow]="coi?.dispositionStatus">
                                                     <span
-                                                        class="ms-3 {{commonService.getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"
-                                                        [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
+                                                        class="ms-3 {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
+                                                        [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
                                                         id="disp-status">{{coi?.dispositionStatus}}</span>
                                                 </app-no-data-label>
                                             </div>
