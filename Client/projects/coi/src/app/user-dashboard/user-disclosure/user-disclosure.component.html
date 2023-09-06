@@ -193,8 +193,7 @@
     </div>
     <div (click)="setTab('DISCLOSURE_HISTORY', dashboardCount?.disclosureHistoryCount)" class="navigation-icons px-3 py-1" role="button"
         title="Click to view Disclosure History" aria-describedby="Click to view Disclosure History">
-        <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3">Disclosure History
-            ({{dashboardCount?.disclosureHistoryCount || 0}})</span>
+        <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3">Disclosure History</span>
     </div>
 </nav> 
 
@@ -221,7 +220,7 @@
         [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
         (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
-        <input class="advance-search-input border-0 px-4 fs-14" id="searchText"
+        <input class="advance-search-input border-0 px-4 fs-14 pe-5" id="searchText"
         [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
         type="text" [(ngModel)]="searchText" (ngModelChange)="getDisclosures()">
         <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>        
