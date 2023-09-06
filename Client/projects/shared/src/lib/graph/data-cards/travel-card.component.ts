@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   template: `
       <div class="data-grid">
         <div class="mr-15">
-            <img class="profile_img" src="/assets/images/travel.svg" alt="an Ican for represrnting a person">
+            <img class="profile_img" src="./assets/images/travel.svg" alt="an Ican for represrnting a person">
         </div>
         <div class="ml-15">
             <h2 class="heading">Travel Number{{data.travel_number}}</h2>
