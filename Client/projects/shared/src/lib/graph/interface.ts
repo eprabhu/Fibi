@@ -30,5 +30,5 @@ export const DISTANCE_BTN_NODES = 75;
 export const FORCE_BTN_NODES = -500;
 
 export const JSON_MAPPING = {
-    101: '/assets/graph/entity-graph.json'
+    101: './assets/graph/entity-graph.json'
 };
