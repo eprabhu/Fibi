@@ -377,6 +377,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				actionLogService.saveDisclosureActionLog(actionLogDto);
 			}
 			actionLogDto.setActionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_SUBMITTED);
+			actionLogDto.setRevisionComment(null);
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 
 		} catch (Exception e) {
