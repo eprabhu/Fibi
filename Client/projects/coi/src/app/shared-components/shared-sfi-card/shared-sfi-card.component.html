@@ -80,7 +80,7 @@
           <mat-icon class="me-1">visibility</mat-icon>
           View
         </button>
-        <button (click)="modifySfiDetails(SFIObject?.entityId, 'edit')"
+        <button *ngIf="SFIObject?.isActive !== 'INACTIVE'" (click)="modifySfiDetails(SFIObject?.entityId, 'edit')"
           class="align-items-center btn btn-outline-secondary d-flex fs-14 mr-15">
           <mat-icon class="me-1">edit</mat-icon>
           Modify
