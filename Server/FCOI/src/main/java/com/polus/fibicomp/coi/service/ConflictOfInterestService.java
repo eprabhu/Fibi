@@ -63,10 +63,10 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used for get list of entity table values(enpoint for entity)
-	 * @param searchString
+	 * @param vo
 	 * @return A list of entity
 	 */
-	List<CoiEntity> searchEnitiy(String searchString);
+	List<CoiEntity> searchEntity(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for get lookup table of sfi
