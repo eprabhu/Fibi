@@ -289,6 +289,7 @@ export class GraphComponent implements OnInit {
     clearGraph() {
         document.getElementById('chart-container').innerHTML = '';
         this.graph = { nodes: [], links: [] };
+        this.selectedRelations = {};
     }
 
 }
