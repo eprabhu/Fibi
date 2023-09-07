@@ -104,7 +104,7 @@ export class RelationshipComponent implements OnInit {
     this.isEditMode = ['1', '5', '6'].includes(this.coiData.coiDisclosure.reviewStatusCode) && IS_CREATE_USER;
   }
 
-  loadProjectRelations() {0
+  loadProjectRelations() {
     this.isShowNoDataCard = false;
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
