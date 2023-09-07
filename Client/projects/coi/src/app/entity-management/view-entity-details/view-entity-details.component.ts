@@ -189,7 +189,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
                 this.entityRelationshipValue == ele.entityRelTypeCode).description;
         }
         if (this.entityRelationshipValue !== '1') {
-            this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl);
+            this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl, 'ALL');
         }
     }
 
@@ -208,7 +208,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
                 this.entityDetails.updatedUserFullName = res.updatedUserFullName;
                 this.entityDetails.updateTimestamp = res.updateTimestamp;
                 this.approveEntityDetails.emit(this.entityDetails);
-                document.getElementById('hide-approve-entity-modal')?.click();
+                document.getElementById('hide-approve-entity-modal').click();
                 this.clearApproveEntityFiled();
                 this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity verified successfully.`);
             }));
@@ -237,7 +237,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.clearField = new String('true');
         this.relationshipEntityId = null;
         this.relationshipEntityName = '';
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl);
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonServices.baseUrl, 'ALL');
         this.entityRelationshipNumber = null;
     }
 

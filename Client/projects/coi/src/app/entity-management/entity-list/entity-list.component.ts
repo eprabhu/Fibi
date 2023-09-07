@@ -77,7 +77,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.checkForSort();
     this.coiElastic = this._elasticConfig.getElasticForCoi();
-    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ALL');
     this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.isViewAdvanceSearch = false;
     if (!this.entityManagementService.coiRequestObject.tabName) {
@@ -191,7 +191,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   resetAdvanceSearchFields() {
     this.entityManagementService.coiRequestObject = new EntityDashboardRequest();
     this.entityManagementService.entityDashDefaultValues = new EntityDashDefaultValues();
-    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ALL');
     this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.lookupValues = [];
   }

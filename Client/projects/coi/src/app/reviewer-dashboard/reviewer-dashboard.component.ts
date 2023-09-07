@@ -486,7 +486,7 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     private setSearchOptions() {
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ALL');
         this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
         this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
     }
