@@ -199,15 +199,21 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 	
 	@Override
-	public List<CoiEntity> searchEnitiy(String searchString) {
+	public List<CoiEntity> searchEntity(ConflictOfInterestVO vo) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<CoiEntity> query = builder.createQuery(CoiEntity.class);
 		Root<CoiEntity> rootEntityName = query.from(CoiEntity.class);
-		Predicate exactMatch = builder.equal(builder.lower(rootEntityName.get("entityName")), searchString.toLowerCase());
-		Predicate partialMatch = builder.like(builder.lower(rootEntityName.get("entityName")), "%" + searchString.toLowerCase() + "%");
-		Predicate condVersionStatus = builder.notEqual(rootEntityName.get("versionStatus"), Constants.COI_ARCHIVE_STATUS);
-		query.where(builder.and(condVersionStatus, builder.or(exactMatch, partialMatch)));
+		Predicate exactMatch = builder.equal(builder.lower(rootEntityName.get("entityName")), vo.getSearchString().toLowerCase());
+		Predicate partialMatch = builder.like(builder.lower(rootEntityName.get("entityName")), "%" + vo.getSearchString().toLowerCase() + "%");
+		if (vo.getIsActive() != null && vo.getIsActive()) {
+			Predicate condVersionStatus = builder.equal(rootEntityName.get("versionStatus"), Constants.COI_ACTIVE_STATUS);
+			Predicate condActiveStatus = builder.equal(rootEntityName.get("isActive"), true);
+			query.where(builder.and(builder.and(condVersionStatus, builder.and(condActiveStatus)), builder.or(exactMatch, partialMatch)));
+		} else {
+			Predicate condVersionStatus = builder.notEqual(rootEntityName.get("versionStatus"), Constants.COI_ARCHIVE_STATUS);
+			query.where(builder.and(condVersionStatus,  builder.or(exactMatch, partialMatch)));
+		}
 		query.orderBy(builder.asc(builder.selectCase().when(exactMatch, 0).otherwise(1)), builder.asc(rootEntityName.get("entityName")));
 		return session.createQuery(query).setMaxResults(50).getResultList();
 	}

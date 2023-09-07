@@ -52,7 +52,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ONLY_ACTIVE');
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.getDataFromStore();
         this.listenDataChangeFromStore();
