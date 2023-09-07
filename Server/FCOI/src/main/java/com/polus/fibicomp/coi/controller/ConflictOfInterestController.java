@@ -103,7 +103,7 @@ public class ConflictOfInterestController {
 	@PostMapping(value = "/searchEntity")
 	public List<CoiEntity> searchEnitiy(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for searchEntity");
-		return conflictOfInterestService.searchEnitiy(vo.getSearchString());
+		return conflictOfInterestService.searchEntity(vo);
 	}
 
 	@GetMapping("/loadSFILookups")
