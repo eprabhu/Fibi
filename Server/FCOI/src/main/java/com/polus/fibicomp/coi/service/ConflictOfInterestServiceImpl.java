@@ -291,8 +291,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public List<CoiEntity> searchEnitiy(String searchString) {
-		return conflictOfInterestDao.searchEnitiy(searchString);
+	public List<CoiEntity> searchEntity(ConflictOfInterestVO vo) {
+		return conflictOfInterestDao.searchEntity(vo);
 	}
 	
 	@Override

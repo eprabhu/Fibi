@@ -104,10 +104,10 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * This method is used for get entity details
-	 * @param searchString
+	 * @param vo
 	 * @return
 	 */
-	public List<CoiEntity> searchEnitiy(String searchString);
+	public List<CoiEntity> searchEntity(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for get entity status(lookup)
