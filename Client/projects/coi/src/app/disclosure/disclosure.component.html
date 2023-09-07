@@ -199,44 +199,6 @@
                     </div>
                 </div> -->
             </div>
-            <ng-container *ngIf="isCreateMode">
-                <div class="nav-progress navigation-tabs row">
-                    <div (click)="goToStep(1);"
-                        [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
-                        class="col h-100 m-0" queryParamsHandling='merge' title="Go to Screening Questionnaire section">
-                        Screening Questionnaire
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(2);"
-                        [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
-                        class="col ps-5 text-nowrap" queryParamsHandling='merge'
-                        title="Go to SFI section">
-                        Significant Financial Interest(SFIs)
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(3);" [class.complete]="isRouteComplete(['relationship', 'certification'])"
-                        class="col" queryParamsHandling='merge' title="Go to Relationships section">
-                        <span class="align-self-center">Relationships</span>
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(4);" [class.complete]="isRouteComplete(['certification'])" class="col"
-                        queryParamsHandling='merge' title="Go to Certification section">
-                        <span class="align-self-center">Certification</span>
-                    </div>
-                </div>
-            </ng-container>
 
             <ng-container *ngIf="!isCreateMode">
                 <div class="navigation-tabs d-flex align-items-center">
@@ -310,16 +272,13 @@
                     </button>
                 </div>
             </div>
-            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes">
-                Notes & Attachments
-            </div>
             <div *ngIf="sfiService.isShowSfiNavBar">
                 <app-add-sfi-slider [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi-slider>
             </div>
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill border-end bg-white shadow-sm" [class.side-height]="isCardExpanded">
-                <div class="row m-0 px-3 d-flex justify-content-between {{isCardExpanded ? 'py-3' : 'pt-2'}}">
+                <div class="row m-0 px-3 d-flex justify-content-between min-height-90 {{isCardExpanded ? 'py-3' : 'pt-2'}}">
                     <button title="Go to COI home page" (click)="goToHomeUrl()"
                     [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
                     class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-10">
@@ -448,6 +407,56 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="mx-0 p-0 row">
+        <ng-container *ngIf="isCreateMode">
+            <div class="p-0">
+                <div class="nav-progress navigation-tabs row">
+                    <div (click)="goToStep(1);"
+                        [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
+                        class="col h-100 m-0" queryParamsHandling='merge' title="Go to Screening Questionnaire section">
+                        Screening Questionnaire
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="goToStep(2);" [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
+                        class="col ps-5 text-nowrap" queryParamsHandling='merge' title="Go to SFI section">
+                        Significant Financial Interest(SFIs)
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="goToStep(3);" [class.complete]="isRouteComplete(['relationship', 'certification'])"
+                        class="col" queryParamsHandling='merge' title="Go to Relationships section">
+                        <span class="align-self-center">Relationships</span>
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="goToStep(4);" [class.complete]="isRouteComplete(['certification'])" class="col"
+                        queryParamsHandling='merge' title="Go to Certification section">
+                        <span class="align-self-center">Certification</span>
+                    </div>
+                    <span
+                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center d-flex justify-content-center col hand-cursor nav-border-right border-r-0">
+                        Notes & Attachments
+                    </span>
+                    <span
+                        *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null"
+                        [routerLink]="['history']" queryParamsHandling='merge' routerLinkActive="active"
+                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center d-flex justify-content-center col hand-cursor border-r-0">
+                        History
+                    </span>
+                </div>
+            </div>
+        </ng-container>
     </div>
 </div>
 
