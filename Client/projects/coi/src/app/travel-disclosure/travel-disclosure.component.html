@@ -1,6 +1,6 @@
 <div class="border-top-0 mb-3 mx-3 row header-sticky">
     <div class="col-9 p-0">
-        <div class="border shadow-sm bg-white" [class.min-height-189]="isCardExpanded">
+        <div class="border shadow-sm bg-white" [class.min-height-189]="isCardExpanded && !isCreateMode">
             <div class="disclosure-heading px-3 d-flex">
                 <!-- disclosure heading -->
                 <div class="align-self-center flex-fill d-flex">
@@ -188,32 +188,7 @@
                     </div>
                 </div>
             </div>
-            <ng-container *ngIf="isCreateMode">
-                <div class="nav-progress row mt-1" tabindex="0"  role="navigation" aria-label="travel disclosure">
-                    <!-- travel details -->
-                    <div class="col h-100 m-0 fs-14" (click)="service.isChildRouteTriggered = true"
-                        [class.complete]="isRouteComplete(['travel-details', 'certification'])"
-                        [routerLink]="['travel-details']" queryParamsHandling='merge'
-                        [class.cursor-pointer]="!isRouteComplete(['travel-details'])" role="link"
-                        [attr.aria-label]="isRouteComplete(['travel-details'])? 'Travel Details' : 'Go to step Travel Details'" tabindex="0"
-                        [title]="isRouteComplete(['travel-details'])? 'Travel Details' : 'Go to step Travel Details'">
-                        Travel Details
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- certification -->
-                    <div class="col fs-14" (click)="service.isChildRouteTriggered = true"
-                        [attr.aria-label]="isRouteComplete(['certification'])? 'Certification' : 'Go to step Certification'" tabindex="0"
-                        [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
-                        queryParamsHandling='merge' [class.cursor-pointer]="!isRouteComplete(['certification'])"
-                        [title]="isRouteComplete(['certification'])? 'Certification' : 'Go to step Certification'" role="link">
-                        Certification
-                    </div>
-                </div>
-            </ng-container>
+       
             <ng-container *ngIf="!isCreateMode">
                 <div class="navigation-tabs d-flex align-items-center" tabindex="0"  role="navigation" aria-label="travel disclosure">
                      <!-- Disclosure -->
@@ -247,8 +222,8 @@
     <!-- right side options -->
     <div class="col-3 px-0">
         <div class="d-flex position-relative flex-column p-0 bg-white border-end shadow-sm" 
-            [ngClass]="isCardExpanded? 'min-height-189' : 'collapse-right-tab'" tabindex="0"  role="menu" aria-label="travel disclosure actions section">
-            <div  class="row m-0 py-3 px-3">
+            [ngClass]="isCardExpanded? isCreateMode ? 'min-height-160' : 'min-height-189' : 'collapse-right-tab'" tabindex="0"  role="menu" aria-label="travel disclosure actions section">
+            <div class="row m-0 py-3 px-3">
                 <!-- home -->
                 <button (click)="navigateBack()" title="Go to home" aria-label="Go to home"
                     [ngClass]="(travelDisclosure?.reviewStatusCode != '2' && !isCreateMode && travelDisclosure?.reviewStatusCode != '7') ? 'col-2' : 'col'"
@@ -394,12 +369,49 @@
                     <div>{{travelDisclosure?.personFullName}} On {{travelDisclosure?.updateTimestamp |
                         dateFormatterWithTimeZone:'long'}}</div>
                 </div>
-            </div>            
-
-            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes w-100" *ngIf="isCreateMode">
-                Notes & Attachments
             </div>
-        </div>
+        </div> 
+    </div>
+    <div class="mx-0 p-0 row">
+        <ng-container *ngIf="isCreateMode">
+            <div class="p-0">
+                <div class="nav-progress navigation-tabs row" tabindex="0" role="navigation" aria-label="travel disclosure">
+                    <!-- travel details -->
+                    <div class="col h-100 m-0 fs-14" (click)="service.isChildRouteTriggered = true"
+                        [class.complete]="isRouteComplete(['travel-details', 'certification'])"
+                        [routerLink]="['travel-details']" queryParamsHandling='merge'
+                        [class.cursor-pointer]="!isRouteComplete(['travel-details'])" role="link"
+                        [attr.aria-label]="isRouteComplete(['travel-details'])? 'Travel Details' : 'Go to step Travel Details'"
+                        tabindex="0"
+                        [title]="isRouteComplete(['travel-details'])? 'Travel Details' : 'Go to step Travel Details'">
+                        Travel Details
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- certification -->
+                    <div class="col fs-14" (click)="service.isChildRouteTriggered = true"
+                        [attr.aria-label]="isRouteComplete(['certification'])? 'Certification' : 'Go to step Certification'"
+                        tabindex="0" [class.complete]="isRouteComplete(['certification'])" [routerLink]="['certification']"
+                        queryParamsHandling='merge' [class.cursor-pointer]="!isRouteComplete(['certification'])"
+                        [title]="isRouteComplete(['certification'])? 'Certification' : 'Go to step Certification'"
+                        role="link">
+                        Certification
+                    </div>
+                    <span
+                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center border-r-0 d-flex justify-content-center col hand-cursor nav-border-right">
+                        Notes & Attachments
+                    </span>
+                    <span *ngIf="travelDisclosure?.reviewStatusCode != 1 && travelDisclosure?.reviewStatusCode != null"
+                        [routerLink]="['history']" queryParamsHandling='merge' routerLinkActive="active"
+                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center border-r-0 d-flex justify-content-center col hand-cursor">
+                        History
+                    </span>
+                </div>
+            </div>
+        </ng-container>
     </div>
 </div>
 <div class="mx-3">

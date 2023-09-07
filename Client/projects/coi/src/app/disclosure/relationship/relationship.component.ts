@@ -100,10 +100,11 @@ export class RelationshipComponent implements OnInit {
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    this.isEditMode = ['1', '5', '6'].includes(this.coiData.coiDisclosure.reviewStatusCode);
+    const IS_CREATE_USER = this.coiData.coiDisclosure.personId === this._commonService.getCurrentUserDetail('personId');
+    this.isEditMode = ['1', '5', '6'].includes(this.coiData.coiDisclosure.reviewStatusCode) && IS_CREATE_USER;
   }
 
-  loadProjectRelations() {
+  loadProjectRelations() {0
     this.isShowNoDataCard = false;
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
