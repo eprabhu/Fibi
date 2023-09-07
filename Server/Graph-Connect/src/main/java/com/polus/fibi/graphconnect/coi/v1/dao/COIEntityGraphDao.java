@@ -48,6 +48,14 @@ public class COIEntityGraphDao {
 	private static final String TYPE = "type";
 
 	private static final String PARAM_1 = "param1";
+	
+	private static final String NODE_ENTITY = "Entity";
+	
+	private static final String NODE_COUNTRY = "Country";
+	
+	private static final String NODE_PERSON = "Person";
+	
+	private static String RETURN_NODE = "RETURN p";
 
 	public ResponseDTO entityGraphDAO(RequestDTO request) {
 
@@ -134,65 +142,155 @@ public class COIEntityGraphDao {
 	}
 
 	private String getCypher(RequestDTO request) {
+		
+		HashMap<String,HashMap<String,String>> nodeAliasMap = new HashMap<>();
 
 		String cypher = null;
 		// boolean
 		ArrayList<String> lsRelationships = request.getRelationship();
+		String node = request.getNode();
 
 		for (String relationship : lsRelationships) {
 
 			if ("BELONGS_TO".equalsIgnoreCase(relationship)) {
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
+				
 				cypher = cypher
-						.concat("MATCH p=(e1:Entity)-[r1:BELONGS_TO]->(e2:Country)  where <WHERE_CLAUSE> RETURN p");
+						.concat("MATCH p=(e1:Entity)-[r1:BELONGS_TO]->(e2:Country) ");
 
+				HashMap<String,String> aliasHm = new HashMap<>();
+				aliasHm.put(NODE_ENTITY, "e1");	
+				aliasHm.put(NODE_COUNTRY, "e2");	
+				nodeAliasMap.put(relationship, aliasHm);
+				String whereClause = buildWhereClause(relationship,node,nodeAliasMap);
+				
+				cypher = cypher
+							.concat(whereClause)
+							.concat(RETURN_NODE);
+				
+				
 			} else if ("ASSOCIATED_ENTITIES".equalsIgnoreCase(relationship)) {
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher.concat(
-						"MATCH p=(e1:Entity)-[r1:ASSOCIATED_ENTITIES]->(e2:Person)  where <WHERE_CLAUSE> RETURN p");
-
+						"MATCH p=(e1:Entity)<-[r1:ASSOCIATED_ENTITIES]-(e2:Person) ");
+				
+				HashMap<String,String> aliasHm = new HashMap<>();
+				aliasHm.put(NODE_ENTITY, "e1");	
+				aliasHm.put(NODE_PERSON, "e2");	
+				nodeAliasMap.put(relationship, aliasHm);
+				String whereClause = buildWhereClause(relationship,node,nodeAliasMap);
+				
+				cypher = cypher
+							.concat(whereClause)
+							.concat(RETURN_NODE);
+				
+				
+				
 			} else if ("CITIZEN_OF".equalsIgnoreCase(relationship)) {
 
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher
-						.concat("MATCH p=(e1:Person)-[r1:CITIZEN_OF]->(e2:Country)  where <WHERE_CLAUSE> RETURN p");
+						.concat("MATCH p=(e1:Person)-[r1:CITIZEN_OF]->(e2:Country) ");
 
+				HashMap<String,String> aliasHm = new HashMap<>();
+				aliasHm.put(NODE_PERSON, "e1");	
+				aliasHm.put(NODE_COUNTRY, "e2");	
+				nodeAliasMap.put(relationship, aliasHm);
+				String whereClause = buildWhereClause(relationship,node,nodeAliasMap);
+				
+				cypher = cypher
+							.concat(whereClause)
+							.concat(RETURN_NODE);
+				
 			} else if ("AFFILIATED_ENTITIES".equalsIgnoreCase(relationship)) {
 
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher.concat(
-						" MATCH p=(c1:Country)<--(e2:Entity)-[r1:AFFILIATED_ENTITIES]->(e1:Entity)  where <WHERE_CLAUSE> RETURN p");
+						" MATCH p=(c1:Country)<--(e2:Entity)-[r1:AFFILIATED_ENTITIES]->(e1:Entity) ");
 
+				HashMap<String,String> aliasHm = new HashMap<>();
+				aliasHm.put(NODE_ENTITY, "e2");	
+				aliasHm.put(NODE_COUNTRY, "c1");	
+				nodeAliasMap.put(relationship, aliasHm);
+				String whereClause = buildWhereClause(relationship,node,nodeAliasMap);
+				
+				cypher = cypher
+							.concat(whereClause)
+							.concat(RETURN_NODE);
+				
 			} else if ("ASSOCIATED_PERSONS".equalsIgnoreCase(relationship)) {
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher.concat(
-						"MATCH p=(e1:Person)-[r1:ASSOCIATED_ENTITIES]->(e2:Entity)  where <WHERE_CLAUSE> RETURN p");
-						
+						"MATCH p=(e1:Person)-[r1:ASSOCIATED_ENTITIES]->(e2:Entity) ");
+		
+				HashMap<String,String> aliasHm = new HashMap<>();
+				aliasHm.put(NODE_ENTITY, "e2");	
+				aliasHm.put(NODE_PERSON, "e1");	
+				nodeAliasMap.put(relationship, aliasHm);
+				String whereClause = buildWhereClause(relationship,node,nodeAliasMap);
+				
+				cypher = cypher
+							.concat(whereClause)
+							.concat(RETURN_NODE);
+				
 
 			} else if ("ENTITIES_BELONGS_WITH".equalsIgnoreCase(relationship)) {
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher
-						.concat("MATCH p=(e1:Country)<-[r1:BELONGS_TO]-(e2:Entity)  where <WHERE_CLAUSE> RETURN p");
+						.concat("MATCH p=(e1:Country)<-[r1:BELONGS_TO]-(e2:Entity) ");
 
+				HashMap<String,String> aliasHm = new HashMap<>();
+				aliasHm.put(NODE_ENTITY, "e2");	
+				aliasHm.put(NODE_COUNTRY, "e1");	
+				nodeAliasMap.put(relationship, aliasHm);
+				String whereClause = buildWhereClause(relationship,node,nodeAliasMap);
+				
+				cypher = cypher
+							.concat(whereClause)
+							.concat(RETURN_NODE);
+				
+				
 			} else if ("ALL_CITIZENS".equalsIgnoreCase(relationship)) {
 
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher
-						.concat("MATCH p=(e1:Country)<-[r1:CITIZEN_OF]-(e2:Person)  where <WHERE_CLAUSE> RETURN p");
+						.concat("MATCH p=(e1:Country)<-[r1:CITIZEN_OF]-(e2:Person) ");
 
+				HashMap<String,String> aliasHm = new HashMap<>();
+				aliasHm.put(NODE_PERSON, "e2");	
+				aliasHm.put(NODE_COUNTRY, "e1");	
+				nodeAliasMap.put(relationship, aliasHm);
+				String whereClause = buildWhereClause(relationship,node,nodeAliasMap);
+				
+				cypher = cypher
+							.concat(whereClause)
+							.concat(RETURN_NODE);
+			
 			}else if ("ASSOCIATED_PERSONS_WITH_CITIZEN_INFO".equalsIgnoreCase(relationship)) {
 
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
-				String gql = """
-						
-						MATCH p= (e1:Person)-[r1:ASSOCIATED_ENTITIES]->(e2:Entity)  where <WHERE_CLAUSE> RETURN p 
-
-						UNION
-						
-						MATCH p= (c1:Country)<-[r0:CITIZEN_OF]-(e1:Person)-[r1:ASSOCIATED_ENTITIES]->(e2:Entity) where <WHERE_CLAUSE> RETURN p 
-
-						""";
-				cypher = cypher.concat(gql);
+				HashMap<String,String> aliasHm = new HashMap<>();
+				aliasHm.put(NODE_ENTITY, "e2");	
+				aliasHm.put(NODE_COUNTRY, "c1");
+				aliasHm.put(NODE_PERSON, "e1");	
+				nodeAliasMap.put(relationship, aliasHm);
+				
+				String gq1 = "MATCH p= (e1:Person)-[r1:ASSOCIATED_ENTITIES]->(e2:Entity)";
+				String whereClause = buildWhereClause(relationship,node,nodeAliasMap);
+				gq1 = gq1
+							.concat(whereClause)
+							.concat(RETURN_NODE)
+							.concat("UNION ");
+				
+				String gq2 = "MATCH p= (c1:Country)<-[r0:CITIZEN_OF]-(e1:Person)-[r1:ASSOCIATED_ENTITIES]->(e2:Entity) ";
+				whereClause = buildWhereClause(relationship,node,nodeAliasMap);
+				gq2 = gq2
+						.concat(whereClause)
+						.concat(RETURN_NODE);
+				
+					
+				
+				cypher = cypher.concat(gq2);
 
 			}
 			
@@ -200,18 +298,32 @@ public class COIEntityGraphDao {
 
 		}
 
-		if ("Entity".equalsIgnoreCase(request.getNode())) {
-			cypher = cypher.replace("<WHERE_CLAUSE>", " e1.entity_number = $param1 OR e2.entity_number = $param1");
-
-		} else if ("Person".equalsIgnoreCase(request.getNode())) {
-			cypher = cypher.replace("<WHERE_CLAUSE>", " e1.person_id = $param1");
-
-		} else if ("Country".equalsIgnoreCase(request.getNode())) {
-			cypher = cypher.replace("<WHERE_CLAUSE>", " e1.country_code = $param1");
-
-		}
+		
 
 		return cypher;
+	}
+
+	private String buildWhereClause(String relationship, String node,
+			HashMap<String, HashMap<String, String>> nodeAliasMap) {
+		
+			String whereClause = "";
+			HashMap<String, String> aliasMap = nodeAliasMap.get(relationship);
+			if (NODE_ENTITY.equalsIgnoreCase(node)) {				
+				String nodeAliasValue = aliasMap.get(NODE_ENTITY);				
+				whereClause = nodeAliasValue + "." + "entity_number = $param1 ";
+
+			} else if (NODE_PERSON.equalsIgnoreCase(node)) {
+				String nodeAliasValue = aliasMap.get(NODE_PERSON);				
+				whereClause = nodeAliasValue + "." + "person_id = $param1 ";
+				
+
+			} else if (NODE_COUNTRY.equalsIgnoreCase(node)) {
+				String nodeAliasValue = aliasMap.get(NODE_COUNTRY);				
+				whereClause = nodeAliasValue + "." + "country_code = $param1 ";				
+
+			}
+																						
+			return " WHERE "+ whereClause;
 	}
 
 	private void logQuery(String cypher) {
