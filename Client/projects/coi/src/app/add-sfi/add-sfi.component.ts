@@ -84,7 +84,7 @@ export class AddSfiComponent implements OnInit {
         if (this.isEntityManagement) {
             this.canShowEntityFields = true;
         }
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ONLY_ACTIVE');
         this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     }
 
@@ -112,7 +112,7 @@ export class AddSfiComponent implements OnInit {
     hideRelationshipModal(event): void {
         this.clearSFIFields();
         this.clearField = new String('true');
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ONLY_ACTIVE');
     }
 
     private createOrUpdateEntitySFI(): void {
@@ -152,7 +152,7 @@ export class AddSfiComponent implements OnInit {
                 this.clearCountryField = new String('false');
             }
         }, err => {
-            this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+            this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl,'ONLY_ACTIVE');
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Entity selection failed. Please try again');
         }));
     }
@@ -191,7 +191,7 @@ export class AddSfiComponent implements OnInit {
                 }
             }, _err => {
                 this.isSaving = false;
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating SFI Please try again.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating SFI , please try again.');
             }));
     }
 
