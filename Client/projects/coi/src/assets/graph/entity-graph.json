@@ -9,41 +9,52 @@
   "root_relations": [
     "ASSOCIATED_PERSONS_WITH_CITIZEN_INFO",
     "AFFILIATED_ENTITIES",
-    "BELONGS_TO"
+    "BELONGS_TO",
+    "ASSOCIATED_PERSONS"
   ],
   "relations": [
     {
       "node": "Person",
       "relationships": [
         {
-          "relation": "ASSOCIATED_ENTITIES",
+          "id": "1",
+          "relation": ["ASSOCIATED_ENTITIES", "BELONGS_TO"],
           "description": "Associated entities"
         },
-        { "relation": "CITIZEN_OF", "description": "Citizenship Of" }
+        {  "id": "2","relation": ["CITIZEN_OF"], "description": "Citizenship Of" }
       ]
     },
     {
       "node": "Entity",
+      "root_node": true,
       "relationships": [
-        { "relation": "BELONGS_TO", "description": "Belongs To" },
+        { "id": "1", "relation": ["BELONGS_TO"], "description": "Belongs To" },
         {
-          "relation": "ASSOCIATED_PERSONS",
+          "id": "2",
+          "relation": ["ASSOCIATED_PERSONS", "CITIZEN_OF"],
           "description": "Associated Persons"
         },
         {
-          "relation": "AFFILIATED_ENTITIES",
+          "id": "3",
+          "relation": ["ASSOCIATED_ENTITIES", "BELONGS_TO"],
           "description": "Affiliates Entities"
         }
       ]
     },
     {
       "node": "Country",
+      "root_node": false,
       "relationships": [
         {
-          "relation": "ENTITIES_BELONGS_WITH",
+          "id": "1",
+          "relation": ["ENTITIES_BELONGS_WITH"],
           "description": "Entities in relation"
         },
-        { "relation": "ALL_CITIZENS", "description": "All Citizens" }
+        {
+          "id": "2",
+          "relation": ["ALL_CITIZENS"],
+          "description": "All Citizens"
+        }
       ]
     }
   ]

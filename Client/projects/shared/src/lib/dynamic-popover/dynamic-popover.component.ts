@@ -55,7 +55,6 @@ export class DynamicPopoverComponent implements OnInit, OnDestroy {
     }
 
     private getTopPosition(): string {
-        console.log(this.positionDetails.clientY);
         return screen.height > this.positionDetails.popoverHeight + this.positionDetails.clientY  ?
             this.positionDetails.clientY + window.scrollY + 'px' :
             this.positionDetails.clientY - this.positionDetails.popoverHeight + window.scrollY + 'px';
