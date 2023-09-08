@@ -424,7 +424,7 @@ public class COIImportGraphDataDao_v1_beta {
 		String query = "SELECT distinct t1.PERSON_ID, t1.INVOLVEMENT_START_DATE,t1.INVOLVEMENT_END_DATE,t1.ENTITY_ID as ENTITY_ID,\r\n"
 				+ "		t1.ENTITY_NUMBER\r\n" + "		FROM person_entity t1\r\n"
 				+ "		inner join person_entity_relationship t2 on t1.PERSON_ENTITY_ID  = t2.PERSON_ENTITY_ID\r\n"
-				+ "		where t2.VALID_PERSON_ENTITY_REL_TYPE_CODE = 1";
+				+ "		where t2.VALID_PERS_ENTITY_REL_TYP_CODE = 1";
 
 		jdbcTemplate.query(query, (resultSet, rowNum) -> {
 
@@ -448,7 +448,7 @@ public class COIImportGraphDataDao_v1_beta {
 		String query = "SELECT t1.PERSON_ID, t1.INVOLVEMENT_START_DATE,t1.INVOLVEMENT_END_DATE,t1.ENTITY_ID as ENTITY_ID,\r\n"
 				+ "		t1.ENTITY_NUMBER\r\n" + "		FROM person_entity t1\r\n"
 				+ "		inner join person_entity_relationship t2 on t1.PERSON_ENTITY_ID  = t2.PERSON_ENTITY_ID\r\n"
-				+ "		where t2.VALID_PERSON_ENTITY_REL_TYPE_CODE = 2";
+				+ "		where t2.VALID_PERS_ENTITY_REL_TYP_CODE = 2";
 
 		jdbcTemplate.query(query, (resultSet, rowNum) -> {
 
@@ -472,7 +472,7 @@ public class COIImportGraphDataDao_v1_beta {
 		String query = "SELECT t1.PERSON_ID, t1.INVOLVEMENT_START_DATE,t1.INVOLVEMENT_END_DATE,t1.ENTITY_ID as ENTITY_ID,\r\n"
 				+ "		t1.ENTITY_NUMBER\r\n" + "		FROM person_entity t1\r\n"
 				+ "		inner join person_entity_relationship t2 on t1.PERSON_ENTITY_ID  = t2.PERSON_ENTITY_ID\r\n"
-				+ "		where t2.VALID_PERSON_ENTITY_REL_TYPE_CODE = 3";
+				+ "		where t2.VALID_PERS_ENTITY_REL_TYP_CODE = 3";
 
 		jdbcTemplate.query(query, (resultSet, rowNum) -> {
 
