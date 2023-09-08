@@ -75,8 +75,8 @@
             <p class="interests_title">Show Connections </p>
             <ng-container *ngFor="let relation of relations">
                 <span class="interests_item">
-                    <input type="checkbox" class="mr-2" [(ngModel)]="selectedRelations[cardData.elementId][relation.relation]" id="{{relation.relation}}" (click)="drillDownEvent($event, relation.relation)">
-                    <label class="form-check-label" for="{{relation.relation}}">{{relation.description}}</label>
+                    <input type="checkbox" class="mr-2" [(ngModel)]="selectedRelations[cardData.elementId][relation.id]" id="{{relation.id}}" (click)="drillDownEvent($event, relation.relation)">
+                    <label class="form-check-label" for="{{relation.id}}">{{relation.description}}</label>
                 </span>
             </ng-container>
         </div>
