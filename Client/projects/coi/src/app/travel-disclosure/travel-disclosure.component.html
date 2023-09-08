@@ -255,7 +255,7 @@
                         <!-- reassigned admin -->
                         <button mat-menu-item *ngIf="travelDisclosure?.adminPersonId && checkReviewStatusCode(['3'])" aria-label="Click to Reassign administrator"
                             title="Click to Reassign Administrator/Admin Group" role="menuitems"
-                            class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center"
+                            class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action"
                             (click)="openAddAssignModal()">
                             <mat-icon>group_add</mat-icon>
                             <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
@@ -266,7 +266,7 @@
                         <button mat-menu-item (click)="openConflictSlider()" role="menuitems"
                             [attr.aria-label]="'Click to ' + (checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View') + ' Disclosure Status'"
                             title="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure Status"
-                            class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center">
+                            class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
                             <mat-icon>{{checkReviewStatusCode(['2','3'], 'SOME') ? 'mode' : 'visibility'}}</mat-icon>
                             <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'Manage' : 'View'}} Disclosure
                                 Status</span>
@@ -276,7 +276,7 @@
                         <button mat-menu-item (click)="openRiskSlider()" role="menuitems"
                             [attr.aria-label]="'Click to ' + (checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View') + ' Risk'"
                             title="Click to {{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk"
-                            class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center">
+                            class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
                             <mat-icon class="material-icons-round">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'warning' :
                                 'visibility'}}</mat-icon>
                             <span class="ms-2 fw-medium fs-14">{{checkReviewStatusCode(['2','3'], 'SOME') ? 'Modify' : 'View'}} Risk</span>
@@ -286,7 +286,7 @@
                     <!-- Withdraw disclosure -->
                     <button mat-menu-item title="Click to Withdraw Travel Disclosure" aria-label="Click to Withdraw Travel Disclosure"
                         (click)="openConfirmationModal('Withdraw', true, withdrawHelpTexts, true, withdrawErrorMsg);"
-                        class="border-0 rounded-0 d-flex justify-content-start w-100 align-items-center" role="menuitems"
+                        class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action" role="menuitems"
                         *ngIf="checkReviewStatusCode(['2']) && travelDisclosure?.personId == currentPersonId">
                         <mat-icon>logout</mat-icon>
                         <span class="ms-2 fw-medium fs-14">Withdraw</span>
@@ -294,7 +294,7 @@
 
                     <!-- notify -->
                     <button mat-menu-item title="Click to Notify" aria-label="Click to Notify" role="menuitems"
-                        class="border-0 rounded-0 d-flex justify-content-start w-100 align-items-center">
+                        class="text-nowrap border-0 rounded-0 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon>notifications</mat-icon>
                         <span class="ms-2 fw-medium fs-14">Notify</span>
                     </button>
