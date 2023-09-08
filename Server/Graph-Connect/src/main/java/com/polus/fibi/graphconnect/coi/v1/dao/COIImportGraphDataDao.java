@@ -234,7 +234,7 @@ public class COIImportGraphDataDao {
 						CONCAT(t3.DESCRIPTION, '[', GROUP_CONCAT(DISTINCT t4.DESCRIPTION SEPARATOR ','), ']') AS REL
 						from person_entity t0
 						inner join person_entity_relationship t1 on t1.PERSON_ENTITY_ID  = t0.PERSON_ENTITY_ID
-						inner join VALID_PERSON_ENTITY_REL_TYPE t2 on t1.VALID_PERSON_ENTITY_REL_TYPE_CODE = t2.VALID_PERSON_ENTITY_REL_TYPE_CODE
+						inner join VALID_PERSON_ENTITY_REL_TYPE t2 on t1.VALID_PERS_ENTITY_REL_TYP_CODE = t2.VALID_PERS_ENTITY_REL_TYP_CODE
 						inner join coi_disclosure_type t3 on t2.DISCLOSURE_TYPE_CODE = t3.DISCLOSURE_TYPE_CODE
 						inner join person_entity_rel_type t4 on t4.RELATIONSHIP_TYPE_CODE = t2.RELATIONSHIP_TYPE_CODE
 						inner join entity t5 on t5.ENTITY_ID = t0.ENTITY_ID
