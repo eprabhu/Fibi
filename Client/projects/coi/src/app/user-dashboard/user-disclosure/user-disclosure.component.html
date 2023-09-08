@@ -241,7 +241,7 @@
                             </span>
 
                             <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-2" aria-hidden="true"></i>
+                                <i class="fa fa-user mt-65" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.travellerName}}</strong>
                                 <ng-container>
                                 <span class="pipe me-1 mt-1"></span>
@@ -257,7 +257,7 @@
                             </h4>
 
                            <h4 *ngIf="!disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-2" aria-hidden="true"></i>
+                                <i class="fa fa-user mt-65" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.disclosurePersonFullName}}</strong>
                                 <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="ms-1">
                                     <span class="pipe me-2 mt-1"></span>
