@@ -307,7 +307,7 @@
                     <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
                     <button 
                     [matMenuTriggerFor]="beforeMenu"
-                        class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2 mb-10"
+                        class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2 mb-10 px-3"
                         role="button" title="Click for More Actions">
                         <mat-icon class="moreActionIcon">more_vert</mat-icon>
                         <span *ngIf="isCardExpanded">More Actions</span>
@@ -325,52 +325,52 @@
                     <!-- dispositionStatusCode(3-Approved) -->
                     <mat-menu #beforeMenu="matMenu" xPosition="before">
                         <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3' && getManageDisclosureRight()">
-                            <button title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
-                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2"
+                            <button mat-menu-item title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                 (click)="openAddAssignModal();"
                                 [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
                                 <mat-icon>group_add</mat-icon>
-                                <span class="ms-2 fw-medium">Reassign Admin</span>
+                                <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
                             </button>
                         </ng-container>
 
                         <ng-container *ngIf="checkForModifyRisk()">
-                            <button title="Click to Modify Risk" area-describedby="Click to Modify Risk"
-                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2"
+                            <button mat-menu-item title="Click to Modify Risk" area-describedby="Click to Modify Risk"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                 (click)="openRiskSlider();">
                                 <mat-icon class="material-icons-round">warning</mat-icon>
-                                <div class="ms-2 mt-1 fw-medium">Modify Risk</div>
+                                <span class="ms-2 mt-1 fw-medium fs-14">Modify Risk</span>
                             </button>
                         </ng-container>
                     
                         <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
                         <!-- check logged person & disclosure created person is same -->
-                        <button *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId) && 
+                        <button mat-menu-item *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId) && 
                         (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw" 
                             area-describedby="Click to Withdraw"
-                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2"
+                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                             (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg);">
                             <mat-icon>logout</mat-icon>
-                            <span class="ms-2">Withdraw</span>
+                            <span class="ms-2 fw-medium fs-14">Withdraw</span>
                         </button>
 
                        <!-- return to pi -->
                        <!-- reviewStatusCode-(3-Review In Progress) -->
                        <!-- Check logged person and administrator are same -->
-                    <button *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '3' && coiData.coiDisclosure.adminPersonId &&
+                    <button mat-menu-item *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '3' && coiData.coiDisclosure.adminPersonId &&
                     (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)" title="Click to Return Disclosure"
                         (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
-                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2">
+                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon class="returnIcon">refresh</mat-icon>
-                        <span class="ms-1">Return</span>
+                        <span class="ms-1 fw-medium fs-14">Return</span>
                     </button>
 
-                    <button title="Click to Return Disclosure"
-                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3 mt-2">
+                    <button mat-menu-item title="Click to Return Disclosure"
+                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon class="returnIcon">notifications</mat-icon>
-                        <span class="ms-1">Notify</span>
+                        <span class="ms-1 fw-medium fs-14">Notify</span>
                     </button>
-                    </mat-menu>
+                </mat-menu>
 
                     <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'"  
                     title="Click to start review" area-describedby="Click to start review" 

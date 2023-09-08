@@ -349,3 +349,19 @@ table {
   color: #fff;
   background-color: #007dec;
 }
+
+.more-action {
+  color: #6a7980 !important;
+  span,
+  mat-icon {
+    color: #6a7980 !important;
+  }
+  &:hover {
+    background-color: #E2F1FF !important;
+    color: #007DEC !important;
+    span,
+    mat-icon {
+      color: #007DEC !important;
+    }
+  }
+}
