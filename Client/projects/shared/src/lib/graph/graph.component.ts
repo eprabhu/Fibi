@@ -230,10 +230,8 @@ export class GraphComponent implements OnInit {
         this.node.on('click', (event, d) => {
             this.selectedRelations[d.elementId] = this.selectedRelations[d.elementId] || {};
             this.graphNodeEvents.next({ index: d.index, clientX: event.clientX, clientY: event.clientY });
-            console.log(d);
             this.cardData = d;
             this.relations = this.setConnectionsDataForPopUp(d) || [];
-            console.log(this.relations);
         });
         this.link.on('click', (event, d) => {
             console.log('Click from link');
@@ -245,12 +243,9 @@ export class GraphComponent implements OnInit {
         return data?.relationships;
     }
 
-
-
     private listenToGraphEvents() {
         this.graphNodeEvents.subscribe((data: any) => { this.showBasicDetailsPopup(data); });
     }
-
 
     private showBasicDetailsPopup(position) {
         this.popOverPositions.clientX = position.clientX;
@@ -259,9 +254,8 @@ export class GraphComponent implements OnInit {
     }
 
     async drillDownEvent(event, relation): Promise<any> {
-        console.log(this.selectedRelations);
         const value = this.getValueForNode(this.cardData);
-        const RO: GraphDataRO = this.getROForGraph(this.cardData.label, value, [relation]);
+        const RO: GraphDataRO = this.getROForGraph(this.cardData.label, value, relation);
         const GRAPH_DATA = await this.graphDataService.getDataForGraph(RO);
         this.addNodesAndLinks(GRAPH_DATA.nodes, GRAPH_DATA.links);
         this.hideBasicDetailsPopup();
@@ -290,6 +284,7 @@ export class GraphComponent implements OnInit {
         document.getElementById('chart-container').innerHTML = '';
         this.graph = { nodes: [], links: [] };
         this.selectedRelations = {};
+        this.cardData = {};
     }
 
 }
