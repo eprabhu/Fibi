@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
 
+import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -71,5 +73,6 @@ public class CoiTravelDisclosureDto {
 	private Timestamp updateTimestamp;
 	private String comment;
 	private String riskCategoryCode;
+	private EntityRiskCategory entityRiskCategory;
 
 }

@@ -909,7 +909,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
 						.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_REVIEW_COMPLETED).disclosureId(disclosure.getDisclosureId())
 						.disclosureNumber(disclosure.getDisclosureNumber()).fcoiTypeCode(disclosure.getFcoiTypeCode())
-						.revisionComment(disclosure.getRevisionComment()).build();
+						.build();
 				actionLogService.saveDisclosureActionLog(actionLogDto);
 			} catch (Exception e) {
 				logger.error("completeDisclosureReview : {}", e.getMessage());
@@ -1304,6 +1304,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		try {
 			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_CREATED)
 					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+					.comment(vo.getDescription())
 					.build();
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
@@ -1485,6 +1486,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		dto.setEntityEmail(entityDetails.getEmailAddress());
 		dto.setEntityAddress(entityDetails.getAddress());
 		dto.setEntityIsActive(entityDetails.getIsActive());
+		dto.setEntityRiskCategory(entityDetails.getEntityRiskCategory());
 		dto.setRiskLevel(coiTravelDisclosure.getCoiRiskCategory() != null ? coiTravelDisclosure.getCoiRiskCategory().getDescription() : null);
 		dto.setRiskCategoryCode(coiTravelDisclosure.getRiskCategoryCode());
 		EntityType entityTypeDetails = conflictOfInterestDao.getEntityTypeDetails(entityDetails.getEntityTypeCode());
@@ -1581,6 +1583,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				coiTravelDisclosure.setCoiTravelDisclosureStatusTypeDetalis(coiTravelDisclosureStatusType);
 				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_DISCLOSURE_STATUS_CREATED)
 						.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+						.comment(DEFAULT_DISCLOSURE_STATUS)
 						.build();
 				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 			}
@@ -1657,7 +1660,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			coiTravelDisclosure.setCertifiedAt(null);
 			coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 			coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
-			coiTravelDisclosure.setDescription(description);
 			conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 			try {
 				TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_WITHDRAWN)
@@ -1691,11 +1693,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setVersionStatus(Constants.TRAVE_VERSION_STATUS_ACTIVE);
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
-		coiTravelDisclosure.setDescription(description);
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		try {
 			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_APPROVED)
 					.travelDisclosureId(coiTravelDisclosure.getTravelDisclosureId()).travelNumber(coiTravelDisclosure.getTravelNumber())
+					.comment(description)
 					.build();
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
@@ -1723,7 +1725,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiTravelDisclosure.setCertifiedBy("");
 		coiTravelDisclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
 		coiTravelDisclosure.setUpdateTimestamp(currentTimestamp);
-		coiTravelDisclosure.setDescription(description);
 		conflictOfInterestDao.saveOrUpdateCoiTravelDisclosure(coiTravelDisclosure);
 		try {
 			TravelDisclosureActionLogDto actionLogDto = TravelDisclosureActionLogDto.builder().actionTypeCode(ACTION_LOG_RETURNED)
