@@ -21,9 +21,16 @@
                     </span>
                 </div>
             </div>
+            <ng-container *ngIf="isResultFromSearch">
+                <div class="col-custom"></div>
+                <div class="col p-0 me-4 mt-5">
+                    <app-shared-entity-info-card [entityDetails]="entityDetails" [viewMore]="true"
+                        (emitEntityId)="viewEntity($event)"></app-shared-entity-info-card>
+                </div>
+            </ng-container>
 
             <!-- traveller details -->
-            <div class="row d-flex px-0 mt-5 pt-2">
+            <div class="row d-flex px-0 mt-20 pt-2">
                 <label class="fw-500 fs-14 col-custom" for="travel-disclosure-traveller">Traveller :</label>
                 <div class="col-10">
                     <div class="divCenter">

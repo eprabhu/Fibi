@@ -101,10 +101,10 @@
                             <div class="col-4 p-10">
                                 <div class="border h-100 rounded-1 table-bg-color position-relative">
                                     <span class="status-pill">Project/SFI Relationship</span>
-                                    <div class="emptySfi mt-5 pt-3" *ngIf="count <= 0">
-                                        <p>No SFI(s) Attached</p>
+                                    <div class="emptySfi mt-5 pt-3" *ngIf="!count">
+                                        <p class="fw-600">No SFI(s) Attached</p>
                                     </div>
-                                    <div class="row fs-14" style="text-align: right;" *ngIf="count > 0">
+                                    <div class="row fs-14" style="text-align: right;" *ngIf="count">
                                         <div class="col-6 mt-4">
                                             <div class="row">
                                                 <div class="col-6">
