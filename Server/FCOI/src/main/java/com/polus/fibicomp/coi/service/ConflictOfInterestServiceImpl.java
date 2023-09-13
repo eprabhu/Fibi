@@ -153,6 +153,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String USER_DEFINED_ENTITY_RISK = "This is the status set by the user at the time of Entity creation.";
 	private static final String DEFAULT_TRAVEL_RISK = "This is the status set by the user against the entity, which is now the current status of the disclosure.";
 	private static final String DEFAULT_DISCLOSURE_STATUS = "This is the default status set by the system.";
+	private static final String TYPE_DISCLOSURE_DETAIL_COMMENT = "1";
+	private static final String RISK_CATEGORY_LOW_DESCRIPTION = "Low";
 
 	@Override
 	public ResponseEntity<Object> createDisclosure(ConflictOfInterestVO conflictOfInterestVO) {
@@ -364,6 +366,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		if (coiDisclosureObj.getReviewStatusCode().equals(REVIEW_STATUS_PENDING)) {
 			riskCategory = conflictOfInterestDao.syncDisclosureRisk(coiDisclosureObj.getDisclosureId(), coiDisclosureObj.getDisclosureNumber());
 		}
+		if(riskCategory == null) {
+			CoiDisclosureDto coiDisclosureDto = CoiDisclosureDto.builder().disclosureId(coiDisclosure.getDisclosureId())
+					.riskCategoryCode(RISK_CATEGORY_LOW).build();
+			conflictOfInterestDao.updateDisclosureRiskCategory(coiDisclosureDto);
+		}
 		coiDisclosureObj.setCreateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getCreateUser()));
 		coiDisclosureObj.setUpdateUserFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getUpdateUser()));
 		try {
@@ -372,10 +379,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.disclosureNumber(coiDisclosureObj.getDisclosureNumber())
 					.revisionComment(DEFAULT_DISCLOSURE_RISK)
 					.fcoiTypeCode(coiDisclosureObj.getFcoiTypeCode()).build();
-			if (riskCategory != null) {
-				actionLogDto.setRiskCategory(riskCategory.getDescription());
-				actionLogService.saveDisclosureActionLog(actionLogDto);
-			}
+			actionLogDto.setRiskCategory(riskCategory != null? riskCategory.getDescription(): RISK_CATEGORY_LOW_DESCRIPTION);
+			actionLogService.saveDisclosureActionLog(actionLogDto);
 			actionLogDto.setActionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_SUBMITTED);
 			actionLogDto.setRevisionComment(null);
 			actionLogService.saveDisclosureActionLog(actionLogDto);
@@ -649,14 +654,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			vo.getCoiReviewCommentDto().setCommentedByPersonId(AuthenticatedUser.getLoginPersonId());
 			DisclComment disclComment = DisclComment.builder()
 					.commentId(coiReviewComment.getCommentId())
-					.componentTypeCode("1")	//Disclosure detail comment
+					.componentTypeCode(TYPE_DISCLOSURE_DETAIL_COMMENT)
 					.componentReferenceId(coiReviewComment.getDisclosureId())
-					.componentReferenceNumber(coiReviewComment.getCoiSubSectionsId())	//PersonEntityId in case of SFI
-					.commentType(coiReviewComment.getCoiSectionsTypeCode())	//mapped with coi_sections_type
-					.componentSubReferenceId(coiReviewComment.getComponentSubRefId())
+					.componentReferenceNumber(coiReviewComment.getCoiSubSectionsId())	//	SFI Id/ Project id
+					.commentType(coiReviewComment.getCoiSectionsTypeCode())	//	mapped with coi_sections_type
+					.componentSubReferenceId(coiReviewComment.getComponentSubRefId()) //	SFIs of Projects
 					.commentPersonId(coiReviewComment.getCommentedByPersonId())
 					.documentOwnerPersonId(vo.getDocumentOwnerPersonId())
-					.isPrivate(false)
+					.isPrivate(vo.getCoiReviewCommentDto().getIsPrivate())
 					.parentCommentId(coiReviewComment.getCoiParentCommentId())
 					.comment(coiReviewComment.getComment())
 					.updateUser(AuthenticatedUser.getLoginUserName())
@@ -737,7 +742,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					reviewCommentTag.setTagGroupName(conflictOfInterestDao.fetchadminGroupName(reviewCommentTag.getTagGroupId()));
 				}
 			});
-			loadSubSection(reviewComments);
 		});
 		coiReviewComments.stream().forEach(parentComment -> {
 			Integer parentId = parentComment.getCommentId();
@@ -750,21 +754,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		});
 		coiReviewComments.removeIf(comment -> comment.getParentCommentId() != null);
 		return new ResponseEntity<>(vo.getDisclComments(), HttpStatus.OK);
-	}
-
-	private void loadSubSection(DisclComment reviewComments){
-		if (reviewComments.getCommentType() != null) {
-			switch (reviewComments.getCommentType()) {
-			case Constants.SFI:
-				reviewComments.setPersonEntity(conflictOfInterestDao.getSFIDetails(Integer.parseInt(reviewComments.getComponentReferenceNumber())));
-				break;
-			case Constants.PROJECT_RELATIONSHIP:
-				reviewComments.setDisclEntProjDetails(conflictOfInterestDao.getProjectRelationship(Integer.parseInt(reviewComments.getComponentReferenceNumber())));
-				break;
-			default:
-				break;
-			}
-		}
 	}
 
 	@Override
