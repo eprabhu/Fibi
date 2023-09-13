@@ -540,4 +540,10 @@ public interface ConflictOfInterestService {
 
 	String deleteReviewCommentTag(Integer coiReviewCommentTagId);
 
+	/**
+	 * This service is used to fetch the latest active person entity
+	 * @param personEntityNumber
+	 * @return
+	 */
+    ResponseEntity<Object> getSFILatestVersion(Integer personEntityNumber);
 }
