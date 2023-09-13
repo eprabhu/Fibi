@@ -26,7 +26,7 @@ export class ReviewCommentsService {
     }
 
     downloadAttachment(params) {
-        return this._http.get(this._commonService.baseUrl + '/atta/downloadDisclAttachment', {
+        return this._http.get(this._commonService.baseUrl + '/attachment/downloadDisclAttachment', {
             headers: new HttpHeaders().set('attachmentId', params.toString()),
             responseType: 'blob'
         });
@@ -37,7 +37,7 @@ export class ReviewCommentsService {
     }
 
     deleteCOICommentAttachment(params) {
-        return this._http.post(this._commonService.baseUrl + ' /atta/deleteDisclAttachment', params);
+        return this._http.post(this._commonService.baseUrl + ' /attachment/deleteDisclAttachment', params);
     }
 
     deleteReviewComments(coiReviewCommentId) {
