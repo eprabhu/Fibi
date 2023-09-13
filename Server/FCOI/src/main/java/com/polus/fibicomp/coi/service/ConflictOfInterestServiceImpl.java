@@ -1030,6 +1030,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_CREATE_ACTION_LOG_CODE, coiEntity, null);
 		} else { // on update or patch checks its a major change or not
 			Integer entityId = coiEntity.getEntityId();
+			coiEntity.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+			coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
+			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 			if (coiEntity.isMajorVersion() && conflictOfInterestDao.checkEntityAdded(entityId, null)) { // checks the entity is linked to a SFI or not
 				coiEntity.setIsActive(true); // N
 				conflictOfInterestDao.archiveEntity(entityId);
@@ -1037,11 +1040,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				coiEntity.setVersionNumber(conflictOfInterestDao.getMaxEntityVersionNumber(coiEntity.getEntityNumber()) + 1);
 				coiEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
 				coiEntity.setCreateTimestamp(commonDao.getCurrentTimestamp());
+				conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
+				conflictOfInterestDao.syncEntityWithPersonEntity(coiEntity.getEntityId(), coiEntity.getEntityNumber(), null);
+			} else {
+				conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
 			}
-			coiEntity.setUpdateTimestamp(commonDao.getCurrentTimestamp());
-			coiEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
-			coiEntity.setVersionStatus(Constants.COI_ACTIVE_STATUS);
-			conflictOfInterestDao.saveOrUpdateCoiEntity(coiEntity);
 			actionLogService.saveEntityActionLog(Constants.COI_ENTITY_MODIFY_ACTION_LOG_CODE, coiEntity, coiEntity.getRevisionReason());
 		}
 		return new ResponseEntity<>(coiEntity, HttpStatus.OK);
@@ -2156,28 +2159,34 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		if (conflictOfInterestDao.checkPersonEntityAdded(personEntityId)) {
 			PersonEntity personEntity = new PersonEntity();
+			Timestamp currentTimestamp = commonDao.getCurrentTimestamp();
+			String loginUsername = AuthenticatedUser.getLoginUserName();
 			BeanUtils.copyProperties(personEntityObj, personEntity);
 			personEntity.setPersonEntityId(null);
 			personEntity.setVersionNumber(conflictOfInterestDao.getMaxPersonEntityVersionNumber(personEntityObj.getPersonEntityNumber()) + 1);
 			personEntity.setVersionStatus(Constants.COI_PENDING_STATUS);
-			personEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
-			personEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
-			personEntity.setCreateTimestamp(commonDao.getCurrentTimestamp());
-			personEntity.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+			personEntity.setUpdateUser(loginUsername);
+			personEntity.setCreateUser(loginUsername);
+			personEntity.setCreateTimestamp(currentTimestamp);
+			personEntity.setUpdateTimestamp(currentTimestamp);
+			personEntity.setEntityId(conflictOfInterestDao.getMaxEntityId(personEntityObj.getEntityNumber()));
 			conflictOfInterestDao.saveOrUpdateSFI(personEntity);
 			conflictOfInterestDao.getCoiFinancialEntityDetails(personEntityObj.getPersonEntityId()).forEach(personEntityRelationship -> {
 				PersonEntityRelationship relationship = new PersonEntityRelationship();
 				BeanUtils.copyProperties(personEntityRelationship, relationship);
 				relationship.setPersonEntityRelId(null);
 				relationship.setPersonEntityId(personEntity.getPersonEntityId());
-				relationship.setUpdateUser(AuthenticatedUser.getLoginUserName());
-				relationship.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+				relationship.setUpdateUser(loginUsername);
+				relationship.setUpdateTimestamp(currentTimestamp);
 				conflictOfInterestDao.saveOrUpdatePersonEntityRelationship(relationship);
 			});
 			copyPersonEntityQuestionnaireData(personEntityObj, personEntity);
 			personEntityDto.setPersonEntityId(personEntity.getPersonEntityId());
 		} else {
-			conflictOfInterestDao.patchPersonEntityVersionStatus(personEntityId, Constants.COI_PENDING_STATUS);
+			personEntityObj.setVersionStatus(Constants.COI_PENDING_STATUS);
+			personEntityObj.setEntityId(conflictOfInterestDao.getMaxEntityId(personEntityObj.getEntityNumber()));
+			conflictOfInterestDao.saveOrUpdateSFI(personEntityObj);
+			conflictOfInterestDao.syncEntityWithPersonEntity(personEntityObj.getEntityId(), personEntityObj.getEntityNumber(), personEntityId);
 			conflictOfInterestDao.syncProjectWithDisclosure(null,
 					null, personEntityId, null, null, Constants.TYPE_INACTIVATE_SFI);
 			personEntityDto.setPersonEntityId(personEntityId);
@@ -2210,6 +2219,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
         disclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclosure.setReviewStatusCode(REVIEW_STATUS_WITHDRAWN);
         disclosure = conflictOfInterestDao.saveOrUpdateCoiDisclosure(disclosure);
+		conflictOfInterestDao.syncProjectWithDisclosure(disclosure.getDisclosureId(),
+				disclosure.getDisclosureNumber(),null, null, null, Constants.TYPE_RESYNC_SFI);
         WithdrawDisclosureDto withdrawDisclosureDto = WithdrawDisclosureDto.builder()
                 .certifiedAt(null)
                 .expirationDate(null)
@@ -2242,6 +2253,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
         disclosure.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclosure.setReviewStatusCode(REVIEW_STATUS_RETURNED);
         disclosure = conflictOfInterestDao.saveOrUpdateCoiDisclosure(disclosure);
+		conflictOfInterestDao.syncProjectWithDisclosure(disclosure.getDisclosureId(),
+				disclosure.getDisclosureNumber(),null, null, null, Constants.TYPE_RESYNC_SFI);
 		try {
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_RETURNED)
 					.disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber())

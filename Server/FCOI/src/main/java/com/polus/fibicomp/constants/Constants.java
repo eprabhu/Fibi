@@ -1628,6 +1628,7 @@ public interface Constants {
     String TYPE_SFI = "S";
     String TYPE_INACTIVATE_SFI = "IS";
     String TYPE_FINALIZE_SFI = "FS";
+    String TYPE_RESYNC_SFI = "RS";
 
     Integer COI_ADMINISTRATOR = 1335;
     Integer VIEW_ADMIN_GROUP_COI = 1356;
