@@ -270,6 +270,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 			}
 			historyDto.setActionTypeCode(actionLog.getActionTypeCode());
 			historyDto.setMessage(actionLog.getDescription());
+			historyDto.setComment(actionLog.getComment());
 			travelDisclosureHistories.add(historyDto);
 		});
 		return new ResponseEntity<>(travelDisclosureHistories, HttpStatus.OK);

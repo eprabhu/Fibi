@@ -41,7 +41,8 @@ export class TravelDataStoreService {
             entityType: { description: data.entityType },
             entityName: data.travelEntityName,
             emailAddress: data.entityEmail,
-            address: data.entityAddress
+            address: data.entityAddress,
+            entityRiskCategory: data.entityRiskCategory
         };
     }
 

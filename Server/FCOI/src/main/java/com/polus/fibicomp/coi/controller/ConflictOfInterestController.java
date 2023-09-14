@@ -622,4 +622,8 @@ public class ConflictOfInterestController {
    		return actionLogService.getReviewHistoryById(disclosureId);
    	}
 
+	@GetMapping("/personEntity/{personEntityNumber}/latestVersion")
+	public ResponseEntity<Object> getSFILatestVersion(@PathVariable("personEntityNumber") Integer personEntityNumber) {
+		return conflictOfInterestService.getSFILatestVersion(personEntityNumber);
+	}
 }

@@ -2908,6 +2908,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				personEntity.getCoiEntity().getCountry().setCountryName(rset.getString("COUNTRY_NAME"));
 				personEntity.getCoiEntity().setEntityType(new EntityType());
 				personEntity.getCoiEntity().getEntityType().setDescription(rset.getString("ENTITY_TYPE"));
+				personEntity.getCoiEntity().setIsActive(rset.getBoolean("ENTITY_ACTIVE"));
+				personEntity.getCoiEntity().setVersionStatus(rset.getString("ENTITY_VERSION_STATUS"));
 				personEntity.setIsRelationshipActive(rset.getBoolean("IS_RELATIONSHIP_ACTIVE"));
 				personEntities.add(personEntity);
 			}
@@ -3894,4 +3896,48 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	    return session.createQuery(query).getSingleResult();
 	}
 
+	@Override
+	public void syncEntityWithPersonEntity(Integer entityId, Integer entityNumber, Integer personEntityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("UPDATE PersonEntity pe SET pe.entityId = :entityId, pe.updateTimestamp = :updateTimestamp, ");
+		hqlQuery.append("pe.updateUser = :updateUser where pe.entityNumber = :entityNumber ");
+		if (personEntityId == null) {
+			hqlQuery.append("AND pe.versionStatus = :versionStatus");
+		} else {
+			hqlQuery.append("AND pe.personEntityId = :personEntityId");
+		}
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("entityNumber", entityNumber);
+		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
+		query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+		if (personEntityId == null) {
+			query.setParameter("versionStatus", Constants.COI_PENDING_STATUS);
+		} else {
+			query.setParameter("personEntityId", personEntityId);
+		}
+		query.executeUpdate();
+	}
+
+	@Override
+	public Integer getMaxEntityId(Integer entityNumber) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT MAX(e.entityId) FROM CoiEntity e WHERE e.entityNumber = :entityNumber");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityNumber", entityNumber);
+		return (Integer) query.getSingleResult();
+	}
+
+	@Override
+	public Integer getSFILatestVersion(Integer personEntityNumber) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT MAX(e.personEntityId) FROM PersonEntity e WHERE e.personEntityNumber = :personEntityNumber AND e.versionStatus = :versionStatus");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personEntityNumber", personEntityNumber);
+		query.setParameter("versionStatus", Constants.COI_ACTIVE_STATUS);
+		return (Integer) query.getSingleResult();
+	}
 }

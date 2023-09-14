@@ -1073,4 +1073,25 @@ public interface ConflictOfInterestDao {
 	 */
 	public String loadCoiReviewAssigneePersonName(Integer coiReviewId);
 
+	/**
+	 * This method is used to sync entity with person entity
+	 * @param entityId
+	 * @param entityNumber
+	 * @param personEntityId
+	 */
+	void syncEntityWithPersonEntity(Integer entityId, Integer entityNumber,  Integer personEntityId);
+
+	/**
+	 * This method is used to get max entity id by entity number
+	 * @param entityNumber
+	 * @return
+	 */
+	Integer getMaxEntityId(Integer entityNumber);
+
+	/**
+	 *
+	 * @param personEntityNumber
+	 * @return
+	 */
+	Integer getSFILatestVersion(Integer personEntityNumber);
 }
