@@ -2419,4 +2419,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return commonDao.convertObjectToJSON(DELETE_MSG);
 	}
 
+	@Override
+	public ResponseEntity<Object> getSFILatestVersion(Integer personEntityNumber) {
+		return new ResponseEntity<>(conflictOfInterestDao.getSFILatestVersion(personEntityNumber), HttpStatus.OK);
+	}
 }
