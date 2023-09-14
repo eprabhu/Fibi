@@ -363,5 +363,12 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         }
     }
 
+      openRelationDetails() {
+        this.$subscriptions.push(this.entityDetailsServices.getCurrentId(this.relationshipsDetails.personEntityNumber).subscribe((data: any) => {
+            this._router.navigate(['/coi/entity-details/entity'],
+            { queryParams: { personEntityId: data, mode: 'view' } });        
+        }, err => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in opening current version, please try again');
+        }));
+      }
 }
-

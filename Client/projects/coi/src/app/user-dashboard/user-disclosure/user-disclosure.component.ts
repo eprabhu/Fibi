@@ -10,6 +10,7 @@ import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
+import { openSlider, closeSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -61,6 +62,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     readMoreOrLess = [];
     isShowFilterAndSearch = false;
     isReadMore = false;
+    showSlider = false;
+    entityId: any;
 
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
@@ -272,5 +275,20 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             this.loadingComplete();
         })); 
     }
+
+    viewSlider(event) {
+        this.showSlider = event.flag;
+        this.entityId = event.entityId;
+        setTimeout(() => {
+            openSlider('disclosure-entity-view-2-slider');
+        });
+    }
+
+    validateSliderClose() {
+        closeSlider('disclosure-entity-view-2-slider');
+        setTimeout(() => {
+            this.showSlider = false;
+		}, 500);
+	}
 
 }

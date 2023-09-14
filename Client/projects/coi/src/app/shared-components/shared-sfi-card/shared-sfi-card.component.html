@@ -7,8 +7,16 @@
       <p class="entity-title mt-3">
         <strong class="fs-16">{{SFIObject?.entityName }}</strong>
       </p>
+      <div class="info-text fs-14 ms-auto italian px-3 py-0" data-bs-toggle="tooltip" [title]="getHelpText()" data-bs-placement="top" *ngIf="checkForEntityWarning()">
+        <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
+        {{getMessage()}}
+      </div>
+      <div class="info-text fs-14 ms-auto italian px-3 py-0" *ngIf="referredFrom == 'SFI_SUMMARY' && this.reqObject.versionStatus == 'ARCHIVE'">
+        <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
+        SFI has been modified
+      </div>
     </span>
-  </div>
+    </div>
   <div class="m-0 mb-2 row">
     <div class="text-secondary fs-14" [ngClass]="referredFrom === 'SFI_SUMMARY' ? 'col-8' : 'col-7'">
       <span class="fw-bold me-3">Relationship :</span>

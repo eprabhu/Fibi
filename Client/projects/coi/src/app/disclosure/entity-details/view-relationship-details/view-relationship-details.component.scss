@@ -295,3 +295,17 @@ small {
   padding-right: 12px;
   padding-left: 4px;
 }
+
+.info-text {
+  position: relative;
+  top: -4px;
+  left: 37px;
+  color: #ffc107;
+  border-radius: 30px;
+  border: 1px solid #ffc107;
+}
+
+.info-text:hover {
+  color: #0D6EFD;
+  border: 1px solid #0D6EFD;
+}

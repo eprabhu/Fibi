@@ -575,5 +575,16 @@
 <app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
-    (closeModal)="closeModalEvent($event)" [fcoiTypeCode]="fcoiTypeCode" [disclosures]="disclosures">
+    (closeModal)="closeModalEvent($event)" (viewSlider)="viewSlider($event)" [fcoiTypeCode]="fcoiTypeCode" [disclosures]="disclosures">
 </app-count-modal>
+
+<ng-container *ngIf="showSlider">
+    <app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index] = "1057"
+    [overlay_z_index] = "1056" [isStickyContentAvailable] = "false" [isHeaderContentAvailable] = "false"
+    [sliderName]="'disclosure-entity-view-2-slider'">
+        <!-- modal content -->
+        <ng-container content>
+            <app-entity-details [entityId]="entityId"></app-entity-details>
+        </ng-container>
+    </app-coi-slider>
+</ng-container>

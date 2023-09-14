@@ -47,10 +47,8 @@
                                     </app-no-data-label>
                                 <td>
                                     <button class="align-items-center btn-primary-icon d-flex fs-16 m-0 py-1"
-                                        title="action" aria-label="Edit Organization" data-bs-dismiss="modal"
-                                        [routerLink]="['/coi/entity-details/entity']"
-                                        [queryParams]="{personEntityId:item?.personEntityId, mode:'view'}"
-                                        (click)="closeCountModal()">
+                                        title="View SFI" aria-label="Edit Organization"
+                                        (click)="viewSliderEmit(true, item?.personEntityId)">
                                         <mat-icon>visibility</mat-icon>
                                     </button>
                                 </td>
