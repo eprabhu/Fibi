@@ -78,4 +78,8 @@ export class EntityDetailsService {
     return this._http.post(this._commonService.baseUrl + '/personEntity/modify', params);
   }
 
+  getCurrentId(personEntityNumber) {
+    return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityNumber}/latestVersion`);
+  }
+
 }

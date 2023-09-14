@@ -50,7 +50,7 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   }
 
   checkForUrl() {
-   return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary','entity-management/entity-details'].some(ele => this._router.url.includes(ele))
+   return ['create-disclosure', 'user-dashboard/entities', 'disclosure/summary','entity-management/entity-details' , 'user-dashboard/disclosures'].some(ele => this._router.url.includes(ele))
   }
 
   ngOnDestroy(): void {

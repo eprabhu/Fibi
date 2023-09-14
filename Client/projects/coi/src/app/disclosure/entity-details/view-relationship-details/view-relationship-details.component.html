@@ -11,7 +11,11 @@
             [ngClass]="{'text-primary':entityDetailsServices.isHoverEntityCard}"
             (mouseover)="entityDetailsServices.isHoverEntityCard = true">
             {{entityDetails?.entityName}}
-          </h1>
+          </h1> 
+          <div class="info-text fs-14 ms-auto italian px-3 py-0 mt-4 mb-2 cursor-pointer" title="Click to view latest version" *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'" (click)="openRelationDetails()">
+            <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
+            SFI has been modified
+          </div>
         </div>
         <div class="col-1 d-flex justify-content-end" (mouseout)="entityDetailsServices.isHoverEntityCard = false">
           <div *ngIf="entityDetailsServices.isExpanded"
