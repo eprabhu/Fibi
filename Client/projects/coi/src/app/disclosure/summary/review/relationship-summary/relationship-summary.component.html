@@ -42,36 +42,99 @@
       </span>
     </div>
       <div *ngIf="isCollapsed" class="card-body">
-            <div class="row m-2">
-            <div class="col-4">
-              <label class="label-text">Principal Investigator :</label>
-              <span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
-            </div>
-            <div class="col-8">
-              <label class="label-text">Sponsor :</label>
-              <span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
-            </div>
-            <div class="col-4">
-              <label class="label-text">Period :</label>
-              <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
-            </div>
-            <div class="col-8">
-              <label class="label-text">Prime Sponsor :</label>
-                <app-no-data-label [valueToShow]="selectedProject?.primeSponsor">
-                    <span class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
-                </app-no-data-label>
-            </div>
-            <div class="col-4">
-              <label class="label-text">Proposal Status : </label>
-              <span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
-            </div>
-            <div class="col-8">
-              <label class="label-text">Lead Unit :</label>
-                <app-no-data-label [valueToShow]="selectedProject?.unitName">
-                    <span class="ml-2 grey-text">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
-                </app-no-data-label>
-            </div>
-            </div>
+			<div class="row m-2">
+				<div class="col-9">
+					<div class="row">
+						<div class="col-5">
+							<label class="label-text">Principal Investigator :</label>
+							<span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
+						</div>
+						<div class="col-7">
+							<label class="label-text">Sponsor :</label>
+							<span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
+						</div>
+						<div class="col-5">
+							<label class="label-text">Period :</label>
+							<span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+								|
+								dateFormatter}}</span>
+						</div>
+						<div class="col-7">
+							<label class="label-text">Prime Sponsor :</label>
+							<app-no-data-label [valueToShow]="selectedProject?.primeSponsor">
+								<span class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
+							</app-no-data-label>
+						</div>
+						<div class="col-5">
+							<label class="label-text">Proposal Status : </label>
+							<span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
+						</div>
+						<div class="col-7">
+							<label class="label-text">Lead Unit :</label>
+							<app-no-data-label [valueToShow]="selectedProject?.unitName">
+								<span class="ml-2 grey-text">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+							</app-no-data-label>
+						</div>
+						<div class="col-5">
+							<label class="label-text">Project Role : </label>
+							<span class="ml-2 grey-text">{{selectedProject?.reporterRole}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-3 p-10">
+					<div>
+						<div class="border h-100 rounded-1 table-bg-color position-relative">
+							<span class="status-pill">Project/SFI Relationship</span>
+							<div class="emptySfi mt-5 pt-3" *ngIf="count <= 0">
+								<p>No SFI(s) Attached</p>
+							</div>
+							<div class="row fs-14" style="text-align: right;" *ngIf="count > 0">
+								<div class="col-8 m-2 mt-4 pb-2">
+									<div class="row">
+										<div class="col-6">
+											<label class="count-label">No Conflict : </label>
+										</div>
+										<div class="col-6" style="text-align: center;">
+											<span *ngIf="selectedProject.sfiCompleted !== null"
+												class="fs-12 badge badge-pill badge-primary noConflict-badge">
+												<span>{{getDisclosureCount(1, selectedProject.disclosureStatusCount)}}</span>
+											</span>
+											<span *ngIf="selectedProject.sfiCompleted == null" class="count-margin">--</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-6">
+											<label class="count-label">Potential Conflict :
+											</label>
+										</div>
+										<div class="col-6" style="text-align: center;">
+											<span *ngIf="selectedProject.sfiCompleted !== null"
+												class="fs-12 badge badge-pill badge-primary potentialConflict-badge">
+												<span>{{getDisclosureCount(2, selectedProject.disclosureStatusCount)}}</span>
+											</span>
+											<span *ngIf="selectedProject.sfiCompleted == null" class="count-margin">--</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-6">
+											<label class="count-label">Conflict Identified :</label>
+										</div>
+										<div class="col-6" style="text-align: center;">
+											<span *ngIf="selectedProject.sfiCompleted != null"
+												class="fs-12 badge badge-pill badge-primary Conflict-badge">
+												<span>{{getDisclosureCount(3, selectedProject.disclosureStatusCount)}}</span>
+											</span>
+											<span *ngIf="selectedProject.sfiCompleted == null" class="count-margin">--</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div>
+					</div>
+				</div>
+			</div>
             <ng-container *ngIf="isShowNoDataCard">
               <table class="table fs-14 fw-medium mt-3" *ngIf="projectRelations.length > 0">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->

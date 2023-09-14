@@ -94,5 +94,24 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   openReviewComment(relationshipDetails) {
     this.reviewSlider.emit({personEntityId: relationshipDetails.entityId, personEntityHeader :relationshipDetails.entityName});
   }
+
+  getMessage() { 
+    if (this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE')
+    return 'Entity has been modified';
+    else if ((this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')))
+    return 'Entity has been inactivated';
+  }
+
+  checkForEntityWarning() {
+    return this.referredFrom != 'SFI_SUMMARY' && 
+           (this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE' || (this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')));
+  }
+
+  getHelpText() {
+    if (this.referredFrom != 'SFI_SUMMARY' && this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE')
+    return 'Please click Modify button to revise SFI';
+    else if (this.referredFrom != 'SFI_SUMMARY' && (this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')))
+    return 'Please use Inactivate button to inactivate SFI';
+  }
   
 }

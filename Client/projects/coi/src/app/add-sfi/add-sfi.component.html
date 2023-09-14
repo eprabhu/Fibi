@@ -39,7 +39,6 @@
                 <mat-icon role="img" class="mat-icon info fs-16">info</mat-icon>
               </span>
             </label>
-            <!-- *ngIf="!mandatoryList?.has('entityAlreadyAdded')" -->
           </div>
           <div class="col px-3">
             <app-endpoint-search *ngIf="!isEntityManagement ;else textBox" (onSelect)="selectedEvent($event)" [clearField]="clearField"
@@ -254,10 +253,10 @@
            <div class="pb-5 pt-3 entity-padding row">
              <div class="col">
                <div class="d-flex px-1 position-relative">
-                 <label class="d-block fs-14 fw-500 px-1" for="Entity Type">
+                 <label class="d-block fs-14 fw-500 px-1 py-2" for="Entity Type">
                   <span class="mandatory">*</span> Entity Type :
                   <span data-bs-toggle="tooltip" title="Select type from the available options." data-bs-placement="top" class="d-inline-block">
-                    <mat-icon role="img" class="mat-icon info fs-16 entity-type-info">info</mat-icon>
+                    <mat-icon role="img" class="mat-icon info fs-16">info</mat-icon>
                   </span>
                  </label>
                </div>
@@ -276,10 +275,10 @@
                </div>
              </div>
              <div class="col pl-85">
-               <div *ngIf="isEntityManagement" class="d-flex px-1 py-1 position-relative">
-                 <label class="d-block fs-14 fw-500 px-1" for="risk-level">Risk :
+               <div *ngIf="isEntityManagement" class="d-flex px-1 position-relative">
+                 <label class="d-block fs-14 fw-500 px-1 py-2" for="risk-level">Risk :
                   <span data-bs-toggle="tooltip" title="Select risk level from the available." data-bs-placement="top" class="d-inline-block">
-                    <mat-icon role="img" class="mat-icon info fs-16 risk-info">info</mat-icon>
+                    <mat-icon role="img" class="mat-icon info fs-16">info</mat-icon>
                   </span>
                  </label>
                </div>
