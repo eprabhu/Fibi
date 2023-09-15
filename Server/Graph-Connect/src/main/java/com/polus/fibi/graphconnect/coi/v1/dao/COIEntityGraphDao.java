@@ -206,7 +206,7 @@ public class COIEntityGraphDao {
 
 				cypher = (cypher != null ? cypher.concat(" UNION ") : "");
 				cypher = cypher.concat(
-						" MATCH p=(c1:Country)<--(e2:Entity)-[r1:AFFILIATED_ENTITIES]->(e1:Entity) ");
+						" MATCH p=(c1:Country)<--(e2:Entity)-[r1:AFFILIATED_ENTITIES]-(e1:Entity) ");
 
 				HashMap<String,String> aliasHm = new HashMap<>();
 				aliasHm.put(NODE_ENTITY, "e2");	

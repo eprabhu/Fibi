@@ -281,3 +281,49 @@ tr.tr-hover {
 .badge-margin {
   margin-left: -10px;
 }
+
+.Conflict-badge{
+  background-color: #ffe6e7;
+  border-radius: 10px;
+  color: #ca4e4f;
+  margin-left: 75px;
+}
+.potentialConflict-badge {
+  border-radius: 10px;
+  background-color: #fff5e6;
+  color: #c59c59;
+  margin-left: 75px;
+}
+.noConflict-badge{
+  border-radius: 10px;
+  background-color: #e3ffe5;
+  color: #6cc974;
+  margin-left: 75px;
+}
+
+.table-bg-color {
+  background-color: #f2f6fe;
+}
+
+.status-pill {
+  position: absolute;
+  left: 14px;
+  top: -12px;
+  background-color: white;
+  border-radius: 1rem !important;
+  font-weight: 600 !important;
+  padding: 1px 0.5rem;
+  border: 1px solid #dee2e6 !important;
+  font-size: 13px;
+  letter-spacing : 0.1px
+}
+
+.count-label {
+  display: inline-block;
+  width: 150px;
+}
+
+label {
+  color: #48647f;
+  font-weight: 500;
+}

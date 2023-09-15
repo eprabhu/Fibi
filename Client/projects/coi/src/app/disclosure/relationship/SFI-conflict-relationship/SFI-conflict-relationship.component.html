@@ -1,5 +1,5 @@
 <!-- [ngClass] = "!isEditMode ? 'p-10' : '' " -->
-  <div class="relationship-sfi-header card mt-3">
+  <div class="relationship-sfi-header card mt-3" *ngIf="entityProjectDetails.length">
     <div class="row m-0"> 
       <div title="List of SFIs" class="col-4 fs-14 border-end" [class.p-10]="!isEditMode">
           <div class="fw-600">Significant Financial Interest</div>
@@ -86,7 +86,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p class="fs-14">Do you want to update all your Project - SFI relations?</p>
+        <p class="fs-14 message-color">Do you want to update all your <strong> Project - SFI relations? </strong></p> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary w-14" data-bs-dismiss="modal" (click)="clearValues()">No</button>

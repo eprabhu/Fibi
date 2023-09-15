@@ -2,13 +2,15 @@
     <div class="slider-base" id="{{sliderName}}">
         <app-slider-close-btn (closeAction)="emitCloseSlider()"></app-slider-close-btn>
         <div class="slider-container p-0">
-            <div class="sticky-0">
-                <div class="card card-header bg-white px-4 py-2 pt-3">
+            <div class="sticky-0" *ngIf="isHeaderContentAvailable || isStickyContentAvailable">
+                <div class="card card-header bg-white px-4 py-2 pt-3" *ngIf="isHeaderContentAvailable">
                     <h5 class="fs-16">
                         <ng-content select="[header]"></ng-content>
                     </h5>
                 </div>
-                <ng-content select="[content-sticky]"></ng-content>
+                <ng-container *ngIf="isStickyContentAvailable">
+                    <ng-content select="[content-sticky]"></ng-content>
+                </ng-container>
             </div>
 
             <ng-content select="[content]"></ng-content>

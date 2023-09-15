@@ -266,7 +266,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.needDescriptionField = needDescriptionField;
         this.isMandatory = isMandatory;
         this.helpTexts = helpTexts;
-        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : actionBtnName;
+        this.textAreaLabelName = actionBtnName === 'Withdraw' ? ' Withdrawal' : 'Approve' ? 'Approval' : actionBtnName;
         this.modalSize = 'lg';
         this.setPersonEntityDetails();
         this.setModalHeaderTitle(actionBtnName);

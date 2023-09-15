@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
 import { CommonService } from '../../../../common/services/common.service';
-import { CommentConfiguration } from '../../../coi-interface';
+import { CommentConfiguration, RO } from '../../../coi-interface';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
 import { CoiSummaryService } from '../../coi-summary.service';
 import { HTTP_ERROR_STATUS } from "../../../../../../../fibi/src/app/app-constants";
@@ -27,6 +27,7 @@ export class RelationshipSummaryComponent implements OnInit {
     isShowHoverWhite = [];
     deployMap = environment.deployUrl;
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
+    count: number;
 
     reviewerConflict: any = { comment: {comments: ''}};
     projectDetails: any = {};
@@ -52,6 +53,7 @@ export class RelationshipSummaryComponent implements OnInit {
         this.fetchCOIDetails();
         this.getEntityProjectRelations();
         this.listenForCoiDetails();
+        this.getSfiDetails();
         this.commentConfiguration.disclosureId = this._dataStoreAndEventsService.coiSummaryConfig.currentDisclosureId;
         this.commentConfiguration.coiSectionsTypeCode = 3;
     }
@@ -144,5 +146,32 @@ export class RelationshipSummaryComponent implements OnInit {
             this._commonService.$commentConfigurationDetails.next(disclosureDetails);
             this._coiService.isShowCommentNavBar = true;
     }
+
+    getDisclosureCount(typeCode, disclosureStatus) {
+        if(disclosureStatus) {
+          let value = disclosureStatus.find(ele => Object.keys(ele) == typeCode);
+          return value ? value[typeCode] : 0;
+        }
+      }
+
+      getSfiDetails() {
+        this.$subscriptions.push(this._coiSummaryService.getSfiDetails(this.getRequestObject()).subscribe((data: any) => {
+            if (data) {
+                this.count = data.count;
+            }
+        }));
+    }
+
+    getRequestObject() {
+        const REQ_OBJ = new RO();
+        REQ_OBJ.currentPage = 0;
+        REQ_OBJ.disclosureId = this.coiDetails.disclosureId;
+        REQ_OBJ.filterType = 'ACTIVE';
+        REQ_OBJ.pageNumber = 0;
+        REQ_OBJ.personId = this.coiDetails.personId;
+        REQ_OBJ.reviewStatusCode = this.coiDetails.reviewStatusCode;
+        REQ_OBJ.searchWord = '';
+        return REQ_OBJ;
+      }
 
 }

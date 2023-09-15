@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { SharedModule } from '../../shared/shared.module';
+import { AddSfiModule } from '../../add-sfi/add-sfi.module';
 
 const routes: Routes = [
     {
@@ -20,7 +21,8 @@ const routes: Routes = [
         SharedModule,
         FormsModule,
         RouterModule.forChild(routes),
-        SharedComponentModule
+        SharedComponentModule,
+        AddSfiModule
     ],
     providers: [],
     exports: []

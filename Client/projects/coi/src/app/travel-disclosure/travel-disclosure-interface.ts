@@ -94,6 +94,7 @@ export class TravelDisclosure {
     riskLevel: string;
     expirationDate: number;
     riskCategoryCode: number;
+    entityRiskCategory: EntityRiskCategory;
   }
 
 export interface EndpointOptions {
@@ -112,6 +113,7 @@ export class EntityDetails {
     entityName: string;
     emailAddress: string;
     address: string;
+    entityRiskCategory?: EntityRiskCategory;
 }
 
 export interface TravelHistoryRO {
@@ -146,3 +148,13 @@ export class TravelConflictRO {
     description: string;
     disclosureStatusCode: string;
 }
+
+export interface EntityRiskCategory {
+    description: string;
+    riskCategoryCode: string;
+    isActive?: boolean;
+    updateUser?: string;
+    updateTimestamp?:number;
+  }
+  
+  

@@ -12,6 +12,7 @@ import { CommonService } from '../../common/services/common.service';
 import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { fadeInOutHeight } from '../../common/utilities/animations';
+import { EntityDetails } from '../../entity-management/entity-details-interface';
 
 @Component({
     selector: 'app-travel-disclosure-form',
@@ -43,6 +44,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         'Fill in all the fields of the disclosure form and to save your progress, click on the ‘Save’ button.',
         'Navigate to the Certification section to certify and submit the disclosure.'
     ];
+    isResultFromSearch = false;
+    entityDetails: EntityDetails = new EntityDetails();
 
     constructor(public commonService: CommonService,
         private _router: Router,
@@ -79,6 +82,9 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.countrySearchOptions.defaultValue = responseObject.destinationCountry;
         this.destination = responseObject.destinationCountry ? 'International' : 'Domestic';
         this.travelDisclosureRO = this._dataStore.getTravelDisclosureRO();
+        if (responseObject.travelEntityName) {
+            this.isResultFromSearch = true;
+        }
     }
 
     private handleTravelDisclosureSave(): void {
@@ -180,13 +186,15 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
         this.validateDates();
         return this.mandatoryList.size !== 0 || !this.validateDates() ? false : true;
-    }
+}
 
     selectedEntityEvent(event: any): void {
         this.entityName = event ? event.entityName : null;
         this.travelDisclosureRO.entityId = event ? event.entityId : null;
         this.travelDisclosureRO.entityNumber = event ? event.entityNumber : null;
         this.setUnSavedChangesTrue();
+        this.entityDetails = event ? event : null;
+        this.isResultFromSearch = event ? true : false;
     }
 
     selectTravelCountry(event: any): void {
@@ -279,6 +287,11 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
             queryParamsHandling: 'merge',
         });
     }
+
+    viewEntity(entityId: string): void {
+        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityId } });
+    }
+
 }
 
 

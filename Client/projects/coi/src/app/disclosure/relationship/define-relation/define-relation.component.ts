@@ -201,11 +201,11 @@ export class DefineRelationComponent implements OnInit {
   calculateSize() {
     const DETAILS_BOX = this.getClassDetails('.relationship-details-box');
     const INFO_BOX = this.isEditMode ? this.getClassDetails('.relationship-info') : null;
-    const TABLE_HEADER_BOX = this.getClassDetails('.relationship-sfi-header');
+    const TABLE_HEADER_BOX = this.getClassDetails('.relationship-sfi-header') || null;
     this.resetStyles(DETAILS_BOX, INFO_BOX, TABLE_HEADER_BOX);
     const DETAILS_BOX_HEIGHT = DETAILS_BOX.offsetHeight;
     const INFO_BOX_HEIGHT = INFO_BOX ? INFO_BOX.offsetHeight : 0;
-    const TABLE_HEADER_BOX_HEIGHT = TABLE_HEADER_BOX.offsetHeight;
+    const TABLE_HEADER_BOX_HEIGHT = TABLE_HEADER_BOX ? TABLE_HEADER_BOX.offsetHeight: 0;
     const HALF_SCREEN_HEIGHT = window.innerHeight / 2;
     const TOTAL_BOX_HEIGHT = DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT + TABLE_HEADER_BOX_HEIGHT;
     if (TOTAL_BOX_HEIGHT > HALF_SCREEN_HEIGHT) {
@@ -220,7 +220,7 @@ export class DefineRelationComponent implements OnInit {
       if (INFO_BOX) {
         this.setTop(INFO_BOX, DETAILS_BOX_HEIGHT + 'px');
       }
-      this.setTop(TABLE_HEADER_BOX, (DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT) + 'px');
+      this.setTop(TABLE_HEADER_BOX , (DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT) + 'px');
     }
   }
 
@@ -234,13 +234,17 @@ export class DefineRelationComponent implements OnInit {
   }
 
   setTop(element, top) {
-    element.style.top = top;
+    if(element) {
+      element.style.top = top;
+    }
   }
 
   resetStyles(detailsBox, infoBox, sfiHeaderBox) {
     detailsBox.classList.add('position-sticky');
-    sfiHeaderBox.classList.add('position-sticky');
-    sfiHeaderBox.style.top = '0px';
+    if(sfiHeaderBox) {
+      sfiHeaderBox.classList.add('position-sticky');
+      sfiHeaderBox.style.top = '0px';
+    }
     detailsBox.style.top = '0px';
     if (infoBox) {
       infoBox.style.top = '0px';

@@ -28,11 +28,11 @@
     </div>
   </div>
   
-  <div class="form-group col-lg-12 col-md-12 col-12 d-flex mx-auto mt-2" *ngIf="awardList.length>1">
-      <input type="text" placeholder="Search by Module Id, Module Name, PI, Status, Sponsor, Prime Sponsor  "
-          class="searchInput form-control" [(ngModel)]="searchText">
-      <a class="searchButton">
-          <mat-icon class="mat-icon material-icons" aria-hidden="true" data-mat-icon-type="font">search</mat-icon></a>
+  <div class="form-control col-lg-12 col-md-12 col-12 d-flex mx-auto mt-2" *ngIf="awardList.length>1">
+    <mat-icon *ngIf="!searchText" class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
+    <input type="text" placeholder="Search by Project Id, Project Name, PI, Project Status, Sponsor, Prime Sponsor  "
+    class="searchField  mt-2 ms-2 pb-2" [(ngModel)]="searchText">
+       
   </div>
   <ng-container
       *ngIf="(awardList| SearchFilter : searchText:
@@ -43,7 +43,7 @@
                 <div class="card outer-card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-8 col-12 mb-10">
+                            <div class="col-md-8 col-12">
                                 <div class="col-12 d-flex" *ngIf="relation.moduleCode == 3">
                                     <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
                                     <p class="entity-title">
@@ -96,75 +96,81 @@
                                             {{relation?.unitName}}</span>
                                         <span *ngIf="!relation?.unitName" class="noDataExists">No Lead Unit exist</span>
                                     </div>
+                                    <div class="col-6">
+                                        <label class="label-text">Project Role : </label>
+                                        <span class="ml-2 grey-text">{{relation?.reporterRole}}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-4 p-10">
-                                <div class="border h-100 rounded-1 table-bg-color position-relative">
-                                    <span class="status-pill">Project/SFI Relationship</span>
-                                    <div class="emptySfi mt-5 pt-3" *ngIf="count <= 0">
-                                        <p>No SFI(s) Attached</p>
-                                    </div>
-                                    <div class="row fs-14" style="text-align: right;" *ngIf="count > 0">
-                                        <div class="col-6 mt-4">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <label class="count-label">No Conflict : </label>
-                                                </div>
-                                                <div class="col-6" style="text-align: center;">
-                                                    <span *ngIf="relation.sfiCompleted !== null"
-                                                        class="fs-12 badge badge-pill badge-primary noConflict-badge">
-                                                        <span>{{getDisclosureCount(1, relation.disclosureStatusCount)}}</span>
-                                                    </span>
-                                                    <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <label class="count-label">Potential Conflict :
-                                                    </label>
-                                                </div>
-                                                <div class="col-6" style="text-align: center;">
-                                                    <span *ngIf="relation.sfiCompleted !== null"
-                                                        class="fs-12 badge badge-pill badge-primary potentialConflict-badge">
-                                                        <span>{{getDisclosureCount(2, relation.disclosureStatusCount)}}</span>
-                                                    </span>
-                                                    <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <label class="count-label">Conflict Identified :</label>
-                                                </div>
-                                                <div class="col-6" style="text-align: center;">
-                                                    <span *ngIf="relation.sfiCompleted != null"
-                                                        class="fs-12 badge badge-pill badge-primary Conflict-badge">
-                                                        <span>{{getDisclosureCount(3, relation.disclosureStatusCount)}}</span>
-                                                    </span>
-                                                    <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
-                                                </div>
-                                            </div>
+                                <div>
+                                    <div class="border h-100 rounded-1 table-bg-color position-relative">
+                                        <span class="status-pill">Project/SFI Relationship</span>
+                                        <div class="emptySfi mt-5 pt-3" *ngIf="!count">
+                                            <p class="fw-600">No SFI(s) Attached</p>
                                         </div>
-                                        <div class="col-6 mt-3" style="text-align: center;">
-                                            <div class="row mt-2" *ngIf="!isShowCollapsedConflictRelationship">
-                                                <div class="col-12">
-                                                    <button title="Click to {{isEditMode ? 'Define' : 'Manage'}} Project - SFI relationship"
-                                                        class="align-items-center btn btn-primary d-flex define-relation fs-14"
-                                                        (click)="openDefineRelationship(relation)" type="submit">
-                                                        <img src="{{deployMap}}assets/images/define-relation-hover.svg"
-                                                            class="mr-2 hover_img"
-                                                            alt="{{isEditMode ? 'Define Relationship' : 'Manage Relationship'}}">{{isEditMode
-                                                        ? 'Define Relationship' : 'Manage Relationship'}}
-                                                    </button>
+                                        <div class="row fs-14 m-2" style="text-align: right;" *ngIf="count">
+                                            <div class="col-6 mt-4">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="count-label">No Conflict : </label>
+                                                    </div>
+                                                    <div class="col-6" style="text-align: center;">
+                                                        <span *ngIf="relation.sfiCompleted !== null"
+                                                            class="fs-12 badge badge-pill badge-primary noConflict-badge">
+                                                            <span>{{getDisclosureCount(1, relation.disclosureStatusCount)}}</span>
+                                                        </span>
+                                                        <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="count-label">Potential Conflict :
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-6" style="text-align: center;">
+                                                        <span *ngIf="relation.sfiCompleted !== null"
+                                                            class="fs-12 badge badge-pill badge-primary potentialConflict-badge">
+                                                            <span>{{getDisclosureCount(2, relation.disclosureStatusCount)}}</span>
+                                                        </span>
+                                                        <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="count-label">Conflict Identified :</label>
+                                                    </div>
+                                                    <div class="col-6" style="text-align: center;">
+                                                        <span *ngIf="relation.sfiCompleted != null"
+                                                            class="fs-12 badge badge-pill badge-primary Conflict-badge">
+                                                            <span>{{getDisclosureCount(3, relation.disclosureStatusCount)}}</span>
+                                                        </span>
+                                                        <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="disclosure-status-complete ml-15" *ngIf="relation.sfiCompleted == true" [class.mt-5]="isShowCollapsedConflictRelationship"><mat-icon
-                                                            class="complete-icon">done</mat-icon><span class="complete">Completed</span>
+                                            <div class="col-6 mt-3" style="text-align: center;">
+                                                <div class="row mt-2" *ngIf="!isShowCollapsedConflictRelationship">
+                                                    <div class="col-12">
+                                                        <button title="Click to {{isEditMode ? 'Define' : 'Manage'}} Project - SFI relationship"
+                                                            class="align-items-center btn btn-primary d-flex define-relation fs-14"
+                                                            (click)="openDefineRelationship(relation)" type="submit">
+                                                            <img src="{{deployMap}}assets/images/define-relation-hover.svg"
+                                                                class="mr-2 hover_img"
+                                                                alt="{{isEditMode ? 'Define Relationship' : 'Manage Relationship'}}">{{isEditMode
+                                                            ? 'Define Relationship' : 'Manage Relationship'}}
+                                                        </button>
                                                     </div>
-                                                    <div class="disclosure-status-incomplete" [class.count-margin]="!relation.sfiCompleted && !isEditMode" [class.mt-5]="isShowCollapsedConflictRelationship"
-                                                        *ngIf="relation.sfiCompleted == false"><mat-icon class="in-complete-icon">not_interested</mat-icon><span
-                                                            class="notComplete">Not Completed</span>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="disclosure-status-complete ml-15" *ngIf="relation.sfiCompleted == true" [class.mt-5]="isShowCollapsedConflictRelationship"><mat-icon
+                                                                class="complete-icon">done</mat-icon><span class="complete">Completed</span>
+                                                        </div>
+                                                        <div class="disclosure-status-incomplete" [class.count-margin]="!relation.sfiCompleted && !isEditMode" [class.mt-5]="isShowCollapsedConflictRelationship"
+                                                            *ngIf="relation.sfiCompleted == false"><mat-icon class="in-complete-icon">not_interested</mat-icon><span
+                                                                class="notComplete">Not Completed</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -176,10 +182,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="sfi-card">
                         <app-SFI-conflict-relationship [coiStatusList]="coiStatusList" [isEditMode]="isEditMode" *ngIf="isShowCollapsedConflictRelationship" [entityProjectDetails]="entityProjectDetails"
                         [coiStatusCode]="coiStatusCode" [coiData]="coiData" [moduleCode]="moduleCode" [selectedProject]="relation" (closePage)="closePage()"></app-SFI-conflict-relationship>   
-                    </div>
                 </div>
             </ng-container>
         </div>
