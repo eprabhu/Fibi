@@ -67,6 +67,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     { variableName: 'country', fieldName: 'Country' },
     { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
 ];
+isEntityFound = false;
 
   constructor(private _router: Router,
     public entityManagementService: EntityManagementService,
@@ -114,6 +115,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
     this.isShowAllProposalList = true;
     this.entityManagementService.isAdvanceSearch = false;
+    this.isEntityFound = false;
     if (this.activeTabName === 'ALL_ENTITIES') {
         this.isShowEntityList = false;
       this.isViewAdvanceSearch = true;
@@ -151,6 +153,9 @@ export class EntityListComponent implements OnDestroy, OnInit {
         this.entityList = res.coiEntityList || [];
         this.resultCount = res.entityCount;
         this.isLoading = false;
+        if (!this.entityList.length) {
+          this.isEntityFound = true;
+       }
       }, _error => {
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         this.entityList = [];

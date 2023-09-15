@@ -66,7 +66,7 @@
                     <div class="col-3" title="Click to search by Entity name">
                         <label class="fw-bold fs-14 d-block" for="adv-entity-name">Entity</label>
                         <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
-                            [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here for entity'"
+                            [httpOptions]="EntitySearchOptions" [placeHolder]="'Search by Entity'"
                             class=" text-secondary fs-13" [uniqueId]="'adv-entity-name'">
                         </app-endpoint-search>
                     </div>
@@ -81,7 +81,7 @@
                         <label class="fw-bold fs-14 d-block" for="adv-entity-country">Country</label>
                         <app-endpoint-search (onSelect)="selectEntityCountry($event)" [clearField]="advSearchClearField"
                             [httpOptions]="countrySearchOptions" class=" text-secondary fs-13"
-                            [placeHolder]="'Type here for entity country'" [uniqueId]="'adv-entity-country'">
+                            [placeHolder]="'Search by country'" [uniqueId]="'adv-entity-country'">
                         </app-endpoint-search>
                     </div>
                     <div class="col-3" title="Click to search by Status">
@@ -280,3 +280,9 @@
 <ng-container *ngIf="isShowGraph">
 <app-graph [graphEnableEvent]="graphEvent" [graphId]="101"></app-graph>
 </ng-container>
+
+ <div *ngIf="isEntityFound" class="mx-4 mt-4 on-data-position">
+    <div class="shadow-sm rounded">
+      <app-no-information></app-no-information>
+    </div>
+</div>

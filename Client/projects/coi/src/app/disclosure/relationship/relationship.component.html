@@ -28,11 +28,11 @@
     </div>
   </div>
   
-  <div class="form-group col-lg-12 col-md-12 col-12 d-flex mx-auto mt-2" *ngIf="awardList.length>1">
-      <input type="text" placeholder="Search by Module Id, Module Name, PI, Status, Sponsor, Prime Sponsor  "
-          class="searchInput form-control" [(ngModel)]="searchText">
-      <a class="searchButton">
-          <mat-icon class="mat-icon material-icons" aria-hidden="true" data-mat-icon-type="font">search</mat-icon></a>
+  <div class="form-control col-lg-12 col-md-12 col-12 d-flex mx-auto mt-2" *ngIf="awardList.length>1">
+    <mat-icon *ngIf="!searchText" class="mat-icon material-icons search-icon" aria-hidden="true" data-mat-icon-type="font">search</mat-icon>
+    <input type="text" placeholder="Search by Project Id, Project Name, PI, Project Status, Sponsor, Prime Sponsor  "
+    class="searchField  mt-2 ms-2 pb-2" [(ngModel)]="searchText">
+       
   </div>
   <ng-container
       *ngIf="(awardList| SearchFilter : searchText:
