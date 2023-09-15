@@ -29,7 +29,7 @@
                         </label>
                         <div class="col-12">
                             <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator
-                                [isShowLimiter]='true' [limit]=500 class="form-control fs-14" autocomplete="off"
+                                [isShowLimiter]='true' [limit]=2000 class="form-control fs-14" autocomplete="off"
                                 [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty();description= description.trim()"
                                 [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''">
                         </textarea>
