@@ -7,12 +7,11 @@ import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from '../..
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
-import { CoiTravelDisclosure, EndpointOptions, TravelCreateModalDetails, TravelDisclosure, TravelDisclosureTraveller } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, EndpointOptions, EntityDetails, TravelCreateModalDetails, TravelDisclosure, TravelDisclosureTraveller } from '../travel-disclosure-interface';
 import { CommonService } from '../../common/services/common.service';
 import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { fadeInOutHeight } from '../../common/utilities/animations';
-import { EntityDetails } from '../../entity-management/entity-details-interface';
 
 @Component({
     selector: 'app-travel-disclosure-form',
@@ -71,6 +70,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     private getDataFromStore(): void {
         if (this._dataStore.getData().travelDisclosureId) {
             this.setDisclosureDetails(this._dataStore.getData());
+            this.entityDetails = this._dataStore.getEntityDetails();
         } else {
             this.getTravelCreateModalDetails();
         }
@@ -279,6 +279,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.travelResObject.adminPersonId = response.adminPersonId;
         this.travelResObject.adminPersonName = response.adminPersonName;
         this.travelResObject.travelState = response.travelstate;
+        this.travelResObject.disclosureStatus = response.coiTravelDisclosureStatusTypeDetalis.description;
+        this.travelResObject.disclosureStatusCode = response.coiTravelDisclosureStatusTypeDetalis.disclosureStatusCode;
         this._dataStore.manualDataUpdate(this.travelResObject);
         this._router.navigate([], {
             queryParams: {
