@@ -334,6 +334,18 @@ export class CommonService {
         }
     }
 
+  getProjectDisclosureConflictStatusBadge(statusCode: string) {
+    switch (String(statusCode)) {
+        case '100':
+            return 'green-badge';
+        case '200':
+            return 'brown-badge';
+        case '300':
+            return 'red-badge';
+        case '400':
+            return 'green-badge';
+    }
+}
     removeUserDetailsFromLocalStorage() {
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }

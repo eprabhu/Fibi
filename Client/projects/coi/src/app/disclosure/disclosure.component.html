@@ -11,10 +11,9 @@
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
                             <strong
-                                title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}}
-                                :
+                                title="{{coiData?.projectDetail?.title}}">
                                 {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                                Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} :
+                                Disclosure - [ {{coiData?.projectDetail?.moduleItemId}} :
                                 {{(coiData?.projectDetail?.title)?.length>40 ?
                                 (coiData?.projectDetail?.title | slice:0: 40)+'...' :
                                 coiData?.projectDetail?.title}} ] By
@@ -223,7 +222,7 @@
                         <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
                             area-describedby="Click to view the reviews">Reviews</div>
                     </div>
-                    <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge' role="button">
+                    <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'  title="click to view history" role="button">
                         <div class="navigation-box-content" routerLinkActive="active">History</div>
                     </div>
                 </div>
