@@ -218,6 +218,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
                     }
                     this._router.navigate(['/coi/entity-details/entity'],
                         { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
+                        this.getEntityDetails(this.getEntityId());
                 }
             }
             this.relationshipsDetails.updateTimestamp = event.updateTimestamp;

@@ -31,5 +31,7 @@ public class DisclosureActionLogDto {
 	private String administratorName;
 	private String oldReviewer;
 	private String newReviewer;
+	private String reporter;
+	private String coiAdmin;	
 
 }
