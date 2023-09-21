@@ -726,13 +726,13 @@ INSERT INTO `coi_review_status_type` (`REVIEW_STATUS_CODE`,`DESCRIPTION`,`IS_ACT
 INSERT INTO `coi_review_status_type` (`REVIEW_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('5','Revison requested','Y',now(),'quickstart');
 
 INSERT INTO `coi_project_type` (`COI_PROJECT_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('1','Award','Y',now(),'quickstart');
-INSERT INTO `coi_project_type` (`COI_PROJECT_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('2','Ad-Hoc Award','Y',now(),'quickstart');
 INSERT INTO `coi_project_type` (`COI_PROJECT_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('3','Development Proposal','Y',now(),'quickstart');
-INSERT INTO `coi_project_type` (`COI_PROJECT_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('4','Ad-Hoc Proposal','Y',now(),'quickstart');
+INSERT INTO `COI_PROJECT_TYPE` (`COI_PROJECT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('4', 'IRB Protocol', 'Y', now(), 'quickstart');
+INSERT INTO `COI_PROJECT_TYPE` (`COI_PROJECT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('5', 'IACUC Protocol', 'Y', now(), 'quickstart');
 
-INSERT INTO `coi_proj_conflict_status_type` (`PROJECT_CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('1','No Conflict','Y',now(),'quickstart');
-INSERT INTO `coi_proj_conflict_status_type` (`PROJECT_CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('2','Potential Conflict','Y',now(),'quickstart');
-INSERT INTO `coi_proj_conflict_status_type` (`PROJECT_CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('3','Conflict Identified','Y',now(),'quickstart');
+INSERT INTO `coi_proj_conflict_status_type` (`PROJECT_CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('100','No Conflict','Y',now(),'quickstart');
+INSERT INTO `coi_proj_conflict_status_type` (`PROJECT_CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('200','Potential Conflict','Y',now(),'quickstart');
+INSERT INTO `coi_proj_conflict_status_type` (`PROJECT_CONFLICT_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('300','Conflict Identified','Y',now(),'quickstart');
 
 INSERT INTO `coi_disposition_status_type` (`DISPOSITION_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('1','Pending','Y',now(),'quickstart');
 INSERT INTO `coi_disposition_status_type` (`DISPOSITION_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('2','Void','Y',now(),'quickstart');
@@ -933,19 +933,19 @@ CREATE TABLE `coi_travel_conflict_history` (
 INSERT INTO `discl_component_type` (`COMPONENT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', 'Travel disclosure conflict comment', 'Y', now(), 'quickstart');
 INSERT INTO `discl_comment_type` (`COMMENT_TYPE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', 'Travel disclosure conflict comment', 'Y', now(), 'quickstart');
 
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('1', 'New {FCOI /Project /Travel} application has been created', 'Created', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', '{FCOI /Project /Travel} application has been submitted', 'Submitted', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '{FCOI /Project /Travel} application has been recalled', 'Withdraw', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('4', 'New Admin <b>{ADMIN_ONE}</b> has been assigned', 'Assigned to admin /Admin Group', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('5', 'Admin <b>{ADMIN_ONE}</b> reassigned to <b>{ADMIN_TWO}</b>', 'Re Assigned to admin /Admin Group', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('6', '{FCOI /Project /Travel} application has been returned', 'Returned', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('7', '<b>{REVIEWER_NAME}</b> assigned to review {FCOI /Project /Travel} disclosure', 'Assigned For Review', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('8', '{FCOI /Project /Travel} Disclosure review has been completed', 'Assigned Review Completed', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('9', 'Risk Level <b>{LOW}</b> has been added', 'Added Risk', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('10', 'Risk for  {FCOI /Project /Travel} Disclosure changed from <b>{LOW}</b> to <b>{HIGH}</b>', 'Manage Risk', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('11', '{FCOI /Project /Travel}  Disclosure admin-review has been completed', 'Admin  Review Completed', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('12', '{FCOI /Project /Travel} Disclosure has been expired', 'Expired', now(), 'quickstart');
-INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('13', '{FCOI /Project /Travel} application has been approved', 'Approved', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('1', '{FCOI /Project /Travel} disclosure <b>created</b> by <b>{REPORTER}</b>', 'Created', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', '{FCOI /Project /Travel} disclosure <b>submitted</b> by <b>{REPORTER}</b>', 'Submitted', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', '{FCOI /Project /Travel} disclosure <b>recalled</b> by <b>{REPORTER}</b>', 'Withdraw', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('4', 'Primary Administrator <b>{ADMIN_ONE}</b> <b>assigned</b> by <b>{COI_ADMIN}</b>', 'Assigned to admin /Admin Group', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('5', 'Primary Administrator <b>{ADMIN_ONE}</b> <b>reassigned</b> to <b>{ADMIN_TWO}</b> by <b>{COI_ADMIN}</b>', 'Re Assigned to admin /Admin Group', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('6', '{FCOI /Project /Travel} disclosure <b>returned</b> by <b>{ADMIN_NAME}</b>', 'Returned', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('7', '{FCOI /Project /Travel} disclosure <b>assigned</b> to Review by <b>{ADMIN_NAME}</b>', 'Assigned For Review', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('8', 'Assigned Review <b>completed</b> for {FCOI /Project /Travel} disclosure', 'Assigned Review Completed', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('9', '{FCOI /Project /Travel} disclosure Risk <b>added</b> as <b>{LOW}</b>', 'Added Risk', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('10', '{FCOI /Project /Travel} Disclosure Risk <b>changed</b> from <b>{LOW}</b> to <b>{HIGH}</b> by <b>{ADMIN_NAME}</b>', 'Manage Risk', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('11', '{FCOI /Project /Travel} disclosure review <b>completed</b> by <b>{ADMIN_NAME}</b>', 'Admin  Review Completed', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('12', '{FCOI /Project /Travel} disclosure has <b>expired</b>', 'Expired', now(), 'quickstart');
+INSERT INTO `disclosure_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('13', '{FCOI /Project /Travel} disclosure <b>approved</b>', 'Approved', now(), 'quickstart');
 
 
 INSERT INTO `ENTITY_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
