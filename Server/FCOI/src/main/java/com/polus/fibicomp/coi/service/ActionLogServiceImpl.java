@@ -158,7 +158,12 @@ public class ActionLogServiceImpl implements ActionLogService {
         if (actionLogDto.getOldReviewer() != null) {
             placeholdersAndValues.put("{REVIEWER_ONE}", actionLogDto.getOldReviewer());
             placeholdersAndValues.put("{REVIEWER_TWO}", actionLogDto.getNewReviewer());
-            
+        }
+        if(actionLogDto.getReporter()!=null) {
+        	placeholdersAndValues.put("{REPORTER}", actionLogDto.getReporter());
+        }
+        if(actionLogDto.getCoiAdmin()!=null) {
+        	placeholdersAndValues.put("{COI_ADMIN}", actionLogDto.getCoiAdmin());
         }
         return renderPlaceholders(message, placeholdersAndValues);
     }
@@ -219,6 +224,15 @@ public class ActionLogServiceImpl implements ActionLogService {
 		} else if (actionLogDto.getNewAdmin() != null) {
 			placeholdersAndValues.put("{STATUS_ONE}", actionLogDto.getNewDisclosureStatus());
 		}
+		if(actionLogDto.getReporter()!=null) {
+        	placeholdersAndValues.put("{REPORTER}", actionLogDto.getReporter());
+        }
+		if (actionLogDto.getAdministratorName() != null) {
+            placeholdersAndValues.put("{ADMIN_NAME}", actionLogDto.getAdministratorName());
+        }
+		if(actionLogDto.getCoiAdmin()!=null) {
+        	placeholdersAndValues.put("{COI_ADMIN}", actionLogDto.getCoiAdmin());
+        }
 		return renderPlaceholders(message, placeholdersAndValues);
 	}
 

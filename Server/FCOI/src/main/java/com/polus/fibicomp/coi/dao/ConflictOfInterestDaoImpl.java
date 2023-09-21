@@ -870,10 +870,19 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	public List<Map<Object, Object>> disclosureStatusCount(Integer moduleCode, Integer moduleItemId, Integer disclosureId) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		StringBuilder hqlQuery = new StringBuilder();
-		hqlQuery.append("SELECT  C2.PROJECT_CONFLICT_STATUS_CODE, COUNT(C2.PROJECT_CONFLICT_STATUS_CODE) FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
+		hqlQuery.append("SELECT  CASE ");
+		hqlQuery.append("  WHEN C2.PROJECT_CONFLICT_STATUS_CODE BETWEEN 100 AND 199 THEN 1 ");
+		hqlQuery.append("  WHEN C2.PROJECT_CONFLICT_STATUS_CODE BETWEEN 200 AND 299 THEN 2 ");
+		hqlQuery.append("  WHEN C2.PROJECT_CONFLICT_STATUS_CODE BETWEEN 300 AND 399 THEN 3 ");
+		hqlQuery.append("END AS StatusGroup, ");
+		hqlQuery.append("COUNT(*) ");
+		hqlQuery.append("FROM COI_DISCL_ENT_PROJ_DETAILS C2 ");
 		hqlQuery.append("WHERE C2.PROJECT_CONFLICT_STATUS_CODE IS NOT NULL ");
-		hqlQuery.append("and C2.DISCLOSURE_ID = :disclosureId and C2.MODULE_CODE= :moduleCode and C2.MODULE_ITEM_KEY= :moduleItemId GROUP BY C2.PROJECT_CONFLICT_STATUS_CODE ");
-		hqlQuery.append("ORDER BY C2.PROJECT_CONFLICT_STATUS_CODE ASC");
+		hqlQuery.append("AND C2.DISCLOSURE_ID = :disclosureId ");
+		hqlQuery.append("AND C2.MODULE_CODE = :moduleCode ");
+		hqlQuery.append("AND C2.MODULE_ITEM_KEY = :moduleItemId ");
+		hqlQuery.append("GROUP BY StatusGroup ");
+		hqlQuery.append("ORDER BY StatusGroup ASC");
 		Query query = session.createNativeQuery(hqlQuery.toString());
 		query.setParameter("disclosureId", disclosureId);
 		query.setParameter("moduleCode", moduleCode);
@@ -3271,8 +3280,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<String> query = builder.createQuery(String.class);
-			Root<CoiConflictStatusType> rootCoiConflictStatusType = query.from(CoiConflictStatusType.class);
-			query.where(builder.equal(rootCoiConflictStatusType.get("conflictStatusCode"), conflictStatusCode));
+			Root<CoiProjConflictStatusType> rootCoiConflictStatusType = query.from(CoiProjConflictStatusType.class);
+			query.where(builder.equal(rootCoiConflictStatusType.get("projectConflictStatusCode"), conflictStatusCode));
 			query.select(rootCoiConflictStatusType.get("description"));
 			return session.createQuery(query).getSingleResult();
 		} catch (Exception e) {
