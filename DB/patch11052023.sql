@@ -473,6 +473,52 @@ CHANGE COLUMN `DESCRIPTION` `DESCRIPTION` VARCHAR(2000) NULL DEFAULT NULL ;
 
 SET FOREIGN_KEY_CHECKS=1;
 
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure <b>created</b> by <b>{REPORTER}</b> ' WHERE (`ACTION_TYPE_CODE` = '1');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} Disclosure Risk <b>changed</b> from <b>{LOW}</b> to <b>{HIGH}</b> by <b>{ADMIN_NAME}</b> ' WHERE (`ACTION_TYPE_CODE` = '10');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure review <b>completed</b> by <b>{ADMIN_NAME}</b> ' WHERE (`ACTION_TYPE_CODE` = '11');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure has <b>expired</b> ' WHERE (`ACTION_TYPE_CODE` = '12');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure <b>approved</b> ' WHERE (`ACTION_TYPE_CODE` = '13');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure status <b>changed</b> from <b>{STATUS_ONE}</b> to <b>{STATUS_TWO}</b> ' WHERE (`ACTION_TYPE_CODE` = '15');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure <b>submitted</b> by <b>{REPORTER}</b> ' WHERE (`ACTION_TYPE_CODE` = '2');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure <b>recalled</b> by <b>{REPORTER}</b> ' WHERE (`ACTION_TYPE_CODE` = '3');
+UPDATE `disclosure_action_type` SET `MESSAGE` = 'Primary Administrator <b>{ADMIN_ONE}</b> <b>assigned</b> by <b>{COI_ADMIN}</b> ' WHERE (`ACTION_TYPE_CODE` = '4');
+UPDATE `disclosure_action_type` SET `MESSAGE` = 'Primary Administrator <b>{ADMIN_ONE}</b> <b>reassigned</b> to <b>{ADMIN_TWO}</b> by <b>{COI_ADMIN}</b> ' WHERE (`ACTION_TYPE_CODE` = '5');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure <b>returned</b> by <b>{ADMIN_NAME}</b> ' WHERE (`ACTION_TYPE_CODE` = '6');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure <b>assigned</b> to Review by <b>{ADMIN_NAME}</b> ' WHERE (`ACTION_TYPE_CODE` = '7');
+UPDATE `disclosure_action_type` SET `MESSAGE` = 'Assigned Review <b>completed</b> for {FCOI /Project /Travel} disclosure ' WHERE (`ACTION_TYPE_CODE` = '8');
+UPDATE `disclosure_action_type` SET `MESSAGE` = '{FCOI /Project /Travel} disclosure Risk <b>added</b> as <b>{LOW}</b>' WHERE (`ACTION_TYPE_CODE` = '9');
+
+SET SQL_SAFE_UPDATES = 1;
+
+INSERT INTO `COI_PROJECT_TYPE` (`COI_PROJECT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('4', 'IRB Protocol', 'Y', now(), 'quickstart');
+INSERT INTO `COI_PROJECT_TYPE` (`COI_PROJECT_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('5', 'IACUC Protocol', 'Y', now(), 'quickstart');
+
+INSERT INTO `COI_PROJ_CONFLICT_STATUS_TYPE` (`PROJECT_CONFLICT_STATUS_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('200', 'Potential Conflict', 'Y', now(), 'quickstart');
+INSERT INTO `COI_PROJ_CONFLICT_STATUS_TYPE` (`PROJECT_CONFLICT_STATUS_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('300', 'Conflict Identified', 'Y', now(), 'quickstart');
+INSERT INTO `COI_PROJ_CONFLICT_STATUS_TYPE` (`PROJECT_CONFLICT_STATUS_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('100', 'No Conflict', 'Y', now(), 'quickstart');
+
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE coi_discl_ent_proj_details
+SET PROJECT_CONFLICT_STATUS_CODE = 300
+WHERE PROJECT_CONFLICT_STATUS_CODE = 3;
+
+UPDATE coi_discl_ent_proj_details
+SET PROJECT_CONFLICT_STATUS_CODE = 200
+WHERE PROJECT_CONFLICT_STATUS_CODE = 2;
+
+UPDATE coi_discl_ent_proj_details
+SET PROJECT_CONFLICT_STATUS_CODE = 100
+WHERE PROJECT_CONFLICT_STATUS_CODE = 1;
+
+SET SQL_SAFE_UPDATES = 1;
+
+DELETE FROM `COI_PROJ_CONFLICT_STATUS_TYPE` WHERE (`PROJECT_CONFLICT_STATUS_CODE` = '1');
+DELETE FROM `COI_PROJ_CONFLICT_STATUS_TYPE` WHERE (`PROJECT_CONFLICT_STATUS_CODE` = '2');
+DELETE FROM `COI_PROJ_CONFLICT_STATUS_TYPE` WHERE (`PROJECT_CONFLICT_STATUS_CODE` = '3');
+
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_ADMIN_DASHBOARD;
