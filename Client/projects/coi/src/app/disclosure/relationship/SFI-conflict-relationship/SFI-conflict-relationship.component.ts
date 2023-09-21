@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DataStoreService } from '../../services/data-store.service';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, interval } from 'rxjs';
 import { RelationshipService } from '../relationship.service';
 import { CommonService } from '../../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { CoiService } from '../../services/coi.service';
+import { debounce } from 'rxjs/operators';
 
 @Component({
   selector: 'app-SFI-conflict-relationship',
@@ -24,6 +25,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
   @Input() coiData: any;
   @Input() clearIndex: any;
   @Input() moduleCode: any;
+  $debounceEvent = new Subject<any>();
   @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
 
 
@@ -38,6 +40,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
 
   ngOnInit() {
     this._relationShipService.isSliderDataUpdated = false;
+    this.triggerSingleSave();
   }
 
   openSaveAllConfirmationModal() {
@@ -133,21 +136,39 @@ export class SFIConflictRelationshipComponent implements OnInit {
   }
 
   singleSaveClick(element, index) {
-    this.$subscriptions.push(this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode,
-      this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId,
-      this.coiData.coiDisclosure.personId).subscribe((data: any) => {
-      this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
-      this.clearIndex = null;
-      this.coiValidationMap.clear();
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
-      this.closePage.emit();
-  }, err => {
-    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
-  }));
+    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving....',1250);
+      this.$subscriptions.push(this._relationShipService.singleEntityProjectRelation(element, this.selectedProject.moduleCode,
+        this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId,
+        this.coiData.coiDisclosure.personId).subscribe((data: any) => {
+        this.entityProjectDetails[index] = data.coiDisclEntProjDetail;
+        this.clearIndex = null;
+        this.coiValidationMap.clear();
+        setTimeout(() => {
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship saved successfully.');
+        }, 1500);
+        this.closePage.emit();
+    }, err => {
+      setTimeout(() => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationship.');
+      }, 1500);
+    }));
 }
 
 sliderDataChanges() {
   this._dataStore.dataChanged = false;
   this._relationShipService.isSliderInputModified = false;
+}
+
+sfiSingleSave(index, sfi) {
+  this.$debounceEvent.next({index: index, SFI: sfi});
+}
+
+triggerSingleSave() {
+  this.$subscriptions.push(this.$debounceEvent.pipe(debounce(() => interval(1000))).subscribe((data: any) => {
+    if(data) {
+      this.saveSingleEntity(data.index, data.SFI);
+    }
+  }
+  ));
 }
 }
