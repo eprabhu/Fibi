@@ -19,10 +19,6 @@
                                                         <label class="fw-700 mx-3">{{historyEntry?.updateTimestamp|
                                                             dateFormatterWithTimeZone:'time'}}</label>
                                                         <span [innerHTML]="historyEntry?.message"></span>
-                                                        <span class="pl-2"
-                                                            *ngIf="historyEntry?.updateUserFullName"></span>
-                                                        by<span
-                                                            class="history-username fw-700 ml-2">{{historyEntry?.updateUserFullName}}</span>
                                                     </p>
                                                     <span *ngIf="historyEntry?.comment" class="px-4 fs-14">
                                                         <span class="fa fa-quote-left comment-icon grey-text ml-2 fs-13"></span>
