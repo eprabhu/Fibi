@@ -5,7 +5,7 @@ import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
 import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import {Toast} from 'bootstrap';
-import { HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 
 type Method = 'SOME' | 'EVERY';
 @Injectable()
@@ -232,12 +232,12 @@ export class CommonService {
         return {fibiRights, coiRights};
     }
 
-    showToast(status = HTTP_SUCCESS_STATUS, toastContent = '') {
+    showToast(status = HTTP_SUCCESS_STATUS, toastContent = '', timer = 5000) {
         const toast: any = new Toast(document.getElementById('coi-bootstrap-toast'));
         const toast_body: any = document.getElementById('coi-bootstrap-toast-body');
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
-        this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' : 'bg-danger';
+        this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' :'bg-danger';
         if (toast && toast_body) {
             ['bg-success', 'bg-danger'].forEach(className => toast._element.classList.remove(className));
             toast_body.innerText =  this.appToastContent;
@@ -251,7 +251,7 @@ export class CommonService {
             setTimeout(() => {
                 toast_body.innerText = '';
                 toast.hide();
-            }, 5000);
+            }, timer);
         }
 
 
