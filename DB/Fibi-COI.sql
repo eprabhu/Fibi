@@ -1122,6 +1122,14 @@ VALUES ('7', 'Review assigned', 'Y', now(), 'quickstart');
 INSERT INTO `coi_review_status_type` (`REVIEW_STATUS_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('8', 'Assigned Review Completed', 'Y', now(), 'quickstart');
 
+UPDATE `entity_action_type` SET `MESSAGE` = '{ENTITY_NAME} <b>created</b>' WHERE (`ACTION_TYPE_CODE` = '1');
+UPDATE `entity_action_type` SET `MESSAGE` = '{ENTITY_NAME} <b>activated</b>' WHERE (`ACTION_TYPE_CODE` = '2');
+UPDATE `entity_action_type` SET `MESSAGE` = '{ENTITY_NAME} <b>inactivated</b>' WHERE (`ACTION_TYPE_CODE` = '3');
+UPDATE `entity_action_type` SET `MESSAGE` = '{ENTITY_NAME} <b>verified</b>' WHERE (`ACTION_TYPE_CODE` = '4');
+UPDATE `entity_action_type` SET `MESSAGE` = 'Entity Risk changed from <b>{RISK}</b> to <b>{NEW_RISK}</b>' WHERE (`ACTION_TYPE_CODE` = '5');
+UPDATE `entity_action_type` SET `MESSAGE` = '{ENTITY_NAME} <b>modified</b> by' WHERE (`ACTION_TYPE_CODE` = '6');
+UPDATE `entity_action_type` SET `MESSAGE` = 'Entity Risk <b>added</b> as <b>{RISK}</b>' WHERE (`ACTION_TYPE_CODE` = '7');
+
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;
