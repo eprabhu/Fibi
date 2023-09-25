@@ -28,14 +28,13 @@
                         <p class="fs-14 pb-0 pt-1"
                             *ngIf="(!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE') || triggeredFrom != 'PROJECT_DISCLOSURE'">
                             <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                            For disclosing at any other unit please click on the ‘Edit’ icon near the unit field to
-                            proceed to disclosure creation
+                            To disclose at any other unit, please click on the 'Edit' icon near the unit field, and proceed to disclosure creation.
                             <br>
                             <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                            For reverting to the original unit click on the 'Reset' icon.
+                            To revert to the original unit, click on the 'Reset' icon.
                             <br>
-                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                            For adding any additional description/comment, please use the “Description“ field.
+                            <span *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')"><i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                            For adding any additional description/comment, please use the “Description“ field.</span>
                         </p>
                     </div>
                     <p class="fs-14 alert alert-danger" *ngIf="isShowExistingDisclosure">
@@ -88,10 +87,10 @@
                         <label for="desc-award mb-2" *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
                             <span class="fs-14 fw-600 mandatory">*</span>Revision Reason
                         </label>
-                        <label for="desc-award mb-2" *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE'">
+                        <label for="desc-award mb-2" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                             Description
                         </label>
-                        <textarea [(ngModel)]="reviseObject.revisionComment" (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
+                        <textarea [(ngModel)]="reviseObject.revisionComment" *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')" (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
                                   appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"
                                   [ngClass]="(mandatoryList?.get('reviseComment')) ? 'invalid-border':''">
                         </textarea>

@@ -10,17 +10,25 @@
                             </strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                            <strong
-                                title="{{coiData?.projectDetail?.title}}">
-                                {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                                Disclosure - [ {{coiData?.projectDetail?.moduleItemId}} :
-                                {{(coiData?.projectDetail?.title)?.length>40 ?
-                                (coiData?.projectDetail?.title | slice:0: 40)+'...' :
-                                coiData?.projectDetail?.title}} ] By
+                            <strong title="{{ coiData?.projectDetail?.title }}">
+                                {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }}
+                                Disclosure - [
+                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
+                                     {{ coiData?.projectDetail?.moduleItemId }} :
+                                </ng-container>
+                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
+                                     {{ coiData?.projectDetail?.moduleItemKey }} :
+                                </ng-container>
+                                {{ (coiData?.projectDetail?.title)?.length > 40 ? (coiData?.projectDetail?.title | slice:0: 40)+'...' :
+                                coiData?.projectDetail?.title }}
+                                ] By
                                 <span class="text-primary ">
-                                    <u class="cursor-pointer" (click)="openDetailModal(coiData)" title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u>
+                                    <u class="cursor-pointer" (click)="openDetailModal(coiData)"
+                                        title="click to view person details of {{ coiData?.coiDisclosure?.person?.fullName }}">
+                                        {{ coiData?.coiDisclosure?.person?.fullName }}
+                                    </u>
                                 </span>
-                            </strong>
+                              </strong>
                         </ng-container>
                     </p>
                     <div *ngIf="coiData?.coiDisclosure?.riskCategoryCode" class="d-flex ms-auto mr-15">

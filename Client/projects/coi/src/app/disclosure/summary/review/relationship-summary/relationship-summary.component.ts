@@ -40,6 +40,7 @@ export class RelationshipSummaryComponent implements OnInit {
     projectConflictValidationMap = new Map();
     isShowNoDataCard = false;
     readMoreOrLess = false;
+    resultObject = [];
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
@@ -84,7 +85,7 @@ export class RelationshipSummaryComponent implements OnInit {
         }));
     }
 
-    getEntityProjectRelations() {
+getEntityProjectRelations() {
         this.isShowNoDataCard = false;
         this.$subscriptions.push(
             this._coiSummaryService.getEntityProjectRelations(this.selectedProject.moduleCode, this.selectedProject.moduleItemId,
@@ -93,11 +94,13 @@ export class RelationshipSummaryComponent implements OnInit {
                 if (data && data.length > 0) {
                     this.isShowNoDataCard = true;
                     this.projectRelations = data;
-                }
-        }, _err => {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project details. Please try again.');
-        }));
-    }
+                    this.conflictStatusCountUpdation();
+                    this.selectedProject.disclosureStatusCount = this.resultObject;
+                    }
+                }, _err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching project details. Please try again.');
+                }));
+}
 
     closePage(event) {
         this.isOpenSlider = false;
@@ -106,6 +109,7 @@ export class RelationshipSummaryComponent implements OnInit {
         if (event) {
             this.updateDisclosureConflictStatus(event);
         }
+        this. conflictStatusCountUpdation();
     }
 
     setEntityDetails(entity, index) {
@@ -173,5 +177,27 @@ export class RelationshipSummaryComponent implements OnInit {
         REQ_OBJ.searchWord = '';
         return REQ_OBJ;
       }
+
+    conflictStatusCountUpdation() {
+        const projectConflictStatusCodes = this.projectRelations.map(relation => relation.projectConflictStatusCode);
+        const counts = {};
+        projectConflictStatusCodes.forEach(statusCode => {
+            if (statusCode === '100') {
+                statusCode = '1';
+            } else if (statusCode === '200') {
+                statusCode = '2';
+            } else if (statusCode === '300') {
+                statusCode = '3';
+            }
+            counts[statusCode] = (counts[statusCode] || 0) + 1;
+        });
+        this.resultObject = [];
+        for (const key in counts) {
+            if (Object.hasOwnProperty.call(counts, key)) {
+                this.resultObject.push({ [key]: counts[key] });
+            }
+        }
+
+    }
 
 }

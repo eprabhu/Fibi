@@ -5,10 +5,10 @@
         <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" title="Sort by All Status"
               role="button">All</span>
-        <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" title="Sort by Active Status"
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
         <span (click)="setFilter('DRAFT')" [class.filter-active]="sfiDashboardRequestObject.filterType=='DRAFT'" title="Sort by DRAFT Status"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Draft</span>
+        <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" title="Sort by Active Status"
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
         <span (click)="setFilter('INACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INACTIVE'" title="Sort by Inactive Status"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Inactive</span>     
     </div>
