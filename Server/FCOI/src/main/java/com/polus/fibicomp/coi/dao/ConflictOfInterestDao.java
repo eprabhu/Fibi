@@ -1,6 +1,7 @@
 package com.polus.fibicomp.coi.dao;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -286,8 +287,9 @@ public interface ConflictOfInterestDao {
 	 * This method is used for update reviewStatusTypeCode in CoiReview
 	 * @param reviewStatusTypeCode
 	 * @param coiReviewId
+	 * @param endDate Completion Date
 	 */
-	public void startReview(String reviewStatusTypeCode, Integer coiReviewId);
+	void startReview(String reviewStatusTypeCode, Integer coiReviewId, Date endDate);
 
 	/**
 	 * This method is used for load CoiReview

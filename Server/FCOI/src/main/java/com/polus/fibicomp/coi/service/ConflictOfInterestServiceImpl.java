@@ -518,9 +518,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		CoiReview coiReview = vo.getCoiReview();
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
 		if (coiReview.getCoiReviewId() == null) {
-		 coiReview.setReviewStatusTypeCode(REVIEW_STATUS_TYPE_CODE);
-		 coiReview.setCoiReviewStatus(conflictOfInterestDao.getReviewStatus(REVIEW_STATUS_TYPE_CODE));
-		 actionTypeCode = Constants.COI_DISCLOSURE_ACTION_LOG_ADD_REVIEWER;
+			actionTypeCode = Constants.COI_DISCLOSURE_ACTION_LOG_ADD_REVIEWER;
 		}
 		else {
 			actionTypeCode = Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REASSIGNED;
@@ -528,6 +526,18 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		String assigneePersonId = coiReview.getCoiReviewId() != null ? conflictOfInterestDao.loadCoiReviewAssigneePersonName(coiReview.getCoiReviewId()) : null;
 		String assigneePersonName = assigneePersonId != null ? personDao.getPersonFullNameByPersonId(assigneePersonId) : null;
 		conflictOfInterestDao.saveOrUpdateCoiReview(vo.getCoiReview());
+		CoiDisclosure coiDisclosure = new CoiDisclosure();
+		coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
+		coiDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
+		coiDisclosure.setDisclosureId(coiReview.getDisclosureId());
+		if (coiReview.getReviewStatusTypeCode() != null &&
+				coiReview.getReviewStatusTypeCode().equals(Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED) &&
+				conflictOfInterestDao.numberOfInCompleteReview(coiReview.getDisclosureId()).equals(0)) {
+			coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED);
+		} else {
+			coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_ASSIGNED);
+		}
+		conflictOfInterestDao.completeDisclosureReview(coiDisclosure);
 		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(coiReview.getDisclosureId());
 		try {
 			DisclosureActionLogDto  actionLogDto = DisclosureActionLogDto.builder()
@@ -536,6 +546,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.revisionComment(coiReview.getDescription())
 					.oldReviewer(assigneePersonName!=null ? assigneePersonName :coiReview.getAssigneePersonName())
 					.newReviewer(coiReview.getAssigneePersonName())
+					.administratorName(AuthenticatedUser.getLoginUserFullName())
+					.reviewerStatusType(coiReview.getReviewerStatusType())
+					.reviewLocationType(coiReview.getReviewLocationType())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 			actionLogDto = DisclosureActionLogDto.builder()
@@ -545,6 +558,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.administratorName(AuthenticatedUser.getLoginUserFullName())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
+			coiReview.setCoiDisclosure(disclosure);
 		} catch (Exception e) {
 			logger.error("saveOrUpdateCoiReview : {}", e.getMessage());
 		}
@@ -572,7 +586,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public CoiReview startReview(ConflictOfInterestVO vo){
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
-		conflictOfInterestDao.startReview(DISCLOSURE_REVIEW_IN_PROGRESS,vo.getCoiReview().getCoiReviewId());
+		conflictOfInterestDao.startReview(DISCLOSURE_REVIEW_IN_PROGRESS,vo.getCoiReview().getCoiReviewId(), null);
 		String personName = vo.getCoiReview().getAssigneePersonName();
 		CoiReview coiReview = conflictOfInterestDao.loadCoiReview(vo.getCoiReview().getCoiReviewId());
 		coiReview.setAssigneePersonName(personName);
@@ -718,7 +732,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public CoiReview completeReview(ConflictOfInterestVO vo){
 		CoiReviewAssigneeHistory coiReviewAssigneeHistory = new CoiReviewAssigneeHistory();
-		conflictOfInterestDao.startReview(DISCLOSURE_REVIEW_COMPLETED,vo.getCoiReview().getCoiReviewId());
+		conflictOfInterestDao.startReview(Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED,
+				vo.getCoiReview().getCoiReviewId(), vo.getCoiReview().getEndDate());
 		String personName = vo.getCoiReview().getAssigneePersonName();
 		CoiReview coiReview = conflictOfInterestDao.loadCoiReview(vo.getCoiReview().getCoiReviewId());
 		coiReview.setAssigneePersonName(personName);
@@ -729,6 +744,16 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiReviewAssigneeHistory.setCoiReviewId(coiReview.getCoiReviewId());
 		coiReviewAssigneeHistory.setCoiReviewActivityId(COMPLETE_ACTIVIVITY);
 		conflictOfInterestDao.saveOrUpdateCoiReviewAssigneeHistory(coiReviewAssigneeHistory);
+		if (conflictOfInterestDao.numberOfInCompleteReview(coiReview.getDisclosureId()).equals(0)) {
+			CoiDisclosure coiDisclosure = new CoiDisclosure();
+			coiDisclosure.setDisclosureId(coiReview.getDisclosureId());
+			coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
+			coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED);
+			coiDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
+			conflictOfInterestDao.completeDisclosureReview(coiDisclosure);
+			coiReview.getCoiDisclosure().setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED);
+			coiReview.getCoiDisclosure().setCoiReviewStatusType(conflictOfInterestDao.getReviewStatusByCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED));
+		}
 		try {
 			CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(coiReview.getDisclosureId());
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
@@ -754,7 +779,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public String deleteReview(Integer coiReviewId){
+	public ResponseEntity<Object> deleteReview(Integer coiReviewId){
 		try {
 			CoiReview coiReview = conflictOfInterestDao.loadCoiReview(coiReviewId);
 			conflictOfInterestDao.deleteReviewAssigneeHistory(coiReviewId);
@@ -767,6 +792,19 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			conflictOfInterestDao.deleteReviewComment(coiReview.getAssigneePersonId(),coiReview.getDisclosureId());
 			conflictOfInterestDao.deleteReview(coiReviewId);
 			conflictOfInterestDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
+			CoiDisclosure coiDisclosure = new CoiDisclosure();
+			if (conflictOfInterestDao.numberOfInCompleteReview(coiReview.getDisclosureId()).equals(0)) {
+				coiDisclosure.setDisclosureId(coiReview.getDisclosureId());
+				coiDisclosure.setDispositionStatusCode(DISPOSITION_STATUS_PENDING);
+				coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED);
+				coiDisclosure.setVersionStatus(Constants.COI_PENDING_STATUS);
+				conflictOfInterestDao.completeDisclosureReview(coiDisclosure);
+				coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED);
+				coiDisclosure.setCoiReviewStatusType(conflictOfInterestDao.getReviewStatusByCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED));
+			} else {
+				coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_ASSIGNED);
+				coiDisclosure.setCoiReviewStatusType(conflictOfInterestDao.getReviewStatusByCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_ASSIGNED));
+			}
 			try {
 				DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
 						.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REMOVED)
@@ -780,7 +818,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			} catch (Exception e) {
 				logger.error("saveOrUpdateCoiReview : {}", e.getMessage());
 			}
-			return commonDao.convertObjectToJSON(DELETE_MSG);
+			return new ResponseEntity<>(coiDisclosure, HttpStatus.OK);
 		} catch(Exception e) {
 			throw new ApplicationException("deleteCoiReview",e, Constants.JAVA_ERROR);
 		}

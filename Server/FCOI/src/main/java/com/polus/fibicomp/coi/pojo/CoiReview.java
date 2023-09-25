@@ -2,6 +2,7 @@ package com.polus.fibicomp.coi.pojo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,10 +58,23 @@ public class CoiReview implements Serializable {
 
 	@ManyToOne(optional = true)
 	@JoinColumn(foreignKey = @ForeignKey(name = "COI_REVIEW_FK4"), name = "REVIEW_STATUS_TYPE_CODE", referencedColumnName = "REVIEW_STATUS_CODE", insertable = false, updatable = false)
-	private CoiReviewStatusType coiReviewStatus;
+	private CoiReviewerStatusType reviewerStatusType;
+
+	@Column(name = "LOCATION_TYPE_CODE")
+	private String locationTypeCode;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "COI_REVIEW_FK5"), name = "LOCATION_TYPE_CODE", referencedColumnName = "LOCATION_TYPE_CODE", insertable = false, updatable = false)
+	private CoiReviewLocationType reviewLocationType;
 	
 	@Column(name = "DESCRIPTION")
 	private String description ;
+
+	@Column(name = "START_DATE")
+	private Date startDate;
+
+	@Column(name = "END_DATE")
+	private Date endDate;
 	
 	@CreatedDate
 	@Column(name = "CREATE_TIMESTAMP")
@@ -185,11 +199,43 @@ public class CoiReview implements Serializable {
 		this.coiDisclosure = coiDisclosure;
 	}
 
-	public CoiReviewStatusType getCoiReviewStatus() {
-		return coiReviewStatus;
+	public CoiReviewerStatusType getReviewerStatusType() {
+		return reviewerStatusType;
 	}
 
-	public void setCoiReviewStatus(CoiReviewStatusType coiReviewStatus) {
-		this.coiReviewStatus = coiReviewStatus;
+	public void setReviewerStatusType(CoiReviewerStatusType reviewerStatusType) {
+		this.reviewerStatusType = reviewerStatusType;
+	}
+
+	public String getLocationTypeCode() {
+		return locationTypeCode;
+	}
+
+	public void setLocationTypeCode(String locationTypeCode) {
+		this.locationTypeCode = locationTypeCode;
+	}
+
+	public CoiReviewLocationType getReviewLocationType() {
+		return reviewLocationType;
+	}
+
+	public void setReviewLocationType(CoiReviewLocationType reviewLocationType) {
+		this.reviewLocationType = reviewLocationType;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 }

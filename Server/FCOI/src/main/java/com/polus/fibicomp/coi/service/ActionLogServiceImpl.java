@@ -165,6 +165,12 @@ public class ActionLogServiceImpl implements ActionLogService {
         if(actionLogDto.getCoiAdmin()!=null) {
         	placeholdersAndValues.put("{COI_ADMIN}", actionLogDto.getCoiAdmin());
         }
+		if (actionLogDto.getReviewLocationType() != null) {
+			placeholdersAndValues.put("{LOCATION}", actionLogDto.getReviewLocationType().getDescription());
+		}
+		if (actionLogDto.getReviewerStatusType() != null) {
+			placeholdersAndValues.put("{REVIEW_STATUS}", actionLogDto.getReviewerStatusType().getDescription());
+		}
         return renderPlaceholders(message, placeholdersAndValues);
     }
 

@@ -186,9 +186,9 @@ public interface ConflictOfInterestService {
 	/**
 	 * This method is used for delete review
 	 * @param coiReviewId
-	 * @return String
+	 * @return
 	 */
-	String deleteReview(Integer coiReviewId);
+	ResponseEntity<Object> deleteReview(Integer coiReviewId);
 
 	/**
 	 * This method is used for delete comment

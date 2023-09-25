@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -458,12 +459,15 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
-	public void startReview(String reviewStatusTypeCode ,Integer coiReviewId) {
+	public void startReview(String reviewStatusTypeCode ,Integer coiReviewId, Date endDate) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaUpdate<CoiReview> criteriaUpdate = cb.createCriteriaUpdate(CoiReview.class);
 		Root<CoiReview> root = criteriaUpdate.from(CoiReview.class);
 		criteriaUpdate.set("reviewStatusTypeCode",reviewStatusTypeCode);
+		if (endDate != null) {
+			criteriaUpdate.set("endDate",endDate);
+		}
 		criteriaUpdate.where(cb.equal(root.get("coiReviewId"),coiReviewId));
 		session.createQuery(criteriaUpdate).executeUpdate();
 	}
@@ -766,7 +770,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<CoiReview> root = query.from(CoiReview.class);
 		Predicate predicate1 = builder.equal(root.get("disclosureId"), disclosureId);
-		Predicate predicate2 = builder.notEqual(root.get("reviewStatusTypeCode"), "4");
+		Predicate predicate2 = builder.notEqual(root.get("reviewStatusTypeCode"), Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED);
 		query.select(root.get("coiReviewId"));
 		query.where(builder.and(predicate1,predicate2));
 		return (session.createQuery(query).getResultList().size());
