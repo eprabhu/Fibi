@@ -9,6 +9,9 @@ import {CoiService} from '../../services/coi.service';
 import {ElasticConfigService} from '../../../../../../fibi/src/app/common/services/elastic-config.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {deepCloneObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../fibi/src/app/app-constants';
+import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
+import { PersonProjectOrEntity } from '../../../shared-components/shared-interface';
 
 @Component({
     selector: 'app-coi-review-location',
@@ -34,17 +37,26 @@ export class LocationComponent implements OnInit, OnDestroy {
     assigneeClearField: String;
     adminGroupsCompleterOptions: any = {};
     categoryClearFiled: String;
+    datePlaceHolder = DATE_PLACEHOLDER;
+    personProjectDetails = new PersonProjectOrEntity();
 
     reviewActionConfirmation: any = {};
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
     projectDetail: any = {};
     isMangeReviewAction = false;
+    disReviewLocation = 'COI_REVIEW_LOCATION_TYPE#LOCATION_TYPE_CODE#false#false';
+    disReviewStatus = 'COI_REVIEWER_STATUS_TYPE#REVIEW_STATUS_CODE#false#false';
+    locationType: any = [];
+    reviewerStatusType: any = [];
+    reviewStartDate: any;
+    reviewEndDate: any;
+    collapseViewMore = {};
 
     constructor(
         private _elasticConfigService: ElasticConfigService,
         private _reviewService: ReviewService,
         private _dataStore: DataStoreService,
-        private _commonService: CommonService,
+        public _commonService: CommonService,
         public coiService: CoiService
     ) { }
 
@@ -58,6 +70,45 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
     }
+
+    onLocationSelect(event) {
+        this.validationMap.delete('location');
+        if(event && event.length) {
+            this.reviewDetails.locationTypeCode = event[0].code;
+            this.reviewDetails.reviewLocationType = {};
+            this.reviewDetails.reviewLocationType['description'] = event[0].description;
+            this.reviewDetails.reviewLocationType['locationTypeCode'] = event[0].code; 
+        } else {
+            this.reviewDetails.locationTypeCode = null; 
+            this.reviewDetails.reviewLocationType = {};  
+        }
+    }
+
+    onStatusSelect(event) {
+        this.reviewEndDate = '';
+        this.validationMap.delete('reviewEndDate');
+        this.validationMap.delete('reviewStatus');
+        if(event && event.length) {
+            this.reviewDetails.reviewStatusTypeCode = event[0].code;
+            this.reviewDetails.reviewerStatusType = {};
+            this.reviewDetails.reviewerStatusType['description'] = event[0].description;
+            this.reviewDetails.reviewerStatusType['reviewStatusCode'] = event[0].code; 
+            if(this.reviewDetails.reviewStatusTypeCode === '2') {
+                this.reviewEndDate = new Date();
+                this.reviewEndDate.setHours(0, 0, 0, 0);
+            }
+        } else {
+            this.reviewDetails.reviewStatusTypeCode = null;  
+            this.reviewDetails.reviewerStatusType = {}; 
+        }
+    }
+
+    // setStatusLocationType(typeCode, type, event) {
+    //     this.reviewDetails[typeCode] = event[0].code;
+    //     this.reviewDetails[type] = {};
+    //     this.reviewDetails[type]['description'] = event[0].description;
+    //     this.reviewDetails[type][typeCode] = event[0].code; 
+    // }
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
@@ -76,6 +127,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.adminGroups = DATA.adminGroup || [];
         this.disclosurePerson = DATA.person;
         this.projectDetail = DATA.projectDetail;
+        this.setPersonProjectDetails();
         this.commentConfiguration.disclosureId = this.coiDisclosure.disclosureId;
         this.getCoiReview();
         this.setAdminGroupOptions();
@@ -113,6 +165,16 @@ export class LocationComponent implements OnInit, OnDestroy {
     editReview(review: any, index: number): void {
         this.clearReviewModal();
         this.reviewDetails = deepCloneObject(review);
+        this.reviewStartDate = getDateObjectFromTimeStamp(this.reviewDetails.startDate);
+        if(this.reviewDetails.endDate) {
+            this.reviewEndDate = getDateObjectFromTimeStamp(this.reviewDetails.endDate);
+        }
+        if (this.reviewDetails.reviewLocationType) {
+            this.locationType.push({'code': this.reviewDetails.reviewLocationType.locationTypeCode, 'description': this.reviewDetails.reviewLocationType.description});
+        } 
+        if (this.reviewDetails.reviewerStatusType) {
+            this.reviewerStatusType.push({'code': this.reviewDetails.reviewerStatusType.reviewStatusCode, 'description': this.reviewDetails.reviewerStatusType.description});
+        }
         this.modifyIndex = index;
         this.personElasticOptions.defaultValue = review.assigneePersonName;
         this.assigneeClearField = new String(false);
@@ -123,6 +185,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     saveOrUpdateCoiReview() {
         if (this.validateReview()) {
             this.reviewDetails.disclosureId = this.coiDisclosure.disclosureId;
+            this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview({ coiReview: this.reviewDetails }).subscribe((res: any) => {
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
                 this.modifyIndex = -1;
@@ -137,17 +200,24 @@ export class LocationComponent implements OnInit, OnDestroy {
         }
     }
 
+    getReviewDates() {
+        this.reviewDetails.startDate = parseDateWithoutTimestamp(this.reviewStartDate);
+        this.reviewDetails.endDate = parseDateWithoutTimestamp(this.reviewEndDate)
+    }
+
     addReviewToList(review: any) {
         this.reviewerList.push(review);
-        this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
+        this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
+        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });        
         this._dataStore.updateTimestampEvent.next();
         this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
-        this.coiService.isReviewActionCompleted = this.completeReviewAction();
+        this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
     }
 
     updateReview(review: any) {
         this.reviewerList.splice(this.modifyIndex, 1, review);
-        this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
+        this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
+        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
         this._dataStore.updateTimestampEvent.next();
         this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
     }
@@ -161,14 +231,15 @@ export class LocationComponent implements OnInit, OnDestroy {
     deleteReview() {
         this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.coiReviewId).subscribe((_res: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
-            this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: this.reviewerList });
-             this.coiService.isReviewActionCompleted = this.completeReviewAction();
+            this.coiDisclosure.coiReviewStatusType = _res.coiReviewStatusType;
+            this._dataStore.updateStore(['coiReviewerList' , 'coiDisclosure'], { coiReviewerList: this.reviewerList, coiDisclosure: this.coiDisclosure });
+             this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
              this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
-            //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
+            this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
             this.clearActionData();
-            //this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting review.`);
+            this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting review.`);
         }));
     }
 
@@ -179,13 +250,36 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     validateReview() {
         this.validationMap.clear();
-        if (!this.reviewDetails.assigneePersonId && !this.reviewDetails.adminGroupId) {
-            this.validationMap.set('general', 'Please select a reviewer.');
-        }
+        this.isEndDateInValid();
         if (this.reviewDetails.assigneePersonId) {
             this.isDuplicateReviewerValidation();
         }
+        if (!this.reviewDetails.locationTypeCode) {
+            this.validationMap.set('location', 'Please select a location.');
+        }
+        if (!this.reviewStartDate) {
+            this.validationMap.set('reviewStartDate', 'Please select a review start date.');
+        }
+        if (!this.reviewEndDate && this.reviewDetails.reviewStatusTypeCode == '2') {
+            this.validationMap.set('reviewEndDate', 'Please select a review end date.');
+        }
+        if (!this.reviewDetails.reviewStatusTypeCode) {
+            this.validationMap.set('reviewStatus', 'Please select a status.');
+        }
         return this.validationMap.size === 0;
+    }
+
+    isEndDateInValid() {
+        if (this.reviewStartDate && this.reviewEndDate &&
+            (compareDates(this.reviewStartDate, this.reviewEndDate) === 1)) {
+            this.validationMap.set('endDate', 'Please provide a valid review end date.');
+        } 
+    }
+
+    compareDates(type: any) {
+        this.validationMap.delete('endDate');
+        type === 'START' ? this.validationMap.delete('reviewStartDate') : this.validationMap.delete('reviewEndDate');
+        this.isEndDateInValid();
     }
 
     isDuplicateReviewerValidation() {
@@ -199,13 +293,13 @@ export class LocationComponent implements OnInit, OnDestroy {
         }
     }
 
+   
+    // Assigned - 1, Completed - 2, In Progress - 3.
     getReviewStatusBadge(statusCode: any) {
         switch (statusCode) {
             case '1': return 'warning';
-            case '2': return 'info';
             case '3': return 'info';
-            case '5': return 'warning';
-            case '4': return 'success';
+            case '2': return 'success';
             default: return 'danger';
         }
     }
@@ -216,13 +310,10 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.validationMap.clear();
         this.assigneeClearField = new String('true');
         this.categoryClearFiled = new String('true');
+        this.reviewStartDate = new Date();
+        this.reviewStartDate.setHours(0, 0, 0, 0);
+        this.reviewEndDate = '';
     }
-
-  private completeReviewAction (): boolean {
-    return this.reviewerList.every(value => value.coiReviewStatus.reviewStatusCode === '4');
-  }
-
-
 
   updateCoiReviewStage(index, reviewer, modalType: ModalType) {
     this.modifyIndex = index;
@@ -235,5 +326,25 @@ export class LocationComponent implements OnInit, OnDestroy {
         return this.reviewerList.find(ele =>
             ele.assigneePersonId === this._commonService.currentUserDetails.personId
             && ele.reviewStatusTypeCode === '1');
+    }
+
+    getDaysAtLocation(startDate, endDate) {
+        if (startDate) {
+            let currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
+            return getDuration(startDate, endDate? endDate : currentDate).durInDays;
+        } else {
+            return null;
+        }
+    }
+
+    collapseViewMoreOption(id: number, flag: boolean): void {
+        this.collapseViewMore[id] = !flag;
+    }
+
+    private setPersonProjectDetails(): void {
+        this.personProjectDetails.personFullName = this.coiDisclosure.person.fullName;
+        this.personProjectDetails.projectDetails = this.projectDetail;
+        this.personProjectDetails.unitDetails = this.coiDisclosure.person.unit.unitDetail;
     }
 }
