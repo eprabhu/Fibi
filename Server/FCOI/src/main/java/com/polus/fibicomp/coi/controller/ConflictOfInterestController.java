@@ -207,7 +207,7 @@ public class ConflictOfInterestController {
 	}
 
 	@DeleteMapping(value = "/deleteReview/{coiReviewId}")
-	public String deleteReview(@PathVariable(value = "coiReviewId", required = true) final Integer coiReviewId) {
+	public ResponseEntity<Object> deleteReview(@PathVariable(value = "coiReviewId", required = true) final Integer coiReviewId) {
 		logger.info("Requesting for deleteReview");
 		return conflictOfInterestService.deleteReview(coiReviewId);
 	}
