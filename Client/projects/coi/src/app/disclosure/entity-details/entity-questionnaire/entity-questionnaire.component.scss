@@ -117,7 +117,7 @@
 }
 
 .scrollable-table {
-  max-height: 50vh;
+  max-height: 78vh;
   overflow-y: auto;
   overflow-x: hidden;
   height: auto;
@@ -207,4 +207,10 @@
 .btn-tertiary:hover {
   background-color: rgba(44, 119, 244, .27);
   color: #043e9e !important;
+}
+
+.header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }

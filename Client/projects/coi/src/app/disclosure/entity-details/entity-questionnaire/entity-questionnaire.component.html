@@ -1,5 +1,5 @@
 <div class="mx-4">
-  <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 shadow-sm user-dashboard-nav">
+  <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 mb-1 shadow-sm user-dashboard-nav">
     <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;let last = last">
       <div (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail)" class="text-secondary {{isEditMode && availableRelationships?.length || !last ? 'border-end' :''}}" role="button"
         [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'navigation-icons':''">
@@ -27,10 +27,12 @@
             <span class="fs-14 delete-content-position">Delete</span>
           </button>
         </div>
-
-        <app-view-questionnaire-list *ngIf="definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
+<div [class.scrollable-table]="!isEditMode || !entityDetailsServices.canMangeSfi">
+  <app-view-questionnaire-list *ngIf="definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
           [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)" (QuestionnaireEditEvent)="questionnaireEdit($event)">
         </app-view-questionnaire-list>
+</div>
+        
         </div>
 </div>
 <div *ngIf="!definedRelationships?.length" class="mx-4 mt-4 on-data-position">
