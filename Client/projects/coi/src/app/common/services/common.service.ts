@@ -280,6 +280,10 @@ export class CommonService {
                 return 'green-badge';
             case '4':
                 return 'green-badge';
+            case '7':
+                return 'green-badge';
+            case '8':
+                return 'green-badge';
             case '5':
                 return 'review-status-badge';
             default:

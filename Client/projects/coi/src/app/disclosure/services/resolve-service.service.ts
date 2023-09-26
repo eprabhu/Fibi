@@ -36,7 +36,7 @@ export class ResolveServiceService {
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
                     this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure.reviewStatusCode, route, res[0].coiDisclosure.personId);
-                    if (['3', '4'].includes(res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode)) {
+                    if (['3', '4', '7', '8'].includes(res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode)) {
                         this.getCoiReview(res[0].coiDisclosure.disclosureId, observer);
                     } else {
                         observer.next(true);
@@ -106,7 +106,7 @@ export class ResolveServiceService {
         this.$subscriptions.push(
             this._coiService.getCoiReview(disclosureId).subscribe((res: any) => {
                 this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: res });
-                this._coiService.isReviewActionCompleted = this.isAllReviewerReviewCompleted(res);
+                this._coiService.isReviewActionCompleted = this._coiService.isAllReviewsCompleted(res);
                 const reviewerDetail = this.getLoggedInReviewerInfo(res);
                 if (reviewerDetail) {
                     this._coiService.isStartReview = reviewerDetail.reviewStatusTypeCode === '1' ? true : false;
@@ -122,9 +122,6 @@ export class ResolveServiceService {
                 this._router.navigate([this._coiService.previousHomeUrl]);
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
             }));
-    }
-    private isAllReviewerReviewCompleted(data: any): boolean {
-        return data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
     }
 
     getLoggedInReviewerInfo(coiReviewerList): any {

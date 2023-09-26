@@ -11,6 +11,8 @@ import {SharedModule} from "../../shared/shared.module";
 import { SharedDisclosureModule } from '../shared-disclosure/shared-disclosure.module';
 import { ReviewHistoryComponent } from './review-history/review-history.component';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
     imports: [
@@ -19,7 +21,9 @@ import { SharedComponentModule } from '../../shared-components/shared-component.
         FormsModule,
         SharedModule,
         SharedDisclosureModule,
-        SharedComponentModule
+        SharedComponentModule,
+        MatDatepickerModule,
+        MatIconModule
       ],
     declarations: [
         ReviewComponent,

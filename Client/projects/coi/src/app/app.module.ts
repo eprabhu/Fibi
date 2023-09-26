@@ -18,7 +18,6 @@ import {ElasticConfigService} from '../../../fibi/src/app/common/services/elasti
 import {NavigationService} from './common/services/navigation.service';
 import {EntityManagementGuardService} from './entity-management/entity-management-guard.service';
 import {AdminRouteGuardService} from './common/services/guards/admin-route-guard.service';
-import {DataStoreService} from "./disclosure/services/data-store.service";
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
