@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../../fibi/src/app/app-constants';
 import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
-import { hideModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
+import { deepCloneObject, hideModal, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { getDateObjectFromTimeStamp, compareDates } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { environment } from '../../environments/environment';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
@@ -61,6 +61,8 @@ export class AddSfiComponent implements OnInit {
     RELATION_HELP_TEXT_1 = "This description is presented in the Relationship section to help you relate this entity to your research projects. Please enter an adequate description of the organization, and of your role with them,to aid both you, and a reviewers' understanding of the association between the entity and work";
     RELATION_HELP_TEXT_2 = "Please enter an adequate description of the entity's principal are of business.";
     RELATION_HELP_TEXT_3 = "Please enter an adequate description of the entity's relationship to your University responsibilities.";
+    addEntityConfirmation: any = null;
+    isAddressReadMore: false;
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -143,8 +145,8 @@ export class AddSfiComponent implements OnInit {
                 this.existingEntityDetails = res;
                 this.mandatoryList.set('entityAlreadyAdded', 'An SFI has already been created against the entity you are trying to add. To view the SFI, please click on the View button on the SFI card.');
             } else {
-                this.isResultFromSearch = true;
-                this.entityDetails.coiEntity = event;
+                openModal('entity-details');
+                this.addEntityConfirmation = event;
                 if (event.country) {
                     this.countrySearchOptions.defaultValue = event.country.countryName;
                     this.selectedCountryEvent(event.country);
@@ -255,7 +257,7 @@ export class AddSfiComponent implements OnInit {
             }
             this.endDateValidation();
         }
-        return this.mandatoryList.size !== 0 || this.emailWarningMsg ? false : true;
+        return this.mandatoryList.size !== 0 ? false : true;
     }
 
     private entityDetailsValidation(): void {
@@ -264,9 +266,6 @@ export class AddSfiComponent implements OnInit {
         }
         if (!this.entityDetails.coiEntity.entityTypeCode || this.entityDetails.coiEntity.entityTypeCode === 'null') {
             this.mandatoryList.set('entityType', 'Please choose an entity type.');
-        }
-        if (!this.entityDetails.coiEntity.emailAddress) {
-            this.mandatoryList.set('email', 'Please enter a email address.');
         }
         if (!this.entityDetails.coiEntity.address) {
             this.mandatoryList.set('address', 'Please enter an address.');
@@ -385,4 +384,29 @@ export class AddSfiComponent implements OnInit {
     viewEntityDetails(event) {
         this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: event } });
     }
-}
+
+    confirmEntityDetails() {
+        this.isResultFromSearch = true;
+        this.entityDetails.coiEntity = deepCloneObject(this.addEntityConfirmation);
+        this.addEntityConfirmation = null;
+    }
+
+    clearEntityDetails() {
+        this.clearField = new String('true');
+        this.addEntityConfirmation = null;
+    }
+
+    getWarningClass(typeCode): string {
+        switch (typeCode) {
+            case '1':
+                return 'invalid';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return;
+        }
+    }
+
+} 
