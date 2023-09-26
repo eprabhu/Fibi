@@ -523,7 +523,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     getCoiReview() {
         this.$subscriptions.push(this.coiService.getCoiReview(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
-            this.coiService.isReviewActionCompleted = data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
+            if (data) {
+                this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(data);
+            }
         }))
     }
 
@@ -586,10 +588,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     /**
      * 2 - Submitted
      * 3 - Review In Progress
+     * 7 - Review Assigned
+     * 8 - Assigned review completed
      * To be done - Admin group id check needs to be added.
      */
     checkForModifyRisk() {
-        return ['2', '3'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) && 
+        return ['2', '3', '7', '8'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) && 
         (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personId'));
     }
 
