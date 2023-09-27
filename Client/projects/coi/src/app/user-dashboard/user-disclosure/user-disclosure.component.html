@@ -174,7 +174,7 @@
     </ng-container>
 </div>
 
-<nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
+<nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav" *ngIf="!isShowCreate">
     <div (click)="setTab('IN_PROGRESS_DISCLOSURES', dashboardCount?.inProgressDisclosureCount)" class="border-end navigation-icons px-3 py-1" role="button"
         title="Click to view In Progress Disclosures"
         aria-describedby="Click to view In Progress Disclosures">
@@ -563,14 +563,50 @@
             </div>    
         </ng-container>
     </div>
-    <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
+    <app-no-information *ngIf="!filteredDisclosureArray.length && !isShowCreate"></app-no-information>
+    <!-- Pagination -->
+    <div [hidden]="isLoading" *ngIf="(filteredDisclosureArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY')"
+        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+        <nav aria-label="pagination section" class="pagination justify-content-end">
+            <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
+                [totalCount]="result.totalServiceRequest"></app-pagination>
+        </nav>
+    </div>
+    <ng-container *ngIf="isShowCreate">
+        <div class="card create-card">
+            <div class="border d-flex pi-info-text mx-4 mt-4 rounded-1 position-relative">
+                <span data-bs-toggle="tooltip" title="Relationship Help Text." data-bs-placement="top"
+                    class="d-inline-block">
+                    <mat-icon role="img"
+                        class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color"
+                        aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                </span>
+                <div class="info-text fs-14">
+                    <div class="mt-2">
+                        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>To create a new FCOI disclosure,
+                        click on the <strong>Create FCOI Disclosure</strong> button below or the quick link provided.
+                    </div>
+                    <!-- <div class="mt-2">
+                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>To create a new OPA disclosure, click on the <strong>Create OPA disclosure</strong> button below or the quick link provided.
+                        </div> -->
+                    <div class="mt-2">
+                        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>To create new Project /Travel
+                        disclosure, click on the corresponding quick link provided.
+                    </div>
+                </div>
+            </div>
+            <span class="d-flex create-buttons">
+                <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mx-2" (click)="openFCOIModal('FCOI')">
+                    Create FCOI Disclosure
+                </button>
+                <!-- <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mx-2" (click)="openFCOIModal('FCOI')">
+                        Create OPA Disclosure
+                    </button> -->
+            </span>
+        </div>
+    </ng-container>
 </ng-container>
-<!-- Pagination -->
-<div [hidden]="isLoading" *ngIf="(filteredDisclosureArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY')"  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-    <nav aria-label="pagination section" class="pagination justify-content-end">
-        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"[totalCount]="result.totalServiceRequest"></app-pagination>
-    </nav>
-</div>
+
 
 <app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
