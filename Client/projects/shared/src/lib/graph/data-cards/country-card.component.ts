@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   template: `
       <div class="data-grid">
         <div class="mr-15">
-            <img class="profile_img" src="./assets/images/icons8-globe-94.png" alt="an Icon for representing an entity">
+            <img class="profile_img" [src]="imagePath" alt="an icon for representing an entity">
         </div>
         <div class="ml-15">
             <h2 class="heading">{{data.country_name}}({{data.country_code}})</h2>
@@ -42,6 +42,8 @@ import { Component, Input } from '@angular/core';
 export class CountryCardComponent {
 
   @Input() data: any = {};
+  @Input() imagePath: any = {};
+
   constructor() { }
 
 }

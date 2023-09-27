@@ -1,62 +1,76 @@
 
-{
+{    
     "nodes": { 
         "Award" : {
             "colour": "#dd7d33",
             "size": 10,
             "name": "Award",
-            "image": "./fibicoi/assets/images/award.png",
-            "valueField": "award_number"
+            "image": "/assets/images/g_award.png",
+            "openLink": "#/fibi/award/overview?awardId=",
+            "valueField": "award_number",
+            "linkType": "FIBI"
         },
         "Country": {
             "colour": "#5ab008",
             "size": 6,
             "name": "Country",
-            "image": "./fibicoi/assets/images/icons8-globe-94.png",
-            "valueField": "country_code"
+            "image": "/assets/images/g_country.png",
+            "valueField": "country_code",
+            "linkType": "FIBI"
         },
         "Entity" :{
             "colour": "#b14403",
             "size": 10,
             "name": "Entity",
-            "image": "./fibicoi/assets/images/entity.png",
-            "valueField": "entity_number"
+            "image": "/assets/images/g_entity.png",
+            "openLink": "#/coi/entity-management/entity-details?entityManageId=",
+            "valueField": "entity_number",
+            "linkType": "COI"
         },
         "Person": {
             "colour": "#f2aa20",
             "size": 8,
             "name": "Person",
-            "image": "./fibicoi/assets/images/icons8-person-96.png",
-            "valueField": "person_id"
+            "image": "/assets/images/g_person.png",
+            "openLink": "#/fibi/person/person-details?personId=",
+            "valueField": "person_id",
+            "linkType": "FIBI"
         },
         "Proposal": {
             "colour": "#b0bef7",
             "size": 8,
             "name": "Proposal",
-            "image": "./fibicoi/assets/images/proposal.png",
-            "valueField": "title"
+            "image": "/assets/images/g_proposal.png",
+            "openLink": "#/fibi/proposal/overview?proposalId=",
+            "valueField": "title",
+            "linkType": "FIBI"
         },
         "Sponsor": {
             "entity":"",
             "colour": "#c69602",
             "size": 8,
             "name": "Sponsor",
-            "image": "./fibicoi/assets/images/sponsor.png",
-            "valueField": "sponsor_code"
+            "image": "/assets/images/g_sponsor.png",
+            "openLink": "#/fibi/sponsor-maintenance/sponsor-view?sponsorId=",
+            "valueField": "sponsor_code",
+            "linkType": "FIBI"
         },
         "TravelDisclosure":{
             "colour": "#eee",
             "size": 8,
             "name": "Travel Disclosure",
-            "image": "./fibicoi/assets/images/travel.svg",
-            "valueField": "travel_number"
+            "image": "/assets/images/g_travel.svg",
+            "openLink": "#/coi/create-travel-disclosure/travel-details?disclosureId=",
+            "valueField": "travel_number",
+            "linkType": "COI"
         },
         "Unit":{
             "colour": "#7b936a",
             "size": 12,
             "name": "Unit",
-            "image": "./fibicoi/assets/images/unit.png",
-            "valueField": "unit_number"
+            "image": "/assets/images/g_unit.png",
+            "valueField": "unit_number",
+            "linkType": "FIBI"
         }
     },
     "relations": {
@@ -166,5 +180,9 @@
             "lineWidth": 1.5,
             "name": ""
         }
+    },
+    "externalLinks": {
+        "FIBI": "http://192.168.1.47:8080/fibi/",
+        "COI": "http://10.199.100.35:2222/"
     }
 }
