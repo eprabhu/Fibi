@@ -8,11 +8,12 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Date;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -75,6 +76,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.DisclAttaType;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
@@ -1262,7 +1264,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		List<String> reviewStatusCodes = vo.getProperty21();
 		List<String> conflictStatusCodes = vo.getProperty4();
 		String certificationDate = vo.getProperty23();
-
 		statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		statement.setString(1, disclosureId);
 		statement.setString(2, disclosurePersonId);
@@ -1333,6 +1334,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			disclosureView.setUnit(unit);
 			disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
 			disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
+			String reviewers = resultSet.getString("REVIEWERS");
+			if (reviewers != null && !reviewers.isEmpty()) {
+				String[] reviewerArray = reviewers.split(";");
+				disclosureView.setReviewerList((Arrays.asList(reviewerArray)));
+			}
 			disclosureViews.add(disclosureView);
 		}
 	}
@@ -3953,4 +3959,10 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("versionStatus", Constants.COI_ACTIVE_STATUS);
 		return (Integer) query.getSingleResult();
 	}
+
+	@Override
+	public List<DisclAttaType> loadDisclAttachTypes() {
+		return hibernateTemplate.loadAll(DisclAttaType.class);
+	}
+
 }

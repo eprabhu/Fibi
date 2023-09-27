@@ -247,4 +247,11 @@ public interface PersonDao {
 	 * @return List of Persons
 	 */
 	List<Person> fetchPersonsByLikeUserName(String principalName);
+
+	/**
+	 * This method is used to return list of personIds in Admin groups
+	 * @param module code
+	 * @return personids
+	 */
+	public List<String> getAdministratorsByModuleCode(Integer coiModuleCode);
 }

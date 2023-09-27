@@ -532,7 +532,12 @@ public interface ConflictOfInterestService {
 	 */
 	ResponseEntity<Object> fetchDisclosureHistory(DisclosureActionLogDto actionLogDto);
 
-	ResponseEntity<Object> getCoiSectionsTypeCode();
+	/**
+	 * This method is used to fetch section type codes
+	 * @param ConflictOfInterestVO
+	 * @return
+	 */
+	ResponseEntity<Object> getCoiSectionsTypeCode(ConflictOfInterestVO vo);
 
 	ResponseEntity<Object> modifyTravelDisclosureRisk(CoiTravelDisclosureDto travelDisclosureDto);
 
@@ -546,4 +551,11 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
     ResponseEntity<Object> getSFILatestVersion(Integer personEntityNumber);
+
+    /**
+	 * This method is used to fetch disclosure attachment types
+	 * @return
+	 */
+    ResponseEntity<Object> loadDisclAttachTypes();
+
 }
