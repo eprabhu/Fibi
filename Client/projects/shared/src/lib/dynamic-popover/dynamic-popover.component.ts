@@ -1,10 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+
 class Position {
     clientX: number;
     clientY: number;
     popoverHeight: number;
     popoverWidth: number;
+    containerWidth: number;
+    containerHeight: number;
 }
 
 @Component({
@@ -36,10 +39,14 @@ export class DynamicPopoverComponent implements OnInit, OnDestroy {
     private showBasicDetailsPopup(event: Position): void {
         document.body.style.overflowY = 'hidden';
         const POPUP: HTMLElement = document.querySelector('#dynamic-popover');
-        POPUP.style.left = this.getLeftPosition();
-        POPUP.style.top = this.getTopPosition();
-        POPUP.style.display = 'block';
-        POPUP.style.zIndex = '21234';
+        setTimeout(() => {
+            POPUP.style.display = 'block';
+            POPUP.style.zIndex = '21234';
+            this.positionDetails.popoverHeight = POPUP.offsetHeight || this.positionDetails.popoverHeight;
+            this.positionDetails.popoverWidth = POPUP.offsetWidth || this.positionDetails.popoverWidth;
+            POPUP.style.left = this.getLeftPosition();
+            POPUP.style.top = this.getTopPosition();
+        });
     }
 
     private hideBasicDetailsPopup(): void {
@@ -49,13 +56,15 @@ export class DynamicPopoverComponent implements OnInit, OnDestroy {
     }
 
     private getLeftPosition(): string {
-        return screen.width > this.positionDetails.popoverWidth + this.positionDetails.clientX ?
+        let displayWidth = this.positionDetails.containerWidth || screen.width;
+        return  displayWidth > this.positionDetails.popoverWidth + this.positionDetails.clientX ?
             this.positionDetails.clientX  + window.scrollX + 'px' :
             this.positionDetails.clientX - this.positionDetails.popoverWidth +  window.scrollX + 'px';
     }
 
     private getTopPosition(): string {
-        return screen.height > this.positionDetails.popoverHeight + this.positionDetails.clientY  ?
+        let displayHeight = this.positionDetails.containerHeight || screen.height;
+        return displayHeight > this.positionDetails.popoverHeight + this.positionDetails.clientY  ?
             this.positionDetails.clientY + window.scrollY + 'px' :
             this.positionDetails.clientY - this.positionDetails.popoverHeight + window.scrollY + 'px';
     }

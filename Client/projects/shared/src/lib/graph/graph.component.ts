@@ -4,7 +4,10 @@ import { Observable, Subject } from 'rxjs';
 import { DataService } from './data.service';
 import * as d3 from 'd3';
 import { GraphEvent, GraphDetail, GraphDataRO, HEIGHT, WIDTH, DISTANCE_BTN_NODES, FORCE_BTN_NODES } from './interface';
-
+class RedirectionClass {
+    node: string;
+    id: number | string;
+}
 @Component({
     selector: 'app-graph',
     templateUrl: './graph.component.html',
@@ -22,7 +25,9 @@ export class GraphComponent implements OnInit {
         clientX: 0,
         clientY: 0,
         popoverHeight: 400,
-        popoverWidth: 500
+        popoverWidth: 500,
+        containerWidth: 0,
+        containerHeight: 0
     };
     selectedRelations: any = {};
     cardData: any = {};
@@ -50,6 +55,7 @@ export class GraphComponent implements OnInit {
         });
         this.manageGraphDisplay();
         this.listenToGraphEvents();
+        this.openDetailsView();
     }
 
     private manageGraphDisplay(): void {
@@ -250,6 +256,9 @@ export class GraphComponent implements OnInit {
     private showBasicDetailsPopup(position) {
         this.popOverPositions.clientX = position.clientX;
         this.popOverPositions.clientY = position.clientY;
+        const modal: HTMLElement = document.querySelector('#d3GraphModal');
+        this.popOverPositions.containerWidth = modal.offsetWidth;
+        this.popOverPositions.containerHeight = modal.offsetHeight;
         this.popOverEvents.next(true);
     }
 
@@ -285,6 +294,14 @@ export class GraphComponent implements OnInit {
         this.graph = { nodes: [], links: [] };
         this.selectedRelations = {};
         this.cardData = {};
+    }
+
+    openDetailsView() {
+        this.graphDataService.openDetailsEvent.subscribe((data: RedirectionClass) => {
+           if(data) {
+            this.graphDataService.openRedirectionPath(data.node, data.id);
+           }
+        });
     }
 
 }
