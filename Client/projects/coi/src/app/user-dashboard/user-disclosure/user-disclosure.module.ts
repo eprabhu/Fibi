@@ -23,7 +23,7 @@ const routes: Routes = [{path: '', component: UserDisclosureComponent}];
         MatIconModule,
         SharedModule,
         SharedComponentModule,
-        FormsModule,
+        FormsModule
     ]
 })
 export class UserDisclosureModule {

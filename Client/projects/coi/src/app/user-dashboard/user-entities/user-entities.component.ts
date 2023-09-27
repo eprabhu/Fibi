@@ -194,4 +194,9 @@ clearSearchText() {
   this.$fetchSFI.next();
 }
 
+
+addSFI(type) {
+  this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
+}
+
 }

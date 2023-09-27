@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
@@ -10,7 +10,7 @@ import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
-import { openSlider, closeSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -61,7 +61,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     isLoading = false;
     readMoreOrLess = [];
     isShowFilterAndSearch = false;
-    isReadMore = false;
+    isShowCreate = false;
     showSlider = false;
     entityId: any;
 
@@ -145,7 +145,17 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.userDisclosureService.getCOIDashboardCount(this.dashboardRequestObject).subscribe((res: any) => {
             this.dashboardCount = res;
             this.isShowFilterAndSearch = !!res?.inProgressDisclosureCount;
+            this.setIsShowCreateFlag();
         });
+    }
+
+    setIsShowCreateFlag() {
+        if (!this.dashboardCount.inProgressDisclosureCount && !this.dashboardCount.approvedDisclosureCount 
+            && !this.dashboardCount.travelDisclosureCount && !this.dashboardCount.disclosureHistoryCount && 
+            !this.filteredDisclosureArray.length && 
+            this.dashboardRequestObject.currentPage == '1' && this.dashboardRequestObject.filterType == 'ALL') {
+                this.isShowCreate = true;
+        }
     }
 
     getEventType(disclosureSequenceStatusCode, disclosureCategoryType) {
@@ -276,6 +286,10 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         })); 
     }
 
+    openFCOIModal(type) {
+        this.userDashboardService.$openModal.next(type);
+    }
+
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
@@ -290,5 +304,6 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             this.showSlider = false;
 		}, 500);
 	}
+	
 
 }
