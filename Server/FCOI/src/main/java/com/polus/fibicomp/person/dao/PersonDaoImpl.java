@@ -42,9 +42,9 @@ import com.polus.fibicomp.person.pojo.DegreeType;
 import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.person.pojo.PersonDegree;
 import com.polus.fibicomp.person.pojo.PersonRoleRT;
-import com.polus.fibicomp.persontraining.pojo.PersonTraining;
 import com.polus.fibicomp.person.vo.PersonSearchResult;
 import com.polus.fibicomp.person.vo.PersonVO;
+import com.polus.fibicomp.persontraining.pojo.PersonTraining;
 import com.polus.fibicomp.roles.pojo.PersonRoles;
 
 @Transactional
@@ -605,4 +605,12 @@ public class PersonDaoImpl implements PersonDao {
 		query.setParameter("principalName", principalName);
 		return query.getResultList();
 	}
+
+	@Override
+	public List<String> getAdministratorsByModuleCode(Integer coiModuleCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+	    String hqlQuery = "SELECT DISTINCT pr.personRoleRTAttributes.personId FROM PersonRoleRT pr WHERE pr.roleId IN (SELECT ag.roleId FROM AdminGroup ag WHERE ag.moduleCode = :moduleCode)";
+	    return session.createQuery(hqlQuery, String.class).setParameter("moduleCode", coiModuleCode).getResultList();
+	}
+
 }

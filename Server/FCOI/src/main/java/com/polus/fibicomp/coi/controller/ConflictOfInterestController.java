@@ -601,10 +601,10 @@ public class ConflictOfInterestController {
 		return actionLogService.getTravelDisclosureHistoryById(travelDisclosureId);
 	}
 
-    @GetMapping("/getCoiSectionsTypeCode")
-	public ResponseEntity<Object> getCoiSectionsTypeCode() {
+    @PostMapping("/getCoiSectionsTypeCode")
+	public ResponseEntity<Object> getCoiSectionsTypeCode(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for getCoiSectionsTypeCode");
-		return conflictOfInterestService.getCoiSectionsTypeCode();
+		return conflictOfInterestService.getCoiSectionsTypeCode(vo);
 	}
 
     @PutMapping("/travelDisclosure/modifyRisk")
@@ -626,4 +626,11 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> getSFILatestVersion(@PathVariable("personEntityNumber") Integer personEntityNumber) {
 		return conflictOfInterestService.getSFILatestVersion(personEntityNumber);
 	}
+
+	@GetMapping("/loadDisclAttachTypes")
+	public ResponseEntity<Object> loadDisclAttachTypes() {
+		logger.info("Requesting for loadDisclAttachTypes");
+		return conflictOfInterestService.loadDisclAttachTypes();
+	}
+
 }

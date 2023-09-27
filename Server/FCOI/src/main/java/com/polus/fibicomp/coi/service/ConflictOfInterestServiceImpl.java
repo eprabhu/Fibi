@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
@@ -39,6 +40,7 @@ import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiReviewCommentsDto;
+import com.polus.fibicomp.coi.dto.CoiSectionTypeDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureCertifyDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
@@ -62,6 +64,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
+import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
@@ -2358,8 +2361,59 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> getCoiSectionsTypeCode() {
-		return new ResponseEntity<>(conflictOfInterestDao.getCoiSectionsTypeCode(),HttpStatus.OK);
+	public ResponseEntity<Object> getCoiSectionsTypeCode(ConflictOfInterestVO vo) {
+		CoiSectionTypeDto coiSectionTypeDto = CoiSectionTypeDto.builder()
+				.coiSectionsTypeList(getSectionTypeList())
+				.personEntities(getPersonEntityList(vo))
+				.projectList(getProjectDetailList(vo.getPersonId(), vo.getDisclosureId()))
+				.questionnaireDataBus(getQuestionnaireList(vo.getDisclosureId()))
+				.build();
+		return new ResponseEntity<>(coiSectionTypeDto,HttpStatus.OK);
+	}
+
+	private QuestionnaireDataBus getQuestionnaireList(Integer disclosureId) {
+		QuestionnaireDataBus questionnaireDataBus = new QuestionnaireDataBus();
+		questionnaireDataBus.setModuleItemCode(Integer.parseInt("8"));
+		questionnaireDataBus.setModuleItemKey(disclosureId.toString());
+		questionnaireDataBus.setModuleSubItemKey("0");
+		questionnaireDataBus.setModuleSubItemCode(0);
+		questionnaireDataBus.setActionPersonId(AuthenticatedUser.getLoginPersonId());
+		questionnaireDataBus.setQuestionnaireMode("ANSWERED");
+		questionnaireDataBus = questionnaireService.getApplicableQuestionnaire(questionnaireDataBus);
+		return questionnaireDataBus;
+	}
+
+	private List<PersonEntity> getPersonEntityList(ConflictOfInterestVO vo) {
+		return conflictOfInterestDao.getSFIOfDisclosure(vo);
+	}
+
+	private List<DisclosureDetailDto> getProjectDetailList(String personId, Integer disclosureId) {
+		List<DisclosureDetailDto> awardDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE,
+				personId, disclosureId, null);
+		List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, personId,
+				disclosureId, null);
+		List<DisclosureDetailDto> projectList = Stream.concat(proposalDetails.stream(), awardDetails.stream())
+		        .collect(Collectors.toList());
+		projectList.stream().forEach(project -> {
+			List<CoiDisclEntProjDetailsDto> disclosureDetails = new ArrayList<>();
+			conflictOfInterestDao.getProjectRelationshipByParam(project.getModuleCode(), project.getModuleItemId(),personId,
+					disclosureId).forEach(disclosureDetail -> {
+				CoiDisclEntProjDetailsDto coiDisclEntProjDetails = new CoiDisclEntProjDetailsDto();
+				BeanUtils.copyProperties(disclosureDetail, coiDisclEntProjDetails, "coiDisclosure", "coiEntity", "personEntity");
+				if (disclosureDetail.getCoiEntity() != null) {
+					CoiEntityDto coiEntityDto = new CoiEntityDto();
+					BeanUtils.copyProperties(disclosureDetail.getCoiEntity(), coiEntityDto, "entityStatus", "entityType", "coiProjConflictStatusType");
+					coiDisclEntProjDetails.setCoiEntity(coiEntityDto);
+				}
+				disclosureDetails.add(coiDisclEntProjDetails);
+			});
+			project.setCoiDisclEntProjDetails(disclosureDetails);
+		});
+		return projectList;
+	}
+
+	private List<CoiSectionsType> getSectionTypeList() {
+		return conflictOfInterestDao.getCoiSectionsTypeCode();
 	}
 
 	@Override
@@ -2396,6 +2450,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getSFILatestVersion(Integer personEntityNumber) {
 		return new ResponseEntity<>(conflictOfInterestDao.getSFILatestVersion(personEntityNumber), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> loadDisclAttachTypes() {
+		return new ResponseEntity<>(conflictOfInterestDao.loadDisclAttachTypes(), HttpStatus.OK);
 	}
 
 }
