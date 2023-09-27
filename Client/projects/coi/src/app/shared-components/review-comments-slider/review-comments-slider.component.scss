@@ -323,3 +323,77 @@ select option {
     right: 4px;
     height: 20px;
 }
+
+.entity-status {
+    color: white;
+    width: max-content;
+    height: 27px;
+    position: relative;
+    left: -32px;
+    top: -6px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 0 50px 50px 0;
+    padding: 10px 18px;
+
+    &:before {
+        content: "";
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-bottom: 6px solid #151515;
+        border-left: 6px solid transparent;
+        top: -6px;
+        left: 0;
+    }
+}
+
+    .invalid {
+        position: relative;
+        color: #ff0000;
+    }
+    
+    .medium-risk {
+        position: relative;
+        color: #ff8c00;
+    }
+    
+    .low-risk {
+        position: relative;
+        color: rgb(26, 172, 62);
+    }
+    
+    .title-card {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    .person-card {
+        background-color: #ffffff;
+        border: 1px solid #dbdbdb;
+        border-radius: 0px 0px 20px 20px;
+    }
+
+    .margin-project-title {
+        margin-left: -31px;
+        margin-top: -6px;
+    }
+    
+    .border-color {
+        border-color:#b7adae !important;
+    }
+
+    ::ng-deep .ck.ck-editor__editable_inline {
+         border: 1px solid #d3d1d1 !important;
+         min-height: 100px;
+    }
+
+    .action-btn {
+        list-style: none;
+    }
+
+    .btn-position {
+    position: absolute;
+    right: 20px;
+    }

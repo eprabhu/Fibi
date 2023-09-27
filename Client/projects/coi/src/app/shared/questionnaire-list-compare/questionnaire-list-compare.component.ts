@@ -83,6 +83,7 @@ export class QuestionnaireListCompareComponent implements OnChanges, OnDestroy {
   $subscriptions: Subscription[] = [];
   isQuestionnaireOpen = false;
   @Output() updateAccordionStatus: EventEmitter<any> = new EventEmitter<any>();
+  @Output() currentActiveQuestionnaire: EventEmitter<any> = new EventEmitter<any>();
   moduleItemKeyList: any = {};
 
   constructor(private _questionnaireListService: QuestionnaireListCompareService,
@@ -268,6 +269,7 @@ export class QuestionnaireListCompareComponent implements OnChanges, OnDestroy {
     this.setCurrentSelectedIndex(index);
     if (this.questionnaireList.length) {
       this.activeQuestionnaire = this.questionnaireList[index];
+      this.currentActiveQuestionnaire.emit(this.activeQuestionnaire);
       (this.configuration.baseModuleItemKey && this.configuration.currentModuleItemKey) ?
         this.compareQuestionnaire() : this.viewQuestionnaires();
     }

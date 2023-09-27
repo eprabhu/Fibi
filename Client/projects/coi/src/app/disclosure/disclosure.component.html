@@ -143,7 +143,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto status-card-width">
+                <div class="col-4">
                     <div class="border triple-card rounded-1 position-relative">
                         <span class="status-pill">Status</span>
                         <div class="ps-4 table-negative-margin">
@@ -730,7 +730,8 @@
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
 <div *ngIf="coiService.isShowCommentNavBar">
-    <app-review-comments-slider  (closePage)="closeReviewComment($event)"></app-review-comments-slider>
+    <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="coiData.coiDisclosure" 
+    [projectDetails]="coiData.projectDetail" [reviewList]="reviewList"></app-review-comments-slider>
 </div>
 
 <!--Disclosure Withdraw/Return Confirmation Modal-->

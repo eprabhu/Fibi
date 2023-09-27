@@ -69,5 +69,6 @@ export interface coiReviewComment {
     coiSectionsTypeCode:string;
     headerName:string;
     coiSubSectionsId:any;
+    coiSubSectionsTitle:any;
     componentSubRefId:number;
 }

@@ -13,6 +13,7 @@ export class CoiSliderComponent {
     @Input() isHeaderContentAvailable = true;
     @Input() isStickyContentAvailable = true;
     @Output() closeSlider: EventEmitter<undefined> = new EventEmitter<undefined>();
+    @Input() isHeaderNeeded = true;
 
     emitCloseSlider() {
         this.closeSlider.emit();
