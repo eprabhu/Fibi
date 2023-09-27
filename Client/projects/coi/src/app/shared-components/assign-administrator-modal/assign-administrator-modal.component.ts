@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { AssignAdminRO, DefaultAssignAdminDetails } from '../shared-interface';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 declare const $: any;
 
@@ -25,6 +26,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     clearAdminGroupField: any;
     $subscriptions: Subscription[] = [];
     isSaving = false;
+    adminGrpWarningMessage: string;
 
     @Input() disclosureId = null;
     @Input() defaultAdminDetails = new DefaultAssignAdminDetails();
@@ -36,7 +38,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     ngOnInit(): void {
         document.getElementById('toggle-assign-admin').click();
         if (this.checkDefaultAdminPersonId()) {
-            document.getElementById('assignCheck').click();
+            this.isAssignToMe = true;
         }
         this.setDefaultAdminDetails();
     }
@@ -101,10 +103,11 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
             this.adminSearchOptions.defaultValue = this._commonService.getCurrentUserDetail('fullName');
             this.addAdmin.adminPersonId = this._commonService.getCurrentUserDetail('personId');
             this.isAssignToMe = true;
+            this.getPersonGroup();
             this.assignAdminMap.clear();
         } else {
-            this.addAdmin.adminPersonId = this.checkDefaultAdminPersonId() ? null : this.defaultAdminDetails.adminPersonId;
-            this.adminSearchOptions.defaultValue = this.checkDefaultAdminPersonId() ? '' : this.defaultAdminDetails.adminPersonName;
+            this.addAdmin.adminPersonId = null;
+            this.adminSearchOptions.defaultValue = null;
             this.isAssignToMe = false;
         }
         this.clearAdministratorField = new String('false');
@@ -114,9 +117,15 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
         if (event) {
             this.addAdmin.adminPersonId = event.personId;
             this.isAssignToMe = this.setAssignToMe();
+            this.getPersonGroup();
             this.assignAdminMap.clear();
         } else {
             this.addAdmin.adminPersonId = null;
+            this.addAdmin.adminGroupId = null;
+            this.clearAdministratorField = new String('true');
+            this.adminSearchOptions.defaultValue = '';
+            this.clearAdminGroupField = new String('true');
+            this.adminGroupsCompleterOptions.defaultValue = '';
             this.isAssignToMe = false;
         }
     }
@@ -162,5 +171,29 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
         this.addAdmin = new AssignAdminRO();
         this.clearAdminGroupField = new String('true');
         this.clearAdministratorField = new String('true');
+    }
+    
+    getPersonGroup() {
+        this.adminGrpWarningMessage = '';
+        if(!this.isSaving) {
+            this.isSaving = true;
+            this.$subscriptions.push(this._assignAdminService.getPersonGroup(this.addAdmin.adminPersonId).subscribe((data: any) => {
+                if(data && data.adminGroupId) {
+                    this.addAdmin.adminGroupId = data.adminGroupId;
+                    this.adminGroupsCompleterOptions.defaultValue = data.adminGroupName;
+                    this.clearAdminGroupField = new String('false');
+                    this.isSaving = false;
+                } else {
+                    this.adminGrpWarningMessage = data;
+                    this.adminGroupsCompleterOptions.defaultValue = '';
+                    this.clearAdminGroupField = new String('true');
+                    this.addAdmin.adminGroupId = null;
+                    this.isSaving = false;
+                }
+            }, error => {
+                this.isSaving = false;
+                this._commonService.showToast(HTTP_ERROR_STATUS, "Error in fetching group details");
+            }));
+        }
     }
 }
