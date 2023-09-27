@@ -438,6 +438,16 @@
                                                 </app-no-data-label>
                                             </div>
                                         </div>
+                                        <div class="row mb-3 p-013 mt-2" *ngIf="coi?.reviewerList">
+                                            <div class="col-12">
+                                                <label for="id" class="label-text">Reviewers:</label>
+                                                <span class="grey-text">
+                                                    <ng-container *ngFor="let reviewer of coi?.reviewerList; let isLast = last">
+                                                        <span class="fileChips regularFont">{{reviewer}}</span>
+                                                    </ng-container>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </ng-container>
         
                                     <ng-container *ngIf="coi?.travelDisclosureId">
