@@ -41,6 +41,8 @@ export class RelationshipSummaryComponent implements OnInit {
     isShowNoDataCard = false;
     readMoreOrLess = false;
     resultObject = [];
+    showSlider = false;
+    entityId: any;
 
     constructor(
         private _coiSummaryService: CoiSummaryService,
@@ -136,16 +138,16 @@ getEntityProjectRelations() {
         this._dataStore.updateStore(['coiDisclosure'], { coiDisclosure: this.coiDetails });
     }
 
-    openReviewerComment(details,section) {
-// const  disclosureDetails  need to re-check.reasons loadCoiReviewComments api payload  not correct  
+    openReviewerComment(details,section, childSubSection) {
             let coiData = this._dataStore.getData();
             const disclosureDetails:coiReviewComment = {
                 documentOwnerPersonId: coiData.coiDisclosure.person.personId,
                 disclosureId: coiData.coiDisclosure.disclosureId,
                 coiSectionsTypeCode: '6',
-                headerName: section === 'PROJECT' ? details.title : details.coiEntity.entityName,
+                headerName: section === 'PROJECT' ? details.title : details.coiEntity?.entityName,
                 coiSubSectionsId: 'PROJECT' ? details.moduleItemId : details.moduleItemKey,
-                componentSubRefId: section === 'RELATIONSHIP' ? details.disclosureDetailsId : null
+                componentSubRefId: childSubSection?.personEntityId,
+                coiSubSectionsTitle: `#${details.moduleCode == '3' ? details.moduleItemId : details.moduleItemKey}: ${details.title}`
             }
             this._commonService.$commentConfigurationDetails.next(disclosureDetails);
             this._coiService.isShowCommentNavBar = true;
@@ -198,6 +200,16 @@ getEntityProjectRelations() {
             }
         }
 
+    }
+
+      viewSlider(event) {
+        this.showSlider = event.flag;
+        this.entityId = event.entityId;
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
+        setTimeout(() => {
+            const slider = document.querySelector('.slider-base');
+            slider.classList.add('slider-opened');
+        });
     }
 
 }

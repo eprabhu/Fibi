@@ -36,7 +36,7 @@
       </span>
 
       <span class="align-items-center d-flex">
-        <button (click)="openReviewerComment(selectedProject,'PROJECT')" class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
+        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
           <mat-icon>rate_review</mat-icon>
       </button>
       </span>
@@ -176,7 +176,7 @@
                         (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
                         <span class="btn-secondary-svg"></span>
                       </button>
-                      <button (click)="openReviewerComment(relation,'RELATIONSHIP')" class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
+                      <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP', relation)" class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
                         <mat-icon>rate_review</mat-icon>
                       </button>
                       </div>

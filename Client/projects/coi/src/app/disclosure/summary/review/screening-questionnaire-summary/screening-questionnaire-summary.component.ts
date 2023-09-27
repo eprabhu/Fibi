@@ -32,6 +32,7 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
     commentConfiguration: CommentConfiguration = new CommentConfiguration();
     isQuestionnaireCollapsed = false;
     $subscriptions: Subscription[] = [];
+    activeQuestionnaire: any = null;
 
 
     constructor(
@@ -63,12 +64,17 @@ export class ScreeningQuestionnaireSummaryComponent implements OnInit, DoCheck, 
             disclosureId: coiData.coiDisclosure.disclosureId,
             coiSectionsTypeCode: '4',
             documentOwnerPersonId: coiData.coiDisclosure.person.personId,
-            coiSubSectionsId: null,
+            coiSubSectionsId: this.activeQuestionnaire?.QUESTIONNAIRE_ID,
             headerName: '',
-            componentSubRefId: null
+            componentSubRefId: null,
+            coiSubSectionsTitle: this.activeQuestionnaire?.QUESTIONNAIRE
         }
         this._commonService.$commentConfigurationDetails.next(disclosureDetails);
         this._coiService.isShowCommentNavBar = true;
+    }
+
+    setActiveQuestionnaire(event) {
+        this.activeQuestionnaire = event;
     }
 
 }
