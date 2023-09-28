@@ -56,14 +56,14 @@ export class DynamicPopoverComponent implements OnInit, OnDestroy {
     }
 
     private getLeftPosition(): string {
-        let displayWidth = this.positionDetails.containerWidth || screen.width;
+        const displayWidth = this.positionDetails.containerWidth || screen.width;
         return  displayWidth > this.positionDetails.popoverWidth + this.positionDetails.clientX ?
             this.positionDetails.clientX  + window.scrollX + 'px' :
             this.positionDetails.clientX - this.positionDetails.popoverWidth +  window.scrollX + 'px';
     }
 
     private getTopPosition(): string {
-        let displayHeight = this.positionDetails.containerHeight || screen.height;
+        const displayHeight = this.positionDetails.containerHeight || screen.height;
         return displayHeight > this.positionDetails.popoverHeight + this.positionDetails.clientY  ?
             this.positionDetails.clientY + window.scrollY + 'px' :
             this.positionDetails.clientY - this.positionDetails.popoverHeight + window.scrollY + 'px';

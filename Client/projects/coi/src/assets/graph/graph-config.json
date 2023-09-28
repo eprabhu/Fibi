@@ -184,5 +184,9 @@
     "externalLinks": {
         "FIBI": "http://192.168.1.47:8080/fibi/",
         "COI": "http://10.199.100.35:2222/"
-    }
+    },
+    "additionalImages": [
+        {"id": "ESponsor", "image":"/assets/images/g_proposal.png"}
+    ]
+      
 }

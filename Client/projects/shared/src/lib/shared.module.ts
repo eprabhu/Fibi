@@ -13,12 +13,16 @@ import { ProposalCardComponent } from './graph/data-cards/proposal-card.componen
 import { COICardComponent } from './graph/data-cards/coi-card.component';
 import { EntityCardComponent } from './graph/data-cards/entity-card.componenet';
 import { CountryCardComponent } from './graph/data-cards/country-card.component';
+import { TimelineComponent } from './graph/timeline/timeline.component';
+import { DragDirective } from './directives/drag.directive';
 
 @NgModule({
   declarations: [
     AppAutocompleterComponent,
     GraphComponent,
     DynamicPopoverComponent,
+    TimelineComponent,
+    DragDirective
   ],
   imports: [
       FormsModule,
@@ -38,6 +42,7 @@ import { CountryCardComponent } from './graph/data-cards/country-card.component'
     AppAutocompleterComponent,
     GraphComponent,
     DynamicPopoverComponent,
+    DragDirective
   ]
 })
 export class SharedLibraryModule { }

@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { DataService } from './data.service';
 import * as d3 from 'd3';
-import { GraphEvent, GraphDetail, GraphDataRO, HEIGHT, WIDTH, DISTANCE_BTN_NODES, FORCE_BTN_NODES } from './interface';
+import { GraphEvent, GraphDetail, GraphDataRO, HEIGHT, WIDTH, DISTANCE_BTN_NODES, FORCE_BTN_NODES, EventHistoryItem } from './interface';
 class RedirectionClass {
     node: string;
     id: number | string;
@@ -40,7 +40,11 @@ export class GraphComponent implements OnInit {
     link;
     node;
     zoom;
-    isShowFilter = true;
+    isShowFilter = false;
+    eventHistory: Array<EventHistoryItem> = [];
+    eventData: any = {};
+    selectedEventIndex = 0;
+    showtimeLine = false;
 
     constructor(public graphDataService: DataService) { }
 
@@ -64,8 +68,13 @@ export class GraphComponent implements OnInit {
             if (data.visible) {
                 this.setSVGForGraph();
                 this.toggleGraphModal(true);
-                const RO: GraphDataRO = this.fetchROForRoot(100151);
+                const RO: GraphDataRO = this.fetchROForRoot(5);
                 const GRAPH_DATA = await this.graphDataService.getDataForGraph(RO);
+                const eventName: string = this.setEventName(this.graphDetail.name, this.graphDataService.graphTypeConfiguration.root_name);
+                const eventItem: EventHistoryItem = this.setEventItem('root', eventName, RO.relationship, RO.value, null, null);
+                this.setEventHistory(eventItem);
+                this.selectedEventIndex = this.eventHistory.length - 1;
+                this.setEventData(GRAPH_DATA, 'root');
                 this.addNodesAndLinks(GRAPH_DATA.nodes, GRAPH_DATA.links);
             } else {
                 this.toggleGraphModal(false);
@@ -87,7 +96,7 @@ export class GraphComponent implements OnInit {
 
         g.append('circle')
             .attr('r', 20)
-            .attr('fill', d => `url(#${d.label})`);
+            .attr('fill', d => this.getImageURL(d));
 
         g.append('text')
             .style('font-size', '10px')
@@ -112,6 +121,13 @@ export class GraphComponent implements OnInit {
             .force('charge', d3.forceManyBody().strength(-500))
             .alpha(0.03)
             .restart();
+    }
+
+    getImageURL(node) {
+        if (node.isGrantSponsor && node.isGrantSponsor === 1 ) {
+            return `url(#ESponsor)`;
+        }
+        return `url(#${node.label})`;
     }
 
     private setSVGForGraph(): void {
@@ -176,7 +192,7 @@ export class GraphComponent implements OnInit {
 
     private fetchROForRoot(id): GraphDataRO {
         const RO: GraphDataRO = this.getROForGraph(this.graphDataService.graphTypeConfiguration.root_node[0],
-            this.graphDetail.id, this.graphDataService.graphTypeConfiguration.root_relations);
+            id, this.graphDataService.graphTypeConfiguration.root_relations);
         return RO;
     }
 
@@ -211,7 +227,6 @@ export class GraphComponent implements OnInit {
         links.forEach(L => this.addLinks(L));
     }
 
-
     findSourceAndTargetIndex(link): any {
         const source = this.graph.nodes.findIndex(N => N.elementId === link.source);
         const target = this.graph.nodes.findIndex(N => N.elementId === link.target);
@@ -242,6 +257,9 @@ export class GraphComponent implements OnInit {
         this.link.on('click', (event, d) => {
             console.log('Click from link');
         });
+        this.link.on('mouseover', (event, d) => {
+            console.log('Click from link');
+        });
     }
 
     setConnectionsDataForPopUp(node) {
@@ -262,11 +280,34 @@ export class GraphComponent implements OnInit {
         this.popOverEvents.next(true);
     }
 
-    async drillDownEvent(event, relation): Promise<any> {
+    async drillDownEvent(event, R): Promise<any> {
         const value = this.getValueForNode(this.cardData);
-        const RO: GraphDataRO = this.getROForGraph(this.cardData.label, value, relation);
-        const GRAPH_DATA = await this.graphDataService.getDataForGraph(RO);
-        this.addNodesAndLinks(GRAPH_DATA.nodes, GRAPH_DATA.links);
+        const eventId: string = value + R.id;
+        let GRAPH_DATA: any;
+        if (event.target.checked) {
+            if (!this.eventData[eventId]) {
+                const RO: GraphDataRO = this.getROForGraph(this.cardData.label, value, R.relation);
+                GRAPH_DATA = await this.graphDataService.getDataForGraph(RO);
+            } else {
+                GRAPH_DATA = this.eventData[eventId];
+            }
+            const eventName: string = this.setEventName(this.getTextForNode(this.cardData), R.description);
+            const eventItem: EventHistoryItem = this.setEventItem(eventId, eventName, R.relation, value, R.id, this.cardData.elementId);
+            this.clearCheckBoxSelection();
+            this.eventHistory.length = this.selectedEventIndex + 1;
+            this.setEventHistory(eventItem);
+            this.setEventData(GRAPH_DATA, eventId);
+            this.addNodesAndLinks(GRAPH_DATA.nodes, GRAPH_DATA.links);
+        } else {
+            const index = this.eventHistory.findIndex(E => E.eventId === eventId);
+            if (index !== -1) {
+                this.setEventHistory(null, index);
+            }
+            this.graph = { nodes: [], links: [] };
+            this.eventHistory.forEach(E => this.addNodesAndLinks(this.eventData[E.eventId].nodes, this.eventData[E.eventId].links));
+        }
+        console.log(this.selectedRelations);
+        this.selectedEventIndex = this.eventHistory.length - 1;
         this.hideBasicDetailsPopup();
     }
 
@@ -294,13 +335,58 @@ export class GraphComponent implements OnInit {
         this.graph = { nodes: [], links: [] };
         this.selectedRelations = {};
         this.cardData = {};
+        this.eventData = {};
+        this.eventHistory = [];
+        this.selectedEventIndex = null;
+        this.showtimeLine = false;
+    }
+
+    setEventItem(eventId: string, eventName: string, relations: string[], nodeName: string,
+            relationId: string, elementId: string): EventHistoryItem {
+        const eventItem = new EventHistoryItem();
+        eventItem.eventId = eventId;
+        eventItem.eventName = eventName;
+        eventItem.nodeName = nodeName;
+        eventItem.relations = relations;
+        eventItem.relationId = relationId;
+        eventItem.elementId = elementId;
+        return eventItem;
+    }
+
+    setEventName(first: string, second: string): string {
+        return first + '  ➜  ' + second;
+    }
+
+    setEventData(data, eventId): void {
+        this.eventData[eventId] = data;
+    }
+
+    setEventHistory(data: EventHistoryItem, index?: number): void {
+        (index || index === 0) ? this.eventHistory.splice(index, 1) : this.eventHistory.push(data);
+    }
+
+    unlinkFromGraph(event: EventHistoryItem): void {
+        const eventIndex = this.eventHistory.findIndex(E => E.eventId === event.eventId);
+        this.selectedEventIndex = eventIndex;
+        this.graph = { nodes: [], links: [] };
+        for (let index = 0; index <= eventIndex; index++) {
+            const eventId = this.eventHistory[index].eventId;
+            this.addNodesAndLinks(this.eventData[eventId].nodes, this.eventData[eventId].links);
+        }
+    }
+
+    clearCheckBoxSelection() {
+        for (let index = this.selectedEventIndex + 1; index < this.eventHistory.length; index++) {
+            const E = this.eventHistory[index];
+            this.selectedRelations[E.elementId][E.relationId] = false;
+        }
     }
 
     openDetailsView() {
         this.graphDataService.openDetailsEvent.subscribe((data: RedirectionClass) => {
-           if(data) {
-            this.graphDataService.openRedirectionPath(data.node, data.id);
-           }
+            if (data) {
+                this.graphDataService.openRedirectionPath(data.node, data.id);
+            }
         });
     }
 

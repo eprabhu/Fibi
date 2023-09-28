@@ -6,79 +6,105 @@
     <div class="modal-dialog modal-custom-width" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="mb-0">{{graphDataService.graphTypeConfiguration.header}}</h4>
-                <!-- <div (click)="isShowFilter = !isShowFilter" class="ml-2">
-                    <button class="btn btn-outline-primary" *ngIf="!isShowFilter"> Show more information</button>
-                    <button class="btn btn-outline-info" *ngIf="isShowFilter"> Hide more information</button>
-                </div>
+                <h4 class="mb-0">
+                    <span (click)="isShowFilter = !isShowFilter" class="col-auto me-2">
+                        <button class="btn btn-sm btn-outline-dark"><i class="fa fa-info" aria-hidden="true"></i></button>
+                    </span>
+                    {{graphDataService.graphTypeConfiguration.header}} {{graphDetail.name}}</h4>
                 <div class="container" *ngIf="isShowFilter">
-                    <span>information about graph</span>
-                    <div class="success-banner px-3 my-4 mx-4 d-flex justify-content-between align-items-center ng-tns-c9-0 ng-star-inserted">
-                        <div> 
-                          <em>{{graphDataService.graphTypeConfiguration.additional_info}}</em>
+                    <span class="fs-16 ms-4">Lorem ipsum</span>
+                    <div
+                        class="success-banner px-3 my-4 mx-4 d-flex justify-content-between align-items-center ng-tns-c9-0 ng-star-inserted">
+                        <div class="p-3">
+                            {{graphDataService.graphTypeConfiguration.additional_info}}
                         </div>
                     </div>
-                    <span>information about graph events</span>
-                    <div class="success-banner px-3 my-4 mx-4 d-flex justify-content-between align-items-center ng-tns-c9-0 ng-star-inserted">
-                        <div>
-                            <em>{{graphDataService.graphTypeConfiguration.action_info}}</em>
+                    <div
+                        class="success-banner2 px-3 my-4 mx-4 d-flex justify-content-between align-items-center ng-tns-c9-0 ng-star-inserted">
+                        <div class="p-3">
+                            <span class="fs-16">Lorem ipsum</span>
+                            <div class="mt-2">{{graphDataService.graphTypeConfiguration.action_info}}</div>
                         </div>
                     </div>
-
                     <div class="dropdown-wrapper">
-                        <span *ngFor="let node of graphDataService.graphMetaData.nodes | keyvalue">
-                            <img [src]="node.value.image" [alt]="node.key.name" class="image-frame mr-1"> {{node.value.name}}
+                        <span *ngFor="let node of graphDataService.graphMetaData.nodes | keyvalue" class="card-color py-2 px-3 rounded-2 d-flex flex-end">
+                            <img [src]="node.value.image" [alt]="node.key.name" class="image-frame mr-2"> 
+                            <span>{{node.value.name}}</span>
                         </span>
                     </div>
-                </div> -->
-                <button type="button" data-bs-dismiss="modal" class="btn-close fs-12" id="graph-modal-dismiss-btn"
-                    aria-label="Close" (click)="popOverEvents.next(false); clearGraph();"></button>
-            </div> 
+                </div>
+                <div class="d-flex align-items-center">
+                    <button type="button" data-bs-dismiss="modal" class="btn-close fs-12" id="graph-modal-dismiss-btn"
+                        aria-label="Close" (click)="popOverEvents.next(false); clearGraph();"></button>
+                </div>
+            </div>
+            <div class="timeline" appDrag *ngIf="eventHistory.length">
+                <h3 *ngIf="showtimeLine">History <span><button type="button"  class="btn-close float-end fs-12" id="history-close"aria-label="Close" (click)="showtimeLine =false"></button></span></h3>
+                <div *ngIf="!showtimeLine" (click)="showtimeLine =true">
+                    <span>
+                        <img class="image-container"
+                            src="data:image/png;base64,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">
+                    </span>
+                </div>
+                <ng-container *ngIf="showtimeLine">
+                    <app-timeline [history]="eventHistory" [selectedEventIndex]="selectedEventIndex"
+                        (historySelectEvent)=unlinkFromGraph($event)></app-timeline>
+                </ng-container>
+            </div>
             <div class="modal-body modal-custom-height">
                 <div id="chart-container"></div>
             </div>
-    </div>
-</div>
-
-<app-dynamic-popover [positionDetails]="popOverPositions" [showPopupEvent]="popOverEvents">
-    <div class="card" id="dynamic-popover-card">
-        <ng-container *ngIf="cardData.label === 'Person'">
-            <app-person-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Person')"></app-person-card>
-        </ng-container>
-        <ng-container *ngIf="cardData.label === 'Unit'">
-            <app-unit-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Unit')"></app-unit-card>
-        </ng-container>
-        <ng-container *ngIf="cardData.label === 'Award'">
-            <app-award-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Award')"></app-award-card>
-        </ng-container>
-        <ng-container *ngIf="cardData.label === 'COIDisclosure'">
-            <app-coi-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage()"></app-coi-card>
-        </ng-container>
-        <ng-container *ngIf="cardData.label === 'Country'">
-            <app-country-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Country')"></app-country-card>
-        </ng-container>
-        <ng-container *ngIf="cardData.label === 'Entity'">
-            <app-entity-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Entity')"></app-entity-card>
-        </ng-container>
-        <ng-container *ngIf="cardData.label === 'Proposal'">
-            <app-proposal-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Proposal')"></app-proposal-card>
-        </ng-container>
-        <ng-container *ngIf="cardData.label === 'Sponsor'">
-            <app-sponsor-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Sponsor')"></app-sponsor-card>
-        </ng-container>
-        <ng-container *ngIf="cardData.label === 'TravelDisclosure'">
-            <app-travel-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('TravelDisclosure')"></app-travel-card>
-        </ng-container>
-        <button type="button" class="modal-close" aria-label="Close" (click)="popOverEvents.next(false)">X</button>
-        <hr>
-        <div class="interests" *ngIf="cardData.elementId">
-            <p class="interests_title">Show Connections </p>
-            <ng-container *ngFor="let relation of relations">
-                <span class="interests_item">
-                    <input type="checkbox" class="mr-2" [(ngModel)]="selectedRelations[cardData.elementId][relation.id]" id="{{relation.id}}" (click)="drillDownEvent($event, relation.relation)">
-                    <label class="form-check-label" for="{{relation.id}}">{{relation.description}}</label>
-                </span>
-            </ng-container>
         </div>
     </div>
-</app-dynamic-popover>
+
+    <app-dynamic-popover [positionDetails]="popOverPositions" [showPopupEvent]="popOverEvents">
+        <div class="card" id="dynamic-popover-card">
+            <ng-container *ngIf="cardData.label === 'Person'">
+                <app-person-card [data]="cardData"
+                    [imagePath]="graphDataService.getLinkForImage('Person')"></app-person-card>
+            </ng-container>
+            <ng-container *ngIf="cardData.label === 'Unit'">
+                <app-unit-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Unit')"></app-unit-card>
+            </ng-container>
+            <ng-container *ngIf="cardData.label === 'Award'">
+                <app-award-card [data]="cardData"
+                    [imagePath]="graphDataService.getLinkForImage('Award')"></app-award-card>
+            </ng-container>
+            <ng-container *ngIf="cardData.label === 'COIDisclosure'">
+                <app-coi-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage()"></app-coi-card>
+            </ng-container>
+            <ng-container *ngIf="cardData.label === 'Country'">
+                <app-country-card [data]="cardData"
+                    [imagePath]="graphDataService.getLinkForImage('Country')"></app-country-card>
+            </ng-container>
+            <ng-container *ngIf="cardData.label === 'Entity'">
+                <app-entity-card [data]="cardData"
+                    [imagePath]="graphDataService.getLinkForImage('Entity')"></app-entity-card>
+            </ng-container>
+            <ng-container *ngIf="cardData.label === 'Proposal'">
+                <app-proposal-card [data]="cardData"
+                    [imagePath]="graphDataService.getLinkForImage('Proposal')"></app-proposal-card>
+            </ng-container>
+            <ng-container *ngIf="cardData.label === 'Sponsor'">
+                <app-sponsor-card [data]="cardData"
+                    [imagePath]="graphDataService.getLinkForImage('Sponsor')"></app-sponsor-card>
+            </ng-container>
+            <ng-container *ngIf="cardData.label === 'TravelDisclosure'">
+                <app-travel-card [data]="cardData"
+                    [imagePath]="graphDataService.getLinkForImage('TravelDisclosure')"></app-travel-card>
+            </ng-container>
+            <button type="button" class="modal-close" aria-label="Close" (click)="popOverEvents.next(false)">X</button>
+            <hr>
+            <div class="interests" *ngIf="cardData.elementId">
+                <p class="interests_title">Show Connections </p>
+                <ng-container *ngFor="let relation of relations">
+                    <span class="interests_item">
+                        <input type="checkbox" class="mr-2"
+                            [(ngModel)]="selectedRelations[cardData.elementId][relation.id]" id="{{relation.id}}"
+                            (click)="drillDownEvent($event, relation)">
+                        <label class="form-check-label" for="{{relation.id}}">{{relation.description}}</label>
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+    </app-dynamic-popover>

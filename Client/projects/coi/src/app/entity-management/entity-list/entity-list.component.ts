@@ -308,8 +308,8 @@ setEventTypeFlag() {
         this.entityManagementService.isAdvanceSearch = this.isViewAdvanceSearch;
     }
 
-    openGraph(entityId) {
-        this.graphEvent.next({ visible: true, id: entityId });
+    openGraph(entityId, entityName) {
+        this.graphEvent.next({ visible: true, id: entityId, name: entityName });
     }
 
 }
