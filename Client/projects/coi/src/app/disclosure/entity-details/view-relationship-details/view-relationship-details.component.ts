@@ -52,7 +52,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     RELATION_HELP_TEXT_1 = "This description is presented in the Relationship section to help you relate this entity to your research projects. Please enter an adequate description of the organization, and of your role with them,to aid both you, and a reviewers' understanding of the association between the entity and work";
     RELATION_HELP_TEXT_2 = "Please enter an adequate description of the entity's principal are of business.";
     RELATION_HELP_TEXT_3 = "Please enter an adequate description of the entity's relationship to your University responsibilities.";
-    
+
     constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
         private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService) {
     }
@@ -68,7 +68,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         }
     }
 
-    async ngOnChanges() {       
+    async ngOnChanges() {
         if (!this.isEditMode) {
             this.isQuestionnaireCompleted = true;
         }
@@ -126,7 +126,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     /**
-     * 
+     *
      * @returns need to check this
      */
 
@@ -231,7 +231,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             if (this.entityId != event.personEntityId) {
                 if(this._navigationService.previousURL.includes('coi/create-disclosure/')) {
                     this.previousUrlBeforeActivate = this._navigationService.previousURL;
-                }                
+                }
                 this._router.navigate(['/coi/entity-details/entity'],
                     { queryParams: { personEntityId: event.personEntityId, mode: 'view' } });
             }
@@ -245,7 +245,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         this.personEntityRelationships.forEach(rel => {
             this.setQuestionnaireRequestObject(rel.validPersonEntityRelTypeCode, QUEST_REQ_OBJ_LIST);
         });
-        QUEST_REQ_OBJ_LIST.length ? this.checkQuestionnaireCompleted(QUEST_REQ_OBJ_LIST) : this.isQuestionnaireCompleted = false; 
+        QUEST_REQ_OBJ_LIST.length ? this.checkQuestionnaireCompleted(QUEST_REQ_OBJ_LIST) : this.isQuestionnaireCompleted = false;
     }
 
     setQuestionnaireRequestObject(subItemCode, list) {
@@ -291,7 +291,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         }
         this.$subscriptions.push(this.entityDetailsServices.updateAdditionalDetails(this.additionalDetails).subscribe((res: any) => {
             this.isChangesInFieldValue = false;
-            this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Significant Financial Interest updated successfully completed.');
+            this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Significant Financial Interest updated successfully.');
             this.relationshipsDetails.updateTimestamp = res.updateTimestamp;
             this.entityDetailsServices.isAdditionalDetailsChanged = false;
             let index = this.entityDetailsServices.unSavedSections.findIndex(ele => ele.includes(SFI_ADDITIONAL_DETAILS_SECTION_NAME));
@@ -367,7 +367,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
       openRelationDetails() {
         this.$subscriptions.push(this.entityDetailsServices.getCurrentId(this.relationshipsDetails.personEntityNumber).subscribe((data: any) => {
             this._router.navigate(['/coi/entity-details/entity'],
-            { queryParams: { personEntityId: data, mode: 'view' } });        
+            { queryParams: { personEntityId: data, mode: 'view' } });
         }, err => {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in opening current version, please try again');
         }));

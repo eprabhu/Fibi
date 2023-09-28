@@ -14,10 +14,16 @@
                 <span class="icon-btn"><mat-icon>home</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">My COI</span></span>
             </button>
 
-            <button role="listitem" aria-label="Go to View Appointments" title="Go to Disclosures"
+            <button *ngIf="isShowAdminDashboard" role="listitem" aria-label="Go to View Appointments" title="Go to Disclosures"
                     class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
                     routerLinkActive="active-list" [routerLink]="['/coi/admin-dashboard']">
                 <span class="icon-btn"><mat-icon>article</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Disclosures</span></span>
+            </button>
+
+            <button role="listitem" aria-label="Go to View Appointments" title="Go to Person Search"
+                    class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
+                    routerLinkActive="active-list">
+                <span class="icon-btn"><mat-icon>person_search</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Person Search</span></span>
             </button>
 
          <!--   <button role="listitem" aria-label="Go to View Appointments" title="Go to Review Disclosures"
@@ -26,16 +32,16 @@
                 <span class="icon-btn"><mat-icon>preview</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Review Disclosures</span></span>
             </button>-->
 
-            <button role="listitem" aria-label="Go to View Appointments" title="Go to Manage Entity"
+            <button *ngIf="isManageEntity" role="listitem" aria-label="Go to View Appointments" title="Go to Manage Entity"
                     class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
                     routerLinkActive="active-list" [routerLink]="['/coi/entity-management']">
                 <span class="icon-btn"><mat-icon>domain</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Manage Entity</span></span>
             </button>
 
-            <button role="listitem" aria-label="Go to View Appointments" title="Go to Manage Entity"
+            <button *ngIf="canViewAdminDashboard" role="listitem" aria-label="Go to View Appointments" title="Go to Manage Entity"
                     class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
                     routerLinkActive="active-list" [routerLink]="['/coi/configuration']">
-                <span class="icon-btn"><mat-icon>settings</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">COI Configurations</span></span>
+                <span class="icon-btn"><mat-icon>apps</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">COI Configurations</span></span>
             </button>
 
         </ul>
