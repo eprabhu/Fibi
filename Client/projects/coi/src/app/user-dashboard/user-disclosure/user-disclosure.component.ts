@@ -310,5 +310,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
     }
 
+    triggerClickForId(targetIdName: string) {
+        document.getElementById(targetIdName)?.click();
+    }
+
 
 }
