@@ -442,7 +442,9 @@
                                                 <label for="id" class="label-text">Reviewers:</label>
                                                 <span class="grey-text">
                                                     <ng-container *ngFor="let reviewer of coi?.reviewerList; let isLast = last">
-                                                        <span class="fileChips regularFont">{{reviewer}}</span>
+                                                        <span class="fileChips regularFont">
+                                                            {{reviewer[0]}} <ng-container *ngIf="reviewer[1] != 'null'">| {{reviewer[1]}} </ng-container> | <span class="reviewer-{{getReviewerStatus(reviewer[3])}}">{{reviewer[2]}}</span>
+                                                        </span>
                                                     </ng-container>
                                                 </span>
                                             </div>
@@ -451,7 +453,7 @@
         
                                     <ng-container *ngIf="coi?.travelDisclosureId">
                                         <div class="row mb-3 p-013 mt-2">
-                                            <div class="col-4 d-flex" *ngIf="coi?.travelDisclosureId">
+                                            <div class="col-4 d-flex" *ngIf="coi?.travelDisclosureId">  
                                                 <label for="traveller" class="label-text">Travellers :</label>
                                                 <app-no-data-label id="traveller" [valueToShow]="coi?.travellerTypeDescription">
                                                     <span
