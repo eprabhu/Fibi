@@ -15,6 +15,7 @@ import { EntityCardComponent } from './graph/data-cards/entity-card.componenet';
 import { CountryCardComponent } from './graph/data-cards/country-card.component';
 import { TimelineComponent } from './graph/timeline/timeline.component';
 import { DragDirective } from './directives/drag.directive';
+import { TooltipComponent } from './graph/tooltip/tooltip.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { DragDirective } from './directives/drag.directive';
     GraphComponent,
     DynamicPopoverComponent,
     TimelineComponent,
-    DragDirective
+    DragDirective,
+    TooltipComponent
   ],
   imports: [
       FormsModule,

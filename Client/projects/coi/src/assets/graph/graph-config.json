@@ -59,7 +59,7 @@
             "colour": "#eee",
             "size": 8,
             "name": "Travel Disclosure",
-            "image": "/assets/images/g_travel.svg",
+            "image": "/assets/images/g_travel.png",
             "openLink": "#/coi/create-travel-disclosure/travel-details?disclosureId=",
             "valueField": "travel_number",
             "linkType": "COI"
@@ -96,9 +96,16 @@
             "name": "Award Sponsor"
         },
         "BELONGS_TO":{
+            "relation":"BELONGS_TO",
             "colour": "#5ab008",
             "lineWidth": 1.5,
-            "name": "Country where entity belongs"
+            "name": "Belongs to"
+        },
+        "CITIZEN_OF":{
+            "relation":"CITIZEN_OF",
+            "colour": "#5ab008",
+            "lineWidth": 1.5,
+            "name": "Citizen of"
         },
         "DEPENDANT_RELATIONSHIP": {
             "colour": "#eee",
