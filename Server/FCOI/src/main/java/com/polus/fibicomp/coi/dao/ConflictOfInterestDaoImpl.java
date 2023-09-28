@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -1291,7 +1292,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		statement.setString(24, certificationDate);
 		statement.execute();
 		resultSet = statement.getResultSet();
-
 		while (resultSet.next()) {
 			DisclosureView disclosureView = new DisclosureView();
 			disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
@@ -1337,7 +1337,15 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			String reviewers = resultSet.getString("REVIEWERS");
 			if (reviewers != null && !reviewers.isEmpty()) {
 				String[] reviewerArray = reviewers.split(";");
-				disclosureView.setReviewerList((Arrays.asList(reviewerArray)));
+				List<List<String>> reviewerList = new ArrayList<>();
+				Arrays.stream(reviewerArray)
+		        .forEach(reviewer -> {
+		            List<String> subList = Arrays.stream(reviewer.split(":"))
+		                .map(String::trim)
+		                .collect(Collectors.toList());
+		            reviewerList.add(subList);
+		        });
+				disclosureView.setReviewerList(reviewerList);
 			}
 			disclosureViews.add(disclosureView);
 		}
@@ -3012,7 +3020,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, c.reviewStatusCode = 3, ");
+		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, ");
 		hqlQuery.append("c.updateTimestamp = :updateTimestamp, c.updateUser = :updateUser ");
 		hqlQuery.append("WHERE c.disclosureId = : disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());

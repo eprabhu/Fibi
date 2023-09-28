@@ -271,9 +271,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     getSearchPlaceHolder() {
         if (this.currentSelected.tab !== 'TRAVEL_DISCLOSURES') {
-            return 'Search by Disclosure Id, Project Title, Disclosure Status, Disposition Status, Review Status, Department Name';
+            return 'Search by Project Title, Disclosure Status, Disposition Status, Review Status, Department Name';
         } else {
-            return 'Search by #Travel Disclosure Id, Entity Name, Department Name, Traveller Type, Destination, Review Status, Document Status, Purpose';
+            return 'Search by Entity Name, Department Name, Traveller Type, Destination, Review Status, Document Status, Purpose';
         }
     }
 

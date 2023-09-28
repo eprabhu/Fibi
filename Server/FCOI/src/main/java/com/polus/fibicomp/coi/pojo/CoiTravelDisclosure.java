@@ -173,6 +173,10 @@ public class CoiTravelDisclosure implements Serializable {
 	@Column(name = "TRAVEL_DISCLOSURE_STATUS_CODE")
 	private String disclosureStatusCode;
 
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "COI_TRAVEL_DISCLOSURE_FK6"), name = "TRAVEL_DISCLOSURE_STATUS_CODE", referencedColumnName = "TRAVEL_DISCLOSURE_STATUS_CODE", insertable = false, updatable = false)
+	private CoiTravelDisclosureStatusType coiTravelDisclosureStatusType;
+	
 	@Column(name = "DISPOSITION_STATUS_CODE")
 	private String dispositionStatusCode;
 
