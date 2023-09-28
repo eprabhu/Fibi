@@ -35,19 +35,19 @@ body {
   width: 12px;
 }
 
-::-webkit-scrollbar-track { 
+::-webkit-scrollbar-track {
   width: 12px;
   background-color: #e7e7e7;
   border-radius: 5px;
 }
- 
+
 ::-webkit-scrollbar-thumb {
 	background: #b8b7b6;
 	border-radius: 12px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #979797; 
+  background: #979797;
 }
 // scroll design ends
 
@@ -375,7 +375,7 @@ nav ul li.active {
 }
 
 .hovering-card:hover  {
-  .btn-outline-secondary{
+  .btn-outline-secondary:not(.no-hover){
     color: #fff;
     background-color: #007dec;
     border-color: #007dec;

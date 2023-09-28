@@ -157,9 +157,16 @@
                                 {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</div>
                         </div>
                         <div class="col-auto d-flex justify-content-end mr-7">
+                            <button (click)="triggerClickForId('create-fcoi-modal')"
+                                    class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14 me-2"
+                                    title="Click to Renew FCOI Disclosure"
+                                    area-describedby="Click to Renew FCOI Disclosure">
+                                <mat-icon class="me-1">restart_alt</mat-icon>
+                                Revise
+                            </button>
                             <button [queryParams]={disclosureId:disclosure.disclosureId}
                                 [routerLink]="['/coi/disclosure/summary']"
-                                class="align-items-center btn btn-outline-secondary d-flex fs-14"
+                                class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14"
                                 title="Click to view FCOI Disclosure details"
                                 [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                 area-describedby="Click to view FCOI Disclosure details">
