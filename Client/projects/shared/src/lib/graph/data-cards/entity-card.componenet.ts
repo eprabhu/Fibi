@@ -10,8 +10,7 @@ import { DataService } from '../data.service';
             <img class="profile_img" [src]="imagePath" alt="an icon for representing a person">
         </div>
         <div class="ml-15">
-            <h2 class="heading">{{data.name}}({{data.entity_number}})        
-            </h2>
+            <h2 class="heading">{{data.name}}</h2>
             <p class="sub-heading">{{data.country_name}}</p>
             <p class="sub-heading">Type: {{data.type}}</p>
             <p class="sub-heading">Status: {{data.status}}</p>
