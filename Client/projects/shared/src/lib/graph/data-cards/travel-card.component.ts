@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { DataService } from '../data.service';
 
 @Component({
   standalone: true,
@@ -6,11 +7,20 @@ import { Component, Input } from '@angular/core';
   template: `
       <div class="data-grid">
         <div class="mr-15">
-            <img class="profile_img" src="./assets/images/travel.svg" alt="an Ican for represrnting a person">
+            <img class="profile_img" [src]="imagePath" alt="an icon for representing a person">
         </div>
-        <div class="ml-15">
+        <div class="ml-15 mr-8">
             <h2 class="heading">Travel Number{{data.travel_number}}</h2>
         </div>
+        <div class="align-items-end d-flex ms-auto">
+          <button (click)="openTravelDisclosure(data.travel_number)"
+          class="align-items-center btn btn-primary d-flex fs-14"
+          title="Click to view Travel Disclosure Details"
+          area-describedby="Click to view Travel Disclosure Details">
+          <i class="fa fa-eye mr-2" aria-hidden="true"></i>
+          View
+          </button>
+      </div>
       </div>
   `,
   styles: [
@@ -41,5 +51,12 @@ import { Component, Input } from '@angular/core';
 export class TravelDisclosureCardComponent {
 
   @Input() data: any = {};
+  @Input() imagePath: any = {};
+
+  constructor(public graphDataService: DataService) {}
+
+  openTravelDisclosure(id) {
+    this.graphDataService.openDetailsEvent.next({'node': 'TravelDisclosure', 'id': id});
+  }
 
 }

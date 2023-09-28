@@ -122,4 +122,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         const rightsArray = await this.commonService.fetchPermissions();
         this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
     }
+
+    triggerClickForId(modalId: string) {
+        document.getElementById(modalId)?.click();
+    }
 }

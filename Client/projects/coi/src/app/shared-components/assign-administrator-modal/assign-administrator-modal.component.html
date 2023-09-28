@@ -23,6 +23,7 @@
                     <label class="d-block ml-4 mt-3"><span class="mandatory">*</span>Administrator</label>
                     <div class="col-md-12 col-sm-4 col-12">
                         <app-autocompleter [completerOptions]="adminSearchOptions"
+                        [isError]="assignAdminMap.has('adminName')"
                             [clearField]="clearAdministratorField" [placeHolder]="'Search for admin'"
                             (onSelect)="adminSelect($event)"
                             [ngClass]="(assignAdminMap.get('adminName'))? 'is-invalid d-block' : ''"></app-autocompleter>
@@ -38,6 +39,12 @@
                             [clearField]="clearAdminGroupField" [placeHolder]="'Search for admin group'"
                             (onSelect)="adminGroupSelect($event)">
                         </app-autocompleter>
+                    </div>
+                </div>
+                <div *ngIf="adminGrpWarningMessage" class="success-banner px-3 my-2 d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
+                        <em>{{adminGrpWarningMessage}}</em>
                     </div>
                 </div>
             </div>

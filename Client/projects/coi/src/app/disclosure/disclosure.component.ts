@@ -108,6 +108,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
+    reviewList:any = [];
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -526,6 +527,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             if (data) {
                 this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(data);
             }
+            this.reviewList = data;
+            this.coiService.isReviewActionCompleted = data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
         }))
     }
 
@@ -690,15 +693,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
     
     openReviewComment() {	
-        const disclosureDetails:coiReviewComment = {
+        const COMMENT_META_DATA: coiReviewComment = {
             disclosureId: this.coiData.coiDisclosure.disclosureId,
             coiSectionsTypeCode: '3',
             documentOwnerPersonId: this.coiData.coiDisclosure.person.personId,
             coiSubSectionsId: null,
             headerName: '',
-            componentSubRefId: null
+            componentSubRefId: null,
+            coiSubSectionsTitle: null
         }
-        this.commonService.$commentConfigurationDetails.next(disclosureDetails);	
+        this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);	
         this.coiService.isShowCommentNavBar = true;	
     }
 

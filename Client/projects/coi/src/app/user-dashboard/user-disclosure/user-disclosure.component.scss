@@ -233,3 +233,37 @@ margin-top-3px{
   color: grey;
   height: 14px;
 }
+
+.pi-info-text {
+  background-color: #F3F3F3;
+  color: #41464B;
+}
+
+.create-buttons {
+  margin-bottom: 15px;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.info-icon {
+  top: 7px;
+  height: 22px;
+  width: 22px;
+  font-size: 16px;
+  position: absolute;
+  margin-left: 2px;
+  color: #6f7395;
+  cursor: pointer;
+}
+
+.info-text {
+  margin-bottom: 5px;
+  margin-left: 27px;
+}
+
+.create-card {
+  height: 350px;
+}

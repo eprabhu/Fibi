@@ -10,8 +10,8 @@
                 <!-- <div (click)="isShowFilter = !isShowFilter" class="ml-2">
                     <button class="btn btn-outline-primary" *ngIf="!isShowFilter"> Show more information</button>
                     <button class="btn btn-outline-info" *ngIf="isShowFilter"> Hide more information</button>
-                </div> -->
-                <!-- <div class="container" *ngIf="isShowFilter">
+                </div>
+                <div class="container" *ngIf="isShowFilter">
                     <span>information about graph</span>
                     <div class="success-banner px-3 my-4 mx-4 d-flex justify-content-between align-items-center ng-tns-c9-0 ng-star-inserted">
                         <div> 
@@ -41,33 +41,33 @@
 </div>
 
 <app-dynamic-popover [positionDetails]="popOverPositions" [showPopupEvent]="popOverEvents">
-    <div class="card">
+    <div class="card" id="dynamic-popover-card">
         <ng-container *ngIf="cardData.label === 'Person'">
-            <app-person-card [data]="cardData"></app-person-card>
+            <app-person-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Person')"></app-person-card>
         </ng-container>
         <ng-container *ngIf="cardData.label === 'Unit'">
-            <app-unit-card [data]="cardData"></app-unit-card>
+            <app-unit-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Unit')"></app-unit-card>
         </ng-container>
         <ng-container *ngIf="cardData.label === 'Award'">
-            <app-award-card [data]="cardData"></app-award-card>
+            <app-award-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Award')"></app-award-card>
         </ng-container>
         <ng-container *ngIf="cardData.label === 'COIDisclosure'">
-            <app-coi-card [data]="cardData"></app-coi-card>
+            <app-coi-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage()"></app-coi-card>
         </ng-container>
         <ng-container *ngIf="cardData.label === 'Country'">
-            <app-country-card [data]="cardData"></app-country-card>
+            <app-country-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Country')"></app-country-card>
         </ng-container>
         <ng-container *ngIf="cardData.label === 'Entity'">
-            <app-entity-card [data]="cardData"></app-entity-card>
+            <app-entity-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Entity')"></app-entity-card>
         </ng-container>
         <ng-container *ngIf="cardData.label === 'Proposal'">
-            <app-proposal-card [data]="cardData"></app-proposal-card>
+            <app-proposal-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Proposal')"></app-proposal-card>
         </ng-container>
         <ng-container *ngIf="cardData.label === 'Sponsor'">
-            <app-sponsor-card [data]="cardData"></app-sponsor-card>
+            <app-sponsor-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('Sponsor')"></app-sponsor-card>
         </ng-container>
         <ng-container *ngIf="cardData.label === 'TravelDisclosure'">
-            <app-travel-card [data]="cardData"></app-travel-card>
+            <app-travel-card [data]="cardData" [imagePath]="graphDataService.getLinkForImage('TravelDisclosure')"></app-travel-card>
         </ng-container>
         <button type="button" class="modal-close" aria-label="Close" (click)="popOverEvents.next(false)">X</button>
         <hr>

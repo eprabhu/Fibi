@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ReviewCommentsSliderComponent } from './review-comments-slider.component';
+import { ReviewCommentsSliderComponent } from './ReviewCommentsSliderComponent';
 
 describe('CommentsSliderComponent', () => {
   let component: ReviewCommentsSliderComponent;

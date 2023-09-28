@@ -44,18 +44,19 @@ export class CertifySummaryComponent implements OnInit,OnDestroy {
         ).coiDisclosure;
     }
 
-    modifyReviewComment() {
-            let coiData = this._dataStore.getData();
-            const disclosureDetails:coiReviewComment = {
-                disclosureId: coiData.coiDisclosure.disclosureId,
-                coiSectionsTypeCode: '7',
-                documentOwnerPersonId: coiData.coiDisclosure.person.personId,
-                coiSubSectionsId: null,
-                headerName: '',
-                componentSubRefId: null
-            }
-            this._commonService.$commentConfigurationDetails.next(disclosureDetails);	
-        this.coiService.isShowCommentNavBar = true;
-    }
+    // modifyReviewComment() {
+    //         let coiData = this._dataStore.getData();
+    //         const disclosureDetails:coiReviewComment = {
+    //             disclosureId: coiData.coiDisclosure.disclosureId,
+    //             coiSectionsTypeCode: '7',
+    //             documentOwnerPersonId: coiData.coiDisclosure.person.personId,
+    //             coiSubSectionsId: null,
+    //             headerName: '',
+    //             componentSubRefId: null,
+    //             coiSubSectionsTitle: null
+    //         }
+    //         this._commonService.$commentConfigurationDetails.next(disclosureDetails);	
+    //     this.coiService.isShowCommentNavBar = true;
+    // }
 
 }

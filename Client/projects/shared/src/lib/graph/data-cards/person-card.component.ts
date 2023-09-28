@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { DataService } from '../data.service';
 
 @Component({
   standalone: true,
@@ -6,13 +7,22 @@ import { Component, Input } from '@angular/core';
   template: `
       <div class="data-grid">
         <div class="mr-15">
-            <img class="profile_img" src="./assets/images/icons8-person-96.png" alt="an Icon for representing a person">
+            <img class="profile_img" [src]="imagePath" alt="an icon for representing a person">
         </div>
-        <div class="ml-15">
+        <div class="ml-15 mr-8">
             <h2 class="heading">{{data.full_name}}({{data.person_id}})</h2>
             <p class="sub-heading">{{data.country_name}}</p>
             <p class="sub-heading">Home unit: {{data.home_unit}}</p>
         </div>
+        <div class="align-items-end d-flex ms-auto">
+        <button (click)="openEntity(data.person_id)"
+        class="align-items-center btn btn-primary d-flex fs-14"
+        title="Click to view Person Details"
+        area-describedby="Click to view Person Details">
+        <i class="fa fa-eye mr-2" aria-hidden="true"></i>
+        View
+        </button>
+  </div>
       </div>
   `,
   styles: [
@@ -43,5 +53,12 @@ import { Component, Input } from '@angular/core';
 export class PersonCardComponent {
 
   @Input() data: any = {};
+  @Input() imagePath: any = {};
+
+  constructor(public graphDataService: DataService) {}
+
+  openEntity(id) {
+    this.graphDataService.openDetailsEvent.next({'node': 'Person', 'id': id});
+  }
 
 }

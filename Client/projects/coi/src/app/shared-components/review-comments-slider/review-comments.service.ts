@@ -12,8 +12,8 @@ export class ReviewCommentsService {
     constructor(private _commonService: CommonService, private _http: HttpClient) {
     }
 
-    getSectionsTypeCode() {
-        return this._http.get(this._commonService.baseUrl + '/getCoiSectionsTypeCode');
+    getSectionsTypeCode(params) {
+        return this._http.post(this._commonService.baseUrl + '/getCoiSectionsTypeCode', params);
     }
 
     getAdminDetails() {
@@ -48,12 +48,44 @@ export class ReviewCommentsService {
         const formData = new FormData();
         if (uploadedFiles) {
             uploadedFiles.forEach(file => {
-                formData.append('files', file, file.fileName);
+                formData.append('files', file, file.name);
             });
         }
         formData.append('formDataJson', JSON.stringify(params));
         return this._http.post(this._commonService.baseUrl + '/addCOIReviewComment', formData);
     }
 
+    getSfiDetails(params: any) {
+        return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
+    }
+
+    getProjectRelationships(params: any) {
+        return this._http.post(`${this._commonService.baseUrl}/getDisclosureRelations`, params);
+    }
+
+    getEntityProjectRelations(moduleCode, moduleId, id, status, personId) {
+        if (moduleCode == 3) {
+          return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations', {
+            'disclosureId': id,
+            'proposalIdlinkedInDisclosure': moduleId,
+            'disclosureStatusCode': status,
+            'moduleCode': moduleCode,
+            'moduleItemId': moduleId,
+            'personId': personId,
+          });
+        } else {
+          return this._http.post(this._commonService.baseUrl + '/disclosure/project/relations', {
+            'disclosureId': id,
+            'disclosureStatusCode': status,
+            'moduleCode': moduleCode,
+            'moduleItemId': moduleId,
+            'personId': personId
+          });
+        }
+      }
+
+      loadDisclAttachTypes() {
+        return this._http.get(this._commonService.baseUrl + '/loadDisclAttachTypes');
+    }
 
 }

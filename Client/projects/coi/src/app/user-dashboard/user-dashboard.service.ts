@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {CommonService} from "../common/services/common.service";
 import { ActiveDisclosure } from './user-disclosure/user-disclosure-interface';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class UserDashboardService {
 
   activeDisclosures: ActiveDisclosure[] = [];
   isModalOpen = false;
+  $openModal = new Subject();
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 

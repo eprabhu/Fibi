@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { GraphDataRO, JSON_MAPPING } from './interface';
 import * as d3 from 'd3';
 
@@ -12,6 +12,7 @@ export class DataService {
     configSubscription: Subscription;
     links: any;
     nodes: any;
+    openDetailsEvent = new Subject();
     constructor(private _http: HttpClient) { }
 
     getDataForGraph(RO: GraphDataRO): Promise<any> {
@@ -102,5 +103,10 @@ export class DataService {
         return window.location.origin + this.graphMetaData.nodes[node].image;
     }
 
+    openRedirectionPath(node, id) {
+        const LINK_TYPE = this.graphMetaData.nodes[node].linkType;
+        const ORIGIN_URL = this.graphMetaData.externalLinks[LINK_TYPE];
+        window.open(ORIGIN_URL + this.graphMetaData.nodes[node].openLink + id);
+    }
 
 }

@@ -54,6 +54,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
     @Input() isShowBackButton = false;
     @Input() isShowCollapse = false;
     @Input() saveButtonLabel = 'Save';
+    @Output() currentActiveQuestionnaire: EventEmitter<any> = new EventEmitter<any>();
 
     requestObject = {
         moduleItemCode: null,
@@ -185,6 +186,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
             this.isViewMode = this.checkViewMode(this.questionnaireList[index].MODULE_SUB_ITEM_CODE);
             this.activeQuestionnaire.isChanged = false;
             this.activeQuestionnaire = Object.assign({}, this.questionnaireList[index]);
+            this.currentActiveQuestionnaire.emit(this.activeQuestionnaire);
         } else {
             this.activeQuestionnaire.QUESTIONNAIRE_ANS_HEADER_ID = '';
         }

@@ -214,3 +214,17 @@
   top: 0;
   z-index: 50;
 }
+
+.pi-info-text {
+  background-color: #F3F3F3;
+  color: #41464B;
+}
+
+.create-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 218px;
+  font-weight: 500;
+  font-size: 15px;
+}
