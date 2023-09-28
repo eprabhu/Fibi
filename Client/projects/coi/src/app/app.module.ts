@@ -13,11 +13,13 @@ import {AppRouterComponent} from "./common/app-router/app-router.component";
 import {FooterComponent} from "./common/footer/footer.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AppHttpInterceptor} from './common/services/http-interceptor';
-import {DashboardGuardService} from "./common/services/dashboard-guard.service";
+import {DashboardGuardService} from './common/services/dashboard-guard.service';
 import {ElasticConfigService} from '../../../fibi/src/app/common/services/elastic-config.service';
 import {NavigationService} from './common/services/navigation.service';
 import {EntityManagementGuardService} from './entity-management/entity-management-guard.service';
 import {AdminRouteGuardService} from './common/services/guards/admin-route-guard.service';
+import { LeftNavBarComponent } from './common/left-nav-bar/left-nav-bar.component';
+import {MatMenuModule} from "@angular/material/menu";
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -28,7 +30,8 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         AppComponent,
         HeaderComponent,
         AppRouterComponent,
-        FooterComponent
+        FooterComponent,
+        LeftNavBarComponent
     ],
     imports: [
         BrowserModule,
@@ -36,7 +39,8 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         AppRoutingModule,
         HttpClientModule,
         SharedModule,
-        MatIconModule
+        MatIconModule,
+        MatMenuModule
     ],
     providers: [CommonService,
         DashboardGuardService,

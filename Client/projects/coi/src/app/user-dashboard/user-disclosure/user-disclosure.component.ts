@@ -104,11 +104,11 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     private loadingComplete() {
         this.isLoading = false;
     }
-    
+
     getDashboardBasedOnTab() {
         if(this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
             this.getDisclosureHistory();
-        } else { 
+        } else {
             this.filteredDisclosureArray = [];
             this.$fetchDisclosures.next();
         }
@@ -150,9 +150,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     setIsShowCreateFlag() {
-        if (!this.dashboardCount.inProgressDisclosureCount && !this.dashboardCount.approvedDisclosureCount 
-            && !this.dashboardCount.travelDisclosureCount && !this.dashboardCount.disclosureHistoryCount && 
-            !this.filteredDisclosureArray.length && 
+        if (!this.dashboardCount.inProgressDisclosureCount && !this.dashboardCount.approvedDisclosureCount
+            && !this.dashboardCount.travelDisclosureCount && !this.dashboardCount.disclosureHistoryCount &&
+            !this.filteredDisclosureArray.length &&
             this.dashboardRequestObject.currentPage == '1' && this.dashboardRequestObject.filterType == 'ALL') {
                 this.isShowCreate = true;
         }
@@ -283,7 +283,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({'filterType':this.currentSelected.filter}).subscribe((data: any) => {
             this.filteredDisclosureArray =  data;
             this.loadingComplete();
-        })); 
+        }));
     }
 
     openFCOIModal(type) {
@@ -304,6 +304,11 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             this.showSlider = false;
 		}, 500);
 	}
-	
+
+    getActiveFCOI() {
+        return this.userDashboardService.activeDisclosures.filter(disclosure =>
+            disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
+    }
+
 
 }

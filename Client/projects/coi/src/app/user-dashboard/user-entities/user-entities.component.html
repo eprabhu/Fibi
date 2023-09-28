@@ -1,5 +1,4 @@
-<div class="row my-4"></div>
-<div class="advance-search-area border d-flex rounded-1"
+<div class="advance-search-area border d-flex rounded-1 mt-3"
   *ngIf="!isHideFilterSearchAndShowCreate">
     <div class="border-end fs-14 p-3" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
@@ -11,7 +10,7 @@
         <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" title="Sort by Active Status"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
         <span (click)="setFilter('INACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INACTIVE'" title="Sort by Inactive Status"
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Inactive</span>     
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Inactive</span>
     </div>
     <div class="d-flex flex-fill position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
     (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
@@ -19,7 +18,7 @@
         <input class="advance-search-input border-0 px-4 fs-15" type="text" id="searchText"
         [class.search-area]="isSearchTextHover"
         placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
-        <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>        
+        <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
     </div>
 </div>
 <ng-container *ngIf="!isLoading">
@@ -67,11 +66,11 @@
         </div>
     </div>
     </div>
-    
+
     <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
       [personEntityId]="personEntityId" [isRelationshipActive]="isRelationshipActive" (closeModal)="closeActivateInactivateSfiModal($event)">
     </app-activate-inactivate-sfi-modal>
-    
+
     <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-delete-button" data-bs-toggle="modal" data-bs-target="#deleteSFIConfirmationModal"></button>
     <div class="modal fade" id="deleteSFIConfirmationModal" tabindex="-1" aria-labelledby="deleteSFIConfirmationModal" aria-hidden="true">
       <div class="modal-dialog">
