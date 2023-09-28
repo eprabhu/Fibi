@@ -806,5 +806,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
         this.isAssignAdminModalOpen = false;
     }
+    
+    getReviewerStatus(statusCode) {
+        switch (statusCode) {
+            case '1': return 'info';
+            case '2': return 'success';
+            case '3': return 'warning';
+            default: return 'danger';
+        }
+    }
 }
 
