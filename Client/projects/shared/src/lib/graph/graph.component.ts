@@ -57,7 +57,7 @@ export class GraphComponent implements OnInit {
         containerHeight: 0,
         index: null,
         type: ''
-    }
+    };
     $debounceEventForTooltip = new Subject();
 
     constructor(public graphDataService: DataService) { }
@@ -108,7 +108,7 @@ export class GraphComponent implements OnInit {
             .on('mouseover', (event, d) => {
                 this.$debounceEventForTooltip.next({'d': d, 'event': event});
             });
-        
+
         this.node = this.svg.selectAll('.node').data(this.graph.nodes);
         const g = this.node.enter().append('g').attr('class', 'node');
 
@@ -340,7 +340,7 @@ export class GraphComponent implements OnInit {
         this.popOverEvents.next(false);
     }
 
-    hideTooltip() : void {
+    hideTooltip(): void {
         this.openTooltipEvent.next(false);
     }
 
@@ -406,7 +406,7 @@ export class GraphComponent implements OnInit {
     }
 
     subscribeTooltipEvent() {
-        this.graphTooltipEvents.subscribe((data: any) => { 
+        this.graphTooltipEvents.subscribe((data: any) => {
             this.showToolTipDetails(data); });
     }
 
@@ -414,7 +414,8 @@ export class GraphComponent implements OnInit {
         this.$debounceEventForTooltip.pipe(debounce(() => interval(80)))
         .subscribe((data: any) => {
             if (data) {
-                this.showToolTipDetails({ index: data.d.index, clientX: data.event.clientX, clientY: data.event.clientY, type: this.getType(data) });
+                this.showToolTipDetails({ index: data.d.index, clientX: data.event.clientX,
+                     clientY: data.event.clientY, type: this.getType(data) });
             }
         });
     }
@@ -431,5 +432,9 @@ export class GraphComponent implements OnInit {
         this.tooltipPositionDetails.clientY = data.clientY;
         this.tooltipPositionDetails.type = data.type;
         this.openTooltipEvent.next(true);
+    }
+
+    getLinkForAdditionalImage(imageURL): string {
+        return window.location.origin + imageURL;
     }
 }
