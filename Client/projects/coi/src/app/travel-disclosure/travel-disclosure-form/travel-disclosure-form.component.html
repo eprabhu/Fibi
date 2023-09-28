@@ -112,7 +112,7 @@
                 </div>
 
                 <!-- State list -->
-                <div class="row col-6" *ngIf="destination=='Domestic'">
+                <div class="row col-6" *ngIf="destination !=='International'">
                     <label for="travelDisclosure-stateList" class="fw-500 fs-14 col-custom">State :</label>
                     <div class="col">
                         <input type="text" id="travelDisclosure-destinationState" autocomplete="off"

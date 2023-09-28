@@ -84,11 +84,8 @@
                 <div class="form-row mt-2"
                     *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                     <div class="col-12">
-                        <label for="desc-award mb-2" *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
-                            <span class="fs-14 fw-600 mandatory">*</span>Revision Reason
-                        </label>
-                        <label for="desc-award mb-2" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE'">
-                            Description
+                        <label for="desc-award mb-2" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE' || (hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE')">
+                            <span *ngIf="triggeredFrom == 'FCOI_DISCLOSURE'" class="fs-14 fw-600 mandatory">*</span> Description
                         </label>
                         <textarea [(ngModel)]="reviseObject.revisionComment" *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')" (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
                                   appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"

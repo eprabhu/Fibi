@@ -257,8 +257,7 @@
                             </div>
                             <div class="row mb-3 p-013">
                                 <div *ngIf="coi?.fcoiTypeCode== 1" class="col-5">
-                                    <label for="id" class="label-text">{{coi?.disclosureVersionNumber== 1 ?
-                                        'Description:' : 'Revision Reason:'}}</label>
+                                    <label for="id" class="label-text">Description</label>
                                     <span id="id" class="grey-text">{{coi?.reviseComment}}</span>
                                 </div>
                                 <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-5">
