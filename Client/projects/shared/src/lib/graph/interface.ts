@@ -26,6 +26,15 @@ export class GraphDataRO {
     relationship: Array<string>;
 }
 
+export interface TooltipEvent {
+    index: number;
+    clientX: number;
+    clientY: number;
+    type: string;
+    source: string;
+    target: string;
+}
+
 export class EventHistoryItem {
     eventId: string;
     eventName: string;
