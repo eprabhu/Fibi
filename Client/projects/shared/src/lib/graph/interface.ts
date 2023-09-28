@@ -12,9 +12,10 @@ export interface GraphEvent {
 export class GraphDetail {
     id: string;
     visible: boolean;
+    name: string;
 }
 
-export class GraphConfiguraion {
+export class GraphConfiguration {
     nodes: any = {};
     relations: any = {};
 }
@@ -23,6 +24,15 @@ export class GraphDataRO {
     node: string;
     value: string;
     relationship: Array<string>;
+}
+
+export class EventHistoryItem {
+    eventId: string;
+    eventName: string;
+    nodeName: string;
+    relationId: string;
+    relations: Array<string> = [];
+    elementId: string;
 }
 export const WIDTH = 1000;
 export const HEIGHT = 800;
