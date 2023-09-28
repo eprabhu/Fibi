@@ -69,6 +69,8 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 		if(!this.isReplyComment && !this.reviewCommentsService.isEditParentComment && !this.isEditComment) {
 			this.getReviewerActionDetails();
 			this.commentDetails.coiReviewCommentDto.coiParentCommentId = commentDetails.commentId;
+			this.commentDetails.coiReviewCommentDto.coiSubSectionsId = commentDetails.componentReferenceNumber;
+			this.commentDetails.coiReviewCommentDto.componentSubRefId = commentDetails.componentSubReferenceId;
 			this.isReplyComment = true;
 		}
 
@@ -82,13 +84,15 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 		}));
 	}
 
-	editReplyComment(replayComment, index) {
+	editReplyComment(replayComment) {
 		if( !this.isEditComment  &&  !this.reviewCommentsService.isEditParentComment && !this.isReplyComment) {
 			this.isEditComment = true;
 			this.commentDetails.coiReviewCommentDto.disclosureId = replayComment.componentReferenceId
 			this.commentDetails.coiReviewCommentDto.commentId = replayComment.commentId;
 			this.commentDetails.coiReviewCommentDto.comment = replayComment.comment;
 			this.commentDetails.coiReviewCommentDto.coiParentCommentId = replayComment.parentCommentId;
+			this.commentDetails.coiReviewCommentDto.coiSubSectionsId = replayComment.componentReferenceNumber;
+			this.commentDetails.coiReviewCommentDto.componentSubRefId = replayComment.componentSubReferenceId;
 		}
 	}
 

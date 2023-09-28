@@ -131,7 +131,7 @@
             </div>
         </div> -->
         
-        <div class="card pt-2 px-2 shadow-medium m-3 pb-5">
+        <div class="card pt-2 px-2 shadow-medium m-3 pb-3">
             <div class="p-3 br-12 pb-0">
                 <ckeditor [(ngModel)]="reviewCommentDetails.coiReviewCommentDto.comment"
                 [editor]="Editor" [config]="editorConfig"(ready)="onReady($event)"
@@ -172,16 +172,8 @@
                         <a class="tooltip-helptext"><i class="fa fa-info-circle ct-icon-right hand-cursor mt-2"
                                 aria-hidden="true"></i></a>
                     </span> -->
-                    <!-- <div class="align-items-center d-flex fs-14 pl-4 text-right border-left-line">
-                        <label class="col-3 fw-500 mr-2" for="Reviewer">Comment Visibility: </label>
-                        <select id="prop-doc-popup-type" class="form-control form-select"
-                                    [(ngModel)]="selectedCommentType">
-                                    <option value= "null">--Select--</option>
-                                    <option *ngFor="let type of reviewCommentType"
-                                        [value]="type" [hidden]="(isUserAdmin && !type.isShowForAdmin) || (isUserReviewer && !type.isShowForReviewer) || (isUserReporter && !type.isShowForReporter)">
-                                        {{type.description}}</option>
-                                </select>
-                    </div>  -->
+                   
+
                     <!-- <div class="mb-2 btn-position">
                         <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3" id="clear-btn"
                             (click)="cancelOrClearCommentsDetails()">{{isEditComment?'Cancel':'Clear'}}</button>
@@ -190,7 +182,7 @@
                     </div> -->
                 <!-- </div> -->
 
-                <div *ngIf="isAddAssignee" class="border-top-steps mx-3 mb-3" [@topSlideInOut]>
+                <!-- <div *ngIf="isAddAssignee" class="border-top-steps mx-3 mb-3" [@topSlideInOut]>
                     <div class="d-flex mx-3 mb-15">
                         <div class="col-4">
                             <label class="d-block ml-4 mt-3 fs-14 fw-500">Administrator</label>
@@ -209,7 +201,7 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- <div class="border border-top-steps card-col d-flex form-row justify-content-between pt-2 px-3 mb-10 mx-3"> -->
                     <!-- <div class="fs-14 mb-3"> -->
@@ -241,15 +233,32 @@
                             (click)="addCommentsDetails()">{{isEditComment ? 'Save Comment' :'Add Comment'}}</button>
                     </div> -->
                 <!-- </div> -->
-                <div class="border-top-steps d-flex px-3 py-3 mx-3 border-top-0 border-bottom-0 justify-content-end">
-                <div class="mb-2 btn-position">
-                    <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3" id="clear-btn"
-                        (click)="cancelOrClearCommentsDetails()">{{isEditComment?'Cancel':'Clear'}}</button>
-                    <button class="btn btn-primary px-4 py-2 fs-14" id="add-comment-btn"
-                        (click)="addCommentsDetails()">{{isEditComment ? 'Save Comment' :'Add Comment'}}</button>
-                </div>
-            </div>
 
+                <div class="row mt-3 mx-2 align-items-center">
+                    <div class="col">
+                        <!-- <div class="align-items-center d-flex fs-14 pl-4 text-right"> -->
+                        <!-- <span class="fs-14 fw-medium me-2 text-secondary">Comment Visibility:</span>
+                        <ng-container *ngFor="let type of reviewCommentType">
+                            <span
+                                *ngIf="(isUserAdmin && type.isShowForAdmin) || (isUserReviewer && type.isShowForReviewer) || (isUserReporter && type.isShowForReporter)"
+                                (click)="selectedCommentType = type?.code" [class.filter-active]="selectedCommentType == type?.code"
+                                [title]="'Click to filter by type: ' + type.description"
+                                [area-describedby]="'Click to filter by type: ' + type.description"
+                                class="shadow-sm fw-medium px-3 py-1 mx-1 border rounded-5 bg-white filter-active" role="button">
+                                {{type.description}}
+                            </span>
+                        </ng-container> -->
+                    </div>
+                    <!-- <div class="border-top-steps d-flex px-3 py-3 mx-3 border-top-0 border-bottom-0 justify-content-end">  btn-position-->
+                    <div class="col-auto">
+                        <div>
+                            <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3" id="clear-btn"
+                                (click)="cancelOrClearCommentsDetails()">{{isEditComment?'Cancel':'Clear'}}</button>
+                            <button class="btn btn-primary px-4 py-2 fs-14" id="add-comment-btn"
+                                (click)="addCommentsDetails()">{{isEditComment ? 'Save Comment' :'Add Comment'}}</button>
+                        </div>
+                    </div>
+                </div>
         </div>
         <app-review-comment-list-view [commentReviewerList]="commentList" [reviewTypeList]="reviewTypeList?.coiSectionsTypeList" [selectedReviewType]="selectedReviewType.coiSectionsTypeCode"
             (deleteReviewComment)="deleteReviewComment($event)"

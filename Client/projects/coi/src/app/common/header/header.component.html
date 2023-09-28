@@ -26,8 +26,8 @@
             <div class="align-items-center d-flex mx-4">
                 <ng-container *ngIf="_router.url.includes('/coi/user-dashboard')">
                     <div class="btn-group me-4">
-                        <button type="button" class="btn btn-primary fs-14 d-flex align-items-center"><mat-icon>add</mat-icon> <span class="pt-1 px-2">Create</span></button>
-                        <button [matMenuTriggerFor]="createActionMenu" type="button" class="border-start fs-14 btn btn-primary dropdown-width dropdown-toggle dropdown-toggle-split">
+                        <button (click)="triggerClickForId('create-toggle-dropdown')" type="button" class="btn btn-primary fs-14 d-flex align-items-center"><mat-icon>add</mat-icon> <span class="px-2">Create</span></button>
+                        <button id="create-toggle-dropdown" [matMenuTriggerFor]="createActionMenu" type="button" class="border-start fs-14 btn btn-primary dropdown-width dropdown-toggle dropdown-toggle-split">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                     </div>

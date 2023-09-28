@@ -83,7 +83,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy, OnChang
     ];
     selectedCommentType: any = null;
     componentSubRefTitle = '';
-    coiSectionType = '';
+    coiSectionType = null;
     isUserAdmin = false;
     isUserReviewer = false;
     isUserReporter = false;
