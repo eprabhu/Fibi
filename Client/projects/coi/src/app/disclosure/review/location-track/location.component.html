@@ -106,13 +106,14 @@
                                         (click)="updateCoiReviewStage(index,reviewer,'COMPLETE')">stop_circle</mat-icon>
                                 </button>
                             </ng-container>
-                                <button class="btn-primary-icon d-flex align-items-center me-3 my-1" [ngClass]="{'review-comment-position':!isMangeReviewAction}" (click)="modifyReviewComment(reviewer.coiReviewId)">
+                                <button class="btn-primary-icon d-flex align-items-center me-3 my-1"
+                                [ngClass]="{'review-comment-position':!isMangeReviewAction}" (click)="modifyReviewComment(reviewer.coiReviewId)">
                                     <mat-icon title="Click here to add review comment">rate_review</mat-icon>
                                 </button>
                                 <!-- more actions -->
                                 
                                 <ng-container *ngIf="isMangeReviewAction">
-                                    <button  *ngIf="reviewer.reviewStatusTypeCode == '1'" [matMenuTriggerFor]="beforeMenu"
+                                    <button  *ngIf="reviewer.reviewStatusTypeCode !== '2'" [matMenuTriggerFor]="beforeMenu"
                                         class="btn-primary-icon d-flex align-items-center my-1"
                                         role = "button"
                                         type="button"
@@ -194,16 +195,17 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review Location' : 'Assign Review Location' }} for
+                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review Location' : 'Assign Review Location' }}
                   <ng-container  *ngIf="coiDisclosure?.fcoiTypeCode == '1'">
                     #{{coiDisclosure?.disclosureNumber}} : FCOI Disclosure By {{coiDisclosure?.person?.fullName}}
                   </ng-container>
-                  <ng-container  *ngIf="coiDisclosure?.fcoiTypeCode !== '1'">
+                  <!-- <ng-container  *ngIf="coiDisclosure?.fcoiTypeCode !== '1'">
                     #{{coiDisclosure?.disclosureNumber}} : {{coiDisclosure?.coiDisclosureFcoiType?.description}} Disclosure [{{projectDetail?.moduleItemId}} :
                     {{(projectDetail?.title)?.length>20 ?
                     (projectDetail?.title | slice:0: 10)+'...' :
                     projectDetail?.title}}] By {{coiDisclosure?.person?.fullName}}
-                  </ng-container></h5>
+                  </ng-container> -->
+                </h5>
                 <button type="button" title="Close" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
                     (click)="reviewDetails = {}">
                 </button>

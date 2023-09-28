@@ -245,7 +245,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     modifyReviewComment(coiReviewId) {
         this.commentConfiguration.coiReviewId = coiReviewId;
-        this.coiService.triggerCommentModal(this.commentConfiguration);
+        this.coiService.isShowCommentNavBar = true;	
     }
 
     validateReview() {
