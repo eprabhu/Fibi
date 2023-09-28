@@ -5,15 +5,19 @@ import { CommonService } from '../../../common/services/common.service';
 import { COISection, Section } from '../coi-comparison-constants';
 import { CoiSummaryEventsAndStoreService } from '../coi-summary-events-and-store.service';
 import { CoiSummaryService } from '../coi-summary.service';
-import {slideHorizontal} from '../../../../../../fibi/src/app/common/utilities/animations';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {HTTP_ERROR_STATUS} from '../../../../../../fibi/src/app/app-constants';
+import { listAnimation, slideInAnimation } from '../../../common/utilities/animations';
+import { slideHorizontal } from '../../../../../../fibi/src/app/common/utilities/animations';
 
 @Component({
     selector: 'app-tool-kit',
     templateUrl: './tool-kit.component.html',
     styleUrls: ['./tool-kit.component.scss'],
-    animations: [slideHorizontal]
+    animations: [ listAnimation, slideHorizontal,
+        slideInAnimation('0','12px', 400, 'slideUp'),
+        slideInAnimation('0','-12px', 400, 'slideDown')
+    ]
 })
 export class ToolKitComponent implements OnInit, OnDestroy {
 
@@ -26,6 +30,7 @@ export class ToolKitComponent implements OnInit, OnDestroy {
     proposalIdLinkedInDisclosure: number = null;
 
     $subscriptions: Subscription[] = [];
+    isRelationshipCollapse = true;
 
     constructor(
         private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
