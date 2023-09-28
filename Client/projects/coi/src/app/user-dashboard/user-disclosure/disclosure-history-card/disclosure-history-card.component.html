@@ -64,8 +64,8 @@
                     <label for="review-status" class="label-text">Version Status :</label>
                     <app-no-data-label [valueToShow]="disclosure?.versionStatus">
                         <span class="ms-3"
-                        [ngClass]="disclosure?.versionStatus === 'ACTIVE' ? 'green-badge' : 'grey-badge'"
-                        id="review-status">{{disclosure?.versionStatus === 'ACTIVE' ? 'Active' : 'Archive'}}</span>
+                        [ngClass]="disclosure?.versionStatus === 'ACTIVE' ? 'green-badge' : disclosure?.versionStatus === 'PENDING' ? 'yellow-badge' : 'grey-badge'"
+                        id="review-status">{{disclosure?.versionStatus === 'ACTIVE' ? 'Active' : disclosure?.versionStatus === 'PENDING' ? 'Pending' : 'Archive'}}</span>
                     </app-no-data-label>
                 </div>
             </div>
@@ -135,9 +135,9 @@
                 </div>
                 <div class="col-3">
                     <label for="status" class="label-text">Disclosure Status :</label>
-                    <app-no-data-label [valueToShow]="disclosure?.travelStatus">
-                        <span class="ms-3 {{commonService.getDisclosureConflictBadge(disclosure?.travelStatusCode)}}"
-                            id="status">{{disclosure?.travelStatus}}
+                    <app-no-data-label [valueToShow]="disclosure?.conflictStatus">
+                        <span class="ms-3 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}"
+                            id="status">{{disclosure?.conflictStatus}}
                         </span>
                     </app-no-data-label>
                 </div>
