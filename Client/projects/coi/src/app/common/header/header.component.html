@@ -1,7 +1,7 @@
 <app-left-nav-bar></app-left-nav-bar>
 <header class="align-items-center bg-white d-flex justify-content-between shadow-medium px-5">
     <div class="d-flex align-items-center">
-        <a class="logo me-3 ms-4" href="#/fibi/dashboard">
+        <a class="logo me-3 ms-4" href={{homeNavigation}}>
             <img [src]="logo" alt="Logo" class="w-100 ms-5">
         </a>
             <ul *ngIf="_router.url.includes('/coi/user-dashboard')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">

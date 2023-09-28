@@ -32,6 +32,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     passwordValidation = new Map();
     timer: any = {password: null, confirmPassword: null};
     $subscriptions: Subscription[] = [];
+    homeNavigation: string = '';
+    isAdministrator: boolean = false;
 
     constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -39,6 +41,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
+        this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
+                                || this.commonService.isCoiReviewer;
+        this.navigateForHomeIcon();
+    }
+
+    navigateForHomeIcon(): void {
+        this.homeNavigation = this.isAdministrator ? '#/coi/admin-dashboard' : '#/coi/user-dashboard/disclosures';
     }
 
     ngOnDestroy(): void {
@@ -109,3 +118,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         document.getElementById(modalId)?.click();
     }
 }
+function thisnavigateForHomeIcon() {
+    throw new Error('Function not implemented.');
+}
+

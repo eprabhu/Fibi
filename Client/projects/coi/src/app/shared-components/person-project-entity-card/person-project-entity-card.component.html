@@ -12,7 +12,7 @@
         <div class="ms-2 d-flex" *ngIf="personProjectOrEntity?.projectDetails?.moduleItemId">
             <label class="grey-text fs-14 fw-600 text-nowrap mt-1">Project : </label>
             <app-no-data-label [valueToShow]="personProjectOrEntity?.projectDetails?.moduleItemId">
-                <span class="ml-2 grey-text fs-14">#{{personProjectOrEntity?.projectDetails?.moduleItemId}} :
+                <span class="ml-2 grey-text fs-14">#{{projectId}} :
                     {{(!isReadMore && personProjectOrEntity?.projectDetails?.title?.length > 180)
                     ? (personProjectOrEntity?.projectDetails?.title | slice:0:180) :
                     personProjectOrEntity?.projectDetails?.title }}
