@@ -1,9 +1,10 @@
 
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Observable, Subject, interval } from 'rxjs';
 import { DataService } from './data.service';
 import * as d3 from 'd3';
-import { GraphEvent, GraphDetail, GraphDataRO, HEIGHT, WIDTH, DISTANCE_BTN_NODES, FORCE_BTN_NODES, EventHistoryItem } from './interface';
+import { GraphEvent, GraphDetail, GraphDataRO, HEIGHT, WIDTH, DISTANCE_BTN_NODES, FORCE_BTN_NODES, EventHistoryItem, TooltipEvent } from './interface';
+import { debounce } from 'rxjs/operators';
 class RedirectionClass {
     node: string;
     id: number | string;
@@ -20,7 +21,9 @@ export class GraphComponent implements OnInit {
     @Input() graphId: string | number;
     graphDetail: GraphDetail = new GraphDetail();
     graphNodeEvents = new Subject<GraphEvent>;
+    graphTooltipEvents = new Subject<TooltipEvent>;
     popOverEvents = new Subject<boolean>;
+    openTooltipEvent = new Subject<boolean>;
     popOverPositions = {
         clientX: 0,
         clientY: 0,
@@ -45,6 +48,17 @@ export class GraphComponent implements OnInit {
     eventData: any = {};
     selectedEventIndex = 0;
     showtimeLine = false;
+    tooltipPositionDetails = {
+        clientX: 0,
+        clientY: 0,
+        popoverHeight: 400,
+        popoverWidth: 500,
+        containerWidth: 0,
+        containerHeight: 0,
+        index: null,
+        type: ''
+    }
+    $debounceEventForTooltip = new Subject();
 
     constructor(public graphDataService: DataService) { }
 
@@ -58,7 +72,9 @@ export class GraphComponent implements OnInit {
             // do something here to handle error and indicate the error.
         });
         this.manageGraphDisplay();
+        this.getSearchList();
         this.listenToGraphEvents();
+        this.subscribeTooltipEvent();
         this.openDetailsView();
     }
 
@@ -88,9 +104,11 @@ export class GraphComponent implements OnInit {
             .insert('line', '.node')
             .attr('class', 'link')
             .style('stroke', '#d9d9d9')
-            .attr('marker-end', 'url(#arrow)');
-        this.link.exit().remove();
-
+            .attr('marker-end', 'url(#arrow)')
+            .on('mouseover', (event, d) => {
+                this.$debounceEventForTooltip.next({'d': d, 'event': event});
+            });
+        
         this.node = this.svg.selectAll('.node').data(this.graph.nodes);
         const g = this.node.enter().append('g').attr('class', 'node');
 
@@ -111,10 +129,16 @@ export class GraphComponent implements OnInit {
         this.node.call(d3.drag()
             .on('start', this.dragStarted.bind(this))
             .on('drag', this.dragged.bind(this))
-            .on('end', this.dragEnded.bind(this)));
-        this.node.exit().remove();
+            .on('end', this.dragEnded.bind(this)))
+            .on('click', (event, d) => {
+                this.selectedRelations[d.elementId] = this.selectedRelations[d.elementId] || {};
+                this.graphNodeEvents.next({ index: d.index, clientX: event.clientX, clientY: event.clientY });
+                this.cardData = d;
+                this.relations = this.setConnectionsDataForPopUp(d) || [];
+            });
 
-        this.attachEventsForGraph();
+        this.link.exit().remove();
+        this.node.exit().remove();
 
         this.simulation.nodes(this.graph.nodes)
             .force('link', d3.forceLink(this.graph.links).distance(100))
@@ -192,7 +216,7 @@ export class GraphComponent implements OnInit {
 
     private fetchROForRoot(id): GraphDataRO {
         const RO: GraphDataRO = this.getROForGraph(this.graphDataService.graphTypeConfiguration.root_node[0],
-            id, this.graphDataService.graphTypeConfiguration.root_relations);
+            this.graphDetail.id, this.graphDataService.graphTypeConfiguration.root_relations);
         return RO;
     }
 
@@ -247,21 +271,6 @@ export class GraphComponent implements OnInit {
         }
     }
 
-    private attachEventsForGraph(): void {
-        this.node.on('click', (event, d) => {
-            this.selectedRelations[d.elementId] = this.selectedRelations[d.elementId] || {};
-            this.graphNodeEvents.next({ index: d.index, clientX: event.clientX, clientY: event.clientY });
-            this.cardData = d;
-            this.relations = this.setConnectionsDataForPopUp(d) || [];
-        });
-        this.link.on('click', (event, d) => {
-            console.log('Click from link');
-        });
-        this.link.on('mouseover', (event, d) => {
-            console.log('Click from link');
-        });
-    }
-
     setConnectionsDataForPopUp(node) {
         const data = this.graphDataService.graphTypeConfiguration.relations.find(R => R.node === node.label);
         return data?.relationships;
@@ -281,6 +290,7 @@ export class GraphComponent implements OnInit {
     }
 
     async drillDownEvent(event, R): Promise<any> {
+        this.hideTooltip();
         const value = this.getValueForNode(this.cardData);
         const eventId: string = value + R.id;
         let GRAPH_DATA: any;
@@ -330,6 +340,10 @@ export class GraphComponent implements OnInit {
         this.popOverEvents.next(false);
     }
 
+    hideTooltip() : void {
+        this.openTooltipEvent.next(false);
+    }
+
     clearGraph() {
         document.getElementById('chart-container').innerHTML = '';
         this.graph = { nodes: [], links: [] };
@@ -339,6 +353,7 @@ export class GraphComponent implements OnInit {
         this.eventHistory = [];
         this.selectedEventIndex = null;
         this.showtimeLine = false;
+        this.hideTooltip();
     }
 
     setEventItem(eventId: string, eventName: string, relations: string[], nodeName: string,
@@ -390,4 +405,31 @@ export class GraphComponent implements OnInit {
         });
     }
 
+    subscribeTooltipEvent() {
+        this.graphTooltipEvents.subscribe((data: any) => { 
+            this.showToolTipDetails(data); });
+    }
+
+    getSearchList() {
+        this.$debounceEventForTooltip.pipe(debounce(() => interval(80)))
+        .subscribe((data: any) => {
+            if (data) {
+                this.showToolTipDetails({ index: data.d.index, clientX: data.event.clientX, clientY: data.event.clientY, type: this.getType(data) });
+            }
+        });
+    }
+
+    getType(data: any) {
+        return data.d.Relationship_Info || data.d.Relationship_type || this.graphDataService.graphMetaData.relations[data.d.type].name;
+    }
+
+    showToolTipDetails(data) {
+        const modal: HTMLElement = document.querySelector('#d3GraphModal');
+        this.tooltipPositionDetails.containerWidth = modal.offsetWidth;
+        this.tooltipPositionDetails.containerHeight = modal.offsetHeight;
+        this.tooltipPositionDetails.clientX = data.clientX;
+        this.tooltipPositionDetails.clientY = data.clientY;
+        this.tooltipPositionDetails.type = data.type;
+        this.openTooltipEvent.next(true);
+    }
 }
