@@ -307,7 +307,30 @@ small {
   margin-bottom: 5px;
   font-size: 12px;
   padding: 3px 8px 3px 12px;
-  border-radius: 11px;
-  background: gainsboro;
+  border-radius: 15px;
+  background: #f1f1f1;
+  border: 1px solid #ebe8e8;
   /* box-shadow: 2px 1px 1px #cef9ff; */
+}
+
+// code optimization is needed
+.reviewer-success {
+  background: none;
+  padding: 0;
+  margin: 0;
+  color: #4cb57d;
+}
+
+.reviewer-warning {
+  background: none;
+  padding: 0;
+  margin: 0;
+  color: #ac8100;
+}
+
+.reviewer-info {
+  background: none;
+  padding: 0;
+  margin: 0;
+  color: #007DEC;
 }
