@@ -13,7 +13,6 @@ export class LeftNavBarComponent implements OnInit {
     deployMap = environment.deployUrl;
     isNavExpanded = false;
     isAdministrator = false;
-    isShowAdminDashboard = false;
     canViewAdminDashboard = false;
     isManageEntity = false;
     @ViewChild('sideBarMenu', {static: true}) sideBarMenu: ElementRef;
@@ -24,12 +23,8 @@ export class LeftNavBarComponent implements OnInit {
 
     ngOnInit() {
         this.checkUserHasRight();
-        this.getPermissions();
         this.isAdministrator = this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
             || this._commonService.isCoiReviewer;
-        if (this.isAdministrator) {
-            this._router.navigate(['/coi/admin-dashboard'], { queryParamsHandling: 'preserve' });
-        }
     }
 
     offClickSideBarHandler(event) {
@@ -52,10 +47,5 @@ export class LeftNavBarComponent implements OnInit {
                 'MAINTAIN_QUESTIONNAIRE', 'MAINTAIN_USER_ROLES', 'MAINTAIN_ROLE', 'MAINTAIN_PERSON', 'MAINTAIN_TRAINING',
                 'VIEW_KEY_PERSON_TIMESHEET', 'MAINTAIN_KEY_PERSON_TIMESHEET', 'MAINTAIN_DELEGATION', 'MAINTAIN_ORCID_WORKS'],
             'SOME');
-    }
-
-    async getPermissions() {
-        const rightsArray = await this._commonService.fetchPermissions();
-        this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
     }
 }
