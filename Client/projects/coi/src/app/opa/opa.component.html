@@ -1,0 +1,195 @@
+<div class="border-top-0 mb-3 mx-3 row header-sticky">
+    <div class="col-9 p-0">
+        <div class="border shadow-sm">
+            <div class="disclosure-heading px-3 d-flex">
+                <div class="align-self-center flex-fill d-flex">
+                    <p class="m-0">
+                        <strong># : FCOI Disclosure By <span
+                            class="text-primary"><u class="cursor-pointer" title="Click to view details of"></u></span>
+                        </strong>
+                        <strong title="">
+                            Disclosure - [ : ] By
+                            <span class="text-primary ">
+                                    <u class="cursor-pointer" title="click to view person details of "></u>
+                                </span>
+                        </strong>
+                    </p>
+                </div>
+                <div class="d-flex">
+                    <div class="align-items-center d-flex" title="Click here to collapse / expand">
+                        <button (click)="isCardExpanded=!isCardExpanded"
+                                class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                            <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 bg-white pb-3">
+                <div class="col mr-15">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                        <span class="status-pill">Details</span>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="label-text"><i aria-hidden="true" class="fa fa-home right-margin"></i>Department
+                                    : </label>
+                                <span class="grey-text ml-2">
+                                    <app-no-data-label [valueToShow]="">
+                                        <div class="text-overflow"></div>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="label-text"><i class="fa fa-user-o fw-700 right-margin"
+                                                             aria-hidden="true"></i>Administrator : </label>
+                                <span class="grey-text ml-2">
+                                    <app-no-data-label [valueToShow]="">
+                                        <span></span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="label-text left-margin">Admin Group : </label>
+                                <span class="grey-text ml-2">
+                                    <app-no-data-label [valueToShow]="">
+                                        <span></span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto status-card-width">
+                    <div class="border triple-card rounded-1 position-relative">
+                        <span class="status-pill">Cycle</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium spaced-table">
+                                <tr>
+                                    <td class="fw-600">Disposition :</td>
+                                    <td class="ps-4">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-600">Review :</td>
+                                    <td class="ps-4">
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-600">Disclosure :</td>
+                                    <td class="ps-4">
+                                        <app-no-data-label
+                                            [valueToShow]="">
+                                            <span
+                                                class=""></span>
+                                        </app-no-data-label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col">
+                    <div class="border triple-card rounded-1 position-relative">
+                        <span class="status-pill">Relationship with</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium spaced-table">
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfSFI > 0"
+                                    (click)="openCountModal('sfi',  coiData, coiData?.coiDisclosure?.numberOfSFI)">
+                                    <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfSFI?
+                                            coiData?.coiDisclosure?.numberOfSFI : 0}}</span>
+                                    </td>
+                                    <td class="ps-2">Significant Financial Interest test</td>
+                                </tr>
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfProposals > 0"
+                                    (click)="openCountModal('proposal', coiData, coiData?.coiDisclosure?.numberOfProposals)"
+                                    *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
+                                    <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfProposals ?
+                                            coiData?.coiDisclosure?.numberOfProposals : 0}}</span>
+                                    </td>
+                                    <td class="ps-2">Proposals</td>
+                                </tr>
+                                <tr [class.cursor-pointer]="coiData?.coiDisclosure?.numberOfProposals > 0"
+                                    (click)="openCountModal('award', coiData, coiData?.coiDisclosure?.numberOfAwards)"
+                                    *ngIf="!coiData?.proposalIdlinkedInDisclosure && ['1'].includes(coiData?.coiDisclosure?.fcoiTypeCode)">
+                                    <td><span class="bold-blue-color">{{coiData?.coiDisclosure?.numberOfAwards ?
+                                            coiData?.coiDisclosure?.numberOfAwards : 0}}</span>
+                                    </td>
+                                    <td class="ps-2">Awards</td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+
+
+        </div>
+    </div>
+    <div class="col-3 px-0">
+        <div class="d-flex flex-column p-0 bg-white min-height-189 border-end shadow-sm">
+            <div class="flex-fill h-100">
+                <div class="d-flex justify-content-between p-3">
+                    <span title="Go to COI home page"
+                          class="btn btn-outline-grey pb-0 fs-14 col-2">
+                        <mat-icon>home</mat-icon>
+                    </span>
+                    <button
+                        class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
+                        <mat-icon class="me-2">undo</mat-icon>
+                        Previous
+                    </button>
+                    <button
+                        class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
+                        <mat-icon class="me-2">redo</mat-icon>
+                        Next
+                    </button>
+                </div>
+                <div title="Click to save your progress"
+                     class="d-flex justify-content-around px-3 pb-3">
+                    <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">save</mat-icon>
+                        Save
+                    </span>
+                </div>
+                <div
+                    class="d-flex justify-content-around px-3">
+                    <button
+                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
+                        title="Click to submit your disclosure">
+                        <mat-icon class="me-2">done</mat-icon>
+                        Submit
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="mx-3 d-flex">
+    <div class="left-div me-1" id="coi_summary_container">
+        <app-form-builder-view></app-form-builder-view>
+    </div>
+    <div class="p-0 right-div ms-2" id="coi_summary_toolkit">
+
+        <div>
+            <div class="Details of Disclosureborder shadow-sm">
+                <div class="align-items-center d-flex f-15 fw-bold px-3 side-bar-title">
+                    Navigate to
+                </div>
+                <div class="bg-white p-3 scrollable-section">
+                    <div class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Certification</div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+

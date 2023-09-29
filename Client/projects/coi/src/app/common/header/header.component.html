@@ -4,7 +4,7 @@
         <a class="logo me-3 ms-4" href={{homeNavigation}}>
             <img [src]="logo" alt="Logo" class="w-100 ms-5">
         </a>
-            <ul *ngIf="_router.url.includes('/coi/user-dashboard')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
+        <ul role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
             <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab"
                 routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/disclosures') ? 'My COI' : 'Go to My COI Page'"
                 aria-describedby="Goto home page">My Disclosures
@@ -14,6 +14,11 @@
                 routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/entities') ? 'Disclosures page' : 'Go to Disclosures page'"
                 aria-describedby="Goto Disclosures page">My Entities
                 <span *ngIf="_router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
+            </li>
+            <li [routerLink]="['/coi/opa']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/opa') ? 'My OPA page' : 'Go to My OPA page'"
+                aria-describedby="Goto My OPA page">My OPA
+                <span *ngIf="_router.url.includes('/coi/opa')" class="active-color"></span>
             </li>
             <li class="mr-2 cursor-pointer" role="tab"
                 routerLinkActive="active" [attr.title]="_router.url.includes('/coi/reviewer-dashboard') ? 'Notes and Attachments page' : 'Go to Notes and Attachments page'"
