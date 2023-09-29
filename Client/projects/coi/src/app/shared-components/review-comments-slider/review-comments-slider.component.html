@@ -98,7 +98,10 @@
                                 <app-no-data-label
                                     [valueToShow]="disclosureDetails?.coiConflictStatusType?.description">
                                     <span
-                                        class="{{commonService.getDisclosureConflictBadge(disclosureDetails?.conflictStatusCode)}}">{{disclosureDetails?.coiConflictStatusType?.description}}</span>
+                                        class="{{commonService.getDisclosureConflictBadge(disclosureDetails?.conflictStatusCode)}}"></span>
+                                        <span class="badgeFont">
+                                            {{disclosureDetails?.coiConflictStatusType?.description}}
+                                        </span>
                                 </app-no-data-label>
                             </span>
                         </div>

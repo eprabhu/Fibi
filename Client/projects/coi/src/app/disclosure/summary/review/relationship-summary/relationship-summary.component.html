@@ -165,7 +165,10 @@
                       </div>
                     </td>
                     <td class="border-end border-top-0 px-3 text-center" [class.border-0]="i != projectRelations?.length-1">
-                      <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}">{{relation?.coiProjConflictStatusType?.description}}</span>
+                      <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}"></span>
+                      <span class="badgeFont">
+                        {{relation?.coiProjConflictStatusType?.description}}
+                    </span>      
                     </td>
                     <td class="border-0  border-top-0 pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
                       <div class="d-flex">
@@ -191,4 +194,4 @@
       </div>
 </div>
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
-  [entityDetails]="entityDetails" [isEditMode]="coiDetails?.reviewStatusCode== 3 && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
+  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>

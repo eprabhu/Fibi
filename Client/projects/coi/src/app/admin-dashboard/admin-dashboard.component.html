@@ -341,18 +341,24 @@
                                     </span>
                                 </div>
                                 <div class="p-1 align-items-center mt-2 col-3">
-                                    <label for="disclosure-status" class="label-text">Disclosure Status :</label>
+                                    <label for="disclosure-status" class="label-text p5">Disclosure Status :</label>
                                     <app-no-data-label [valueToShow]="coi?.conflictStatus" *ngIf="!coi?.travelDisclosureId">
                                         <span
                                             class="ms-3 {{commonService.getDisclosureConflictBadge(coi?.conflictStatusCode)}}"
-                                            id="disclosure-status">{{coi?.conflictStatus}}
+                                            id="disclosure-status">
+                                        </span>
+                                        <span class="badgeFont">
+                                            {{coi?.conflictStatus}}
                                         </span>
                                     </app-no-data-label>
                                     <app-no-data-label [valueToShow]="coi?.travelDisclosureStatusDescription"
                                         *ngIf="coi?.travelDisclosureId">
                                         <span
                                             class="ms-3 {{commonService.getDisclosureConflictBadge(coi?.travelDisclosureStatusCode)}}"
-                                            id="disclosure-status">{{coi?.travelDisclosureStatusDescription}}
+                                            id="disclosure-status">
+                                        </span>
+                                        <span class="badgeFont">
+                                            {{coi?.travelDisclosureStatusDescription}}
                                         </span>
                                     </app-no-data-label>
                                 </div>
@@ -384,7 +390,10 @@
                                                     <span
                                                         class="ms-3 {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
                                                         [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
-                                                        id="disp-status">{{coi?.dispositionStatus}}</span>
+                                                        id="disp-status"></span>
+                                                        <span class="badgeFont">
+                                                            {{coi?.dispositionStatus}}
+                                                        </span>
                                                 </app-no-data-label>
                                             </div>
                                         </div>
@@ -429,11 +438,14 @@
                                                 </app-no-data-label>
                                             </div>
                                             <div class="col-3">
-                                                <label for="review-status" class="label-text">Review Status :</label>
+                                                <label for="review-status" class="label-text p-25">Review Status :</label>
                                                 <app-no-data-label [valueToShow]="coi?.reviewStatus">
                                                     <span
                                                         class="ms-3 {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
-                                                        id="review-status">{{coi?.reviewStatus}}</span>
+                                                        id="review-status"></span>
+                                                        <span class="badgeFont">
+                                                            {{coi?.reviewStatus}}
+                                                        </span>
                                                 </app-no-data-label>
                                             </div>
                                         </div>
@@ -478,13 +490,16 @@
                                                 </app-no-data-label>
                                             </div>
                                             <div class="col-3">
-                                                <label for="review-status" class="label-text">Document Status :</label>
+                                                <label for="review-status" class="label-text p5">Document Status :</label>
                                                 <app-no-data-label id="review-status"
                                                     [valueToShow]="coi?.documentStatusDescription">
                                                     <span
                                                         class="ms-3 {{commonService.getDocumentStatusBadge(coi?.documentStatusCode)}}"
                                                         [class.text-dark]="commonService.getDocumentStatusBadge(coi?.documentStatusCode) === 'warning'"
-                                                        id="disp-status">{{coi?.documentStatusDescription}}
+                                                        id="disp-status">
+                                                    </span>
+                                                    <span class="badgeFont">
+                                                        {{coi?.documentStatusDescription}}
                                                     </span>
                                                 </app-no-data-label>
                                             </div>
@@ -511,12 +526,15 @@
                                                 </app-no-data-label>
                                             </div>
                                             <div class="col-3">
-                                                <label for="review-status" class="label-text">Review Status :</label>
+                                                <label for="review-status" class="label-text p-25">Review Status :</label>
                                                 <app-no-data-label id="review-status" [valueToShow]="coi?.reviewDescription">
                                                     <span
                                                         class="ms-3 {{commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode)}}"
                                                         [class.text-dark]="commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
-                                                        id="disp-status">{{coi?.reviewDescription}}
+                                                        id="disp-status">
+                                                    </span>
+                                                    <span class="badgeFont">
+                                                        {{coi?.reviewDescription}}
                                                     </span>
                                                 </app-no-data-label>
                                             </div>
