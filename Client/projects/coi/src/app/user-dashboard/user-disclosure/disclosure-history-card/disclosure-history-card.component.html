@@ -52,20 +52,29 @@
                     <label for="status" class="label-text">Disclosure Status :</label>
                     <app-no-data-label [valueToShow]="disclosure?.conflictStatus">
                         <span class="ms-3 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}"
-                            id="status">{{disclosure?.conflictStatus}}
+                            id="status">
                         </span>
+                        <span class="badgeFont">
+                            {{disclosure?.conflictStatus}}
+                    </span>
                     </app-no-data-label>
                 </div>
                 <div class="col-3">
                     <span class="label-text me-2">Disposition Status :</span> <span
-                        class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} ">{{disclosure?.dispositionStatus}}</span>
+                        class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
+                        <span class="badgeFont">
+                            {{disclosure?.dispositionStatus}}
+                    </span>
                 </div>
                 <div class="col-3">
                     <label for="review-status" class="label-text">Version Status :</label>
                     <app-no-data-label [valueToShow]="disclosure?.versionStatus">
                         <span class="ms-3"
                         [ngClass]="disclosure?.versionStatus === 'ACTIVE' ? 'green-badge' : disclosure?.versionStatus === 'PENDING' ? 'yellow-badge' : 'grey-badge'"
-                        id="review-status">{{disclosure?.versionStatus === 'ACTIVE' ? 'Active' : disclosure?.versionStatus === 'PENDING' ? 'Pending' : 'Archive'}}</span>
+                        id="review-status"></span>
+                        <span class="badgeFont">
+                            {{disclosure?.versionStatus === 'ACTIVE' ? 'Active' : disclosure?.versionStatus === 'PENDING' ? 'Pending' : 'Archive'}}
+                        </span>
                     </app-no-data-label>
                 </div>
             </div>
@@ -137,8 +146,11 @@
                     <label for="status" class="label-text">Disclosure Status :</label>
                     <app-no-data-label [valueToShow]="disclosure?.conflictStatus">
                         <span class="ms-3 {{commonService.getDisclosureConflictBadge(disclosure?.conflictStatusCode)}}"
-                            id="status">{{disclosure?.conflictStatus}}
+                            id="status">
                         </span>
+                        <span class="badgeFont">
+                            {{disclosure?.conflictStatus}}
+                    </span>
                     </app-no-data-label>
                 </div>
                 <div class="col-3">
@@ -146,8 +158,11 @@
                     <app-no-data-label [valueToShow]="disclosure?.versionStatus">
                         <span class="ms-3"
                         [ngClass]="disclosure?.versionStatus === 'ACTIVE' ? 'green-badge' : 'grey-badge'"
-                        id="review-status">{{disclosure?.versionStatus === 'ACTIVE' ? 'Active' : 'Archive'}}</span>
+                        id="review-status"></span>
                     </app-no-data-label>
+                    <span class="badgeFont">
+                        {{disclosure?.versionStatus === 'ACTIVE' ? 'Active' : 'Archive'}}
+                </span>
                 </div>
             </div>
         </div>

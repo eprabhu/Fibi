@@ -157,7 +157,10 @@
                                 <span class="grey-text fs-14 ms-3 col">
                                     <app-no-data-label [valueToShow]="travelDisclosure?.documentStatusCode">
                                         <span
-                                            class="fs-14 {{commonService.getDocumentStatusBadge(travelDisclosure?.documentStatusCode)}}">{{travelDisclosure?.documentStatus}}</span>
+                                            class="fs-14 {{commonService.getDocumentStatusBadge(travelDisclosure?.documentStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{travelDisclosure?.documentStatus}}
+                                            </span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -169,7 +172,10 @@
                                 <span class="grey-text fs-14 ms-3 col">
                                     <app-no-data-label [valueToShow]="travelDisclosure?.reviewStatusCode">
                                         <span
-                                            class="fs-14 {{commonService.getTravelReviewStatusBadge(travelDisclosure?.reviewStatusCode)}}">{{travelDisclosure?.reviewStatus}}</span>
+                                            class="fs-14 {{commonService.getTravelReviewStatusBadge(travelDisclosure?.reviewStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{travelDisclosure?.reviewStatus}}
+                                            </span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -180,7 +186,10 @@
                                 aria-label="Disclosure status is">Disclosure : </label>
                                 <span class="grey-text fs-14 ms-3 col">
                                     <app-no-data-label [valueToShow]="travelDisclosure?.disclosureStatus">
-                                        <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}">{{travelDisclosure?.disclosureStatus}}</span>
+                                        <span class="fs-14 {{commonService.getDisclosureConflictBadge(travelDisclosure?.disclosureStatusCode)}}"></span>
+                                        <span class="badgeFont">
+                                            {{travelDisclosure?.disclosureStatus}}
+                                        </span>
                                     </app-no-data-label>
                                 </span>
                             </div>
