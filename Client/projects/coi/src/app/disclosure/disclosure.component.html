@@ -151,20 +151,29 @@
                                 <tr>
                                     <td class="fw-600">Disposition :</td>
                                     <td class="ps-4">
-                                        <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
+                                        <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}"></span>
+                                        <span class="badgeFont">
+                                            {{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-600">Review :</td>
                                     <td class="ps-4">
-                                        <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
+                                        <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
+                                        <span class="badgeFont">
+                                            {{coiData?.coiDisclosure?.coiReviewStatusType?.description}}
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-600">Disclosure :</td>
                                     <td class="ps-4">
                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
-                                            <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                            <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{coiData?.coiDisclosure?.coiConflictStatusType?.description}}
+                                            </span>
                                         </app-no-data-label>
                                     </td>
                                 </tr>
