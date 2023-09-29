@@ -108,12 +108,13 @@ export interface EndpointOptions {
 export class EntityDetails {
     isActive: boolean;
     country: { countryName: string };
-    entityId: string | number;
+    entityId: number;
     entityType: { description: string };
     entityName: string;
     emailAddress: string;
     address: string;
     entityRiskCategory?: EntityRiskCategory;
+    entityNumber?: any;
 }
 
 export interface TravelHistoryRO {

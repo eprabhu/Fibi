@@ -1068,6 +1068,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					unit.setAcronym(resultSet.getString("ACRONYM"));
 					unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
 					disclosureView.setUnit(unit);
+					disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
+					disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
 					disclosureViews.add(disclosureView);
 					disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
 				}
@@ -3971,6 +3973,30 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	@Override
 	public List<DisclAttaType> loadDisclAttachTypes() {
 		return hibernateTemplate.loadAll(DisclAttaType.class);
+	}
+
+	@Override
+	public Boolean isReviewerReviewCompleted(Integer disclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT COUNT(r.assigneePersonId) FROM CoiReview r ");
+		hqlQuery.append("WHERE r.reviewStatusTypeCode <> 2 AND r.disclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		Long count = (Long) query.getSingleResult();
+		return (count <= 0);
+	}
+
+	@Override
+	public Boolean isReviewerAssigned(Integer disclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT COUNT(r.assigneePersonId) FROM CoiReview r ");
+		hqlQuery.append("WHERE r.disclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		Long count = (Long) query.getSingleResult();
+		return count > 0;
 	}
 
 }

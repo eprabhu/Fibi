@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { CoiTravelDisclosure, EndpointOptions, EntityDetails, TravelCreateModalDetails, TravelDisclosure, TravelDisclosureTraveller } from '../travel-disclosure-interface';
 import { CommonService } from '../../common/services/common.service';
-import { convertToValidAmount } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { convertToValidAmount, deepCloneObject, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { fadeInOutHeight } from '../../common/utilities/animations';
 
@@ -36,7 +36,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     travelResObject = new TravelDisclosure();
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
-    destination: 'Domestic' | 'International' = 'Domestic';
+    destination = null;
 
     helpText = [
         'All the fields of travel disclosure form are mandatory.',
@@ -45,6 +45,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     ];
     isResultFromSearch = false;
     entityDetails: EntityDetails = new EntityDetails();
+    addEntityConfirmation: any = null;
+    isAddressReadMore: false;
 
     constructor(public commonService: CommonService,
         private _router: Router,
@@ -189,12 +191,17 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 }
 
     selectedEntityEvent(event: any): void {
-        this.entityName = event ? event.entityName : null;
-        this.travelDisclosureRO.entityId = event ? event.entityId : null;
-        this.travelDisclosureRO.entityNumber = event ? event.entityNumber : null;
+        if (event) {
+            openModal('travel-entity-details');
+        } else {
+            this.entityDetails = null;
+            this.isResultFromSearch = false;
+            this.entityName = null;
+            this.travelDisclosureRO.entityId = null;
+            this.travelDisclosureRO.entityNumber = null;
+        }
+        this.addEntityConfirmation = event ? event : null;
         this.setUnSavedChangesTrue();
-        this.entityDetails = event ? event : null;
-        this.isResultFromSearch = event ? true : false;
     }
 
     selectTravelCountry(event: any): void {
@@ -292,6 +299,39 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
     viewEntity(entityId: string): void {
         this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityId } });
+    }
+
+    confirmEntityDetails() {
+        this.entityDetails = deepCloneObject(this.addEntityConfirmation);
+        this.isResultFromSearch = true;
+        this.entityName = this.entityDetails.entityName;
+        this.travelDisclosureRO.entityId = this.entityDetails.entityId;
+        this.travelDisclosureRO.entityNumber = this.entityDetails.entityNumber;
+        this.addEntityConfirmation = null;
+    }
+
+    clearEntityDetails() {
+        this.clearField = new String('true');
+        this.addEntityConfirmation = null;
+        this.entityDetails = null;
+        this.isResultFromSearch = false;
+        this.entityName = null;
+        this.travelDisclosureRO.entityId = null;
+        this.travelDisclosureRO.entityNumber = null;
+        this.entitySearchOptions.defaultValue = '';
+    }
+
+    getWarningClass(typeCode): string {
+        switch (typeCode) {
+            case '1':
+                return 'invalid';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return;
+        }
     }
 
 }

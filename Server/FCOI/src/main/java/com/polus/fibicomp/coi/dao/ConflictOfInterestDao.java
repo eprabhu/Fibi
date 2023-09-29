@@ -1104,4 +1104,16 @@ public interface ConflictOfInterestDao {
 	 */
 	public List<DisclAttaType> loadDisclAttachTypes();
 
+	/**
+	 * This method is used to Check if the reviewers in the disclosure have completed their reviews
+	 * @return
+	 */
+	public Boolean isReviewerReviewCompleted(Integer disclosureId);
+
+	/**
+	 * This method is used to Check if the disclosure have reviewers assigned
+	 * @return
+	 */
+	public Boolean isReviewerAssigned(Integer disclosureId);
+
 }
