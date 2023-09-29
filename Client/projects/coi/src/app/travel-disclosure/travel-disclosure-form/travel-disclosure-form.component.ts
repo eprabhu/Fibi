@@ -36,7 +36,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     travelResObject = new TravelDisclosure();
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
-    destination: 'Domestic' | 'International' = 'Domestic';
+    destination = null;
 
     helpText = [
         'All the fields of travel disclosure form are mandatory.',
