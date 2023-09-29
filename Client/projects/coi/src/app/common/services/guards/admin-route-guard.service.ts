@@ -34,7 +34,9 @@ export class AdminRouteGuardService {
     }
 
     private async hasPathRights(): Promise<boolean> {
-        return await this.checkIfRightsPresent(ADMIN_DASHBOARD_RIGHTS);
+        const isAdmin = await this.checkIfRightsPresent(ADMIN_DASHBOARD_RIGHTS) ||
+            this._commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI']);
+        return isAdmin || this._commonService.isCoiReviewer;
     }
 
     async checkIfRightsPresent(adminDashboardRights: Set<string>): Promise<boolean> {

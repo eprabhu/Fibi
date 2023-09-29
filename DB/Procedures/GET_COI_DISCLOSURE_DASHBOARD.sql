@@ -219,7 +219,10 @@ ELSE
 										T15.AWARD_IDS,
                                         T7.NO_OF_SFI,
                                         T8.NO_OF_PROPOSAL,
-                                        T9.NO_OF_AWARD, T1.REVISION_COMMENT ' ,SELECTED_FIELD_LIST,'
+                                        T9.NO_OF_AWARD, 
+                                        T1.REVISION_COMMENT, 
+                                        T31.ADMIN_GROUP_NAME, 
+                                        T40.FULL_NAME AS ADMINISTRATOR ' ,SELECTED_FIELD_LIST,'
                                         FROM COI_DISCLOSURE T1 
 										LEFT JOIN COI_CONFLICT_STATUS_TYPE T2 ON T2.CONFLICT_STATUS_CODE=T1.CONFLICT_STATUS_CODE
 										INNER JOIN COI_DISPOSITION_STATUS_TYPE T3 ON T3.DISPOSITION_STATUS_CODE = T1.DISPOSITION_STATUS_CODE
@@ -227,6 +230,8 @@ ELSE
 										LEFT JOIN PERSON T6 ON T6.PERSON_ID = T1.PERSON_ID
 										LEFT JOIN PERSON T30 ON T30.USER_NAME = T1.UPDATE_USER 
                                         LEFT JOIN UNIT T20 ON T20.UNIT_NUMBER = T1.HOME_UNIT
+                                        LEFT JOIN ADMIN_GROUP T31 ON T31.ADMIN_GROUP_ID = T1.ADMIN_GROUP_ID 
+										LEFT JOIN PERSON T40 ON T40.PERSON_ID = T1.ADMIN_PERSON_ID
                                         INNER JOIN COI_DISCLOSURE_FCOI_TYPE T10 ON T10.FCOI_TYPE_CODE = T1.FCOI_TYPE_CODE ',JOIN_CONDITION,' WHERE T1.PERSON_ID = ',
 										AV_PERSON_ID,TAB_QUERY,SEARCH_CONDITION,
 										' GROUP BY T1.DISCLOSURE_ID)T ',LS_FILTER_CONDITION,' ',AV_SORT_TYPE,' ',LS_OFFSET_CONDITION);

@@ -362,10 +362,10 @@
                         </button>
 
                        <!-- return to pi -->
-                       <!-- reviewStatusCode-(3-Review In Progress) -->
+                       <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
                        <!-- Check logged person and administrator are same -->
-                    <button mat-menu-item *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '3' && coiData.coiDisclosure.adminPersonId &&
-                    (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)" title="Click to Return Disclosure"
+                    <button mat-menu-item *ngIf="coiData?.coiDisclosure?.adminPersonId && ['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) &&
+                    (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
                         (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
                         class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon class="returnIcon">refresh</mat-icon>
@@ -397,7 +397,8 @@
                   <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                   <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                   </button>
-                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='8'
+                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='8' || 
+                  coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'
                   && (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                         [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"

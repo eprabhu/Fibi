@@ -14,7 +14,7 @@
                 <span class="icon-btn"><mat-icon>home</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">My COI</span></span>
             </button>
 
-            <button *ngIf="isShowAdminDashboard" role="listitem" aria-label="Go to View Appointments" title="Go to Disclosures"
+            <button *ngIf="isAdministrator" role="listitem" aria-label="Go to View Appointments" title="Go to Disclosures"
                     class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
                     routerLinkActive="active-list" [routerLink]="['/coi/admin-dashboard']">
                 <span class="icon-btn"><mat-icon>article</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Disclosures</span></span>

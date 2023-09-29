@@ -77,14 +77,14 @@
                 <label for="travelDisclosure-destination" class="fw-500 fs-14 d-block col-custom">Destination :</label>
                 <div class="divCenter ms-1 col">
                     <input class=" me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
-                        id="travelDisclosure-domestic" [(ngModel)]="destination"
-                        (click)="setValuesForDestinationType(); setUnSavedChangesTrue(); ">
+                        id="travelDisclosure-domestic" value="Domestic" [(ngModel)]="destination"
+                        (ngModelChange)="setValuesForDestinationType(); setUnSavedChangesTrue(); ">
                     <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-domestic">
                         Domestic
                     </label>
                     <input class=" ms-4 me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
                         id="travelDisclosure-international" value="International" [(ngModel)]="destination"
-                        (click)="setValuesForDestinationType(); setUnSavedChangesTrue();">
+                        (ngModelChange)="setValuesForDestinationType(); setUnSavedChangesTrue();">
                     <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-international">
                         International
                     </label>
@@ -93,41 +93,6 @@
 
             <!-- country/state/city -->
             <div class="row mt-4 px-0 d-flex justify-content-between">
-                <!-- Country list -->
-                <div class="row col-6" *ngIf="destination=='International'">
-                    <label class="fw-500 fs-14 col-custom" for="travelDisclosure-countryList">Country :</label>
-                    <div class="col">
-                        <app-endpoint-search (onSelect)="selectTravelCountry($event)" [clearField]="countryClearField"
-                            [httpOptions]="countrySearchOptions" [uniqueId]="'travelDisclosure-countryList'"
-                            (change)="setUnSavedChangesTrue();" autocomplete="off"
-                            [isError]="(mandatoryList?.has('country'))? true: false">
-                        </app-endpoint-search>
-                        <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-msg d-block position-absolute">
-                            {{mandatoryList?.get('country')}}
-                        </span>
-                        <span *ngIf="!mandatoryList?.has('country')" class="position-absolute fs-13 col text-secondary mb-0">
-                            Select country from search bar.
-                        </span>
-                    </div>
-                </div>
-
-                <!-- State list -->
-                <div class="row col-6" *ngIf="destination !=='International'">
-                    <label for="travelDisclosure-stateList" class="fw-500 fs-14 col-custom">State :</label>
-                    <div class="col">
-                        <input type="text" id="travelDisclosure-destinationState" autocomplete="off"
-                            [(ngModel)]="travelDisclosureRO.travelState" class="form-control col"
-                            (ngModelChange)="setUnSavedChangesTrue();"
-                            [ngClass]="(mandatoryList?.get('state')) ? 'invalid-border':''">
-                        <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-msg d-block position-absolute">
-                            {{mandatoryList?.get('state')}}
-                        </span>
-                        <span *ngIf="!mandatoryList?.has('state')" class="position-absolute fs-13 col text-secondary mb-0">
-                            Type the state you traveled to.
-                        </span>
-                    </div>
-                </div>
-
                 <!-- City list -->
                 <div class="row col-6">
                     <label for="travelDisclosure-cityList" class="fw-500 fs-14 col-custom">City :</label>
@@ -144,8 +109,45 @@
                         </span>
                     </div>
                 </div>
+            
+                <!-- Country and State list -->
+                <div class="row col-6">
+                    <ng-container *ngIf="destination === 'International'">
+                        <!-- Country list -->
+                        <label class="fw-500 fs-14 col-custom" for="travelDisclosure-countryList col-custom">Country :</label>
+                        <div class="col">
+                            <app-endpoint-search (onSelect)="selectTravelCountry($event)" [clearField]="countryClearField"
+                                [httpOptions]="countrySearchOptions" [uniqueId]="'travelDisclosure-countryList'"
+                                (change)="setUnSavedChangesTrue();" autocomplete="off"
+                                [isError]="(mandatoryList?.has('country'))? true: false">
+                            </app-endpoint-search>
+                            <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-msg d-block position-absolute">
+                                {{mandatoryList?.get('country')}}
+                            </span>
+                            <span *ngIf="!mandatoryList?.has('country')" class="position-absolute fs-13 col text-secondary mb-0">
+                                Select country from the search bar.
+                            </span>
+                        </div>
+                    </ng-container>
+            
+                    <ng-container *ngIf="destination !== 'International' && destination !== null">
+                        <!-- State list -->
+                        <label for="travelDisclosure-stateList" class="fw-500 fs-14 col-custom">State :</label>
+                        <div class="col">
+                            <input type="text" id="travelDisclosure-destinationState" autocomplete="off"
+                                [(ngModel)]="travelDisclosureRO.travelState" class="form-control col"
+                                (ngModelChange)="setUnSavedChangesTrue();"
+                                [ngClass]="(mandatoryList?.get('state')) ? 'invalid-border':''">
+                            <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-msg d-block position-absolute">
+                                {{mandatoryList?.get('state')}}
+                            </span>
+                            <span *ngIf="!mandatoryList?.has('state')" class="position-absolute fs-13 col text-secondary mb-0">
+                                Type the state you traveled to.
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
             </div>
-
             <!-- Date -->
             <div class="row px-0 mt-5 pt-2 d-flex justify-content-between pb-2">
                 <!-- start date -->
@@ -261,4 +263,72 @@
 
         </div>
     </div>
+</div>
+
+<!-- Entity Details Modal -->
+<button class="d-none" data-bs-toggle="modal" data-bs-target="#travel-entity-details" id="persondetails">
+</button>
+
+<div class="modal fade mySkinDialog modal-lg" id="travel-entity-details" tabindex="-1" aria-labelledby="exampleModalLabel"
+  data-bs-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header headerStyle">
+        <h5 class="modal-title userDetail " id="entityDetails">{{addEntityConfirmation?.entityName}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearEntityDetails()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mx-1 row pt-1 d-flex mb-3">
+          <div class="text-secondary fs-14 col-4 mb-15">
+            <label class="grey-text me-2"> Country</label>
+            <span class="d-flex fs-14 fw-normal"> {{addEntityConfirmation?.country?.countryName}}</span>
+          </div>
+          <div class="text-secondary fs-14 col-4 mb-15">
+            <label class="grey-text me-2">Entity Type</label>
+            <span class="d-flex fs-14 fw-normal"> {{addEntityConfirmation?.entityType?.description}}</span>
+          </div>
+          <div class="text-secondary fs-14 col-4">
+            <label class="grey-text me-2">Entity Status</label>
+            <span class="fs-14 fw-400 d-flex entity-risk-badge px-3"
+              [ngClass]="addEntityConfirmation?.isActive ? 'active' : 'inactive'">{{addEntityConfirmation?.isActive
+              ?'Active':'Inactive'}}</span>
+          </div>
+          <div class="text-secondary fs-14 col-8 mt-2">
+            <label class="grey-text me-2"> Address</label>
+            <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
+              <span> {{(addEntityConfirmation?.address |
+                slice:0:55)}}
+              <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
+              </span></span>
+            </span>
+            <ng-template #showFullInfo>
+              <span class="word-break-all d-flex fs-14 fw-normal">{{addEntityConfirmation?.address}}</span>
+              <span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"
+                class="d-flex hand-cursor"><span class="fw-medium"><u>Read Less</u></span>
+              </span>
+            </ng-template>
+          </div>
+          <div class="col text-secondary fs-14 align-items-center mt-2">
+            <label class="fw-bold me-2">Risk </label>
+            <span class="fw-normal">
+              <div class="text-color fs-14 d-flex">
+                <span>
+                  <mat-icon
+                    class="{{getWarningClass(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                </span>
+                <span class="ml-2">{{addEntityConfirmation?.entityRiskCategory.description}}</span>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ct-footer-padding">
+        <button (click)="clearEntityDetails()" class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn"
+          data-bs-dismiss="modal" type="button">Clear
+        </button>
+        <button (click)="confirmEntityDetails()" data-bs-dismiss="modal"
+          class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button">Confirm</button>
+      </div>
+    </div>
+  </div>
 </div>
