@@ -150,6 +150,10 @@ margin-top-3px{
   margin-right: 7px;
 }
 
+.mr-21{
+  margin-right: 21px;
+}
+
 .col-custom-travel {
   width: max-content;
 }
@@ -266,4 +270,58 @@ margin-top-3px{
 
 .create-card {
   height: 350px;
+}
+
+.pos{
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.alignment{
+// padding-left: 120PX;
+display: flex;
+align-items: center;
+justify-content: end;
+}
+
+.p19{
+  padding-right: 19px;
+}
+
+.p17{
+padding-right: 17px;
+
+}
+
+.p-4{
+  padding-right: 4px;
+}
+
+.disclosure-master-header-bg {
+  background-color: #E7F9E8;
+  border-bottom: 1px solid #c1d9c2;
+}
+
+.disclosure-master-body-bg {
+  background-color: #F0FFF1;
+}
+
+.disclosure-master-footer-bg{
+  background-color: #E7F9E8;
+  border-top: 1px solid #c1d9c2;
+  padding: 3px;
+}
+
+.view-button{
+  text-decoration: none;
+  color: #8c97a9;
+}
+.p-26{
+  padding-right: 26px;
+}
+.pl{
+  padding-left: 2px;
 }
