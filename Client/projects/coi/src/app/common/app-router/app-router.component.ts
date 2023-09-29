@@ -12,7 +12,7 @@ export class AppRouterComponent implements OnInit, OnDestroy {
     isShowLoader = false;
     $subscriptions = [];
 
-    constructor(public commonService: CommonService,private elementRef: ElementRef) {
+    constructor(public commonService: CommonService, private elementRef: ElementRef) {
     }
 
     ngOnInit(): void {

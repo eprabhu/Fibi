@@ -1,0 +1,49 @@
+<div class="side-bar h-100 shadow" #sideBarMenu [ngClass]="isNavExpanded?'side-bar-open':'side-bar-closed'">
+    <div class="d-flex flex-column position-relative top-0 width-max-content h-100">
+        <!-- navigation-menu -->
+        <ul tabindex="0" role="navigation" id="eri-left-navigation-menu" aria-label="navigation menu"
+            class="list-unstyled d-flex flex-column fs-16 text-secondary text-white bg-red pt-3 navigation-menu position-relative mb-0">
+
+            <span class="menu-icon pt-2 px-4" (click)="!isNavExpanded && toggleNavBar(true)">
+                <mat-icon class="cursor-pointer">{{isNavExpanded ? 'close':'menu'}}</mat-icon>
+            </span>
+
+            <button role="listitem" aria-label="Go to Dashboard" title="Go to My COI"
+                    class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
+                    routerLinkActive="active-list" [routerLink]="['/coi/user-dashboard']">
+                <span class="icon-btn"><mat-icon>home</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">My COI</span></span>
+            </button>
+
+            <button *ngIf="isAdministrator" role="listitem" aria-label="Go to View Appointments" title="Go to Disclosures"
+                    class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
+                    routerLinkActive="active-list" [routerLink]="['/coi/admin-dashboard']">
+                <span class="icon-btn"><mat-icon>article</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Disclosures</span></span>
+            </button>
+
+            <button role="listitem" aria-label="Go to View Appointments" title="Go to Person Search"
+                    class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
+                    routerLinkActive="active-list">
+                <span class="icon-btn"><mat-icon>person_search</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Person Search</span></span>
+            </button>
+
+         <!--   <button role="listitem" aria-label="Go to View Appointments" title="Go to Review Disclosures"
+                    class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
+                    routerLinkActive="active-list" [routerLink]="['/coi/reviewer-dashboard']">
+                <span class="icon-btn"><mat-icon>preview</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Review Disclosures</span></span>
+            </button>-->
+
+            <button *ngIf="isManageEntity" role="listitem" aria-label="Go to View Appointments" title="Go to Manage Entity"
+                    class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
+                    routerLinkActive="active-list" [routerLink]="['/coi/entity-management']">
+                <span class="icon-btn"><mat-icon>domain</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Manage Entity</span></span>
+            </button>
+
+            <button *ngIf="canViewAdminDashboard" role="listitem" aria-label="Go to View Appointments" title="Go to Manage Entity"
+                    class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
+                    routerLinkActive="active-list" [routerLink]="['/coi/configuration']">
+                <span class="icon-btn"><mat-icon>apps</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">COI Configurations</span></span>
+            </button>
+
+        </ul>
+    </div>
+</div>

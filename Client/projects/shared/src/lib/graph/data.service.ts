@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { GraphDataRO, JSON_MAPPING } from './interface';
 import * as d3 from 'd3';
 
@@ -12,6 +12,7 @@ export class DataService {
     configSubscription: Subscription;
     links: any;
     nodes: any;
+    openDetailsEvent = new Subject();
     constructor(private _http: HttpClient) { }
 
     getDataForGraph(RO: GraphDataRO): Promise<any> {
@@ -95,6 +96,20 @@ export class DataService {
                     .attr('xlink:href', d => this.getLinkForImage(node));
             }
         }
+        if (this.graphMetaData.additionalImages) {
+            this.graphMetaData.additionalImages.forEach( N => {
+                svg.append('defs').append('svg:pattern')
+                        .attr('id', N.id)
+                        .attr('width', 5)
+                        .attr('height', 5)
+                        .append('svg:image')
+                        .attr('width', 30)
+                        .attr('height', 30)
+                        .attr('x', 5)
+                        .attr('y', 5)
+                        .attr('xlink:href', d => this.getLinkForAdditionalImage(N.image));
+            });
+        }
         return svg;
     }
 
@@ -102,5 +117,14 @@ export class DataService {
         return window.location.origin + this.graphMetaData.nodes[node].image;
     }
 
+    private getLinkForAdditionalImage(imageURL): string {
+        return window.location.origin + imageURL;
+    }
+
+    openRedirectionPath(node, id) {
+        const LINK_TYPE = this.graphMetaData.nodes[node].linkType;
+        const ORIGIN_URL = this.graphMetaData.externalLinks[LINK_TYPE];
+        window.open(ORIGIN_URL + this.graphMetaData.nodes[node].openLink + id);
+    }
 
 }

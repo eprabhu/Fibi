@@ -1,36 +1,59 @@
+<app-left-nav-bar></app-left-nav-bar>
 <header class="align-items-center bg-white d-flex justify-content-between shadow-medium px-5">
     <div class="d-flex align-items-center">
-        <a class="logo" href="#/fibi/dashboard">
-            <img [src]="logo" alt="Logo" class="w-75">
+        <a class="logo me-3 ms-4" href={{homeNavigation}}>
+            <img [src]="logo" alt="Logo" class="w-100 ms-5">
         </a>
-        <ul role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary">
-            <li [routerLink]="['/coi/user-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard') ? 'My COI' : 'Go to My COI Page'"
-                aria-describedby="Goto home page">My COI
+            <ul *ngIf="_router.url.includes('/coi/user-dashboard')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
+            <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/disclosures') ? 'My COI' : 'Go to My COI Page'"
+                aria-describedby="Goto home page">My Disclosures
                 <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
-            <li *ngIf="isShowAdminDashboard" [routerLink]="['/coi/admin-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/admin-dashboard') ? 'Disclosures page' : 'Go to Disclosures page'"
-                aria-describedby="Goto Disclosures page">Disclosures
-                <span *ngIf="_router.url.includes('/coi/admin-dashboard')" class="active-color"></span>
+            <li [routerLink]="['/coi/user-dashboard/entities']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/entities') ? 'Disclosures page' : 'Go to Disclosures page'"
+                aria-describedby="Goto Disclosures page">My Entities
+                <span *ngIf="_router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
             </li>
-            <li *ngIf="commonService.isCoiReviewer" [routerLink]="['/coi/reviewer-dashboard']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/reviewer-dashboard') ? 'Review Disclosures page' : 'Go to Review Disclosures page'" aria-describedby="Goto Review Disclosures page">Review Disclosures
-              <span *ngIf="_router.url.includes('/coi/reviewer-dashboard')" class="active-color"></span>
-            </li>
-            <li [routerLink]="['/coi/entity-management']" class="mr-2 cursor-pointer" role="tab"
-              *ngIf="isManageEntity" routerLinkActive="active" [attr.title]="_router.url.includes('/coi/entity-management') ? 'Manage Entity page' : 'Go to Manage Entity page'" aria-describedby="Goto Manage Entity page">Manage Entity
-                <span *ngIf="_router.url.includes('/coi/entity-management')" class="active-color"></span>
-            </li>
-            <li *ngIf="canViewAdminDashboard" [routerLink]="['/coi/configuration']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" title="Goto COI Configurations page" aria-describedby="Goto COI Configurations page">COI Configurations
-                <span *ngIf="_router.url.includes('/coi/configuration')" class="active-color"></span>
+            <li class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/reviewer-dashboard') ? 'Notes and Attachments page' : 'Go to Notes and Attachments page'"
+                aria-describedby="Goto Notes and Attachments page">Notes and Attachments
             </li>
         </ul>
     </div>
     <div>
         <div class="d-flex align-items-center">
             <div class="align-items-center d-flex mx-4">
+                <ng-container *ngIf="_router.url.includes('/coi/user-dashboard')">
+                    <div class="btn-group me-4">
+                        <button (click)="triggerClickForId('create-toggle-dropdown')" type="button" class="btn btn-primary fs-14 d-flex align-items-center"><mat-icon>add</mat-icon> <span class="px-2">Create</span></button>
+                        <button id="create-toggle-dropdown" [matMenuTriggerFor]="createActionMenu" type="button" class="border-start fs-14 btn btn-primary dropdown-width dropdown-toggle dropdown-toggle-split">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                    </div>
+                    <mat-menu #createActionMenu="matMenu" xPosition="before">
+                        <button (click)="triggerClickForId('create-sfi-modal')" mat-menu-item title="Click to Create Significant Financial Interest" area-describedby="Click to Create Significant Financial Interest"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <span class="ms-2 fw-medium fs-14">Significant Financial Interest</span>
+                        </button>
+                        <button mat-menu-item title="Click to Add Notes" area-describedby="Click to Add Notes"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <span class="ms-2 fw-medium fs-14">Notes</span>
+                        </button>
+                        <button mat-menu-item title="Click to Add Attachments" area-describedby="Click to add attachments"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <span class="ms-2 fw-medium fs-14">Attachments</span>
+                        </button>
+                        <button (click)="triggerClickForId('create-project-modal')" mat-menu-item title="Click to Create Project Disclosure" area-describedby="Click to Create Project Disclosure"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <span class="ms-2 fw-medium fs-14">Project Disclosure</span>
+                        </button>
+                        <button (click)="triggerClickForId('create-travel-modal')" mat-menu-item title="Click to Create Travel Disclosure" area-describedby="Click to Create Travel Disclosure"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            <span class="ms-2 fw-medium fs-14">Travel Disclosure</span>
+                        </button>
+                    </mat-menu>
+                </ng-container>
                 <mat-icon [attr.title]="'Click to view COI FAQ'" [routerLink]="['/coi/user/faq']" [attr.aria-labelledby]="'Click to view all the frequently asked questions'"
                           class="me-3 halo-icons align-items-center d-flex justify-content-center mat-icon mat-icon-no-color mat-ligature-font material-icons notranslate">
                     help

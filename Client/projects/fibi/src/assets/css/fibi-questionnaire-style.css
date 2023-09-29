@@ -1219,10 +1219,6 @@ input:checked+.slider:before {
     background-color: #ffe0e0;
     color: #c40808 !important
 }
-.mySkinDialog .modal-content {
-    background-color: #fff;
-	border-left: 6px solid #aaa;
-}
 .actionButtonGroup {
 	list-style: none;
 	padding: 0;

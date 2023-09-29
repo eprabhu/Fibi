@@ -108,6 +108,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         `Click on 'Return' button to return the disclosure for any modification.`
     ];
     isOpenRiskSlider = false;
+    reviewList:any = [];
 
     constructor(public router: Router,
         public commonService: CommonService,
@@ -523,6 +524,10 @@ export class DisclosureComponent implements OnInit, OnDestroy {
 
     getCoiReview() {
         this.$subscriptions.push(this.coiService.getCoiReview(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
+            if (data) {
+                this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(data);
+            }
+            this.reviewList = data;
             this.coiService.isReviewActionCompleted = data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
         }))
     }
@@ -586,10 +591,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     /**
      * 2 - Submitted
      * 3 - Review In Progress
+     * 7 - Review Assigned
+     * 8 - Assigned review completed
      * To be done - Admin group id check needs to be added.
      */
     checkForModifyRisk() {
-        return ['2', '3'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) && 
+        return ['2', '3', '7', '8'].includes(this.coiData.coiDisclosure.coiReviewStatusType.reviewStatusCode) && 
         (this.coiService.isCOIAdministrator || this.coiData.coiDisclosure.adminPersonId === this.commonService.getCurrentUserDetail('personId'));
     }
 
@@ -686,15 +693,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
     
     openReviewComment() {	
-        const disclosureDetails:coiReviewComment = {
+        const COMMENT_META_DATA: coiReviewComment = {
             disclosureId: this.coiData.coiDisclosure.disclosureId,
             coiSectionsTypeCode: '3',
             documentOwnerPersonId: this.coiData.coiDisclosure.person.personId,
             coiSubSectionsId: null,
             headerName: '',
-            componentSubRefId: null
+            componentSubRefId: null,
+            coiSubSectionsTitle: null
         }
-        this.commonService.$commentConfigurationDetails.next(disclosureDetails);	
+        this.commonService.$commentConfigurationDetails.next(COMMENT_META_DATA);	
         this.coiService.isShowCommentNavBar = true;	
     }
 

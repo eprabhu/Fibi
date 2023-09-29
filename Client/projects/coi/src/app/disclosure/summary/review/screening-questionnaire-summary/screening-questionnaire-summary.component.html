@@ -31,7 +31,8 @@
       <mat-icon>{{isQuestionnaireCollapsed ? 'expand_more' : 'expand_less'}}</mat-icon>
     </button>
     <app-view-questionnaire-list [configuration]="configuration"
-      [questionnaireHeader]="'Screening Questions related to your Financial Interests'">
+      [questionnaireHeader]="'Screening Questions related to your Financial Interests'"
+      (currentActiveQuestionnaire)="setActiveQuestionnaire($event)">
     </app-view-questionnaire-list>
   </div>
 </div>

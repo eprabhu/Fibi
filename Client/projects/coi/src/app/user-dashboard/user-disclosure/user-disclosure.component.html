@@ -1,4 +1,4 @@
-<div class="row my-4">
+<div class="row my-4" *ngIf="getActiveFCOI().length">
     <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
         <div class="light-dark-text-color col-12 "
             *ngIf="disclosure?.fcoiTypeCode == '1' && disclosure?.versionStatus != 'PENDING'">
@@ -157,9 +157,16 @@
                                 {{disclosure?.updateTimestamp | dateFormatterWithTimeZone:'long'}}</div>
                         </div>
                         <div class="col-auto d-flex justify-content-end mr-7">
+                            <button (click)="triggerClickForId('create-fcoi-modal')"
+                                    class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14 me-2"
+                                    title="Click to Renew FCOI Disclosure"
+                                    area-describedby="Click to Renew FCOI Disclosure">
+                                <mat-icon class="me-1">restart_alt</mat-icon>
+                                Revise
+                            </button>
                             <button [queryParams]={disclosureId:disclosure.disclosureId}
                                 [routerLink]="['/coi/disclosure/summary']"
-                                class="align-items-center btn btn-outline-secondary d-flex fs-14"
+                                class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14"
                                 title="Click to view FCOI Disclosure details"
                                 [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                 area-describedby="Click to view FCOI Disclosure details">
@@ -174,7 +181,7 @@
     </ng-container>
 </div>
 
-<nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav">
+<nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav" *ngIf="!isShowCreate">
     <div (click)="setTab('IN_PROGRESS_DISCLOSURES', dashboardCount?.inProgressDisclosureCount)" class="border-end navigation-icons px-3 py-1" role="button"
         title="Click to view In Progress Disclosures"
         aria-describedby="Click to view In Progress Disclosures">
@@ -195,7 +202,7 @@
         title="Click to view Disclosure History" aria-describedby="Click to view Disclosure History">
         <span [class.active]="currentSelected.tab=='DISCLOSURE_HISTORY'" class="pb-3">Disclosure History</span>
     </div>
-</nav> 
+</nav>
 
 <div class="advance-search-area border d-flex mt-2 rounded-1" *ngIf="isShowFilterAndSearch">
     <div class="fs-14 p-3" [class.border-end] = "currentSelected.tab != 'DISCLOSURE_HISTORY'" *ngIf="currentSelected.tab != 'TRAVEL_DISCLOSURES'" [@leftSlideInOut]>
@@ -209,7 +216,7 @@
         <span (click)="setFilter('PROJECT')" [class.filter-active]="currentSelected.filter=='PROJECT'"
             title="Click to filter by type: Project" area-describedby="Click to filter by type: Project"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white mx-1" role="button">Project</span>
-        <span *ngIf="currentSelected.tab == 'DISCLOSURE_HISTORY'"  (click)="setFilter('TRAVEL')" 
+        <span *ngIf="currentSelected.tab == 'DISCLOSURE_HISTORY'"  (click)="setFilter('TRAVEL')"
             [class.filter-active]="currentSelected.filter=='TRAVEL'"
             title="Click to filter by type: Travel" area-describedby="Click to filter by type: Travel"
             class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white" role="button">Travel</span>
@@ -223,13 +230,13 @@
         <input class="advance-search-input border-0 px-4 fs-14 pe-5" id="searchText"
         [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
         type="text" [(ngModel)]="searchText" (ngModelChange)="getDisclosures()">
-        <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>        
+        <mat-icon class="closeButton" *ngIf="searchText" (click)="resetAndFetchDisclosure()">close</mat-icon>
     </div>
 </div>
 <ng-container *ngIf="!isLoading">
     <div [@listAnimation]="filteredDisclosureArray.length">
         <ng-container *ngFor="let disclosure of filteredDisclosureArray ; let index = index; let isLast=last;">
-            <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color" 
+            <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
                 (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false" >
                 <div class="row mt-2">
                     <div class="col">
@@ -270,7 +277,7 @@
                                     </span>
                                     <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1 fw-500">Read Less</span></a>
                                     </span>
-                                </ng-container>  
+                                </ng-container>
                             </h4>
                         </span>
                     </div>
@@ -560,17 +567,53 @@
             </div>
             <div *ngIf="currentSelected.tab=='DISCLOSURE_HISTORY'">
                     <app-disclosure-history-card [disclosure]="disclosure" [isLastElement]="isLast"></app-disclosure-history-card>
-            </div>    
+            </div>
         </ng-container>
     </div>
-    <app-no-information *ngIf="!filteredDisclosureArray.length"></app-no-information>
+    <app-no-information *ngIf="!filteredDisclosureArray.length && !isShowCreate"></app-no-information>
+    <!-- Pagination -->
+    <div [hidden]="isLoading" *ngIf="(filteredDisclosureArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY')"
+        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+        <nav aria-label="pagination section" class="pagination justify-content-end">
+            <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
+                [totalCount]="result.totalServiceRequest"></app-pagination>
+        </nav>
+    </div>
+    <ng-container *ngIf="isShowCreate">
+        <div class="card create-card">
+            <div class="border d-flex pi-info-text mx-4 mt-4 rounded-1 position-relative">
+                <span data-bs-toggle="tooltip" title="Relationship Help Text." data-bs-placement="top"
+                    class="d-inline-block">
+                    <mat-icon role="img"
+                        class="mat-icon notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color"
+                        aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+                </span>
+                <div class="info-text fs-14">
+                    <div class="mt-2">
+                        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>To create a new FCOI disclosure,
+                        click on the <strong>Create FCOI Disclosure</strong> button below or the quick link provided.
+                    </div>
+                    <!-- <div class="mt-2">
+                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>To create a new OPA disclosure, click on the <strong>Create OPA disclosure</strong> button below or the quick link provided.
+                        </div> -->
+                    <div class="mt-2">
+                        <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>To create new Project /Travel
+                        disclosure, click on the corresponding quick link provided.
+                    </div>
+                </div>
+            </div>
+            <span class="d-flex create-buttons">
+                <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mx-2" (click)="openFCOIModal('FCOI')">
+                    Create FCOI Disclosure
+                </button>
+                <!-- <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mx-2" (click)="openFCOIModal('FCOI')">
+                        Create OPA Disclosure
+                    </button> -->
+            </span>
+        </div>
+    </ng-container>
 </ng-container>
-<!-- Pagination -->
-<div [hidden]="isLoading" *ngIf="(filteredDisclosureArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY')"  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-    <nav aria-label="pagination section" class="pagination justify-content-end">
-        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"[totalCount]="result.totalServiceRequest"></app-pagination>
-    </nav>
-</div>
+
 
 <app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
     [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
@@ -580,7 +623,7 @@
 
 <ng-container *ngIf="showSlider">
     <app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index] = "1057"
-    [overlay_z_index] = "1056" [isStickyContentAvailable] = "false" [isHeaderContentAvailable] = "false"
+    [overlay_z_index] = "1056" [isStickyNeeded] = "false" [isHeaderNeeded] = "false"
     [sliderName]="'disclosure-entity-view-2-slider'">
         <!-- modal content -->
         <ng-container content>
@@ -588,3 +631,4 @@
         </ng-container>
     </app-coi-slider>
 </ng-container>
+

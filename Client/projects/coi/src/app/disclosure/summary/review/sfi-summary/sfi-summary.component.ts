@@ -126,7 +126,8 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
             coiSectionsTypeCode: '5',
             headerName: event.personEntityHeader,
             coiSubSectionsId: event.personEntityId,
-            componentSubRefId: null
+            componentSubRefId: null,
+            coiSubSectionsTitle: event.personEntityHeader
         }
         this._commonService.$commentConfigurationDetails.next(REQ_BODY);
         this._coiService.isShowCommentNavBar = true;

@@ -8,11 +8,13 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Date;
+import java.util.stream.Collectors;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -75,6 +77,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.DisclAttaType;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
@@ -1065,6 +1068,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					unit.setAcronym(resultSet.getString("ACRONYM"));
 					unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
 					disclosureView.setUnit(unit);
+					disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
+					disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
 					disclosureViews.add(disclosureView);
 					disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
 				}
@@ -1262,7 +1267,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		List<String> reviewStatusCodes = vo.getProperty21();
 		List<String> conflictStatusCodes = vo.getProperty4();
 		String certificationDate = vo.getProperty23();
-
 		statement = connection.prepareCall("{call GET_COI_DISCLOSURE_ADMIN_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 		statement.setString(1, disclosureId);
 		statement.setString(2, disclosurePersonId);
@@ -1290,7 +1294,6 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		statement.setString(24, certificationDate);
 		statement.execute();
 		resultSet = statement.getResultSet();
-
 		while (resultSet.next()) {
 			DisclosureView disclosureView = new DisclosureView();
 			disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
@@ -1333,6 +1336,19 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			disclosureView.setUnit(unit);
 			disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
 			disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
+			String reviewers = resultSet.getString("REVIEWERS");
+			if (reviewers != null && !reviewers.isEmpty()) {
+				String[] reviewerArray = reviewers.split(";");
+				List<List<String>> reviewerList = new ArrayList<>();
+				Arrays.stream(reviewerArray)
+		        .forEach(reviewer -> {
+		            List<String> subList = Arrays.stream(reviewer.split(":"))
+		                .map(String::trim)
+		                .collect(Collectors.toList());
+		            reviewerList.add(subList);
+		        });
+				disclosureView.setReviewerList(reviewerList);
+			}
 			disclosureViews.add(disclosureView);
 		}
 	}
@@ -3006,7 +3022,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 		StringBuilder hqlQuery = new StringBuilder();
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, c.reviewStatusCode = 3, ");
+		hqlQuery.append("UPDATE CoiDisclosure c SET c.adminGroupId = :adminGroupId , c.adminPersonId = :adminPersonId, ");
 		hqlQuery.append("c.updateTimestamp = :updateTimestamp, c.updateUser = :updateUser ");
 		hqlQuery.append("WHERE c.disclosureId = : disclosureId");
 		Query query = session.createQuery(hqlQuery.toString());
@@ -3953,4 +3969,34 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("versionStatus", Constants.COI_ACTIVE_STATUS);
 		return (Integer) query.getSingleResult();
 	}
+
+	@Override
+	public List<DisclAttaType> loadDisclAttachTypes() {
+		return hibernateTemplate.loadAll(DisclAttaType.class);
+	}
+
+	@Override
+	public Boolean isReviewerReviewCompleted(Integer disclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT COUNT(r.assigneePersonId) FROM CoiReview r ");
+		hqlQuery.append("WHERE r.reviewStatusTypeCode <> 2 AND r.disclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		Long count = (Long) query.getSingleResult();
+		return (count <= 0);
+	}
+
+	@Override
+	public Boolean isReviewerAssigned(Integer disclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT COUNT(r.assigneePersonId) FROM CoiReview r ");
+		hqlQuery.append("WHERE r.disclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		Long count = (Long) query.getSingleResult();
+		return count > 0;
+	}
+
 }

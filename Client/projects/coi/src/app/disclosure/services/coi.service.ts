@@ -102,5 +102,9 @@ export class CoiService {
         return this._http.get(`${this._commonService.baseUrl}/disclosureHistory/${disclosureId}`);
     }
 
+     isAllReviewsCompleted (reviewerList): boolean {
+        return reviewerList.every(value => value.reviewerStatusType && value.reviewerStatusType.reviewStatusCode === '2');
+     }
+
 }
 

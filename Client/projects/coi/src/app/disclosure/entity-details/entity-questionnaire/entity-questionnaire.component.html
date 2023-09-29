@@ -1,5 +1,5 @@
-<div class="mx-4">
-  <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 shadow-sm user-dashboard-nav">
+<div class="mx-4" *ngIf="definedRelationships?.length">
+  <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 mb-1 shadow-sm user-dashboard-nav">
     <ng-container *ngFor="let coiFinancialEntityDetail of definedRelationships;let last = last">
       <div (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail)" class="text-secondary {{isEditMode && availableRelationships?.length || !last ? 'border-end' :''}}" role="button"
         [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'navigation-icons':''">
@@ -27,16 +27,28 @@
             <span class="fs-14 delete-content-position">Delete</span>
           </button>
         </div>
-
-        <app-view-questionnaire-list *ngIf="definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
+<div [class.scrollable-table]="!isEditMode || !entityDetailsServices.canMangeSfi">
+  <app-view-questionnaire-list *ngIf="definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
           [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)" (QuestionnaireEditEvent)="questionnaireEdit($event)">
         </app-view-questionnaire-list>
+</div>
+        
         </div>
 </div>
-<div *ngIf="!definedRelationships?.length" class="mx-4 mt-4 on-data-position">
-  <div class="shadow-sm rounded">
-    <app-no-information></app-no-information>
+<div class="card ml-15 mr-15 mt-3" *ngIf="!definedRelationships?.length">
+  <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
+    <p class="fs-14 m-0">
+      <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
+        You currently do not have any relationships associated with the entity. To add any relationship, click on the
+        <strong>Add Relationship</strong> button.
+      </span>
+    </p>
   </div>
+  <span class="create-button">
+    <button class="btn btn-primary btn-sm d-block fs-15" (click)="saveOrAddRelationshipModal()">
+      Add Relationship
+    </button>
+  </span>
 </div>
 
 <!-- Modal -->
@@ -50,7 +62,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header custom-height">
-        <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relations</h3>
+        <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relationship</h3>
         <button title="Click to close the relationship button" type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
           id="close-addRelationshipModal-trigger-btn" (click)="clearModal()"></button>
       </div>
@@ -92,7 +104,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal"
           (click)="clearModal()">Cancel</button>
-        <button title="Click to Add Relationship" type="button" class="btn btn-primary fs-14" (click)="addRelation()">Add Relation</button>
+        <button title="Click to Add Relationship" type="button" class="btn btn-primary fs-14" (click)="addRelation()">Add Relationship</button>
       </div>
     </div>
   </div>

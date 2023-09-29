@@ -60,7 +60,7 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col d-flex align-items-center">
-                                <label class="grey-text">Current Risk: </label>
+                                <label class="grey-text">Risk: </label>
                                 <span class="ml-2 grey-text fw-normal">
                                     <div class="text-color fs-14 d-flex align-items-center">
                                         <span class="text-secondary fs-14">
@@ -104,7 +104,7 @@
                 <div class="card comment-card shadow-sm mx-1">
                     <div class="row ml-15 mt-4">
                         <div class="col-4 ml-15 align-items-center">
-                            <label class="fs-14 fw-500">Risk Level:</label>
+                            <label class="fs-14 fw-500">Risk:</label>
                             <span>
                                 <select class="form-control form-select" [(ngModel)]="riskCategoryCode"
                                     [ngClass]="riskValidationMap?.has('riskLevelCode') || riskValidationMap?.has('duplicateRisk')  ? 'is-invalid d-block' : ''"

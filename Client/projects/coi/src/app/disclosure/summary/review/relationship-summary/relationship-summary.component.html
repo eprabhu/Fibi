@@ -36,7 +36,7 @@
       </span>
 
       <span class="align-items-center d-flex">
-        <button (click)="openReviewerComment(selectedProject,'PROJECT')" class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
+        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
           <mat-icon>rate_review</mat-icon>
       </button>
       </span>
@@ -169,14 +169,14 @@
                     </td>
                     <td class="border-0  border-top-0 pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
                       <div class="d-flex">
-                        <!-- reviewStatusCode-(3-Review In Progress, 4-completed),  dispositionStatusCode(1-pending, 3-Approved)-->
-                        <button *ngIf="(coiDetails?.reviewStatusCode== 3 && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 4 && coiDetails?.dispositionStatusCode == 3)
+                        <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned review completed, 4-completed),  dispositionStatusCode(1-pending, 3-Approved)-->
+                        <button *ngIf="(['3', '7', '8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 4 && coiDetails?.dispositionStatusCode == 3)
                         && (_commonService.getCurrentUserDetail('userName') == coiDetails?.createUser || _commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"
                         class="btn-primary-icon-svg me-1" type="button" (mouseenter)="isShowHoverWhite[i]= true"
                         (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
                         <span class="btn-secondary-svg"></span>
                       </button>
-                      <button (click)="openReviewerComment(relation,'RELATIONSHIP')" class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
+                      <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP', relation)" class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
                         <mat-icon>rate_review</mat-icon>
                       </button>
                       </div>

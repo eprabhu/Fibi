@@ -32,9 +32,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     passwordValidation = new Map();
     timer: any = {password: null, confirmPassword: null};
     $subscriptions: Subscription[] = [];
-    isManageEntity = false;
-    isShowAdminDashboard = false;
-    canViewAdminDashboard = false;
+    homeNavigation: string = '';
+    isAdministrator: boolean = false;
 
     constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -42,8 +41,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
-        this.checkUserHasRight();
-        this.getPermissions();
+        this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
+                                || this.commonService.isCoiReviewer;
+        this.navigateForHomeIcon();
+    }
+
+    navigateForHomeIcon(): void {
+        this.homeNavigation = this.isAdministrator ? '#/coi/admin-dashboard' : '#/coi/user-dashboard/disclosures';
     }
 
     ngOnDestroy(): void {
@@ -110,16 +114,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    checkUserHasRight(): void {
-        this.isManageEntity = this.commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME');
-        this.canViewAdminDashboard = this.commonService.getAvailableRight(['APPLICATION_ADMINISTRATOR',
-                'MAINTAIN_QUESTIONNAIRE', 'MAINTAIN_USER_ROLES', 'MAINTAIN_ROLE', 'MAINTAIN_PERSON', 'MAINTAIN_TRAINING',
-                'VIEW_KEY_PERSON_TIMESHEET', 'MAINTAIN_KEY_PERSON_TIMESHEET', 'MAINTAIN_DELEGATION', 'MAINTAIN_ORCID_WORKS'],
-            'SOME');
-    }
-
-    async getPermissions() {
-        const rightsArray = await this.commonService.fetchPermissions();
-        this.isShowAdminDashboard = rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+    triggerClickForId(modalId: string) {
+        document.getElementById(modalId)?.click();
     }
 }
+function thisnavigateForHomeIcon() {
+    throw new Error('Function not implemented.');
+}
+

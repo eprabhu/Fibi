@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
@@ -39,6 +40,7 @@ import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiReviewCommentsDto;
+import com.polus.fibicomp.coi.dto.CoiSectionTypeDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureCertifyDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
@@ -62,6 +64,7 @@ import com.polus.fibicomp.coi.pojo.CoiReviewAssigneeHistory;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentAttachment;
 import com.polus.fibicomp.coi.pojo.CoiReviewCommentTag;
 import com.polus.fibicomp.coi.pojo.CoiRiskCategory;
+import com.polus.fibicomp.coi.pojo.CoiSectionsType;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
 import com.polus.fibicomp.coi.pojo.CoiTravelDisclosureStatusType;
@@ -357,11 +360,18 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(coiDisclosureObj, HttpStatus.OK);
 	}
 	
-	private void setDisclosureReviewStatusCode(CoiDisclosure coiDisclosure, CoiDisclosure coiDisclosureObj ) {
+	private void setDisclosureReviewStatusCode(CoiDisclosure coiDisclosure, CoiDisclosure coiDisclosureObj) {
 		String reviewStatusCode = coiDisclosureObj.getReviewStatusCode();
-		if (reviewStatusCode.equals(REVIEW_STATUS_RETURNED)
-				&& ((coiDisclosureObj.getAdminGroupId() != null) || (coiDisclosureObj.getAdminPersonId() != null))) {
-			coiDisclosure.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
+		if (reviewStatusCode.equals(REVIEW_STATUS_RETURNED)) {
+			if (Boolean.TRUE.equals(conflictOfInterestDao.isReviewerAssigned(coiDisclosureObj.getDisclosureId()))) {
+				if (Boolean.TRUE.equals(conflictOfInterestDao.isReviewerReviewCompleted(coiDisclosureObj.getDisclosureId()))) {
+					coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED);
+				} else {
+					coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_ASSIGNED);
+				}
+			} else if ((coiDisclosureObj.getAdminGroupId() != null || coiDisclosureObj.getAdminPersonId() != null)) {
+				coiDisclosure.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
+			}
 		} else {
 			coiDisclosure.setReviewStatusCode(SUBMITTED_FOR_REVIEW);
 		}
@@ -1780,16 +1790,22 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			logger.error("assignDisclosureAdmin : {}", e.getMessage());
 		}
 		conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId());
-		conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
+		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(dto.getDisclosureId());
+		if (disclosure.getReviewStatusCode().equalsIgnoreCase(SUBMITTED_FOR_REVIEW)) {
+			conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
+			dto.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
+			dto.setReviewStatus(REVIEW_IN_PROGRESS);
+		}
+		else{
+			dto.setReviewStatusCode(disclosure.getReviewStatusCode());
+			dto.setReviewStatus(disclosure.getCoiReviewStatusType().getDescription());
+		}
 		dto.setAdminGroupName(dto.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(dto.getAdminGroupId()).getAdminGroupName() : null);
 		dto.setAdminPersonName(personDao.getPersonFullNameByPersonId(dto.getAdminPersonId()));
-		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(dto.getDisclosureId());
 		dto.setConflictStatus(disclosure.getCoiConflictStatusType() != null ? disclosure.getCoiConflictStatusType().getDescription() : null);
 		dto.setConflictStatusCode(disclosure.getConflictStatusCode());
 		dto.setDispositionStatusCode(disclosure.getDispositionStatusCode());
 		dto.setDispositionStatus(disclosure.getCoiDispositionStatusType().getDescription());
-		dto.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
-		dto.setReviewStatus(REVIEW_IN_PROGRESS);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
@@ -2193,9 +2209,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
     @Override
     public ResponseEntity<Object> returnDisclosure(Integer disclosureId, String description) {
         CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(disclosureId);
-        if (!DISCLOSURE_REVIEW_IN_PROGRESS.equalsIgnoreCase(disclosure.getReviewStatusCode())) {
-            return new ResponseEntity<>("Could not return disclosure ", HttpStatus.METHOD_NOT_ALLOWED);
-        }
         disclosure.setCertificationText(null);
         disclosure.setCertifiedAt(null);
         disclosure.setCertifiedBy(null);
@@ -2358,8 +2371,59 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public ResponseEntity<Object> getCoiSectionsTypeCode() {
-		return new ResponseEntity<>(conflictOfInterestDao.getCoiSectionsTypeCode(),HttpStatus.OK);
+	public ResponseEntity<Object> getCoiSectionsTypeCode(ConflictOfInterestVO vo) {
+		CoiSectionTypeDto coiSectionTypeDto = CoiSectionTypeDto.builder()
+				.coiSectionsTypeList(getSectionTypeList())
+				.personEntities(getPersonEntityList(vo))
+				.projectList(getProjectDetailList(vo.getPersonId(), vo.getDisclosureId()))
+				.questionnaireDataBus(getQuestionnaireList(vo.getDisclosureId()))
+				.build();
+		return new ResponseEntity<>(coiSectionTypeDto,HttpStatus.OK);
+	}
+
+	private QuestionnaireDataBus getQuestionnaireList(Integer disclosureId) {
+		QuestionnaireDataBus questionnaireDataBus = new QuestionnaireDataBus();
+		questionnaireDataBus.setModuleItemCode(Integer.parseInt("8"));
+		questionnaireDataBus.setModuleItemKey(disclosureId.toString());
+		questionnaireDataBus.setModuleSubItemKey("0");
+		questionnaireDataBus.setModuleSubItemCode(0);
+		questionnaireDataBus.setActionPersonId(AuthenticatedUser.getLoginPersonId());
+		questionnaireDataBus.setQuestionnaireMode("ANSWERED");
+		questionnaireDataBus = questionnaireService.getApplicableQuestionnaire(questionnaireDataBus);
+		return questionnaireDataBus;
+	}
+
+	private List<PersonEntity> getPersonEntityList(ConflictOfInterestVO vo) {
+		return conflictOfInterestDao.getSFIOfDisclosure(vo);
+	}
+
+	private List<DisclosureDetailDto> getProjectDetailList(String personId, Integer disclosureId) {
+		List<DisclosureDetailDto> awardDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE,
+				personId, disclosureId, null);
+		List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, personId,
+				disclosureId, null);
+		List<DisclosureDetailDto> projectList = Stream.concat(proposalDetails.stream(), awardDetails.stream())
+		        .collect(Collectors.toList());
+		projectList.stream().forEach(project -> {
+			List<CoiDisclEntProjDetailsDto> disclosureDetails = new ArrayList<>();
+			conflictOfInterestDao.getProjectRelationshipByParam(project.getModuleCode(), project.getModuleItemId(),personId,
+					disclosureId).forEach(disclosureDetail -> {
+				CoiDisclEntProjDetailsDto coiDisclEntProjDetails = new CoiDisclEntProjDetailsDto();
+				BeanUtils.copyProperties(disclosureDetail, coiDisclEntProjDetails, "coiDisclosure", "coiEntity", "personEntity");
+				if (disclosureDetail.getCoiEntity() != null) {
+					CoiEntityDto coiEntityDto = new CoiEntityDto();
+					BeanUtils.copyProperties(disclosureDetail.getCoiEntity(), coiEntityDto, "entityStatus", "entityType", "coiProjConflictStatusType");
+					coiDisclEntProjDetails.setCoiEntity(coiEntityDto);
+				}
+				disclosureDetails.add(coiDisclEntProjDetails);
+			});
+			project.setCoiDisclEntProjDetails(disclosureDetails);
+		});
+		return projectList;
+	}
+
+	private List<CoiSectionsType> getSectionTypeList() {
+		return conflictOfInterestDao.getCoiSectionsTypeCode();
 	}
 
 	@Override
@@ -2396,6 +2460,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> getSFILatestVersion(Integer personEntityNumber) {
 		return new ResponseEntity<>(conflictOfInterestDao.getSFILatestVersion(personEntityNumber), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> loadDisclAttachTypes() {
+		return new ResponseEntity<>(conflictOfInterestDao.loadDisclAttachTypes(), HttpStatus.OK);
 	}
 
 }

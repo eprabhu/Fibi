@@ -12,8 +12,10 @@ public interface GeneralService {
     ResponseEntity<Object> fetchAllCoiRights();
 
     /**
+     * This method is used to fetch Admin groups and Persons
      *
-     * @return
+     * @return List<Object>
      */
     ResponseEntity<Object> fetchAdminGroupsAndPersons();
+
 }

@@ -45,6 +45,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.DisclAttaType;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
@@ -1096,4 +1097,23 @@ public interface ConflictOfInterestDao {
 	 * @return
 	 */
 	Integer getSFILatestVersion(Integer personEntityNumber);
+
+	/**
+	 * This method is used to get disclosure attachment types
+	 * @return
+	 */
+	public List<DisclAttaType> loadDisclAttachTypes();
+
+	/**
+	 * This method is used to Check if the reviewers in the disclosure have completed their reviews
+	 * @return
+	 */
+	public Boolean isReviewerReviewCompleted(Integer disclosureId);
+
+	/**
+	 * This method is used to Check if the disclosure have reviewers assigned
+	 * @return
+	 */
+	public Boolean isReviewerAssigned(Integer disclosureId);
+
 }

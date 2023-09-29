@@ -3,12 +3,16 @@
     <div class="card-header px-4 py-2 ">
 					<h4 class="card-title review-title">
                         <div class="justify-content-between row d-flex align-items-center">
-                            <div class="col">Assigned Review</div>
-                            <div *ngIf="coiService.isCOIAdministrator && coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" class="col-auto me-2">
+                            <div class="col">Location</div>
+                            <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
+                            <div 
+                            *ngIf="coiService.isCOIAdministrator && 
+                            ['3', '8', '7'].includes(coiDisclosure?.coiReviewStatusType?.reviewStatusCode)" 
+                            class="col-auto me-2">
                                 <button (click)="clearReviewModal()" class="btn btn-primary fs-14 btn-sm mt-0 justify-content-center d-flex align-items-center" data-bs-toggle="modal"
                                     title="Add Review Location" data-bs-target="#add-coi-reviewer-modal">
                                     <mat-icon class="me-2">person_add</mat-icon>
-                                    Assign Reviewer
+                                    Add Location
                                 </button>
                             </div>    
                             <button (click)="isExpanded = !isExpanded" title="Click here to collapse / expand"
@@ -33,6 +37,9 @@
             <thead>
                 <tr>
                     <th scope="col-2" class="px-3">
+                        Location
+                    </th>
+                    <th scope="col-2" class="px-3">
                         Reviewers
                     </th>
                     <th scope="col-3" style="width:30%" class="px-3">
@@ -40,6 +47,12 @@
                     </th>
                     <th scope="col-2" class="px-3">
                         Assigned On
+                    </th>
+                    <th scope="col-2" class="px-3">
+                        Review End Date
+                    </th>
+                    <th scope="col-2" class="px-3">
+                        Days at Location
                     </th>
                     <th scope="col-3" class="px-3">
                         Status
@@ -49,16 +62,34 @@
             </thead>
             <tbody>
                 <tr *ngFor="let reviewer of reviewerList; let index = index">
-                    <td class="table-data fw-600">{{reviewer?.assigneePersonName}}</td>
-                    <td>
-                        <app-no-data-label [valueToShow]="reviewer?.description"></app-no-data-label>
+                    <td class="table-data fw-600">{{reviewer?.reviewLocationType?.description}}</td>
+                    <td class="table-data">
+                        <app-no-data-label [valueToShow]="reviewer?.assigneePersonName" [customNoDataFoundMessage]="'-- No Reviewer assigned --'">
+                            <span class="fw-600">{{reviewer?.assigneePersonName}}</span>
+                        </app-no-data-label>
                     </td>
-                    <td>{{reviewer?.createTimestamp | dateFormatterWithTimeZone: 'long' }}
+                    <td style="width:30%" class="text-break">
+                        <app-no-data-label [valueToShow]="reviewer?.description">
+                            <span *ngIf="reviewer?.description">{{reviewer?.description.length >
+                                180 && !collapseViewMore[reviewer?.coiReviewId] ? (reviewer?.description | slice:0:75)+'...' : reviewer?.description}}
+                                <ng-container *ngIf="reviewer?.description.length > 180">
+                                    <span (click)="collapseViewMoreOption(reviewer?.coiReviewId, collapseViewMore[reviewer?.coiReviewId])"
+                                        *ngIf="reviewer?.description.length > 180" class="collapse-text fs-14 fw-medium desc-collapse">
+                                        {{collapseViewMore[reviewer?.coiReviewId] ? "Read Less" : "Read More"}}
+                                    </span>
+                                </ng-container>
+                            </span>
+                        </app-no-data-label>
                     </td>
-
+                    <td>{{reviewer?.startDate | dateFormatter }}
+                    </td>
+                    <td *ngIf="reviewer?.endDate">{{reviewer?.endDate | dateFormatter }}</td>
+                    <td *ngIf="!reviewer?.endDate">  </td>
+                    <td>{{getDaysAtLocation(reviewer.startDate, reviewer.endDate)}}</td>
                     <td>
-                      <span [class.text-black]="reviewer?.reviewStatusTypeCode == '1'" class="fw-medium badge bg-{{getReviewStatusBadge(reviewer?.coiReviewStatus?.reviewStatusCode)}} fs-14 rounded-5">
-                      {{reviewer?.coiReviewStatus?.description}}
+                      <app-no-data-label *ngIf="!reviewer?.reviewStatusTypeCode"[valueToShow]="reviewer?.reviewStatusTypeCode"></app-no-data-label>
+                      <span *ngIf="reviewer?.reviewStatusTypeCode" [class.text-black]="reviewer?.reviewStatusTypeCode == '1'" class="fw-medium badge bg-{{getReviewStatusBadge(reviewer?.reviewerStatusType?.reviewStatusCode)}} fs-14 rounded-5">
+                      {{reviewer?.reviewerStatusType?.description}}
                       </span>
                     </td>
                     <td class="align-items-center justify-content-end">
@@ -75,16 +106,18 @@
                                         (click)="updateCoiReviewStage(index,reviewer,'COMPLETE')">stop_circle</mat-icon>
                                 </button>
                             </ng-container>
-                                <button class="btn-primary-icon d-flex align-items-center me-3 my-1" [ngClass]="{'review-comment-position':!isMangeReviewAction}" (click)="modifyReviewComment(reviewer.coiReviewId)">
+                                <button class="btn-primary-icon d-flex align-items-center me-3 my-1"
+                                [ngClass]="{'review-comment-position':!isMangeReviewAction}" (click)="modifyReviewComment(reviewer.coiReviewId)">
                                     <mat-icon title="Click here to add review comment">rate_review</mat-icon>
                                 </button>
                                 <!-- more actions -->
                                 
                                 <ng-container *ngIf="isMangeReviewAction">
-                                    <button  *ngIf="reviewer.reviewStatusTypeCode == '1'" mat-button [matMenuTriggerFor]="beforeMenu"
+                                    <button  *ngIf="reviewer.reviewStatusTypeCode !== '2'" [matMenuTriggerFor]="beforeMenu"
                                         class="btn-primary-icon d-flex align-items-center my-1"
-                                        type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                        title="More Actions" aria-expanded="false">
+                                        role = "button"
+                                        type="button"
+                                        title="More Actions">
                                         <mat-icon class="btn-color">more_vert</mat-icon>
                                     </button>
                                 </ng-container>
@@ -162,34 +195,104 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Reviewer' : 'Assign Reviewer' }} for
+                <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review Location' : 'Assign Review Location' }}
                   <ng-container  *ngIf="coiDisclosure?.fcoiTypeCode == '1'">
                     #{{coiDisclosure?.disclosureNumber}} : FCOI Disclosure By {{coiDisclosure?.person?.fullName}}
                   </ng-container>
-                  <ng-container  *ngIf="coiDisclosure?.fcoiTypeCode !== '1'">
+                  <!-- <ng-container  *ngIf="coiDisclosure?.fcoiTypeCode !== '1'">
                     #{{coiDisclosure?.disclosureNumber}} : {{coiDisclosure?.coiDisclosureFcoiType?.description}} Disclosure [{{projectDetail?.moduleItemId}} :
                     {{(projectDetail?.title)?.length>20 ?
                     (projectDetail?.title | slice:0: 10)+'...' :
                     projectDetail?.title}}] By {{coiDisclosure?.person?.fullName}}
-                  </ng-container></h5>
+                  </ng-container> -->
+                </h5>
                 <button type="button" title="Close" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
                     (click)="reviewDetails = {}">
                 </button>
             </div>
             <div class="modal-body">
+                <div class="margin-person-card mb-3">
+                    <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
+                </div>
                 <div class="row">
-                    <div class="col-sm-12 col-12">
+                    <div class="col-4">
+                        <label class="block-display">
+                            <span class="mandatory">*</span>Location</label>
+                        <app-look-up (selectedResult)="onLocationSelect($event)"
+                        [options]="disReviewLocation" 
+                        [selectedLookUpList]="locationType"
+                        [isError]="validationMap.has('location')"
+                        [defaultValue]="reviewDetails.reviewLocationType ? reviewDetails.reviewLocationType.description : ''"
+                        [uniqueId]="'disclosure-review-location'">
+                        </app-look-up>
+                        <div class="ms-2" *ngIf="validationMap.has('location')">
+                            <span class="mandatory d-inline-block">{{validationMap.get('location')}}</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
                         <label class="d-block">Reviewer</label>
                         <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField"
                                      [isError]="validationMap.has('reviewer')"
-                            [placeHolder]="'Search Reviewer'" (selectedResult)="assigneeSelect($event)">
+                                     [placeHolder]="'Search Reviewer'" (selectedResult)="assigneeSelect($event)">
                         </app-elastic>
-                        <div *ngIf="validationMap?.has('reviewer')" class="invalid-feedback d-block fs-13">
-                            {{validationMap?.get('reviewer')}}
+                        <div *ngIf="validationMap?.has('reviewer')">
+                           <span class="mandatory d-inline-block">{{validationMap?.get('reviewer')}}</span>
                         </div>
                     </div>
-                    <div class="ms-2" *ngIf="validationMap.has('general')">
-                        <span class="mandatory d-inline-block">{{validationMap.get('general')}}</span>
+                    <div class="col-4">
+                        <label class="block-display">
+                            <span class="mandatory">*</span>Status</label>
+                            <app-look-up (selectedResult)="onStatusSelect($event)"
+                            [options]="disReviewStatus" [isError]="validationMap.has('reviewStatus')"
+                            [selectedLookUpList]="reviewerStatusType"
+                            [defaultValue]="reviewDetails.reviewerStatusType ? reviewDetails.reviewerStatusType.description : ''"
+                            [uniqueId]="'disclosure-review-status'">
+                            </app-look-up>
+                            <div *ngIf="validationMap?.has('reviewStatus')">
+                                <span class="mandatory d-inline-block">{{validationMap?.get('reviewStatus')}}</span>
+                            </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-4">
+                        <label class="block-display">
+                            <span class="mandatory">*</span>Assigned On</label>
+                            <div>
+                                <span class="dateField w-100">
+                                  <input matInput [matDatepicker]="startDate" id="start-date-involvement" placeholder="{{datePlaceHolder}}"
+                                    style="width: 100% !important" (click)="startDate.open()" autocomplete="off" class="d-inline-block form-control"
+                                    [(ngModel)]="reviewStartDate" (keypress)="_commonService._keyPress($event, 'date')" (ngModelChange)="compareDates('START')"
+                                    [ngClass]="(validationMap?.has('reviewStartDate')) ? 'is-invalid d-block' : ''" />
+                                  <i title="Click to select Start date" (click)="startDate.open()" [class.date-field-error]="validationMap?.has('reviewStartDate')"
+                                    class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click to select date"></i>
+                                  <mat-datepicker #startDate>
+                                  </mat-datepicker>
+                                </span>
+                                <div class="ms-2" *ngIf="validationMap.has('reviewStartDate')">
+                                    <span class="mandatory d-inline-block">{{validationMap.get('reviewStartDate')}}</span>
+                                </div>
+                              </div>
+                    </div>
+                    <div class="col-4" *ngIf="reviewDetails?.reviewStatusTypeCode == '2'">
+                        <label class="d-block"><span class="mandatory">*</span>Review End Date </label>
+                        <div>
+                            <span class="dateField w-100">
+                              <input matInput [matDatepicker]="endDate" id="end-date-involvement" placeholder="{{datePlaceHolder}}"
+                                style="width: 100% !important" (click)="endDate.open()" autocomplete="off" class="d-inline-block form-control"
+                                [(ngModel)]="reviewEndDate" (keypress)="_commonService._keyPress($event, 'date')" (ngModelChange)="compareDates('END')"
+                                [ngClass]="(validationMap?.has('reviewEndDate') || validationMap.get('endDate')) ? 'is-invalid d-block' : ''" />
+                              <i title="Click to select Start date" (click)="endDate.open()" [class.date-field-error]="validationMap?.has('reviewEndDate')"
+                                class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click to select date"></i>
+                              <mat-datepicker #endDate>
+                              </mat-datepicker>
+                            </span>
+                            <div class="ms-2" *ngIf="validationMap.has('reviewEndDate')">
+                                <span class="mandatory d-inline-block">{{validationMap.get('reviewEndDate')}}</span>
+                            </div>
+                            <div class="ms-2" *ngIf="validationMap.has('endDate')">
+                                <span class="mandatory d-inline-block">{{validationMap.get('endDate')}}</span>
+                            </div>
+                          </div>
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -197,7 +300,7 @@
                         <label class="block-display">
                             Description</label>
                         <textarea [(ngModel)]="reviewDetails.description" appLengthValidator [isShowLimiter]="true"
-                            [limit]="2000" rows="2" class="form-control"></textarea>
+                            [limit]="2000" rows="3" class="form-control"></textarea>
                     </div>
                 </div>
             </div>

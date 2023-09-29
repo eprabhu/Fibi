@@ -1,61 +1,63 @@
 {
-  "id": 101,
-  "end_point": "/graph-connect/coi/v1/entitygraph",
-  "module_code": 15,
-  "header": "Entity Connections",
-  "additional_info": "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
-  "action_info": "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
-  "root_node": ["Entity"],
-  "root_relations": [
-    "ASSOCIATED_PERSONS_WITH_CITIZEN_INFO",
-    "AFFILIATED_ENTITIES",
-    "BELONGS_TO",
-    "ASSOCIATED_PERSONS"
-  ],
-  "relations": [
-    {
-      "node": "Person",
-      "relationships": [
+    "id": 101,
+    "end_point": "/graph-connect/coi/v1/entitygraph",
+    "module_code": 15,
+    "header": "Entity Connections",
+    "additional_info": "",
+    "action_info": "",
+    "root_node": ["Entity"],
+    "root_relations": [
+        "ASSOCIATED_PERSONS_WITH_CITIZEN_INFO",
+        "AFFILIATED_ENTITIES",
+        "BELONGS_TO",
+        "ASSOCIATED_PERSONS"
+    ],
+    "root_name" : "Root",
+    "relations": [
         {
-          "id": "1",
-          "relation": ["ASSOCIATED_ENTITIES", "BELONGS_TO"],
-          "description": "Associated entities"
-        },
-        {  "id": "2","relation": ["CITIZEN_OF"], "description": "Citizenship Of" }
-      ]
-    },
-    {
-      "node": "Entity",
-      "root_node": true,
-      "relationships": [
-        { "id": "1", "relation": ["BELONGS_TO"], "description": "Belongs To" },
-        {
-          "id": "2",
-          "relation": ["ASSOCIATED_PERSONS", "CITIZEN_OF"],
-          "description": "Associated Persons"
+            "node": "Person",
+            "relationships": [
+                {
+                    "id": "1",
+                    "relation": ["ASSOCIATED_ENTITIES"],
+                    "description": "Related Entities"
+                },
+                {
+                    "id": "2",
+                    "relation": ["CITIZEN_OF"],
+                    "description": "Country"
+                }
+            ]
         },
         {
-          "id": "3",
-          "relation": ["ASSOCIATED_ENTITIES", "BELONGS_TO"],
-          "description": "Affiliates Entities"
+            "node": "Entity",
+            "relationships": [
+                {
+                    "id": "1",
+                    "relation": ["BELONGS_TO"],
+                    "description": "Country"
+                },
+                {
+                    "id": "2",
+                    "relation": ["ASSOCIATED_PERSONS"],
+                    "description": "Related Persons"
+                },
+                {
+                    "id": "3",
+                    "relation": ["ASSOCIATED_ENTITIES", "BELONGS_TO"],
+                    "description": "Related Entities"
+                }
+            ]
+        },
+        {
+            "node": "Country",
+            "relationships": [
+                {
+                    "id": "1",
+                    "relation": ["ENTITIES_BELONGS_WITH"],
+                    "description": "Entities Associated With"
+                }
+            ]
         }
-      ]
-    },
-    {
-      "node": "Country",
-      "root_node": false,
-      "relationships": [
-        {
-          "id": "1",
-          "relation": ["ENTITIES_BELONGS_WITH"],
-          "description": "Entities in relation"
-        },
-        {
-          "id": "2",
-          "relation": ["ALL_CITIZENS"],
-          "description": "All Citizens"
-        }
-      ]
-    }
-  ]
+    ]
 }

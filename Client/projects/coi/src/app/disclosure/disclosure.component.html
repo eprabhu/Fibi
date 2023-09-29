@@ -108,7 +108,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto mr-15">
+                <div class="col-3 mr-15">
                     <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
                         <span class="status-pill">Date</span>
                         <div  class="row mt-2">
@@ -143,7 +143,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto status-card-width">
+                <div class="col-4">
                     <div class="border triple-card rounded-1 position-relative">
                         <span class="status-pill">Status</span>
                         <div class="ps-4 table-negative-margin">
@@ -215,12 +215,12 @@
                             title="Click to view the disclosure screening form"
                             area-describedby="Click to view the disclosure screening form">Disclosure</div>
                     </div>
-                    <div [routerLink]="['relationship']" class="navigation-box border-end" queryParamsHandling='merge'
+                    <!-- <div [routerLink]="['relationship']" class="navigation-box border-end" queryParamsHandling='merge'
                         role="button">
                         <div class="navigation-box-content" routerLinkActive="active"
                             title="Click to view the relationships" area-describedby="Click to view the relationships">
                             Relationships</div>
-                    </div>
+                    </div> -->
                     <!-- <div [routerLink]="['conflict-management']" class="navigation-box border-end"
                         queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Conflict Management</div>
@@ -329,9 +329,9 @@
                         </button>
                     </ng-container>
                     
-                    <!-- dispositionStatusCode(3-Approved) -->
+                    <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
                     <mat-menu #beforeMenu="matMenu" xPosition="before">
-                        <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3' && getManageDisclosureRight()">
+                        <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && ['3', '7', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && getManageDisclosureRight()">
                             <button mat-menu-item title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
                                 (click)="openAddAssignModal();"
@@ -362,10 +362,10 @@
                         </button>
 
                        <!-- return to pi -->
-                       <!-- reviewStatusCode-(3-Review In Progress) -->
+                       <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
                        <!-- Check logged person and administrator are same -->
-                    <button mat-menu-item *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '3' && coiData.coiDisclosure.adminPersonId &&
-                    (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)" title="Click to Return Disclosure"
+                    <button mat-menu-item *ngIf="coiData?.coiDisclosure?.adminPersonId && ['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) &&
+                    (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
                         (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
                         class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                         <mat-icon class="returnIcon">refresh</mat-icon>
@@ -379,7 +379,7 @@
                     </button>
                 </mat-menu>
 
-                    <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'"  
+                    <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'"  
                     title="Click to start review" area-describedby="Click to start review" 
                     (click)="updateCoiReview('START')"
                     id="start-review-btn"
@@ -389,7 +389,7 @@
                     <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Start Review </span>
                 </button>
 
-                  <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" 
+                  <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'" 
                   title="Click to complete review" area-describedby="Click to complete review" (click)="updateCoiReview('COMPLETE')"
                   id="complete-review-btn"
                   [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
@@ -397,7 +397,8 @@
                   <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                   <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                   </button>
-                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3'
+                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='8' || 
+                  coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'
                   && (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
                         [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
@@ -730,7 +731,8 @@
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
 <div *ngIf="coiService.isShowCommentNavBar">
-    <app-review-comments-slider  (closePage)="closeReviewComment($event)"></app-review-comments-slider>
+    <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="coiData.coiDisclosure" 
+    [projectDetails]="coiData.projectDetail" [reviewList]="reviewList"></app-review-comments-slider>
 </div>
 
 <!--Disclosure Withdraw/Return Confirmation Modal-->

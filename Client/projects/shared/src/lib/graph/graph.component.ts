@@ -1,10 +1,14 @@
 
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Observable, Subject, interval } from 'rxjs';
 import { DataService } from './data.service';
 import * as d3 from 'd3';
-import { GraphEvent, GraphDetail, GraphDataRO, HEIGHT, WIDTH, DISTANCE_BTN_NODES, FORCE_BTN_NODES } from './interface';
-
+import { GraphEvent, GraphDetail, GraphDataRO, HEIGHT, WIDTH, DISTANCE_BTN_NODES, FORCE_BTN_NODES, EventHistoryItem, TooltipEvent } from './interface';
+import { debounce } from 'rxjs/operators';
+class RedirectionClass {
+    node: string;
+    id: number | string;
+}
 @Component({
     selector: 'app-graph',
     templateUrl: './graph.component.html',
@@ -17,12 +21,16 @@ export class GraphComponent implements OnInit {
     @Input() graphId: string | number;
     graphDetail: GraphDetail = new GraphDetail();
     graphNodeEvents = new Subject<GraphEvent>;
+    graphTooltipEvents = new Subject<TooltipEvent>;
     popOverEvents = new Subject<boolean>;
+    openTooltipEvent = new Subject<boolean>;
     popOverPositions = {
         clientX: 0,
         clientY: 0,
         popoverHeight: 400,
-        popoverWidth: 500
+        popoverWidth: 500,
+        containerWidth: 0,
+        containerHeight: 0
     };
     selectedRelations: any = {};
     cardData: any = {};
@@ -35,7 +43,22 @@ export class GraphComponent implements OnInit {
     link;
     node;
     zoom;
-    isShowFilter = true;
+    isShowFilter = false;
+    eventHistory: Array<EventHistoryItem> = [];
+    eventData: any = {};
+    selectedEventIndex = 0;
+    showtimeLine = false;
+    tooltipPositionDetails = {
+        clientX: 0,
+        clientY: 0,
+        popoverHeight: 400,
+        popoverWidth: 500,
+        containerWidth: 0,
+        containerHeight: 0,
+        index: null,
+        type: ''
+    };
+    $debounceEventForTooltip = new Subject();
 
     constructor(public graphDataService: DataService) { }
 
@@ -49,7 +72,10 @@ export class GraphComponent implements OnInit {
             // do something here to handle error and indicate the error.
         });
         this.manageGraphDisplay();
+        this.getSearchList();
         this.listenToGraphEvents();
+        this.subscribeTooltipEvent();
+        this.openDetailsView();
     }
 
     private manageGraphDisplay(): void {
@@ -58,8 +84,13 @@ export class GraphComponent implements OnInit {
             if (data.visible) {
                 this.setSVGForGraph();
                 this.toggleGraphModal(true);
-                const RO: GraphDataRO = this.fetchROForRoot(100151);
+                const RO: GraphDataRO = this.fetchROForRoot(5);
                 const GRAPH_DATA = await this.graphDataService.getDataForGraph(RO);
+                const eventName: string = this.setEventName(this.graphDetail.name, this.graphDataService.graphTypeConfiguration.root_name);
+                const eventItem: EventHistoryItem = this.setEventItem('root', eventName, RO.relationship, RO.value, null, null);
+                this.setEventHistory(eventItem);
+                this.selectedEventIndex = this.eventHistory.length - 1;
+                this.setEventData(GRAPH_DATA, 'root');
                 this.addNodesAndLinks(GRAPH_DATA.nodes, GRAPH_DATA.links);
             } else {
                 this.toggleGraphModal(false);
@@ -73,15 +104,17 @@ export class GraphComponent implements OnInit {
             .insert('line', '.node')
             .attr('class', 'link')
             .style('stroke', '#d9d9d9')
-            .attr('marker-end', 'url(#arrow)');
-        this.link.exit().remove();
+            .attr('marker-end', 'url(#arrow)')
+            .on('mouseover', (event, d) => {
+                this.$debounceEventForTooltip.next({'d': d, 'event': event});
+            });
 
         this.node = this.svg.selectAll('.node').data(this.graph.nodes);
         const g = this.node.enter().append('g').attr('class', 'node');
 
         g.append('circle')
             .attr('r', 20)
-            .attr('fill', d => `url(#${d.label})`);
+            .attr('fill', d => this.getImageURL(d));
 
         g.append('text')
             .style('font-size', '10px')
@@ -96,16 +129,29 @@ export class GraphComponent implements OnInit {
         this.node.call(d3.drag()
             .on('start', this.dragStarted.bind(this))
             .on('drag', this.dragged.bind(this))
-            .on('end', this.dragEnded.bind(this)));
-        this.node.exit().remove();
+            .on('end', this.dragEnded.bind(this)))
+            .on('click', (event, d) => {
+                this.selectedRelations[d.elementId] = this.selectedRelations[d.elementId] || {};
+                this.graphNodeEvents.next({ index: d.index, clientX: event.clientX, clientY: event.clientY });
+                this.cardData = d;
+                this.relations = this.setConnectionsDataForPopUp(d) || [];
+            });
 
-        this.attachEventsForGraph();
+        this.link.exit().remove();
+        this.node.exit().remove();
 
         this.simulation.nodes(this.graph.nodes)
             .force('link', d3.forceLink(this.graph.links).distance(100))
             .force('charge', d3.forceManyBody().strength(-500))
             .alpha(0.03)
             .restart();
+    }
+
+    getImageURL(node) {
+        if (node.isGrantSponsor && node.isGrantSponsor === 1 ) {
+            return `url(#ESponsor)`;
+        }
+        return `url(#${node.label})`;
     }
 
     private setSVGForGraph(): void {
@@ -205,7 +251,6 @@ export class GraphComponent implements OnInit {
         links.forEach(L => this.addLinks(L));
     }
 
-
     findSourceAndTargetIndex(link): any {
         const source = this.graph.nodes.findIndex(N => N.elementId === link.source);
         const target = this.graph.nodes.findIndex(N => N.elementId === link.target);
@@ -226,18 +271,6 @@ export class GraphComponent implements OnInit {
         }
     }
 
-    private attachEventsForGraph(): void {
-        this.node.on('click', (event, d) => {
-            this.selectedRelations[d.elementId] = this.selectedRelations[d.elementId] || {};
-            this.graphNodeEvents.next({ index: d.index, clientX: event.clientX, clientY: event.clientY });
-            this.cardData = d;
-            this.relations = this.setConnectionsDataForPopUp(d) || [];
-        });
-        this.link.on('click', (event, d) => {
-            console.log('Click from link');
-        });
-    }
-
     setConnectionsDataForPopUp(node) {
         const data = this.graphDataService.graphTypeConfiguration.relations.find(R => R.node === node.label);
         return data?.relationships;
@@ -250,14 +283,41 @@ export class GraphComponent implements OnInit {
     private showBasicDetailsPopup(position) {
         this.popOverPositions.clientX = position.clientX;
         this.popOverPositions.clientY = position.clientY;
+        const modal: HTMLElement = document.querySelector('#d3GraphModal');
+        this.popOverPositions.containerWidth = modal.offsetWidth;
+        this.popOverPositions.containerHeight = modal.offsetHeight;
         this.popOverEvents.next(true);
     }
 
-    async drillDownEvent(event, relation): Promise<any> {
+    async drillDownEvent(event, R): Promise<any> {
+        this.hideTooltip();
         const value = this.getValueForNode(this.cardData);
-        const RO: GraphDataRO = this.getROForGraph(this.cardData.label, value, relation);
-        const GRAPH_DATA = await this.graphDataService.getDataForGraph(RO);
-        this.addNodesAndLinks(GRAPH_DATA.nodes, GRAPH_DATA.links);
+        const eventId: string = value + R.id;
+        let GRAPH_DATA: any;
+        if (event.target.checked) {
+            if (!this.eventData[eventId]) {
+                const RO: GraphDataRO = this.getROForGraph(this.cardData.label, value, R.relation);
+                GRAPH_DATA = await this.graphDataService.getDataForGraph(RO);
+            } else {
+                GRAPH_DATA = this.eventData[eventId];
+            }
+            const eventName: string = this.setEventName(this.getTextForNode(this.cardData), R.description);
+            const eventItem: EventHistoryItem = this.setEventItem(eventId, eventName, R.relation, value, R.id, this.cardData.elementId);
+            this.clearCheckBoxSelection();
+            this.eventHistory.length = this.selectedEventIndex + 1;
+            this.setEventHistory(eventItem);
+            this.setEventData(GRAPH_DATA, eventId);
+            this.addNodesAndLinks(GRAPH_DATA.nodes, GRAPH_DATA.links);
+        } else {
+            const index = this.eventHistory.findIndex(E => E.eventId === eventId);
+            if (index !== -1) {
+                this.setEventHistory(null, index);
+            }
+            this.graph = { nodes: [], links: [] };
+            this.eventHistory.forEach(E => this.addNodesAndLinks(this.eventData[E.eventId].nodes, this.eventData[E.eventId].links));
+        }
+        console.log(this.selectedRelations);
+        this.selectedEventIndex = this.eventHistory.length - 1;
         this.hideBasicDetailsPopup();
     }
 
@@ -280,11 +340,101 @@ export class GraphComponent implements OnInit {
         this.popOverEvents.next(false);
     }
 
+    hideTooltip(): void {
+        this.openTooltipEvent.next(false);
+    }
+
     clearGraph() {
         document.getElementById('chart-container').innerHTML = '';
         this.graph = { nodes: [], links: [] };
         this.selectedRelations = {};
         this.cardData = {};
+        this.eventData = {};
+        this.eventHistory = [];
+        this.selectedEventIndex = null;
+        this.showtimeLine = false;
+        this.hideTooltip();
     }
 
+    setEventItem(eventId: string, eventName: string, relations: string[], nodeName: string,
+            relationId: string, elementId: string): EventHistoryItem {
+        const eventItem = new EventHistoryItem();
+        eventItem.eventId = eventId;
+        eventItem.eventName = eventName;
+        eventItem.nodeName = nodeName;
+        eventItem.relations = relations;
+        eventItem.relationId = relationId;
+        eventItem.elementId = elementId;
+        return eventItem;
+    }
+
+    setEventName(first: string, second: string): string {
+        return first + '  ➜  ' + second;
+    }
+
+    setEventData(data, eventId): void {
+        this.eventData[eventId] = data;
+    }
+
+    setEventHistory(data: EventHistoryItem, index?: number): void {
+        (index || index === 0) ? this.eventHistory.splice(index, 1) : this.eventHistory.push(data);
+    }
+
+    unlinkFromGraph(event: EventHistoryItem): void {
+        const eventIndex = this.eventHistory.findIndex(E => E.eventId === event.eventId);
+        this.selectedEventIndex = eventIndex;
+        this.graph = { nodes: [], links: [] };
+        for (let index = 0; index <= eventIndex; index++) {
+            const eventId = this.eventHistory[index].eventId;
+            this.addNodesAndLinks(this.eventData[eventId].nodes, this.eventData[eventId].links);
+        }
+    }
+
+    clearCheckBoxSelection() {
+        for (let index = this.selectedEventIndex + 1; index < this.eventHistory.length; index++) {
+            const E = this.eventHistory[index];
+            this.selectedRelations[E.elementId][E.relationId] = false;
+        }
+    }
+
+    openDetailsView() {
+        this.graphDataService.openDetailsEvent.subscribe((data: RedirectionClass) => {
+            if (data) {
+                this.graphDataService.openRedirectionPath(data.node, data.id);
+            }
+        });
+    }
+
+    subscribeTooltipEvent() {
+        this.graphTooltipEvents.subscribe((data: any) => {
+            this.showToolTipDetails(data); });
+    }
+
+    getSearchList() {
+        this.$debounceEventForTooltip.pipe(debounce(() => interval(80)))
+        .subscribe((data: any) => {
+            if (data) {
+                this.showToolTipDetails({ index: data.d.index, clientX: data.event.clientX,
+                     clientY: data.event.clientY, type: this.getType(data) });
+            }
+        });
+    }
+
+    getType(data: any) {
+        return data.d.Relationship_Info || data.d.Relationship_type || this.graphDataService.graphMetaData.relations[data.d.type].name;
+    }
+
+    showToolTipDetails(data) {
+        const modal: HTMLElement = document.querySelector('#d3GraphModal');
+        this.tooltipPositionDetails.containerWidth = modal.offsetWidth;
+        this.tooltipPositionDetails.containerHeight = modal.offsetHeight;
+        this.tooltipPositionDetails.clientX = data.clientX;
+        this.tooltipPositionDetails.clientY = data.clientY;
+        this.tooltipPositionDetails.type = data.type;
+        this.openTooltipEvent.next(true);
+    }
+
+    getLinkForAdditionalImage(imageURL): string {
+        return window.location.origin + imageURL;
+    }
 }

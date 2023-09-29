@@ -68,7 +68,9 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                         //     this.commonService.assignSystemParameters(systemParameters);
                         // });
                         this.commonService.fetchPermissions(true).then((res) => {
-                            this._router.navigate(['coi/user-dashboard']);
+                            const isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
+                                || this.commonService.isCoiReviewer;
+                            this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : 'coi/user-dashboard']);
                         });
                     }
                 }
