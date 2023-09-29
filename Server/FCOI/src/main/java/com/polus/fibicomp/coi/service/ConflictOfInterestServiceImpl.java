@@ -360,11 +360,18 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(coiDisclosureObj, HttpStatus.OK);
 	}
 	
-	private void setDisclosureReviewStatusCode(CoiDisclosure coiDisclosure, CoiDisclosure coiDisclosureObj ) {
+	private void setDisclosureReviewStatusCode(CoiDisclosure coiDisclosure, CoiDisclosure coiDisclosureObj) {
 		String reviewStatusCode = coiDisclosureObj.getReviewStatusCode();
-		if (reviewStatusCode.equals(REVIEW_STATUS_RETURNED)
-				&& ((coiDisclosureObj.getAdminGroupId() != null) || (coiDisclosureObj.getAdminPersonId() != null))) {
-			coiDisclosure.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
+		if (reviewStatusCode.equals(REVIEW_STATUS_RETURNED)) {
+			if (Boolean.TRUE.equals(conflictOfInterestDao.isReviewerAssigned(coiDisclosureObj.getDisclosureId()))) {
+				if (Boolean.TRUE.equals(conflictOfInterestDao.isReviewerReviewCompleted(coiDisclosureObj.getDisclosureId()))) {
+					coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_COMPLETED);
+				} else {
+					coiDisclosure.setReviewStatusCode(Constants.COI_DISCLOSURE_REVIEWER_STATUS_ASSIGNED);
+				}
+			} else if ((coiDisclosureObj.getAdminGroupId() != null || coiDisclosureObj.getAdminPersonId() != null)) {
+				coiDisclosure.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
+			}
 		} else {
 			coiDisclosure.setReviewStatusCode(SUBMITTED_FOR_REVIEW);
 		}
@@ -1783,16 +1790,22 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			logger.error("assignDisclosureAdmin : {}", e.getMessage());
 		}
 		conflictOfInterestDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId());
-		conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
+		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(dto.getDisclosureId());
+		if (disclosure.getReviewStatusCode().equalsIgnoreCase(SUBMITTED_FOR_REVIEW)) {
+			conflictOfInterestDao.updateReviewStatus(dto.getDisclosureId(), DISCLOSURE_REVIEW_IN_PROGRESS);
+			dto.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
+			dto.setReviewStatus(REVIEW_IN_PROGRESS);
+		}
+		else{
+			dto.setReviewStatusCode(disclosure.getReviewStatusCode());
+			dto.setReviewStatus(disclosure.getCoiReviewStatusType().getDescription());
+		}
 		dto.setAdminGroupName(dto.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(dto.getAdminGroupId()).getAdminGroupName() : null);
 		dto.setAdminPersonName(personDao.getPersonFullNameByPersonId(dto.getAdminPersonId()));
-		CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(dto.getDisclosureId());
 		dto.setConflictStatus(disclosure.getCoiConflictStatusType() != null ? disclosure.getCoiConflictStatusType().getDescription() : null);
 		dto.setConflictStatusCode(disclosure.getConflictStatusCode());
 		dto.setDispositionStatusCode(disclosure.getDispositionStatusCode());
 		dto.setDispositionStatus(disclosure.getCoiDispositionStatusType().getDescription());
-		dto.setReviewStatusCode(DISCLOSURE_REVIEW_IN_PROGRESS);
-		dto.setReviewStatus(REVIEW_IN_PROGRESS);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
@@ -2196,9 +2209,6 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
     @Override
     public ResponseEntity<Object> returnDisclosure(Integer disclosureId, String description) {
         CoiDisclosure disclosure = conflictOfInterestDao.loadDisclosure(disclosureId);
-        if (!DISCLOSURE_REVIEW_IN_PROGRESS.equalsIgnoreCase(disclosure.getReviewStatusCode())) {
-            return new ResponseEntity<>("Could not return disclosure ", HttpStatus.METHOD_NOT_ALLOWED);
-        }
         disclosure.setCertificationText(null);
         disclosure.setCertifiedAt(null);
         disclosure.setCertifiedBy(null);
