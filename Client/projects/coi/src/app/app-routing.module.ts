@@ -68,6 +68,10 @@ const routes: Routes = [
             {
                 path: 'create-sfi',
                 loadChildren: () => import('./add-sfi/add-sfi.module').then(m => m.AddSfiModule)
+            },
+            {
+                path: 'opa',
+                loadChildren: () => import('./opa/opa.module').then(m => m.OpaModule)
             }
           ]
     },
