@@ -77,14 +77,14 @@
                 <label for="travelDisclosure-destination" class="fw-500 fs-14 d-block col-custom">Destination :</label>
                 <div class="divCenter ms-1 col">
                     <input class=" me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
-                        id="travelDisclosure-domestic" [(ngModel)]="destination"
-                        (click)="setValuesForDestinationType(); setUnSavedChangesTrue(); ">
+                        id="travelDisclosure-domestic" value="Domestic" [(ngModel)]="destination"
+                        (ngModelChange)="setValuesForDestinationType(); setUnSavedChangesTrue(); ">
                     <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-domestic">
                         Domestic
                     </label>
                     <input class=" ms-4 me-2 hand-cursor" type="radio" name="travelDisclosure-destination"
                         id="travelDisclosure-international" value="International" [(ngModel)]="destination"
-                        (click)="setValuesForDestinationType(); setUnSavedChangesTrue();">
+                        (ngModelChange)="setValuesForDestinationType(); setUnSavedChangesTrue();">
                     <label class="form-check-label fs-14 fw-normal hand-cursor" for="travelDisclosure-international">
                         International
                     </label>
@@ -93,41 +93,6 @@
 
             <!-- country/state/city -->
             <div class="row mt-4 px-0 d-flex justify-content-between">
-                <!-- Country list -->
-                <div class="row col-6" *ngIf="destination=='International'">
-                    <label class="fw-500 fs-14 col-custom" for="travelDisclosure-countryList">Country :</label>
-                    <div class="col">
-                        <app-endpoint-search (onSelect)="selectTravelCountry($event)" [clearField]="countryClearField"
-                            [httpOptions]="countrySearchOptions" [uniqueId]="'travelDisclosure-countryList'"
-                            (change)="setUnSavedChangesTrue();" autocomplete="off"
-                            [isError]="(mandatoryList?.has('country'))? true: false">
-                        </app-endpoint-search>
-                        <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-msg d-block position-absolute">
-                            {{mandatoryList?.get('country')}}
-                        </span>
-                        <span *ngIf="!mandatoryList?.has('country')" class="position-absolute fs-13 col text-secondary mb-0">
-                            Select country from search bar.
-                        </span>
-                    </div>
-                </div>
-
-                <!-- State list -->
-                <div class="row col-6" *ngIf="destination !=='International'">
-                    <label for="travelDisclosure-stateList" class="fw-500 fs-14 col-custom">State :</label>
-                    <div class="col">
-                        <input type="text" id="travelDisclosure-destinationState" autocomplete="off"
-                            [(ngModel)]="travelDisclosureRO.travelState" class="form-control col"
-                            (ngModelChange)="setUnSavedChangesTrue();"
-                            [ngClass]="(mandatoryList?.get('state')) ? 'invalid-border':''">
-                        <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-msg d-block position-absolute">
-                            {{mandatoryList?.get('state')}}
-                        </span>
-                        <span *ngIf="!mandatoryList?.has('state')" class="position-absolute fs-13 col text-secondary mb-0">
-                            Type the state you traveled to.
-                        </span>
-                    </div>
-                </div>
-
                 <!-- City list -->
                 <div class="row col-6">
                     <label for="travelDisclosure-cityList" class="fw-500 fs-14 col-custom">City :</label>
@@ -144,8 +109,45 @@
                         </span>
                     </div>
                 </div>
+            
+                <!-- Country and State list -->
+                <div class="row col-6">
+                    <ng-container *ngIf="destination === 'International'">
+                        <!-- Country list -->
+                        <label class="fw-500 fs-14 col-custom" for="travelDisclosure-countryList col-custom">Country :</label>
+                        <div class="col">
+                            <app-endpoint-search (onSelect)="selectTravelCountry($event)" [clearField]="countryClearField"
+                                [httpOptions]="countrySearchOptions" [uniqueId]="'travelDisclosure-countryList'"
+                                (change)="setUnSavedChangesTrue();" autocomplete="off"
+                                [isError]="(mandatoryList?.has('country'))? true: false">
+                            </app-endpoint-search>
+                            <span *ngIf="mandatoryList?.has('country')" class="fs-13 invalid-msg d-block position-absolute">
+                                {{mandatoryList?.get('country')}}
+                            </span>
+                            <span *ngIf="!mandatoryList?.has('country')" class="position-absolute fs-13 col text-secondary mb-0">
+                                Select country from the search bar.
+                            </span>
+                        </div>
+                    </ng-container>
+            
+                    <ng-container *ngIf="destination !== 'International' && destination !== null">
+                        <!-- State list -->
+                        <label for="travelDisclosure-stateList" class="fw-500 fs-14 col-custom">State :</label>
+                        <div class="col">
+                            <input type="text" id="travelDisclosure-destinationState" autocomplete="off"
+                                [(ngModel)]="travelDisclosureRO.travelState" class="form-control col"
+                                (ngModelChange)="setUnSavedChangesTrue();"
+                                [ngClass]="(mandatoryList?.get('state')) ? 'invalid-border':''">
+                            <span *ngIf="mandatoryList?.has('state')" class="fs-13 invalid-msg d-block position-absolute">
+                                {{mandatoryList?.get('state')}}
+                            </span>
+                            <span *ngIf="!mandatoryList?.has('state')" class="position-absolute fs-13 col text-secondary mb-0">
+                                Type the state you traveled to.
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
             </div>
-
             <!-- Date -->
             <div class="row px-0 mt-5 pt-2 d-flex justify-content-between pb-2">
                 <!-- start date -->
