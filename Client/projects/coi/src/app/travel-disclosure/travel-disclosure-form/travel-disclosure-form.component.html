@@ -264,3 +264,71 @@
         </div>
     </div>
 </div>
+
+<!-- Entity Details Modal -->
+<button class="d-none" data-bs-toggle="modal" data-bs-target="#travel-entity-details" id="persondetails">
+</button>
+
+<div class="modal fade mySkinDialog modal-lg" id="travel-entity-details" tabindex="-1" aria-labelledby="exampleModalLabel"
+  data-bs-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header headerStyle">
+        <h5 class="modal-title userDetail " id="entityDetails">{{addEntityConfirmation?.entityName}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearEntityDetails()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mx-1 row pt-1 d-flex mb-3">
+          <div class="text-secondary fs-14 col-4 mb-15">
+            <label class="grey-text me-2"> Country</label>
+            <span class="d-flex fs-14 fw-normal"> {{addEntityConfirmation?.country?.countryName}}</span>
+          </div>
+          <div class="text-secondary fs-14 col-4 mb-15">
+            <label class="grey-text me-2">Entity Type</label>
+            <span class="d-flex fs-14 fw-normal"> {{addEntityConfirmation?.entityType?.description}}</span>
+          </div>
+          <div class="text-secondary fs-14 col-4">
+            <label class="grey-text me-2">Entity Status</label>
+            <span class="fs-14 fw-400 d-flex entity-risk-badge px-3"
+              [ngClass]="addEntityConfirmation?.isActive ? 'active' : 'inactive'">{{addEntityConfirmation?.isActive
+              ?'Active':'Inactive'}}</span>
+          </div>
+          <div class="text-secondary fs-14 col-8 mt-2">
+            <label class="grey-text me-2"> Address</label>
+            <span class="d-flex fs-14 fw-normal" *ngIf="!isAddressReadMore && addEntityConfirmation?.address?.length > 55; else showFullInfo">
+              <span> {{(addEntityConfirmation?.address |
+                slice:0:55)}}
+              <span (click)="isAddressReadMore = !isAddressReadMore" class="hand-cursor"><span class="fw-medium">...<u>Read more</u></span>
+              </span></span>
+            </span>
+            <ng-template #showFullInfo>
+              <span class="word-break-all d-flex fs-14 fw-normal">{{addEntityConfirmation?.address}}</span>
+              <span *ngIf="addEntityConfirmation?.address?.length > 55" (click)="isAddressReadMore = !isAddressReadMore" aria-hidden="true"
+                class="d-flex hand-cursor"><span class="fw-medium"><u>Read Less</u></span>
+              </span>
+            </ng-template>
+          </div>
+          <div class="col text-secondary fs-14 align-items-center mt-2">
+            <label class="fw-bold me-2">Risk </label>
+            <span class="fw-normal">
+              <div class="text-color fs-14 d-flex">
+                <span>
+                  <mat-icon
+                    class="{{getWarningClass(addEntityConfirmation?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                </span>
+                <span class="ml-2">{{addEntityConfirmation?.entityRiskCategory.description}}</span>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ct-footer-padding">
+        <button (click)="clearEntityDetails()" class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn"
+          data-bs-dismiss="modal" type="button">Clear
+        </button>
+        <button (click)="confirmEntityDetails()" data-bs-dismiss="modal"
+          class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
