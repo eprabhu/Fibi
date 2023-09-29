@@ -199,17 +199,18 @@ export class AddSfiComponent implements OnInit {
 
     selectNewEntity(event): void {
         this.clearSFIFields();
+        this.EntitySearchOptions.defaultValue = event.searchString;
         this.entityDetails.coiEntity.entityName = event.searchString;
         this.canShowEntityFields = true;
     }
 
     selectedEvent(event): void {
+        this.canShowEntityFields = false;
+        this.clearSFIFields();
         if (event) {
             this.clearField = new String('false');
             this.checkIfSFIAlreadyAdded(event.entityId, event);
         } else {
-            this.canShowEntityFields = false;
-            this.clearSFIFields();
             this.sfiService.$addRelationService.next(null);
         }
     }
@@ -394,6 +395,7 @@ export class AddSfiComponent implements OnInit {
     clearEntityDetails() {
         this.clearField = new String('true');
         this.addEntityConfirmation = null;
+        this.canShowEntityFields = false;
     }
 
     getWarningClass(typeCode): string {

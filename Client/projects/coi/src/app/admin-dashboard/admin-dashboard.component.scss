@@ -313,24 +313,23 @@ small {
   /* box-shadow: 2px 1px 1px #cef9ff; */
 }
 
-// code optimization is needed
-.reviewer-success {
+.coi-reviewer-pill {
   background: none;
   padding: 0;
   margin: 0;
+}
+
+.reviewer-success {
+  @extend .coi-reviewer-pill;
   color: #4cb57d;
 }
 
 .reviewer-warning {
-  background: none;
-  padding: 0;
-  margin: 0;
+  @extend .coi-reviewer-pill;
   color: #ac8100;
 }
 
 .reviewer-info {
-  background: none;
-  padding: 0;
-  margin: 0;
+  @extend .coi-reviewer-pill;
   color: #007DEC;
 }
