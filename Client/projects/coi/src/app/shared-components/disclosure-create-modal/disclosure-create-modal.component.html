@@ -34,7 +34,7 @@
                             To revert to the original unit, click on the 'Reset' icon.
                             <br>
                             <span *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')"><i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                            For adding any additional description/comment, please use the “Description“ field.</span>
+                            Add the purpose of the trip in the field provided.</span>
                         </p>
                     </div>
                     <p class="fs-14 alert alert-danger" *ngIf="isShowExistingDisclosure">
@@ -85,7 +85,7 @@
                     *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                     <div class="col-12">
                         <label for="desc-award mb-2" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE' || (hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE')">
-                            <span *ngIf="triggeredFrom == 'FCOI_DISCLOSURE'" class="fs-14 fw-600 mandatory">*</span> Description
+                            <span *ngIf="triggeredFrom == 'FCOI_DISCLOSURE'" class="fs-14 fw-600 mandatory">*</span> {{triggeredFrom == 'TRAVEL_DISCLOSURE' ? 'Purpose of the Trip': 'Description'}}
                         </label>
                         <textarea [(ngModel)]="reviseObject.revisionComment" *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')" (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
                                   appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"
@@ -212,7 +212,7 @@
 
                                 
                                 <div class="col-6 pt-1 py-1">
-                                    <label class="f-14 pe-2">{{manualProjectAddDetails?.reporterRole}} : </label>
+                                    <label class="f-14 pe-2">Principal Investigator : </label>
                                     <span class="ml-2 grey-text">{{manualProjectAddDetails?.principalInvestigator}}</span>
                                 </div>
                                 <div class="col-6 pt-1 py-1">
