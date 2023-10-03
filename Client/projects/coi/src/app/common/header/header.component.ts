@@ -34,6 +34,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     $subscriptions: Subscription[] = [];
     homeNavigation: string = '';
     isAdministrator: boolean = false;
+    ispersondetailsmodal = false;
+    userDetails = null;
 
     constructor(public _router: Router, public commonService: CommonService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -44,6 +46,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
                                 || this.commonService.isCoiReviewer;
         this.navigateForHomeIcon();
+        this.userDetails = {
+           personId: this.commonService.getCurrentUserDetail('personId'),
+           fullName: this.commonService.getCurrentUserDetail('fullName')
+        };
     }
 
     navigateForHomeIcon(): void {
@@ -117,8 +123,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     triggerClickForId(modalId: string) {
         document.getElementById(modalId)?.click();
     }
+    
+    closePersonDetailsModal(event) {
+        this.ispersondetailsmodal = event;
+
+    }
 }
 function thisnavigateForHomeIcon() {
     throw new Error('Function not implemented.');
 }
+
 

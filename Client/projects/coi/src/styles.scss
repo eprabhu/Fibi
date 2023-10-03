@@ -523,3 +523,14 @@ nav ul li.active {
   background-color: #997404;
   color: white;
 }
+
+.clickable-content:hover {
+  color: #007DEC !important;
+}
+
+.clickable-content {
+  letter-spacing: normal;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}

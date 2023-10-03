@@ -23,7 +23,7 @@ export class PersonalDetailsModalComponent implements OnInit {
     canShowPersonDetails = false;
 
     ngOnInit() {
-        document.getElementById('persondetailsTrigger').click();
+        document.getElementById('entitypersondetailsTrigger').click();
         this.persondetails(this.userdetails);
         this.setPersonBtnRights();
     }
