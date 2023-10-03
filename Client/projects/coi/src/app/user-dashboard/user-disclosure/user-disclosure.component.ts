@@ -11,6 +11,7 @@ import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
 import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
+import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -64,6 +65,11 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     isShowCreate = false;
     showSlider = false;
     entityId: any;
+    differenceInDays:any;
+    dateWarningColor:any = false;
+    dateWarning:any = true;
+    hasPendingFCOI:any = false;
+    hasActiveFCOI = false;
 
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
@@ -306,13 +312,36 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 	}
 
     getActiveFCOI() {
+        this.fcoiDatesRemaining();
         return this.userDashboardService.activeDisclosures.filter(disclosure =>
-            disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
+            disclosure?.fcoiTypeCode === '1' );
     }
 
     triggerClickForId(targetIdName: string) {
         document.getElementById(targetIdName)?.click();
     }
 
+    fcoiDatesRemaining() {
+            this.userDashboardService.activeDisclosures.forEach(disclosure => {
+                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
+                    this.hasPendingFCOI = true;
+                }
+                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING') {
+                    this.hasActiveFCOI = true;
+                }
+            })
+            let disclosureDate  =  this.userDashboardService.activeDisclosures.filter(disclosure =>
+                disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
+            if ( disclosureDate[0]) {
+                const experationDate = (disclosureDate[0].expirationDate);
+                const currentDate = new Date().getTime()
+                this.differenceInDays = getDuration(currentDate, experationDate)
+                if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30)) < 10){
+                    this.dateWarningColor = true;
+                }else if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30)) > 30){
+                    this.dateWarning = false;
+                }
+            }
+    }
 
 }

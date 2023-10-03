@@ -310,9 +310,12 @@ padding-right: 17px;
 }
 
 .disclosure-master-footer-bg{
-  background-color: #E7F9E8;
+  background-color: #f7f7f7;
   border-top: 1px solid #c1d9c2;
-  padding: 3px;
+  height: 55px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .view-button{
@@ -324,4 +327,44 @@ padding-right: 17px;
 }
 .pl{
   padding-left: 2px;
+}
+
+.card-footer-pending-fcoi{
+  height: 55px;
+}
+
+.fcoi-pending-cardbody{
+  background-color: #FFFBF3;
+}
+
+.fcoi-pending-cardheader{
+  background-color: #FFFBF3;
+}
+
+.dateWarningColor{
+  color: red;
+}
+
+
+.medium-risk {
+  position: relative;
+  top: 5px;
+  color: #ff8c00;
+}
+
+.high-risk {
+  position: relative;
+  top: 5px;
+  color: red;
+}
+
+// .col-6{
+//   margin-bottom: 25px;
+// }
+.card{
+  margin: 5px;
+}
+
+.data-warning{
+padding-right: 288px;
 }
