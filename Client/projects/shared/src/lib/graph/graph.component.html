@@ -12,14 +12,12 @@
                     </span>
                     {{graphDataService.graphTypeConfiguration.header}} {{graphDetail.name}}</h4>
                 <div class="container" *ngIf="isShowFilter">
-                    <div
-                        class="success-banner px-3 my-4 mx-4 d-flex justify-content-between align-items-center ng-tns-c9-0 ng-star-inserted">
+                    <div class="success-banner px-3 my-4 mx-4 d-flex justify-content-between align-items-center " *ngIf="graphDataService.graphTypeConfiguration.additional_info">
                         <div class="p-3">
                             {{graphDataService.graphTypeConfiguration.additional_info}}
                         </div>
                     </div>
-                    <div
-                        class="success-banner2 px-3 my-4 mx-4 d-flex justify-content-between align-items-center ng-tns-c9-0 ng-star-inserted">
+                    <div class="success-banner2 px-3 my-4 mx-4 d-flex justify-content-between align-items-center" *ngIf="graphDataService.graphTypeConfiguration.action_info">
                         <div class="p-3">
                             <div class="mt-2">{{graphDataService.graphTypeConfiguration.action_info}}</div>
                         </div>
