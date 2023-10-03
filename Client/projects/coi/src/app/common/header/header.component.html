@@ -75,7 +75,7 @@
                 <div class="d-flex mx-4 cursor-pointer">
                     <img alt="" src="assets/images/{{isMaleUser ?'user.svg':'user-female.svg'}}">
                 </div>
-                <div class="d-flex flex-column cursor-pointer">
+                <div class="d-flex flex-column clickable-content ">
                     <b (click)="ispersondetailsmodal = true" class="f-16">{{fullName}}</b>
                     <small class="f-16">{{loginPerson?.reviewerRights?.description}}</small>
                 </div>
