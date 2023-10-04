@@ -39,7 +39,7 @@
 <ng-container *ngIf="isRelationCollapsed">
 	<ng-container *ngIf="_dataStoreAndEventsService.concatenatedProjectList?.length">
 		<ng-container *ngFor="let award of _dataStoreAndEventsService.concatenatedProjectList; let i =index">
-			<app-relationship-summary [selectedProject]="award"></app-relationship-summary>
+			<app-relationship-summary [selectedProject]="award" (openModuleDetails)="openModuleSummaryDetails($event)"></app-relationship-summary>
 		</ng-container>
 	</ng-container>
 	<div *ngIf="!_dataStoreAndEventsService.concatenatedProjectList?.length">
@@ -49,3 +49,69 @@
 <!--<app-conflict-management-summary></app-conflict-management-summary>-->
 <app-certify-summary></app-certify-summary>
 
+<!-- Project Details Modal -->
+<div class="modal fade" id="projectViewModal" tabindex="-1" aria-labelledby="projectViewModal" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+	<div class="modal-header">
+	<h4 class="modal-title">
+		Details of
+		<strong title="{{ selectedProject?.title }}">
+			#{{selectedProject?.moduleCode == 3 ? selectedProject?.moduleItemId : selectedProject?.moduleItemKey}} -
+			{{ (selectedProject?.title)?.length > 80 ? (selectedProject?.title | slice:0: 80)+'...' :
+			selectedProject?.title }}
+		</strong>
+	</h4>
+	  <button title="Click to close the popup" type="button" class="btn-close" data-bs-dismiss="modal"
+		aria-label="Close" (click)="openModuleSummaryDetails()"></button>
+	</div>
+	<div class="modal-body">
+	  <div class="row mx-0 mt-3">
+		<div class="col-lg-4 col-sm-6 col-6 mb-3">
+		  <label class="d-block label-text">Principal Investigator</label>
+		  <app-no-data-label [valueToShow]="selectedProject?.principalInvestigator">
+			<span class="grey-text m-0">{{selectedProject?.principalInvestigator}}</span>
+		  </app-no-data-label>
+		</div>
+		<div class="col-lg-4 col-sm-6 col-6 mb-3">
+		  <label class="d-block label-text">Period</label>
+		  <span class="grey-text m-0">
+			{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate |
+			dateFormatter}}</span>
+		</div>
+		<div class="col-lg-4 col-sm-6 col-6 mb-3">
+		  <label class="d-block label-text">{{selectedProject?.moduleCode == 3 ? 'Proposal' :
+			'Award'}} Status</label>
+		  <app-no-data-label [valueToShow]="selectedProject?.moduleStatus">
+			<span class="grey-text m-0">{{selectedProject?.moduleStatus}}</span>
+		  </app-no-data-label>
+		</div>
+		<div class="col-lg-4 col-sm-6 col-12 mb-3">
+		  <label class="d-block label-text">Lead Unit</label>
+		  <span class="grey-text m-0">
+			{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+		</div>
+		<div class="col-lg-4 col-sm-6 col-6 mb-3">
+		  <label class="d-block label-text">Sponsor</label>
+		  <app-no-data-label [valueToShow]="selectedProject?.sponsor">
+			<span class="grey-text m-0">{{selectedProject?.sponsor}}</span>
+		  </app-no-data-label>
+		</div>
+		<div class="col-lg-4 col-sm-6 col-6 mb-3">
+		  <label class="d-block label-text">Prime Sponsor</label>
+		  <app-no-data-label [valueToShow]="selectedProject?.primeSponsor">
+			<span class="grey-text m-0">{{selectedProject?.primeSponsor}}</span>
+		  </app-no-data-label>
+		</div>
+	  </div>
+	</div>
+	<div class="modal-footer">
+	  <button title="Click to close the popup" type="button"
+		class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="openModuleSummaryDetails()">Close</button>
+	  <button type="button" title="Click to view project details page"
+		(click)="openProjectMoreDetails(selectedProject.moduleItemId);"
+		class="btn btn-primary fs-14" data-bs-dismiss="modal">More Details</button>
+	</div>
+  </div>
+</div>
+</div>

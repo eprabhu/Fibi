@@ -5,32 +5,32 @@
         <ng-container *ngIf="selectedProject?.moduleCode == 3 ">
           <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
           <span class="title-text mt-2 word-break-all new-line-property badge-margin">
-            <strong>#{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
-              selectedProject?.title}}</strong>
+            <u class="clickable-content" (click)="openModule();"><strong>#{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}</strong></u>
             <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
-              <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
-                <span class="readMore fw-500 hand-cursor">Read More</span>
-              </a>
+              <span *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
+                <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
+              </span>
             </span>
-            <a *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
-              <span class="readMore ms-1 fw-500 hand-cursor">Read Less</span>
-            </a>
+            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
+              <span class="readMore hand-cursor fs-14 fw-medium">Read Less</span>
+            </span>
           </span>
         </ng-container>
       
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
           <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex">Award</span>
           <span class="title-text mt-2 word-break-all new-line-property badge-margin">
-            <strong>#{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
-              selectedProject?.title}}</strong>
+            <u class="clickable-content" (click)="openModule();"><strong>#{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}</strong></u>
             <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
-              <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
-                <span class="readMore fw-500 hand-cursor">Read More</span>
-              </a>
+              <span *ngIf="!redivdMoreOrLess" (click)="readMoreOrLess=true">
+                <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
+              </span>
             </span>
-            <a *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
-              <span class="readMore ms-1 fw-500 hand-cursor">Read Less</span>
-            </a>
+            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
+              <span class="readMore hand-cursor fs-14 fw-medium">Read Less</span>
+            </span>
           </span>
         </ng-container>
       </span>
@@ -66,7 +66,7 @@
 							</app-no-data-label>
 						</div>
 						<div class="col-5">
-							<label class="label-text">Proposal Status : </label>
+							<label class="label-text">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}} Status :</label>
 							<span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
 						</div>
 						<div class="col-7">
@@ -195,3 +195,4 @@
 </div>
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
   [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
+

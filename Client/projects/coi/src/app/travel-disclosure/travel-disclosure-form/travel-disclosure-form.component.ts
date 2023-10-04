@@ -194,14 +194,18 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         if (event) {
             openModal('travel-entity-details');
         } else {
-            this.entityDetails = null;
-            this.isResultFromSearch = false;
-            this.entityName = null;
-            this.travelDisclosureRO.entityId = null;
-            this.travelDisclosureRO.entityNumber = null;
+            this.clearEntity();
         }
         this.addEntityConfirmation = event ? event : null;
-        this.setUnSavedChangesTrue();
+        this.setUnSavedChangesTrue();  
+    }
+
+    clearEntity() {
+        this.entityDetails = null;
+        this.isResultFromSearch = false;
+        this.entityName = null;
+        this.travelDisclosureRO.entityId = null;
+        this.travelDisclosureRO.entityNumber = null;
     }
 
     selectTravelCountry(event: any): void {
