@@ -36,6 +36,9 @@ public class ReminderNotification implements Serializable {
 	@Column(name = "PLACEHOLDER_VALUES")
 	private String placeHolderValues;
 
+	@Column(name = "REMINDER_TYPE_FLAG")
+	private String reminderTypeFlag;
+
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
@@ -112,6 +115,14 @@ public class ReminderNotification implements Serializable {
 
 	public void setPlaceHolderValues(String placeHolderValues) {
 		this.placeHolderValues = placeHolderValues;
+	}
+
+	public String getReminderTypeFlag() {
+		return reminderTypeFlag;
+	}
+
+	public void setReminderTypeFlag(String reminderTypeFlag) {
+		this.reminderTypeFlag = reminderTypeFlag;
 	}
 
 }
