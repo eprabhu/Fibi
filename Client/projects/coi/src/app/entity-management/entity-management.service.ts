@@ -25,8 +25,8 @@ export class EntityManagementService {
     {code: 'N', description: 'Inactive'}
   ];
   statusCode: any = [
-    {code: '1', description: 'verified'},
-    {code: '2', description: 'unverified'}
+    {code: '1', description: 'Verified'},
+    {code: '2', description: 'Unverified'}
   ];
 
   getAllSystemEntityList(params) {
