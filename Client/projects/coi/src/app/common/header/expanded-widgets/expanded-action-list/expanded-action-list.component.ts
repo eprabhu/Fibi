@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DATE_PLACEHOLDER } from '../../../../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../../../../src/app/app-constants';
 import { Constants } from '../../../../../../../fibi/src/app/common/constants/action-list.constants';
 import { CommonService } from '../../../services/common.service';
 import { setFocusToElement } from '../../../../../../../fibi/src/app/common/utilities/custom-utilities';
