@@ -114,11 +114,11 @@ export class DataService {
     }
 
     private getLinkForImage(node): string {
-        return window.location.origin + this.graphMetaData.nodes[node].image;
+        return window.location.origin + window.location.pathname + this.graphMetaData.nodes[node].image;
     }
 
     private getLinkForAdditionalImage(imageURL): string {
-        return window.location.origin + imageURL;
+        return window.location.origin + window.location.pathname + imageURL;
     }
 
     openRedirectionPath(node, id) {

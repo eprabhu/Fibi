@@ -10,7 +10,7 @@ export class ConfigurationService {
     }
 
     syncEntityToGraphDB() {
-        return this._http.post(this._commonService.baseUrl + '/graph-connect/coi/v1/import', {});
+        return this._http.post(window.location.origin + '/graph-connect/coi/v1/import', {});
     }
 
 }
