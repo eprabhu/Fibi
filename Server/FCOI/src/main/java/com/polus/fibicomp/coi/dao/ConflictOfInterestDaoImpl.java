@@ -47,6 +47,7 @@ import com.polus.fibicomp.coi.dto.CoiTravelDashboardDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
+import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
@@ -97,6 +98,7 @@ import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.inbox.pojo.Inbox;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
@@ -126,6 +128,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Autowired
 	private PersonDao personDao;
+	
+	private static final String OPENED_FLAG = "openedFlag";
 
 	@Override
 	public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure coiDisclosure) {
@@ -3997,6 +4001,39 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.setParameter("disclosureId", disclosureId);
 		Long count = (Long) query.getSingleResult();
 		return count > 0;
+	}
+	
+	@Override
+	public List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto) {
+		 Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		 CriteriaBuilder builder = session.getCriteriaBuilder();
+		 CriteriaQuery<Inbox> query = builder.createQuery(Inbox.class);
+		 Root<Inbox> rootInboxValue = query.from(Inbox.class);
+		 List<Integer> moduleCodeList = notifyBannerDto.getModuleCodeList();
+		 List<Predicate> predicateList = new ArrayList<>();
+		 String personId = (notifyBannerDto.getPersonId() != null) ? notifyBannerDto.getPersonId() : AuthenticatedUser.getLoginPersonId();
+		 predicateList.add(builder.equal(rootInboxValue.get("toPersonId"), personId));
+		 Predicate openFlag = null;
+		 if (moduleCodeList != null && !moduleCodeList.isEmpty()) {
+		     predicateList.add(rootInboxValue.get("moduleCode").in(moduleCodeList));
+		 }
+		 if (notifyBannerDto.getAlertType() != null) {
+			 openFlag = getOpenFlagForPredicate(notifyBannerDto, builder, rootInboxValue);
+		     predicateList.add(builder.equal(rootInboxValue.get("alertType"), notifyBannerDto.getAlertType()));
+		 }
+		 Predicate predicate = builder.and(predicateList.toArray(new Predicate[0]));
+//		 query.where(predicate, openFlag);
+		 query.where(predicate);
+		 return session.createQuery(query).getResultList();
+	}
+	
+	private Predicate getOpenFlagForPredicate(NotificationBannerDto notifyBannerDto, CriteriaBuilder builder, Root<Inbox> rootInboxValue) {
+		if (notifyBannerDto.getAlertType().equals("B") || !notifyBannerDto.isProcessed()) {
+			return builder.equal(rootInboxValue.get("openedFlag"), Constants.NO);
+		} else if (notifyBannerDto.isProcessed()) {
+			return builder.equal(rootInboxValue.get("openedFlag"), Constants.YES);
+		}
+		return null;
 	}
 
 }

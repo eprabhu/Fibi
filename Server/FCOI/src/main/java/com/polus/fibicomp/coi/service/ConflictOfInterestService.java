@@ -15,9 +15,10 @@ import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
-import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiDisclosure;
@@ -28,6 +29,7 @@ import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.inbox.pojo.Inbox;
 
 @Transactional
 @Service(value = "conflictOfInterestService")
@@ -557,5 +559,7 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
     ResponseEntity<Object> loadDisclAttachTypes();
+    
+    List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto);
 
 }

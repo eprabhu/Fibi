@@ -1131,6 +1131,10 @@ UPDATE `entity_action_type` SET `MESSAGE` = 'Entity Risk changed from <b>{RISK}<
 UPDATE `entity_action_type` SET `MESSAGE` = '{ENTITY_NAME} <b>modified</b> by' WHERE (`ACTION_TYPE_CODE` = '6');
 UPDATE `entity_action_type` SET `MESSAGE` = 'Entity Risk <b>added</b> as <b>{RISK}</b>' WHERE (`ACTION_TYPE_CODE` = '7');
 
+INSERT INTO `coeus_module` (MODULE_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER, IS_ACTIVE) VALUES (24, 'COI Travel Disclosure', now(), 'admin', 'Y');
+INSERT INTO `message` (MESSAGE_TYPE_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('139', 'FCOI Disclosure Expiration', now(), 'quickstart');
+INSERT INTO `message` (MESSAGE_TYPE_CODE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('140', 'Travel Disclosure Expiration', now(), 'quickstart');
+
 ALTER TABLE `coi_travel_disclosure` 
 ADD INDEX `COI_TRAVEL_DISCLOSURE_FK6_idx` (`TRAVEL_DISCLOSURE_STATUS_CODE` ASC) VISIBLE;
 ;
