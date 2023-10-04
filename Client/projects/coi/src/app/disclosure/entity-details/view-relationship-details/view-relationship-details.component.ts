@@ -5,7 +5,7 @@ import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utili
 import { Subscription, forkJoin } from 'rxjs';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
-import { DATE_PLACEHOLDER } from '../../../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { slideInOut } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { NavigationService } from '../../../common/services/navigation.service';
