@@ -10,12 +10,12 @@
                                         <strong class="fs-15">FCOI
                                             Disclosure</strong>
                                     </div>
-                                    <div class="col d-flex justify-content-end text-muted"><a class="view-button" [queryParams]={disclosureId:disclosure.disclosureId}
+                                    <div class="col d-flex justify-content-end text-muted"><a class="view-button d-flex align-items-center" [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         title="Click to view FCOI Disclosure details"
                                         [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                         area-describedby="Click to view FCOI Disclosure details">
-                                        View >
+                                        <span>View</span> <mat-icon>chevron_right</mat-icon>
                                     </a></div>
                                 </div>
     
@@ -82,8 +82,8 @@
                         </div>
                         <div class="align-items-center d-flex disclosure-master-footer-bg px-3 py-3">
                             <div class="data-warning">
-                                <h5 *ngIf="dateWarning" class="mb-3" id="dateWarning" [ngClass]="dateWarningColor ? 'dateWarningColor':''" ><mat-icon class="me-2" [ngClass]="dateWarningColor ? 'high-risk material-icons-round':'medium-risk material-icons-round'"
-                                    >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year,</span><span *ngIf="differenceInDays?.durInMonths">{{differenceInDays?.durInMonths}} months,</span><span *ngIf="differenceInDays?.durInDays">{{differenceInDays?.durInDays}} days</span> </h5>
+                                <h5 *ngIf="dateWarning" class="mb-3 f-15" id="dateWarning" [ngClass]="dateWarningColor ? 'dateWarningColor':'medium-Warning-color'" ><mat-icon class="me-2" [ngClass]="dateWarningColor ? 'high-risk material-icons-round':'medium-risk material-icons-round'"
+                                    >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year,</span><span *ngIf="differenceInDays?.durInMonths">{{differenceInDays?.durInMonths}} months,</span><span *ngIf="differenceInDays?.durInDays">{{differenceInDays?.durInDays}} days</span><span>, on {{disclosure?.expirationDate | date :'d MMM y'}}</span> </h5>
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button *ngIf="!hasPendingFCOI" (click)="triggerClickForId('create-fcoi-modal')"
@@ -106,12 +106,12 @@
                                         <strong class="fs-15">FCOI
                                             Disclosure</strong>
                                     </div>
-                                    <div class="col d-flex justify-content-end text-muted"><a class="view-button" [queryParams]={disclosureId:disclosure.disclosureId}
+                                    <div class="col d-flex justify-content-end text-muted"><a class="view-button d-flex align-items-center " [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         title="Click to view FCOI Disclosure details"
                                         [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                         area-describedby="Click to view FCOI Disclosure details">
-                                        View >
+                                        <span>View</span> <mat-icon>chevron_right</mat-icon>
                                     </a></div>
                                 </div>
     
@@ -211,7 +211,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer disclosure-master-footer-bg py-3">
+            <div class="card-footer disclosure-master-footer-bg py-3 justify-content-end">
                 <div class="col-auto d-flex justify-content-end mr-7">
                     <!-- <button (click)="triggerClickForId('create-fcoi-modal')"
                             class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14 me-2"

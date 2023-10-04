@@ -270,22 +270,24 @@ export class CommonService {
         }
     }
 
-    getReviewStatusBadge(statusCode) {
+    getReviewStatusBadge(statusCode: string): string {
         switch (statusCode) {
             case '1':
                 return 'yellow-badge';
             case '2':
                 return 'blue-badge';
             case '3':
-                return 'green-badge';
+                return 'yellow-badge';
             case '4':
                 return 'green-badge';
+            case '5':
+                return 'red-badge';
+            case '6':
+                return 'red-badge';
             case '7':
-                return 'green-badge';
+                return 'blue-badge';
             case '8':
                 return 'green-badge';
-            case '5':
-                return 'review-status-badge';
             default:
                 return 'red-badge';
         }
