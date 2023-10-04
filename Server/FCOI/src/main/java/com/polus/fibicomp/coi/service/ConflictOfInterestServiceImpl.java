@@ -47,6 +47,7 @@ import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
@@ -83,6 +84,7 @@ import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.inbox.pojo.Inbox;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.pojo.Country;
@@ -2465,6 +2467,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> loadDisclAttachTypes() {
 		return new ResponseEntity<>(conflictOfInterestDao.loadDisclAttachTypes(), HttpStatus.OK);
+	}
+	
+	@Override
+	public List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto) {
+		return conflictOfInterestDao.fetchAllActiolListEntriesForBanners(notifyBannerDto);
 	}
 
 }

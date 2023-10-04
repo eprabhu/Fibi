@@ -449,6 +449,6 @@ export class GraphComponent implements OnInit {
     }
 
     getLinkForAdditionalImage(imageURL): string {
-        return window.location.origin + imageURL;
+        return window.location.origin + window.location.pathname + imageURL;
     }
 }

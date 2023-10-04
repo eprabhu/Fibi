@@ -31,6 +31,7 @@ import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
@@ -47,6 +48,8 @@ import com.polus.fibicomp.coi.service.GeneralService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.inbox.pojo.Inbox;
+import com.polus.fibicomp.reminder.service.ReminderScheduler;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 @RestController
@@ -67,6 +70,9 @@ public class ConflictOfInterestController {
 
 	@Autowired
 	private ActionLogService actionLogService;
+	
+	@Autowired
+	private ReminderScheduler rs;
 
 	@GetMapping("hello")
 	public ResponseEntity<String> hello() {
@@ -631,6 +637,12 @@ public class ConflictOfInterestController {
 	public ResponseEntity<Object> loadDisclAttachTypes() {
 		logger.info("Requesting for loadDisclAttachTypes");
 		return conflictOfInterestService.loadDisclAttachTypes();
+	}
+
+	@PostMapping("/fetchAllActiolListEntriesForBanners")
+	public List<Inbox> fetchAllActiolListEntriesForBanners(@RequestBody NotificationBannerDto notifyBannerDto) {
+		logger.info("Request for fetchAllActiolListEntriesForBanners");
+		return conflictOfInterestService.fetchAllActiolListEntriesForBanners(notifyBannerDto);
 	}
 
 }
