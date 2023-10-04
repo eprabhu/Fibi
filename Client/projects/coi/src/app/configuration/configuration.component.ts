@@ -1,7 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {environment} from '../../../../admin-dashboard/src/environments/environment';
 import {CommonService} from '../common/services/common.service';
 import { fadeInOutHeight } from '../common/utilities/animations';
+import {ConfigurationService} from "./configuration.service";
+import {Subscription} from "rxjs";
+import {HTTP_SUCCESS_STATUS} from "../app-constants";
+import {subscriptionHandler} from "../../../../fibi/src/app/common/utilities/subscription-handler";
 
 @Component({
   selector: 'app-configuration',
@@ -9,7 +13,7 @@ import { fadeInOutHeight } from '../common/utilities/animations';
   styleUrls: ['./configuration.component.scss'],
   animations: [fadeInOutHeight]
 })
-export class ConfigurationComponent implements OnInit {
+export class ConfigurationComponent implements OnInit, OnDestroy {
 
   deployMap = environment.deployUrl;
   isMaintainQuestionnaire = false;
@@ -23,11 +27,17 @@ export class ConfigurationComponent implements OnInit {
   isViewTimeSheet = false;
   isMaintainTraining = false;
 
-  constructor(private _commonService: CommonService) {
+  $subscriptions: Subscription[] = [];
+
+  constructor(private _commonService: CommonService, private _configurationService: ConfigurationService) {
   }
 
   ngOnInit() {
     this.setAdminRights();
+  }
+
+  ngOnDestroy() {
+      subscriptionHandler(this.$subscriptions);
   }
 
   openInNewTab(path: string) {
@@ -47,5 +57,11 @@ export class ConfigurationComponent implements OnInit {
     this.isViewTimeSheet = this._commonService.getAvailableRight(['VIEW_KEY_PERSON_TIMESHEET']);
     this.isMaintainTraining = this._commonService.getAvailableRight(['MAINTAIN_TRAINING']);
   }
+
+    syncEntityToGraphDB() {
+      this.$subscriptions.push(this._configurationService.syncEntityToGraphDB().subscribe((res: any) => {
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'All Entities synced successfully.');
+      }));
+    }
 
 }
