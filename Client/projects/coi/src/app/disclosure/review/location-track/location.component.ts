@@ -9,7 +9,8 @@ import {CoiService} from '../../services/coi.service';
 import {ElasticConfigService} from '../../../../../../fibi/src/app/common/services/elastic-config.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {deepCloneObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
-import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../fibi/src/app/app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { PersonProjectOrEntity } from '../../../shared-components/shared-interface';
 

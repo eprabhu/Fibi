@@ -5,7 +5,7 @@ import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utili
 import { Subscription, forkJoin } from 'rxjs';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
-import { DATE_PLACEHOLDER } from '../../../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { slideInOut } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { NavigationService } from '../../../common/services/navigation.service';
@@ -63,9 +63,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
 
     async ngOnInit() {
         await this.getEntityDetails(this.getEntityId());
-        if (this.isEditMode) {
-            this.getQuestionnaire();
-        }
+        this.getQuestionnaire();
     }
 
     async ngOnChanges() {
@@ -267,9 +265,13 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     checkQuestionnaireCompleted(questionList) {
+        this.entityDetailsServices.relationshipCompletedObject = {};
         this.$subscriptions.push(forkJoin(...questionList).subscribe(data => {
             this.allRelationQuestionnaires = [];
-            data.forEach((d: any) => this.combineQuestionnaireList(d.applicableQuestionnaire));
+            data.forEach((d: any) =>{ 
+                this.entityDetailsServices.relationshipCompletedObject[d.applicableQuestionnaire[0].MODULE_SUB_ITEM_KEY] = d.applicableQuestionnaire.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
+                this.combineQuestionnaireList(d.applicableQuestionnaire);
+            })
             this.isQuestionnaireCompleted = this.isAllQuestionnaireCompleted(this.allRelationQuestionnaires);
         }, err => {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');

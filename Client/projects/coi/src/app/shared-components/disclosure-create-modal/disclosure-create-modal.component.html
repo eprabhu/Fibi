@@ -139,7 +139,7 @@
                             <label class="f-14 pe-2">Review Status : </label>
                             <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
                                 <span
-                                    class="ml-2 badge {{getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}">{{existingDisclosureDetails?.reviewStatus}}</span>
+                                    class="ml-2 badge {{commonService.getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}">{{existingDisclosureDetails?.reviewStatus}}</span>
                             </app-no-data-label>
                         </div>
                        
@@ -282,7 +282,10 @@
                                     <label class="f-14 pe-2">Review Status : </label>
                                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
                                         <span
-                                            class="ml-2 badge {{getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}">{{existingDisclosureDetails?.reviewStatus}}</span>
+                                            class="ml-2  {{commonService.getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                        {{existingDisclosureDetails?.reviewStatus}}
+                                    </span>
                                     </app-no-data-label>
                                 </div>
                                
@@ -291,7 +294,10 @@
                                     <app-no-data-label
                                         [valueToShow]="existingDisclosureDetails?.conflictStatusCode">
                                         <span
-                                            class="ml-2 {{getDisclosureConflictBadge(existingDisclosureDetails?.conflictStatusCode)}}">{{existingDisclosureDetails?.conflictStatus}}</span>
+                                            class="ml-2 {{getDisclosureConflictBadge(existingDisclosureDetails?.conflictStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{existingDisclosureDetails?.conflictStatus}}
+                                            </span>
                                     </app-no-data-label>
                                 </div>
                               
@@ -300,7 +306,10 @@
                                     <app-no-data-label
                                         [valueToShow]="existingDisclosureDetails?.dispositionStatusCode">
                                         <span
-                                            class="ml-2 {{getDispositionStatusBadge(existingDisclosureDetails?.dispositionStatusCode)}}">{{existingDisclosureDetails?.dispositionStatus}}</span>
+                                            class="ml-2 {{getDispositionStatusBadge(existingDisclosureDetails?.dispositionStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{existingDisclosureDetails?.dispositionStatus}}
+                                            </span>
                                     </app-no-data-label>
                                 </div>
                             </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
@@ -21,6 +21,7 @@ declare var $: any;
 export class RelationshipSummaryComponent implements OnInit {
 
     @Input() selectedProject: any;
+    @Output() openModuleDetails: EventEmitter<any> = new EventEmitter<any>();
     $subscriptions: Subscription[] = [];
     projectRelations: any = [];
     isOpenSlider = false;
@@ -210,6 +211,10 @@ getEntityProjectRelations() {
             const slider = document.querySelector('.slider-base');
             slider.classList.add('slider-opened');
         });
+    }
+
+    openModule() {
+        this.openModuleDetails.emit(this.selectedProject);
     }
 
 }

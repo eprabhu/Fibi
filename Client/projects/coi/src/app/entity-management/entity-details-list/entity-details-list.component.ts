@@ -11,7 +11,7 @@ import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/ut
 import { switchMap } from 'rxjs/operators';
 import { CREATE_DISCLOSURE_ROUTE_URL, HTTP_ERROR_STATUS, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
-import { DATE_PLACEHOLDER } from '../../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../../src/app/app-constants';
 
 @Component({
   selector: 'app-entity-details-list',
