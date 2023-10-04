@@ -83,7 +83,7 @@
                         <div class="align-items-center d-flex disclosure-master-footer-bg px-3 py-3">
                             <div class="data-warning">
                                 <h5 *ngIf="dateWarning" class="mb-3 f-15" id="dateWarning" [ngClass]="dateWarningColor ? 'dateWarningColor':'medium-Warning-color'" ><mat-icon class="me-2" [ngClass]="dateWarningColor ? 'high-risk material-icons-round':'medium-risk material-icons-round'"
-                                    >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year,</span><span *ngIf="differenceInDays?.durInMonths">{{differenceInDays?.durInMonths}} months,</span><span *ngIf="differenceInDays?.durInDays">{{differenceInDays?.durInDays}} days</span><span>, on {{disclosure?.expirationDate | date :'d MMM y'}}</span> </h5>
+                                    >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year,</span><span *ngIf="differenceInDays?.durInMonths">{{differenceInDays?.durInMonths}} months,</span><span *ngIf="differenceInDays?.durInDays">{{differenceInDays?.durInDays}} days.</span></h5>
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button *ngIf="!hasPendingFCOI" (click)="triggerClickForId('create-fcoi-modal')"
