@@ -58,6 +58,7 @@
   border-radius: 20px;
   padding: 20px;
   max-width: 500px;
+  min-width: 300px;
   min-height: 150px;
   max-height: 400px;
   margin: 10px 0;
@@ -112,12 +113,8 @@
 
 .modal-close {
   position: absolute;
-  top: -7px;
-  right: -7px;
-  background: chocolate;
-  color: white;
-  border: none;
-  border-radius: 50%;
+  top: 7px;
+  right: 17px;
   font-size: 1em;
 }
 
@@ -149,10 +146,6 @@
     z-index: 1999;
     cursor: pointer;
 }
-.image-container {
-  width: 30px;
-  height: 20px;
-}
 
 .dropdown-wrapper {
   display: flex;
@@ -177,4 +170,13 @@
 .card-color {
   background-color: #e3f1ff;
   border: 1px dashed #5199e2;
+}
+
+.modal-header {
+  height: 47px;
+}
+
+.image-container {
+  width: 19px;
+  height: 19px
 }
