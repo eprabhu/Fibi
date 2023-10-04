@@ -20,24 +20,32 @@ public class Person {
 	@Id	
 	@Property(name="id")
 	private String id;
-	
+
 	@Property(name="person_id")
 	private String personId;
-	
+
 	@Property(name="full_name")
 	private String fullName;
-	
+
 	@Property(name="home_unit")
 	private String homeUnit;
-	
+
 	@Property(name="country_code")
 	private String countryCode;
-		
+
 	@Property(name="country_name")
 	private String countryName;
-	
+
 	@Property(name="status")
 	private String status;
-	
-	
+
+	@Property(name="user_name")
+	private String userName;
+
+	@Property(name="email_address")
+	private String emailAddress;
+
+	@Property(name="designation")
+	private String designation;
+
 }
