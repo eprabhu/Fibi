@@ -6,7 +6,16 @@
         <span title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}} Questionnaire"
           [ngClass]="activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
           class="active r-title px-3 py-3">
-          {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}</span>
+          {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}
+          <span id="qnr-complete-msg"
+            *ngIf="entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
+            class="fa fa-check" title="Completed">
+          </span>
+          <span id="qnr-incomplete-msg"
+            *ngIf="!entityDetailsServices.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
+            class="fa fa-exclamation-circle" title="Incomplete">
+          </span>
+        </span>
         </div>
     </ng-container>
     <div *ngIf="availableRelationships?.length && isEditMode && entityDetailsServices.canMangeSfi" class="pt-1"  [ngClass]="isHoverAddRelationship?'text-primary':'text-secondary'"

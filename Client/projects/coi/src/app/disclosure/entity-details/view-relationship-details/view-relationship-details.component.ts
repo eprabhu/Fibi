@@ -63,9 +63,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
 
     async ngOnInit() {
         await this.getEntityDetails(this.getEntityId());
-        if (this.isEditMode) {
-            this.getQuestionnaire();
-        }
+        this.getQuestionnaire();
     }
 
     async ngOnChanges() {
@@ -267,9 +265,13 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     checkQuestionnaireCompleted(questionList) {
+        this.entityDetailsServices.relationshipCompletedObject = {};
         this.$subscriptions.push(forkJoin(...questionList).subscribe(data => {
             this.allRelationQuestionnaires = [];
-            data.forEach((d: any) => this.combineQuestionnaireList(d.applicableQuestionnaire));
+            data.forEach((d: any) =>{ 
+                this.entityDetailsServices.relationshipCompletedObject[d.applicableQuestionnaire[0].MODULE_SUB_ITEM_KEY] = d.applicableQuestionnaire.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
+                this.combineQuestionnaireList(d.applicableQuestionnaire);
+            })
             this.isQuestionnaireCompleted = this.isAllQuestionnaireCompleted(this.allRelationQuestionnaires);
         }, err => {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');

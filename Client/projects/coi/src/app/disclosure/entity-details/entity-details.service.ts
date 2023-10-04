@@ -23,6 +23,7 @@ export class EntityDetailsService {
   isSwitchCurrentTab = false;
   isShowHistoryInfo = true;
   unSavedSections = [];
+  relationshipCompletedObject: any = {};
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
