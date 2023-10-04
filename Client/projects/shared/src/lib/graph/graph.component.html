@@ -2,12 +2,12 @@
     data-bs-target="#d3GraphModal"></button>
 
 <div class="modal modal-coi fade mySkinDialog" id="d3GraphModal" tabindex="-1" role="dialog"
-    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-bs-backdrop="static" data-keyboard="false">
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-custom-width" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="mb-0">
-                    <span (click)="isShowFilter = !isShowFilter;hideTooltip()" class="col-auto me-2">
+                    <span (click)="isShowFilter = !isShowFilter;hideToolTipAndCard()" class="col-auto me-2">
                         <button class="btn btn-sm btn-outline-dark"><i class="fa fa-info" aria-hidden="true"></i></button>
                     </span>
                     {{graphDataService.graphTypeConfiguration.header}} {{graphDetail.name}}</h4>
@@ -30,10 +30,10 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <div *ngIf="!showtimeLine" (click)="showtimeLine =true;hideTooltip()" class="timeline-btn mr-2" title="View graph history">
+                    <div *ngIf="!showtimeLine" (click)="showtimeLine = true;hideToolTipAndCard();" class="timeline-btn mr-2" title="View graph history">
                         <span>
                             <img class="image-container" alt="icon representing timeline"
-                                src="./assets/images/tree_timeline.png">
+                            src="./assets/images/g_timeline.png">                        
                         </span>
                     </div>
                     <button type="button" data-bs-dismiss="modal" class="btn-close fs-12" id="graph-modal-dismiss-btn"
@@ -41,13 +41,13 @@
                 </div>
             </div>
             <div class="timeline" appDrag *ngIf="showtimeLine && eventHistory.length">
-                <h3>History <span><button type="button"  class="btn-close float-end fs-12" id="history-close"aria-label="Close" (click)="showtimeLine =false"></button></span></h3>
+                <h3>History <span><button type="button"  class="btn-close float-end fs-12" id="history-close"aria-label="Close" (click)="showtimeLine =false;hideToolTipAndCard()"></button></span></h3>
                 <ng-container>
                     <app-timeline [history]="eventHistory" [selectedEventIndex]="selectedEventIndex"
                         (historySelectEvent)=unlinkFromGraph($event)></app-timeline>
                 </ng-container>
             </div>
-            <div class="modal-body modal-custom-height">
+            <div class="modal-body modal-custom-height p-0">
                 <div id="chart-container"></div>
             </div>
         </div>
@@ -89,10 +89,10 @@
                 <app-travel-card [data]="cardData"
                     [imagePath]="graphDataService.getLinkForImage('TravelDisclosure')"></app-travel-card>
             </ng-container>
-            <button type="button" class="modal-close" aria-label="Close" (click)="popOverEvents.next(false)">X</button>
+            <button type="button" aria-label="Close" (click)="hideToolTipAndCard()" class="modal-close btn-close fs-12"></button>
             <hr>
             <div class="interests" *ngIf="cardData.elementId">
-                <p class="interests_title">Show Connections </p>
+                <p class="interests_title">Show Connections : </p>
                 <ng-container *ngFor="let relation of relations">
                     <span class="interests_item">
                         <input type="checkbox" class="mr-2"

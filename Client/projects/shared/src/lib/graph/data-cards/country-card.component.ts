@@ -10,7 +10,7 @@ import { Component, Input } from '@angular/core';
         </div>
         <div class="ml-15">
             <h2 class="heading">{{data.country_name}}({{data.country_code}})</h2>
-            <p class="sub-heading">Currency: {{data.currency_code}}</p>
+            <p class="sub-heading">{{data.currency_code}}</p>
         </div>
       </div>
   `,
@@ -26,15 +26,14 @@ import { Component, Input } from '@angular/core';
       flex-direction: row;
     }
     .heading {
-      font-family: "Poppins";
-      font-weight: 500;
+      font-weight: bold;
       font-size: 18px;
       margin: 3px 0;
+      color: #007dec;
     }
     .sub-heading {
-      font-family: "Avenir";
+      font-weight: bold;
       font-size: 14px;
-      color: rgba(34, 34, 34, 0.5);
       margin: 5px 0;
     }
   `],

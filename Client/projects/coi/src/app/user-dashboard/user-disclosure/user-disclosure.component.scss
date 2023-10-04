@@ -303,6 +303,7 @@ padding-right: 17px;
 .disclosure-master-header-bg {
   background-color: #E7F9E8;
   border-bottom: 1px solid #c1d9c2;
+  height:  49px;
 }
 
 .disclosure-master-body-bg {
@@ -330,6 +331,7 @@ padding-right: 17px;
 }
 
 .card-footer-pending-fcoi{
+  border-top: 1px solid #00000017;
   height: 55px;
 }
 
@@ -339,12 +341,17 @@ padding-right: 17px;
 
 .fcoi-pending-cardheader{
   background-color: #FFFBF3;
+  border-bottom: 1px solid #00000017;
+  height:  49px;
 }
 
 .dateWarningColor{
-  color: red;
+  color: #9F0909;
 }
 
+.medium-Warning-color{
+  color: #D28B00;
+}
 
 .medium-risk {
   position: relative;
@@ -358,9 +365,6 @@ padding-right: 17px;
   color: red;
 }
 
-// .col-6{
-//   margin-bottom: 25px;
-// }
 .card{
   margin: 5px;
 }

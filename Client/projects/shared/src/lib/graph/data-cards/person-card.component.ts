@@ -11,8 +11,11 @@ import { DataService } from '../data.service';
         </div>
         <div class="ml-15 mr-8">
             <h2 class="heading">{{data.full_name}}({{data.person_id}})</h2>
-            <p class="sub-heading">{{data.country_name}}</p>
-            <p class="sub-heading">Home unit: {{data.home_unit}}</p>
+            <p class="sub-heading">Country : {{data.country_name}}</p>
+            <p class="sub-heading">Username : {{data.user_name}}</p>
+            <p class="sub-heading">Email : {{data.email_address}}</p>
+            <p class="sub-heading">Designation : {{data.designation}}</p>
+            <p class="sub-heading">Home Unit : {{data.home_unit}}</p>
         </div>
         <div class="align-items-end d-flex ms-auto">
         <button (click)="openEntity(data.person_id)"
@@ -37,15 +40,14 @@ import { DataService } from '../data.service';
       flex-direction: row;
     }
     .heading {
-      font-family: "Poppins";
-      font-weight: 500;
+      font-weight: bold;
       font-size: 18px;
       margin: 3px 0;
+      color: #007dec;
     }
     .sub-heading {
-      font-family: "Avenir";
+      font-weight: bold;
       font-size: 14px;
-      color: rgba(34, 34, 34, 0.5);
       margin: 5px 0;
     }
   `],

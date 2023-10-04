@@ -113,11 +113,13 @@ export class GraphComponent implements OnInit {
         const g = this.node.enter().append('g').attr('class', 'node');
 
         g.append('circle')
+            .style('cursor', 'pointer')
             .attr('r', 20)
             .attr('fill', d => this.getImageURL(d));
 
         g.append('text')
             .style('font-size', '10px')
+            .style('cursor', 'pointer')
             .attr('x', 20)
             .attr('y', '0.50em')
             .text(d => this.getTextForNode(d))
@@ -158,6 +160,9 @@ export class GraphComponent implements OnInit {
         this.attachZoom();
         this.svg = d3.select('#chart-container').append('svg')
             .attr('viewBox', [-WIDTH / 2.5, -HEIGHT / 3.8, WIDTH, HEIGHT])
+            .on('click', (event, d) => {
+                this.hideToolTipAndCard();
+            })
             .call(this.zoom).append('svg:g');
         this.zoom.scaleTo(this.svg, 1 / 1);
         this.attachStimulation();
@@ -187,10 +192,18 @@ export class GraphComponent implements OnInit {
             });
     }
 
+    hideToolTipAndCard() {
+        this.hideTooltip();
+        this.hideBasicDetailsPopup();
+    }
+
     private attachZoom() {
         this.zoom = d3.zoom()
             .scaleExtent([1 / 2, 10])
-            .on('zoom', d => this.svg.attr('transform', d.transform));
+            .on('zoom', d => {
+                this.svg.attr('transform', d.transform);
+                this.hideToolTipAndCard();
+            });
     }
 
     private dragStarted(event) {
@@ -290,7 +303,7 @@ export class GraphComponent implements OnInit {
     }
 
     async drillDownEvent(event, R): Promise<any> {
-        this.hideTooltip();
+        this.hideToolTipAndCard();
         const value = this.getValueForNode(this.cardData);
         const eventId: string = value + R.id;
         let GRAPH_DATA: any;
@@ -353,7 +366,7 @@ export class GraphComponent implements OnInit {
         this.eventHistory = [];
         this.selectedEventIndex = null;
         this.showtimeLine = false;
-        this.hideTooltip();
+        this.hideToolTipAndCard();
     }
 
     setEventItem(eventId: string, eventName: string, relations: string[], nodeName: string,
@@ -381,6 +394,7 @@ export class GraphComponent implements OnInit {
     }
 
     unlinkFromGraph(event: EventHistoryItem): void {
+        this.hideToolTipAndCard();
         const eventIndex = this.eventHistory.findIndex(E => E.eventId === event.eventId);
         this.selectedEventIndex = eventIndex;
         this.graph = { nodes: [], links: [] };
