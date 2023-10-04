@@ -706,6 +706,7 @@ INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_
 INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('2','Private','Y',now(),'quickstart');
 INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('3','Non-Profit','Y',now(),'quickstart');
 INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('4','For-Profit','Y',now(),'quickstart');
+INSERT INTO `entity_type` (`ENTITY_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('5', 'Federal', 'Y', now(), 'quickstart');
 
 INSERT INTO `coi_disclosure_type` (`DISCLOSURE_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('1','Financial Conflict of Interest','Y',now(),'quickstart');
 INSERT INTO `coi_disclosure_type` (`DISCLOSURE_TYPE_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`) VALUES ('2','Other Professional Activities','N',now(),'quickstart');

@@ -292,20 +292,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         }
     }
 
-    getReviewStatusBadge(statusCode): string {
-        switch (statusCode) {
-            case '1':
-                return 'yellow-badge';
-            case '2':
-                return 'blue-badge';
-            case '3':
-                return 'green-badge';
-            case '4':
-                return 'green-badge';
-            default:
-                return 'red-badge';
-        }
-    }
+    
 
     getDispositionStatusBadge(statusCode): string {
         switch (statusCode) {

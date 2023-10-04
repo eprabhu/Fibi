@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../../admin-dashboard/src/environments/environment';
-import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../../src/app/app-constants';
 import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -194,14 +195,18 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         if (event) {
             openModal('travel-entity-details');
         } else {
-            this.entityDetails = null;
-            this.isResultFromSearch = false;
-            this.entityName = null;
-            this.travelDisclosureRO.entityId = null;
-            this.travelDisclosureRO.entityNumber = null;
+            this.clearEntity();
         }
         this.addEntityConfirmation = event ? event : null;
-        this.setUnSavedChangesTrue();
+        this.setUnSavedChangesTrue();  
+    }
+
+    clearEntity() {
+        this.entityDetails = null;
+        this.isResultFromSearch = false;
+        this.entityName = null;
+        this.travelDisclosureRO.entityId = null;
+        this.travelDisclosureRO.entityNumber = null;
     }
 
     selectTravelCountry(event: any): void {

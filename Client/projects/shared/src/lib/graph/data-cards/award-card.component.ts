@@ -50,15 +50,14 @@ import { DataService } from '../data.service';
       flex-direction: row;
     }
     .heading {
-      font-family: "Poppins";
-      font-weight: 500;
+      font-weight: bold;
       font-size: 18px;
       margin: 3px 0;
+      color: #007dec;
     }
     .sub-heading {
-      font-family: "Avenir";
+      font-weight: bold;
       font-size: 14px;
-      color: rgba(34, 34, 34, 0.5);
       margin: 5px 0;
       display:flex;
       justify-content: start;

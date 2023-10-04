@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { DATE_PLACEHOLDER } from '../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {

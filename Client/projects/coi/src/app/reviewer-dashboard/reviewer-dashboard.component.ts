@@ -9,7 +9,7 @@ import { NameObject, ReviewerDashboardRequest, ReviewerDashboardService, SortCou
 import { CommonService } from '../common/services/common.service';
 import { NavigationService } from '../common/services/navigation.service';
 import { listAnimation, topSlideInOut, fadeInOutHeight, scaleOutAnimation, slideInAnimation} from '../common/utilities/animations';
-import { DATE_PLACEHOLDER } from 'projects/fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 
 @Component({
     selector: 'app-reviewer-dashboard',

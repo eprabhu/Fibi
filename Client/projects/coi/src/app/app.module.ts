@@ -20,6 +20,7 @@ import {EntityManagementGuardService} from './entity-management/entity-managemen
 import {AdminRouteGuardService} from './common/services/guards/admin-route-guard.service';
 import { LeftNavBarComponent } from './common/left-nav-bar/left-nav-bar.component';
 import {MatMenuModule} from "@angular/material/menu";
+import { SharedComponentModule } from './shared-components/shared-component.module';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -38,7 +39,7 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         BrowserAnimationsModule,
         AppRoutingModule,
         HttpClientModule,
-        SharedModule,
+        SharedComponentModule,
         MatIconModule,
         MatMenuModule
     ],

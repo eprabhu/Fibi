@@ -303,6 +303,7 @@ padding-right: 17px;
 .disclosure-master-header-bg {
   background-color: #E7F9E8;
   border-bottom: 1px solid #c1d9c2;
+  height:  49px;
 }
 
 .disclosure-master-body-bg {
@@ -310,9 +311,12 @@ padding-right: 17px;
 }
 
 .disclosure-master-footer-bg{
-  background-color: #E7F9E8;
+  background-color: #f7f7f7;
   border-top: 1px solid #c1d9c2;
-  padding: 3px;
+  height: 55px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .view-button{
@@ -324,4 +328,47 @@ padding-right: 17px;
 }
 .pl{
   padding-left: 2px;
+}
+
+.card-footer-pending-fcoi{
+  border-top: 1px solid #00000017;
+  height: 55px;
+}
+
+.fcoi-pending-cardbody{
+  background-color: #FFFBF3;
+}
+
+.fcoi-pending-cardheader{
+  background-color: #FFFBF3;
+  border-bottom: 1px solid #00000017;
+  height:  49px;
+}
+
+.dateWarningColor{
+  color: #9F0909;
+}
+
+.medium-Warning-color{
+  color: #D28B00;
+}
+
+.medium-risk {
+  position: relative;
+  top: 5px;
+  color: #ff8c00;
+}
+
+.high-risk {
+  position: relative;
+  top: 5px;
+  color: red;
+}
+
+.card{
+  margin: 5px;
+}
+
+.data-warning{
+padding-right: 288px;
 }
