@@ -16,7 +16,7 @@ public class OPAServiceImpl implements OPAService {
 	private OPADao opaDao;
 
 	@Override
-	public Boolean isOpaDisclosureRequired(String personId) {
+	public Boolean canCreateOpaDisclosure(String personId) {
 		return opaDao.isOpaDisclosureRequired(personId);
 	}
 
