@@ -32,6 +32,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
   $subscriptions: Subscription[] = [];
   coiValidationMap: Map<string, string> = new Map();
   coiTableValidation: Map<string, string> = new Map();
+  textareaValue: string;
 
   constructor(private _relationShipService: RelationshipService,
               private _commonService: CommonService,
@@ -165,10 +166,16 @@ sfiSingleSave(index, sfi) {
 
 triggerSingleSave() {
   this.$subscriptions.push(this.$debounceEvent.pipe(debounce(() => interval(1000))).subscribe((data: any) => {
-    if(data) {
+    if (data) {
       this.saveSingleEntity(data.index, data.SFI);
     }
   }
   ));
 }
+getStatusDescriptionByCode(code: string): string {
+  const STATUS = this.coiStatusList.find(S => S.projectConflictStatusCode === code);
+  return STATUS ? STATUS.description : '';
+}
+
+
 }

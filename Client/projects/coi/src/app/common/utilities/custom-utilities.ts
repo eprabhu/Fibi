@@ -92,3 +92,9 @@ export function closeCommonModal(modalName: string = 'confirmation-modal'): void
         closeBtn.click();
     }
 }
+
+export function focusElementyById(element_id: string): void {
+    const focusElement: HTMLElement | null = document.getElementById(element_id);
+    focusElement?.blur();
+    focusElement?.focus();
+}
