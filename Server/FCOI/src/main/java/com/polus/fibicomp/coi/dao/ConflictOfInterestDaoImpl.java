@@ -4013,20 +4013,19 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		 List<Predicate> predicateList = new ArrayList<>();
 		 String personId = (notifyBannerDto.getPersonId() != null) ? notifyBannerDto.getPersonId() : AuthenticatedUser.getLoginPersonId();
 		 predicateList.add(builder.equal(rootInboxValue.get("toPersonId"), personId));
-		 Predicate openFlag = null;
 		 if (moduleCodeList != null && !moduleCodeList.isEmpty()) {
 		     predicateList.add(rootInboxValue.get("moduleCode").in(moduleCodeList));
 		 }
 		 if (notifyBannerDto.getAlertType() != null) {
-			 openFlag = getOpenFlagForPredicate(notifyBannerDto, builder, rootInboxValue);
 		     predicateList.add(builder.equal(rootInboxValue.get("alertType"), notifyBannerDto.getAlertType()));
 		 }
 		 Predicate predicate = builder.and(predicateList.toArray(new Predicate[0]));
-//		 query.where(predicate, openFlag);
 		 query.where(predicate);
 		 return session.createQuery(query).getResultList();
 	}
 	
+	/* This method will come into picture if we use the openFlag parameter. For instance the parameter is not included in the list of predicates for fetching the value.
+	 * This will be included in the future commits after the implementation of trigger functions for coi disclosures.*/
 	private Predicate getOpenFlagForPredicate(NotificationBannerDto notifyBannerDto, CriteriaBuilder builder, Root<Inbox> rootInboxValue) {
 		if (notifyBannerDto.getAlertType().equals("B") || !notifyBannerDto.isProcessed()) {
 			return builder.equal(rootInboxValue.get("openedFlag"), Constants.NO);

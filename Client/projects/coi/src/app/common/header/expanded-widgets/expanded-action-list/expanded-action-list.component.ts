@@ -7,7 +7,7 @@ import { CommonService } from '../../../services/common.service';
 import { setFocusToElement } from '../../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 import { ExpandedActionListService } from './expanded-action-list.service';
-import { getTimeInterval, parseDateWithoutTimestamp } from '../../../../../../../fibi/src/app/common/utilities/date-utilities';
+import { getDuration, getTimeInterval, parseDateWithoutTimestamp } from '../../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { fadeInOutHeight } from '../../../../common/utilities/animations';
 
@@ -27,66 +27,17 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
         {
             inbox: {
                 message: {
-                    description: "Disclosure Approved",
-                    disclosureId:"66",
-                    Proposal:" #25849 - Start-up Research Grant (SRG) scheme"
+                    description: 'Disclosure Approved',
+                    disclosureId: '66',
+                    Proposal: ' #25849 - Start-up Research Grant (SRG) scheme'
                 },
                 messageTypeCode: '123',
-                class: "fresher",
-                arrivalDate: "31/01/2015"
+                class: 'fresher',
+                arrivalDate: '31/01/2015'
             },
 
         },
-        // {
-        //     inbox: {
-        //         message: {
-        //             description: "Disclosure Submitted for Review",
-        //             disclosureId:"3",
-        //             Proposal:" #25849 - Start-up Research Grant (SRG) scheme"
-        //         },
-        //         messageTypeCode: '123',
-        //         arrivalDate:'21/09/2010'
-        //     },
 
-        // },
-        {
-            inbox: {
-                message: {
-                    description: "Disclosure Submitted for Review"                 ,
-                    disclosureId:"16",
-                    Proposal:" #25849 - UV induced Cell Death in Plants- An overview"
-                },
-                messageTypeCode: '123',
-                arrivalDate: "01/02/2004"
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "Management Plan uploaded ",
-                    disclosureId:"62",
-                    Proposal:" #25849 - Start-up Research Grant (SRG) scheme"
-                },
-                messageTypeCode: '123',
-                arrivalDate: "03/02/2010"
-            },
-
-        },
-        {
-            inbox: {
-                message: {
-                    description: "Potential Conflict Identified",
-                    disclosureId:"61",
-                   
-                },
-                messageTypeCode: '123',
-                arrivalDate: "04/02/2002"
-
-            },
-
-        }
-        
     ];
     $subscriptions: Subscription[] = [];
     modulePath = Object.assign({}, Constants.paths);
@@ -98,14 +49,21 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
     isInboxInfo = true;
     getTimeInterval = getTimeInterval;
     isSaving = false;
+    data = [];
+    expirationdate: any;
+    noOfDays: any;
+    currentDate: number;
+    time: { durInDays: number; durInMonths: number; durInYears: number; };
+    actionListEntriesForBanner: any = [];
+    description: any;
 
-    constructor(private _actionList: ExpandedActionListService, private _router: Router,
-        public _commonService: CommonService) { }
+    constructor(private _actionListservice: ExpandedActionListService,
+                private _router: Router,
+                public _commonService: CommonService) { }
 
     ngOnInit() {
         this.clearInboxSearchField();
-        this.getActionList(false);
-        
+        this.fetchActionListForBanners();
     }
 
     ngOnDestroy() {
@@ -120,7 +78,7 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
             this.inboxObject.processed = type;
             this.inboxObject.fromDate = parseDateWithoutTimestamp(this.inboxObject.fromDate);
             this.inboxObject.toDate = parseDateWithoutTimestamp(this.inboxObject.toDate);
-            this.$subscriptions.push(this._actionList.getActionList(this.inboxObject).subscribe((data: any) => {
+            this.$subscriptions.push(this._actionListservice.getActionList(this.inboxObject).subscribe((data: any) => {
                 this.inboxDetails = data.inboxDetails;
                 this.moduleList = data.modules;
                 this.isSaving = false;
@@ -171,7 +129,47 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
     }
 
     markAsRead(id) {
-        this.$subscriptions.push(this._actionList.openUnreadInbox(id).subscribe(data => { }));
+        this.$subscriptions.push(this._actionListservice.openUnreadInbox(id).subscribe(data => { }));
+    }
+
+    getRequestObjectForBanner(): any {
+        return {
+            'moduleCodeList': [8, 24],
+            'personId': this._commonService.getCurrentUserDetail('personId'),
+            'alertType': 'B'
+        };
+    }
+
+    fetchActionListForBanners() {
+        const [REQUEST_OBJECT, CURRENT_DATE] = [this.getRequestObjectForBanner(), new Date().setHours(0, 0, 0, 0)];
+        this.$subscriptions.push(this._actionListservice.getActionLogEntries(REQUEST_OBJECT).subscribe(
+            (data: any) => {
+                this.actionListEntriesForBanner = data;
+                 this.setDurationForEntries(CURRENT_DATE);
+            }));
+    }
+
+    // this function calculates duration between the current date and expiration date using getduration function
+    setDurationForEntries(CURRENT_DATE: any): void {
+        this.actionListEntriesForBanner.forEach((element) => {
+            element.duration = getDuration(CURRENT_DATE, element.expirationDate);
+            element.message.description = this.getValueFromPlaceholder(element);
+        });
+    }
+
+    getValueFromPlaceholder(element: any): any {
+        this.description = element.message.description;
+        return element && element.message ?
+            this.getDisclosureType(element) : null;
+    }
+
+     // this function replace the NO_OF_DAYS placeholder with days count which calculated using the function setDurationForEntries
+    getDisclosureType(element: any): any {
+        if (element && element.message) {
+            this.description = this.description
+            .replace('{NO_OF_DAYS}', `${element.duration.durInDays}`);
+        return this.description;
+        }
     }
 
     clearInboxSearchField() {
@@ -181,28 +179,21 @@ export class ExpandedActionListComponent implements OnInit, OnDestroy {
     getInboxTab() {
         this.inboxTab === 'PENDING' ? this.getActionList(false) : this.getActionList(true);
         this.viewInboxSearch = false;
-        // this.clearInboxSearchField();
     }
-    addingDataToDummyArray() {
-        this.testInboxDeatils = [
-            {
-                inbox: {
-                    message: {
-                        description: "Management Plan uploaded"
-                    }
-                },
 
-            },
-            {
-                inbox: {
-                    message: {
-                        description: "Management Plan uploaded"
-                    }
-                },
-
-            },
-        ]
-    }
+    // modulecode 8 means coi disclosure,22 -FCOI
+    getModuleCodeClass(moduleCode: number): string {
+        switch (moduleCode) {
+          case 24:
+            return 'text-primary';
+          case 8:
+            return 'text-danger';
+          case 22:
+            return 'text-warning';
+          default:
+            return 'text-primary';
+        }
+      }
 
 }
 

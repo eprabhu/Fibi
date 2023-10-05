@@ -1,4 +1,5 @@
-<div class="card mt-3 mb-3" [@fadeInOutHeight]>
+<div class="me-3 ms-3">
+    <div class="card pe-2 ps-2 mt-3 mb-3" [@fadeInOutHeight]>
     <div class="card-header py-2">
         <h4 class="card-title d-flex justify-content-between">
             <span class="d-flex align-items-center">Action List</span>
@@ -39,7 +40,7 @@
         </button>
     </div>
     <div *ngIf="viewInboxSearch" class="card inbox-card">
-        <button type="button" id="modal-close" class="btn no-outline " data-dismiss="modal"
+        <button type="button" id="modal-close" class="btn no-outline border-0" data-dismiss="modal"
             (click)="viewInboxSearch = false" aria-label="Close">
             <span class="d-block modal-close" aria-hidden="true">&times;</span>
         </button>
@@ -58,7 +59,7 @@
                         <label>Action Date</label>
                         <div class="d-flex">
                             <span class="dateField">
-                                <input matInput [matDatepicker]="fromDt" class="d-inline-block form-control"
+                                <input matInput [matDatepicker]="fromDt" class="d-inline-block form-control action-fromdate"
                                     [(ngModel)]="inboxObject.fromDate" placeholder="{{datePlaceHolder}}" id="from-date"
                                     (click)="fromDt.open()">
                                 <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor"
@@ -68,7 +69,7 @@
                             </span>
                             <span>-</span>
                             <span class="dateField">
-                                <input matInput [matDatepicker]="toDt" class="d-inline-block form-control"
+                                <input matInput [matDatepicker]="toDt" class="d-inline-block form-control action-enddate"
                                     [(ngModel)]="inboxObject.toDate" placeholder="{{datePlaceHolder}}" id="to-date"
                                     (click)="toDt.open()">
                                 <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor"
@@ -78,11 +79,13 @@
                             </span>
                         </div>
                     </div>
-                    <div class="text-right col-12 mt-3">
-                        <button id="adv-search-clear-grant" class="btn btn-secondary btn-sm btn-xs mr-sm-2 me-3"
-                            (click)="clearInboxSearchField();getInboxTab()">Clear</button>
-                        <button id="adv-search-grant" class="btn btn-primary btn-sm btn-xs"
-                            (click)="getInboxTab()">Search</button>
+                    <div class="col-12 mt-3 d-flex justify-content-end">
+                        <div>
+                            <button id="adv-search-clear-grant" class="btn btn-secondary btn-lg btn-xs mr-sm-2 me-3"
+                                (click)="clearInboxSearchField();getInboxTab()">Clear</button>
+                            <button id="adv-search-grant" class="btn btn-primary btn-lg btn-xs"
+                                (click)="getInboxTab()">Search</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,48 +93,33 @@
     </div>
     <div class="card-content">
         <div class="card-body">
-            <div *ngIf="testInboxDeatils?.length > 0" class="table-responsive">
+            <div class="table-responsive">
                 <table class="table tableSkin">
-                    <caption class=""></caption>
-                    <thead class="">
-                        <tr>                          
-                            <th class="tablehead fs-13 mb-3"scope="col " colspan="2"><i class="fa fa-info-circle mr-1"></i> Items awaiting an Action :<button type="button" class="btn-close m-0 p-0" data-bs-dismiss="modal" id="support-dissmiss-btn"  aria-label="Close"></button></th>                       
-                        </tr>
-                    </thead>
-                    <tbody class="pt-3">
-                        <tr class="pull-up pt-3" *ngFor="let testinbox of testInboxDeatils; let i= index">
-                            <td class="td-pd pt-3" (click)="goToActionPath(testinbox?.inbox)">
+                    <tbody class="pt-3 notifications">
+                        <tr class="pull-up pt-3" *ngFor="let logEntries of actionListEntriesForBanner; let i= index">
+                            <td class="td-pd pt-3" (click)="goToActionPath(logEntries?.inbox)">
                                 <div>
-                                    <span class="font-style">{{(testinbox.inbox?.message?.description)?.length>1 ?
-                                        (testinbox.inbox?.message?.description | slice:0:150)+'...' :
-                                        testinbox.inbox?.message?.description}}</span><br>
-                                    <span class="font-style fw-normal">disclosureId: {{(testinbox.inbox?.message?.disclosureId)?.length>1 ?
-                                        (testinbox.inbox?.message?.disclosureId | slice:0:150)+'' :
-                                        testinbox.inbox?.message?.disclosureId}}</span>
-                                    <!-- <span class="d-block text-break">{{(testinbox.inbox?.message?.description)}}</span> -->
-                                    <span class="d-block text-break fw-normal ">{{(testinbox.inbox?.message?.Proposal)}}</span>
+                                    <span [innerHTML]="logEntries?.message?.description"></span>
+                                    <br>
+                                      <div class="pt-3">#{{logEntries?.moduleItemKey}} - {{logEntries?.disclosureName}}</div>
+                                    <div>
+                                    </div>
                                 </div>
                             </td>
-                            <td style="width:20%" (click)="goToActionPath(testinbox?.inbox)">
+                            <td style="width:20%" (click)="goToActionPath(logEntries?.inbox)">
                                 <div class="text-right">
-                                    <span class="block-display fw-600">
-                                        <i class="fa fa-clock-o mr-2"
-                                            title="{{testinbox?.inbox?.arrivalDate}}"
-                                            aria-hidden="true"></i><span>{{testinbox?.inbox?.arrivalDate}}</span></span>
-                                           
-                                             <!-- demo data(time)
-                                            <!-- <span class="block-display fw-600">
-                                                <i class="fa fa-clock-o mr-2"
-                                                    title="{{testinbox?.inbox?.arrivalDate | dateFormatter}}"
-                                                       aria-hidden="true"></i>{{testInboxDeatils?.inbox?.arrivalDate}}</span> -->
-                                                       <label *ngIf="i >= 2" style="color: #007bff;font-weight: 400; cursor: pointer;">Development Proposal</label>
-                                                       <label *ngIf="i < 2" style="color: #007bff;font-weight: 400; cursor: pointer;">Award</label>
-                                    <span
-                                        *ngIf="testinbox.inbox.messageTypeCode !== '121' && testinbox.inbox.messageTypeCode !== '122' else variation"
-                                        class="{{testinbox.inbox.class}} float-right mt-1">
-                                        {{testinbox?.inbox?.name}}</span>
+                                    <span class="fa fa-clock-o mr-2 pe-2" title="mesag"></span>
+                                        <!-- <span>{{ logEntries?.arrivalDate| dateFormatterWithTimeZone: 'long' }}</span> -->
+                                        <span>{{getTimeInterval(logEntries.arrivalDate)}}</span>
+                                        <div class="pt-3 float-right" [ngClass]="getModuleCodeClass(logEntries?.moduleName.moduleCode)">
+                                            {{ logEntries?.moduleName.description }}
+                                          </div>
+                                     <span
+                                        *ngIf="logEntries?.inbox?.messageTypeCode !== '121' && logEntries?.inbox?.messageTypeCode !== '122' else variation"
+                                        class="{{logEntries?.inbox?.class}} float-right mt-1">
+                                        {{logEntries?.inbox?.name}}</span>
                                     <ng-template #variation>
-                                        <span class="{{testinbox?.inbox.class}} float-right mt-1">Variation Request</span>
+                                        <span class="{{logEntries?.inbox.class}} float-right mt-1">Variation Request</span>
                                     </ng-template>
                                 </div>
                             </td>
@@ -139,7 +127,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="no-data-container" *ngIf="inboxDetails?.length > 0">
+            <div class="no-data-container" *ngIf="actionListEntriesForBanner?.length  === 0">
                 <span class="no-data-icon-outer">
                     <div class="no-data-icon">
                         <i class="fa fa-file-o" aria-hidden="true"></i>
@@ -149,5 +137,7 @@
                 <h4>There is no information in this section.</h4>
             </div>
         </div>
-    </div>
+    </div> 
+ </div>
 </div>
+
