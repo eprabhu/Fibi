@@ -45,10 +45,10 @@
                         <div class="row">
                             <div class="col-md-8 col-12">
                                 <div class="col-12 d-flex" *ngIf="relation.moduleCode == 3">
-                                    <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
+                                    <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex" tabindex='0' aria-label="proposal">Proposal</span>
                                     <p class="entity-title">
-                                        <strong title="Click to view project details" class="fs-16" (click)="selectedProjectForView=relation;" data-bs-toggle="modal"
-                                            data-bs-target="#moduleViewModal">#{{relation?.moduleItemId}} - {{relation?.title?.length >
+                                        <strong title="Click to view project details" tabindex="0" class="fs-16" (click)="selectedProjectForView=relation;" data-bs-toggle="modal"
+                                            data-bs-target="#moduleViewModal"[attr.aria-label]="relation?.moduleItemId + '_' + relation?.title ">#{{relation?.moduleItemId}} - {{relation?.title?.length >
                                             75 && !collapseViewMore[relation?.moduleItemId] ? (relation?.title | slice:0:75)+'...' :
                                             relation?.title}}
                                         </strong>
@@ -60,45 +60,45 @@
                                     </p>
                                 </div>
                                 <div class="col-12 d-flex" *ngIf="relation.moduleCode == 1">
-                                    <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex">Award</span>
+                                    <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex" tabindex='0' aria-label="Award">Award</span>
                                     <p title="Click to view project details" class="entity-title m-0" (click)="selectedProjectForView=relation" data-bs-toggle="modal"
-                                        data-bs-target="#moduleViewModal">
-                                        <strong class="fs-16">#{{relation?.moduleItemKey}} - {{relation?.title}} </strong>
+                                        data-bs-target="#moduleViewModal"tabindex='0' >
+                                        <strong class="fs-16"[attr.aria-label]="relation?.moduleItemKey + ' - ' + relation?.title">#{{relation?.moduleItemKey}} - {{relation?.title}} </strong>
                                     </p>
                                 </div>
                                 <div class="row m-2">
-                                    <div class="col-6">
+                                    <div class="col-6"tabindex="0">
                                         <label class="label-text">Principal Investigator :</label>
-                                        <span class="ml-2 grey-text">{{relation?.principalInvestigator}}</span>
+                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.principalInvestigator">{{relation?.principalInvestigator}}</span>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6"tabindex="0">
                                         <label class="label-text">Sponsor :</label>
-                                        <span class="grey-text">{{relation?.sponsor}}</span>
+                                        <span class="grey-text" [attr.aria-label]="relation?.sponsor">{{relation?.sponsor}}</span>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6"tabindex="0">
                                         <label class="label-text">Period :</label>
-                                        <span class="ml-2 grey-text">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
+                                        <span class="ml-2 grey-text" [attr.aria-label]="relation?.startDate + ' - ' + relation?.endDate">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
                                             dateFormatter}}</span>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6"tabindex="0">
                                         <label class="label-text">Prime Sponsor :</label>
-                                        <span *ngIf="relation?.primeSponsor" class="ml-2 grey-text">{{relation?.primeSponsor}}</span>
+                                        <span *ngIf="relation?.primeSponsor" class="ml-2 grey-text"[attr.aria-label]="relation?.primeSponsor">{{relation?.primeSponsor}}</span>
                                         <span *ngIf="!relation?.primeSponsor" class="noDataExists">--No Data--</span>
                                     </div>
-                                    <div class="col-6">
-                                        <label class="label-text">{{relation.moduleCode == 3 ? 'Proposal' : 'Award'}} Status :
+                                    <div class="col-6"tabindex="0">
+                                        <label class="label-text"[attr.aria-label]="relation.moduleCode === 3 ? 'Proposal' : 'Award'"> {{relation.moduleCode == 3 ? 'Proposal' : 'Award'}} Status :
                                         </label>
                                         <span class="ml-2 grey-text">{{relation?.moduleStatus}}</span>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6"tabindex="0">
                                         <label class="label-text">Lead Unit :</label>
-                                        <span class="ml-2 grey-text" *ngIf="relation?.unitName">{{relation?.unitNumber}} -
+                                        <span class="ml-2 grey-text" *ngIf="relation?.unitName"[attr.aria-label]="relation?.unitName">{{relation?.unitNumber}} -
                                             {{relation?.unitName}}</span>
                                         <span *ngIf="!relation?.unitName" class="noDataExists">No Lead Unit exist</span>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6"tabindex="0">
                                         <label class="label-text">Project Role : </label>
-                                        <span class="ml-2 grey-text">{{relation?.reporterRole}}</span>
+                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.reporterRole">{{relation?.reporterRole}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                         </div>
                                         <div class="row fs-14 m-2" style="text-align: right;" *ngIf="count">
                                             <div class="col-6 mt-4">
-                                                <div class="row">
+                                                <div class="row" tabindex="0"[attr.aria-label]="'No Conflict count: ' + getDisclosureCount(1, relation.disclosureStatusCount)" >
                                                     <div class="col-6">
                                                         <label class="count-label">No Conflict : </label>
                                                     </div>
@@ -123,7 +123,7 @@
                                                         <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row"tabindex="0"[attr.aria-label]="'Potential Conflict count: ' + getDisclosureCount(2, relation.disclosureStatusCount)">
                                                     <div class="col-6">
                                                         <label class="count-label">Potential Conflict :
                                                         </label>
@@ -136,7 +136,7 @@
                                                         <span *ngIf="relation.sfiCompleted == null" class="count-margin">--</span>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row" tabindex="0"[attr.aria-label]="'Conflict Identified count: ' + getDisclosureCount(3, relation.disclosureStatusCount)">
                                                     <div class="col-6">
                                                         <label class="count-label">Conflict Identified :</label>
                                                     </div>
