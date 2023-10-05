@@ -105,30 +105,45 @@ public class ReminderScheduler {
 		
 	}
 	
+	/* This method will be invoked for `ALERT_TYPE` = "B" means for Banners.To get things work for banners, we added a new column- `REMINDER_TYPE_FLAG` to the
+	 * existing table `REMINDER_NOTIFICATION` and set the value as "B" for notification Banners. The method here will lists out different persons with expiration
+	 * warning(For instance 365 days) for the disclosures. Then will add entries corresponding to each person in the action list table. So that if any user comes
+	 * and login to the application and tries to click on the Notification icon, they can see what are the disclosures which are going to expire in the given
+	 * number of days.
+	*/
 	private void getThingsForBanner(ReminderNotification reminder, ResultSet rs) {
-		String personId = AuthenticatedUser.getLoginPersonId();
 			try {
 				while (rs.next()) {
-					Inbox actionList = new Inbox();
-					actionList.setModuleCode(rs.getInt("MODULE_CODE"));
-					actionList.setSubModuleCode(rs.getInt("SUB_MODULE_CODE"));
-					actionList.setModuleItemKey(rs.getString("MODULE_ITEM_KEY"));
-					actionList.setSubModuleItemKey(rs.getString("SUB_MODULE_ITEM_KEY"));
-					actionList.setExpirationDate(rs.getTimestamp("EXPIRATION_DATE"));
-					actionList.setAlertType(reminder.getReminderTypeFlag());
-					actionList.setUpdateUser(rs.getString("UPDATE_USER"));
-					actionList.setUpdateTimeStamp(rs.getTimestamp("UPDATE_TIMESTAMP"));
-					actionList.setUserMessage(rs.getString("USER_MESSAGE"));
-					actionList.setMessageTypeCode(rs.getString("EXPIRING_MESSAGE_TYPE_CODE"));
 					List<String> personIds = Arrays.asList(rs.getString("PERSON_ID").split("\\s*,\\s*"));
-					personIds.forEach(id -> {
-						actionList.setToPersonId(personId != null ? personId : id);
-						inboxDao.saveBannerEntriesToActionList(actionList);
-					});
+					if (!personIds.isEmpty()) {
+						personIds.forEach(id -> {
+							saveBannerNotificationsToActionListForPerson(reminder, rs, id);
+						});
+					}
 				}
 			} catch (Exception e) {
 				logger.error("Error Occured in getThingsForBanner : {}", e.getMessage());
 			}
+	}
+	
+	private void saveBannerNotificationsToActionListForPerson(ReminderNotification reminder, ResultSet rs, String personId) {
+		try {
+			Inbox actionList = new Inbox();
+			actionList.setToPersonId(personId);
+			actionList.setModuleCode(rs.getInt("MODULE_CODE"));
+			actionList.setSubModuleCode(rs.getInt("SUB_MODULE_CODE"));
+			actionList.setModuleItemKey(rs.getString("MODULE_ITEM_KEY"));
+			actionList.setSubModuleItemKey(rs.getString("SUB_MODULE_ITEM_KEY"));
+			actionList.setExpirationDate(rs.getTimestamp("EXPIRATION_DATE"));
+			actionList.setAlertType(reminder.getReminderTypeFlag());
+			actionList.setUpdateUser(rs.getString("UPDATE_USER"));
+			actionList.setUpdateTimeStamp(rs.getTimestamp("UPDATE_TIMESTAMP"));
+			actionList.setUserMessage(rs.getString("USER_MESSAGE"));
+			actionList.setMessageTypeCode(rs.getString("EXPIRING_MESSAGE_TYPE_CODE"));
+			inboxDao.saveBannerEntriesToActionList(actionList);
+		} catch (SQLException e) {
+			logger.error("Error Occured in getThingsForBanner : {}", e.getMessage());
+		}
 	}
 
 	private void setNotifictionRecipient(Integer notificationId, String personId, Integer moduleCode, Integer subModuleCode, String moduleItemKey, String subModuleItemKey, Map<String, String> placeHolder) {

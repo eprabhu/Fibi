@@ -97,6 +97,6 @@ public interface InboxDao {
 	 */
 	public void updateMessageInboxByParam(String subModuleItemKey, Integer moduleCode, String messageTypeCode);
 	
-	public Inbox saveBannerEntriesToActionList(Inbox actionList);
+	public void saveBannerEntriesToActionList(Inbox actionList);
 
 }

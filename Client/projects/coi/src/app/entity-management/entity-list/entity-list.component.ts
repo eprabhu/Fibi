@@ -44,7 +44,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   riskLevelTypeOptions = 'entity_risk_category#RISK_CATEGORY_CODE#true#true';
   entityTypeOptions = 'entity_type#ENTITY_TYPE_CODE#true#true';
   statusTypeOptions = 'EMPTY#EMPTY#true#true#true#true';
-  verificationTypeOptions = 'ENTITY_STATUS#ENTITY_STATUS_CODE#true#true';
+  verificationTypeOptions = 'entity_status#ENTITY_STATUS_CODE#true#true';
   $entityList = new Subject();
   entityList: any = [];
   $subscriptions: Subscription[] = [];
@@ -232,7 +232,7 @@ isEntityFound = false;
     }
     if (this.entityManagementService.coiRequestObject.property24.length !== 0) {
         this.generateLookupArray(this.entityManagementService.coiRequestObject.property24, 'property24');
-      }
+    }
   }
 
   generateLookupArray(property, propertyNumber) {

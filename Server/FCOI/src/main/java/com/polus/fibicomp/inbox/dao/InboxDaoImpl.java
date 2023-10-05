@@ -267,9 +267,8 @@ public class InboxDaoImpl implements InboxDao {
 	}
 
 	@Override
-	public Inbox saveBannerEntriesToActionList(Inbox actionList) {
+	public void saveBannerEntriesToActionList(Inbox actionList) {
 		hibernateTemplate.saveOrUpdate(actionList);
-		return actionList;
 	}
 
 }
