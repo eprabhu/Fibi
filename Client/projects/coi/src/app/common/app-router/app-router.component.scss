@@ -137,3 +137,8 @@
   right: 10px;
   z-index: 1100;
 }
+
+.coi-body {
+  min-height: calc(100vh - (36px + 60px));
+  overflow: auto;
+}
