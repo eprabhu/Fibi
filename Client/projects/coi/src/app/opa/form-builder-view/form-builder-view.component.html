@@ -1,1 +1,5 @@
-<app-no-information></app-no-information>
+
+
+<div *ngFor="let section of formBuilderData.primaryForm?.formSections">
+    <app-form-sections [sectionDetails] = "section"></app-form-sections>
+</div>

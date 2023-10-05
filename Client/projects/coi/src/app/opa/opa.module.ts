@@ -7,13 +7,16 @@ import {MatMenuModule} from '@angular/material/menu';
 import {SharedComponentModule} from '../shared-components/shared-component.module';
 import {SharedModule} from '../shared/shared.module';
 import {FormBuilderViewComponent} from './form-builder-view/form-builder-view.component';
+import { FormSectionsComponent } from './form-builder-view/form-sections/form-sections.component';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [{path: '', component: OpaComponent}];
 
 @NgModule({
     declarations: [
         OpaComponent,
-        FormBuilderViewComponent
+        FormBuilderViewComponent,
+        FormSectionsComponent
     ],
     imports: [
         CommonModule,
@@ -21,7 +24,8 @@ const routes: Routes = [{path: '', component: OpaComponent}];
         MatIconModule,
         MatMenuModule,
         SharedComponentModule,
-        SharedModule
+        SharedModule,
+        FormsModule
     ]
 })
 export class OpaModule {
