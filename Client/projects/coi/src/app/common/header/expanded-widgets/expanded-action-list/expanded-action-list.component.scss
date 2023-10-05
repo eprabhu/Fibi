@@ -115,3 +115,23 @@ table {
     font-family: "Roboto", sans-serif;
     border: 1px solid #caced2;
 }
+.action-fromdate {
+    padding-right: 47px;
+}
+
+.action-enddate {
+   padding-right: 53px;
+}
+
+.notifications {
+    transition: background-color 0.3s ease; 
+    background-color: #fff;
+    color: #eeeeee; 
+    cursor: pointer; 
+  }
+  
+  .notificationst:not(:hover) {
+    background-color: #fff;
+    color: #eeeeee;
+  }
+  
