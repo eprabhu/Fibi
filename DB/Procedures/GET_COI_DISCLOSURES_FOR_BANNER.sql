@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE DEFINER=`root`@`%` PROCEDURE `coi`.`GET_COI_DISCLOSURES_FOR_BANNER`( NO_OF_DAYS INT)
+CREATE PROCEDURE `GET_COI_DISCLOSURES_FOR_BANNER`( NO_OF_DAYS INT)
 BEGIN
 		SELECT 8                                           					AS MODULE_CODE,
          0                                                 					AS SUB_MODULE_CODE,
