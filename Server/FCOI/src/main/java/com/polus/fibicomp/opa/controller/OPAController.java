@@ -25,7 +25,7 @@ public class OPAController {
 	@PostMapping("/createOPA")
 	public ResponseEntity<Object> createOPADisclosure(@RequestBody CreateOpaDto dto) {
 		logger.info("Request for createOPADisclosure");
-		if(Boolean.TRUE.equals(opaService.isOpaDisclosureRequired(dto.getPersonId()))) {
+		if(Boolean.TRUE.equals(opaService.canCreateOpaDisclosure(dto.getPersonId()))) {
 			return opaService.createOpaDisclosure(dto.getPersonId(), dto.getHomeUnit());
 		}
 		return new ResponseEntity<>(dto, HttpStatus.OK);

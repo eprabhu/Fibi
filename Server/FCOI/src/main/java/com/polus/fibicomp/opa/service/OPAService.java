@@ -11,7 +11,7 @@ public interface OPAService {
 	 * @param personId 
 	 * @param CreateOpaDto
 	 */
-	Boolean isOpaDisclosureRequired(String personId);
+	Boolean canCreateOpaDisclosure(String personId);
 
 	ResponseEntity<Object> createOpaDisclosure(String personId, String homeUnit);
 
