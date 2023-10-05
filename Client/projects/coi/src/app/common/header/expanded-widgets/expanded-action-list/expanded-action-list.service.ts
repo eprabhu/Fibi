@@ -17,4 +17,8 @@ export class ExpandedActionListService {
     return this._http.post(this._commonService.baseUrl + '/markAsReadInboxMessage', { 'inboxId': inboxId });
   }
 
+  getActionLogEntries(notifications) {
+    return this._http.post(this._commonService.baseUrl + '/fetchAllActiolListEntriesForBanners', notifications );
+  }
+
 }
