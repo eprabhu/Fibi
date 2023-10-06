@@ -12,7 +12,7 @@ public interface OPADao {
 
 	boolean isOpaDisclosureRequired(String personId);
 
-	void createOpaDisclosure(String personId, String homeUnit);
+	Integer createOpaDisclosure(String personId, String homeUnit);
 
 	/**
 	 * This method is used patch the opa disclosure for submit
