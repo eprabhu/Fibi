@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import com.polus.fibicomp.opa.pojo.OPAActionLogType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -149,4 +150,13 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
 		return session.createQuery(query).getResultList();
 	}
 
+    @Override
+    public OPAActionLogType getOPAActionType(String actionLogTypeCode) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT oa FROM OPAActionLogType oa WHERE oa.actionTypeCode = :actionTypeCode");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("actionTypeCode", actionLogTypeCode);
+        return (OPAActionLogType) query.getResultList().get(0);
+    }
 }
