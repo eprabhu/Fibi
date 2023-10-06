@@ -8,7 +8,7 @@
   </div>
   <div class="content">
     <ng-container *ngFor="let component of sectionDetails.sectionComponent">
-      <div class="info" *ngIf="component.componentHeader" [innerHTML] = "component.componentHeader">
+      <div class="side-info" *ngIf="component.componentHeader" [innerHTML] = "component.componentHeader">
       </div>
       <div *ngIf="component.componentType === 'QN'">
         <app-view-questionnaire-v2 [questionnaireVO] = "component.questionnaire"></app-view-questionnaire-v2>
