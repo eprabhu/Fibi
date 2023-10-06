@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
@@ -26,6 +27,7 @@ import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
@@ -561,5 +563,11 @@ public interface ConflictOfInterestService {
     ResponseEntity<Object> loadDisclAttachTypes();
     
     List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto);
+    
+    List<Notes> fetchAllNotesForPerson(String personId);
+    
+    ResponseEntity<Object> saveOrUpdatePersonNote(NotesDto dto);
+    
+    Notes getNoteDetailsForNoteId(Integer noteId);
 
 }

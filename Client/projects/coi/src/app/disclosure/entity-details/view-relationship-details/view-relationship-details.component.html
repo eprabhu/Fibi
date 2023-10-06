@@ -7,10 +7,11 @@
             (mouseout)="entityDetailsServices.isHoverEntityCard = false"
             [ngClass]="sfiStatus ==='Active'?'':(sfiStatus === 'Inactive'?'inactive-pill':'draft-pill')">
             <span class="px-2">{{sfiStatus}}</span></span>
-          <h1 class="fw-bold fs-18 mt-3 px-3 cursor-pointer hyper-link"
+          <h1 class="fw-bold fs-18 mt-2 px-3 cursor-pointer"
             [ngClass]="{'text-primary':entityDetailsServices.isHoverEntityCard}"
             (mouseover)="entityDetailsServices.isHoverEntityCard = true">
             {{entityDetails?.entityName}}
+            <mat-icon class="cursor-pointer hyper-link py-1 entity-down-arrow">arrow_drop_down</mat-icon>
           </h1> 
           <div class="info-text fs-14 ms-auto italian px-3 py-0 mt-4 mb-2 cursor-pointer" title="Click to view latest version" *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'" (click)="openRelationDetails()">
             <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
