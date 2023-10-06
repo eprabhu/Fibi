@@ -1,0 +1,239 @@
+<div class="col-md-12 users-list-tbl mb-3 px-0"
+  *ngIf="questionnaire?.questions != undefined && questionnaire?.questions != null">
+  <div class="qst-list-padding">
+    <ng-container>
+      <div class="px-2">
+        <ul class="qst-list m-0 p-0">
+          <ng-container *ngFor='let question of questionnaire?.questions; let indexQuestion = index;'>
+          <li id="ques_{{question.QUESTION_ID}}" *ngIf="question.SHOW_QUESTION == true">
+            <div class="py-2">
+              <span class="question-font mb-2">{{question.QUESTION}}</span>
+                <i *ngIf="question.DESCRIPTION || question.HELP_LINK"
+                (click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)" class="fa fa-info-circle"
+                aria-hidden="true"></i>
+                <ng-container *ngIf="question.ANSWER_TYPE === 'Table'">
+                  <ng-container *ngIf="question.is_add_row && !isViewMode">
+                    <p class="text-end mb-1"><span (click)="addNewAnswerRow(question)" class="action-button mr-1 mb-2"
+                        title="Add new row"><i aria-hidden="true" class="fa fa-plus icon-actions"></i>Add Row</span></p>
+                  </ng-container>
+      
+                  <div class="overflow-auto">
+                    <table class="table tableSkin table-bordered table-question mb-0" aria-describedby="question.QUESTION">
+                      <thead>
+                        <tr>
+                          <ng-container *ngFor=" let option of questionnaire.options">
+                            <ng-container *ngIf="question.QUESTION_ID == option.QUESTION_ID">
+                              <th class="table-min-width" scope="col">{{option.OPTION_LABEL}}</th>
+                            </ng-container>
+                          </ng-container>
+                          <th *ngIf="!question.IS_NO_VISIBLE_ANSWERS && !isViewMode" class="action-column" scope="col">Action
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngIf="question.ANSWERS && question.ANSWERS['1']">
+                          <tr *ngFor="let answer of question.ANSWERS['1'];let answerIndex = index;">
+                            <ng-container *ngIf="answer.AC_TYPE!== 'D'">
+                              <ng-container *ngFor=" let option of question.HEADERS; let columnHeaderIndex = index">
+                                <td (click)="gotoTextArea(question.QUESTION_ID,answerIndex, columnHeaderIndex)"
+                                  class="p-0 align-top">
+                                  <textarea *ngIf="!isViewMode"
+                                    (focusout)="updateTableAnswerAcType(question, answer, answerIndex, columnHeaderIndex)"
+                                    (focus)="isShowLimiterInTable[answerIndex + '_' + columnHeaderIndex] = true"
+                                    [(ngModel)]="answer['COLUMN_' + (columnHeaderIndex + 1)]"
+                                    [id]="'answer'+question.QUESTION_ID+answerIndex+columnHeaderIndex" appAutoGrow
+                                    class="border-0 form-control table-answers" rows="1" appLengthValidator
+                                    [isShowLimiter]="isShowLimiterInTable[answerIndex + '_' + columnHeaderIndex]"
+                                    [limit]=250></textarea>
+                                  <p *ngIf="isViewMode" class="mb-0 p-2 new-line-property"
+                                    [innerText]="answer['COLUMN_' + (columnHeaderIndex + 1)]">
+                                  </p>
+                                </td>
+                              </ng-container>
+                              <td *ngIf="!isViewMode" class="text-center p-0 align-middle text-nowrap action-column">
+                                <i (click)="deleteAnswer(question, answer, answerIndex)" aria-hidden="true"
+                                  class="fa fa-trash-o f-16 mt-2 hand-cursor mx-2 hoverColor" title="delete row"></i>
+                              </td>
+                            </ng-container>
+                          </tr>
+                        </ng-container>
+                        <tr *ngIf="question.IS_NO_VISIBLE_ANSWERS
+                                              || !(question.ANSWERS && question.ANSWERS['1'])
+                                              || question.ANSWERS['1'].length === 0">
+                          <td class="text-center f-13" colspan="100%">No Answers Found</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="question.ANSWER_TYPE === 'Text'">
+                  <div class="answer-field p-0 ml-4" *ngFor="let number of getArray(question.NO_OF_ANSWERS); let i = index">
+                    <input type="text" [disabled]="isViewMode" class="form-control" id="ans_{{question.QUESTION_ID}}"
+                      [(ngModel)]="question.ANSWERS[i+1]" (ngModelChange)="showChildQuestions(question);" name="name"
+                      appLengthValidator [isShowLimiter]='!isViewMode' />
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="question.ANSWER_TYPE === 'Radio' || question.ANSWER_TYPE == 'Y/N'|| question.ANSWER_TYPE == 'Y/N/NA'">
+                  <div *ngFor=" let option of questionnaire.options" class="answer-options answer-field  p-0 ml-4">
+                    <span *ngIf="question.QUESTION_ID == option.QUESTION_ID">
+                      <input type="radio" [disabled]="isViewMode" name="{{option.QUESTION_ID}}"
+                        [value]="option.OPTION_LABEL" [(ngModel)]="question.ANSWERS[1]"
+                        (ngModelChange)="showChildQuestions(question);" /> {{option.OPTION_LABEL}}
+                    </span>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="question.ANSWER_TYPE === 'Checkbox'">
+                  <div class="answer-options answer-field p-0 ml-4" *ngFor=" let option of questionnaire.options">
+                    <span *ngIf="question.QUESTION_ID == option.QUESTION_ID">
+                      <input type="checkbox" [disabled]="isViewMode" [(ngModel)]="question.ANSWERS[option.OPTION_LABEL]"
+                        (change)="showChildQuestions(question);" /> {{option.OPTION_LABEL}}
+                    </span>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="question.ANSWER_TYPE === 'Attachment'">
+                  <div class="answer-field p-0 ml-4">
+                    <a id="add-attach{{questionnaireDetails?.QUESTIONNAIRE_ID}}" class="btn-link mb-3 answer-field"
+                      *ngIf="!isViewMode" (click)="attachmentIndex = indexQuestion" data-bs-toggle="modal"
+                      [attr.data-bs-target]="'#AttachmentModal' + questionnaireDetails?.QUESTIONNAIRE_ID">
+                      <i aria-hidden="true" class="fa fa-paperclip mr-3"></i>Add Attachment</a>
+                  </div>
+                  <span *ngIf="question.ANSWERS[1]" class="qst-attachment-label answer-field ml-3">
+                    <label><strong class="fs-12">{{ question.ANSWERS[1] }}</strong></label>
+                    <button class="qst-attachment-cls-btn" *ngIf="!isViewMode"
+                      (click)="removeDuplicateFile(question.QUESTION_ID, indexQuestion)">
+                      <i aria-hidden="true" class="fa fa-times"></i>
+                    </button>
+                    <button *ngIf="question.ATTACHMENT_ID!=null && question.AC_TYPE != 'I'" class="qst-attachment-cls-btn"
+                      (click)="downloadAttachment(question.ATTACHMENT_ID, question.ANSWERS[1])">
+                      <i class="fa fa-download" aria-hidden="true"></i>
+                    </button>
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="question.ANSWER_TYPE === 'Textarea'">
+                  <div class="answer-field p-0 ml-4">
+                    <textarea name="name" [disabled]="isViewMode" rows="2" appLengthValidator appAutoGrow
+                      [isShowLimiter]='!isViewMode' id="ans_{{question.QUESTION_ID}}"
+                      class="question-font mb-2 scheduleBoxes dateBox qst-input-width" [(ngModel)]="question.ANSWERS[1]"
+                      (ngModelChange)="showChildQuestions(question);"> </textarea>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="question.ANSWER_TYPE === 'Date'">
+                  <div class="answer-field p-0 ml-4">
+                    <div class="qst-date-dv">
+                      <span class="dateField">
+                        <input matInput [matDatepicker]="questionnaire_date" [disabled]="isViewMode"
+                          id="ans_{{question.QUESTION_ID}}" (click)="certificationDate.open()"
+                          class="form-control d-inline-block" [(ngModel)]="question.ANSWERS[1]"
+                          (ngModelChange)="showChildQuestions(question)" placeholder="dd/MM/yyyy">
+                        <i (click)="questionnaire_date.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                        <mat-datepicker #questionnaire_date></mat-datepicker>
+                      </span>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="question.ANSWER_TYPE === 'elastic'">
+                  <div class="answer-field p-0 ml-4">
+                    <app-elastic [options]="searchOptions[question.QUESTION_ID + question.ANSWER_TYPE]"
+                      [clearField]="clearElasticField" [placeHolder]="question.placeHolder" [isDisabled]="isViewMode"
+                      (selectedResult)="onSearchSelectEvent($event, question);">
+                    </app-elastic>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="question.ANSWER_TYPE === 'endpoint'">
+
+                  <app-endpoint-search [httpOptions]="searchOptions[question.QUESTION_ID + question.ANSWER_TYPE]"
+                  [placeHolder]="question.placeHolder" [isDisabled]="isViewMode"
+                  (onSelect)="onSearchSelectEvent($event, question)">
+                </app-endpoint-search>
+                </ng-container>
+                <ng-container *ngIf="question.ANSWER_TYPE == 'SystemLookup' || question.ANSWER_TYPE == 'UserLookup'">\
+
+                  <div *ngIf="question.SHOW_QUESTION == true" @items>
+                    <span class="question-font">{{question.QUESTION}}</span>
+                    <a class="tooltip" (click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)">
+                      <i class="fa fa-info-circle ct-icon-right" aria-hidden="true"></i>
+                    </a>
+                    <div class="ml-4" *ngIf="question.ANSWER_LENGTH === 1; else singleValueSelect">
+                      <ng-container *ngIf="!isViewMode">
+                        <app-look-up [options]='lookUpOptions[question.QUESTION_ID]' [isDisabled]="isViewMode"
+                          [selectedLookUpList]="lookUpValues[question.QUESTION_ID]"
+                          (selectedResult)="onSelectLookUpValue($event, question)">
+                        </app-look-up>
+                      </ng-container>
+                      <div class="col mb-0 pl-0 fileChips" style="margin-left: 2px;">
+                        <ng-container *ngFor="let question of lookUpValues[question.QUESTION_ID]">
+                          <span class="pl-2 mb-0">{{question.description}}
+                          </span>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <ng-template #singleValueSelect>
+                      <div class="ml-4">
+                        <app-look-up [options]='lookUpOptions[question.QUESTION_ID]' [isDisabled]="isViewMode"
+                          [selectedLookUpList]="lookUpValues[question.QUESTION_ID]"
+                          (selectedResult)="onSelectLookUpValue($event, question)"
+                          [defaultValue]="question.ANSWERS[0] ? question.ANSWERS[0].description : ''">
+                        </app-look-up>
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-container>
+            </div>
+          </li>
+        </ng-container>
+  
+        </ul>
+      </div>
+    </ng-container>
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="col-12 text-right pr-0">
+          <button class="btn btn-outline-primary fs-14"
+            *ngIf="!isViewMode && questionnaire.questions.length != 0 && isShowSave" (click)="saveQuestionnaire()"
+            id="save">{{saveButtonLabel}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- attachment modal -->
+<div class="modal fade mySkinDialog" id="AttachmentModal{{questionnaireDetails?.QUESTIONNAIRE_ID}}" tabindex="-1"
+  role="dialog" aria-labelledby="AttachmentModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AttachmentModalTitle">Add Attachment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="tempFiles = [];">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-12">
+          <app-file-drop [multiple]="false" (filesDropEvent)="addFileToTempFiles($event)">
+          </app-file-drop>
+        </div>
+        <div class="upload-table">
+          <table class="table">
+            <caption class="sr-only">Attachment</caption>
+            <thead class="qst-table-head" *ngIf="tempFiles?.length != 0">
+              <th scope="col" class="f-14">Name</th>
+              <th scope="col" class="f-14">Type</th>
+            </thead>
+            <tbody class="upload-name-style">
+              <tr *ngFor="let item of tempFiles;let i = index" class="qst-atmt-list">
+                <td><span>{{ item.fileName }}</span></td>
+                <td><span>{{ item.type }}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="tempFiles = [];" class="btn btn-outline-secondary fs-14"
+            data-bs-dismiss="modal">Close</button>
+          <button type="button" (click)="addFileToArray();" data-bs-dismiss="modal"
+            class="btn btn-outline-primary fs-14">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
