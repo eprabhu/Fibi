@@ -22,7 +22,7 @@
                             </h4>
                         </div>
                         <div class="card-content">
-                            <div class="card-body disclosure-master-body-bg">
+                            <div class="card-body disclosure-master-body-bg min-card-height">
                                 <div class="row">
                                     <div class="col-7">
                                         <div class="row">
@@ -83,7 +83,7 @@
                         <div class="align-items-center d-flex disclosure-master-footer-bg px-3 py-3">
                             <div class="data-warning">
                                 <h5 *ngIf="dateWarning" class="mb-3 f-15" id="dateWarning" [ngClass]="dateWarningColor ? 'dateWarningColor':'medium-Warning-color'" ><mat-icon class="me-2" [ngClass]="dateWarningColor ? 'high-risk material-icons-round':'medium-risk material-icons-round'"
-                                    >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year,</span><span *ngIf="differenceInDays?.durInMonths">{{differenceInDays?.durInMonths}} months,</span><span *ngIf="differenceInDays?.durInDays">{{differenceInDays?.durInDays}} days.</span></h5>
+                                    >warning</mat-icon><span *ngIf = "disclosure?.expirationDate !== null">Your Disclosure will expire in </span> <span *ngIf="differenceInDays?.durInYears">{{differenceInDays?.durInYears}} year</span><span *ngIf="differenceInDays?.durInMonths">, {{differenceInDays?.durInMonths}} months</span><span *ngIf="differenceInDays?.durInDays">, {{differenceInDays?.durInDays}} days.</span></h5>
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button *ngIf="!hasPendingFCOI" (click)="triggerClickForId('create-fcoi-modal')"
@@ -118,7 +118,7 @@
                             </h4>
                         </div>
                         <div class="card-content">
-                            <div class="card-body disclosure-master-body-bg fcoi-pending-cardbody">
+                            <div class="card-body disclosure-master-body-bg fcoi-pending-cardbody min-card-height">
                                 <div class="row">
                                     <div class="col-7">
                                         <div class="row">
@@ -204,10 +204,11 @@
                 </h4>
             </div>
             <div class="card-content">
-                <div class="card-body disclosure-master-body-bg">
+                <div class="card-body min-card-height disclosure-master-body-bg">
                     <div class="row">
                         <div class="col">
-                            To protect the integrity and objectivity of research conducted by investigators, and comply with related policies and regulations.Investigators and others, as required by the sponsor who share responsibility for the design, conduct or reporting of externally supported research</div>
+                            A conflict of interest occurs when your personal, financial, or other interests could influence or appear to influence your judgment and decision-making in the workplace. Please disclose any existing or potential conflicts of interest you may have with our organization.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -259,7 +260,8 @@
                 <div class="card-body disclosure-master-body-bg">
                     <div class="row">
                         <div class="col">
-                            Reports of outside professional activities (whether compensated or uncompensated) must include all foreign and domestic activities. Outside professional activities must be reported and updated during the annual OPA reporting cycle which starts in May of each year</div>
+                            OPA activities could include consulting, teaching, public speaking, or serving on boards. Please disclose any outside professional activities you are currently engaged in or plan to engage in. Include details such as the name of the organization, your role, and the time commitment involved.
+                        </div>
                     </div>
                 </div>
             </div>
