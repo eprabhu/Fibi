@@ -22,8 +22,8 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public ResponseEntity<Object> createOpaDisclosure(String personId, String homeUnit) {
-		opaDao.createOpaDisclosure(personId, homeUnit);
-		return new ResponseEntity<>(personId, HttpStatus.OK);
+		Integer opaDisclosureId = opaDao.createOpaDisclosure(personId, homeUnit);
+		return new ResponseEntity<>(opaDisclosureId, HttpStatus.OK);
 	}
 
 }
