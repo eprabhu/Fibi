@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.polus.formbuilder.model.ApplicableFormRequest;
+import com.polus.formbuilder.model.ApplicableFormResponse;
 import com.polus.formbuilder.model.BlankFormRequest;
 import com.polus.formbuilder.model.BlankFormResponse;
 import com.polus.formbuilder.model.FormComponentFetchRequest;
@@ -18,6 +20,11 @@ public class FormBuilderServiceCoordinator {
 	
 	@Autowired
 	private FormBuilderModuleRouter moduleRouter;
+	
+	public ApplicableFormResponse getApplicableForms(ApplicableFormRequest request) {
+		FormBuilderService formBuilderService = moduleRouter.route(request.getModuleItemCode());
+		return formBuilderService.getApplicableForms(request);
+	}
 	
 	public BlankFormResponse GetBankForm(BlankFormRequest request) {
 		FormBuilderService formBuilderService = moduleRouter.route(request.getModuleItemCode());

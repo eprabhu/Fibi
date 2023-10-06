@@ -28,6 +28,8 @@ import com.polus.formbuilder.entity.FormBuilderHeaderEntity;
 import com.polus.formbuilder.entity.FormBuilderProgElementEntity;
 import com.polus.formbuilder.entity.FormBuilderSectionComponentEntity;
 import com.polus.formbuilder.entity.FormBuilderSectionEntity;
+import com.polus.formbuilder.model.ApplicableFormRequest;
+import com.polus.formbuilder.model.ApplicableFormResponse;
 import com.polus.formbuilder.model.BlankFormRequest;
 import com.polus.formbuilder.model.BlankFormResponse;
 import com.polus.formbuilder.model.FormComponentFetchRequest;
@@ -69,7 +71,22 @@ public class FormBuilderServiceProcessor {
 	
 	@Autowired
 	private FormBuilderServiceProcessorDAO formDAO;
-	
+
+	public ApplicableFormResponse PerformGetApplicableForms(ApplicableFormRequest request) {
+
+		List<Integer> applicableFormId = formDAO.getApplicableFormIds(request.getModuleItemCode(),
+				request.getModuleSubItemCode(), request.getDocumentOwnerPersonId());
+
+		Integer primaryFormID = getPrimaryFormId(applicableFormId);
+		
+		var response = ApplicableFormResponse.builder()
+										.applicableFormsBuilderIds(applicableFormId)
+										.formsBuilderId(primaryFormID)
+										.build();
+
+		return response;
+			
+		}
 
 	public BlankFormResponse PerformGetBankFormbyModule(BlankFormRequest request) {
 		
@@ -87,6 +104,7 @@ public class FormBuilderServiceProcessor {
 		
 		var response = BlankFormResponse.builder()
 										.form(formResponseDTO)
+										.formsBuilderId(primaryFormID)
 										.applicableFormsBuilderIds(applicableFormId).build();
 
 		return response;

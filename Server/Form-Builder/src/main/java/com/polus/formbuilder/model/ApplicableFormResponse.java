@@ -13,12 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BlankFormResponse {
+public class ApplicableFormResponse {
 
 	private List<Integer> applicableFormsBuilderIds;
 	
 	private Integer formsBuilderId;
-	
-	private FormResponseDTO form;
 	
 }
