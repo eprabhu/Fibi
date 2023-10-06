@@ -670,7 +670,18 @@
     <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
         [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
         [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
-        [adminData]="adminData" [fcoiTypeCode]="fcoiTypeCode"></app-count-modal>
+        [adminData]="adminData" [fcoiTypeCode]="fcoiTypeCode" (viewSlider)="viewSlider($event)"></app-count-modal>
+
+    <ng-container *ngIf="showSlider">
+        <app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index] = "1057"
+        [overlay_z_index] = "1056" [isStickyNeeded] = "false" [isHeaderNeeded] = "false"
+        [sliderName]="'admin-dashboard-entity-slider'">
+            <!-- modal content -->
+            <ng-container content>
+                <app-entity-details [entityId]="entityId"></app-entity-details>
+            </ng-container>
+        </app-coi-slider>
+    </ng-container>
     <!-- Confirmation Modal -->
     <div class="modal fade mySkinDialog" id="ReviewModal" role="dialog">
         <div class="modal-dialog">

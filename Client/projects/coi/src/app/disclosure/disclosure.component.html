@@ -5,8 +5,8 @@
                 <div class="align-self-center flex-fill d-flex">
                     <p class="m-0">
                         <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
-                            <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By 
-                                <span><u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
+                            <strong>FCOI Disclosure By 
+                                <span class="clickable-content"><u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
                             </strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
@@ -126,7 +126,7 @@
                                 <label  class="label-text">Certification :</label>
                                 <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
-                                        <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatter}}</span>
+                                        <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -136,7 +136,7 @@
                                 <label  class="label-text">Expiration : </label>
                                 <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
-                                        <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatter}}</span>
+                                        <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -687,7 +687,7 @@
             <div class="modal-header">
                 <strong title="{{coiData?.projectDetail?.title}}">
                     <div class="d-flex">
-                        <span class="text-slice">#{{coiData?.coiDisclosure?.disclosureNumber}} :
+                        <span class="text-slice">
                             {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
                             Disclosure <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode !== '1'">For [ <span>{{coiData?.projectDetail?.moduleItemId}} :
                             {{coiData?.projectDetail?.title.slice(0,10) + '...'}}</span><span class="col"> ]</span></ng-container>  By <strong
