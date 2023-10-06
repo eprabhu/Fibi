@@ -2,11 +2,11 @@
   <div class="relationship-sfi-header card mt-3" *ngIf="entityProjectDetails.length">
     <div class="row m-0"> 
       <div title="List of SFIs" class="col-4 fs-14 border-end" [class.p-10]="!isEditMode">
-          <div class="fw-600">Significant Financial Interest</div>
+          <div class="fw-600" tabindex="0" aria-label="Significant Financial Interest">Significant Financial Interest</div>
       </div>
       <div class="col-2 fs-14 border-end" [class.p-10]="!isEditMode">
         <span class="mandatory fw-600">*</span>
-         <span title="List of COI status" class="fw-600">COI Status</span>
+         <span title="List of COI status" tabindex="0" aria-label="coi status" class="fw-600">COI Status</span>
          <div [class.mt-2]="isEditMode" *ngIf="isEditMode">
           <select id="COI_Status_dropdown" [(ngModel)]="coiStatusCode" class="form-select form-control cursor-pointer" 
           [ngClass] ="coiValidationMap.has('coiStatus') ? 'is-invalid d-block' : ''" (ngModelChange)="setUnsavedModuleTrue()">
@@ -20,9 +20,9 @@
           </span>
         </div>
       </div>
-      <div class="fs-14 border-end" [ngClass] = "isEditMode ? 'col' : 'col-6 p-10'">
-        <span class="mandatory fw-600">*</span>
-        <span class="fw-600">Define Project - SFI Relation</span>
+      <div class="fs-14 border-end"[ngClass] = "isEditMode ? 'col' : 'col-6 p-10'">
+        <span class="mandatory fw-600" id="description">*</span>
+        <span class="fw-600" tabindex="0" aria-label="Define Project - SFI Relation" role="field" aria-describedby="list of project sfi relations">Define Project - SFI Relation</span>
         <textarea *ngIf="isEditMode" class="form-control comment-text-box textarea-height mt-2" id="coi_description"
         [(ngModel)]="coiDescription" (ngModelChange)="coiDescription = coiDescription.trim(); setUnsavedModuleTrue()" appAutoGrow  appLengthValidator rows="1"
         [ngClass] ="coiValidationMap.has('coiDescription') ? 'is-invalid d-block' : ''"
@@ -38,20 +38,20 @@
   </div>
   <!-- List of SFI's -->
   <ng-container *ngFor="let test of entityProjectDetails; let i = index">
-    <div class="relationship-sfi-data row m-0" [class.white-bg]="i%2==0" [class.border-bottom]="i==entityProjectDetails.length-1" [class.border-top]="i==0">
-        <div class="col-4 fs-14 border-end">
-         <div class="table-text my-4">
+    <div class="relationship-sfi-data row m-0"  [class.white-bg]="i%2==0" [class.border-bottom]="i==entityProjectDetails.length-1" [class.border-top]="i==0">
+        <div class="col-4 fs-14 border-end"tabindex='0'>
+         <div class="table-text my-4" [attr.aria-label]="test?.coiEntity?.entityName">
           {{test?.coiEntity?.entityName?.length > 100 ? (test?.coiEntity?.entityName | slice:0:100)+'...' : test?.coiEntity?.entityName}}
          </div>
         </div>
-        <div class="col-2 fs-14 border-end">
+        <div class="col-2 fs-14 border-end" tabindex='0'>
           <select [(ngModel)]="test.projectConflictStatusCode"
-          class="form-select form-control mt-3" 
+          class="form-select form-control mt-3" [attr.aria-label]="getStatusDescriptionByCode(test.projectConflictStatusCode)"
           (ngModelChange)="sfiSingleSave(i, test)"
           [ngClass] ="coiTableValidation.has('save-status'+i) ? 'is-invalid d-block' : ''"(ngModelChange)="setUnsavedModuleTrue()"
           [disabled]="!isEditMode">
           <option value=null>--Select--</option>
-          <option [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList; let i = index">
+          <option aria-label="" [value]="status.projectConflictStatusCode" *ngFor="let status of coiStatusList; let i = index">
               {{status?.description}}</option>
           </select>
           <div>
@@ -60,12 +60,12 @@
             </span>
           </div>
         </div>
-        <div class="col fs-14 border-end" [class.col-6]="!isEditMode">
-          <textarea  class="form-control comment-text-box textarea-height mt-3" id="main-panel-comnt"
+        <div class="col fs-14 border-end"  tabindex='0' [class.col-6]="!isEditMode">
+          <textarea  class="form-control comment-text-box textarea-height mt-3"id="main-panel-comnt"
           appAutoGrow [(ngModel)]="test.disclComment.comment"
           [disabled]="!isEditMode" rows="1" appLengthValidator
-          [ngClass] ="coiTableValidation.has('save-description'+i) ? 'is-invalid d-block' : ''" (ngModelChange)="setUnsavedModuleTrue(i, test);sfiSingleSave(i, test)"
-          placeholder="Provide your description here" [limit]=2000 spellcheck="false"></textarea>
+          [ngClass] ="coiTableValidation.has('save-description'+i) ? 'is-invalid d-block' : ''" (ngModelChange)="setUnsavedModuleTrue(i, test);sfiSingleSave(i, test);"
+          placeholder="Provide your description here" [limit]=2000 spellcheck="false" [attr.aria-label]="test.disclComment.comment"></textarea>
           <span class="invalid-feedback" *ngIf="coiTableValidation.has('save-description'+i)">
             {{coiTableValidation.get('save-description'+i)}}
           </span>

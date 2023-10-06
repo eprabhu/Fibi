@@ -29,6 +29,7 @@ import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
@@ -41,6 +42,7 @@ import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
@@ -49,7 +51,6 @@ import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.inbox.pojo.Inbox;
-import com.polus.fibicomp.reminder.service.ReminderScheduler;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 @RestController
@@ -70,9 +71,6 @@ public class ConflictOfInterestController {
 
 	@Autowired
 	private ActionLogService actionLogService;
-	
-	@Autowired
-	private ReminderScheduler rs;
 
 	@GetMapping("hello")
 	public ResponseEntity<String> hello() {
@@ -644,5 +642,23 @@ public class ConflictOfInterestController {
 		logger.info("Request for fetchAllActiolListEntriesForBanners");
 		return conflictOfInterestService.fetchAllActiolListEntriesForBanners(notifyBannerDto);
 	}
+
+	@PostMapping("/saveOrUpdatePersonNote")
+	public ResponseEntity<Object> saveOrUpdatePersonNote(@RequestBody NotesDto dto) {
+		logger.info("Request for saveOrUpdatePersonNote");
+		return conflictOfInterestService.saveOrUpdatePersonNote(dto);
+	}
+
+    @GetMapping("/fetchAllNotesForPerson/{personId}")
+   	public List<Notes> fetchAllNotesForPerson(@PathVariable("personId") String personId) {
+    	logger.info("Request for fetchAllNotesForPerson");
+   		return conflictOfInterestService.fetchAllNotesForPerson(personId);
+   	}
+
+    @GetMapping("/getNoteDetailsForNoteId/{noteId}")
+   	public Notes getNoteDetailsForNoteId(@PathVariable("noteId") Integer noteId) {
+    	logger.info("Request for getNoteDetailsForNoteId");
+   		return conflictOfInterestService.getNoteDetailsForNoteId(noteId);
+   	}
 
 }

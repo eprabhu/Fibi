@@ -52,13 +52,13 @@
                                     class=" tab subTabLink nav-item nav-link txt-medium text-black hand-cursor" [ngClass]="{'active':selectedIndex === i,
                                                 'text-success fw-600':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
                                                                     (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null
-                                                                    && isViewMode)}" tabindex="0">
+                                                                    && isViewMode)}" >
                                     <i [ngClass]="{'txt-green':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y',
                                                     'txt-red':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
                                                                 questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null}"
                                         aria-hidden="true"></i>
                                     <span class="mandatory" *ngIf="questionnaire.IS_MANDATORY == 'Y'" title="Mandatory">*</span>
-                                    {{questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }}
+                                    <span tabindex="0" [attr.aria-label]="questionnaire?.QUESTIONNAIRE_LABEL"> {{questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }} </span>
                                     <span id="qnr-complete-msg"
                                         *ngIf="(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
                                                     (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null && isViewMode)"
