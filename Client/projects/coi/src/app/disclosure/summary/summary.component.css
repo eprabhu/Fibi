@@ -10,9 +10,10 @@
     width: 24%;
     position: fixed;
     margin-left: 5px;
+    padding-right: 0.9rem;
 }
 
 
-@media (min-width: 1600px) {
-  .right-div {width: 388px;}
-}
+/* @media (min-width: 1600px) {
+  .right-div {width: 45.2rem;}
+} */
