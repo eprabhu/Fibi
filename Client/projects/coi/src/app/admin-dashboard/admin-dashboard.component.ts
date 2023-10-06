@@ -21,6 +21,7 @@ import {
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
+import { openSlider, closeSlider } from '../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -100,6 +101,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     isLoading = false;
     assignAdminPath: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' = 'DISCLOSURES';
     sortSectionsList = [];
+    showSlider = false;
+    entityId: any;
     disclosureSortSections = [
         { variableName: 'coiDisclosureNumber', fieldName: 'Disclosure#' },
         { variableName: 'disclosurePersonFullName', fieldName: 'Person' },
@@ -815,5 +818,20 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             default: return 'danger';
         }
     }
+
+    viewSlider(event) {
+        this.showSlider = event.flag;
+        this.entityId = event.entityId;
+        setTimeout(() => {
+            openSlider('admin-dashboard-entity-slider');
+        });
+    }
+
+    validateSliderClose() {
+        closeSlider('admin-dashboard-entity-slider');
+        setTimeout(() => {
+            this.showSlider = false;
+		}, 500);
+	}
 }
 

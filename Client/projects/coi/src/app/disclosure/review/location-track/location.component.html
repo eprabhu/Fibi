@@ -196,15 +196,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ modifyIndex != -1 ? 'Edit Review Location' : 'Assign Review Location' }}
-                  <ng-container  *ngIf="coiDisclosure?.fcoiTypeCode == '1'">
-                    #{{coiDisclosure?.disclosureNumber}} : FCOI Disclosure By {{coiDisclosure?.person?.fullName}}
-                  </ng-container>
-                  <!-- <ng-container  *ngIf="coiDisclosure?.fcoiTypeCode !== '1'">
-                    #{{coiDisclosure?.disclosureNumber}} : {{coiDisclosure?.coiDisclosureFcoiType?.description}} Disclosure [{{projectDetail?.moduleItemId}} :
-                    {{(projectDetail?.title)?.length>20 ?
-                    (projectDetail?.title | slice:0: 10)+'...' :
-                    projectDetail?.title}}] By {{coiDisclosure?.person?.fullName}}
-                  </ng-container> -->
                 </h5>
                 <button type="button" title="Close" class="btn-close fs-12" data-bs-dismiss="modal" aria-label="Close"
                     (click)="reviewDetails = {}">

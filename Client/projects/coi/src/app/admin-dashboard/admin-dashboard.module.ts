@@ -8,6 +8,7 @@ import { SharedComponentModule } from '../shared-components/shared-component.mod
 import { AdminDashboardService } from './admin-dashboard.service';
 import { FormsModule } from '@angular/forms';
 import { DataStoreService } from '../disclosure/services/data-store.service';
+import { EntityDetailsModule } from '../disclosure/entity-details/entity-details.module';
 
 const routes: Routes = [{path: '', component: AdminDashboardComponent}];
 
@@ -21,7 +22,8 @@ const routes: Routes = [{path: '', component: AdminDashboardComponent}];
         SharedComponentModule,
         MatIconModule,
         FormsModule,
-        SharedModule
+        SharedModule,
+        EntityDetailsModule
     ],
     providers: [AdminDashboardService, DataStoreService]
 })
