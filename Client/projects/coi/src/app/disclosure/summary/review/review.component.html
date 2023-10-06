@@ -24,14 +24,14 @@
 <div class="main-title d-flex flex-end justify-content-between px-1 pb-2" id="COI803">
 	<h3 class="fs-16">
 	  <span class="d-flex align-items-center">
-	  <strong>Relationships</strong>
+	  <strong tabindex="0" aria-label="Relationships">Relationships</strong>
 	  <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="View entity relationships."
 		data-bs-placement="top">
-		<mat-icon class="me-2 info-icon position-relative mt-3" data-bs-toggle="tooltip">info</mat-icon>
+		<mat-icon aria-label="info" class="me-2 info-icon position-relative mt-3" data-bs-toggle="tooltip">info</mat-icon>
 	  </span>
 	</span>
 	</h3>
-	<button id="relationship_collapse_btn" class="mr-8 toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm" 
+	<button [attr.aria-label]="'Click here to ' + (isRelationCollapsed ? 'collapse' : 'expand') + ' Details of relationship'" id="relationship_collapse_btn" class="mr-8 toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm" 
 	(click)="isRelationCollapsed = !isRelationCollapsed" [title]="isRelationCollapsed ? 'Click here to collapse relationship' : 'Click here to expand relationship'">
 	  <mat-icon>{{isRelationCollapsed ? 'expand_less' : 'expand_more'}}</mat-icon>
 	</button>
