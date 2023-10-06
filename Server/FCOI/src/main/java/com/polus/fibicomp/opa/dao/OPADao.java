@@ -7,6 +7,6 @@ public interface OPADao {
 
 	boolean isOpaDisclosureRequired(String personId);
 
-	void createOpaDisclosure(String personId, String homeUnit);
+	Integer createOpaDisclosure(String personId, String homeUnit);
 
 }
