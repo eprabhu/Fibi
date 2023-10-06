@@ -39,6 +39,7 @@ import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.CoiReviewCommentsDto;
 import com.polus.fibicomp.coi.dto.CoiSectionTypeDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
@@ -77,6 +78,7 @@ import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
@@ -2472,6 +2474,28 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto) {
 		return conflictOfInterestDao.fetchAllActiolListEntriesForBanners(notifyBannerDto);
+	}
+
+	@Override
+	public List<Notes> fetchAllNotesForPerson(String personId) {
+		return conflictOfInterestDao.fetchAllNotesForPerson(personId);
+	}
+
+	@Override
+	public ResponseEntity<Object> saveOrUpdatePersonNote(NotesDto coiNotesdto) {
+		Notes notes = coiNotesdto.getNoteId() == null ? new Notes() :
+						 conflictOfInterestDao.loadCoiNotesForNoteId(coiNotesdto.getNoteId());
+		notes.setPersonId(coiNotesdto.getPersonId());
+		notes.setContent(coiNotesdto.getContent());
+		notes.setUpdateUser(AuthenticatedUser.getLoginUserName());
+		notes.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+		conflictOfInterestDao.saveOrUpdatePersonNote(notes);
+		return new ResponseEntity<>(notes, HttpStatus.OK);
+	}
+
+	@Override
+	public Notes getNoteDetailsForNoteId(Integer noteId) {
+		return conflictOfInterestDao.loadCoiNotesForNoteId(noteId);
 	}
 
 }

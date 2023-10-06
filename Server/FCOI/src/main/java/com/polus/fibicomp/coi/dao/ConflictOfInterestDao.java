@@ -56,6 +56,7 @@ import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
@@ -1119,5 +1120,11 @@ public interface ConflictOfInterestDao {
 	public Boolean isReviewerAssigned(Integer disclosureId);
 	
 	List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto);
+    
+    List<Notes> fetchAllNotesForPerson(String personId);
+    
+    Notes saveOrUpdatePersonNote(Notes dto);
+    
+    Notes loadCoiNotesForNoteId(Integer noteId);
 
 }
