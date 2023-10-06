@@ -2,6 +2,7 @@ package com.polus.fibicomp.coi.service;
 
 import java.util.List;
 
+import com.polus.fibicomp.opa.dto.OPACommonDto;
 import org.springframework.http.ResponseEntity;
 
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
@@ -70,4 +71,10 @@ public interface ActionLogService {
      */
 	ResponseEntity<Object> getReviewHistoryById(Integer disclosureId);
 
+    /**
+     * This method is used to save OPA Action log
+     * @param actionLogTypeCode
+     * @param opaCommonDto
+     */
+    void saveOPAActionLog(String actionLogTypeCode, OPACommonDto opaCommonDto);
 }

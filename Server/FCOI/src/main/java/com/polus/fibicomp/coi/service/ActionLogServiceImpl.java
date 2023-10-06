@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.polus.fibicomp.opa.dto.OPACommonDto;
+import com.polus.fibicomp.opa.pojo.OPAActionLog;
+import com.polus.fibicomp.opa.pojo.OPAActionLogType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -335,4 +338,29 @@ public class ActionLogServiceImpl implements ActionLogService {
 		return new ResponseEntity<>(disclosureHistories, HttpStatus.OK);
 	}
 
+	@Override
+	public void saveOPAActionLog(String actionLogTypeCode, OPACommonDto opaCommonDto) {
+		OPAActionLogType opaActionLogType = actionLogRepositoryCustom.getOPAActionType(actionLogTypeCode);
+		if (opaActionLogType != null) {
+			String message = buildOPALogMessage(opaActionLogType.getMessage(), opaCommonDto);
+			OPAActionLog opaActionLog = OPAActionLog.builder()
+					.actionTypeCode(actionLogTypeCode)
+					.comment(opaCommonDto.getComment())
+					.description(message)
+					.opaDisclosureId(opaCommonDto.getOpaDisclosureId())
+					.opaDisclosureNumber(opaCommonDto.getOpaDisclosureNumber())
+					.updateTimestamp(commonDao.getCurrentTimestamp()).updateUser(AuthenticatedUser.getLoginUserName())
+					.build();
+			actionLogRepositoryCustom.saveObject(opaActionLog);
+		}
+	}
+
+	private String buildOPALogMessage(String message, OPACommonDto commonDto) {
+		Map<String, String> placeholdersAndValues = new HashMap<>();
+		placeholdersAndValues.put("{REPORTER}", commonDto.getUpdateUserFullName());
+		placeholdersAndValues.put("{ADMIN_NAME}", commonDto.getUpdateUserFullName());
+		placeholdersAndValues.put("{ASSIGNED_ADMIN}", commonDto.getAdminPersonName());
+		placeholdersAndValues.put("{REASSIGNED_ADMIN}", commonDto.getReassignedAdminPersonName());
+		return renderPlaceholders(message, placeholdersAndValues);
+	}
 }

@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
+import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 import lombok.AllArgsConstructor;
@@ -97,14 +99,42 @@ public class OPADisclosure {
 	@Column(name = "CONFLICT_DESCRIPTION")
 	private String conflictDescription;
 
+	@Column(name = "OPA_DISCLOSURE_STATUS_CODE")
+	private String opaDisclosureStatusCode;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "OPA_DISCLOSURE_FK2"), name = "OPA_DISCLOSURE_STATUS_CODE",
+			referencedColumnName = "OPA_DISCLOSURE_STATUS_CODE", insertable = false, updatable = false)
+	private OPADisclosureStatusType opaDisclosureStatusType;
+
+	@Column(name = "DISPOSITION_STATUS_CODE")
+	private String dispositionStatusCode;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "COI_DISCLOSURE1_FK3"), name = "DISPOSITION_STATUS_CODE",
+			referencedColumnName = "DISPOSITION_STATUS_CODE", insertable = false, updatable = false)
+	private OPADispositionStatusType dispositionStatusType;
+
+	@Column(name = "CERTIFICATION_TEXT")
+	private String certificationText;
+
+	@Column(name = "CERTIFIED_BY")
+	private String certifiedBy;
+
+	@Column(name = "SUBMISSION_TIMESTAMP")
+	private Timestamp submissionTimestamp;
+
+	@Column(name = "ADMIN_GROUP_ID")
+	private Integer adminGroupId;
+
+	@Column(name = "ADMIN_PERSON_ID")
+	private String adminPersonId;
+
 	@Column(name = "CREATE_TIMESTAMP")
 	private Timestamp createTimestamp;
 
 	@Column(name = "CREATE_USER")
 	private String createUser;
-
-	@Column(name = "SUBMISSION_TIMESTAMP")
-	private Timestamp submissionTimestamp;
 
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
