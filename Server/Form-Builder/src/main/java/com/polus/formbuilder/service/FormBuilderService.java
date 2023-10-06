@@ -3,6 +3,8 @@ package com.polus.formbuilder.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.polus.formbuilder.model.ApplicableFormRequest;
+import com.polus.formbuilder.model.ApplicableFormResponse;
 import com.polus.formbuilder.model.BlankFormRequest;
 import com.polus.formbuilder.model.BlankFormResponse;
 import com.polus.formbuilder.model.FormComponentFetchRequest;
@@ -14,6 +16,8 @@ import com.polus.formbuilder.model.FormResponse;
 
 @Service
 public interface FormBuilderService {
+	
+	public ApplicableFormResponse getApplicableForms(ApplicableFormRequest request);
 
 	public BlankFormResponse GetBankFormbyModule(BlankFormRequest request);
 	
