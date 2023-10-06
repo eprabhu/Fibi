@@ -88,6 +88,7 @@ import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
@@ -4033,6 +4034,32 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			return builder.equal(rootInboxValue.get("openedFlag"), Constants.YES);
 		}
 		return null;
+	}
+
+	@Override
+	public List<Notes> fetchAllNotesForPerson(String personId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Notes> query = builder.createQuery(Notes.class);
+		Root<Notes> rootCOINoteEntity = query.from(Notes.class);
+		query.where(builder.equal(rootCOINoteEntity.get("personId"), personId));
+		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public Notes saveOrUpdatePersonNote(Notes note) {
+		hibernateTemplate.saveOrUpdate(note);
+		return note;
+	}
+
+	@Override
+	public Notes loadCoiNotesForNoteId(Integer noteId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Notes> query = builder.createQuery(Notes.class);
+		Root<Notes> rootCOINoteEntity = query.from(Notes.class);
+		query.where(builder.equal(rootCOINoteEntity.get("noteId"), noteId));
+		return session.createQuery(query).getSingleResult();
 	}
 
 }
