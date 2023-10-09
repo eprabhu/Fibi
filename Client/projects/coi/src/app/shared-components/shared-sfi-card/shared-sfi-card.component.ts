@@ -97,9 +97,9 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
 
   getMessage() { 
     if (this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE')
-    return 'Entity has been modified';
+    return 'Entity modified';
     else if ((this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')))
-    return 'Entity has been inactivated';
+    return 'Entity inactivated';
   }
 
   checkForEntityWarning() {
