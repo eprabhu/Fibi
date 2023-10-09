@@ -31,8 +31,6 @@ import { Questionnaire, QuestionnaireVO } from './questionnaire-interface';
     providers: [QuestionnaireService],
 })
 export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestroy {
-    @Input() questionnaireDetails: any = {};
-    @Input() moduleDetails: any = {};
     @Input() isViewMode: boolean;
     @Input() questionnaireVO = new QuestionnaireVO();
     @Output() questionnaireSaveEvent = new EventEmitter<any>();
@@ -85,6 +83,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     lookUpValues = {};
     IsEnableACTypeChecking = false;
     isShowLimiterInTable: any = {};
+    isChanged = false;
 
     constructor(
         private _questionnaireService: QuestionnaireService,
@@ -103,9 +102,13 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     */
     autoSaveEvent() {
         if (this.externalSaveEvent) {
-            this.$subscriptions.push(this.externalSaveEvent.subscribe(_event =>
-                !this.isViewMode && this.questionnaireDetails.isChanged && this.saveQuestionnaire()
-            ));
+            this.$subscriptions.push(this.externalSaveEvent.subscribe((event: any ) => {
+                if (event.saveMethod === 'EXTERNAL') {
+                 this.saveQuestionnaireExternal();
+                } else if (!this.isViewMode && this.isChanged ) {
+                   this.saveQuestionnaire();
+                }
+            }));
         }
     }
 
@@ -133,20 +136,13 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
             }
         });
         if (this.requestObject.newQuestionnaireId) {
-            this.emitCopiedQuestionnaireDetails();
+            this.questionnaireSaveEvent.emit({ status: 'SUCCESS' });
         }
         this.highlight = this.questionnaire.questions[0].QUESTION_ID;
         this.findUnAnsweredQuestions();
         this.IsEnableACTypeChecking = true;
         this.showHelpMsg = [];
         this._CDRef.markForCheck();
-    }
-
-    emitCopiedQuestionnaireDetails() {
-        this.questionnaireDetails.QUESTIONNAIRE_ID = this.questionnaireVO.questionnaireId;
-        this.questionnaireDetails.QUESTIONNAIRE_ANS_HEADER_ID = this.questionnaireVO.questionnaireAnswerHeaderId;
-        this.questionnaireDetails.NEW_QUESTIONNAIRE_ID = this.questionnaireVO.newQuestionnaireId;
-        this.questionnaireSaveEvent.emit({ status: 'SUCCESS', data: this.questionnaireDetails });
     }
 
     private ifQuestionTypeTablePrepareData(question: Question): void {
@@ -845,41 +841,31 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     saveQuestionnaire() {
         this.deleteUnAnsweredTableRows();
         this.questionnaireVO.questionnaireCompleteFlag = this.checkQuestionnaireCompletion();
-        /* isSaving flag is used for  avoiding mutiple service call. */
         if (this.isSaving === false) {
             this.isSaving = true;
-            if (!this._commonService.isWafEnabled) {
-                this.$subscriptions.push(
-                    this._questionnaireService.saveQuestionnaire(this.questionnaireVO, this.filesArray).subscribe(
-                        (data: any) => {
-                            this.saveActions(data);
-                        },
-                        (err) => {
-                            this.questionnaireVO = err.error;
-                            this.questionnaire = this.questionnaireVO.questionnaire;
-                            this.isSaving = false;
-                            this.questionnaireSaveEvent.emit({ status: 'ERROR', data: this.questionnaireDetails });
-                        },
-                        () => { }
-                    )
-                );
-            }
+            this.$subscriptions.push(
+                this._questionnaireService.saveQuestionnaire(this.questionnaireVO, this.filesArray).subscribe(
+                    (data: any) => {
+                        this.saveActions(data);
+                    },
+                    (err) => {
+                        this.questionnaireVO = err.error;
+                        this.questionnaire = this.questionnaireVO.questionnaire;
+                        this.isSaving = false;
+                        this.questionnaireSaveEvent.emit({ status: 'ERROR'});
+                    },
+                    () => { }
+                )
+            );
         }
     }
-    /** if attachment is uploaded, sets parameters and calls saveAttachment function in wafAttachmentService.
-     * Otherwise calls saveWafRequest function in wafAttachmentService.
-     */
-    /**
-     * @param  {} data
-     * if data doesn't contains error, questionnaire gets saved, otherwise shows error.
-     */
-    checkSavedOrNot(data) {
-        if (data && !data.error) {
-            this.saveActions(data);
-            this.uploadedFile = [];
-        } else {
-            this.questionnaireSaveEvent.emit({ status: 'ERROR', data: this.questionnaireDetails });
-            this.isSaving = false;
+
+    saveQuestionnaireExternal() {
+        if (this.isChanged) {
+            this.deleteUnAnsweredTableRows();
+            this.questionnaireVO.questionnaireCompleteFlag = this.checkQuestionnaireCompletion();
+            this.questionnaireVO.files = this.filesArray;
+            this.questionnaireSaveEvent.emit({ status: 'EXTERNAL_SAVE', data: this.questionnaireVO});
         }
     }
     /**
@@ -901,18 +887,13 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
             this.questionnaireVO.hasOwnProperty('questionnaireAnswerHeaderId') &&
             this.questionnaireVO.questionnaireAnswerHeaderId != null
         ) {
-            this.requestObject.questionnaireAnswerHeaderId = this.questionnaireVO.questionnaireAnswerHeaderId;
-            this.questionnaireDetails.QUESTIONNAIRE_ANS_HEADER_ID = this.questionnaireVO.questionnaireAnswerHeaderId;
-            this.questionnaireDetails.QUESTIONNAIRE_COMPLETED_FLAG = this.questionnaireVO.questionnaireCompleteFlag;
-            this.questionnaireDetails.TRIGGER_POST_EVALUATION = this.questionnaireVO.header.TRIGGER_POST_EVALUATION;
-            this.questionnaireSaveEvent.emit({ status: 'SUCCESS', data: this.questionnaireDetails });
+            this.questionnaireSaveEvent.emit({ status: 'SUCCESS'});
         }
     }
 
     /**checks whether the questionnaire is complete and sets the flag */
     checkQuestionnaireCompletion() {
-        return (this.questionnaireDetails.QUESTIONNAIRE_COMPLETED_FLAG =
-            this.uniqueIdFromUnAnsweredQuestions.length === 0 ? 'Y' : 'N');
+        return this.uniqueIdFromUnAnsweredQuestions.length === 0 ? 'Y' : 'N';
     }
 
     /** assigns help link message of a question
@@ -944,7 +925,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
      */
     downloadAttachment(attachmentId, attachmentName) {
         this.$subscriptions.push(
-            this._questionnaireService.downloadAttachment(attachmentId, this.moduleDetails.moduleItemCode).subscribe(
+            this._questionnaireService.downloadAttachment(attachmentId, this.questionnaireVO.moduleItemCode).subscribe(
                 (data: any) => {
                     const a = document.createElement('a');
                     const blob = new Blob([data], { type: data.type });
@@ -975,19 +956,19 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     }
 
     markQuestionnaireAsChanged(status: boolean): void {
-        if (this.questionnaireDetails.isChanged !== status) {
-            this.questionnaireDetails.isChanged = status;
+        if (this.isChanged !== status) {
+            this.isChanged = status;
             this.questionnaireEditEvent.emit(status);
         }
     }
 
     private checkBusinessRule(ruleId, question): any {
         const REQUEST_OBJECT = {
-            'moduleItemCode': this.questionnaireDetails.MODULE_ITEM_CODE,
-            'moduleItemKey': this.moduleDetails.moduleItemKey,
+            'moduleItemCode': this.questionnaireVO.moduleItemCode,
+            'moduleItemKey': this.questionnaireVO.moduleItemKey,
             'ruleId': ruleId,
-            'moduleSubItemCode': this.questionnaireDetails.MODULE_SUB_ITEM_CODE,
-            'moduleSubItemKey': this.moduleDetails.moduleSubItemKey
+            'moduleSubItemCode': this.questionnaireVO.moduleSubItemCode,
+            'moduleSubItemKey': this.questionnaireVO.moduleSubItemKey
         };
         this.$subscriptions.push(this._questionnaireService.evaluateBusinessRule(REQUEST_OBJECT)
             .subscribe((data: any) => {
