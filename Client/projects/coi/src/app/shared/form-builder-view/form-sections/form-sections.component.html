@@ -11,10 +11,14 @@
       <div class="side-info" *ngIf="component.componentHeader" [innerHTML] = "component.componentHeader">
       </div>
       <div *ngIf="component.componentType === 'QN'">
-        <app-view-questionnaire-v2 [questionnaireVO] = "component.questionnaire"></app-view-questionnaire-v2>
+        <app-view-questionnaire-v2 [questionnaireVO] = "component.questionnaire" 
+        [externalSaveEvent]="saveEventForChildComponent"
+        (questionnaireSaveEvent) ="saveEventsFromChild($event, component)"
+        ></app-view-questionnaire-v2>
       </div>
       <div *ngIf="component.componentType === 'RT'">
-        <app-rich-text [editorData] = "component.componentData"></app-rich-text>
+        <!-- <app-rich-text [editorData] = "component.componentData"></app-rich-text> -->
+        <div [innerHTML] = "component.componentData"></div>
       </div>
       <div *ngIf="component.componentType === 'PE'">
        <!-- to be developed -->
@@ -23,7 +27,9 @@
          <div class="line" [style]="component.componentData"></div>
       </div>
       <div *ngIf="component.componentType === 'CE'">
-        <app-custom-element-v2 [customElement] = "component.customElement"></app-custom-element-v2>
+        <app-custom-element-v2 [customElementVO] = "component.customElement" 
+        [externalSaveEvent]="saveEventForChildComponent"
+        (saveEvent) ="saveEventsFromChild($event, component)"></app-custom-element-v2>
       </div>
       <div *ngIf="component.componentType === 'BR'">
          <!-- to be developed -->

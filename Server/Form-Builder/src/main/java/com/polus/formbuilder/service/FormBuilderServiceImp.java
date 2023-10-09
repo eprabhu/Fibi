@@ -33,7 +33,8 @@ import com.polus.formbuilder.programmedelement.ProgrammedElementService;
 import com.polus.formbuilder.repository.FormBuilderHeaderEntityRepository;
 
 @Service
-public class FormBuilderServiceImp implements FormBuilderService {
+//This class will be revmoved
+public class FormBuilderServiceImp  {
 
 	@Autowired
 	private ProgrammedElementService programmedElementService;
@@ -51,13 +52,13 @@ public class FormBuilderServiceImp implements FormBuilderService {
 		return null;
 	}
 	
-	@Override
+	
 	public BlankFormResponse getBlankFormByFormId(BlankFormRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	
 	public BlankFormResponse GetBankFormbyModule(BlankFormRequest request) {
 
 		Instant start = Instant.now();
@@ -196,55 +197,6 @@ public class FormBuilderServiceImp implements FormBuilderService {
 		QuestionnaireDataBus bus = new QuestionnaireDataBus();
 		bus.setQuestionnaireId(qnrId);
 		return bus;
-	}
-
-	@Override
-	public FormResponse getFormbyFormId(FormRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FormResponse GetFormSection(FormRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FormComponentFetchResponse GetQuestionnaireComponent(FormComponentFetchRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FormComponentFetchResponse GetCustomElementComponent(FormComponentFetchRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FormComponentFetchResponse GetProgrammedElementComponent(FormComponentFetchRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FormComponentSaveResponse SaveQuestionnaireComponent(FormComponentSaveRequest request, 
-			 MultipartHttpServletRequest multipartRequest) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FormComponentSaveResponse SaveCustomElementComponent(FormComponentSaveRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FormComponentSaveResponse SaveProgrammedElementComponent(FormComponentSaveRequest request) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	

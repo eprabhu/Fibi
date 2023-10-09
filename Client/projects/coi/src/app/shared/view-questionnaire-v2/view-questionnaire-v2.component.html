@@ -83,10 +83,11 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="question.ANSWER_TYPE === 'Checkbox'">
-                  <div class="answer-options answer-field p-0 ml-4" *ngFor=" let option of questionnaire.options">
+                  <div class="answer-options answer-field p-0 ml-4" *ngFor=" let option of questionnaire.options; let i=index;">
                     <span *ngIf="question.QUESTION_ID == option.QUESTION_ID">
                       <input type="checkbox" [disabled]="isViewMode" [(ngModel)]="question.ANSWERS[option.OPTION_LABEL]"
-                        (change)="showChildQuestions(question);" /> {{option.OPTION_LABEL}}
+                        (change)="showChildQuestions(question);" id="{{option.OPTION_LABEL}}{{i}}"/> 
+                        <label for="{{option.OPTION_LABEL}}{{i}}"> {{option.OPTION_LABEL}}</label>
                     </span>
                   </div>
                 </ng-container>
@@ -198,7 +199,7 @@
 </div>
 
 <!-- attachment modal -->
-<div class="modal fade mySkinDialog" id="AttachmentModal{{questionnaireDetails?.QUESTIONNAIRE_ID}}" tabindex="-1"
+<div class="modal fade mySkinDialog" id="AttachmentModal{{questionnaireVO.questionnaireId}}" tabindex="-1"
   role="dialog" aria-labelledby="AttachmentModal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">

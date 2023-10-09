@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.polus.formbuilder.model.ApplicableFormRequest;
+import com.polus.formbuilder.model.ApplicableFormResponse;
 import com.polus.formbuilder.model.BlankFormRequest;
 import com.polus.formbuilder.model.BlankFormResponse;
 import com.polus.formbuilder.model.FormComponentFetchRequest;
@@ -31,6 +33,12 @@ public class FormBuilderController {
 	String greetings() {
 		return "Hello from Form Builder App. "+Runtime.getRuntime().availableProcessors();
 	}	
+	
+	@PostMapping("/getApplicableForms")
+	ResponseEntity<ApplicableFormResponse> getApplicableForms(@RequestBody ApplicableFormRequest request){		
+		var response = service.getApplicableForms(request);		
+		return new ResponseEntity<ApplicableFormResponse>(response,HttpStatus.OK);		
+	}
 	
 	@PostMapping("/getBlankForm")
 	ResponseEntity<BlankFormResponse> getBlankForm(@RequestBody BlankFormRequest request){		

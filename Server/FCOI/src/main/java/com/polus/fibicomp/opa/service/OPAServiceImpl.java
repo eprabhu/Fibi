@@ -2,6 +2,9 @@ package com.polus.fibicomp.opa.service;
 
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.opa.clients.FormBuilderClient;
+import com.polus.fibicomp.opa.clients.model.ApplicableFormRequest;
+import com.polus.fibicomp.opa.clients.model.ApplicableFormResponse;
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
 import com.polus.fibicomp.opa.dto.OPACommonDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
@@ -30,19 +33,29 @@ public class OPAServiceImpl implements OPAService {
 	@Autowired
 	private PersonDao personDao;
 
+	@Autowired
+	private FormBuilderClient formBuilderClient;
+
 	@Override
 	public Boolean canCreateOpaDisclosure(String personId) {
-		return opaDao.isOpaDisclosureRequired(personId);
+		return opaDao.canCreateOpaDisclosure(personId);
 	}
 
 	@Override
 	public ResponseEntity<Object> createOpaDisclosure(String personId, String homeUnit) {
-		opaDao.createOpaDisclosure(personId, homeUnit);
+		Integer opaDisclosureId = opaDao.createOpaDisclosure(personId, homeUnit);
 		OPACommonDto  opaCommonDto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
 				.build();
 		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_CREATED, opaCommonDto);
-		return new ResponseEntity<>(personId, HttpStatus.OK);
+		//TODO if needed move the below client call to any util class
+		ApplicableFormRequest requestObject = ApplicableFormRequest.builder()
+				.moduleItemCode(Constants.OPA_MODULE_ITEM_CODE)
+				.moduleSubItemCode(Constants.OPA_MODULE_SUB_ITEM_CODE).build();
+		ResponseEntity<ApplicableFormResponse> response = formBuilderClient.getApplicableForms(requestObject);
+		ApplicableFormResponse formResponse = response.getBody();
+		formResponse.setOpaDisclosureId(opaDisclosureId);
+		return new ResponseEntity<>(formResponse, HttpStatus.OK);
 	}
 
 	@Override
