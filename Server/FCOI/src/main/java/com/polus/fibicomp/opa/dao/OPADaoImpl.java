@@ -40,7 +40,7 @@ public class OPADaoImpl implements OPADao {
   	protected static Logger logger = LogManager.getLogger(OPADaoImpl.class.getName());
 
     @Override
-    public boolean isOpaDisclosureRequired(String personId) {
+    public boolean canCreateOpaDisclosure(String personId) {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         SessionImpl sessionImpl = (SessionImpl) session;
         Connection connection = sessionImpl.connection();
@@ -60,11 +60,6 @@ public class OPADaoImpl implements OPADao {
             e.printStackTrace();
         }
         return false;
-    }
-
-    @Override
-    public void createOpaDisclosure(String personId, String homeUnit) {
-//		procedure call
     }
 
     @Override
@@ -169,25 +164,6 @@ public class OPADaoImpl implements OPADao {
             query.setParameter("dispositionStatusCode", dispositionStatus);
         return (boolean) query.getSingleResult();
     }
-
-
-
-	@Override
-	public boolean isOpaDisclosureRequired(String personId) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		SessionImpl sessionImpl = (SessionImpl) session;
-		Connection connection = sessionImpl.connection();
-		try {
-			CallableStatement statement = connection.prepareCall("{ ? = call FN_CAN_CREATE_OPA_DISCLOSURE (?) }");
-			statement.registerOutParameter(1, OracleTypes.INTEGER);
-			statement.setString(2, personId);
-			statement.execute();
-			int result = statement.getInt(1);
-			return result == 1;
-		} catch (SQLException e) {
-			return Boolean.FALSE;
-		}
-	}
 
 	@Override
 	public Integer createOpaDisclosure(String personId, String homeUnit) {

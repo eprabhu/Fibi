@@ -32,7 +32,7 @@ public class OPAServiceImpl implements OPAService {
 
 	@Override
 	public Boolean canCreateOpaDisclosure(String personId) {
-		return opaDao.isOpaDisclosureRequired(personId);
+		return opaDao.canCreateOpaDisclosure(personId);
 	}
 
 	@Override
