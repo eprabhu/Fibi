@@ -1,0 +1,6 @@
+
+
+<div class="section-container" *ngFor="let section of formBuilderData?.form?.formSections">
+    <app-form-sections [sectionDetails] = "section" [saveEventForChildComponent]="saveEventForChildComponent"
+    (saveEventFromChildComponents)="saveEventFromChildComponents($event)"></app-form-sections>
+</div>

@@ -1,11 +1,20 @@
 export class FormBuilder {
     applicableFormsBuilderIds: number[];
-    primaryForm: PrimaryForm;
+    form: Form;
 }
 
-export class PrimaryForm {
+export class FormBuilderEvent {
+    eventType: string;
+    data?: any;
+}
+
+export class Form {
     formBuilderId: number;
     formBuilderNumber: string;
+    moduleItemCode: string;
+    moduleSubItemCode: string;
+    moduleItemKey: string;
+    moduleSubItemKey: string;
     formName: string;
     formSections: FormSection[] = [];
 }
@@ -16,9 +25,9 @@ export class FormSection {
     sectionOrder: number;
     sectionDescription: string;
     sectionBusinessRule: any;
-    sectionHelpText: string;
-    sectionHeader: string;
-    sectionFooter: string;
+    sectionHelpText?: string;
+    sectionHeader?: string;
+    sectionFooter?: string;
     sectionComponent: SectionComponent[];
 }
 
@@ -28,9 +37,9 @@ export class SectionComponent {
     componentDescription: any;
     componentType: string;
     componentRefId?: string;
-    componentData: string;
-    componentHeader: string;
-    componentFooter: string;
+    componentData?: string;
+    componentHeader?: string;
+    componentFooter: any;
     programmedElement: any;
     questionnaire?: QuestionnaireVO;
     customElement?: CustomElement;
@@ -40,10 +49,10 @@ export class SectionComponent {
 export class QuestionnaireVO {
     applicableQuestionnaire: any;
     questionnaireId: number;
-    moduleItemKey: any;
-    moduleSubItemKey: any;
-    moduleItemCode: any;
-    moduleSubItemCode: any;
+    moduleItemKey: string;
+    moduleSubItemKey: string;
+    moduleItemCode: number;
+    moduleSubItemCode: number;
     questionnaireAnswerHeaderId: any;
     questionnaireAnsAttachmentId: any;
     questionnaireCompleteFlag: any;
@@ -127,15 +136,16 @@ export class Question {
     GROUP_NAME: string;
     HELP_LINK: any;
     QUESTION_VERSION_NUMBER: number;
-    DESCRIPTION?: string;
+    DESCRIPTION: any;
     SORT_ORDER: number;
     QUESTION_ID: number;
-    ANSWERS: any;
+    ANSWERS?: any;
     ANSWER_TYPE: string;
-    NO_OF_ANSWERS: number;
+    NO_OF_ANSWERS?: number;
     UPDATE_TIMESTAMP: string;
     PARENT_QUESTION_ID?: number;
 }
+
 
 export class Condition {
     QUESTION_CONDITION_ID: number;
@@ -149,22 +159,22 @@ export class Condition {
 export class Option {
     EXPLANTION_LABEL: any;
     QUESTION_OPTION_ID: number;
-    OPTION_NUMBER: any;
+    OPTION_NUMBER?: number;
     QUESTION_ID: number;
     OPTION_LABEL: string;
-    REQUIRE_EXPLANATION: string;
+    REQUIRE_EXPLANATION?: string;
 }
 
-export class CustomElement {
-    customDataElement: CustomDataElement;
+export class CustomElementVO {
+    customDataElement: any;
     customDataElements: any;
     responseMessage: any;
-    customDataElementId: number;
+    customDataElementId: any;
     customDataTypes: any;
-    elementOptions: any[];
+    elementOptions: any;
     customResponses: any;
     moduleCode: any;
-    customElements: any;
+    customElements: CustomElement[];
     updateUser: any;
     updateTimestamp: any;
     moduleItemKey: any;
@@ -174,53 +184,59 @@ export class CustomElement {
     dataTypeCode: any;
     systemLookups: any;
     lookUps: any;
-    elementAnswered: boolean;
+    elementAnswered: any;
+    subModuleCode: any;
+    subModuleItemKey: any;
 }
 
-export class CustomDataElement {
-    customElementId: number;
-    columnId: number;
-    columnVersionNumber: number;
-    columnLabel: string;
-    dataType: string;
-    customDataTypes: CustomDataTypes;
-    dataLength: any;
+export class CustomElement {
+    customDataElementId: number;
+    columnName: string;
     defaultValue: string;
-    isLatestVesrion: string;
-    hasLookup: boolean;
+    dataType: string;
+    isRequired: string;
+    options: Option2[];
+    answers: any[];
+    moduleItemCode: number;
+    moduleItemKey: string;
+    subModuleItemCode: number;
+    subModuleItemKey: string;
+    dataLength: any;
+    columnId: number;
+    versionNumber: number;
     lookupWindow: string;
     lookupArgument: string;
-    isActive: string;
-    updateUser: string;
-    updateTimestamp: string;
-    customElementName: string;
-    customDataElementUsage: CustomDataElementUsage[];
-    acType: any;
+    filterType: string;
+    orderNumber: number;
+    isActive: any;
+    customElementName: any;
 }
 
-export class CustomDataTypes {
-    dataTypeCode: string;
-    description: string;
-    updateTimestamp: string;
-    updateUser: string;
-    isActive: boolean;
+export class Option2 {
+    optionName: string;
+    customDataOptionId: string;
 }
 
-export class CustomDataElementUsage {
-    customElementUsageId: number;
-    moduleCode: number;
-    module: Module;
-    isRequired: string;
-    updateUser: string;
-    updateTimestamp: string;
-    orderNumber: any;
-    acType: string;
+
+export class FormBuilderSaveRO {
+    formId: number;
+    documentOwnerPersonId: string;
+    moduleItemCode: string;
+    moduleSubItemCode: string;
+    moduleItemKey: string;
+    moduleSubItemKey: string;
+    componentId: number;
+    componentType: string;
+    programmedElement: any;
+    questionnaire: QuestionnaireVO;
+    customElement: CustomElementVO;
+    files: any[];
 }
 
-export class Module {
-    moduleCode: number;
-    description: string;
-    updateTimestamp: string;
-    updateUser: string;
-    isActive: boolean;
+export class FBConfiguration {
+    moduleItemCode: string;
+    moduleSubItemCode: string;
+    moduleItemKey: string;
+    moduleSubItemKey: string;
+    documentOwnerPersonId: string;
 }

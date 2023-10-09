@@ -3,8 +3,8 @@ export class QuestionnaireVO {
     questionnaireId: number;
     moduleItemKey: any;
     moduleSubItemKey: any;
-    moduleItemCode: any;
-    moduleSubItemCode: any;
+    moduleItemCode: number;
+    moduleSubItemCode: number;
     questionnaireAnswerHeaderId: any;
     questionnaireAnsAttachmentId: any;
     questionnaireCompleteFlag: any;
@@ -41,6 +41,7 @@ export class QuestionnaireVO {
     rulePassed: any;
     questionnaireMode: any;
     copyInActiveQuestionAnswers: boolean;
+    files: any[] = [];
 }
 
 export class Header {

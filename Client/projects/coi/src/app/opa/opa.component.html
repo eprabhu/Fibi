@@ -149,7 +149,7 @@
                         Next
                     </button>
                 </div>
-                <div title="Click to save your progress"
+                <div title="Click to save your progress" (click)="triggerSave()"
                      class="d-flex justify-content-around px-3 pb-3">
                     <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                         <mat-icon class="me-2">save</mat-icon>
@@ -174,7 +174,7 @@
 
 <div class="mx-3 d-flex">
     <div class="left-div me-1" id="coi_summary_container">
-        <app-form-builder-view [formBuilderData]="formBuilderData"></app-form-builder-view>
+        <app-form-builder-view [externalEvents]="formBuilderEvents"></app-form-builder-view>
     </div>
     <div class="p-0 right-div ms-2" id="coi_summary_toolkit">
 
