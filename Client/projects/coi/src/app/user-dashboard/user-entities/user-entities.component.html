@@ -35,7 +35,7 @@
  <div [hidden]="isLoading" *ngIf="filteredEntityArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
   <nav aria-label="pagination section" class="pagination justify-content-end">
       <app-pagination (pageChangeEvent)="actionsOnPageChangeEvent($event)"
-          [totalCount]="result.count">
+          [totalCount]="result.count" [defaultCurrentPage]="sfiDashboardRequestObject.currentPage">
       </app-pagination>
   </nav>
 </div>

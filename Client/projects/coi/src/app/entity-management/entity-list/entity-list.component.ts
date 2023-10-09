@@ -251,8 +251,10 @@ isEntityFound = false;
   }
 
   actionsOnPageChange(event) {
-    this.entityManagementService.coiRequestObject.currentPage = event;
-    this.$entityList.next();
+    if (this.entityManagementService.coiRequestObject.currentPage != event) {
+      this.entityManagementService.coiRequestObject.currentPage = event;
+      this.$entityList.next();
+    }
   }
 
   checkUserHasRight(): void {

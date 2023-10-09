@@ -143,8 +143,10 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     actionsOnPageChange(event) {
-        this.dashboardRequestObject.currentPage = event;
-        this.$fetchDisclosures.next();
+        if (this.dashboardRequestObject.currentPage != event) {
+            this.dashboardRequestObject.currentPage = event;
+            this.$fetchDisclosures.next();
+        }
     }
 
     loadDashboardCount() {
