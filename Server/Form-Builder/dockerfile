@@ -1,0 +1,9 @@
+FROM openjdk:17
+
+ARG JAR_FILE=target/*.jar
+
+COPY ${JAR_FILE} fibi-form-builder.jar
+
+ENTRYPOINT [ "java","-jar", "/fibi-form-builder.jar" ]
+
+EXPOSE 8011

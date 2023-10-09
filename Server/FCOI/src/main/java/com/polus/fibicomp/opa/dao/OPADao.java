@@ -1,16 +1,16 @@
 package com.polus.fibicomp.opa.dao;
 
-import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
-import com.polus.fibicomp.opa.dto.OPACommonDto;
-import com.polus.fibicomp.opa.dto.OPASubmitDto;
+import java.sql.Timestamp;
+
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
+import com.polus.fibicomp.opa.dto.OPASubmitDto;
 
 @Service
 public interface OPADao {
 
-	boolean isOpaDisclosureRequired(String personId);
+	boolean canCreateOpaDisclosure(String personId);
 
 	Integer createOpaDisclosure(String personId, String homeUnit);
 
