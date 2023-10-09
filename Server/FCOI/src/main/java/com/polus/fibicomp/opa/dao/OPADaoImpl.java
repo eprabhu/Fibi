@@ -6,11 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import com.polus.fibicomp.common.dao.CommonDao;
-import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
-import com.polus.fibicomp.opa.dto.OPASubmitDto;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import javax.persistence.Query;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -21,11 +18,14 @@ import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
+import com.polus.fibicomp.opa.dto.OPASubmitDto;
+import com.polus.fibicomp.opa.pojo.OPADisclosure;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 import oracle.jdbc.OracleTypes;
-
-import javax.persistence.Query;
 
 @Transactional
 @Service(value = "opaDaoImpl")
@@ -203,4 +203,9 @@ public class OPADaoImpl implements OPADao {
         query.setParameter("opaDisclosureId",opaDisclosureId);
         return (boolean) query.getSingleResult();
     }
+
+	@Override
+	public OPADisclosure getOPADisclosure(Integer opaDisclosureId) {
+		return hibernateTemplate.get(OPADisclosure.class, opaDisclosureId);
+	}
 }
