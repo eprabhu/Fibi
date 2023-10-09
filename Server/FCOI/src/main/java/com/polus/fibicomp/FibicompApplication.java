@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -25,6 +26,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 @ComponentScan
 @EnableScheduling
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
+@EnableFeignClients
 /* @ComponentScan("com.polus.fibicomp.*") */
 public class FibicompApplication {
 
