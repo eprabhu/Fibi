@@ -1698,4 +1698,6 @@ public interface Constants {
     String OPA_ACTION_LOG_TYPE_APPROVED = "5";
     String OPA_ACTION_LOG_TYPE_ADMIN_ASSIGNED = "6";
     String OPA_ACTION_LOG_TYPE_ADMIN_REASSIGNED = "7";
+    String OPA_MODULE_ITEM_CODE = "23";
+    String OPA_MODULE_SUB_ITEM_CODE = "0";
 }
