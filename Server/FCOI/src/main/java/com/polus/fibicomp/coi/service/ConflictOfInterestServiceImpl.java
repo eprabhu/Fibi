@@ -240,6 +240,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		coiDisclosure.setPerson(personDao.getPersonDetailById(coiDisclosure.getPersonId()));
 		coiDisclosure.setAdminGroupName(coiDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(coiDisclosure.getAdminGroupId()).getAdminGroupName() : null);
 		coiDisclosure.setAdminPersonName(coiDisclosure.getAdminPersonId() != null ? personDao.getPersonFullNameByPersonId(coiDisclosure.getAdminPersonId()) : null);
+		Person person = personDao.getPersonDetailById(coiDisclosure.getPersonId());
+		coiDisclosure.setPersonEmail(person.getEmailAddress());
+		coiDisclosure.setPersonPrimaryTitle(person.getPrimaryTitle());
 		conflictOfInterestVO.setCoiDisclosure(coiDisclosure);
 		conflictOfInterestVO.setCoiSectionsType(conflictOfInterestDao.fetchCoiSections());
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);

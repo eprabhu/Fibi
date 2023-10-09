@@ -1,20 +1,22 @@
 package com.polus.fibicomp.opa.controller;
 
-import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
-import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PatchMapping;
 
+import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.opa.dto.CreateOpaDto;
+import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
+import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.service.OPAService;
 
 @RestController
@@ -25,6 +27,9 @@ public class OPAController {
 
 	@Autowired
 	private OPAService opaService;
+
+	@Autowired
+	private UserDocumentAuthorization documentAuthorization;
 
 	@PostMapping("/createOPA")
 	public ResponseEntity<Object> createOPADisclosure(@RequestBody CreateOpaDto dto) {
@@ -73,4 +78,15 @@ public class OPAController {
 		logger.info("Request for reassignAdminOPADisclosure");
 		return opaService.reassignAdminOPADisclosure(assignAdminDto);
 	}
+
+	@GetMapping("/getOPADisclosureHeader/{opaDisclosureId}")
+	public ResponseEntity<Object> getOPADisclosure(@PathVariable("opaDisclosureId") Integer opaDisclosureId) {
+		logger.info("Request for getOPADisclosure");
+//		Authorization check to be implemented
+//		if (!documentAuthorization.isAuthorized(Constants.OPA_MODULE_CODE, opaDisclosureId.toString(), AuthenticatedUser.getLoginPersonId())) {
+//			return new ResponseEntity<>("Not Authorized to view this Disclosure",HttpStatus.FORBIDDEN);
+//		}
+		return opaService.getOPADisclosure(opaDisclosureId);
+	}
+
 }

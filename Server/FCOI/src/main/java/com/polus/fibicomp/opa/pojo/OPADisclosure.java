@@ -13,9 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.polus.fibicomp.coi.pojo.CoiDispositionStatusType;
-import com.polus.fibicomp.coi.pojo.CoiReviewStatusType;
 import com.polus.fibicomp.util.JpaCharBooleanConversion;
 
 import lombok.AllArgsConstructor;
@@ -49,14 +48,18 @@ public class OPADisclosure {
 	@Column(name = "PERSON_ID")
 	private String personId;
 
+	@ManyToOne(optional = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "OPA_DISCLOSURE_FK4"), name = "PERSON_ID", referencedColumnName = "PERSON_ID", insertable = false, updatable = false)
+	private OPAPerson opaPerson;
+
 	@Column(name = "PERSON_NAME")
 	private String personName;
 
 	@Column(name = "HOME_UNIT")
 	private String homeUnit;
 
-	@Column(name = "STATUS_FLAG")
-	private String statusFlag;
+	@Column(name = "STATUS_CODE")
+	private String statusCode;
 
 	@Column(name = "IS_FACULTY")
 	@Convert(converter = JpaCharBooleanConversion.class)
@@ -141,5 +144,26 @@ public class OPADisclosure {
 
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
+
+	@Transient
+	private String updateUserFullName;
+
+	@Transient
+	private String createUserFullName;
+
+	@Transient
+	private String adminGroupName;
+
+	@Transient
+	private String adminPersonName;
+
+	@Transient
+	private String personEmail;
+
+	@Transient
+	private String personPrimaryTitle;
+
+	@Transient
+	private String homeUnitName;
 
 }

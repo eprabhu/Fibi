@@ -1,24 +1,27 @@
 package com.polus.fibicomp.opa.service;
 
-import com.polus.fibicomp.coi.service.ActionLogService;
-import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.opa.clients.FormBuilderClient;
-import com.polus.fibicomp.opa.clients.model.ApplicableFormRequest;
-import com.polus.fibicomp.opa.clients.model.ApplicableFormResponse;
-import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
-import com.polus.fibicomp.opa.dto.OPACommonDto;
-import com.polus.fibicomp.opa.dto.OPASubmitDto;
-import com.polus.fibicomp.person.dao.PersonDao;
-import com.polus.fibicomp.security.AuthenticatedUser;
+import java.sql.Timestamp;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polus.fibicomp.coi.service.ActionLogService;
+import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.opa.clients.FormBuilderClient;
+import com.polus.fibicomp.opa.clients.model.ApplicableFormRequest;
+import com.polus.fibicomp.opa.clients.model.ApplicableFormResponse;
 import com.polus.fibicomp.opa.dao.OPADao;
-
-import java.sql.Timestamp;
+import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
+import com.polus.fibicomp.opa.dto.OPACommonDto;
+import com.polus.fibicomp.opa.dto.OPASubmitDto;
+import com.polus.fibicomp.opa.pojo.OPADisclosure;
+import com.polus.fibicomp.person.dao.PersonDao;
+import com.polus.fibicomp.person.pojo.Person;
+import com.polus.fibicomp.security.AuthenticatedUser;
 
 @Transactional
 @Service(value = "opaService")
@@ -35,6 +38,9 @@ public class OPAServiceImpl implements OPAService {
 
 	@Autowired
 	private FormBuilderClient formBuilderClient;
+
+	@Autowired
+	private CommonDao commonDao;
 
 	@Override
 	public Boolean canCreateOpaDisclosure(String personId) {
@@ -153,4 +159,18 @@ public class OPAServiceImpl implements OPAService {
 		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_ADMIN_REASSIGNED, opaCommonDto);
 		return new ResponseEntity<>(timestamp, HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity<Object> getOPADisclosure(Integer opaDisclosureId) {
+		OPADisclosure opaDisclosure = opaDao.getOPADisclosure(opaDisclosureId);
+		opaDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(opaDisclosure.getUpdateUser()));
+		opaDisclosure.setAdminGroupName(opaDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(opaDisclosure.getAdminGroupId()).getAdminGroupName() : null);
+		opaDisclosure.setAdminPersonName(opaDisclosure.getAdminPersonId() != null ? personDao.getPersonFullNameByPersonId(opaDisclosure.getAdminPersonId()) : null);
+		Person person = personDao.getPersonDetailById(opaDisclosure.getPersonId());
+		opaDisclosure.setPersonEmail(person.getEmailAddress());
+		opaDisclosure.setPersonPrimaryTitle(person.getPrimaryTitle());
+		opaDisclosure.setHomeUnitName(commonDao.getUnitName(opaDisclosure.getHomeUnit()));
+		return new ResponseEntity<>(opaDisclosure, HttpStatus.OK);
+	}
+
 }
