@@ -26,6 +26,8 @@ ul {
 
 .side-bar {
     position: absolute;
+    top: 0;
+    left: 0;
     background-color: white;
     z-index: 51;
     transition: width ease-out 150ms;
