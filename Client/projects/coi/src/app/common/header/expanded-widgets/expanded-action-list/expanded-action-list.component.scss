@@ -45,6 +45,8 @@ table {
 .switch-view {
     border-radius: 3px;
     display: inline-block;
+    color: #9ea3a9;
+    background: #dddfe2;
 }
 
 .switch-view i:hover {
@@ -135,3 +137,31 @@ table {
     color: #eeeeee;
   }
   
+  .tab-styler {
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.close-btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.arrival-right-allign {
+    display: flex;
+    justify-content: end;
+}
+
+.success-banner {
+    color: #007985;
+    background-color: #dff5f9;
+    border-color: #81b7b2;
+    font-size: 1.4rem;
+}
+
+.close-button {
+    background-color: #dff5f9;
+}
