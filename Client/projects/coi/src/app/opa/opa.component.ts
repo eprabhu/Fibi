@@ -1,40 +1,52 @@
-import {  } from './../shared/questionnaire-list-compare/interface';
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import { FBConfiguration, FormBuilder, FormBuilderEvent } from '../shared/form-builder-view/form-builder-interface';
-import { OpaService } from './opa-service.service';
-import { Subject } from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilderEvent} from '../shared/form-builder-view/form-builder-interface';
+import {Subject} from 'rxjs';
+import {OpaService} from './services/opa.service';
+import {isEmptyObject} from '../../../../fibi/src/app/common/utilities/custom-utilities';
+import {DataStoreService} from './services/data-store.service';
+import {CommonService} from '../common/services/common.service';
+import {environment} from '../../environments/environment';
 
 @Component({
     selector: 'app-opa',
     templateUrl: './opa.component.html',
-    styleUrls: ['./opa.component.scss'],
-    providers: [OpaService]
+    styleUrls: ['./opa.component.scss']
 })
-export class OpaComponent implements OnInit, AfterViewInit {
+export class OpaComponent implements OnInit {
     isCardExpanded = true;
-    formBuilderData: FormBuilder = new FormBuilder();
     formBuilderEvents = new Subject<FormBuilderEvent>();
-    fbConfiguration = new FBConfiguration();
-    constructor(private _opa: OpaService ) {}
+    opaData;
+    deployMap = environment.deployUrl;
+    $subscriptions;
 
-    ngOnInit(): void {
+    constructor(private _opa: OpaService,
+                public commonService: CommonService,
+                private dataStore: DataStoreService) {
     }
 
-    ngAfterViewInit(): void {
-        // NEEDS TO SETUP FORM BUILDER DATA HERE, currently adding dummy data fro save testing
-        this.fbConfiguration.moduleItemCode = '23';
-        this.fbConfiguration.moduleSubItemCode = '0';
-        this.fbConfiguration.moduleItemKey = '11000110';
-        this.fbConfiguration.moduleSubItemKey = '0';
-        this.fbConfiguration.documentOwnerPersonId = '110000001';
-        this.formBuilderEvents.next({eventType: 'CONFIGURATION', data: this.fbConfiguration});
+    ngOnInit(): void {
+        this.getDataFromStore();
     }
 
     triggerSave() {
         this.formBuilderEvents.next({eventType: 'SAVE'});
     }
 
+    private getDataFromStore() {
+        const opaData = this.dataStore.getData();
+        if (isEmptyObject(opaData)) {
+            return;
+        }
+        this.opaData = opaData;
+    }
 
+    private listenDataChangeFromStore() {
+        this.$subscriptions.push(
+            this.dataStore.dataEvent.subscribe((dependencies: string[]) => {
+                this.getDataFromStore();
+            })
+        );
+    }
 
 
 }
