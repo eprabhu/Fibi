@@ -5,6 +5,7 @@ import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe'
 import { ServiceRequest } from '../service-request.interface';
 import { CommonDataService } from '../services/common-data.service';
 import { HistoryService } from './history.service';
+import { isEmptyObject } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-history',
@@ -17,6 +18,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
     serviceRequestHistory: any = [];
     serviceRequest: ServiceRequest = new ServiceRequest();
+    isEmptyObject = isEmptyObject;
 
     constructor(
         private _commonData: CommonDataService,

@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
+import { getParams } from '../../common/services/end-point.config';
 
 @Injectable()
 export class RolodexMaintenanceService {
@@ -19,28 +20,31 @@ export class RolodexMaintenanceService {
   getRolodexData(rolodexId) {
     return this._http.post(this._commonService.baseUrl + '/getRolodexDetailById', {'rolodexId': rolodexId});
   }
-  fetchOrganization( searchString) {
-    return this._http.get( this._commonService.baseUrl + '/findOrganizations' + '?searchString=' + searchString);
-    }
+
   saveRolodexData(sponsor) {
     return this._http.post(this._commonService.baseUrl + '/saveOrUpdateRolodex', sponsor);
   }
   fetchRolodexData(params){
     return this._http.post(this._commonService.baseUrl + '/getAllRolodexes', params);
   }
-  fetchSponsors( searchString) {
-    return this._http.get( this._commonService.baseUrl + '/findSponsors' + '?searchString=' + searchString);
-  }
-    /**
+  
+  /**
    * @param  {} contextField
    * @param  {} formatString
    * @param  {} path
    *returns the endpoint search object with respect to the the inputs.
-   */
-  setSearchOptions(contextField, formatString, path) {
+   * @param params will have fetchLimit as one of the values 
+   * to specify limit of data to fetched,
+   * it should be given inside params as {'fetchLimit' : requiredLimit}
+   * requiredLimit can be either null or any valid number.
+   * if no limit is specified default fetch limit 50 will be used.
+   * if limit is null then full list will return, this may cause performance issue.
+  */
+  setSearchOptions(contextField, formatString, path, params ={}) {
     this.endpointSearchOptions.contextField = contextField;
     this.endpointSearchOptions.formatString = formatString;
     this.endpointSearchOptions.path = path;
+    this.endpointSearchOptions.params = getParams(params);
     return JSON.parse(JSON.stringify(this.endpointSearchOptions));
   }
 

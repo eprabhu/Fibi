@@ -27,6 +27,7 @@ export class CountModalComponent implements OnInit {
     @Input() disclosures: any;
     @Input() adminData: any;
     @Input() reviewerData: any;
+    @Output() viewSlider: EventEmitter<any> = new EventEmitter<any>();
     @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
     $subscriptions: Subscription[] = [];
     tableArray: any[] = [];
@@ -204,5 +205,10 @@ export class CountModalComponent implements OnInit {
             window.open(awardLink, '_blank');
         }
     }
+
+    viewSliderEmit(flag: boolean, entityId) {
+        this.viewSlider.emit({'flag': flag, 'entityId': entityId})
+    }
+
 
 }

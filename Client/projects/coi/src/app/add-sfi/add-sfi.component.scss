@@ -324,3 +324,59 @@ small {
 .modal {
   z-index: 1501;
 }
+
+.info {
+    top: 7px;
+    font-size: 16px;
+    position: absolute;
+    color: #6f7395;
+    cursor: pointer;
+    height: 15px;
+    width: 16px;
+}
+
+.entity-padding {
+    padding-left: 2.5rem;
+    padding-right: 3rem;
+}
+
+.statuspillposition {
+    border-radius: 20px;
+    padding: 3px 9px 3px 9px;
+}
+
+.active {
+    background-color: #4CB57D !important;
+    color: #fff;
+    @extend .statuspillposition;
+  }
+
+.inactive {
+    background-color: #949494;
+    color: #fff;
+    @extend .statuspillposition;
+}
+
+.riskbadge {
+    top: -5px;
+    position: relative;
+}
+
+.invalid {
+    @extend .riskbadge;
+    color: #ff0000;
+}
+
+.medium-risk {
+    @extend .riskbadge;
+    color: #ff8c00;
+}
+
+.low-risk {
+    @extend .riskbadge;
+    color: rgb(26, 172, 62);
+}
+
+.entity-risk-badge {
+    width: max-content !important;
+}

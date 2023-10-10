@@ -1,12 +1,12 @@
 <div>
     <app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
-        [isEditMode]="isEditMode" [entityDetails]="entityDetails" [onDeleteTimestamp]="onDeleteTimestamp"
-        [isTriggeredFromSlider]="isTriggeredFromSlider"></app-view-relationship-details>
+        [isEditMode]="isEditMode" [entityDetails]="entityDetails" [deleteRelationshipEvent]="deleteRelationshipEvent"
+        [isTriggeredFromSlider]="isTriggeredFromSlider" (closeEntityInfoCard)="closeSlider($event)"></app-view-relationship-details>
     <app-entity-questionnaire (mouseout)="entityDetailService.isHoverEntityCard = false" [entityId]="entityId"
         id="focusQuestionnaire" (updateRelationship)="updateRelationship($event)" [isEditMode]="isEditMode"
-        (positionsToView)="scrollPosition($event)" (emitLeaveModal)="showLeaveConfirmModal($event)"
+        (positionsToView)="scrollPosition($event)" (emitLeaveModal)="showQuestionnaireLeaveConfirmationModal($event)"
         [isSwitchCurrentTab]="isSwitchCurrentTab"
-        (onDeleteTimestamp)="emittedDeletedRelationship($event)"></app-entity-questionnaire>
+        (deleteRelationshipEvent)="emittedDeletedRelationship($event)"></app-entity-questionnaire>
 </div>
 
 <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-unsaved-changes-button" data-bs-toggle="modal"
@@ -23,12 +23,39 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>You have unsaved changes in the current<strong> Relationship Questionnaire</strong>.</p>
+                <p>You have unsaved changes in 
+                <strong> 
+                    <ng-container *ngFor="let section of entityDetailService.unSavedSections; let isLast = last;">{{section}} <ng-container *ngIf="!isLast">, </ng-container></ng-container>
+                </strong>.
+                </p>
                 <span class="fs-14"><p>Do you want to leave the page?</p></span>
             </div>
             <div class="modal-footer mx-2">
-                <button type="button" class="btn btn-outline-secondary" (click)="leavePage();">Leave Page</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="fullPageNavigationLeavePage();">Leave Page</button>
                 <button type="button" class="btn btn-primary btn-sm fs-14" (click)="closeUnsavedChangesModal()">Stay On Page</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-coi fade mySkinDialog" id="questionnaireUnsavedChanges" role="dialog" aria-labelledby="hiddenUnsavedChanges"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12"
+                data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>You have unsaved changes in <strong>{{questionnaireSection}}</strong>.
+                </p>
+                <span class="fs-14"><p>Do you want to leave the page?</p></span>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary" (click)="questionnaireChangeModalLeaveTab();">Leave Page</button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" data-bs-dismiss="modal">Stay On Page</button>
             </div>
         </div>
     </div>

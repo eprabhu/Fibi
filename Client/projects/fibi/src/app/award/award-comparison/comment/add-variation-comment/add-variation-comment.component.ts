@@ -110,10 +110,10 @@ export class AddVariationCommentComponent implements OnInit, OnDestroy {
                             this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment added Successfully.');
                             this.clearData();
                         } else {
-                            this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding comments failed. Please try again.');
+                            this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Comments failed. Please try again.');
                         }
                     }, err => {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding comments failed. Please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Comments failed. Please try again.');
                     }));
         }
     }

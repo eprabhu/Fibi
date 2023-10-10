@@ -11,6 +11,7 @@ export class COI {
     proposalIdlinkedInDisclosure: any;
     projectDetail: any;
     coiReviewerList: ReviewerList[];
+    documentOwnerPersonId: string;
 }
 
 export interface CoiConflictStatusType {
@@ -85,6 +86,8 @@ export class CoiDisclosure {
     moduleItemKey: string;
     title: string;
     numberOfSFI: any;
+    riskCategoryCode: any;
+    coiRiskCategory: any;
 }
 export interface UnitAdministratorType {
     code: string;

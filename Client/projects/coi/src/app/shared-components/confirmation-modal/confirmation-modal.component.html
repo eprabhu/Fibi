@@ -1,34 +1,36 @@
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="{{modalName}}-trigger-btn"
+<button type="button" class="btn btn-primary btn-sm" hidden="true" id="{{modalName}}-trigger-btn"
     data-bs-toggle="modal" [attr.data-bs-target]="'#'+modalName"></button>
 <div class="modal modal-coi fade mySkinDialog" id="{{modalName}}" role="dialog" [attr.aria-labelledby]="modalName"
     aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog {{getModalSize()}}" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">
+                <h5 class="modal-title" tabindex="0" id="modal-header">
                     <ng-content select="[header]"></ng-content>
                 </h5>
                 <button type="button" id="{{modalName}}-dismiss-btn" class="btn-close fs-12"
-                    data-bs-dismiss="modal" aria-label="Close" (click)="performSecondaryAction(false)">
+                    data-bs-dismiss="modal" aria-label="click to Close popup" role="button" (click)="closeModal()">
                 </button>
             </div>
-            <div class="modal-body m-0 p-0">
-                <app-help-text *ngIf="helpText.length > 0" [helpTextList]="helpText"></app-help-text>
 
+            <ng-content select="[content-sticky]"></ng-content>
+
+            <div class="modal-body m-0 p-0">
                 <div class="p-2 m-2">
-                    <!-- warning msg -->
+                    <!-- content -->
                     <ng-content select="[content]"></ng-content>
 
                     <!-- description text area -->
                     <ng-container *ngIf="needDescriptionField">
-                        <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12">
+                        <label for="travelDisclosure-tripPurpose" class="fw-600 fs-14 col-12" 
+                            [attr.aria-label]="'please enter the' + textAreaLabelName + (isMandatory? '. It is mandatory' : '')">
                             <span class="text-danger" *ngIf="isMandatory">*</span>
-                            Description
+                            {{textAreaLabelName}}
                         </label>
                         <div class="col-12">
                             <textarea id="travelDisclosure-tripPurpose" appAutoGrow rows="1" appLengthValidator
-                                [isShowLimiter]='true' [limit]=500 class="form-control fs-14" autocomplete="off"
-                                [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty();"
+                                [isShowLimiter]='true' [limit]=2000 class="form-control fs-14" autocomplete="off"
+                                [(ngModel)]="description" (ngModelChange)="descriptionChangedOrEmpty();description= description.trim()"
                                 [ngClass]="(mandatoryList?.get('description')) ? 'invalid-border':''">
                         </textarea>
                             <span *ngIf="mandatoryList?.has('description')"
@@ -39,11 +41,13 @@
                     </ng-container>
                 </div>
             </div>
-            <div class="modal-footer mx-2">
-                <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction(true)">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" (click)="performSecondaryAction()"
+                    [attr.aria-label]="'click to ' + secondaryBtnName" role="button">
                     {{secondaryBtnName}}
                 </button>
-                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performPrimaryAction()">
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="performPrimaryAction()"
+                    [attr.aria-label]="'click to ' + primaryBtnName" role="button">
                     {{primaryBtnName}}
                 </button>
             </div>

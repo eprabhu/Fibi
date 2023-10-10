@@ -17,6 +17,7 @@ import { SfiModule } from './sfi/sfi.module';
 import { SharedComponentModule } from '../shared-components/shared-component.module';
 import {DataStoreService} from "./services/data-store.service";
 import { SharedDisclosureModule } from './shared-disclosure/shared-disclosure.module';
+import { EntityRiskSliderModule } from './entity-risk-slider/entity-risk-slider.module';
 
 
 const routes: Routes = [
@@ -47,7 +48,7 @@ const routes: Routes = [
                 loadChildren: () => import('./attachment/attachment.module').then(m => m.AttachmentModule)
             },
             {
-                path: 'review', canDeactivate: [RouterGuardService],
+                path: 'review', canDeactivate: [RouterGuardService], canActivate: [ResolveServiceService],
                 loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)
             },
             {
@@ -80,6 +81,7 @@ const routes: Routes = [
         FormsModule,
         SharedComponentModule,
         SharedDisclosureModule,
+        EntityRiskSliderModule
     ]
 })
 export class DisclosureModule {

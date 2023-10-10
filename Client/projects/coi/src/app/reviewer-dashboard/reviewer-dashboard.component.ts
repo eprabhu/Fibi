@@ -9,6 +9,7 @@ import { NameObject, ReviewerDashboardRequest, ReviewerDashboardService, SortCou
 import { CommonService } from '../common/services/common.service';
 import { NavigationService } from '../common/services/navigation.service';
 import { listAnimation, topSlideInOut, fadeInOutHeight, scaleOutAnimation, slideInAnimation} from '../common/utilities/animations';
+import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 
 @Component({
     selector: 'app-reviewer-dashboard',
@@ -68,6 +69,7 @@ export class ReviewerDashboardComponent implements OnInit {
         { variableName: 'expirationDate', fieldName: 'Expiration Date' },
         { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
     ];
+    datePlaceHolder = DATE_PLACEHOLDER;
 
     constructor(
         public reviewerDashboardService: ReviewerDashboardService,
@@ -76,19 +78,21 @@ export class ReviewerDashboardComponent implements OnInit {
         private _navigationService: NavigationService) { }
 
     ngOnInit() {
+        this.setDashboardTab();
         this.getDashboardDetails();
         this.setSearchOptions();
         this.setAdvanceSearch();
-        this.setDashboardTab();
         this.checkForSort();
         this.checkForPagination();
         this.checkForAdvanceSearch();
     }
 
     actionsOnPageChange(event) {
-        this.localCOIRequestObject.currentPage = event;
-        this.reviewerDashboardService.reviewerRequestObject.currentPage = event;
-        this.$coiList.next();
+        if (this.localCOIRequestObject.currentPage != event) {
+            this.localCOIRequestObject.currentPage = event;
+            this.reviewerDashboardService.reviewerRequestObject.currentPage = event;
+            this.$coiList.next();
+        }
     }
 
     checkForPagination() {
@@ -486,7 +490,7 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     private setSearchOptions() {
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ALL');
         this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
         this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
     }

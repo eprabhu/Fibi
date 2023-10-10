@@ -13,7 +13,8 @@ import { Subscription } from 'rxjs';
 import {
     compareDatesWithoutTimeZone,
     getDateObjectFromTimeStamp,
-    parseDateWithoutTimestamp
+    parseDateWithoutTimestamp,
+    isValidDateFormat
 } from '../../../common/utilities/date-utilities';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
 
@@ -67,7 +68,13 @@ export class TrainingDetailsComponent implements OnInit, OnDestroy {
         updateUser: null
     };
     invalidData = {
-        invalidPersonData: false, invalidCommentData: false, invalidAttachmentData: false, dateAcknowledged: false, followupDate: false
+        invalidPersonData: false,
+        invalidCommentData: false,
+        invalidAttachmentData: false,
+        dateAcknowledged: false,
+        followupDate: false,
+        invalidDateAcknowledgedMessage: '',
+        invalidFollowupDateMessage: ''
     };
     datePlaceHolder = DEFAULT_DATE_FORMAT;
     setFocusToElement = setFocusToElement;
@@ -233,8 +240,8 @@ export class TrainingDetailsComponent implements OnInit, OnDestroy {
                     this.personnelTrainingInfo = res;
                     this._router.navigate(['/fibi/training-maintenance/person-detail'],
                         {queryParams: {personTrainingId: this.personnelTrainingInfo.personTraining.personTrainingId, E: 'T'}});
-                    this.successMessage('Training saved successfully');
-                }, _err => this.errorMessage('Save Training action failed. Please try again.')));
+                    this.successMessage('Training saved successfully.');
+                }, _err => this.errorMessage('Save Training Action failed. Please try again.')));
         }
     }
 
@@ -290,9 +297,9 @@ export class TrainingDetailsComponent implements OnInit, OnDestroy {
             .saveOrUpdateTrainingAttachment(this.uploadedFile[0], this.getUploadAttachmentRO())
             .subscribe((data: any) => {
                 this.personnelTrainingAttachments.push(data.personTrainingAttachment);
-                this.successMessage('Attachment successfully added');
+                this.successMessage('Attachment added successfully.');
                 this.dismissAttachmentModal();
-            }, _err => this.errorMessage('Something Went wrong! please try again')));
+            }, _err => this.errorMessage('Something went wrong. Please try again.')));
     }
 
     deleteTrainingAttachments() {
@@ -301,8 +308,8 @@ export class TrainingDetailsComponent implements OnInit, OnDestroy {
             .subscribe((_res) => {
                 this.personnelTrainingAttachments.splice(this.attachmentDeleteObj.index, 1);
                 this.attachmentDeleteObj = null;
-                this.successMessage('Attachment successfully deleted');
-            }, _err => this.errorMessage('Something Went wrong! please try again')));
+                this.successMessage('Attachment deleted successfully.');
+            }, _err => this.errorMessage('Something went wrong. Please try again.')));
     }
 
     /**
@@ -354,11 +361,11 @@ export class TrainingDetailsComponent implements OnInit, OnDestroy {
                     } else {
                         this.personnelTrainingComments.push(data.personTrainingComment);
                     }
-                    this.successMessage('Comment successfully saved');
+                    this.successMessage('Comment saved successfully.');
                     this.personTrainingComments.personTrainingId = this.personTrainingId;
                     this.personTrainingComments.comment = null;
                     this.personTrainingComments.trainingCommentId = null;
-                }, _err => this.errorMessage('Something Went wrong! please try again')));
+                }, _err => this.errorMessage('Something went wrong. Please try again.')));
         }
     }
 
@@ -371,8 +378,8 @@ export class TrainingDetailsComponent implements OnInit, OnDestroy {
                 this.isCommentDelete = false;
                 this.commentDeleteIndex = null;
                 this.personTrainingComments.trainingCommentId = null;
-                this.successMessage('Comment successfully deleted');
-            }, _err => this.errorMessage('Something Went wrong! please try again')));
+                this.successMessage('Comment deleted successfully.');
+            }, _err => this.errorMessage('Something went wrong. please try again.')));
     }
 
     resetCommentInput() {
@@ -386,27 +393,58 @@ export class TrainingDetailsComponent implements OnInit, OnDestroy {
     }
 
     /* validation for the acknowledgement date and expiration dates */
-    validateAckDate() {
-        if (this.personTrainingDetails.followupDate && this.personTrainingDetails.dateAcknowledged) {
-            if (compareDatesWithoutTimeZone(this.personTrainingDetails.followupDate, this.personTrainingDetails.dateAcknowledged) === -1) {
-                this.invalidData.dateAcknowledged = true;
+    validateAcknowledgementDate(event): void {
+        this.clearInvalidDateMap('ACKNOWLEDGE');
+        if (!this.checkDateFieldEmpty('complete-date')) {
+            if (isValidDateFormat(event)) {
+                if (this.personTrainingDetails.followupDate && this.personTrainingDetails.dateAcknowledged) {
+                    if (compareDatesWithoutTimeZone(this.personTrainingDetails.followupDate,
+                            this.personTrainingDetails.dateAcknowledged) === -1) {
+                        this.invalidData.dateAcknowledged = true;
+                        this.invalidData.invalidDateAcknowledgedMessage = 'Completion Date should be before Expiration Date';
+                    }
+                }
             } else {
-                this.invalidData.dateAcknowledged = false;
-                this.invalidData.followupDate = false;
+                this.invalidData.dateAcknowledged = true;
+                this.invalidData.invalidDateAcknowledgedMessage = 'Entered date format is invalid. Please use '
+                                                                    + DEFAULT_DATE_FORMAT + ' format.';
             }
         }
     }
 
     /* validation for the acknowledgement date and expiration dates */
-    validateExpDate() {
-        if (this.personTrainingDetails.dateAcknowledged && this.personTrainingDetails.followupDate) {
-            if (compareDatesWithoutTimeZone(this.personTrainingDetails.dateAcknowledged, this.personTrainingDetails.followupDate) === 1) {
-                this.invalidData.followupDate = true;
+    validateExpirationDate(event): void {
+        this.clearInvalidDateMap('FOLLOWUP');
+        if (!this.checkDateFieldEmpty('exp-date')) {
+            if (isValidDateFormat(event)) {
+                if (this.personTrainingDetails.dateAcknowledged && this.personTrainingDetails.followupDate) {
+                    if (compareDatesWithoutTimeZone(this.personTrainingDetails.dateAcknowledged,
+                        this.personTrainingDetails.followupDate) === 1) {
+                        this.invalidData.followupDate = true;
+                        this.invalidData.invalidFollowupDateMessage = 'Expiration Date should be after Completion Date';
+                    }
+                }
             } else {
-                this.invalidData.dateAcknowledged = false;
-                this.invalidData.followupDate = false;
+                this.invalidData.followupDate = true;
+                this.invalidData.invalidFollowupDateMessage = 'Entered date format is invalid. Please use '
+                                                                + DEFAULT_DATE_FORMAT + ' format.';
             }
         }
+    }
+
+    clearInvalidDateMap(dateType: string): void {
+        if (dateType === 'ACKNOWLEDGE') {
+            this.invalidData.dateAcknowledged = false;
+            this.invalidData.invalidDateAcknowledgedMessage = '';
+        } else {
+            this.invalidData.followupDate = false;
+            this.invalidData.invalidFollowupDateMessage = '';
+        }
+    }
+
+    checkDateFieldEmpty(elementId: string): boolean {
+        const ELEMENT = <HTMLInputElement>document.getElementById(elementId);
+        return(ELEMENT.value !== '' ? false : true);
     }
 
     /* link back to te protocol from which it is taken */
@@ -447,7 +485,7 @@ export class TrainingDetailsComponent implements OnInit, OnDestroy {
                     [] : data.personTraining.personTrainingAttachments;
                 await this.setEditMode(data.personId);
                 if (this.isEditMode) { this.populateFieldData(); }
-            }, _err => this.errorMessage('Something Went wrong! please try again')));
+            }, _err => this.errorMessage('Something went wrong. Please try again.')));
     }
 
     private async setEditMode(personId: string) {

@@ -47,6 +47,7 @@ export class BudgetOverviewComponent implements OnInit, OnDestroy {
     setFocusToElement = setFocusToElement;
     isShowPeriodsChangeModal = false;
     hasUnsavedChanges = false;
+    
 
     constructor(
         public _budgetDataService: BudgetDataService,
@@ -87,11 +88,11 @@ export class BudgetOverviewComponent implements OnInit, OnDestroy {
             data.budgetStatus = this.budgetData.budgetStatus.find(item => data.budgetStatusCode == item.budgetStatusCode);
             this.checkBudgetStatus();
         } else if (type === 'oh') {
-            this.budgetData.budgetHeader.rateTypeCode = data.rateType.rateTypeCode;
-            this.budgetData.budgetHeader.rateClassCode = data.rateType.rateClassCode;
+            this.budgetData.budgetHeader.rateTypeCode = data.rateType ? data.rateType.rateTypeCode : null;
+            this.budgetData.budgetHeader.rateClassCode = data.rateType ? data.rateType.rateClassCode : null;
         } else if (type === 'ur') {
-            this.budgetData.budgetHeader.underrecoveryRateClassCode = data.underrecoveryRateType.rateClassCode;
-            this.budgetData.budgetHeader.underrecoveryRateTypeCode = data.underrecoveryRateType.rateTypeCode;
+            this.budgetData.budgetHeader.underrecoveryRateClassCode = data.underrecoveryRateType ? data.underrecoveryRateType.rateClassCode : null;
+            this.budgetData.budgetHeader.underrecoveryRateTypeCode = data.underrecoveryRateType ? data.underrecoveryRateType.rateTypeCode : null;
         }
     }
 
@@ -100,18 +101,25 @@ export class BudgetOverviewComponent implements OnInit, OnDestroy {
         this.budgetData.budgetHeader.rateType =
             this.getRateTypeObject(this.budgetData.budgetHeader.rateClassCode, this.budgetData.budgetHeader.rateTypeCode);
         this.budgetData.budgetHeader.underrecoveryRateType =
-            this.getRateTypeObject(this.budgetData.budgetHeader.underrecoveryRateClassCode, this.budgetData.budgetHeader.underrecoveryRateTypeCode);
+            this.getRateTypeObject(this.budgetData.budgetHeader.underrecoveryRateClassCode,
+                                          this.budgetData.budgetHeader.underrecoveryRateTypeCode);
     }
 
-    getRateTypeObject(classCode, typeCode) {
-        return this.budgetData.rateTypes.find(item => classCode == item.rateClassCode && typeCode == item.rateTypeCode);
+
+    getRateTypeObject(classCode: string, typeCode: string): any {
+        const rateType = this.findRateTypeFromClassCode(classCode, typeCode);
+        return rateType ? rateType : null;
+    }
+
+    findRateTypeFromClassCode(classCode: string, typeCode: string): any {
+        return this.budgetData.rateTypes.find(item => classCode === item.rateClassCode && typeCode === item.rateTypeCode);
     }
 
     /** method to check whether the budget status is 'complete' */
     checkBudgetStatus() {
         this.isbudgetStatusComplete = false;
         this.isbudgetStatusComplete = this.budgetData.isBudgetVersionEnabled ?
-            (this.budgetData.budgetHeader.isFinalBudget === true && this.budgetData.budgetHeader.budgetStatusCode != 3 ? true : false) : true;
+         (this.budgetData.budgetHeader.isFinalBudget === true && this.budgetData.budgetHeader.budgetStatusCode != 3 ? true : false) : true;
     }
 
     /*
@@ -352,6 +360,10 @@ export class BudgetOverviewComponent implements OnInit, OnDestroy {
         this._budgetDataService.isBudgetOverviewChanged = flag;
         this.hasUnsavedChanges = flag;
         this._autoSaveService.setUnsavedChanges('Budget Summary', 'ip-budget-overview', flag, true);
+    }
+
+    getCampusFlagDescription(code) {
+        return this.campusFlagList.find(item => item.value === code).description;
     }
 
 }

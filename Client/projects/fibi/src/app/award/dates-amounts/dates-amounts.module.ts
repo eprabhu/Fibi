@@ -8,6 +8,7 @@ import { DatesAmountsService } from './dates-amounts.service';
 import { DatesAmountsEditComponent } from './dates-amounts-edit/dates-amounts-edit.component';
 import { DatesAmountsViewComponent } from './dates-amounts-view/dates-amounts-view.component';
 import { AnticipatedDistributionModule } from '../anticipated-distribution/anticipated-distribution.module';
+import { AwardSharedModule } from '../award-shared/award-shared.module';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { AnticipatedDistributionModule } from '../anticipated-distribution/antic
         RouterModule.forChild([{ path: '', component: DatesAmountsComponent }]),
         SharedModule,
         FormsModule,
-        AnticipatedDistributionModule
+        AnticipatedDistributionModule,
+        AwardSharedModule
     ],
     declarations: [
         DatesAmountsComponent,

@@ -40,9 +40,9 @@ export class ExternalReviewerListComponent implements OnInit, OnDestroy {
         property12: '',
         property13: [],
         property14: [],
+        property15: [],
         extReviewers: [],
         externalReviewerSpecializations: null,
-        sortBy: 'externalReviewerId',
         reverse: 'DESC',
         sort: {}
     };
@@ -58,11 +58,10 @@ export class ExternalReviewerListComponent implements OnInit, OnDestroy {
     subAcademicAreaTypeOptions = 'EXT_REVIEWER_ACADEMIC_SUB_AREA#ACADEMIC_SUB_AREA_CODE#true#false';
     hIndexTypeOptions = 'H_INDEX#ID#true#false';
     specializationTypeOptions = 'EXT_SPECIALISM_KEYWORD#SPECIALISM_KEYWORD_CODE#true#true';
+    academicRankTypeOptions = 'EXT_REVIEWER_ACADEMIC_RANK#ACADEMIC_RANK_CODE#true#true';
     sortCountObj = {
-        'externalReviewerId': 0, 'firstName': 0, 'lastName': 0, 'passportName': 0,
-        'affiliationInstitution.description': 0, 'countryDetails.countryName': 0, 'primaryEmail': 0, 'agreementStartDate': 0,
-        'agreementEndDate': 0, 'status': 0
-
+        'externalReviewerId': 0, 'passportName': 0, 'hindex': 0, 'academicRank.description': 0,
+        'countryDetails.countryName': 0, 'agreementEndDate': 0, 'status': 0,
     };
     sortMap: any = {};
     $subscriptions: Subscription[] = [];
@@ -70,6 +69,7 @@ export class ExternalReviewerListComponent implements OnInit, OnDestroy {
     affiliatedInstitutionSearchOptions: any = {};
     clearAffiliatedInstitution;
     isReadMore: boolean[] = [];
+    datePlaceHolder = DEFAULT_DATE_FORMAT;
 
     constructor(
         public _extReviewerMaintenanceService: ExtReviewerMaintenanceService,
@@ -81,7 +81,6 @@ export class ExternalReviewerListComponent implements OnInit, OnDestroy {
     async ngOnInit() {
         this.getEndPointOptions();
          this.getLookUpData();
-        this.loadExternalReviewers();
         this.isMaintainReviewer = await this._extReviewerMaintenanceService.getMaintainReviewerPermission();
         this.externalReviewerElasticConfig = this._elasticConfig.getElasticForExternalReviewer();
     }
@@ -138,6 +137,7 @@ export class ExternalReviewerListComponent implements OnInit, OnDestroy {
         this.extRequestObject.property12 = this.tempExtRequestObject.property12 || '';
         this.extRequestObject.property13 = this.tempExtRequestObject.property13 || [];
         this.extRequestObject.property14 = this.tempExtRequestObject.property14 || [];
+        this.extRequestObject.property15 = this.tempExtRequestObject.property15 || [];
 
     }
 
@@ -156,6 +156,7 @@ export class ExternalReviewerListComponent implements OnInit, OnDestroy {
         this.extRequestObject.property12 = '';
         this.extRequestObject.property13 = [];
         this.extRequestObject.property14 = [];
+        this.extRequestObject.property15 = [];
         this.clearCountryField = new String('true');
         this.clearAffiliatedInstitution = new String('true');
         this.lookupValues = [];
@@ -170,11 +171,8 @@ export class ExternalReviewerListComponent implements OnInit, OnDestroy {
 
     sortResult(sortFieldBy: string) {
         this.sortCountObj[sortFieldBy]++;
-        this.extRequestObject.sortBy = sortFieldBy;
         if (this.sortCountObj[sortFieldBy] < 3) {
-            if (this.extRequestObject.sortBy === sortFieldBy) {
                 this.sortMap[sortFieldBy] = !this.sortMap[sortFieldBy] ? 'asc' : 'desc';
-            }
         } else {
             this.sortCountObj[sortFieldBy] = 0;
             delete this.sortMap[sortFieldBy];

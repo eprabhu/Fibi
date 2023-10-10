@@ -6,7 +6,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { EntityDetails, TravelConflictRO, TravelDisclosure } from '../travel-disclosure-interface';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
-import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
+import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-travel-add-conflict-slider',
@@ -15,20 +15,20 @@ import { closeSlider, openSlider } from '../../common/utilities/custom-utilities
 })
 export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
 
-    @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
+    @Input() isEditMode: any = null;
     @Input() entityDetails: EntityDetails = new EntityDetails();
     @Input() travelDisclosure: TravelDisclosure = new TravelDisclosure();
-    @Input() isEditMode: any = null;
+    @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
 
-    conflictHistory = [];
-    $subscriptions: Subscription[] = [];
-    conflictLookUpList: any = [];
-    travelConflictValidationMap = new Map();
-    conflictStatus: any = null;
-    comment: any = null;
-    coiTravelConflictStatusType = null;
-    isReadMore: boolean[] = [];
     isShowMore = false;
+    comment: string = null;
+    disclosureStatusCode: string = null;
+    disclosureStatus = null;
+    conflictHistory: any = [];
+    isReadMore: boolean[] = [];
+    disclosureStatusLookUpList: any = [];
+    $subscriptions: Subscription[] = [];
+    travelConflictValidationMap = new Map();
     travelConflictRO: TravelConflictRO = new TravelConflictRO();
 
     helpText = [
@@ -36,11 +36,11 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
         'Provide an adequate reason for your decision in the description field provided.'
     ];
 
-    constructor( private _commonService: CommonService,
+    constructor( public commonService: CommonService,
                  private _service: TravelDisclosureService,
                  private _dataStore: TravelDataStoreService ) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.getTravelConflictStatusType();
         this.loadTravelConflictHistory();
         setTimeout(() => {
@@ -48,92 +48,110 @@ export class TravelAddConflictSliderComponent implements OnInit, OnDestroy {
         });
     }
 
-    openConformationModal() {
-        document.getElementById('travel-conflict-confirmation-modal-trigger-btn').click();
+    private getTravelConflictHistoryRO(): TravelConflictRO {
+        this.travelConflictRO.personId = this.travelDisclosure.personId;
+        this.travelConflictRO.travelDisclosureId = this.travelDisclosure.travelDisclosureId;
+        this.travelConflictRO.disclosureStatusCode = this.disclosureStatusCode;
+        this.travelConflictRO.description = this.comment;
+        return this.travelConflictRO;
     }
 
-    validateSliderClose() {
-        (this.conflictStatus || this.comment) ? this.openConformationModal() : this.closeConflictSlider();
+    private loadTravelConflictHistory(): void {
+        this.$subscriptions.push(
+            this._service.loadTravelConflictHistory(this.travelDisclosure.travelDisclosureId).subscribe((data: any) => {
+                this.conflictHistory = data;
+            }, _err => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching conflict status history. Please try again.');
+            }));
     }
 
-    closeConflictSlider() {
+    private closeConflictSlider(): void {
         closeSlider('travel-conflict-slider');
         setTimeout(() => {
             this.closePage.emit();
         }, 500);
     }
 
-    leavePageClicked(event: boolean) {
-        if (event) {
-            setTimeout(() => {
-                this.closeConflictSlider();
-            }, 100);
+    private travelConflictValidation(): boolean {
+        this.travelConflictValidationMap.clear();
+
+        if (!this.comment) {
+            this.travelConflictValidationMap.set('comment', 'Please add a reason.');
         }
+
+        if (this.disclosureStatusCode === 'null' || !this.disclosureStatusCode) {
+            this.travelConflictValidationMap.set('disclosureStatusCode', 'Please select disclosure status.');
+        }
+
+        if (this.disclosureStatusCode  === this.travelDisclosure.disclosureStatusCode) {
+            this.travelConflictValidationMap.set('duplicateDisclosure', 'You are trying to update the disclosure status with the current disclosure status.');
+            this.travelConflictValidationMap.delete('disclosureStatusCode');
+        }
+
+        return this.travelConflictValidationMap.size === 0;
     }
 
     private getTravelConflictStatusType(): void {
         this.$subscriptions.push(this._service.getTravelConflictStatusType().subscribe((res: any) => {
-            this.conflictLookUpList = res;
+            this.disclosureStatusLookUpList = res;
         }));
     }
 
-    getTravelConflictHistoryRO(): TravelConflictRO {
-        this.travelConflictRO.personId = this.travelDisclosure.personId;
-        this.travelConflictRO.travelDisclosureId = this.travelDisclosure.travelDisclosureId;
-        this.travelConflictRO.disclosureStatusCode = this.conflictStatus;
-        this.travelConflictRO.description = this.comment;
-        return this.travelConflictRO;
+    validateSliderClose(): void {
+        (this.disclosureStatusCode || this.comment) ? openCommonModal('travel-conflict-confirmation-modal') : this.closeConflictSlider();
     }
 
-    manageTravelConflict() {
+    setCoiTravelConflictStatusType(): void {
+        const disclosureStatusDetails = this.disclosureStatusLookUpList.find( status => {
+            return status.disclosureStatusCode === this.disclosureStatusCode;
+        });
+        this.disclosureStatus = disclosureStatusDetails.description;
+    }
+
+    leavePageClicked(): void {
+        setTimeout(() => {
+            this.closeConflictSlider();
+        }, 100);
+    }
+
+    clearConflictModal(): void {
+        this.travelConflictValidationMap.clear();
+        this.disclosureStatusCode = null;
+        this.comment = null;
+        this.disclosureStatus = null;
+    }
+
+    manageTravelConflict(): void {
         if (this.travelConflictValidation()) {
             this.$subscriptions.push(
                 this._service.manageTravelConflict(this.getTravelConflictHistoryRO()).subscribe((data: any) => {
                     this.conflictHistory = data;
                     this.isReadMore = [];
-                    // this.travelDisclosure.disclosureStatusCode = this.coiTravelConflictStatusType;
-                    // this.travelDisclosure.conflictDescription = this.comment;
+                    this.travelDisclosure.disclosureStatusCode = this.disclosureStatusCode;
+                    this.travelDisclosure.disclosureStatus = this.disclosureStatus;
                     this._dataStore.manualDataUpdate(this.travelDisclosure);
                     this.clearConflictModal();
-                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure Status updated successfully.');
                 }, _err => {
-                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating disclosure status. Please try again.');
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating disclosure status. Please try again.');
                 }));
         }
     }
 
-    travelConflictValidation() {
-        this.travelConflictValidationMap.clear();
-        if (this.conflictStatus === 'null' || !this.conflictStatus) {
-            this.travelConflictValidationMap.set('coiConflictStatusCode', 'Please select conflict status.');
-        }
-        if (!this.comment) {
-            this.travelConflictValidationMap.set('comment', 'Please add a reason.');
-        }
-        return this.travelConflictValidationMap.size === 0 ? true : false;
-    }
-
-    clearConflictModal() {
-        this.travelConflictValidationMap.clear();
-        this.conflictStatus = null;
-        this.comment = null;
-        this.coiTravelConflictStatusType = null;
-    }
-
-    setCoiTravelConflictStatusType() {
-        this.coiTravelConflictStatusType = this.conflictLookUpList.find(status => status.travelConflictStatusCode === this.conflictStatus);
-    }
-
-    loadTravelConflictHistory() {
-        this.$subscriptions.push(
-            this._service.loadTravelConflictHistory(this.travelDisclosure.travelDisclosureId).subscribe((data: any) => {
-                this.conflictHistory = data;
-            }, _err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching conflict status history. Please try again.');
-            }));
-    }
-
     ngOnDestroy(): void {
         subscriptionHandler(this.$subscriptions);
+    }
+
+    getWarningClass(typeCode): string {
+        switch (typeCode) {
+            case '1':
+                return 'invalid';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return;
+        }
     }
 }

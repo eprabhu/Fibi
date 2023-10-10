@@ -15,9 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.FetchType;
 
-import com.polus.fibicomp.pojo.Unit;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -25,10 +23,20 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.polus.fibicomp.person.pojo.Person;
+import com.polus.fibicomp.pojo.Unit;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "COI_DISCLOSURE")
 @EntityListeners(AuditingEntityListener.class)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CoiDisclosure implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -166,324 +174,10 @@ public class CoiDisclosure implements Serializable {
 	@Transient
 	private String disclosurePersonFullName;
 
-	public Integer getNumberOfProposals() {
-		return numberOfProposals;
-	}
+	@Transient
+	private String personEmail;
 
-	public void setNumberOfProposals(Integer numberOfProposals) {
-		this.numberOfProposals = numberOfProposals;
-	}
+	@Transient
+	private String personPrimaryTitle;
 
-	public Integer getNumberOfAwards() {
-		return numberOfAwards;
-	}
-
-	public void setNumberOfAwards(Integer numberOfAwards) {
-		this.numberOfAwards = numberOfAwards;
-	}
-
-	public Integer getDisclosureId() {
-		return disclosureId;
-	}
-
-	public void setDisclosureId(Integer disclosureId) {
-		this.disclosureId = disclosureId;
-	}
-
-	public String getPersonId() {
-		return personId;
-	}
-
-	public void setPersonId(String personId) {
-		this.personId = personId;
-	}
-
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
-
-	public String getFcoiTypeCode() {
-		return fcoiTypeCode;
-	}
-
-	public void setFcoiTypeCode(String fcoiTypeCode) {
-		this.fcoiTypeCode = fcoiTypeCode;
-	}
-
-	public CoiDisclosureFcoiType getCoiDisclosureFcoiType() {
-		return coiDisclosureFcoiType;
-	}
-
-	public void setCoiDisclosureFcoiType(CoiDisclosureFcoiType coiDisclosureFcoiType) {
-		this.coiDisclosureFcoiType = coiDisclosureFcoiType;
-	}
-
-	public String getConflictStatusCode() {
-		return conflictStatusCode;
-	}
-
-	public void setConflictStatusCode(String conflictStatusCode) {
-		this.conflictStatusCode = conflictStatusCode;
-	}
-
-	public CoiConflictStatusType getCoiConflictStatusType() {
-		return coiConflictStatusType;
-	}
-
-	public void setCoiConflictStatusType(CoiConflictStatusType coiConflictStatusType) {
-		this.coiConflictStatusType = coiConflictStatusType;
-	}
-
-	public String getDispositionStatusCode() {
-		return dispositionStatusCode;
-	}
-
-	public void setDispositionStatusCode(String dispositionStatusCode) {
-		this.dispositionStatusCode = dispositionStatusCode;
-	}
-
-	public CoiDispositionStatusType getCoiDispositionStatusType() {
-		return coiDispositionStatusType;
-	}
-
-	public void setCoiDispositionStatusType(CoiDispositionStatusType coiDispositionStatusType) {
-		this.coiDispositionStatusType = coiDispositionStatusType;
-	}
-
-	public String getReviewStatusCode() {
-		return reviewStatusCode;
-	}
-
-	public void setReviewStatusCode(String reviewStatusCode) {
-		this.reviewStatusCode = reviewStatusCode;
-	}
-
-	public CoiReviewStatusType getCoiReviewStatusType() {
-		return coiReviewStatusType;
-	}
-
-	public void setCoiReviewStatusType(CoiReviewStatusType coiReviewStatusType) {
-		this.coiReviewStatusType = coiReviewStatusType;
-	}
-
-	public String getRiskCategoryCode() {
-		return riskCategoryCode;
-	}
-
-	public void setRiskCategoryCode(String riskCategoryCode) {
-		this.riskCategoryCode = riskCategoryCode;
-	}
-
-	public CoiRiskCategory getCoiRiskCategory() {
-		return coiRiskCategory;
-	}
-
-	public void setCoiRiskCategory(CoiRiskCategory coiRiskCategory) {
-		this.coiRiskCategory = coiRiskCategory;
-	}
-
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-
-	public String getCertificationText() {
-		return certificationText;
-	}
-
-	public void setCertificationText(String certificationText) {
-		this.certificationText = certificationText;
-	}
-
-	public String getCertifiedBy() {
-		return certifiedBy;
-	}
-
-	public void setCertifiedBy(String certifiedBy) {
-		this.certifiedBy = certifiedBy;
-	}
-
-	public String getRevisionComment() {
-		return revisionComment;
-	}
-
-	public void setRevisionComment(String revisionComment) {
-		this.revisionComment = revisionComment;
-	}
-
-	public Timestamp getUpdateTimestamp() {
-		return updateTimestamp;
-	}
-
-	public void setUpdateTimestamp(Timestamp updateTimestamp) {
-		this.updateTimestamp = updateTimestamp;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	public Integer getVersionNumber() {
-		return versionNumber;
-	}
-
-	public void setVersionNumber(Integer versionNumber) {
-		this.versionNumber = versionNumber;
-	}
-
-	public String getVersionStatus() {
-		return versionStatus;
-	}
-
-	public void setVersionStatus(String versionStatus) {
-		this.versionStatus = versionStatus;
-	}
-
-	public Timestamp getCertifiedAt() {
-		return certifiedAt;
-	}
-
-	public void setCertifiedAt(Timestamp certifiedAt) {
-		this.certifiedAt = certifiedAt;
-	}
-
-	public String getCreateUser() {
-		return createUser;
-	}
-
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
-	}
-
-	public Timestamp getCreateTimestamp() {
-		return createTimestamp;
-	}
-
-	public void setCreateTimestamp(Timestamp createTimestamp) {
-		this.createTimestamp = createTimestamp;
-	}
-
-	public Integer getModuleCode() {
-		return moduleCode;
-	}
-
-	public void setModuleCode(Integer moduleCode) {
-		this.moduleCode = moduleCode;
-	}
-
-	public String getModuleItemKey() {
-		return moduleItemKey;
-	}
-
-	public void setModuleItemKey(String moduleItemKey) {
-		this.moduleItemKey = moduleItemKey;
-	}
-
-	public Integer getDisclosureNumber() {
-		return disclosureNumber;
-	}
-
-	public void setDisclosureNumber(Integer disclosureNumber) {
-		this.disclosureNumber = disclosureNumber;
-	}
-
-	public String getUpdateUserFullName() {
-		return updateUserFullName;
-	}
-
-	public void setUpdateUserFullName(String updateUserFullName) {
-		this.updateUserFullName = updateUserFullName;
-	}
-
-	public String getCreateUserFullName() {
-		return createUserFullName;
-	}
-
-	public void setCreateUserFullName(String createUserFullName) {
-		this.createUserFullName = createUserFullName;
-	}
-
-	public Integer getNumberOfSFI() {
-		return numberOfSFI;
-	}
-
-	public void setNumberOfSFI(Integer numberOfSFI) {
-		this.numberOfSFI = numberOfSFI;
-	}
-
-	public String getCoiProjectTypeCode() {
-		return coiProjectTypeCode;
-	}
-
-	public void setCoiProjectTypeCode(String coiProjectTypeCode) {
-		this.coiProjectTypeCode = coiProjectTypeCode;
-	}
-
-	public String getHomeUnit() {
-		return homeUnit;
-	}
-
-	public void setHomeUnit(String homeUnit) {
-		this.homeUnit = homeUnit;
-	}
-
-	public Unit getUnit() {
-		return unit;
-	}
-
-	public void setUnit(Unit unit) {
-		this.unit = unit;
-	}
-
-	public Integer getAdminGroupId() {
-		return adminGroupId;
-	}
-
-	public void setAdminGroupId(Integer adminGroupId) {
-		this.adminGroupId = adminGroupId;
-	}
-
-	public String getAdminPersonId() {
-		return adminPersonId;
-	}
-
-	public void setAdminPersonId(String adminPersonId) {
-		this.adminPersonId = adminPersonId;
-	}
-
-	public String getAdminGroupName() {
-		return adminGroupName;
-	}
-
-	public void setAdminGroupName(String adminGroupName) {
-		this.adminGroupName = adminGroupName;
-	}
-
-	public String getAdminPersonName() {
-		return adminPersonName;
-	}
-
-	public void setAdminPersonName(String adminPersonName) {
-		this.adminPersonName = adminPersonName;
-	}
-
-
-	public String getDisclosurePersonFullName() {
-		return disclosurePersonFullName;
-	}
-
-	public void setDisclosurePersonFullName(String disclosurePersonFullName) {
-		this.disclosurePersonFullName = disclosurePersonFullName;
-	}
 }

@@ -309,34 +309,39 @@
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                 <label for="prop-start-date"><span class="mandatory">*</span>Proposed Start Date</label>
                 <span class="dateField">
-                    <input matInput [matDatepicker]="startDate" placeholder="{{datePlaceHolder}}" id="prop-start-date" autocomplete="off"
-                        style="width: 100% !important" class="d-inline-block form-control"
-                        [ngClass]="proposalDataBindObj?.mandatoryList?.has('startDate') ? 'is-invalid d-block' : ''"
-                        [(ngModel)]="result.proposal.startDate" (change)="startDate.close()" (ngModelChange)="dateValidation();setDataChangeFlag();isDateFieldChanged = true;
-                        dateValidationBeforeAction(result?.proposal?.startDate, 'startDate', 'Opening date');"
-                        (click)="startDate.open()" (keypress)="keyPress($event, 'date');setDataChangeFlag();" />
-                    <i class="fa fa-calendar fa-large hand-cursor insidePicker" id="prop-start-date-icon"
-                        (click)="startDate.open()" aria-hidden="true"></i>
+                    <input matInput [matDatepicker]="startDate" placeholder="{{datePlaceHolder}}" id="prop-start-date"
+                        autocomplete="off" (click)="clearDateOnValidation('prop-start-date-icon')" style="width: 100% !important"
+                        class="d-inline-block form-control"
+                        [ngClass]="proposalDataBindObj?.mandatoryList?.has('startDate') || proposalDataBindObj?.mandatoryList?.has('startDateFormat')  ? 'is-invalid d-block' : ''"
+                        [(ngModel)]="result.proposal.startDate" (change)="startDate.close()" (ngModelChange)="dateValidation();setDataChangeFlag();checkForValidFormat($event,'startDate');isDateFieldChanged = true;
+                                        dateValidationBeforeAction(result?.proposal?.startDate, 'startDate', 'Opening date');"
+                        (keypress)="keyPress($event, 'date');setDataChangeFlag();" />
+                    <span class="fa fa-calendar fa-large insidePicker hand-cursor" title="open calendar"
+                        (click)="clearDateOnValidation('prop-start-date-icon')">
+                    </span>
+                    <i id="prop-start-date-icon" (click)="startDate.open()" aria-hidden="true"></i>
                     <mat-datepicker #startDate (opened)="setFocusToElement('prop-start-date');isDateFieldChanged=false"
                         (closed)="dateValidation();isDateFieldChanged">
                     </mat-datepicker>
                 </span>
                 <div *ngIf="proposalDataBindObj?.mandatoryList?.has('startDate')" class="invalid-feedback d-block">*
                     Please provide a start date</div>
+                <div *ngIf ="proposalDataBindObj?.mandatoryList?.has('startDateFormat')" class="invalid-feedback d-block">* Entered date format is invalid.<br>Please use {{datePlaceHolder}} format.</div>
             </div>
             <!-- Proposed End Date -->
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                 <label for="prop-end-date"><span class="mandatory">*</span>Proposed End Date</label>
                 <span class="dateField">
-                    <input matInput [matDatepicker]="endDate" class="d-inline-block form-control" id="prop-end-date" placeholder="{{datePlaceHolder}}"
-                        autocomplete="off" 
-                        [ngClass]="proposalDataBindObj?.mandatoryList?.has('endDate') || proposalDataBindObj?.dateWarningList?.has('endDate') ? 'is-invalid d-block' : ''"
+                    <input matInput [matDatepicker]="endDate" class="d-inline-block form-control" id="prop-end-date"
+                        placeholder="{{datePlaceHolder}}" autocomplete="off" (click)="clearDateOnValidation('prop-end-date-icon');"
+                        [ngClass]="proposalDataBindObj?.mandatoryList?.has('endDate') || proposalDataBindObj?.dateWarningList?.has('endDate') || proposalDataBindObj?.mandatoryList?.has('endDateFormat') ? 'is-invalid d-block' : ''"
                         [(ngModel)]="result.proposal.endDate" (change)="endDate.close()"
-                        (keypress)="keyPress($event, 'date');setDataChangeFlag()" (ngModelChange)="dateValidation();setDataChangeFlag();isDateFieldChanged = true;
-                        dateValidationBeforeAction(result?.proposal?.endDate, 'endDate', 'Closing date');"
-                        (click)="endDate.open()">
-                    <i id="prop-end-date-icon" class="fa fa-calendar fa-large hand-cursor insidePicker"
-                        (click)="endDate.open()" aria-hidden="true"></i>
+                        (keypress)="keyPress($event, 'date');setDataChangeFlag()" (ngModelChange)="dateValidation();setDataChangeFlag();checkForValidFormat($event,'endDate');isDateFieldChanged = true;
+                                    dateValidationBeforeAction(result?.proposal?.endDate, 'endDate', 'Closing date');">
+                    <span class="fa fa-calendar fa-large insidePicker hand-cursor" title="open calendar"
+                        (click)="clearDateOnValidation('prop-end-date-icon')">
+                    </span>
+                    <i id="prop-end-date-icon" (click)="endDate.open()" aria-hidden="true"></i>
                     <mat-datepicker #endDate (opened)="setFocusToElement('prop-end-date');isDateFieldChanged=false"
                         (closed)="dateValidation();isDateFieldChanged">
                     </mat-datepicker>
@@ -345,6 +350,8 @@
                     Please provide an end date</div>
                 <div *ngIf="proposalDataBindObj?.dateWarningList?.has('endDate')" class="invalid-feedback d-block">
                     {{proposalDataBindObj?.dateWarningList?.get('endDate')}}</div>
+                <div *ngIf="proposalDataBindObj?.mandatoryList?.has('endDateFormat')" class="invalid-feedback d-block">* Entered
+                    date format is invalid.<br>Please use {{datePlaceHolder}} format.</div>
             </div>
             <!-- Duration -->
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
@@ -371,15 +378,19 @@
             </div>
             <!-- Sponsor Deadline Date -->
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                <label>Sponsor Deadline Date</label><span class="dateField"> <input
-                        matInput [matDatepicker]="subDt" placeholder="{{datePlaceHolder}}" id="prop-sub-date" style="width: 100% !important"
+                <label>Sponsor Deadline Date</label><span class="dateField"> 
+                  <input matInput [matDatepicker]="subDt" placeholder="{{datePlaceHolder}}" id="prop-sub-date" style="width: 100% !important"
                         autocomplete="off" class="d-inline-block form-control"
+                        (click)="clearDateOnValidation('prop-sub-date-icon');"
+                        [ngClass]="proposalDataBindObj?.dateWarningList?.has('subdtFormat') ? 'is-invalid d-block' : ''"
                         [(ngModel)]="result.proposal.sponsorDeadlineDate"
                         [disabled]="_proposalService.proposalSectionConfig['353']?.isActive && result?.proposal?.grantCallId !== null && result?.proposal?.sponsorDeadlineDate"
                         (keypress)="keyPress($event, 'date');setDataChangeFlag()"
-                        (ngModelChange)="getInternalDeadlineDate(result?.proposal?.sponsorDeadlineDate, null);setDataChangeFlag()"
-                        (click)="subDt.open()">
-                    <i id="prop-sub-date-icon" class="fa fa-calendar fa-large insidePicker hand-cursor"
+                        (ngModelChange)="getInternalDeadlineDate(result?.proposal?.sponsorDeadlineDate, null);checkForValidFormat($event,'subDt');setDataChangeFlag();"/>
+                        <span class="fa fa-calendar fa-large insidePicker hand-cursor" title="open calendar"
+                        (click)="clearDateOnValidation('prop-sub-date-icon')">
+                    </span>
+                    <i id="prop-sub-date-icon" 
                         aria-hidden="true" (click)="subDt.open()"></i>
                     <mat-datepicker #subDt (opened)="setFocusToElement('prop-sub-date')"
                         (closed)="getInternalDeadlineDate(result?.proposal?.sponsorDeadlineDate, null);">
@@ -387,6 +398,7 @@
                 </span>
                 <div *ngIf="proposalDataBindObj?.dateWarningList?.has('deadlineDate')" class="invalid-feedback d-block">
                     {{proposalDataBindObj?.dateWarningList?.get('deadlineDate')}}</div>
+                    <div *ngIf ="proposalDataBindObj?.dateWarningList?.has('subdtFormat')" class="invalid-feedback d-block">* Entered date format is invalid.<br>Please use {{datePlaceHolder}} format.</div>    
             </div>
             <!-- KKI Specific Change Don't Delete -->
             <!-- <div class="col">
@@ -572,10 +584,12 @@
                 <p class="text-justify" *ngIf="!result?.enableClosedGrantCallLinkingInProposal">You are about to edit
                     the Grant Call information for this proposal.</p>
                 <p class="text-danger text-justify" *ngIf="!result?.enableClosedGrantCallLinkingInProposal">
-                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Please note that you can only add a
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                <ng-container i18n="@@GRANT_CALL_LINK_UNLINK_WARNING"> Please note that you can only add a
                     Grant Call that is currently ‘Open’.<br>
                     You will not be able to add a Grant Call that is already ‘Closed’, including this current Grant Call
                     if it has closed.
+                </ng-container>
                 </p>
                 <p>Do you want to proceed to edit the Grant Call information?</p>
             </div>

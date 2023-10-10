@@ -1,3 +1,5 @@
+export type ModalSize = 'sm' | 'lg' | 'xl' | '';
+
 export class CoiTravelDisclosure {
     travellerTypeCode: Array<string> = [];
     entityId: number;
@@ -87,8 +89,12 @@ export class TravelDisclosure {
     certifiedAt: number;
     documentStatusCode: string;
     documentStatus: string;
+    disclosureStatusCode: string;
+    disclosureStatus: string;
     riskLevel: string;
     expirationDate: number;
+    riskCategoryCode: number;
+    entityRiskCategory: EntityRiskCategory;
   }
 
 export interface EndpointOptions {
@@ -102,11 +108,13 @@ export interface EndpointOptions {
 export class EntityDetails {
     isActive: boolean;
     country: { countryName: string };
-    entityId: string | number;
+    entityId: number;
     entityType: { description: string };
     entityName: string;
     emailAddress: string;
     address: string;
+    entityRiskCategory?: EntityRiskCategory;
+    entityNumber?: any;
 }
 
 export interface TravelHistoryRO {
@@ -130,13 +138,6 @@ export interface TravelHistory {
     travelEndDate: number;
 }
 
-export class DefaultAdminDetails {
-    adminPersonId = '';
-    adminGroupId = null;
-    adminPersonName = '';
-    adminGroupName = '';
-}
-
 export interface TravelActionAfterSubmitRO {
     travelDisclosureId: number;
     description: string;
@@ -148,3 +149,13 @@ export class TravelConflictRO {
     description: string;
     disclosureStatusCode: string;
 }
+
+export interface EntityRiskCategory {
+    description: string;
+    riskCategoryCode: string;
+    isActive?: boolean;
+    updateUser?: string;
+    updateTimestamp?:number;
+  }
+  
+  

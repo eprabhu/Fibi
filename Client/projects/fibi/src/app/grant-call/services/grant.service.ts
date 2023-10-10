@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { CommonService } from '../../common/services/common.service';
 import { Subject } from 'rxjs';
+import { getParams } from '../../common/services/end-point.config';
 
 @Injectable()
 export class GrantCallService {
@@ -106,12 +107,25 @@ export class GrantCallService {
     return this._http.post(this._commonService.baseUrl + '/addScienceKeyword', params);
   }
 
-  setEndPointSearchOptions(contextField, formatString, path, defaultValue, param) {
+  /**
+ * @param params will have fetchLimit as one of the values 
+ * to specify limit of data to fetched,
+ * it should be given inside params as {'fetchLimit' : requiredLimit}
+ * requiredLimit can be either null or any valid number.
+ * if no limit is specified default fetch limit 50 will be used.
+ * if limit is null then full list will return, this may cause performance issue.
+ * /findDepartment endpoint do not have limit in backend, so condition check added.
+ */
+  setEndPointSearchOptions(contextField, formatString, path, defaultValue, params = {}) {
     this.endPointSearchOptions.contextField = contextField;
     this.endPointSearchOptions.formatString = formatString;
     this.endPointSearchOptions.path = path;
     this.endPointSearchOptions.defaultValue = defaultValue;
-    this.endPointSearchOptions.params = param;
+    if (path == 'findDepartment') {
+      this.endPointSearchOptions.params = params;
+    } else {
+      this.endPointSearchOptions.params = getParams(params);   
+    } 
     return JSON.parse(JSON.stringify(this.endPointSearchOptions));
   }
 

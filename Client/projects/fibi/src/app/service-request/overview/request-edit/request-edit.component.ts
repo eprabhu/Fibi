@@ -84,7 +84,7 @@ export class RequestEditComponent implements OnInit, OnDestroy {
         this.serviceRequest = data.serviceRequest;
         this.setDefaultValues();
         this.setTemporaryData();
-        this.setUnitForNewRequest();
+        // this.setUnitForNewRequest();
     }
 
     private setUnitForNewRequest(): void {
@@ -163,6 +163,9 @@ export class RequestEditComponent implements OnInit, OnDestroy {
             this.serviceRequest.serviceRequestModule = event;
         } else {
             this.serviceRequest.moduleCode = this.serviceRequest.serviceRequestModule = null;
+            this.serviceRequest.subject = null;
+            this._serviceRequestService.serviceRequestTitle = null;
+            this.serviceRequest.description = null;
         }
         this.categoryTypeSelect();
         this.setCategoryTypeOptions();

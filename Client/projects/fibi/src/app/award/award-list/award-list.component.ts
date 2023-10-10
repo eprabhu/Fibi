@@ -355,7 +355,7 @@ export class AwardListComponent implements OnInit, OnDestroy {
 		}
 			, err => {
 				$('#deleteAwardPermissionCheckingModal').modal('hide');
-				this._commonService.showToast(HTTP_ERROR_STATUS, 'Delete Award failed as another transaction is being processed in current Award. Please click Delete Award again.');
+				this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Award failed as another transaction is being processed in current Award. Please click Delete Award again.');
 			}));
 	}
 
@@ -370,7 +370,7 @@ export class AwardListComponent implements OnInit, OnDestroy {
 			}
 			$('#deleteAwardPermissionCheckingModal').modal('show');
 		},
-			err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Delete Award failed as another transaction is being processed in current Award. Please click Delete Award again.'); }));
+			err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Award failed as another transaction is being processed in current Award. Please click Delete Award again.'); }));
 	}
 
 	setSortProperties() {

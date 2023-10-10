@@ -442,7 +442,7 @@ export class TaskOverviewComponent implements OnInit, OnDestroy {
             isTaskExist = this.checkTaskExist(data);
             this.isSaving = false;
           }, err => {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Save Task failed. Please try again.');
+            this._commonService.showToast(HTTP_ERROR_STATUS,( this.taskId?'Updating ':'Saving ')+ 'Task failed. Please try again.');
             this.isSaving = false;
             this.showManualLoader(false);
           }, () => {
@@ -469,9 +469,9 @@ export class TaskOverviewComponent implements OnInit, OnDestroy {
 
   showTaskSaveResponse(isTaskExist) {
     if (isTaskExist) {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Task already exists');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Task already exists.');
     } else {
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Task Saved Successfully');
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, "Task " + (this.taskId ? 'updated ' : 'saved ') + 'successfully.');
       this._router.navigate(['/fibi/award/task'],
         {
           queryParams: {
@@ -618,6 +618,9 @@ export class TaskOverviewComponent implements OnInit, OnDestroy {
             'taskId': null
           }
         });
+      this._commonService.showToast(HTTP_SUCCESS_STATUS, "Task rejected successfully.");
+    }, err => {
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Rejecting task failed. Please try again.');
     }));
   }
 

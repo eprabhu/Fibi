@@ -18,6 +18,8 @@ public interface COIFileAttachmentService {
 
 	List<DisclAttachment> getDisclAttachByRefIdAndTypeCode(Integer refId, Integer typeCode);
 
+	List<DisclAttachment> getDisclAttachByCommentId(Integer commentId);
+
 	String updateDisclAttachment(COIFileRequestDto request);
 
 	String deleteDisclAttachment(COIFileRequestDto request);

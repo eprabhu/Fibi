@@ -42,16 +42,18 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatIconModule} from '@angular/material/icon';
-import {DATE_PICKER_FORMAT_MATERIAL} from "../../../../fibi/src/app/app-constants";
+import {DATE_PICKER_FORMAT_MATERIAL} from '../../../../fibi/src/app/app-constants';
 import {MatMenuModule} from '@angular/material/menu';
 import {CdkMenuModule} from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
 import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
 import { CountModalComponent } from './count-modal/count-modal.component';
-import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
 import { ActivityComponent } from '../disclosure/activity-track/activity.component';
 import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
 import { SfiService } from '../disclosure/sfi/sfi.service';
+import { ViewQuestionnaireV2Component } from './view-questionnaire-v2/view-questionnaire-v2.component';
+import { RichTextComponent } from './rich-text/rich-text.component';
+import { CustomElementV2Component } from './custom-element-v2/custom-element-v2.component';
 
 @NgModule({
     imports: [
@@ -63,20 +65,20 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
         MatNativeDateModule,
         MatIconModule,
         CdkMenuModule,
-        MatMenuModule    
+        MatMenuModule
     ],
-    declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective, AppEndpointSearchComponent, CustomElementComponent,
+    declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective,
+        AppEndpointSearchComponent, CustomElementComponent,
         ViewQuestionnaireComponent, LookUpComponent, LookupFilterPipe,
         ClickNdragDirective, AddressBookComponent, DateFormatPipe, SearchFilterPipe, ViewQuestionnaireListComponent,
         LengthValidatorDirective, CurrencyFormatDirective, CustomCurrencyPipe, QuestionnaireListCompareComponent,
         AutoGrowDirective, QuestionnaireCompareComponent, CustomElementCompareComponent, GrantDetailsViewComponent, AppTimePickerComponent,
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
-        DragNDragDirective, CustomTagRemoverPipe,PaginationComponent,
+        DragNDragDirective, CustomTagRemoverPipe, PaginationComponent,
         AddRelationshipModalComponent,
         CountModalComponent,
-        CoiReviewCommentsComponent,
         ActivityComponent,
-        NoDataLabelComponent],
+        NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -118,9 +120,11 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
         MatMenuModule,
         AddRelationshipModalComponent,
         CountModalComponent,
-        CoiReviewCommentsComponent,
         ActivityComponent,
         NoDataLabelComponent,
+        ViewQuestionnaireV2Component,
+        RichTextComponent,
+        CustomElementV2Component
     ],
 
     providers: [
@@ -140,7 +144,7 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
         SafeHtmlPipe,
         DecimalPipe,
         CustomNumberPipe,
-        CustomTagRemoverPipe,SfiService
+        CustomTagRemoverPipe, SfiService
     ],
 
 })

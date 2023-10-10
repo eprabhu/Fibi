@@ -53,6 +53,7 @@ export class ProgressReportKpiForm1Component implements OnInit, OnChanges, OnDes
     datePlaceHolder = DEFAULT_DATE_FORMAT;
     setFocusToElement = setFocusToElement;
     $subscriptions: Subscription[] = [];
+    isSaving = false;
 
     constructor(private _commonService: CommonService,
                 private _progressReportKpiFormsService: ProgressReportKpiFormsService,
@@ -147,7 +148,8 @@ export class ProgressReportKpiForm1Component implements OnInit, OnChanges, OnDes
     }
 
     processRequest() {
-        if (this.kpiValidation()) {
+        if (this.kpiValidation() && !this.isSaving) {
+            this.isSaving = true;
             this.$subscriptions.push(this._progressReportKpiFormsService
                 .saveOrUpdateKPISummaryDetails(this.getRequestObject()).subscribe((res: { progressReportKPIImpactPublications }) => {
                     if (this.selectedIndex === null) {
@@ -161,8 +163,11 @@ export class ProgressReportKpiForm1Component implements OnInit, OnChanges, OnDes
                     this.selectedIndex = null;
                     $('#form-modal' + this.kpiSummaryId).modal('hide');
                     this.resetFormData();
-                }, err => this._commonService
-                    .showToast(HTTP_ERROR_STATUS, 'Failed to ' + (this.selectedIndex === null ? 'add' : 'update') + ' entry.')));
+                    this.isSaving = false;
+                }, err => {
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to ' + (this.selectedIndex === null ? 'add' : 'update') + ' entry.')
+                    this.isSaving = false;
+                }));
         }
     }
 

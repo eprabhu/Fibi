@@ -24,12 +24,12 @@
         <div>
             <a title="Create New Progress Report" class="btn btn-primary mt-0 mr-2 hand-cursor" id="create-progress-report-btn"
                 tabindex="0" data-target="#create-progress-final-modal1" data-toggle="modal"
-                (click)="isAdhoc=true;createReportDetails.reportClassCode = 1;setAwardEndPointObject()"><span class="d-none d-sm-inline-block">
-                    Create</span> Progress Report</a>
-            <a title="Create New Final Report" class="btn btn-primary mt-0 mr-2 hand-cursor" id="create-final-report-btn"
+                (click)="isAdhoc=true; setAwardEndPointObject()"><span class="d-none d-sm-inline-block">
+                    Create</span> Report</a>
+            <!-- <a title="Create New Final Report" class="btn btn-primary mt-0 mr-2 hand-cursor" id="create-final-report-btn"
                 tabindex="0" data-target="#create-progress-final-modal1" data-toggle="modal"
-                (click)="isAdhoc=true;createReportDetails.reportClassCode = 2;setAwardEndPointObject()"><span class="d-none d-sm-inline-block">
-                    Create</span> Final Report</a>
+                (click)="isAdhoc=true;setAwardEndPointObject()"><span class="d-none d-sm-inline-block">
+                    Create</span> Final Report</a> -->
             <a (click)="clearAdvanceSearchField();" aria-controls="collapseProgressReport" aria-expanded="false"
                 class="btn btn-sm btn-tertiary mt-0" data-toggle="collapse" href="#collapseProgressReport"
                 id="show-advcance-search-progress-report" role="button" tabindex="0" title="Advanced Search">

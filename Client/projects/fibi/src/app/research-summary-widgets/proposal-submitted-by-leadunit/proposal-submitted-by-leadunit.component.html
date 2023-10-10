@@ -10,11 +10,24 @@
       </span>
     </h4>
   </div>
-  <div class="card-content" [ngClass]="{'h-100 d-flex align-items-center': !proposalByLeadUnitData?.length}">
+  <div class="card-content" [ngClass]="{'d-flex align-items-center': !proposalByLeadUnitData?.length}">
     <div class="card-body">
       <div *ngIf="isShowLoader" appCustomPreloader></div>
-      <div class="py-0 pl-2 px-2 fixed-header-table" *ngIf="proposalByLeadUnitData?.length">
-        <table class="table tableSkin table-bordered grid2 mb-0">
+      <div class="searchBox">          
+        <app-endpoint-search [httpOptions]="leadUnitHttpOptions" [clearField]="clearLeadUnitField"
+            [placeHolder]="'Search Lead Unit'"
+            (onSelect)="onLeadUnitSelection($event)">
+        </app-endpoint-search>
+      </div>
+      <div class="py-0 pl-2 px-2 fixed-header-table">         
+        <div *ngIf='selectedUnitNumber' class="pb-4">
+                  <span class="highlight-text">
+                      {{selectedUnitName}}
+                      <i aria-hidden="true" class="fa fa-close hand-cursor ng-star-inserted"
+                          (click)="removeUnit()" title="Remove this Lead Unit"></i>
+                  </span>
+        </div>
+        <table class="table tableSkin table-bordered grid2 mb-0" *ngIf="proposalByLeadUnitData?.length">
           <caption class="sr-only">Proposals By Lead Unit</caption>
           <thead>
             <th (click)="isDesc =!isDesc;sortBy(0)">Department
@@ -38,7 +51,9 @@
                 aria-hidden="true"></i>    
               </span>
             </th>
-            <th style="width: 17%;" (click)="isDesc =!isDesc;sortBy(3)">Awarded
+            <th style="width: 20%;" (click)="isDesc =!isDesc;sortBy(3)">Awarded
+              <span class="content-color">
+                ({{totalAwardedProposalCount}})</span>
               <span>
                 <i [ngClass]="((column == 3) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-sort-numeric-desc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"
                   aria-hidden="true"></i>    
@@ -48,7 +63,7 @@
           <tbody>
             <tr *ngFor="let data of proposalByLeadUnitData | orderByIndex: {property: column, direction: direction};">
               <ng-container *ngFor="let eachData of data; let proposalIndex=index">
-                <td [ngClass]="{'text-center': proposalIndex > 0}">{{eachData}}</td>
+                <td [ngClass]="{'text-center': proposalIndex > 0}">{{!eachData ? 0 : eachData}}</td>
               </ng-container>
             </tr>
           </tbody>

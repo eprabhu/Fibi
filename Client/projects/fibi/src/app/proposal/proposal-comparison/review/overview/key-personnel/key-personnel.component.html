@@ -88,7 +88,7 @@
                           </td>
                           <td *ngIf="canShowCertification" class="f-16 text-nowrap">
                               <ng-container
-                                      *ngIf="(person?.proposalPersonRole?.certificationRequired === 'Y' && !person?.rolodexId) else noCertification">
+                                      *ngIf="(person?.proposalPersonRole?.certificationRequired === 'Y' && ( person?.rolodexId ? nonEmployeeCertification:true)) else noCertification">
                                   <i [ngClass]="person?.personCertified ?
                                    'fa-check-circle text-success':'fa-exclamation-circle text-warning'"
                                      aria-hidden="true" class="fa"></i>

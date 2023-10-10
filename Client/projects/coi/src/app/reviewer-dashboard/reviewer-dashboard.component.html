@@ -95,7 +95,7 @@
                     <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Entity Name">
                         <label class="d-block" for="reviewer-adv-entity-name">Entity</label>
                         <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
-                            [httpOptions]="EntitySearchOptions" [placeHolder]="'Search by Type'" class="w-100 mt-4"
+                            [httpOptions]="EntitySearchOptions" [placeHolder]="'Search by Entity'" class="w-100 mt-4"
                             [uniqueId]="'reviewer-adv-entity-name'">
                         </app-endpoint-search>
                     </div>
@@ -129,7 +129,7 @@
                         <span class="dateField">
                             <input matInput [matDatepicker]="expirationDate" id="reviewer-adv-expiration-date"
                                 (click)="expirationDate.open()" class="form-control d-inline-block"
-                                [(ngModel)]="advanceSearchDates.expirationDate" placeholder="MM/dd/yyyy">
+                                [(ngModel)]="advanceSearchDates.expirationDate" placeholder = {{datePlaceHolder}}>
                             <i (click)="expirationDate.open()"
                                 class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                             <mat-datepicker #expirationDate></mat-datepicker>
@@ -143,7 +143,7 @@
                         <span class="dateField">
                             <input matInput [matDatepicker]="certificationDate" id="reviewer-adv-certification-date"
                                 (click)="certificationDate.open()" class="form-control d-inline-block"
-                                [(ngModel)]="advanceSearchDates.certificationDate" placeholder="MM/dd/yyyy">
+                                [(ngModel)]="advanceSearchDates.certificationDate" placeholder = {{datePlaceHolder}}>
                             <i (click)="certificationDate.open()"
                                 class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
                             <mat-datepicker #certificationDate></mat-datepicker>
@@ -198,7 +198,7 @@
                                         <span>{{coi?.fcoiType}}</span>
                                     </span>
                                     <h4 class="mb-0 mt-2 d-flex label-text">
-                                        <i class="fa fa-user mt-2" aria-hidden="true"></i>
+                                        <i class="fa fa-user mt-65" aria-hidden="true"></i>
                                         <strong class="me-2 ml-2 text-nowrap mt-2">{{coi.disclosurePersonFullName}}</strong>
                                         <ng-container *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="ms-1">
                                             <span class="pipe me-2 mt-1"></span>
@@ -257,8 +257,7 @@
                             </div>
                             <div class="row mb-3 p-013">
                                 <div *ngIf="coi?.fcoiTypeCode== 1" class="col-5">
-                                    <label for="id" class="label-text">{{coi?.disclosureVersionNumber== 1 ?
-                                        'Description:' : 'Revision Reason:'}}</label>
+                                    <label for="id" class="label-text">Description</label>
                                     <span id="id" class="grey-text">{{coi?.reviseComment}}</span>
                                 </div>
                                 <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-5">

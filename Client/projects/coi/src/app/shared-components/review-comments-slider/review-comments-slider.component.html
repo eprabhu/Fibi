@@ -1,170 +1,357 @@
-<div class="card-height" *ngIf="_coiService.isShowCommentNavBar" #commentNavOverlay @enterAnimation
-    [class.overlay]="_coiService.isShowCommentNavBar">
-    <div class="task-right-div card-height d-flex align-items-center" id="task-nav-bar">
-        <app-slider-close-btn (closeAction)="hideCommentNavBar()"></app-slider-close-btn>
-        <div class="tool-kit-body card-height scrollable-table">
-                <div class="card card-header bg-white px-4 pt-3">
-                    <h4 class="card-title review-title">
-                        <div class="justify-content-between row">
-                            <div class="col-auto fs-16">Review Comments
-                            </div>
-                        </div>
-                    </h4>
-                </div>
-                <div class="card pt-2 px-2 shadow-medium m-3">
-                    <div class="p-3 br-12">
-                            <textarea id="main-panel-comnt" class="form-control comment-text-box fs-14" 
-                            placeholder="Comment" row="1" maxlength="2000"></textarea>
-                        <div class="border border-top-steps d-flex mx-0 pt-3 px-3 pb-3">
-                            <span class="fs-14 fw-500 mr-2" for="comment">Comment About:</span>
-                            <div class="tab-color px-0 d-flex">
-                                <span class="badge ml-2 border-color d-flex fs-14 rounded-5 px-4">
-                                    General</span>
-                                <span class="badge ml-2 border-color d-flex fs-14 rounded-5 px-4">
-                                    Questionnaire</span>
-                                <span class="badge ml-2 border-color d-flex fs-14 rounded-5 px-4">
-                                    SFIs</span>
-                                <span class="badge ml-2 border-color d-flex fs-14 rounded-5 px-4">
-                                    Project Relationships</span>
-                            </div>
-                            <span class="checkbox-align">
-                                <input class="form-check-input mt-2" type="checkbox" name="Mark as private">
-                                <span class="form-check-label fs-14 fw-500 p-2" for="Mark as private">
-                                    Mark as private
+<!-- slider -->
+<app-coi-slider (closeSlider)="validateSliderClose()" [isHeaderNeeded]="false" [sliderName]="'review-comments-slider'">
+    <!-- slider header -->
+    <!-- <ng-container header>
+        <span class="col-auto fs-16">Review Comments About </span><span
+            *ngIf="['3' ,'4', '7'].includes(selectedReviewType?.coiSectionsTypeCode);else changeHeader">{{selectedReviewType.description}}
+        </span>
+        <ng-template #changeHeader>
+            {{headerName}}
+        </ng-template>
+    </ng-container> -->
+
+    <!-- slider header card -->
+    <!-- Sticky contents / heading are given under this ngContainer -->
+    <!-- <ng-container content-sticky>
+        
+    </ng-container> -->
+
+    <!-- slider content -->
+    <ng-container content>
+    <section>
+        <div class="mt-2 ml-15">
+                Comments against <strong>{{coiSectionType}} {{coiSubSectionsTitle ? ': '+ coiSubSectionsTitle : ''}}</strong>
+                <span *ngIf="componentSubRefTitle"> and <strong> {{componentSubRefTitle}}</strong></span>
+                <span class="cursor-pointer"
+                    title="Click to view details of {{reviewTypeList?.coiSectionsTypeList?.description}}">
+                </span>
+        </div>
+        <div class="info-card-border card-scroll mt-2 rounded-2 shadow-medium bg-light mx-3 ms-4 mt-3">
+            <div class="row ml-15 mt-2">
+                <div class="position-relative p-3 fs-14 pl-5 fw-500">
+                    <div class="row">
+                        <div class="col">
+                            <span class="d-flex">
+                                <span
+                                    class="entity-status shadow-sm align-items-center d-flex {{getColorBadges(disclosureDetails)}}">
+                                    <span>{{getDisclosureTitleName(disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode)}}</span>
                                 </span>
-                                <a class="tooltip-helptext"><i class="fa fa-info-circle ct-icon-right hand-cursor mt-2" aria-hidden="true"></i></a>
+                                <h4 class="mb-0 d-flex margin-project-title label-text">
+                                    <ng-container
+                                        *ngIf="disclosureDetails.fcoiTypeCode === '2' || disclosureDetails.fcoiTypeCode === '3'"
+                                        class="ms-1">
+                                        <span class="title-text ml-2 mt-2 word-break-all new-line-property">
+                                            {{(readMoreOrLess ? modalHeader(projectDetails) :
+                                            modalHeader(projectDetails) | slice:0:180)}}
+                                            <span
+                                                *ngIf="!readMoreOrLess && modalHeader(projectDetails)?.length>180">...
+                                                <a *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
+                                                    <span class="readMore fw-500">Read More
+                                                    </span>
+                                                </a>
+                                            </span>
+                                            <a *ngIf="readMoreOrLess" (click)="readMoreOrLess=false">
+                                                <span class="readMore ms-1 fw-500">Read Less</span>
+                                            </a>
+                                        </span>
+                                    </ng-container>
+                                </h4>
                             </span>
-                            </div>
-
-                        <div *ngIf="isAddAttachment" class="border border-top-steps card-col mx-0 pt-3 px-3">
-                            <app-file-drop [multiple]="false" (filesDropEvent)="fileDrop($event)"></app-file-drop>
                         </div>
-                        <div *ngIf="isAddAssignee" class="border border-top-steps mx-0 pt-3 px-3">
-                            <div class="mr-2">
-                                <label class="fs-14 fw-500" for="comment">Assignee:</label>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex">
+                            <label class="grey-text left-margin me-2">Person associated with the Disclosure:
+                            </label>
+                            <app-no-data-label [valueToShow]="disclosureDetails?.person?.fullName">
+                                <span class="grey-text fw-normal">{{disclosureDetails?.person?.fullName}}</span>
+                            </app-no-data-label>
                         </div>
-                        <div
-                            class="border border-top-steps card-col d-flex form-row justify-content-between mx-0 pt-3 px-3">
-                            <div class="fs-14 mb-3">
-                                <button class="attch p-2 me-3" id="add-attach-btn" title="Add New Attachment"
-                                    (click)="isAddAttachment = !isAddAttachment ">
-                                    <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                    <span class="d-none d-md-inline-block ml-2">Add Attachment</span>
-                                </button>
-                                <button class="attch p-2" id="add-admin-groups" title="Tag Assignee/Admin Groups"
-                                    (click)="isAddAssignee = !isAddAssignee ">
-                                    <i class="fa fa-user-o ml-2" aria-hidden="true"></i>
-                                    <span class="d-md-inline-block d-none fs-14">Tag Assignee/Admin Groups</span>
-                                </button>
-                            </div>
-                            <div>
-                                <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3" id="clear-btn">Clear</button>
-                                <button class="btn btn-primary px-4 py-2 fs-14" id="add-comment-btn">Add Comment</button>
-                            </div>
+                        <div class="col d-flex">
+                            <label class="grey-text">Department: </label>
+                            <span class="ml-2 grey-text fw-normal">
+                                <app-no-data-label [valueToShow]="disclosureDetails?.unit?.unitDetail">
+                                    <span>{{disclosureDetails?.unit?.unitDetail}}</span>
+                                </app-no-data-label>
+                            </span>
                         </div>
-
                     </div>
-                </div>
-
-            <div class="mx-0 pt-3 px-3 d-flex justify-content-between">
-                <div class="align-items-center d-flex">
-                    <div class="fs-14 ml-3 mr-2">
-                        <label class="fw-500 fs-14" for="comment">Filter by:</label>
+                    <div class="row mt-2">
+                        <div class="col d-flex align-items-center">
+                            <label class="grey-text">Risk: </label>
+                            <span class="ml-2 grey-text fw-normal">
+                                <div class="text-color fs-14 d-flex align-items-center">
+                                    <span class="text-secondary fs-14">
+                                        <mat-icon class="{{getWarningClass(disclosureDetails?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                                    </span>
+                                    <app-no-data-label
+                                        [valueToShow]="disclosureDetails?.coiRiskCategory?.description">
+                                        <span
+                                            class="ml-2 mt-1 fw-normal">{{disclosureDetails?.coiRiskCategory?.description}}</span>
+                                    </app-no-data-label>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <label class="grey-text">Disclosure : </label>
+                            <span class="ml-2 grey-text fw-normal">
+                                <app-no-data-label
+                                    [valueToShow]="disclosureDetails?.coiConflictStatusType?.description">
+                                    <span
+                                        class="{{commonService.getDisclosureConflictBadge(disclosureDetails?.conflictStatusCode)}}"></span>
+                                        <span class="badgeFont">
+                                            {{disclosureDetails?.coiConflictStatusType?.description}}
+                                        </span>
+                                </app-no-data-label>
+                            </span>
+                        </div>
                     </div>
-                    <div class="tab-color px-0">
-                        <div class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
-                            All</div>
-                    </div>
-                    <div class="tab-color px-0">
-                        <span class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
-                            General</span>
-                    </div>
-                    <div class="tab-color px-0">
-                        <div class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
-                            Questionnaire</div>
-                    </div>
-                    <div class="tab-color px-0">
-                        <div class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
-                            SFIs</div>
-                    </div>
-                    <div class="tab-color px-0">
-                        <div class="badge badge-pill ml-2 border-color d-flex justify-content-center fs-14 rounded-5 px-4">
-                            Project Relationships</div>
-                    </div>
-                </div>
-                <div class="align-items-center d-flex fs-14 pl-4 text-right border-left-line">
-                    <label class="fw-500 mr-2" for="Reviewer"> Reviewer: </label>
-                    <select id="reviewer" class="form-control dateBox">
-                        <option [value]=null>--Select--</option>
-                    </select>
                 </div>
             </div>
-
-            <div class="form-row mx-0 pt-3 px-3 d-flex justify-content-between mt-3">
-                <span class="badge-title bg-transparent px-0 fs-14-nav">
-                    <mat-icon class="me-1 date">person</mat-icon>
-                    <span class="d-none d-md-inline-block ml-3 mx-2 fs-14"> Chew Cindy: </span>
-                    <span class="date fs-14">{{'Thu Feb 16 2023 19:42:01' | dateFormatter: 'long'}}</span>
-                </span>
+        </div>
+        <!-- <div class="card mt-3 mx-3 shadow-medium">
+            <div class="p-3 px-4 row">
+                <div class="col-4">
+                        <app-autocompleter [completerOptions]="sectionSearchOptions"
+                    [clearField]="clearSectionField" [placeHolder]="'Search for disclosure section'"
+                    (onSelect)="sectionSelect($event)" 
+                    [isDisabled] = "reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode"></app-autocompleter>
+                </div>
+                <div class="col-4" *ngIf="['4', '5', '6'].includes(reviewCommentDetails.coiReviewCommentDto.coiSectionsTypeCode)">
+                    <app-autocompleter [completerOptions]="subSectionSearchOptions"
+                [clearField]="clearSubSectionField" [placeHolder]= "searchPlaceHolder"
+                (onSelect)="subSectionSelect($event)"
+                [isDisabled] = "reviewCommentDetails?.coiReviewCommentDto.coiSubSectionsId"></app-autocompleter>
+                </div>
+    
+                <div *ngIf="reviewCommentDetails?.coiReviewCommentDto.coiSectionsTypeCode == 6 && reviewCommentDetails.coiReviewCommentDto.coiSubSectionsId 
+                    && reviewCommentDetails.coiReviewCommentDto.componentSubRefId" class="col-4">
+                    <app-autocompleter [completerOptions]="childSubSectionSelectOptions"
+                    [clearField]="clearEntityField" [placeHolder]="'Search for SFI'"
+                    (onSelect)="setComponentSubRefId($event)"
+                    [isDisabled] = "reviewCommentDetails?.coiReviewCommentDto.componentSubRefId"></app-autocompleter>
+                </div>
             </div>
-                <div class="col-11 comment-card pt-1 p-2 ml-5 mb-0 comment-box-margin mx-auto">
-                    <span class="fs-13">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                        Ipsum
-                        has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
-                        galley
-                        <span (click)="isReadMore = !isReadMore" class="hand-cursor italian">...Read more
-                            <i aria-hidden="true"
-                                [ngClass]="isReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i>
+        </div> -->
+        
+        <div class="card pt-2 px-2 shadow-medium m-3 pb-3">
+            <div class="p-3 br-12 pb-0">
+                <ckeditor [(ngModel)]="reviewCommentDetails.coiReviewCommentDto.comment"
+                [editor]="Editor" [config]="editorConfig"(ready)="onReady($event)"
+                placeholder="Comment" row="1" maxlength="2000" 
+                [ngClass]="mandatoryMap.has('comment') ? 'is-invalid d-block':'' "
+                (ngModelChange)="isChangesInField = true"></ckeditor>
+                <div *ngIf="mandatoryMap.has('comment')" class="invalid-feedback d-block fs-12">
+                    {{mandatoryMap?.get('comment')}}</div>
+                </div>
+
+                <!-- <div class="border-top-steps d-flex px-3 py-2 mx-3 border-top-0 border-bottom-0"> -->
+                    <!-- <span class="fs-14 fw-500 mr-2 d-flex align-items-center">
+                        <mat-icon class="me-1 date person-icon-position mb-3 hand-cursor" title="Tag Assignee/Admin Groups"
+                        (click)="isAddAssignee = !isAddAssignee;isAddAttachment = false;"
+                        [ngClass]="isAddAssignee ?'text-primary' :'material-symbols-outlined'">group_add</mat-icon>
+                    <div *ngIf="reviewCommentDetails?.coiReviewCommentDto?.coiReviewCommentTag?.length" class="d-flex">
+                        <ng-container
+                            *ngFor="let tag of reviewCommentDetails?.coiReviewCommentDto?.coiReviewCommentTag; let i = index">
+                            <div *ngIf="tag.tagPersonId || tag.tagGroupId" class="fileChips regularFont ml-2 ">
+                                <span class="px-2">
+                                    {{tag.tagPersonId ? tag.tagPersonFullName : tag.tagGroupName}}
+                                    <i aria-hidden="true" class="fa fa-times badge-icon ml-1 hand-cursor"
+                                        title="Delete {{tag.tagPersonId ? tag.tagPersonFullName : tag.tagGroupName}}"
+                                        (click)="deleteCoiCommentAssignee(tag,i)">
+                                    </i>
+                                </span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    </span> -->
+                    <!-- <span class="checkbox-align">
+                        <input class="form-check-input mt-2" type="checkbox" name="Mark as private"
+                            [(ngModel)]="reviewCommentDetails.coiReviewCommentDto.isPrivate"
+                            (ngModelChange)="isChangesInField = true">
+                        <span class="form-check-label fs-14 fw-500 p-2" for="Mark as private">
+                            Mark as private
                         </span>
-                    </span>
-                </div>
-                <div class="col f-13 text-secondary my-3 d-flex justify-content-end mr-15 mb-4">
-                    <span class="hand-cursor mr-15">
-                        <i aria-hidden="true" class="fa fa-commenting mr-2"></i>
-                        <ng-container>Show</ng-container>
-                        replies(3)
-                    </span>
-                    <span class="hand-cursor">
-                        <i aria-hidden="true" class="fa fa-reply mr-2"></i>
-                        Reply
-                    </span>
-                </div>
-            
+                        <a class="tooltip-helptext"><i class="fa fa-info-circle ct-icon-right hand-cursor mt-2"
+                                aria-hidden="true"></i></a>
+                    </span> -->
+                   
 
-            <div class="position-relative">
-                <span class="collapse-description ml-5 mr-4"></span>
+                    <!-- <div class="mb-2 btn-position">
+                        <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3" id="clear-btn"
+                            (click)="cancelOrClearCommentsDetails()">{{isEditComment?'Cancel':'Clear'}}</button>
+                        <button class="btn btn-primary px-4 py-2 fs-14" id="add-comment-btn"
+                            (click)="addCommentsDetails()">{{isEditComment ? 'Save Comment' :'Add Comment'}}</button>
+                    </div> -->
+                <!-- </div> -->
+
+                <!-- <div *ngIf="isAddAssignee" class="border-top-steps mx-3 mb-3" [@topSlideInOut]>
+                    <div class="d-flex mx-3 mb-15">
+                        <div class="col-4">
+                            <label class="d-block ml-4 mt-3 fs-14 fw-500">Administrator</label>
+                            <div class="col-md-12 col-sm-4 col-12">
+                                <app-autocompleter [completerOptions]="adminSearchOptions"
+                                    [clearField]="clearAdministratorField" [placeHolder]="'Search for admin'"
+                                    (onSelect)="adminSelect($event)"
+                                    [ngClass]="assignAdminMap.has('adminName') ? 'is-invalid d-block':'' "></app-autocompleter>
+                                <div *ngIf="assignAdminMap.has('adminName')" class="invalid-feedback d-block fs-12">
+                                    {{assignAdminMap?.get('adminName')}}</div>
+                            </div>
+                        </div>
+                        <div class="col d-flex justify-content-end fs-12 mt-3">
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" id="btn-close"
+                                type="button" (click)="isAddAssignee = false">
+                            </button>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- <div class="border border-top-steps card-col d-flex form-row justify-content-between pt-2 px-3 mb-10 mx-3"> -->
+                    <!-- <div class="fs-14 mb-3"> -->
+                        <!-- <span class="fs-14 fw-500 mr-2 d-flex align-items-center">
+                            <mat-icon class=" attachment-icon mb-3 hand-cursor" title="Add New Attachment"
+                            (click)="isAddAssignee = false; attachmentModal();" data-bs-toggle="modal" data-bs-target="#add-attachment-modal"
+                            [ngClass]="isAddAttachment?'text-primary' :'material-symbols-outlined'">
+                            attachment
+                        </mat-icon>
+                        <div *ngIf="reviewCommentDetails?.coiReviewCommentDto?.coiReviewCommentAttachment?.length" class="d-flex">
+                        <ng-container
+                            *ngFor="let item of reviewCommentDetails?.coiReviewCommentDto?.coiReviewCommentAttachment; let i = index">
+                            <div class="fileChips regularFont ml-2 ">
+                                <span class="px-2">
+                                    {{item?.fileName}}
+                                    <i aria-hidden="true" class="fa fa-times badge-icon ml-1 hand-cursor"
+                                        title="Delete {{item?.fileName}}" (click)="deleteCoiCommentAttachments(item,i);">
+                                    </i>
+                                </span>
+                            </div>
+                        </ng-container>
+                        </div>
+                    </span> -->
+                    <!-- </div> -->
+                    <!-- <div class="mb-2">
+                        <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3" id="clear-btn"
+                            (click)="cancelOrClearCommentsDetails()">{{isEditComment?'Cancel':'Clear'}}</button>
+                        <button class="btn btn-primary px-4 py-2 fs-14" id="add-comment-btn"
+                            (click)="addCommentsDetails()">{{isEditComment ? 'Save Comment' :'Add Comment'}}</button>
+                    </div> -->
+                <!-- </div> -->
+
+                <div class="row mt-3 mx-2 align-items-center">
+                    <div class="col">
+                        <!-- <div class="align-items-center d-flex fs-14 pl-4 text-right"> -->
+                        <!-- <span class="fs-14 fw-medium me-2 text-secondary">Comment Visibility:</span>
+                        <ng-container *ngFor="let type of reviewCommentType">
+                            <span
+                                *ngIf="(isUserAdmin && type.isShowForAdmin) || (isUserReviewer && type.isShowForReviewer) || (isUserReporter && type.isShowForReporter)"
+                                (click)="selectedCommentType = type?.code" [class.filter-active]="selectedCommentType == type?.code"
+                                [title]="'Click to filter by type: ' + type.description"
+                                [area-describedby]="'Click to filter by type: ' + type.description"
+                                class="shadow-sm fw-medium px-3 py-1 mx-1 border rounded-5 bg-white filter-active" role="button">
+                                {{type.description}}
+                            </span>
+                        </ng-container> -->
+                    </div>
+                    <!-- <div class="border-top-steps d-flex px-3 py-3 mx-3 border-top-0 border-bottom-0 justify-content-end">  btn-position-->
+                    <div class="col-auto">
+                        <div>
+                            <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3" id="clear-btn"
+                                (click)="cancelOrClearCommentsDetails()">{{isEditComment?'Cancel':'Clear'}}</button>
+                            <button class="btn btn-primary px-4 py-2 fs-14" id="add-comment-btn"
+                                (click)="addCommentsDetails()">{{isEditComment ? 'Save Comment' :'Add Comment'}}</button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <app-review-comment-list-view [commentReviewerList]="commentList" [reviewTypeList]="reviewTypeList?.coiSectionsTypeList" [selectedReviewType]="selectedReviewType.coiSectionsTypeCode"
+            (deleteReviewComment)="deleteReviewComment($event)"
+            (editReviewParentComment)="editReviewerParentComment($event)"
+            (emitReplayCommentDetails)="addReplayComment($event)"
+            (deleteChidReviewComment)="removeChidReviewComment($event)"></app-review-comment-list-view>
+        </section>
+    </ng-container>
+</app-coi-slider>
+
+<!--conflict confirmation Modal-->
+<app-confirmation-modal [modalName]="'review-comments-confirmation-modal'"
+    (secondaryBtnAction)="leavePageClicked($event)" [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
+    <!-- modal header -->
+    <ng-container header>
+        <span>Confirmation</span>
+    </ng-container>
+    <!-- modal content -->
+    <p content class="fs-14 ms-2">
+        You have unsaved changes in the <strong>Review Comments</strong>, do you want to leave?
+    </p>
+</app-confirmation-modal>
+
+<!--attachment modal-->
+<div class="modal modal-coi fade mySkinDialog" id="add-attachment-modal" role="dialog"
+    [attr.aria-labelledby]="'add-attachment-modal'" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" tabindex="0" id="modal-header">
+                    Add Comment Attachment
+                </h5>
+                <button type="button" id="add-attachment-modal-dismiss-btn" class="btn-close fs-12"
+                    data-bs-dismiss="modal" aria-label="click to Close popup" role="button"
+                    (click)="dismissAttachmentModal()">
+                </button>
             </div>
 
-            <div class="form-row mx-0 pt-3 px-3 d-flex justify-content-between mt-3">
-                <span class="badge-title bg-transparent px-0 fs-14-nav">
-                    <mat-icon class="me-1 date">person</mat-icon>
-                    <span class="d-none d-md-inline-block ml-3 mx-2 fs-14">Chew Cindy: </span>
-                    <span class="date fs-14">{{'Thu Feb 16 2023 19:42:01' | dateFormatter: 'long'}}</span>
-                </span>
+            <div class="modal-padding px-3">
+                <app-file-drop class="mt-2" (filesDropEvent)="fileDrop($event)" [multiple]="false"></app-file-drop>
+
+                <div class="gridSkin attachment-height-container">
+                    <div class="card shadow mb-3" *ngFor="let item of uploadedFile; let i=index">
+                        <div class="row mb-15 mt-3">
+                            <div class="col-lg-3 col-12">
+                                <label for="prop-doc-popup-type"><span class="mandatory">*</span>Attachment Type</label>
+                                <select id="prop-doc-popup-type" class="form-control form-select"
+                                    [(ngModel)]="selectedAttachmentType[i]">
+                                    <option value= "null">--Select--</option>
+                                    <option *ngFor="let attachType of personnelAttachTypes"
+                                        [value]="attachType.attaTypeCode" [hidden]="attachType.isActive != true">
+                                        {{attachType?.description}}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-5 col-12">
+                                <label for="desc">Description</label>
+                                <textarea id="desc" cols=2 rows="1" id="prop-doc-popup-desc"
+                                    [(ngModel)]="selectedAttachmentDescription[i]" placeholder="Type Description"
+                                    class="form-control dateBox text-area-height" appLengthValidator
+                                    [isShowLimiter]='true' [limit]=2000>
+                        </textarea>
+                            </div>
+                            <div class="col-lg-2 col-12" title="{{item?.name}}">
+                                <label class="d-block"><span class="mandatory">*</span>File Name</label>
+                                <span>{{ item.name }}</span>
+                            </div>
+                            <div class="col-lg-1 col text-right">
+                                <label>Action</label>
+                                <ul class="action-btn mt-3">
+                                    <li>
+                                        <a id="prop-doc-popup-dlt-btn" class="fa fa-trash-o hand-cursor fs-16"
+                                            title="Remove File" (click)="deleteFromUploadedFileList(i)"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-                <div class="col-11 comment-card pt-1 p-2 ml-5 mb-0 comment-box-margin mx-auto">
-                    <span class="fs-13">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                        Ipsum
-                        has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
-                        galley
-                        <span (click)="isReadMore = !isReadMore" class="hand-cursor italian">...Read more
-                            <i aria-hidden="true"
-                                [ngClass]="isReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i>
-                        </span>
-                    </span>
-                </div>
-                <div class="col f-13 text-secondary my-3 d-flex justify-content-end mr-15 mb-4">
-                    <span class="hand-cursor mr-15">
-                        <i aria-hidden="true" class="fa fa-commenting mr-2"></i>
-                        <ng-container>Show</ng-container>
-                        replies(3)
-                    </span>
-                    <span class="hand-cursor">
-                        <i aria-hidden="true" class="fa fa-reply mr-2"></i>
-                        Reply
-                    </span>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" (click)="dismissAttachmentModal()"
+                    [attr.aria-label]="'click to Cancel'" role="button">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="addToAttachment()"
+                    [attr.aria-label]="'click to Add'" role="button">
+                    Add
+                </button>
+            </div>
         </div>
     </div>
 </div>
+

@@ -13,8 +13,8 @@ export const ELASTIC_GRANT_OUTPUT_FORMAT = 'grant_header_id | title | grant_type
 export const ELASTIC_COI_OUTPUT_FORMAT = 'coi_disclosure_number | full_name | disclosure_disposition |disclosure_status | module_item_key';
 export const ELASTIC_IACUC_OUTPUT_FORMAT = 'protocol_number | title | lead_unit_name | status | person_name | protocol_type';
 export const ELASTIC_IRB_OUTPUT_FORMAT = 'protocol_number | title | lead_unit_name | status | person_name';
-export const ELASTIC_AGREEMENT_OUTPUT_FORMAT = 'agreement_request_id | title | unit_name | agreement_type | agreement_status | principal_person_full_name| aa_person_full_name | requestor_full_name';
-export const ELASTIC_EXTERNAL_REVIEWER_OUTPUT_FORMAT = 'full_name | prncpl_nm';
+export const ELASTIC_AGREEMENT_OUTPUT_FORMAT = 'agreement_request_id | title | agreement_type | unit_name | agreement_status | principal_person_full_name | aa_person_full_name | sponsor_name | requestor_full_name';
+export const ELASTIC_EXTERNAL_REVIEWER_OUTPUT_FORMAT = 'full_name | email_addr | Academic Rank : academic_rank | H-Index: hindex';
 
 export const HTTP_ERROR_STATUS = 'error';
 export const HTTP_SUCCESS_STATUS = 'success';
@@ -26,9 +26,9 @@ export const SSO_LOGOUT_URL = '';
 
 /* KKI Specific Change (Don't Delete) in Month/Day/Year format for DEFAULT_DATE_FORMAT, LONG_DATE_FORMAT,
 parseInput, fullPickerInput, datePickerInput */
-export const DATE_PLACEHOLDER = 'MM/DD/YYYY'
-export const DEFAULT_DATE_FORMAT = 'MM/dd/YYYY';
-export const LONG_DATE_FORMAT = 'MM/dd/YYYY h:mm:ss a';
+
+export const DEFAULT_DATE_FORMAT = 'dd/MM/yyyy';
+export const LONG_DATE_FORMAT = 'dd/MM/yyyy h:mm:ss a';
 export const TIME_FORMAT = 'h:mm:ss a';
 export const AWARD_LABEL = $localize`:@@COMMON_AWARD:Award`;
 export const KEY_PERSON_LABEL = $localize`:@@COMMON_KEY_PERSONNEL:Key Personnel`;
@@ -38,11 +38,12 @@ export const COMMON_PERIODS_AND_TOTAL_LABEL = $localize`:@@COMMON_PERIODS_AND_TO
 export const AWARD_ERR_MESSAGE = $localize`:@@AWARD_ERR_MESSAGE: Please lodge issue at FIBI Support`;
 export const ETHICS_SAFETY_LABEL = 'Special Review';
 export const AREA_OF_RESEARCH = $localize`:@@COMMON_AREA_OF_RESEARCH/SOCIETAL_CHALLENGE_AREA:Area of Research/Societal Challenge Area`;
+export const DATE_PLACEHOLDER = 'MM/DD/YYYY';
 
 export const DATE_PICKER_FORMAT = {
-  parseInput: 'MM/DD/YYYY HH:mm:ss',
-  fullPickerInput: 'MM/DD/YYYY HH:mm:ss',
-  datePickerInput: 'MM/DD/YYYY',
+  parseInput: 'DD/MM/YYYY HH:mm:ss',
+  fullPickerInput: 'DD/MM/YYYY HH:mm:ss',
+  datePickerInput: 'DD/MM/YYYY',
   timePickerInput: 'HH:mm:ss',
   monthYearLabel: 'MMM YYYY',
   dateA11yLabel: 'LL',
@@ -59,6 +60,9 @@ export const EDITOR_CONFIURATION = {
     defaultProtocol: 'http://'
   },
   removePlugins: ['imageUpload', 'mediaEmbed'],
+  toolbar: {
+    removeItems: [ 'imageUpload', 'mediaEmbed', 'uploadImage' ]
+  },
   image: {},
   mediaEmbed: {},
 };
@@ -68,6 +72,8 @@ export const DEFAULT_SPONSOR = {
   sponsorName: 'Air-Force'
 };
 
+export const ROOT_UNIT_NUMBER = '000001';
+
 // Redirection link for external user registration application
 export const EXT_USER_REGN_LINK = '';
 
@@ -76,6 +82,12 @@ export const ENDPOINT_SPONSOR_OUTPUT_FORMAT = 'sponsorCode - sponsorName (acrony
 export const LEAD_UNIT_OUTPUT_FORMAT = 'unitNumber - unitName';
 export const COMPLIANCE_URL = '';
 export const ROLODEX_FULL_NAME = 'LASTNAME, FIRSTNAME MIDDLENAME';
+export const DEFAULT_ENDPOINT_FETCH_LIMIT = 50;
+export const TOAST_DURATION = 15000;
+
+export const  LS_FY_START_DATE = '07/01';
+export const LS_FY_END_DATE = '06/30';
+export const YEAR_RANGE = 20;
 
 // this is the Proposal status checked in Questionnaires for showing active/answered and unasnwered questions.
 // 1- in Progress , 3- returned, 12- Withdrawn 9- revision requested.
@@ -84,10 +96,10 @@ export const PROPOSAL_STATUS_FOR_FETCHING_ALL_QUESTIONNAIRE = [1, 3, 12, 9];
 //  Angular Material date picker
 export const DATE_PICKER_FORMAT_MATERIAL = {
   parse: {
-    dateInput: 'MM/DD/YYYY HH:mm:ss',
+    dateInput: 'DD/MM/YYYY HH:mm:ss',
   },
   display: {
-    dateInput: 'MM/DD/YYYY',
+    dateInput: 'DD/MM/YYYY',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',

@@ -8,7 +8,7 @@ export class EntityDetailsRouteGuardService {
 constructor(private entityDetailsService: EntityDetailsService) { }
 
 canDeactivate(): boolean {
-  if (this.entityDetailsService.isRelationshipQuestionnaireChanged) {
+  if (this.entityDetailsService.isRelationshipQuestionnaireChanged || this.entityDetailsService.isAdditionalDetailsChanged) {
       document.getElementById('hidden-unsaved-changes-button').click();
       return false;
   } else {

@@ -5,6 +5,7 @@ import { DataStoreService } from '../../services/data-store.service';
 import { CommonService } from '../../../common/services/common.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 
 @Component({
     selector: 'app-reviewer-action-modal',
@@ -17,8 +18,9 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     currentReviewer: any = {};
     $subscriptions: Subscription[] = [];
 
-    constructor(private _coiService: CoiService, private _dataStore: DataStoreService,
-        private _commonService: CommonService) { }
+    constructor( private _coiService: CoiService, 
+                 private _dataStore: DataStoreService,
+                 private _commonService: CommonService ) { }
 
     ngOnInit() {
         this.getReviewerDetails();
@@ -51,9 +53,12 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
     }
 
     completeReview() {
+        let currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
         this.$subscriptions.push(this._coiService.completeReview({
             coiReviewId: this.currentReviewer.coiReviewId,
-            assigneePersonName: this.currentReviewer.assigneePersonName
+            assigneePersonName: this.currentReviewer.assigneePersonName,
+            endDate: parseDateWithoutTimestamp(currentDate)
         }).subscribe((res: any) => {
             this.updateDataStore(res);
             this.currentReviewer = {};
@@ -75,8 +80,9 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         const reviewerList = DATA.coiReviewerList || [];
         const index = reviewerList.findIndex(ele => ele.coiReviewId === reviewer.coiReviewId);
         reviewerList[index] = reviewer;
-        this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: reviewerList });
-        this._coiService.isReviewActionCompleted = this.completeReviewAction(reviewerList);
+        DATA.coiDisclosure.coiReviewStatusType = reviewer.coiDisclosure.coiReviewStatusType;
+        this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], { coiReviewerList: reviewerList, coiDisclosure: DATA.coiDisclosure });
+        this._coiService.isReviewActionCompleted = this._coiService.isAllReviewsCompleted(reviewerList);
         this.updateReviewActions(reviewer);
         this._coiService.isEnableReviewActionModal = false;
     }
@@ -86,12 +92,10 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
         if (reviewer.reviewStatusTypeCode === '3' && this._coiService.isDisclosureReviewer) {
             this._coiService.isStartReview = false;
             this._coiService.isCompleteReview = true;
-        } else if (reviewer.reviewStatusTypeCode === '4' && this._coiService.isDisclosureReviewer) {
+        } else if (reviewer.reviewStatusTypeCode === '2' && this._coiService.isDisclosureReviewer) {
             this._coiService.isStartReview = false;
             this._coiService.isCompleteReview = false;
         }
     }
-    private completeReviewAction (reviewerList): boolean {
-        return reviewerList.every(value => value.coiReviewStatus.reviewStatusCode === '4');
-      }
+
 }

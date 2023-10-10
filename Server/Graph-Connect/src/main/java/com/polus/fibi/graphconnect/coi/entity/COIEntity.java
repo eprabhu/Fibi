@@ -25,26 +25,29 @@ public class COIEntity {
 	@Id	
 	@Property(name="id")
 	private String id;
-	
+
 	@Property(name="entity_number")
 	private String entityNumber;
-	
+
 	@Property(name="name")
 	private String entityName;
-	
+
 	@Property(name="country_name")
 	private String countryName;
-	
+
 	@Property(name="country_code")
 	private String countryCode;
-		
+	
 	@Property(name="status")
 	private String status;
-	
+
 	@Property(name="type")
 	private String type;
-	
+
+	@Property(name="risk")
+	private String risk;
+
 	@Relationship(type = "COUNTRY_OWNED", direction = Direction.OUTGOING)
 	private Country countryOwned;
-	
+
 }

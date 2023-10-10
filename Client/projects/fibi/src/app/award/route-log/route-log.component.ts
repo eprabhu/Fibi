@@ -6,11 +6,12 @@ import { CommonDataService } from '../services/common-data.service';
 import { Subscription } from 'rxjs';
 import { AwardService } from '../services/award.service';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
+declare var $: any;
 
 @Component({
   selector: 'app-route-log',
   template: `<workflow-engine *ngIf="result?.award?.awardId && _commonData.awardSectionConfig['162'].isActive" [workFlowResult]="result"
-             (workFlowResponse)='workFlowResponse($event)' [workFlowDetailKey]="'award'"></workflow-engine>`
+             (workFlowResponse)='workFlowResponse($event)' (errorEvent)='errorEvent()' [workFlowDetailKey]="'award'"></workflow-engine>`
 })
 export class RouteLogComponent implements OnInit, OnDestroy {
 
@@ -70,5 +71,9 @@ export class RouteLogComponent implements OnInit, OnDestroy {
     this.result.previousActiveAwardId = data.previousActiveAwardId;
     this.result.pendingAwardsSummary = data.pendingAwardsSummary;
   }
+
+  errorEvent() {
+    $('#invalidActionModal').modal('show');
+    }
 
 }

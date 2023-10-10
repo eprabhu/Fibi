@@ -78,7 +78,14 @@ export class EntityDetails {
   numberOfSFI: any;
   coiFinancialEntity: any;
   personEntity: any;
+  comment: any;
   coiEntity: CoiEntity = new CoiEntity();
 }
 
+export class RiskHistoryRO {
+  entityId: number;
+  entityNumber: number;
+  revisionReason = '';
+  riskCategoryCode: string;
+}
 

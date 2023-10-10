@@ -42,6 +42,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.getActiveDisclosure();
+        this.openModalTriggeredFromChild();
         // this.getAllRemaindersList();
     }
 
@@ -94,4 +95,11 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
     }
 
+    openModalTriggeredFromChild() {
+        this.$subscriptions.push(this.service.$openModal.subscribe((event: string) => {
+            if(event == 'FCOI') {
+                this.openReviseModal();
+            }
+        }))
+    }
 }

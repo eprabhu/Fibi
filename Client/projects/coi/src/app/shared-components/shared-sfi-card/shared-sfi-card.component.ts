@@ -5,17 +5,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-
-class SFI_OBJECT {
-  isActive = 'INACTIVE';
-  validPersonEntityRelTypes = [];
-  entityType = '';
-  involvementStartDate = '';
-  involvementEndDate = '';
-  countryName = '';
-  entityId = '';
-  entityName = '';
-}
+import { SfiObject } from '../shared-interface';
 
 @Component({
   selector: 'app-shared-sfi-card',
@@ -31,8 +21,9 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
   @Output() viewSlider = new EventEmitter<any>();
   @Output() deleteEvent =  new EventEmitter<any>();
   @Output() activateDeactivateEvent =  new EventEmitter<any>();
+  @Output() reviewSlider = new EventEmitter<any>();
 
-  SFIObject = new SFI_OBJECT();
+  SFIObject = new SfiObject();
   $subscriptions: Subscription[] = [];
 
   constructor(private _router: Router, private _sharedSFIService: SharedSfiService, private _commonService: CommonService) { }
@@ -100,4 +91,27 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
     this.activateDeactivateEvent.emit(this.reqObject);
   }
 
+  openReviewComment(relationshipDetails) {
+    this.reviewSlider.emit({personEntityId: relationshipDetails.entityId, personEntityHeader :relationshipDetails.entityName});
+  }
+
+  getMessage() { 
+    if (this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE')
+    return 'Entity modified';
+    else if ((this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')))
+    return 'Entity inactivated';
+  }
+
+  checkForEntityWarning() {
+    return this.referredFrom != 'SFI_SUMMARY' && 
+           (this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE' || (this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')));
+  }
+
+  getHelpText() {
+    if (this.referredFrom != 'SFI_SUMMARY' && this.getValuesFormCOIEntityObj('versionStatus') == 'ARCHIVE')
+    return 'Please click Modify button to revise SFI';
+    else if (this.referredFrom != 'SFI_SUMMARY' && (this.reqObject.isRelationshipActive && !this.getValuesFormCOIEntityObj('isActive')))
+    return 'Please use Inactivate button to inactivate SFI';
+  }
+  
 }

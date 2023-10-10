@@ -69,6 +69,8 @@ export interface InstituteProposalBudgetHeader {
     totalCost: number;
     totalDirectCost: number;
     totalIndirectCost: number;
+    costSharingTypeCode: number;
+    costSharingType: any;
     comments: string;
     campusFlag: string;
     createTimeStamp: number;
@@ -101,6 +103,7 @@ export interface InstituteProposalBudgetHeader {
     totalModifiedDirectCost: number;
     totalInKind: number;
     totalOfTotalCost: number;
+
 }
 
 export class BudgetData {
@@ -151,6 +154,7 @@ export class BudgetData {
     rateTypes: RateType[];
     isShowModifiedDirectCost: boolean;
     isCampusFlagEnabled: boolean;
+    overHeadRateTypeEnabled: boolean;
     description?: any;
     isAwarded?: any;
     proposalNumber?: any;

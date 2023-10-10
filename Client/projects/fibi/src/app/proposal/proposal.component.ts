@@ -158,6 +158,7 @@ export class ProposalComponent implements OnInit, OnDestroy {
     isChecked = {};
     submitModalName: string;
     proposalMode = '';
+    invalidActionMessage = '';
 
     // KKI Specific Change Don't Delete
     // internalDeadlineWarningMsg: string;
@@ -434,6 +435,7 @@ export class ProposalComponent implements OnInit, OnDestroy {
             this.clearCopyFlags();
             this.autoSaveService.clearUnsavedChanges();
             this.loadProposalById(success.proposal.proposalId);
+            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Proposal copied successfully.');
         }));
     }
 
@@ -441,7 +443,8 @@ export class ProposalComponent implements OnInit, OnDestroy {
         event.preventDefault();
         this.$subscriptions.push(this._proposalService.withdrawProposal({
             'userFullName': this._commonService.getCurrentUserDetail('fullName'),
-            'updateUser': this._commonService.getCurrentUserDetail('userName'), 'proposalId': this.result.proposal.proposalId
+            'updateUser': this._commonService.getCurrentUserDetail('userName'), 'proposalId': this.result.proposal.proposalId,
+            'proposalStatusCode': this.result.proposal.statusCode
         }).subscribe((data: any) => {
             this.result.proposal.proposalStatus = data.proposal.proposalStatus;
             this.result.proposal.statusCode = data.proposal.statusCode;
@@ -449,8 +452,8 @@ export class ProposalComponent implements OnInit, OnDestroy {
             this.webSocket.releaseCurrentModuleLock('Proposal' + '#' + this.result.proposal.proposalId);
         }, err => {
             $('#warning-modal').modal('hide');
-            this._commonService.showToast(HTTP_ERROR_STATUS, (err && typeof err.error == 'string') ?
-                err.error : 'Withdraw Proposal failed. Please try again.');
+            (err && err.status === 405) ? $('#invalidActionModal').modal('show') :
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Withdraw Proposal failed. Please try again.');
         },
         () => {
             $('#warning-modal').modal('hide');
@@ -526,12 +529,14 @@ export class ProposalComponent implements OnInit, OnDestroy {
         },
             err => {
                 $('#warning-modal').modal('hide');
-                if (err.error && err.error.errorMessage  === 'Deadlock') {
+                if (err && err.status === 405) { 
+                    $('#invalidActionModal').modal('show');
+                } else if (err.error && err.error.errorMessage  === 'Deadlock') {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Submit Proposal failed. Please try again.');
-                  } else {
+                } else {
                     this._commonService.showToast(HTTP_ERROR_STATUS, `Transaction is not completed due to an error.
                     ${AWARD_ERR_MESSAGE}`);
-                  }
+                 }
                 this._commonService.isShowOverlay = false;
             },
             () => {
@@ -763,7 +768,6 @@ export class ProposalComponent implements OnInit, OnDestroy {
         this.requestObject.updateUser = this._commonService.getCurrentUserDetail('userName');
         this.requestObject.proposalId = this.result.proposal.proposalId;
         this.requestObject.isSuperUser = this.superUser;
-        this.requestObject.approverStopNumber = this.result.approverStopNumber;
         const approveFormData = new FormData();
 
         for (let i = 0; i < this.uploadedFile.length; i++) {
@@ -788,8 +792,11 @@ export class ProposalComponent implements OnInit, OnDestroy {
                 err => {
                     $('#approveDisapproveModal').modal('hide');
                     this.closeApproveDisapproveModal();
+                    if (err && err.status === 405) {
+                      $('#invalidActionModal').modal('show');
+                    }
                     // tslint:disable-next-line:max-line-length
-                    if (err.error && err.error.errorMessage  === 'Deadlock') {
+                    else if (err.error && err.error.errorMessage  === 'Deadlock') {
                         this._commonService.showToast(HTTP_ERROR_STATUS, `Proposal ${COMMON_APPROVE_LABEL.toLowerCase()} failed. Please try again.`);
                     } else {
                         this._commonService.showToast(HTTP_ERROR_STATUS, `Transaction is not completed due to an error.
@@ -1116,7 +1123,8 @@ export class ProposalComponent implements OnInit, OnDestroy {
     setProposalStatusInActive() {
         this.$subscriptions.push(this._proposalService.setProposalStatusInActive({
             'proposalId': this.result.proposal.proposalId,
-            'updateUser': this._commonService.getCurrentUserDetail('userName')
+            'updateUser': this._commonService.getCurrentUserDetail('userName'),
+            'proposalStatusCode': this.result.proposal.statusCode
         }).subscribe((data: any) => {
             if (data) {
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Proposal deactivated.');
@@ -1129,8 +1137,8 @@ export class ProposalComponent implements OnInit, OnDestroy {
             }
         }, err => {
             $('#warning-modal').modal('hide');
-            this._commonService.showToast(HTTP_ERROR_STATUS, (err && typeof err.error == 'string') ?
-                err.error : 'Deactivate Proposal failed. Please try again.');
+            (err && err.status === 405) ? $('#invalidActionModal').modal('show') :
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Deactivate Proposal failed. Please try again.');
         },
             () => {
                 this.dataVisibilityObj.isShowNotifyApprover = false;
@@ -1227,8 +1235,8 @@ export class ProposalComponent implements OnInit, OnDestroy {
                     },
                     err => {
                             $('#recallProposalModal').modal('hide');
-                            this._commonService.showToast(HTTP_ERROR_STATUS, (err && typeof err.error == 'string') ?
-                                err.error : 'Withdraw Proposal failed. Please try again.');
+                        (err && err.status === 405) ? $('#invalidActionModal').modal('show') :
+                            this._commonService.showToast(HTTP_ERROR_STATUS, 'Withdraw Proposal failed. Please try again.');
                             this.isSaving = false;
                         }));
             }
@@ -1245,13 +1253,18 @@ export class ProposalComponent implements OnInit, OnDestroy {
 
     deleteProposal() {
         this.$subscriptions.push(this._proposalService.deleteProposal({
-            'proposalId': this.result.proposal.proposalId,
+            'proposalId': this.result.proposal.proposalId
         }).subscribe((success: any) => {
             if (success.message === 'Proposal deleted successfully') {
                 this._router.navigate(['fibi/dashboard/proposalList']);
+                this._commonService.showToast(HTTP_SUCCESS_STATUS , success.message);
             } else {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'You don\'t have the right to delete this Proposal.');
             }
+        }, err => {
+            $('#deleteProposalModal').modal('hide');
+            (err && err.status === 405) ? $('#invalidActionModal').modal('show') :
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'You don\'t have the right to delete this Proposal.');
         }));
     }
 
@@ -1261,7 +1274,8 @@ export class ProposalComponent implements OnInit, OnDestroy {
             'updateUser': this._commonService.getCurrentUserDetail('userName'),
             'actionType': 'C',
             'personId': this._commonService.getCurrentUserDetail('personID'),
-            'workFlowPersonId': this._commonService.getCurrentUserDetail('personID')
+            'workFlowPersonId': this._commonService.getCurrentUserDetail('personID'),
+            'proposalStatusCode': this.result.proposal.statusCode
         };
     }
 
@@ -1313,8 +1327,10 @@ export class ProposalComponent implements OnInit, OnDestroy {
     createAdminCorrectionForProposal() {
         if (!this.isSaving) {
             this.isSaving = true;
-            this.$subscriptions.push(this._proposalService.createProposalAdminCorrection(this.result.proposal.proposalId)
-                .subscribe(async (success: any) => {
+            this.$subscriptions.push(this._proposalService.createProposalAdminCorrection({
+                'proposalId': this.result.proposal.proposalId,
+                'proposalStatusCode': this.result.proposal.statusCode
+            }).subscribe(async (success: any) => {
                     await this.webSocket.isModuleLocked('Proposal', this.result.proposalId);
                     this.isSaving = false;
                     this.result.proposal.documentStatusCode = '2';
@@ -1322,11 +1338,11 @@ export class ProposalComponent implements OnInit, OnDestroy {
                     this.setProposalMode();
                     this.updateBudgetEditMode();
                     this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Admin Correction created successfully.');
-                }, err => {
-                    this.isSaving = false;
-                    this._commonService.showToast(HTTP_ERROR_STATUS, (err && typeof err.error == 'string') ?
-                        err.error : 'Admin Correction failed. Please try again.');
-                }));
+            }, err => {
+                this.isSaving = false;
+                (err && err.status === 405) ? $('#invalidActionModal').modal('show') :
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Admin Correction failed. Please try again.');
+            }));
         }
     }
 
@@ -1353,8 +1369,7 @@ export class ProposalComponent implements OnInit, OnDestroy {
         if (!this.isSaving) {
             this.isSaving = true;
             this.triggerManualLoader(true);
-            this.$subscriptions.push(this._proposalService.completeProposalAdminCorrection(this.result.proposal.proposalId)
-                .subscribe((data: any) => {
+            this.$subscriptions.push(this._proposalService.completeProposalAdminCorrection(this.result.proposal.proposalId).subscribe((data: any) => {
                     if (data.status === 200) {
                         this.isSaving = false;
                         this.setProposalStoreData(data.body);
@@ -1383,7 +1398,10 @@ export class ProposalComponent implements OnInit, OnDestroy {
                         this._commonService.showToast(HTTP_ERROR_STATUS, 'Submit Admin Correction failed. Please try again.');
                         this.isSaving = false;
                     }
-                }));
+            }, err => {
+                (err && err.status === 405) ? $('#invalidActionModal').modal('show') :
+                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Complete Admin Correction failed. Please try again.');
+            }));
         }
     }
 
@@ -1468,6 +1486,25 @@ export class ProposalComponent implements OnInit, OnDestroy {
                 $('#app-generic-support-modal').modal('show');
             });
         }
+    }
+    reload() {
+        window.location.reload();
+    }
+
+    cancelAdminCorrection() {
+        this.$subscriptions.push(this._proposalService.cancelAdminCorrection({'proposalId': this.result.proposal.proposalId}).subscribe((data: any) => {
+            this._commonService.showToast(HTTP_SUCCESS_STATUS,'Admin Correction cancelled successfully.');
+            this.loadProposalById(data);
+        }, err => {
+            if (err && err.status === 405) {
+                this.invalidActionMessage = err.error;
+                $('#invalidProposalActionModal').modal('show');
+            } else {
+                this._commonService.showToast(HTTP_ERROR_STATUS,'Admin Correction Cancel Failed.');
+            }
+        }
+        ))
+        $('#cancelAdminCorrection').modal('hide');
     }
 }
 

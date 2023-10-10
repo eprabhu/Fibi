@@ -3,14 +3,17 @@ import { CoiService } from '../services/coi.service';
 import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { DataStoreService } from '../services/data-store.service';
 import { DateFormatPipeWithTimeZone } from '../../shared/pipes/custom-date.pipe';
+import { fadeInOutHeight } from '../../common/utilities/animations';
+import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-history',
     templateUrl: './history.component.html',
-    styleUrls: ['./history.component.scss']
+    styleUrls: ['./history.component.scss'],
+    animations: [fadeInOutHeight]
 })
 export class HistoryComponent implements OnInit {
 
@@ -18,6 +21,8 @@ export class HistoryComponent implements OnInit {
     dependencies = ['coiDisclosure'];
     coiDisclosure: any = {};
     disclosureHistoryLogs: any = {};
+    isEmptyObject = isEmptyObject;
+    isReadMore = false;
 
     constructor( public _coiService: CoiService, 
                  private _commonService: CommonService, 
@@ -60,7 +65,7 @@ export class HistoryComponent implements OnInit {
 
     updateHistoryLogs(data: any) {
         if (data.length) {
-            this.disclosureHistoryLogs = [];
+            this.disclosureHistoryLogs = {};
             data.forEach((historyObj) => {
                 const date = this._dataFormatPipe.transform(historyObj.updateTimestamp);
                 this.disclosureHistoryLogs[date] = this.disclosureHistoryLogs[date] ? this.disclosureHistoryLogs[date] : [];
@@ -69,7 +74,4 @@ export class HistoryComponent implements OnInit {
         }
     }
 
-    closeHistoryInfo() {
-        this._coiService.isShowHistoryInfo = false;
-    }
 }

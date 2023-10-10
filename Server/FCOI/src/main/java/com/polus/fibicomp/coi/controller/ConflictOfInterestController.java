@@ -29,15 +29,20 @@ import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.NotesDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.SearchDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
@@ -45,6 +50,7 @@ import com.polus.fibicomp.coi.service.GeneralService;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.inbox.pojo.Inbox;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 @RestController
@@ -101,7 +107,7 @@ public class ConflictOfInterestController {
 	@PostMapping(value = "/searchEntity")
 	public List<CoiEntity> searchEnitiy(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for searchEntity");
-		return conflictOfInterestService.searchEnitiy(vo.getSearchString());
+		return conflictOfInterestService.searchEntity(vo);
 	}
 
 	@GetMapping("/loadSFILookups")
@@ -186,14 +192,14 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping(value = "/addCOIReviewComment")
-	public String addExtReviewerAttachment(@RequestParam(value = "files", required = false) MultipartFile[] files,
+	public ResponseEntity<Object> addExtReviewerAttachment(@RequestParam(value = "files", required = false) MultipartFile[] files,
 			@RequestParam("formDataJson") String formDataJson) {
 		logger.info("Requesting for addCOIReviewComment");
 		return conflictOfInterestService.saveOrUpdateCoiReviewComments(files, formDataJson);
 	}
 
 	@PostMapping("/loadCoiReviewComments")
-	public String loadCoiReviewComments(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> loadCoiReviewComments(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for loadCoiReviewComments");
 		return conflictOfInterestService.loadCoiReviewComments(vo);
 	}
@@ -205,7 +211,7 @@ public class ConflictOfInterestController {
 	}
 
 	@DeleteMapping(value = "/deleteReview/{coiReviewId}")
-	public String deleteReview(@PathVariable(value = "coiReviewId", required = true) final Integer coiReviewId) {
+	public ResponseEntity<Object> deleteReview(@PathVariable(value = "coiReviewId", required = true) final Integer coiReviewId) {
 		logger.info("Requesting for deleteReview");
 		return conflictOfInterestService.deleteReview(coiReviewId);
 	}
@@ -214,6 +220,12 @@ public class ConflictOfInterestController {
 	public String deleteReviewComment(@PathVariable(value = "coiReviewCommentId", required = true) final Integer coiReviewCommentId) {
 		logger.info("Requesting for deleteReviewComment");
 		return conflictOfInterestService.deleteReviewComment(coiReviewCommentId);
+	}
+
+	@DeleteMapping(value = "/deleteCOIReviewCommentTags/{coiReviewCommentTagId}")
+	public String deleteReviewCommentTag(@PathVariable(value = "coiReviewCommentTagId", required = true) final Integer coiReviewCommentTagId) {
+		logger.info("Requesting for deleteReviewCommentTag");
+		return conflictOfInterestService.deleteReviewCommentTag(coiReviewCommentTagId);
 	}
 	
 	@DeleteMapping(value = "/deleteReviewAttachment/{coiReviewCommentAttId}")
@@ -526,11 +538,6 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.approveEntity(entityRelationship);
 	}
 
-	@PostMapping("/disclosure/historyDashboard")
-	public ResponseEntity<Object> getDisclosureHistory(@RequestBody CoiDashboardVO dashboardVO) {
-		return conflictOfInterestService.getDisclosureHistory(dashboardVO);
-	}
-	
 	@PostMapping(value = "/loadTravelDisclosureHistory")
 	public List<CoiTravelHistoryDto> loadTravelDisclosureHistory(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for loadTravelDisclosureHistory");
@@ -592,5 +599,66 @@ public class ConflictOfInterestController {
 		logger.info("Request for loadTravelConflictHistory");
 		return conflictOfInterestService.getCoiTravelConflictHistory(travelDisclosureId);
 	}
+
+    @GetMapping("/travelDisclosureHistory/{travelDisclosureId}")
+	public ResponseEntity<Object> getTravelDisclosureHistoryById(@PathVariable("travelDisclosureId") Integer travelDisclosureId) {
+		return actionLogService.getTravelDisclosureHistoryById(travelDisclosureId);
+	}
+
+    @PostMapping("/getCoiSectionsTypeCode")
+	public ResponseEntity<Object> getCoiSectionsTypeCode(@RequestBody ConflictOfInterestVO vo) {
+		logger.info("Requesting for getCoiSectionsTypeCode");
+		return conflictOfInterestService.getCoiSectionsTypeCode(vo);
+	}
+
+    @PutMapping("/travelDisclosure/modifyRisk")
+    public ResponseEntity<Object> modifyRisk(@RequestBody CoiTravelDisclosureDto travelDisclosureDto) {
+        return conflictOfInterestService.modifyTravelDisclosureRisk(travelDisclosureDto);
+    }
+
+    @PostMapping("/travelDisclosure/history")
+    public ResponseEntity<Object> fetchtravelDisclosureHistory(@RequestBody TravelDisclosureActionLogDto actionLogDto) {
+        return conflictOfInterestService.fetchTravelDisclosureHistory(actionLogDto);
+    }
+
+    @GetMapping("/reviewHistory/{disclosureId}")
+   	public ResponseEntity<Object> getReviewHistoryById(@PathVariable("disclosureId") Integer disclosureId) {
+   		return actionLogService.getReviewHistoryById(disclosureId);
+   	}
+
+	@GetMapping("/personEntity/{personEntityNumber}/latestVersion")
+	public ResponseEntity<Object> getSFILatestVersion(@PathVariable("personEntityNumber") Integer personEntityNumber) {
+		return conflictOfInterestService.getSFILatestVersion(personEntityNumber);
+	}
+
+	@GetMapping("/loadDisclAttachTypes")
+	public ResponseEntity<Object> loadDisclAttachTypes() {
+		logger.info("Requesting for loadDisclAttachTypes");
+		return conflictOfInterestService.loadDisclAttachTypes();
+	}
+
+	@PostMapping("/fetchAllActiolListEntriesForBanners")
+	public List<Inbox> fetchAllActiolListEntriesForBanners(@RequestBody NotificationBannerDto notifyBannerDto) {
+		logger.info("Request for fetchAllActiolListEntriesForBanners");
+		return conflictOfInterestService.fetchAllActiolListEntriesForBanners(notifyBannerDto);
+	}
+
+	@PostMapping("/saveOrUpdatePersonNote")
+	public ResponseEntity<Object> saveOrUpdatePersonNote(@RequestBody NotesDto dto) {
+		logger.info("Request for saveOrUpdatePersonNote");
+		return conflictOfInterestService.saveOrUpdatePersonNote(dto);
+	}
+
+    @GetMapping("/fetchAllNotesForPerson/{personId}")
+   	public List<Notes> fetchAllNotesForPerson(@PathVariable("personId") String personId) {
+    	logger.info("Request for fetchAllNotesForPerson");
+   		return conflictOfInterestService.fetchAllNotesForPerson(personId);
+   	}
+
+    @GetMapping("/getNoteDetailsForNoteId/{noteId}")
+   	public Notes getNoteDetailsForNoteId(@PathVariable("noteId") Integer noteId) {
+    	logger.info("Request for getNoteDetailsForNoteId");
+   		return conflictOfInterestService.getNoteDetailsForNoteId(noteId);
+   	}
 
 }

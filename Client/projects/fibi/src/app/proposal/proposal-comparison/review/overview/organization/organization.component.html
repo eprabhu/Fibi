@@ -44,29 +44,32 @@
               </ng-template>
               </td>
               <td>
-                <span *ngIf="org?.organization?.contactPersonName; else noContact"
-                  [innerHTML]="org?.organization?.contactPersonName | customTagRemover: currentMethod">
-                  <!-- <a class="anchor-link" data-toggle="modal" data-target="#contactViewDetailsModal"
-                  (click)="getContactDetails(index)">
-                  <i aria-hidden="true"></i>
-                </a> -->
+                <span *ngIf="!isDefaultOrganizationType(org?.organizationTypeCode)" class="noDataExists">Not Applicable</span>
+                <span  *ngIf="isDefaultOrganizationType(org?.organizationTypeCode)">
+                  <span *ngIf="org?.organization?.contactPersonName; else noContact"
+                    [innerHTML]="org?.organization?.contactPersonName | customTagRemover: currentMethod">
+                      <!-- <a class="anchor-link" data-toggle="modal" data-target="#contactViewDetailsModal"
+                      (click)="getContactDetails(index)">
+                      <i aria-hidden="true"></i>
+                    </a> -->
+                  </span>
                 </span>
                 <ng-template #noContact>
                   <span class="noDataExists">No Data</span>
                 </ng-template>
               </td>
               <td *ngIf="enableOrganizationLocation">                
-                <span *ngIf="org?.location; else noLocation">{{org?.location}} </span>
-                <ng-template #noLocation>
-                  <span class="noDataExists">No Data</span>
-                </ng-template>
+                <span *ngIf="isDefaultOrganizationType(org?.organizationTypeCode)" class="noDataExists">Not Applicable</span>
+                <span *ngIf="!isDefaultOrganizationType(org?.organizationTypeCode)" [class.noDataExists]="!org?.location">
+                    {{org?.location ? org?.location : 'No Data'}}
+                </span>
               </td>
               <td>
                 <ng-container *ngIf="org?.proposalCongDistricts?.length > 0; else noDistrict">
                   <ng-container *ngFor="let dist of org?.proposalCongDistricts;">
                     <ng-container *ngIf="dist.congressionalDistrict == null" class="noDataExists">No data
                     </ng-container>
-                    <ng-container *ngIf="dist.congressionalDistrict">
+                    <ng-container *ngIf="dist.congressionalDistrict.description">
                       <span
                         [ngClass]="{ 'delete-background': dist?.status == -1,'add-background': dist?.status == 1}"
                         [innerHTML]='dist.congressionalDistrict.description | customTagRemover: currentMethod'>

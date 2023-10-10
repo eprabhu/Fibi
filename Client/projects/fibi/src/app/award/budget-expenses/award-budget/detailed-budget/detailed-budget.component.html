@@ -485,7 +485,7 @@
                                 <i *ngIf="lineItem?.isSystemGeneratedCostElement!=true && _budgetDataService.isBudgetEditable && lineItem.prevLineItemCost == null"
                                   class="fa fa-trash hand-cursor hoverColor action-icons" title="Delete line Item"
                                   data-toggle="modal" data-target="#deleteAwardBudgetLineitemModal"
-                                  (click)="deleteLineItemIndex = detailIndex;
+                                  (click)="deleteLineItemIndex = detailIndex; isIOCodeExistInManpower = lineItem.isIOCodeExistInManpower;
                                   isManpowerResourceExistInManpower = lineItem.isManpowerResourceExistInManpower" aria-hidden="true"></i>
                                 <i *ngIf="!isLineItemEditable[detailIndex] && _budgetDataService.isBudgetEditable && ((lineItem?.isSystemGeneratedCostElement && !awardBudgetData?.awardBudgetHeader?.isAutoCalc) || !lineItem?.isSystemGeneratedCostElement)"
                                   class="fa fa-pencil hand-cursor hoverColor action-icons"
@@ -834,8 +834,8 @@
 <!-- LINEITEM DELETE MODAL STARTS -->
 <div class="modal fade mySkinDialog" tabindex="-1" id="deleteAwardBudgetLineitemModal" tabindex="-1" role="dialog"
   data-backdrop="static" data-keyboard="false" aria-labelledby="deleteAwardBudgetLineitemModal" aria-hidden="true">
-  <div class="modal-dialog" role="document" [ngClass]="_commonService.isManpowerEnabled && (tempObject?.lineItem?.isIOCodeExistInManpower ||
-  tempObject?.lineItem?.isManpowerResourceExistInManpower) ? 'modal-lg' : ''">
+  <div class="modal-dialog" role="document" [ngClass]="_commonService.isManpowerEnabled && (isIOCodeExistInManpower ||
+  isManpowerResourceExistInManpower) ? 'modal-lg' : ''">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Delete</h5>
@@ -844,17 +844,17 @@
         </button>
       </div>
       <div class="modal-body">
-        <p *ngIf="!(tempObject?.lineItem?.isManpowerResourceExistInManpower && _commonService.isManpowerEnabled)">Are you sure you want to delete this line item?</p>
-        <div *ngIf="tempObject?.lineItem?.isIOCodeExistInManpower && !tempObject?.lineItem?.isManpowerResourceExistInManpower && _commonService.isManpowerEnabled"
+        <p *ngIf="!(isManpowerResourceExistInManpower && _commonService.isManpowerEnabled)">Are you sure you want to delete this line item?</p>
+        <div *ngIf="isIOCodeExistInManpower && !isManpowerResourceExistInManpower && _commonService.isManpowerEnabled"
         class="alert alert-warning" role="alert">Deleting the line item would also delete the corresponding entry in Manpower Plan
         </div>
-        <div *ngIf="tempObject?.lineItem?.isManpowerResourceExistInManpower && _commonService.isManpowerEnabled" class="alert alert-danger" role="alert">
+        <div *ngIf="isManpowerResourceExistInManpower && _commonService.isManpowerEnabled" class="alert alert-danger" role="alert">
           Deletion can only be done when there are no resource in the manpower category
       </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary-sub" data-dismiss="modal" [disabled]="tempObject?.lineItem?.isManpowerResourceExistInManpower"
+        <button *ngIf="!isManpowerResourceExistInManpower" type="button" class="btn btn-primary-sub" data-dismiss="modal"
           (click)="deleteLineItem()">Delete</button>
       </div>
     </div>

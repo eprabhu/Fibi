@@ -52,11 +52,11 @@ public class PersonEntityRelationship implements Serializable {
 	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ENTITY_RELATIONSHIP_FK1"), name = "PERSON_ENTITY_ID", referencedColumnName = "PERSON_ENTITY_ID", insertable = false, updatable = false)
 	private PersonEntity personEntity;
 	
-	@Column(name = "VALID_PERSON_ENTITY_REL_TYPE_CODE")
+	@Column(name = "VALID_PERS_ENTITY_REL_TYP_CODE")
 	private Integer validPersonEntityRelTypeCode;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ENTITY_RELATIONSHIP_FK2"), name = "VALID_PERSON_ENTITY_REL_TYPE_CODE", referencedColumnName = "VALID_PERSON_ENTITY_REL_TYPE_CODE", insertable = false, updatable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "PERSON_ENTITY_RELATIONSHIP_FK2"), name = "VALID_PERS_ENTITY_REL_TYP_CODE", referencedColumnName = "VALID_PERS_ENTITY_REL_TYP_CODE", insertable = false, updatable = false)
 	private ValidPersonEntityRelType validPersonEntityRelType;
 	
 	@Column(name = "QUESTIONNAIRE_ANS_HEADER_ID")

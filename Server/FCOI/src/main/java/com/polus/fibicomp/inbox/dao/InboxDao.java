@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.polus.fibicomp.coi.pojo.CoiDisclosure;
 import com.polus.fibicomp.inbox.pojo.Inbox;
 import com.polus.fibicomp.inbox.vo.InboxVO;
 
@@ -95,5 +96,7 @@ public interface InboxDao {
 	 * @param submoduleItemKey
 	 */
 	public void updateMessageInboxByParam(String subModuleItemKey, Integer moduleCode, String messageTypeCode);
+	
+	public void saveBannerEntriesToActionList(Inbox actionList);
 
 }

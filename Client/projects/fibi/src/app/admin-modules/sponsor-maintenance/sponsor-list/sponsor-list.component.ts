@@ -124,6 +124,7 @@ export class SponsorListComponent implements OnInit, OnDestroy {
     this.sponsorRequestObject.property4 = '';
     this.sponsorRequestObject.property5 = '';
     this.sponsorRequestObject.property6 = '';
+    this.sponsorRequestObject.property7 = '';
     this.departmentName = '';
   }
 

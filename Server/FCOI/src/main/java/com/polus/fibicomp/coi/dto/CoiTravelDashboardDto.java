@@ -11,6 +11,7 @@ public class CoiTravelDashboardDto {
 	private Integer travelDisclosureId;
 	private String travellerName;
 	private String travellerTypeDescription;
+	private String travelDisclosureStatusCode;
 	private String travelDisclosureStatusDescription;
 	private String travelEntityName;
 	private String travelCity;
@@ -59,6 +60,14 @@ public class CoiTravelDashboardDto {
 
 	public void setTravellerTypeDescription(String travellerTypeDescription) {
 		this.travellerTypeDescription = travellerTypeDescription;
+	}
+
+	public String getTravelDisclosureStatusCode() {
+		return travelDisclosureStatusCode;
+	}
+
+	public void setTravelDisclosureStatusCode(String travelDisclosureStatusCode) {
+		this.travelDisclosureStatusCode = travelDisclosureStatusCode;
 	}
 
 	public String getTravelDisclosureStatusDescription() {

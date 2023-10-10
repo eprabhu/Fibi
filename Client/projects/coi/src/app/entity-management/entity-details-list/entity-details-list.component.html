@@ -1,5 +1,6 @@
 <div [@fadeInOutHeight]>
-  <app-view-entity-sfi-details></app-view-entity-sfi-details>
+  <app-view-entity-sfi-details [entityDetails]="entityDetails" (modifiedEntityId)="getUpdatedEntityId($event)"
+  (approveEntityDetails)="updateApprovedEntityDetails($event)"></app-view-entity-sfi-details>
   <div class="fw-bold ml-15 mt-4 mb-2 px-1 fs-16">Relationships</div>
   <div class="ml-15 mr-15 shadow-sm">
     <nav
@@ -30,13 +31,20 @@
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'FINANCIAL_DISCLOSURES'"
           class="px-5">Financial Disclosures</span>
       </div>
-      <div (click)="currentTab('TRAVEL_DISCLOSURES')" class="navigation-icons text-secondary py-1" role="button"
+      <div (click)="currentTab('TRAVEL_DISCLOSURES')" class="border-end navigation-icons text-secondary py-1" role="button"
         id="btn-travel-disclosure" title="Click to view Travel relations" (keyup.enter)="currentTab('TRAVEL_DISCLOSURES')"
         (keyup.space)="currentTab('TRAVEL_DISCLOSURES')">
         <span tabindex="0"
           [class.active]="entityManagementService.relationshipDashboardRequest.filterType === 'TRAVEL_DISCLOSURES'"
           class="px-5">Travel Disclosures</span>
       </div>
+      <div (click)="entityManagementService.relationshipDashboardRequest.filterType = 'HISTORY'" class="navigation-icons text-secondary py-1" role="button"
+        id="btn-history" title="Click to view History">
+        <span tabindex="0"
+          [class.active]="entityManagementService.relationshipDashboardRequest.filterType == 'HISTORY'"
+          class="px-5">History</span>
+      </div>
+
     </nav>
   </div>
   <!-- Advanced Search -->
@@ -57,7 +65,7 @@
       </div>
     </div>
   </div> -->
-  <!-- <div *ngIf="entityDetails.length > 0 && (entityManagementService.relationshipDashboardRequest.filterType == 'PERSON' ||
+  <!-- <div *ngIf="entityRelations.length > 0 && (entityManagementService.relationshipDashboardRequest.filterType == 'PERSON' ||
     entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES')
     " class="sort-div border mt-2 py-3 mr-15 ml-15">
     <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
@@ -277,11 +285,11 @@
 
   <!-- Advanced Search end -->
 
-  <ng-container *ngIf="!isLoading">
-    <div class="mt-2 ml-15 mr-15 border-1" [@listAnimation]="entityDetails.length">
+  <ng-container *ngIf="!isLoading && entityManagementService.relationshipDashboardRequest.filterType != 'HISTORY'">
+    <div class="mt-2 ml-15 mr-15 border-1" [@listAnimation]="entityRelations.length">
       <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'PERSON' ||
         entityManagementService.relationshipDashboardRequest.filterType == 'OTHER_ENTITIES'">
-        <div *ngFor="let entityListData of entityDetails;let i=index"
+        <div *ngFor="let entityListData of entityRelations;let i=index"
           class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
           (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
           <div class="p-3 text-break">
@@ -380,7 +388,7 @@
       </ng-container>
       <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'FINANCIAL_DISCLOSURES' ||
     entityManagementService.relationshipDashboardRequest.filterType == 'DEPARTMENT'">
-        <div *ngFor="let disclosureList of entityDetails;let i=index"
+        <div *ngFor="let disclosureList of entityRelations;let i=index"
           class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
           (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
           <div class="p-3 text-break">
@@ -497,7 +505,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'TRAVEL_DISCLOSURES'">
-        <div *ngFor="let travelDisclosureList of entityDetails;let i=index"
+        <div *ngFor="let travelDisclosureList of entityRelations;let i=index"
           class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
           (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false">
           <div class="p-3 text-break">
@@ -620,23 +628,25 @@
       </ng-container>
     </div>
   
-    <div class="m-4" *ngIf="!entityDetails.length">
+    <div class="m-4" *ngIf="!entityRelations.length">
       <app-no-information></app-no-information>
     </div>
   
-    <div *ngIf="entityDetails.length>0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+    <div *ngIf="entityRelations.length>0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
       <nav aria-label="pagination section" class="pagination justify-content-end m-3">
-        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount">
+        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount"
+          [defaultCurrentPage]="entityManagementService.relationshipDashboardRequest.currentPage">
         </app-pagination>
       </nav>
     </div>
   </ng-container>
+  <app-entity-history *ngIf="entityManagementService.relationshipDashboardRequest.filterType == 'HISTORY'" [entityDetails] = "entityDetails"></app-entity-history>
 </div>
 <div #viewSFIDetailsOverlay [class.overlay]="showSlider">
   <div class="slider-base" *ngIf="showSlider">
     <app-slider-close-btn (closeAction)="hideSfiNavBar()"></app-slider-close-btn>
     <div class="slider-container">
-      <app-entity-details [entityId]="personEntityId"></app-entity-details>
+      <app-entity-details [entityId]="personEntityId" (closeAction)="hideSfiNavBar()"></app-entity-details>
     </div>
   </div>
 </div>

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EntityManagementComponent } from './entity-management.component';
 import { RouterModule, Routes } from '@angular/router';
-import { EntityListComponent } from './entity-list/entity-list.component';
 import { MatIconModule } from '@angular/material/icon';
 import { EntityDetailsListComponent } from './entity-details-list/entity-details-list.component';
 import { SharedModule } from '../shared/shared.module';
@@ -12,7 +11,12 @@ import { SharedComponentModule } from '../shared-components/shared-component.mod
 import { EntityManagementGuardService } from './entity-management-guard.service';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { EntityDetailsService } from '../disclosure/entity-details/entity-details.service';
+import { EntityHistoryComponent } from './entity-history/entity-history.component';
 import { EntityDetailsModule } from '../disclosure/entity-details/entity-details.module';
+import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
+import { EntityListComponent } from './entity-list/entity-list.component';
+import { EntityManagementService } from './entity-management.service';
+import { SharedLibraryModule } from '../../../../shared/src/lib/shared.module' ;
 
 const routes: Routes = [
   {
@@ -20,8 +24,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'entity-list', pathMatch: 'full' },
       { path: 'entity-details', component: EntityDetailsListComponent },
-      { path: 'entity-list', component: EntityListComponent },
-
+      { path: 'entity-list', component: EntityListComponent }
     ]
   },
 ];
@@ -29,8 +32,10 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     EntityManagementComponent,
-    EntityListComponent,
     EntityDetailsListComponent,
+    EntityHistoryComponent,
+    EntityListComponent,
+    ViewEntityDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -39,10 +44,13 @@ const routes: Routes = [
     SharedModule,
     FormsModule,
     SharedComponentModule,
-    EntityDetailsModule
+    EntityDetailsModule,
+    SharedLibraryModule
   ],
   exports: [
-  ], providers: [ElasticConfigService,EntityDetailsService, EntityManagementGuardService, SfiService, EntityManagementGuardService]
+  ],
+  providers: [ElasticConfigService, EntityDetailsService, EntityManagementGuardService, SfiService,
+     EntityManagementGuardService, EntityManagementService]
 })
 export class EntityManagementModule {
 }

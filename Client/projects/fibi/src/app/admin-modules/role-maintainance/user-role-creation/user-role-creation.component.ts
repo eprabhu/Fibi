@@ -90,6 +90,7 @@ export class UserRoleCreationComponent implements OnInit, OnDestroy {
 			this.isShowPersonCard = true;
 			this.isPersonFieldDisabled = true;
 			this.personDetails = Object.assign(personObj);
+			this.personDetails.unit_name = personObj.homeUnitName ? personObj.homeUnitName : this.roleMaintenanceService.assignPersonDetails.unit_name;
 		}
 		if (unitObj.unitNumber) {
 			this.unitSearchOptions.defaultValue = concatUnitNumberAndUnitName(unitObj.unitNumber, unitObj.unitName);

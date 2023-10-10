@@ -70,7 +70,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
     this.updateLookUpSettings();
     this.setSelectedValue();
     if (!this.isMultiple) {
-      this.selection = this.defaultValue || '--select--';
+      this.selection = this.defaultValue || this.selection;
     }
     this.isError ? this.searchField.nativeElement.classList.add('is-invalid')
       : this.searchField.nativeElement.classList.remove('is-invalid');

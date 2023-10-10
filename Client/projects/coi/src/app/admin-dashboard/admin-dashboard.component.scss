@@ -298,3 +298,50 @@ small {
   color: grey;
   height: 18px;
 }
+
+.fileChips {
+  display: inline-block;
+  padding: 0 25px;
+  margin-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 12px;
+  padding: 3px 8px 3px 12px;
+  border-radius: 15px;
+  background: #f1f1f1;
+  border: 1px solid #ebe8e8;
+  /* box-shadow: 2px 1px 1px #cef9ff; */
+}
+
+.coi-reviewer-pill {
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reviewer-success {
+  @extend .coi-reviewer-pill;
+  color: #4cb57d;
+}
+
+.reviewer-warning {
+  @extend .coi-reviewer-pill;
+  color: #ac8100;
+}
+
+.reviewer-info {
+  @extend .coi-reviewer-pill;
+  color: #007DEC;
+}
+
+.p-25{
+  padding-right: 25px;
+}
+
+.p5{
+  padding-right:5px;
+}
+
+.p0{
+  padding-right:0 ;
+}

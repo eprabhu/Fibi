@@ -91,9 +91,11 @@ public class COIImportGraphDataDao {
 		logger.debug("--------- Import Entity: starts at ------------ " + start);
 
 		String query = "SELECT \r\n" + "CONCAT('ENT',t1.ENTITY_ID) as ID,\r\n" + "t1.ENTITY_NUMBER,\r\n"
-				+ "t1.ENTITY_NAME as NAME,\r\n" + "t2.DESCRIPTION as STATUS,\r\n" + "t3.DESCRIPTION as TYPE,\r\n"
+				+ "t1.ENTITY_NAME as NAME,\r\n" + "CASE \r\n"
+						+ "        WHEN t1.IS_ACTIVE = 'Y' THEN 'Active'\r\n"
+						+ "        WHEN t1.IS_ACTIVE = 'N' THEN 'Inactive' END as STATUS,\r\n" + "t3.DESCRIPTION as TYPE, t5.DESCRIPTION as RISK,\r\n"
 				+ "t1.COUNTRY_CODE,\r\n" + "t4.COUNTRY_NAME,\r\n" + "t1.WEB_URL\r\n" + "FROM entity t1\r\n"
-				+ "inner join entity_status t2 on t1.entity_status_code = t2.entity_status_code\r\n"
+				+ "inner join entity_risk_category t5 on t1.RISK_CATEGORY_CODE = t5.RISK_CATEGORY_CODE\r\n"
 				+ "inner join entity_type t3 on t1.entity_type_code = t3.entity_type_code\r\n"
 				+ "left outer join country t4 on t1.COUNTRY_CODE = t4.COUNTRY_CODE\r\n"
 				+ "WHERE t1.VERSION_NUMBER IN  (select MAX(s1.VERSION_NUMBER) from entity s1 where s1.ENTITY_NUMBER = t1.ENTITY_NUMBER and s1.VERSION_STATUS = 'ACTIVE' )";
@@ -131,6 +133,7 @@ public class COIImportGraphDataDao {
 			COIEntity entity = COIEntity.builder().id(resultSet.getString("ID"))
 					.entityNumber(resultSet.getString("ENTITY_NUMBER")).entityName(resultSet.getString("NAME"))
 					.status(resultSet.getString("STATUS")).type(resultSet.getString("TYPE"))
+					.risk(resultSet.getString("RISK"))
 					.countryName(resultSet.getString("COUNTRY_NAME")).countryCode(resultSet.getString("COUNTRY_CODE"))
 					.build();
 			return entity;
@@ -157,7 +160,7 @@ public class COIImportGraphDataDao {
 */
 				
 		String query = """
-				select CONCAT('PER',PERSON_ID) AS ID, PERSON_ID,FULL_NAME,UNIT_NAME as HOME_UNIT,t1.COUNTRY_OF_CITIZENSHIP as COUNTRY_CODE, t4.COUNTRY_NAME,
+				select CONCAT('PER',PERSON_ID) AS ID, PERSON_ID,FULL_NAME, USER_NAME, EMAIL_ADDRESS, PRIMARY_TITLE as DESIGNATION, UNIT_NAME as HOME_UNIT,t1.COUNTRY_OF_CITIZENSHIP as COUNTRY_CODE, t4.COUNTRY_NAME,
 				CASE   WHEN STATUS = 'A' THEN 'Active' ELSE 'Inactive' END AS STATUS from person t1
 				left outer join unit t2 on t1.home_unit = t2.unit_number
 				left outer join country t4 on t1.COUNTRY_OF_CITIZENSHIP = t4.COUNTRY_CODE 
@@ -199,6 +202,8 @@ public class COIImportGraphDataDao {
 			Person person = Person.builder().id(resultSet.getString("ID")).personId(resultSet.getString("PERSON_ID"))
 					.fullName(resultSet.getString("FULL_NAME")).homeUnit(resultSet.getString("HOME_UNIT"))
 					.countryCode(resultSet.getString("COUNTRY_CODE")).countryName(resultSet.getString("COUNTRY_NAME"))
+					.userName(resultSet.getString("USER_NAME")).emailAddress(resultSet.getString("EMAIL_ADDRESS"))
+					.designation(resultSet.getString("DESIGNATION"))
 					.status(resultSet.getString("STATUS")).build();
 			return person;
 		});
@@ -234,7 +239,7 @@ public class COIImportGraphDataDao {
 						CONCAT(t3.DESCRIPTION, '[', GROUP_CONCAT(DISTINCT t4.DESCRIPTION SEPARATOR ','), ']') AS REL
 						from person_entity t0
 						inner join person_entity_relationship t1 on t1.PERSON_ENTITY_ID  = t0.PERSON_ENTITY_ID
-						inner join VALID_PERSON_ENTITY_REL_TYPE t2 on t1.VALID_PERSON_ENTITY_REL_TYPE_CODE = t2.VALID_PERSON_ENTITY_REL_TYPE_CODE
+						inner join VALID_PERSON_ENTITY_REL_TYPE t2 on t1.VALID_PERS_ENTITY_REL_TYP_CODE = t2.VALID_PERS_ENTITY_REL_TYP_CODE
 						inner join coi_disclosure_type t3 on t2.DISCLOSURE_TYPE_CODE = t3.DISCLOSURE_TYPE_CODE
 						inner join person_entity_rel_type t4 on t4.RELATIONSHIP_TYPE_CODE = t2.RELATIONSHIP_TYPE_CODE
 						inner join entity t5 on t5.ENTITY_ID = t0.ENTITY_ID

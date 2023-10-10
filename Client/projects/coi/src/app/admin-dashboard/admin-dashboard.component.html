@@ -6,7 +6,7 @@
                     <li tabindex="0" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
                         (keyup.space)="changeTab('MY_REVIEWS')"
                         [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
-                        class="p-3 position-relative text-center  fs-14" title="Click to view My Reviews"
+                        class="p-3 position-relative text-center" title="Click to view My Reviews"
                         area-describedby="Click to view the list of all disclosures under my review">My Reviews
                     <li class="separator"></li>
                     <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('NEW_SUBMISSIONS')"
@@ -300,7 +300,7 @@
                                             <span>{{coi?.travelDisclosureId? 'Travel' :
                                                 coi?.fcoiType}}</span></span>
                                         <h4 *ngIf="coi.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                            <i class="fa fa-user mt-2" aria-hidden="true"></i>
+                                            <i class="fa fa-user mt-65" aria-hidden="true"></i>
                                             <strong class="me-2 ml-2 text-nowrap mt-2">{{coi.travellerName}}</strong>
                                             <ng-container>
                                                 <span class="pipe me-1 mt-1"></span>
@@ -319,7 +319,7 @@
                                         </h4>
                                 
                                         <h4 *ngIf="!coi.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                            <i class="fa fa-user mt-2" aria-hidden="true"></i>
+                                            <i class="fa fa-user mt-65" aria-hidden="true"></i>
                                             <strong class="me-2 ml-2 text-nowrap mt-2">{{coi.disclosurePersonFullName}}</strong>
                                             <ng-container *ngIf="coi.fcoiTypeCode === '2' || coi.fcoiTypeCode === '3'" class="ms-1">
                                                 <span class="pipe me-2 mt-1"></span>
@@ -341,18 +341,24 @@
                                     </span>
                                 </div>
                                 <div class="p-1 align-items-center mt-2 col-3">
-                                    <label for="disclosure-status" class="label-text">Disclosure Status :</label>
+                                    <label for="disclosure-status" class="label-text p5">Disclosure Status :</label>
                                     <app-no-data-label [valueToShow]="coi?.conflictStatus" *ngIf="!coi?.travelDisclosureId">
                                         <span
                                             class="ms-3 {{commonService.getDisclosureConflictBadge(coi?.conflictStatusCode)}}"
-                                            id="disclosure-status">{{coi?.conflictStatus}}
+                                            id="disclosure-status">
+                                        </span>
+                                        <span class="badgeFont">
+                                            {{coi?.conflictStatus}}
                                         </span>
                                     </app-no-data-label>
                                     <app-no-data-label [valueToShow]="coi?.travelDisclosureStatusDescription"
                                         *ngIf="coi?.travelDisclosureId">
                                         <span
                                             class="ms-3 {{commonService.getDisclosureConflictBadge(coi?.travelDisclosureStatusCode)}}"
-                                            id="disclosure-status">{{coi?.travelDisclosureStatusDescription}}
+                                            id="disclosure-status">
+                                        </span>
+                                        <span class="badgeFont">
+                                            {{coi?.travelDisclosureStatusDescription}}
                                         </span>
                                     </app-no-data-label>
                                 </div>
@@ -382,22 +388,41 @@
                                                 <label for="disp-status" class="label-text">Disposition Status :</label>
                                                 <app-no-data-label [valueToShow]="coi?.dispositionStatus">
                                                     <span
-                                                        class="ms-3 {{commonService.getDispositionStatusBadge(coi?.disclosureDispositionCode)}}"
-                                                        [class.text-dark]="getDispositionStatusBadge(coi?.disclosureDispositionCode) === 'warning'"
-                                                        id="disp-status">{{coi?.dispositionStatus}}</span>
+                                                        class="ms-3 {{commonService.getDispositionStatusBadge(coi?.dispositionStatusCode)}}"
+                                                        [class.text-dark]="getDispositionStatusBadge(coi?.dispositionStatusCode) === 'warning'"
+                                                        id="disp-status"></span>
+                                                        <span class="badgeFont">
+                                                            {{coi?.dispositionStatus}}
+                                                        </span>
                                                 </app-no-data-label>
                                             </div>
                                         </div>
                                         <div class="row mb-3 p-013">
                                             <div *ngIf="coi?.fcoiTypeCode== 1" class="col-5">
-                                                <label for="id" class="label-text">{{coi?.disclosureVersionNumber== 1 ?
-                                                    'Description:' : 'Revision Reason:'}}</label>
+                                                <label for="id" class="label-text">Description</label>
                                                 <span id="id" class="grey-text">{{coi?.reviseComment}}</span>
                                             </div>
                                             <div *ngIf="coi?.fcoiTypeCode!= 1" class="col-5">
                                                 <label for="id" class="label-text">Description :</label>
                                                 <app-no-data-label [valueToShow]="coi?.reviseComment">
-                                                    <span id="id" class="grey-text">{{coi?.reviseComment}}</span>
+                                                    <span *ngIf="coi?.reviseComment" class="fs-14">
+                                                        <span class="word-break-all new-line-property mx-2"
+                                                            *ngIf="!isReadMore && coi?.reviseComment?.length > 175; else showFullInfo">
+                                                            <span class="grey-text mt-2">{{(coi?.reviseComment | slice:0:175)}}</span>
+                                                            <span (click)="isReadMore = !isReadMore" class="hand-cursor"><span class="fw-medium">... <u>Read
+                                                                        More</u>
+                                                                    <i aria-hidden="true"></i></span>
+                                                            </span>
+                                                        </span>
+                                                        <ng-template #showFullInfo>
+                                                            <span class="word-break-all new-line-property grey-text">{{coi?.reviseComment}}</span>
+                                                            <span class="hand-cursor mt-2 fw-medium" *ngIf="coi?.reviseComment?.length > 175"
+                                                                (click)="isReadMore = !isReadMore" aria-hidden="true">
+                                                                <span class="fw-medium"><u> Read Less</u>
+                                                                    <i aria-hidden="true"></i></span>
+                                                            </span>
+                                                        </ng-template>
+                                                    </span>
                                                 </app-no-data-label>
                                             </div>
                                             <div class="col">
@@ -413,19 +438,34 @@
                                                 </app-no-data-label>
                                             </div>
                                             <div class="col-3">
-                                                <label for="review-status" class="label-text">Review Status :</label>
+                                                <label for="review-status" class="label-text p-25">Review Status :</label>
                                                 <app-no-data-label [valueToShow]="coi?.reviewStatus">
                                                     <span
                                                         class="ms-3 {{commonService.getReviewStatusBadge(coi?.reviewStatusCode)}}"
-                                                        id="review-status">{{coi?.reviewStatus}}</span>
+                                                        id="review-status"></span>
+                                                        <span class="badgeFont">
+                                                            {{coi?.reviewStatus}}
+                                                        </span>
                                                 </app-no-data-label>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 p-013 mt-2" *ngIf="coi?.reviewerList">
+                                            <div class="col-12">
+                                                <label for="id" class="label-text">Reviewers:</label>
+                                                <span class="grey-text">
+                                                    <ng-container *ngFor="let reviewer of coi?.reviewerList; let isLast = last">
+                                                        <span class="fileChips regularFont">
+                                                            {{reviewer[0]}} <ng-container *ngIf="reviewer[1] != 'null'">| {{reviewer[1]}} </ng-container> | <span class="reviewer-{{getReviewerStatus(reviewer[3])}}">{{reviewer[2]}}</span>
+                                                        </span>
+                                                    </ng-container>
+                                                </span>
                                             </div>
                                         </div>
                                     </ng-container>
         
                                     <ng-container *ngIf="coi?.travelDisclosureId">
                                         <div class="row mb-3 p-013 mt-2">
-                                            <div class="col-4 d-flex" *ngIf="coi?.travelDisclosureId">
+                                            <div class="col-4 d-flex" *ngIf="coi?.travelDisclosureId">  
                                                 <label for="traveller" class="label-text">Travellers :</label>
                                                 <app-no-data-label id="traveller" [valueToShow]="coi?.travellerTypeDescription">
                                                     <span
@@ -450,13 +490,16 @@
                                                 </app-no-data-label>
                                             </div>
                                             <div class="col-3">
-                                                <label for="review-status" class="label-text">Document Status :</label>
+                                                <label for="review-status" class="label-text p5">Document Status :</label>
                                                 <app-no-data-label id="review-status"
                                                     [valueToShow]="coi?.documentStatusDescription">
                                                     <span
                                                         class="ms-3 {{commonService.getDocumentStatusBadge(coi?.documentStatusCode)}}"
                                                         [class.text-dark]="commonService.getDocumentStatusBadge(coi?.documentStatusCode) === 'warning'"
-                                                        id="disp-status">{{coi?.documentStatusDescription}}
+                                                        id="disp-status">
+                                                    </span>
+                                                    <span class="badgeFont">
+                                                        {{coi?.documentStatusDescription}}
                                                     </span>
                                                 </app-no-data-label>
                                             </div>
@@ -483,12 +526,15 @@
                                                 </app-no-data-label>
                                             </div>
                                             <div class="col-3">
-                                                <label for="review-status" class="label-text">Review Status :</label>
+                                                <label for="review-status" class="label-text p-25">Review Status :</label>
                                                 <app-no-data-label id="review-status" [valueToShow]="coi?.reviewDescription">
                                                     <span
                                                         class="ms-3 {{commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode)}}"
                                                         [class.text-dark]="commonService.getTravelReviewStatusBadge(coi?.reviewStatusCode) === 'warning'"
-                                                        id="disp-status">{{coi?.reviewDescription}}
+                                                        id="disp-status">
+                                                    </span>
+                                                    <span class="badgeFont">
+                                                        {{coi?.reviewDescription}}
                                                     </span>
                                                 </app-no-data-label>
                                             </div>
@@ -584,7 +630,7 @@
                                     <div class="d-flex m-0 justify-content-end px-0 pe-2"
                                         [ngClass]="coi?.travelDisclosureId? 'col-3' : 'col-auto'">
                                         <button
-                                            [attr.title]="coi?.travelDisclosureId ? 'Click to view Travel disclosure detials' : coi?.fcoiType == 'FCOI' ? 'Click to view FCOI disclosure detials' : 'Click to view Project disclosure detials'"
+                                            [attr.title]="coi?.travelDisclosureId ? 'Click to view Travel disclosure details' : coi?.fcoiType == 'FCOI' ? 'Click to view FCOI disclosure details' : 'Click to view Project disclosure details'"
                                             area-describedby="Click to view details" (click)="redirectToDisclosure(coi)"
                                             class="align-items-center btn btn-outline-primary d-flex fs-14">
                                             <mat-icon class="me-1">visibility</mat-icon>
@@ -624,7 +670,18 @@
     <app-count-modal *ngIf="isShowCountModal" (closeModal)="closeModal($event)" [disclosureId]="currentDisclosureId"
         [disclosureNumber]="currentDisclosureNumber" [disclosureType]="disclosureType" [moduleCode]="selectedModuleCode"
         [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
-        [adminData]="adminData" [fcoiTypeCode]="fcoiTypeCode"></app-count-modal>
+        [adminData]="adminData" [fcoiTypeCode]="fcoiTypeCode" (viewSlider)="viewSlider($event)"></app-count-modal>
+
+    <ng-container *ngIf="showSlider">
+        <app-coi-slider (closeSlider)="validateSliderClose()" [slider_z_index] = "1057"
+        [overlay_z_index] = "1056" [isStickyNeeded] = "false" [isHeaderNeeded] = "false"
+        [sliderName]="'admin-dashboard-entity-slider'">
+            <!-- modal content -->
+            <ng-container content>
+                <app-entity-details [entityId]="entityId"></app-entity-details>
+            </ng-container>
+        </app-coi-slider>
+    </ng-container>
     <!-- Confirmation Modal -->
     <div class="modal fade mySkinDialog" id="ReviewModal" role="dialog">
         <div class="modal-dialog">

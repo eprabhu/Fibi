@@ -17,6 +17,7 @@ class ElasticOption {
     contextField: string;
     icons: any;
     formatFields: any;
+    size: number;
     extraConditions?: object;
     constructor(url) {
         this.url = url;
@@ -40,6 +41,7 @@ export class ElasticConfigService {
             unit_number: {}, unit_name: {}, addr_line_1: {}, phone_nbr: {},
             is_faculty: {}, is_research_staff: {}
         };
+        elasticSearchOption.size = 50;
         return elasticSearchOption;
     }
 
@@ -57,10 +59,12 @@ export class ElasticConfigService {
             first_name: {}, middle_name: {}, full_name: {}, organization: {},
             last_name: {}, rolodex_id: {}, email_address: {}, create_user: {}
         };
+
         elasticSearchOption.icons = {
             organization:
             '<span><img src="' + this.deployMap + 'assets/images/org-icon-6.svg" class="mr-2"></span>'
             };
+        elasticSearchOption.size = 50;
         return elasticSearchOption;
     }
 
@@ -83,6 +87,7 @@ export class ElasticConfigService {
                 '<span><img src="' + this.deployMap + 'assets/images/org-icon-6.svg" class="mr-2"></span>',
             full_name: '<i aria-hidden="true" class="fa fa-user-circle text-danger mr-2"></i>'
         };
+        elasticSearchOption.size = 50;
         return elasticSearchOption;
     }
 
@@ -110,7 +115,10 @@ export class ElasticConfigService {
             proposal_id: {}, title: {}, pi_full_name: {}, lead_unit_name: {},
             activity_type: {}, proposal_type: {}, status: {}, sponsor: {}, proposal_number: {}
         };
-        return elasticSearchOption;
+        const elasticSearchOptionFilter = JSON.parse(JSON.stringify(elasticSearchOption));
+        elasticSearchOptionFilter.extraConditions = {};
+        elasticSearchOptionFilter.extraConditions = {must_not: {match_phrase: {proposal_sequence_status: 'ARCHIVE'}}};
+        return JSON.parse(JSON.stringify(elasticSearchOptionFilter));
     }
 
     getElasticForProposal() {
@@ -123,7 +131,10 @@ export class ElasticConfigService {
             proposal_id: {}, title: {}, full_name: {}, category: {},
             type: {}, status: {}, sponsor: {}, lead_unit_name: {}
         };
-        return elasticSearchOption;
+        const elasticSearchOptionFilter = JSON.parse(JSON.stringify(elasticSearchOption));
+        elasticSearchOptionFilter.extraConditions = {};
+        elasticSearchOptionFilter.extraConditions = {must_not: {term: {status_code: '35'}}};
+        return JSON.parse(JSON.stringify(elasticSearchOptionFilter));
     }
 
     getElasticForGrantCall() {
@@ -179,12 +190,12 @@ export class ElasticConfigService {
         elasticSearchOption.type = 'agreement';
         elasticSearchOption.contextField = 'agreement_request_id';
         elasticSearchOption.formatString = ELASTIC_AGREEMENT_OUTPUT_FORMAT;
-        elasticSearchOption.fields = {
-            agreement_request_id: {}, title: {}, agreement_type: {}, unit_name: {},
-            agreement_status: {}, principal_person_full_name: {}, aa_person_full_name: {}, requestor_full_name: {}
-        };
+        elasticSearchOption.fields = { agreement_request_id: {}, title: {}, agreement_type: {}, unit_name: {},
+										agreement_status: {}, principal_person_full_name: {}, aa_person_full_name: {}, 
+										sponsor_name: {},  requestor_full_name: {}};
         return elasticSearchOption;
     }
+
 
     getElasticForExternalReviewer() {
         const elasticSearchOption = new ElasticOption(this.url);
@@ -194,9 +205,12 @@ export class ElasticConfigService {
         elasticSearchOption.formatString = ELASTIC_EXTERNAL_REVIEWER_OUTPUT_FORMAT;
         elasticSearchOption.fields = {
             prncpl_id: {}, full_name: {}, prncpl_nm: {}, email_addr: {}, country_name: {},
-             aff_description: {}, country_code: {}, aff_code: {}, sk_description: {}, last_name: {}
+            aff_description: {}, country_code: {}, aff_code: {}, sk_description: {}, last_name: {}, academic_rank: {}, hindex: {},
         };
-        return elasticSearchOption;
+        const elasticSearchOptionFilter = JSON.parse(JSON.stringify(elasticSearchOption));
+        elasticSearchOptionFilter.extraConditions = {};
+        elasticSearchOptionFilter.extraConditions = {must_not: {match_phrase: {reviewer_status: 'I'}}};
+        return JSON.parse(JSON.stringify(elasticSearchOptionFilter));
     }
 
 }

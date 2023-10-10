@@ -1,25 +1,25 @@
-.navigation-to-tabs {
-  background-color: #F8F8F8;
+.navigation-to-tabs div {
+  // background-color: #f2f6fe;
   color: #606060;
 
   &:hover {
-    background-color: #48647F;
-    color: white;
+    background-color: #F2F6FE;
+    color: black;
   }
 }
 
 .sub-navigation-to-tabs {
   color: #606060;
   .bg-sub-goto {
-    background-color: #F2F6FE;
+    background-color: white;
   }
   .sub-goto {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
     &:hover {
-      background-color: #48647F !important;
-      color: white;
+      background-color: #F2F6FE !important;
+      color: #606060;
       cursor: pointer;
     }
   }
@@ -51,4 +51,26 @@
 
 ::-webkit-scrollbar-thumb {
   background: #ccc
+}
+
+.relation-margin {
+  margin-left: 250px
+}
+
+.mat-icon:hover {
+  background-color: rgba(44, 119, 244, 0.1);
+  border-radius: 50%;
+  outline: none;
+}
+
+.navigate-color {
+  background-color: white;
+}
+
+.relationship-color {
+  background-color: #F2F6FE !important;
+}
+
+.project-color {
+  color:#486487
 }

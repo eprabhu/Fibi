@@ -262,9 +262,9 @@
                                                 && (result?.canApproveRouting =='1' || result?.isPersonCanScore == true)
                                                 && result?.proposal?.documentStatusCode != '2')"
                                         class="btn btn-primary btn-sm fs-14-nav"
-                                        id="prop-approve-btn" title="Approve"
+                                        id="prop-approve-btn" title="Approve" i18n-title="@@COMMON_APPROVE_FOR_PROPOSAL"
                                         type="button">
-                                    <ng-container i18n="@@COMMON_APPROVE">Approve</ng-container>
+                                    <ng-container i18n="@@COMMON_APPROVE_FOR_PROPOSAL">Approve</ng-container>
                                 </button>
                                 <!-- DONT REMOVE -->
                                 <!-- || (dataVisibilityObj.mode =='view' && superUser == 'true'
@@ -327,6 +327,15 @@
                                                 data-toggle="modal" data-target="#confirmAdminCorrectionModal"
                                                 (click)="isShowMoreOptions = !isShowMoreOptions">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i>Admin Correction
+                                            </a>
+                                        </li>
+                                        <li title="Cancel Admin Correction"
+                                            *ngIf="dataVisibilityObj.mode != 'view' && result?.proposal?.documentStatusCode == 2 &&
+                                                   departmentLevelRightsForProposal?.isCreateAdminCorrection && result?.proposal?.proposalId">
+                                            <a class="dropdown-item" href="" id="prop-cancel-admin-correction-proposal-btn"
+                                                data-toggle="modal" data-target="#cancelAdminCorrection"
+                                                (click)="isShowMoreOptions = !isShowMoreOptions;">
+                                                <i class="fa fa-close" aria-hidden="true"></i>Cancel Admin Correction
                                             </a>
                                         </li>
                                         <li title="Import"
@@ -1086,6 +1095,81 @@
                 <button class="btn btn-secondary btn-sm" data-dismiss="modal" type="button">No</button>
                 <button class="btn btn-primary-sub btn-sm" data-dismiss="modal" type="button"
                     (click)="createIP()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade show mySkinDialog" tabindex="-1" id="invalidActionModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invalid Action</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-1">
+                        <i class="fa fa-2x fa-exclamation-triangle text-warning position-person-inpur-box" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-11">
+                        <p>
+                            You have tried to perform an action that is not valid for the current state of this Proposal. The likely cause is that
+                            somebody has changed the Proposal recently. Please click the Refresh button to proceed further.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary-sub btn-sm" data-dismiss="modal"
+                    (click)="reload()">Refresh</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  
+<!--Cancel Admin Correction Confirmation-->
+<div class="modal fade show mySkinDialog " tabindex="-1" id="cancelAdminCorrection" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to cancel Admin Correction?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal">Close</button>
+                <button type="button" class="btn btn-primary-sub btn-sm" (click)="cancelAdminCorrection()">Cancel Admin Correction</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show mySkinDialog" id="invalidProposalActionModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invalid Action</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button" [routerLink]="['/fibi/dashboard/proposalList']">
+                    <span aria-hidden="true" title="Close and go to proposal list">×</span>
+                </button>
+            </div>
+            <div class="flex-row-reverse form-row m-0">
+				<div class="col ml-4 mt-2">
+                    <p>{{invalidActionMessage}}</p>
+                </div>
+                <div class="col-auto ml-3">
+					<i aria-hidden="true" class="fa fa-exclamation-triangle larger-font position-person-inpur-box text-warning"></i>
+				</div>
+			</div>
+            <div class="modal-footer">
+                <button class="btn btn-primary-sub btn-sm" data-dismiss="modal" type="button" title="Close and go to proposal list" [routerLink]="['/fibi/dashboard/proposalList']">OK</button>
             </div>
         </div>
     </div>

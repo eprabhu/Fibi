@@ -198,11 +198,11 @@
                                             Questionnaire
                                         </a>
                                     </li>
-                                    <li routerLinkActive="active" *ngIf="result?.award?.awardId != null && _commonData.awardSectionConfig?.AW125?.isActive">
+                                    <!-- <li routerLinkActive="active" *ngIf="result?.award?.awardId != null && _commonData.awardSectionConfig?.AW125?.isActive">
                                         <a  [routerLink]="['/fibi/award/summary-report']" queryParamsHandling='merge'>
                                             Report Summary
                                         </a>
-                                    </li>
+                                    </li> -->
                                     <li routerLinkActive="active" *ngIf="result?.award?.awardId != null && _commonData.awardSectionConfig?.AW110?.isActive">
                                         <a (click)="getSectionDescriptionFromCode(101)"
                                             [routerLink]="['/fibi/award/reports']" queryParamsHandling='merge'>
@@ -571,7 +571,7 @@
                 </div>
                 <div id="dashboardOverlay"></div>
                 <ng-container *ngIf="_awardService.$isSectionNavigation  | async">
-                    <div *ngIf="(result?.serviceRequest || result?.pendingAwardsSummary?.pendingAwards.length)
+                    <div id="notice-box" *ngIf="(result?.serviceRequest || result?.pendingAwardsSummary?.pendingAwards.length)
                     && result?.award?.awardId && result?.award?.awardDocumentType?.awardDocumentTypeCode !== '1'
                     &&  (result?.award?.awardSequenceStatus == 'PENDING' || result?.award?.awardSequenceStatus == 'ACTIVE')"
                         class="card notice-box my-3">
@@ -1732,6 +1732,37 @@
                     (click)="deleteAward();">Delete</button>
                 <button type="button" *ngIf="!canDeleteAward" class="btn btn-primary-sub btn-sm mr-2"
                     data-dismiss="modal" data-toggle="modal" (click)="clearWarningMessages();">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Concurrency Warning modal -->
+<div class="modal fade show mySkinDialog" id="invalidActionModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invalid Action</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="form-row">
+                <div class="col-1">
+                    <i class="fa fa-2x fa-exclamation-triangle text-warning position-person-inpur-box px-3"
+                        aria-hidden="true"></i>
+                </div>
+                <div class="col-11">
+                    <p>
+                        You have tried to perform an action that is not valid for the current state of this Award. The
+                        likely cause is that
+                        somebody has changed the Award recently. Please click the Refresh button to proceed further.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary-sub btn-sm" data-dismiss="modal" type="button"
+                    (click)="reload()">Refresh</button>
             </div>
         </div>
     </div>

@@ -27,7 +27,7 @@ export class RouteGuardService implements CanActivate, CanDeactivate<boolean> {
         switch (getSpecificUrlPart(getPathWithoutParams(currentUrl), 4)) {
             case 'summary': return this.isSectionActive('318');
             case 'evaluation': return this.isSectionActive('335');
-            case 'external-review': return this.isSectionActive('DP315');
+            case 'external-review': return this.isSectionActive('DP316');
             default: return true;
         }
     }

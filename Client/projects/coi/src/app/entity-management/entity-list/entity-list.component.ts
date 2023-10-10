@@ -13,6 +13,8 @@ import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { deepCloneObject, isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { NavigationService } from '../../common/services/navigation.service';
 import { switchMap } from 'rxjs/operators';
+import { GraphDetail } from '../../../../../shared/src/lib/graph/interface';
+
 
 @Component({
   selector: 'app-entity-list',
@@ -26,6 +28,7 @@ import { switchMap } from 'rxjs/operators';
 })
 export class EntityListComponent implements OnDestroy, OnInit {
 
+  graphEvent: Subject<GraphDetail> = new Subject<GraphDetail>();
   activeTabName = 'ALL_ENTITIES';
   isViewAdvanceSearch = false;
   coiElastic = null;
@@ -41,7 +44,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   riskLevelTypeOptions = 'entity_risk_category#RISK_CATEGORY_CODE#true#true';
   entityTypeOptions = 'entity_type#ENTITY_TYPE_CODE#true#true';
   statusTypeOptions = 'EMPTY#EMPTY#true#true#true#true';
-  verificationTypeOptions = 'ENTITY_STATUS#ENTITY_STATUS_CODE#true#true';
+  verificationTypeOptions = 'entity_status#ENTITY_STATUS_CODE#true#true';
   $entityList = new Subject();
   entityList: any = [];
   $subscriptions: Subscription[] = [];
@@ -56,6 +59,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   result: any;
   isActiveDisclosureAvailable: boolean;
   isLoading = false;
+  isShowGraph = false;
   sortSectionsList = [
     { variableName: 'name', fieldName: 'Name' },
     { variableName: 'entityType', fieldName: 'Entity Type' },
@@ -63,6 +67,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     { variableName: 'country', fieldName: 'Country' },
     { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
 ];
+isEntityFound = false;
 
   constructor(private _router: Router,
     public entityManagementService: EntityManagementService,
@@ -73,7 +78,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.checkForSort();
     this.coiElastic = this._elasticConfig.getElasticForCoi();
-    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ALL');
     this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.isViewAdvanceSearch = false;
     if (!this.entityManagementService.coiRequestObject.tabName) {
@@ -88,6 +93,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.viewListOfEntity();
     this.checkForAdvanceSearch();
     this.showEntities();
+    this.isShowGraph = this._commonService.enableGraph;
   }
 
   ngOnDestroy() {
@@ -109,6 +115,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     this.entityManagementService.coiRequestObject.tabName = this.activeTabName;
     this.isShowAllProposalList = true;
     this.entityManagementService.isAdvanceSearch = false;
+    this.isEntityFound = false;
     if (this.activeTabName === 'ALL_ENTITIES') {
         this.isShowEntityList = false;
       this.isViewAdvanceSearch = true;
@@ -140,13 +147,15 @@ export class EntityListComponent implements OnDestroy, OnInit {
  viewListOfEntity() {
     this.$subscriptions.push(this.$entityList.pipe(
       switchMap(() => {
-        this.entityList = [];
         this.isLoading = true;
         return this.entityManagementService.getAllSystemEntityList(this.entityManagementService.coiRequestObject);
       })).subscribe((res: any) => {
         this.entityList = res.coiEntityList || [];
         this.resultCount = res.entityCount;
         this.isLoading = false;
+        if (!this.entityList.length) {
+          this.isEntityFound = true;
+       }
       }, _error => {
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
         this.entityList = [];
@@ -187,7 +196,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
   resetAdvanceSearchFields() {
     this.entityManagementService.coiRequestObject = new EntityDashboardRequest();
     this.entityManagementService.entityDashDefaultValues = new EntityDashDefaultValues();
-    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl);
+    this.EntitySearchOptions = getEndPointOptionsForEntity(this._commonService.baseUrl, 'ALL');
     this.countrySearchOptions = getEndPointOptionsForCountry(this._commonService.fibiUrl);
     this.lookupValues = [];
   }
@@ -223,7 +232,7 @@ export class EntityListComponent implements OnDestroy, OnInit {
     }
     if (this.entityManagementService.coiRequestObject.property24.length !== 0) {
         this.generateLookupArray(this.entityManagementService.coiRequestObject.property24, 'property24');
-      }
+    }
   }
 
   generateLookupArray(property, propertyNumber) {
@@ -242,8 +251,10 @@ export class EntityListComponent implements OnDestroy, OnInit {
   }
 
   actionsOnPageChange(event) {
-    this.entityManagementService.coiRequestObject.currentPage = event;
-    this.$entityList.next();
+    if (this.entityManagementService.coiRequestObject.currentPage != event) {
+      this.entityManagementService.coiRequestObject.currentPage = event;
+      this.$entityList.next();
+    }
   }
 
   checkUserHasRight(): void {
@@ -294,9 +305,13 @@ setEventTypeFlag() {
 
     }
 
-   toggleAdvanceSearch() {
-     this.isViewAdvanceSearch = !this.isViewAdvanceSearch;
-     this.entityManagementService.isAdvanceSearch = this.isViewAdvanceSearch;
-  }
+    toggleAdvanceSearch() {
+        this.isViewAdvanceSearch = !this.isViewAdvanceSearch;
+        this.entityManagementService.isAdvanceSearch = this.isViewAdvanceSearch;
+    }
+
+    openGraph(entityId, entityName) {
+        this.graphEvent.next({ visible: true, id: entityId, name: entityName });
+    }
 
 }

@@ -1,7 +1,7 @@
 {
-  "/login": {
-    "target": "http://192.168.1.149/coi",
-    "secure": false
+  "/graph-connect/coi/v1/entitygraph": {
+    "secure": false,
+    "target": "http://10.199.100.34:9090"
   },
   "/fetchRequiredParams": {
     "secure": false,
@@ -224,7 +224,7 @@
     "secure": false
   },
   "/auth/login": {
-    "target": "http://192.168.1.149/auth",
+    "target": "http://192.168.1.149/",
     "secure": false
   },
   "/fetchFaqDetails": {
@@ -359,7 +359,11 @@
     "target": "http://192.168.1.149/coi",
     "secure": false
   },
-  "/evaluateValidation/*" : {
+  "/travelDisclosureHistory/*": {
+    "target": "http://192.168.1.149/coi",
+    "secure": false
+  },
+  "/evaluateValidation/*": {
     "target": "http://192.168.1.149/coi/",
     "secure": false
   },
@@ -385,14 +389,72 @@
   },
   "/loadAwardsForDisclosure": {
     "target": "http://192.168.1.149/coi",
-    "secure":false
+    "secure": false
   },
   "/disclosure/historyDashboard": {
-    "target": "http://192.168.1.80:9090/coi/",
+    "target": "http://192.168.1.149/coi/",
     "secure": false
   },
   "/disclosureHistory": {
     "target": "http://192.168.1.149/coi/",
     "secure": false
-  }
+  },
+  "/entity/riskHistory/": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/entity/modifyRisk/": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/entity/history": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/travelDisclosure/modifyRisk": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/travelDisclosure/history": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/getCoiSectionsTypeCode": {
+    "target": "http://192.168.1.149/coi",
+    "secure": false
+  },
+  "/atta/*": {
+    "target": "http://192.168.1.149/coi",
+    "secure": false
+  },
+  "/deleteCOIReviewCommentTags": {
+    "target": "http://192.168.1.149/coi",
+    "secure": false
+  },
+  "/reviewHistory": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/attachment/*": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/loadDisclAttachTypes": {
+    "target": "http://192.168.1.149/coi/",
+    "secure": false
+  },
+  "/fetchAllActiolListEntriesForBanners": {
+    "target": "http://10.199.100.123:8070/coi/",
+    "secure": false
+  },
+
+  "/formbuilder/getBlankForm": {
+    "target": "http://192.168.1.248:8011/",
+    "secure":false
+  },
+    "/opa/getOPADisclosureHeader": {
+        "target": "http://10.199.100.34:9090/",
+        "secure":false
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.polus.fibicomp.coi.dao;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,9 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dto.COIValidateDto;
 import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
+import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
@@ -42,6 +46,8 @@ import com.polus.fibicomp.coi.pojo.CoiTravelDocumentStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelReviewStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerStatusType;
 import com.polus.fibicomp.coi.pojo.CoiTravelerType;
+import com.polus.fibicomp.coi.pojo.DisclAttaType;
+import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.pojo.DisclComment;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
@@ -50,12 +56,15 @@ import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
 import com.polus.fibicomp.coi.pojo.EntityRiskCategory;
 import com.polus.fibicomp.coi.pojo.EntityStatus;
 import com.polus.fibicomp.coi.pojo.EntityType;
+import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.inbox.pojo.Inbox;
 import com.polus.fibicomp.pojo.Country;
 import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
@@ -100,10 +109,10 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * This method is used for get entity details
-	 * @param searchString
+	 * @param vo
 	 * @return
 	 */
-	public List<CoiEntity> searchEnitiy(String searchString);
+	public List<CoiEntity> searchEntity(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for get entity status(lookup)
@@ -282,8 +291,9 @@ public interface ConflictOfInterestDao {
 	 * This method is used for update reviewStatusTypeCode in CoiReview
 	 * @param reviewStatusTypeCode
 	 * @param coiReviewId
+	 * @param endDate Completion Date
 	 */
-	public void startReview(String reviewStatusTypeCode, Integer coiReviewId);
+	void startReview(String reviewStatusTypeCode, Integer coiReviewId, Date endDate);
 
 	/**
 	 * This method is used for load CoiReview
@@ -371,9 +381,10 @@ public interface ConflictOfInterestDao {
 
 	/**
 	 * This method is used for deleteReviewComment 
-	 * @param coiReviewId
+	 * @param personId 
+	 * @param disclosureId
 	 */
-	public void deleteReviewComment(Integer coiReviewId);
+	public void deleteReviewComment(String personId, Integer disclosureId);
 
 	/**
 	 * This method is used for deleteReview 
@@ -539,12 +550,6 @@ public interface ConflictOfInterestDao {
 	List<CoiDisclosure> getCoiDisclosuresByDisclosureNumber(Integer disclosureNumber);
 
 	/**
-	 * This method is used for get count of comments
-	 * @return count
-	 */
-	public Integer getReviewCommentsCount();
-
-	/**
 	 * @param disclosureId
 	 * @param coiFinancialEntityId
 	 */
@@ -639,7 +644,7 @@ public interface ConflictOfInterestDao {
 
 	public CoiProjectAward saveOrUpdateCoiProjectAward(CoiProjectAward coiProjectAward);
 
-	CoiEntity getCoiEntityDetailsByEntityId(Integer personEntityId);
+	CoiEntity getCoiEntityByPersonEntityId(Integer personEntityId);
 
 	public PersonEntity getPersonEntityDetailsById(Integer personEntityId);
 
@@ -921,7 +926,7 @@ public interface ConflictOfInterestDao {
 	 * @param coiReviewCommentId
 	 * @return
 	 */
-	CoiReviewComments loadCoiReviewCommentById(Integer coiReviewCommentId);
+	DisclComment loadCoiReviewCommentById(Integer coiReviewCommentId);
 
 	/**
 	 * This method is used to update PersonEntity header update details
@@ -972,6 +977,13 @@ public interface ConflictOfInterestDao {
 	 */
 	List<DisclosureHistoryDto> getDisclosureHistory(CoiDashboardVO dashboardVO);
 
+	/**
+	 * This method is used to update risk category of an entity
+	 * @param entityDto
+	 * @return
+	 */
+	Timestamp updateEntityRiskCategory(CoiEntityDto entityDto);
+
 	public String getDisclosurePersonIdByDisclosureId(Integer disclosureId);
 
 
@@ -1017,5 +1029,102 @@ public interface ConflictOfInterestDao {
 	public List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
 
 	public String getCoiTravelConflictStatusByStatusCode(String conflictStatusCode);
+	
+	public void saveOrUpdateTravelDisclosureActionLog(TravelDisclosureActionLog travelDisclosureActionLog);
+
+	/**
+	 * This method is used to sync disclosure risk
+	 * @param disclosureId
+	 * @param disclosureNumber
+	 * @return CoiRiskCategory
+	 */
+	CoiRiskCategory syncDisclosureRisk(Integer disclosureId, Integer disclosureNumber);
+
+	/**
+	 * This method is used to update disclosure risk
+	 * @param coiDisclosureDto
+	 * @return
+	 */
+	Timestamp updateDisclosureRiskCategory(CoiDisclosureDto coiDisclosureDto);
+
+	/**
+	 * This method is used to fetch all disclosure risk
+	 * @return
+	 */
+	List<CoiRiskCategory> fetchDisclosureRiskCategory();
+
+	/**
+	 * This method is used to get disclosure history count
+	 *
+	 * @param dashboardVO
+	 * @return
+	 */
+	Integer getDisclosureHistoryCount(CoiDashboardVO dashboardVO);
+
+	public List<CoiSectionsType> getCoiSectionsTypeCode();
+
+	public Timestamp updateTravelDisclosureRiskCategory(CoiTravelDisclosureDto travelDisclosureDto);
+
+	public void deleteReviewTagByCommentTagId(Integer coiReviewCommentTagId);
+
+	public List<DisclAttachment> loadDisclAttachmentByCommentId(Integer coiReviewCommentId);
+
+	public List<Integer> loadCoiReviewCommentsByParentId(Integer coiReviewCommentId);
+
+	/**
+	 * This method is used to get review assignee person name
+	 *
+	 * @param coiReviewId
+	 * @return
+	 */
+	public String loadCoiReviewAssigneePersonName(Integer coiReviewId);
+
+	/**
+	 * This method is used to sync entity with person entity
+	 * @param entityId
+	 * @param entityNumber
+	 * @param personEntityId
+	 */
+	void syncEntityWithPersonEntity(Integer entityId, Integer entityNumber,  Integer personEntityId);
+
+	/**
+	 * This method is used to get max entity id by entity number
+	 * @param entityNumber
+	 * @return
+	 */
+	Integer getMaxEntityId(Integer entityNumber);
+
+	/**
+	 *
+	 * @param personEntityNumber
+	 * @return
+	 */
+	Integer getSFILatestVersion(Integer personEntityNumber);
+
+	/**
+	 * This method is used to get disclosure attachment types
+	 * @return
+	 */
+	public List<DisclAttaType> loadDisclAttachTypes();
+
+	/**
+	 * This method is used to Check if the reviewers in the disclosure have completed their reviews
+	 * @return
+	 */
+	public Boolean isReviewerReviewCompleted(Integer disclosureId);
+
+	/**
+	 * This method is used to Check if the disclosure have reviewers assigned
+	 * @return
+	 */
+	public Boolean isReviewerAssigned(Integer disclosureId);
+	
+	List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto);
+    
+    List<Notes> fetchAllNotesForPerson(String personId);
+    
+    Notes saveOrUpdatePersonNote(Notes dto);
+    
+    Notes loadCoiNotesForNoteId(Integer noteId);
 
 }

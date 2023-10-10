@@ -144,26 +144,25 @@
                     <div class="form-row">
                         <div class="col-12 mt-3">
                             <label for="prop-area-of-research-type">Type</label>
-                            <select class="form-control" id="prop-area-of-research-type" [(ngModel)]="researchType"
-                                (change)="researchTypeChange()">
-                                <option *ngFor="let type of result?.researchTypes" [hidden]="type.isActive != true"
-                                    [value]="type.researchTypeCode">
-                                    {{type.description}}</option>
-                            </select>
+                            <select class="form-control" id="prop-area-of-research-type"
+								[(ngModel)]="researchType" (change)="researchTypeChange()">
+								<option *ngFor="let type of result?.researchTypes" [hidden]="type.isActive != true"
+									[value]="type.researchTypeCode">
+									{{type.description}}</option>
+							</select>
                         </div>
                         <div class="col-12">
                             <label>
                                 <span class="mandatory">*</span>Area:
                             </label>
                             <div class="searchBox">
-                                <app-endpoint-search [isError]="isError" id="prop-area-of-research"
-                                    [clearField]="clearAreaField" [httpOptions]="areaHttpOptions"
-                                    [placeHolder]="'Type here for Area'"
-                                    (onSelect)="researchAreaSelectedFunction($event)" [searchOnFocus]=true>
-                                </app-endpoint-search>
-                                <div class="invalid-feedback d-block" *ngIf="researchWarningMsg != null">
-                                    {{researchWarningMsg}}</div>
-                            </div>
+                             <app-endpoint-search [isError]="isError" id="prop-area-of-research"
+								[clearField]="clearAreaField" [httpOptions]="areaHttpOptions"
+								[placeHolder]="'Type here for Area'" (onSelect)="researchAreaSelectedFunction($event)"
+								[searchOnFocus]=true></app-endpoint-search>
+							<div class="invalid-feedback d-block" *ngIf="researchWarningMsg != null">
+								{{researchWarningMsg}}</div>
+							</div>
                         </div>
                         <div class="col-12">
                             <label class="margin-left-label">

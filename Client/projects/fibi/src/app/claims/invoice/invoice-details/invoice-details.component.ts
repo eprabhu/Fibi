@@ -259,8 +259,10 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
         this.documentTypeLookup = this.lookupData.baCodeMetadata[baCode] || [];
     }
 
-    private generateRequestObject({...claimInvoiceDetails}): { claimInvoice: ClaimInvoiceDetail } {
-        const requestObject: { claimInvoice: any } = {claimInvoice: {...JSON.parse(JSON.stringify(claimInvoiceDetails))}};
+    private generateRequestObject({ ...claimInvoiceDetails }): { claimInvoice: ClaimInvoiceDetail } {
+        claimInvoiceDetails.customerEmailAddress = claimInvoiceDetails.customerEmailAddress.trim();
+        claimInvoiceDetails.requesterEmailAddress = claimInvoiceDetails.requesterEmailAddress.trim();
+        const requestObject: { claimInvoice: any } = { claimInvoice: { ...JSON.parse(JSON.stringify(claimInvoiceDetails)) } };
         delete requestObject.claimInvoice.claimInvoiceMetadata;
         delete requestObject.claimInvoice.claimInvoiceDetails;
         delete requestObject.claimInvoice.updateTimeStamp;
@@ -307,6 +309,7 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
         if (this.isFormValid()) {
             this.$subscriptions.push(this._invoiceService.saveOrUpdateClaimInvoice(this.generateRequestObject(this.claimInvoiceDetails))
                 .subscribe((_res: any) => {
+            this.claimInvoiceDetails = _res.claimInvoice;
                     this.setLineItemConfiguration();
                     this.showSuccessMessage('Invoice details saved successfully.');
                     this._commonData.isClaimDataChange = false;

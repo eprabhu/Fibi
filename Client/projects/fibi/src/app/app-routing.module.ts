@@ -221,6 +221,18 @@ const routes: Routes = [
                 data: { preload: false },
                 canActivate: [AuthGuard]
             },
+            {
+                path: 'sponsor-report',
+                loadChildren: () => import('./admin-modules/sponsor-report/sponsor-report.module').then(m => m.SponsorReportModule),
+                data: { preload: false },
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'elastic-monitoring',
+                loadChildren: () => import('./admin-modules/elastic-monitoring/elastic-monitoring.module').then(m => m.ElasticMonitoringModule),
+                data: { preload: false },
+                canActivate: [AuthGuard]
+            }
         ]
     },
     { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },

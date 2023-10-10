@@ -53,4 +53,6 @@ public class DisclosureDetailDto {
 
 	private String accountNumber;
 
+	private List<CoiDisclEntProjDetailsDto> coiDisclEntProjDetails;
+
 }

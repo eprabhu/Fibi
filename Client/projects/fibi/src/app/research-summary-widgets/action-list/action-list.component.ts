@@ -5,7 +5,7 @@ import { fadeDown } from '../../common/utilities/animations';
 import { Constants } from '../../common/constants/action-list.constants';
 import { CommonService } from '../../common/services/common.service';
 import { setFocusToElement } from '../../common/utilities/custom-utilities';
-import { getTimeInterval, parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
+import { compareDates, getTimeInterval, isValidDateFormat, parseDateWithoutTimestamp } from '../../common/utilities/date-utilities';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 import { ResearchSummaryWidgetsService } from '../research-summary-widgets.service';
 import { Router } from '@angular/router';
@@ -34,7 +34,11 @@ export class ActionListComponent implements OnInit, OnDestroy {
   filterFields: any = [];
   isSaving = false;
   widgetDescription: any;
-
+  DEFAULT_DATE_FORMAT = DEFAULT_DATE_FORMAT;
+  fromDateValidationMap = false;
+  toDateValidationMap = false;
+  dateValidationMap: Map<string, string> = new Map();
+  
   constructor(private _researchsummaryService: ResearchSummaryWidgetsService, public _commonService: CommonService,
     private _router:  Router) { }
 
@@ -68,6 +72,24 @@ export class ActionListComponent implements OnInit, OnDestroy {
           element.name = this.modulePath[key].name;
         }
       });
+    });
+  }
+
+  getSystemDate() {
+    return new Date(new Date().setHours(0, 0, 0, 0));
+  }
+
+  clearDateOnValidation(id) {
+    if (this.toDateValidationMap) {
+      this.inboxObject.toDate = this.getSystemDate();
+      this.toDateValidationMap = false;
+    }
+    if (this.fromDateValidationMap) {
+      this.inboxObject.fromDate = this.getSystemDate();
+      this.fromDateValidationMap = false;
+    }
+    setTimeout(() => {
+      document.getElementById(id).click();
     });
   }
 
@@ -115,14 +137,38 @@ export class ActionListComponent implements OnInit, OnDestroy {
   }
 
   getInboxTab() {
-    this.inboxTab === 'PENDING' ? this.getActionList(false) : this.getActionList(true);
-    this.viewInboxSearch = false;
-    // this.isInboxInfo = false;
-    // this.clearInboxSearchField();
+    if (!this.fromDateValidationMap && !this.toDateValidationMap && this.widgetDateValidation()) {
+      this.viewInboxSearch = false;
+      this.inboxTab === 'PENDING' ? this.getActionList(false) : this.getActionList(true);
+    }
   }
 
   clearInboxSearchField() {
     this.inboxObject.moduleCode = null;
+    this.fromDateValidationMap = false;
+    this.toDateValidationMap = false;
+    this.inboxObject.fromDate = false;
+    this.inboxObject.toDate = false;
+    this.dateValidationMap.clear();
+  }
+
+  checkForValidFormat(event, dateType) {
+    dateType === 'fromDate' ? this.fromDateValidationMap = false :
+      this.toDateValidationMap = false;
+    if (!isValidDateFormat(event)) {
+      dateType === 'fromDate' ? this.fromDateValidationMap = true :
+        this.toDateValidationMap = true;
+    }
+  }
+
+  widgetDateValidation(): boolean {
+    this.dateValidationMap.clear();
+    if (this.inboxObject.fromDate != null) {
+      if (compareDates(this.inboxObject.fromDate, this.inboxObject.toDate, 'dateObject', 'dateObject') === 1) {
+        this.dateValidationMap.set('endDate', '* Please select to date after from date');
+      }
+    }
+    return this.dateValidationMap.size === 0 ? true : false;
   }
 
 }

@@ -7,16 +7,27 @@
             </span>
             <ng-template #showFullInfo>
                 {{headerInfoText}}
-                <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Show Less</u></span>
+                <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read Less</u></span>
             </ng-template>
         </p>
     </div>
-    <div class="card mt-3">
-        <div class="card-body d-flex justify-content-center">
-            <div class="gridSkin p-15 text-center d-flex mx-5 custom-margin">
+    <div class="card mt-1">
+
+        <div class="card-body">
+            <!-- error box -->
+            <div class="p-15 mx-5 mt-3" *ngIf="!isCheckBoxDisable">
+                <div class="text-danger">
+                    <p role="alert" class="w-100 fa fa-exclamation-circle icon alert alert-danger py-3" role="alert">
+                        <span class="m-3 fw-400 fs-14">Kindly complete all the mandatory fields in the Travel Details section to certify the disclosure.</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- check box -->
+            <div class="gridSkin p-15 text-center d-flex justify-content-center m-5">
                 <div class="me-3">
                     <input type="checkbox" (change)="certify();" [checked]="travelService.isTravelCertified"
-                    [disabled]="!isEditMode" class="certify-box mt-1">
+                    [disabled]="!isCheckBoxDisable" class="certify-box mt-1">
                 </div>
                 <p>
                     I agree to abide by the University COI policy guidelines and certify that the information provided for

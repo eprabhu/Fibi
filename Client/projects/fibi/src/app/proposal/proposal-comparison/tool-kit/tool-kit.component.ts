@@ -9,7 +9,7 @@ import { scrollIntoView } from '../../../common/utilities/custom-utilities';
 import { ToolkitEventInteractionService } from '../toolkit-event-interaction.service';
 import { slideHorizontal } from '../../../common/utilities/animations';
 import { ActivatedRoute } from '@angular/router';
-import { HTTP_ERROR_STATUS, ETHICS_SAFETY_LABEL } from '../../../app-constants';
+import { HTTP_ERROR_STATUS, ETHICS_SAFETY_LABEL, AREA_OF_RESEARCH } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 
 @Component({
@@ -76,7 +76,8 @@ export class ToolKitComponent implements OnDestroy, OnInit {
             const specialReviewSection = this.sections.find((eachSection) => eachSection.reviewSectionCode === 303);
             specialReviewSection.reviewSectionDescription = ETHICS_SAFETY_LABEL;
         }
-
+        const areaOfResearchSection = this.sections.find((eachSection) => eachSection.reviewSectionCode === 304);
+        areaOfResearchSection.reviewSectionDescription = AREA_OF_RESEARCH;
     }
 
     checkParameterValue() {

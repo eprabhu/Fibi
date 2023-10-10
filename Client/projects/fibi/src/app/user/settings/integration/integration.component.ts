@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsServiceService } from '../settings-service.service';
 import { CommonService } from '../../../common/services/common.service';
-import { HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../../app-constants';
 import { parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 import { setFocusToElement } from '../../../common/utilities/custom-utilities';
 declare var $: any;
@@ -22,6 +22,7 @@ export class IntegrationComponent implements OnInit {
   planCAEndDate: any;
   setFocusToElement = setFocusToElement;
   processingType = 'REVENUE';
+  awardNumber: string;
   constructor(private _settingsService: SettingsServiceService, public _commonService: CommonService) { }
 
   ngOnInit() {
@@ -332,6 +333,18 @@ export class IntegrationComponent implements OnInit {
       });
   }
 
+  updateFeedStatusManually() {
+    this.awardNumber = !this.awardNumber ? null : this.awardNumber;
+    this._settingsService.updateFeedStatusManually(this.awardNumber).subscribe(
+      (data: string) => {
+        if (data && data == "Success") {
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Updated Feed status successfully.');
+        } else {
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating Feed status failed. Please try again.');
+        }  
+      });
+  }
+
   switchFunctions() {
     switch (this.integrationOperation) {
       case 1: { this.migrateAttachmentData(); break; }
@@ -371,6 +384,7 @@ export class IntegrationComponent implements OnInit {
       case 35: {this.positionStatusApi(); break; }
       case 36: {this.costAllocation(); break; }
       case 37: {this.costAllocationWithManualDates(); break; }
+      case 38: {this.updateFeedStatusManually(); break; }
     }
   }
 

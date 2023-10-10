@@ -10,11 +10,13 @@ export class TravelDisclosureService {
 
     coiTravelDisclosure = new TravelDisclosure();
     saveSubject = new Subject();
+
+    isAdminDashboard = false;
     travelDataChanged = false;
     isTravelCertified = false;
-    unSavedTabName = '';
     isChildRouteTriggered = false;
-    isAdminDashboard = false;
+
+    unSavedTabName = '';
     PREVIOUS_MODULE_URL = '';
 
     constructor(private _http: HttpClient,
@@ -25,7 +27,7 @@ export class TravelDisclosureService {
         this.travelDataChanged = dataChange;
     }
 
-    checkCreateUserRight(personId: string): boolean {
+    isCheckLoggedUser(personId: string): boolean {
         return personId === this._commonService.getCurrentUserDetail('personId');
     }
 
@@ -78,5 +80,8 @@ export class TravelDisclosureService {
 
     loadTravelConflictHistory(travelDisclosureId: number) {
         return this._http.get(`${this._commonService.baseUrl}/loadTravelConflictHistory/${travelDisclosureId}`);
+    }
+    getTravelDisclosureHistory(travelDisclosureId: number) {
+        return this._http.get(`${this._commonService.baseUrl}/travelDisclosureHistory/${travelDisclosureId}`);
     }
 }

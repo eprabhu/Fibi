@@ -15,7 +15,6 @@ export class CoiService {
     isShowInfo = true;
     isShowSFIInfo = true;
     isShowCertifyInfo = true;
-    isShowHistoryInfo = true;
     isShowAttachmentInfo = true;
     stepTabName = '';
     isCertified = false;
@@ -102,6 +101,10 @@ export class CoiService {
     disclosureHistory(disclosureId) {
         return this._http.get(`${this._commonService.baseUrl}/disclosureHistory/${disclosureId}`);
     }
+
+     isAllReviewsCompleted (reviewerList): boolean {
+        return reviewerList.every(value => value.reviewerStatusType && value.reviewerStatusType.reviewStatusCode === '2');
+     }
 
 }
 

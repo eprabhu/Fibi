@@ -33,6 +33,7 @@ export class ServiceRequestListComponent implements OnInit, OnDestroy {
     serviceRequestDashboard: ServiceRequestList = new ServiceRequestList();
     serviceRequestTab: string;
     isShowRequestList = true;
+    isShowSearchList = false;
     advanceSearch = new AdvanceSearch();
     sortMap: any = {};
     sortCountObj: any = {};
@@ -55,6 +56,16 @@ export class ServiceRequestListComponent implements OnInit, OnDestroy {
         this.loadDashboard();
         this.setDashboardTab();
         this.getPermissions();
+        if (this.advanceSearch.tabName === 'ALL_REQUEST') {
+            document.getElementById('collapseAdvanceSearch').classList.add('show');
+            this.isShowSearchList = false;
+        } else {
+            this.isShowSearchList = true;
+            document.getElementById('collapseAdvanceSearch').classList.remove('show');
+        }
+        if (this.advanceSearch.tabName !== 'ALL_REQUEST' || this.advanceSearch.advancedSearch === 'A') {
+            this.searchServiceRequest();
+        }
     }
 
     ngOnDestroy() {
@@ -74,22 +85,32 @@ export class ServiceRequestListComponent implements OnInit, OnDestroy {
     setDashboardTab(): void {
         const TAB_NAME = !sessionStorage.getItem('currentServiceRequestTab')
             ? 'MY_REQUEST' : sessionStorage.getItem('currentServiceRequestTab');
+        if (!sessionStorage.getItem('currentServiceRequestTab')) {
+            this.clearServiceRequest();
+        }
         this.setCurrentTabValues(TAB_NAME);
+
     }
+
 
     setCurrentTabValues(tabName: string): void {
         this.advanceSearch.tabName = tabName;
         sessionStorage.setItem('currentServiceRequestTab', tabName);
         this.serviceRequestDashboard.serviceRequestList = [];
-        this.$dashboardList.next();
+        if (tabName !== 'ALL_REQUEST' || (tabName === 'ALL_REQUEST' && this._serviceRequestListService.isAdvanceSearchMade === false )) {
+            this.$dashboardList.next();
+            this.showAdvancedSearch();
+        }
     }
 
     setCurrentTab(tabName: string): void {
-        this._serviceRequestListService.isAdvanceSearchMade = false;
+        this._serviceRequestListService.isAdvanceSearchMade = tabName === 'ALL_REQUEST' ? true : false;
         document.getElementById('collapseAdvanceSearch').classList.remove('show');
+        this.showAdvancedSearch();
         this.resetSortObject();
         this.setCurrentTabValues(tabName);
     }
+
 
     showAdvancedSearch(): void {
         if (this._serviceRequestListService.isAdvanceSearchMade) {
@@ -100,6 +121,7 @@ export class ServiceRequestListComponent implements OnInit, OnDestroy {
             document.getElementById('collapseAdvanceSearch').classList.remove('show');
         }
     }
+
 
     /* Setting default value for end-point, elastic search, so to display in UI. */
     setDefaultValueForCustomLibrarySearch() {
@@ -167,6 +189,10 @@ export class ServiceRequestListComponent implements OnInit, OnDestroy {
         this.advanceSearch.advancedSearch = 'A';
         this._serviceRequestListService.isAdvanceSearchMade = true;
         this.$dashboardList.next();
+        // if (this.advanceSearch.serviceRequestId !== null || this.advanceSearch.serviceRequestId !== '') {
+        //     this.isShowSearchList = true;
+        // }
+        this.isShowSearchList = true;
     }
 
     clearServiceRequest(): void {
@@ -234,6 +260,7 @@ export class ServiceRequestListComponent implements OnInit, OnDestroy {
     getDocumentHeading(): string {
         switch (this.advanceSearch.tabName) {
             case 'MY_REQUEST': return 'My Service Requests';
+            case 'ALL_REQUEST': return 'List of all Service Requests';
             case 'ALL_PENDING_SERVICE_REQUEST': return 'All Pending Service Requests';
             case 'NEW_SUBMISSIONS': return 'New Service Requests';
             case 'MY_PENDING_SERVICE_REQUEST': return 'Service Requests Pending My Review';

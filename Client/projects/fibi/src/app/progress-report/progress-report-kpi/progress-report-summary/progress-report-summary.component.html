@@ -24,9 +24,9 @@
                                [ngClass]="((column == 'target')  ? (!isDesc ? 'fa fa-sort-numeric-desc sortIcon' : 'fa fa-sort-numeric-asc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"></i>
                         </th>
                         <th class="hand-cursor" (click)="isDesc = !isDesc; sortBy('achievedValues.' + prNumbers.progressReportNumber)" scope="col" *ngFor="let prNumbers of progressReportNumbers">Achieved as at
-                                {{getMonth(prNumbers.dueDate)}}
-                                {{getYear(prNumbers.dueDate)}}<br>
-                                (Due Date: {{prNumbers.dueDate | dateFormatter}})
+                                {{getMonth(prNumbers.reportEndDate)}}
+                                {{getYear(prNumbers.reportEndDate)}}<br>
+                                (End Date: {{prNumbers.reportEndDate | dateFormatter}})
                                 <i aria-hidden="true"
                                 [ngClass]="((column == 'achievedValues.' + prNumbers.progressReportNumber)  ?
                                 (!isDesc ? 'fa fa-sort-numeric-desc sortIcon' : 'fa fa-sort-numeric-asc sortIcon')

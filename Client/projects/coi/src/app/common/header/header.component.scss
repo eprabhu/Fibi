@@ -61,6 +61,7 @@ header {
   left: 0;
   right: 0;
   z-index: 50;
+    min-height: 51px;
 }
 
 .pushHeader {
@@ -81,6 +82,7 @@ header {
 
 .logo {
   width: 200px;
+    max-width: 145.359px;
 }
 
 .dropdown-menu {
@@ -115,4 +117,8 @@ header {
   &:hover {
     color: black;
   }
+}
+
+.dropdown-width {
+    min-width: 34px;
 }

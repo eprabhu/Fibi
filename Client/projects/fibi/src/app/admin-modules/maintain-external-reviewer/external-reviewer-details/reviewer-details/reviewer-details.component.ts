@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { DEFAULT_DATE_FORMAT, HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../../../app-constants';
 import { setFocusToElement } from '../../../../common/utilities/custom-utilities';
@@ -31,6 +31,7 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
     lookUpData: any = {};
     isMaintainReviewer: any;
     currentUserName = '';
+    currentEmail = '';
     agreementStartDate: any;
     agreementEndDate: any;
     externalReviewerDetails: any = {};
@@ -46,12 +47,12 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
 
     constructor(public _extReviewerMaintenanceService: ExtReviewerMaintenanceService,
         private _commonService: CommonService,
-        private _router: Router) { }
+        private _router: Router,
+        private _activatedRoute: ActivatedRoute) { }
         
     ngOnInit() {
         this.isMaintainReviewer = this._extReviewerMaintenanceService.getMaintainReviewerPermission();
-        this.getEndPointOptions();
-        this.setInitialValues();
+        this.setQueryParams();
         this.getExternalReviewerData();
     }
 
@@ -62,6 +63,7 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
                 this.extReviewer = this.externalReviewerDetails.extReviewer;
                 this.extReviewer.isUsernameChange = false;
                 this.currentUserName = this.extReviewer.principalName;
+                this.currentEmail = this.extReviewer.primaryEmail;
                 this.getSubAreaLookUp();
                 if (this.extReviewer.agreementStartDate) {
                     this.agreementStartDate = getDateObjectFromTimeStamp(this.extReviewer.agreementStartDate);
@@ -98,7 +100,9 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
     }
 
     bindUName() {
-        this.extReviewer.principalName = this.extReviewer.primaryEmail.trim();
+        if (this._extReviewerMaintenanceService.mode === 'create') {
+            this.extReviewer.principalName = this.extReviewer.primaryEmail.trim();
+        }
         this._extReviewerMaintenanceService.isDataChange = true;
     }
 
@@ -153,6 +157,11 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
+    isEmailChange() {
+        this.extReviewer.isEmailChange = (this.currentEmail && this.currentEmail !== this.extReviewer.primaryEmail) ? 
+             true : false;
+    }
+
     extReviewerValidation() {
         this.emailValidation();
         this.map.clear();
@@ -167,6 +176,9 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
         }
         if (!this.extReviewer.primaryEmail) {
             this.map.set('primaryEmail', 'primaryemail');
+        }
+        if (!this.extReviewer.principalName) {
+            this.map.set('principalName', 'principalName');
         }
     }
 
@@ -190,7 +202,9 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
         this.extReviewer.lastName = this.extReviewer.lastName.trim();
         this.extReviewer.passportName = this.extReviewer.passportName.trim();
         this.extReviewer.primaryEmail = this.extReviewer.primaryEmail.trim();
+        this.extReviewer.principalName = this.extReviewer.principalName.trim();
         this.isUsernameChange();
+        this.isEmailChange();
         if (this.extReviewer.middleName) {
             this.extReviewer.middleName = this.extReviewer.middleName.trim();
         }
@@ -229,7 +243,7 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
     }
 
     saveReviewer() {
-        if (!this.isSaving) {
+        if (!this.isSaving && this._extReviewerMaintenanceService.isDataChange) {
             this.setExtReviewerData();
             this.extReviewerValidation();
             if ((this.map.size < 1) && (this.primaryEmailWarningMsg === null || this.primaryEmailWarningMsg === undefined)) {
@@ -244,8 +258,15 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
                                 { queryParams: { 'externalReviewerId': data.extReviewer.externalReviewerId, 'mode': 'edit' } });
                             this.isSaving = false;
                         } else {
-                            this._commonService.showToast(HTTP_ERROR_STATUS, data.message);
-                            this.map.set('userName', 'Username already exist');
+                            let messageParts = data.message.split(' && ').map(part => part.trim());
+                            const userNameErrorMessage = messageParts[0];
+                            const emailErrorMessage = messageParts[1];
+                            const errorMessage = userNameErrorMessage && emailErrorMessage ? 
+                                                 "Username and Primary Email already exists" 
+                                                 : userNameErrorMessage || emailErrorMessage;
+                            this._commonService.showToast(HTTP_ERROR_STATUS, errorMessage);
+                            this.map.set('userName', userNameErrorMessage);
+                            this.map.set('emailAddress', emailErrorMessage);
                             this.isSaving = false;
                         }  
                     }
@@ -268,7 +289,7 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
                     this.setKeywordErrorMessage();
                 }
             }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding new Affiliated Institution');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding new Affiliated Institution.');
             }));
         this._extReviewerMaintenanceService.setExternalReviewerDetails(this.externalReviewerDetails);
     }
@@ -282,6 +303,7 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
             this.extReviewer.affiliationInstitutionCode = null;
             this.extReviewer.affiliationInstitution = {};
         }
+        this._extReviewerMaintenanceService.isDataChange = true;
     }
 
     private setKeywordErrorMessage(): void {
@@ -291,6 +313,14 @@ export class ReviewerDetailsComponent implements OnInit, OnDestroy {
         this.extReviewer.affiliationInstitutionCode = null;
         this.extReviewer.affiliationInstitution = null;
         this.clearKeywordField = new String('true');
+    }
+
+    private setQueryParams() {
+        this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
+            this.getEndPointOptions();
+            this.setInitialValues();
+            this._extReviewerMaintenanceService.isDataChange = false;
+        }));
     }
 
 }

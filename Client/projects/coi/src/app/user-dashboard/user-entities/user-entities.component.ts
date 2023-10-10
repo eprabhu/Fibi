@@ -9,6 +9,7 @@ import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { listAnimation, fadeInOutHeight, leftSlideInOut } from '../../common/utilities/animations';
+import { UserDashboardService } from '../user-dashboard.service';
 
 @Component({
   selector: 'app-user-entities',
@@ -35,7 +36,7 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   $fetchSFI = new Subject();
   isSearchTextHover = false;
   isLoading = false;
-  isShowFilterAndSearch = false;
+  isHideFilterSearchAndShowCreate = false;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService) {
@@ -59,16 +60,19 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
       })).subscribe((data: any) => {
       this.result = data;
       if (this.result) {
-        this.isShowFilterAndSearch = !!data.personEntities.length;
         this.filteredEntityArray = data.personEntities || [];
         this.loadingComplete();
       }
     }), (err) => {
       this.loadingComplete();
+      this.filteredEntityArray = [];
     });
   }
 
   private loadingComplete() {
+    if (this.sfiDashboardRequestObject.filterType === 'ALL' && !this.searchText && this.sfiDashboardRequestObject.currentPage === 1) {
+      this.isHideFilterSearchAndShowCreate = this.filteredEntityArray.length == 0 ? true : false;
+    }
     this.isLoading = false;
 }
 
@@ -113,8 +117,10 @@ removeEntityId() {
   }
 
   actionsOnPageChangeEvent(event) {
-    this.sfiDashboardRequestObject.currentPage = event;
-    this.$fetchSFI.next();
+    if (this.sfiDashboardRequestObject.currentPage != event) {
+      this.sfiDashboardRequestObject.currentPage = event;
+      this.$fetchSFI.next();
+    }
   }
 
   activateDeactivateEvent(event) {
@@ -188,6 +194,11 @@ clearSearchText() {
   this.searchText = '';
   this.sfiDashboardRequestObject.searchWord = '';
   this.$fetchSFI.next();
+}
+
+
+addSFI(type) {
+  this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
 }
 
 }

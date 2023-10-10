@@ -153,6 +153,7 @@ export class DashboardComponent implements OnInit {
     /* Clear the advanced search parameters */
     clearAdvancedSearch() {
         this.setInitialElasticValues();
+        this.personType = 'employee';
         this.selectedPerson = {};
         this.requestObject.trainingCode = null;
         this.requestObject.personId = null;
@@ -186,9 +187,9 @@ export class DashboardComponent implements OnInit {
             .subscribe((res: string) => {
                 if (res === 'success') {
                     this.$trainingList.next();
-                    this.successMessage('Training deleted successfully');
+                    this.successMessage('Training deleted successfully.');
                 }
-            }, _err => this.errorMessage('Something Went wrong! please try again')));
+            }, _err => this.errorMessage('Something went wrong. Please try again.')));
     }
 
     getParamPersonIfAvailable() {

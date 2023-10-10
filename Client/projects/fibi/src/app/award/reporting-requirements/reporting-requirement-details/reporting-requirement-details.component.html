@@ -1,413 +1,263 @@
-<ng-container *ngIf="childReport?.awardReportTracking?.length > 0">
-    <table aria-describedby="report details" class="border table tableSkin grid2">
-        <thead>
-        <tr>
-            <th class="date-width" scope="col">Due Date</th>
-            <ng-container *ngIf="(isProgressReportEnabled &&
-                ['1','2'].includes(childReport.reportClassCode)); else elseHeaderBlock">
-                <th scope="col">Progress Report #</th>
-                <th scope="col">Progress Report Status</th>
-                <th scope="col">Reporting Period</th>
-                <th scope="col">Create Date</th>
-                <th scope="col">Approve Date</th>
-                <th scope="col">Actions</th>
-                <th scope="col"></th>
-            </ng-container>
-            <ng-template #elseHeaderBlock>
-                <th scope="col">Preparer</th>
-                <th scope="col">Status</th>
-                <th class="date-width" scope="col">Activity Date</th>
-                <th scope="col">Comments</th>
-                <th scope="col">Attachments</th>
-                <th scope="col">Actions</th>
-            </ng-template>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let reportTrackingList of childReport.awardReportTracking; let i = index">
-            <ng-container *ngIf="(isProgressReportEnabled &&
-                ['1','2'].includes(childReport.reportClassCode)); else elseDataBlock">
-                <td class="vertical-middle">{{reportTrackingList.dueDate | dateFormatterWithTimeZone}}</td>
-                <td class="vertical-middle">{{reportTrackingList?.awardProgressReport?.progressReportNumber}}</td>
-                <td class="vertical-middle">{{reportTrackingList?.awardProgressReport?.progressReportStatus?.description}}</td>
-                <td class="vertical-middle">{{reportTrackingList?.awardProgressReport?.reportStartDate | dateFormatter}}
-                    <span *ngIf="reportTrackingList?.awardProgressReport?.reportStartDate">-</span> {{reportTrackingList?.awardProgressReport?.reportEndDate | dateFormatter}}</td>
-                <td class="vertical-middle">{{reportTrackingList?.awardProgressReport?.createTimeStamp | dateFormatter}}</td>
-                <td class="vertical-middle">
-                    <ng-container
-                        *ngIf="reportTrackingList?.awardProgressReport?.progressReportStatus?.progressReportStatusCode === '4'">
-                        {{reportTrackingList?.awardProgressReport?.updateTimeStamp | dateFormatter}}
-                    </ng-container>
-                </td>
-                <td class="action-width">
-                    <button (click)="navigateToReport(reportTrackingList.progressReportId)"
-                            *ngIf="reportTrackingList.progressReportId"
-                            class="btn btn-tertiary mt-0 mx-3" title="View Report">
-                        View Report
-                    </button>
-                    <button
-                        (click)="uniqueModalId=childReport.awardReportTermsId;createProgressReportRequestObject(reportTrackingList, childReport?.reportClassCode, childReport?.frequencyCode)"
-                        *ngIf="!reportTrackingList.progressReportId && (i == createIndex) && isActiveReport && !isEditMode && isReportCreatable"
-                        class="btn btn-tertiary mt-0 mx-3"
-                        title="Create Report">
-                        Create Report
-                    </button>
-                </td>
-                <td class="action-width">
-                    <ul class="actionButtonGroup d-inline-block">
-                        <li *ngIf="(!reportTrackingList.progressReportId) && isEditMode && isModifiable" class="mr-3">
-                            <a (click)="selectedIndex=i;cancelIfEditMode();"
-                                [attr.data-target]="'#deleteAttachment'+ childReport.awardReportTermsId" data-toggle="modal"
-                                title="Delete Entry">
-                                <i aria-hidden="true" class="fa fa-trash-o pointer"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </td>
-            </ng-container>
-            <ng-template #elseDataBlock>
-                <td>
-                    <ng-container *ngIf="isEditMode && !reportTrackingList.progressReportId; else showDueDate">
-                        <span class="dateField d-block position-relative">
-                            <input matInput [matDatepicker]="dueDate" (keypress)="_commonService._keyPress($event, 'date');"
-                                   [(ngModel)]="reportTrackingList.dueDate"
-                                   [disabled]="!isRowEdit[i]"
-                                   [id]="'award-due-date' + i"
-                                   [ngClass]="(validateMap.get('dueDate') && isRowEdit[i]) ? 'is-invalid d-block' : ''"
-                                   (click)="dueDate.open()"
-                                   autocomplete="off"
-                                   class="d-inline-block form-control"
-                                   placeholder="{{datePlaceHolder}}"
-                                   style="width: 100% !important"/>
-                            <i [id]="'award-due-date-icon'+ childReport.awardReportTermsId"
-                               (click)="dueDate.open()" aria-hidden="true"
-                               class="fa fa-calendar fa-large hand-cursor insidePicker"></i>
-                            <mat-datepicker #dueDate
-                                           (opened)="setFocusToElement('award-due-date' + i)"></mat-datepicker>
-                            <span *ngIf="(validateMap.get('dueDate') && isRowEdit[i])"
-                                  class="invalid-feedback d-block table-validation-msg">
-                                {{validateMap.get('dueDate')}}
-                            </span>
-                        </span>
-                    </ng-container>
-                    <ng-template #showDueDate>
-                        {{reportTrackingList.dueDate | dateFormatterWithTimeZone}}
-                    </ng-template>
-                </td>
-                <td>
-                    <div [id]="'searchElastic'+ childReport.awardReportTermsId" class="searchBox mt-3">
-                        <app-elastic (selectedResult)="selectedPerson($event, i);" [clearField]="clearField"
-                                     [isDisabled]="!isRowEdit[i]" [options]="elasticSearchOptions[i]"
-                                     [placeHolder]="'Search'">
-                        </app-elastic>
-                    </div>
-                </td>
-                <td>
-                    <select [(ngModel)]="reportTrackingList.statusCode" [disabled]="!isRowEdit[i]"
-                            [id]="'prop-type'+ childReport.awardReportTermsId" class="form-control">
-                        <option value="">--Select--</option>
-                        <option *ngFor="let statusList of reportStatusList"
-                                [value]="statusList.statusCode">
-                            {{statusList.description}}</option>
-                    </select>
-                </td>
-                <td>
-                <span class="dateField">
-                    <input matInput [matDatepicker]="activityDate" (keypress)="_commonService._keyPress($event, 'date');"
-                           [(ngModel)]="reportTrackingList.activityDate"
-                           [disabled]="!isRowEdit[i]"
-                           [id]="'award-activity-date' + childReport.awardReportTermsId"
-                           [ngClass]="mandatoryMsg == 'startDate' ? 'lineItem-mandatory' : ''"
-                           (click)="activityDate.open()"
-                           autocomplete="off"
-                           class="d-inline-block form-control"
-                           placeholder="{{datePlaceHolder}}"
-                           style="width: 100% !important"/>
-                    <i [id]="'award-activity-date-icon' + childReport.awardReportTermsId"
-                       (click)="activityDate.open()"
-                       aria-hidden="true"
-                       class="fa fa-calendar fa-large hand-cursor insidePicker"></i>
-                    <mat-datepicker #activityDate (opened)="setFocusToElement('award-activity-date'+ childReport.awardReportTermsId )"></mat-datepicker>
-                </span>
-                </td>
-                <td>
-                <textarea [(ngModel)]="reportTrackingList.comments" [disabled]="!isRowEdit[i]"
-                          [id]="'award-report-tracking-comnt'+ childReport.awardReportTermsId"
-                          [isShowLimiter]='true' [limit]=4000 appLengthValidator
-                          class="form-control p-2 mt-4" rows="1"></textarea>
-                </td>
-                <td class="vertical-middle action-width">
-                    <!-- in edit mode -> show only if file not uploaded, has modify right-->
-                    <!-- in view mode -> show only if file not uploaded, has modify right, is active report & edit enabled from backend(concurrent checking) -->
-                    <ng-container *ngIf="(isEditMode && !reportTrackingList?.awardReportTrackingFile && isModifiable) ||
-                        (!isEditMode && isEditEnabledForSection && !reportTrackingList?.awardReportTrackingFile && isModifiable && isActiveReport)">
-                        <a (click)="isReplaceAttachment=false;showUploadModal(i,reportTrackingList);"
-                           class="anchor-link"><i
-                            aria-hidden="true" class="fa fa-upload"></i> Upload</a>
-                    </ng-container>
-                    <ng-container *ngIf="reportTrackingList?.awardReportTrackingFile">
-                        <span *ngIf="reportTrackingList?.awardReportTrackingFile"
-                              class="fileChips regularFont"
-                              title="{{reportTrackingList?.awardReportTrackingFile?.fileName}}">
-                            <span>{{(reportTrackingList?.awardReportTrackingFile?.fileName?.length
-                                > 55) ? (reportTrackingList?.awardReportTrackingFile?.fileName|
-                                slice:0:55) + '...' : (reportTrackingList?.awardReportTrackingFile?.fileName)}}
+<div ng class="card-body gridSkin pr-2 " [ngClass]="last ? '' : 'pb-0'" *ngFor="let reportTrackingList of childReport.awardReportTracking; let i = index ; let last = last;">
+	<div class="form-row">
+		<div class="col-1 d-flex justify-content-center pr-0">
+			<div class="form-row">
+				<div class="mt-2">
+					<span><label for="dueDate">Due Date</label>
+						 <!-- <span id="point">-----</span> -->
+						</span>
+					<div class="data-exist" id="dueDate">
+						{{reportTrackingList?.dueDate | dateFormatterWithTimeZone}}
+					</div>
+					<div *ngIf="reportTrackingList.progressReportId && !reportTrackingList.awardReportTermsId" id="adhocReport">
+						<span class="adhoc-status ">
+							   Ad Hoc
+						   </span>
+					   
+				   </div>
+				</div>
+			</div>
+		</div>
+		<div class="col-11 pr-0">
+			<div class="card">
+				<div class="card-body shadow-sm">
+					<div class="form-row">
+						<div class="col-1">
+							<div *ngIf="(childReport.reportClass.attachmentOrReport == 'A' || childReport.reportClass.attachmentOrReport == 'E') && !reportTrackingList.progressReportId" id="status">
+								
+									<span class="entity-status"
+										[ngClass]="getColorForStatus(reportTrackingList.statusCode, reportTrackingList.progressReportId)">{{getStatus(reportTrackingList.statusCode)}}</span>
+							</div>
+							<div *ngIf="reportTrackingList.progressReportId" id="progressReportstatus">
+								 <span class="entity-status  "
+										[ngClass]="getColorForStatus(reportTrackingList?.awardProgressReport?.progressReportStatus?.progressReportStatusCode, reportTrackingList.progressReportId)">
+										{{reportTrackingList?.awardProgressReport?.progressReportStatus?.description}}
+									</span>
+								
+							</div>									
+						</div>
+						<div class="col-9 ">
+							<div class="form-row">
+								
+								<div class="col-3" *ngIf="childReport.reportClass.attachmentOrReport == 'R' || reportTrackingList.progressReportId">
+									<div>
 
-                                <i (click)="isDeleteAttachment=true;triggerConfirmDeleteAttachment(i, reportTrackingList)"
-                                   *ngIf="isEditMode && isModifiable"
-                                   [attr.data-target]="'#deleteAttachment'+childReport.awardReportTermsId"
-                                   aria-hidden="true" class="fa fa-times hand-cursor" data-toggle="modal"
-                                   title="Delete attachment"></i>
-                            </span>
-                            <ul class="actionButtonGroup d-inline-block">
-                                <li>
-                                    <a>
-                                        <i (click)="downloadReportAttachment(reportTrackingList?.awardReportTrackingFile)"
-                                           aria-hidden="true"
-                                           class="fa fa-download pointer"
-                                           title="Click here to download {{(reportTrackingList?.awardReportTrackingFile?.fileName > 55)?
-                                           (reportTrackingList?.awardReportTrackingFile?.fileName | slice:0:55)+'...':
-                                           (reportTrackingList?.awardReportTrackingFile?.fileName)}}"></i>
-                                    </a>
-                                </li>
-                                <!-- in edit mode -> show if replacement attachment parameter enabled, has modify right -->
-                                <!-- in view mode -> show if replacement attachment parameter enabled, has modify right, is active report, & edit enabled from backend(concurrent checking) -->
-                                <li *ngIf="isReplaceAttachmentEnabled && isModifiable && ((isActiveReport && !isEditMode && isEditEnabledForSection) || isEditMode)">
-                                    <a (click)="isReplaceAttachment= true;showUploadModal(i, reportTrackingList)"
-                                       [id]="'award-doc-replace-btn' + i"
-                                       data-target="#addAwardAttachment" data-toggle="modal"
-                                       tabindex="0"
-                                       title="Click here to replace file {{(reportTrackingList?.awardReportTrackingFile?.fileName?.length > 55)?
-                                       (reportTrackingList?.awardReportTrackingFile?.fileName | slice:0:55)+'...':
-                                       (reportTrackingList?.awardReportTrackingFile?.fileName)}}">
-                                        <i aria-hidden="true" class="fa fa-retweet pointer"></i>
-                                    </a>
-                                </li>
-                                <li *ngIf="isReplaceAttachmentEnabled">
-                                    <a (click)="showAttachmentVersions(reportTrackingList)"
-                                       title="Click here to view file versions">
-                                        <img alt="versions icon" aria-hidden="true"
-                                             class="version-icon"
-                                             src="{{deployMap}}assets/images/version-icons.png">
-                                    </a>
-                                </li>
-                            </ul>
-                        </span>
-                    </ng-container>
-                </td>
-                <td class="vertical-middle action-width px-2">
-                    <ul class="actionButtonGroup d-inline-block">
-                        <ng-container *ngIf="isEditMode">
-                            <li *ngIf="!isRowEdit[i] && isModifiable" class="mx-3">
-                                <a (click)="editRow(reportTrackingList, i)" title="Edit Entry">
-                                    <i aria-hidden="true" class="fa fa-pencil pointer"></i>
-                                </a>
-                            </li>
-                        </ng-container>
-                        <ng-container *ngIf="!isEditMode">
-                            <li *ngIf="!isRowEdit[i] && isModifiable && isActiveReport && isEditEnabledForSection" class="mx-3">
-                                <a (click)="editRow(reportTrackingList, i)" title="Edit Entry">
-                                    <i aria-hidden="true" class="fa fa-pencil pointer"></i>
-                                </a>
-                            </li>
-                        </ng-container>
-                        <li *ngIf="editIndex !== null && isRowEdit[i]" class="mr-2">
-                            <a (click)="saveReportTrackingDetails(reportTrackingList, i)"
-                               title="Save Entry">
-                                <i aria-hidden="true" class="fa fa-floppy-o pointer"></i>
-                            </a>
-                        </li>
-                        <li *ngIf="isRowEdit[i] && !isAddNewReporting" class="mx-2">
-                            <a (click)="cancelEditRow()" title="Cancel Entry">
-                                <i aria-hidden="true" class="fa fa-remove pointer"></i>
-                            </a>
-                        </li>
-                        <li *ngIf="isRowEdit[i] && isAddNewReporting" class="mx-2">
-                            <a (click)="cancelAddNewReporting()" title="Cancel Entry">
-                                <i aria-hidden="true" class="fa fa-remove pointer"></i>
-                            </a>
-                        </li>
-                        <li *ngIf="!reportTrackingList.progressReportId && isEditMode && isModifiable && !isAddNewReporting && !isRowEdit[i]"
-                            class="mr-3">
-                            <a (click)="selectedIndex=i;isDeleteAttachment=false;cancelIfEditMode();"
-                               [attr.data-target]="'#deleteAttachment'+ childReport.awardReportTermsId"
-                               data-toggle="modal" title="Delete Entry">
-                                <i aria-hidden="true" class="fa fa-trash-o pointer"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </td>
-            </ng-template>
-        </tr>
-        </tbody>
-    </table>
-</ng-container>
+										<label for="progressReportNumber"> Progress Report </label>
+										<div id="progressReportNumber" class="data-exist">
+											{{reportTrackingList?.awardProgressReport?.progressReportNumber}}</div>
+									</div>
+									<div class="noDataExists " *ngIf="!reportTrackingList?.awardProgressReport?.progressReportNumber">
+										No data available
+									</div>
+
+								</div>
+
+								<div class="col-3" *ngIf="childReport.reportClass.attachmentOrReport == 'R' || reportTrackingList.progressReportId ">
+									<label for="reportingPeriod"> Reporting Period</label>
+									<div class="" id="reportingPeriod" class="data-exist">
+										{{reportTrackingList?.awardProgressReport?.reportStartDate | dateFormatter}}
+										<span *ngIf="reportTrackingList?.awardProgressReport?.reportStartDate">-</span>
+										{{reportTrackingList?.awardProgressReport?.reportEndDate | dateFormatter}}
+									</div>
+									<div class="noDataExists " *ngIf="!reportTrackingList?.awardProgressReport?.reportStartDate || !reportTrackingList?.awardProgressReport?.reportEndDate">
+										No data available
+									</div>
+									
+								</div>
+								<div class="col-6" *ngIf="(childReport.reportClass.attachmentOrReport == 'A' || childReport.reportClass.attachmentOrReport == 'E') && !reportTrackingList.progressReportId">
+									<div>
+										<label class="d-block" for="attachmentView">Attachment</label>
+										<span>
+											<span *ngIf="reportTrackingList.awardReportTrackingFile" id="attachmentView"
+												class="fileChipsView regularFont"><span>{{(reportTrackingList?.awardReportTrackingFile?.fileName?.length
+													> 45) ? (reportTrackingList?.awardReportTrackingFile?.fileName|
+													slice:0:45) + '...' :
+													(reportTrackingList?.awardReportTrackingFile?.fileName)}}</span>
+
+											</span>
+											<span *ngIf="reportTrackingList.awardReportTrackingFile"
+												class="action-icon">
+												<a>
+													<i (click)="downloadReportAttachment(reportTrackingList?.awardReportTrackingFile)"
+														aria-hidden="true" class="fa fa-download pointer" title="Click here to download {{(reportTrackingList?.awardReportTrackingFile?.fileName.length > 55)?
+													   (reportTrackingList?.awardReportTrackingFile?.fileName | slice:0:55)+'...':
+													   (reportTrackingList?.awardReportTrackingFile?.fileName)}}"></i>
+												</a>
+											</span>
+										</span>
+										<div class="noDataExists " *ngIf="!reportTrackingList.awardReportTrackingFile">
+											No data available
+										</div>
+									</div>
+
+
+								</div>
+								<div *ngIf="(childReport.reportClass.attachmentOrReport == 'A' || childReport.reportClass.attachmentOrReport == 'E') && !reportTrackingList.progressReportId" class="col-2"></div>
+								<div class="col-2 " *ngIf="(childReport.reportClass.attachmentOrReport == 'A' || childReport.reportClass.attachmentOrReport == 'E') && !reportTrackingList.progressReportId">
+									<div>
+
+										<label for="preparerName"> Preparer</label>
+										<div *ngIf="reportTrackingList?.preparerName" id="preparerName"
+											class="data-exist">
+											{{reportTrackingList?.preparerName}}
+										</div>
+										<div class="noDataExists " *ngIf="!reportTrackingList?.preparerName">
+											No data available
+										</div>
+									</div>
+								</div>
+
+								<div class="col-2 " *ngIf="childReport.reportClass.attachmentOrReport == 'R' || reportTrackingList.progressReportId">
+									<div>
+										<label for="approvalDate"> Approval Date</label>
+										<div class="data-exist" id="approvalDate">
+											<ng-container
+												*ngIf="reportTrackingList?.awardProgressReport?.progressReportStatus?.progressReportStatusCode === '4'">
+												{{reportTrackingList?.awardProgressReport?.updateTimeStamp |
+												dateFormatter}}
+											</ng-container>
+										</div>
+										<div class="noDataExists "
+											*ngIf="reportTrackingList?.awardProgressReport?.progressReportStatus?.progressReportStatusCode != '4'">
+											No data available
+										</div>
+									</div>
+								</div>
+
+								<div class="col-2 " *ngIf="childReport.reportClass.attachmentOrReport == 'R' || reportTrackingList.progressReportId">
+									<div>
+
+										<label for="createdBy"> Created By</label>
+										<div class="data-exist"
+											*ngIf="reportTrackingList?.awardProgressReport?.createUser" id="createdBy">
+											{{reportTrackingList?.awardProgressReport?.createUser}}
+										</div>
+										<div class="noDataExists "
+											*ngIf="!reportTrackingList?.awardProgressReport?.createUser">
+											No data available
+										</div>
+									</div>
+								</div>
+
+								<div class="col-2 " *ngIf="childReport.reportClass.attachmentOrReport == 'R' || reportTrackingList.progressReportId">
+									<div>
+
+										<label for="createdOn"> Created On</label>
+										<div class="data-exist"
+											*ngIf="reportTrackingList?.awardProgressReport?.createTimeStamp"
+											id="createdOn">{{reportTrackingList?.awardProgressReport?.createTimeStamp |
+											dateFormatter}}
+										</div>
+										<div class="noDataExists "
+											*ngIf="!reportTrackingList?.awardProgressReport?.createTimeStamp">
+											No data available
+										</div>
+									</div>
+								</div>
+
+								<div class="col-2 " *ngIf="(childReport.reportClass.attachmentOrReport == 'A' || childReport.reportClass.attachmentOrReport == 'E') && !reportTrackingList.progressReportId">
+									<div class="">
+										<label for="activityDate"> Activity Date</label>
+										<div *ngIf="reportTrackingList.activityDate" id="activityDate"
+											class="data-exist">
+											{{reportTrackingList?.activityDate | dateFormatterWithTimeZone}}
+										</div>
+										<div class="noDataExists " *ngIf="!reportTrackingList.activityDate">
+											No data available
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="form-row pt-2">
+								<div *ngIf="(childReport.reportClass.attachmentOrReport == 'A' || childReport.reportClass.attachmentOrReport == 'E') && !reportTrackingList.progressReportId"
+									class="col-12">
+										<label class="d-block" for="comment"> Comment 
+										</label> 
+										<div class="data-exist comment-overflow"
+										[class.text-nowrap]="!isExpandComment[i]"																	
+										  *ngIf="reportTrackingList.comments" id="comment">
+										  <span *ngIf="!isExpandComment[i]" >{{reportTrackingList.comments.length>30 && !isExpandComment[i] ? (reportTrackingList.comments | slice:0:30)+'...' : reportTrackingList.comments}}
+										</span>
+										<span *ngIf="isExpandComment[i]" >{{reportTrackingList.comments}}</span>
+											<span *ngIf="reportTrackingList.comments.length>30" [class.float-right]="isExpandComment[i]" class="hand-cursor italian black-medium "
+												(click)="expandComment(i)">{{isExpandComment[i] ? '...Show less' : 'Read more'}}
+
+											  </span>
+
+										</div>
+										<div class="noDataExists " *ngIf="!reportTrackingList.comments">
+											No data available
+										</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-2 d-flex flex-column align-items-end justify-content-center">
+
+							<button (click)="openDueDateEditModal(reportTrackingList)"
+								*ngIf="(!reportTrackingList.progressReportId && (( isEditMode && hasRight) || (manageOnActiveAward && isActiveReport)) && isEditEnabledForSection && reportTrackingList?.statusCode == '1') "
+								class="btn btn-tertiary btn-small m-1 action-button-width" title="Edit due date">
+								Edit Due Date
+							</button>
+							<button
+								*ngIf="(childReport.reportClass.attachmentOrReport == 'A' || childReport.reportClass.attachmentOrReport == 'E' ) && !reportTrackingList.progressReportId && isActiveReport && !isEditMode && isReportCreatable "
+								(click)="openFormModalForNonProgressReport(reportTrackingList)"
+								class="btn btn-tertiary btn-small m-1 action-button-width" title="upload Report">
+								{{reportTrackingList.awardReportTrackingFile || reportTrackingList.comments ||
+								reportTrackingList.preparerName || reportTrackingList.activityDate ||
+								reportTrackingList.statusCode != '1' ? 'Edit Report' : 'Upload Report' }}
+							</button>
+							<button (click)="navigateToReport(reportTrackingList.progressReportId)"
+								*ngIf="reportTrackingList.progressReportId"
+								class="btn btn-tertiary btn-small m-1 action-button-width" title="View Report">
+								View Report
+							</button>
+							<button (click)="openCreateProgressReportModal(reportTrackingList);"
+								*ngIf="(childReport.reportClass.attachmentOrReport == 'R' || childReport.reportClass.attachmentOrReport == 'E') && (!reportTrackingList.progressReportId && !reportTrackingList.awardReportTrackingFile && reportTrackingList.createProgressReport && isActiveReport && !isEditMode && isReportCreatable )"
+								class="btn btn-tertiary btn-small m-1 action-button-width" title="Create Report">
+								Create Report
+							</button>
+							<button *ngIf="!reportTrackingList.progressReportId && isEditMode && hasRight && isEditEnabledForSection "
+								(click)="isDeleteAttachment=false;deleteTrackingModal(reportTrackingList)"
+								class="btn btn-tertiary btn-small m-1 action-button-width" title="Delete Entry">
+								Delete Tracking
+							</button>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
 <ng-container *ngIf="childReport?.awardReportTracking?.length === 0">
-    <div class="border f-13 ng-star-inserted p-3 text-center">No Data Found.</div>
+	<div class="no-data-container">
+
+		<h4>No due dates found</h4>
+	</div>
 </ng-container>
-<!-- DELETE ATTACHMENT WARNING MODAL -->
-<div [id]="'deleteAttachment'+ childReport.awardReportTermsId" aria-hidden="true"
-     aria-labelledby="deleteModalTitle" class="modal fade mySkinDialog"
-     role="dialog" tabindex="-1">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete</h5>
-                <button [id]="'award-doc-dlt-dismiss'+ childReport.awardReportTermsId" aria-label="Close" class="close"
-                        data-dismiss="modal" type="button">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this {{(isDeleteAttachment ? 'attachment' : 'item')}}?</p>
-            </div>
-            <div class="modal-footer">
-                <button (click)="selectedIndex=null; isDeleteAttachment=false" [id]="'award-doc-dlt-no-btn'+ childReport.awardReportTermsId"
-                        class="btn btn-secondary btn-sm"
-                        data-dismiss="modal"
-                        data-toggle="modal" type="button">Cancel
-                </button>
-                <button (click)="performDelete()"
-                        [id]="'award-doc-dlt-yes-btn'+ childReport.awardReportTermsId"
-                        class="btn btn-primary-sub btn-sm"
-                        data-dismiss="modal" type="button">Delete
-                </button>
-            </div>
-        </div>
-    </div>
+
+<div [id]="'confirmCreateReportModal'+ childReport.reportClassCode + childReport.reportCode "
+	class="modal fade mySkinDialog " data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Confirm</h5>
+				<button aria-label="Close" class="close" data-dismiss="modal" type="button">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<P>Are you sure that you want to Create Report?</P>
+			</div>
+			<div class="modal-footer">
+				<button  class="btn btn-secondary" data-dismiss="modal" type="button">
+					No
+				</button>
+				<button class="btn btn-primary-sub btn-sm" type="button">Yes</button>
+			</div>
+		</div>
+	</div>
 </div>
-<ng-container>
-    <button [attr.data-target]="'#addAwardAttachment'+ childReport.awardReportTermsId"
-            [id]="'triggerAddAttachmentModal' + childReport.awardReportTermsId" data-toggle="modal"
-            hidden></button>
-    <!-- ADD ATTACHMENT MODAL -->
-    <div [id]="'addAwardAttachment'+ childReport.awardReportTermsId" aria-hidden="true"
-         aria-labelledby="skippedSchedulesTitle"
-         class="modal fade mySkinDialog"
-         role="dialog" tabindex="-1">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 *ngIf="!isReplaceAttachment" class="modal-title">Add Attachments</h5>
-                    <h5 *ngIf="isReplaceAttachment" class="modal-title">Replace Attachment</h5>
-                    <button (click)="clearAttachmentDetails()"
-                            [id]="'award-doc-popup-dismiss-btn'+ childReport.awardReportTermsId" aria-label="Close"
-                            class="close"
-                            data-dismiss="modal" type="button">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <app-file-drop (filesDropEvent)="addReportAttachment($event)"
-                                   [multiple]="false">
-                    </app-file-drop>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <button [attr.data-target]="'#award-doc-version-modal'+ childReport.awardReportTermsId"
-            [id]="'triggerAttachmentVersionModal'+ childReport.awardReportTermsId" data-toggle="modal"
-            hidden></button>
-    <!--document version modal-->
-    <div [id]="'award-doc-version-modal'+ childReport.awardReportTermsId" aria-hidden="true"
-         aria-labelledby="versionModalTitle"
-         class="modal fade mySkinDialog" role="dialog" tabindex="-1">
-        <div [ngClass]="(attachmentVersions.length == 0)?'modal-dialog':'modal-dialog modal-lg'" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 *ngIf="attachmentVersions.length > 0" class="modal-title"
-                        title="{{(fileName?.length>55)?(fileName):''}}">Versions
-                        of {{(fileName?.length > 55) ? (fileName | slice:0:55) + '...' : (fileName)}}</h5>
-                    <h5 *ngIf="attachmentVersions.length == 0" class="modal-title"
-                        title="{{(fileName?.length>55)?(fileName):''}}">Versions
-                        of {{(fileName?.length > 55) ? (fileName | slice:0:55) + '...' : (fileName)}}</h5>
-                    <button [id]="'award-doc-version-dlt-dismiss'+ childReport.awardReportTermsId"
-                            aria-label="Close" class="close"
-                            data-dismiss="modal" type="button">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div *ngIf="attachmentVersions.length > 0" class="modal-body">
-                    <table
-                        [id]="'doc-version-table'+ childReport.awardReportTermsId"
-                        [ngClass]="(attachmentVersions.length > 8)? 'version-table-scroll' : 'version-table-noscroll'"
-                        class="table table-responsive tableSkin">
-                        <caption class="sr-only">Attachment Versions</caption>
-                        <thead *ngIf="attachmentVersions.length > 0">
-                        <tr>
-                            <th scope="col" style="width: 5%;">Version</th>
-                            <th scope="col">File Name</th>
-                            <th scope="col">Updated By</th>
-                            <th scope="col" style="width: 5%;">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody *ngIf="attachmentVersions.length > 0">
-                        <tr *ngFor="let version of attachmentVersions">
-                            <td style="width: 5%;">
-                                <span>{{version.versionNumber}}</span>
-                            </td>
-                            <td>
-                                <span class="cursor-normal"
-                                      title="{{(version?.fileName?.length>55)?(version?.fileName):''}}">{{(version?.fileName?.length
-                                    > 55) ? (version?.fileName | slice:0:55) + '...' : (version?.fileName)}}</span>
-                            </td>
-                            <td>
-                                <span>{{version.fullName}} on
-                                    {{version.updateTimestamp | dateFormatterWithTimeZone  : 'long'}}</span>
-                            </td>
-                            <td style="width: 5%;">
-                                <ul class="actionButtonGroup">
-                                    <li>
-                                        <a (click)="downloadReportAttachment(version)"
-                                           [id]="'award-doc-dwnlod-btn'+ childReport.awardReportTermsId"
-                                           title="Click here to download {{(version?.fileName?.length > 55)?
-                                           (version?.fileName | slice:0:55)+'...':(version?.fileName)}}">
-                                            <i aria-hidden="true" class="fa fa-download pointer"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div *ngIf="attachmentVersions.length == 0" class="modal-body">
-                    <p>There are no versions found</p>
-                </div>
-                <div class="modal-footer">
-                    <button [id]="'grant-doc-dlt-no-btn'+ childReport.awardReportTermsId"
-                            class="btn btn-secondary mr-2" data-dismiss="modal"
-                            data-toggle="modal" type="button">Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</ng-container>
-<div [id]="'confirmCreateReportModal'+ childReport.awardReportTermsId" class="modal fade mySkinDialog ">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirm</h5>
-                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure that you want to Create Report?</p>
-            </div>
-            <div class="modal-footer">
-                <button (click)="selectedIndex = null;" class="btn btn-secondary" data-dismiss="modal" type="button">
-                    No
-                </button>
-                <button class="btn btn-primary-sub btn-sm" type="button">Yes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<app-progress-report-create-modal (reportCreated)="runPostReportCreationProcesses($event)"
-                                  [uniqueId]="uniqueModalId"
-                                  [createReportDetails]="createReportDetails"></app-progress-report-create-modal>
-

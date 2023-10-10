@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { DATE_PLACEHOLDER } from '../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { ElasticConfigService } from '../../../../fibi/src/app/common/services/elastic-config.service';
 import { getEndPointOptionsForLeadUnit, getEndPointOptionsForCountry, getEndPointOptionsForEntity } from '../../../../fibi/src/app/common/services/end-point.config';
 import {
@@ -21,6 +21,7 @@ import {
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { fadeInOutHeight, listAnimation, topSlideInOut, slideInAnimation, scaleOutAnimation } from '../common/utilities/animations';
+import { openSlider, closeSlider } from '../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -100,6 +101,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     isLoading = false;
     assignAdminPath: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' = 'DISCLOSURES';
     sortSectionsList = [];
+    showSlider = false;
+    entityId: any;
     disclosureSortSections = [
         { variableName: 'coiDisclosureNumber', fieldName: 'Disclosure#' },
         { variableName: 'disclosurePersonFullName', fieldName: 'Person' },
@@ -121,6 +124,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
     ];
     readMoreOrLess = [];
+    isReadMore = false;
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -232,7 +236,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
         this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
-        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ALL');
     }
 
     setAdvanceSearch() {
@@ -300,9 +304,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     actionsOnPageChange(event) {
-        this.localCOIRequestObject.currentPage = event;
-        this.coiAdminDashboardService.coiRequestObject.currentPage = event;
-        this.$coiList.next();
+        if (this.localCOIRequestObject.currentPage != event) {
+            this.localCOIRequestObject.currentPage = event;
+            this.coiAdminDashboardService.coiRequestObject.currentPage = event;
+            this.$coiList.next();
+        }
     }
 
     changeTab(tabName) {
@@ -756,11 +762,41 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     showAssignAdminButton(coi): boolean {
         const tabName = this.coiAdminDashboardService.coiRequestObject.tabName;
-        const isTabForNewSubmission = tabName === 'NEW_SUBMISSIONS' || tabName === 'NEW_SUBMISSIONS_WITHOUT_SFI';
-        if (tabName === 'TRAVEL_DISCLOSURES' && coi.reviewStatusCode === '2') {
+        const IS_TAB_FOR_NEW_SUBMISSION = ['NEW_SUBMISSIONS', 'NEW_SUBMISSIONS_WITHOUT_SFI'].includes(tabName);
+        const IS_TRAVEL_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_TRAVEL_DISCLOSURE');
+        if (tabName === 'TRAVEL_DISCLOSURES' && coi.reviewStatusCode === '2' && IS_TRAVEL_ADMINISTRATOR) {
             return true;
+        } else if (IS_TAB_FOR_NEW_SUBMISSION && this.getManageDisclosureRight(coi.fcoiTypeCode)) {
+            return true;
+        } else {
+            return false;
         }
-        return isTabForNewSubmission;
+    }
+
+    getManageDisclosureRight(fcoiTypeCode: string): boolean {
+        const IS_FCOI_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_FCOI_DISCLOSURE');
+        const IS_PROJECT_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_PROJECT_DISCLOSURE');
+        switch (fcoiTypeCode) {
+            case '1':
+            case '4':
+                return IS_FCOI_ADMINISTRATOR;
+            case '2':
+            case '3':
+                return IS_PROJECT_ADMINISTRATOR;
+        }
+    }
+
+    getDisclosureTitleName(fcoiTypeCode: any): string {
+        switch (fcoiTypeCode) {
+            case '1':
+                return 'FCOI';
+            case '2':
+                return 'Proposal';
+            case '3':
+                return 'Award';
+            case '4':
+                return 'FCOI';
+        }
     }
 
     openAssignAdminModal(coi): void {
@@ -775,5 +811,29 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         }
         this.isAssignAdminModalOpen = false;
     }
+    
+    getReviewerStatus(statusCode) {
+        switch (statusCode) {
+            case '1': return 'info';
+            case '2': return 'success';
+            case '3': return 'warning';
+            default: return 'danger';
+        }
+    }
+
+    viewSlider(event) {
+        this.showSlider = event.flag;
+        this.entityId = event.entityId;
+        setTimeout(() => {
+            openSlider('admin-dashboard-entity-slider');
+        });
+    }
+
+    validateSliderClose() {
+        closeSlider('admin-dashboard-entity-slider');
+        setTimeout(() => {
+            this.showSlider = false;
+		}, 500);
+	}
 }
 

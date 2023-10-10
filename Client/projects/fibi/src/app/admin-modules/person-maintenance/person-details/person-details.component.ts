@@ -69,6 +69,7 @@ export class PersonDetailsComponent implements OnInit, OnDestroy {
   concatUnitNumberAndUnitName = concatUnitNumberAndUnitName;
   currentUserName = '';
   before = {};
+  isPersonActive = false;
 
   constructor(public _personService: PersonMaintenanceService,
     public _commonService: CommonService, private _activatedRouter: ActivatedRoute,
@@ -211,6 +212,7 @@ export class PersonDetailsComponent implements OnInit, OnDestroy {
     if (this._activatedRouter.snapshot.queryParamMap.get('personId')) {
       this._personService.isPersonEdit = false;
       this.person = JSON.parse(JSON.stringify(this.currentEditPerson));
+      this.setIsPersonActiveFlag(this.currentEditPerson.status);
     } else {
       this._personService.isPersonEditOrView = false;
       this._router.navigate(['/fibi/person']);
@@ -221,6 +223,7 @@ export class PersonDetailsComponent implements OnInit, OnDestroy {
     this.$subscriptions.push(this._personService.getPersonData(personId).subscribe((data: any) => {
       if (data) {
         this.person = data.person;
+        this.setIsPersonActiveFlag(this.person.status);
         this.showOrHideDataFlagsObj.isPersonViewData = true;
         this.showOrHideDataFlagsObj.isOrganizationViewData = true;
         this._personService.personDisplayCard = this.person;
@@ -230,7 +233,7 @@ export class PersonDetailsComponent implements OnInit, OnDestroy {
         }
       }
     }, (err) => {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong! please contact Support');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please contact Support.');
     }));
   }
 
@@ -328,17 +331,19 @@ export class PersonDetailsComponent implements OnInit, OnDestroy {
       REQUESTREPORTDATA.acType = type;
       this.person.updateUser = this._commonService.getCurrentUserDetail('userName');
       this.person.updateTimestamp = getCurrentTimeStamp();
-      this.person.status = 'A';
+      this.person.status = this.isPersonActive ? 'A' : 'I';
       this.changeUsername();
       REQUESTREPORTDATA.person = this.person;
 
       this.$subscriptions.push(this._personService.maintainPersonData(REQUESTREPORTDATA).subscribe((data: any) => {
         if (data.person) {
           this.person = data.person;
+          this.setIsPersonActiveFlag(data.person.status);
           this.setDateValue();
           this.isPersonView = true;
           this.isPersonEdit = false;
           this._personService.isPersonEdit = false;
+          this._personService.personDisplayCard = this.person;
           this.showOrHideDataFlagsObj.isPersonViewData = true;
           this.showOrHideDataFlagsObj.isOrganizationViewData = true;
           if (type === 'I') {
@@ -432,7 +437,7 @@ export class PersonDetailsComponent implements OnInit, OnDestroy {
         this._personService.personDisplayCard = this.person;
       }
     }, (err) => {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong! please contact Support');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please contact Support.');
     }));
   }
 
@@ -454,6 +459,10 @@ export class PersonDetailsComponent implements OnInit, OnDestroy {
     personAuditLog['COUNTRY OF CITIZENSHIP'] =  person.countryOfCitizenshipCode ? `${person.countryOfCitizenshipCode} - ${person.countryOfCitizenshipDetails.countryName}` : "--NONE--";
     personAuditLog['UNIT'] =  person.unit && !isEmptyObject(person.unit) ? `${person.unit.unitNumber}-${person.unit.unitName}` : "--NONE--";
     return personAuditLog;
+  }
+
+  setIsPersonActiveFlag(status: string): void {
+    this.isPersonActive = status === 'A' ? true : false;
   }
 
 }

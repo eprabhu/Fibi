@@ -26,34 +26,36 @@ import { AreaOfResearchEditComponent } from './area-of-research/area-of-research
 import { AreaOfResearchViewComponent } from './area-of-research/area-of-research-view/area-of-research-view.component';
 import { AnticipatedDistributionModule } from '../anticipated-distribution/anticipated-distribution.module';
 import { SharedComponentModule } from '../../shared-component/shared-component.module';
+import { AwardSharedModule } from "../award-shared/award-shared.module";
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild([{ path: '', component: OverviewComponent }]),
-    SharedModule,
-    FormsModule,
-    AnticipatedDistributionModule,
-    SharedComponentModule ],
-
-  exports: [AwardDetailsEditComponent],
-  declarations: [OverviewComponent,
-                 SubContractsEditComponent,
-                 SpecialReviewEditComponent,
-                 AwardDetailsEditComponent,
-                 InstituteProposalEditComponent,
-                 SubContractsViewComponent,
-                 AwardDetailsViewComponent,
-                 InstituteProposalViewComponent,
-                 SpecialReviewViewComponent,
-                 KeyPersonComponent,
-                 ProjectTeamComponent,
-                 ContactsComponent,
-                 KeyPerformanceIndicatorAwardComponent,
-                 ProjectCostOverviewViewComponent,
-                 AwardMilestoneComponent,
-                 AreaOfResearchEditComponent,
-                 AreaOfResearchViewComponent ],
-  providers: [ KeyPersonService,
-              ProjectTeamService, ContactService, KeyPerformanceIndicatorAwardService]
+    exports: [AwardDetailsEditComponent],
+    declarations: [OverviewComponent,
+        SubContractsEditComponent,
+        SpecialReviewEditComponent,
+        AwardDetailsEditComponent,
+        InstituteProposalEditComponent,
+        SubContractsViewComponent,
+        AwardDetailsViewComponent,
+        InstituteProposalViewComponent,
+        SpecialReviewViewComponent,
+        KeyPersonComponent,
+        ProjectTeamComponent,
+        ContactsComponent,
+        KeyPerformanceIndicatorAwardComponent,
+        ProjectCostOverviewViewComponent,
+        AwardMilestoneComponent,
+        AreaOfResearchEditComponent,
+        AreaOfResearchViewComponent],
+    providers: [KeyPersonService,
+        ProjectTeamService, ContactService, KeyPerformanceIndicatorAwardService],
+    imports: [
+        CommonModule,
+        RouterModule.forChild([{ path: '', component: OverviewComponent }]),
+        SharedModule,
+        FormsModule,
+        AnticipatedDistributionModule,
+        SharedComponentModule,
+        AwardSharedModule
+    ]
 })
 export class OverviewModule { }

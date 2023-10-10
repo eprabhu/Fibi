@@ -28,7 +28,7 @@ import {
     getEndPointOptionsForOrganization,
     getEndPointOptionsForCountry,
     getEndPointOptionsForProfitCentre,
-    getEndPointOptionsForGrandCode, getEndPointOptionsForCostCentre, getEndPointOptionsForFundCentre
+    getEndPointOptionsForGrandCode, getEndPointOptionsForCostCentre, getEndPointOptionsForFundCentre, getEndPointOptionsForClaimTemplate
 } from '../../../../common/services/end-point.config';
 import { Question } from '../../questionnaire.interface';
 
@@ -197,7 +197,9 @@ export class CreateQuestionnaireComponent implements OnInit, OnDestroy, OnChange
             return getEndPointOptionsForCostCentre();
         } else if (lookUpType === 'fundCenterName') {
             return getEndPointOptionsForFundCentre();
-        }
+        } else if (lookUpType === 'claimTemplateName') {
+            return getEndPointOptionsForClaimTemplate();
+        } 
     }
 
     /**
@@ -654,6 +656,9 @@ export class CreateQuestionnaireComponent implements OnInit, OnDestroy, OnChange
             case 'fundCenterName':
                 this.defaultValueOptions = SearchConstants.fundCenter;
                 break;
+            case 'claimTemplateName':
+                this.defaultValueOptions = SearchConstants.claimTemplate;
+                break;
         }
     }
 
@@ -768,7 +773,7 @@ export class CreateQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         if (isRuleNotDeleted && this.questionnaire.questions[this.selectedQuestionIndex].RULE_ID) {
             $('#viewBusinessRulesModal').modal('hide');
         } else {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Please select a rule to add');
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Please select a Rule to add.');
         }
     }
 

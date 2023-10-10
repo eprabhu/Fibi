@@ -20,7 +20,8 @@
             <i aria-hidden="true" class="fa fa-file-pdf-o"></i>
           </a>
         </span>
-        <button class="button-container nav-style mx-2" (click)="toggleToolkitVisibility()"
+        <button class="button-container nav-style mx-2" *ngIf="personDetails?.proposalPersons?.length > 0"
+                (click)="toggleToolkitVisibility()"
                 title="{{(isPersonWidgetVisible? 'Hide Person List':'Show Person List')}}">
           <span class="fa-large fa fa-angle-double-right" *ngIf="isPersonWidgetVisible"></span>
           <span class="fa-large fa fa-angle-double-left" *ngIf="!isPersonWidgetVisible"></span>

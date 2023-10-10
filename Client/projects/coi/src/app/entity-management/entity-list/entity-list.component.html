@@ -66,7 +66,7 @@
                     <div class="col-3" title="Click to search by Entity name">
                         <label class="fw-bold fs-14 d-block" for="adv-entity-name">Entity</label>
                         <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField"
-                            [httpOptions]="EntitySearchOptions" [placeHolder]="'Type here for entity'"
+                            [httpOptions]="EntitySearchOptions" [placeHolder]="'Search by Entity'"
                             class=" text-secondary fs-13" [uniqueId]="'adv-entity-name'">
                         </app-endpoint-search>
                     </div>
@@ -81,7 +81,7 @@
                         <label class="fw-bold fs-14 d-block" for="adv-entity-country">Country</label>
                         <app-endpoint-search (onSelect)="selectEntityCountry($event)" [clearField]="advSearchClearField"
                             [httpOptions]="countrySearchOptions" class=" text-secondary fs-13"
-                            [placeHolder]="'Type here for entity country'" [uniqueId]="'adv-entity-country'">
+                            [placeHolder]="'Search by country'" [uniqueId]="'adv-entity-country'">
                         </app-endpoint-search>
                     </div>
                     <div class="col-3" title="Click to search by Status">
@@ -150,15 +150,16 @@
                         <label class="fw-bold fs-14 d-block" for="adv-entity-type">Risk</label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'property22')"
                             [options]="riskLevelTypeOptions" [selectedLookUpList]="lookupValues['property22']"
-                            class=" text-secondary fs-13" [uniqueId]="'adv-entity-type'">
+                            class="text-secondary fs-13" [uniqueId]="'adv-entity-type'">
                         </app-look-up>
                     </div>
                         <div *ngIf="activeTabName !== 'UNVERIFIED'" class="col-3" title="Click to search by verification">
-                            <label class="fw-bold fs-14 d-block">Verification</label>
-                            <app-look-up (selectedResult)="onLookupSelect($event, 'property24')" [options]="verificationTypeOptions"
-                                [selectedLookUpList]="lookupValues['property24']" [externalArray]="entityManagementService.statusCode"
-                                [isExternalArray]="true" class=" text-secondary fs-13" [uniqueId]="'adv-disclosure-type'">
+                            <label class="fw-bold fs-14 d-block" for="adv-entity-verification">Verification</label>
+                            <app-look-up (selectedResult)="onLookupSelect($event, 'property24')" 
+                            [options]="verificationTypeOptions"  [selectedLookUpList]="lookupValues['property24']" 
+                            class="text-secondary fs-13" [uniqueId]="'adv-entity-verification'">
                             </app-look-up>
+
                         </div>
                     <div class="col-6 d-flex justify-content-end align-items-end">
                         <button class="btn btn-outline-secondary  fs-14 py-2 mx-3" id="btn-clear"
@@ -218,7 +219,7 @@
                         </div>
                         <!-- <mat-menu #beforeMenu>
                             <button class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 px-3"
-                                id="edit-location-btn" data-bs-toggle="modal" data-bs-target="#add-location-modal">
+                                id="edit-location-btn" data-bs-toggle="modal" data-bs-target="#add-coi-reviewer-modal">
                                 <mat-icon class="me-2 invalid material-icons-round">warning</mat-icon>
                                 <span>Risk</span>
                             </button>
@@ -252,6 +253,10 @@
                                     <mat-icon class="me-1">visibility</mat-icon>
                                     View
                                 </button>
+                                <button *ngIf="isShowGraph" (click)="openGraph(entityListData.entityNumber, entityListData.entityName )" aria-describedby="Click to view Entity graph database"
+                                    class="align-items-center btn btn-outline-primary d-flex fs-14 ml-2" title="Click to view Entity graph database">
+                                    <mat-icon class="me-1">hub</mat-icon>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -271,5 +276,14 @@
             </ng-template>
 
         </div>
+    </div>
+</div>
+<ng-container *ngIf="isShowGraph">
+<app-graph [graphEnableEvent]="graphEvent" [graphId]="101"></app-graph>
+</ng-container>
+
+ <div *ngIf="isEntityFound" class="mx-4 mt-4 on-data-position">
+    <div class="shadow-sm rounded">
+      <app-no-information></app-no-information>
     </div>
 </div>

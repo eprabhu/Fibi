@@ -250,10 +250,10 @@ export class PersonnelComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           document.getElementById(this.index).scrollIntoView({ block: 'end' });
         }, 0);
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Person successfully updated.');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Person updated successfully.');
         this.isSaving = false;
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Udating person details failed. Please try again.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating person details failed. Please try again.');
         this.isSaving = false;
       });
     }
@@ -265,6 +265,8 @@ export class PersonnelComponent implements OnInit, OnDestroy {
         .subscribe((data: any) => {
           this.personsResultData.awardBudgetPersonList.splice(this.index, 1, data);
           resolve(true);
+        }, err=>{
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Updating person details failed. Please try again.');
         }));
     });
   }

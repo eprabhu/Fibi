@@ -19,6 +19,7 @@ export class ExtReviewer {
     acType?: any;
     status?: any = 'A';
     isUsernameChange?: boolean;
+    isEmailChange?: boolean;
     academicAreaCodePrimary?: string | number = null;
     academicAreaPrimary?: any;
     academicAreaCodeSecondary?: string | number = null;
@@ -72,6 +73,7 @@ export interface ExternalReviewer {
     principalName: string;
     additionalInformation?: any;
     isUsernameChange: boolean;
+    isEmailChange: boolean;
 }
 
 export interface Unit {

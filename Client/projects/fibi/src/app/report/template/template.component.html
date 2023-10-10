@@ -2,7 +2,7 @@
   <div class="container-fluid pushFixedHeaderFooter">
       <div class="headerPush"></div>
       <div class="card mb-4 mt-3">
-        <div class="card-header p-2 px-3">
+        <div class="card-header p-2 px-3 sticky-top-nav">
           <h4 class="card-title align-items-center d-flex">
             <span class="mr-auto">Report - {{requestTemplateData?.templateName}}
               <span class="text-secondary f-12 font-weight-light d-xl-inline-block d-lg-block text-break"> 
@@ -11,9 +11,18 @@
               </span>
             </span>
             <span class="d-flex ml-auto">
-            <button *ngIf="requestTemplateData?.templateType == 'U' && isReportCreator" class="btn btn-secondary btn-sm hand-cursor mr-2"
-              data-toggle="modal" data-target="#saveTemplateModal" (click)="saveAs = false;setModalFields()">
-              Edit
+              <div *ngIf="requestTemplateData?.templateType == 'U' && isReportCreator">
+                <ul class="actionButtonGroup d-flex">
+                  <li>
+                    <a id="edit-btn" data-toggle="modal" data-target="#saveTemplateModal" (click)="saveAs = false;setModalFields()">
+                      <i class="fa fa-pencil mr-4 mt-3" title="Click here to modify Report"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <button class="btn btn-outline-danger btn-sm hand-cursor mr-2 outline-primary" data-toggle="modal"
+              data-target="#saveTemplateModal" (click)="saveAs = true;setModalFields()">
+              Save As
             </button>
             <div class="dropdown">
               <button class="btn btn-sm mr-2 border-style dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -28,9 +37,9 @@
                 </a>
               </div>
             </div>
-            <button class="btn btn-outline-danger btn-sm hand-cursor mr-2 outline-primary" data-toggle="modal"
-              data-target="#saveTemplateModal" (click)="saveAs = true;setModalFields()">
-              Save As
+            <button class="btn btn-primary btn-sm mr-2 min-content-width" type="button" title="Preview Report"
+              (click)="generatePreviewReport(); isCollapseCriteria = !isCollapseCriteria">
+              <ng-container i18n="@@REPORT_PREVIEW">Report Preview</ng-container>
             </button>
             <button *ngIf= "isBirt && allowedReports.includes('P')" (click)="downloadBirt('pdf')" class="btn btn-primary btn-sm mr-2 min-content-width" type="button" title="Export data to PDF">
               Export as PDF
@@ -49,28 +58,16 @@
         </div>
         <div class="card-content">
           <div class="card-body p-1">
-            <div>
-              <section class="row">
-                  <div class="col-xl-12 d-flex justify-content-between">
-                      <ul class="subTabs">
-                          <li role="presentation" [class.active]="tabName == 'CRITERIA'" (click)= "tabName = 'CRITERIA'" >
-                              <a class="subTabLink" title="Criteria" id="prop-pre-review-tab">Criteria</a>
-                          </li>
-                          <li *ngIf="!isBirt || (isBirt && allowedReports.includes('P'))" role="presentation" [class.active]="tabName == 'PREVIEW_REPORT'" (click)= "generatePreviewReport()">
-                              <a class="subTabLink" title="Preview Report" id="prop-pre-review-tab">Preview Report</a>
-                          </li>
-                      </ul>
-                  </div>
-              </section>
-          </div>
           <!-- Criteria tab -->
           <div class="success-banner px-3 my-2 d-flex align-items-center p-2" *ngIf="!isBirt">
             <i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
-            <em>This Report can be Exported to Excel only. Use the Export as Excel button to generate the Report. To see the Preview of the Report, use the Preview Report Tab.</em>
+            <em>This Report can be Exported to Excel only. Use the Export as Excel button to generate the Report. To see the Preview of the Report, use the 
+              <ng-container i18n="@@REPORT_PREVIEW">Report Preview</ng-container> Button.</em>
           </div>
           <div class="success-banner px-3 my-2 d-flex align-items-center p-2" *ngIf="isBirt && allowedReports.includes('P') && !allowedReports.includes('E')">
             <i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
-            <em>This Report can be Exported to PDF only. Use the Export as PDF button to generate the Report. To see the Preview of the Report, use the Preview Report Tab.</em>
+            <em>This Report can be Exported to PDF only. Use the Export as PDF button to generate the Report. To see the Preview of the Report, use the 
+              <ng-container i18n="@@REPORT_PREVIEW">Report Preview</ng-container> Button.</em>
           </div>
           <div class="success-banner px-3 my-2 d-flex align-items-center p-2" *ngIf="isBirt && allowedReports.includes('E') && !allowedReports.includes('P')">
             <i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
@@ -78,15 +75,26 @@
           </div>
           <div class="success-banner px-3 my-2 d-flex align-items-center p-2" *ngIf="isBirt && allowedReports.includes('P') && isBirt && allowedReports.includes('E')">
             <i class="fa fa-info-circle mr-1 info-icon" aria-hidden="true"></i>
-            <em>This Report can be Exported to PDF as well as Excel. Use the Export as PDF / Export as Excel button(s) to generate the Report. To see the Preview of the Report, use the Preview Report Tab.</em>
+            <em>This Report can be Exported to PDF as well as Excel. Use the Export as PDF / Export as Excel button(s) to generate the Report. To see the Preview of the Report, use the
+               <ng-container i18n="@@REPORT_PREVIEW">Report Preview</ng-container> Button.</em>
           </div>
         <div *ngIf="!isFieldSelected" class="alert alert-danger py-1 f-14">
           <div><i class="fa fa-warning mr-1" aria-hidden="true"></i>
             <em>No columns were selected</em>
           </div>
         </div>
-            <div *ngIf="tabName == 'CRITERIA'" class="card card-inner mb-2 border-0" id="report-criteria-section">
-              <div class="card-content">
+            <div class="card card-inner mb-2 border-0" id="report-criteria-section">
+              <div class="card-header px-3">
+                <h4 class="card-title d-flex align-items-center">
+                  <span class="mr-auto">{{ !isCollapseCriteria
+                    && reportCriteria.length ? 'Criteria Used In Report' : 'Criteria' }}</span>
+                <button id="criteriaExpandBtn" class="updown-arrow" 
+                  (click)="isCollapseCriteria = !isCollapseCriteria;assignTempValuesToLookUp();">
+                  <i [ngClass]="!isCollapseCriteria?'fa fa-angle-double-down':'fa fa-angle-double-up'"
+                      aria-hidden="true" class="fa-large"></i></button>
+                </h4>
+              </div>
+              <div *ngIf="isCollapseCriteria" class="card-content">
                 <div class="card-body">
                   <div class="form-row">
                     <ng-container *ngFor="let data of filtersFieldsData.filters; let index = index">
@@ -102,6 +110,12 @@
                         <ng-container *ngIf="data.filterType == 'lookUp'">
                           <app-look-up [options]='data.valueField' [selectedLookUpList]="lookUpValues[data.columnName]"
                             (selectedResult)="onLookupSelect($event, data)"></app-look-up>
+                        </ng-container>
+                        <ng-container *ngIf="data.filterType == 'autocomplete'">
+                          <div class="searchBox memberSearchBox">
+                          <app-autocompleter [completerOptions]="autoCompleterSearchOptions[data.columnName]" [placeHolder]="data.displayName"
+                          (onSelect)="setSearchFilterValue($event, data)"></app-autocompleter>
+                        </div>
                         </ng-container>
                         <ng-container *ngIf="data.filterType == 'date' || data.filterType == 'datetime'">
                           <div class="d-flex">
@@ -162,9 +176,17 @@
                             </span>
                           </div>
                         </ng-container>
+                        <ng-container *ngIf="data.filterType == 'year_end' || data.filterType == 'year_start'">
+                          <select name="yearRange" id="year" class="form-control" [(ngModel)]="tempFilterValues[data.columnName]" 
+                          (ngModelChange)="setYearValueToFilter(data.columnName , data.filterType)">
+                            <option [value]=undefined>--select--</option>
+                            <option *ngFor="let year of getYearRange()" value="{{year}}">
+                              {{year}}</option>
+                          </select>
+                        </ng-container>
                       </div>
                     </ng-container>
-                    <div *ngIf="filtersFieldsData.filters.length" class="col-lg col-md col-sm-6 col-12 d-flex align-items-end justify-content-end">
+                    <div *ngIf="filtersFieldsData.filters.length" class="col-lg col-md col-sm-6 col-12 d-flex align-items-end justify-content-end mt-2">
                     <button  class="btn btn-secondary btn-sm mb-3 mt-4 mt-md-0" (click)="clearTemplate()" type="button" title="Clear">
                       Clear
                     </button>
@@ -173,16 +195,7 @@
                 </div>
               </div>
             </div>
-
-            <!-- Preview Report -->
-      <div *ngIf="tabName == 'PREVIEW_REPORT'">
-        <ng-container *ngIf="checkFilterValuesLength()">
-          <h4 class="card-title d-flex justify-content-between">
-            <span class="mb-3 ml-3 mt-3">
-              Applied Criteria
-            </span>
-          </h4>
-          <div class="card section-highlight mb-3 ml-3 mr-4 p-1 gridSkin shadow-sm" id="report-criteria-section">
+        <ng-container *ngIf="!isCollapseCriteria && checkFilterValuesLength()">
             <div class="card-content">
               <div class="card-body ml-3 mr-3">
                 <div class="form-row f-14">
@@ -194,22 +207,26 @@
                       <ng-container *ngIf="criteria.includes('between')">
                         <b>{{criteria.split('between')[0] }}</b> : {{removeString(criteria.split('between')[1]) }}
                       </ng-container>
-                      <ng-container *ngIf="criteria.includes('than')">
+                      <ng-container *ngIf="criteria.includes('than') && !criteria.includes('equal to')">
                         <b>{{criteria.split('than')[0] }}</b> : {{removeString(criteria.split('than')[1]) }}
+                      </ng-container>
+                      <ng-container *ngIf="criteria.includes('equal to')">
+                        <b>{{criteria.split('to')[0] }}</b> : {{removeString(criteria.split('to')[1]) }}
                       </ng-container>
                     </div>
                   </span>
                 </div>
               </div>
             </div>
-            <div *ngIf="checkFilterValuesLength(6)" class="actionButtonGroup position-absolute action-btn">
-              <button id="award-expand-btn" class="updown-arrow" (click)="isShowCollapse = !isShowCollapse">
-                <i [ngClass]="isShowCollapse?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"
-                  aria-hidden="true"></i>
-              </button>
-            </div>
-          </div>
         </ng-container>
+
+            <!-- Preview Report -->
+      <div class="card card-inner border-0">
+        <div class="card-header px-3">
+          <h4 class="card-title d-flex align-items-center" id="generateReport">
+            <span class="mr-auto"><ng-container i18n="@@REPORT_PREVIEW_HEADER">Report Preview</ng-container></span>
+          </h4>
+        </div>
         <div class="card-content">
           <div *ngIf="reportCount > 200"
             class="success-banner px-3 mx-1 my-2 d-flex justify-content-between align-items-center ng-star-inserted">
@@ -219,6 +236,15 @@
             </div>
             <button aria-label="Close" class="close close-button" (click)="reportCount = 0" type="button">
               <span aria-hidden="true" class="d-block">×</span>
+            </button>
+          </div>
+          <div *ngIf="templateTypes.maxResultCount" class="success-banner px-3 mx-1 my-2 d-flex justify-content-between align-items-center ng-star-inserted">
+            <div>
+              <i  aria-hidden="true" class="fa fa-info-circle mr-1 info-icon"></i>
+              <em  class="ng-star-inserted">Maximum {{templateTypes.maxResultCount}} rows can be downloaded in a single report. Please apply filters such as date range, lead unit etc when applicable.</em>
+            </div>
+            <button  aria-label="Close" class="close close-button" (click) = "templateTypes.maxResultCount = 0" type="button">
+              <span  aria-hidden="true" class="d-block">×</span>
             </button>
           </div>
           <div class="card-body p-1">
@@ -425,7 +451,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button aria-label="Close" data-dismiss="modal" type="button" class="btn btn-primary-sub btn-sm" (click)= "generatePreviewReport()">
+        <button aria-label="Close" data-dismiss="modal" type="button" class="btn btn-primary-sub btn-sm">
           Close
         </button>
       </div>

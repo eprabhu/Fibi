@@ -160,79 +160,79 @@ public class FibiRepoConfig {
 		return hibernateJpaVendorAdapter;
 	}
 	
-*/	
-	
-	 	@Autowired
-	    private DataSource dataSource;
+*/
 
-	    @Autowired
-	    private EntityManagerFactory entityManagerFactory;
+	@Autowired
+	private DataSource dataSource;
 
-	    @Bean
-	    @Primary
-	    public HibernateTemplate hibernateTemplate() {
-	        return new HibernateTemplate(sessionFactory());
-	    }
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
 
-	    @Bean
-	    public SessionFactory sessionFactory() {
-	        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-	        sessionFactoryBean.setDataSource(getDataSource());
-	        sessionFactoryBean.setPackagesToScan("com.polus.fibicomp.*");
-	        sessionFactoryBean.setHibernateProperties(hibernateProperties());
-	        try {
-	            sessionFactoryBean.afterPropertiesSet();
-	        } catch (Exception e) {
-	            throw new RuntimeException("Failed to configure sessionFactory: " + e.getMessage(), e);
-	        }
-	        return sessionFactoryBean.getObject();
-	    }
+	@Bean
+	@Primary
+	public HibernateTemplate hibernateTemplate() {
+		return new HibernateTemplate(sessionFactory());
+	}
 
-	    @Bean
-	    @Primary
-	    public HibernateTransactionManager hibernateTransactionManager() {
-	        HibernateTransactionManager transactionManager = new HibernateTransactionManager(sessionFactory());
-	        return transactionManager;
-	    }
+	@Bean
+	public SessionFactory sessionFactory() {
+		LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+		sessionFactoryBean.setDataSource(getDataSource());
+		sessionFactoryBean.setPackagesToScan("com.polus.fibicomp.*");
+		sessionFactoryBean.setHibernateProperties(hibernateProperties());
+		try {
+			sessionFactoryBean.afterPropertiesSet();
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to configure sessionFactory: " + e.getMessage(), e);
+		}
+		return sessionFactoryBean.getObject();
+	}
 
-	    @Bean
-	    public JpaTransactionManager jpaTransactionManager() {
-	        JpaTransactionManager transactionManager = new JpaTransactionManager(entityManagerFactory);
-	        return transactionManager;
-	    }
+	@Bean
+	@Primary
+	public HibernateTransactionManager hibernateTransactionManager() {
+		HibernateTransactionManager transactionManager = new HibernateTransactionManager(sessionFactory());
+		return transactionManager;
+	}
+
+	@Bean
+	public JpaTransactionManager jpaTransactionManager() {
+		JpaTransactionManager transactionManager = new JpaTransactionManager(entityManagerFactory);
+		return transactionManager;
+	}
 
 
 
-	    @Bean
-	    @Primary
-	    public EntityManagerFactory entityManagerFactory() {
-	        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-	        factory.setDataSource(getDataSource());
-	        factory.setPackagesToScan("com.polus.fibicomp.*");
-	        factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-	        factory.setJpaProperties(hibernateProperties());
-	        factory.afterPropertiesSet();
-	        return factory.getObject();
-	    }
-	    
-	    private Properties hibernateProperties() {
-	        Properties properties = new Properties();
-			properties.put("hibernate.dialect", hibernateDialect);
-			properties.put("hibernate.show_sql", hibernateShowSql);
+	@Bean
+	@Primary
+	public EntityManagerFactory entityManagerFactory() {
+		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+		factory.setDataSource(getDataSource());
+		factory.setPackagesToScan("com.polus.fibicomp.*");
+		factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+		factory.setJpaProperties(hibernateProperties());
+		factory.afterPropertiesSet();
+		return factory.getObject();
+	}
+
+	private Properties hibernateProperties() {
+		Properties properties = new Properties();
+		properties.put("hibernate.dialect", hibernateDialect);
+		properties.put("hibernate.show_sql", hibernateShowSql);
 //			properties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
-			properties.put("hibernate.format_sql", hibernateFormatSql);
+		properties.put("hibernate.format_sql", hibernateFormatSql);
 
-			properties.put("hibernate.c3p0.minPoolSize", hibernateMinPoolSize);
-			properties.put("hibernate.c3p0.maxPoolSize", hibernateMaxPoolSize);
-			properties.put("hibernate.c3p0.timeout", hibernateTimeOut);
-			properties.put("hibernate.c3p0.max_statement", hibernateMaxStmnt);
-			properties.put("hibernate.c3p0.testConnectionOnCheckout", hibernateTestConnectionOnCheckout);
-			// properties.put("hibernate.temp.use_jdbc_metadata_defaults", hibernateMetadataDefaults);
-			properties.put("hibernate.jdbc.lob.non_contextual_creation", hibernateContextualCreation);
-			properties.put("spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults", hibernateSpringJDBCMetadataDefault);
-			properties.put("hibernate.default_schema", hibernateDefault_schema);
-			return properties;
-			
-	    }
+		properties.put("hibernate.c3p0.minPoolSize", hibernateMinPoolSize);
+		properties.put("hibernate.c3p0.maxPoolSize", hibernateMaxPoolSize);
+		properties.put("hibernate.c3p0.timeout", hibernateTimeOut);
+		properties.put("hibernate.c3p0.max_statement", hibernateMaxStmnt);
+		properties.put("hibernate.c3p0.testConnectionOnCheckout", hibernateTestConnectionOnCheckout);
+		// properties.put("hibernate.temp.use_jdbc_metadata_defaults", hibernateMetadataDefaults);
+		properties.put("hibernate.jdbc.lob.non_contextual_creation", hibernateContextualCreation);
+		properties.put("spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults", hibernateSpringJDBCMetadataDefault);
+		properties.put("hibernate.default_schema", hibernateDefault_schema);
+		return properties;
+
+	}
 
 }

@@ -28,14 +28,13 @@
                         <p class="fs-14 pb-0 pt-1"
                             *ngIf="(!isSearchExternalProject && triggeredFrom == 'PROJECT_DISCLOSURE') || triggeredFrom != 'PROJECT_DISCLOSURE'">
                             <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                            For disclosing at any other unit please click on the ‘Edit’ icon near the unit field to
-                            proceed to disclosure creation
+                            To disclose at any other unit, please click on the 'Edit' icon near the unit field, and proceed to disclosure creation.
                             <br>
                             <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                            For reverting to the original unit click on the 'Reset' icon.
+                            To revert to the original unit, click on the 'Reset' icon.
                             <br>
-                            <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-                            For adding any additional description/comment, please use the “Description“ field.
+                            <span *ngIf="(triggeredFrom == 'TRAVEL_DISCLOSURE')"><i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                            Add the purpose of the trip in the field provided.</span>
                         </p>
                     </div>
                     <p class="fs-14 alert alert-danger" *ngIf="isShowExistingDisclosure">
@@ -85,13 +84,10 @@
                 <div class="form-row mt-2"
                     *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
                     <div class="col-12">
-                        <label for="desc-award mb-2" *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
-                            <span class="fs-14 fw-600 mandatory">*</span>Revision Reason
+                        <label for="desc-award mb-2" *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE' || (hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE')">
+                            <span *ngIf="triggeredFrom == 'FCOI_DISCLOSURE'" class="fs-14 fw-600 mandatory">*</span> {{triggeredFrom == 'TRAVEL_DISCLOSURE' ? 'Purpose of the Trip': 'Description'}}
                         </label>
-                        <label for="desc-award mb-2" *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' || (!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE') || triggeredFrom == 'TRAVEL_DISCLOSURE'">
-                            Description
-                        </label>
-                        <textarea [(ngModel)]="reviseObject.revisionComment" [isShowLimiter]='true' [limit]=2000
+                        <textarea [(ngModel)]="reviseObject.revisionComment" *ngIf="(triggeredFrom != 'PROJECT_DISCLOSURE')" (ngModelChange)="reviseObject.revisionComment = reviseObject.revisionComment.trim()" [isShowLimiter]='true' [limit]=2000
                                   appAutoGrow appLengthValidator class="form-control" rows="1" id="desc-award"
                                   [ngClass]="(mandatoryList?.get('reviseComment')) ? 'invalid-border':''">
                         </textarea>
@@ -143,7 +139,7 @@
                             <label class="f-14 pe-2">Review Status : </label>
                             <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
                                 <span
-                                    class="ml-2 badge {{getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}">{{existingDisclosureDetails?.reviewStatus}}</span>
+                                    class="ml-2 badge {{commonService.getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}">{{existingDisclosureDetails?.reviewStatus}}</span>
                             </app-no-data-label>
                         </div>
                        
@@ -167,7 +163,7 @@
                     </div>
                 </div>
                 <div *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'" [class.mt-3]="triggeredFrom == 'PROJECT_DISCLOSURE' && isShowExistingDisclosure">
-                    <span class="project-types-label">Project Type :</span>
+                    <label class="project-types-label"><span class="mandatory fs-14 fw-600">*</span> Project Type : </label>
                     <div>
                         <ul class="project-types mb-0">
                             <li *ngFor="let type of projectTypes" class="me-5 d-flex align-items-center">
@@ -178,7 +174,7 @@
                                     for="{{type?.description}}">{{type?.description}}</label>
                             </li>
                         </ul>
-                        <div *ngIf="projectDisclosureValidation?.has('projectSelect')" class="invalid-feedback d-block">
+                        <div *ngIf="projectDisclosureValidation?.has('projectSelect')" class="invalid-feedback d-block fs-13">
                             {{projectDisclosureValidation?.get('projectSelect')}}
                         </div>
                     </div>
@@ -216,7 +212,7 @@
 
                                 
                                 <div class="col-6 pt-1 py-1">
-                                    <label class="f-14 pe-2">{{manualProjectAddDetails?.reporterRole}} : </label>
+                                    <label class="f-14 pe-2">Principal Investigator : </label>
                                     <span class="ml-2 grey-text">{{manualProjectAddDetails?.principalInvestigator}}</span>
                                 </div>
                                 <div class="col-6 pt-1 py-1">
@@ -286,7 +282,10 @@
                                     <label class="f-14 pe-2">Review Status : </label>
                                     <app-no-data-label [valueToShow]="existingDisclosureDetails?.reviewStatusCode">
                                         <span
-                                            class="ml-2 badge {{getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}">{{existingDisclosureDetails?.reviewStatus}}</span>
+                                            class="ml-2  {{commonService.getReviewStatusBadge(existingDisclosureDetails?.reviewStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                        {{existingDisclosureDetails?.reviewStatus}}
+                                    </span>
                                     </app-no-data-label>
                                 </div>
                                
@@ -295,7 +294,10 @@
                                     <app-no-data-label
                                         [valueToShow]="existingDisclosureDetails?.conflictStatusCode">
                                         <span
-                                            class="ml-2 {{getDisclosureConflictBadge(existingDisclosureDetails?.conflictStatusCode)}}">{{existingDisclosureDetails?.conflictStatus}}</span>
+                                            class="ml-2 {{getDisclosureConflictBadge(existingDisclosureDetails?.conflictStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{existingDisclosureDetails?.conflictStatus}}
+                                            </span>
                                     </app-no-data-label>
                                 </div>
                               
@@ -304,7 +306,10 @@
                                     <app-no-data-label
                                         [valueToShow]="existingDisclosureDetails?.dispositionStatusCode">
                                         <span
-                                            class="ml-2 {{getDispositionStatusBadge(existingDisclosureDetails?.dispositionStatusCode)}}">{{existingDisclosureDetails?.dispositionStatus}}</span>
+                                            class="ml-2 {{getDispositionStatusBadge(existingDisclosureDetails?.dispositionStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{existingDisclosureDetails?.dispositionStatus}}
+                                            </span>
                                     </app-no-data-label>
                                 </div>
                             </div>

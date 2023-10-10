@@ -21,15 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.service.COIFileAttachmentService;
+import com.polus.fibicomp.common.dao.CommonDao;
 
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping("coi/atta")
+@RequestMapping("coi/attachment")
 public class COIFileAttachmentController {
 
 	@Autowired
 	COIFileAttachmentService coiFileAttachmentService;
+
+	@Autowired
+	private CommonDao commonDao;
 
 	@Value("${app.filemanagement.storage.type}")
 	private String storageType;
@@ -38,7 +42,7 @@ public class COIFileAttachmentController {
 	@PostMapping(value = "saveFile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<String> saveFile(COIFileRequestDto request){
 		String response = coiFileAttachmentService.saveFileAttachment(request);		
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@Operation(description = "Consumes: refId")
@@ -60,21 +64,21 @@ public class COIFileAttachmentController {
 	@PostMapping(value = "/updateDisclAttachment", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<String> updateDisclAttachment(COIFileRequestDto request) {
 		String response = coiFileAttachmentService.updateDisclAttachment(request);
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@Operation(summary = "Update disclosure attachment details without file", description = "Consumes: attachmentId, fileDataId, description, attaStatusCode, attaTypeCode, commentId, componentReferenceId, componentReferenceNumber, componentTypeCode, documentOwnerPersonId, attachmentNumber")
 	@PostMapping(value = "/updateDisclAttachmentDetails", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<String> updateDisclAttachmentDetails(@RequestBody COIFileRequestDto request) {
 		String response = coiFileAttachmentService.updateDisclAttachmentDetails(request);
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@Operation(description ="Consumes: fileDataId, attachmentId") 
 	@PostMapping(value = "/deleteDisclAttachment", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<String> deleteDisclAttachment(@RequestBody COIFileRequestDto request) {
+	public String deleteDisclAttachment(@RequestBody COIFileRequestDto request) {
 		String response = coiFileAttachmentService.deleteDisclAttachment(request);
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+		return commonDao.convertObjectToJSON(response);
 	}
 
 	@Operation(description ="Consumes: attachmentId")

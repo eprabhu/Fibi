@@ -265,4 +265,47 @@ small {
   text-decoration: underline !important;
 }
 
+.text-area-height {
+  height: 75px !important;
+}
 
+.text-area-height::-webkit-scrollbar {
+  width: .4em;
+}
+
+.text-area-height::-webkit-scrollbar-button {
+  display: none;
+}
+
+.date-field-error {
+  padding-right: 16px !important;
+}
+
+.info {
+  top: 7px;
+  font-size: 16px;
+  position: absolute;
+  color: #6f7395;
+  cursor: pointer;
+  height: 15px;
+  width: 16px;
+}
+
+.info-padding {
+  padding-right: 12px;
+  padding-left: 4px;
+}
+
+.info-text {
+  position: relative;
+  top: -4px;
+  left: -11px;
+  color: #c39200;
+  border-radius: 30px;
+  border: 1px solid #c39200;
+}
+
+.info-text:hover {
+  color: #0D6EFD;
+  border: 1px solid #0D6EFD;
+}

@@ -1,24 +1,24 @@
-<div class="advance-search-area border d-flex rounded-1" style="margin-top: 20px;" 
-  *ngIf="isShowFilterAndSearch">
+<div class="advance-search-area border d-flex rounded-1 mt-3"
+  *ngIf="!isHideFilterSearchAndShowCreate">
     <div class="border-end fs-14 p-3" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ALL'"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" title="Sort by All Status"
               role="button">All</span>
-        <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" title="Sort by Active Status"
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
         <span (click)="setFilter('DRAFT')" [class.filter-active]="sfiDashboardRequestObject.filterType=='DRAFT'" title="Sort by DRAFT Status"
               class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Draft</span>
+        <span (click)="setFilter('ACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='ACTIVE'" title="Sort by Active Status"
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
         <span (click)="setFilter('INACTIVE')" [class.filter-active]="sfiDashboardRequestObject.filterType=='INACTIVE'" title="Sort by Inactive Status"
-              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Inactive</span>     
+              class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Inactive</span>
     </div>
     <div class="d-flex flex-fill position-relative" [class.pl-28]="!searchText" [class.search-area]="isSearchTextHover"
     (mouseover)="isSearchTextHover = true" (mouseout)="isSearchTextHover = false">
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
-        <input class="advance-search-input border-0 px-4 fs-14" type="text" id="searchText"
+        <input class="advance-search-input border-0 px-4 fs-15" type="text" id="searchText"
         [class.search-area]="isSearchTextHover"
-        placeholder="Search Entity Name" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
-        <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>        
+        placeholder="Search Entity" [(ngModel)]="searchText" (ngModelChange)="getEntities()">
+        <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon>
     </div>
 </div>
 <ng-container *ngIf="!isLoading">
@@ -29,17 +29,34 @@
   </div>
 
   <!-- no data card -->
-  <app-no-information *ngIf="!filteredEntityArray.length"></app-no-information>
-</ng-container>
+  <app-no-information *ngIf="!filteredEntityArray.length && !isHideFilterSearchAndShowCreate"></app-no-information>
 
  <!-- Pagination -->
  <div [hidden]="isLoading" *ngIf="filteredEntityArray.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
   <nav aria-label="pagination section" class="pagination justify-content-end">
       <app-pagination (pageChangeEvent)="actionsOnPageChangeEvent($event)"
-          [totalCount]="result.count">
+          [totalCount]="result.count" [defaultCurrentPage]="sfiDashboardRequestObject.currentPage">
       </app-pagination>
   </nav>
 </div>
+
+<ng-container *ngIf="isHideFilterSearchAndShowCreate">
+  <div class="card">
+    <div class="border pi-info-text p-3 mx-4 mt-4 rounded-1">
+      <p class="fs-14 m-0">
+        <span title="Expand Policy Text" aria-describedby="Expand Policy Text">
+          You do not have any added entities. To add any personal entities, click on the <strong>Create Entity</strong>
+          button or the quick link provided.
+        </span>
+      </p>
+    </div>
+    <span class="create-button">
+      <button class="btn btn-primary btn-sm d-block mt-4 fs-15 mb-3" (click)="addSFI()">
+        Create Entity
+      </button>
+    </span>
+  </div>
+</ng-container>
 
 <div #viewMyEntitiesOverlay [class.overlay]="showSlider">
     <div class="slider-base" *ngIf="showSlider">
@@ -49,11 +66,11 @@
         </div>
     </div>
     </div>
-    
+
     <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
       [personEntityId]="personEntityId" [isRelationshipActive]="isRelationshipActive" (closeModal)="closeActivateInactivateSfiModal($event)">
     </app-activate-inactivate-sfi-modal>
-    
+
     <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-delete-button" data-bs-toggle="modal" data-bs-target="#deleteSFIConfirmationModal"></button>
     <div class="modal fade" id="deleteSFIConfirmationModal" tabindex="-1" aria-labelledby="deleteSFIConfirmationModal" aria-hidden="true">
       <div class="modal-dialog">

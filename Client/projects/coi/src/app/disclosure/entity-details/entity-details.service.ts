@@ -12,6 +12,7 @@ export class EntityDetailsService {
   globalSave$: Subject<any> = new Subject<any>();
   isShowRelationButton: any;
   isRelationshipQuestionnaireChanged = false;
+  isAdditionalDetailsChanged = false;
 
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
@@ -20,6 +21,9 @@ export class EntityDetailsService {
   canMangeSfi = false;
   $relationshipTabSwitch = new BehaviorSubject<object>(null)
   isSwitchCurrentTab = false;
+  isShowHistoryInfo = true;
+  unSavedSections = [];
+  relationshipCompletedObject: any = {};
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
@@ -47,6 +51,18 @@ export class EntityDetailsService {
     return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship', params);
   }
 
+  loadSFILookups() {
+    return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
+  }
+
+  entityRisk(params) {
+    return this._http.post(this._commonService.baseUrl + '/entity/modifyRisk', params);
+  }
+
+  riskHistory(entityId) {
+    return this._http.get(`${this._commonService.baseUrl}/entity/riskHistory/${entityId}`);
+  }
+
   deletePersonEntityRelationship(personEntityRelId, personEntityId) {
     return this._http.delete(`${this._commonService.baseUrl}/personEntity/relationship/${personEntityRelId}/${personEntityId}`);
   }
@@ -61,6 +77,10 @@ export class EntityDetailsService {
 
   modifyPersonEntity(params) {
     return this._http.post(this._commonService.baseUrl + '/personEntity/modify', params);
+  }
+
+  getCurrentId(personEntityNumber) {
+    return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityNumber}/latestVersion`);
   }
 
 }

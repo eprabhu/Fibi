@@ -1,17 +1,28 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
     selector: 'app-coi-slider',
     templateUrl: './coi-slider.component.html',
     styleUrls: ['./coi-slider.component.scss']
 })
-export class CoiSliderComponent {
+export class CoiSliderComponent implements OnInit {
 
     @Input() sliderName = 'coi-slider';
+    @Input() slider_z_index: any = 51;
+    @Input() overlay_z_index: any = 50;
+    @Input() isStickyNeeded = true;
     @Output() closeSlider: EventEmitter<undefined> = new EventEmitter<undefined>();
+    @Input() isHeaderNeeded = true;
 
     emitCloseSlider() {
         this.closeSlider.emit();
+    }
+
+    ngOnInit() {
+        setTimeout(() => {
+            document.getElementById(`${this.sliderName}-overlay`).style.zIndex = this.overlay_z_index;
+            document.getElementById(this.sliderName).style.zIndex = this.slider_z_index;
+        });
     }
 
 }

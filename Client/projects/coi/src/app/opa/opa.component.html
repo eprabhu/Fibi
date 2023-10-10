@@ -1,0 +1,194 @@
+<div class="border-top-0 mb-3 mx-3 row header-sticky">
+    <div class="col-9 p-0">
+        <div class="border shadow-sm">
+            <div class="disclosure-heading px-3 d-flex">
+                <div class="align-self-center flex-fill d-flex justify-content-between">
+                    <div class="d-flex row">
+                        <p class="m-0 py-1">
+                            <strong># : OPA Disclosure By
+                                <span class="clickable-content"><u class="cursor-pointer"
+                                                                   title="Click to view details of {{opaData?.personName}}"
+                                >{{opaData?.personName}}</u></span>
+                            </strong>
+                        </p>
+                        <p class="m-0 label-text">
+                            <strong>{{opaData?.personPrimaryTitle}} |
+                                <span>{{opaData?.homeUnit}}-{{opaData?.homeUnitName}}</span> |
+                                {{opaData?.personEmail}}</strong>
+                        </p>
+                    </div>
+                    <div class="align-items-center d-flex f-14 label-color">
+                        <strong class="clickable-content me-2"><u>Notes(0)</u></strong> | <strong
+                        class="clickable-content ms-2 me-3"><u>Attachments(0)</u></strong>
+                    </div>
+
+                </div>
+                <div class="d-flex">
+                    <div class="align-items-center d-flex" title="Click here to collapse / expand">
+                        <button (click)="isCardExpanded=!isCardExpanded"
+                                class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+                            <mat-icon>{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isCardExpanded" class="d-flex p-3 pt-4 bg-white pb-3">
+                <div class="col mr-15">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                        <span class="status-pill">Details</span>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="label-text">
+                                    <i class="fa fa-user-o fw-700 right-margin"
+                                       aria-hidden="true"></i>Administrator : </label>
+                                <span class="grey-text ml-2">
+                                    <app-no-data-label [valueToShow]="opaData?.adminPersonName">
+                                        <span>{{opaData?.adminPersonName}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="label-text left-margin">
+                                    <img class="activity-icon" src="{{deployMap}}assets/images/multiple-admin-1.svg"
+                                         alt="add-adminGroup icon">Admin Group : </label>
+                                <span class="grey-text ml-2">
+                                    <app-no-data-label [valueToShow]="opaData?.adminGroupName">
+                                        <span>{{opaData?.adminGroupName}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto status-card-width mr-15">
+                    <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
+                        <span class="status-pill">Dates</span>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="label-text">Cycle : </label>
+                                <span class="grey-text ml-2">
+                                    <app-no-data-label
+                                        [valueToShow]="opaData?.opaCycles?.periodStartDate && opaData?.opaCycles?.periodEndDate">
+                                            <span>{{opaData?.opaCycles?.periodStartDate | dateFormatterWithTimeZone}} -
+                                                {{opaData?.opaCycles?.periodEndDate | dateFormatterWithTimeZone}}</span>
+                                        </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col d-flex">
+                                <label class="label-text left-margin">Create : </label>
+                                <span class="grey-text ml-2">
+                                    <app-no-data-label [valueToShow]="opaData?.createTimestamp">
+                                        <span>{{opaData?.createTimestamp | dateFormatterWithTimeZone}}</span>
+                                    </app-no-data-label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto status-card-width">
+                    <div class="border triple-card rounded-1 position-relative">
+                        <span class="status-pill">Status</span>
+                        <div class="ps-4 table-negative-margin">
+                            <table class="fs-14 fw-medium spaced-table">
+                                <tr>
+                                    <td class="fw-600">Disposition :</td>
+                                    <td class="ps-4">
+                                        <app-no-data-label
+                                            [valueToShow]="opaData?.dispositionStatusType?.description">
+                                            <span
+                                                class="{{commonService.getDispositionStatusBadge(opaData?.dispositionStatusType?.dispositionStatusCode)}}"></span>
+                                            <span
+                                                class="badgeFont">{{opaData?.dispositionStatusType?.description}}</span>
+                                        </app-no-data-label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-600">Disclosure :</td>
+                                    <td class="ps-4">
+                                        <app-no-data-label
+                                            [valueToShow]="opaData?.opaDisclosureStatusType?.description">
+                                            <span
+                                                class="{{commonService.getDisclosureConflictBadge(opaData?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
+                                            <span class="badgeFont">{{opaData?.opaDisclosureStatusType?.description}}
+                                            </span>
+                                        </app-no-data-label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="navigation-tabs d-flex align-items-center">
+                <div [routerLink]="['summary']" class="navigation-box border-end" queryParamsHandling='merge'
+                     role="button">
+                    <div class="navigation-box-content" routerLinkActive="active"
+                         title="Click to view the disclosure screening form"
+                         area-describedby="Click to view the disclosure screening form">Form
+                    </div>
+                </div>
+                <div [routerLink]="['review']" class="navigation-box border-end" queryParamsHandling='merge'
+                     role="button">
+                    <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
+                         area-describedby="Click to view the reviews">Reviews
+                    </div>
+                </div>
+                <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'
+                     title="click to view history" role="button">
+                    <div class="navigation-box-content" routerLinkActive="active">History</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-3 px-0">
+        <div *ngIf="isCardExpanded" class="d-flex flex-column p-0 bg-white min-height-189 border-end shadow-sm">
+            <div class="flex-fill h-100">
+                <div class="d-flex justify-content-between p-3">
+                    <span title="Go to COI home page"
+                          class="btn btn-outline-grey pb-0 fs-14 col-6 me-2">
+                        <mat-icon>home</mat-icon>
+                    </span>
+                    <button
+                        class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col-6 justify-content-center">
+                        <mat-icon class="me-2">reply</mat-icon>
+                        Back
+                    </button>
+                </div>
+                <div title="Click to save your progress" (click)="triggerSave()"
+                     class="d-flex justify-content-around px-3 pb-3">
+                    <span class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
+                        <mat-icon class="me-2">save</mat-icon>
+                        Save
+                    </span>
+                </div>
+                <div
+                    class="d-flex justify-content-around px-3">
+                    <button
+                        class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
+                        title="Click to submit your disclosure">
+                        <mat-icon class="me-2">done</mat-icon>
+                        Submit
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="!isCardExpanded" class="d-flex flex-column p-0 bg-white collapsed-action-section border-end shadow-sm">
+            <div class="flex-fill h-100">
+                <div class="d-flex justify-content-between p-3">
+                    <span title="Go to COI home page">
+
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<router-outlet></router-outlet>
+

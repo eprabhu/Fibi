@@ -12,20 +12,25 @@ import { FormsModule } from '@angular/forms';
 import { AssignAdministratorModalComponent } from './assign-administrator-modal/assign-administrator-modal.component';
 import { AddSfiModule } from '../add-sfi/add-sfi.module';
 import { AddSfiSliderComponent } from './add-sfi-slider/add-sfi-slider.component';
-import { ViewEntityDetailsComponent } from './view-entity-details/view-entity-details.component';
 import { SliderCloseBtnComponent } from './slider-close-btn/slider-close-btn.component';
 import { ActivateInactivateSfiModalComponent } from './activate-inactivate-sfi-modal/activate-inactivate-sfi-modal.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
+ import { EntityRiskSliderComponent } from './entity-risk-slider/entity-risk-slider.component';
 import { ReviewCommentsSliderComponent } from './review-comments-slider/review-comments-slider.component';
 import { CoiSliderComponent } from './coi-slider/coi-slider.component';
 import { HelpTextComponent } from './help-text/help-text.component';
+import { PersonProjectEntityCardComponent } from './person-project-entity-card/person-project-entity-card.component';
+import { ReviewCommentListViewComponent } from './review-comment-list-view/review-comment-list-view.component';
+import { CoiReviewCommentsComponent } from './coi-review-comments/coi-review-comments.component';
+
 @NgModule({
   imports: [
     CommonModule,
     MatIconModule,
     SharedModule,
     FormsModule,
-    AddSfiModule
+    AddSfiModule,
+
   ],
   declarations: [
     NoInformationComponent,
@@ -36,13 +41,16 @@ import { HelpTextComponent } from './help-text/help-text.component';
     DisclosureCreateModalComponent,
     AssignAdministratorModalComponent,
     AddSfiSliderComponent,
-    ViewEntityDetailsComponent,
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
     ConfirmationModalComponent,
     ReviewCommentsSliderComponent,
     CoiSliderComponent,
-    HelpTextComponent
+    HelpTextComponent,
+    PersonProjectEntityCardComponent,
+    EntityRiskSliderComponent,
+    ReviewCommentListViewComponent,
+    CoiReviewCommentsComponent
   ],
   exports: [
     NoInformationComponent,
@@ -51,13 +59,17 @@ import { HelpTextComponent } from './help-text/help-text.component';
     DisclosureCreateModalComponent,
     AssignAdministratorModalComponent,
     AddSfiSliderComponent,
-    ViewEntityDetailsComponent,
     SliderCloseBtnComponent,
     ActivateInactivateSfiModalComponent,
     ConfirmationModalComponent,
+
     ReviewCommentsSliderComponent,
     CoiSliderComponent,
-    HelpTextComponent
+    HelpTextComponent,
+    PersonProjectEntityCardComponent,
+    EntityRiskSliderComponent,
+    ReviewCommentListViewComponent,
+    CoiReviewCommentsComponent
   ]
 })
 export class SharedComponentModule { }

@@ -55,6 +55,7 @@ export class InstituteProposalComponent implements OnInit, OnDestroy {
   blockingModificationMessage = '';
   cardMessage = '';
   isCurrentIPPending = false;
+  isSaving = false;
   isShowSave = false;
 
   constructor(public _commonService: CommonService,
@@ -176,7 +177,8 @@ export class InstituteProposalComponent implements OnInit, OnDestroy {
 
   createAdminCorrection() {
     this.hasDescriptionValidation = this.description === '' ? true : false;
-    if (!this.hasDescriptionValidation) {
+    if (!this.hasDescriptionValidation && !this.isSaving) {
+      this.isSaving = true;
       this.$subscriptions.push(this._instituteService.createNewIPVersion({
         proposalId: this.result.instProposal.proposalId,
         description: this.description, proposalNumber: this.result.instProposal.proposalNumber
@@ -189,8 +191,10 @@ export class InstituteProposalComponent implements OnInit, OnDestroy {
           } else {
             this.setAdminCorrectionActive(data);
           }
-        }
-        ));
+          this.isSaving = false;
+        }, err => {
+          this.isSaving = false;
+        }));
     }
   }
 
@@ -236,10 +240,12 @@ export class InstituteProposalComponent implements OnInit, OnDestroy {
         this.result.instProposal.statusCode = this.currentActionType.instProposalStatus.statusCode;
         this._dataStore.updateStoreData({ 'instProposal': this.result.instProposal });
         $('#ConfirmSubmitReviewModal').modal('hide');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Modification created successfully.');
       }, err => {
-        if (typeof(err.error) === 'string') {
-          this._commonService.showToast(HTTP_ERROR_STATUS, err.error);
-        }else {
+        if (err && err.status === 405) {
+          $('#ConfirmSubmitReviewModal').modal('hide');
+          $('#invalidActionModal').modal('show');
+        } else {
           this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
         }
         this.canShowSave();
@@ -247,19 +253,32 @@ export class InstituteProposalComponent implements OnInit, OnDestroy {
   }
 
   submitAdminCorrection() {
-    this.$subscriptions.push(this._instituteService.submitIPVersion({
-      proposalId: this.result.instProposal.proposalId, description: this.description,
-      proposalNumber: this.result.instProposal.proposalNumber
-    }).subscribe((data: any) => {
-      this.description = '';
-      this.isPendingVersionAvailable = false;
-      this.result.instProposal.proposalSequenceStatus = 'ACTIVE';
-      this._dataStore.setInstituteProposal(this.result);
-      this.setButtonStatus();
-      this._dataStore.dataEvent.next(Object.keys(this.result));
-      this._instituteService.isInstituteProposalDataChange = false;
-      this.webSocket.releaseCurrentModuleLock('IP' + '#' + this.result.instProposal.proposalId);
-    }));
+    if (!this.isSaving) {
+      this.isSaving = true ;
+      this.$subscriptions.push(this._instituteService.submitIPVersion({
+        proposalId: this.result.instProposal.proposalId, description: this.description,
+        proposalNumber: this.result.instProposal.proposalNumber
+      }).subscribe((data: any) => {
+        this.description = '';
+        this.isPendingVersionAvailable = false;
+        this.result.instProposal.proposalSequenceStatus = 'ACTIVE';
+        this._dataStore.setInstituteProposal(this.result);
+        this.setButtonStatus();
+        this.isSaving = false;
+        this._dataStore.dataEvent.next(Object.keys(this.result));
+        this._instituteService.isInstituteProposalDataChange = false;
+        this.webSocket.releaseCurrentModuleLock('IP' + '#' + this.result.instProposal.proposalId);
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Proposal submitted successfully.')
+      }, err => {
+        this.isSaving = false;
+        if (err && err.status === 405) {
+          $('#ConfirmSubmitModal').modal('hide');
+          $('#invalidActionModal').modal('show');
+        } else {
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Submit Institute Proposal filed,Please try later.');
+        }
+      }));
+    }
   }
 
   getVersionStatusCode(statusCode) {
@@ -410,22 +429,28 @@ export class InstituteProposalComponent implements OnInit, OnDestroy {
       proposalId: this.result.instProposal.proposalId,
       proposalNumber: this.result.instProposal.proposalNumber
     };
-    this.$subscriptions.push(this._instituteService.withdrawIP(REQ_BODY).subscribe((data: InstituteProposal) => {
-      this.description = '';
-      this.webSocket.releaseCurrentModuleLock('IP' + '#' + this.result.instProposal.proposalId);
-      this.result = data;
-      this._dataStore.setInstituteProposal(this.result);
-      this.setButtonStatus();
-      this._dataStore.dataEvent.next(Object.keys(this.result));
-      this._instituteService.isInstituteProposalDataChange = false;
-      this.isPendingVersionAvailable = false;
-      const activeId = this.result.instProposalSummaryVO.instProposalSummaryDetails[0].proposalId;
-      this._router.navigate(['fibi/instituteproposal/overview'],
-        { queryParams: { 'instituteProposalId': activeId } });
-      this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Institute Proposal cancelled successfully.');
-    }, (err) => {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Cancel Institute Proposal failed. Please try again.');
-    }));
+    if (!this.isSaving) {
+      this.isSaving = true;
+      this.$subscriptions.push(this._instituteService.withdrawIP(REQ_BODY).subscribe((data: InstituteProposal) => {
+        this.description = '';
+        this.webSocket.releaseCurrentModuleLock('IP' + '#' + this.result.instProposal.proposalId);
+        this.result = data;
+        this._dataStore.setInstituteProposal(this.result);
+        this.setButtonStatus();
+        this.isSaving = false;
+        this._dataStore.dataEvent.next(Object.keys(this.result));
+        this._instituteService.isInstituteProposalDataChange = false;
+        this.isPendingVersionAvailable = false;
+        const activeId = this.result.instProposalSummaryVO.instProposalSummaryDetails[0].proposalId;
+        this._router.navigate(['fibi/instituteproposal/overview'],
+          { queryParams: { 'instituteProposalId': activeId } });
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Institute Proposal cancelled successfully.');
+      }, (err) => {
+        this.isSaving =  false;
+        (err && err.status === 405) ? $('#invalidActionModal').modal('show') :
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Cancel Institute Proposal failed. Please try again.');
+      }));
+    }
   }
 
   editIpSection(data) {
@@ -435,14 +460,14 @@ export class InstituteProposalComponent implements OnInit, OnDestroy {
     this.result.instProposal = data.instProposal;
     this.result.instituteProposalPersons = data.instituteProposalPersons;
     this.result.instituteProposalKeywords = data.instituteProposalKeywords;
-    this.result.instituteProposalPersons = data.instituteProposalPersons;
-    this.result.instituteProposalPersons = data.instituteProposalPersons;
     this.result.instituteProposalResearchAreas = data.instituteProposalResearchAreas;
+    this.result.instituteProposalSpecialReviews = data.instituteProposalSpecialReviews;
     this.result.proposalId = data.proposalId;
     this.checkForIPlock();
     this._dataStore.setInstituteProposal(this.result);
     this._dataStore.dataEvent.next(Object.keys(this.result));
     this.setButtonStatus();
+    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Institute Proposal modification created successfully.');
     this._router.navigate(['fibi/instituteproposal/overview'],
       { queryParams: { 'instituteProposalId': this.result.instProposal.proposalId } });
   }
@@ -503,10 +528,13 @@ export class InstituteProposalComponent implements OnInit, OnDestroy {
       this.cardMessage = 'In progress Modification associated with this Institute Proposal.';
     }
   }
-  
+
+  reload() {
+    window.location.reload();
+  }
+
   initiateSaveInChildComponents() {
     this.autoSaveService.commonSaveTrigger$.next(true);
   }
 
 }
-

@@ -8,7 +8,7 @@
   </div>
   <div *ngIf="isOverviewWidgetOpen" class="card-content">
     <div class="card-body pt-0">
-      <div *ngIf="!awardBudgetHeader" class="no-data-container">
+      <div *ngIf="!awardBudgetHeader?.budgetId" class="no-data-container">
         <span class="no-data-icon-outer">
           <div class="no-data-icon">
             <i class="fa fa-file-o" aria-hidden="true"></i>
@@ -17,112 +17,155 @@
         </span>
         <h4>There is no information in this section.</h4>
       </div>
-      <div *ngIf="awardBudgetHeader" >
+      <div class="table-responsive custom-overflow" *ngIf="awardBudgetHeader?.budgetId">
         <div class="gridSkin">
           <div class="row px-4">
             <div class="col-md-2 col-sm col-6 ">
-              <h5>Start Date</h5>
-              <span class=" text-secondary f-13 fw-500"
-                [innerHTML]='awardBudgetHeader.startDate ? (dateFormatter.parseDate(awardBudgetHeader.startDate) | customTagRemover: currentMethod) : "No data available"'></span>
+              <label>Start Date</label>
+                  <div class="fw-500">
+                      <span [ngClass]="awardBudgetHeader.startDate ? '': 'noDataExists' ">
+                        {{awardBudgetHeader.startDate ? dateFormatter.parseDate(awardBudgetHeader.startDate):'No Start Date Specified'}}
+                      </span>
+                  </div>
             </div>
             <div class="col-md-2 col-sm col-6 ">
-              <h5>End Date</h5>
-              <span class="text-secondary f-13 fw-500"
-                [innerHTML]='awardBudgetHeader.endDate ? (dateFormatter.parseDate(awardBudgetHeader.endDate) | customTagRemover: currentMethod) : "No data available"'></span>
+              <label>End Date</label>
+                 <div class="fw-500">
+                    <span [ngClass]="awardBudgetHeader.endDate ? '': 'noDataExists' ">
+                      {{awardBudgetHeader.endDate ? dateFormatter.parseDate(awardBudgetHeader.endDate):'No End Date Specified'}}
+                    </span>
+                </div>
             </div>
             <div class="col-md-2 col-sm col-6 " *ngIf='enabledCampusFlagAward'>
-              <h5>On/Off Campus</h5>
-              <span class="fw-500 f-13 text-secondary"
-                [innerHTML]='awardBudgetHeader.onOffCampusFlag ? (awardBudgetHeader.onOffCampusFlag | customTagRemover: currentMethod) : "No data available"'></span>
+              <label>Campus Flag</label>
+                <div class="fw-500">
+                  <span [ngClass]="awardBudgetHeader.onOffCampusFlag ? '': 'noDataExists' ">
+                    {{awardBudgetHeader.onOffCampusFlag ? awardBudgetHeader.onOffCampusFlag:'No Campus Flag Specified'}}
+                  </span>
+                </div>
             </div>
             <div class="col-md-2 col-sm col-6 ">
-              <h5><ng-container i18n="@@PROPOSAL_OVER_HEAD_RATE_TYPE">Over Head Rate Type</ng-container></h5>
-              <span class=" f-13 fw-50 text-secondary"
-                [innerHTML]='awardBudgetHeader.rateType?.description ? (awardBudgetHeader?.rateType?.description | customTagRemover: currentMethod) : "No data available"'></span>
+              <label><ng-container i18n="@@PROPOSAL_OVER_HEAD_RATE_TYPE">Over Head Rate Type</ng-container></label>
+                <div class="fw-500">
+                  <span [ngClass]="awardBudgetHeader.rateType?.description ? '': 'noDataExists' ">
+                    {{awardBudgetHeader.rateType?.description ? awardBudgetHeader.rateType?.description:'No Over Head Rate Type Specified'}}
+                  </span>
+               </div>
             </div>
-            <div class="col-md-3 col-sm col-6 ">
-              <h5>Remaining Fund based on</h5>
-              <span class="text-secondary f-13 fw-500"
-                [innerHTML]='awardBudgetHeader?.availableFundType ? (awardBudgetHeader?.availableFundType | customTagRemover: currentMethod) : "No data available"'></span>
+            <div class="col-md-2 col-sm col-6 ">
+              <label>Remaining Fund based on</label>
+                <div class="fw-500">
+                  <span [ngClass]="awardBudgetHeader?.availableFundType ? '': 'noDataExists' ">
+                    {{awardBudgetHeader?.availableFundType ? awardBudgetHeader?.availableFundType:'No Remaining Fund based on Specified'}}
+                  </span>
+               </div>
             </div>
-          </div>
-          <div class="row px-4">
+            <!-- </div> -->
+            <!-- <div class="row px-4"> -->
             
-            <div class="col-lg-2 col-md-4 col-sm-3 col-12" *ngIf="enableCostShareStatus">
-              <h5>Cost Sharing</h5>
-              <span class=" f-13 fw-500 text-secondary"
-                [innerHTML]='awardBudgetHeader.costSharingTypeCode ? (awardBudgetHeader.costSharingType.description | customTagRemover: currentMethod) : "No data available"'>
-              </span>
+            <div class="col-md-2 col-sm col-6" *ngIf="enableCostShareStatus">
+             <label>Cost Sharing</label>
+                <div class="fw-500">
+                  <span [ngClass]="awardBudgetHeader.costSharingTypeCode ? '': 'noDataExists' ">
+                    {{awardBudgetHeader.costSharingTypeCode ? awardBudgetHeader.costSharingType.description:'No Cost Sharing Specified'}}
+                  </span>
+               </div>
             </div>
-            <div class="col-lg-2 col-md-4 col-sm-3 col-12 " *ngIf="isShowBudgetOHRatePercentage">
-              <h5>On-Campus Rate</h5>
-              <span class=" f-13 fw-500 text-secondary"
-                [innerHTML]='awardBudgetHeader.onCampusRates ? (awardBudgetHeader.onCampusRates | customTagRemover: currentMethod) :"No data available"'>
-              </span>
+            <div class="col-md-2 col-sm col-6 " *ngIf="isShowBudgetOHRatePercentage">
+              <label>On-Campus Rate</label>
+                <div class="fw-500">
+                  <span [ngClass]="awardBudgetHeader.onCampusRates ? '': 'noDataExists' ">
+                    {{awardBudgetHeader.onCampusRates ? awardBudgetHeader.onCampusRates:'No On-Campus Rate Specified'}}
+                  </span>
+               </div>
             </div>
-            <div class="col-lg-2 col-md-4 col-sm-3 col-12 " *ngIf="isShowBudgetOHRatePercentage">
-              <h5>Off-Campus Rate</h5>
-              <span class=" f-13 fw-500 text-secondary"
-                [innerHTML]='awardBudgetHeader.offCampusRates ? (awardBudgetHeader.offCampusRates | customTagRemover: currentMethod) : "No data available"'>
-              </span>
+            <div class="col-md-2 col-sm col-6 " *ngIf="isShowBudgetOHRatePercentage">
+              <label>Off-Campus Rate</label>
+                <div class="fw-500">
+                  <span [ngClass]="awardBudgetHeader.offCampusRates ? '': 'noDataExists' ">
+                    {{awardBudgetHeader.offCampusRates ? awardBudgetHeader.offCampusRates:'No Off-Campus Rate Specified'}}
+                  </span>
+               </div>
             </div>
             
             <div *ngIf="awardBudgetHeader?.enableAwardBudgetVirementCalculation" class="col-md-2 col-sm col-6 ">
-              <h5>Virement %</h5>
-              <span class="fw-500 f-13 text-secondary"
-                [innerHTML]='awardBudgetHeader?.virement ? (awardBudgetHeader?.virement | customTagRemover: currentMethod) : "0.00" '></span>
+              <label>Virement %</label>
+                <div>
+                  <span class="fw-500 f-13 text-secondary"
+                    [innerHTML]='awardBudgetHeader?.virement ? (awardBudgetHeader?.virement | customTagRemover: currentMethod) : "0.00" '>
+                  </span>
+               </div>
             </div>
             <div  *ngIf="awardBudgetHeader?.enableAwardBudgetVirementCalculation" class="col-md-2 col-sm col-6">
-              <h5>Cumulative Virement %</h5>
-              <span class="fw-500 f-13 text-secondary"
-                [innerHTML]='awardBudgetHeader?.cumulativeVirement ? (awardBudgetHeader?.cumulativeVirement | customTagRemover: currentMethod) : "0.00" '></span>
+              <label>Cumulative Virement %</label>
+                <div class="fw-500">
+                  <span class="fw-500 f-13 text-secondary"
+                    [innerHTML]='awardBudgetHeader?.cumulativeVirement ? (awardBudgetHeader?.cumulativeVirement | customTagRemover: currentMethod) : "0.00" '>
+                  </span>
+               </div>
             </div>
-          </div>
-          <div class="row px-4">
-            <div class="col-lg-2 col-sm-6 col-12" *ngIf="isShowAwardBudgetFieldForSap">
-              <h5>Fund Center</h5>
-              <span class=" f-13 fw-500 text-secondary"
-                [innerHTML]='awardBudgetHeader.fundCenter ? (awardBudgetHeader.fundCenter | customTagRemover: currentMethod) : "No data available"'>
-              </span>
+           <!-- </div> -->
+           <!-- <div class="row px-4"> -->
+           
+            <div class="col-md-2 col-sm col-6" *ngIf="isShowAwardBudgetFieldForSap">
+                <label>Fund Center</label>
+                  <div class="fw-500">
+                    <span [ngClass]="awardBudgetHeader.fundCenter ? '': 'noDataExists' ">
+                      {{awardBudgetHeader.fundCenter ? awardBudgetHeader.fundCenter:'No Fund Center Specified'}}
+                    </span>
+                 </div>
             </div>
-            <div class="col-lg-2 col-sm-6 col-12" *ngIf="isShowAwardBudgetFieldForSap">
-              <h5>Fund Code</h5>
-              <span class=" f-13 fw-500 text-secondary"
-                [innerHTML]='awardBudgetHeader.fundCode ? (awardBudgetHeader.fundCode | customTagRemover: currentMethod) : "No data available"'>
-              </span>
+            <div class="col-md-2 col-sm col-6" *ngIf="isShowAwardBudgetFieldForSap">
+              <label>Fund Code</label>
+                <div class="fw-500">
+                  <span [ngClass]="awardBudgetHeader.fundCode ? '': 'noDataExists' ">
+                    {{awardBudgetHeader.fundCode ? awardBudgetHeader.fundCode:'No Fund Code Specified'}}
+                  </span>
+               </div>
             </div>
-            <div class="col-lg-2 col-sm-6 col-12" *ngIf="isShowAwardBudgetFieldForSap">
-              <h5>Fund Disbursement Basis</h5>
-              <span class=" f-13 fw-500 text-secondary"
-                [innerHTML]='awardBudgetHeader.fundDisbursementBasisTypeCode ? (awardBudgetHeader.fundDisbursementBasisType.description | customTagRemover: currentMethod) : "No data available"'>
-              </span>
+            <div class="col-md-2 col-sm col-6" *ngIf="isShowAwardBudgetFieldForSap">
+              <label>Fund Disbursement Basis</label>
+                <div class="fw-500">
+                  <span [ngClass]="awardBudgetHeader.fundDisbursementBasisTypeCode ? '': 'noDataExists' ">
+                    {{awardBudgetHeader.fundDisbursementBasisTypeCode ? awardBudgetHeader.fundDisbursementBasisType.description:'No Fund Disbursement Basis Specified'}}
+                </span>
+              </div>
             </div>
-          </div>
-          <div class="row px-4">
+            <!-- </div> -->
+            <!-- <div class="row px-4"> -->
             <div class="col-md-2 col-sm col-6 ">
-              <h5>Direct Cost</h5>
-              <span class=" f-13 fw-500 text-secondary"
-                [innerHTML]='awardBudgetHeader.totalDirectCost ? (currencyFormatter.parseCurrency(awardBudgetHeader.totalDirectCost) | customTagRemover: currentMethod) : currencyFormatter.parseCurrency("0.00")'>
-              </span>
+              <label>Direct Cost</label>
+                <div class="fw-500">
+                  <span class=" f-13 fw-500 text-secondary"
+                    [innerHTML]='awardBudgetHeader.totalDirectCost ? (currencyFormatter.parseCurrency(awardBudgetHeader.totalDirectCost) | customTagRemover: currentMethod) : currencyFormatter.parseCurrency("0.00")'>
+                  </span>
+               </div>
             </div>
             <div class="col-md-2 col-sm col-6 ">
-              <h5>Indirect Cost</h5>
-              <span class=" f-13 fw-500 text-secondary"
-                [innerHTML]='awardBudgetHeader.totalIndirectCost ? (currencyFormatter.parseCurrency(awardBudgetHeader.totalIndirectCost) | customTagRemover: currentMethod) : (currencyFormatter.parseCurrency("0.00") | customTagRemover: currentMethod)'>
-              </span>
+              <label>Indirect Cost</label>
+                <div class="fw-500">
+                  <span class=" f-13 fw-500 text-secondary"
+                    [innerHTML]='awardBudgetHeader.totalIndirectCost ? (currencyFormatter.parseCurrency(awardBudgetHeader.totalIndirectCost) | customTagRemover: currentMethod) : (currencyFormatter.parseCurrency("0.00") | customTagRemover: currentMethod)'>
+                  </span>
+               </div>
             </div>
             <div class="col-md-2 col-sm col-6 ">
-              <h5>Total Cost</h5>
-              <span class=" f-13 fw-500 text-secondary"
-                [innerHTML]='awardBudgetHeader.totalCost ? (currencyFormatter.parseCurrency(awardBudgetHeader.totalCost) | customTagRemover: currentMethod) : (currencyFormatter.parseCurrency("0.00") | customTagRemover: currentMethod)'>
-              </span>
+              <label>Total Cost</label>
+                <div class="fw-500">
+                  <span class=" f-13 fw-500 text-secondary"
+                    [innerHTML]='awardBudgetHeader.totalCost ? (currencyFormatter.parseCurrency(awardBudgetHeader.totalCost) | customTagRemover: currentMethod) : (currencyFormatter.parseCurrency("0.00") | customTagRemover: currentMethod)'>
+                  </span>
+               </div>
             </div>
           </div>
           <div class="row px-4">
             <div class="col-12">
-              <h5 class="d-block">Description</h5>
-              <span class="text-secondary f-13 fw-500"
-              [innerHTML]='awardBudgetHeader?.comments ? (awardBudgetHeader?.comments | customTagRemover: currentMethod) : "No data available"'></span>
+              <label>Description</label>
+                  <div class="fw-500">
+                    <span [ngClass]="awardBudgetHeader?.comments ? '': 'noDataExists' ">
+                      {{awardBudgetHeader?.comments ? awardBudgetHeader?.comments:'No Description Specified'}}
+                   </span>
+                 </div>
             </div>
           </div>
         </div>

@@ -94,7 +94,8 @@ export class BudgetComparisonComponent implements OnChanges, OnDestroy {
 
   updateAwardHeader(data) {
     if (data.budgetHeader) {
-      data.budgetHeader.onOffCampusFlag = data.budgetHeader.onOffCampusFlag === 'Y' ? 'ON' : 'OFF';
+      data.budgetHeader.onOffCampusFlag = data.budgetHeader.onOffCampusFlag === 'N' ? 'ON' 
+                                          : (data.budgetHeader.onOffCampusFlag === 'F' ? 'OFF' : 'BOTH');
       data.budgetHeader.availableFundType = data.budgetHeader.availableFundType === 'O' ? 'Obligated Distributable'
         : 'Total Project Cost';
       data.budgetHeader.virement = data.budgetHeader.virement ? data.budgetHeader.virement : '0.00';

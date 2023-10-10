@@ -113,7 +113,7 @@ export class UserActivityComponent implements OnInit {
                 this.isSaving = false;
             }, err => {
                 this.isSaving = false;
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'User activity list fetching failed. Please try again.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'User Activity list fetching failed. Please try again.');
             }));
     }
 

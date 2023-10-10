@@ -150,6 +150,10 @@ margin-top-3px{
   margin-right: 7px;
 }
 
+.mr-21{
+  margin-right: 21px;
+}
+
 .col-custom-travel {
   width: max-content;
 }
@@ -232,4 +236,139 @@ margin-top-3px{
   margin-right: 3px;
   color: grey;
   height: 14px;
+}
+
+.pi-info-text {
+  background-color: #F3F3F3;
+  color: #41464B;
+}
+
+.create-buttons {
+  margin-bottom: 15px;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.info-icon {
+  top: 7px;
+  height: 22px;
+  width: 22px;
+  font-size: 16px;
+  position: absolute;
+  margin-left: 2px;
+  color: #6f7395;
+  cursor: pointer;
+}
+
+.info-text {
+  margin-bottom: 5px;
+  margin-left: 27px;
+}
+
+.create-card {
+  height: 350px;
+}
+
+.pos{
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.alignment{
+// padding-left: 120PX;
+display: flex;
+align-items: center;
+justify-content: end;
+}
+
+.p19{
+  padding-right: 19px;
+}
+
+.p17{
+padding-right: 17px;
+
+}
+
+.p-4{
+  padding-right: 4px;
+}
+
+.disclosure-master-header-bg {
+  background-color: #E7F9E8;
+  border-bottom: 1px solid #c1d9c2;
+  height:  49px;
+}
+
+.disclosure-master-body-bg {
+  background-color: #F0FFF1;
+}
+
+.disclosure-master-footer-bg{
+  background-color: #f7f7f7;
+  border-top: 1px solid #c1d9c2;
+  height: 55px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.view-button{
+  text-decoration: none;
+  color: #8c97a9;
+}
+.p-26{
+  padding-right: 26px;
+}
+.pl{
+  padding-left: 2px;
+}
+
+.card-footer-pending-fcoi{
+  border-top: 1px solid #00000017;
+  height: 55px;
+}
+
+.fcoi-pending-cardbody{
+  background-color: #FFFBF3;
+}
+
+.fcoi-pending-cardheader{
+  background-color: #FFFBF3;
+  border-bottom: 1px solid #00000017;
+  height:  49px;
+}
+
+.dateWarningColor{
+  color: #9F0909;
+}
+
+.medium-Warning-color{
+  color: #D28B00;
+}
+
+.medium-risk {
+  position: relative;
+  top: 5px;
+  color: #ff8c00;
+}
+
+.high-risk {
+  position: relative;
+  top: 5px;
+  color: red;
+}
+
+.card{
+  margin: 5px;
+}
+
+.min-card-height{
+  min-height: 96px;
 }

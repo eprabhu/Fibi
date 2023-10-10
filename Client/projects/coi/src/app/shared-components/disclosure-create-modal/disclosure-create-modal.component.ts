@@ -3,7 +3,6 @@ import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import {
-    getEndPointOptionsForAwardNumber,
     getEndPointOptionsForDepartment,
     getEndPointOptionsForLeadUnit,
     getEndPointOptionsForProposalDisclosure,
@@ -20,38 +19,7 @@ import {
 } from '../../app-constants';
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
-
-class Disclosure {
-    adminGroupId: any;
-    adminPersonId: any;
-    certifiedAt: any;
-    conflictStatus: any;
-    conflictStatusCode: any;
-    createTimestamp: any;
-    createUserFullName: any;
-    disclosureId: any;
-    disclosureNumber: any;
-    dispositionStatus: any;
-    dispositionStatusCode: any;
-    expirationDate: any;
-    homeUnit: any;
-    homeUnitName: any;
-    personId: any;
-    reviewStatus: any;
-    reviewStatusCode: any;
-    updateTimestamp: any;
-    updateUserFullName: any;
-    versionNumber: any;
-    versionStatus: any;
-    type: any;
-    disclosurePersonFullName: any;
-    disclosureType: any;
-}
-class RevisionObject {
-    revisionComment: null;
-    disclosureId: null;
-    homeUnit: null;
-}
+import { RevisionObject, Disclosure } from '../shared-interface';
 
 @Component({
     selector: 'app-disclosure-create-modal',
@@ -278,7 +246,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.clearProjectField = new String('true');
         switch (this.selectedProjectType) {
             case 'Award':
-                return this.projectSearchOptions = getEndPointOptionsForCoiAwardNumber(this.commonService.fibiUrl);
+                return this.projectSearchOptions = getEndPointOptionsForCoiAwardNumber(this.commonService.baseUrl);
             case 'Development Proposal':
                 return this.projectSearchOptions = getEndPointOptionsForProposalDisclosure(this.commonService.baseUrl);
             default:
@@ -324,20 +292,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         }
     }
 
-    getReviewStatusBadge(statusCode): string {
-        switch (statusCode) {
-            case '1':
-                return 'yellow-badge';
-            case '2':
-                return 'blue-badge';
-            case '3':
-                return 'green-badge';
-            case '4':
-                return 'green-badge';
-            default:
-                return 'red-badge';
-        }
-    }
+    
 
     getDispositionStatusBadge(statusCode): string {
         switch (statusCode) {
@@ -464,7 +419,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     private assignSelectedProject(event): void {
         if (event) {
             this.manualProjectAddDetails.moduleItemId = this.selectedProjectType == 'Award' ? event.moduleItemId : event.moduleItemId;
-            this.manualProjectAddDetails.title = this.selectedProjectType == 'Award' ? event.moduleItemId + '-' + event.title : event.title;
+            this.manualProjectAddDetails.title = (this.selectedProjectType == 'Award' ? event.moduleItemKey : event.moduleItemId)  + ' - ' + event.title ;
             this.manualProjectAddDetails.principalInvestigator = this.selectedProjectType == 'Award' ? event.principalInvestigator : event.principalInvestigator;
             this.manualProjectAddDetails.unitName = this.selectedProjectType == 'Award' ? event.unitName : event.unitName;
             this.manualProjectAddDetails.startDate = this.selectedProjectType == 'Award' ? event.startDate : event.startDate;

@@ -15,16 +15,12 @@
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          For making any corrections /inactivating an existing Active SFI,navigate to the SFI page and amend the details.
-        </div>
-        <div class="mt-2">
-          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          For making any corrections /activating an  Inactive SFI,navigate to the SFI page and amend the details.
+          For making any corrections / inactivating / activating an existing Active / Inactive SFI,navigate to the SFI page and amend the details.
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
           Only “Active SFI(s)“ are listed in the Relationships page. Please ensure that you have the updated list of Active SFI(s) before you proceed to the next step.
-          <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Show Less</u></span>
+          <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Read Less</u></span>
         </div>
       </ng-container>
     </div>
@@ -69,7 +65,7 @@
 <!-- pagination -->
 <div [hidden]="isLoading" *ngIf="coiFinancialEntityDetails?.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
   <nav aria-label="pagination section" class="pagination justify-content-end">
-      <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="count" [pageCount]="10">
+      <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="count" [pageCount]="10" [defaultCurrentPage]="currentPage">
       </app-pagination>
   </nav>
 </div>

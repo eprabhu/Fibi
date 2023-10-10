@@ -50,7 +50,7 @@ export interface Question {
     ANSWERS: ANSWERS;
     AC_TYPE: string;
     ANSWER_TYPE: string;
-    NO_OF_ANSWERS: number | Number;
+    NO_OF_ANSWERS: number;
     UPDATE_TIMESTAMP: number;
     PARENT_QUESTION_ID?: any;
     HEADERS: HEADER[];
