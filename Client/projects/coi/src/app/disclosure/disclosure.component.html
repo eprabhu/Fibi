@@ -687,12 +687,23 @@
             <div class="modal-header">
                 <strong title="{{coiData?.projectDetail?.title}}">
                     <div class="d-flex">
-                        <span class="text-slice">
-                            {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                            Disclosure <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode !== '1'">For [ <span>{{coiData?.projectDetail?.moduleItemId}} :
-                            {{coiData?.projectDetail?.title.slice(0,10) + '...'}}</span><span class="col"> ]</span></ng-container>  By <strong
-                                title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</strong>
-                        </span>
+                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
+                            <strong title="{{ coiData?.projectDetail?.title }}">
+                                {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }}
+                                Disclosure - [
+                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
+                                    #{{ coiData?.projectDetail?.moduleItemId }} :
+                                </ng-container>
+                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
+                                    #{{ coiData?.projectDetail?.moduleItemKey }} :
+                                </ng-container>
+                                {{ (coiData?.projectDetail?.title)?.length > 40 ? (coiData?.projectDetail?.title | slice:0: 40)+'...' :
+                                coiData?.projectDetail?.title }}
+                                ] By
+                                <strong
+                                    title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</strong>
+                            </strong>
+                        </ng-container>
                     </div>
                 </strong>
                 <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
