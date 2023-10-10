@@ -50,7 +50,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
       document.getElementById('hidden-save-all-button').click();
       this.sliderDataChanges();
     }
-    if (!this.coiStatusCode) {
+    if (!this.coiStatusCode || this.coiStatusCode == 'null') {
       this.coiValidationMap.set('coiStatus', 'Please select COI Status');
     }
     if (!this.coiDescription) {
