@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
-import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.common.service.CommonService;
 import com.polus.fibicomp.constants.Constants;
@@ -31,7 +30,6 @@ import com.polus.fibicomp.notification.email.vo.EmailServiceVO;
 import com.polus.fibicomp.notification.pojo.NotificationRecipient;
 import com.polus.fibicomp.reminder.dao.ReminderDao;
 import com.polus.fibicomp.reminder.pojo.ReminderNotification;
-import com.polus.fibicomp.security.AuthenticatedUser;
 
 
 @Component
@@ -134,16 +132,27 @@ public class ReminderScheduler {
 			actionList.setSubModuleCode(rs.getInt("SUB_MODULE_CODE"));
 			actionList.setModuleItemKey(rs.getString("MODULE_ITEM_KEY"));
 			actionList.setSubModuleItemKey(rs.getString("SUB_MODULE_ITEM_KEY"));
+			actionList.setArrivalDate(rs.getTimestamp("ARRIVAL_DATE"));
 			actionList.setExpirationDate(rs.getTimestamp("EXPIRATION_DATE"));
 			actionList.setAlertType(reminder.getReminderTypeFlag());
 			actionList.setUpdateUser(rs.getString("UPDATE_USER"));
 			actionList.setUpdateTimeStamp(rs.getTimestamp("UPDATE_TIMESTAMP"));
-			actionList.setUserMessage(rs.getString("USER_MESSAGE"));
+			actionList.setUserMessage(buildCoiUserMessageForActionList(rs));
 			actionList.setMessageTypeCode(rs.getString("EXPIRING_MESSAGE_TYPE_CODE"));
 			inboxDao.saveBannerEntriesToActionList(actionList);
 		} catch (SQLException e) {
 			logger.error("Error Occured in getThingsForBanner : {}", e.getMessage());
 		}
+	}
+	
+	private String buildCoiUserMessageForActionList(ResultSet rs) {
+		String message = ""; 
+		try {
+			return message.concat("#").concat(rs.getString("MODULE_ITEM_KEY")).concat(" - ").concat(rs.getString("DISCLOSURE_TITLE"));
+		} catch (SQLException e) {
+			logger.error("Error Occured in buildCoiUserMessageForActionList : {}", e.getMessage());
+		}
+		return message;
 	}
 
 	private void setNotifictionRecipient(Integer notificationId, String personId, Integer moduleCode, Integer subModuleCode, String moduleItemKey, String subModuleItemKey, Map<String, String> placeHolder) {
