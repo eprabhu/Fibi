@@ -11,7 +11,7 @@
                             <input type="text" *ngIf="viewMode !== 'view'" id="adv-search-proposal-no"
                                 [(ngModel)]="answer.value" placeholder="{{ customElement.columnName }}"
                                 class="form-control mb-2" (keyup)="checkValidation(answer,$event,customElement,i)"
-                                [ngClass]="!isValueEmpty[i]&&validationId[i]==i ? 'is-invalid d-block' : ''" 
+                                [ngClass]="!isValueEmpty[i]&&validationId[i]==i ? 'is-invalid d-block' : ''"
                                 (ngModelChange)="emitDataChange()" /></span></span>
                 </div>
                 <div *ngIf="customElement.filterType == 'Text'">
@@ -19,7 +19,7 @@
                             <textarea  type="text" appAutoGrow appLengthValidator [isShowLimiter]='true' rows="4"
                                 *ngIf="viewMode !== 'view'" id="adv-search-proposal-no"
                                 [(ngModel)]="answer.value" placeholder="{{ customElement.columnName }}"
-                                class="form-control" 
+                                class="form-control"
                                 (ngModelChange)="emitDataChange()">
                             </textarea>
                     </span>
@@ -33,7 +33,7 @@
                                     [ngModel]="answer.value ?  answer.value : customElement.defaultValue"
                                     [(ngModel)]="answer.value" (ngModelChange)="answer.value = parseDateWithoutTimestamp(answer.value)"
                                     [ngClass]="!isValueEmpty[i]&&validationId[i]==i ? 'is-invalid d-block' : '' "
-                                    (keypress)="_commonService._keyPress($event, 'date');" 
+                                    (keypress)="_commonService._keyPress($event, 'date');"
                                     (ngModelChange)="emitDataChange()"
                                     [owlDateTimeTrigger]="customDt">
                                 <i class="fa fa-calendar fa-large insidePicker hand-cursor"
@@ -43,21 +43,21 @@
                             </span>
                         </span>
                 </div>
-                <div *ngIf="customElement.filterType == 'Check Box'">
+                <div *ngIf="customElement.filterType == 'Check Box'" class="mt-3">
                         <div class="checkbox-inline col-12" *ngFor="let option of customElement.options;  let checkBoxIndex=index">
-                            <input type="checkbox" [disabled]="viewMode == 'view'" 
+                            <input type="checkbox" [disabled]="viewMode == 'view'"
                                 [checked] = "checkIsSelected(customElement.answers, option.customDataOptionId)"
                                 id="{{option.optionName}}{{i}}"
                                 (change)="emitDataChange(); setAnswerForCheckBox(customElement, $event.target.checked, option)" />
                             <label for="{{option.optionName}}{{i}}" [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option.optionName}}</label>
                         </div>
                 </div>
-                <div *ngIf="customElement.filterType == 'Radio Button'">
+                <div *ngIf="customElement.filterType == 'Radio Button'" class="mt-3">
                         <div class="checkbox-inline col-12" *ngFor="let option of customElement.options">
                             <input type="radio" [disabled]="viewMode == 'view'" [value]="option.optionName"
-                                name="{{option.optionName}}{{i}}" id="{{option}}{{i}}" [(ngModel)]="customElement.answers[0].value"  
+                                name="{{option.optionName}}{{i}}" id="{{option}}{{i}}" [(ngModel)]="customElement.answers[0].value"
                                 (ngModelChange)="emitDataChange()"/>
-                                <label for="{{option.optionName}}{{i}}" [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option.optionName}}</label> 
+                                <label for="{{option.optionName}}{{i}}" [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option.optionName}}</label>
                         </div>
                 </div>
                 <div *ngIf="customElement.filterType == 'System Dropdown' || customElement.filterType == 'User Dropdown'">
@@ -76,7 +76,7 @@
                                 <app-elastic [options]="elasticSearchOptions[customElement.columnName]"
                                     [placeHolder]="'Type here for ' + customElement.columnName"
                                     (selectedResult)="setSearchFilterValue($event,answer,customElement)"
-                                    [isError]="(!isValueEmpty[i]&&validationId[i]==i) ? true : false" 
+                                    [isError]="(!isValueEmpty[i]&&validationId[i]==i) ? true : false"
                                     [isDisabled] = "viewMode == 'view'">
                                 </app-elastic>
                             </div>

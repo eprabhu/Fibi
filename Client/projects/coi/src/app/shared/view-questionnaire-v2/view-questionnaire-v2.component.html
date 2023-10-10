@@ -7,7 +7,7 @@
           <ng-container *ngFor='let question of questionnaire?.questions; let indexQuestion = index;'>
           <li id="ques_{{question.QUESTION_ID}}" *ngIf="question.SHOW_QUESTION == true">
             <div class="py-2">
-              <span class="question-font mb-2">{{question.QUESTION}}</span>
+              <span class="question-font d-flex mb-2">{{question.QUESTION}}</span>
                 <i *ngIf="question.DESCRIPTION || question.HELP_LINK"
                 (click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)" class="fa fa-info-circle"
                 aria-hidden="true"></i>
@@ -75,10 +75,10 @@
                 </ng-container>
                 <ng-container *ngIf="question.ANSWER_TYPE === 'Radio' || question.ANSWER_TYPE == 'Y/N'|| question.ANSWER_TYPE == 'Y/N/NA'">
                   <div *ngFor=" let option of questionnaire.options" class="answer-options answer-field  p-0 ml-4">
-                    <span *ngIf="question.QUESTION_ID == option.QUESTION_ID">
+                    <span *ngIf="question.QUESTION_ID == option.QUESTION_ID" class="d-flex align-items-center">
                       <input type="radio" [disabled]="isViewMode" name="{{option.QUESTION_ID}}"
                         [value]="option.OPTION_LABEL" [(ngModel)]="question.ANSWERS[1]"
-                        (ngModelChange)="showChildQuestions(question);" /> {{option.OPTION_LABEL}}
+                        (ngModelChange)="showChildQuestions(question);" /> <span class="ms-2">{{option.OPTION_LABEL}}</span>
                     </span>
                   </div>
                 </ng-container>
@@ -86,7 +86,7 @@
                   <div class="answer-options answer-field p-0 ml-4" *ngFor=" let option of questionnaire.options; let i=index;">
                     <span *ngIf="question.QUESTION_ID == option.QUESTION_ID">
                       <input type="checkbox" [disabled]="isViewMode" [(ngModel)]="question.ANSWERS[option.OPTION_LABEL]"
-                        (change)="showChildQuestions(question);" id="{{option.OPTION_LABEL}}{{i}}"/> 
+                        (change)="showChildQuestions(question);" id="{{option.OPTION_LABEL}}{{i}}"/>
                         <label for="{{option.OPTION_LABEL}}{{i}}"> {{option.OPTION_LABEL}}</label>
                     </span>
                   </div>
