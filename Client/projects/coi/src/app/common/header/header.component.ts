@@ -52,6 +52,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         };
     }
 
+    redirectToOpa() {
+        this._router.navigate(['/coi/opa/form'],
+            { queryParams: { disclosureId: 2} });
+    }
+
     navigateForHomeIcon(): void {
         this.homeNavigation = this.isAdministrator ? '#/coi/admin-dashboard' : '#/coi/user-dashboard/disclosures';
     }
@@ -123,7 +128,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     triggerClickForId(modalId: string) {
         document.getElementById(modalId)?.click();
     }
-    
+
     closePersonDetailsModal(event) {
         this.ispersondetailsmodal = event;
 

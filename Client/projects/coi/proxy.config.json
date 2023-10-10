@@ -451,5 +451,10 @@
   "/formbuilder/getBlankForm": {
     "target": "http://192.168.1.248:8011/",
     "secure":false
-  }
+  },
+    "/opa/getOPADisclosureHeader": {
+        "target": "http://10.199.100.34:9090/",
+        "secure":false
+    }
+
 }

@@ -1,4 +1,3 @@
-import { Questionnaire } from './../view-questionnaire-v2/questionnaire-interface';
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CustomElementVO, FormBuilder, FormBuilderEvent, FormBuilderSaveRO, QuestionnaireVO,
