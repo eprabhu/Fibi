@@ -17,13 +17,13 @@ import com.polus.appcorelib.customdataelement.controller.CustomDataElementContro
 import com.polus.appcorelib.customdataelement.service.CustomDataElementService;
 import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
 import com.polus.appcorelib.customdataelement.vo.CustomDataResponse;
+import com.polus.appcorelib.questionnaire.controller.QuestionnaireController;
 import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.appcorelib.questionnaire.service.QuestionnaireService;
 import com.polus.formbuilder.dao.FormBuilderServiceProcessorDAO;
 import com.polus.formbuilder.dto.FormBuilderSectionsComponentDTO;
 import com.polus.formbuilder.dto.FormBuilderSectionsDTO;
 import com.polus.formbuilder.dto.FormResponseDTO;
-import com.polus.formbuilder.dto.QuestionnaireBusDTO;
 import com.polus.formbuilder.entity.FormBuilderHeaderEntity;
 import com.polus.formbuilder.entity.FormBuilderProgElementEntity;
 import com.polus.formbuilder.entity.FormBuilderSectionComponentEntity;
@@ -213,16 +213,20 @@ public class FormBuilderServiceProcessor {
 					PerformSaveQuestionnaireComponent(FormComponentSaveRequest request, 
 													  MultipartHttpServletRequest multipartRequest) {
 		//QuestionnaireController c;
-		QuestionnaireBusDTO  questionnaireBusDTO = (QuestionnaireBusDTO) request.getQuestionnaire();		
-		questionnaireBusDTO = (QuestionnaireBusDTO) questionnaireService.saveQuestionnaireAnswers(questionnaireBusDTO, multipartRequest);
+		//QuestionnaireBusDTO  questionnaireBusDTO = (QuestionnaireBusDTO) request.getQuestionnaire();		
+		//questionnaireBusDTO = (QuestionnaireBusDTO) questionnaireService.saveQuestionnaireAnswers(questionnaireBusDTO, multipartRequest);
+		
+		QuestionnaireDataBus questionnaireBus = request.getQuestionnaire();
+		questionnaireBus = questionnaireService.saveQuestionnaireAnswers(questionnaireBus, multipartRequest);		
 		var response = initialComponentSaveReponse(request);
-		response.setQuestionnaire(questionnaireBusDTO);
+		response.setQuestionnaire(questionnaireBus);
 		
 		return response;
 	}
 
 
 	public FormComponentSaveResponse PerformSaveCustomElementComponent(FormComponentSaveRequest request) {
+		CustomDataElementController c;
 		CustomDataElementVO customElement = request.getCustomElement();		
 		customElement = customDataElementService.saveCustomResponse(customElement);
 		//FormBuilderSectionsComponentDTO componentDTO = getComponentInfoById(request.getComponentId());
@@ -501,8 +505,7 @@ public class FormBuilderServiceProcessor {
 																  String moduleSubItemCode,
 																  String moduleItemKey,
 																  String moduleSubItemKey) {
-		//QuestionnaireController qn;
-		QuestionnaireDataBus bus = new QuestionnaireDataBus();
+	   	QuestionnaireDataBus bus = new QuestionnaireDataBus();
 		bus.setQuestionnaireId(qnrId);
 		bus.setModuleItemCode(Integer.parseInt(moduleItemCode));
 		bus.setModuleSubItemCode(Integer.parseInt(moduleSubItemCode));
@@ -525,8 +528,6 @@ public class FormBuilderServiceProcessor {
 														  String moduleItemKey,
 														  String moduleSubItemKey) {
 
-
-		CustomDataElementController c;
 		CustomDataElementVO customDataElementVO = new CustomDataElementVO();
 		customDataElementVO.setCustomDataElementId(elementId);
 		customDataElementVO.setModuleCode(Integer.parseInt(moduleItemCode));
