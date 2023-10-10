@@ -501,9 +501,10 @@ public interface ConflictOfInterestDao {
 	/**
 	 * This method is used for get number of incomplete reviews
 	 * @param disclosureId
+	 * @param reviewStatus
 	 * @return Integer
 	 */
-	public Integer numberOfInCompleteReview(Integer disclosureId);
+	Integer numberOfReviewNotOfStatus(Integer disclosureId, String reviewStatus);
 
 	/**
 	 * This method is used for delete tag details based on coiReviewId
