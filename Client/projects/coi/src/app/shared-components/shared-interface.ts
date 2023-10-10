@@ -14,7 +14,7 @@ export class DefaultAssignAdminDetails {
 
 export class PersonProjectOrEntity {
     personFullName = '';
-    projectDetails ? = {};
+    projectDetails ?: any = {};
     entityName ? = '';
     unitDetails = '';
 }
