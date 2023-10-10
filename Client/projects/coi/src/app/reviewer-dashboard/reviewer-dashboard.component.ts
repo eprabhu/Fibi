@@ -88,9 +88,11 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     actionsOnPageChange(event) {
-        this.localCOIRequestObject.currentPage = event;
-        this.reviewerDashboardService.reviewerRequestObject.currentPage = event;
-        this.$coiList.next();
+        if (this.localCOIRequestObject.currentPage != event) {
+            this.localCOIRequestObject.currentPage = event;
+            this.reviewerDashboardService.reviewerRequestObject.currentPage = event;
+            this.$coiList.next();
+        }
     }
 
     checkForPagination() {

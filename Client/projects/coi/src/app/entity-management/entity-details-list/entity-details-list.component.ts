@@ -160,8 +160,10 @@ export class EntityDetailsListComponent implements OnInit, OnDestroy {
   }
 
   actionsOnPageChange(event) {
-    this.entityManagementService.relationshipDashboardRequest.currentPage = event;
-    this.$relationshipEntityList.next();
+    if (this.entityManagementService.relationshipDashboardRequest.currentPage != event) {
+      this.entityManagementService.relationshipDashboardRequest.currentPage = event;
+      this.$relationshipEntityList.next();
+    }
   }
 
   resetAdvanceSearchFields() {

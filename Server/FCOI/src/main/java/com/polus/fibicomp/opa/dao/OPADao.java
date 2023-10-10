@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
+import com.polus.fibicomp.opa.pojo.OPADisclosure;
 
 @Service
 public interface OPADao {
@@ -53,4 +54,11 @@ public interface OPADao {
 	 * @return boolean true/false, true if added else false
 	 */
 	boolean isAdminAssigned(Integer opaDisclosureId);
+
+	/**
+	 * This method is used for get opaDisclosure details
+	 * @param opaDisclosureId
+	 * @return
+	 */
+	public OPADisclosure getOPADisclosure(Integer opaDisclosureId);
 }

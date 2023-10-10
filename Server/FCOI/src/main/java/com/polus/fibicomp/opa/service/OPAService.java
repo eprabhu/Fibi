@@ -60,4 +60,11 @@ public interface OPAService {
 	 * @return
 	 */
     ResponseEntity<Object> reassignAdminOPADisclosure(OPAAssignAdminDto assignAdminDto);
+
+    /**
+	 * This method is used to get header details of OPA disclosure
+	 * @param opaDisclosureId
+	 * @return
+	 */
+	ResponseEntity<Object> getOPADisclosure(Integer opaDisclosureId);
 }

@@ -304,9 +304,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     actionsOnPageChange(event) {
-        this.localCOIRequestObject.currentPage = event;
-        this.coiAdminDashboardService.coiRequestObject.currentPage = event;
-        this.$coiList.next();
+        if (this.localCOIRequestObject.currentPage != event) {
+            this.localCOIRequestObject.currentPage = event;
+            this.coiAdminDashboardService.coiRequestObject.currentPage = event;
+            this.$coiList.next();
+        }
     }
 
     changeTab(tabName) {
