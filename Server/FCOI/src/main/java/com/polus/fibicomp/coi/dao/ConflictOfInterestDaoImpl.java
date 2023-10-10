@@ -772,15 +772,19 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 	
 	@Override
-	public Integer numberOfInCompleteReview(Integer disclosureId) {
+	public Integer numberOfReviewNotOfStatus(Integer disclosureId, String reviewStatus) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<CoiReview> root = query.from(CoiReview.class);
 		Predicate predicate1 = builder.equal(root.get("disclosureId"), disclosureId);
-		Predicate predicate2 = builder.notEqual(root.get("reviewStatusTypeCode"), Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED);
 		query.select(root.get("coiReviewId"));
-		query.where(builder.and(predicate1,predicate2));
+		if (reviewStatus != null) {
+			Predicate predicate2 = builder.notEqual(root.get("reviewStatusTypeCode"), reviewStatus);
+			query.where(builder.and(predicate1, predicate2));
+		} else {
+			query.where(predicate1);
+		}
 		return (session.createQuery(query).getResultList().size());
 	}
 
