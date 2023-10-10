@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PersonProjectOrEntity } from '../shared-interface';
 
 @Component({
@@ -7,16 +7,11 @@ import { PersonProjectOrEntity } from '../shared-interface';
     styleUrls: ['./person-project-entity-card.component.scss']
 })
 
-export class PersonProjectEntityCardComponent implements OnChanges {
+export class PersonProjectEntityCardComponent {
 
     @Input() personProjectOrEntity: PersonProjectOrEntity = new PersonProjectOrEntity();
 
     isReadMore = false;
-    projectId: any;
-
-    ngOnChanges() {
-        this.projectId = this.setProjectAndNumberForModuleCodes();
-    }
 
     setProjectAndNumberForModuleCodes(): any {
         return this.personProjectOrEntity.projectDetails['moduleCode'] == 3 ?
