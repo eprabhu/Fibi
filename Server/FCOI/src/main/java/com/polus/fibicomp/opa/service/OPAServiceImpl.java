@@ -18,6 +18,7 @@ import com.polus.fibicomp.opa.dao.OPADao;
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
 import com.polus.fibicomp.opa.dto.OPACommonDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
+import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.person.pojo.Person;
@@ -173,4 +174,9 @@ public class OPAServiceImpl implements OPAService {
 		return new ResponseEntity<>(opaDisclosure, HttpStatus.OK);
 	}
 
+
+	@Override
+	public ResponseEntity<Object> getOPADashboard(OPADashboardRequestDto requestDto) {
+		return new ResponseEntity<>(opaDao.getOPADashboard(requestDto), HttpStatus.OK);
+	}
 }

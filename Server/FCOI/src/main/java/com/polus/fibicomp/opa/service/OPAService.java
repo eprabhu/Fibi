@@ -1,6 +1,7 @@
 package com.polus.fibicomp.opa.service;
 
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
+import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -67,4 +68,11 @@ public interface OPAService {
 	 * @return
 	 */
 	ResponseEntity<Object> getOPADisclosure(Integer opaDisclosureId);
+
+	/**
+	 * This method is used to fetch reporter OPA Dashboard
+	 * @param requestDto
+	 * @return
+	 */
+    ResponseEntity<Object> getOPADashboard(OPADashboardRequestDto requestDto);
 }
