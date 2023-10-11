@@ -29,7 +29,7 @@ export class OpaComponent implements OnInit {
     }
 
     triggerSave() {
-        this.formBuilderEvents.next({eventType: 'SAVE'});
+        this._opa.formBuilderEvents.next({eventType: 'SAVE'});
     }
 
     private getDataFromStore() {

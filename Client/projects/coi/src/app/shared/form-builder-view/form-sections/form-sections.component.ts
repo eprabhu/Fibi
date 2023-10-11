@@ -1,3 +1,4 @@
+import { FBConfiguration } from './../form-builder-interface';
 
 import { EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, Component } from '@angular/core';
 import { CustomElementVO, FormSection, QuestionnaireVO, SectionComponent } from '../form-builder-interface';
@@ -12,6 +13,8 @@ export class FormSectionsComponent implements OnInit, OnChanges {
 
     @Input() sectionDetails = new FormSection();
     @Input() saveEventForChildComponent;
+    @Input() formBuilderId: number;
+    @Input() fbConfiguration: FBConfiguration;
     @Output()saveEventFromChildComponents = new EventEmitter<any>();
 
     constructor() { }

@@ -1,6 +1,7 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {Subject} from 'rxjs';
 import {FBConfiguration, FormBuilderEvent} from '../../shared/form-builder-view/form-builder-interface';
+import { OpaService } from '../services/opa.service';
 
 @Component({
     selector: 'app-form',
@@ -12,21 +13,22 @@ export class FormComponent implements AfterViewInit {
     formBuilderEvents = new Subject<FormBuilderEvent>();
     fbConfiguration = new FBConfiguration();
 
-    constructor() {
+    constructor(public _opa: OpaService) {
     }
 
     ngAfterViewInit(): void {
         // NEEDS TO SETUP FORM BUILDER DATA HERE, currently adding dummy data fro save testing
         this.fbConfiguration.moduleItemCode = '23';
         this.fbConfiguration.moduleSubItemCode = '0';
-        this.fbConfiguration.moduleItemKey = '11000110';
+        this.fbConfiguration.moduleItemKey = '11000111';
         this.fbConfiguration.moduleSubItemKey = '0';
         this.fbConfiguration.documentOwnerPersonId = '110000001';
-        this.formBuilderEvents.next({eventType: 'CONFIGURATION', data: this.fbConfiguration});
+        this.fbConfiguration.formBuilderId = 2;
+        this._opa.formBuilderEvents.next({eventType: 'CONFIGURATION', data: this.fbConfiguration});
     }
 
     triggerSave() {
-        this.formBuilderEvents.next({eventType: 'SAVE'});
+        this._opa.formBuilderEvents.next({eventType: 'SAVE'});
     }
 
 
