@@ -54,6 +54,7 @@ import { SfiService } from '../disclosure/sfi/sfi.service';
 import { ViewQuestionnaireV2Component } from './view-questionnaire-v2/view-questionnaire-v2.component';
 import { RichTextComponent } from './rich-text/rich-text.component';
 import { CustomElementV2Component } from './custom-element-v2/custom-element-v2.component';
+import { DataLayerComponent } from './form-builder-view/data-layer/data-layer.component';
 
 @NgModule({
     imports: [
@@ -78,7 +79,7 @@ import { CustomElementV2Component } from './custom-element-v2/custom-element-v2.
         AddRelationshipModalComponent,
         CountModalComponent,
         ActivityComponent,
-        NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component],
+        NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -124,7 +125,8 @@ import { CustomElementV2Component } from './custom-element-v2/custom-element-v2.
         NoDataLabelComponent,
         ViewQuestionnaireV2Component,
         RichTextComponent,
-        CustomElementV2Component
+        CustomElementV2Component,
+        DataLayerComponent
     ],
 
     providers: [
