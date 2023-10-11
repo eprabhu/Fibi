@@ -35,7 +35,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     @Input() questionnaireVO = new QuestionnaireVO();
     @Output() questionnaireSaveEvent = new EventEmitter<any>();
     @Output() questionnaireEditEvent = new EventEmitter<any>();
-    @Input() externalSaveEvent: Observable<any>;
+    @Input() externalEvent: Observable<any>;
     @Input() isShowSave = false;
     @Input() isShowQuestionnaireDock = true;
     @Input() saveButtonLabel: string;
@@ -83,7 +83,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     lookUpValues = {};
     IsEnableACTypeChecking = false;
     isShowLimiterInTable: any = {};
-    isChanged = false;
+    isDataChanged = false;
 
     constructor(
         private _questionnaireService: QuestionnaireService,
@@ -101,12 +101,14 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     * user click the general save button.
     */
     autoSaveEvent() {
-        if (this.externalSaveEvent) {
-            this.$subscriptions.push(this.externalSaveEvent.subscribe((event: any ) => {
-                if (event.saveMethod === 'EXTERNAL') {
-                 this.saveQuestionnaireExternal();
-                } else if (!this.isViewMode && this.isChanged ) {
-                   this.saveQuestionnaire();
+        if (this.externalEvent) {
+            this.$subscriptions.push(this.externalEvent.subscribe((event: any ) => {
+                if (event.eventType === 'EXTERNAL_SAVE' && this.isDataChanged) {
+                    this.saveQuestionnaireExternal();
+                } else if (event.eventType === 'SAVE' && this.isDataChanged) {
+                    this.saveQuestionnaire();
+                } else if (event.eventType === 'SAVE_COMPLETE') {
+                    this.isDataChanged = false;
                 }
             }));
         }
@@ -861,7 +863,7 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     }
 
     saveQuestionnaireExternal() {
-        if (this.isChanged) {
+        if (this.isDataChanged) {
             this.deleteUnAnsweredTableRows();
             this.questionnaireVO.questionnaireCompleteFlag = this.checkQuestionnaireCompletion();
             this.questionnaireVO.files = this.filesArray;
@@ -956,8 +958,8 @@ export class ViewQuestionnaireV2Component implements OnInit, OnChanges, OnDestro
     }
 
     markQuestionnaireAsChanged(status: boolean): void {
-        if (this.isChanged !== status) {
-            this.isChanged = status;
+        if (this.isDataChanged !== status) {
+            this.isDataChanged = status;
             this.questionnaireEditEvent.emit(status);
         }
     }

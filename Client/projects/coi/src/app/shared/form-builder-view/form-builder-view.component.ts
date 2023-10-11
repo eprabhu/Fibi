@@ -39,43 +39,19 @@ export class FormBuilderViewComponent implements OnInit, OnChanges {
                     this.getFormBuilderData();
                 }
                 if (E.eventType === 'SAVE') {
-                    this.saveEventForChildComponent.next({saveMethod: 'EXTERNAL'});
+                    this.saveEventForChildComponent.next({eventType: 'EXTERNAL_SAVE'});
+                }
+                if (E.eventType === 'SAVE_COMPLETED') {
+                    this.saveEventForChildComponent.next({eventType: 'CHANGE_FLAG', data: false});
                 }
             });
         }
     }
 
     private getFormBuilderData(): void {
-        this._formBuilderService.getFormBuilderData().subscribe((data: any) => {
+        this._formBuilderService.getFormBuilderData(this.fbConfiguration).subscribe((data: any) => {
             this.formBuilderData = data;
         });
-    }
-
-    saveEventFromChildComponents(data: CustomElementVO | QuestionnaireVO| any ) {
-        const RO: FormBuilderSaveRO = this.prepareROForSave(data);
-        console.log(RO);
-        this._formBuilderService.saveFormComponent(RO).subscribe(data => {
-            console.log('done');
-        }, err => console.log('ooppzzz'));
-    }
-
-    prepareROForSave(data: CustomElementVO | QuestionnaireVO| any ): FormBuilderSaveRO {
-        const RO = new FormBuilderSaveRO();
-        RO.formId = this.formBuilderData.form.formBuilderId;
-        RO.moduleItemCode = this.fbConfiguration.moduleItemCode;
-        RO.moduleItemKey = this.fbConfiguration.moduleItemKey;
-        RO.moduleSubItemCode = this.fbConfiguration.moduleSubItemCode;
-        RO.moduleSubItemKey = this.fbConfiguration.moduleSubItemKey;
-        RO.documentOwnerPersonId = this.fbConfiguration.documentOwnerPersonId;
-        RO.componentId = data.componentId;
-        RO.componentType = data.componentType;
-        switch (data.componentType) {
-            case 'QN': RO.questionnaire = data.questionnaire;
-                        RO.files = data.questionnaire.files; break;
-            case 'CE': RO.customElement = data.customElement; break;
-            case 'PE': RO.programmedElement = data.programmedElement; break;
-        }
-        return RO;
     }
 
 

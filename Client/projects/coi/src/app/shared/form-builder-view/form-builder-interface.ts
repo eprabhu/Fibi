@@ -42,7 +42,7 @@ export class SectionComponent {
     componentFooter: any;
     programmedElement: any;
     questionnaire?: QuestionnaireVO;
-    customElement?: CustomElement;
+    customElement?: CustomElementVO;
     componentOrder: number;
 }
 
@@ -89,6 +89,7 @@ export class QuestionnaireVO {
     rulePassed: any;
     questionnaireMode: any;
     copyInActiveQuestionAnswers: boolean;
+    files?: any[] = [];
 }
 
 export class Header {
@@ -219,7 +220,7 @@ export class Option2 {
 
 
 export class FormBuilderSaveRO {
-    formId: number;
+    formBuilderId: number;
     documentOwnerPersonId: string;
     moduleItemCode: string;
     moduleSubItemCode: string;
@@ -239,4 +240,5 @@ export class FBConfiguration {
     moduleItemKey: string;
     moduleSubItemKey: string;
     documentOwnerPersonId: string;
+    formBuilderId: number;
 }
