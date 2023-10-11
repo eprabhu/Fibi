@@ -1,8 +1,9 @@
+import { Configuration } from './../questionnaire-list-compare/interface';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
-import { FormBuilderSaveRO } from './form-builder-interface';
+import { FBConfiguration, FormBuilderSaveRO } from './form-builder-interface';
 
 @Injectable()
 
@@ -1472,17 +1473,14 @@ export class FormBuilderService {
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-    getFormBuilderData() {
-        return of(this.DUMMY);
-        // return this._http.post(this._commonService.baseUrl + '/formbuilder/getBlankForm', {
-        //     'moduleItemCode': '23',
-        //     'moduleSubItemCode': '0'
-        // });
+    getFormBuilderData(configuration: FBConfiguration) {
+        // return of(this.DUMMY);
+        return this._http.post(this._commonService.baseUrl + '/formbuilder/getForm', configuration);
     }
 
     saveFormComponent(data: FormBuilderSaveRO): Observable<any> {
         const formData = new FormData();
-        formData.append('formId', data.formId.toString());
+        formData.append('formBuilderId', data.formBuilderId.toString());
         formData.append('documentOwnerPersonId', data.documentOwnerPersonId);
         formData.append('moduleItemCode', data.moduleItemCode);
         formData.append('moduleSubItemCode', data.moduleSubItemCode);
@@ -1498,7 +1496,7 @@ export class FormBuilderService {
                 formData.append(file.questionId + '', file.attachment, file.attachment.name);
             });
         }
-        return this._http.post(this._commonService.baseUrl + '/saveFormComponent', formData);
+        return this._http.post(this._commonService.baseUrl + '/formbuilder/saveFormComponent', formData);
     }
 
 }

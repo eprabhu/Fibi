@@ -46,7 +46,7 @@ export class CustomElementV2Component implements OnInit, OnChanges, OnDestroy {
     @Input() customElementVO;
     @Output() dataChangeEvent = new EventEmitter<boolean>();
     @Output() saveEvent = new EventEmitter<any>();
-    @Input() externalSaveEvent: Observable<any>;
+    @Input() externalEvent: Observable<any>;
     @Input() isShowSave = false;
     @Input() isShowCollapse = false;
     customElement;
@@ -130,12 +130,14 @@ export class CustomElementV2Component implements OnInit, OnChanges, OnDestroy {
    * user click the general save button.
    */
     autoSaveEvent() {
-        if (this.externalSaveEvent) {
-            this.$subscriptions.push(this.externalSaveEvent.subscribe((event: any) => {
-                if (event.saveMethod === 'EXTERNAL') {
+        if (this.externalEvent) {
+            this.$subscriptions.push(this.externalEvent.subscribe((event: any) => {
+                if (event.eventType === 'EXTERNAL_SAVE' && this.isDataChange) {
                     this.saveCustomDataExternal();
-                } else if (this.isDataChange) {
+                } else if (event.eventType === 'SAVE' && this.isDataChange) {
                     this.saveCustomData();
+                } else if (event.eventType === 'SAVE_COMPLETE') {
+                    this.isDataChange = false;
                 }
             }));
         }
@@ -306,7 +308,7 @@ export class CustomElementV2Component implements OnInit, OnChanges, OnDestroy {
             CUSTOM_DATA.updateTimestamp = new Date().getTime();
             CUSTOM_DATA.moduleItemKey = this.moduleItemKey;
             CUSTOM_DATA.moduleCode = this.moduleCode;
-            CUSTOM_DATA.customElements = this.customElement;
+            CUSTOM_DATA.customElements = [this.customElement];
             this.saveEvent.emit({ status: 'EXTERNAL_SAVE', data: CUSTOM_DATA});
         }
     }
