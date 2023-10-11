@@ -939,7 +939,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> completeDisclosureReview(Integer disclosureId, Integer disclosureNumber){
-		if (conflictOfInterestDao.numberOfInCompleteReview(disclosureId).equals(0)) {
+//		if (conflictOfInterestDao.isDisclosureInStatuses(disclosureId, APPROVED, REVIEW_STATUS_COMPLETE, Constants.COI_ACTIVE_STATUS)) {
+//			return  new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+//		}
+		if (conflictOfInterestDao.numberOfReviewNotOfStatus(disclosureId, Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED).equals(0)) {
 			CoiDisclosure coiDisclosure = new CoiDisclosure();
 			coiDisclosure.setDisclosureId(disclosureId);
 			coiDisclosure.setDispositionStatusCode(APPROVED);
