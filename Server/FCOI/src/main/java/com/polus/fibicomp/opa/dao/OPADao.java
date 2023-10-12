@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
+import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
+import com.polus.fibicomp.opa.dto.OPADashboardResponseDto;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
 
 @Service
@@ -61,4 +63,11 @@ public interface OPADao {
 	 * @return
 	 */
 	public OPADisclosure getOPADisclosure(Integer opaDisclosureId);
+
+	/**
+	 *
+	 * @param requestDto
+	 * @return
+	 */
+	OPADashboardResponseDto getOPADashboard(OPADashboardRequestDto requestDto);
 }
