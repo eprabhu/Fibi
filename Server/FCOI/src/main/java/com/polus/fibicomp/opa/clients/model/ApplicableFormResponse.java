@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 public class ApplicableFormResponse {
 
 	private List<Integer> applicableFormsBuilderIds;
-	
 	private Integer formsBuilderId;
 	private Integer opaDisclosureId;
-	
+
 }

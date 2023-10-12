@@ -2,6 +2,7 @@ package com.polus.fibicomp.opa.pojo;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -165,5 +166,8 @@ public class OPADisclosure {
 
 	@Transient
 	private String homeUnitName;
+
+	@Transient
+	private List<OPAFormBuilderDetails> opaFormBuilderDetails;
 
 }

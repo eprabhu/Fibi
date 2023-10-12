@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
+import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.opa.dto.CreateOpaDto;
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
@@ -31,6 +32,9 @@ public class OPAController {
 
 	@Autowired
 	private UserDocumentAuthorization documentAuthorization;
+
+	@Autowired
+	private ActionLogService actionLogService;
 
 	@PostMapping("/createOPA")
 	public ResponseEntity<Object> createOPADisclosure(@RequestBody CreateOpaDto dto) {
@@ -61,7 +65,7 @@ public class OPAController {
 		return opaService.returnOPADisclosure(opaDisclosureId, opaDisclosureNumber);
 	}
 
-	@PostMapping("/assignAdmin")
+	@PatchMapping("/assignAdmin")
 	public ResponseEntity<Object> assignAdminOPADisclosure(@RequestBody OPAAssignAdminDto assignAdminDto) {
 		logger.info("Request for assignAdminOPADisclosure");
 		return opaService.assignAdminOPADisclosure(assignAdminDto);
@@ -74,12 +78,6 @@ public class OPAController {
 		return opaService.completeOPADisclosure(opaDisclosureId, opaDisclosureNumber);
 	}
 
-	@PostMapping("/reassignAdmin")
-	public ResponseEntity<Object> reassignAdminOPADisclosure(@RequestBody OPAAssignAdminDto assignAdminDto) {
-		logger.info("Request for reassignAdminOPADisclosure");
-		return opaService.reassignAdminOPADisclosure(assignAdminDto);
-	}
-
 	@GetMapping("/getOPADisclosureHeader/{opaDisclosureId}")
 	public ResponseEntity<Object> getOPADisclosure(@PathVariable("opaDisclosureId") Integer opaDisclosureId) {
 		logger.info("Request for getOPADisclosure");
@@ -90,11 +88,15 @@ public class OPAController {
 		return opaService.getOPADisclosure(opaDisclosureId);
 	}
 
-
 	@PostMapping("/dashboard")
 	public ResponseEntity<Object> dashboard(@RequestBody OPADashboardRequestDto requestDto) {
 		logger.info("Request for opa dashboard");
 		return opaService.getOPADashboard(requestDto);
+	}
+
+	@GetMapping("/opaDisclosureHistory/{opaDisclosureId}")
+	public ResponseEntity<Object> geOpatDisclosureHistoryById(@PathVariable("opaDisclosureId") Integer opaDisclosureId) {
+		return actionLogService.getOpaDisclosureHistoryById(opaDisclosureId);
 	}
 
 }

@@ -1,7 +1,7 @@
 package com.polus.fibicomp.opa.service;
 
-import java.sql.Timestamp;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +17,10 @@ import com.polus.fibicomp.opa.clients.model.ApplicableFormResponse;
 import com.polus.fibicomp.opa.dao.OPADao;
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
 import com.polus.fibicomp.opa.dto.OPACommonDto;
-import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
+import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
+import com.polus.fibicomp.opa.pojo.OPAFormBuilderDetails;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.security.AuthenticatedUser;
@@ -48,20 +49,33 @@ public class OPAServiceImpl implements OPAService {
 		return opaDao.canCreateOpaDisclosure(personId);
 	}
 
+	protected static Logger logger = LogManager.getLogger(OPAServiceImpl.class.getName());
+	
 	@Override
 	public ResponseEntity<Object> createOpaDisclosure(String personId, String homeUnit) {
-		Integer opaDisclosureId = opaDao.createOpaDisclosure(personId, homeUnit);
-		OPACommonDto  opaCommonDto = OPACommonDto.builder()
+		OPACommonDto opaDisclosure = opaDao.createOpaDisclosure(personId, homeUnit);
+		OPACommonDto opaCommonDto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
 				.build();
 		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_CREATED, opaCommonDto);
-		//TODO if needed move the below client call to any util class
+		// TODO if needed move the below client call to any util class
 		ApplicableFormRequest requestObject = ApplicableFormRequest.builder()
 				.moduleItemCode(Constants.OPA_MODULE_ITEM_CODE)
-				.moduleSubItemCode(Constants.OPA_MODULE_SUB_ITEM_CODE).build();
+				.moduleSubItemCode(Constants.OPA_MODULE_SUB_ITEM_CODE)
+				.build();
 		ResponseEntity<ApplicableFormResponse> response = formBuilderClient.getApplicableForms(requestObject);
 		ApplicableFormResponse formResponse = response.getBody();
-		formResponse.setOpaDisclosureId(opaDisclosureId);
+		OPAFormBuilderDetails opaFormBuilderDetails = OPAFormBuilderDetails.builder()
+				.opaDisclosureId(opaDisclosure.getOpaDisclosureId())
+				.opaDisclosureNumber(opaDisclosure.getOpaDisclosureNumber())
+				.personId(AuthenticatedUser.getLoginPersonId())
+				.formBuilderId(formResponse != null ? formResponse.getFormsBuilderId() : null)
+				.isPrimaryForm(true)
+				.updateTimestamp(commonDao.getCurrentTimestamp())
+				.updateUser(AuthenticatedUser.getLoginUserName())
+				.build();
+		opaDao.saveOrUpdateOpaFormBuilderDetails(opaFormBuilderDetails);
+		formResponse.setOpaDisclosureId(opaDisclosure.getOpaDisclosureId());
 		return new ResponseEntity<>(formResponse, HttpStatus.OK);
 	}
 
@@ -71,94 +85,97 @@ public class OPAServiceImpl implements OPAService {
 				Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
 			return new ResponseEntity<>("Already Submitted", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		Timestamp timestamp = opaDao.submitOPADisclosure(opaSubmitDto);
+		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN,
+				Constants.OPA_DISPOSITION_STATUS_PENDING, opaSubmitDto.getOpaDisclosureId())) {
+			opaSubmitDto.setOpaDisclosureStatus(Constants.OPA_DISCLOSURE_STATUS_REVIEW_IN_PROGRESS);
+		}
+		opaDao.submitOPADisclosure(opaSubmitDto);
 		OPACommonDto  opaCommonDto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
 				.opaDisclosureId(opaSubmitDto.getOpaDisclosureId())
 				.opaDisclosureNumber(opaSubmitDto.getOpaDisclosureNumber())
 				.build();
 		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_SUBMITTED, opaCommonDto);
-		return new ResponseEntity<>(timestamp, HttpStatus.OK);
+		return getOPADisclosure(opaSubmitDto.getOpaDisclosureId());
 	}
 
 
 	@Override
 	public ResponseEntity<Object> withdrawOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW,
-				null, opaDisclosureId)) {
+		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, null, opaDisclosureId)) {
 			return new ResponseEntity<>("Already withdrawn", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		Timestamp timestamp = opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW,
-				opaDisclosureId);
+		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_WITHDRAW, opaDisclosureId);
 		OPACommonDto  opaCommonDto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
 				.opaDisclosureId(opaDisclosureId)
 				.opaDisclosureNumber(opaDisclosureNumber)
 				.build();
 		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_WITHDRAWN, opaCommonDto);
-		return new ResponseEntity<>(timestamp, HttpStatus.OK);
+		return getOPADisclosure(opaDisclosureId);
 	}
 
 	@Override
 	public ResponseEntity<Object> returnOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN,
-				null, opaDisclosureId)) {
+		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_RETURN, null, opaDisclosureId)) {
 			return new ResponseEntity<>("Already returned", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		Timestamp timestamp = opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_RETURN,
-				opaDisclosureId);
+		opaDao.returnOrWithdrawOPADisclosure(Constants.OPA_DISCLOSURE_STATUS_RETURN, opaDisclosureId);
 		OPACommonDto  opaCommonDto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
 				.opaDisclosureId(opaDisclosureId)
 				.opaDisclosureNumber(opaDisclosureNumber)
 				.build();
 		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_RETURNED, opaCommonDto);
-		return new ResponseEntity<>(timestamp, HttpStatus.OK);
+		return getOPADisclosure(opaDisclosureId);
 	}
 
 	@Override
 	public ResponseEntity<Object> assignAdminOPADisclosure(OPAAssignAdminDto assignAdminDto) {
-		if(opaDao.isAdminAssigned( assignAdminDto.getOpaDisclosureId())) {
-			return new ResponseEntity<>("Already admin assigned", HttpStatus.METHOD_NOT_ALLOWED);
+		try {
+			saveAssignAdminActionLog(assignAdminDto.getAdminPersonId(), assignAdminDto.getOpaDisclosureId(), assignAdminDto.getOpaDisclosureNumber());
+		} catch (Exception e) {
+			logger.error("assignDisclosureAdmin : {}", e.getMessage());
 		}
-		Timestamp timestamp = opaDao.assignAdminOPADisclosure(assignAdminDto);
-		OPACommonDto  opaCommonDto = OPACommonDto.builder()
-				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
-				.opaDisclosureId(assignAdminDto.getOpaDisclosureId())
-				.opaDisclosureNumber(assignAdminDto.getOpaDisclosureNumber())
-				.adminPersonName(personDao.getPersonFullNameByPersonId(assignAdminDto.getAdminPersonId()))
-				.build();
-		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_ADMIN_ASSIGNED, opaCommonDto);
-		return new ResponseEntity<>(timestamp, HttpStatus.OK);
+		assignAdminDto.setOpaDisclosureStatus(Boolean.TRUE.equals(opaDao.isAdminAssigned(assignAdminDto.getOpaDisclosureId())) 
+						? null
+						: Constants.OPA_DISCLOSURE_STATUS_REVIEW_IN_PROGRESS);
+		opaDao.assignAdminOPADisclosure(assignAdminDto);
+		return getOPADisclosure(assignAdminDto.getOpaDisclosureId());
+	}
+
+	private Boolean saveAssignAdminActionLog(String adminPersonId, Integer opaDisclosureId, String opaDisclosureNumber) {
+		Boolean isAdminAssigned = opaDao.isAdminAssigned(opaDisclosureId);
+		if (Boolean.TRUE.equals(isAdminAssigned)) {
+			OPACommonDto opaCommonDto = OPACommonDto.builder()
+					.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
+					.adminPersonName(personDao.getPersonFullNameByPersonId(opaDao.getAssignedAdmin(opaDisclosureId)))
+					.reassignedAdminPersonName(personDao.getPersonFullNameByPersonId(adminPersonId))
+					.opaDisclosureId(opaDisclosureId).opaDisclosureNumber(opaDisclosureNumber).build();
+			actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_ADMIN_REASSIGNED, opaCommonDto);
+		} else {
+			OPACommonDto opaCommonDto = OPACommonDto.builder()
+					.updateUserFullName(AuthenticatedUser.getLoginUserFullName()).opaDisclosureId(opaDisclosureId)
+					.opaDisclosureNumber(opaDisclosureNumber).adminPersonName(personDao.getPersonFullNameByPersonId(adminPersonId))
+					.build();
+			actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_ADMIN_ASSIGNED, opaCommonDto);
+		}
+		return isAdminAssigned;
 	}
 
 	@Override
 	public ResponseEntity<Object> completeOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber) {
-		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_COMPLETED,
-				Constants.OPA_DISPOSITION_STATUS_COMPLETED, opaDisclosureId)) {
+		if(opaDao.isOPAWithStatuses(Constants.OPA_DISCLOSURE_STATUS_COMPLETED, Constants.OPA_DISPOSITION_STATUS_COMPLETED, opaDisclosureId)) {
 			return new ResponseEntity<>("Already approved", HttpStatus.METHOD_NOT_ALLOWED);
 		}
-		Timestamp timestamp = opaDao.completeOPADisclosure(opaDisclosureId);
+		opaDao.completeOPADisclosure(opaDisclosureId);
 		OPACommonDto  opaCommonDto = OPACommonDto.builder()
 				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
 				.opaDisclosureId(opaDisclosureId)
 				.opaDisclosureNumber(opaDisclosureNumber)
 				.build();
 		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_APPROVED, opaCommonDto);
-		return new ResponseEntity<>(timestamp, HttpStatus.OK);
-	}
-
-	@Override
-	public ResponseEntity<Object> reassignAdminOPADisclosure(OPAAssignAdminDto assignAdminDto) {
-		Timestamp timestamp = opaDao.assignAdminOPADisclosure(assignAdminDto);
-		OPACommonDto  opaCommonDto = OPACommonDto.builder()
-				.updateUserFullName(AuthenticatedUser.getLoginUserFullName())
-				.adminPersonName(personDao.getPersonFullNameByPersonId(assignAdminDto.getAdminPersonId()))
-				.opaDisclosureId(assignAdminDto.getOpaDisclosureId())
-				.opaDisclosureNumber(assignAdminDto.getOpaDisclosureNumber())
-				.build();
-		actionLogService.saveOPAActionLog(Constants.OPA_ACTION_LOG_TYPE_ADMIN_REASSIGNED, opaCommonDto);
-		return new ResponseEntity<>(timestamp, HttpStatus.OK);
+		return getOPADisclosure(opaDisclosureId);
 	}
 
 	@Override
@@ -171,9 +188,9 @@ public class OPAServiceImpl implements OPAService {
 		opaDisclosure.setPersonEmail(person.getEmailAddress());
 		opaDisclosure.setPersonPrimaryTitle(person.getPrimaryTitle());
 		opaDisclosure.setHomeUnitName(commonDao.getUnitName(opaDisclosure.getHomeUnit()));
+		opaDisclosure.setOpaFormBuilderDetails(opaDao.getOpaFormBuilderDetailsByOpaDisclosureId(opaDisclosureId));
 		return new ResponseEntity<>(opaDisclosure, HttpStatus.OK);
 	}
-
 
 	@Override
 	public ResponseEntity<Object> getOPADashboard(OPADashboardRequestDto requestDto) {
