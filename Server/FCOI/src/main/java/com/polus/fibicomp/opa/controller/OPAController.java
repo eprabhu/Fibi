@@ -17,6 +17,7 @@ import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.opa.dto.CreateOpaDto;
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
+import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.service.OPAService;
 
 @RestController
@@ -87,6 +88,13 @@ public class OPAController {
 //			return new ResponseEntity<>("Not Authorized to view this Disclosure",HttpStatus.FORBIDDEN);
 //		}
 		return opaService.getOPADisclosure(opaDisclosureId);
+	}
+
+
+	@PostMapping("/dashboard")
+	public ResponseEntity<Object> dashboard(@RequestBody OPADashboardRequestDto requestDto) {
+		logger.info("Request for opa dashboard");
+		return opaService.getOPADashboard(requestDto);
 	}
 
 }
