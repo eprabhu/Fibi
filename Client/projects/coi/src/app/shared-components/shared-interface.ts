@@ -2,6 +2,8 @@ export class AssignAdminRO {
     adminPersonId;
     adminGroupId = null;
     travelDisclosureId?: '';
+    opaDisclosureId?: '';
+    opaDisclosureNumber?: '';
     disclosureId?: '';
 }
 

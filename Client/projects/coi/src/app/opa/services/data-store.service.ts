@@ -42,7 +42,7 @@ export class DataStoreService {
         this.dataEvent.next(KEYS);
     }
 
-    setStoreData(data: COI): void {
+    setStoreData(data): void {
         this.storeData = this.structuredClone(data);
     }
 

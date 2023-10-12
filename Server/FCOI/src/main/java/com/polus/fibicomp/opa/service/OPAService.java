@@ -55,13 +55,6 @@ public interface OPAService {
 	 */
     ResponseEntity<Object> completeOPADisclosure(Integer opaDisclosureId, String opaDisclosureNumber);
 
-	/**
-	 * This method is used to reassign OPA Disclosure admin
-	 * @param assignAdminDto
-	 * @return
-	 */
-    ResponseEntity<Object> reassignAdminOPADisclosure(OPAAssignAdminDto assignAdminDto);
-
     /**
 	 * This method is used to get header details of OPA disclosure
 	 * @param opaDisclosureId

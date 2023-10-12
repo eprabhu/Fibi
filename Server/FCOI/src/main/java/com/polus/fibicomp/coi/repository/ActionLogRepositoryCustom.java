@@ -9,6 +9,7 @@ import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
+import com.polus.fibicomp.opa.pojo.OPAActionLog;
 import com.polus.fibicomp.opa.pojo.OPAActionLogType;
 
 public interface ActionLogRepositoryCustom {
@@ -66,4 +67,11 @@ public interface ActionLogRepositoryCustom {
      * @return OPAActionLogType
      */
     OPAActionLogType getOPAActionType(String actionLogTypeCode);
+
+    /**
+     * This method is used to fetch OPA disclosure action logs based on id
+     * @param opaDisclosureId
+     */
+	List<OPAActionLog> fetchOpaDisclosureActionLogsBasedOnId(Integer opaDisclosureId);
+
 }

@@ -200,7 +200,7 @@ table {
 }
 
 .min-height-90 {
-    min-height: 90.5px;
+    min-height: 101px;
 }
 
 .btn-outline-grey {
@@ -439,4 +439,8 @@ table {
 
 ::-webkit-scrollbar-thumb {
     background: #ccc
+}
+
+.fit-height {
+    height: 34px;
 }
