@@ -29,8 +29,9 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     adminGrpWarningMessage: string;
 
     @Input() disclosureId = null;
+    @Input() disclosureNumber = null;
     @Input() defaultAdminDetails = new DefaultAssignAdminDetails();
-    @Input() path: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' = 'DISCLOSURES';
+    @Input() path: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' | 'OPA_DISCLOSURES' = 'DISCLOSURES';
     @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private _commonService: CommonService, private _assignAdminService: AssignAdministratorModalService) { }
@@ -72,6 +73,9 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     private setDisclosureId(): void {
         if (this.path === 'TRAVEL_DISCLOSURES') {
             this.addAdmin.travelDisclosureId = this.disclosureId;
+        } else if (this.path === 'OPA_DISCLOSURES') {
+            this.addAdmin.opaDisclosureId = this.disclosureId;
+            this.addAdmin.opaDisclosureNumber = this.disclosureNumber;
         } else {
             this.addAdmin.disclosureId = this.disclosureId;
         }
@@ -138,8 +142,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
         if (!this.isSaving && this.validateAdmin()) {
             this.isSaving = true;
             this.setDisclosureId();
-            const path = this.path === 'DISCLOSURES' ? 'disclosure' : 'travelDisclosure';
-            this.$subscriptions.push(this._assignAdminService.assignAdmin(path, this.addAdmin)
+            this.$subscriptions.push(this._assignAdminService.assignAdmin(this.getPath(), this.addAdmin)
                 .subscribe((data: any) => {
                     this.isAssignToMe = false;
                     this.addAdmin = new AssignAdminRO();
@@ -150,6 +153,17 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
                 }, err => {
                     this.isSaving = false;
                 }));
+        }
+    }
+
+    private getPath() {
+        switch (this.path) {
+            case 'DISCLOSURES':
+                return 'disclosure';
+            case 'TRAVEL_DISCLOSURES':
+                return 'travelDisclosure';
+            case 'OPA_DISCLOSURES':
+                return 'opa';
         }
     }
 
@@ -172,7 +186,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
         this.clearAdminGroupField = new String('true');
         this.clearAdministratorField = new String('true');
     }
-    
+
     getPersonGroup() {
         this.adminGrpWarningMessage = '';
         if(!this.isSaving) {

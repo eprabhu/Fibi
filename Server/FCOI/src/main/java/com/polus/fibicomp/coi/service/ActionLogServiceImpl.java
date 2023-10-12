@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.polus.fibicomp.opa.dto.OPACommonDto;
-import com.polus.fibicomp.opa.pojo.OPAActionLog;
-import com.polus.fibicomp.opa.pojo.OPAActionLogType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +33,9 @@ import com.polus.fibicomp.coi.repository.DisclosureActionTypeRepository;
 import com.polus.fibicomp.coi.repository.TravelDisclosureActionLogRepository;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.opa.dto.OPACommonDto;
+import com.polus.fibicomp.opa.pojo.OPAActionLog;
+import com.polus.fibicomp.opa.pojo.OPAActionLogType;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
@@ -369,4 +369,23 @@ public class ActionLogServiceImpl implements ActionLogService {
 		placeholdersAndValues.put("{REASSIGNED_ADMIN}", commonDto.getReassignedAdminPersonName());
 		return renderPlaceholders(message, placeholdersAndValues);
 	}
+
+	@Override
+	public ResponseEntity<Object> getOpaDisclosureHistoryById(Integer opaDisclosureId) {
+		List<OPAActionLog> opaActionLogs = actionLogRepositoryCustom.fetchOpaDisclosureActionLogsBasedOnId(opaDisclosureId);
+		List<HistoryDto> opaDisclosureHistories = new ArrayList<>();
+		opaActionLogs.forEach(actionLog -> {
+			HistoryDto historyDto = new HistoryDto();
+			historyDto.setUpdateTimestamp(actionLog.getUpdateTimestamp());
+			if (actionLog.getUpdateUser() != null) {
+				historyDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(actionLog.getUpdateUser()));
+			}
+			historyDto.setActionTypeCode(actionLog.getActionTypeCode());
+			historyDto.setMessage(actionLog.getDescription());
+			historyDto.setComment(actionLog.getComment());
+			opaDisclosureHistories.add(historyDto);
+		});
+		return new ResponseEntity<>(opaDisclosureHistories, HttpStatus.OK);
+	}
+
 }

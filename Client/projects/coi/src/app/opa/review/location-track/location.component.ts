@@ -18,6 +18,7 @@ import {
 import {PersonProjectOrEntity} from '../../../shared-components/shared-interface';
 import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
 import {OpaService} from '../../services/opa.service';
+import {OpaDisclosure} from "../../opa-interface";
 
 @Component({
     selector: 'app-coi-review-location',
@@ -28,7 +29,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
     dependencies = ['coiDisclosure', 'adminGroup', 'person', 'projectDetail', 'coiReviewerList'];
-    coiDisclosure: CoiDisclosure = new CoiDisclosure();
+    opaDisclosure: OpaDisclosure = new OpaDisclosure();
     adminGroups: any = [];
     deployMap = environment.deployUrl;
 
@@ -63,7 +64,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         private _reviewService: ReviewService,
         private _dataStore: DataStoreService,
         public _commonService: CommonService,
-        public coiService: OpaService
+        public opaService: OpaService
     ) {
     }
 
@@ -153,7 +154,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     saveOrUpdateCoiReview() {
         if (this.validateReview()) {
-            this.reviewDetails.disclosureId = this.coiDisclosure.disclosureId;
+            this.reviewDetails.disclosureId = this.opaDisclosure.opaDisclosureId;
             this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview({coiReview: this.reviewDetails}).subscribe((res: any) => {
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
@@ -176,37 +177,37 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     addReviewToList(review: any) {
         this.reviewerList.push(review);
-        this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
+        this.opaDisclosure.opaDisclosureStatusType = review.coiDisclosure.coiReviewStatusType;
         this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], {
             coiReviewerList: this.reviewerList,
-            coiDisclosure: this.coiDisclosure
+            opaDisclosure: this.opaDisclosure
         });
         this._dataStore.updateTimestampEvent.next();
-        this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
-        this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
+        this.opaService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+        this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
     }
 
     updateReview(review: any) {
         this.reviewerList.splice(this.modifyIndex, 1, review);
-        this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
+        this.opaDisclosure.opaDisclosureStatusType = review.coiDisclosure.coiReviewStatusType;
         this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], {
             coiReviewerList: this.reviewerList,
-            coiDisclosure: this.coiDisclosure
+            opaDisclosure: this.opaDisclosure
         });
         this._dataStore.updateTimestampEvent.next();
-        this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+        this.opaService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
     }
 
     deleteReview() {
         this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.coiReviewId).subscribe((_res: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
-            this.coiDisclosure.coiReviewStatusType = _res.coiReviewStatusType;
+            this.opaDisclosure.opaDisclosureStatusType = _res.coiReviewStatusType;
             this._dataStore.updateStore(['coiReviewerList', 'coiDisclosure'], {
                 coiReviewerList: this.reviewerList,
-                coiDisclosure: this.coiDisclosure
+                opaDisclosure: this.opaDisclosure
             });
-            this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
-            this.coiService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
+            this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
+            this.opaService.isStartReview = this.startReviewIfLoggingPerson() ? true : false;
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
@@ -217,7 +218,7 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     modifyReviewComment(coiReviewId) {
         this.commentConfiguration.coiReviewId = coiReviewId;
-        this.coiService.isShowCommentNavBar = true;
+        this.opaService.isShowCommentNavBar = true;
     }
 
     validateReview() {
@@ -292,9 +293,9 @@ export class LocationComponent implements OnInit, OnDestroy {
 
     updateCoiReviewStage(index, reviewer, modalType: ModalType) {
         this.modifyIndex = index;
-        this.coiService.triggerStartOrCompleteCoiReview(modalType);
-        this.coiService.$SelectedReviewerDetails.next(reviewer);
-        this.coiService.isEnableReviewActionModal = true;
+        this.opaService.triggerStartOrCompleteCoiReview(modalType);
+        this.opaService.$SelectedReviewerDetails.next(reviewer);
+        this.opaService.isEnableReviewActionModal = true;
     }
 
     getDaysAtLocation(startDate, endDate) {
@@ -323,13 +324,13 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     private getDataFromStore() {
-        const DATA = this._dataStore.getData(this.dependencies);
-        this.coiDisclosure = DATA.coiDisclosure;
+        const DATA = this._dataStore.getData();
+        this.opaDisclosure = DATA;
         this.adminGroups = DATA.adminGroup || [];
         this.disclosurePerson = DATA.person;
         this.projectDetail = DATA.projectDetail;
         this.setPersonProjectDetails();
-        this.commentConfiguration.disclosureId = this.coiDisclosure.disclosureId;
+        this.commentConfiguration.disclosureId = this.opaDisclosure.opaDisclosureId;
         this.getCoiReview();
         this.setAdminGroupOptions();
     }
@@ -360,8 +361,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     private setPersonProjectDetails(): void {
-        this.personProjectDetails.personFullName = this.coiDisclosure.person.fullName;
+        this.personProjectDetails.personFullName = this.opaDisclosure.opaPerson.personName;
         this.personProjectDetails.projectDetails = this.projectDetail;
-        this.personProjectDetails.unitDetails = this.coiDisclosure.person.unit.unitDetail;
+        this.personProjectDetails.unitDetails = this.opaDisclosure.homeUnitName;
     }
 }

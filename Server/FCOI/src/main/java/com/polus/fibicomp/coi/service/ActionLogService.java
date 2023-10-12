@@ -77,4 +77,11 @@ public interface ActionLogService {
      * @param opaCommonDto
      */
     void saveOPAActionLog(String actionLogTypeCode, OPACommonDto opaCommonDto);
+
+    /**
+     * This method is used to get OPA disclosure history
+     * @param opaDisclosureId
+     */
+	ResponseEntity<Object> getOpaDisclosureHistoryById(Integer opaDisclosureId);
+
 }

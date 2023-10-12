@@ -1,21 +1,24 @@
 package com.polus.fibicomp.opa.dao;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.polus.fibicomp.opa.dto.OPAAssignAdminDto;
-import com.polus.fibicomp.opa.dto.OPASubmitDto;
+import com.polus.fibicomp.opa.dto.OPACommonDto;
 import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
 import com.polus.fibicomp.opa.dto.OPADashboardResponseDto;
+import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
+import com.polus.fibicomp.opa.pojo.OPAFormBuilderDetails;
 
 @Service
 public interface OPADao {
 
 	boolean canCreateOpaDisclosure(String personId);
 
-	Integer createOpaDisclosure(String personId, String homeUnit);
+	OPACommonDto createOpaDisclosure(String personId, String homeUnit);
 
 	/**
 	 * This method is used patch the opa disclosure for submit
@@ -70,4 +73,26 @@ public interface OPADao {
 	 * @return
 	 */
 	OPADashboardResponseDto getOPADashboard(OPADashboardRequestDto requestDto);
+
+	/**
+	 * This method is used for inserting details into opaformbuilderdetails table
+	 * @param opaFormBuilderDetails
+	 * @return
+	 */
+	OPAFormBuilderDetails saveOrUpdateOpaFormBuilderDetails(OPAFormBuilderDetails opaFormBuilderDetails);
+
+	/**
+	 * This method is used to get opaformbuilderdetails using opaDisclosureId
+	 * @param opaDisclosureId
+	 * @return
+	 */
+	List<OPAFormBuilderDetails> getOpaFormBuilderDetailsByOpaDisclosureId(Integer opaDisclosureId);
+
+	/**
+	 * This method is used to get admin person id of an opa disclosure using opaDisclosureId
+	 * @param opaDisclosureId
+	 * @return
+	 */
+	String getAssignedAdmin(Integer opaDisclosureId);
+
 }
