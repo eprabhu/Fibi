@@ -98,7 +98,7 @@ export class ResolveServiceService {
     }
 
     private updateProposalDataStore(data: any) {
-        this._dataStore.setStoreData(data);
+        this._dataStore.setStoreData({opaDisclosure: data});
     }
 
     private getHttpRequests(route: ActivatedRouteSnapshot): Observable<any>[] {

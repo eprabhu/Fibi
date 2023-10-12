@@ -40,4 +40,22 @@ export class OpaService {
     triggerStartOrCompleteCoiReview(modalType) {
 
     }
+
+    disclosureHistory(disclosureId) {
+        return this._http.get(`${this._commonService.baseUrl}/opa/opaDisclosureHistory/${disclosureId}`);
+    }
+    submitOPA(opaDisclosureId, opaDisclosureNumber) {
+        return this._http.patch(`${this._commonService.baseUrl}/opa/submit`, {opaDisclosureId, opaDisclosureNumber});
+    }
+    returnOPA(OPADisclosureID, OPADisclosureNumber) {
+        return this._http.patch(`${this._commonService.baseUrl}/opa/return/${OPADisclosureID}/${OPADisclosureNumber}`, {});
+    }
+    withdrawOPA(OPADisclosureID, OPADisclosureNumber) {
+        return this._http.patch(`${this._commonService.baseUrl}/opa/withdraw/${OPADisclosureID}/${OPADisclosureNumber}`, {});
+    }
+
+    completeOPAReview(OPADisclosureID, OPADisclosureNumber) {
+        return this._http.patch(`${this._commonService.baseUrl}/opa/complete/${OPADisclosureID}/${OPADisclosureNumber}`, {});
+    }
+
 }
