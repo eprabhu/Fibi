@@ -262,11 +262,15 @@ export class CommonService {
             case '1':
                 return 'green-badge';
             case '2':
+            case '5':
                 return 'brown-badge';
             case '3':
+            case '6':
                 return 'red-badge';
             case '4':
                 return 'green-badge';
+            default:
+                return 'yellow-badge';
         }
     }
 

@@ -272,7 +272,7 @@
         "secure": false
     },
     "/getPersonGroup": {
-        "target": "http://192.168.1.149/fibii",
+        "target": "http://10.199.100.39:2222/",
         "secure": false
     },
     "/disclosure/*": {
@@ -462,6 +462,34 @@
     },
     "/formbuilder/getForm": {
         "target": "http://192.168.1.248:8011/",
+        "secure": false
+    },
+    "/opa/opaDisclosureHistory": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/opa/createOPA": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/opa/assignAdmin": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/opa/submit": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/opa/complete": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/opa/withdraw": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/opa/return": {
+        "target": "http://10.199.100.34:9090/",
         "secure": false
     }
 }

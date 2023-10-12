@@ -4,16 +4,18 @@ import {Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import {ADMIN_DASHBOARD_RIGHTS} from '../../app-constants';
+import {HeaderService} from './header.service';
 
 class ChangePassword {
     password = '';
     reEnterPassword = '';
 }
+
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
+    providers: [HeaderService],
     encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit, OnDestroy {
@@ -37,24 +39,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
     ispersondetailsmodal = false;
     userDetails = null;
 
-    constructor(public _router: Router, public commonService: CommonService) {
+    constructor(public _router: Router, public commonService: CommonService, private _headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
     }
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
         this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
-                                || this.commonService.isCoiReviewer;
+            || this.commonService.isCoiReviewer;
         this.navigateForHomeIcon();
         this.userDetails = {
-           personId: this.commonService.getCurrentUserDetail('personId'),
-           fullName: this.commonService.getCurrentUserDetail('fullName')
+            personId: this.commonService.getCurrentUserDetail('personId'),
+            fullName: this.commonService.getCurrentUserDetail('fullName')
         };
     }
 
     redirectToOpa() {
         this._router.navigate(['/coi/opa/form'],
-            { queryParams: { disclosureId: 2} });
+            {queryParams: {disclosureId: 2}});
     }
 
     navigateForHomeIcon(): void {
@@ -94,18 +96,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     passwordLengthValidator() {
-            clearTimeout(this.timer.password);
-            this.timer.password = setTimeout(() => {
-                this.resetPassword.password = this.resetPassword.password.trim();
-                this.passwordValidation.delete('password-length');
-                this.passwordAtleast7Characters();
-            });
-    }
-
-    private passwordAtleast7Characters() {
-        if (this.resetPassword.password.length < 7) {
-            this.passwordValidation.set('password-length', true);
-        }
+        clearTimeout(this.timer.password);
+        this.timer.password = setTimeout(() => {
+            this.resetPassword.password = this.resetPassword.password.trim();
+            this.passwordValidation.delete('password-length');
+            this.passwordAtleast7Characters();
+        });
     }
 
     checkSamePassword() {
@@ -119,12 +115,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    private confirmPasswordSame() {
-        if (this.resetPassword.password !== this.resetPassword.reEnterPassword) {
-            this.passwordValidation.set('same-password', true);
-        }
-    }
-
     triggerClickForId(modalId: string) {
         document.getElementById(modalId)?.click();
     }
@@ -133,9 +123,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.ispersondetailsmodal = event;
 
     }
-}
-function thisnavigateForHomeIcon() {
-    throw new Error('Function not implemented.');
+
+    createOPA() {
+        this._headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+            this.commonService.getCurrentUserDetail('homeUnit'))
+            .subscribe((res: any) => {
+                this._router.navigate(['/coi/opa/form'], { queryParams: { disclosureId: res.opaDisclosureId } });
+            });
+    }
+
+    private passwordAtleast7Characters() {
+        if (this.resetPassword.password.length < 7) {
+            this.passwordValidation.set('password-length', true);
+        }
+    }
+
+    private confirmPasswordSame() {
+        if (this.resetPassword.password !== this.resetPassword.reEnterPassword) {
+            this.passwordValidation.set('same-password', true);
+        }
+    }
 }
 
 
