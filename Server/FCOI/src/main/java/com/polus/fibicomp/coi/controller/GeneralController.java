@@ -20,6 +20,6 @@ public class GeneralController {
 
     @GetMapping("/fetchAllCoiRights")
     public ResponseEntity<Object> fetchAllCoiRights(){
-        return generalService.fetchAllCoiRights();
+        return generalService.fetchAllCoiOpaRights();
     }
 }
