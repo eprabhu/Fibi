@@ -1438,7 +1438,7 @@ UPDATE ``DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review by <b>{REVIEWE
 	 
 
 INSERT INTO ``DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('23', 'Review assigned to  at <b>{LOCATION}</b> with status <b>{REVIEW_STATUS}</b> by <b>{ADMIN_NAME}</b>', 'Review Added without Reviewer', now(), 'quickstart');
+VALUES ('23', 'Review assigned at <b>{LOCATION}</b> with status <b>{REVIEW_STATUS}</b> by <b>{ADMIN_NAME}</b>', 'Review Added without Reviewer', now(), 'quickstart');
 
 INSERT INTO ``DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('24', 'Review modified and Assigned at <b>{LOCATION}</b> with status <b>{REVIEW_STATUS}</b> by <b>{ADMIN_NAME}</b>', 'Review Modified without Reviewer', now(), 'quickstart');
