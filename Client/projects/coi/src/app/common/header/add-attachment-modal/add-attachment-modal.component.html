@@ -1,0 +1,69 @@
+<!-- ADD ATTACHMENT  MODAL -->
+<div class="modal fade mySkinDialog" id="addAttachmentModal" tabindex="-1" role="dialog"
+    aria-labelledby="skippedSchedulesTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Attachment(s)</h5>
+                <button type="button" class="btn-close" id="external-review-doc-popup-dismiss-btn" aria-label="Close"
+                    (click)="clearAttachments()">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <app-file-drop [multiple]="true" (filesDropEvent)="fileDrop($event)"></app-file-drop>
+                </div>
+                <div *ngIf="uploadedFiles.length > 0">
+                    <div class="gridSkin">
+                        <div class="card shadow mb-2" *ngFor="let item of uploadedFiles; let i=index">
+                            <div class="row mb-2 mt-3">
+                                <div class="col-lg-3 col-12">
+                                    <label class="d-block"><span class="mandatory">*</span>Attachment Type</label>
+                                    <select id="external-review-doc-popup-type" class="form-control dateBox doc-type"
+                                        [ngClass]=" attachmentErrorMsg && !selectedAttachmentTypeCodes[i] ? 'is-invalid d-block' : ''"
+                                        [(ngModel)]="selectedAttachmentTypeCodes[i]"
+                                        (ngModelChange)="clearValidation(index)">
+                                        <option [ngValue]='undefined'>--Select--</option>
+                                        <option [value]="attachType?.attaTypeCode"
+                                            *ngFor="let attachType of attachmentTypes">
+                                            {{attachType?.description}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4 col-12">
+                                    <label class="d-block">Description </label>
+                                    <textarea id="desc" rows="1" id="external-review-doc-popup-desc"
+                                        [(ngModel)]="selectedAttachmentDescriptions[i]" placeholder=""
+                                        class="form-control dateBox" appLengthValidator [isShowLimiter]='true'
+                                        [limit]=2000>
+                    				</textarea>
+                                </div>
+                                <div class="col-lg-4 col-12">
+                                    <label><span class="mandatory">*</span>File</label>
+                                    <span class="d-block">{{item?.name}}</span>
+                                </div>
+                                <div class="col-lg-1 col text-right">
+                                    <ul class="actionButtonGroup mt-5">
+                                        <li>
+                                            <a id="external-review-doc-popup-dlt-btn" class="fa fa-trash-o hand-cursor"
+                                                title="Remove File" (click)="deleteFromUploadedFileList(i)"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="attachmentErrorMsg != null">
+                    <span class="mandatory font">{{attachmentErrorMsg}}</span>
+                </div>
+            </div>
+            <div class="modal-footer float-right mt-3" *ngIf="uploadedFiles.length > 0">
+                <button type="button" class="btn btn-outline-secondary" id="external-review-doc-popup-close-btn"
+                    data-bs-dismiss="modal" (click)="clearAttachments()">Close</button>
+                <button type="button" class="btn btn-primary fs-14" id="external-review-doc-popup-add-btn"
+                    (click)="saveAttachments()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
