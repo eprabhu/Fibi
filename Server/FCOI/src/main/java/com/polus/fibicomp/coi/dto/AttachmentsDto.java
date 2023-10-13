@@ -1,0 +1,48 @@
+package com.polus.fibicomp.coi.dto;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.polus.fibicomp.coi.pojo.Attachments;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class AttachmentsDto {
+
+	private Integer attachmentId;
+	
+	private String personId;
+	
+	private String attaTypeCode;
+
+	private String fileName;
+
+	private String mimeType;
+
+	private String description;
+
+	private String fileDataId;
+	
+	private String moduleNumber;
+	
+	private MultipartFile file;
+	
+	private List<Attachments> newAttachments;
+
+	private String createUser;
+
+	private Timestamp createTimestamp;
+
+	private String updateUser;
+
+	private Timestamp updateTimestamp;
+}

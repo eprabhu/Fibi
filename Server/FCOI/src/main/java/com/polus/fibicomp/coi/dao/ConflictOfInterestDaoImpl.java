@@ -106,6 +106,7 @@ import com.polus.fibicomp.pojo.DashBoardProfile;
 import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.security.AuthenticatedUser;
 import com.polus.fibicomp.view.DisclosureView;
+import com.polus.fibicomp.coi.pojo.Attachments;
 
 import oracle.jdbc.OracleTypes;
 
@@ -4047,6 +4048,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaQuery<Notes> query = builder.createQuery(Notes.class);
 		Root<Notes> rootCOINoteEntity = query.from(Notes.class);
 		query.where(builder.equal(rootCOINoteEntity.get("personId"), personId));
+		query.orderBy(builder.desc(rootCOINoteEntity.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
 
@@ -4063,6 +4065,37 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaQuery<Notes> query = builder.createQuery(Notes.class);
 		Root<Notes> rootCOINoteEntity = query.from(Notes.class);
 		query.where(builder.equal(rootCOINoteEntity.get("noteId"), noteId));
+		return session.createQuery(query).getSingleResult();
+	}
+	
+	@Override
+	public void deleteNote(Integer noteId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaDelete<Notes> query = builder.createCriteriaDelete(Notes.class);
+		Root<Notes> root = query.from(Notes.class);
+		query.where(builder.equal(root.get("noteId"), noteId));
+		session.createQuery(query).executeUpdate();
+	}
+
+	@Override
+	public List<Attachments> loadAllAttachmentsForPerson(String personId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Attachments> query = builder.createQuery(Attachments.class);
+		Root<Attachments> root = query.from(Attachments.class);
+		query.where(builder.equal(root.get("personId"), personId));
+		query.orderBy(builder.desc(root.get("updateTimestamp")));
+		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public DisclAttaType getDisclosureAttachmentForTypeCode(String attaTypeCode) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<DisclAttaType> query = builder.createQuery(DisclAttaType.class);
+		Root<DisclAttaType> root = query.from(DisclAttaType.class);
+		query.where(builder.equal(root.get("attaTypeCode"), attaTypeCode));
 		return session.createQuery(query).getSingleResult();
 	}
 

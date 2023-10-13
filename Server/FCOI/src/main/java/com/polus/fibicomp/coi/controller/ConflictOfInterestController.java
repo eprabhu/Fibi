@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,13 +30,14 @@ import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
@@ -660,5 +662,24 @@ public class ConflictOfInterestController {
     	logger.info("Request for getNoteDetailsForNoteId");
    		return conflictOfInterestService.getNoteDetailsForNoteId(noteId);
    	}
+
+	@DeleteMapping(value = "/deleteNote/{noteId}")
+	public ResponseEntity<Object> deleteNote(@PathVariable(value = "noteId", required = true) final Integer noteId) {
+		logger.info("Requesting for deleteNote");
+		return conflictOfInterestService.deleteNote(noteId);
+	}
+
+	@PostMapping(value = "/saveOrUpdateAttachments", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Object> saveOrUpdateAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam("formDataJson") String formDataJson) {
+		logger.info("Request for saveOrUpdateAttachments");
+		return conflictOfInterestService.saveOrUpdateAttachments(files, formDataJson);
+	}
+
+    @GetMapping("/loadAllAttachmentsForPerson/{personId}")
+   	public List<Attachments> loadAllAttachmentsForPerson(@PathVariable("personId") String personId) {
+    	logger.info("Request for loadAllAttachmentsForPerson");
+   		return conflictOfInterestService.loadAllAttachmentsForPerson(personId);
+   	};
 
 }
