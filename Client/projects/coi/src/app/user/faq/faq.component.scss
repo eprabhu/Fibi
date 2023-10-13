@@ -41,7 +41,7 @@
 .side-scroll{
     max-height: calc(100vh - 20rem);
     overflow-y: auto;
-    
+  
 }
 .title-primary{
     padding-top: 8px;
@@ -121,11 +121,11 @@ nav[data-toggle="toc"] {
     font-size: 1.4rem;
     margin: 0;
     font-weight: 600;
-    background-color: #e7fbf9;
+    background-color: #007dec;
     }
 .categorylist-active a h4
 {
-color: #05ab9c;
+color: #fff;
 }
 
 .question-list {
@@ -136,7 +136,7 @@ color: #05ab9c;
 }
 .questionlist-active{
     padding:5px 13px;
-    color: #05ab9c;
+    color: #b90b8e;
 }
 .question-tab ul{
     list-style-type: none;
@@ -184,7 +184,7 @@ color: #05ab9c;
     height: 0;
     border-width: 10px;
     border-style: solid;
-    border-color: transparent #55ab9c transparent transparent;
+    border-color: transparent #007dec transparent transparent;
     position: absolute;
     left: -20px;
     top: 15px;

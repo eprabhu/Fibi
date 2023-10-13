@@ -4,6 +4,7 @@ import { faqService } from './faq.service';
 import { deepCloneObject, fileDownloader } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { fadeInOutHeight } from '../../common/utilities/animations';
+import { AddFaqService } from './add-faq/add-faq.service';
 
 declare const $: any;
 
@@ -33,13 +34,19 @@ export class FaqComponent implements OnInit {
     answer: any;
     questionid: any;
     allQuestionData: any; // All Questions
-    editIndex = -1;
+    editIndex: any;
+    tempQuestion: any;
+    questionIndex: any;
+    isCollapsed: any;
 
-    constructor(private _faqService: faqService) {
+    constructor(private _faqService: faqService,
+                private _addfaqservice: AddFaqService) {
     }
 
     ngOnInit() {
-        this.displayFAQ(1, '', true, 0);
+         this.displayFAQ(1, '', true, 0);
+        // this.loadQuestions(this.searchText);
+        // updatedData($event);
     }
 
     ngOnDestroy() {
@@ -63,15 +70,19 @@ export class FaqComponent implements OnInit {
        * @param  {} categoryName
        * returns the current category name
        */
-    displayFAQ(categoryCode, subCategoryCode, isSelected = false, index,) {
+    displayFAQ(categoryCode, subCategoryCode, isSelected = false, index, ) {
         this.selectedCategory = index;
         this.faqRequestObject.categoryCode = categoryCode;
         this.faqRequestObject.subCategoryCode = subCategoryCode;
         this.$subscriptions.push(this._faqService.getFaq(this.faqRequestObject).subscribe((data: any) => {
-            if (isSelected) this.categoryList = data.faqCategory;
+            if (isSelected) {
+            this.categoryList = data.faqCategory;
             this.questionsList = data.faq;
-            this.tempQuestionList = this.questionsList;
+            this.tempQuestionList = this.questionsList.reverse();
+            this._faqService.faqList = this.tempQuestionList;
+            // this.tempQuestionList.unshift(this._addfaqservice.newlyAddedData);
             this.categoryName = this.categoryList.find(type => type.categoryCode === categoryCode).description;
+            }
         }));
     }
 
@@ -119,16 +130,13 @@ export class FaqComponent implements OnInit {
      * @param  {} searchText
      * loads faq according to quesion or answer searched
      */
-    loadQuestions(searchText) {
-        this.$subscriptions.push(this._faqService.getFaq(searchText).subscribe((data: any) => {
-            this.faqDetails = data;
-        }));
-    }
+
     // Used for editing
     editdata(data, index) {
-        this.buttonName = 'Update'
+        this.buttonName = 'Update';
         this.editIndex = index;
-        this.allQuestionData = deepCloneObject(data);//question data
+        this.allQuestionData = deepCloneObject(data); // question data
+         this.questionIndex = index;
         $('#add-new-faq').modal('show');
     }
     // passing the data from the child(add-faq) to parent(faq)
@@ -139,5 +147,12 @@ export class FaqComponent implements OnInit {
     addNewQuestion() {
         this.buttonName = 'Add Questions';
         this.allQuestionData = [];
+    }
+
+    // function is to updating the current data with the updata
+    updatedData(updatedFaq) {
+        this.tempQuestionList[this.questionIndex].question = updatedFaq[0].question;
+        this.tempQuestionList[this.questionIndex].answer = updatedFaq[0].answer;
+        this.tempQuestionList[this.questionIndex].url = updatedFaq[0].url;
     }
 }
