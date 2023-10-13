@@ -4,16 +4,19 @@ import {Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import {ADMIN_DASHBOARD_RIGHTS} from '../../app-constants';
+import { HeaderService } from './header.service';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 
 class ChangePassword {
     password = '';
     reEnterPassword = '';
 }
+
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
+    providers: [HeaderService],
     encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit, OnDestroy {
@@ -36,20 +39,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isAdministrator: boolean = false;
     ispersondetailsmodal = false;
     userDetails = null;
+    isShowCreateNoteModal = false;
+    noteComment: any;
+    isOpenAttachmentModal = false;
 
-    constructor(public _router: Router, public commonService: CommonService) {
+    constructor(public _router: Router, public commonService: CommonService, private _headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
     }
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
         this.isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
-                                || this.commonService.isCoiReviewer;
+            || this.commonService.isCoiReviewer;
         this.navigateForHomeIcon();
         this.userDetails = {
-           personId: this.commonService.getCurrentUserDetail('personId'),
-           fullName: this.commonService.getCurrentUserDetail('fullName')
+            personId: this.commonService.getCurrentUserDetail('personId'),
+            fullName: this.commonService.getCurrentUserDetail('fullName')
         };
+    }
+
+    redirectToOpa() {
+        this._router.navigate(['/coi/opa/form'],
+            {queryParams: {disclosureId: 2}});
     }
 
     navigateForHomeIcon(): void {
@@ -89,18 +100,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     passwordLengthValidator() {
-            clearTimeout(this.timer.password);
-            this.timer.password = setTimeout(() => {
-                this.resetPassword.password = this.resetPassword.password.trim();
-                this.passwordValidation.delete('password-length');
-                this.passwordAtleast7Characters();
-            });
-    }
-
-    private passwordAtleast7Characters() {
-        if (this.resetPassword.password.length < 7) {
-            this.passwordValidation.set('password-length', true);
-        }
+        clearTimeout(this.timer.password);
+        this.timer.password = setTimeout(() => {
+            this.resetPassword.password = this.resetPassword.password.trim();
+            this.passwordValidation.delete('password-length');
+            this.passwordAtleast7Characters();
+        });
     }
 
     checkSamePassword() {
@@ -114,23 +119,68 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
+    triggerClickForId(modalId: string) {
+        if (modalId) {
+            document.getElementById(modalId).click();
+        }
+    }
+
+    closePersonDetailsModal(event) {
+        this.ispersondetailsmodal = event;
+
+    }
+
+    createOPA() {
+        this._headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+            this.commonService.getCurrentUserDetail('homeUnit'))
+            .subscribe((res: any) => {
+                this._router.navigate(['/coi/opa/form'], { queryParams: { disclosureId: res.opaDisclosureId } });
+            });
+    }
+
+    private passwordAtleast7Characters() {
+        if (this.resetPassword.password.length < 7) {
+            this.passwordValidation.set('password-length', true);
+        }
+    }
+
     private confirmPasswordSame() {
         if (this.resetPassword.password !== this.resetPassword.reEnterPassword) {
             this.passwordValidation.set('same-password', true);
         }
     }
-
-    triggerClickForId(modalId: string) {
-        document.getElementById(modalId)?.click();
-    }
     
-    closePersonDetailsModal(event) {
-        this.ispersondetailsmodal = event;
+    saveOrUpdateNote() {
+        if (this.noteComment.trim()) {
+            this.$subscriptions.push(this._headerService.saveOrUpdatePersonNote({
+                'personId': this.commonService.getCurrentUserDetail('personId'),
+                'content': this.noteComment.trim()
+            }).subscribe((ele: any) => {
+                this.isShowCreateNoteModal = false;
+                this.noteComment = '';
+                if(this._router.url.includes('/coi/user-dashboard/notes')) {
+                    this.commonService.$updateLatestNote.next(ele);
+                }
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Note added successfully.');
+            } , error => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding note, please try again.');
+            }));
+        }
+    }
 
+    showNotes() {
+        this.isShowCreateNoteModal = true;
+        setTimeout(() => {
+            document.getElementById("textArea").focus();
+        });
+    }
+
+    closeAddNote() {
+        this.isShowCreateNoteModal = false;
+        this.noteComment = '';
+    }
+
+    closeModal() {
+        this.isOpenAttachmentModal = false;
     }
 }
-function thisnavigateForHomeIcon() {
-    throw new Error('Function not implemented.');
-}
-
-

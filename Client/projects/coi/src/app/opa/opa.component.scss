@@ -1,10 +1,11 @@
 .disclosure-heading {
-    height: 45px;
-    background-color: #E8E8E8;
+    height: 55px;
+    background-color: #f6f8fa;
+    border-bottom: 1px solid #0000000d;
 }
 
 .triple-card {
-    height: 96px;
+    height: 76px;
 }
 
 .navigation-tabs {
@@ -12,8 +13,9 @@
     background-color: #E4F1FF;
 }
 
-.collapsed-nav-tabs {
-    height: 58px;
+
+.collapsed-action-section {
+    height: 101px;
 }
 
 .notes {
@@ -194,12 +196,11 @@ table {
 }
 
 .min-height-189 {
-    min-height: 167px;
-    max-height: 167px;
+    min-height: 202px;
 }
 
 .min-height-90 {
-    min-height: 90.5px;
+    min-height: 101px;
 }
 
 .btn-outline-grey {
@@ -373,7 +374,6 @@ table {
 
 .left-div {
     width: 75%;
-    background: white;
 }
 
 .right-div {
@@ -439,4 +439,8 @@ table {
 
 ::-webkit-scrollbar-thumb {
     background: #ccc
+}
+
+.fit-height {
+    height: 34px;
 }

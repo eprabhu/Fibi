@@ -634,7 +634,8 @@
   
     <div *ngIf="entityRelations.length>0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
       <nav aria-label="pagination section" class="pagination justify-content-end m-3">
-        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount">
+        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="resultCount"
+          [defaultCurrentPage]="entityManagementService.relationshipDashboardRequest.currentPage">
         </app-pagination>
       </nav>
     </div>

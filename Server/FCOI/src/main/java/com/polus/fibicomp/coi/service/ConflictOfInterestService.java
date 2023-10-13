@@ -32,6 +32,7 @@ import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.inbox.pojo.Inbox;
+import com.polus.fibicomp.coi.pojo.Attachments;
 
 @Transactional
 @Service(value = "conflictOfInterestService")
@@ -569,5 +570,11 @@ public interface ConflictOfInterestService {
     ResponseEntity<Object> saveOrUpdatePersonNote(NotesDto dto);
     
     Notes getNoteDetailsForNoteId(Integer noteId);
+    
+    ResponseEntity<Object> deleteNote(Integer noteId);
+    
+    ResponseEntity<Object> saveOrUpdateAttachments(MultipartFile[] files, String formDataJSON);
+    
+    List<Attachments> loadAllAttachmentsForPerson(String personId);
 
 }

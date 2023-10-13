@@ -14,8 +14,7 @@
           <span class="sr-only">Previous</span>
         </a>
       </li>
-      <li class="page-item" [ngClass]="{'active':currentPage == page}"
-        *ngFor="let page of paginationList; let index = index">
+      <li class="page-item" *ngFor="let page of paginationList; let index = index" [ngClass]="{'active':currentPage == page}">
         <a class="page-link" [ngClass]="{'disabled': page === null}" (click)="updateCurrentPage(page)"
           tabindex="0">{{page || '...'}}</a>
       </li>

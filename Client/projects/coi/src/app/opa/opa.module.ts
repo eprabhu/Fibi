@@ -5,18 +5,24 @@ import {RouterModule, Routes} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {SharedComponentModule} from '../shared-components/shared-component.module';
+import {FormsModule} from '@angular/forms';
+import {ResolveServiceService} from './services/resolve-service.service';
+import {DataStoreService} from './services/data-store.service';
+import {OpaService} from './services/opa.service';
 import {SharedModule} from '../shared/shared.module';
-import {FormBuilderViewComponent} from './form-builder-view/form-builder-view.component';
-import { FormSectionsComponent } from './form-builder-view/form-sections/form-sections.component';
-import { FormsModule } from '@angular/forms';
 
-const routes: Routes = [{path: '', component: OpaComponent}];
+const routes: Routes = [{
+    path: '', component: OpaComponent, canActivate: [ResolveServiceService], children: [
+        {path: '', redirectTo: 'form', pathMatch: 'full'},
+        {path: 'form', loadChildren: () => import('./form/form.module').then(m => m.FormModule)},
+        {path: 'review', loadChildren: () => import('./review/review.module').then(m => m.ReviewModule)},
+        {path: 'history', loadChildren: () => import('./history/history.module').then(m => m.HistoryModule)}
+    ]
+}];
 
 @NgModule({
     declarations: [
         OpaComponent,
-        FormBuilderViewComponent,
-        FormSectionsComponent
     ],
     imports: [
         CommonModule,
@@ -24,8 +30,13 @@ const routes: Routes = [{path: '', component: OpaComponent}];
         MatIconModule,
         MatMenuModule,
         SharedComponentModule,
-        SharedModule,
-        FormsModule
+        FormsModule,
+        SharedModule
+    ],
+    providers: [
+        OpaService,
+        DataStoreService,
+        ResolveServiceService
     ]
 })
 export class OpaModule {

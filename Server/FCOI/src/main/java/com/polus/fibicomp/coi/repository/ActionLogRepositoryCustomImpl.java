@@ -1,6 +1,5 @@
 package com.polus.fibicomp.coi.repository;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -26,7 +25,8 @@ import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.common.dao.CommonDao;
-import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.opa.pojo.OPAActionLog;
+import com.polus.fibicomp.opa.pojo.OPAActionLogType;
 
 @Repository
 @Primary
@@ -146,6 +146,27 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
 		query.where(builder.and(builder.equal(root.get("disclosureId"), disclosureId),
 				root.get("actionTypeCode").in(actionTypeCodes)));
 		query.orderBy(builder.desc(root.get("updateTimestamp")));
+		return session.createQuery(query).getResultList();
+	}
+
+    @Override
+    public OPAActionLogType getOPAActionType(String actionLogTypeCode) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT oa FROM OPAActionLogType oa WHERE oa.actionTypeCode = :actionTypeCode");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("actionTypeCode", actionLogTypeCode);
+        return (OPAActionLogType) query.getResultList().get(0);
+    }
+
+    @Override
+	public List<OPAActionLog> fetchOpaDisclosureActionLogsBasedOnId(Integer opaDisclosureId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<OPAActionLog> query = builder.createQuery(OPAActionLog.class);
+		Root<OPAActionLog> root = query.from(OPAActionLog.class);
+        query.where(builder.equal(root.get("opaDisclosureId"), opaDisclosureId));
+        query.orderBy(builder.desc(root.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
 

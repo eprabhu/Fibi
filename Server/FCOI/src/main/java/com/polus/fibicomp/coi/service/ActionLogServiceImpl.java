@@ -33,6 +33,9 @@ import com.polus.fibicomp.coi.repository.DisclosureActionTypeRepository;
 import com.polus.fibicomp.coi.repository.TravelDisclosureActionLogRepository;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.opa.dto.OPACommonDto;
+import com.polus.fibicomp.opa.pojo.OPAActionLog;
+import com.polus.fibicomp.opa.pojo.OPAActionLogType;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
@@ -176,9 +179,12 @@ public class ActionLogServiceImpl implements ActionLogService {
 
 	@Override
 	public ResponseEntity<Object> getDisclosureHistoryById(Integer disclosureId) {
-		List<String> reviewActionTypeCodes = Arrays.asList(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_START_REVIEW,
-				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_COMPLETE_REVIEW,
-				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REMOVED,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REASSIGNED);
+		List<String> reviewActionTypeCodes = Arrays.asList(Constants.COI_DIS_ACTION_LOG_CREATED_REVIEW_WITH_REVIEWER, Constants.COI_DIS_ACTION_LOG_CREATED_REVIEW_WITHOUT_REVIEWER,
+				Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_START_REVIEW, Constants.COI_DIS_ACTION_LOG_MODIFIED_REVIEW_WITHOUT_REVIEWER,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITH_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_COMPLETE_REVIEW,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITHOUT_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITH_REVIEWER,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITHOUT_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITH_REVIEWER,
+				Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITHOUT_REVIEWER, Constants.COI_DIS_ACTION_LOG_MODIFIED_REVIEW_WITH_REVIEWER);
 		List<DisclosureActionLog> disclsouretActionLogs = actionLogRepositoryCustom.fetchDisclosureActionLogsBasedOnDisclosureId(disclosureId, reviewActionTypeCodes);
 		List<HistoryDto> disclosureHistories = new ArrayList<>();
 		disclsouretActionLogs.forEach(disclsouretActionLog -> {
@@ -316,9 +322,12 @@ public class ActionLogServiceImpl implements ActionLogService {
 
 	@Override
 	public ResponseEntity<Object> getReviewHistoryById(Integer disclosureId) {
-		List<String> actionTypeCodes = Arrays.asList(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_START_REVIEW,
-				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_COMPLETE_REVIEW,
-				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REMOVED,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_REASSIGNED);
+		List<String> actionTypeCodes = Arrays.asList(Constants.COI_DIS_ACTION_LOG_CREATED_REVIEW_WITH_REVIEWER, Constants.COI_DIS_ACTION_LOG_CREATED_REVIEW_WITHOUT_REVIEWER,
+				Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_START_REVIEW, Constants.COI_DIS_ACTION_LOG_MODIFIED_REVIEW_WITHOUT_REVIEWER,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITH_REVIEWER, Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_COMPLETE_REVIEW,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITHOUT_REVIEWER, Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITH_REVIEWER,
+				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITHOUT_REVIEWER, Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITH_REVIEWER,
+				Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITHOUT_REVIEWER, Constants.COI_DIS_ACTION_LOG_MODIFIED_REVIEW_WITH_REVIEWER);
 		List<DisclosureActionLog> disclsouretActionLogs = actionLogRepositoryCustom.fetchReviewActionLogs(disclosureId, actionTypeCodes);
 		List<HistoryDto> disclosureHistories = new ArrayList<>();
 		disclsouretActionLogs.forEach(disclsouretActionLog -> {
@@ -333,6 +342,50 @@ public class ActionLogServiceImpl implements ActionLogService {
 			disclosureHistories.add(historyDto);
 		});
 		return new ResponseEntity<>(disclosureHistories, HttpStatus.OK);
+	}
+
+	@Override
+	public void saveOPAActionLog(String actionLogTypeCode, OPACommonDto opaCommonDto) {
+		OPAActionLogType opaActionLogType = actionLogRepositoryCustom.getOPAActionType(actionLogTypeCode);
+		if (opaActionLogType != null) {
+			String message = buildOPALogMessage(opaActionLogType.getMessage(), opaCommonDto);
+			OPAActionLog opaActionLog = OPAActionLog.builder()
+					.actionTypeCode(actionLogTypeCode)
+					.comment(opaCommonDto.getComment())
+					.description(message)
+					.opaDisclosureId(opaCommonDto.getOpaDisclosureId())
+					.opaDisclosureNumber(opaCommonDto.getOpaDisclosureNumber())
+					.updateTimestamp(commonDao.getCurrentTimestamp()).updateUser(AuthenticatedUser.getLoginUserName())
+					.build();
+			actionLogRepositoryCustom.saveObject(opaActionLog);
+		}
+	}
+
+	private String buildOPALogMessage(String message, OPACommonDto commonDto) {
+		Map<String, String> placeholdersAndValues = new HashMap<>();
+		placeholdersAndValues.put("{REPORTER}", commonDto.getUpdateUserFullName());
+		placeholdersAndValues.put("{ADMIN_NAME}", commonDto.getUpdateUserFullName());
+		placeholdersAndValues.put("{ASSIGNED_ADMIN}", commonDto.getAdminPersonName());
+		placeholdersAndValues.put("{REASSIGNED_ADMIN}", commonDto.getReassignedAdminPersonName());
+		return renderPlaceholders(message, placeholdersAndValues);
+	}
+
+	@Override
+	public ResponseEntity<Object> getOpaDisclosureHistoryById(Integer opaDisclosureId) {
+		List<OPAActionLog> opaActionLogs = actionLogRepositoryCustom.fetchOpaDisclosureActionLogsBasedOnId(opaDisclosureId);
+		List<HistoryDto> opaDisclosureHistories = new ArrayList<>();
+		opaActionLogs.forEach(actionLog -> {
+			HistoryDto historyDto = new HistoryDto();
+			historyDto.setUpdateTimestamp(actionLog.getUpdateTimestamp());
+			if (actionLog.getUpdateUser() != null) {
+				historyDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(actionLog.getUpdateUser()));
+			}
+			historyDto.setActionTypeCode(actionLog.getActionTypeCode());
+			historyDto.setMessage(actionLog.getDescription());
+			historyDto.setComment(actionLog.getComment());
+			opaDisclosureHistories.add(historyDto);
+		});
+		return new ResponseEntity<>(opaDisclosureHistories, HttpStatus.OK);
 	}
 
 }

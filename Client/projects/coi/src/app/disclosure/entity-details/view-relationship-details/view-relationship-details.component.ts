@@ -3,7 +3,7 @@ import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription, forkJoin } from 'rxjs';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../../app-constants';
+import { ADMIN_DASHBOARD_URL, HOME_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
@@ -52,18 +52,21 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     RELATION_HELP_TEXT_1 = "This description is presented in the Relationship section to help you relate this entity to your research projects. Please enter an adequate description of the organization, and of your role with them,to aid both you, and a reviewers' understanding of the association between the entity and work";
     RELATION_HELP_TEXT_2 = "Please enter an adequate description of the entity's principal are of business.";
     RELATION_HELP_TEXT_3 = "Please enter an adequate description of the entity's relationship to your University responsibilities.";
+    isCOIAdministrator = true;
 
-    constructor(public entityDetailsServices: EntityDetailsService, private _router: Router,
-        private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService) {
-    }
+    constructor( public entityDetailsServices: EntityDetailsService, private _router: Router,
+                 private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService ) {
+    } 
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
     }
 
     async ngOnInit() {
+        this.getQueryParamChange();
         await this.getEntityDetails(this.getEntityId());
         this.getQuestionnaire();
+        this.isCOIAdministrator = this.commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
     }
 
     async ngOnChanges() {
@@ -201,7 +204,8 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     goToHome() {
-        this._router.navigate(['/coi/user-dashboard/entities']);
+        const reRouteUrl = this.isCOIAdministrator ? ADMIN_DASHBOARD_URL : HOME_URL;
+        this._router.navigate([reRouteUrl]);
     }
 
     closeActivateInactivateSfiModal(event) {
@@ -333,6 +337,12 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     modifySfi() {
         this.$subscriptions.push(this.entityDetailsServices.modifyPersonEntity({ personEntityId: this.getEntityId() }).subscribe((res: any) => {
             this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: res.personEntityId, mode: 'edit' } });
+        }));
+    }
+
+    getQueryParamChange() {
+        this.$subscriptions.push(this._route.queryParams.subscribe(params => {
+            this.getEntityDetails(this.getEntityId());
         }));
     }
 

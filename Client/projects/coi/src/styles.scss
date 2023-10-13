@@ -33,6 +33,7 @@ body {
 // scroll design
 ::-webkit-scrollbar {
   width: 12px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -538,3 +539,9 @@ nav ul li.active {
 .entity-down-arrow {
   color:#848484;
 }
+
+.grid-back {
+  background-size: 90px 90px;
+  background-image: linear-gradient(to right, #dad3d3 1px, transparent 1px), linear-gradient(to bottom, #cdc4c4 1px, transparent 1px);
+}
+

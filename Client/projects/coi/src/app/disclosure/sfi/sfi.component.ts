@@ -159,8 +159,10 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     actionsOnPageChange(event) {
+        if (this.currentPage != event) {
             this.currentPage = event;
             this.$fetchSFIList.next();
+        }
     }
 
     hideSfiNavBar() {

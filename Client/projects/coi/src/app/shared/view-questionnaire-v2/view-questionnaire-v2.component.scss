@@ -81,3 +81,13 @@
 .help-text-close {
     border: 0px solid !important;
 }
+
+.answer-options {
+    label {
+        margin-left: 1rem;
+    }
+    span {
+        display: flex;
+        align-items: center;
+    }
+}

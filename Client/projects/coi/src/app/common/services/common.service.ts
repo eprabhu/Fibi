@@ -60,6 +60,8 @@ export class CommonService {
     $ScrollAction = new Subject<{event: Event,pageYOffset: number}>();
     $commentConfigurationDetails =  new BehaviorSubject<any>({});
     enableGraph = false;
+    $updateLatestNote = new Subject();
+    $updateLatestAttachment = new Subject();
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
@@ -262,11 +264,15 @@ export class CommonService {
             case '1':
                 return 'green-badge';
             case '2':
+            case '5':
                 return 'brown-badge';
             case '3':
+            case '6':
                 return 'red-badge';
             case '4':
                 return 'green-badge';
+            default:
+                return 'yellow-badge';
         }
     }
 

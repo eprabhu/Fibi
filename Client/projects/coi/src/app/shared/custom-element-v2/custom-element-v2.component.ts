@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CustomElementService } from '../custom-element/custom-element.service';
 import { CommonService } from '../../common/services/common.service';
 import { Observable, Subscription } from 'rxjs';
@@ -16,25 +17,39 @@ import {
     getEndPointOptionsForSponsor
 } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { AutoSaveService } from '../../../../../fibi/src/app/common/services/auto-save.service';
 import { DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
 
+class CustomAnswer {
+    columnId = null;
+    customDataElementsId = null;
+    customDataId = null;
+    description = null;
+    moduleItemCode = null;
+    moduleItemKey = null;
+    moduleSubItemCode = null;
+    moduleSubItemKey = null;
+    updateTimestamp = null;
+    updateUser = null;
+    value = null;
+    versionNumber = null;
+  }
 @Component({
     selector: 'app-custom-element-v2',
     templateUrl: './custom-element-v2.component.html',
     styleUrls: ['./custom-element-v2.component.scss']
 })
-export class CustomElementV2Component implements OnInit, OnInit, OnDestroy {
+export class CustomElementV2Component implements OnInit, OnChanges, OnDestroy {
 
     @Input() moduleItemKey;
     @Input() moduleCode;
     @Input() viewMode;
-    @Input() customElement;
+    @Input() customElementVO;
     @Output() dataChangeEvent = new EventEmitter<boolean>();
-    @Input() externalSaveEvent: Observable<any>;
-    @Input() isShowSave = true;
+    @Output() saveEvent = new EventEmitter<any>();
+    @Input() externalEvent: Observable<any>;
+    @Input() isShowSave = false;
     @Input() isShowCollapse = false;
-    customElements: any = [];
+    customElement;
     result: any = {};
     isLength = false;
     isType = false;
@@ -81,15 +96,15 @@ export class CustomElementV2Component implements OnInit, OnInit, OnDestroy {
     constructor(private _customService: CustomElementService, public _commonService: CommonService,
         private _elasticConfig: ElasticConfigService) { }
 
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.customElementVO.customElements) {
+            this.customElement = this.customElementVO.customElements[0];
+            this.setDefaultValues(this.customElement);
+        }
+    }
+
     ngOnInit() {
-        this.$subscriptions.push(this._customService.getCustomData(this.moduleCode, this.moduleItemKey)
-            .subscribe(data => {
-                this.result = data || [];
-                if (this.result) {
-                    this.customElements = this.result.customElements;
-                    this.setDefaultValues(this.customElements);
-                }
-            }));
         this.autoSaveEvent();
     }
 
@@ -101,14 +116,12 @@ export class CustomElementV2Component implements OnInit, OnInit, OnDestroy {
    * @param  {} customElementList
    * sets the default value if any based on fieldType.
    */
-    setDefaultValues(customElementList) {
-        customElementList.forEach(element => {
-            switch (element.filterType) {
-                case 'Elastic Search': this.setElasticOptions(element); break;
-                case 'Autosuggest': this.setEndpointOptions(element); break;
-                default: element.answers.findIndex(item => item.value = item.value ? item.value : element.defaultValue);
-            }
-        });
+    setDefaultValues(customElement) {
+        switch (customElement.filterType) {
+            case 'Elastic Search': this.setElasticOptions(customElement); break;
+            case 'Autosuggest': this.setEndpointOptions(customElement); break;
+            default: customElement.answers.findIndex(item => item.value = item.value ? item.value : customElement.defaultValue);
+        }
     }
 
     /**
@@ -117,8 +130,16 @@ export class CustomElementV2Component implements OnInit, OnInit, OnDestroy {
    * user click the general save button.
    */
     autoSaveEvent() {
-        if (this.externalSaveEvent) {
-            this.$subscriptions.push(this.externalSaveEvent.subscribe(_event => this.isDataChange && this.saveCustomData()));
+        if (this.externalEvent) {
+            this.$subscriptions.push(this.externalEvent.subscribe((event: any) => {
+                if (event.eventType === 'EXTERNAL_SAVE' && this.isDataChange) {
+                    this.saveCustomDataExternal();
+                } else if (event.eventType === 'SAVE' && this.isDataChange) {
+                    this.saveCustomData();
+                } else if (event.eventType === 'SAVE_COMPLETE') {
+                    this.isDataChange = false;
+                }
+            }));
         }
     }
 
@@ -208,44 +229,42 @@ export class CustomElementV2Component implements OnInit, OnInit, OnDestroy {
      *  data description and corresponding type codes are listed below.
      * 1-String, 2-Number, 3-Date, 4-Check Box, 5-Radio Button, 6-Elastic Search, 7-End Point Search, 8-System Lookup, 9-User Lookup
      */
-    checkMandatory() {
-        this.checkEmptyFlag = false;
-        this.radioEmptyFlag = false;
-        this.customElements.forEach((field, index) => {
-            if (field.filterType !== 'Radio Button' && field.filterType !== 'Check Box') {
-                const INDEX = field.answers.findIndex(item => (item.value === null || item.value === ''));
-                if (INDEX >= 0 && field.isRequired === 'Y') {
-                    this.isValueEmpty[index] = false;
-                    this.validationId[index] = index;
-                } else {
-                    this.isValueEmpty[index] = true;
-                }
-            }
-            this.checkEmptyFlag = false;
-            this.radioEmptyFlag = false;
-            if (field.filterType === 'Check Box' && field.isRequired === 'Y') {
-                this.checkEmptyFlag = !!field.answers.find(item => item.value === true || item.value === 'true');
-            }
-            if (this.checkEmptyFlag === true) {
-                this.checkEmpty[index] = false;
-                this.validationId[index] = index;
-            } else {
-                this.checkEmpty[index] = true;
-            }
-            if (field.filterType === 'Radio Button' && field.isRequired === 'Y') {
-                this.radioEmptyFlag = !!field.answers.find(item => item.value !== null && item.value !== '');
-            }
-            if (this.radioEmptyFlag === true) {
-                this.radioEmpty[index] = false;
-                this.validationId[index] = index;
-            } else {
-                this.radioEmpty[index] = true;
-            }
-        });
-    }
+    // checkMandatory() {
+    //     this.checkEmptyFlag = false;
+    //     this.radioEmptyFlag = false;
+    //         if (this.customElement.filterType !== 'Radio Button' && this.customElement.filterType !== 'Check Box') {
+    //             const INDEX = this.customElement.answers.findIndex(item => (item.value === null || item.value === ''));
+    //             if (INDEX >= 0 && this.customElement.isRequired === 'Y') {
+    //                 this.isValueEmpty[index] = false;
+    //                 this.validationId[index] = index;
+    //             } else {
+    //                 this.isValueEmpty[index] = true;
+    //             }
+    //         }
+    //         this.checkEmptyFlag = false;
+    //         this.radioEmptyFlag = false;
+    //         if (this.customElement.filterType === 'Check Box' && this.customElement.isRequired === 'Y') {
+    //             this.checkEmptyFlag = !!this.customElement.answers.find(item => item.value === true || item.value === 'true');
+    //         }
+    //         if (this.checkEmptyFlag === true) {
+    //             this.checkEmpty[index] = false;
+    //             this.validationId[index] = index;
+    //         } else {
+    //             this.checkEmpty[index] = true;
+    //         }
+    //         if (this.customElement.filterType === 'Radio Button' && this.customElement.isRequired === 'Y') {
+    //             this.radioEmptyFlag = !!this.customElement.answers.find(item => item.value !== null && item.value !== '');
+    //         }
+    //         if (this.radioEmptyFlag === true) {
+    //             this.radioEmpty[index] = false;
+    //             this.validationId[index] = index;
+    //         } else {
+    //             this.radioEmpty[index] = true;
+    //         }
+    // }
 
     saveCustomData() {
-        this.checkMandatory();
+        // this.checkMandatory();
         if ((this.isValueEmpty.filter(item => item === false).length !== 0) ||
             (this.checkEmpty.filter(check => check === false).length !== 0) ||
             (this.radioEmpty.filter(radio => radio === false).length !== 0)) {
@@ -259,7 +278,7 @@ export class CustomElementV2Component implements OnInit, OnInit, OnDestroy {
             CUSTOM_DATA.updateTimestamp = new Date().getTime();
             CUSTOM_DATA.moduleItemKey = this.moduleItemKey;
             CUSTOM_DATA.moduleCode = this.moduleCode;
-            CUSTOM_DATA.customElements = this.customElements;
+            CUSTOM_DATA.customElements = this.customElement;
             if (!this.isSaving) {
                 this.isSaving = true;
                 this.$subscriptions.push(this._customService.saveCustomData(CUSTOM_DATA)
@@ -269,7 +288,7 @@ export class CustomElementV2Component implements OnInit, OnInit, OnDestroy {
                             if (this.isShowSave) {
                                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Other Information(s) saved successfully.');
                             }
-                            this.customElements = this.result.customElements;
+                            this.customElement = this.result.customElements;
                             this.isRadioEmpty = true;
                             this.isDataChange = false;
                             this.dataChangeEvent.emit(false);
@@ -283,10 +302,42 @@ export class CustomElementV2Component implements OnInit, OnInit, OnDestroy {
         }
     }
 
+    private saveCustomDataExternal() {
+        if (this.isDataChange) {
+            const CUSTOM_DATA: any = {};
+            CUSTOM_DATA.updateTimestamp = new Date().getTime();
+            CUSTOM_DATA.moduleItemKey = this.moduleItemKey;
+            CUSTOM_DATA.moduleCode = this.moduleCode;
+            CUSTOM_DATA.customElements = [this.customElement];
+            this.saveEvent.emit({ status: 'EXTERNAL_SAVE', data: CUSTOM_DATA});
+        }
+    }
+
     emitDataChange() {
         if (!this.isDataChange) {
             this.isDataChange = true;
             this.dataChangeEvent.emit(this.isDataChange);
         }
     }
+
+    checkIsSelected(answers: Array<any>, optionId: string) {
+        return !!answers.find(ele => ele.value === optionId);
+    }
+
+    setAnswerForCheckBox(list: any, event: boolean, option: any) {
+        if (event) {
+            const CUSTOM_ANSWER = new CustomAnswer();
+            CUSTOM_ANSWER.value = option.customDataOptionId;
+            CUSTOM_ANSWER.description = option.optionName;
+            list.answers.push(CUSTOM_ANSWER);
+        } else {
+         this.removeAnswer(list, option);
+        }
+      }
+
+      private removeAnswer(list: any, option: any) {
+        const ANSWER = list.answers.find(ele => ele.value === option.customDataOptionId);
+        ANSWER.description = null;
+        ANSWER.value = null;
+      }
 }

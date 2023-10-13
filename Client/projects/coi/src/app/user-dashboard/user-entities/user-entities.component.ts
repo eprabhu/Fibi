@@ -117,8 +117,10 @@ removeEntityId() {
   }
 
   actionsOnPageChangeEvent(event) {
-    this.sfiDashboardRequestObject.currentPage = event;
-    this.$fetchSFI.next();
+    if (this.sfiDashboardRequestObject.currentPage != event) {
+      this.sfiDashboardRequestObject.currentPage = event;
+      this.$fetchSFI.next();
+    }
   }
 
   activateDeactivateEvent(event) {

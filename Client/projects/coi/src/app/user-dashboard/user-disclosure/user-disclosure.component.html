@@ -10,12 +10,12 @@
                                         <strong class="fs-15">FCOI
                                             Disclosure</strong>
                                     </div>
-                                    <div class="col d-flex justify-content-end text-muted"><a class="view-button d-flex align-items-center" [queryParams]={disclosureId:disclosure.disclosureId}
+                                    <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center" [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         title="Click to view FCOI Disclosure details"
                                         [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                         area-describedby="Click to view FCOI Disclosure details">
-                                        <span>View</span> <mat-icon>chevron_right</mat-icon>
+                                        <span class="hyper-link">View</span> <mat-icon class="hyper-link">chevron_right</mat-icon>
                                     </a></div>
                                 </div>
     
@@ -106,12 +106,12 @@
                                         <strong class="fs-15">FCOI
                                             Disclosure</strong>
                                     </div>
-                                    <div class="col d-flex justify-content-end text-muted"><a class="view-button d-flex align-items-center " [queryParams]={disclosureId:disclosure.disclosureId}
+                                    <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center " [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         title="Click to view FCOI Disclosure details"
                                         [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                         area-describedby="Click to view FCOI Disclosure details">
-                                        <span>View</span> <mat-icon>chevron_right</mat-icon>
+                                        <span class="hyper-link">View</span> <mat-icon class="hyper-link">chevron_right</mat-icon>
                                     </a></div>
                                 </div>
     
@@ -257,7 +257,7 @@
                 </h4>
             </div>
             <div class="card-content">
-                <div class="card-body disclosure-master-body-bg">
+                <div class="card-body disclosure-master-body-bg min-card-height">
                     <div class="row">
                         <div class="col">
                             OPA activities could include consulting, teaching, public speaking, or serving on boards. Please disclose any outside professional activities you are currently engaged in or plan to engage in. Include details such as the name of the organization, your role, and the time commitment involved.
@@ -704,7 +704,7 @@
         class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
         <nav aria-label="pagination section" class="pagination justify-content-end">
             <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
-                [totalCount]="result.totalServiceRequest"></app-pagination>
+                [totalCount]="result.totalServiceRequest" [defaultCurrentPage]="dashboardRequestObject.currentPage"></app-pagination>
         </nav>
     </div>
     <!-- <ng-container *ngIf="isShowCreate">
