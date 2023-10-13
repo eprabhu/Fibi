@@ -21,6 +21,9 @@ import {AdminRouteGuardService} from './common/services/guards/admin-route-guard
 import { LeftNavBarComponent } from './common/left-nav-bar/left-nav-bar.component';
 import {MatMenuModule} from "@angular/material/menu";
 import { SharedComponentModule } from './shared-components/shared-component.module';
+import { FormsModule } from '@angular/forms';
+import { DragDirective } from './common/header/drag.directive';
+import { AddAttachmentModalModule } from './common/header/add-attachment-modal/add-attachment-modal.module';
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -32,7 +35,8 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         HeaderComponent,
         AppRouterComponent,
         FooterComponent,
-        LeftNavBarComponent
+        LeftNavBarComponent,
+        DragDirective    
     ],
     imports: [
         BrowserModule,
@@ -41,7 +45,10 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         HttpClientModule,
         SharedComponentModule,
         MatIconModule,
-        MatMenuModule
+        MatMenuModule,
+        SharedModule,
+        FormsModule,
+        AddAttachmentModalModule
     ],
     providers: [CommonService,
         DashboardGuardService,
