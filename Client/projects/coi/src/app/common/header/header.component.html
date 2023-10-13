@@ -15,14 +15,18 @@
                 aria-describedby="Goto Disclosures page">My Entities
                 <span *ngIf="_router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
             </li>
-            <li (click)="redirectToOpa()" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/opa') ? 'My OPA page' : 'Go to My OPA page'"
+            <li (click)="redirectToOpa();" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/opa/form') ? 'My OPA page' : 'Go to My OPA page'"
                 aria-describedby="Goto My OPA page">My OPA
-                <span *ngIf="_router.url.includes('/coi/opa')" class="active-color"></span>
+                <span *ngIf="_router.url.includes('/coi/opa/form')" class="active-color"></span>
             </li>
-            <li class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/reviewer-dashboard') ? 'Notes and Attachments page' : 'Go to Notes and Attachments'"
-                aria-describedby="Goto Notes and Attachments page">Notes and Attachments
+            <li [routerLink]="['/coi/user-dashboard/notes']" class="mr-2 cursor-pointer" role="tab"
+                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/notes') ? 'Notes page' : 'Go to Notes page'"
+                aria-describedby="Goto Notes page">Notes
+            </li>
+            <li class="mr-2 cursor-pointer" role="tab" [routerLink]="['/coi/user-dashboard/attachments']"
+                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/attachments') ? 'Attachments page' : 'Go to Attachments page'"
+                aria-describedby="Goto Attachments page">Attachments
             </li>
         </ul>
     </div>
@@ -31,28 +35,31 @@
             <div class="align-items-center d-flex mx-4">
                 <ng-container>
                     <div class="btn-group me-4">
-                        <button (click)="triggerClickForId('create-toggle-dropdown')" type="button" class="btn btn-primary fs-14 d-flex align-items-center"><mat-icon>add</mat-icon> <span class="px-2">Create</span></button>
+                        <button (click)="triggerClickForId('create-toggle-dropdown');" type="button" class="btn btn-primary fs-14 d-flex align-items-center"><mat-icon>add</mat-icon> <span class="px-2">Create</span></button>
                         <button id="create-toggle-dropdown" [matMenuTriggerFor]="createActionMenu" type="button" class="border-start fs-14 btn btn-primary dropdown-width dropdown-toggle dropdown-toggle-split">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                     </div>
                     <mat-menu #createActionMenu="matMenu" xPosition="before">
-                        <button (click)="triggerClickForId('create-sfi-modal')" mat-menu-item title="Click to Create Significant Financial Interest" area-describedby="Click to Create Significant Financial Interest"
+                            <button (click)="triggerClickForId('create-sfi-modal')" mat-menu-item
+                                title="Click to Create Significant Financial Interest"
+                                area-describedby="Click to Create Significant Financial Interest"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                            <span class="ms-2 fw-medium fs-14">Significant Financial Interest</span>
-                        </button>
-                        <button mat-menu-item title="Click to Add Notes" area-describedby="Click to Add Notes"
+                                <span class="ms-2 fw-medium fs-14">Significant Financial Interest</span>
+                            </button>
+                            <button mat-menu-item title="Click to Add Notes" area-describedby="Click to Add Notes" (click)="showNotes()"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                            <span class="ms-2 fw-medium fs-14">Notes</span>
-                        </button>
-                        <button mat-menu-item title="Click to Add Attachments" area-describedby="Click to add attachments"
+                                <span class="ms-2 fw-medium fs-14">Notes</span>
+                            </button>
+                            <button mat-menu-item title="Click to Add Attachments" area-describedby="Click to add attachments"
+                            (click)="isOpenAttachmentModal = true" class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                                <span class="ms-2 fw-medium fs-14">Attachments</span>
+                            </button>
+                            <button (click)="triggerClickForId('create-project-modal')" mat-menu-item title="Click to Create Project Disclosure"
+                                area-describedby="Click to Create Project Disclosure"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                            <span class="ms-2 fw-medium fs-14">Attachments</span>
-                        </button>
-                        <button (click)="triggerClickForId('create-project-modal')" mat-menu-item title="Click to Create Project Disclosure" area-describedby="Click to Create Project Disclosure"
-                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
-                            <span class="ms-2 fw-medium fs-14">Project Disclosure</span>
-                        </button>
+                                <span class="ms-2 fw-medium fs-14">Project Disclosure</span>
+                            </button>
                         <button (click)="triggerClickForId('create-travel-modal')" mat-menu-item title="Click to Create Travel Disclosure" area-describedby="Click to Create Travel Disclosure"
                                 class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                             <span class="ms-2 fw-medium fs-14">Travel Disclosure</span>
@@ -112,5 +119,27 @@
     </div>
 </header>
 
+<div class="card add-note" *ngIf="isShowCreateNoteModal" appDrag>
+    <div class="d-flex add-notes pt-2">
+        <span class="fs-16 pt-1">Add Note</span>
+        <span class="btn-primary-icon btn-sm ms-auto mt-0 px-2" id="close-edit-home-unit" title="Return to main menu"
+            (click)="closeAddNote()" type="button">
+            <mat-icon class="pt-1">close</mat-icon>
+        </span>
+    </div>
+    <hr class="hr">
+    <div>
+        <textarea id="textArea" appAutoGrow [styleList]="'float-end mr-15 p2 text-right word-count'"  rows="2" class="form-control ml-15 mr-15 mt-4 notes-textarea"
+            placeholder="Take a note..." [(ngModel)]="noteComment"></textarea>
+    </div>
+    <div>
+        <button type="button" aria-label="Close"
+            class="btn btn-primary float-end fs-14 h-41 mb-3 mr-15 mt-3"
+            (click)="saveOrUpdateNote()">Add Note</button>
+    </div>
+</div>
+
+<app-add-attachment-modal *ngIf="isOpenAttachmentModal" (closeModal)="closeModal($event)">
+</app-add-attachment-modal>
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>

@@ -19,3 +19,16 @@ export const ADMIN_DASHBOARD_RIGHTS = new Set(['MANAGE_FCOI_DISCLOSURE', 'VIEW_F
 export const SFI_ADDITIONAL_DETAILS_SECTION_NAME = 'Additional Information';
 
 export const DATE_PLACEHOLDER = 'DD/MM/YYYY';
+
+export const EDITOR_CONFIGURATION = {
+    link: {
+      addTargetToExternalLinks: true,
+      defaultProtocol: 'http://'
+    },
+    removePlugins: ['imageUpload', 'mediaEmbed'],
+    toolbar: {
+      removeItems: [ 'imageUpload', 'mediaEmbed', 'uploadImage' ]
+    },
+    image: {},
+    mediaEmbed: {},
+  };

@@ -60,6 +60,8 @@ export class CommonService {
     $ScrollAction = new Subject<{event: Event,pageYOffset: number}>();
     $commentConfigurationDetails =  new BehaviorSubject<any>({});
     enableGraph = false;
+    $updateLatestNote = new Subject();
+    $updateLatestAttachment = new Subject();
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }

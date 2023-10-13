@@ -4,7 +4,8 @@ import {Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
-import {HeaderService} from './header.service';
+import { HeaderService } from './header.service';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 
 class ChangePassword {
     password = '';
@@ -38,6 +39,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isAdministrator: boolean = false;
     ispersondetailsmodal = false;
     userDetails = null;
+    isShowCreateNoteModal = false;
+    noteComment: any;
+    isOpenAttachmentModal = false;
 
     constructor(public _router: Router, public commonService: CommonService, private _headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
@@ -116,7 +120,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     triggerClickForId(modalId: string) {
-        document.getElementById(modalId)?.click();
+        if (modalId) {
+            document.getElementById(modalId).click();
+        }
     }
 
     closePersonDetailsModal(event) {
@@ -143,6 +149,38 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.passwordValidation.set('same-password', true);
         }
     }
+    
+    saveOrUpdateNote() {
+        if (this.noteComment.trim()) {
+            this.$subscriptions.push(this._headerService.saveOrUpdatePersonNote({
+                'personId': this.commonService.getCurrentUserDetail('personId'),
+                'content': this.noteComment.trim()
+            }).subscribe((ele: any) => {
+                this.isShowCreateNoteModal = false;
+                this.noteComment = '';
+                if(this._router.url.includes('/coi/user-dashboard/notes')) {
+                    this.commonService.$updateLatestNote.next(ele);
+                }
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Note added successfully.');
+            } , error => {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding note, please try again.');
+            }));
+        }
+    }
+
+    showNotes() {
+        this.isShowCreateNoteModal = true;
+        setTimeout(() => {
+            document.getElementById("textArea").focus();
+        });
+    }
+
+    closeAddNote() {
+        this.isShowCreateNoteModal = false;
+        this.noteComment = '';
+    }
+
+    closeModal() {
+        this.isOpenAttachmentModal = false;
+    }
 }
-
-
