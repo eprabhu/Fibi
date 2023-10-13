@@ -424,7 +424,7 @@ public class ConflictOfInterestController {
 
 	@GetMapping("/fetchAllCoiRights")
 	public ResponseEntity<Object> fetchAllCoiRights(){
-		return generalService.fetchAllCoiRights();
+		return generalService.fetchAllCoiOpaRights();
 	}
 
 	@GetMapping("/entity/isLinked/{entityId}/personEntity")
