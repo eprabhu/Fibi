@@ -33,6 +33,7 @@ import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.pojo.ValidPersonEntityRelType;
+import com.polus.fibicomp.opa.pojo.OPADisclosure;
 import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.pojo.Unit;
 
@@ -300,5 +301,7 @@ public class ConflictOfInterestVO {
 	private List<DisclComment> DisclComments;
 
 	private Integer componentSubRefId;
+
+	private List<OPADisclosure> opaDisclosure;
 
 }

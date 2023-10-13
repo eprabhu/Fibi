@@ -1438,7 +1438,7 @@ UPDATE ``DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review by <b>{REVIEWE
 	 
 
 INSERT INTO ``DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
-VALUES ('23', 'Review assigned to  at <b>{LOCATION}</b> with status <b>{REVIEW_STATUS}</b> by <b>{ADMIN_NAME}</b>', 'Review Added without Reviewer', now(), 'quickstart');
+VALUES ('23', 'Review assigned at <b>{LOCATION}</b> with status <b>{REVIEW_STATUS}</b> by <b>{ADMIN_NAME}</b>', 'Review Added without Reviewer', now(), 'quickstart');
 
 INSERT INTO ``DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('24', 'Review modified and Assigned at <b>{LOCATION}</b> with status <b>{REVIEW_STATUS}</b> by <b>{ADMIN_NAME}</b>', 'Review Modified without Reviewer', now(), 'quickstart');
@@ -1462,6 +1462,24 @@ CREATE TABLE `opa_form_builder_details` (
   `UPDATE_TIMESTAMP` DATETIME NOT NULL,
   `UPDATE_USER` VARCHAR(90) NOT NULL,
   PRIMARY KEY (`OPA_FORM_BUILDER_DETAILS_ID`));
+
+INSERT INTO `rights` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `UPDATE_TIMESTAMP`, `RIGHTS_TYPE_CODE`) 
+VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), 'MANAGE_OPA_DISCLOSURE', 'To manage all actions against an OPA disclosure', 'quickstart', now(), '2');
+
+INSERT INTO `rights` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `UPDATE_TIMESTAMP`, `RIGHTS_TYPE_CODE`) 
+VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), 'VIEW_OPA_DISCLOSURE', 'To view any OPA disclosure in a unit', 'quickstart', now(), '2');
+
+INSERT INTO `rights` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `UPDATE_TIMESTAMP`, `RIGHTS_TYPE_CODE`) 
+VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), 'VIEW_OPA_DISCLOSURE_PRIVATE_COMMENTS', 'To view private comments tagged in the opa disclosure', 'quickstart', now(), '2');
+
+INSERT INTO `rights` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `UPDATE_TIMESTAMP`, `RIGHTS_TYPE_CODE`) 
+VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), 'VIEW_OPA_DISCLOSURE_PRIVATE_ATTACHMENTS', 'To view private attachments tagged in the opa disclosure', 'quickstart', now(), '2');
+
+INSERT INTO `rights` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `UPDATE_TIMESTAMP`, `RIGHTS_TYPE_CODE`) 
+VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), 'VIEW_ADMIN_GROUP_OPA', 'Allow to view opa based on admin group', 'quickstart', now(), '1');
+
+INSERT INTO `rights` (`RIGHT_ID`, `RIGHT_NAME`, `DESCRIPTION`, `UPDATE_USER`, `UPDATE_TIMESTAMP`, `RIGHTS_TYPE_CODE`) 
+VALUES ((SELECT A.ID FROM (SELECT MAX(RIGHT_ID) + 1 AS ID FROM RIGHTS ) AS A), 'OPA_ADMINISTRATOR', 'OPA Administrator', 'quickstart', now(), '1');
 
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;

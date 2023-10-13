@@ -35,6 +35,7 @@ import com.polus.fibicomp.opa.dto.OPADashboardResponseDto;
 import com.polus.fibicomp.opa.dto.OPASubmitDto;
 import com.polus.fibicomp.opa.pojo.OPADisclosure;
 import com.polus.fibicomp.opa.pojo.OPAFormBuilderDetails;
+import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.security.AuthenticatedUser;
 
 import oracle.jdbc.OracleTypes;
@@ -48,6 +49,9 @@ public class OPADaoImpl implements OPADao {
 
     @Autowired
     private CommonDao commonDao;
+
+    @Autowired
+	private PersonDao personDao;
 
   	protected static Logger logger = LogManager.getLogger(OPADaoImpl.class.getName());
 
@@ -334,6 +338,48 @@ public class OPADaoImpl implements OPADao {
 	    Root<OPADisclosure> root = query.from(OPADisclosure.class);
 	    query.select(root.get("adminPersonId")).where(builder.equal(root.get("opaDisclosureId"), opaDisclosureId));
 	    return session.createQuery(query).getSingleResult();
+	}
+
+	@Override
+	public List<OPADisclosure> getActiveAndPendingOpaDisclosure(String personId) {
+		List<OPADisclosure> opaDisclosures = new ArrayList<>();
+		try {
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<OPADisclosure> query = builder.createQuery(OPADisclosure.class);
+			Root<OPADisclosure> rootOpaDisclosure = query.from(OPADisclosure.class);
+			query.where(builder.and(builder.equal(rootOpaDisclosure.get("personId"), personId),
+					builder.equal(rootOpaDisclosure.get("dispositionStatusCode"), Constants.OPA_DISPOSITION_STATUS_COMPLETED)));
+			query.orderBy(builder.desc(rootOpaDisclosure.get("updateTimestamp")));
+			List<OPADisclosure> opaDisclData = session.createQuery(query).getResultList();
+			if (opaDisclData != null && !opaDisclData.isEmpty()) {
+				OPADisclosure opaDisclosure = opaDisclData.get(0);
+				opaDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(opaDisclosure.getUpdateUser()));
+				opaDisclosure.setAdminPersonName(opaDisclosure.getAdminPersonId() != null ? personDao.getPersonFullNameByPersonId(opaDisclosure.getAdminPersonId()) : null);
+				opaDisclosure.setAdminGroupName(opaDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(opaDisclosure.getAdminGroupId()).getAdminGroupName() : null);
+				opaDisclosures.add(opaDisclosure);
+			}
+			OPADisclosure opaDisclosure = getPendingOpaDisclosure(personId);
+			if (opaDisclosure != null) {
+				opaDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(opaDisclosure.getUpdateUser()));
+				opaDisclosures.add(opaDisclosure);
+			}
+		} catch (Exception ex) {
+			throw new ApplicationException("Unable to fetch Active Disclosure", ex, Constants.JAVA_ERROR);
+		}
+		return opaDisclosures;
+	}
+
+	private OPADisclosure getPendingOpaDisclosure(String personId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<OPADisclosure> query = builder.createQuery(OPADisclosure.class);
+		Root<OPADisclosure> rootOpaDisclosure = query.from(OPADisclosure.class);
+		query.where(builder.and(builder.equal(rootOpaDisclosure.get("personId"), personId),
+				builder.equal(rootOpaDisclosure.get("dispositionStatusCode"), Constants.OPA_DISPOSITION_STATUS_PENDING)));
+		query.orderBy(builder.desc(rootOpaDisclosure.get("updateTimestamp")));
+		List<OPADisclosure> opaDisclData = session.createQuery(query).getResultList();
+		return !opaDisclData.isEmpty() ? opaDisclData.get(0) : null;
 	}
 
 }

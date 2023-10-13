@@ -1,0 +1,55 @@
+<ng-container *ngIf="!isFirstTimeLoad">
+    <mat-menu #createActionMenu="matMenu" xPosition="before">
+        <span class="fw-medium fs-14 d-flex align-items-center grey-text" mat-menu-item title="Click to delete attachment"
+            area-describedby="Click to delete attachment">
+            <mat-icon class="fs-20">delete</mat-icon>
+            <span class="fs-14">Delete</span>
+        </span>
+        <span class="fw-medium fs-14 grey-text" mat-menu-item title="Click to replace attachment"
+            area-describedby="Click to replace attachment">
+            <img alt="versions icon" aria-hidden="true" class="version-icon ml-2" src="{{deployMap}}assets/images/replace.svg">
+            <span class="fs-14 ml-15">Replace</span>
+        </span>
+        <span class="fw-medium fs-14 grey-text" mat-menu-item title="Click to view attachment version"
+            area-describedby="Click to view attachment version">
+            <img alt="versions icon" aria-hidden="true" class="version-icon ml-2" src="{{deployMap}}assets/images/attachment_version.png">
+            <span class="fs-14 ml-15">Versions</span>
+        </span>
+    </mat-menu>
+
+    <div class="table-responsive" *ngIf="attachmentLists.length">
+        <table class="table">
+            <thead class="fs-14 grey-text">
+                <tr>
+                    <th scope="col" style="width: 20%" class="pt-3 ps-3">Attachment Type</th>
+                    <th scope="col" style="width: 30%">Description</th>
+                    <th scope="col" style="width: 25%">File name</th>
+                    <th scope="col" style="width: 15%">Last Updated</th>
+                    <th scope="col" style="width: 5%">Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white">
+                <tr *ngFor="let attachment of attachmentLists ; let index = index;" class="fs-14 grey-text mt-2">
+                    <td class="pt-3 ps-3">{{attachment?.disclAttaTypeDetails?.description}}</td>
+                    <td class="pt-3">{{attachment.description}}</td>
+                    <td class="pt-3">{{attachment.fileName}}</td>
+                    <td class="pt-3">{{attachment.updateTimestamp |
+                        dateFormatterWithTimeZone:'long'}}</td>
+                    <td class="d-flex pt-3">
+                        <span class="mr-2 cursor-pointer" title="Click to edit attachment">
+                            <mat-icon class="fs-20">edit</mat-icon>
+                        </span>
+                        <span class="mr-2 cursor-pointer" title="Click to download attachment">
+                            <mat-icon class="fs-20">vertical_align_bottom</mat-icon>
+                        </span>
+                        <span class="mr-2 cursor-pointer" title="Click to open more options"
+                            [matMenuTriggerFor]="createActionMenu">
+                            <mat-icon class="fs-20">more_vert</mat-icon>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <app-no-information *ngIf="!attachmentLists.length"></app-no-information>
+</ng-container>

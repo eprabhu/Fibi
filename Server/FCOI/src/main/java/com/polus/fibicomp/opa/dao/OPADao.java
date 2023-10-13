@@ -95,4 +95,11 @@ public interface OPADao {
 	 */
 	String getAssignedAdmin(Integer opaDisclosureId);
 
+	/**
+	 * This method is used to get active and pending OPA disclosures by personId
+	 * @param personId
+	 * @return
+	 */
+	List<OPADisclosure> getActiveAndPendingOpaDisclosure(String personId);
+
 }
