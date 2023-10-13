@@ -17,6 +17,7 @@ import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -1127,5 +1128,11 @@ public interface ConflictOfInterestDao {
     Notes saveOrUpdatePersonNote(Notes dto);
     
     Notes loadCoiNotesForNoteId(Integer noteId);
+    
+    public void deleteNote(Integer noteId);
+    
+    List<Attachments> loadAllAttachmentsForPerson(String personId);
+
+	DisclAttaType getDisclosureAttachmentForTypeCode(String attaTypeCode);
 
 }

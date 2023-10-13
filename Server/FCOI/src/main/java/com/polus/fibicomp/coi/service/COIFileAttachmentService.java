@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
+import com.polus.fibicomp.coi.pojo.Attachments;
+import com.polus.fibicomp.coi.dto.AttachmentsDto;
 
 public interface COIFileAttachmentService {
 
@@ -29,5 +31,7 @@ public interface COIFileAttachmentService {
 	void exportAllDisclAttachments(COIFileRequestDto request, HttpServletResponse response) throws IOException;
 
 	String updateDisclAttachmentDetails(COIFileRequestDto request);
+	
+	Attachments saveAttachment(AttachmentsDto request);
 
 }

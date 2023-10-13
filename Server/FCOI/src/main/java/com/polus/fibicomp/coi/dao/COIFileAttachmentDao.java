@@ -25,6 +25,10 @@ import com.polus.fibicomp.coi.exception.COIFileAttachmentException;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.repository.COIDisclosureAttachmentRepository;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.fibicomp.coi.dto.AttachmentsDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
+import com.polus.fibicomp.common.dao.CommonDao;
 
 @Component
 public class COIFileAttachmentDao {
@@ -34,6 +38,9 @@ public class COIFileAttachmentDao {
 
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
+	
+	@Autowired
+	private CommonDao commonDao;
 
     @Transactional(rollbackFor = {COIFileAttachmentException.class})
 	public void saveDisclosureAttachmentDetail(COIFileRequestDto request) {
@@ -58,7 +65,30 @@ public class COIFileAttachmentDao {
 		}catch(Exception e) {
 			throw new COIFileAttachmentException("Error at saveDisclosureAttachmentDetail in COIFileAttachmentDao" + e.getMessage());
 		}	
-	} 
+	}
+	
+	@Transactional(rollbackFor = {COIFileAttachmentException.class})
+	public Attachments saveAttachmentDetails(AttachmentsDto request, String fileDataId) {
+		try {
+			Attachments attachment = Attachments.builder()
+			.attachmentId(request.getAttachmentId())
+			.personId(AuthenticatedUser.getLoginPersonId())
+			.attaTypeCode(request.getAttaTypeCode())
+			.fileName(request.getFileName())
+			.mimeType(request.getMimeType())
+			.description(request.getDescription())
+			.fileDataId(fileDataId)
+			.createUser(AuthenticatedUser.getLoginUserName())
+			.createTimestamp(commonDao.getCurrentTimestamp())
+			.updateUser(AuthenticatedUser.getLoginUserName())
+			.updateTimestamp(commonDao.getCurrentTimestamp())
+			.build();
+			hibernateTemplate.saveOrUpdate(attachment);
+			return attachment;
+		} catch(Exception e) {
+			throw new COIFileAttachmentException("Error at saveAttachmentDetails in COIFileAttachmentDao" + e.getMessage());
+		}	
+	}  
 
 	private Integer getNextAttachmentNumber() {
 		Session session = hibernateTemplate.getSessionFactory().openSession();

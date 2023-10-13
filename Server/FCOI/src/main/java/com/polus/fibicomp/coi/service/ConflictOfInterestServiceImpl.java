@@ -39,7 +39,6 @@ import com.polus.fibicomp.coi.dto.CoiConflictStatusTypeDto;
 import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
 import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.CoiReviewCommentsDto;
 import com.polus.fibicomp.coi.dto.CoiSectionTypeDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
@@ -95,6 +94,11 @@ import com.polus.fibicomp.pojo.Unit;
 import com.polus.fibicomp.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.fibicomp.questionnaire.service.QuestionnaireService;
 import com.polus.fibicomp.security.AuthenticatedUser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.polus.fibicomp.coi.dto.AttachmentsDto;
+import com.polus.fibicomp.coi.dto.NotesDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
+import com.polus.fibicomp.coi.pojo.DisclAttaType;
 
 
 @Service(value = "conflictOfInterestService")
@@ -2544,6 +2548,63 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public Notes getNoteDetailsForNoteId(Integer noteId) {
 		return conflictOfInterestDao.loadCoiNotesForNoteId(noteId);
+	}
+	
+	@Override
+	public ResponseEntity<Object> saveOrUpdateAttachments(MultipartFile[] files, String formDataJSON) {
+		List<Attachments> attachmentsList = new ArrayList<>();
+		AttachmentsDto dto = new AttachmentsDto();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			dto = mapper.readValue(formDataJSON, AttachmentsDto.class);
+			dto.getNewAttachments().forEach(ele -> {
+				int count = 0;
+				AttachmentsDto request = AttachmentsDto.builder()
+						.personId(AuthenticatedUser.getLoginPersonId())
+						.attaTypeCode(ele.getAttaTypeCode())
+						.fileName(ele.getFileName())
+						.mimeType(ele.getMimeType())
+						.description(ele.getDescription())
+						.createUser(AuthenticatedUser.getLoginUserName())
+						.createTimestamp(commonDao.getCurrentTimestamp())
+						.updateUser(AuthenticatedUser.getLoginUserName())
+						.updateTimestamp(commonDao.getCurrentTimestamp())
+						.build();
+				DisclAttaType disclosureAttachmentType = conflictOfInterestDao.getDisclosureAttachmentForTypeCode(ele.getAttaTypeCode());
+				Attachments attachment = addAttachments(files[count], request);
+				attachment.setDisclAttaTypeDetails(disclosureAttachmentType);
+				attachmentsList.add(attachment);
+				count++;
+			});
+		} catch (JsonProcessingException e) {
+			throw new ApplicationException("error in addTagPerson", e, Constants.JAVA_ERROR);
+		}
+		return new ResponseEntity<>(attachmentsList, HttpStatus.OK);
+	}
+
+	private Attachments addAttachments(MultipartFile file, AttachmentsDto request) {
+		try {
+			Attachments attachment = null;
+			if (file != null) {
+				request.setFile(file);
+				attachment = coiFileAttachmentService.saveAttachment(request);
+			}
+			return attachment;
+		} catch (Exception e) {
+			throw new ApplicationException("error in addAttachments", e, Constants.JAVA_ERROR);
+		}
+	}
+
+	@Override
+	public ResponseEntity<Object> deleteNote(Integer noteId) {
+		conflictOfInterestDao.deleteNote(noteId);
+		return null;
+	}
+
+	@Override
+	public List<Attachments> loadAllAttachmentsForPerson(String personId) {
+		List<Attachments> attachmentsList = conflictOfInterestDao.loadAllAttachmentsForPerson(personId);
+		return attachmentsList;
 	}
 
 }
