@@ -1,5 +1,6 @@
 package com.polus.fibicomp.coi.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,14 +35,6 @@ public class GeneralServiceImpl implements GeneralService{
     private CommonDao commonDao;
 
     @Override
-    public ResponseEntity<Object> fetchAllCoiRights() {
-        Map<String, Object> objectMap = new HashMap<>();
-        objectMap.put("rights", generalDao.fetchAllCoiRights(AuthenticatedUser.getLoginPersonId()));
-        objectMap.put("IS_REVIEW_MEMBER", generalDao.isPersonInReviewer(AuthenticatedUser.getLoginPersonId()));
-        return new ResponseEntity<>(objectMap, HttpStatus.OK);
-    }
-
-    @Override
 	public ResponseEntity<Object> fetchAdminGroupsAndPersons() {
 		List<String> personIds = personDao.getAdministratorsByModuleCode(Constants.COI_MODULE_CODE);
 		Set<Person> persons = new HashSet<>();
@@ -51,6 +44,16 @@ public class GeneralServiceImpl implements GeneralService{
 		objectMap.put("persons", persons);
 		objectMap.put("adminGroups", adminGroups);
 		return new ResponseEntity<>(objectMap, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> fetchAllCoiOpaRights() {
+		Map<String, Object> objectMap = new HashMap<>();
+        List<String> rights = new ArrayList<>();
+        rights.addAll(generalDao.fetchAllCoiOpaRights(AuthenticatedUser.getLoginPersonId()));
+        objectMap.put("rights", rights);
+        objectMap.put("IS_REVIEW_MEMBER", generalDao.isPersonInReviewer(AuthenticatedUser.getLoginPersonId()));
+        return new ResponseEntity<>(objectMap, HttpStatus.OK);
 	}
 
 }

@@ -7,8 +7,6 @@ import java.util.List;
  */
 public interface GeneralDao {
 
-    List<String> fetchAllCoiRights(String personId);
-
     /**
      * This method is used to check a person is in reviewer table
      *
@@ -16,4 +14,11 @@ public interface GeneralDao {
      * @return
      */
     boolean isPersonInReviewer(String personId);
+
+	/**
+     * This method is used to fetch rights
+     *
+     * @return List<String> rights
+     */
+	List<String> fetchAllCoiOpaRights(String loginPersonId);
 }
