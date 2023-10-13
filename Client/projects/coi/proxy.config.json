@@ -440,7 +440,7 @@
         "secure": false
     },
     "/loadDisclAttachTypes": {
-        "target": "http://192.168.1.149/coi/",
+        "target": "http://10.199.100.34:9090/coi/",
         "secure": false
     },
     "/fetchAllActiolListEntriesForBanners": {
@@ -491,5 +491,30 @@
     "/opa/return": {
         "target": "http://10.199.100.34:9090/",
         "secure": false
+    },
+    "/getNoteDetailsForNoteId/noteId": {
+        "target": "http://10.199.100.123:8070/coi/",
+        "secure": false
+    },
+    "/fetchAllNotesForPerson/*": {
+        "target": "http://10.199.100.123:8070/coi/",
+        "secure": false
+    },
+    "/saveOrUpdatePersonNote": {
+        "target": "http://10.199.100.34:9090/coi/",
+        "secure": false
+    },
+    "/getNoteDetailsForNoteId/*": {
+        "target": "http://10.199.100.34:9090/coi/",
+        "secure": false
+    },
+    "/saveOrUpdateAttachments": {
+        "target": "http://10.199.100.123:8070/coi/",
+        "secure": false
+    },
+    "/loadAllAttachmentsForPerson": {
+        "target": "http://10.199.100.123:8070/coi/",
+        "secure": false
     }
+
 }
