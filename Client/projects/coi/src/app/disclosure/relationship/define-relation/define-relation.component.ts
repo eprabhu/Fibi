@@ -7,9 +7,8 @@ import { CommonService } from '../../../common/services/common.service';
 import { DataStoreService } from '../../services/data-store.service';
 import { RelationshipService } from '../relationship.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { Subject, Subscription, interval, of, timer } from 'rxjs';
+import { Subject, Subscription, interval } from 'rxjs';
 import { debounce } from 'rxjs/operators';
-import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-define-relation',
@@ -23,6 +22,8 @@ export class DefineRelationComponent implements OnInit {
   @Input() moduleItemId: any;
   @Input() moduleCode: any;
   @Input() module: any;
+  @Input() relationList: any;
+  @Input() currentRelation: any;
   @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('defineRelationOverlay', { static: true }) defineRelationOverlay: ElementRef;
 
@@ -202,17 +203,20 @@ export class DefineRelationComponent implements OnInit {
     const DETAILS_BOX = this.getClassDetails('.relationship-details-box');
     const INFO_BOX = this.isEditMode ? this.getClassDetails('.relationship-info') : null;
     const TABLE_HEADER_BOX = this.getClassDetails('.relationship-sfi-header') || null;
-    this.resetStyles(DETAILS_BOX, INFO_BOX, TABLE_HEADER_BOX);
+    const GLOBAL_SAVE = this.getClassDetails('.relationship-sfi-global-save');
+    this.resetStyles(DETAILS_BOX, INFO_BOX, GLOBAL_SAVE, TABLE_HEADER_BOX);
     const DETAILS_BOX_HEIGHT = DETAILS_BOX.offsetHeight;
     const INFO_BOX_HEIGHT = INFO_BOX ? INFO_BOX.offsetHeight : 0;
     const TABLE_HEADER_BOX_HEIGHT = TABLE_HEADER_BOX ? TABLE_HEADER_BOX.offsetHeight: 0;
+    const GLOBAL_SAVE_HEIGHT = GLOBAL_SAVE.offsetHeight;
     const HALF_SCREEN_HEIGHT = window.innerHeight / 2;
-    const TOTAL_BOX_HEIGHT = DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT + TABLE_HEADER_BOX_HEIGHT;
+    const TOTAL_BOX_HEIGHT = DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT + TABLE_HEADER_BOX_HEIGHT + GLOBAL_SAVE_HEIGHT;
     if (TOTAL_BOX_HEIGHT > HALF_SCREEN_HEIGHT) {
       this.addRelativeRemoveSticky(DETAILS_BOX);
       if (INFO_BOX) {
         this.addRelativeRemoveSticky(INFO_BOX);
       }
+      this.addRelativeRemoveSticky(GLOBAL_SAVE);
       this.setTop(TABLE_HEADER_BOX, '0px');
     }
     if (TOTAL_BOX_HEIGHT < HALF_SCREEN_HEIGHT) {
@@ -220,7 +224,8 @@ export class DefineRelationComponent implements OnInit {
       if (INFO_BOX) {
         this.setTop(INFO_BOX, DETAILS_BOX_HEIGHT + 'px');
       }
-      this.setTop(TABLE_HEADER_BOX , (DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT) + 'px');
+      this.setTop(GLOBAL_SAVE, DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT +'px');
+      this.setTop(TABLE_HEADER_BOX , (DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT + GLOBAL_SAVE_HEIGHT) + 'px');
     }
   }
 
@@ -239,17 +244,19 @@ export class DefineRelationComponent implements OnInit {
     }
   }
 
-  resetStyles(detailsBox, infoBox, sfiHeaderBox) {
+  resetStyles(detailsBox, infoBox, globalSave, sfiHeaderBox) {
     detailsBox.classList.add('position-sticky');
+    detailsBox.style.top = '0px';
     if(sfiHeaderBox) {
       sfiHeaderBox.classList.add('position-sticky');
       sfiHeaderBox.style.top = '0px';
     }
-    detailsBox.style.top = '0px';
     if (infoBox) {
       infoBox.style.top = '0px';
       infoBox.classList.add('position-sticky');
     }
+    globalSave.classList.add('position-sticky');
+    globalSave.style.top = '0px';
   }
 
   @HostListener('window:resize', ['$event'])
@@ -285,7 +292,6 @@ export class DefineRelationComponent implements OnInit {
     }
   }
 
-
   hideConflictNavBar() {
     const slider = document.querySelector('.slider-base');
     slider.classList.remove('slider-opened');
@@ -298,11 +304,25 @@ export class DefineRelationComponent implements OnInit {
 }
 
 validateProjectSfiSliderOnClose() {
-  if (this._relationShipService.isSliderInputModified) {
-    openModal('projectSfiConfirmationModal');
-  } else {
     this.hideConflictNavBar();
-  }
 }
+
+  goBackStep() {
+    this.currentRelation--;
+    this.navigateToStep(this.relationList[this.currentRelation]);
+  }
+
+  navigateToStep(relation) {
+    this.moduleCode = relation.moduleCode;
+    this.moduleItemId = relation.moduleItemId;
+    this.module = relation;
+    this.getEntityList();
+  }
+
+  goToStep(stepPosition?: any) {
+    this.currentRelation = stepPosition ? stepPosition : this.currentRelation + 1;
+    this.navigateToStep(this.relationList[this.currentRelation]);
+  }
+
 }
 
