@@ -154,7 +154,7 @@
                                                     <div class="col-12">
                                                         <button title="Click to {{isEditMode ? 'Define' : 'Manage'}} Project - SFI relationship"
                                                             class="align-items-center btn btn-primary d-flex define-relation fs-14"
-                                                            (click)="openDefineRelationship(relation)" type="submit">
+                                                            (click)="openDefineRelationship(relation, i)" type="submit">
                                                             <img src="{{deployMap}}assets/images/define-relation-hover.svg"
                                                                 class="mr-2 hover_img"
                                                                 alt="{{isEditMode ? 'Define Relationship' : 'Manage Relationship'}}">{{isEditMode
@@ -182,8 +182,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mx-3">
                         <app-SFI-conflict-relationship [coiStatusList]="coiStatusList" [isEditMode]="isEditMode" *ngIf="isShowCollapsedConflictRelationship" [entityProjectDetails]="entityProjectDetails"
-                        [coiStatusCode]="coiStatusCode" [coiData]="coiData" [moduleCode]="moduleCode" [selectedProject]="relation" (closePage)="closePage()"></app-SFI-conflict-relationship>   
+                        [coiStatusCode]="coiStatusCode" [coiData]="coiData" [moduleCode]="moduleCode" [selectedProject]="relation" (closePage)="closePage()"></app-SFI-conflict-relationship>
+                    </div>   
                 </div>
             </ng-container>
         </div>
@@ -194,7 +196,7 @@
 
   </ng-container>
   <app-define-relation *ngIf="isShowRelation" [coiStatusList]="coiStatusList" [moduleCode]="moduleCode"
-      [moduleItemId]="moduleId" [module]="selectedProject" (closePage)="closePage()"></app-define-relation>
+      [moduleItemId]="moduleId" [module]="selectedProject" (closePage)="closePage()" [relationList]="awardList" [currentRelation]="currentRelation"></app-define-relation>
 
   
   <button type="button" class="btn btn-primary btn-sm" hidden=true id="module-view-modal-button" data-bs-toggle="modal"

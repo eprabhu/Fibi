@@ -49,7 +49,7 @@ export class RelationshipComponent implements OnInit {
   coiTableValidation: Map<string, string> = new Map();
   coiStatusCode: any = null;
   isAnimationPaused = false;
-
+  currentRelation: number;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
@@ -151,10 +151,11 @@ getDisclosureCount(typeCode, disclosureStatus) {
     return test;
   }
 
-  openDefineRelationship(test) {
+  openDefineRelationship(test, currentRelation) {
     this.moduleCode = test.moduleCode;
     this.moduleId = test.moduleItemId ;
     this.selectedProject = test;
+    this.currentRelation = currentRelation;
     this.isShowRelation = true;
   }
 

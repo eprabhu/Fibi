@@ -188,7 +188,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     goToStep(stepPosition?: any) {
         if (this.dataStore.dataChanged) {
             this.tempStepNumber = stepPosition ? stepPosition : this.currentStepNumber + 1;
-             openCommonModal('disclsoure-unsaved-changes-modal');
+             openCommonModal('disclosure-unsaved-changes-modal');
         } else {
             if (!stepPosition && this.currentStepNumber === 4) {
                 return;
