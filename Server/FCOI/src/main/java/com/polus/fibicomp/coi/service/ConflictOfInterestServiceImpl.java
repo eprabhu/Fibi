@@ -2576,7 +2576,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 						.updateTimestamp(commonDao.getCurrentTimestamp())
 						.build();
 				DisclAttaType disclosureAttachmentType = conflictOfInterestDao.getDisclosureAttachmentForTypeCode(ele.getAttaTypeCode());
-				Attachments attachment = addAttachments(files[count], request);
+				Attachments attachment = addAttachments(files[count], request, AuthenticatedUser.getLoginPersonId());
 				attachment.setDisclAttaTypeDetails(disclosureAttachmentType);
 				attachmentsList.add(attachment);
 				count++;
@@ -2587,12 +2587,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(attachmentsList, HttpStatus.OK);
 	}
 
-	private Attachments addAttachments(MultipartFile file, AttachmentsDto request) {
+	private Attachments addAttachments(MultipartFile file, AttachmentsDto request, String personId) {
 		try {
 			Attachments attachment = null;
 			if (file != null) {
 				request.setFile(file);
-				attachment = coiFileAttachmentService.saveAttachment(request);
+				attachment = coiFileAttachmentService.saveAttachment(request, personId);
 			}
 			return attachment;
 		} catch (Exception e) {
