@@ -1,20 +1,20 @@
-<div *ngIf="isToolkitVisible" [@enterAnimation]>
-    <div class="Details of Disclosureborder shadow-sm">
+<div class="scrollable-section" *ngIf="isToolkitVisible" [@enterAnimation]>
+    <div class="Details of Disclosureborder shadow-sm ">
         <div class="align-items-center d-flex f-15 fw-bold px-3 side-bar-title">
             Navigate to
         </div>
-        <div class="scrollable-section navigate-color">
+        <div class="navigate-color">
             <div class="navigation-to-tabs">
-                <div (click)="jumpToSection('COI801');" title="Go to Screening Questionnaire Section" class="cursor-pointer fs-15 fw-medium px-4 py-1 mt-2">Screening
+                <div (click)="jumpToSection('COI801');" title="Go to Screening Questionnaire Section" class="cursor-pointer fs-15 fw-medium px-4 py-1 mt-2 ps-3">Screening
                     Questionnaire
                 </div>
-                <div (click)="jumpToSection('COI802');" title="Go to SFI's section" class="cursor-pointer fs-15 fw-medium px-4 py-1">Significant Financial
+                <div (click)="jumpToSection('COI802');" title="Go to SFI's section" class="cursor-pointer fs-15 fw-medium px-4 py-1 ps-3">Significant Financial
                     Interest
                 </div>
             </div>
-            <div class="fs-15 py-1 relationship-color"
+            <div class="fs-15 py-1 relationship-color "
             [ngClass]="!isRelationshipCollapse ? 'navigation-to-tabs' : 'sub-navigation-to-tabs'">
-                <div class="fw-medium cursor-pointer d-flex justify-content-between px-4 pt-1"
+                <div class="fw-medium cursor-pointer d-flex justify-content-between px-4 pt-1 ps-3"
                     (click)="jumpToSection('COI803'); isRelationshipCollapse = !isRelationshipCollapse"
                     title="Go to Relationships section">Relationships
                     <mat-icon class="mat-icon"
@@ -24,7 +24,7 @@
                 </div>
                 <div class="px-4 mb-3" *ngIf="projectList?.awards?.length && isRelationshipCollapse" [@listAnimation]>
                   <div class="fw-medium py-1 project-color">Awards</div>
-                  <div class="bg-sub-goto border fw-medium p-3 rounded-1 mb-2">
+                  <div class="bg-sub-goto border fw-medium p-3 rounded-1 mb-2 side-scroll-award">
                       <ng-container *ngFor="let award of projectList?.awards; let i = index">
                         <div (click)="jumpToProjectSection(award?.moduleItemId); openProjectRelationships(award, i)" title="{{award?.title}}" class="sub-goto mb-1 p-1 px-3">
                           {{award?.moduleItemKey}} {{award?.title}}
@@ -38,7 +38,7 @@
               </div>
                 <div class="px-4" *ngIf="projectList?.proposals?.length && isRelationshipCollapse" [@listAnimation]>
                     <div class="fw-medium py-1 project-color">Proposals</div>
-                    <div class="bg-sub-goto border fw-medium p-3 rounded-1 mb-2">
+                    <div class="bg-sub-goto border fw-medium p-3 rounded-1 mb-2 side-scroll-proposal">
                         <ng-container *ngFor="let proposals of projectList?.proposals; let i = index">
                             <div (click)="jumpToProjectSection(proposals?.moduleItemId); openProjectRelationships(proposals, i)" title="{{proposals?.title}}" class="sub-goto mb-1 p-1 px-3">
                                 {{proposals?.moduleItemId}} {{proposals?.title}}
@@ -53,7 +53,7 @@
             </div>
             <!--<div (click)="jumpToSection('COI805');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium mb-2 px-4 py-1">Conflict Management
             </div>-->
-            <div (click)="jumpToSection('COI804');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium"><div class="px-4 py-1">Certification</div></div>
+            <div (click)="jumpToSection('COI804');" class="navigation-to-tabs cursor-pointer fs-15 fw-medium "><div class="px-4 py-1">Certification</div></div>
         </div>
     </div>
 </div>
