@@ -200,26 +200,10 @@
                                     <label class="f-14 pe-2">Title : </label>
                                     <span class="ml-2 grey-text">#{{manualProjectAddDetails?.title}}</span>
                                 </div>
-
-                                <div class="col-6">
-                                    <label class="f-14 pe-2">Sponsor : </label>
-                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.sponsor}}</span>
-                                </div>
-                                <div class="col-6">
-                                    <label class="f-14 pe-2">Prime Sponsor : </label>
-                                    <span class="ml-2 grey-text">{{manualProjectAddDetails.primeSponsorName || 'No Data'}}</span>
-                                </div>
-
-                                
                                 <div class="col-6 pt-1 py-1">
                                     <label class="f-14 pe-2">Principal Investigator : </label>
                                     <span class="ml-2 grey-text">{{manualProjectAddDetails?.principalInvestigator}}</span>
                                 </div>
-                                <div class="col-6 pt-1 py-1">
-                                    <label class="f-14 pe-2">Lead Unit : </label>
-                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.unitName}}</span>
-                                </div>
-                                
                                 <div class="col-6">
                                     <label class="f-14 pe-2">Project Role : </label>
                                     <span class="ml-2 grey-text">{{manualProjectAddDetails?.reporterRole}}</span>
@@ -234,6 +218,18 @@
                                             {{manualProjectAddDetails?.endDate | dateFormatter}}
                                         </span>
                                     </app-no-data-label>
+                                </div>
+                                <div class="col-6">
+                                    <label class="f-14 pe-2">Sponsor : </label>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.sponsor}}</span>
+                                </div>
+                                <div class="col-6 pt-1 py-1">
+                                    <label class="f-14 pe-2">Lead Unit : </label>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.unitName}}</span>
+                                </div>
+                                <div class="col-6">
+                                    <label class="f-14 pe-2">Prime Sponsor : </label>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails.primeSponsorName || 'No Data'}}</span>
                                 </div>
                                 
                             </div>

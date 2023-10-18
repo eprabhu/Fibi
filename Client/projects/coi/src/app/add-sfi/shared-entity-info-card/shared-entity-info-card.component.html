@@ -49,7 +49,7 @@
                 class="{{getWarningClass(entityDetails?.entityRiskCategory?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
             </span>
             <app-no-data-label [valueToShow]="entityDetails?.entityRiskCategory">
-              <span class="ml-2 mt-1 fw-normal">{{entityDetails?.entityRiskCategory.description}}</span>
+              <span class="ml-2 mt-1 fw-normal">{{entityDetails?.entityRiskCategory?.description}}</span>
             </app-no-data-label>
           </div>
         </span>

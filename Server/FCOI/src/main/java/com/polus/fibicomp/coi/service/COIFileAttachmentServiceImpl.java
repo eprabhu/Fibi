@@ -72,13 +72,13 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 
 	@Override
 	@Transactional(rollbackFor = {COIFileAttachmentException.class, IOException.class})
-	public Attachments saveAttachment(AttachmentsDto request) {
+	public Attachments saveAttachment(AttachmentsDto request, String personId) {
 		FileManagementOutputDto fileOutput = null;
 		try {
 			FileManagmentInputDto input = FileManagmentInputDto.builder()
 											.file(request.getFile())
 											.moduleCode(FileManagmentConstant.COI_MODULE_CODE)
-											.moduleNumber(request.getModuleNumber())
+											.moduleNumber(personId)
 											.updateUser(AuthenticatedUser.getLoginUserName())
 											.build();
 			fileOutput = fileManagementService.saveFile(input);
