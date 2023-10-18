@@ -71,34 +71,24 @@
                                         <label class="label-text">Principal Investigator :</label>
                                         <span class="ml-2 grey-text"[attr.aria-label]="relation?.principalInvestigator">{{relation?.principalInvestigator}}</span>
                                     </div>
-                                    <div class="col-6"tabindex="0">
-                                        <label class="label-text">Sponsor :</label>
-                                        <span class="grey-text" [attr.aria-label]="relation?.sponsor">{{relation?.sponsor}}</span>
+                                    <div class="col-3"tabindex="0">
+                                        <label class="label-text">Project Role : </label>
+                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.reporterRole">{{relation?.reporterRole}}</span>
                                     </div>
-                                    <div class="col-6"tabindex="0">
+                                    <div class="col-3"tabindex="0">
                                         <label class="label-text">Period :</label>
                                         <span class="ml-2 grey-text" [attr.aria-label]="relation?.startDate + ' - ' + relation?.endDate">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
                                             dateFormatter}}</span>
                                     </div>
                                     <div class="col-6"tabindex="0">
-                                        <label class="label-text">Prime Sponsor :</label>
-                                        <span *ngIf="relation?.primeSponsor" class="ml-2 grey-text"[attr.aria-label]="relation?.primeSponsor">{{relation?.primeSponsor}}</span>
-                                        <span *ngIf="!relation?.primeSponsor" class="noDataExists">--No Data--</span>
-                                    </div>
-                                    <div class="col-6"tabindex="0">
-                                        <label class="label-text"[attr.aria-label]="relation.moduleCode === 3 ? 'Proposal' : 'Award'"> {{relation.moduleCode == 3 ? 'Proposal' : 'Award'}} Status :
-                                        </label>
-                                        <span class="ml-2 grey-text">{{relation?.moduleStatus}}</span>
+                                        <label class="label-text">Sponsor :</label>
+                                        <span class="grey-text" [attr.aria-label]="relation?.sponsor">{{relation?.sponsor}}</span>
                                     </div>
                                     <div class="col-6"tabindex="0">
                                         <label class="label-text">Lead Unit :</label>
                                         <span class="ml-2 grey-text" *ngIf="relation?.unitName"[attr.aria-label]="relation?.unitName">{{relation?.unitNumber}} -
                                             {{relation?.unitName}}</span>
                                         <span *ngIf="!relation?.unitName" class="noDataExists">No Lead Unit exist</span>
-                                    </div>
-                                    <div class="col-6"tabindex="0">
-                                        <label class="label-text">Project Role : </label>
-                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.reporterRole">{{relation?.reporterRole}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -224,16 +214,21 @@
                           </app-no-data-label>
                       </div>
                       <div class="col-lg-4 col-sm-6 col-6 mb-3">
+                          <label class="d-block label-text">Project Role</label>
+                          <app-no-data-label [valueToShow]="selectedProjectForView?.reporterRole">
+                              <span class="grey-text m-0">{{selectedProjectForView?.reporterRole}}</span>
+                          </app-no-data-label>
+                      </div>
+                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
                           <label class="d-block label-text">Period</label>
                           <span class="grey-text m-0">
                               {{selectedProjectForView?.startDate | dateFormatter}} - {{selectedProjectForView?.endDate |
                               dateFormatter}}</span>
                       </div>
                       <div class="col-lg-4 col-sm-6 col-6 mb-3">
-                          <label class="d-block label-text">{{selectedProjectForView?.moduleCode == 3 ? 'Proposal' :
-                              'Award'}} Status</label>
-                          <app-no-data-label [valueToShow]="selectedProjectForView?.moduleStatus">
-                              <span class="grey-text m-0">{{selectedProjectForView?.moduleStatus}}</span>
+                          <label class="d-block label-text">Sponsor</label>
+                          <app-no-data-label [valueToShow]="selectedProjectForView?.sponsor">
+                              <span class="grey-text m-0">{{selectedProjectForView?.sponsor}}</span>
                           </app-no-data-label>
                       </div>
                       <div class="col-lg-4 col-sm-6 col-12 mb-3">
@@ -242,9 +237,10 @@
                             {{selectedProjectForView?.unitNumber}} - {{selectedProjectForView?.unitName}}</span>
                       </div>
                       <div class="col-lg-4 col-sm-6 col-6 mb-3">
-                          <label class="d-block label-text">Sponsor</label>
-                          <app-no-data-label [valueToShow]="selectedProjectForView?.sponsor">
-                              <span class="grey-text m-0">{{selectedProjectForView?.sponsor}}</span>
+                          <label class="d-block label-text">{{selectedProjectForView?.moduleCode == 3 ? 'Proposal' :
+                              'Award'}} Status</label>
+                          <app-no-data-label [valueToShow]="selectedProjectForView?.moduleStatus">
+                              <span class="grey-text m-0">{{selectedProjectForView?.moduleStatus}}</span>
                           </app-no-data-label>
                       </div>
                       <div class="col-lg-4 col-sm-6 col-6 mb-3">

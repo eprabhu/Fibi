@@ -32,7 +32,7 @@ export class RelationshipComponent implements OnInit {
   selectedProjectForView: any;
   isEditMode: boolean = true;
   collapseViewMore = {};
-  expandInfo = true;
+  expandInfo = false;
   count: number;
   disclosureId: number;
   reviewStatus: string;

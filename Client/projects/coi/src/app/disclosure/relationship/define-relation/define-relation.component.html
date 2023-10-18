@@ -18,36 +18,34 @@
             </div>
             <div class="row ml-2 mb-3">
               <div class="col-4">
+                <label class="label-text">{{selectedProject?.reporterRole}} :</label>
+                <span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
+              </div>
+              <div class="col-4">
+                <label class="label-text">Project Role : </label>
+                <span class="ml-2 grey-text">{{selectedProject?.reporterRole}}</span>
+              </div>
+              <div class="col-4">
+                <label class="label-text">Period :</label>
+                <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
+              </div>
+              <div class="col-4">
                 <label class="label-text">Sponsor :</label>
                 <span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
               </div>
               <div class="col-4">
-                <label class="label-text">Prime Sponsor :</label>
-              <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
-              <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">--No Data--</span>
+                <label class="label-text">Lead Unit :</label>
+                <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+                <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
               </div>
               <div class="col-3">
                 <label class="label-text">{{selectedProject?.moduleCode == 3 ? 'Proposal' : 'Award'}} Status : </label>
                 <span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
               </div>
-    
               <div class="col-4">
-                <label class="label-text">{{selectedProject?.reporterRole}} :</label>
-                <span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
-              </div>
-              <div class="col-8">
-                <label class="label-text">Lead Unit :</label>
-              <span class="ml-2 grey-text" *ngIf="selectedProject?.unitName">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
-              <span *ngIf="!selectedProject?.unitName" class="noDataExists">No Lead Unit exist</span>
-              </div>
-    
-              <div class="col-4">
-                <label class="label-text">Project Role : </label>
-                <span class="ml-2 grey-text">{{selectedProject?.reporterRole}}</span>
-              </div>
-              <div class="col-8">
-                <label class="label-text">Period :</label>
-                <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
+                <label class="label-text">Prime Sponsor :</label>
+              <span *ngIf="selectedProject?.primeSponsor" class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
+              <span *ngIf="!selectedProject?.primeSponsor" class="noDataExists">--No Data--</span>
               </div>
             </div>
           </div>
