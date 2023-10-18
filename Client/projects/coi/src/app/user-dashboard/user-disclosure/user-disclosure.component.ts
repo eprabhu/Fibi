@@ -338,9 +338,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
                 const experationDate = (disclosureDate[0].expirationDate);
                 const currentDate = new Date().getTime()
                 this.differenceInDays = getDuration(currentDate, experationDate)
-                if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30)) < 10){
+                if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) < 10){
                     this.dateWarningColor = true;
-                }else if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30)) > 30){
+                }else if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) > 30){
                     this.dateWarning = false;
                 }
             }
