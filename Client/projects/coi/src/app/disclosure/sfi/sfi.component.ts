@@ -42,7 +42,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     entityName: any;
     isRelationshipActive: false;
     entityDetails: any;
-    expandInfo = true;
+    expandInfo = false;
     isEnableActivateInactivateSfiModal: boolean;
     $debounceEvent = new Subject();
     $fetchSFIList = new Subject();

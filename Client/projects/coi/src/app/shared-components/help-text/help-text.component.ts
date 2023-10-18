@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 export class HelpTextComponent {
 
   @Input() helpTextList: string[] = [];
-  @Input() isExpanded = true;
+  @Input() isExpanded = false;
   @Input() isReadMoreLess = false;
   @Input() rowLimit = 1;
   @Input() tooltip = '';
