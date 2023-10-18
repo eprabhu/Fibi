@@ -1,24 +1,37 @@
 package com.polus.formbuilder.programmedelement.opa.compuncomp;
 
+import java.math.BigDecimal;
+
 import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
+import com.polus.formbuilder.programmedelement.ProgrammedElementRequestModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OPACompUnCompRequestModel implements ProgrammedElementModel{
+@EqualsAndHashCode(callSuper = false)
+public class OPACompUnCompRequestModel extends ProgrammedElementRequestModel{
 
-	private int id;
-    private int opaId;
-    private int opaNumber;
-    private int personEntityId;
-    private String entityNumber;
-    private String natureOfRelationship;
-    private String isCompOrUncomp;
-    private int numberOfDays;
+	    private Integer opaDisclActivityId;
+	    private Integer opaDisclosureId;
+	    private Integer opaDisclPersonEntityId;
+	    private Integer personEntityId;
+	    private Integer entityId;
+	    private String entityNumber;
+	    private String entityName;
+	    private String isCompensated;
+	    private BigDecimal numOfDaysSummer;
+	    private BigDecimal numOfDaysAcademic;
+	    private BigDecimal numOfDaysInYear;
+	    private String natureOfWork;
+	    private String description1;
+	    private String description2;
+	    private String updateUser;
+	    private OPAPersonEntityInfoDTO entityInfo;
 }

@@ -25,6 +25,8 @@ public class FormComponentSaveRequest{
 	
 	private String componentType;
 	
+	private String componentData;
+	
 	private String componentRefId;
 	
 	private ProgrammedElementModel programmedElement;
