@@ -32,8 +32,8 @@
 .scrollable-section {
   overflow-y: auto;
   overflow-x: hidden;
-  min-height: 40vh;
-  max-height: 51vh;
+  min-height: calc(100vh - 293px);
+  max-height: 33vh;
 }
 
 ::-webkit-scrollbar {
@@ -74,3 +74,16 @@
 .project-color {
   color:#486487
 }
+
+.side-scroll-award {
+  max-height: calc(74vh - 50rem);
+  overflow-y: auto;
+  min-height: 100px;
+}
+
+.side-scroll-proposal {
+  max-height: calc(74vh - 50rem);
+  overflow-y: auto;
+  min-height: 100px;
+}
+

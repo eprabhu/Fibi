@@ -32,6 +32,6 @@ public interface COIFileAttachmentService {
 
 	String updateDisclAttachmentDetails(COIFileRequestDto request);
 	
-	Attachments saveAttachment(AttachmentsDto request);
+	Attachments saveAttachment(AttachmentsDto request, String personId);
 
 }
