@@ -446,6 +446,10 @@ nav ul li.active {
   background: #c9a742 !important;
 }
 
+.bg-opa-clip {
+  background: #1192d1 !important;
+}
+
 .bg-travel-clip {
   background: #bf975a !important;
 }
@@ -474,8 +478,9 @@ nav ul li.active {
 }
 
 .info-card-border {
-  border: #17a2b8 solid;
-  border-width: 1px 1px 1px 5px;
+  margin:0;
+  padding:5px;
+  background:#e6f4ff!important;
 }
 
 .mr-8 {
@@ -544,4 +549,5 @@ nav ul li.active {
   background-size: 90px 90px;
   background-image: linear-gradient(to right, #dad3d3 1px, transparent 1px), linear-gradient(to bottom, #cdc4c4 1px, transparent 1px);
 }
+
 

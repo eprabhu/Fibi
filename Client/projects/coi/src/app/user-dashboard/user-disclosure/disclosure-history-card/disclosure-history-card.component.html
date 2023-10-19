@@ -2,11 +2,17 @@
     <div class="position-relative col-auto mt-46">
         <div class="fs-14 rounded-5 bg-white border round-card" [class.last-update] = "!isLastElement">
             <div [title]="disclosure?.updateTimestamp | date:'dd MMM yyyy'" class="fw-bold grey-text m-0"
-                *ngIf="disclosure?.updateTimestamp">{{disclosure?.updateTimestamp | date : 'dd MMM yyyy'}}</div>
+                *ngIf="disclosure?.updateTimestamp">
+                {{disclosure?.updateTimestamp | date : 'dd MMM yyyy'}}
+            </div>
+            <div [title]="disclosure?.updateTimeStamp | date:'dd MMM yyyy'" class="fw-bold grey-text m-0"
+                *ngIf="disclosure?.updateTimeStamp">
+                {{disclosure?.updateTimeStamp | date : 'dd MMM yyyy'}}
+            </div>
         </div>
     </div>
     <div class="bg-white position-relative card-left col hovering-card border mt-2 m-06 d-flex align-items-center shadow-sm light-dark-text-color"
-        *ngIf="!disclosure?.travelDisclosureId">
+        *ngIf="!disclosure?.travelDisclosureId && !disclosure.opaDisclosureId">
         <div class="col-11">
             <div class="row mt-2">
                 <div class="col-12 d-flex">
@@ -177,4 +183,87 @@
             </div>
         </div>
     </div>
+
+    <!-- OPA Histories -->
+
+    <div class="bg-white position-relative card-left col hovering-card border mt-2 m-06 d-flex align-items-center shadow-sm light-dark-text-color"
+        *ngIf="disclosure?.opaDisclosureId">
+    <div class="col-11">
+        <div class="row mt-2">
+            <div class="col-12 d-flex">
+                <span
+                    class="entity-status-history shadow-sm align-items-center d-flex {{getColorBadges(disclosure)}}">
+                    <span>OPA</span>
+                </span>
+            </div>
+        </div>
+        <div class="row mb-3 mt-4 ml-2">
+            <div class="col-3">
+                <span class="label-text">Department:</span> <span class="grey-text">
+                    #{{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+            </div>
+            <div class="col-3">
+                <label for="certify-date" class="label-text">Certification Date :</label>
+                <app-no-data-label id="certify-date" [valueToShow]="disclosure?.submissionTimestamp">
+                    <span class="grey-text">{{disclosure?.submissionTimestamp | dateFormatter}}</span>
+                </app-no-data-label>
+            </div>
+            <div class="col-3">
+                <label for="certify-date" class="label-text">Reporting Cycle :</label>
+                <app-no-data-label [valueToShow]="">
+                    <span class="grey-text">{{disclosure?.periodStartDate |dateFormatter}} - {{disclosure?.periodEndDate |dateFormatter}}</span>
+                </app-no-data-label>
+            </div>
+            <div class="col-3">
+                <span class="label-text me-2">Disposition Status :</span> <span
+                    class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
+                    <span class="badgeFont">
+                        {{disclosure?.dispositionStatus}}
+                </span>
+            </div>
+        </div>
+        <div class="row mb-3 mt-4 ml-2">
+            <div class="col-3">
+                <span class="label-text me-2">Staff / Faculty :</span>
+                <span class=" "></span>
+                    <span class="badgeFont">
+                        {{disclosure?.isFaculty ? 'Faculty' : 'Staff'}}
+                </span>
+            </div>
+            <div class="col-3">
+                <label for="id" class="label-text">Administrator :</label>
+                <app-no-data-label [valueToShow]="disclosure?.adminPersonName">
+                    <span id="id" class="grey-text">{{disclosure?.adminPersonName}}</span>
+                </app-no-data-label>
+            </div>
+            <div class="col-3">
+                <label for="id" class="label-text">Admin Group :</label>
+                <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
+                    <span id="id" class="grey-text">{{disclosure?.adminGroupName}}</span>
+                </app-no-data-label>
+            </div>
+            <div class="col-3">
+                <label for="review-status" class="label-text mr-21">Review Status :</label>
+                <app-no-data-label id="review-status" [valueToShow]="disclosure?.disclosureStatus">
+                    <span
+                        [class.text-dark]="commonService.getTravelReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
+                        class="ms-3 {{commonService.getTravelReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
+                        <span class="badgeFont">
+                            {{disclosure?.disclosureStatus}}
+                    </span>
+                </app-no-data-label>
+            </div>
+        </div>
+    </div>
+    <div class="col-1 ms-4 mt-64">
+        <div class="d-flex col-1 align-items-center py-2 px-3">
+            <button (click)="redirectToDisclosure()" aria-describedby="Click to view Disclosure details"
+                class="d-flex align-items-center btn btn-outline-primary  fs-14"
+                [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
+                <mat-icon class="me-1">visibility</mat-icon>
+                View
+            </button>
+        </div>
+    </div>
+</div>
 </div>

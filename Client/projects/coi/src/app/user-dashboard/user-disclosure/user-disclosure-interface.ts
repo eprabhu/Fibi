@@ -80,6 +80,7 @@ export interface UserDisclosure {
         travellerTypeDescription: string;
         travelDisclosureStatusCode: string;
         travelDisclosureStatusDescription: string;
+        opaDisclosureId: any;
       }
 
       export interface UnitDetails {
