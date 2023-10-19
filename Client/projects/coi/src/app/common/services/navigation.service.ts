@@ -83,11 +83,14 @@ export class NavigationService {
     setCurrentSubTabForModules(event) {
         const coiAdminTab = sessionStorage.getItem('currentCOIAdminTab');
         const coiReviewTab = sessionStorage.getItem('currentCOIReviewTab');
+        const opaDashboard = sessionStorage.getItem('currentOPATab');
         this.removeCurrentTab();
         if (this.coiPermissionList(event) && coiAdminTab) {
             sessionStorage.setItem('currentCOIAdminTab', coiAdminTab);
         } else if (this.coiReviewerPermissionList(event) && coiReviewTab) {
             sessionStorage.setItem('currentCOIReviewTab', coiReviewTab);
+        } else if (this.opaDashboardCheck(event) && opaDashboard) {
+            sessionStorage.setItem('currentOPATab', opaDashboard);
         }
     }
 
@@ -97,6 +100,7 @@ export class NavigationService {
     removeCurrentTab() {
         sessionStorage.removeItem('currentCOIAdminTab');
         sessionStorage.removeItem('currentCOIReviewTab');
+        sessionStorage.removeItem('currentOPATab');
     }
      /**
      * @param  {} event
@@ -111,6 +115,10 @@ export class NavigationService {
      */
     coiReviewerPermissionList(event) {
     return event.url.split(/[/?]/).includes('disclosure') || event.url.split('/').includes('reviewer-dashboard') ? true : false;
+    }
+
+    opaDashboardCheck(event) {
+        return event.url.split(/[/?]/).includes('/opa/form') || event.url.split('/').includes('opa-dashboard') ? true : false;
     }
     /**
      * @param  {} pathDetails

@@ -53,6 +53,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     getActiveDisclosure() {
         this.$subscriptions.push(this.service.getActiveDisclosure().subscribe((res: any) => {
             this.service.activeDisclosures = res.coiDisclosures || [];
+            this.service.activeOPAs = res.opaDisclosure || [];
             this.updateFCOIStatuses();
         }));
     }

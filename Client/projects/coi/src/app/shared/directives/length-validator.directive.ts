@@ -27,12 +27,14 @@ export class LengthValidatorDirective implements OnInit, OnChanges {
     @Input() limit = 2000;
     @Input() elementId: string;
     @Input() isShowLimiter = true;
+    @Input() position = 'BELOW';
     @Input() styleList = 'p2 text-end word-count';
     @Input() ngModel;
 
     customElementId = null;
     hostElement: HTMLInputElement;
-    element = '<div class="CLASS_LIST"><span id = "ELEMENT_ID" >LIMIT</span><span> characters remaining</span></div>';
+    element = this.position === 'BELOW' ? '<div class="CLASS_LIST"><span id = "ELEMENT_ID" >LIMIT</span><span> characters remaining</span></div>'
+                                        : '<span class="CLASS_LIST"><span id = "ELEMENT_ID" >LIMIT</span><span> characters remaining</span></span>';
     currentLengthValueElement: HTMLElement;
 
     constructor(public _hostElement: ElementRef) {
@@ -65,7 +67,8 @@ export class LengthValidatorDirective implements OnInit, OnChanges {
         if (!this.elementId) {
             this.assignElementId();
         }
-        (this.hostElement.parentNode as HTMLElement).insertAdjacentHTML('beforeend', this.element);
+        this.position === 'BELOW' ? (this.hostElement.parentNode as HTMLElement).insertAdjacentHTML('beforeend', this.element) : 
+        (this.hostElement.parentNode as HTMLElement).insertAdjacentHTML('afterbegin', this.element);
         this.currentLengthValueElement = document.getElementById(this.elementId);
     }
 

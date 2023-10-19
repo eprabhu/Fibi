@@ -17,6 +17,7 @@ export class CommonService {
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
+    opaUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -109,6 +110,7 @@ export class CommonService {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
+        this.opaUrl = configurationData.opaUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -255,8 +257,6 @@ export class CommonService {
                 toast.hide();
             }, timer);
         }
-
-
     }
 
   getDisclosureConflictBadge(statusCode: string) {

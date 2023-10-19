@@ -3,7 +3,7 @@ import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
 import { CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL,
-         CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+         CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL } from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
 import { Subject, interval } from 'rxjs';
@@ -65,11 +65,13 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     isShowCreate = false;
     showSlider = false;
     entityId: any;
-    differenceInDays:any;
-    dateWarningColor:any = false;
-    dateWarning:any = true;
-    hasPendingFCOI:any = false;
+    differenceInDays: any;
+    dateWarningColor: any = false;
+    dateWarning: any = true;
+    hasPendingFCOI: any = false;
     hasActiveFCOI = false;
+    hasPendingOPA = false;
+    hasActiveOPA = false;
 
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
@@ -104,7 +106,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     private getDashboardList(): any {
         const disclosureViews = this.result.disclosureViews || [];
         const travelDashboardViews = this.result.travelDashboardViews || [];
-        return disclosureViews.concat(travelDashboardViews);
+        const OPA_DETAILS = this.result.opaDashboardDto || [];
+        return [...disclosureViews, ...travelDashboardViews, ...OPA_DETAILS];
     }
 
     private loadingComplete() {
@@ -234,22 +237,25 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     redirectToDisclosure(disclosure: UserDisclosure) {
         let redirectUrl;
-
         if (disclosure.travelDisclosureId) {
             const isTravelDisclosureEditPage = ['1', '4', '5'].includes(disclosure.reviewStatusCode);
             redirectUrl = isTravelDisclosureEditPage ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
+        } else if (disclosure.opaDisclosureId) {
+            redirectUrl = OPA_REDIRECT_URL;
         } else {
             const isDisclosureEditPage = ['1', '5', '6'].includes(disclosure.reviewStatusCode);
             redirectUrl = isDisclosureEditPage ? CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
-
         this._router.navigate([redirectUrl],
-            { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId } });
+            { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId || disclosure.opaDisclosureId} });
     }
 
     getColorBadges(disclosure: UserDisclosure) {
         if (disclosure?.travelDisclosureId) {
             return 'bg-travel-clip';
+        }
+        if (disclosure?.opaDisclosureId) {
+            return 'bg-opa-clip';
         }
         switch (disclosure.fcoiTypeCode) {
             case '1':
@@ -264,12 +270,14 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     modalHeader(disclosure: UserDisclosure) {
-        if (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3') {
+        if (!disclosure.opaDisclosureId && (disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3')) {
             if (disclosure.fcoiTypeCode === '2') {
                 return `#${disclosure.proposalId} - ${disclosure.proposalTitle}`;
             } else if (disclosure.fcoiTypeCode === '3') {
                 return `#${disclosure.awardId} - ${disclosure.awardTitle}`;
             }
+        } else {
+            return `#${disclosure.opaDisclosureId}`;
         }
     }
 
@@ -289,9 +297,15 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.filteredDisclosureArray =  [];
         this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({'filterType':this.currentSelected.filter}).subscribe((data: any) => {
-            this.filteredDisclosureArray =  data;
+            this.filteredDisclosureArray =  this.getAllDisclosureHistories(data);;
             this.loadingComplete();
         }));
+    }
+
+    getAllDisclosureHistories(data: any): any {
+        const DISCLOSURE_HISTORY = data.disclosureHistoryDtos || [];
+        const OPA_HISTORY = data.opaDashboardDtos || [];
+        return [...DISCLOSURE_HISTORY, ...OPA_HISTORY];
     }
 
     openFCOIModal(type) {
@@ -324,26 +338,44 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     fcoiDatesRemaining() {
-            this.userDashboardService.activeDisclosures.forEach(disclosure => {
-                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
-                    this.hasPendingFCOI = true;
-                }
-                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING') {
-                    this.hasActiveFCOI = true;
-                }
-            })
-            let disclosureDate  =  this.userDashboardService.activeDisclosures.filter(disclosure =>
-                disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
-            if ( disclosureDate[0]) {
-                const experationDate = (disclosureDate[0].expirationDate);
-                const currentDate = new Date().getTime()
-                this.differenceInDays = getDuration(currentDate, experationDate)
-                if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) < 10){
-                    this.dateWarningColor = true;
-                }else if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) > 30){
-                    this.dateWarning = false;
-                }
+        this.userDashboardService.activeDisclosures.forEach(disclosure => {
+            if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
+                this.hasPendingFCOI = true;
             }
+            if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING') {
+                this.hasActiveFCOI = true;
+            }
+        });
+        this.userDashboardService.activeOPAs.forEach(disclosure => {
+            if (disclosure?.dispositionStatusType?.dispositionStatusCode === '3') {
+                this.hasActiveOPA = true;
+            }
+            if (disclosure?.dispositionStatusType?.dispositionStatusCode === '1') {
+                this.hasPendingOPA = true;
+            }
+        });
+        const disclosureDate = this.userDashboardService.activeDisclosures.filter(disclosure =>
+            disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
+        if (disclosureDate[0]) {
+            const expirationDate = (disclosureDate[0].expirationDate);
+            const currentDate = new Date().getTime();
+            this.differenceInDays = getDuration(currentDate, expirationDate);
+            if ((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) +
+                (this.differenceInDays.durInYears * 360)) < 10) {
+                this.dateWarningColor = true;
+            } else if ((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) +
+                (this.differenceInDays.durInYears * 360)) > 30) {
+                this.dateWarning = false;
+            }
+        }
+    }
+
+    createOPA() {
+        this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+            this.commonService.getCurrentUserDetail('homeUnit'))
+            .subscribe((res: any) => {
+                this._router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
+            }));
     }
 
 }

@@ -17,7 +17,7 @@ export class LeftNavBarComponent implements OnInit {
     isManageEntity = false;
     @ViewChild('sideBarMenu', {static: true}) sideBarMenu: ElementRef;
 
-    constructor(private _commonService: CommonService, private _router: Router) {
+    constructor(private _commonService: CommonService, public _router: Router) {
         document.addEventListener('mouseup', this.offClickSideBarHandler.bind(this));
     }
 

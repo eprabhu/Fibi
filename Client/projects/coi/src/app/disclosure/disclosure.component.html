@@ -288,9 +288,6 @@
                     </button>
                 </div>
             </div>
-            <div *ngIf="sfiService.isShowSfiNavBar">
-                <app-add-sfi-slider [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi-slider>
-            </div>
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill border-end bg-white shadow-sm" [class.side-height]="isCardExpanded">
@@ -475,6 +472,9 @@
             </div>
         </ng-container>
     </div>
+</div>
+<div *ngIf="sfiService.isShowSfiNavBar">
+    <app-add-sfi-slider [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi-slider>
 </div>
 
 <!-- Complete review modal -->

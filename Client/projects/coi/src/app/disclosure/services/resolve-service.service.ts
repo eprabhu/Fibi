@@ -8,7 +8,7 @@ import {DataStoreService} from './data-store.service';
 import {
     CREATE_DISCLOSURE_ROUTE_URL,
     HTTP_ERROR_STATUS,
-    HOME_URL,
+    REPORTER_HOME_URL,
     POST_CREATE_DISCLOSURE_ROUTE_URL
 } from '../../app-constants';
 import {NavigationService} from '../../common/services/navigation.service';
@@ -36,8 +36,8 @@ export class ResolveServiceService {
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
                     this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure.reviewStatusCode, route, res[0].coiDisclosure.personId);
-                    if (['3', '4', '7', '8'].includes(res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode)) {
-                        this.getCoiReview(res[0].coiDisclosure.disclosureId, observer);
+                    if (['3', '4', '7', '8'].includes(res[0].opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)) {
+                        this.getCoiReview(res[0].opaDisclosure?.opaDisclosureId, observer);
                     } else {
                         observer.next(true);
                         observer.complete();
@@ -64,7 +64,7 @@ export class ResolveServiceService {
     }
 
     setPreviousUrlPath(previousUrl: string) {
-        return previousUrl.includes('?') ? HOME_URL : previousUrl;
+        return previousUrl.includes('?') ? REPORTER_HOME_URL : previousUrl;
     }
 
     private updateProposalDataStore(data: any) {
@@ -95,7 +95,7 @@ export class ResolveServiceService {
             this._router.navigate(['/coi/error-handler/403']);
             return new Observable(null);
         } else {
-            this._router.navigate([HOME_URL]);
+            this._router.navigate([REPORTER_HOME_URL]);
             // this._commonService.showToast(HTTP_ERROR_STATUS,
             //     error.error !== 'DISCLOSURE_EXISTS' ? 'Please try again later.' : 'Disclosure already exists.');
             return new Observable(null);

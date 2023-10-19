@@ -72,7 +72,11 @@ const routes: Routes = [
             {
                 path: 'opa',
                 loadChildren: () => import('./opa/opa.module').then(m => m.OpaModule)
-            }
+            },
+            {
+                path: 'opa-dashboard',
+                loadChildren: () => import('./opa-dashboard/opa-dashboard.module').then(m => m.OpaDashboardModule)
+            },
           ]
     },
 { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }
