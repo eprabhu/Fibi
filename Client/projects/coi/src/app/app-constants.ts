@@ -12,6 +12,7 @@ export const POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL = '/coi/travel-disclosure/s
 export const REPORTER_HOME_URL = '/coi/user-dashboard';
 export const ADMIN_DASHBOARD_URL = '/coi/admin-dashboard';
 export const DEFAULT_UNIT_FORMAT = 'unitNumber - unitName';
+export const OPA_REDIRECT_URL = '/coi/opa/form';
 
 export const ADMIN_DASHBOARD_RIGHTS = new Set(['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE',
     'VIEW_PROJECT_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE']);

@@ -20,6 +20,16 @@
                 <span class="icon-btn"><mat-icon>article</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Disclosures</span></span>
             </button>
 
+            <button *ngIf="isAdministrator" role="listitem" aria-label="Go to View Appointments" title="Go to OPA"
+                class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
+                routerLinkActive="active-list" [routerLink]="['/coi/opa-dashboard']">
+                <span class="icon-btn">
+                    <img class="mr-2 img-container" *ngIf="_router.url.includes('/coi/opa-dashboard')" src="{{deployMap}}assets/images/opa icon-active.svg" alt="Organization icon">
+                    <img class="mr-2 img-container" *ngIf="!_router.url.includes('/coi/opa-dashboard')" src="{{deployMap}}assets/images/opa icon.svg" alt="Organization icon">
+                    <span
+                        class="text-start text-nowrap width-170px text-indent-15px ps-3">My OPA</span></span>
+            </button>
+
             <button role="listitem" aria-label="Go to View Appointments" title="Go to Person Search"
                     class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
                     routerLinkActive="active-list">
@@ -43,7 +53,7 @@
                     routerLinkActive="active-list" [routerLink]="['/coi/configuration']">
                 <span class="icon-btn"><mat-icon>apps</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">COI Configuration</span></span>
             </button>
-
+            
         </ul>
     </div>
 </div>

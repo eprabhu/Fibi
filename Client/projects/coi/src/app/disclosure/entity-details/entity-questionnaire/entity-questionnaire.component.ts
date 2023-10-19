@@ -61,6 +61,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
       this.configuration.enableViewMode = !this.isEditMode;
     }));
   }
+
   ngOnChanges() {
     this.configuration.enableViewMode = !this.isEditMode;
     if (this.isSwitchCurrentTab) {
@@ -83,8 +84,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
 
   async getRelationshipLookUp(): Promise<any> {
     try {
-      const response = await this.entityDetailsServices.addSFILookUp(this.currentSelected.tab);
-      return response.validPersonEntityRelTypes;
+      const response = await this.entityDetailsServices.addSFILookUp();
+      return response;
     } catch (error) {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
     }
@@ -99,13 +100,12 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   }
   getDefinedRelationships() {
     const REQ_BODY = {
-      'tabName': this.currentSelected.tab,
       'personEntityId': this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId
     };
     return new Promise<boolean>((resolve) => {
       this.$subscriptions.push(this.entityDetailsServices.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
         this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;
-        this.definedRelationships = res.personEntityRelationships || [];
+        this.definedRelationships = res || [];
         (this.isEditMode && this.definedRelationships.length > 0) ? this.positionsToView.emit(true) : this.positionsToView.emit(false);
         this.removeExistingRelation();
         resolve(true);

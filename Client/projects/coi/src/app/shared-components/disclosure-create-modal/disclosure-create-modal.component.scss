@@ -86,7 +86,15 @@
     cursor: pointer;
 }
 
-.grey-text {
-    color: #6A7980;
+.label-text {
+    font-weight: 600;
+    color: #697a80;
     font-size: 14px;
+}
+
+.grey-text {
+    font-size: 1.4rem;
+    color: #48647f;
+    font-weight: 400;
+    margin-left: 5px;
 }
