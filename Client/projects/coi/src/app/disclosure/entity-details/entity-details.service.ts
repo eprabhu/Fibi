@@ -35,8 +35,8 @@ export class EntityDetailsService {
     return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
   }
 
-  async addSFILookUp(tabName): Promise<any> {
-    return this._http.get(`${this._commonService.baseUrl}/getRelationshipLookup/${tabName}`).toPromise();
+  async addSFILookUp(): Promise<any> {
+    return this._http.get(`${this._commonService.baseUrl}/getRelationshipLookup`).toPromise();
   }
 
   getCoiEntityDetails(personEntityId) {
