@@ -492,6 +492,10 @@
         "target": "http://10.199.100.34:9090/",
         "secure": false
     },
+    "/opa/review/*": {
+        "target": "http://10.199.100.62:8071/",
+        "secure": false
+    },
     "/getNoteDetailsForNoteId/noteId": {
         "target": "http://10.199.100.123:8070/coi/",
         "secure": false

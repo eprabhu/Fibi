@@ -131,11 +131,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     createOPA() {
-        this._headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+        this.$subscriptions.push(this._headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
-                this._router.navigate(['/coi/opa/form'], { queryParams: { disclosureId: res.opaDisclosureId } });
-            });
+                this._router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
+            }));
     }
 
     private passwordAtleast7Characters() {
@@ -149,7 +149,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.passwordValidation.set('same-password', true);
         }
     }
-    
+
     saveOrUpdateNote() {
         if (this.noteComment.trim()) {
             this.$subscriptions.push(this._headerService.saveOrUpdatePersonNote({
