@@ -3,7 +3,7 @@ import { EntityDetailsService } from '../entity-details.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription, forkJoin } from 'rxjs';
-import { ADMIN_DASHBOARD_URL, HOME_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../../app-constants';
+import { ADMIN_DASHBOARD_URL, REPORTER_HOME_URL, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
@@ -56,7 +56,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
 
     constructor( public entityDetailsServices: EntityDetailsService, private _router: Router,
                  private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService ) {
-    } 
+    }
 
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
@@ -204,7 +204,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     goToHome() {
-        const reRouteUrl = this.isCOIAdministrator ? ADMIN_DASHBOARD_URL : HOME_URL;
+        const reRouteUrl = this.isCOIAdministrator ? ADMIN_DASHBOARD_URL : REPORTER_HOME_URL;
         this._router.navigate([reRouteUrl]);
     }
 
@@ -272,7 +272,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         this.entityDetailsServices.relationshipCompletedObject = {};
         this.$subscriptions.push(forkJoin(...questionList).subscribe(data => {
             this.allRelationQuestionnaires = [];
-            data.forEach((d: any) =>{ 
+            data.forEach((d: any) =>{
                 this.entityDetailsServices.relationshipCompletedObject[d.applicableQuestionnaire[0].MODULE_SUB_ITEM_KEY] = d.applicableQuestionnaire.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
                 this.combineQuestionnaireList(d.applicableQuestionnaire);
             })

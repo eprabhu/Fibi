@@ -65,11 +65,13 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     isShowCreate = false;
     showSlider = false;
     entityId: any;
-    differenceInDays:any;
-    dateWarningColor:any = false;
-    dateWarning:any = true;
-    hasPendingFCOI:any = false;
+    differenceInDays: any;
+    dateWarningColor: any = false;
+    dateWarning: any = true;
+    hasPendingFCOI: any = false;
     hasActiveFCOI = false;
+    hasPendingOPA = false;
+    hasActiveOPA = false;
 
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
@@ -324,26 +326,44 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     fcoiDatesRemaining() {
-            this.userDashboardService.activeDisclosures.forEach(disclosure => {
-                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
-                    this.hasPendingFCOI = true;
-                }
-                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING') {
-                    this.hasActiveFCOI = true;
-                }
-            })
-            let disclosureDate  =  this.userDashboardService.activeDisclosures.filter(disclosure =>
-                disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
-            if ( disclosureDate[0]) {
-                const experationDate = (disclosureDate[0].expirationDate);
-                const currentDate = new Date().getTime()
-                this.differenceInDays = getDuration(currentDate, experationDate)
-                if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) < 10){
-                    this.dateWarningColor = true;
-                }else if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) > 30){
-                    this.dateWarning = false;
-                }
+        this.userDashboardService.activeDisclosures.forEach(disclosure => {
+            if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
+                this.hasPendingFCOI = true;
             }
+            if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING') {
+                this.hasActiveFCOI = true;
+            }
+        });
+        this.userDashboardService.activeOPAs.forEach(disclosure => {
+            if (disclosure?.dispositionStatusType?.dispositionStatusCode === '3') {
+                this.hasActiveOPA = true;
+            }
+            if (disclosure?.dispositionStatusType?.dispositionStatusCode === '1') {
+                this.hasPendingOPA = true;
+            }
+        });
+        const disclosureDate = this.userDashboardService.activeDisclosures.filter(disclosure =>
+            disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
+        if (disclosureDate[0]) {
+            const expirationDate = (disclosureDate[0].expirationDate);
+            const currentDate = new Date().getTime();
+            this.differenceInDays = getDuration(currentDate, expirationDate);
+            if ((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) +
+                (this.differenceInDays.durInYears * 360)) < 10) {
+                this.dateWarningColor = true;
+            } else if ((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) +
+                (this.differenceInDays.durInYears * 360)) > 30) {
+                this.dateWarning = false;
+            }
+        }
+    }
+
+    createOPA() {
+        this.$subscriptions.push(this.userDisclosureService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+            this.commonService.getCurrentUserDetail('homeUnit'))
+            .subscribe((res: any) => {
+                this._router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
+            }));
     }
 
 }

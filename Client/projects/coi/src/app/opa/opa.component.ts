@@ -6,11 +6,13 @@ import {isEmptyObject} from '../../../../fibi/src/app/common/utilities/custom-ut
 import {DataStoreService} from './services/data-store.service';
 import {CommonService} from '../common/services/common.service';
 import {environment} from '../../environments/environment';
-import {HOME_URL, HTTP_ERROR_STATUS} from '../app-constants';
-import {OpaDisclosure} from './opa-interface';
+import {REPORTER_HOME_URL, HTTP_ERROR_STATUS} from '../app-constants';
+import {OPA, OpaDisclosure} from './opa-interface';
 import {DefaultAssignAdminDetails, PersonProjectOrEntity} from '../shared-components/shared-interface';
 import {HTTP_SUCCESS_STATUS} from '../../../../fibi/src/app/app-constants';
 import {Router} from '@angular/router';
+import {Location} from '@angular/common';
+import {ModalType} from "../disclosure/coi-interface";
 
 @Component({
     selector: 'app-opa',
@@ -20,7 +22,7 @@ import {Router} from '@angular/router';
 export class OpaComponent implements OnInit {
     isCardExpanded = true;
     formBuilderEvents = new Subject<FormBuilderEvent>();
-    opaData: OpaDisclosure = new OpaDisclosure();
+    opa: OPA = new OPA();
     deployMap = environment.deployUrl;
     isAddAssignModalOpen = false;
     defaultAdminDetails = new DefaultAssignAdminDetails();
@@ -46,8 +48,9 @@ export class OpaComponent implements OnInit {
     personDetailsModalVO = {personId: '', fullName: ''};
     $subscriptions = [];
 
-    constructor(private _opa: OpaService,
+    constructor(public opaService: OpaService,
                 private _router: Router,
+                public location: Location,
                 public commonService: CommonService,
                 private dataStore: DataStoreService) {
     }
@@ -57,14 +60,14 @@ export class OpaComponent implements OnInit {
     }
 
     triggerSave() {
-        this._opa.formBuilderEvents.next({eventType: 'SAVE'});
+        this.opaService.formBuilderEvents.next({eventType: 'SAVE'});
     }
 
     submitOPA() {
-        this.$subscriptions.push(this._opa.submitOPA(this.opaData.opaDisclosureId, this.opaData.opaDisclosureNumber)
+        this.$subscriptions.push(this.opaService.submitOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
-                this.opaData = res;
-                this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opaData});
+                this.opa.opaDisclosure = res;
+                this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa});
             }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')));
     }
 
@@ -80,8 +83,8 @@ export class OpaComponent implements OnInit {
     closeAssignAdministratorModal(event) {
         if (event && (event.adminPersonId || event.adminGroupId)) {
             // this.getCoiReview();
-            this.opaData = event;
-            this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opaData});
+            this.opa.opaDisclosure = event;
+            this.dataStore.updateStore(['opaDisclosure'], this.opa);
         }
         this.isAddAssignModalOpen = false;
     }
@@ -108,11 +111,11 @@ export class OpaComponent implements OnInit {
     }
 
     returnDisclosure() {
-        this.$subscriptions.push(this._opa
-            .returnOPA(this.opaData.opaDisclosureId, this.opaData.opaDisclosureNumber)
+        this.$subscriptions.push(this.opaService
+            .returnOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
-                this.opaData = res;
-                this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opaData});
+                this.opa.opaDisclosure = res;
+                this.dataStore.updateStore(['opaDisclosure'], this.opa);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `OPA returned successfully.`);
                 this.goToHomeUrl();
             }, _err => {
@@ -122,16 +125,16 @@ export class OpaComponent implements OnInit {
 
     goToHomeUrl() {
         // TODO admin/reviewer/pi based redirect once rights are implemented.
-        const reRouteUrl = this._opa.previousHomeUrl || HOME_URL;
+        const reRouteUrl = this.opaService.previousHomeUrl || REPORTER_HOME_URL;
         this._router.navigate([reRouteUrl]);
     }
 
     withdrawDisclosure() {
-        this.$subscriptions.push(this._opa
-            .withdrawOPA(this.opaData.opaDisclosureId, this.opaData.opaDisclosureNumber)
+        this.$subscriptions.push(this.opaService
+            .withdrawOPA(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
-                this.opaData = res;
-                this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opaData});
+                this.opa.opaDisclosure = res;
+                this.dataStore.updateStore(['opaDisclosure'], this.opa);
             }, _err => {
                 this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
             }));
@@ -142,18 +145,13 @@ export class OpaComponent implements OnInit {
     }
 
     openDetailModal(): void {
-        this.personDetailsModalVO.personId = this.opaData.personId;
-        this.personDetailsModalVO.fullName = this.opaData.personName;
+        this.personDetailsModalVO.personId = this.opa.opaDisclosure.personId;
+        this.personDetailsModalVO.fullName = this.opa.opaDisclosure.personName;
         this.showPersonDetailsModal = true;
     }
 
     private getDataFromStore() {
-        const opaData = this.dataStore.getData();
-        console.log(opaData);
-        if (isEmptyObject(opaData)) {
-            return;
-        }
-        this.opaData = opaData.opaDisclosure;
+        this.opa = this.dataStore.getData();
     }
 
     private listenDataChangeFromStore() {
@@ -165,24 +163,24 @@ export class OpaComponent implements OnInit {
     }
 
     private setAssignAdminModalDetails(): void {
-        this.defaultAdminDetails.adminGroupId = this.opaData.adminGroupId;
-        this.defaultAdminDetails.adminGroupName = this.opaData.adminGroupName;
-        this.defaultAdminDetails.adminPersonId = this.opaData.adminPersonId;
-        this.defaultAdminDetails.adminPersonName = this.opaData.adminPersonName;
+        this.defaultAdminDetails.adminGroupId = this.opa.opaDisclosure.adminGroupId;
+        this.defaultAdminDetails.adminGroupName = this.opa.opaDisclosure.adminGroupName;
+        this.defaultAdminDetails.adminPersonId = this.opa.opaDisclosure.adminPersonId;
+        this.defaultAdminDetails.adminPersonName = this.opa.opaDisclosure.adminPersonName;
     }
 
     private setPersonProjectDetails(): void {
-        this.personProjectDetails.personFullName = this.opaData.opaPerson.personName;
+        this.personProjectDetails.personFullName = this.opa.opaDisclosure.opaPerson.personName;
         // this.personProjectDetails.projectDetails = this.coiData?.projectDetail;
-        this.personProjectDetails.unitDetails = this.opaData.homeUnitName;
+        this.personProjectDetails.unitDetails = this.opa.opaDisclosure.homeUnitName;
     }
 
     completeDisclosureReview() {
-        this.$subscriptions.push(this._opa
-            .completeOPAReview(this.opaData.opaDisclosureId, this.opaData.opaDisclosureNumber)
+        this.$subscriptions.push(this.opaService
+            .completeOPAReview(this.opa.opaDisclosure.opaDisclosureId, this.opa.opaDisclosure.opaDisclosureNumber)
             .subscribe((res: any) => {
-                this.opaData = res;
-                this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opaData});
+                this.opa.opaDisclosure = res;
+                this.dataStore.updateStore(['opaDisclosure'], {opaDisclosure: this.opa.opaDisclosure});
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             }, _err => {
                 // if (_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
@@ -191,6 +189,16 @@ export class OpaComponent implements OnInit {
                     this.commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
                 // }
             }));
+    }
+
+    updateOpaReview(modalType: ModalType) {
+        const reviewerInfo = this.opa.opaReviewerList.find(ele =>
+            ele.assigneePersonId === this.commonService.currentUserDetails.personId);
+        if (reviewerInfo) {
+            this.opaService.$SelectedReviewerDetails.next(reviewerInfo);
+            this.opaService.triggerStartOrCompleteCoiReview(modalType);
+            this.opaService.isEnableReviewActionModal = true;
+        }
     }
 
 }

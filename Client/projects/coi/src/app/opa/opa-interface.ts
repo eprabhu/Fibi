@@ -1,3 +1,8 @@
+export class OPA {
+    opaDisclosure: OpaDisclosure;
+    opaReviewerList: any;
+}
+
 export class OpaDisclosure {
     opaDisclosureId: number;
     opaDisclosureNumber: string;

@@ -12,16 +12,16 @@ export class ReviewService {
     ) { }
 
     saveOrUpdateCoiReview(params: any) {
-        return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiReview', params);
+        return this._http.post(this._commonService.opaUrl + '/review', params);
     }
 
     getCoiReview(disclosureId: number) {
-        return this._http.get(`${this._commonService.baseUrl}/getCoiReview/${disclosureId}`);
+        return this._http.get(`${this._commonService.opaUrl}/review/${disclosureId}`);
     }
 
 
     deleteReview(coiReviewId: any) {
-        return this._http.delete(`${this._commonService.baseUrl}/deleteReview/${coiReviewId}`);
+        return this._http.delete(`${this._commonService.opaUrl}/review/${coiReviewId}`);
     }
 
     reviewHistory(disclosureId: any) {
