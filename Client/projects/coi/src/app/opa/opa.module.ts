@@ -9,6 +9,7 @@ import {FormsModule} from '@angular/forms';
 import {ResolveServiceService} from './services/resolve-service.service';
 import {DataStoreService} from './services/data-store.service';
 import {OpaService} from './services/opa.service';
+import {OPASharedModule} from './shared/shared.module';
 import {SharedModule} from '../shared/shared.module';
 
 const routes: Routes = [{
@@ -31,7 +32,8 @@ const routes: Routes = [{
         MatMenuModule,
         SharedComponentModule,
         FormsModule,
-        SharedModule
+        SharedModule,
+        OPASharedModule,
     ],
     providers: [
         OpaService,

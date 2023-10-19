@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 export class UserDashboardService {
 
   activeDisclosures: ActiveDisclosure[] = [];
+  activeOPAs = [];
   isModalOpen = false;
   $openModal = new Subject();
 

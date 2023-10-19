@@ -12,7 +12,7 @@ import {
     CoiTravelDisclosure, TravelCreateModalDetails,
     TravelActionAfterSubmitRO, TravelDisclosure, EntityDetails, ModalSize } from './travel-disclosure-interface';
 import {
-    HOME_URL, HTTP_ERROR_STATUS, ADMIN_DASHBOARD_URL, HTTP_SUCCESS_STATUS,
+    REPORTER_HOME_URL, HTTP_ERROR_STATUS, ADMIN_DASHBOARD_URL, HTTP_SUCCESS_STATUS,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
@@ -106,7 +106,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             const MODULE_ID = params['disclosureId'];
             const homeUnit = this.getHomeUnit();
             if (!homeUnit && !MODULE_ID) {
-                this.router.navigate([HOME_URL]);
+                this.router.navigate([REPORTER_HOME_URL]);
             }
         });
     }
@@ -204,7 +204,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
 
     navigateBack(): void {
         const PREVIOUS_MODULE_URL = this.service.PREVIOUS_MODULE_URL;
-        const ROUTE_URL = this.service.isAdminDashboard ? ADMIN_DASHBOARD_URL : HOME_URL;
+        const ROUTE_URL = this.service.isAdminDashboard ? ADMIN_DASHBOARD_URL : REPORTER_HOME_URL;
         (PREVIOUS_MODULE_URL?.includes('travel-disclosure')) ?
             this.router.navigate([ROUTE_URL]) : this.router.navigateByUrl(PREVIOUS_MODULE_URL || ROUTE_URL);
     }

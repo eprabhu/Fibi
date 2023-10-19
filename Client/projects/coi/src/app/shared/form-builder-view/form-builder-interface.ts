@@ -3,8 +3,10 @@ export class FormBuilder {
     form: Form;
 }
 
+type EventTypes = ['EXTERNAL_SAVE', 'SAVE', 'SAVE_COMPLETE', 'SAVE_COMPLETED', 'CONFIGURATION', 'IS_EDIT_MODE'];
+
 export class FormBuilderEvent {
-    eventType: string;
+    eventType: EventTypes[number];
     data?: any;
 }
 

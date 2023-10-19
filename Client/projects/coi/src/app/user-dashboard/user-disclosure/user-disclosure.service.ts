@@ -33,4 +33,8 @@ export class UserDisclosureService {
     getDisclosureHistory(param) {
         return this._http.post(this._commonService.baseUrl + '/disclosure/historyDashboard',param);
     }
+
+    createOPA(personId, homeUnit) {
+        return this._http.post(this._commonService.opaUrl + '/createOPA', {personId, homeUnit});
+    }
 }

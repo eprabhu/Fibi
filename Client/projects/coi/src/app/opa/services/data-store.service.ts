@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
-
 import { Subject } from 'rxjs';
-import {COI} from '../../disclosure/coi-interface';
+import {OpaDisclosure} from '../opa-interface';
+
+export class StoreData {
+    opaDisclosure = new OpaDisclosure();
+}
 
 @Injectable()
 export class DataStoreService {
 
     constructor() { }
 
-    private storeData: COI = new COI();
+    private storeData: StoreData = new StoreData();
     disclosureStatus: any;
     dataChanged = false;
 
@@ -51,9 +54,9 @@ export class DataStoreService {
         return (typeof nativeCloneFunction === 'function') ? nativeCloneFunction(obj) : JSON.parse(JSON.stringify(obj));
     }
 
-    getEditModeForCOI(): boolean {
-        if (this.storeData.coiDisclosure) {
-            return this.storeData.coiDisclosure.dispositionStatusCode === '1';
+    getEditModeForOPA(): boolean {
+        if (this.storeData.opaDisclosure.opaDisclosureId) {
+            return ['1', '5', '6'].includes(this.storeData.opaDisclosure.opaDisclosureStatusType.opaDisclosureStatusCode);
         } else {
             return false;
         }
