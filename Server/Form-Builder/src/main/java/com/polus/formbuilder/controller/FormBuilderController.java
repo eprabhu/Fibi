@@ -1,6 +1,7 @@
 package com.polus.formbuilder.controller;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,13 +26,16 @@ import com.polus.formbuilder.model.FormComponentFetchResponse;
 import com.polus.formbuilder.model.FormComponentSaveRequest;
 import com.polus.formbuilder.model.FormRequest;
 import com.polus.formbuilder.model.FormResponse;
+import com.polus.formbuilder.programmedelement.ProgrammedElement;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
+import com.polus.formbuilder.programmedelement.opa.compuncomp.OPACompUnCompRequestModel;
+import com.polus.formbuilder.service.FormBuilderService;
 import com.polus.formbuilder.service.FormBuilderServiceCoordinator;
 
 @RestController
 @RequestMapping("/")
 public class FormBuilderController {
-
+	
 	@Autowired
 	FormBuilderServiceCoordinator service;
 	
@@ -107,6 +111,7 @@ public class FormBuilderController {
         dto.setComponentId(Integer.parseInt(multiRequest.getParameter("componentId")));
         dto.setComponentType(multiRequest.getParameter("componentType"));
         dto.setComponentRefId(multiRequest.getParameter("componentRefId"));
+        dto.setComponentData(multiRequest.getParameter("componentData"));
 
         ObjectMapper objectMapper = new ObjectMapper();       
 	       
@@ -126,7 +131,7 @@ public class FormBuilderController {
 	        	
 	        }else if(dto.getComponentType().equals("PE")) {
 	        	String programmedElementJson = multiRequest.getParameter("programmedElement");
-	        	ProgrammedElementModel programmedElement = objectMapper.readValue(programmedElementJson, ProgrammedElementModel.class);
+	        	ProgrammedElementModel programmedElement = (ProgrammedElementModel) objectMapper.readValue(programmedElementJson, OPACompUnCompRequestModel.class);
 	        	dto.setProgrammedElement(programmedElement);
 	        	dto.setCustomElement(null);
 	        	dto.setQuestionnaire(null);

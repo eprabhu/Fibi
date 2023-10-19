@@ -13,12 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.polus.appcorelib.authentication.AuthenticatedUser;
 import com.polus.appcorelib.customdataelement.controller.CustomDataElementController;
 import com.polus.appcorelib.customdataelement.service.CustomDataElementService;
 import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
 import com.polus.appcorelib.customdataelement.vo.CustomDataResponse;
-import com.polus.appcorelib.questionnaire.controller.QuestionnaireController;
 import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.appcorelib.questionnaire.service.QuestionnaireService;
 import com.polus.formbuilder.dao.FormBuilderServiceProcessorDAO;
@@ -260,14 +258,17 @@ public class FormBuilderServiceProcessor {
 	
 	public FormComponentSaveResponse PerformSaveProgrammedElementComponent(FormComponentSaveRequest request) {
 		
-		Optional<FormBuilderProgElementEntity> programmedElementOptional = programmedElementRepository.findById(Integer.parseInt(request.getComponentRefId()));
-		if(programmedElementOptional.isEmpty()) {
-			return null;
+		String programmedElementName = request.getComponentData();
+		if(programmedElementName == null) {
+			Optional<FormBuilderProgElementEntity> programmedElementOptional = programmedElementRepository.findById(Integer.parseInt(request.getComponentRefId()));
+			if(programmedElementOptional.isEmpty()) {
+				throw new RuntimeException("No entry in Programmed Element for Id "+request.getComponentRefId());
+			}
+			
+			FormBuilderProgElementEntity programmedElementEntity = programmedElementOptional.get();
+			programmedElementName = programmedElementEntity.getProgElementName();
 		}
-		
-		FormBuilderProgElementEntity programmedElementEntity = programmedElementOptional.get();
-		
-		String programmedElementName = programmedElementEntity.getProgElementName();	
+			
 		var moduleDetails = 
 				 ProgrammedElementModuleDetails.builder()
 				 							   .moduleItemCode(request.getModuleItemCode())
@@ -276,10 +277,12 @@ public class FormBuilderServiceProcessor {
 				 							   .moduleSubItemKey(request.getModuleSubItemKey())
 				 							   .loggedInUser(getLoggedInUser())
 				 							   .build();
-		programmedElementService.performAction(programmedElementName,moduleDetails, request.getProgrammedElement());
 		
-		return null;
+		ProgrammedElementModel programmedElement =  programmedElementService.save(programmedElementName,moduleDetails, request.getProgrammedElement());
+		var response = initialComponentSaveReponse(request);
+		response.setProgrammedElement(programmedElement);
 		
+		return response;
 	}
 	
 
@@ -561,24 +564,6 @@ public class FormBuilderServiceProcessor {
 		
 		return bus;
 	}
-	
-	private CustomDataElementVO intialCustomDataElementVO(Integer elementId,
-														  String moduleItemCode,
-														  String moduleSubItemCode,
-														  String moduleItemKey,
-														  String moduleSubItemKey) {
-
-		CustomDataElementVO customDataElementVO = new CustomDataElementVO();
-		customDataElementVO.setCustomDataElementId(elementId);
-		customDataElementVO.setModuleCode(Integer.parseInt(moduleItemCode));
-		customDataElementVO.setSubModuleCode(Integer.parseInt(moduleSubItemCode));
-		if(moduleItemKey != null) {
-			customDataElementVO.setModuleItemKey(Integer.parseInt(moduleItemKey));
-			customDataElementVO.setSubModuleItemKey(moduleSubItemKey);
-		}				
-		
-		return customDataElementVO;
-	}	
 	
 	private FormBuilderSectionsComponentDTO mapComponentEntityToDTO(FormBuilderSectionComponentEntity entity) {
 		

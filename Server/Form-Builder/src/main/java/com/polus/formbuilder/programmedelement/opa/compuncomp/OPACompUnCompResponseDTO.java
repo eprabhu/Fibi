@@ -1,10 +1,8 @@
 package com.polus.formbuilder.programmedelement.opa.compuncomp;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OPACompUnCompResponseDTO{
 	
-	private Integer opaDiscActivityId;
+	private Integer opaDisclActivityId;
     private Integer opaDisclosureId;
     private Integer opaDisclPersonEntityId;
     private Integer personEntityId;

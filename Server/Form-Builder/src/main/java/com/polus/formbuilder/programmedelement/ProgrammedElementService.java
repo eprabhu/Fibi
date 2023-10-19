@@ -5,9 +5,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.polus.formbuilder.programmedelement.opa.compuncomp.OPACompUnComp;
-import com.polus.formbuilder.service.module.opa.OPAFormBuilderService;
-
 @Service
 public class ProgrammedElementService {
 
@@ -32,7 +29,7 @@ public class ProgrammedElementService {
 		return object.getResponse(moduleDetails, request);
 	}
 
-	public ProgrammedElementModel performAction(String elementName, ProgrammedElementModuleDetails moduleDetails,
+	public ProgrammedElementModel save(String elementName, ProgrammedElementModuleDetails moduleDetails,
 			ProgrammedElementModel request) {
 
 		ProgrammedElement object = programmedElements.get(elementName);

@@ -1,27 +1,22 @@
 package com.polus.formbuilder.programmedelement.opa.compuncomp;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Component;
 
-import com.polus.formbuilder.dto.FormBuilderSectionsComponentDTO;
-import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
 import com.polus.formbuilder.programmedelement.opa.entity.OPADiscActivityEntity;
 import com.polus.formbuilder.programmedelement.opa.repository.OPADisclPersonEntityRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.persistence.StoredProcedureQuery;
-import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -36,6 +31,9 @@ public class OPACompUnCompDAO {
 	
 	@Autowired
 	private OPADisclPersonEntityRepository disclPersonEntityRepository;
+	
+	@Autowired
+	private HibernateTemplate hibernateTemplate;
 	
 	
 	public List<OPACompUnCompResponseDTO> getDisclosureActivity(OPACompUnCompRequestModel opaRequest) {
@@ -72,7 +70,7 @@ public class OPACompUnCompDAO {
 			
 				output.add(
 							OPACompUnCompResponseDTO.builder()
-										.opaDiscActivityId(activity.getOpaDisclActivityId())
+										.opaDisclActivityId(activity.getOpaDisclActivityId())
 										.opaDisclosureId(activity.getOpaDisclosureId())
 										.opaDisclPersonEntityId(activity.getOpaDisclPersonEntityId())
 										.personEntityId(personInfoDto.getPersonEntityId())
@@ -148,6 +146,7 @@ public class OPACompUnCompDAO {
 	}
 
 
+	@Transactional
 	public List<OPACompUnCompResponseDTO> saveDisclosureActivity(OPACompUnCompRequestModel opaRequest) {
 		if(opaRequest.getOpaDisclActivityId() != null) {
 			return updateOpaDisclActivity(opaRequest);
@@ -160,42 +159,98 @@ public class OPACompUnCompDAO {
 		
 		OPADisclPersonEntity opaPersonEntity = disclPersonEntityRepository.FetchByPersonEntityId(opaRequest.getPersonEntityId());
 		
-		//Sync OPA_DISCL_PERSON_ENTITY table by adding the new SFI
+		//START - Sync OPA_DISCL_PERSON_ENTITY table by adding the new SFI
 		if(opaPersonEntity == null) {
-			opaPersonEntity = prepareOpaPersonEntity(opaRequest);
-			opaPersonEntity = disclPersonEntityRepository.save(opaPersonEntity);
-		}	
-		
+			opaPersonEntity = SyncOPADisclPersonEntity(opaRequest);
+		}			
+		//END - Sync OPA_DISCL_PERSON_ENTITY table by adding the new SFI
 		opaRequest.setOpaDisclPersonEntityId(opaPersonEntity.getOpaDisclPersonEntityId());
+		
 		OPADiscActivityEntity activityEntity = mapRequestToEntity(opaRequest);
-		repository.save(activityEntity);
-		return getDisclosureActivity(opaRequest);
+		hibernateTemplate.saveOrUpdate(activityEntity);	
+		//hibernateTemplate.sa
+		Integer primaryKey = activityEntity.getOpaDisclActivityId();
+		List<OPACompUnCompResponseDTO> output = new ArrayList<>();
+		
+		output.add(
+				OPACompUnCompResponseDTO.builder()
+							.opaDisclActivityId(primaryKey)
+							.opaDisclosureId(opaRequest.getOpaDisclosureId())							
+							.opaDisclPersonEntityId(opaPersonEntity.getOpaDisclPersonEntityId())
+							.personEntityId(opaRequest.getEntityInfo().getPersonEntityId())
+							.natureOfWork(opaRequest.getNatureOfWork())
+							.description1(opaRequest.getDescription1())
+							.description2(opaRequest.getDescription2())
+							.isCompensated(opaRequest.getIsCompensated())
+							.numOfDaysAcademic(opaRequest.getNumOfDaysAcademic())
+							.numOfDaysInYear(opaRequest.getNumOfDaysInYear())
+							.numOfDaysSummer(opaRequest.getNumOfDaysSummer())							
+							.updateUser(opaRequest.getUpdateUser())
+							.entityInfo(opaRequest.getEntityInfo())
+							.build()
+					);
+		
+		return output;
 		
 	}
 
 
+	private OPADisclPersonEntity SyncOPADisclPersonEntity(OPACompUnCompRequestModel opaRequest) {
+		OPADisclPersonEntity opaPersonEntity;
+		opaPersonEntity = prepareOpaPersonEntity(opaRequest);
+		hibernateTemplate.saveOrUpdate(opaPersonEntity);
+		Integer primaryKey = opaPersonEntity.getOpaDisclPersonEntityId();
+		//Integer primaryKey = (Integer)hibernateTemplate.save(opaPersonEntity);
+		opaPersonEntity.setOpaDisclPersonEntityId(primaryKey);
+		return opaPersonEntity;
+	}
+
+	
 	private List<OPACompUnCompResponseDTO> updateOpaDisclActivity(OPACompUnCompRequestModel opaRequest) {
-		
+		//OPADiscActivityEntity activityEntity = repository.findById(opaRequest.getOpaDisclActivityId()).orElse(null);
 		OPADiscActivityEntity activityEntity = mapRequestToEntity(opaRequest);
-		repository.save(activityEntity);		
+		try {			
+			hibernateTemplate.saveOrUpdate(activityEntity);			
+		} catch (Exception e) {
+			throw new RuntimeException("Error in updateOpaDisclActivity --> "+e.getMessage());			
+		}
+
+		
 		return prepareResponse(activityEntity,opaRequest);
+				
 	}
 
 
 	private OPADiscActivityEntity mapRequestToEntity(OPACompUnCompRequestModel opaRequest) {
+		
+//		activityEntity.setOpaDisclosureId(opaRequest.getOpaDisclosureId());
+//		activityEntity.setOpaDisclPersonEntityId(opaRequest.getOpaDisclPersonEntityId());
+//		activityEntity.setIsCompensated(opaRequest.getIsCompensated());
+//		activityEntity.setNumOfDaysAcademic(opaRequest.getNumOfDaysAcademic());
+//		activityEntity.setNumOfDaysInYear(opaRequest.getNumOfDaysInYear());
+//		activityEntity.setNumOfDaysSummer(opaRequest.getNumOfDaysSummer());
+//		activityEntity.setNatureOfWork(opaRequest.getNatureOfWork());
+//		activityEntity.setDescription1(opaRequest.getDescription1());
+//		activityEntity.setDescription2(opaRequest.getDescription2());
+//		activityEntity.setUpdateTimestamp(new Date());
+//		activityEntity.setUpdateUser(opaRequest.getUpdateUser());
+//		
+		
 		OPADiscActivityEntity  activityEntity = OPADiscActivityEntity.builder()
-												.opaDisclosureId(opaRequest.getOpaDisclosureId())
-												.opaDisclPersonEntityId(opaRequest.getOpaDisclPersonEntityId())
-												.isCompensated(opaRequest.getIsCompensated())
-												.numOfDaysAcademic(opaRequest.getNumOfDaysAcademic())
-												.numOfDaysInYear(opaRequest.getNumOfDaysInYear())
-												.numOfDaysSummer(opaRequest.getNumOfDaysSummer())
-												.natureOfWork(opaRequest.getNatureOfWork())
-												.description1(opaRequest.getDescription1())
-												.description2(opaRequest.getDescription2())
-												.updateTimestamp(new Date())
-												.updateUser(opaRequest.getUpdateUser())
-												.build();
+				.opaDisclActivityId(opaRequest.getOpaDisclActivityId())
+				.opaDisclosureId(opaRequest.getOpaDisclosureId())
+				.opaDisclPersonEntityId(opaRequest.getOpaDisclPersonEntityId())
+				.isCompensated(opaRequest.getIsCompensated())
+				.numOfDaysAcademic(opaRequest.getNumOfDaysAcademic())
+				.numOfDaysInYear(opaRequest.getNumOfDaysInYear())
+				.numOfDaysSummer(opaRequest.getNumOfDaysSummer())
+				.natureOfWork(opaRequest.getNatureOfWork())
+				.description1(opaRequest.getDescription1())
+				.description2(opaRequest.getDescription2())
+				.updateTimestamp(new Date())
+				.updateUser(opaRequest.getUpdateUser())
+				.build();
+		
 		return activityEntity;
 	}
 
@@ -205,7 +260,7 @@ public class OPACompUnCompDAO {
 				
 		output.add(
 				OPACompUnCompResponseDTO.builder()
-							.opaDiscActivityId(activity.getOpaDisclActivityId())
+							.opaDisclActivityId(activity.getOpaDisclActivityId())
 							.opaDisclosureId(activity.getOpaDisclosureId())							
 							.opaDisclPersonEntityId(activity.getOpaDisclPersonEntityId())
 							.personEntityId(opaRequest.getEntityInfo().getPersonEntityId())
@@ -232,9 +287,9 @@ public class OPACompUnCompDAO {
 		personEntity.setUpdateTimestamp(new Date());
 		personEntity.setUpdateUser(opaRequest.getUpdateUser());
 		
-		String sql = "SELECT PERSON_ENTITY_ID,ENTITY_ID,ENTITY_NUMBER FROM PERSON_ENTITY WHERE PERSON_ENTITY_ID = :personEntityId ";
+		String sql = "SELECT PERSON_ENTITY_ID,ENTITY_ID,ENTITY_NUMBER FROM PERSON_ENTITY WHERE PERSON_ENTITY_ID = :personEntityId";
 		Query query = entityManager.createNativeQuery(sql);
-		query.setParameter(":personEntityId", opaRequest.getPersonEntityId());
+		query.setParameter("personEntityId", opaRequest.getPersonEntityId());
 		List<?> resultRows = query.getResultList();
 
 		for (Object row : resultRows) {
@@ -250,9 +305,15 @@ public class OPACompUnCompDAO {
 		return personEntity;
 	}
 
-
+	
+	@Transactional
 	public void deleteDisclosureActivity(OPACompUnCompRequestModel opaRequest) {
-		repository.deleteById(opaRequest.getOpaDisclActivityId());
+		OPADiscActivityEntity disclosureActivity = mapRequestToEntity(opaRequest);
+		if (disclosureActivity != null) {
+		    hibernateTemplate.delete(disclosureActivity);
+		}	
+		//TODO - need to sync the OPA DISCL PERSON ENTITY and PERSON ENTITY
+		//repository.deleteById(opaRequest.getOpaDisclActivityId());
 		
 	}
 	

@@ -2,16 +2,12 @@ package com.polus.formbuilder.programmedelement.opa.compuncomp;
 
 import java.util.List;
 
-import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.polus.formbuilder.programmedelement.ProgrammedElement;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModuleDetails;
-
-import jakarta.persistence.PersistenceException;
 
 @Component("OPACompUncompComponent")
 public class OPACompUnComp implements ProgrammedElement{
@@ -65,6 +61,7 @@ public class OPACompUnComp implements ProgrammedElement{
 		 if(opaRequest == null || opaRequest.getOpaDisclosureId() == null) {
 			 opaRequest = prepareOPARequest(moduleDetails);
 		 }
+		 opaRequest.setUpdateUser(moduleDetails.getLoggedInUser());
 		 
 		if("SAVE".equals(opaRequest.getActionType())) {
 			

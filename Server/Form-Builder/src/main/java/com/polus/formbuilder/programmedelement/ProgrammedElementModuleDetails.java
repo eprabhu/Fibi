@@ -1,7 +1,5 @@
 package com.polus.formbuilder.programmedelement;
 
-import com.polus.appcorelib.authentication.AuthenticatedUser;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

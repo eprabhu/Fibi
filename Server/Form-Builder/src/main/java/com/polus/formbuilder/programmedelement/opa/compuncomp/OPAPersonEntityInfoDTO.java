@@ -1,9 +1,7 @@
 package com.polus.formbuilder.programmedelement.opa.compuncomp;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

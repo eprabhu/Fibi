@@ -2,7 +2,6 @@ package com.polus.formbuilder.programmedelement.opa.compuncomp;
 
 import java.math.BigDecimal;
 
-import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
 import com.polus.formbuilder.programmedelement.ProgrammedElementRequestModel;
 
 import lombok.AllArgsConstructor;
@@ -21,10 +20,7 @@ public class OPACompUnCompRequestModel extends ProgrammedElementRequestModel{
 	    private Integer opaDisclActivityId;
 	    private Integer opaDisclosureId;
 	    private Integer opaDisclPersonEntityId;
-	    private Integer personEntityId;
-	    private Integer entityId;
-	    private String entityNumber;
-	    private String entityName;
+	    private Integer personEntityId;	  
 	    private String isCompensated;
 	    private BigDecimal numOfDaysSummer;
 	    private BigDecimal numOfDaysAcademic;
