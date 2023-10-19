@@ -41,7 +41,7 @@
         </div>
         <div class="row">
           <span class="col dateField p-0">
-            <input matInput [matDatepicker]="dueFromDt" id="submission-start-date" [(ngModel)]="fromDate"
+            <input matInput [matDatepicker]="dueFromDt" id="submission-start-date" [(ngModel)]="fromDate"  (ngModelChange)="checkForValidFormat($event, 'fromDate')"
               placeholder="From ({{datePlaceHolder}})" class="form-control d-inline-block"
               (click)="dueFromDt.open()" (ngModelChange)="getResearchSummaryTable()"
               (keypress)="_commonService._keyPress($event, 'date')" />
@@ -49,16 +49,22 @@
               (click)="dueFromDt.open()"></span>
             <mat-datepicker #dueFromDt (opened)="setFocusToElement('submission-start-date')">
             </mat-datepicker>
+			 <span class="invalid-feedback block-display" *ngIf="fromDateValidationMap">
+              <span>Entered Date format is inValid.<br>Please use {{DEFAULT_DATE_FORMAT}} format</span>
+            </span>
           </span>
           <label class="d-block m-2"> - </label>
           <span class="col dateField p-0">
             <input matInput [matDatepicker]="dueToDt" id="submission-due-date" [(ngModel)]="toDate" placeholder="To ({{datePlaceHolder}})"
-              (ngModelChange)="getResearchSummaryTable()" class="form-control d-inline-block"
+              (ngModelChange)="getResearchSummaryTable()" (ngModelChange)="checkForValidFormat($event, 'toDate')" class="form-control d-inline-block"
               (click)="dueToDt.open()" (keypress)="_commonService._keyPress($event, 'date')">
             <span class="fa fa-calendar fa-large pointer insidePicker hand-cursor" title="open calendar"
               (click)="dueToDt.open()"></span>
             <mat-datepicker #dueToDt (opened)="setFocusToElement('submission-due-date')">
             </mat-datepicker>
+			        <span class="invalid-feedback block-display" *ngIf="toDateValidationMap">
+              <span>Entered date format is invalid.<br>Please use {{DEFAULT_DATE_FORMAT}} format.</span>
+            </span>
           </span>
           <span class="invalid-feedback block-display" *ngIf="dateValidationMap.get('endDate')">
             {{dateValidationMap.get('endDate')}}

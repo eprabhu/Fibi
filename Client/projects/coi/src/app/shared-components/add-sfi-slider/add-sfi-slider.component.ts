@@ -25,7 +25,7 @@ export class AddSfiSliderComponent implements OnInit {
     constructor(public sfiService: SfiService, public _commonService: CommonService, private _router: Router) { }
 
     ngOnInit(): void {
-        document.body.classList.add('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         this.showSfiNavBar();
     }
 
@@ -39,8 +39,8 @@ export class AddSfiSliderComponent implements OnInit {
 
     addBodyScroll() {
         setTimeout(() => {
-          document.body.classList.remove('overflow-hidden');
-          document.body.classList.add('overflow-auto');
+          document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+          document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
         }, 500);
       }
 

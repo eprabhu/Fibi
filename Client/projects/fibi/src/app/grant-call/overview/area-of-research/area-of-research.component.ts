@@ -65,6 +65,8 @@ export class AreaOfResearchComponent implements OnInit, OnDestroy {
     this.researchAreaSelectedFunction(null);
     this.warningMsgObj.researchWarningMsg = null;
     this.isAreaError = false;
+    this.selectedArea = null;
+    this.selectedSubArea = null;
     this.setAreaOptions();
   }
 

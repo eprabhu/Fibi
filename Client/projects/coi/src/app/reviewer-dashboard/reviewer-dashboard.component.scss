@@ -77,6 +77,7 @@ nav ul li {
 .arrow {
   font-size: 18px;
   height: 18px;
+  width: 16px;
   margin-left: 4px;
 }
 
@@ -93,7 +94,8 @@ nav ul li {
 .sort-div {
   background-color: #eeeeee;
   padding: 9px;
-  margin-top: -10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
 }
 
 .f-5 {
@@ -283,4 +285,31 @@ nav ul li {
 .pipe {
   border-left: 2px solid #48647f82;
   padding-top: 2px;
+  height: 18px;
+}
+
+.p-013 {
+  padding-left: 1.3rem;
+  padding-right: 1rem;
+}
+
+.entity-icon {
+  width: 21px;
+  margin-right: -1px;
+  color: grey;
+  height: 24px;
+}
+
+.proposal-icon {
+  width: 16px;
+  margin-right: 3px;
+  color: grey;
+  height: 17px;
+}
+
+.award-icon {
+  width: 18px;
+  margin-right: 3px;
+  color: grey;
+  height: 18px;
 }

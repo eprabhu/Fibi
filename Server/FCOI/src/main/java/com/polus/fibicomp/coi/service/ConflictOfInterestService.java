@@ -5,28 +5,34 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
-import com.polus.fibicomp.coi.dto.CoiEntityDto;
-import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
-import com.polus.fibicomp.coi.dto.PersonEntityDto;
-import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
-import com.polus.fibicomp.coi.pojo.CoiReview;
-import com.polus.fibicomp.coi.pojo.CoiTravelDisclosure;
-import com.polus.fibicomp.coi.pojo.CoiEntity;
-import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
-import com.polus.fibicomp.coi.pojo.CoiDisclosure;
-import com.polus.fibicomp.coi.pojo.EntityRelationshipType;
-import com.polus.fibicomp.coi.pojo.EntityRelationship;
-import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.NotesDto;
+import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
+import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.NotificationBannerDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
+import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
+import com.polus.fibicomp.coi.pojo.CoiDisclosure;
+import com.polus.fibicomp.coi.pojo.CoiEntity;
+import com.polus.fibicomp.coi.pojo.CoiReview;
+import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
+import com.polus.fibicomp.coi.pojo.EntityRelationship;
+import com.polus.fibicomp.coi.pojo.Notes;
+import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
+import com.polus.fibicomp.inbox.pojo.Inbox;
+import com.polus.fibicomp.coi.pojo.Attachments;
 
 @Transactional
 @Service(value = "conflictOfInterestService")
@@ -62,10 +68,10 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used for get list of entity table values(enpoint for entity)
-	 * @param searchString
+	 * @param vo
 	 * @return A list of entity
 	 */
-	List<CoiEntity> searchEnitiy(String searchString);
+	List<CoiEntity> searchEntity(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for get lookup table of sfi
@@ -85,7 +91,7 @@ public interface ConflictOfInterestService {
 	 * @param personEntityRelationship
 	 * @return COIFinancialEntityDetails
 	 */
-	PersonEntityRelationship saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
+	List<PersonEntityRelationship> saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
 
 	/**
 	 * This method is used to create SFI
@@ -164,16 +170,16 @@ public interface ConflictOfInterestService {
 	 * This method is used for add comments
 	 * @param files
 	 * @param formDataJSON
-	 * @return saved comments,tag details and attachment details
+	 * @return success message
 	 */
-	String saveOrUpdateCoiReviewComments(MultipartFile[] files, String formDataJSON);
+	ResponseEntity<Object> saveOrUpdateCoiReviewComments(MultipartFile[] files, String formDataJSON);
 
 	/**
 	 * This method is used for get review comment details
 	 * @param vo
 	 * @return comment details
 	 */
-	String loadCoiReviewComments(ConflictOfInterestVO vo);
+	ResponseEntity<Object> loadCoiReviewComments(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for complete review
@@ -185,9 +191,9 @@ public interface ConflictOfInterestService {
 	/**
 	 * This method is used for delete review
 	 * @param coiReviewId
-	 * @return String
+	 * @return
 	 */
-	String deleteReview(Integer coiReviewId);
+	ResponseEntity<Object> deleteReview(Integer coiReviewId);
 
 	/**
 	 * This method is used for delete comment
@@ -234,10 +240,12 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used to get proposals for Disclosure
-	 * @param vo
+	 * @param searchString
 	 * @return list of proposals
 	 */
-	String loadProposalsForDisclosure(ConflictOfInterestVO vo);
+	String loadProposalsForDisclosure(String searchString);
+
+	String loadAwardsForDisclosure(String searchString);
 
 	/**
 	 * @param vo
@@ -438,7 +446,135 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship);
-	
+
+	/**
+	 * This method is used to fetch disclosure history
+	 * @param dashboardVO
+	 */
+	ResponseEntity<Object> getDisclosureHistory(CoiDashboardVO dashboardVO);
+
+	/**
+	 * This method is used to modify risk
+	 * @param entityDto
+	 * @return
+	 */
+	ResponseEntity<Object> modifyRisk(CoiEntityDto entityDto);
+
+	/**
+	 * This method is used to fetch all risk history of an entity
+	 * @param entityId
+	 * @return
+	 */
+	ResponseEntity<Object> fetchEntityRiskHistory(Integer entityId);
+
+	/**
+	 * This method is used to fetch Entity Action Log
+	 * @param coiEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> fetchEntityHistory(CoiEntityDto coiEntityDto);
+
 	List<CoiTravelHistoryDto> loadTravelDisclosureHistory(String personId, Integer entityNumber);
+
+	/**
+	 * This method is used to update person entity
+	 * @param personEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> updatePersonEntity(PersonEntityDto personEntityDto);
+
+	/**
+	 * This method is used to delete Person Entity Relationship
+	 * @param personEntityRelId
+	 * @param personEntityId
+	 * @return
+	 */
+	ResponseEntity<Object> deletePersonEntityRelationship(Integer personEntityRelId, Integer personEntityId);
+
+	/**
+	 * This method is used to validate and modify a person entity based on following condition
+	 * 1) if the current version of person entity is not used anywhere, makes this version to draft
+	 * 2) if the current version of person entity is used anywhere, creates a new version in draft status
+	 * @param personEntityId
+	 * @return person entity
+	 */
+	ResponseEntity<Object> modifyPersonEntity(Integer personEntityId);
+
+	/**
+	 * This method is used to finalize Person Entity
+	 * @param personEntityDto
+	 * @return
+	 */
+	ResponseEntity<Object> finalizePersonEntity(PersonEntityDto personEntityDto);
+
+	ResponseEntity<Object> withdrawDisclosure(Integer disclosureId, String description);
+
+    ResponseEntity<Object> returnDisclosure(Integer disclosureId, String description);
+
+	ResponseEntity<Object> getTravelConflictStatusType();
+
+	ResponseEntity<Object> manageTravelConflict(ConflictOfInterestVO vo);
+
+	List<CoiTravelConflictHistory> getCoiTravelConflictHistory(Integer travelDisclosureId);
+
+	/**
+	 * This method is used to modify disclosure risk
+	 * @param disclosureDto
+	 * @return
+	 */
+	ResponseEntity<Object> modifyDisclosureRisk(CoiDisclosureDto disclosureDto);
+
+	/**
+	 * This method is used to fetch all disclosure risk
+	 * @return
+	 */
+	ResponseEntity<Object> fetchAllDisclosureRisk();
+
+	/**
+	 * This method is used to fetch disclosure history
+	 * @param actionLogDto
+	 * @return
+	 */
+	ResponseEntity<Object> fetchDisclosureHistory(DisclosureActionLogDto actionLogDto);
+
+	/**
+	 * This method is used to fetch section type codes
+	 * @param ConflictOfInterestVO
+	 * @return
+	 */
+	ResponseEntity<Object> getCoiSectionsTypeCode(ConflictOfInterestVO vo);
+
+	ResponseEntity<Object> modifyTravelDisclosureRisk(CoiTravelDisclosureDto travelDisclosureDto);
+
+	ResponseEntity<Object> fetchTravelDisclosureHistory(TravelDisclosureActionLogDto actionLogDto);
+
+	String deleteReviewCommentTag(Integer coiReviewCommentTagId);
+
+	/**
+	 * This service is used to fetch the latest active person entity
+	 * @param personEntityNumber
+	 * @return
+	 */
+    ResponseEntity<Object> getSFILatestVersion(Integer personEntityNumber);
+
+    /**
+	 * This method is used to fetch disclosure attachment types
+	 * @return
+	 */
+    ResponseEntity<Object> loadDisclAttachTypes();
+    
+    List<Inbox> fetchAllActiolListEntriesForBanners(NotificationBannerDto notifyBannerDto);
+    
+    List<Notes> fetchAllNotesForPerson(String personId);
+    
+    ResponseEntity<Object> saveOrUpdatePersonNote(NotesDto dto);
+    
+    Notes getNoteDetailsForNoteId(Integer noteId);
+    
+    ResponseEntity<Object> deleteNote(Integer noteId);
+    
+    ResponseEntity<Object> saveOrUpdateAttachments(MultipartFile[] files, String formDataJSON);
+    
+    List<Attachments> loadAllAttachmentsForPerson(String personId);
 
 }

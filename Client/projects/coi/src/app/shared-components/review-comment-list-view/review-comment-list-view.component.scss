@@ -1,0 +1,119 @@
+
+
+
+
+select option {
+    background-color: #fff;
+}
+
+.border-left-line {
+    // border-left: solid 1px #80808054;
+    width: 35%;
+}
+
+.custom-font-color {
+   color: #98989e;
+}
+
+.collapse-description {
+    display: flex;
+    align-items: center;
+}
+
+.collapse-description::after {
+    content: '';
+    flex: 1;
+    margin-left: 1rem;
+    height: 1px;
+    background-color: #cacdd1;
+}
+
+.comment-text-box {
+    height: 100px;
+}
+
+.filter-active {
+    border: 2px solid #54BF5B !important;
+    background: #F5FEF5 !important;
+}
+
+.comment-card {
+    background: #d8e6f6;
+    border: 1px solid #dbdbdb;
+    border-radius: 0px 20px 0px 20px;
+    width: max-content;
+}
+ 
+.badge {
+    color: #5a5a5a !important;
+}
+
+.person-icon-position {
+    position: relative;
+    top: 4px;
+}
+
+.material-symbols-outlined {
+    color: #98989e;
+}
+
+.comment-card-position-child {
+    position: relative;
+    left: 5px;
+}
+
+.comment-card-position-parent {
+    position: relative;
+    right: 2px;
+}
+
+.view-position {
+    position: relative;
+    left: 68px;
+}
+
+.attachment-icon {
+    transform: rotate(45deg);
+}
+
+.hand-hover:hover {
+    color: #007DEC;
+}
+
+.hyper-link {
+    text-decoration: underline;
+    color: #007DEC;
+
+}
+
+.reply-comment-position {
+    position: relative;
+    left: 75px;
+}
+
+.parent-badge-position {
+    position: relative;
+    left: 20px;
+}
+.col-custom {
+    flex: 0 0 auto;
+    width: 4.7%;
+}
+
+.pl-0{
+    padding-left: 0 !important;
+}
+
+.vl {
+    border-left: 1px solid #c3c3c3;
+    height: 100%;
+    position: absolute;
+    left: 18px;
+    top: 0;
+  }
+
+  .cmnt-background {
+    background: #f6f6f6;
+    border-radius: 10px;
+    }
+    

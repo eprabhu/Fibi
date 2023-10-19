@@ -15,3 +15,20 @@ export const DEFAULT_UNIT_FORMAT = 'unitNumber - unitName';
 
 export const ADMIN_DASHBOARD_RIGHTS = new Set(['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE',
     'VIEW_PROJECT_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE']);
+
+export const SFI_ADDITIONAL_DETAILS_SECTION_NAME = 'Additional Information';
+
+export const DATE_PLACEHOLDER = 'DD/MM/YYYY';
+
+export const EDITOR_CONFIGURATION = {
+    link: {
+      addTargetToExternalLinks: true,
+      defaultProtocol: 'http://'
+    },
+    removePlugins: ['imageUpload', 'mediaEmbed'],
+    toolbar: {
+      removeItems: [ 'imageUpload', 'mediaEmbed', 'uploadImage' ]
+    },
+    image: {},
+    mediaEmbed: {},
+  };

@@ -1,0 +1,174 @@
+
+
+<ng-container *ngFor="let list of commentReviewerList;let i=index;let last = last">
+    <div class="row mx-4 cmnt-background mt-3">
+        <div class="d-flex form-row p-3">
+           <!-- col-1st -->
+            <div class="col-auto">
+                <mat-icon class="me-1 custom-font-color">person</mat-icon>
+            </div>
+            <!-- col-2nd -->
+            <div class="col">
+                <div class="d-flex justify-content-between">
+                    <span>
+                        <span class="fs-14 font-bold">
+                            {{list?.updateUserFullName}}:</span>
+                    <span class="custom-font-color fs-14 ms-2 text-secondary">{{list?.updateTimestamp| dateFormatterWithTimeZone:
+                            'long'}}</span>
+                    </span>
+
+                    <span class="f-13 justify-content-end mt-1 text-secondary">
+                        <ng-container *ngIf="reviewCommentsService.editParentCommentId !== list?.commentId">
+                            <span class="hand-cursor mr-15 hand-hover" id="btn-edit-parent-comment"
+                                (click)="editParentComment(list,i)">
+                                <i aria-hidden="true" class="fa fa-pencil mr-2"></i>
+                                Edit
+                            </span>
+                            <span class="hand-cursor mr-15 hand-hover" id="btn-delete-parent-comment"
+                                (click)="deleteComment(list,i)">
+                                <i aria-hidden="true" class="fa fa-trash mr-2"></i>
+                                Delete
+                            </span>
+                        </ng-container>
+                        <span class="hand-cursor hand-hover" id="btn-show-reply"
+                            [class.mr-15]="reviewCommentsService.editParentCommentId !== list?.commentId"
+                            (click)="showReplyComment(list,isShowReplyComment && selectedCommentIdList.includes(list?.commentId)? 'HIDE':'SHOW')">
+                            <i aria-hidden="true" class="fa fa-commenting mr-2"></i>
+                            <ng-container>{{isShowReplyComment && selectedCommentIdList.includes(list?.commentId)
+                                ?'Hide':'Show'}}</ng-container>
+                            replies({{list?.reply?.length ? list?.reply?.length : 0}})
+                        </span>
+                        <span *ngIf="reviewCommentsService.editParentCommentId !== list?.commentId"
+                            class="hand-cursor hand-hover" id="btn-reply" (click)="replyComment(list,i)">
+                            <i aria-hidden="true" class="fa fa-reply mr-2"></i>
+                            Reply
+                        </span>
+                    </span>
+                </div>
+                <div class="mt-1">
+                    <span class="fs-13">
+                        <span *ngIf="list?.coiReviewCommentTag?.length">
+                            <ng-container
+                                *ngFor="let assignee of list?.coiReviewCommentTag; let taggedPersonLast = last">
+                                <span class="text-primary">
+                                    {{'@'+(assignee?.tagPersonId ? assignee?.tagPersonFullName :
+                                    assignee.tagGroupName)+' '}}<span *ngIf="!taggedPersonLast">,</span>
+                                </span>
+                            </ng-container>
+                        </span>
+                        <span class="word-break-all" *ngIf="!readMoreCommentIdList.includes(list?.commentId)">
+                            <span [innerHTML]="(list?.comment.length>280 ?
+                    (list?.comment | slice:0:280 ) : list?.comment)"></span></span>
+                        <span class="word-break-all" *ngIf="readMoreCommentIdList.includes(list?.commentId)">
+                            <span [innerHTML]="(list?.comment)"></span></span>
+                        <span *ngIf="list?.comment.length>280"
+                            (click)="readMore(list,readMoreCommentIdList.includes(list?.commentId) ? 'LESS':'MORE')"
+                            class="hand-cursor italian hyper-link">
+                            {{readMoreCommentIdList.includes(list?.commentId) ? 'Read Less': '...Read More'}}
+                            <i aria-hidden="true"
+                                [ngClass]="readMoreCommentIdList.includes(list?.commentId)?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i>
+                        </span>
+                    </span>
+                </div>
+                <div *ngIf="commentDetails?.coiReviewCommentDto?.coiParentCommentId === list?.commentId && isReplyComment"
+                    class="col-11 mx-2 my-4 reply-comment-position">
+                    <div class="row d-flex justify-content-end mr-10">
+                        <textarea id="main-panel-comnt" class="comment-text-box form-control fs-14 ms-4"
+                            [(ngModel)]="commentDetails.coiReviewCommentDto.comment" placeholder="Comment" row="1"
+                            maxlength="2000" [ngClass]="mandatoryMap.has('comment') ? 'is-invalid d-block':'' "></textarea>
+                        <div *ngIf="mandatoryMap.has('comment')" class="invalid-feedback d-block fs-12 p-0">
+                            {{mandatoryMap?.get('comment')}}
+                        </div>
+                    </div>
+                    <div class="col d-flex justify-content-end  align-items-center mt-20 mr-10">
+                        <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3"
+                            (click)="cancelOrClearCommentsDetails()">Cancel</button>
+                        <button class="btn btn-primary px-4 py-2 fs-14" (click)="addReplayCommentsDetails()">Reply
+                            Comment</button>
+                    </div>
+                </div>
+                <ng-container *ngIf="isShowReplyComment &&  selectedCommentIdList.includes(list?.commentId)">
+                    <div class="ms-5" *ngFor="let replayComment of list.reply;let replyIndex = index">
+                        <div class="d-flex">
+                            <div class="col ml-2">
+                                <span class="badge-title bg-transparent px-0 fs-14-nav">
+                                    <mat-icon class="me-1 custom-font-color person-icon-position">person</mat-icon>
+                                    <span class="d-none d-md-inline-block ml-3 mx-2 fs-14">
+                                        {{replayComment?.updateUserFullName}}:</span>
+                                    <span class="custom-font-color fs-14">{{replayComment?.updateTimestamp|
+                                        dateFormatterWithTimeZone:
+                                        'long'}}</span>
+                                </span>
+                            </div>
+                            <div *ngIf="commentDetails?.coiReviewCommentDto?.commentId !== replayComment?.commentId"
+                                class="col-3 d-flex f-13 justify-content-end mr-15 pr-25 text-secondary">
+                                <span class="hand-cursor mr-15 hand-hover" id="{{'btn-edit-chid'+replyFroComment}}"
+                                    (click)="editReplyComment(replayComment,i)">
+                                    <i aria-hidden="true" class="fa fa-pencil mr-2"></i>
+                                    Edit
+                                </span>
+                                <span class="hand-cursor mr-2 hand-hover" id="{{'btn-delete-chid'+replyFroComment}}"
+                                    (click)="deleteComment(replayComment,i)">
+                                    <i aria-hidden="true" class="fa fa-trash mr-2"></i>
+                                    Delete
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="(commentDetails?.coiReviewCommentDto?.commentId ? commentDetails?.coiReviewCommentDto?.commentId !== replayComment?.commentId : !commentDetails?.coiReviewCommentDto?.commentId ) "
+                            class="d-flex">
+                            <div class="d-flex">
+                                <div class="pt-1 p-3 ml-5 mb-0 comment-card-position-child">
+                                    <span class="fs-13">
+                                        <span *ngIf="!readMoreCommentIdList.includes(replayComment?.commentId)" class="word-break-all">
+                                            <span [innerHTML]="(replayComment?.comment.length>280 ? (replayComment?.comment |
+                                                            slice:0:280 ) : replayComment?.comment)"></span>
+                                        </span>
+                                        <span *ngIf="readMoreCommentIdList.includes(replayComment?.commentId)" class="word-break-all">
+                                            <span [innerHTML]="(replayComment?.comment)"></span>
+                                        </span>
+                                        <span *ngIf="replayComment?.comment.length>280"
+                                            (click)="readMore(replayComment,readMoreCommentIdList.includes(replayComment?.commentId) ? 'LESS':'MORE')"
+                                            class="hand-cursor italian hyper-link">
+                                            {{readMoreCommentIdList.includes(replayComment?.commentId) ? 'Read Less': '...Read
+                                            More'}}
+                                            <i aria-hidden="true"
+                                                [ngClass]="readMoreCommentIdList.includes(replayComment?.commentId) ?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="commentDetails?.coiReviewCommentDto?.commentId === replayComment?.commentId && isEditComment"
+                            class="d-flex justify-content-end me-4 my-4 row">
+                            <div class="row mr-3">
+                                <div class="col-custom">
+                                    <span class="vl"></span>
+                                </div>
+                                <div class="col pl-0 pe-5">
+                                    <textarea id="main-panel-comnt" class="form-control comment-text-box fs-14"
+                                        [(ngModel)]="commentDetails.coiReviewCommentDto.comment" placeholder="Comment" row="1"
+                                        maxlength="2000"
+                                        [ngClass]="mandatoryMap.has('comment') ? 'is-invalid d-block':'' "></textarea>
+                                    <div *ngIf="mandatoryMap.has('comment')" class="invalid-feedback d-block fs-12">
+                                        {{mandatoryMap?.get('comment')}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="align-items-center col d-flex justify-content-end mt-20 mx-4 pe-4">
+                                <button class="btn btn-outline-secondary px-4 py-2 fs-14 me-3"
+                                    (click)="cancelOrClearCommentsDetails()">Cancel</button>
+                                <button class="btn btn-primary px-4 py-2 fs-14" (click)="addReplayCommentsDetails()">Save
+                                    Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+        </div>
+    </div>
+
+</ng-container>
+
+
+                

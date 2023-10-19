@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
@@ -24,6 +25,10 @@ import com.polus.fibicomp.coi.exception.COIFileAttachmentException;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.repository.COIDisclosureAttachmentRepository;
 import com.polus.fibicomp.constants.Constants;
+import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.fibicomp.coi.dto.AttachmentsDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
+import com.polus.fibicomp.common.dao.CommonDao;
 
 @Component
 public class COIFileAttachmentDao {
@@ -33,6 +38,9 @@ public class COIFileAttachmentDao {
 
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
+	
+	@Autowired
+	private CommonDao commonDao;
 
     @Transactional(rollbackFor = {COIFileAttachmentException.class})
 	public void saveDisclosureAttachmentDetail(COIFileRequestDto request) {
@@ -47,7 +55,7 @@ public class COIFileAttachmentDao {
 					   .componentReferenceNumber(request.getComponentReferenceNumber())
 					   .componentTypeCode(request.getComponentTypeCode())
 					   .fileDataId(request.getFileDataId())
-					   .fileName(request.getFile().getName())
+					   .fileName(request.getFile().getOriginalFilename())
 					   .mimeType(request.getFile().getContentType())
 					   .description(request.getDescription())
 					   .documentOwnerPersonId(request.getDocumentOwnerPersonId())
@@ -57,7 +65,30 @@ public class COIFileAttachmentDao {
 		}catch(Exception e) {
 			throw new COIFileAttachmentException("Error at saveDisclosureAttachmentDetail in COIFileAttachmentDao" + e.getMessage());
 		}	
-	} 
+	}
+	
+	@Transactional(rollbackFor = {COIFileAttachmentException.class})
+	public Attachments saveAttachmentDetails(AttachmentsDto request, String fileDataId) {
+		try {
+			Attachments attachment = Attachments.builder()
+			.attachmentId(request.getAttachmentId())
+			.personId(AuthenticatedUser.getLoginPersonId())
+			.attaTypeCode(request.getAttaTypeCode())
+			.fileName(request.getFileName())
+			.mimeType(request.getMimeType())
+			.description(request.getDescription())
+			.fileDataId(fileDataId)
+			.createUser(AuthenticatedUser.getLoginUserName())
+			.createTimestamp(commonDao.getCurrentTimestamp())
+			.updateUser(AuthenticatedUser.getLoginUserName())
+			.updateTimestamp(commonDao.getCurrentTimestamp())
+			.build();
+			hibernateTemplate.saveOrUpdate(attachment);
+			return attachment;
+		} catch(Exception e) {
+			throw new COIFileAttachmentException("Error at saveAttachmentDetails in COIFileAttachmentDao" + e.getMessage());
+		}	
+	}  
 
 	private Integer getNextAttachmentNumber() {
 		Session session = hibernateTemplate.getSessionFactory().openSession();
@@ -105,6 +136,15 @@ public class COIFileAttachmentDao {
 		return session.createQuery(query).getResultList();
 	}
 
+	public List<DisclAttachment> getDisclAttachByCommentId(Integer commentId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<DisclAttachment> query = builder.createQuery(DisclAttachment.class);
+		Root<DisclAttachment> rootDisclAttachment = query.from(DisclAttachment.class);
+		query.where(builder.equal(rootDisclAttachment.get("commentId"), commentId));
+		return session.createQuery(query).getResultList();
+	}
+
 	public DisclAttachment getDisclAttachByAttachId(Integer attachmentId) {
 		return hibernateTemplate.load(DisclAttachment.class, attachmentId);
 	}
@@ -124,7 +164,12 @@ public class COIFileAttachmentDao {
 	}
 
 	public void deleteDisclAttachment(Integer attachmentId) {
-	        hibernateTemplate.delete(hibernateTemplate.load(DisclAttachment.class, attachmentId));
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaDelete<DisclAttachment> query = builder.createCriteriaDelete(DisclAttachment.class);
+		Root<DisclAttachment> root = query.from(DisclAttachment.class);
+		query.where(builder.equal(root.get("attachmentId"), attachmentId));
+		session.createQuery(query).executeUpdate();
 	}
 
 	public void updateDisclosureAttachmentStatus(String statusCode, Integer attachmentId) {

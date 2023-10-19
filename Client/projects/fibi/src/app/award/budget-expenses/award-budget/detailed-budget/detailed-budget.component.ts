@@ -64,6 +64,8 @@ export class DetailedBudgetComponent implements OnInit {
   subItemCostValidationList = [];
   deleteLineItemIndex: number;
   currentLineItemCode: any;
+  isManpowerResourceExistInManpower = false;
+  isIOCodeExistInManpower = false;
   setFocusToElement = setFocusToElement;
 
   constructor(public _commonDataService: CommonDataService, public _commonService: CommonService,
@@ -248,8 +250,8 @@ export class DetailedBudgetComponent implements OnInit {
   addNewBudgetLineItem() {
     this.onLineItemCostChange(this.newLineItemObject.lineItemCost);
     if (this.newLineItemObject.budgetCategory && this.newLineItemObject.budgetCategory.budgetCategoryTypeCode) {
-        this.isSubItemCostValidOnAdd =
-        this.validateSubItemsCost(this.newLineItemObject, this.newLineItemObject.budgetCategory.budgetCategoryTypeCode);
+      this.isSubItemCostValidOnAdd = this.validateSubItemsCost(this.newLineItemObject, this.newLineItemObject.budgetCategory.budgetCategoryTypeCode);
+      this.trimSubLineItem(this.newLineItemObject);
     }
     this.saveAwardBudgetLineItem(this.newLineItemObject);
   }
@@ -315,6 +317,9 @@ export class DetailedBudgetComponent implements OnInit {
     }
     lineItemObject.budgetId = this.awardBudgetData.awardBudgetHeader.budgetId;
     lineItemObject.budgetPeriodId = this.currentPeriodData.budgetPeriodId;
+    if (lineItemObject.internalOrderCode) {
+      lineItemObject.internalOrderCode = lineItemObject.internalOrderCode.trim();
+    }
     lineItemObject.personsDetails.map(person => {
       person.startDate = parseDateWithoutTimestamp(person.startDate);
       person.endDate = parseDateWithoutTimestamp(person.endDate);
@@ -617,10 +622,12 @@ export class DetailedBudgetComponent implements OnInit {
       this.updateCurrentPeriodData(this.awardBudgetData);
       this._budgetDataService.checkTotalCostValidation();
       this.isInvalidCostOnEdit = false;
+      this.isManpowerResourceExistInManpower = false;
+      this.isIOCodeExistInManpower = false;
       this.clearNewLineItemObject();
       this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Line Item deleted successfully.');
     }, err => {
-      this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting line item failed. Please try again.');
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting Line item failed. Please try again.');
     }));
   }
 
@@ -910,6 +917,11 @@ export class DetailedBudgetComponent implements OnInit {
    * if the line item edited is validated calls save or update service.
    */
   updateAwardBudgetLineItem(lineItem, detailIndex, subItemType) {
+    if (!this.tempObject.lineItem) {
+      this.tempObject.lineItem = JSON.parse(JSON.stringify(lineItem));
+      this.prevLineItemCost = parseFloat(lineItem.lineItemCost);
+    }
+    this.trimSubLineItem(lineItem);
     this.onLineItemCostChange(lineItem.lineItemCost);
     this.isInvalidCostOnEdit = false;
     this.isInvalidRevisedBudget = false;
@@ -990,5 +1002,18 @@ export class DetailedBudgetComponent implements OnInit {
       isIOCodeEditable = false;
     }
     return isIOCodeEditable;
+  }
+  trimSubLineItem(lineItem) {
+    lineItem.personsDetails.forEach(element => {
+      if (element.internalOrderCode) {
+        element.internalOrderCode = element.internalOrderCode.trim();
+      }
+    });
+
+    lineItem.nonPersonsDetails.forEach(element => {
+      if (element.internalOrderCode) {
+        element.internalOrderCode = element.internalOrderCode.trim();
+      }
+    });
   }
 }

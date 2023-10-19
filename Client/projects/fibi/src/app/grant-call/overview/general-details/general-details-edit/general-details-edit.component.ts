@@ -148,7 +148,7 @@ export class GeneralDetailsEditComponent implements OnInit, OnDestroy {
             }
         }));
     }
-
+    
     setGrantCallCurrency() {
         /* making SGD as default currency code */
         const currencyDetailObject = this.result.currencyDetail.find(type => type.currencyCode === 'SGD');
@@ -580,13 +580,16 @@ export class GeneralDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     getSearchValue(event) {
-        this.selectedKeyword = event.target.value;
+        this.selectedKeyword = event;
     }
 
     /* adds user defined keyword to database and delete the same keyword added in this particular grant call */
     addKeywordToDatabase(event) {
         if (event) {
             this.selectedKeyword = event.searchString;
+            if (this.selectedKeyword) {
+                this.selectedKeyword = this.selectedKeyword.trim();
+              }
             this.$subscriptions.push(this._grantService.addScienceKeyword({
                 'scienceKeyword': this.selectedKeyword,
                 'userName': this.commonService.getCurrentUserDetail('userName')
@@ -890,6 +893,9 @@ export class GeneralDetailsEditComponent implements OnInit, OnDestroy {
         if (field && !pattern.test(field)) {
             this.mapNonMandatory.set(key, true);
         }
+        if (this.result.grantCall.maximumBudget === 0) {
+          this.result.grantCall.maximumBudget = null;
+        }
     }
 
     /**
@@ -926,5 +932,4 @@ export class GeneralDetailsEditComponent implements OnInit, OnDestroy {
             this.saveGrant();
         }));
     }
-
 }

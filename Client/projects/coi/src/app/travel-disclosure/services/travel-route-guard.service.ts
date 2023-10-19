@@ -8,6 +8,7 @@ import { NavigationService } from '../../common/services/navigation.service';
 import { TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure-interface';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot} from '@angular/router';
 import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, HOME_URL, HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { openCommonModal } from '../../common/utilities/custom-utilities';
 
 
 @Injectable()
@@ -39,7 +40,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
                     }
                 });
             });
-        } else if (this.getHomeAndPersonId()) {
+        } else if (this.hasHomeAndPersonId()) {
             return true;
         } else {
             this._router.navigate([HOME_URL]);
@@ -48,23 +49,21 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
     }
 
     canDeactivate(): boolean {
-        if (!this._service.isChildRouting && this.getHomeAndPersonId()) {
-            document.getElementById('travel-unsaved-changes-modal-trigger-btn').click();
-            return false;
-        } else if (this._service.travelDataChanged) {
-            document.getElementById('travel-unsaved-changes-modal-trigger-btn').click();
+        const shouldShowUnsavedModal = (!this._service.isChildRouteTriggered && this.hasHomeAndPersonId())
+                                        || this._service.travelDataChanged;
 
+        if (shouldShowUnsavedModal) {
+            openCommonModal('travel-unsaved-changes-modal');
             return false;
         }
-        this._service.isChildRouting = false;
+
+        this._service.isChildRouteTriggered = false;
         return true;
     }
 
-    private getHomeAndPersonId(): boolean {
+    private hasHomeAndPersonId(): boolean {
         const travelCreateModalDetails: TravelCreateModalDetails = this._dataStore.getCreateModalDetails();
-        const homeUnit = (travelCreateModalDetails && travelCreateModalDetails.homeUnit) || null;
-        const personId = (travelCreateModalDetails && travelCreateModalDetails.personId) || null;
-        return (homeUnit && personId) ? true : false;
+        return !!travelCreateModalDetails?.homeUnit && !!travelCreateModalDetails?.personId;
     }
 
     private setPreviousModuleUrl(): void {
@@ -81,7 +80,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
 
     private reRouteIfWrongPath(currentPath: string, reviewStatusCode: string, personId: string, route): void {
         const hasCreateTravelPath = currentPath.includes('create-travel-disclosure');
-        const hasCreateUserRight = this._service.checkCreateUserRight(personId);
+        const hasCreateUserRight = this._service.isCheckLoggedUser(personId);
         const isEditPage = ['1', '4', '5'].includes(reviewStatusCode);
 
         let reRoutePath = null;

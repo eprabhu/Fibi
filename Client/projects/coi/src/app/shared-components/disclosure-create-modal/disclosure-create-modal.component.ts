@@ -1,13 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import {
-    getEndPointOptionsForAwardNumber,
     getEndPointOptionsForDepartment,
     getEndPointOptionsForLeadUnit,
     getEndPointOptionsForProposalDisclosure,
-    getEndPointOptionsForSponsor
+    getEndPointOptionsForSponsor,getEndPointOptionsForCoiAwardNumber
 } from '../../../../../fibi/src/app/common/services/end-point.config';
 import {deepCloneObject, hideModal} from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -20,38 +19,7 @@ import {
 } from '../../app-constants';
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
-
-class Disclosure {
-    adminGroupId: any;
-    adminPersonId: any;
-    certifiedAt: any;
-    conflictStatus: any;
-    conflictStatusCode: any;
-    createTimestamp: any;
-    createUserFullName: any;
-    disclosureId: any;
-    disclosureNumber: any;
-    dispositionStatus: any;
-    dispositionStatusCode: any;
-    expirationDate: any;
-    homeUnit: any;
-    homeUnitName: any;
-    personId: any;
-    reviewStatus: any;
-    reviewStatusCode: any;
-    updateTimestamp: any;
-    updateUserFullName: any;
-    versionNumber: any;
-    versionStatus: any;
-    type: any;
-    disclosurePersonFullName: any;
-    disclosureType: any;
-}
-class RevisionObject {
-    revisionComment: null;
-    disclosureId: null;
-    homeUnit: null;
-}
+import { RevisionObject, Disclosure } from '../shared-interface';
 
 @Component({
     selector: 'app-disclosure-create-modal',
@@ -114,6 +82,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.clearProjectDisclosure();
         this.reviseObject = new RevisionObject();
         this.emitCreateOrRevise.emit({closeModal: false});
+        this.clearProjectField = new String('true');
     }
 
     resetHomeUnit(): void {
@@ -142,7 +111,8 @@ export class DisclosureCreateModalComponent implements OnInit {
             this.projectDisclosureValidation.clear();
             this.mandatoryList.clear();
             const selectedModuleCode = this.selectedProjectType === 'Award' ? '1' : '3';
-            const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.awardId : event.moduleItemId : null;
+            // const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.awardId : event.moduleItemId : null;
+            const moduleItemId = event ? this.selectedProjectType === 'Award' ? event.moduleItemId : event.moduleItemId : null;
             this._disclosureCreateModalService.checkIfDisclosureAvailable(selectedModuleCode, moduleItemId).subscribe((data: any) => {
                 if (data) {
                     if (data.pendingProject != null) {
@@ -159,7 +129,8 @@ export class DisclosureCreateModalComponent implements OnInit {
                 this.changeProjectType();
             });
         } else {
-            this.changeProjectType();
+            this.clearProjectDisclosure();
+
         }
     }
 
@@ -168,7 +139,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     clearProjectDisclosure(): void {
-        this.clearProjectField = new String('true');
+        // this.clearProjectField = new String('true');
         this.clearSponsorField = new String('true');
         this.clearPrimeSponsorField = new String('true');
         this.clearPIField = new String('true');
@@ -272,9 +243,10 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     changeProjectType(): void {
         this.clearProjectDisclosure();
+        this.clearProjectField = new String('true');
         switch (this.selectedProjectType) {
             case 'Award':
-                return this.projectSearchOptions = getEndPointOptionsForAwardNumber(this.commonService.fibiUrl);
+                return this.projectSearchOptions = getEndPointOptionsForCoiAwardNumber(this.commonService.baseUrl);
             case 'Development Proposal':
                 return this.projectSearchOptions = getEndPointOptionsForProposalDisclosure(this.commonService.baseUrl);
             default:
@@ -315,23 +287,12 @@ export class DisclosureCreateModalComponent implements OnInit {
                 return 'brown-badge';
             case '3':
                 return 'red-badge';
+            case '4':
+                return 'green-badge';
         }
     }
 
-    getReviewStatusBadge(statusCode): string {
-        switch (statusCode) {
-            case '1':
-                return 'yellow-badge';
-            case '2':
-                return 'blue-badge';
-            case '3':
-                return 'green-badge';
-            case '4':
-                return 'green-badge';
-            default:
-                return 'red-badge';
-        }
-    }
+    
 
     getDispositionStatusBadge(statusCode): string {
         switch (statusCode) {
@@ -457,13 +418,15 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     private assignSelectedProject(event): void {
         if (event) {
-            this.manualProjectAddDetails.moduleItemId = this.selectedProjectType == 'Award' ? event.awardId : event.moduleItemId;
-            this.manualProjectAddDetails.title = this.selectedProjectType == 'Award' ? event.awardNumber + '-' + event.title : event.title;
+            this.manualProjectAddDetails.moduleItemId = this.selectedProjectType == 'Award' ? event.moduleItemId : event.moduleItemId;
+            this.manualProjectAddDetails.title = (this.selectedProjectType == 'Award' ? event.moduleItemKey : event.moduleItemId)  + ' - ' + event.title ;
             this.manualProjectAddDetails.principalInvestigator = this.selectedProjectType == 'Award' ? event.principalInvestigator : event.principalInvestigator;
             this.manualProjectAddDetails.unitName = this.selectedProjectType == 'Award' ? event.unitName : event.unitName;
             this.manualProjectAddDetails.startDate = this.selectedProjectType == 'Award' ? event.startDate : event.startDate;
             this.manualProjectAddDetails.endDate = this.selectedProjectType == 'Award' ? event.endDate : event.endDate;
-            this.manualProjectAddDetails.sponsor = this.selectedProjectType == 'Award' ? event.sponsorName : event.sponsor;
+            this.manualProjectAddDetails.sponsor = this.selectedProjectType == 'Award' ? event.sponsor : event.sponsor;
+            this.manualProjectAddDetails.reporterRole = this.selectedProjectType =='Award' ? event.reporterRole : event.reporterRole;
+            this.manualProjectAddDetails.primeSponsorName = this.selectedProjectType == 'Award' ? event.primeSponsor : event.primeSponsor;
             this.isShowResultCard = true;
         }
     }
@@ -515,4 +478,5 @@ export class DisclosureCreateModalComponent implements OnInit {
         }
         return this.title;
     }
+
 }

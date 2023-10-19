@@ -102,7 +102,7 @@ export class BatchHistoryComponent implements OnInit, OnDestroy {
           reader.readAsText(data);
           reader.onload = () => {
             reader.result === 'Empty_Zip' ?
-            currentInstance._commonService.showToast(HTTP_ERROR_STATUS, 'There are no interface files available for download') :
+            currentInstance._commonService.showToast(HTTP_ERROR_STATUS, 'There are no Interface files available for download.') :
             fileDownloader(data, 'SAP_Feed_Batch_# ' + currentInstance.downloadBatchId, 'zip');
             this.downloadBatchId = null;
           };

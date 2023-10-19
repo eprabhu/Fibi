@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.polus.fibicomp.pojo.Module;
 
@@ -68,6 +69,12 @@ public class Inbox implements Serializable {
 
 	@Column(name = "SUB_MODULE_ITEM_KEY")
 	private String subModuleItemKey;
+
+	@Column(name = "ALERT_TYPE")
+	private String alertType;
+
+	@Column(name = "EXPIRATION_DATE")
+	private Timestamp expirationDate;
 
 	@ManyToOne(optional = true, cascade = { CascadeType.REFRESH })
 	@JoinColumn(foreignKey = @ForeignKey(name = "INBOX_FK2"), name = "MODULE_CODE", referencedColumnName = "MODULE_CODE", insertable = false, updatable = false)
@@ -203,6 +210,22 @@ public class Inbox implements Serializable {
 
 	public void setOpenedFlag(String openedFlag) {
 		this.openedFlag = openedFlag;
+	}
+
+	public String getAlertType() {
+		return alertType;
+	}
+
+	public void setAlertType(String alertType) {
+		this.alertType = alertType;
+	}
+
+	public Timestamp getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Timestamp expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
 }

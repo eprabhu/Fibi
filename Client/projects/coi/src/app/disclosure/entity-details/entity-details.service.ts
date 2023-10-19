@@ -12,10 +12,19 @@ export class EntityDetailsService {
   globalSave$: Subject<any> = new Subject<any>();
   isShowRelationButton: any;
   isRelationshipQuestionnaireChanged = false;
+  isAdditionalDetailsChanged = false;
 
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
-  isExpanded = true;
+  isExpanded = false;
+  isHoverEntityCard = false;
+  canMangeSfi = false;
+  $relationshipTabSwitch = new BehaviorSubject<object>(null)
+  isSwitchCurrentTab = false;
+  isShowHistoryInfo = true;
+  unSavedSections = [];
+  relationshipCompletedObject: any = {};
+
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
   getSFIDetails(coiFinancialEntityId) {
@@ -40,6 +49,38 @@ export class EntityDetailsService {
 
   getPersonEntityRelationship(params) {
     return this._http.post(this._commonService.baseUrl + '/getPersonEntityRelationship', params);
+  }
+
+  loadSFILookups() {
+    return this._http.get(this._commonService.baseUrl + '/loadSFILookups');
+  }
+
+  entityRisk(params) {
+    return this._http.post(this._commonService.baseUrl + '/entity/modifyRisk', params);
+  }
+
+  riskHistory(entityId) {
+    return this._http.get(`${this._commonService.baseUrl}/entity/riskHistory/${entityId}`);
+  }
+
+  deletePersonEntityRelationship(personEntityRelId, personEntityId) {
+    return this._http.delete(`${this._commonService.baseUrl}/personEntity/relationship/${personEntityRelId}/${personEntityId}`);
+  }
+
+  getApplicableQuestionnaire(requestObject: any) {
+    return this._http.post(this._commonService.fibiUrl + '/getApplicableQuestionnaire', requestObject);
+  }
+
+  updateAdditionalDetails(params) {
+    return this._http.put(this._commonService.baseUrl + '/personEntity', params);
+  }
+
+  modifyPersonEntity(params) {
+    return this._http.post(this._commonService.baseUrl + '/personEntity/modify', params);
+  }
+
+  getCurrentId(personEntityNumber) {
+    return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityNumber}/latestVersion`);
   }
 
 }

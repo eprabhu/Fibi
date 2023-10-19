@@ -35,22 +35,21 @@
         <div class="row">
           <div class="col-lg col-12 pr-0">
             <input type="text" placeholder="Author Name" class="ng-pristine ng-valid ng-touched form-control"
-              [(ngModel)]="searchOptions.property1">
+              [(ngModel)]="searchOptions.property1" (keyup.enter)="findPublications()">
           </div>
           <div class="col-lg col-12 pr-0">
-            <select class="form-control" [(ngModel)]="searchOptions.property3">
+            <select class="form-control" [(ngModel)]="searchOptions.property3" (ngModelChange)="findPublications()">
               <option [ngValue]="null">Pick a Type</option>
-              <option [value]="type" *ngFor="let type of publicationList.publicationTypes">
-                {{type}}</option>
-            </select>
+              <option [value]="type" *ngFor="let type of publicationList.publicationTypes">{{type}}</option>
+            </select>                                                      
           </div>
           <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 px-2">
             <input type="text" placeholder="Title of Paper" class="ng-pristine ng-valid ng-touched form-control"
-              [(ngModel)]="searchOptions.property2">
+              [(ngModel)]="searchOptions.property2" (keyup.enter)="findPublications()">
           </div>
           <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 pl-0 pr-2">
             <input type="text" placeholder="Name of Journal / Book / Conference"
-              class="ng-pristine ng-valid ng-touched form-control" [(ngModel)]="searchOptions.property4">
+              class="ng-pristine ng-valid ng-touched form-control" [(ngModel)]="searchOptions.property4" (keyup.enter)="findPublications()">
           </div>
           <div>
             <button type="button" class="btn btn-secondary" (click)="clearPublicationSearchField()"
@@ -60,6 +59,17 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="col">
+      <div class="no-data-container" *ngIf="publicationList?.publications?.length == 0 && awardPublicationList?.length == 0">
+        <span class="no-data-icon-outer">
+            <div class="no-data-icon">
+                <i class="fa fa-file-o" aria-hidden="true"></i>
+                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+            </div>
+        </span>
+        <h4>There is no information in this section.</h4>
+    </div>
     </div>
   </div>
   <div *ngIf="_outcomeService.isOutcomesEditable && !isPublications && publicationList.publications" class="card box-shadow">
@@ -114,9 +124,11 @@
           </div>
           <div class="col-lg-4 col-md-auto col-sm-4 col-4">
             <label class="d-sm-block">Publication Url</label>
-            <span *ngIf="publication?.url">{{publication?.url}}</span>
+            <span  class="hand-cursor" *ngIf="publication?.url">
+              <a class="anchor-link" (click)="redirectUrl(publication?.url)">{{publication?.url}}</a></span>
             <span *ngIf="!publication?.url" class="noDataExists">No Data Specified</span>
           </div>
+
         </div>
         <div class="invalid-feedback d-block"
           *ngIf="(publicationWarningText != null && (publication.publicationId===awardPublication.publicationId))">
@@ -149,8 +161,7 @@
             <td>{{selectedPublication?.publication?.year}}</td>
             <td>
               <a class="anchor-link" title="click here to view {{selectedPublication?.publication?.url}}"
-                href="http://{{selectedPublication?.publication?.url}}"
-                target="_blank">{{selectedPublication?.publication?.url}}</a>
+              (click)="redirectUrl(selectedPublication?.publication?.url)">{{selectedPublication?.publication?.url}}</a>
             </td>
             <td>
               <ul class="actionButtonGroup">

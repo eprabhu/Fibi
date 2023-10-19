@@ -1225,9 +1225,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	private void setDocumentUpdateUserAndTimestamp(Integer moduleCode, Integer subModuleCode, Integer moduleItemKey, String updateUser) {
 		if (moduleCode.equals(Constants.MODULE_CODE_AWARD)) {
 			awardService.updateAwardDocumentUpdateUserAndTimestamp(moduleItemKey, updateUser);
-		} else if (moduleCode == Constants.COI_MODULE_CODE && subModuleCode == Constants.COI_SUBMODULE_CODE) {
+		} else if (moduleCode.equals(Constants.COI_MODULE_CODE) && subModuleCode.equals(Constants.COI_SUBMODULE_CODE)) {
 			conflictOfInterestDao.updateDisclosureUpdateDetails(moduleItemKey);
-		} else if(moduleCode == Constants.COI_MODULE_CODE && subModuleCode == Constants.COI_SFI_SUBMODULE_CODE) {
+		} else if(moduleCode.equals(Constants.COI_MODULE_CODE ) && subModuleCode.equals(Constants.COI_SFI_SUBMODULE_CODE)) {
 			conflictOfInterestDao.updatePersonEntityUpdateDetails(moduleItemKey);
 		}
 	}
@@ -1582,13 +1582,13 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	@Override
 	public void deleteAllQuestionAnswers(QuestionnaireDataBus questionnaireDataBus) {
 		questionnaireDAO.deleteQuestTableAnswers(questionnaireDataBus.getModuleItemKey(),questionnaireDataBus.getModuleItemCode(),
-				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleItemKey());
+				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleSubItemKey());
 		questionnaireDAO.deleteQuestAnswerAttachment(questionnaireDataBus.getModuleItemKey(),questionnaireDataBus.getModuleItemCode(),
-				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleItemKey());
+				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleSubItemKey());
 		questionnaireDAO.deleteQuestAnswer(questionnaireDataBus.getModuleItemKey(),questionnaireDataBus.getModuleItemCode(),
-				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleItemKey());
+				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleSubItemKey());
 		questionnaireDAO.deleteQuestAnswerHeader(questionnaireDataBus.getModuleItemKey(), questionnaireDataBus.getModuleItemCode(),
-				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleItemKey());
+				questionnaireDataBus.getModuleSubItemCode(), questionnaireDataBus.getModuleSubItemKey());
 
 	}
 

@@ -1,22 +1,24 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'projects/admin-dashboard/src/environments/environment';
-import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/fibi/src/app/app-constants';
-import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from 'projects/fibi/src/app/common/services/end-point.config';
-import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from 'projects/fibi/src/app/common/utilities/date-utilities';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { environment } from '../../../../../admin-dashboard/src/environments/environment';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../fibi/src/app/app-constants';
+import { DATE_PLACEHOLDER } from '../../../../src/app/app-constants';
+import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../../fibi/src/app/common/services/end-point.config';
+import { parseDateWithoutTimestamp, getTotalNoOfDays, compareDates } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
-import { CoiTravelDisclosure, EndpointOptions, TravelCreateModalDetails, TravelDisclosure, TravelDisclosureTraveller } from '../travel-disclosure-interface';
+import { CoiTravelDisclosure, EndpointOptions, EntityDetails, TravelCreateModalDetails, TravelDisclosure, TravelDisclosureTraveller } from '../travel-disclosure-interface';
 import { CommonService } from '../../common/services/common.service';
-import { convertToValidAmount } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { convertToValidAmount, deepCloneObject, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
-declare var $: any;
 @Component({
     selector: 'app-travel-disclosure-form',
     templateUrl: './travel-disclosure-form.component.html',
-    styleUrls: ['./travel-disclosure-form.component.scss']
+    styleUrls: ['./travel-disclosure-form.component.scss'],
+    animations: [fadeInOutHeight]
 })
 export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
 
@@ -35,17 +37,27 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     travelResObject = new TravelDisclosure();
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     travelStatusTypeLookup: Array<TravelDisclosureTraveller>;
-    destination: 'Domestic' | 'International' = 'Domestic';
+    destination = null;
+
+    helpText = [
+        'All the fields of travel disclosure form are mandatory.',
+        'Fill in all the fields of the disclosure form and to save your progress, click on the ‘Save’ button.',
+        'Navigate to the Certification section to certify and submit the disclosure.'
+    ];
+    isResultFromSearch = false;
+    entityDetails: EntityDetails = new EntityDetails();
+    addEntityConfirmation: any = null;
+    isAddressReadMore: false;
 
     constructor(public commonService: CommonService,
         private _router: Router,
         private _service: TravelDisclosureService,
         private _dataStore: TravelDataStoreService) {
-        window.scrollTo(0, 0);
+        document.getElementById('COI_SCROLL').scrollTo(0, 0);
     }
 
     ngOnInit(): void {
-        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.entitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ONLY_ACTIVE');
         this.countrySearchOptions = getEndPointOptionsForCountry(this.commonService.fibiUrl);
         this.getDataFromStore();
         this.listenDataChangeFromStore();
@@ -61,6 +73,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
     private getDataFromStore(): void {
         if (this._dataStore.getData().travelDisclosureId) {
             this.setDisclosureDetails(this._dataStore.getData());
+            this.entityDetails = this._dataStore.getEntityDetails();
         } else {
             this.getTravelCreateModalDetails();
         }
@@ -72,6 +85,9 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.countrySearchOptions.defaultValue = responseObject.destinationCountry;
         this.destination = responseObject.destinationCountry ? 'International' : 'Domestic';
         this.travelDisclosureRO = this._dataStore.getTravelDisclosureRO();
+        if (responseObject.travelEntityName) {
+            this.isResultFromSearch = true;
+        }
     }
 
     private handleTravelDisclosureSave(): void {
@@ -173,16 +189,29 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
         this.validateDates();
         return this.mandatoryList.size !== 0 || !this.validateDates() ? false : true;
-    }
+}
 
     selectedEntityEvent(event: any): void {
-        this.entityName = (event && event.entityName) || null;
-        this.travelDisclosureRO.entityId = (event && event.entityId) || null;
-        this.travelDisclosureRO.entityNumber = (event && event.entityNumber) || null;
+        if (event) {
+            openModal('travel-entity-details');
+        } else {
+            this.clearEntity();
+        }
+        this.addEntityConfirmation = event ? event : null;
+        this.setUnSavedChangesTrue();  
+    }
+
+    clearEntity() {
+        this.entityDetails = null;
+        this.isResultFromSearch = false;
+        this.entityName = null;
+        this.travelDisclosureRO.entityId = null;
+        this.travelDisclosureRO.entityNumber = null;
     }
 
     selectTravelCountry(event: any): void {
-        this.travelDisclosureRO.destinationCountry = (event && event.countryName) || null;
+        this.travelDisclosureRO.destinationCountry = event ? event.countryName : null;
+        this.setUnSavedChangesTrue();
     }
 
     getTravellerTypeCode(): void {
@@ -205,7 +234,7 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    setUnSavedChanges(): void {
+    setUnSavedChangesTrue(): void {
         this._service.setUnSavedChanges(true, 'Travel Details');
     }
 
@@ -262,6 +291,8 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
         this.travelResObject.adminPersonId = response.adminPersonId;
         this.travelResObject.adminPersonName = response.adminPersonName;
         this.travelResObject.travelState = response.travelstate;
+        this.travelResObject.disclosureStatus = response.coiTravelDisclosureStatusTypeDetalis.description;
+        this.travelResObject.disclosureStatusCode = response.coiTravelDisclosureStatusTypeDetalis.disclosureStatusCode;
         this._dataStore.manualDataUpdate(this.travelResObject);
         this._router.navigate([], {
             queryParams: {
@@ -270,6 +301,44 @@ export class TravelDisclosureFormComponent implements OnInit, OnDestroy {
             queryParamsHandling: 'merge',
         });
     }
+
+    viewEntity(entityId: string): void {
+        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityId } });
+    }
+
+    confirmEntityDetails() {
+        this.entityDetails = deepCloneObject(this.addEntityConfirmation);
+        this.isResultFromSearch = true;
+        this.entityName = this.entityDetails.entityName;
+        this.travelDisclosureRO.entityId = this.entityDetails.entityId;
+        this.travelDisclosureRO.entityNumber = this.entityDetails.entityNumber;
+        this.addEntityConfirmation = null;
+    }
+
+    clearEntityDetails() {
+        this.clearField = new String('true');
+        this.addEntityConfirmation = null;
+        this.entityDetails = null;
+        this.isResultFromSearch = false;
+        this.entityName = null;
+        this.travelDisclosureRO.entityId = null;
+        this.travelDisclosureRO.entityNumber = null;
+        this.entitySearchOptions.defaultValue = '';
+    }
+
+    getWarningClass(typeCode): string {
+        switch (typeCode) {
+            case '1':
+                return 'invalid';
+            case '2':
+                return 'medium-risk';
+            case '3':
+                return 'low-risk';
+            default:
+                return;
+        }
+    }
+
 }
 
 

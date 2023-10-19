@@ -24,6 +24,8 @@ import com.polus.fibicomp.filemanagement.FileManagmentConstant;
 import com.polus.fibicomp.filemanagement.FileManagmentInputDto;
 import com.polus.fibicomp.print.service.PrintService;
 import com.polus.fibicomp.security.AuthenticatedUser;
+import com.polus.fibicomp.coi.dto.AttachmentsDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
 
 @Transactional
 @Service
@@ -66,6 +68,27 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 			throw new COIFileAttachmentException("Exception in saveFileAttachment in COIFileAttachmentService, " + e);
 		}
 		return "SUCCESS";
+	}
+
+	@Override
+	@Transactional(rollbackFor = {COIFileAttachmentException.class, IOException.class})
+	public Attachments saveAttachment(AttachmentsDto request, String personId) {
+		FileManagementOutputDto fileOutput = null;
+		try {
+			FileManagmentInputDto input = FileManagmentInputDto.builder()
+											.file(request.getFile())
+											.moduleCode(FileManagmentConstant.COI_MODULE_CODE)
+											.moduleNumber(personId)
+											.updateUser(AuthenticatedUser.getLoginUserName())
+											.build();
+			fileOutput = fileManagementService.saveFile(input);
+			request.setFileDataId(fileOutput.getFileDataId());
+			Attachments attachment= coiFileAttachmentDao.saveAttachmentDetails(request, request.getFileDataId());
+			return attachment;
+		} catch (Exception e) {
+			fileManagementService.removeFileOnException(fileOutput.getFilePath(), fileOutput.getFileName());
+			throw new COIFileAttachmentException("Exception in saveFileAttachment in COIFileAttachmentService, " + e);
+		}
 	}
 
 	@Override
@@ -198,6 +221,11 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 			throw new COIFileAttachmentException("Exception in saveFileAttachment in COIFileAttachmentService, " + e);
 		}
 		return "SUCCESS";
+	}
+
+	@Override
+	public List<DisclAttachment> getDisclAttachByCommentId(Integer commentId) {
+		return coiFileAttachmentDao.getDisclAttachByCommentId(commentId);
 	}
 
 }

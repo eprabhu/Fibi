@@ -57,7 +57,7 @@
                                     <span class="dateField">
                                         <input matInput [matDatepicker]="DATE_ACKNOWLEDGED" (keypress)="_commonService._keyPress($event, 'date');"
                                                [(ngModel)]="personTrainingDetails.dateAcknowledged"
-                                               (ngModelChange)="validateAckDate()"
+                                               (ngModelChange)="validateAcknowledgementDate($event)"
                                                [ngClass]="(invalidData.dateAcknowledged) ? 'is-invalid d-block' : ''"
                                                (click)="DATE_ACKNOWLEDGED.open()" autocomplete="off"
                                                class="d-inline-block form-control"
@@ -72,7 +72,7 @@
                                     </span>
                                     <div *ngIf="(invalidData.dateAcknowledged)"
                                          class="invalid-feedback d-block">
-                                        Completion Date should be before Expiration Date
+                                         {{invalidData?.invalidDateAcknowledgedMessage}}
                                     </div>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
                                     <span class="dateField">
                                         <input matInput [matDatepicker]="EXPIRATION_DATE" (keypress)="_commonService._keyPress($event, 'date');"
                                                [(ngModel)]="personTrainingDetails.followupDate"
-                                               (ngModelChange)="validateExpDate()"
+                                               (ngModelChange)="validateExpirationDate($event)"
                                                [ngClass]="(invalidData.followupDate) ? 'is-invalid d-block' : ''"
                                                (click)="EXPIRATION_DATE.open()" autocomplete="off"
                                                class="d-inline-block form-control"
@@ -99,8 +99,7 @@
                                     </span>
                                     <div *ngIf="(invalidData.followupDate)"
                                          class="invalid-feedback d-block">
-                                        Expiration Date should be after
-                                        Completion Date
+                                         {{invalidData?.invalidFollowupDateMessage}}
                                     </div>
                                 </div>
                             </div>
@@ -234,7 +233,7 @@
                                 </div>
                             </div>
                             <div class="col no-hover-effect">
-                                <label class="block-display" for="score">Score <span class="mandatory">*</span></label>
+                                <label class="block-display" for="score">Score</label>
                                 <input type="text" id="score" class="form-control" [(ngModel)]="score" maxlength="9">
                             </div>
                             <div [class.align-items-center]="validationMap.get('trainingCode')"

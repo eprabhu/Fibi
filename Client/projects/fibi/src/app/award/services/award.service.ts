@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
 import { Subject ,  BehaviorSubject } from 'rxjs';
+import { getParams } from '../../common/services/end-point.config';
 
 @Injectable()
 export class AwardService {
@@ -92,18 +93,19 @@ export class AwardService {
     }
 
     /** sets endpoint search options
-     * @param contextField
-     * @param formatString
-     * @param path
-     * @param defaultValue
-     * @param params
+     * @param params will have fetchLimit as one of the values 
+     * to specify limit of data to fetched,
+     * it should be given inside params as {'fetchLimit' : requiredLimit}
+     * requiredLimit can be either null or any valid number.
+     * if no limit is specified default fetch limit 50 will be used.
+     * if limit is null then full list will return, this may cause performance issue.
      */
     setHttpOptions(contextField, formatString, path, defaultValue, params) {
       this.httpOptions.contextField = contextField;
       this.httpOptions.formatString = formatString;
       this.httpOptions.path = path;
       this.httpOptions.defaultValue = defaultValue;
-      this.httpOptions.params = params;
+      this.httpOptions.params = getParams(params);   
       return JSON.parse(JSON.stringify(this.httpOptions));
     }
     saveAwardWorkflowStatusForSponsor(params) {
@@ -144,6 +146,6 @@ export class AwardService {
 
     canDeleteAward(awardId: number) {
         return this._http.get(`${this._commonService.baseUrl}/canDeleteAward/${awardId}`);
-      }
+    }
 
 }

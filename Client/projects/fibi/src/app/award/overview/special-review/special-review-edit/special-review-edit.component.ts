@@ -129,9 +129,9 @@ export class SpecialReviewEditComponent implements OnInit, OnChanges, OnDestroy 
                 this.index = null;
                 this.resetDropdownValues();
                 this.showToast(acType);
+                $('#add-review-modal').modal('hide');
             }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, acType === 'SAVE' ?
-                    'Adding Special review failed. Please try again.' : 'Updating Special review failed. Please try again.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, (acType === 'SAVE' ? 'Adding ' : 'Updating ') + "Special Review failed. Please try again.");
                 this.isSaving = false;
                 this.isSpecialReview = true;
                 this.specialReviews.isProtocolIntegrated =  false;
@@ -153,8 +153,7 @@ export class SpecialReviewEditComponent implements OnInit, OnChanges, OnDestroy 
     }
 
     showToast(acType): void {
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, acType === 'SAVE' ? 'Special review added successfully.'
-            : 'Special review updated successfully.');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, "Special Review " + (acType === 'SAVE' ? 'added ' : 'updated ') + 'successfully.')
     }
 
     /**
@@ -273,9 +272,11 @@ export class SpecialReviewEditComponent implements OnInit, OnChanges, OnDestroy 
     }
 
     addNewReview() {
-        this.isShowLinkComplianceModal = true;
+        // this.isShowLinkComplianceModal = true;
         this.specialReviews.approvalTypeCode =
-        this.specialReviews.approvalTypeCode ? this.specialReviews.approvalTypeCode : null;
+             this.specialReviews.approvalTypeCode ? this.specialReviews.approvalTypeCode : null;
+        $('#add-review-modal').modal('hide');
+        this.isShowLinkComplianceModal = true;
     }
 
     specialReviewAdvSearchClick(event) {
@@ -297,6 +298,7 @@ export class SpecialReviewEditComponent implements OnInit, OnChanges, OnDestroy 
             }
             this.setIntegratedStatusComment();
         }
+        $('#add-review-modal').modal('show');
     }
 
     specialReviewTypeChange(type) {

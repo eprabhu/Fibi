@@ -9,12 +9,14 @@ import { Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { debounce, switchMap } from 'rxjs/operators';
-import { GetSFIRequestObject } from '../coi-interface';
+import { RO } from '../coi-interface';
+import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/utilities/animations';
 
 @Component({
     selector: 'app-sfi',
     templateUrl: './sfi.component.html',
-    styleUrls: ['./sfi.component.scss']
+    styleUrls: ['./sfi.component.scss'],
+    animations: [listAnimation, fadeInOutHeight, leftSlideInOut]
 })
 export class SfiComponent implements OnInit, OnDestroy {
 
@@ -40,11 +42,12 @@ export class SfiComponent implements OnInit, OnDestroy {
     entityName: any;
     isRelationshipActive: false;
     entityDetails: any;
-    expandInfo = true;
+    expandInfo = false;
     isEnableActivateInactivateSfiModal: boolean;
     $debounceEvent = new Subject();
     $fetchSFIList = new Subject();
     isSearchTextHover = false;
+    isLoading = false;
 
     constructor(
         private _sfiService: SfiService,
@@ -82,16 +85,20 @@ export class SfiComponent implements OnInit, OnDestroy {
 
     getSfiDetails() {
         this.$subscriptions.push(this.$fetchSFIList.pipe(
-            switchMap(() =>this._sfiService.getSfiDetails(this.getRequestObject()))).subscribe((data: any) => {
+            switchMap(() => {
+                this.isLoading = true;
+                return this._sfiService.getSfiDetails(this.getRequestObject())
+            })).subscribe((data: any) => {
             if (data) {
                 this.count = data.count;
                 this.coiFinancialEntityDetails = data.personEntities;
+                this.isLoading = false;
             }
         }));
     }
 
     getRequestObject() {
-        let requestObj: GetSFIRequestObject = new GetSFIRequestObject();
+        let requestObj: RO = new RO();
         requestObj.currentPage = this.currentPage;
         requestObj.disclosureId = this.disclosureId;
         requestObj.filterType = this.filterType;
@@ -125,7 +132,7 @@ export class SfiComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
-        document.body.classList.add('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         setTimeout(() => {
             const slider = document.querySelector('.slider-base');
             slider.classList.add('slider-opened');
@@ -136,6 +143,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         this.filterType = filterType;
         this.currentPage = 1;
         this.searchText = '';
+        this.coiFinancialEntityDetails = [];
         this.$fetchSFIList.next();
     }
 
@@ -151,9 +159,8 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     actionsOnPageChange(event) {
-        if(this.currentPage != event) {
+        if (this.currentPage != event) {
             this.currentPage = event;
-            this.searchText = '';
             this.$fetchSFIList.next();
         }
     }
@@ -168,8 +175,8 @@ export class SfiComponent implements OnInit, OnDestroy {
     }
 
     addBodyScroll() {
-        document.body.classList.remove('overflow-hidden');
-        document.body.classList.add('overflow-auto');
+        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }
 
     deleteSFIConfirmation(event, i) {

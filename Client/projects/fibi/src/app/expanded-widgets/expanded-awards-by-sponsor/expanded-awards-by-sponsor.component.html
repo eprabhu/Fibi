@@ -41,6 +41,10 @@
                     <i [ngClass]="((column == 3) ? (isDesc ? 'fa fa-sort-alpha-asc sortIcon' : 'fa fa-sort-alpha-desc sortIcon') : 'fa fa-sort-alpha-asc blrcolor')"
                     aria-hidden="true"></i>
                   </th>
+                  <th scope="col" width="10%" class="text-right" (click)="isDesc =!isDesc;sortBy(4)">Anticipated Amount
+                    <i [ngClass]="((column == 4) ? (isDesc ? 'fa fa-sort-numeric-asc sortIcon' : 'fa fa-sort-numeric-desc sortIcon') : 'fa fa-sort-numeric-asc blrcolor')"
+                    aria-hidden="true"></i>
+                  </th>
                   <th scope="col" width="5%">Actions</th>
               </thead>
               <tbody>
@@ -49,6 +53,7 @@
                   <td>{{award[1]}}</td>
                   <td class="text-break">{{award[2]}}</td>
                   <td class="text-break">{{award[3]}}</td>
+                  <td class="text-right">{{award[5] ? (award[5] | customCurrency: 2) : '-'}}</td>
                   <td>
                     <ul class="actionButtonGroup">
                       <li><a title="Open award {{award[0]}}" [routerLink]="['/fibi/award']"

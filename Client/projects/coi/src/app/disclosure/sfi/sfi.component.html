@@ -15,22 +15,18 @@
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          For making any corrections /inactivating an existing Active SFI,navigate to the SFI page and amend the details.
-        </div>
-        <div class="mt-2">
-          <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
-          For making any corrections /activating an  Inactive SFI,navigate to the SFI page and amend the details.
+          For making any corrections / inactivating / activating an existing Active / Inactive SFI,navigate to the SFI page and amend the details.
         </div>
         <div class="mt-2">
           <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
           Only “Active SFI(s)“ are listed in the Relationships page. Please ensure that you have the updated list of Active SFI(s) before you proceed to the next step.
-          <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Show Less</u></span>
+          <span *ngIf="expandInfo" (click) = "expandInfo = false" class="fw-700 cursor-pointer"><u title="Collapse SFI help text">Read Less</u></span>
         </div>
       </ng-container>
     </div>
 </div>
 <div class="advance-search-area border d-flex mt-2 rounded-1">
-    <div class="border-end fs-14 p-3">
+    <div class="border-end fs-14 p-3" [@leftSlideInOut]>
         <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
         <span (click)="setFilter('ALL')" [class.filter-active]="filterType=='ALL'"
             title="Click to filter by type: All" area-describedby="Click to filter by type: All"
@@ -54,21 +50,24 @@
       <mat-icon class="closeButton" *ngIf="searchText" (click)="clearSearchText()">close</mat-icon> 
     </div>
 </div>
-<div class="margin-left-5">
-  <ng-container
-    *ngFor="let item of coiFinancialEntityDetails ; let i =index">
-    <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'"></app-shared-sfi-card>
-  </ng-container>
-<div *ngIf="coiFinancialEntityDetails?.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-    <nav aria-label="pagination section" class="pagination justify-content-end">
-        <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="count" [pageCount]="10">
-        </app-pagination>
-    </nav>
-</div>
+<ng-container *ngIf="!isLoading">
+  <div class="margin-left-5" [@listAnimation]="coiFinancialEntityDetails.length">
+    <div *ngFor="let item of coiFinancialEntityDetails ; let i =index">
+      <app-shared-sfi-card [canShow]="'true'" (activateDeactivateEvent)="activateDeactivateEvent($event)"(deleteEvent)="deleteSFIConfirmation($event)" (viewSlider)="viewSlider($event)" [reqObject] = 'item' [referredFrom]="'SFI_EDIT_AND_DASHBOARD'"></app-shared-sfi-card>
+    </div>
+  <!-- no data card -->
+    <div *ngIf="!coiFinancialEntityDetails?.length">
+      <app-no-information> </app-no-information>
+    </div>
+  </div>
+</ng-container>
 
-<div *ngIf="!coiFinancialEntityDetails?.length">
-  <app-no-information> </app-no-information>
-</div>
+<!-- pagination -->
+<div [hidden]="isLoading" *ngIf="coiFinancialEntityDetails?.length > 0" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+  <nav aria-label="pagination section" class="pagination justify-content-end">
+      <app-pagination (pageChangeEvent)="actionsOnPageChange($event)" [totalCount]="count" [pageCount]="10" [defaultCurrentPage]="currentPage">
+      </app-pagination>
+  </nav>
 </div>
 
 <div #viewSFIDetailsOverlay [class.overlay]="showSlider">

@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { WafAttachmentService } from '../../../common/services/waf-attachment.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { AddFaqService } from './add-faq.service';
+import { faqService } from '../faq.service';
 
 declare var $: any;
 
@@ -37,14 +38,17 @@ export class AddFaqComponent implements OnInit, OnChanges {
   subCategoryList = [];
   questionindex: any;
   faqId: any;
-  modal: any
+  modal: any;
   @Output() selectedResult = new EventEmitter<boolean>();
   @Output() newdata = new EventEmitter();
+  @Output() updatedData = new EventEmitter();
+  // updatedData: any;
 
   constructor(
     private _commonService: CommonService,
     private _addFaqService: AddFaqService,
-    private _wafAttachmentService: WafAttachmentService
+    private _wafAttachmentService: WafAttachmentService,
+    private _faqservice: faqService
   ) { }
 
   ngOnInit() {
@@ -57,7 +61,7 @@ export class AddFaqComponent implements OnInit, OnChanges {
       this.faqList.question = this.questiondata.question;
       this.faqList.categoryCode = this.questiondata.categoryCode || null;
       this.faqList.url = this.questiondata.url,
-      this.faqList.questionId = this.questiondata.questionId
+      this.faqList.questionId = this.questiondata.questionId;
     }
 
   }
@@ -113,11 +117,12 @@ export class AddFaqComponent implements OnInit, OnChanges {
         for (const file of this.uploadedFile) {
           formData.append('files', file, file.name);
         }
-        formData.append('formDataJson', JSON.stringify({ 'faqdtls': this.faqList, 'newFaqAttachment': this.fileList }));
+        formData.append('formDataJson', JSON.stringify({ 'faqdtls': this.faqList, 'newFaqAttachment': this.fileList, }));
         this.$subscriptions.push(this._addFaqService.saveFaq(formData).subscribe((data: any) => {
-          this.newdata.emit("Data Faqdtls: "+data.faqdtls);
+          this._faqservice.faqList.unshift(data.faqdtls);
+          this.newdata.emit('Data Faqdtls:  ' + data.faqdtls);
           this.submitActions();
-          this.modal = "modal";
+          this.modal = 'modal';
         }, err => { },
           () => {
             $('#add-new-faq').modal('hide'); this.emitFaqFlag();
@@ -185,9 +190,9 @@ export class AddFaqComponent implements OnInit, OnChanges {
       this.uploadedFile.push(files[index]);
     } if (this.fileList == null) {
       this.fileList = [];
-      this.prepareFileDetails(files)
+      this.prepareFileDetails(files);
     } else {
-      this.prepareFileDetails(files)
+      this.prepareFileDetails(files);
     }
   }
 
@@ -216,32 +221,33 @@ export class AddFaqComponent implements OnInit, OnChanges {
       'questionId': null
     };
   }
-  // $('#add-new-faq').modal('hide')
 
   functionSelection() {
     // Updating the question
     if (this.buttonName == 'Update') {
       this.updatequestions();
-
-    }
-    // submitting the question
-    else {
-      this.submitFaq()
+    } else {
+      this.submitFaq();
     }
   }
   // Question Updation
   updatequestions() {
-    const REQ_BODY = { "faq": [this.faqList] } //Payload
+    const REQ_BODY = { 'faq': [this.faqList] }; // Payload
     this.$subscriptions.push(this._addFaqService.savequestion(REQ_BODY).subscribe((data: any) => {
-      // this.newdata.emit(data.faq[0]);
+      const UPDATED_QUESTION_AND_ANSWER = [{
+        question: data.faqdtls.question,
+        answer: data.faqdtls.answer,
+        url: data.faqdtls.url,
+      }];
+      this.updatedData.emit(UPDATED_QUESTION_AND_ANSWER);
       this.clearinputfield();
       this.editSubmitAction();
-      $('#add-new-faq').modal('hide');      
-    }))
+      $('#add-new-faq').modal('hide');
+    }));
 
   }
 
-  editSubmitAction(){
+  editSubmitAction() {
     this._commonService.showToast(HTTP_SUCCESS_STATUS, 'FAQ Edited successfully.');
   }
 

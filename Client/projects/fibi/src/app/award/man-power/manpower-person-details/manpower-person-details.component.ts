@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { CommonDataService } from '../../services/common-data.service';
 import { ManPowerService } from '../man-power.service';
 import { openInNewTab } from '../../../common/utilities/custom-utilities';
+import { CommonService } from '../../../common/services/common.service';
 
 
 
@@ -15,7 +16,8 @@ import { openInNewTab } from '../../../common/utilities/custom-utilities';
 export class ManpowerPersonDetailsComponent implements OnInit, OnChanges {
   constructor(
     public _commonData: CommonDataService,
-    private _manpowerService: ManPowerService
+    private _manpowerService: ManPowerService,
+    public _commonService: CommonService
     ) {
   }
 

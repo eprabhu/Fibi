@@ -1,24 +1,26 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { GetSFIRequestObject } from "../../disclosure/coi-interface";
-import { CoiService } from "../../disclosure/services/coi.service";
+import { Router } from '@angular/router';
+import { RO } from "../../disclosure/coi-interface";
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { UserEntitiesService } from "./user-entities.service";
 import { CommonService } from '../../common/services/common.service';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
-import { BehaviorSubject, Subject, interval } from 'rxjs';
+import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
+import { listAnimation, fadeInOutHeight, leftSlideInOut } from '../../common/utilities/animations';
+import { UserDashboardService } from '../user-dashboard.service';
 
 @Component({
   selector: 'app-user-entities',
   templateUrl: './user-entities.component.html',
   styleUrls: ['./user-entities.component.scss'],
+  animations: [listAnimation, fadeInOutHeight, leftSlideInOut],
   providers: [UserEntitiesService]
 })
 export class UserEntitiesComponent implements OnInit, OnDestroy {
   @ViewChild('viewMyEntitiesOverlay', { static: true }) viewMyEntitiesOverlay: ElementRef;
-  sfiDashboardRequestObject = new GetSFIRequestObject();
+  sfiDashboardRequestObject = new RO();
   $subscriptions = [];
   entityArray = [];
   filteredEntityArray = [];
@@ -33,7 +35,8 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   $debounceEventForEntities = new Subject();
   $fetchSFI = new Subject();
   isSearchTextHover = false;
-  isShowNoDataCard = false;
+  isLoading = false;
+  isHideFilterSearchAndShowCreate = false;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService) {
@@ -49,26 +52,39 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   }
 
  fetchMyEntities() {
-  this.isShowNoDataCard = false;
     this.sfiDashboardRequestObject.personId = this._commonService.getCurrentUserDetail('personId');
     this.$subscriptions.push(this.$fetchSFI.pipe(
-      switchMap(() => this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject))).subscribe((data: any) => {
+      switchMap(() => {
+        this.isLoading = true;
+        return this._userEntityService.getSFIDashboard(this.sfiDashboardRequestObject)
+      })).subscribe((data: any) => {
       this.result = data;
       if (this.result) {
-        this.isShowNoDataCard = true;
         this.filteredEntityArray = data.personEntities || [];
+        this.loadingComplete();
       }
-    }));
+    }), (err) => {
+      this.loadingComplete();
+      this.filteredEntityArray = [];
+    });
   }
+
+  private loadingComplete() {
+    if (this.sfiDashboardRequestObject.filterType === 'ALL' && !this.searchText && this.sfiDashboardRequestObject.currentPage === 1) {
+      this.isHideFilterSearchAndShowCreate = this.filteredEntityArray.length == 0 ? true : false;
+    }
+    this.isLoading = false;
+}
 
   viewEntityDetails(entities) {
     this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: entities.coiFinancialEntityId, mode: 'view' } })
   }
 
   setFilter(type = 'ALL') {
+    this.searchText = '';
+    this.filteredEntityArray = [];
     this.sfiDashboardRequestObject.filterType = type;
     this.sfiDashboardRequestObject.currentPage = 1;
-    this.searchText = '';
     this.sfiDashboardRequestObject.searchWord = '';
     this.$fetchSFI.next();
   }
@@ -101,8 +117,10 @@ removeEntityId() {
   }
 
   actionsOnPageChangeEvent(event) {
-    this.sfiDashboardRequestObject.currentPage = event;
-    this.$fetchSFI.next();
+    if (this.sfiDashboardRequestObject.currentPage != event) {
+      this.sfiDashboardRequestObject.currentPage = event;
+      this.$fetchSFI.next();
+    }
   }
 
   activateDeactivateEvent(event) {
@@ -121,7 +139,7 @@ removeEntityId() {
   viewSlider(event) {
     this.showSlider = event.flag;
     this.entityId = event.entityId;
-    document.body.classList.add('overflow-hidden');
+    document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
     setTimeout(() => {
         const slider = document.querySelector('.slider-base');
         slider.classList.add('slider-opened');
@@ -151,8 +169,8 @@ removeEntityId() {
 }
 
 addBodyScroll() {
-    document.body.classList.remove('overflow-hidden');
-    document.body.classList.add('overflow-auto');
+    document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+    document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
 }
 
 closeActivateInactivateSfiModal(event) {
@@ -176,6 +194,11 @@ clearSearchText() {
   this.searchText = '';
   this.sfiDashboardRequestObject.searchWord = '';
   this.$fetchSFI.next();
+}
+
+
+addSFI(type) {
+  this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
 }
 
 }

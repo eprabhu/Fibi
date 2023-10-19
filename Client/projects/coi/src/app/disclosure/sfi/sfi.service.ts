@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
 // import { SFI } from './add-sfi.interface';
 import { Subject } from 'rxjs';
-import { GetSFIRequestObject } from '../coi-interface';
+import { RO } from '../coi-interface';
 
 @Injectable()
 export class SfiService {
@@ -11,10 +11,11 @@ export class SfiService {
     isSFIRequired = false;
     previousURL= '';
     $addSfi = new Subject<Boolean>();
+    $addRelationService = new Subject();
 
     constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-    getSfiDetails(params: GetSFIRequestObject) {
+    getSfiDetails(params: RO) {
         return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
     }
 

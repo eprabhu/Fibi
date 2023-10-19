@@ -3,17 +3,19 @@ import { Subscription } from 'rxjs';
 import { TravelDisclosureService } from '../services/travel-disclosure.service';
 import { TravelDataStoreService } from '../services/travel-data-store.service';
 import { CoiTravelDisclosure, TravelDisclosure } from '../travel-disclosure-interface';
+import { fadeInOutHeight } from '../../common/utilities/animations';
 
 @Component({
     selector: 'app-travel-certification',
     templateUrl: './travel-certification.component.html',
-    styleUrls: ['./travel-certification.component.scss']
+    styleUrls: ['./travel-certification.component.scss'],
+    animations: [fadeInOutHeight]
 })
 export class TravelCertificationComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
     dependencies = ['coiDisclosure'];
-    isEditMode = true;
+    isCheckBoxDisable = false;
     isSaving = false;
     coiDisclosure: any;
     isReadMore = false;
@@ -36,10 +38,11 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
     proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
 
     constructor(public travelService: TravelDisclosureService, private _dataStore: TravelDataStoreService) {
-        window.scrollTo(0, 0);
+        document.getElementById('COI_SCROLL').scrollTo(0, 0);
     }
 
     ngOnInit(): void {
+        this.isCheckBoxDisable = !this.validateTravelDisclosureRO();
     }
 
     ngOnDestroy(): void {
@@ -47,41 +50,10 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
         this.travelService.isTravelCertified = false;
     }
 
-    // private listenDataChangeFromStore() {
-    //     this.$subscriptions.push(
-    //         this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
-    //             this.getDataFromStore();
-    //         })
-    //     );
-    // }
-
-    // private getDataFromStore() {
-    //     this.travelReqObject = this._dataStore.getTravelDisclosureRO() ?
-    //         this._dataStore.getTravelDisclosureRO() : new CoiTravelDisclosure();
-
-    //     this.travelResObject = this._dataStore.getData() ?
-    //         this._dataStore.getData() : new TravelDisclosure();
-
-    //     this.travelService.isTravelCertified = this.travelService.isTravelCertified ? true : false;
-    // }
-
-    // private certifyTravelDisclosure(): void {
-    //     this.travelService.certifyTravelDisclosure(this.travelReqObject).subscribe((res: any) => {
-    //         if (res) {
-    //             this.travelService.isTravelCertified = true;
-    //             this.travelResObject.certifiedAt = res.certifiedAt;
-    //             this.travelResObject.certifiedBy = res.certifiedBy;
-    //             this._dataStore.manualDataUpdate(this.travelResObject);
-    //         }
-    //     }, (err) => {
-    //         this.travelService.isTravelCertified = false;
-    //     });
-    // }
-
     /**
- * @description
- * for validating whether travel disclosure request object contains all values or not
- */
+     * @description
+     * for validating whether travel disclosure request object contains all values or not
+     */
     private validateTravelDisclosureRO() {
         this.travelReqObject = this._dataStore.getTravelDisclosureRO();
         const excludedVariables: (keyof CoiTravelDisclosure)[] = [
@@ -97,20 +69,12 @@ export class TravelCertificationComponent implements OnInit, OnDestroy {
             return false;
         });
 
-        if (hasEmptyTravelReqObject) {
-            this.travelService.isTravelCertified = false;
-        } else {
-            this.travelService.isTravelCertified = true;
-        }
+        return hasEmptyTravelReqObject;
     }
 
     certify(): void {
         this.travelService.setUnSavedChanges(true, 'Certification');
-        if (!this.travelService.isTravelCertified) {
-            this.validateTravelDisclosureRO();
-        } else {
-            this.travelService.isTravelCertified = false;
-        }
+        this.travelService.isTravelCertified = !this.travelService.isTravelCertified;
     }
 
 }

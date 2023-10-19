@@ -10,7 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { TravelDataStoreService } from './services/travel-data-store.service';
 import { CoiService } from '../disclosure/services/coi.service';
-import { TravelSharedComponentModule } from './travel-shared-component/travel-shared-component.module';
+import { TravelAddConflictSliderComponent } from './travel-add-conflict-slider/travel-add-conflict-slider.component';
+import { AddSfiModule } from '../add-sfi/add-sfi.module';
+import { TravelRiskSliderModule } from './travel-risk-slider/travel-risk-slider.module';
 
 const routes: Routes = [
     {
@@ -38,6 +40,11 @@ const routes: Routes = [
                 path: 'related-disclosures', canDeactivate: [],
                 loadChildren: () => import('./travel-related-disclosures/travel-related-disclosures.module')
                 .then(m => m.TravelRelatedDisclosuresModule)
+            },
+            {
+                path: 'history', canDeactivate: [],
+                loadChildren: () => import('./travel-history/travel-history.module')
+                .then(m => m.TravelHistoryModule)
             }
         ]
     }
@@ -45,14 +52,16 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         TravelDisclosureComponent,
+        TravelAddConflictSliderComponent
     ],
     imports: [
         CommonModule,
         SharedModule,
         FormsModule,
+        AddSfiModule,
         RouterModule.forChild(routes),
         SharedComponentModule,
-        TravelSharedComponentModule
+        TravelRiskSliderModule
     ],
     providers: [
         SfiService,

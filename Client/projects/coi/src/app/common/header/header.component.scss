@@ -61,6 +61,7 @@ header {
   left: 0;
   right: 0;
   z-index: 50;
+    min-height: 51px;
 }
 
 .pushHeader {
@@ -77,6 +78,11 @@ header {
     font-size: 14px;
     padding: 20px 30px 20px 15px;
   }
+}
+
+.logo {
+  width: 200px;
+    max-width: 145.359px;
 }
 
 .dropdown-menu {
@@ -111,4 +117,47 @@ header {
   &:hover {
     color: black;
   }
+}
+
+.dropdown-width {
+    min-width: 34px;
+}
+
+.add-notes{
+    font-weight: 600;
+    padding-left: 16px;
+    padding-right: 8px;
+}
+
+.notes-textarea {
+  padding-top: 10px;
+  background-color: #d2d3d526;
+  width: 93%;
+  margin-left: 13px;
+  border: none;
+  font-size: 14px;
+}
+
+.notes-textarea:focus {
+  outline: none !important;
+  border-bottom: 2px solid #007dec;
+  box-shadow: none;
+  background-color: #d2d3d526;
+}
+
+.h-41{
+  height: 41px!important;
+}
+
+.hr {
+  margin: 0.5rem 0;
+}
+
+.add-note {
+  position: absolute;
+  top: 44px;
+  right: 28px;
+  cursor: all-scroll;
+  z-index: 52 !important;
+  width: 30%;
 }

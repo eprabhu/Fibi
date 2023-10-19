@@ -11,25 +11,29 @@
       <div class="modal-body ct-modal-padding">
         <div class="help-text">
           <div class="col-12 py-2 grey-info font px-3">
-            <span *ngIf="isRelationshipActive" class="fs-13 text-secondary">
-                <ol type="1">
-                  <li>Please provide a reason for inactivation in the field provided.</li>
-                  <!-- <li>The current date is marked as the end date of involvement,
-                    you may edit and update the date if required.</li> -->
-                </ol>
-            </span>
-            <span *ngIf="!isRelationshipActive" class="fs-13  text-secondary">
-              <ol type="1">
-                <li>Provide the reason for Activation in the field provided.</li>
-                <li>Click on Activate button to activate the entity.</li>
-              </ol>
+            <span class="fs-13 text-secondary d-flex">
+              <mat-icon role="img" class="mat-icon me-2 info-icon material-icons mat-icon-no-color mt-2" aria-hidden="true"
+                data-mat-icon-type="font">info</mat-icon>
+              <p *ngIf="isRelationshipActive" class="fs-14 pb-0 pt-1">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Please provide a reason for inactivation in the field provided.
+                <br>
+              </p>
+              <p *ngIf="!isRelationshipActive" class="fs-14 pb-0 pt-1">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Provide the reason for Activation in the field provided.
+                <br>
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Click on Activate button to activate the entity.
+                <br>
+              </p>
             </span>
           </div>
         </div>
         <div class="row">
           <div class="col">
             <span class="block-display fw-bold fs-14"><span *ngIf="isRelationshipActive" class="mandatory px-1">*</span>Reason for {{isRelationshipActive?'Inactivation' :'Activation'}} :</span>
-            <textarea placeholder="Please enter the reason."  [(ngModel)]="activateInactivateReason" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
+            <textarea placeholder="Please enter the reason."  [(ngModel)]="activateInactivateReason" (ngModelChange)="activateInactivateReason = activateInactivateReason.trim()" [isShowLimiter]="true" [limit]="500" rows="1" class="form-control"
               appAutoGrow appLengthValidator [class.invalid-border]="reasonValidateMapSfi.has('reason')"></textarea>
             <span *ngIf="reasonValidateMapSfi.has('reason')" class="invalid-feedback d-block fs-13">
               {{reasonValidateMapSfi.get('reason')}}

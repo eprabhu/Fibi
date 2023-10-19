@@ -44,7 +44,6 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     this.findPublications();
     this.awardPublicationList = this._outcomeService.outcomesData.awardPublications;
     this.isPublications = this.awardPublicationList.length ? true : false;
-
   }
 
   ngOnDestroy() {
@@ -148,6 +147,10 @@ export class PublicationsComponent implements OnInit, OnDestroy {
 
   trimSpaceInTextField() {
     ['property1', 'property2', 'property4'].forEach(textField => this.searchOptions[textField] = this.searchOptions[textField] && this.searchOptions[textField].trim())
+  }
+
+  redirectUrl(url) {
+    url.includes('http') ? window.open(url, '_blank') : window.open('//' + url, '_blank');
   }
 
 }

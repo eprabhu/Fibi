@@ -270,7 +270,7 @@ export class ReviewComponent implements OnInit, OnDestroy {
         this.preReviews = data.preReviews;
         this.reviewRequestObject = {};
         const reviewerReview = this.preReviews.find(review => review.preReviewId === this.reviewerReview.preReviewId);
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comment has been added successfully');
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comment has been added successfully.');
     }
 
     /**downloadAttachments - downloads uploaded review attachments

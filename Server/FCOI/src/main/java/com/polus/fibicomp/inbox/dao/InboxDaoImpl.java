@@ -125,7 +125,7 @@ public class InboxDaoImpl implements InboxDao {
 				statement.setString(3, inbox.getToPersonId());
 				statement.setString(4, inbox.getSubjectType());
 				statement.setString(5, inbox.getUserMessage());
-				statement.setString(6, AuthenticatedUser.getLoginUserName());
+				statement.setString(6, AuthenticatedUser.getLoginUserName() != null ? AuthenticatedUser.getLoginUserName() : inbox.getUpdateUser());
 				statement.setString(7, inbox.getMessageTypeCode());
 				statement.setInt(8, inbox.getSubModuleCode());
 				statement.setString(9, inbox.getSubModuleItemKey());
@@ -263,6 +263,11 @@ public class InboxDaoImpl implements InboxDao {
 		} catch (Exception e) {
 			logger.error("Exception in updateMessageInboxByParam :{}", e.getMessage());
 		}
+	}
+
+	@Override
+	public void saveBannerEntriesToActionList(Inbox actionList) {
+		hibernateTemplate.saveOrUpdate(actionList);
 	}
 
 }

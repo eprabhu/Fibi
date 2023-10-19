@@ -20,114 +20,160 @@
       <div *ngIf="proposalBudgetHeader" class="row">
         <div class="col-12 gridSkin">
         <div class="row px-4">
-            <div *ngIf="budgetData?.budgetTemplateTypes && budgetData?.budgetTemplateTypes?.length" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5 class="d-block">Budget Template</h5>
-                <span class="text-secondary f-13 fw-500" [innerHTML]='(proposalBudgetHeader?.budgetTemplate?.description ? proposalBudgetHeader?.budgetTemplate?.description
-                        : "No data available") | customTagRemover: currentMethod'></span>
+            <div *ngIf="budgetData?.budgetTemplateTypes && budgetData?.budgetTemplateTypes?.length" class="col-md-2 col-sm col-6">
+                <label>Budget Template</label>
+                    <div class="fw-500">
+                        <span [ngClass]="proposalBudgetHeader?.budgetTemplate?.description ? '': 'noDataExists' ">
+                          {{proposalBudgetHeader?.budgetTemplate?.description ? proposalBudgetHeader?.budgetTemplate?.description:'No Budget Template Specified'}}
+                        </span>
+                    </div>
             </div>
-
-            <div *ngIf="budgetData?.isOverHeadRateTypeEnabled && budgetData?.rateTypes?.length" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Over Head Rate Type</h5>
-                <span class=" f-13 fw-50 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader?.rateType?.rateClassDescription? proposalBudgetHeader?.rateType?.rateClassDescription :"No data available") | customTagRemover: currentMethod'></span>
+            <div *ngIf="budgetData?.isOverHeadRateTypeEnabled && budgetData?.rateTypes?.length" class="col-md-2 col-sm col-6">
+                <label>Over Head Rate Type</label>
+                  <div class="fw-500">
+                    <span [ngClass]="proposalBudgetHeader?.rateType?.rateClassDescription? '': 'noDataExists' ">
+                      {{proposalBudgetHeader?.rateType?.rateClassDescription? proposalBudgetHeader?.rateType?.rateClassDescription:'No Over Head Rate Type Specified'}}
+                    </span>
+                </div>
             </div>
             <div *ngIf=" budgetData?.rateTypes?.length &&( budgetData?.isShowCostShareAndUnderrecovery
-                      || budgetData?.isShowInKind)" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Under Recovery Rate Type</h5>
-                <span class="text-secondary f-13 fw-500" [innerHTML]='(proposalBudgetHeader?.underrecoveryRateType?.rateClassDescription?
-                          proposalBudgetHeader?.underrecoveryRateType?.rateClassDescription :"No data available") | customTagRemover: currentMethod'></span>
+                      || budgetData?.isShowInKind)" class="col-md-2 col-sm col-6">
+                <label>Under Recovery Rate Type</label>
+                    <div class="fw-500">
+                        <span [ngClass]="proposalBudgetHeader?.underrecoveryRateType?.rateClassDescription? '': 'noDataExists' ">
+                          {{proposalBudgetHeader?.underrecoveryRateType?.rateClassDescription? proposalBudgetHeader?.underrecoveryRateType?.rateClassDescription:'No Under Recovery Rate Type Specified'}}
+                        </span>
+                  </div>
             </div>
-            <div *ngIf="!proposalBudgetHeader?.isApprovedBudget" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Budget Status</h5>
-                <span class="text-secondary f-13 fw-500" [innerHTML]='(proposalBudgetHeader?.budgetStatus?.description ? proposalBudgetHeader?.budgetStatus?.description :
-                        "No data available") | customTagRemover: currentMethod'></span>
+            <div *ngIf="!proposalBudgetHeader?.isApprovedBudget" class="col-md-2 col-sm col-6">
+                <label>Budget Status</label>
+                    <div class="fw-500">
+                        <span [ngClass]="proposalBudgetHeader?.budgetStatus?.description? '': 'noDataExists' ">
+                          {{proposalBudgetHeader?.budgetStatus?.description? proposalBudgetHeader?.budgetStatus?.description:'No Budget Status Specified'}}
+                        </span>
+                    </div>
             </div>
-
-            <div class="col-xl col-lg col-md-6 col-sm-6 col-12" *ngIf="budgetData?.isAutoCalculateEnabled">
-                <h5 class="d-block">Auto Calculate</h5>
-                <span class="text-secondary f-13 fw-500"
-                    [innerHTML]='(proposalBudgetHeader.isAutoCalc ? proposalBudgetHeader.isAutoCalc : "No data available") | customTagRemover: currentMethod'></span>
-            </div>
-
-        </div>
-        <div class="row px-4">
-            <div class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Direct Cost</h5>
-                <span class=" f-13 fw-500 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader.totalDirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalDirectCost) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
-                </span>
-            </div>
-            <div *ngIf="budgetData?.isShowModifiedDirectCost" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Modified Direct Cost</h5>
-                <span class=" f-13 fw-500 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader.totalModifiedDirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalModifiedDirectCost) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
-                </span>
-            </div>
-            <div class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Indirect Cost</h5>
-                <span class=" f-13 fw-500 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader.totalIndirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalIndirectCost) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
-                </span>
-            </div>
-            <div *ngIf="budgetData?.isShowCostShareAndUnderrecovery" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Cost Share</h5>
-                <span class=" f-13 fw-500 text-secondary"
-                    [innerHTML]='proposalBudgetHeader.costSharingAmount ? currencyFormatter.parseCurrency(proposalBudgetHeader.costSharingAmount) : currencyFormatter.parseCurrency("0.00")'>
-                </span>
-            </div>
-            <div *ngIf="budgetData?.isShowCostShareAndUnderrecovery" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Under Recovery</h5>
-                <span class="fw-500 f-13 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader?.underrecoveryAmount ? currencyFormatter.parseCurrency(proposalBudgetHeader.underrecoveryAmount)  : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'></span>
-            </div>
-            <div *ngIf="budgetData?.isShowInKind" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Total Requested Cost</h5>
-                <span class="fw-500 f-13 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader?.totalCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalCost)  : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'></span>
-            </div>
-            <div *ngIf="budgetData?.isShowInKind" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Total In-Kind</h5>
-                <span class=" f-13 fw-500 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader.totalInKind ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalInKind) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
-                </span>
-            </div>
-            <div class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Total Cost</h5>
-                <span class=" f-13 fw-500 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader.totalOfTotalCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalOfTotalCost) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
-                </span>
+            <div class="col-md-2 col-sm col-6" *ngIf="budgetData?.isAutoCalculateEnabled">
+                <label>Auto Calculate</label>   
+                     <div class="fw-500">
+                        <span [ngClass]="proposalBudgetHeader.isAutoCalc? '': 'noDataExists' ">
+                          {{proposalBudgetHeader.isAutoCalc? proposalBudgetHeader.isAutoCalc:'No Auto Calculate Specified'}}
+                        </span>
+                    </div>
             </div>
 
-        </div>
-        <div class="row px-4">
-            <div *ngIf="budgetData.isCampusFlagEnabled" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Campus Flag</h5>
-                <span class="fw-500 f-13 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader.campusFlag ? proposalBudgetHeader.campusFlag : "No data available") | customTagRemover: currentMethod'></span>
+           <!-- </div> -->
+           <!-- <div class="row px-4"> -->
+            <div class="col-md-2 col-sm col-6">
+                <label>Direct Cost</label>
+                    <div class="fw-500">
+                      <span class=" f-13 fw-500 text-secondary"
+                          [innerHTML]='(proposalBudgetHeader.totalDirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalDirectCost) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
+                      </span>
+                  </div>
             </div>
-            <div *ngIf="budgetData.enableCostShareStatus" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-              <h5>Cost Sharing</h5>
-              <span class="fw-500 f-13 text-secondary"
-                  [innerHTML]='(proposalBudgetHeader?.costSharingTypeCode ? proposalBudgetHeader?.costSharingType?.description : "No data available") | customTagRemover: currentMethod'></span>
+            <div *ngIf="budgetData?.isShowModifiedDirectCost" class="col-md-2 col-sm col-6">
+                <label>Modified Direct Cost</label>
+                    <div class="fw-500">
+                      <span class=" f-13 fw-500 text-secondary"
+                          [innerHTML]='(proposalBudgetHeader.totalModifiedDirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalModifiedDirectCost) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
+                      </span>
+                   </div>
             </div>
-            <div *ngIf="budgetData.isShowBudgetOHRatePercentage" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>On-Campus Rate</h5>
-                <span class="fw-500 f-13 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader.onCampusRates ? proposalBudgetHeader.onCampusRates : "No data available") | customTagRemover: currentMethod'></span>
+            <div class="col-md-2 col-sm col-6">
+                <label>Indirect Cost</label>
+                    <div class="fw-500">
+                        <span class=" f-13 fw-500 text-secondary"
+                            [innerHTML]='(proposalBudgetHeader.totalIndirectCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalIndirectCost) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
+                        </span>
+                   </div>
             </div>
-            <div *ngIf="budgetData.isShowBudgetOHRatePercentage" class="col-xl col-lg col-md-6 col-sm-6 col-12">
-                <h5>Off-Campus Rate</h5>
-                <span class="fw-500 f-13 text-secondary"
-                    [innerHTML]='(proposalBudgetHeader.offCampusRates ? proposalBudgetHeader.offCampusRates : "No data available") | customTagRemover: currentMethod'></span>
+            <div *ngIf="budgetData?.isShowCostShareAndUnderrecovery" class="col-md-2 col-sm col-6">
+                <label>Cost Share</label>
+                     <div class="fw-500">
+                        <span class=" f-13 fw-500 text-secondary"
+                            [innerHTML]='proposalBudgetHeader.costSharingAmount ? currencyFormatter.parseCurrency(proposalBudgetHeader.costSharingAmount) : currencyFormatter.parseCurrency("0.00")'>
+                        </span>
+                    </div>
+            </div>
+            <div *ngIf="budgetData?.isShowCostShareAndUnderrecovery" class="col-md-2 col-sm col-6">
+                <label>Under Recovery</label>
+                    <div class="fw-500">
+                      <span class="fw-500 f-13 text-secondary"
+                        [innerHTML]='(proposalBudgetHeader?.underrecoveryAmount ? currencyFormatter.parseCurrency(proposalBudgetHeader.underrecoveryAmount)  : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
+                      </span>
+                    </div>   
+            </div>
+            <div *ngIf="budgetData?.isShowInKind" class="col-md-2 col-sm col-6">
+                <label>Total Requested Cost</label>
+                    <div class="fw-500">
+                        <span class="fw-500 f-13 text-secondary"
+                            [innerHTML]='(proposalBudgetHeader?.totalCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalCost)  : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
+                          </span>
+                    </div>
+            </div>
+            <div *ngIf="budgetData?.isShowInKind" class="col-md-2 col-sm col-6">
+                <label>Total In-Kind</label>
+                     <div  class="fw-500">
+                        <span class=" f-13 fw-500 text-secondary"
+                            [innerHTML]='(proposalBudgetHeader.totalInKind ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalInKind) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
+                        </span>
+                    </div>
+            </div>
+            <div class="col-md-2 col-sm col-6">
+                <label>Total Cost</label>
+                  <div class="fw-500">
+                      <span class=" f-13 fw-500 text-secondary"
+                          [innerHTML]='(proposalBudgetHeader.totalOfTotalCost ? currencyFormatter.parseCurrency(proposalBudgetHeader.totalOfTotalCost) : currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
+                      </span>
+                 </div>
+            </div>
+
+            <!-- </div> -->
+            <!-- <div class="row px-4"> -->
+            <div *ngIf="budgetData.isCampusFlagEnabled" class="col-md-2 col-sm col-6">            
+              <label>Campus Flag</label>
+                  <div class="fw-500">
+                      <span [ngClass]="proposalBudgetHeader.campusFlag? '': 'noDataExists' ">
+                        {{proposalBudgetHeader.campusFlag? proposalBudgetHeader.campusFlag:'No Campus Flag Specified'}}
+                      </span>
+                   </div>
+            </div>
+            <div *ngIf="budgetData.enableCostShareStatus" class="col-md-2 col-sm col-6">            
+              <label>Cost Sharing</label>
+                <div class="fw-500">
+                    <span [ngClass]="proposalBudgetHeader?.costSharingTypeCode? '': 'noDataExists' ">
+                      {{proposalBudgetHeader?.costSharingTypeCode? proposalBudgetHeader?.costSharingType?.description:'No Cost Sharing Specified'}}
+                    </span>
+                </div>
+            </div>
+            <div *ngIf="budgetData.isShowBudgetOHRatePercentage" class="col-md-2 col-sm col-6">
+                <label>On-Campus Rate</label>
+                    <div class="fw-500">
+                        <span [ngClass]="proposalBudgetHeader.onCampusRates? '': 'noDataExists' ">
+                          {{proposalBudgetHeader.onCampusRates? proposalBudgetHeader.onCampusRates:'No On-Campus Rate Specified'}}
+                        </span>
+                    </div>
+            </div>
+            <div *ngIf="budgetData.isShowBudgetOHRatePercentage" class="col-md-2 col-sm col-6">              
+                <label>Off-Campus Rate</label> 
+                   <div class="fw-500">
+                      <span [ngClass]="proposalBudgetHeader.offCampusRates ? '': 'noDataExists' ">
+                        {{proposalBudgetHeader.offCampusRates ? proposalBudgetHeader.offCampusRates :'No Off-Campus Rate Specified'}}
+                      </span>
+                  </div>
             </div>
         </div>
 
         <div class="row px-4">
             <!-- Description -->
-            <div class="col">
-                <h5 class="d-block">Description</h5>
-                <span class="text-secondary f-13 fw-500"
-                    [innerHTML]='(proposalBudgetHeader?.comments ? proposalBudgetHeader?.comments : "No data available") | customTagRemover: currentMethod'></span>
+            <div class="col-xl col-lg col-md-6 col-sm-6 col-12">
+                <label>Description</label> 
+                  <div class="fw-500">
+                      <span [ngClass]="proposalBudgetHeader?.comments ? '': 'noDataExists' ">
+                        {{proposalBudgetHeader?.comments ? proposalBudgetHeader?.comments :'No Description Specified'}}
+                      </span>
+                  </div>
             </div>
         </div>
         </div>
@@ -206,7 +252,7 @@
             <tr>
                 <td colspan="2"></td>
                 <td class="font-weight-bold text-right px-1">Total</td>
-                <td class="text-right"
+                <td class="font-weight-bold text-right px-1"
                   [innerHTML]='(proposalBudgetHeader?.totalDirectCost ?currencyFormatter.parseCurrency(proposalBudgetHeader?.totalDirectCost): currencyFormatter.parseCurrency("0.00")) | customTagRemover: currentMethod'>
                 </td>
                 <td class="font-weight-bold text-right px-1" *ngIf="budgetData?.isShowModifiedDirectCost"
@@ -350,7 +396,7 @@
 <!--Simple Budget Begin-->
 <div id="Proposal311" *ngIf="budgetData.isSimpleBudgetEnabled && _proposalService.proposalSectionConfig['311']?.isActive" class="card mb-3">
   <div class="card-header px-4">
-    <h4 class="card-title">SimpleBudget</h4>
+    <h4 class="card-title">Simple Budget</h4>
     <button id="costShareExpandBtn" class="updown-arrow" (click)="isSimpleBudgetWidgetOpen = !isSimpleBudgetWidgetOpen">
       <i [ngClass]="isSimpleBudgetWidgetOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"
         aria-hidden="true"></i>
@@ -445,7 +491,7 @@
   </div>
   <div *ngIf="isModularBudgetWidgetOpen" class="card-content">
     <div class="card-body pt-0">
-      <div class="no-data-container" *ngIf=" budgetModularVO?.modularBudget?.length == 0">
+      <div class="no-data-container" *ngIf="!budgetModularVO || budgetModularVO?.modularBudget?.length == 0">
         <span class="no-data-icon-outer">
           <div class="no-data-icon">
             <i class="fa fa-file-o" aria-hidden="true"></i>

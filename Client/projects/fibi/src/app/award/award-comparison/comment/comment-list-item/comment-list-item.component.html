@@ -30,7 +30,7 @@
             <div class="comment-inner-body pt-1">
                 <div *ngIf="!isEditMainComment[i]" >
                   <i aria-hidden="true" class="fa fa-quote-left comment-icon"></i>
-                  <sub> <span class="f-13  text-content-color new-line-property" [innerHTML]="comment.reviewComment"></span>
+                  <sub> <span class="f-13  text-content-color new-line-property" [innerHTML]="comment.reviewComment  | customTagRemover: currentMethod"></span>
                   </sub>
                 </div>
               <div *ngIf="isEditMainComment[i]">

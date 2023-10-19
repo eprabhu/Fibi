@@ -2,8 +2,8 @@ import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angu
 import { CustomElementService } from './custom-element.service';
 import { CommonService } from '../../common/services/common.service';
 import { Observable, Subscription } from 'rxjs';
-import { setFocusToElement } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
+import { setFocusToElement } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { parseDateWithoutTimestamp } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import {ElasticConfigService} from "../../../../../fibi/src/app/common/services/elastic-config.service";
 import {
   getEndPointOptionsForCostCentre,

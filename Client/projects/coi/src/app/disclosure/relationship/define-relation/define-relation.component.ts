@@ -7,7 +7,7 @@ import { CommonService } from '../../../common/services/common.service';
 import { DataStoreService } from '../../services/data-store.service';
 import { RelationshipService } from '../relationship.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { Subject, Subscription, interval, of, timer } from 'rxjs';
+import { Subject, Subscription, interval } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 
 @Component({
@@ -22,6 +22,8 @@ export class DefineRelationComponent implements OnInit {
   @Input() moduleItemId: any;
   @Input() moduleCode: any;
   @Input() module: any;
+  @Input() relationList: any;
+  @Input() currentRelation: any;
   @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('defineRelationOverlay', { static: true }) defineRelationOverlay: ElementRef;
 
@@ -33,6 +35,7 @@ export class DefineRelationComponent implements OnInit {
   coiStatusCode: any = null;
   coiDescription: any;
   reviewStatusCode: any;
+  validStatusCodes = ['1', '5', '6'];
   sfiDetails: any;
   dependencies = ['coiDisclosure'];
   currentProjectId: any;
@@ -53,6 +56,8 @@ export class DefineRelationComponent implements OnInit {
   imgUrl = this.deployMap + 'assets/images/close-black.svg';
   debounceTimer: any;
   $triggerEvent = new Subject();
+  isOpenSlider: boolean;
+  isDataModified = false;
 
   constructor(private _relationShipService: RelationshipService, public snackBar: MatSnackBar, private _commonService: CommonService, private _dataStore: DataStoreService) { }
 
@@ -64,22 +69,13 @@ export class DefineRelationComponent implements OnInit {
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    this.isEditMode = this.coiData.coiDisclosure.reviewStatusCode == '1';
+    this.isEditMode = this.validStatusCodes.includes(this.coiData.coiDisclosure.reviewStatusCode);
   }
 
   showTaskNavBar() {
-    document.body.classList.add('overflow-hidden');
+    document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
     const slider = document.querySelector('.slider-base');
     slider.classList.add('slider-opened');
-  }
-
-  hideSfiNavBar(event) {
-    this.addBodyScroll();
-    let slider = document.querySelector('.slider-base');
-    slider.classList.remove('slider-opened');
-    setTimeout(() => {
-        this.closePage.emit(false);
-    }, 1000);
   }
 
     openSnackBar(message: string, action: string) {
@@ -89,16 +85,6 @@ export class DefineRelationComponent implements OnInit {
           horizontalPosition: 'right',
       });
    }
-
-    applyToAll() {
-      this.coiValidationMap.clear();
-      this.coiTableValidation.clear();
-      this.entityProjectDetails.forEach((ele: any) => {
-          ele.projectConflictStatusCode = this.coiStatusCode;
-          ele.disclComment.comment = this.coiDescription;
-      });
-      this.saveClick();
-    }
 
     getEntityList() {
       this.$subscriptions.push(  this._relationShipService.getEntityList(this.moduleCode, this.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode,this.coiData.coiDisclosure.personId).subscribe((data: any) => {
@@ -121,19 +107,6 @@ export class DefineRelationComponent implements OnInit {
 
     isAnyOneEntityAnswered() {
        return !!this.entityProjectDetails.find(ele => ele.projectConflictStatusCode);
-    }
-
-    openSaveAllConfirmationModal() {
-      this.coiValidationMap.clear();
-      if (this.coiStatusCode && this.coiDescription) {
-        document.getElementById('hidden-save-all-button').click();
-      } 
-      if(!this.coiStatusCode){
-        this.coiValidationMap.set('coiStatus', 'Please select COI Status');
-      } 
-      if(!this.coiDescription){
-        this.coiValidationMap.set('coiDescription', 'Please enter description');
-      }
     }
 
     clearAll() {
@@ -174,27 +147,6 @@ export class DefineRelationComponent implements OnInit {
       }
     }
 
-    saveSingleEntity(index, test) {
-      this.coiTableValidation.delete('save-status'+index );
-      this.coiTableValidation.delete('save-description'+index );
-      if ([null, 'null'].includes(this.entityProjectDetails[index].projectConflictStatusCode)) {
-        this.coiTableValidation.set('save-status'+index , 'Please select COI Status');
-      } 
-      if (!this.entityProjectDetails[index].disclComment.comment) {
-        this.coiTableValidation.set('save-description'+index , 'Please enter description');
-      }
-      if(!this.coiTableValidation.has('save-status'+index) && !this.coiTableValidation.has('save-description'+index) ) {
-        test.personEntityId = test.personEntityId;
-        test.disclosureId = this.coiData.coiDisclosure.disclosureId;
-        test.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
-        test.moduleCode = this.selectedProject.moduleCode;
-        test.moduleItemKey = this.selectedProject.moduleItemId;
-        // this.getCommentObject(test.comment);
-        test.coiProjConflictStatusType = this.getStatusObject(test.projectConflictStatusCode);
-        this.singleSaveClick(test, index);
-      }
-    }
-
     prepareSaveObject() {
       this.entityProjectDetails.forEach((ele: any) => {
         ele.personEntityId = ele.personEntityId;
@@ -210,11 +162,11 @@ export class DefineRelationComponent implements OnInit {
       return this.coiStatusList.find(ele => ele.projectConflictStatusCode === code);
     }
 
-    getCommentObject(comment: any) {
-        comment.disclosureNumber = this.coiData.disclosureNumber;
-        comment.commentTypeCode = 1;
-        comment.comments = comment.comments ? comment.comments : null;
-    }
+    // getCommentObject(comment: any) {
+    //     comment.disclosureNumber = this.coiData.disclosureNumber;
+    //     comment.commentTypeCode = 1;
+    //     comment.comments = comment.comments ? comment.comments : null;
+    // }
 
     saveClick() {
       this.prepareSaveObject();
@@ -250,18 +202,21 @@ export class DefineRelationComponent implements OnInit {
   calculateSize() {
     const DETAILS_BOX = this.getClassDetails('.relationship-details-box');
     const INFO_BOX = this.isEditMode ? this.getClassDetails('.relationship-info') : null;
-    const TABLE_HEADER_BOX = this.getClassDetails('.relationship-sfi-header');
-    this.resetStyles(DETAILS_BOX, INFO_BOX, TABLE_HEADER_BOX);
+    const TABLE_HEADER_BOX = this.getClassDetails('.relationship-sfi-header') || null;
+    const GLOBAL_SAVE = this.getClassDetails('.relationship-sfi-global-save');
+    this.resetStyles(DETAILS_BOX, INFO_BOX, GLOBAL_SAVE, TABLE_HEADER_BOX);
     const DETAILS_BOX_HEIGHT = DETAILS_BOX.offsetHeight;
     const INFO_BOX_HEIGHT = INFO_BOX ? INFO_BOX.offsetHeight : 0;
-    const TABLE_HEADER_BOX_HEIGHT = TABLE_HEADER_BOX.offsetHeight;
+    const TABLE_HEADER_BOX_HEIGHT = TABLE_HEADER_BOX ? TABLE_HEADER_BOX.offsetHeight: 0;
+    const GLOBAL_SAVE_HEIGHT = GLOBAL_SAVE.offsetHeight;
     const HALF_SCREEN_HEIGHT = window.innerHeight / 2;
-    const TOTAL_BOX_HEIGHT = DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT + TABLE_HEADER_BOX_HEIGHT;
+    const TOTAL_BOX_HEIGHT = DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT + TABLE_HEADER_BOX_HEIGHT + GLOBAL_SAVE_HEIGHT;
     if (TOTAL_BOX_HEIGHT > HALF_SCREEN_HEIGHT) {
       this.addRelativeRemoveSticky(DETAILS_BOX);
       if (INFO_BOX) {
         this.addRelativeRemoveSticky(INFO_BOX);
       }
+      this.addRelativeRemoveSticky(GLOBAL_SAVE);
       this.setTop(TABLE_HEADER_BOX, '0px');
     }
     if (TOTAL_BOX_HEIGHT < HALF_SCREEN_HEIGHT) {
@@ -269,7 +224,8 @@ export class DefineRelationComponent implements OnInit {
       if (INFO_BOX) {
         this.setTop(INFO_BOX, DETAILS_BOX_HEIGHT + 'px');
       }
-      this.setTop(TABLE_HEADER_BOX, (DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT) + 'px');
+      this.setTop(GLOBAL_SAVE, DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT +'px');
+      this.setTop(TABLE_HEADER_BOX , (DETAILS_BOX_HEIGHT + INFO_BOX_HEIGHT + GLOBAL_SAVE_HEIGHT) + 'px');
     }
   }
 
@@ -283,18 +239,24 @@ export class DefineRelationComponent implements OnInit {
   }
 
   setTop(element, top) {
-    element.style.top = top;
+    if(element) {
+      element.style.top = top;
+    }
   }
 
-  resetStyles(detailsBox, infoBox, sfiHeaderBox) {
+  resetStyles(detailsBox, infoBox, globalSave, sfiHeaderBox) {
     detailsBox.classList.add('position-sticky');
-    sfiHeaderBox.classList.add('position-sticky');
-    sfiHeaderBox.style.top = '0px';
     detailsBox.style.top = '0px';
+    if(sfiHeaderBox) {
+      sfiHeaderBox.classList.add('position-sticky');
+      sfiHeaderBox.style.top = '0px';
+    }
     if (infoBox) {
       infoBox.style.top = '0px';
       infoBox.classList.add('position-sticky');
     }
+    globalSave.classList.add('position-sticky');
+    globalSave.style.top = '0px';
   }
 
   @HostListener('window:resize', ['$event'])
@@ -310,8 +272,8 @@ export class DefineRelationComponent implements OnInit {
   }
 
   addBodyScroll() {
-      document.body.classList.remove('overflow-hidden');
-      document.body.classList.add('overflow-auto');
+      document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+      document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
   }
 
   ngOnDestroy() {
@@ -319,9 +281,47 @@ export class DefineRelationComponent implements OnInit {
     subscriptionHandler(this.$subscriptions);
   }
 
-  clearValues() {
-    this.coiDescription = '';
-    this.coiStatusCode = null;
+  getColorBadges(typeCode) {
+    switch (typeCode) {
+        case 3:
+            return 'bg-proposal-clip';
+        case 1:
+            return 'bg-award-clip';
+        default:
+            return;
+    }
+  }
+
+  hideConflictNavBar() {
+    const slider = document.querySelector('.slider-base');
+    slider.classList.remove('slider-opened');
+    setTimeout(() => {
+        this.isOpenSlider = false;
+        this.closePage.emit();
+    }, 500);
+    this._dataStore.dataChanged = false;
+    this._relationShipService.isSliderInputModified = false;
+}
+
+validateProjectSfiSliderOnClose() {
+    this.hideConflictNavBar();
+}
+
+  goBackStep() {
+    this.currentRelation--;
+    this.navigateToStep(this.relationList[this.currentRelation]);
+  }
+
+  navigateToStep(relation) {
+    this.moduleCode = relation.moduleCode;
+    this.moduleItemId = relation.moduleItemId;
+    this.module = relation;
+    this.getEntityList();
+  }
+
+  goToStep(stepPosition?: any) {
+    this.currentRelation = stepPosition ? stepPosition : this.currentRelation + 1;
+    this.navigateToStep(this.relationList[this.currentRelation]);
   }
 
 }

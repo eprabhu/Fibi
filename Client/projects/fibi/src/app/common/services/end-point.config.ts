@@ -1,6 +1,6 @@
 import { ENDPOINT_SPONSOR_OUTPUT_FORMAT, LEAD_UNIT_OUTPUT_FORMAT } from '../../app-constants';
 
-const endPointOptions = {
+const endPointOptions: any = {
     contextField: '',
     formatString: '',
     path: '',
@@ -106,14 +106,16 @@ export function getEndPointOptionsForCongressionalDistrict() {
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));
 }
-export function getEndPointOptionsForEntity(baseUrl= '') {
+export function getEndPointOptionsForEntity(baseUrl= '', active_filter: 'ONLY_ACTIVE' | 'ALL') {
     endPointOptions.contextField = 'entityName';
     endPointOptions.formatString = 'entityName';
     endPointOptions.path = baseUrl + '/' + 'searchEntity';
     endPointOptions.defaultValue = '';
-    endPointOptions.params = null;
+    let isActive = active_filter === 'ONLY_ACTIVE' ? true : false;
+    endPointOptions.params = {isActive};
     return JSON.parse(JSON.stringify(endPointOptions));
 }
+
 export function getEndPointOptionsForRolodexSearch() {
     endPointOptions.contextField = 'fullName';
     endPointOptions.formatString = 'fullName';
@@ -217,6 +219,16 @@ export function getEndPointOptionsForAwardNumber(baseUrl = '') {
     endPointOptions.formatString =
     ' awardNumber | accountNumber | title | sponsorName | sponsorAwardNumber | unitName | principalInvestigator ';
     endPointOptions.path = baseUrl + '/' + 'findAward';
+    endPointOptions.defaultValue = '';
+    endPointOptions.params = null;
+    return JSON.parse(JSON.stringify(endPointOptions));
+}
+
+export function getEndPointOptionsForCoiAwardNumber(baseUrl = '') {
+    endPointOptions.contextField = 'title';
+    endPointOptions.formatString =
+        'moduleItemKey | accountNumber | title | sponsorName | sponsorAwardNumber | unitName | PrincipalInvestigator';
+    endPointOptions.path = baseUrl + '/' + 'loadAwardsForDisclosure';
     endPointOptions.defaultValue = '';
     endPointOptions.params = null;
     return JSON.parse(JSON.stringify(endPointOptions));

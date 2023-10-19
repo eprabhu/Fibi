@@ -1,4 +1,4 @@
-<div class="push4slideMenu pageMinHeight" id="scrollToTop">
+<div class="push4slideMenu pageMinHeight" id="scrollToTop" [@fadeInOutHeight]>
     <div class="container-fluid pushFixedHeaderFooter">
         <!-- <div class="headerPush"></div> -->
         <div class="row">
@@ -6,7 +6,7 @@
                 <div class="card mb-3">
                     <div class="card-header">
                         <h4 class="card-title">
-                            <div>Frequently Asked Questions</div>
+                            <div>FAQ</div>
                         </h4>
                     </div>
                     <div class="card-content">
@@ -27,7 +27,7 @@
                                 </div>
                                 <!-- Modal -->
                                 <div class="col-2">
-                                    <button title="Add New Question" class="btn btn-sm btn-primary" id="add-faq-btn"
+                                    <button title="Add New Question" class="btn btn-lg btn-primary" id="add-faq-btn"
                                         data-bs-target="#add-new-faq" data-bs-toggle="modal" (click)="addNewQuestion()">
                                         Add New Question
                                     </button>
@@ -130,7 +130,7 @@
                                                     <!-- Edit  -->
                                                     <div>
                                                         <mat-icon [attr.title]="'edit'" style="cursor: pointer;"
-                                                            (click)="editdata(questions,index)">
+                                                            (click)="editdata(questions,i)">
                                                             edit
                                                         </mat-icon>
                                                     </div>
@@ -162,5 +162,5 @@
         </div>
     </div>
 </div>
-<app-add-faq (newdata)="updatedata($event)" (selectedResult)="resetFaqTrigger($event)" [questiondata]="allQuestionData"
+<app-add-faq  (updatedData)="updatedData($event)" (newdata)="updatedata($event)" (selectedResult)="resetFaqTrigger($event)" [questiondata]="allQuestionData"
     [editIndex]="editIndex" [buttonName]="buttonName"></app-add-faq>

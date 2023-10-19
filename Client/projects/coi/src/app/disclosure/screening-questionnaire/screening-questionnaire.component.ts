@@ -10,10 +10,11 @@ import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/
 import {deepCloneObject} from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 import {HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from "../../../../../fibi/src/app/app-constants";
 import {SfiService} from "../sfi/sfi.service";
+import { fadeInOutHeight } from '../../common/utilities/animations';
 @Component({
     selector: 'app-screening-questionnaire',
     template: `
-        <div id="screening-questionnaire-coi">
+        <div id="screening-questionnaire-coi" [@fadeInOutHeight]>
             <app-view-questionnaire-list
                     [isShowExportButton]="false"
                     [configuration]="configuration"
@@ -25,7 +26,8 @@ import {SfiService} from "../sfi/sfi.service";
                     (QuestionnaireEditEvent) = "markQuestionnaireAsEdited($event)">
             </app-view-questionnaire-list>
         </div>
-    `
+    `,
+    animations: [fadeInOutHeight]
 })
 export class ScreeningQuestionnaireComponent implements OnInit, OnDestroy {
 

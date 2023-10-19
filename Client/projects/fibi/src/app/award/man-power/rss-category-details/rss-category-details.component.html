@@ -8,7 +8,7 @@
     </div>
     <div class="col-lg-2 col-sm-6 col-12 no-hover-effect py-0">
       <label class="d-sm-block">Cost Element</label>
-      <span class="content-color">{{manpowerCategory?.costElement?.description}}</span>
+      <span class="content-color">{{manpowerCategory?.costElement}}</span>
     </div>
     <div class="col-lg-4 col-sm-6 col-12 no-hover-effect py-0">
       <label class="d-sm-block">Approved Head Count
@@ -42,7 +42,7 @@
     </span>
     <div *ngIf="isShowAllDetails[componentIndex.split('-')[1]]" class="col-8 py-0  no-hover-effect">
       <label class="d-sm-block">Description</label>
-      <span class="content-color">{{manpowerCategory?.budgetCategory?.description}}</span>
+      <span class="content-color">{{manpowerCategory?.budgetCategory}}</span>
     </div>
     <div *ngIf="isManpowerEdit && isShowAllDetails[componentIndex.split('-')[1]]" class="col-4 text-right py-0 no-hover-effect pb-0">
       <button class="btn btn-primary-sub btn-xs fs-14-nav my-3" id="manpower-add-person-btn" title="Add New Student"
@@ -83,7 +83,7 @@
               </td>
               <td *ngIf="resourceIndex == 0" class="text-right vertical-align-middle"
                 [rowSpan]="manpowerCategory?.awardManpowerResource?.length">
-                <span>{{manpowerResourceDetail?.expenseAmount | currency: _commonService.currencyFormat}}
+                <span>{{manpowerCategory?.expenseAmount | currency: _commonService.currencyFormat}}
                 </span>
               </td>
               <td *ngIf="resourceIndex == 0" class="text-right vertical-align-middle"

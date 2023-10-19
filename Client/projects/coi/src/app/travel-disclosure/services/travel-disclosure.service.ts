@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
-import { TravelActionAfterSubmitRO, TravelDisclosure, TravelHistoryRO } from '../travel-disclosure-interface';
+import { TravelActionAfterSubmitRO, TravelConflictRO, TravelDisclosure, TravelHistoryRO } from '../travel-disclosure-interface';
 
 
 @Injectable()
@@ -10,11 +10,13 @@ export class TravelDisclosureService {
 
     coiTravelDisclosure = new TravelDisclosure();
     saveSubject = new Subject();
+
+    isAdminDashboard = false;
     travelDataChanged = false;
     isTravelCertified = false;
+    isChildRouteTriggered = false;
+
     unSavedTabName = '';
-    isChildRouting = false;
-    isAdminDashboard = false;
     PREVIOUS_MODULE_URL = '';
 
     constructor(private _http: HttpClient,
@@ -25,7 +27,7 @@ export class TravelDisclosureService {
         this.travelDataChanged = dataChange;
     }
 
-    checkCreateUserRight(personId: string): boolean {
+    isCheckLoggedUser(personId: string): boolean {
         return personId === this._commonService.getCurrentUserDetail('personId');
     }
 
@@ -66,5 +68,20 @@ export class TravelDisclosureService {
 
     loadTravelDisclosureHistory(travelHistoryRO: TravelHistoryRO) {
         return this._http.post(`${this._commonService.baseUrl}/loadTravelDisclosureHistory`, travelHistoryRO);
+    }
+
+    getTravelConflictStatusType() {
+        return this._http.get( `${this._commonService.baseUrl}/getTravelConflictStatusType`);
+    }
+
+    manageTravelConflict(params: TravelConflictRO) {
+        return this._http.post(`${this._commonService.baseUrl}/manageTravelConflict`, params);
+    }
+
+    loadTravelConflictHistory(travelDisclosureId: number) {
+        return this._http.get(`${this._commonService.baseUrl}/loadTravelConflictHistory/${travelDisclosureId}`);
+    }
+    getTravelDisclosureHistory(travelDisclosureId: number) {
+        return this._http.get(`${this._commonService.baseUrl}/travelDisclosureHistory/${travelDisclosureId}`);
     }
 }

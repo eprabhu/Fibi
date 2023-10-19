@@ -420,12 +420,12 @@
 										(selectedResult)="onSelectLookUpValue($event, question)">
 									</app-look-up>
 								</ng-container>
-									<div class="col mb-0 pl-0 fileChips" style="margin-left: 2px;">
-										<ng-container *ngFor="let question of lookUpValues[question.QUESTION_ID]">
-											<span class="pl-2 mb-0">{{question.description}}
-											</span>
-										</ng-container>
-									</div>
+								<div *ngIf="question?.ANSWERS && question?.ANSWERS[0]"  class="col mb-0 pl-0 fileChips" style="margin-left: 2px;">
+									<ng-container *ngFor="let question of question.ANSWERS | keyvalue">
+										<span class="pl-2 mb-0">{{question?.value?.description}}
+										</span>
+									</ng-container>
+								</div>
 							</div>
 							<ng-template #singleValueSelect>
 								<div class="ml-4">

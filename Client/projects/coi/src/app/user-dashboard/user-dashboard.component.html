@@ -1,5 +1,5 @@
-<div class="px-3 user-dashboard-content">
-    <div class="row">
+<div class="px-3 user-dashboard-content" aria-label="User Dashboard Section">
+    <div class="row d-none">
         <div class="col pe-0">
             <div class="border pi-info-text p-3 rounded-1">
                 <p class="fs-14 m-0">
@@ -12,7 +12,7 @@
                     <ng-template #showFullInfo>
                         {{headerInfoText}}
                         <span title="Collapse Policy Text" aria-describedby="Contract Policy Text"
-                            (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Show
+                            (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read
                                 Less</u></span>
                     </ng-template>
                 </p>
@@ -20,23 +20,23 @@
         </div>
         <div class="col-auto">
             <div class="border pi-quick-links py-2 px-3 shadow-sm fs-15 h-100">
-                <p *ngIf="hasFCOI" area-describedby="Click to create new FCOI disclosure"
+                <p id="create-fcoi-modal" *ngIf="hasFCOI" area-describedby="Click to create new FCOI disclosure"
                     (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
                     title="Click to create new FCOI disclosure">
                     <u>Create/Revise FCOI</u>
                 </p>
-                <p *ngIf="!hasFCOI" (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
+                <p id="create-fcoi-modal" *ngIf="!hasFCOI" (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
                     title="Click to create new FCOI disclosure"
                     area-describedby="Click to create new FCOI disclosure"><u>Create/Revise FCOI</u></p>
-                <p (click)="openProjectDisclosure()" class="m-0 cursor-pointer" role="button"
+                <p id="create-project-modal" (click)="openProjectDisclosure()" class="m-0 cursor-pointer" role="button"
                     title="Click to create new Project disclosure"
                     area-describedby="Click to create new Project disclosure"><u>Create Project
                         Disclosure</u></p>
-                <p (click)="openTravelDisclosure()" class="m-0 cursor-pointer" role="button"
+                <p id="create-travel-modal" (click)="openTravelDisclosure()" class="m-0 cursor-pointer" role="button"
                     title="Click to create new Travel disclosure"
                     area-describedby="Click to create new Travel disclosure"><u>Create Travel
                         Disclosure</u></p>
-                <p (click)="openCreateSFI()"class="m-0 cursor-pointer" role="button"
+                <p id="create-sfi-modal" (click)="openCreateSFI()"class="m-0 cursor-pointer" role="button"
                     title="Click to add new SFI" area-describedby="Click to add new SFI"><u>Add Significant Financial Interest</u></p>
             </div>
         </div>
@@ -93,7 +93,7 @@
         <!--        </div>-->
     </div>
 
-    <div class="navigation border text-center shadow-sm mb-3">
+    <!--<div class="navigation border text-center shadow-sm mb-3">
         <div class="row m-0 text-secondary">
             <div [routerLink]="['disclosures']" tabindex="0" aria-label="Goto My Disclosures"
                 class="hoverable bg-white cursor-pointer align-items-center border-end col d-flex justify-content-around p-0 position-relative"
@@ -110,7 +110,7 @@
                     src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
             </div>
         </div>
-    </div>
+    </div>-->
 
     <router-outlet></router-outlet>
 </div>

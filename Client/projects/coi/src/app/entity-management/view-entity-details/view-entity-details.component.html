@@ -1,0 +1,452 @@
+<div class="sticky-0 page-header-color" [@fadeInOutHeight]>
+  <div class="mx-4 row">
+    <div class="col-9 p-0">
+      <div class="border shadow-sm">
+        <div class="body-heading  px-3 d-flex" [class.border-bottom]="isCardExpanded">
+          <div class="col d-flex">
+            <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-4"
+              [ngClass]="entityDetails?.isActive ?'':'inactive-pill'">
+              <span class="px-2">{{!entityDetails?.isActive?'Inactive':'Active'}}</span></span>
+            <h1 class="fw-bold fs-18 mt-3 px-3">{{entityDetails?.entityName}}</h1>
+          </div>
+          <div *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'" class="align-items-center d-flex">
+            <span class="pill d-flex">
+              <span class="cross-wrapper">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </span>
+              <span class="unverified-label">{{entityDetails?.entityStatus?.description}}</span>
+            </span>
+          </div>
+          <div *ngIf="entityDetails?.entityRiskCategory?.description" class="d-flex me-5 fs-14">
+            <div class="align-items-center d-flex ml-15">
+              <label class="fw-500 mr-2">Risk :</label>
+              <div class="text-color d-flex">
+                <mat-icon [ngClass]="entityRiskLevel(entityDetails?.entityRiskCategory?.description)"
+                  class="material-icons-round icon-alignment">warning</mat-icon>
+                <span *ngIf="entityDetails?.entityRiskCategory" class="mt-1">
+                  {{entityDetails?.entityRiskCategory?.description}}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="align-items-center d-flex" >
+            <button title="Click here to {{isCardExpanded ? 'collapse' : 'expand'}}" (click)="isCardExpanded=!isCardExpanded" class="toggle-header-btn align-items-center bg-white border btn d-flex justify-content-center p-0 rounded-5 shadow-sm">
+              <mat-icon class="mb-2 icon-height">{{isCardExpanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+            </button>
+          </div>
+        </div>
+      <ng-container *ngIf="isCardExpanded">
+        <div class="d-flex bg-white p-3">
+            <div class="col mr-10">
+            <div class="border triple-card rounded-1 position-relative">
+              <div class="ps-4 table-negative-margin">
+                <table class="fs-14 fw-medium spaced-table">
+                  <tr>
+                    <td class="fw-500 fs-14 col-3">Entity Type :</td>
+                    <td class="text-color fs-14">
+                      <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.entityType?.description">
+                        <span class="py-1 rounded-5">{{entityDetails?.entityType?.description}}</span>
+                      </app-no-data-label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="fw-500 fs-14 col-3">Country :</td>
+                    <td class="text-color fs-14">
+                      <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.country?.countryName">
+                        <span class="py-1 rounded-5">{{entityDetails?.country?.countryName}}</span>
+                      </app-no-data-label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="fw-500 fs-14 col-3">City :</td>
+                    <td class="text-color fs-14">
+                      <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.city">
+                        <span class="py-1 rounded-5 ">{{entityDetails?.city}}</span>
+                      </app-no-data-label>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+            <div class="col">
+            <div class="border triple-card rounded-1 position-relative">
+              <div class="ps-4 table-negative-margin">
+                <table class="fs-14 fw-medium spaced-table">
+                  <tr>
+                    <td class="fw-500 fs-14 col-3">Website :</td>
+                    <td class="text-color fs-14">
+                      <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.webURL">
+                        <span class="py-1 rounded-5">
+                          <a class="anchor-link" (click)="redirectUrl(entityDetails?.webURL)">
+                            {{entityDetails?.webURL}}
+                          </a></span>
+                      </app-no-data-label>
+  
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="fw-500 fs-14 col-3">Email :</td>
+                    <td class="text-color fs-14">
+                      <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.emailAddress">
+                        <span class="py-1 rounded-5">{{entityDetails?.emailAddress}}</span>
+                      </app-no-data-label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="fw-500 fs-14 col-3">Phone :</td>
+                    <td class="text-color fs-14">
+                      <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.phone">
+                        <span class="  py-1 rounded-5 ">{{entityDetails?.phone}}</span>
+                      </app-no-data-label>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        </ng-container>
+        <div class="footer-body px-3 d-flex">
+          <div class="align-self-center flex-fill">
+            <label class="fw-500 fs-14 mx-3">Address :</label>
+            <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="entityDetails?.address">
+                        <span class="text-color fs-14 mt-1 pr-15" [title]="entityDetails?.address">
+                          {{entityDetails?.address?.length>100 ? (entityDetails?.address |slice:0:80) +'...' :entityDetails?.address}}</span>
+            </app-no-data-label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 bg-white px-0">
+      <div class="d-flex position-relative flex-column p-0 bg-white">
+        <div  class="row m-0 pt-2 px-3">
+          <!-- home -->
+          <button (click)="goToHome()" *ngIf="hasManageEntity" title="Go to COI home page"
+              class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col text-nowrap">
+              <mat-icon>home</mat-icon>
+              <!-- <span class="ms-2" *ngIf="isCardExpanded">Home</span> -->
+          </button>
+
+          <!-- Modify Entity -->
+          <button title="Click to Modify Entity" *ngIf="hasManageEntity"  id="btn-modify" [matMenuTriggerFor]="beforeMenu"
+            class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 text-nowrap">
+            <mat-icon class="more-options-icon">more_vert</mat-icon>
+            <span class="ms-2" *ngIf="isCardExpanded">More Actions</span>
+          </button>	
+          <mat-menu #beforeMenu="matMenu" xPosition="before">
+            <button *ngIf="hasManageEntity" (click)="openConfirmationModal()"
+              class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5">
+              <mat-icon class="me-2 actions-icon">edit</mat-icon>
+              <span class="pt-2">Modify Entity</span>
+            </button>
+            <button (click)="toggleSlider()"
+              class=" text-nowrap border-0 rounded-0 btn btn-outline-grey fs-14 d-flex justify-content-start w-100 align-items-center py-2 ps-3 pe-5"
+              id="edit-location-btn">
+              <mat-icon class="actions-icon me-2">warning</mat-icon>
+              <span class="pt-2">Manage Risk</span>
+            </button>
+          </mat-menu>
+
+          <!-- Back -->
+          <button title="Click to go back to Entity list" *ngIf="hasManageEntity" 
+              (click)="navigateBack()" id="btn-modify"
+             class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 text-nowrap">
+              <mat-icon>reply</mat-icon>
+              <span class="ms-2" *ngIf="isCardExpanded">Back</span>
+          </button>
+
+         
+
+          <ng-container *ngIf="hasManageEntity">
+            <!-- inactivate -->
+            <ng-container *ngIf="entityDetails.isActive">
+              <button title="Click to Inactivate Entity" id="btn-inactivate"
+                  [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                  class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center"
+                  (click)="activateInactivateEntity()">
+                  <mat-icon>schedule</mat-icon>
+                  <span class="ms-2" *ngIf="isCardExpanded">Inactivate</span>
+              </button>
+            </ng-container>
+            <!-- Activate -->
+            <ng-container *ngIf="!entityDetails.isActive">
+              <button title="Click to activate Entity" id="btn-activate"
+                [ngClass]="isCardExpanded? 'col-12 mt-3 mb-3' : 'col ms-2'"
+                class="btn btn-outline-grey fs-14 d-flex justify-content-center align-items-center"
+                (click)="activateInactivateEntity()">
+                <mat-icon>flash_on</mat-icon>
+                <span class="ms-2" *ngIf="isCardExpanded">Activate</span>
+            </button>
+            </ng-container>
+          <!-- Approve Entity -->
+          <ng-container *ngIf="entityDetails?.entityStatus?.entityStatusCode === '2'">
+            <button id="btn-approve-entity"
+            [ngClass]="isCardExpanded? 'col-12 mb-3' : 'col ms-2'"
+              class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+              title="Click to access entity verification" data-bs-toggle="modal" data-bs-target="#approve-entity-modal">
+              <mat-icon class="mx-1 icon-approve-position">check_circle_outline</mat-icon>
+              <span *ngIf="isCardExpanded" class="btn-approve-position">Approve Entity</span>
+            </button>
+          </ng-container>
+        </ng-container>
+
+        <!-- last update date -->
+        <div class="fs-14 ash-text ps-0" [class.mt-3]="!isCardExpanded">
+          <div class="fw-medium me-3">Last Updated By :</div>
+          <div>{{entityDetails?.updatedUserFullName}} On 
+            {{(entityDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}}</div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="sfiService.isShowSfiNavBar" id="task-navigation-bar">
+  <app-add-sfi-slider [coiEntityManageId]="entityDetails.entityId" [isEditEntity]="true" [modifyType]="modifyType" [revisionReason]="revisionReason"
+    (updatedDataStore)="updatedEntityDetails($event)" [isSlider]="true"></app-add-sfi-slider>
+</div>
+
+<div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog" data-bs-backdrop="static"
+    id="modifyEntityConfirmationModal" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header ct-footer-padding">
+        <h4 class="modal-title">{{entityDetails?.entityName}}</h4>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body ct-modal-padding">
+        <div class="row ">
+          <div class="col-lg-12">
+            <div class="help-text row">
+              <div class="col-12 py-2 grey-info font d-flex">
+                <span data-bs-toggle="tooltip" title=" Modifie entity help text" data-bs-placement="top" class="d-inline-block">
+                  <mat-icon role="img" class="mat-icon me-2 info-icon icon-height material-icons mat-icon-no-color" aria-hidden="true"
+                    data-mat-icon-type="font">info</mat-icon>
+                </span>
+                <div class="ms-5 text-colors mt-1 fs-14">
+                  <div>
+                    <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                    <span class="fw-bold">Minor modification</span> - Select for minor corrections like typos.
+                    <br>
+                  </div>
+                  <div class="d-flex mt-2">
+                    <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                    <div>
+                      <span class="fw-bold">Major modification</span> - Select for major corrections like
+                      changes in the company name, ownership type,
+                      and permanent change in entity address that reflects in entity country.
+                    </div>
+                  </div>
+                  <div>
+                    <i class="fa fa-angle-double-right me-3" aria-hidden="true"></i>
+                    <span class="fw-bold">Description</span> - Provide any description or comments on why you want to modify the
+                    entity.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="fs-14 fw-bold mx-1"><span class="mandatory px-1">*</span>Modify Type :
+            </div>
+            <div class="fs-14 text-secondary d-flex justify-content-start my-3 px-3">
+              <span class="pr-25 d-flex">
+                <input type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="1"> <span
+                  class="px-3">Minor
+                  modification</span>
+              </span>
+              <span class="d-flex">
+                <input type="radio" class="form-check-input cursor-pointer" [(ngModel)]="valueOfModify" value="2"> <span
+                  class="px-3">Major
+                  modification</span>
+              </span>
+            </div>
+            <span *ngIf="mandatoryList.has('change')" class="invalid-feedback d-block fs-13 px-4">
+              {{mandatoryList.get('change')}}
+            </span>
+            <div class="mx-1">
+              <span class="fs-14 fw-bold "><span class="mandatory px-1">*</span> Description :</span>
+              <textarea [(ngModel)]="modifyDescription" (ngModelChange)="modifyDescription = modifyDescription.trim()" placeholder="Please enter a description" [isShowLimiter]='true' [limit]=2000
+                [ngClass]="mandatoryList.has('description')?'invalid-border':'' " appLengthValidator appAutoGrow class="form-control mt-1"
+                id="description" rows="1"></textarea>
+                <span class="invalid-feedback d-block fs-13" *ngIf="mandatoryList.has('description')">
+                  {{mandatoryList.get('description')}}
+                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ct-footer-padding">
+        <button class="btn btn-outline-secondary btn-sm" id="claim-sumbit-no-btn" (click)="closeModal()"
+          type="button">Cancel
+        </button>
+        <button (click)="modifyEntity()" class="btn btn-primary btn-sm fs-14" type="button">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- inactivate-entity-sfi-error-modal  -->
+
+<button id="inactivate-confirm-message" data-bs-target="#inactivateConfirmationModal" data-bs-toggle="modal"
+  class="d-none"></button>
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hide-inactivate-modal" data-bs-toggle="modal"
+  data-bs-target="#inactivateConfirmationModal"></button>
+
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="inactivateConfirmationModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header ct-footer-padding">
+        <h4 class="modal-title">{{entityDetails?.isActive?'Inactivate':'Activate'}} {{entityDetails?.entityName}}</h4>
+        <button type="button" class="btn-close fs-12 " title="Close"  data-bs-dismiss="modal" aria-label="Close" (click)="inactivateReason=''"></button>
+      </div>
+      <div class="modal-body ct-modal-padding">
+        <!-- <div class="help-text">
+          <div class="col-12 py-2 grey-info font px-3">
+            <span *ngIf="entityDetails?.isActive" class="fs-13 text-secondary">
+              <ol type="1">
+                <li>Provide the reason for Inactivation in the field provided.</li>
+                <li>Click on Inactivate button to activate the entity.</li>
+                <li>If the entity is used in any of the Active SFIs (Financial or Travel), then a new version of the entity
+                  is created in Inactive status and the previous version goes to Archive status.</li>
+              </ol>
+            </span>
+            <span *ngIf="!entityDetails?.isActive" class="fs-13 text-secondary">
+              <ol type="1">
+                <li>Provide the reason for Activation in the field provided.</li>
+                <li>Click on Activate button to activate the entity.</li>
+projects/coi/src/app/entity-management/entity-history/entity-history.component.ts              </ol>
+            </span>
+          </div>
+        </div> -->
+        <div class="help-text">
+          <div class="col-12 py-2 grey-info font px-3 d-flex align-items-center position-relative">
+            <span data-bs-toggle="tooltip" title="Inactivate entity Help Text." data-bs-placement="top" class="d-inline-block pe-2">
+              <mat-icon role="img" class="mat-icon icon-height notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+            </span>
+            <span class="fs-14 ms-3 text-colors" *ngIf="entityDetails?.isActive">
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Provide the reason for Inactivation in the field provided.</div>
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Click on Activate button to activate the entity.</div>
+              <div class="mt-2 ml-15 d-flex">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                <div class="ms-1">
+                  If the entity is used in any of the Active SFIs (Financial or Travel), then a new version of the entity
+                  is created in Inactive status and the previous version goes to Archive status.
+                </div>
+               </div>
+            </span>
+            <span class="fs-14 ms-3 text-colors" *ngIf="!entityDetails?.isActive">
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Provide the reason for Activation in the field provided.</div>
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Click on Inactivate button to activate the entity.</div>
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <span class="block-display fw-bold fs-14"><span *ngIf="entityDetails?.isActive" class="mandatory px-1">*</span>Reason for {{entityDetails?.isActive?'Inactivation' :'Activation'}} :</span>
+            <textarea placeholder="Please enter the reason."  [(ngModel)]="inactivateReason" [isShowLimiter]="true" [limit]="2000" rows="1" class="form-control"
+              appAutoGrow appLengthValidator [ngClass]="{'invalid-border':reasonValidateMapEntity.has('reason')}"></textarea>
+            <span *ngIf="reasonValidateMapEntity.has('reason')" class="invalid-feedback d-block fs-13">
+              {{reasonValidateMapEntity.get('reason')}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ct-footer-padding">
+        <button class="btn btn-outline-secondary fs-14 btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+         type="button" title="Cancel" (click)="inactivateReason=''">Cancel
+        </button>
+        <button class="btn btn-primary fs-14 btn-sm" id="claim-sumbit-no-btn" type="button" [attr.title]="entityDetails?.isActive?'Click to inactivate entity':'Click to activate entity'" (click)="activateAndInactivateEntity()">
+          {{entityDetails?.isActive?'Inactivate' : 'Activate'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Approve Entity modal -->
+
+<button type="button" class="btn btn-primary btn-sm" hidden=true id="hide-approve-entity-modal" data-bs-toggle="modal"
+  data-bs-target="#approve-entity-modal"></button>
+
+<div class="modal fade mySkinDialog modal-lg" data-bs-backdrop="static" id="approve-entity-modal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header ct-footer-padding">
+        <h4 class="modal-title">Approve Entity {{entityDetails?.entityName}}</h4>
+        <button type="button" class="btn-close fs-12 " title="Close" data-bs-dismiss="modal"
+          aria-label="Close" (click)="clearApproveEntityFiled()"></button>
+      </div>
+      <div class="modal-body ct-modal-padding">
+        <div class="help-text">
+          <div class="col-12 py-2 grey-info font px-3 d-flex align-items-center position-relative">
+            <span data-bs-toggle="tooltip" title="Approve entity help text." data-bs-placement="top" class="d-inline-block pe-2">
+              <mat-icon role="img" class="mat-icon icon-height notranslate me-2 info-icon ng-tns-c100-5 material-icons mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font">info</mat-icon>
+            </span>
+            <span class="fs-14 ms-3 text-colors">
+              <div class="mt-2 ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Mark any of the entity interrelations using the fields provided below.
+              </div>
+              <div class="ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                You may mark multiple entity relations.
+              </div>
+              <div class="ml-15">
+                <i class="fa fa-angle-double-right mr-2" aria-hidden="true"></i>
+                Complete entity verification by marking any relationships and clicking on Approve Entity button.
+              </div>
+            </span>
+          </div>
+        </div>
+        <div>
+          <div class="row fs-14">
+            <div class="col-5 pt-2 pb-4">
+              <label class="fw-bold" for="select-entity-relationship"><span class="mandatory px-1">*</span>Entity Relationship</label>
+              <select id="select-entity-relationship" class="form-control form-select" [(ngModel)]="entityRelationshipValue"
+              (ngModelChange)="selectEntityRelationship()" [ngClass]="(approveEntityValidateMap?.has('relationship')) ? 'is-invalid d-block' : ''">
+                <option [value]="null"> --Select-- </option>
+                <option *ngFor="let relationship of relationshipLookUpList" [value]="relationship?.entityRelTypeCode">
+                  {{relationship?.description}}</option>
+              </select>
+              <span *ngIf="approveEntityValidateMap?.has('relationship')" class="invalid-feedback d-block fs-13">
+                {{approveEntityValidateMap?.get('relationship')}}
+              </span>
+            </div>
+          </div>
+          <div *ngIf="entityRelationshipValue && entityRelationshipValue !== '1'" class="row fs-14">
+            <div class="col pt-2 pb-4">
+              <label class="fw-bold" for="search-entity-name"><span class="mandatory px-1">*</span>Entity Search</label>
+            <app-endpoint-search (onSelect)="selectedEvent($event)" [clearField]="clearField" [httpOptions]="EntitySearchOptions"
+              [placeHolder]="'Type here for entity'" class=" text-secondary fs-13" [uniqueId]="'search-entity-name'"
+              [isError]="approveEntityValidateMap?.has('entityName')">
+            </app-endpoint-search>
+            <span *ngIf="approveEntityValidateMap?.has('entityName')" class="invalid-feedback d-block fs-13">
+              {{approveEntityValidateMap?.get('entityName')}}
+            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ct-footer-padding">
+        <button class="btn btn-outline-secondary fs-14 btn-sm" id="claim-sumbit-no-btn" data-bs-dismiss="modal"
+          type="button" title="Cancel" (click)="clearApproveEntityFiled()">Cancel
+        </button>
+        <button class="btn btn-primary fs-14 btn-sm" id="claim-sumbit-no-btn" type="button"
+          title="Click here for approve entity" (click)="approveEntity()">
+          Approve Entity
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-entity-risk-slider *ngIf="isOpenSlider" [isOpenSlider]="isOpenSlider"
+(closePage)="riskSliderClosed($event)" [entityDetails]="entityDetails"  ></app-entity-risk-slider> 

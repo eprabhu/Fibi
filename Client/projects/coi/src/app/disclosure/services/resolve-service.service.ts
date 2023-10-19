@@ -1,8 +1,7 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
 import {forkJoin, Observable, Subscriber, Subscription} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-
 import {CommonService} from '../../common/services/common.service';
 import {CoiService} from './coi.service';
 import {DataStoreService} from './data-store.service';
@@ -36,9 +35,9 @@ export class ResolveServiceService {
                 }
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
-                    this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure.reviewStatusCode, route);
-                    if (res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode === '3') {
-                           this.getCoiReview(res[0].coiDisclosure.disclosureId, observer);
+                    this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure.reviewStatusCode, route, res[0].coiDisclosure.personId);
+                    if (['3', '4', '7', '8'].includes(res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode)) {
+                        this.getCoiReview(res[0].coiDisclosure.disclosureId, observer);
                     } else {
                         observer.next(true);
                         observer.complete();
@@ -52,11 +51,11 @@ export class ResolveServiceService {
 
     }
 
-    rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route) {
+    rerouteIfWrongPath(currentPath: string, reviewStatusCode: string, route, personId: any) {
         let reRoutePath;
-        if (reviewStatusCode === '1' && !currentPath.includes('create-disclosure')) {
+        if (['1','5','6'].includes(reviewStatusCode) && !currentPath.includes('create-disclosure') && personId == this._commonService.currentUserDetails.personId ) {
             reRoutePath = CREATE_DISCLOSURE_ROUTE_URL;
-        } else if (reviewStatusCode !== '1' && currentPath.includes('create-disclosure')) {
+        } else if (!['1','5','6'].includes(reviewStatusCode) && currentPath.includes('create-disclosure')) {
             reRoutePath = POST_CREATE_DISCLOSURE_ROUTE_URL;
         }
         if (reRoutePath) {
@@ -107,7 +106,7 @@ export class ResolveServiceService {
         this.$subscriptions.push(
             this._coiService.getCoiReview(disclosureId).subscribe((res: any) => {
                 this._dataStore.updateStore(['coiReviewerList'], { coiReviewerList: res });
-                this._coiService.isReviewActionCompleted = this.isAllReviewerReviewCompleted(res);
+                this._coiService.isReviewActionCompleted = this._coiService.isAllReviewsCompleted(res);
                 const reviewerDetail = this.getLoggedInReviewerInfo(res);
                 if (reviewerDetail) {
                     this._coiService.isStartReview = reviewerDetail.reviewStatusTypeCode === '1' ? true : false;
@@ -123,9 +122,6 @@ export class ResolveServiceService {
                 this._router.navigate([this._coiService.previousHomeUrl]);
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
             }));
-    }
-    private isAllReviewerReviewCompleted(data: any): boolean {
-        return data.every(value => value.coiReviewStatus.reviewStatusCode === '4');
     }
 
     getLoggedInReviewerInfo(coiReviewerList): any {

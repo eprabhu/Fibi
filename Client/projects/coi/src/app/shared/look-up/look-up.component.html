@@ -1,5 +1,5 @@
 <div class="overlay" #dropdownOverlay (click)="hideLookUpList()"></div>
-<div class="elastic-outer">
+<div class="elastic-outer position-relative">
   <input id="searchBox" #searchField class="app-elastic-search form-control pr-25" (focus)="showLookUpList()"
     (keydown.arrowdown)="downArrowEvent($event);" (keydown.esc)="hideLookUpList();" [disabled]="isDisabled"
     (keydown.arrowup)="upArrowEvent($event);" (keydown.enter)="enterKeyEvent();"

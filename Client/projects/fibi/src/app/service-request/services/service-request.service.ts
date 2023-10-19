@@ -41,7 +41,8 @@ export class ServiceRequestService {
         formData.append('formDataJson', JSON.stringify({
             'serviceRequestId': requestId,
             'serviceRequestComment': commentData.comment,
-            'newAttachments': commentData.attachment
+            'newAttachments': commentData.attachment,
+            'serviceRequestStatus': commentData.serviceRequestStatus
         }));
         return formData;
     }

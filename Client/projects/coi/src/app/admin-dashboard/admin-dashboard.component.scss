@@ -270,4 +270,78 @@ small {
 .pipe {
   border-left: 2px solid #48647f82;
   padding-top: 2px;
+  height: 18px;
+}
+
+.p-013 {
+  padding-left: 1.3rem;
+  padding-right: 1rem;
+}
+
+.entity-icon {
+  width: 21px;
+  margin-right: -1px;
+  color: grey;
+  height: 24px;
+}
+
+.proposal-icon {
+  width: 16px;
+  margin-right: 3px;
+  color: grey;
+  height: 17px;
+}
+
+.award-icon {
+  width: 18px;
+  margin-right: 3px;
+  color: grey;
+  height: 18px;
+}
+
+.fileChips {
+  display: inline-block;
+  padding: 0 25px;
+  margin-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 12px;
+  padding: 3px 8px 3px 12px;
+  border-radius: 15px;
+  background: #f1f1f1;
+  border: 1px solid #ebe8e8;
+  /* box-shadow: 2px 1px 1px #cef9ff; */
+}
+
+.coi-reviewer-pill {
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reviewer-success {
+  @extend .coi-reviewer-pill;
+  color: #4cb57d;
+}
+
+.reviewer-warning {
+  @extend .coi-reviewer-pill;
+  color: #ac8100;
+}
+
+.reviewer-info {
+  @extend .coi-reviewer-pill;
+  color: #007DEC;
+}
+
+.p-25{
+  padding-right: 25px;
+}
+
+.p5{
+  padding-right:5px;
+}
+
+.p0{
+  padding-right:0 ;
 }

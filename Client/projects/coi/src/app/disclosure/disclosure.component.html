@@ -2,28 +2,48 @@
     <div class="col-9 p-0">
         <div class="border shadow-sm">
             <div class="disclosure-heading px-3 d-flex">
-                <div class="align-self-center flex-fill">
+                <div class="align-self-center flex-fill d-flex">
                     <p class="m-0">
                         <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
-                            <strong>#{{coiData?.coiDisclosure?.disclosureNumber}} : FCOI Disclosure By <span
-                                    class="text-primary"><u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
+                            <strong>FCOI Disclosure By 
+                                <span class="clickable-content"><u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
                             </strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
-                            <strong
-                                title="{{coiData?.projectDetail?.title}}">#{{coiData?.coiDisclosure?.disclosureNumber}}
-                                :
-                                {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                                Disclosure For [ {{coiData?.projectDetail?.moduleItemId}} :
-                                {{(coiData?.projectDetail?.title)?.length>40 ?
-                                (coiData?.projectDetail?.title | slice:0: 40)+'...' :
-                                coiData?.projectDetail?.title}} ] By
-                                <span class="text-primary ">
-                                    <u class="cursor-pointer" (click)="openDetailModal(coiData)" title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u>
+                            <strong title="{{ coiData?.projectDetail?.title }}">
+                                {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }}
+                                Disclosure - [
+                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
+                                     {{ coiData?.projectDetail?.moduleItemId }} :
+                                </ng-container>
+                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
+                                     {{ coiData?.projectDetail?.moduleItemKey }} :
+                                </ng-container>
+                                {{ (coiData?.projectDetail?.title)?.length > 40 ? (coiData?.projectDetail?.title | slice:0: 40)+'...' :
+                                coiData?.projectDetail?.title }}
+                                ] By
+                                <span class="clickable-content">
+                                    <u (click)="openDetailModal(coiData)"
+                                        title="click to view person details of {{ coiData?.coiDisclosure?.person?.fullName }}">
+                                        {{ coiData?.coiDisclosure?.person?.fullName }}
+                                    </u>
                                 </span>
-                            </strong>
+                              </strong>
                         </ng-container>
                     </p>
+                    <div *ngIf="coiData?.coiDisclosure?.riskCategoryCode" class="d-flex ms-auto mr-15">
+                        <div class="align-items-center d-flex ml-15">
+                          <label class="fw-500 fs-14 mr-2 mt-1">Risk :</label>
+                          <div class="text-color fs-14 d-flex align-items-center">
+                            <span class="text-secondary fs-14">
+                                <mat-icon class="{{getWarningClass(coiData?.coiDisclosure?.riskCategoryCode)}} material-icons-round">warning</mat-icon>
+                            </span>
+                            <span class="ml-2 mt-1"> 
+                                {{coiData?.coiDisclosure?.coiRiskCategory?.description}}
+                            </span>
+                          </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="d-flex">
                     <!-- <ng-container *ngIf="isCreateMode">
@@ -88,7 +108,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto mr-15">
+                <div class="col-3 mr-15">
                     <div class="border triple-card rounded-1 position-relative p-3 fw-medium">
                         <span class="status-pill">Date</span>
                         <div  class="row mt-2">
@@ -106,7 +126,7 @@
                                 <label  class="label-text">Certification :</label>
                                 <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.certifiedAt">
-                                        <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatter}}</span>
+                                        <span>{{coiData?.coiDisclosure?.certifiedAt | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
@@ -116,14 +136,14 @@
                                 <label  class="label-text">Expiration : </label>
                                 <span  class="grey-text ml-2">
                                     <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.expirationDate">
-                                        <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatter}}</span>
+                                        <span>{{coiData?.coiDisclosure?.expirationDate | dateFormatterWithTimeZone}}</span>
                                     </app-no-data-label>
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-auto status-card-width">
+                <div class="col-4">
                     <div class="border triple-card rounded-1 position-relative">
                         <span class="status-pill">Status</span>
                         <div class="ps-4 table-negative-margin">
@@ -131,20 +151,29 @@
                                 <tr>
                                     <td class="fw-600">Disposition :</td>
                                     <td class="ps-4">
-                                        <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}">{{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}</span>
+                                        <span class="{{commonService.getDispositionStatusBadge(coiData?.coiDisclosure?.coiDispositionStatusType?.dispositionStatusCode)}}"></span>
+                                        <span class="badgeFont">
+                                            {{coiData?.coiDisclosure?.coiDispositionStatusType?.description}}
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-600">Review :</td>
                                     <td class="ps-4">
-                                        <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}">{{coiData?.coiDisclosure?.coiReviewStatusType?.description}}</span>
+                                        <span class="{{commonService.getReviewStatusBadge(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)}}"></span>
+                                        <span class="badgeFont">
+                                            {{coiData?.coiDisclosure?.coiReviewStatusType?.description}}
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-600">Disclosure :</td>
                                     <td class="ps-4">
                                         <app-no-data-label [valueToShow]="coiData?.coiDisclosure?.coiConflictStatusType?.description">
-                                            <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}">{{coiData?.coiDisclosure?.coiConflictStatusType?.description}}</span>
+                                            <span class="{{commonService.getDisclosureConflictBadge(coiData?.coiDisclosure?.conflictStatusCode)}}"></span>
+                                            <span class="badgeFont">
+                                                {{coiData?.coiDisclosure?.coiConflictStatusType?.description}}
+                                            </span>
                                         </app-no-data-label>
                                     </td>
                                 </tr>
@@ -186,44 +215,6 @@
                     </div>
                 </div> -->
             </div>
-            <ng-container *ngIf="isCreateMode">
-                <div class="nav-progress navigation-tabs row">
-                    <div (click)="goToStep(1);"
-                        [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
-                        class="col h-100 m-0" queryParamsHandling='merge' title="Go to Screening Questionnaire section">
-                        Screening Questionnaire
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(2);"
-                        [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
-                        class="col ps-5 text-nowrap" queryParamsHandling='merge'
-                        title="Go to SFI section">
-                        Significant Financial Interest(SFIs)
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(3);" [class.complete]="isRouteComplete(['relationship', 'certification'])"
-                        class="col" queryParamsHandling='merge' title="Go to Relationships section">
-                        <span class="align-self-center">Relationships</span>
-                        <div class="arrow-wrapper">
-                            <div class="arrow-cover">
-                                <div class="arrow"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div (click)="goToStep(4);" [class.complete]="isRouteComplete(['certification'])" class="col"
-                        queryParamsHandling='merge' title="Go to Certification section">
-                        <span class="align-self-center">Certification</span>
-                    </div>
-                </div>
-            </ng-container>
 
             <ng-container *ngIf="!isCreateMode">
                 <div class="navigation-tabs d-flex align-items-center">
@@ -233,12 +224,12 @@
                             title="Click to view the disclosure screening form"
                             area-describedby="Click to view the disclosure screening form">Disclosure</div>
                     </div>
-                    <div [routerLink]="['relationship']" class="navigation-box border-end" queryParamsHandling='merge'
+                    <!-- <div [routerLink]="['relationship']" class="navigation-box border-end" queryParamsHandling='merge'
                         role="button">
                         <div class="navigation-box-content" routerLinkActive="active"
                             title="Click to view the relationships" area-describedby="Click to view the relationships">
                             Relationships</div>
-                    </div>
+                    </div> -->
                     <!-- <div [routerLink]="['conflict-management']" class="navigation-box border-end"
                         queryParamsHandling='merge' role="button">
                         <div class="navigation-box-content" routerLinkActive="active">Conflict Management</div>
@@ -248,9 +239,9 @@
                         <div class="navigation-box-content" routerLinkActive="active" title="Click to view the reviews"
                             area-describedby="Click to view the reviews">Reviews</div>
                     </div>
-                    <!-- <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge' role="button">
+                    <div [routerLink]="['history']" class="navigation-box" queryParamsHandling='merge'  title="click to view history" role="button">
                         <div class="navigation-box-content" routerLinkActive="active">History</div>
-                    </div> -->
+                    </div>
                 </div>
             </ng-container>
         </div>
@@ -297,20 +288,16 @@
                     </button>
                 </div>
             </div>
-            <div class="fs-14 fw-medium align-items-center d-flex justify-content-center notes">
-                Notes & Attachments
-            </div>
             <div *ngIf="sfiService.isShowSfiNavBar">
                 <app-add-sfi-slider [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi-slider>
             </div>
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill border-end bg-white shadow-sm" [class.side-height]="isCardExpanded">
-                <div class="row m-0 px-3 d-flex justify-content-between {{isCardExpanded ? 'py-3' : 'pt-2'}}">
+                <div class="row m-0 px-3 d-flex justify-content-between min-height-90 {{isCardExpanded ? 'py-3' : 'pt-2'}}">
                     <button title="Go to COI home page" (click)="goToHomeUrl()"
                     [ngClass]="coiData.coiDisclosure.reviewStatusCode == 4 ? 'd-flex align-items-center justify-content-center fs-16' : 'fs-14'"
-                    [ngClass]="coiData?.coiDisclosure?.reviewStatusCode != '4' && isCardExpanded ? 'col-2' :'col'"
-                    class="btn btn-outline-secondary home-btn-cente me-2 d-flex justify-content-center {{isCardExpanded ? 'mb-3' : ''}}">
+                    class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 col mb-10">
                     <mat-icon>home</mat-icon>
                     <span class="fs-14 mt-1 ml-2" *ngIf="coiData?.coiDisclosure?.reviewStatusCode == 4 && isCardExpanded">Home</span>
                     </button>
@@ -323,58 +310,172 @@
                     <span class="mt-1 ms-2" *ngIf="isCardExpanded">Previous</span>
                     </button>
 
-                    <button data-bs-target="#coi-activity-modal" data-bs-toggle="modal"
+                    <button
                         title="Click here to add new review comment"
                         *ngIf="!['4'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode)"
-                        [ngClass]="isCardExpanded ? 'mb-3' : 'me-2'"
-                        class="fs-14 align-items-center btn btn-outline-secondary d-flex justify-content-center col">
+                        [ngClass]="isCardExpanded ? 'mb-3' : ''"
+                        (click)="openReviewComment()"
+                        class="d-flex align-items-center justify-content-center btn btn-outline-grey fs-14 px-3 col ms-2 mb-10">
                         <mat-icon class="me-2">rate_review</mat-icon>
-                        <span class="mt-1 ms-2" *ngIf="isCardExpanded">Comments</span>
+                        <span *ngIf="isCardExpanded">Comments</span>
                     </button>
-                    <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator" 
-                    class="fs-14 btn btn-outline-secondary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12 mb-3' : 'col me-2'}}" (click)="isAddAssignModalOpen = true;"
-                    [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn btn-outline-grey':'btn btn-primary'">
-                    <mat-icon class="me-1">group_add</mat-icon>
-                    <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
+                    <!-- more option button for expanded & collapsed card -->
+                    <!-- dispositionStatusCode(3-Approved), reviewStatusCode(2-Submitted) -->
+                    <button 
+                    [matMenuTriggerFor]="beforeMenu"
+                        class="text-nowrap d-flex align-items-center justify-content-center btn btn-outline-grey ps-1 fs-14 col ms-2 mb-10 px-3"
+                        role="button" title="Click for More Actions">
+                        <mat-icon class="moreActionIcon">more_vert</mat-icon>
+                        <span *ngIf="isCardExpanded">More Actions</span>
                     </button>
 
-                    <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'"  title="Click to start review" area-describedby="Click to start review" (click)="updateCoiReview('START')"
+                    <ng-container *ngIf="!coiData.coiDisclosure.adminPersonId && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='2' && getManageDisclosureRight()">
+                        <button title="Click to Assign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                            class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center {{isCardExpanded? 'col-12' : 'col ms-2'}}"
+                            (click)="openAddAssignModal();">
+                            <mat-icon class="me-1">group_add</mat-icon>
+                            <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Assign Admin </span>
+                        </button>
+                    </ng-container>
+                    
+                    <!-- reviewStatusCode - (3 - Review In Progress , 7 - Review Assigned , 8 - Assigned review completed )-->
+                    <mat-menu #beforeMenu="matMenu" xPosition="before">
+                        <ng-container *ngIf="coiData.coiDisclosure.adminPersonId && ['3', '7', '8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) && getManageDisclosureRight()">
+                            <button mat-menu-item title="Click to Reassign Administrator/Admin Group" area-describedby="Click to assign administrator"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
+                                (click)="openAddAssignModal();"
+                                [ngClass]="(coiData.coiDisclosure.adminPersonId || coiData.coiDisclosure.adminGroupId)?'btn-primary-icon':'btn btn-primary'">
+                                <mat-icon>group_add</mat-icon>
+                                <span class="ms-2 fw-medium fs-14">Reassign Admin</span>
+                            </button>
+                        </ng-container>
+
+                        <ng-container *ngIf="checkForModifyRisk()">
+                            <button mat-menu-item title="Click to Modify Risk" area-describedby="Click to Modify Risk"
+                                class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
+                                (click)="openRiskSlider();">
+                                <mat-icon class="material-icons-round">warning</mat-icon>
+                                <span class="ms-2 mt-1 fw-medium fs-14">Modify Risk</span>
+                            </button>
+                        </ng-container>
+                    
+                        <!-- Withdrawn option only shown for reviewStatusCode(2-submitted)-->
+                        <!-- check logged person & disclosure created person is same -->
+                        <button mat-menu-item *ngIf="coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode == '2' && !(coiData.coiDisclosure.adminPersonId) && 
+                        (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.personId)" title="Click to Withdraw" 
+                            area-describedby="Click to Withdraw"
+                            class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action"
+                            (click)="openConfirmationModal('Withdraw', withdrawHelpTexts, withdrawErrorMsg);">
+                            <mat-icon>logout</mat-icon>
+                            <span class="ms-2 fw-medium fs-14">Withdraw</span>
+                        </button>
+
+                       <!-- return to pi -->
+                       <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned Review Completed) -->
+                       <!-- Check logged person and administrator are same -->
+                    <button mat-menu-item *ngIf="coiData?.coiDisclosure?.adminPersonId && ['3','7','8'].includes(coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode) &&
+                    (commonService?.getCurrentUserDetail('personId') == coiData?.coiDisclosure?.adminPersonId)" title="Click to Return Disclosure"
+                        (click)="openConfirmationModal('Return', returnHelpTexts, returnErrorMsg);"
+                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                        <mat-icon class="returnIcon">refresh</mat-icon>
+                        <span class="ms-1 fw-medium fs-14">Return</span>
+                    </button>
+
+                    <button mat-menu-item title="Click to Return Disclosure"
+                        class="text-nowrap border-0 rounded-0 btn btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                        <mat-icon class="returnIcon">notifications</mat-icon>
+                        <span class="ms-1 fw-medium fs-14">Notify</span>
+                    </button>
+                </mat-menu>
+
+                    <button *ngIf="coiService.isStartReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'"  
+                    title="Click to start review" area-describedby="Click to start review" 
+                    (click)="updateCoiReview('START')"
                     id="start-review-btn"
-                    [ngClass]="isCardExpanded? 'col-12' : 'col'"
+                    [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
                     class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                     <mat-icon class="material-icons-outlined mb-1">play_circle_filled</mat-icon>
                     <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Start Review </span>
-                  </button>
+                </button>
 
-                  <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'" 
+                  <button *ngIf="coiService.isCompleteReview && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '7'" 
                   title="Click to complete review" area-describedby="Click to complete review" (click)="updateCoiReview('COMPLETE')"
                   id="complete-review-btn"
-                  [ngClass]="isCardExpanded? 'col-12' : 'col'"
+                  [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
                   class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center">
                   <mat-icon class="material-icons-outlined">stop_circle</mat-icon>
                   <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                   </button>
-
-                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='3'"
+                  <button *ngIf="coiService.isCOIAdministrator && coiService.isReviewActionCompleted && coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode =='8' || 
+                  coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'
+                  && (commonService?.getCurrentUserDetail('personId') == coiData.coiDisclosure.adminPersonId)"
                         class="fs-14 btn btn-primary d-flex justify-content-center w-100 align-items-center"
-                        [ngClass]="isCardExpanded? 'col-12' : 'col'"
+                        [ngClass]="isCardExpanded? 'col-12' : 'col ms-2'"
                         data-bs-target="#completeReviewModalFromDashboard" data-bs-toggle="modal">
                         <mat-icon class="me-2">done</mat-icon>
                         <span class="mt-1 ms-2" *ngIf="isCardExpanded"> Complete Review </span>
                     </button>
 
-                    <div class="fs-14 ash-text p-0 {{isCardExpanded ? '' : 'm-04'}}"  
-                        [class.mt-1] = "coiData?.coiDisclosure?.coiReviewStatusType?.reviewStatusCode === '3'">
-                        <div><span class="fw-medium me-3">Last Updated By:</span></div>
+                    <div class="fs-14 ash-text p-0 {{isCardExpanded ? 'mt-3' : 'mt-0'}}">
+                        <div><span class="fw-medium me-3">Last Updated By : </span></div>
                         <div>{{coiData?.coiDisclosure?.updateUserFullName}} On {{coiData?.coiDisclosure?.updateTimestamp |
                             dateFormatterWithTimeZone:'long'}}</div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="mx-0 p-0 row">
+        <ng-container *ngIf="isCreateMode">
+            <div class="p-0">
+                <div class="nav-progress navigation-tabs row">
+                    <div (click)="goToStep(1);"
+                        [class.complete]="isRouteComplete(['screening', 'sfi', 'relationship', 'certification'])"
+                        class="col h-100 m-0" queryParamsHandling='merge' title="Go to Screening Questionnaire section">
+                        Screening Questionnaire
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="goToStep(2);" [class.complete]="isRouteComplete(['sfi', 'relationship', 'certification'])"
+                        class="col ps-5 text-nowrap" queryParamsHandling='merge' title="Go to SFI section">
+                        Significant Financial Interest(SFIs)
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="goToStep(3);" [class.complete]="isRouteComplete(['relationship', 'certification'])"
+                        class="col" queryParamsHandling='merge' title="Go to Relationships section">
+                        <span class="align-self-center">Relationships</span>
+                        <div class="arrow-wrapper">
+                            <div class="arrow-cover">
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="goToStep(4);" [class.complete]="isRouteComplete(['certification'])" class="col"
+                        queryParamsHandling='merge' title="Go to Certification section">
+                        <span class="align-self-center">Certification</span>
+                    </div>
+                    <span
+                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center d-flex justify-content-center col hand-cursor nav-border-right border-r-0">
+                        Notes & Attachments
+                    </span>
+                    <span
+                        *ngIf="coiData?.coiDisclosure?.reviewStatusCode != 1 && coiData?.coiDisclosure?.reviewStatusCode != null"
+                        [routerLink]="['history']" queryParamsHandling='merge' routerLinkActive="active"
+                        class="notes btn nav-btn-grey fs-14 fw-medium align-items-center d-flex justify-content-center col hand-cursor border-r-0">
+                        History
+                    </span>
+                </div>
+            </div>
+        </ng-container>
+    </div>
 </div>
-</div>
-
 
 <!-- Complete review modal -->
 <div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard" role="dialog">
@@ -390,7 +491,7 @@
             <div class="modal-body">
                 <div class="row mt-2 mb-0">
                     <div class="col-lg-12">
-                        <p>Are you sure you want to complete the review of this disclosure?</p>
+                        <p class="fs-14">Are you sure you want to complete the review of this disclosure?</p>
                     </div>
                 </div>
             </div>
@@ -529,42 +630,28 @@
     </div>
 </div>
 <!--questionnaire evalution messge end-->
-<!--Unsaved Changes Modal-->
-<button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-validate-button" data-bs-toggle="modal"
-    data-bs-target="#saveAndExitModal"></button>
-<div class="modal modal-coi fade mySkinDialog" id="saveAndExitModal" role="dialog" aria-labelledby="saveAndExitModal"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirmation</h5>
-                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
-                    aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <p *ngIf="coiService.unSavedModules == 'Screening Questionnaire'" class="fs-14">You have unsaved changes
-                    in
-                    <strong>{{coiService.unSavedModules}}.</strong>
-                </p>
-                <p class="fs-14">Do you want to leave the
-                    <ng-container *ngIf="coiService.unSavedModules == 'Screening Questionnaire'">page without
-                        saving</ng-container>
-                    <ng-container
-                        *ngIf="coiService.unSavedModules != 'Screening Questionnaire'"><strong>Certification</strong>
-                        Page</ng-container>
-                    ?
-                </p>
-            </div>
-            <div class="modal-footer mx-2">
-                <button type="button" class="btn btn-outline-secondary" (click)="leavePageClicked();"
-                    data-bs-dismiss="modal">Leave Page</button>
-                <button type="button" class="btn btn-primary btn-sm fs-14" (click)="stayOnPageClicked()"
-                    data-bs-dismiss="modal">Stay On Page</button>
-            </div>
-        </div>
+
+<!--Unsaved Changes confirmation Modal-->
+<app-confirmation-modal [modalName] = "'disclosure-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked()"
+    [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
+    <!-- modal header -->
+    <ng-container header>
+        <span>Confirmation</span>
+    </ng-container>
+    <!-- modal content -->
+    <div content class="ms-2">
+        <p *ngIf="coiService.unSavedModules != 'Certification'" class="fs-14">
+            You have unsaved changes in
+            <strong>{{coiService?.unSavedModules}}.</strong>
+        </p>
+        <p class="fs-14">Do you want to leave the
+            <strong *ngIf="coiService.unSavedModules == 'Certification'">Certification </strong>
+            {{coiService.unSavedModules == 'Certification' ? 'Page' : 'page without saving' }} ?
+        </p>
     </div>
-</div>
+</app-confirmation-modal>
+<!--Unsaved Changes confirmation Modal end-->
+
 <!--validation modal-->
 <div class="modal fade mySkinDialog" tabindex="-1" id="ValidatedModal" tabindex="-1" role="dialog"
     data-backdrop="static" data-keyboard="false" aria-hidden="true">
@@ -600,12 +687,23 @@
             <div class="modal-header">
                 <strong title="{{coiData?.projectDetail?.title}}">
                     <div class="d-flex">
-                        <span class="text-slice">#{{coiData?.coiDisclosure?.disclosureNumber}} :
-                            {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                            Disclosure <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode !== '1'">For [ <span>{{coiData?.projectDetail?.moduleItemId}} :
-                            {{coiData?.projectDetail?.title.slice(0,10) + '...'}}</span><span class="col"> ]</span></ng-container>  By <strong
-                                title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</strong>
-                        </span>
+                        <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
+                            <strong title="{{ coiData?.projectDetail?.title }}">
+                                {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }}
+                                Disclosure - [
+                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
+                                    #{{ coiData?.projectDetail?.moduleItemId }} :
+                                </ng-container>
+                                <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
+                                    #{{ coiData?.projectDetail?.moduleItemKey }} :
+                                </ng-container>
+                                {{ (coiData?.projectDetail?.title)?.length > 40 ? (coiData?.projectDetail?.title | slice:0: 40)+'...' :
+                                coiData?.projectDetail?.title }}
+                                ] By
+                                <strong
+                                    title="click to view person details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</strong>
+                            </strong>
+                        </ng-container>
                     </div>
                 </strong>
                 <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12" data-bs-dismiss="modal"
@@ -615,12 +713,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
-                    <ng-container *ngIf="coiData?.coiDisclosure?.numberOfSFI > 0">
+                    <ng-container *ngIf="count > 0">
                         <div>
                            <p class="fs-14">Are you sure you want to submit the <strong>{{getDisclosureTypeMessage()}} </strong> disclosure?</p>
                         </div>
                     </ng-container>
-                         <div *ngIf="coiData?.coiDisclosure?.numberOfSFI == 0">
+                         <div *ngIf="count == 0">
                            <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTypeMessage()}} </strong> disclosure.</p>
                         </div>
                     </div>
@@ -643,11 +741,40 @@
     [inputType]="inputType" [personId]="personId" [disclosureSequenceStatusCode]="disclosureSequenceStatusCode"
     [disfullData]="coiData" [fcoiTypeCode]="fcoiTypeCode"></app-count-modal>
 
-
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>
 
-<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)"  [disclosureId]="coiData?.coiDisclosure?.disclosureId"></app-assign-administrator-modal>
+<app-assign-administrator-modal *ngIf="isAddAssignModalOpen" (closeModal)="closeAssignAdministratorModal($event)" 
+    [disclosureId]="coiData?.coiDisclosure?.disclosureId" [defaultAdminDetails]="defaultAdminDetails">
+</app-assign-administrator-modal>
 
 <app-reviewer-action-modal *ngIf="coiService.isEnableReviewActionModal"></app-reviewer-action-modal>
 
+<div *ngIf="coiService.isShowCommentNavBar">
+    <app-review-comments-slider  (closePage)="closeReviewComment($event)" [disclosureDetails]="coiData.coiDisclosure" 
+    [projectDetails]="coiData.projectDetail" [reviewList]="reviewList"></app-review-comments-slider>
+</div>
+
+<!--Disclosure Withdraw/Return Confirmation Modal-->
+<app-confirmation-modal [modalName] = "'disclosure-confirmation-modal'" (primaryBtnAction)="performDisclosureAction($event)"
+    [primaryBtnName]="primaryBtnName" [modalSize]="'lg'" [textAreaLabelName]="'Reason for ' + textAreaLabelName"
+    [needDescriptionField]="true" [isMandatory]="true" [descriptionErrorMsg]="descriptionErrorMsg">
+    <!-- modal header -->
+    <ng-container header>
+        <span>{{primaryBtnName}} {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure</span>
+    </ng-container>
+    <!-- modal content -->
+    <ng-container content-sticky>
+        <app-person-project-entity-card [personProjectOrEntity]="personProjectDetails"></app-person-project-entity-card>
+        <!-- help text -->
+        <div class="mx-3 mt-2">
+            <app-help-text *ngIf="helpTexts.length > 0" [helpTextList]="helpTexts" [tooltip]= "primaryBtnName" ></app-help-text>
+        </div>
+    </ng-container>
+</app-confirmation-modal>
+
+<div *ngIf="isOpenRiskSlider">
+    <app-disclosure-risk-slider [disclosureDetails]="coiData.coiDisclosure" 
+    (riskChange) = "changeDataStoreRisk($event)"
+    [projectDetails]="coiData.projectDetail" (closePage)="closeSlider($event)"></app-disclosure-risk-slider>
+</div>

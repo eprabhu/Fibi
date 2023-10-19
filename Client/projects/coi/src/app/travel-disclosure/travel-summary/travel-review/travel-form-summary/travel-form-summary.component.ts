@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TravelDataStoreService } from '../../../services/travel-data-store.service';
-import { EntityData, TravelDisclosure, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
-import { getFormattedAmount } from 'projects/coi/src/app/common/utlities/custom-utlities';
+import { EntityDetails, TravelDisclosure, TravelDisclosureTraveller } from '../../../travel-disclosure-interface';
+import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { getFormattedAmount } from '../../../../common/utilities/custom-utilities';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-travel-form-summary',
@@ -14,15 +15,15 @@ export class TravelFormSummaryComponent implements OnInit, OnDestroy {
 
     isCollapsed = true;
     $subscriptions: Subscription[] = [];
-    travelDisclosureData = new TravelDisclosure();
+    travelDisclosure = new TravelDisclosure();
     travellerTypeLookup: Array<TravelDisclosureTraveller>;
     traveller = '';
     isReadMorePurpose = false;
     isReadMoreRelation = false;
-    entityData = new EntityData();
+    entityDetails: EntityDetails = new EntityDetails();
     travellerTypeCodeList = [];
 
-    constructor(private _dataStore: TravelDataStoreService) { }
+    constructor(private _dataStore: TravelDataStoreService, private _router: Router) { }
 
     ngOnInit(): void {
         this.getDataFromStore();
@@ -34,16 +35,9 @@ export class TravelFormSummaryComponent implements OnInit, OnDestroy {
     }
 
     private getDataFromStore(): void {
-        this.travelDisclosureData = this._dataStore.getData();
-        this.setEntityData();
+        this.travelDisclosure = this._dataStore.getData();
+        this.entityDetails = this._dataStore.getEntityDetails();
         this.setTravellerType();
-    }
-
-    private setEntityData(): void {
-        this.entityData.country = this.travelDisclosureData.country;
-        this.entityData.entityId = this.travelDisclosureData.entityId;
-        this.entityData.entityName = this.travelDisclosureData.travelEntityName;
-        this.entityData.entityType = this.travelDisclosureData.entityType;
     }
 
     private listenDataChangeFromStore(): void {
@@ -56,12 +50,16 @@ export class TravelFormSummaryComponent implements OnInit, OnDestroy {
 
     private setTravellerType(): void {
         this.traveller = '';
-        if (this.travelDisclosureData.travellerTypeCodeList) {
-            Object.keys(this.travelDisclosureData.travellerTypeCodeList).forEach((typeCode: any) => {
-                const travellerType = this.travelDisclosureData.travellerTypeCodeList[typeCode];
+        if (this.travelDisclosure.travellerTypeCodeList) {
+            Object.keys(this.travelDisclosure.travellerTypeCodeList).forEach((typeCode: any) => {
+                const travellerType = this.travelDisclosure.travellerTypeCodeList[typeCode];
                 this.traveller += this.traveller === '' ? travellerType : `, ${travellerType}`;
             });
         }
+    }
+
+    viewEntity(entityId: string): void {
+        this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: entityId } });
     }
 
     getFormattedAmount(travelAmount: number): string {

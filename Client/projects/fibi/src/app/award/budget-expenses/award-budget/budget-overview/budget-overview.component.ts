@@ -72,7 +72,8 @@ export class BudgetOverviewComponent implements OnChanges, OnDestroy, OnInit {
    */
   setFandAType(rateClassCode) {
     this.awardBudgetData.awardBudgetHeader.rateType = this.awardBudgetData.rateTypes.find(item => item.rateClassCode === rateClassCode);
-    this.awardBudgetData.awardBudgetHeader.rateTypeCode = this.awardBudgetData.awardBudgetHeader.rateType.rateTypeCode;
+    this.awardBudgetData.awardBudgetHeader.rateTypeCode = this.awardBudgetData.awardBudgetHeader.rateType != null ?
+                                                          this.awardBudgetData.awardBudgetHeader.rateType.rateTypeCode : null;
   }
 
   /** Budget Dates validating method */
@@ -242,7 +243,7 @@ export class BudgetOverviewComponent implements OnChanges, OnDestroy, OnInit {
         this._budgetDataService.setAwardBudgetData(this.awardBudgetData);
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Budget Rates reset successfully.');
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Reseting Budget Rates failed. Please try again.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Resetting Budget Rates failed. Please try again.');
       }));
   }
 

@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --host 192.168.1.12 --port 4900",
+    "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve coi",
     "build": "ng build",
+    "start-coi": "ng serve coi --host 0.0.0.0",
+    "start-fibi": "ng serve fibi --host 0.0.0.0",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -27,6 +29,7 @@
     "@ckeditor/ckeditor5-build-decoupled-document": "26.0.0",
     "@types/bootstrap": "^5.2.6",
     "@types/lodash-es": "^4.17.1",
+    "@types/d3": "^7.4.0",
     "bootstrap": "^5.2.3",
     "core-js": "^2.4.1",
     "element-remove": "^1.0.4",
@@ -34,13 +37,12 @@
     "lodash": "^4.17.21",
     "material-icons": "^1.13.2",
     "moment": "^2.29.4",
-    "ng-pick-datetime": "^7.0.0",
-    "ng-pick-datetime-moment": "^1.0.8",
     "npm": "^6.14.7",
     "rxjs": "^6.6.2",
     "socket.io-client": "^4.5.4",
     "tslib": "^1.9.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "d3": "^7.8.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~15.2.2",

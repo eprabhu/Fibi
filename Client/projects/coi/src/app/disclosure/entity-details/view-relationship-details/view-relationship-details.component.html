@@ -1,121 +1,447 @@
-<div class="container-fluid px-4">
-    <div class="card-body border shadow-sm">
-      <div class="relationship fw-bold col-1 shadow-sm">Relationships</div>
-      <div class="row">
-        <div class="col-12 d-flex">
-          <div class="col-3">
-            <div class="row">
-              <label class="fs-14 fw-500">Relationship Type</label>
-              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="personEntityRelationships.length>0">
-                <span class="text-color  fs-14">{{'Financial'}}</span>
-              </app-no-data-label>
-            </div>
+<div class="container-fluid px-4 sticky-0">
+  <div class="d-flex mx-0">
+    <div class="col">
+      <div class="card-header border shadow-sm d-flex header-border-radius">
+        <div class="col d-flex">
+          <span class="entity-status shadow-sm align-items-center d-flex ps-2 mt-4"
+            (mouseout)="entityDetailsServices.isHoverEntityCard = false"
+            [ngClass]="sfiStatus ==='Active'?'':(sfiStatus === 'Inactive'?'inactive-pill':'draft-pill')">
+            <span class="px-2">{{sfiStatus}}</span></span>
+          <h1 class="fw-bold fs-18 mt-2 px-3 cursor-pointer"
+            [ngClass]="{'text-primary':entityDetailsServices.isHoverEntityCard}"
+            (mouseover)="entityDetailsServices.isHoverEntityCard = true">
+            {{entityDetails?.entityName}}
+            <mat-icon class="cursor-pointer hyper-link py-1 entity-down-arrow">arrow_drop_down</mat-icon>
+          </h1> 
+          <div class="info-text fs-14 ms-auto italian px-3 py-0 mt-4 mb-2 cursor-pointer" title="Click to view latest version" *ngIf="relationshipsDetails?.versionStatus == 'ARCHIVE'" (click)="openRelationDetails()">
+            <i class="fa fa-exclamation-triangle mr-2" aria-hidden="true"></i>
+            SFI modified
           </div>
-          <div class="col-2">
-            <div class="row">
-              <label class="fs-14 fw-500">Sponsors Research</label>
-              <span class="text-color fs-14">{{relationshipsDetails?.sponsorsResearch?'Yes':'No'}}</span>
-            </div>
+        </div>
+        <div class="col-1 d-flex justify-content-end" (mouseout)="entityDetailsServices.isHoverEntityCard = false">
+          <div *ngIf="entityDetailsServices.isExpanded"
+            class="bg-white border btn mt-2 mx-4 p-1 rounded-5 shadow-sm toggle-header-btn">
+            <mat-icon title="Click to collapse Relationships"
+            (click)="entityDetailsServices.isExpanded = !entityDetailsServices.isExpanded;hasUserExpanded = true">expand_less</mat-icon>
           </div>
-          <div class="col-3">
-            <div class="row">
-              <label class="fs-14 fw-500">Start Date Of Involvement</label>
-              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementStartDate">
-                <span class="text-color fs-14">{{relationshipsDetails?.involvementStartDate |
-                        dateFormatterWithTimeZone}}</span>
-              </app-no-data-label>
-            </div>
+          <div *ngIf="!entityDetailsServices.isExpanded"
+            class=" bg-white border btn mt-2 mx-4 p-1 rounded-5 shadow-sm toggle-header-btn">
+            <mat-icon title="Click to expand Relationships"
+            (click)="entityDetailsServices.isExpanded = !entityDetailsServices.isExpanded;hasUserExpanded = true">expand_more</mat-icon>
           </div>
-          <div class="col-3">
-            <div class="row">
-              <label class="fs-14 fw-500">End Date Of Involvement</label>
-              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.involvementEndDate">
-                <span class="text-color fs-14">{{relationshipsDetails?.involvementEndDate |
-                        dateFormatterWithTimeZone}}</span>
-              </app-no-data-label>
-            </div>
-          </div>
-          <div class="col-1 d-flex justify-content-end">
-            <div *ngIf="!entityDetailsServices.isExpanded"
-              class=" toggle-header-btn  bg-white border btn  p-1 rounded-5 shadow-sm">
-              <mat-icon title="Click to expand Relationships"
-                (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_more</mat-icon>
-            </div>
-          </div>
-          <!-- <div class="col-3">
-            <div class="row">
-              <label class="fs-14 fw-500">Relationship With</label>
-              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="personEntityRelationships">
-                <ng-container  *ngFor="let data of personEntityRelationships;let last = last" class="col">
-                  <span class="r-title text-color fs-14" *ngIf="!last">{{data?.validPersonEntityRelType?.personEntityRelType?.description +'/'}}
-                  </span>
-                      <span class="r-title text-color fs-14" *ngIf="last">{{data?.validPersonEntityRelType?.personEntityRelType?.description}}
-                  </span>
-                </ng-container>
-              </app-no-data-label>
-            </div>
-          </div> -->
         </div>
       </div>
-      <div *ngIf="entityDetailsServices.isExpanded || (!this.personEntityRelationships.length && this.entityDetailsServices.isExpanded)" class="col">
-        <div class="col-11 mt-3">
-          <div class="row">
-            <label class="fs-14 fw-500">Relationship With Entity</label>
-            <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.staffInvolvement">
-              <span *ngIf="!isReadMoreRelationWith;else more1" class="text-color fs-14">{{(relationshipsDetails?.staffInvolvement?.length>200)?(relationshipsDetails?.staffInvolvement|slice:0:165)
-                :relationshipsDetails?.staffInvolvement}}
-                <span *ngIf="relationshipsDetails?.staffInvolvement?.length>200">...<span class="collapse-text fw-medium" (click)="isReadMoreRelationWith =!isReadMoreRelationWith">Read more</span></span>
-              </span>
-              <ng-template #more1>
-                <span  class="text-color text-break fs-14">{{ relationshipsDetails?.studentInvolvement}}
-                </span><span (click)="isReadMoreRelationWith =!isReadMoreRelationWith" class="collapse-text fw-medium fs-14">Show Less</span>
-              </ng-template>
-
+      <div *ngIf="entityDetailsServices.isHoverEntityCard" class="row entity-box shadow-lg  fs-13 rounded m-0">
+        <div class="py-1">
+          <span class="d-flex px-3 pb-2">
+            <span class="fw-500 col-custom-width">Entity</span>:
+            <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.entityName">
+              <span class="px-3 d-flex">{{entityDetails?.entityName}}</span>
             </app-no-data-label>
-          </div>
-        </div>
-        <div class="col-11 mt-3">
-          <div class="row">
-            <label class="fs-14 fw-500">Principal Business Area Of Entity</label>
-            <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.studentInvolvement">
-              <span *ngIf="!isReadMoreBusinessArea;else more2" class="text-color fs-14">
-                {{(relationshipsDetails?.studentInvolvement?.length>200)?(relationshipsDetails?.studentInvolvement|slice:0:165)
-                :relationshipsDetails?.studentInvolvement}}
-                <span *ngIf="relationshipsDetails?.studentInvolvement?.length>200">...<span class="collapse-text fw-medium" (click)="isReadMoreBusinessArea = !isReadMoreBusinessArea">Read more</span></span>
-              </span>
-              <ng-template #more2>
-                <span  class="text-color text-break fs-14">{{ relationshipsDetails?.studentInvolvement}}
-                </span><span (click)="isReadMoreBusinessArea = !isReadMoreBusinessArea" class="collapse-text fs-14 fw-medium">Show Less</span>
-              </ng-template>
+          </span>
+          <span class="d-flex px-3 pb-2">
+            <span class="fw-500 col-custom-width">Country</span>:
+            <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.country?.countryName">
+              <span class="px-3 d-flex">{{entityDetails?.country?.countryName}}</span>
             </app-no-data-label>
-          </div>
+          </span>
+          <span class="d-flex px-3 pb-2">
+            <span class="fw-500 col-custom-width">City</span>:
+            <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.city">
+              <span class="px-3 d-flex">
+                {{entityDetails?.city}}
+              </span>
+            </app-no-data-label>
+          </span>
+          <span class="d-flex px-3 pb-2">
+            <span class="fw-500 col-custom-width">Website</span>:
+            <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.webURL">
+              <a class="px-3 anchor-link d-flex"
+                (click)="redirectUrl(entityDetails?.webURL)">{{entityDetails?.webURL}}</a>
+            </app-no-data-label>
+          </span>
+          <span class="d-flex px-3 pb-2">
+            <span class="fw-500 col-custom-width">Email</span>:
+            <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.emailAddress">
+              <span class="px-3 d-flex">
+                {{entityDetails?.emailAddress}}
+              </span>
+            </app-no-data-label>
+          </span>
+          <span class="d-flex px-3">
+            <span class="fw-500 col-custom-width">Phone</span>:
+            <app-no-data-label [classesToApply]="'fs-13 px-3'" [valueToShow]="entityDetails?.phone">
+              <span class="px-3 d-flex">
+                {{entityDetails?.phone}}
+              </span>
+            </app-no-data-label>
+          </span>
         </div>
+        <div *ngIf="commonService.getAvailableRight(['MANAGE_ENTITY', 'VIEW_ENTITY'], 'SOME')"
+          class="d-flex justify-content-end align-items-end ml-15">
+          <span class="d-flex" [class.text-primary]="isHoverCardViewMore" (mouseover)="isHoverCardViewMore = true"
+            (mouseout)="isHoverCardViewMore = false" (click)="viewEntityDetails()">
+            <span class="anchor-link">View</span>
+            <mat-icon class="fs-13 pt-2 hand-cursor">arrow_forward_ios</mat-icon>
+          </span>
+        </div>
+      </div>
+      <div *ngIf="!isEditMode" class="card-body bg-color border shadow-sm border-radius"
+        (mouseout)="entityDetailsServices.isHoverEntityCard = false">
         <div class="row">
-          <div class="col-12 d-flex  mt-3 mb-15">
-            <div class="col-11 mt-3">
+          <div class="col-12 d-flex">
+            <div class="col-3">
               <div class="row">
-                <label class="fs-14 fw-500">Relationship Of Entity To Your University Responsibilities</label>
-                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.instituteResourceInvolvement">
-                  <span *ngIf="!isReadMoreUniversity;else more3" class="text-color fs-14">{{(relationshipsDetails?.instituteResourceInvolvement?.length>200)?(relationshipsDetails?.instituteResourceInvolvement|slice:0:165)
-                    :relationshipsDetails?.instituteResourceInvolvement}}
-                    <span *ngIf="relationshipsDetails?.instituteResourceInvolvement?.length>200">...<span class="collapse-text fw-medium" (click)="isReadMoreUniversity =!isReadMoreUniversity">Read more</span></span>
-                  </span>
-                  <ng-template #more3>
-                    <span  class="text-color text-break fs-14">{{ relationshipsDetails?.studentInvolvement}}
-                    </span><span (click)="isReadMoreUniversity =!isReadMoreUniversity" class="collapse-text fs-14 fw-medium">Show Less</span>
-                  </ng-template>
+                <label class="fs-14 fw-500">Relationship Type</label>
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="personEntityRelationships.length>0">
+                  <span class="text-color  fs-14">{{'Financial'}}</span>
                 </app-no-data-label>
               </div>
             </div>
-            <div class="col-1 d-flex align-items-end justify-content-end mt-3 px-3">
-              <div *ngIf="entityDetailsServices.isExpanded"
-                class="toggle-header-btn mt-3  bg-white border btn  p-1 rounded-5 shadow-sm">
-                <mat-icon title="Click to collapse Relationships"
-                  (click)="entityDetailsServices.isExpanded=!entityDetailsServices.isExpanded">expand_less</mat-icon>
+            <div class="col-2">
+              <div class="row">
+                <label class="fs-14 fw-500">Sponsors Research</label>
+                <span class="text-color fs-14">{{relationshipsDetails?.sponsorsResearch?'Yes':'No'}}</span>
               </div>
             </div>
+            <div class="col-3">
+              <div class="row">
+                <label class="fs-14 fw-500">Start Date Of Involvement</label>
+                <app-no-data-label [classesToApply]="'fs-14'"
+                  [valueToShow]="involvementStartDate">
+                  <span class="text-color fs-14">{{involvementStartDate |
+                    dateFormatterWithTimeZone}}</span>
+                </app-no-data-label>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="row">
+                <label class="fs-14 fw-500">End Date Of Involvement</label>
+                <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="involvementEndDate">
+                  <span class="text-color fs-14">{{involvementEndDate |
+                    dateFormatterWithTimeZone}}</span>
+                </app-no-data-label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [@slideInOut] class="col" *ngIf="entityDetailsServices.isExpanded">
+          <div class="mt-3">
+            <div class="row">
+              <label class="fs-14 fw-500">Relationship With Entity</label>
+              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.staffInvolvement">
+                <span *ngIf="!isReadMoreRelationWith;else more1"
+                  class="text-color fs-14">{{(relationshipsDetails?.staffInvolvement?.length>145)?(relationshipsDetails?.staffInvolvement|slice:0:142)
+                  :relationshipsDetails?.staffInvolvement}}
+                  <span *ngIf="relationshipsDetails?.staffInvolvement?.length>145">...<span
+                      class="collapse-text fw-medium" (click)="isReadMoreRelationWith =!isReadMoreRelationWith">Read
+                      more</span></span>
+                </span>
+                <ng-template #more1>
+                  <span class="text-color text-break fs-14">{{ relationshipsDetails?.staffInvolvement}}
+                  </span><span (click)="isReadMoreRelationWith =!isReadMoreRelationWith"
+                    class="collapse-text fw-medium fs-14">Read Less</span>
+                </ng-template>
+
+              </app-no-data-label>
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="row">
+              <label class="fs-14 fw-500">Principal Business Area Of Entity</label>
+              <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.studentInvolvement">
+                <span *ngIf="!isReadMoreBusinessArea;else more2" class="text-color fs-14">
+                  {{(relationshipsDetails?.studentInvolvement?.length>145)?(relationshipsDetails?.studentInvolvement|slice:0:142)
+                  :relationshipsDetails?.studentInvolvement}}
+                  <span *ngIf="relationshipsDetails?.studentInvolvement?.length>145">...<span
+                      class="collapse-text fw-medium" (click)="isReadMoreBusinessArea = !isReadMoreBusinessArea">Read
+                      more</span></span>
+                </span>
+                <ng-template #more2>
+                  <span class="text-color text-break fs-14">{{relationshipsDetails?.studentInvolvement}}
+                  </span><span (click)="isReadMoreBusinessArea = !isReadMoreBusinessArea"
+                    class="collapse-text fs-14 fw-medium">Read Less</span>
+                </ng-template>
+              </app-no-data-label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 d-flex  mt-3 mb-15">
+              <div class="mt-3">
+                <div class="row">
+                  <label class="fs-14 fw-500">Relationship Of Entity To Your University
+                    Responsibilities</label>
+                  <app-no-data-label [classesToApply]="'fs-14'"
+                    [valueToShow]="relationshipsDetails?.instituteResourceInvolvement">
+                    <span *ngIf="!isReadMoreUniversity;else more3"
+                      class="text-color fs-14">{{(relationshipsDetails?.instituteResourceInvolvement?.length>145)?(relationshipsDetails?.instituteResourceInvolvement|slice:0:142)
+                      :relationshipsDetails?.instituteResourceInvolvement}}
+                      <span *ngIf="relationshipsDetails?.instituteResourceInvolvement?.length>145">...<span
+                          class="collapse-text fw-medium" (click)="isReadMoreUniversity =!isReadMoreUniversity">Read
+                          more</span></span>
+                    </span>
+                    <ng-template #more3>
+                      <span class="text-color text-break fs-14">{{
+                        relationshipsDetails?.studentInvolvement}}
+                      </span><span (click)="isReadMoreUniversity =!isReadMoreUniversity"
+                        class="collapse-text fs-14 fw-medium">Read Less</span>
+                    </ng-template>
+                  </app-no-data-label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isEditMode" class="card shadow-sm border-edit-fields  border-radius" tabindex="-1"
+        (mouseout)="entityDetailsServices.isHoverEntityCard = false"
+        [class.h-75]="isQuestionnaireCompleted && sfiStatus == 'Draft' && !entityDetailsServices.isExpanded">
+        <div class="card-body mr-1rem pt-0 " [class.pb-5]="!entityDetailsServices.isExpanded">
+          <div class="row d-flex px-4 py-3">
+            <div class="col">
+              <div class="d-flex">
+                <label class="d-block fw-500 fs-14 row py-2" title="Click to select date"
+                  for="start-date-involvement">
+                  <span class="mandatory">*</span>Start Date of Involvement :
+                </label>
+              </div>
+              <div>
+                <span class="dateField w-100">
+                  <input matInput [matDatepicker]="startDate" id="start-date-involvement"
+                    placeholder="{{datePlaceHolder}}" (click)="startDate.open()" autocomplete="off"
+                    class="d-inline-block form-control w-100" [(ngModel)]="involvementStartDate"
+                    (keypress)="commonService._keyPress($event, 'date')" 
+                    (ngModelChange)="addUnSavedChanges()"
+                    [ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''" />
+                  <i (click)="startDate.open()" [class.date-field-error]="mandatoryList?.has('date')"
+                    class="fa fa-calendar fa-large insidePicker hand-cursor" title="Click to select date"></i>
+                  <mat-datepicker #startDate>
+                  </mat-datepicker>
+                </span>
+                <div *ngIf="mandatoryList?.has('date')" class="invalid-feedback d-block fs-13">
+                  {{mandatoryList?.get('date')}}
+                </div>
+              </div>
+            </div>
+            <div class="col px-5">
+              <label class="d-block fs-14 fw-500 px-1 py-2" title="Click to select date" for="end-date-involvement">End
+                Date of Involvement :
+              </label>
+              <div>
+                <span class="dateField">
+                  <input matInput [matDatepicker]="endDate" id="end-date-involvement" placeholder="{{datePlaceHolder}}"
+                    (click)="endDate.open()" autocomplete="off" (ngModelChange)="addUnSavedChanges()"
+                    class="d-inline-block form-control w-100" [(ngModel)]="involvementEndDate"
+                    (ngModelChange)="endDateValidation()" (keypress)="commonService._keyPress($event, 'date')" />
+                  <i (click)="endDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"
+                    title="Click to select end date"></i>
+                  <mat-datepicker #endDate>
+                  </mat-datepicker>
+                </span>
+                <div *ngIf="(mandatoryList.get('endDate'))" class="fs-13 invalid-feedback d-block">
+                  {{mandatoryList.get('endDate')}}
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="d-flex py-2 px-3">
+                <label class="d-block fs-14 fw-500 px-1 px-2 row">Sponsors Research :</label>
+              </div>
+              <div class="col d-flex px-2" title="Click to toggle Yes/No">
+                <span class="py-1" aria-label="Disclosures_has_sfi" role="switch">
+                  <a *ngIf="additionalDetails.sponsorsResearch" class="pl-2">
+                    <label class="switch"
+                      (click)="additionalDetails.sponsorsResearch = false;addUnSavedChanges()">
+                      <input type="checkbox" checked>
+                      <span class="slider round"><small class="fs-12 mt-1">Yes</small></span>
+                    </label>
+                  </a>
+                  <a *ngIf="!additionalDetails.sponsorsResearch" class="pl-2">
+                    <label class="switch"
+                      (click)="additionalDetails.sponsorsResearch = true;addUnSavedChanges()">
+                      <input type="checkbox">
+                      <span class="slider round"><small class="deactivate-text fs-12 mt-1">No</small></span>
+                    </label>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="entityDetailsServices.isExpanded">
+            <div [@slideInOut]>
+              <div class="row px-4">
+                <div class="d-flex">
+                  <label class="fw-500 fs-14 py-2 position-relative">
+                    <span class="mandatory">*</span>
+                    Relationship with Entity :
+                    <span data-bs-toggle="tooltip" [title]="RELATION_HELP_TEXT_1" data-bs-placement="top" class="d-inline-block">
+                      <mat-icon role="img" class="mat-icon info fs-16">info</mat-icon>
+                    </span>
+                  </label>
+                </div>
+                <div class="col">
+                  <textarea appAutoGrow class="form-control " id="releationship-entity"
+                  [rows]="1"
+                    [(ngModel)]="additionalDetails.staffInvolvement" (ngModelChange)="addUnSavedChanges();additionalDetails.staffInvolvement = additionalDetails.staffInvolvement.trim()"
+                    [ngClass]="(mandatoryList?.has('staff')) ? 'is-invalid d-block' : ''" appLengthValidator
+                    [limit]=2000>
+                  </textarea>
+                  <div *ngIf="mandatoryList?.has('staff')" class="invalid-feedback d-block fs-13">
+                    {{mandatoryList?.get('staff')}}
+                  </div>
+                </div>
+              </div>
+              <div class="row px-4">
+                <div class="d-flex">
+                  <label class="fw-500 fs-14 py-2 position-relative">
+                    <span class="mandatory">*</span> Principle Business Area of Entity :
+                      <span data-bs-toggle="tooltip" [title]="RELATION_HELP_TEXT_2" data-bs-placement="top" class="d-inline-block">
+                        <mat-icon role="img" class="mat-icon info fs-16">info</mat-icon>
+                      </span>
+                    </label>
+                </div>
+                <div class="col">
+                  <textarea appAutoGrow class="form-control " [(ngModel)]="additionalDetails.studentInvolvement"
+                  [rows]="1"
+                    (ngModelChange)="addUnSavedChanges();additionalDetails.studentInvolvement = additionalDetails.studentInvolvement.trim()"
+                    [ngClass]="(mandatoryList?.has('student')) ? 'is-invalid d-block' : ''" appLengthValidator
+                    [limit]=2000>
+                  </textarea>
+                  <div *ngIf="mandatoryList?.has('student')" class="invalid-feedback d-block fs-13">
+                    {{mandatoryList?.get('student')}}
+                  </div>
+                </div>
+              </div>
+              <div class="row px-4">
+                <div class="d-flex">
+                  <label class="d-block fw-500 fs-14 py-2 position-relative">
+                    <span class="mandatory">*</span>
+                      Relationship of Entity to your
+                      University responsibilities :
+                    <span data-bs-toggle="tooltip" [title]="RELATION_HELP_TEXT_3" data-bs-placement="top" class="d-inline-block">
+                      <mat-icon role="img" class="mat-icon info fs-16">info</mat-icon>
+                    </span>
+                  </label>
+                </div>
+                <div class="col">
+                  <textarea appAutoGrow class="form-control "
+                  [rows]="1"
+                    [(ngModel)]="additionalDetails.instituteResourceInvolvement"
+                    (ngModelChange)="isChangesInFieldValue = true;addUnSavedChanges()"
+                    [ngClass]="(mandatoryList?.has('resource')) ? 'is-invalid d-block' : ''" appLengthValidator
+                    [limit]=2000>
+                  </textarea>
+                  <div *ngIf="mandatoryList?.has('resource')" class="invalid-feedback d-block fs-13">
+                    {{mandatoryList?.get('resource')}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 px-0" *ngIf="!isTriggeredFromSlider" [ngClass]="isEditMode?'':'side-action-bar'"
+      [class.custom-margin]="isQuestionnaireCompleted &&
+     sfiStatus == 'Draft' && !entityDetailsServices.isExpanded">
+      <div class="d-flex flex-column p-0 h-100">
+        <div class="flex-fill action-bar-border bg-white shadow-sm"
+          [class.pb-3]="isQuestionnaireCompleted && sfiStatus == 'Draft' && !entityDetailsServices.isExpanded">
+          <div
+            *ngIf="entityDetailsServices.canMangeSfi && relationshipsDetails.versionStatus !== 'ARCHIVE' ;else noMangeRights"
+            class="mt-3 mx-3 d-flex justify-content-around"
+            [class.px-1]="(sfiStatus =='Draft' || sfiStatus =='Inactive') && isEditMode">
+            <button *ngIf="sfiStatus !='Draft' && !isEditMode;else noRightDesign2"
+              class="btn btn-outline-grey pb-0 col-2" title="Go to COI home page" (click)="goToHome()">
+              <mat-icon>home</mat-icon>
+            </button>
+            <ng-template #noRightDesign2>
+              <button class="btn btn-outline-grey pb-0 col-6 me-2" title="Go to COI home page" (click)="goToHome()">
+                <mat-icon>home</mat-icon>
+                <span class="fs-14 mx-1 btn-content-home">Home</span>
+              </button>
+            </ng-template>
+            <button *ngIf="sfiStatus !='Draft' && !isEditMode && entityDetailsServices.canMangeSfi" id="btn-sfi-modify"
+              class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center mx-3"
+              title="Click to Modify SFI" (click)="modifySfi()">
+              <mat-icon class="pencil-sfi">mode</mat-icon>
+              <span class="btn-sfi-position">Modify SFI</span>
+            </button>
+            <button *ngIf="sfiStatus !='Draft' && !isEditMode;else noRightDesign3"
+              class="btn btn-outline-grey fs-14 col-2 pb-0" (click)="navigateBack()" title="Back">
+              <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
+            </button>
+            <ng-template #noRightDesign3>
+              <button class="btn btn-outline-grey fs-14 col-6 py-2" (click)="navigateBack()"
+                title="Click to go back to Entity list">
+                <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
+                <span class="fs-14 mx-2 btn-content-back">Back</span>
+              </button>
+            </ng-template>
+          </div>
+          <ng-template #noMangeRights>
+            <div class="mt-3 mx-3 d-flex justify-content-around px-1">
+              <button class="btn btn-outline-grey pb-0 col-6 me-2" title="Go to COI home page" (click)="goToHome()">
+                <mat-icon>home</mat-icon>
+                <span class="fs-14 mx-1 btn-content-home">Home</span>
+              </button>
+              <button class="btn btn-outline-grey fs-14 col-6 py-2" (click)="navigateBack()"
+                title="Click to go back to Entity list">
+                <i class="fa fa-reply justify-content-center align-items-center fs-14"></i>
+                <span class="fs-14 mx-2 btn-content-back">Back</span>
+              </button>
+            </div>
+          </ng-template>
+          <div *ngIf="isEditMode" class="d-flex justify-content-around mt-3 mx-3">
+            <button id="btn-save-relationship" (click)="saveRelationship()"
+              class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+              title="Click to save">
+              <mat-icon class="me-2">save</mat-icon>
+              <span>Save</span>
+            </button>
+          </div>
+          <ng-container *ngIf="relationshipsDetails.versionStatus !== 'ARCHIVE'">
+            <div *ngIf="entityDetailsServices.canMangeSfi && sfiStatus ==='Active' && !isEditMode"
+              class="d-flex justify-content-around mt-3 mx-3">
+              <button id="btn-inactivate"
+                class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+                title="Click to Inactivate Sfi'" (click)="activateInactivateSfi()">
+                <mat-icon class="mx-1 icon-schedule-position">schedule</mat-icon>
+                <span class="btn-inactivate-content">
+                  Inactivate
+                </span>
+              </button>
+            </div>
+            <div
+              *ngIf="entityDetailsServices.canMangeSfi && isQuestionnaireCompleted &&  
+              (sfiStatus ==='Inactive' || sfiStatus == 'Draft')"
+              class="d-flex justify-content-around mt-3 mx-3">
+              <button id="btn-activate"
+                class="fs-14 btn btn-outline-grey d-flex justify-content-center w-100 align-items-center"
+                title="Click to activate Sfi" (click)="activateInactivateSfi()">
+                <i class="fa fa-bolt fs-18 fw-700  py-1" aria-hidden="true"
+                  [ngClass]="isEditMode ? 'pl-15': 'icon-activate-position'"></i>
+                <span [ngClass]="isEditMode ?'btn-activate-edit-content':'btn-activate-content'">
+                  Activate
+                </span>
+              </button>
+            </div>
+          </ng-container>
+          <div [@slideInOut] *ngIf="entityDetailsServices.isExpanded"
+            class="my-2 ml-2 fs-14 ash-text wrapping-text px-2">
+            <div><span class="fw-medium me-1">Last Updated By :</span></div>
+            <app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="relationshipsDetails?.updateUserFullName">
+              <span class=" fs-14"> {{relationshipsDetails?.updateUserFullName}} On
+                {{(relationshipsDetails?.updateTimestamp|dateFormatterWithTimeZone:'long')}} </span>
+            </app-no-data-label>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </div>
+
+<app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityDetails.entityName"
+  [personEntityId]="entityId" [isRelationshipActive]="isRelationshipActive"
+  (closeModal)="closeActivateInactivateSfiModal($event)" [isFinalizeApi]="isFinalizeApi">
+</app-activate-inactivate-sfi-modal>

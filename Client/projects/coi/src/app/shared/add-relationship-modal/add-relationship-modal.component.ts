@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { hideModal, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
 import { EntityDetail  } from '../../disclosure/sfi/add-sfi.interface';
 import { SfiService } from '../../disclosure/sfi/sfi.service';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
   selector: 'app-add-relationship-modal',
@@ -13,10 +13,7 @@ import { SfiService } from '../../disclosure/sfi/sfi.service';
 })
 export class AddRelationshipModalComponent implements OnInit {
 
-  @Output() relationshipResult: EventEmitter<any> = new EventEmitter<any>();
-  @Output() hideModal = new EventEmitter<boolean>()
-  @Input() isWithOutRelationship = false;
-  @Input() personEntityId;
+  @Output() hideModal = new EventEmitter<boolean>();
 
   isAddRelationshipModal: any;
   isSaving = false;
@@ -37,19 +34,15 @@ export class AddRelationshipModalComponent implements OnInit {
     isEnableVersion: true,
   }
   relationLookup: any = [];
+  isChecked = {};
+  RELATION_TITLE_HELP_TEXT = "Select Relationship Details";
 
   constructor( private _router:Router, private _sfiService: SfiService, private _activatedRoute: ActivatedRoute,
               private _commonService: CommonService) { }
 
   ngOnInit() {
-    openModal('addRelationshipModal');
     this.getRelationshipLookUp();
-  }
-
-  closeModal() {
-    this.relationshipResult.emit('addRelationshipModal');
-    this.hideModal.emit(false);
-
+    this.triggerAddRelation();
   }
 
   getRelationshipLookUp() {
@@ -58,48 +51,46 @@ export class AddRelationshipModalComponent implements OnInit {
     }));
   }
 
-  // addRelation() {
-  //   this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode ? this.addRelationAPI() : this.navigateToSFI();
-  // }
-
-  addRelation() {
+  addRelation(data = null) {
     this.relationValidationMap.clear();
     if (!this.isSaving && this.validateRelationship()) {
       this.isSaving = true;
       const REQ_BODY = {
         "questionnaireAnsHeaderId": null,
-        "personEntityId": this.personEntityId,
-        "validPersonEntityRelTypeCode": this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode
+        "personEntityId" : data,
+        "validPersonEntityRelTypeCodes": this.getSelectedRelationTypeCodes().map(typeCode => Number(typeCode))
       }
       this.$subscriptions.push(this._sfiService.saveOrUpdateCoiFinancialEntityDetails(REQ_BODY).subscribe((res: any) => {
-        this.definedRelationships.push(res);
+        res.forEach(ele => {
+          this.definedRelationships.push(ele);
+          this.findRelation(ele.validPersonEntityRelType.relationshipTypeCode);
+        });
         this.clearRelationModal();
         this.isSaving = false;
-        this.navigateToSFI();
+        this.navigateToSFI(data);
+      } , err => {
+        this.navigateToSFI(data);
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding relationship');
       }));
     }
   }
 
-  private navigateToSFI() {
-    this.relationshipResult.emit('addRelationshipModal');
+  getSelectedRelationTypeCodes() {
+    return Object.keys(this.isChecked).filter(key => this.isChecked[key]);
+  }
+
+  private navigateToSFI(personEntityId) {
     this.hideModal.emit(false);
     this._sfiService.isShowSfiNavBar = false;
-    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.personEntityId, mode: 'edit' } });
+    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit' } });
   }
 
   validateRelationship() {
     this.relationValidationMap.clear();
-    if (!this.entityDetail.validPersonEntityRelTypes.relationshipTypeCode) {
+    if (!this.getSelectedRelationTypeCodes().length) {
       this.relationValidationMap.set('relationRadio', 'Please select a relation to continue.');
     }
     return this.relationValidationMap.size === 0 ? true : false;
-  }
-
-  continueWithoutRelation() {
-    this.clearRelationModal();
-    this.closeModal();
-    this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.personEntityId, mode: 'edit' } })
-    this._sfiService.isShowSfiNavBar = false;
   }
 
   private findRelation(financialEntityRelTypeCode: string) {
@@ -115,16 +106,28 @@ export class AddRelationshipModalComponent implements OnInit {
   }
 
   clearRelationModal() {
-    hideModal('addRelationshipModal');
     this.entityDetail.personEntityRelType = null;
     this.entityDetail.validPersonEntityRelTypes.validPersonEntityRelTypeCode = null;
+    this.isChecked = {};
   }
 
-  closeRelationModal() {
-    this._sfiService.$addSfi.next(true);
-    this.clearRelationModal();
-    this.closeModal();
-    this._sfiService.isShowSfiNavBar = false;
-    this.relationValidationMap.clear();
+  triggerAddRelation() {
+    this.$subscriptions.push(this._sfiService.$addRelationService.subscribe((data: any) => {
+      if(data) {
+        this.addRelationViaSlider(data);
+      } else {
+        this.isChecked = {};
+      }
+    }))
   }
+
+  addRelationViaSlider(data) {
+    if (this.getSelectedRelationTypeCodes().length == 0) {
+      this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: data, mode: 'edit' } })
+      this._sfiService.isShowSfiNavBar = false;
+    } else {
+      this.addRelation(data);
+    }
+  }
+
 }

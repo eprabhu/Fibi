@@ -1,17 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { UserDisclosureService } from './user-disclosure.service';
 import { UserDashboardService } from '../user-dashboard.service';
 import { CommonService } from '../../common/services/common.service';
-import { CREATE_DISCLOSURE_ROUTE_URL, CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL,
+         CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
+import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
+import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+
 @Component({
     selector: 'app-user-disclosure',
     templateUrl: './user-disclosure.component.html',
-    styleUrls: ['./user-disclosure.component.scss']
+    styleUrls: ['./user-disclosure.component.scss'],
+    animations: [listAnimation, leftSlideInOut]
+
 })
 
 export class UserDisclosureComponent implements OnInit, OnDestroy {
@@ -52,9 +59,17 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     $debounceEventForDisclosureList = new Subject();
     $fetchDisclosures = new Subject();
     isSearchTextHover = false;
-    isShowNoDataCard = false;
-    isShowNoInfoCard = false;
+    isLoading = false;
     readMoreOrLess = [];
+    isShowFilterAndSearch = false;
+    isShowCreate = false;
+    showSlider = false;
+    entityId: any;
+    differenceInDays:any;
+    dateWarningColor:any = false;
+    dateWarning:any = true;
+    hasPendingFCOI:any = false;
+    hasActiveFCOI = false;
 
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
@@ -64,24 +79,25 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadDashboard();
-        this.$fetchDisclosures.next();
+        this.getDashboardBasedOnTab();
         this.loadDashboardCount();
         this.getSearchList();
     }
 
     loadDashboard() {
-        this.isShowNoDataCard = false;
-        this.isShowNoInfoCard = false;
+        this.isLoading = true;
         this.$subscriptions.push(this.$fetchDisclosures.pipe(
-            switchMap(() => this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject))).subscribe((res: any) => {
-            this.result = res;
-            if (this.result) {
-                this.isShowNoDataCard = true;
-                this.filteredDisclosureArray =  this.getDashboardList();
-                this.showOrHideNoInfoCard();
-            }
-        }), (err) => {
-            this.showOrHideNoInfoCard();
+            switchMap(() => {
+                this.isLoading = true;
+                return this.userDisclosureService.getCOIDashboard(this.dashboardRequestObject)
+            })).subscribe((res: any) => {
+                this.result = res;
+                if (this.result) {
+                    this.filteredDisclosureArray =  this.getDashboardList();
+                    this.loadingComplete();
+                }
+            }), (err) => {
+                this.loadingComplete();
         });
     }
 
@@ -91,8 +107,17 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         return disclosureViews.concat(travelDashboardViews);
     }
 
-    private showOrHideNoInfoCard() {
-        this.isShowNoInfoCard = !this.filteredDisclosureArray.length;
+    private loadingComplete() {
+        this.isLoading = false;
+    }
+
+    getDashboardBasedOnTab() {
+        if(this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
+            this.getDisclosureHistory();
+        } else {
+            this.filteredDisclosureArray = [];
+            this.$fetchDisclosures.next();
+        }
     }
 
     getDisclosures() {
@@ -103,7 +128,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     getSearchList() {
         this.$subscriptions.push(this.$debounceEventForDisclosureList.pipe(debounce(() => interval(800))).subscribe((data: any) => {
         this.dashboardRequestObject.property2 = this.searchText;
-          this.$fetchDisclosures.next();
+            this.isLoading = true;
+            this.filteredDisclosureArray = [];
+            this.$fetchDisclosures.next();
         }
         ));
       }
@@ -112,18 +139,31 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.searchText = '';
         this.filteredDisclosureArray = [];
         this.dashboardRequestObject.property2 = '';
-        this.$fetchDisclosures.next();
+        this.getDashboardBasedOnTab();
     }
 
     actionsOnPageChange(event) {
-        this.dashboardRequestObject.currentPage = event;
-        this.$fetchDisclosures.next();
+        if (this.dashboardRequestObject.currentPage != event) {
+            this.dashboardRequestObject.currentPage = event;
+            this.$fetchDisclosures.next();
+        }
     }
 
     loadDashboardCount() {
         this.userDisclosureService.getCOIDashboardCount(this.dashboardRequestObject).subscribe((res: any) => {
             this.dashboardCount = res;
+            this.isShowFilterAndSearch = !!res?.inProgressDisclosureCount;
+            this.setIsShowCreateFlag();
         });
+    }
+
+    setIsShowCreateFlag() {
+        if (!this.dashboardCount.inProgressDisclosureCount && !this.dashboardCount.approvedDisclosureCount
+            && !this.dashboardCount.travelDisclosureCount && !this.dashboardCount.disclosureHistoryCount &&
+            !this.filteredDisclosureArray.length &&
+            this.dashboardRequestObject.currentPage == '1' && this.dashboardRequestObject.filterType == 'ALL') {
+                this.isShowCreate = true;
+        }
     }
 
     getEventType(disclosureSequenceStatusCode, disclosureCategoryType) {
@@ -138,12 +178,13 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    setTab(tabName) {
+    setTab(tabName: string, disclosureCount: number = 0) {
         this.currentSelected.tab = tabName;
         this.dashboardRequestObject.tabName = tabName;
         this.dashboardRequestObject.currentPage = '1';
         this.dashboardRequestObject.filterType = 'ALL';
         this.currentSelected.filter = 'ALL';
+        this.isShowFilterAndSearch = !!disclosureCount;
         this.resetAndFetchDisclosure();
     }
 
@@ -192,8 +233,16 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     redirectToDisclosure(disclosure: UserDisclosure) {
-        const redirectUrl = disclosure.travelDisclosureId ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : (disclosure.reviewStatusCode === '1' ?
-            CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL);
+        let redirectUrl;
+
+        if (disclosure.travelDisclosureId) {
+            const isTravelDisclosureEditPage = ['1', '4', '5'].includes(disclosure.reviewStatusCode);
+            redirectUrl = isTravelDisclosureEditPage ? CREATE_TRAVEL_DISCLOSURE_ROUTE_URL : POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL;
+        } else {
+            const isDisclosureEditPage = ['1', '5', '6'].includes(disclosure.reviewStatusCode);
+            redirectUrl = isDisclosureEditPage ? CREATE_DISCLOSURE_ROUTE_URL : POST_CREATE_DISCLOSURE_ROUTE_URL;
+        }
+
         this._router.navigate([redirectUrl],
             { queryParams: { disclosureId: disclosure.travelDisclosureId || disclosure.coiDisclosureId } });
     }
@@ -230,10 +279,71 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     getSearchPlaceHolder() {
         if (this.currentSelected.tab !== 'TRAVEL_DISCLOSURES') {
-            return 'Search by #Disclosure Number, Disclosure Id, Project Title, Disclosure Status, Disposition Status, Review Status, Department Name';
+            return 'Search by Project Title, Disclosure Status, Disposition Status, Review Status, Department Name';
         } else {
-            return 'Search by #Travel Disclosure Id, Entity Name, Department Name, Traveller Type, Destination, Review Status, Document Status, Purpose';
+            return 'Search by Entity Name, Department Name, Traveller Type, Destination, Review Status, Document Status, Purpose';
         }
+    }
+
+    getDisclosureHistory() {
+        this.isLoading = true;
+        this.filteredDisclosureArray =  [];
+        this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({'filterType':this.currentSelected.filter}).subscribe((data: any) => {
+            this.filteredDisclosureArray =  data;
+            this.loadingComplete();
+        }));
+    }
+
+    openFCOIModal(type) {
+        this.userDashboardService.$openModal.next(type);
+    }
+
+    viewSlider(event) {
+        this.showSlider = event.flag;
+        this.entityId = event.entityId;
+        setTimeout(() => {
+            openSlider('disclosure-entity-view-2-slider');
+        });
+    }
+
+    validateSliderClose() {
+        closeSlider('disclosure-entity-view-2-slider');
+        setTimeout(() => {
+            this.showSlider = false;
+		}, 500);
+	}
+
+    getActiveFCOI() {
+        this.fcoiDatesRemaining();
+        return this.userDashboardService.activeDisclosures.filter(disclosure =>
+            disclosure?.fcoiTypeCode === '1' );
+    }
+
+    triggerClickForId(targetIdName: string) {
+        document.getElementById(targetIdName)?.click();
+    }
+
+    fcoiDatesRemaining() {
+            this.userDashboardService.activeDisclosures.forEach(disclosure => {
+                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
+                    this.hasPendingFCOI = true;
+                }
+                if(disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING') {
+                    this.hasActiveFCOI = true;
+                }
+            })
+            let disclosureDate  =  this.userDashboardService.activeDisclosures.filter(disclosure =>
+                disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
+            if ( disclosureDate[0]) {
+                const experationDate = (disclosureDate[0].expirationDate);
+                const currentDate = new Date().getTime()
+                this.differenceInDays = getDuration(currentDate, experationDate)
+                if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) < 10){
+                    this.dateWarningColor = true;
+                }else if((this.differenceInDays.durInDays + (this.differenceInDays.durInMonths * 30) + (this.differenceInDays.durInYears*360)) > 30){
+                    this.dateWarning = false;
+                }
+            }
     }
 
 }

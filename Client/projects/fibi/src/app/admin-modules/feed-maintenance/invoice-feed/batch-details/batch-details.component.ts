@@ -311,17 +311,17 @@ export class BatchDetailsComponent implements OnInit, OnDestroy {
                             this.resetAllProperties();
                             this.triggerFailedCasePopUp(data);
                             if (!data.claimNumbers.length) {
-                                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully Updated Feed Status.');
+                                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully updated Feed Status.');
                                 this.getBatchDetails();
                             }
                             $('#invoice-update').modal('hide');
                         } else {
-                            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error for Updating Feed Status. Please try again.');
+                            this._commonService.showToast(HTTP_ERROR_STATUS, 'Error for updating Feed Status. Please try again.');
                             $('#invoice-update').modal('hide');
                             this.isSaving = false;
                         }
                     }, err => {
-                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error for Updating Feed Status. Please try again.');
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error for updating Feed Status. Please try again.');
                         $('#invoice-update').modal('hide');
                         this.isSaving = false;
                     }));

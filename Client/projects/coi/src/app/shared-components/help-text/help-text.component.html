@@ -1,0 +1,24 @@
+<div class="d-flex py-2 grey-info align-items-center position-relative" *ngIf="helpTextList.length > 0">
+    <span title="{{tooltip}}" class="d-inline-block" tabindex="0" [attr.aria-label]="tooltip">
+        <mat-icon class="mat-icon me-2 info-icon material-icons mat-icon-no-color" 
+            data-mat-icon-type="font">info</mat-icon>
+    </span>
+    <div class="custom-margin fs-14 pb-2">
+        <ng-container *ngFor="let helpText of helpTextList; let isLast = last; let index = index">
+            <div title="{{helpText}}" [attr.aria-label]="helpText" tabindex="0"
+                class="d-flex grey-text align-items-center mt-2" *ngIf="index <= rowLimit-1 || isExpanded">
+                <i class="fa fa-angle-double-right me-2" aria-hidden="true"></i>
+                <span class="grey-text me-1">{{helpText}}</span>
+                <!-- for read more and less -->
+                <ng-container *ngIf="helpTextList.length > rowLimit && isReadMoreLess">
+                    <span *ngIf="index == rowLimit-1 && !isExpanded" type="button" class="fw-700 cursor-pointer"
+                        (keydown.enter)="isExpanded = true;" (keydown.space)="isExpanded = true;" (click)="isExpanded = true">...<u
+                        title="Expand {{tooltip}}" [attr.aria-label]="'Expand' + tooltip" role="button" class="fw-700" tabindex="0">Read More</u></span>
+                    <span *ngIf="isLast && isExpanded" type="button" class="fw-700 cursor-pointer"
+                        (keydown.enter)="isExpanded = false;" (keydown.space)="isExpanded = false;" (click)="isExpanded = false"><u 
+                        title="Collapse {{tooltip}}" [attr.aria-label]="'Collapse' + tooltip" role="button" tabindex="0">Read Less</u></span>
+                </ng-container>
+            </div>
+        </ng-container>
+    </div>
+</div>

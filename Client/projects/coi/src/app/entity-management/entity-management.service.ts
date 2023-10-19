@@ -19,13 +19,10 @@ export class EntityManagementService {
   searchDefaultValues: NameObject = new NameObject();
   sortCountObject: SortCountObj = new SortCountObj();
   relationshipDashboardRequest = new RelationshipDashboardRequest();
+  isAdvanceSearch: any;
   statusCodes: any = [
     {code: 'Y', description: 'Active'},
     {code: 'N', description: 'Inactive'}
-  ];
-  statusCode: any = [
-    {code: '1', description: 'verified'},
-    {code: '2', description: 'unverified'}
   ];
 
   getAllSystemEntityList(params) {
@@ -55,13 +52,17 @@ export class EntityManagementService {
   getApplicableQuestionnaire(requestObject: any) {
     return this._http.post(`${this._commonService.fibiUrl}/getApplicableQuestionnaire`, requestObject);
   }
- 
+
   getRelationshipTypes() {
     return this._http.get(this._commonService.baseUrl + '/entity/relationshipTypes');
   }
 
   approveEntity(params) {
     return this._http.put(this._commonService.baseUrl + '/entity/approval', params);
+  }
+
+  entityHistory(params) {
+    return this._http.post(this._commonService.baseUrl + '/entity/history', params);
   }
 
 }

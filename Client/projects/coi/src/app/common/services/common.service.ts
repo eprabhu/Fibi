@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
 import {ElasticConfigService} from '../../../../../fibi/src/app/common/services/elastic-config.service';
 import {Toast} from 'bootstrap';
-import { HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 
 type Method = 'SOME' | 'EVERY';
 @Injectable()
@@ -57,6 +57,11 @@ export class CommonService {
     dashboardModules: any = {};
     previousURL = null;
     fibiApplicationUrl = '';
+    $ScrollAction = new Subject<{event: Event,pageYOffset: number}>();
+    $commentConfigurationDetails =  new BehaviorSubject<any>({});
+    enableGraph = false;
+    $updateLatestNote = new Subject();
+    $updateLatestAttachment = new Subject();
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
@@ -112,6 +117,7 @@ export class CommonService {
         this.elasticAuthScheme = configurationData.elasticAuthScheme;
         this.elasticConfigService.url = configurationData.elasticIndexUrl;
         this.fibiApplicationUrl = configurationData.fibiApplicationUrl;
+        this.enableGraph = configurationData.enableGraph;
     }
 
     pageScroll(elementId) {
@@ -228,17 +234,26 @@ export class CommonService {
         return {fibiRights, coiRights};
     }
 
-    showToast(status = HTTP_SUCCESS_STATUS, toastContent = '') {
+    showToast(status = HTTP_SUCCESS_STATUS, toastContent = '', timer = 5000) {
         const toast: any = new Toast(document.getElementById('coi-bootstrap-toast'));
         const toast_body: any = document.getElementById('coi-bootstrap-toast-body');
         this.appToastContent = toastContent === '' ? status === HTTP_SUCCESS_STATUS ?
             'Your details saved successfully' : 'Error Saving Data! Please try again' : toastContent;
-        this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' : 'bg-danger';
-        if(toast && toast_body) {
+        this.toastClass = status === HTTP_SUCCESS_STATUS ? 'bg-success' :'bg-danger';
+        if (toast && toast_body) {
             ['bg-success', 'bg-danger'].forEach(className => toast._element.classList.remove(className));
             toast_body.innerText =  this.appToastContent;
             toast._element.classList.add(this.toastClass);
             toast.show();
+
+            // Focus the toast element
+            toast_body.focus();
+
+            // Unfocus after 5000 milliseconds
+            setTimeout(() => {
+                toast_body.innerText = '';
+                toast.hide();
+            }, timer);
         }
 
 
@@ -249,23 +264,35 @@ export class CommonService {
             case '1':
                 return 'green-badge';
             case '2':
+            case '5':
                 return 'brown-badge';
             case '3':
+            case '6':
                 return 'red-badge';
             case '4':
                 return 'green-badge';
+            default:
+                return 'yellow-badge';
         }
     }
 
-    getReviewStatusBadge(statusCode) {
+    getReviewStatusBadge(statusCode: string): string {
         switch (statusCode) {
             case '1':
                 return 'yellow-badge';
             case '2':
                 return 'blue-badge';
             case '3':
-                return 'green-badge';
+                return 'yellow-badge';
             case '4':
+                return 'green-badge';
+            case '5':
+                return 'red-badge';
+            case '6':
+                return 'red-badge';
+            case '7':
+                return 'blue-badge';
+            case '8':
                 return 'green-badge';
             default:
                 return 'red-badge';
@@ -319,6 +346,31 @@ export class CommonService {
         }
     }
 
+  getProjectDisclosureConflictStatusBadge(statusCode: string) {
+    switch (String(statusCode)) {
+        case '100':
+            return 'green-badge';
+        case '200':
+            return 'brown-badge';
+        case '300':
+            return 'red-badge';
+        case '400':
+            return 'green-badge';
+    }
+}
+
+getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCode: string) {
+    switch (String(statusCode)) {
+        case '100':
+            return 'green-badge-for-slider';
+        case '200':
+            return 'brown-badge-for-slider';
+        case '300':
+            return 'red-badge-for-slider';
+        case '400':
+            return 'green-badge-for-slider';
+    }
+}
     removeUserDetailsFromLocalStorage() {
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
@@ -330,5 +382,9 @@ export class CommonService {
       } else {
         return rightsArray.some((right) => this.rightsArray.includes(right));
       }
+    }
+
+    onScrollEvent() {
+        return this.$ScrollAction.asObservable();
     }
 }

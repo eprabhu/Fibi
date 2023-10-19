@@ -119,16 +119,16 @@
                                 <label class="block-display">Active</label>
                                 <a *ngIf="customDataElement.isActive == 'Y'">
                                     <label class="switch">
-                                        <input type="checkbox" id={{customDataElement.customElementId}}
-                                            (click)="inactivateCustomData(customDataElement.isActive, customDataElement.customElementName, customDataElement.customElementId)"
+                                        <input type="checkbox" id={{customDataElement.customElementId}} [disabled] = "!customDataElement.customElementId"
+                                            (click)="inactivateCustomData(customDataElement.isActive, customDataElement.columnName, customDataElement.customElementId)"
                                             checked>
                                         <span class="slider round"><small>Yes</small></span>
                                     </label>
                                 </a>
                                 <a *ngIf="customDataElement.isActive == 'N'">
                                     <label class="switch">
-                                        <input type="checkbox" id={{customDataElement.customElementId}}
-                                            (click)="inactivateCustomData(customDataElement.isActive, customDataElement.customElementName, customDataElement.customElementId)">
+                                        <input type="checkbox" id={{customDataElement.customElementId}} [disabled] = "!customDataElement.customElementId"
+                                            (click)="inactivateCustomData(customDataElement.isActive, customDataElement.columnName, customDataElement.customElementId)">
                                         <span class="slider round"><small class="deactivate-text">No</small></span>
                                     </label>
                                 </a>                           
@@ -139,6 +139,7 @@
                                 <label class="block-display"> <span class="mandatory">*</span>Data Type</label>
                                 <select id="prop-type" class="form-control  dateBox"
                                     [(ngModel)]="customDataElement.dataType"
+                                    [disabled]="currentElementAnswered"
                                     (ngModelChange)="changeOptions(customDataElement.dataType);isDataChange = true; customDataElement.defaultValue = '';"
                                     [ngClass]="(map.get('customdatatype')) ? 'is-invalid d-block' : ''">
                                     <option value="">--Select--</option>
@@ -154,6 +155,7 @@
                                 *ngIf="customDataElement.dataType == '1' || customDataElement.dataType == '2'">
                                 <label class="block-display"> <span class="mandatory">*</span>Data Length</label>
                                 <input id="sponsor-loc" placeholder="" class="form-control  dateBox"
+                                    [disabled]="currentElementAnswered"
                                     [(ngModel)]="customDataElement.dataLength" (ngModelChange)="isDataChange =true"
                                     [ngClass]="(map.get('customdatalength')) ? 'is-invalid d-block' : ''"
                                     (keypress)="inputRestriction($event)"
@@ -166,6 +168,7 @@
                                 *ngIf="customDataElement.dataType == '6' || customDataElement.dataType == '7' || customDataElement.dataType == '8' || customDataElement.dataType == '9'">
                                 <label class="block-display"> <span class="mandatory">*</span>Lookup Type</label>
                                 <select id="prop-type" class="form-control  dateBox"
+                                    [disabled]="currentElementAnswered"
                                     [(ngModel)]="customDataElement.lookupArgument"
                                     [ngClass]="(map.get('customdatalookup')) ? 'is-invalid d-block' : ''"
                                     (ngModelChange)="selectSearchValue(customDataElement.lookupArgument);isDataChange = true; customDataElement.defaultValue = ''; ">
@@ -185,14 +188,15 @@
                                 <select *ngIf="customDataElement.dataType === '6' || customDataElement.dataType === '7'"
                                     id="prop-type" class="form-control  dateBox"
                                     [ngClass]="(map.get('customdatadefault')) ? 'is-invalid d-block' : ''"
-                                    [(ngModel)]="customDataElement.defaultValue">
+                                    [(ngModel)]="customDataElement.defaultValue"
+                                    [disabled]="currentElementAnswered">
                                     <option value="">--Select--</option>
                                     <option *ngFor="let defaultvalue of defaultValueOptions"
                                         [value]="defaultvalue.value">
                                         {{defaultvalue.key}}</option>
                                 </select>
                                 <input *ngIf="customDataElement.dataType === '1' || customDataElement.dataType === '2'"
-                                    id="custom-column" placeholder="" class="form-control dateBox"
+                                    id="custom-column" placeholder="" class="form-control dateBox" [disabled]="currentElementAnswered"
                                     [(ngModel)]="customDataElement.defaultValue" (ngModelChange)="isDataChange =true;"
                                     [ngClass]="(map.get('customdatadefault')) ? 'is-invalid d-block' : ''"
                                     (keypress)="(customDataElement.dataType === '2' ) ? (inputRestriction($event)) : ''"
@@ -214,11 +218,12 @@
                                             <div class="form-group col-lg-10">
                                                 <input type="text" id="option" class="form-control custom-input"
                                                     placeholder="Options" [(ngModel)]="option.optionName"
+                                                    [disabled]="currentElementAnswered"
                                                     (ngModelChange)="isDataChange =true" aria-label="Username"
                                                     aria-describedby="basic-addon1">
                                                 <span class="bar"></span>
                                             </div>
-                                            <div class="input-group-append">
+                                            <div class="input-group-append" *ngIf="!currentElementAnswered">
                                                 <span class="input-group-text"><a
                                                         (click)="deleteOption(option ,optionIndex)">
                                                         <i aria-hidden="true" class="fa fa-times"></i></a>
@@ -227,7 +232,7 @@
                                         </div>
                                     </ng-container>
                                 </div>
-                                <div class="options">
+                                <div class="options" *ngIf="!currentElementAnswered" >
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon1">

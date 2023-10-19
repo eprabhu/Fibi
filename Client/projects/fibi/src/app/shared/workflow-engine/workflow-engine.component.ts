@@ -5,7 +5,7 @@ import { CommonService } from '../../common/services/common.service';
 import { slideInOut, fadeDown } from '../../common/utilities/animations';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 import { WorkflowEngineService } from './workflow-engine.service';
-import { AWARD_ERR_MESSAGE, HTTP_ERROR_STATUS } from '../../app-constants';
+import { AWARD_ERR_MESSAGE, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { environment } from '../../../environments/environment';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
@@ -23,6 +23,7 @@ export class WorkflowEngineComponent implements OnInit, OnChanges, OnDestroy {
   @Input() workFlowResult: any = {};
   @Input() workFlowDetailKey: any = {};
   @Output() workFlowResponse: EventEmitter<any> = new EventEmitter<any>();
+  @Output() errorEvent: EventEmitter<any> = new EventEmitter<any>();
   workFlowDetails: any;
   workflowDetailsMap: any[];
   resultMapArray: any = [];
@@ -78,6 +79,7 @@ export class WorkflowEngineComponent implements OnInit, OnChanges, OnDestroy {
   workflowCreatedBy: string;
   DEFAULT_STOP_NAME = 'Stop ';
   isEmptyComments = false;
+
 
   constructor(private _commonService: CommonService, private _workFlowService: WorkflowEngineService,
     private _elasticConfig: ElasticConfigService) { }
@@ -363,16 +365,23 @@ export class WorkflowEngineComponent implements OnInit, OnChanges, OnDestroy {
         this._commonService.isShowOverlay = false;
         this.latestVersion = this.workFlowResult.workflow.workflowSequence;
         this.updateWorkflowStops(this.workFlowResult.workflow);
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Reviewer Bypassed successfully.');
         $('#bypassConfirmModal').modal('hide');
+        this.closeBypassModal();
       }, err => {
         $('#bypassConfirmModal').modal('hide');
+        this.closeBypassModal();
         this._commonService.isShowOverlay = false;
-        if (err.error && err.error.errorMessage !== 'Deadlock' || !err.error) {
-          this._commonService.showToast(HTTP_ERROR_STATUS, `Action cannot be completed due to a system error.
-          ${AWARD_ERR_MESSAGE} for assistance.`);
+        if (err.error && err.error.errorMessage === 'Deadlock') {
+          this._commonService.showToast(HTTP_ERROR_STATUS, `Action failed as another update is being processed in current document.
+          Please click bypass again. If error persistent after 2 mins, ${AWARD_ERR_MESSAGE} for assistance`);
+        } else if (err && err.status === 405) {
+          this.errorEvent.emit();
         } else {
-          this._commonService.showToast(HTTP_ERROR_STATUS, `Action failed as another update is being processed in current Award. Please click bypass again. If error persistent after 2 mins, ${AWARD_ERR_MESSAGE} for assistance`);
-        }    
+          this._commonService.showToast(HTTP_ERROR_STATUS, `Action cannot be completed due to a system error.
+            ${AWARD_ERR_MESSAGE} for assistance.`);
+        }
+
       }));
   }
 
@@ -477,10 +486,23 @@ export class WorkflowEngineComponent implements OnInit, OnChanges, OnDestroy {
                 this.latestVersion = this.workFlowResult.workflow.workflowSequence;
                 this.updateWorkflowStops(this.workFlowResult.workflow);
                 this.alternateApproverObject = {};
+                if (type === 'approver') {
+                  this._commonService.showToast(HTTP_SUCCESS_STATUS, 'New Approver added successfully.');
+                }else {
+                  this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Alternate Approver added successfully.');
+                }
             }, err => {
-                this._commonService.isShowOverlay = false;
-                this._commonService.showToast(HTTP_ERROR_STATUS, (err && typeof err.error == 'string') ?
-                    err.error : 'Adding alternate approver failed. Please try again.');
+              if (err && err.status === 405) {
+                this.errorEvent.emit();
+              } else {
+                if (type === 'approver') {
+                  this._commonService.isShowOverlay = false;
+                  this._commonService.showToast(HTTP_ERROR_STATUS, (err && typeof err.error == 'string') ?
+                    err.error : 'Adding New Approver failed. Please try again.');
+                } else {
+                  this._commonService.showToast(HTTP_ERROR_STATUS, ' Adding Alternate Approver failed. Please try again.');
+                }
+              }
             }));
         } else {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Cannot add the same approver in the same stop.');
@@ -716,6 +738,7 @@ export class WorkflowEngineComponent implements OnInit, OnChanges, OnDestroy {
       this.isPersonCard[index] = false;
       this._commonService.isShowOverlay = true;
       this.$subscriptions.push(this._workFlowService.addSequentialStop(this.sequentialStopObject).subscribe((data: any) => {
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'New Sequential Stop added successfully.');
         this.workFlowResponse.emit(data);
         this._commonService.isShowOverlay = false;
         this.latestVersion = this.workFlowResult.workflow.workflowSequence;
@@ -724,6 +747,9 @@ export class WorkflowEngineComponent implements OnInit, OnChanges, OnDestroy {
         this.closeStop();
         this.isSaving = false;
       }, err => {
+        if (err && err.status === 405) {
+          this.errorEvent.emit();
+        }
         this.isSaving = false;
         this._commonService.isShowOverlay = false;
         this._commonService.showToast(HTTP_ERROR_STATUS, (err && typeof err.error == 'string') ?
@@ -922,5 +948,10 @@ export class WorkflowEngineComponent implements OnInit, OnChanges, OnDestroy {
 
   validateComment(approveComments) {
     this.isEmptyComments = approveComments === '' ? true : false;
+  }
+
+  closeBypassModal() {
+    this.workflowDetail.approveComment = '';
+    this.isEmptyComments = false;
   }
 }

@@ -9,6 +9,7 @@ import { getEndPointOptionsForOrganization } from '../../../common/services/end-
 import { getCompleterOptionsForLeadUnit } from '../../../common/services/completer.config';
 import { concatUnitNumberAndUnitName, isEmptyObject } from '../../../common/utilities/custom-utilities';
 import { AuditLogService } from '../../../common/services/audit-log.service';
+import { ROOT_UNIT_NUMBER } from '../../../app-constants';
 
 class Unit {
   unitNumber: any = null;
@@ -222,7 +223,9 @@ export class HierarchyTreeviewComponent implements OnInit, OnDestroy {
    * calls function which calls service to add new unit if the validations are correct.
    */
   addNewUnit() {
-    this.isParentUnitNumEmpty = !this.unitProperties.unit.parentUnitNumber ? true : false;
+   // we are skipping parent unit check incase the editing unit is root unit.
+    this.isParentUnitNumEmpty =
+        this.unitProperties.unit.unitNumber !== ROOT_UNIT_NUMBER && !this.unitProperties.unit.parentUnitNumber ? true : false;
     this.isUnitNumEmpty = !this.unitProperties.unit.unitNumber  ? true :  false;
     this.isUnitNameEmpty = !this.unitProperties.unit.unitName ? true :  false;
     this.isSameUnit =  this.unitProperties.unit.parentUnitNumber ?

@@ -1,12 +1,15 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CoiService } from '../../../services/coi.service';
 import { CoiSummaryService } from '../../coi-summary.service';
 import { environment } from '../../../../../environments/environment';
 import { CoiSummaryEventsAndStoreService } from '../../coi-summary-events-and-store.service';
-import { CommentConfiguration, GetSFIRequestObject } from '../../../coi-interface';
+import { CommentConfiguration, RO } from '../../../coi-interface';
 import {subscriptionHandler} from "../../../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { Router } from '@angular/router';
+import { CommonService } from '../../../../../app/common/services/common.service';
+import { CoiService } from '../../../services/coi.service';
+import { DataStoreService } from '../../../services/data-store.service';
+import { coiReviewComment } from '../../../../shared-components/shared-interface';
 
 
 @Component({
@@ -31,7 +34,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     constructor(
         private _coiSummaryService: CoiSummaryService,
         private _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _router: Router
+        private _router: Router,private _commonService :CommonService,private _coiService: CoiService,private _dataStore: DataStoreService
     ) { }
 
     ngOnInit() {
@@ -64,7 +67,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     }
 
     getRequestObject() {
-		const REQ_OBJ = new GetSFIRequestObject();
+		const REQ_OBJ = new RO();
         REQ_OBJ.currentPage = 0;
         REQ_OBJ.disclosureId = Number(this.coiDetails.disclosureId);
         REQ_OBJ.filterType = '';
@@ -94,7 +97,7 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     viewSlider(event) {
         this.showSlider = event.flag;
         this.entityId = event.entityId;
-        document.body.classList.add('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         setTimeout(() => {
             const slider = document.querySelector('.slider-base');
             slider.classList.add('slider-opened');
@@ -111,7 +114,22 @@ export class SfiSummaryComponent implements OnInit, OnDestroy {
     }
 
     addBodyScroll() {
-        document.body.classList.remove('overflow-hidden');
-        document.body.classList.add('overflow-auto');
+        document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
+    }
+
+    openReviewerComment(event) {
+        let coiData = this._dataStore.getData();
+        const REQ_BODY:coiReviewComment = {
+            documentOwnerPersonId: coiData.coiDisclosure.disclosureId,
+            disclosureId: coiData.coiDisclosure.disclosureId,
+            coiSectionsTypeCode: '5',
+            headerName: event.personEntityHeader,
+            coiSubSectionsId: event.personEntityId,
+            componentSubRefId: null,
+            coiSubSectionsTitle: event.personEntityHeader
+        }
+        this._commonService.$commentConfigurationDetails.next(REQ_BODY);
+        this._coiService.isShowCommentNavBar = true;
     }
 }

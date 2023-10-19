@@ -1,17 +1,15 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { slideHorizontal } from '../../../../../../../../fibi/src/app/common/utilities/animations';
 import { CoiSummaryEventsAndStoreService } from '../../../coi-summary-events-and-store.service';
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../app-constants';
 import { CommonService } from '../../../../../common/services/common.service';
-import { openModal } from '../../../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { isEmptyObject, openModal } from '../../../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-add-conflict-slider',
     templateUrl: './add-conflict-slider.component.html',
-    styleUrls: ['./add-conflict-slider.component.scss'],
-    animations: [slideHorizontal]
+    styleUrls: ['./add-conflict-slider.component.scss']
 })
 export class AddConflictSliderComponent implements OnInit, OnDestroy {
 
@@ -30,21 +28,21 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     comment: any = null;
     coiProjConflictStatusType = null;
     isReadMore: boolean[] = [];
-    isShowMore = false;
+    titleReadMore = false;
     coiConflictStatusType: any = null;
 
     constructor( public dataStoreService: CoiSummaryEventsAndStoreService,
                  private _commonService: CommonService ) { }
 
     ngOnInit() {
-        document.body.classList.add('overflow-hidden');
+        document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
         this.showConflictNavBar();
         this.getConflictStatusLookup();
         this.loadProjectConflictHistory();
     }
 
     showConflictNavBar() {
-        if(this.isOpenSlider) {
+        if (this.isOpenSlider) {
             setTimeout(() => {
                 const slider = document.querySelector('.slider-base');
                 slider.classList.add('slider-opened');
@@ -53,11 +51,11 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     }
 
     addBodyScroll() {
-          document.body.classList.remove('overflow-hidden');
-          document.body.classList.add('overflow-auto');
+          document.getElementById('COI_SCROLL').classList.remove('overflow-hidden');
+          document.getElementById('COI_SCROLL').classList.add('overflow-y-scroll');
     }    
 
-    closeNavBar() {
+    validateSliderClose() {
         (this.conflictStatus || this.comment) ? openModal('conflictConfirmationModal') : this.hideConflictNavBar();
     }
 
@@ -107,6 +105,10 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
         if (!this.comment) {
             this.projectConflictValidationMap.set('comment', 'Please add a reason.');
         }
+        if (this.conflictStatus == this.entityDetails.coiProjConflictStatusType.projectConflictStatusCode) {
+			this.projectConflictValidationMap.set('duplicateStatus', 'You are trying to update the conflict with the current conflict status of the disclosure.');
+			this.projectConflictValidationMap.delete('riskLevelCode');
+		}
         return this.projectConflictValidationMap.size === 0 ? true : false;
     }
 
@@ -131,9 +133,13 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
             }));
     }
 
+
+isEmptyHistory(): boolean {
+    return isEmptyObject(this.conflictHistory);
+}
+
     ngOnDestroy(): void {
         this.addBodyScroll();
         subscriptionHandler(this.$subscriptions);
     }
-    
 }

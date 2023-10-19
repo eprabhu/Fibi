@@ -106,7 +106,6 @@ label {
   color: #fff;
   width: max-content;
   height: 27px;
-  background: #949494;
   position: relative;
   left: -19px;;
   top: -1px;
@@ -142,8 +141,19 @@ label {
   margin-top: 5px;
 }
 
-.searchInput {
-  position: relative;
+.searchField {
+  width: 100%;
+  border: none;
+}
+
+.search-icon {
+  color: #9E9E9E;
+  cursor: pointer;
+}
+
+.search-icon :hover {
+  opacity: 0.9;
+  color: #26a69a;
 }
 
 ::placeholder {
@@ -274,4 +284,8 @@ label {
   color: #800202;
   font-size: 14px;
   font-weight: 400;
+}
+
+.sfi-card {
+  padding: 10px;
 }

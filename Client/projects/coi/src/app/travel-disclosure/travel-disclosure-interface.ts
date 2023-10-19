@@ -1,3 +1,5 @@
+export type ModalSize = 'sm' | 'lg' | 'xl' | '';
+
 export class CoiTravelDisclosure {
     travellerTypeCode: Array<string> = [];
     entityId: number;
@@ -44,6 +46,9 @@ export class TravelDisclosure {
     entityId: number;
     entityNumber: number;
     travelEntityName: string;
+    entityEmail: string;
+    entityAddress: string;
+    entityIsActive: boolean;
     travelTitle: string;
     purposeOfTheTrip: string;
     travelAmount: number;
@@ -62,8 +67,6 @@ export class TravelDisclosure {
     travellerHomeUnit: string;
     description: string;
     travelSubmissionDate: number;
-    travelDisclosureStatus: string;
-    travelDisclosureStatusCode: string;
     dispositionStatus: string;
     dispositionStatusCode: string;
     reviewStatus: string;
@@ -86,9 +89,13 @@ export class TravelDisclosure {
     certifiedAt: number;
     documentStatusCode: string;
     documentStatus: string;
-    disclosureStatus: string;
     disclosureStatusCode: string;
-}
+    disclosureStatus: string;
+    riskLevel: string;
+    expirationDate: number;
+    riskCategoryCode: number;
+    entityRiskCategory: EntityRiskCategory;
+  }
 
 export interface EndpointOptions {
     contextField: string;
@@ -98,15 +105,20 @@ export interface EndpointOptions {
     params: string;
 }
 
-export class EntityData {
-    country: string;
-    entityId: string | number;
-    entityType: string;
+export class EntityDetails {
+    isActive: boolean;
+    country: { countryName: string };
+    entityId: number;
+    entityType: { description: string };
     entityName: string;
+    emailAddress: string;
+    address: string;
+    entityRiskCategory?: EntityRiskCategory;
+    entityNumber?: any;
 }
 
 export interface TravelHistoryRO {
-    personId: String;
+    personId: string;
     entityNumber: number;
 }
 
@@ -126,14 +138,24 @@ export interface TravelHistory {
     travelEndDate: number;
 }
 
-export class DefaultAdminDetails {
-    adminPersonId = '';
-    adminGroupId = null;
-    adminPersonName = '';
-    adminGroupName = '';
-}
-
 export interface TravelActionAfterSubmitRO {
     travelDisclosureId: number;
     description: string;
 }
+
+export class TravelConflictRO {
+    travelDisclosureId: number;
+    personId: string;
+    description: string;
+    disclosureStatusCode: string;
+}
+
+export interface EntityRiskCategory {
+    description: string;
+    riskCategoryCode: string;
+    isActive?: boolean;
+    updateUser?: string;
+    updateTimestamp?:number;
+  }
+  
+  

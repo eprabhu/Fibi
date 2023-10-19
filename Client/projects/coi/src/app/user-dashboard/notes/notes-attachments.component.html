@@ -1,0 +1,85 @@
+<ng-container *ngIf="!isFirstTimeLoad">
+    <div [@listAnimation]="notesList.length" class="row px-3">
+        <ng-container *ngFor="let note of notesList ; let index = index;">
+            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12">
+                <div class="hovering-card pb-3 pt-2 px-3 mt-2 light-dark-text-color rounded-4">
+                    <div class="row mr-2 mt-2">
+                        <div class="col-11 fs-13 cursor-pointer" title="Click to open note" (click)="openNote(note)">
+                            {{note?.updateTimestamp |
+                            dateFormatterWithTimeZone:'long'}}
+                        </div>
+                        <div *ngIf="!isOpenMoreMenu[index]" class="cursor-pointer col-1 position-relative"
+                            (click)="clearOtherIndex(index, true);" title="Click to open more options">
+                            <mat-icon>more_horiz</mat-icon>
+                        </div>
+                        <div *ngIf="isOpenMoreMenu[index]" class="cursor-pointer col-1 position-relative"
+                            (click)="clearOtherIndex(index, false)" title="Click to open more options">
+                            <mat-icon>more_horiz</mat-icon>
+                        </div>
+                        <div class="menu-options" *ngIf="isOpenMoreMenu[index]">
+                            <div class="single-menu align-items-center d-flex  px-2 py-1 mt-2">
+                                Delete
+                                <span class="mr-2">
+                                    <mat-icon>delete</mat-icon>
+                                </span>
+                            </div>
+                            <div class="single-menu align-items-center d-flex  px-2 py-1 mt-2">
+                                Add Keywords
+                                <span class="mr-2">
+                                    <mat-icon>note_add</mat-icon>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 mt-1 p-013 cursor-pointer overflow-hidden" (click)="openNote(note)">
+                        <div class="col-12 notes-content" title="Click to open note">
+                            <span class="note-text">
+                                {{getUnformattedContent(note.content)}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <app-no-information *ngIf="!notesList.length"></app-no-information>
+</ng-container>
+
+<ng-container *ngIf="showSlider">
+    <app-coi-slider (closeSlider)="closeEditNoteSlider()" [isStickyNeeded]="false" [slider_z_index]="1057"
+        [overlay_z_index]="1056" [sliderName]="'edit-note-slider'">
+
+        <!-- slider header -->
+        <ng-container header>
+            <span>{{isEditMode ? 'Edit Note' : 'View Note'}}</span>
+        </ng-container>
+        <!-- modal content -->
+        <ng-container content>
+
+            <div class="card-body">
+                <div>
+                    <div class="card shadow-sm mx-1">
+                        <div class="row ml-15 mt-4" *ngIf="isEditMode">
+                            <div class="col mr-10 fs-14 rounded-1 mx-4 my-4">
+                                <ckeditor [(ngModel)]="currentSelectedNote.content" [editor]="Editor"
+                                    [config]="editorConfig" (ready)="onReady($event)" placeholder="Comment" row="1"
+                                    maxlength="2000"></ckeditor>
+                            </div>
+                        </div>
+                        <div class="comments-view row rounded-3" *ngIf="!isEditMode">
+                            <span [innerHTML]="currentSelectedNote.content"></span>
+                        </div>
+                        <div class="text-muted mb-3 mr-10 mt-2 ms-auto" *ngIf="isEditMode">
+                            <button class="btn btn-outline-secondary btn-sm mr-8" id="claim-sumbit-no-btn" type="button"
+                                (click)="clearNote()">Clear
+                            </button>
+                            <button class="btn btn-primary btn-sm fs-14 btn-primary-submit" type="button"
+                                (click)="updateContent()">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </ng-container>
+    </app-coi-slider>
+</ng-container>

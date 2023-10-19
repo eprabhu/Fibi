@@ -449,7 +449,7 @@ export class CreateFinalComponent implements OnInit, OnDestroy {
 
     checkValidation() {
         if (this.ruleDefinition.ruleIsUsedForToName === 'Routing' && this.ruleDefinition.mapId === 0) {
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Please specify a route map.');
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Please specify a Route Map.');
             return false;
         } else if (this.ruleDefinition.ruleIsUsedForToName === 'Notification' && this.ruleDefinition.notificationId === 0) {
             this._commonService.showToast(HTTP_ERROR_STATUS, 'Please specify a notification.');
@@ -476,7 +476,7 @@ export class CreateFinalComponent implements OnInit, OnDestroy {
             if (!this.showEmptySetValidation) {
                 this.saveOrUpdateRule();
             } else if (this.showEmptySetValidation) {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Please specify at least one rule in build a rule section.');
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Please specify at least one rule in Build a Rule section.');
                 this.isSaving = false;
             }
         }

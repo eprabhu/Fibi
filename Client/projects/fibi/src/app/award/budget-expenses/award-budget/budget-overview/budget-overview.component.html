@@ -68,7 +68,7 @@
             [ngClass]="{'is-invalid d-block' : startDateWarningText}"
             (keypress)="_commonService._keyPress($event, 'date')"
             [(ngModel)]="awardBudgetData.awardBudgetHeader.startDate" (ngModelChange)="_commonDataService.isAwardDataChange = true;startDateValidation();"
-            (click)="startDate.open()" [disabled]="!_budgetDataService.isBudgetEditable" />
+            (click)="startDate.open()" *ngIf="_budgetDataService.isBudgetEditable; else startDateSpan" />
           <i class="fa fa-calendar fa-large hand-cursor insidePicker" id="award-start-date-icon"
             (click)="startDate.open()" *ngIf="_budgetDataService.isBudgetEditable" aria-hidden="true"></i>
           <mat-datepicker #startDate (opened)="setFocusToElement('award-start-date');">
@@ -77,6 +77,11 @@
         <div class="invalid-feedback block-display" *ngIf="startDateWarningText">
           {{startDateWarningText}}
         </div>
+        <ng-template #startDateSpan>
+          <span class="d-inline-block d-sm-block content-color">
+              {{awardBudgetData.awardBudgetHeader.startDate |dateFormatterWithTimeZone }}
+         </span> 
+      </ng-template>
       </div>
       <!-- End Date -->
       <div class="col-md-2 col-sm col-6">
@@ -87,7 +92,7 @@
             (keypress)="_commonService._keyPress($event, 'date')"
             [(ngModel)]="awardBudgetData.awardBudgetHeader.endDate"
             (ngModelChange)="_commonDataService.isAwardDataChange = true;endDateValidation();"
-            (click)="endDate.open()" [disabled]="!_budgetDataService.isBudgetEditable" />
+             (click)="endDate.open()" *ngIf="_budgetDataService.isBudgetEditable; else endDateSpan" />
           <i class="fa fa-calendar fa-large hand-cursor insidePicker" id="award-end-date-icon"
             (click)="endDate.open()" *ngIf="_budgetDataService.isBudgetEditable" aria-hidden="true"></i>
           <mat-datepicker #endDate (opened)="setFocusToElement('award-end-date')">
@@ -96,37 +101,48 @@
         <div class="invalid-feedback block-display" *ngIf="endDateWarningText">
           {{endDateWarningText}}
         </div>
+          <ng-template #endDateSpan>
+              <span class="d-inline-block d-sm-block content-color">
+                  {{awardBudgetData.awardBudgetHeader.endDate |dateFormatterWithTimeZone }}
+              </span> 
+          </ng-template>
       </div>
       <!-- On/Off Campus -->
       <div class="col-md-2 col-sm col-6 form-group" *ngIf="awardBudgetData?.enabledCampusFlagAward">
         <label for="on/offcampus" class="d-block">
-          On/Off Campus
+          Campus Flag
         </label>
         <span *ngIf="_budgetDataService.isBudgetEditable; else campusFlagSpan">
           <select id="on/offcampus" class="form-control" [(ngModel)]="awardBudgetData.awardBudgetHeader.onOffCampusFlag"
             (ngModelChange)="_commonDataService.isAwardDataChange = true">
-            <option value='Y'>On</option>
-            <option value='N'>Off</option>
+            <option value='N'>ON</option>
+            <option value='F'>OFF</option>
+            <option value='D'>BOTH</option>
           </select>
         </span>
         <ng-template #campusFlagSpan>
           <span>
-            <span class="content-color" *ngIf='awardBudgetData.awardBudgetHeader.onOffCampusFlag === "Y"'>ON</span>
-            <span class="content-color" *ngIf='awardBudgetData.awardBudgetHeader.onOffCampusFlag === "N"'>OFF</span>
+            <span class="content-color" *ngIf='awardBudgetData.awardBudgetHeader.onOffCampusFlag === "N"'>ON</span>
+            <span class="content-color" *ngIf='awardBudgetData.awardBudgetHeader.onOffCampusFlag === "F"'>OFF</span>
+            <span class="content-color" *ngIf='awardBudgetData.awardBudgetHeader.onOffCampusFlag === "D"'>BOTH</span>
           </span>
         </ng-template>
       </div>
       <!-- Over Head Rate Type -->
       <div class="col-md-2 col-sm col-6 form-group">
         <label for="F&A-rate-type" class="d-block"><ng-container i18n="@@PROPOSAL_OVER_HEAD_RATE_TYPE">Over Head Rate Type</ng-container></label>
-        <span *ngIf="!_budgetDataService.isBudgetEditable"
-          class="content-color">{{awardBudgetData?.awardBudgetHeader?.rateType?.description}}</span>
-        <select id="F&A-rate-type" *ngIf="_budgetDataService.isBudgetEditable" class="form-control"
+        <select id="F&A-rate-type" *ngIf="_budgetDataService.isBudgetEditable; else overHeadRateTypeSpan" class="form-control"
           [(ngModel)]="awardBudgetData.awardBudgetHeader.rateClassCode"
           (ngModelChange)="setFandAType(awardBudgetData?.awardBudgetHeader?.rateClassCode);_commonDataService.isAwardDataChange = true">
-          <option *ngFor="let rate of awardBudgetData?.rateTypes" [value]="rate.rateClassCode" [hidden]="rate.isActive != true">{{rate.description}}
+          <option [ngValue]="null">--Select--</option>
+          <option *ngFor="let rate of awardBudgetData?.rateTypes" [ngValue]="rate.rateClassCode" [hidden]="rate.isActive != true">{{rate.description}}
           </option>
         </select>
+        <ng-template #overHeadRateTypeSpan>
+          <span class="d-inline-block d-sm-block content-color">
+            {{!awardBudgetData.awardBudgetHeader.rateClassCode ? 'No Over Head Rate Type specified': awardBudgetData.awardBudgetHeader.rateType.description}}
+          </span> 
+        </ng-template>
       </div>
       <!-- Available Fund based on -->
       <div class="col-md-3 col-sm col-6 form-group">
@@ -167,45 +183,82 @@
         </span>
       </div>
     </div>
-
+      <!-- Budget Template -->
     <div class="form-row">
       <div class="col-2" *ngIf="awardBudgetData.budgetTemplateTypes && awardBudgetData.budgetTemplateTypes.length">
         <label for="award-budget-template">Budget Template</label>
-        <select [disabled]="!_budgetDataService.isBudgetEditable" id="award-budget-template" class="form-control"
+        <select *ngIf="_budgetDataService.isBudgetEditable; else budgetTemplateSpan" id="award-budget-template" class="form-control"
           [(ngModel)]="awardBudgetData.awardBudgetHeader.budgetTemplateTypeId" (ngModelChange)="triggerConfirmationPopup();">
           <option [ngValue]="null">--Select--</option>
-          <option *ngFor="let template of awardBudgetData.budgetTemplateTypes" [value]="template.budgetTemplateTypeId">
+          <option *ngFor="let template of awardBudgetData.budgetTemplateTypes" [ngValue]="template.budgetTemplateTypeId">
             {{template?.description}}
           </option>
         </select>
+        <ng-template #budgetTemplateSpan>
+          <span class="d-inline-block d-sm-block content-color">
+            {{!awardBudgetData.awardBudgetHeader.budgetTemplateTypeId ? 'No Budget Template specified': awardBudgetData.awardBudgetHeader.budgetTemplateType.description}}
+          </span> 
+        </ng-template>
       </div>
     
       <!-- Cost Sharing Type -->
       <div class="col-xl col-lg col-md-6 col-sm-6 col-12" *ngIf="awardBudgetData?.enableCostShareStatus">
         <label for="prop-doc-status">Cost Sharing</label>
-        <select [disabled]="!_budgetDataService.isBudgetEditable" id="prop-doc-status" class="form-control"
+        <select *ngIf="_budgetDataService.isBudgetEditable; else costSharingSpan" id="prop-doc-status" class="form-control"
             [(ngModel)]="awardBudgetData.awardBudgetHeader.costSharingTypeCode"
             (ngModelChange)="_budgetDataService.budgetDataChanged = true">
-            <option [value]="null">--Select--</option>
-            <option *ngFor="let flag of awardBudgetData.costSharingTypes" [value]="flag.costSharingTypeCode">
+            <option [ngValue]="null">--Select--</option>
+            <option *ngFor="let flag of awardBudgetData.costSharingTypes" [ngValue]="flag.costSharingTypeCode">
                 {{flag?.description}}
             </option>
         </select>
+        <ng-template #costSharingSpan>
+          <span class="d-inline-block d-sm-block content-color">
+            {{!awardBudgetData.awardBudgetHeader.costSharingTypeCode ? 'No Cost Sharing specified': awardBudgetData.awardBudgetHeader.costSharingType.description}}
+          </span> 
+        </ng-template>
       </div>
       <!-- On-Campus rates -->
       <div class="col-lg-2 col-md-4 col-sm-3 col-12" *ngIf="awardBudgetData?.isShowBudgetOHRatePercentage">
         <label for="prop-doc-status">On-Campus Rate</label>
-        <input type="text" [disabled]="!_budgetDataService.isBudgetEditable" id="on-campus-rates" class="form-control"
+        <input type="text" *ngIf="_budgetDataService.isBudgetEditable; else onCampusRateSpan" id="on-campus-rates" class="form-control"
           [(ngModel)]="awardBudgetData.awardBudgetHeader.onCampusRates" placeholder="Enter On-Campus Rate"
           (ngModelChange)="_commonDataService.isAwardDataChange = true">
+        <ng-template #onCampusRateSpan>
+          <span class="d-inline-block d-sm-block content-color">
+            {{!awardBudgetData.awardBudgetHeader.onCampusRates ? 'No On-Campus Rate specified': awardBudgetData.awardBudgetHeader.onCampusRates}}
+          </span> 
+        </ng-template>
       </div>
        <!-- Off-Campus rates-->
        <div class="col-lg-2 col-md-4 col-sm-3 col-12" *ngIf="awardBudgetData?.isShowBudgetOHRatePercentage">
         <label for="prop-doc-status">Off-Campus Rate</label>
-        <input type="text" [disabled]="!_budgetDataService.isBudgetEditable" id="off-campus-rates" class="form-control"
+        <input type="text" *ngIf="_budgetDataService.isBudgetEditable; else offCampusRateSpan" id="off-campus-rates" class="form-control"
           [(ngModel)]="awardBudgetData.awardBudgetHeader.offCampusRates" placeholder="Enter Off-Campus Rate"
           (ngModelChange)="_commonDataService.isAwardDataChange = true">
+          <ng-template #offCampusRateSpan>
+            <span class="d-inline-block d-sm-block content-color">
+              {{!awardBudgetData.awardBudgetHeader.offCampusRates ? 'No Off-Campus Rate specified': awardBudgetData.awardBudgetHeader.offCampusRates}}
+            </span> 
+          </ng-template>
        </div>
+        
+          <!-- Direct Cost , Indirect Cost, Total Cost -->
+       <div class="col-md-2 col-sm col-6">
+        <label class="d-block">Direct Cost</label>
+        <span class="content-color">{{awardBudgetData?.awardBudgetHeader?.totalDirectCost | currency: currency}}</span>
+      </div>
+      <div class="col-md-2 col-sm col-6">
+        <label class="d-block">Indirect Cost</label>
+        <span
+          class="content-color">{{awardBudgetData?.awardBudgetHeader?.totalIndirectCost | currency: currency}}</span>
+      </div>
+      <div class="col-md-2 col-sm col-6">
+        <label class="d-block">Total Cost</label>
+        <span class="content-color">{{awardBudgetData?.awardBudgetHeader?.totalCost | currency: currency}}</span>
+      </div>
+
+        <!-- Virement and Cumulative Virement -->
        <div class="col-md-2 col-sm col-6"
        *ngIf="awardBudgetData?.awardBudgetHeader?.enableAwardBudgetVirementCalculation">
        <label class="d-block">Virement %</label>
@@ -220,59 +273,65 @@
          class="content-color">{{awardBudgetData?.awardBudgetHeader?.cumulativeVirement != null ? awardBudgetData?.awardBudgetHeader?.cumulativeVirement : "00.00" }}
          %</span>
      </div>
-    </div>
-  <!-- Fund Centre, Fund Code ,Fund Disbursement Basis-
-  these fields depends on the parameter 'ENABLE_AB_FIELDS_FOR_SAP' -->
-    <div class="form-row" *ngIf="awardBudgetData?.showAwardBudgetFieldForSap">
+        
+              <!-- Fund Centre, Fund Code ,Fund Disbursement Basis-
+              these fields depends on the parameter 'ENABLE_AB_FIELDS_FOR_SAP' -->
+      
+      <ng-container *ngIf="awardBudgetData?.showAwardBudgetFieldForSap">
         <div class="col-lg-2 col-sm-6 col-12" >
           <label class="d-block">Fund Centre</label>
-          <input type="text" class="form-control" [disabled]="!_budgetDataService.isBudgetEditable && !_budgetDataService.isBudgetPartiallyEditable"
+          <input type="text" class="form-control" *ngIf="_budgetDataService.isBudgetEditable && !_budgetDataService.isBudgetPartiallyEditable; else fundCenterSpan"
             [(ngModel)]="awardBudgetData.awardBudgetHeader.fundCenter"
             (ngModelChange)="_commonDataService.isAwardDataChange = true">
+          <ng-template #fundCenterSpan>
+            <span class="d-inline-block d-sm-block content-color">
+              {{!awardBudgetData.awardBudgetHeader.fundCenter ? 'No Fund Centre specified': awardBudgetData.awardBudgetHeader.fundCenter}}
+            </span> 
+          </ng-template>
         </div>
         <div class="col-lg-2 col-sm-6 col-12" >
           <label class="d-block">Fund Code</label>
-          <span><input type="text" class="form-control" [disabled]="!_budgetDataService.isBudgetEditable && !_budgetDataService.isBudgetPartiallyEditable"
+          <span><input type="text" class="form-control" *ngIf="_budgetDataService.isBudgetEditable && !_budgetDataService.isBudgetPartiallyEditable; else fundCodeSpan"
               [(ngModel)]="awardBudgetData.awardBudgetHeader.fundCode"
               (ngModelChange)="_commonDataService.isAwardDataChange = true">
           </span>
+          <ng-template #fundCodeSpan>
+            <span class="d-inline-block d-sm-block content-color">
+              {{!awardBudgetData.awardBudgetHeader.fundCode ? 'No Fund Code specified': awardBudgetData.awardBudgetHeader.fundCode}}
+            </span> 
+          </ng-template>
         </div>
         <div class="col-lg-2 col-sm-6 col-12" >
           <label class="d-block">Fund Disbursement Basis</label>
-          <select [disabled]="!_budgetDataService.isBudgetEditable && !_budgetDataService.isBudgetPartiallyEditable"  class="form-control"
+          <select *ngIf="_budgetDataService.isBudgetEditable && !_budgetDataService.isBudgetPartiallyEditable; else fundDisbursementBasisSpan"  class="form-control"
               [(ngModel)]="awardBudgetData.awardBudgetHeader.fundDisbursementBasisTypeCode"
               (ngModelChange)="_commonDataService.isAwardDataChange = true">
               <option [ngValue]="null">--Select--</option>
-              <option *ngFor="let type of awardBudgetData.fundDisbursementBasisTypes" [value]="type?.fundDisbursementBasisTypeCode">
+              <option *ngFor="let type of awardBudgetData.fundDisbursementBasisTypes" [ngValue]="type?.fundDisbursementBasisTypeCode">
                 {{type?.description}}
             </option>
-  
           </select>
+          <ng-template #fundDisbursementBasisSpan>
+            <span class="d-inline-block d-sm-block content-color">
+              {{!awardBudgetData.awardBudgetHeader.fundDisbursementBasisTypeCode ? 'No Disbursement Basis specified': awardBudgetData.awardBudgetHeader.fundDisbursementBasisType.description}}
+            </span> 
+          </ng-template>
         </div>
-    </div>
-      <div class="row">
-      <div class="col-md-2 col-sm col-6">
-        <label class="d-block">Direct Cost</label>
-        <span class="content-color">{{awardBudgetData?.awardBudgetHeader?.totalDirectCost | currency: currency}}</span>
-      </div>
-      <div class="col-md-2 col-sm col-6">
-        <label class="d-block">Indirect Cost</label>
-        <span
-          class="content-color">{{awardBudgetData?.awardBudgetHeader?.totalIndirectCost | currency: currency}}</span>
-      </div>
-      <div class="col-md-2 col-sm col-6">
-        <label class="d-block">Total Cost</label>
-        <span class="content-color">{{awardBudgetData?.awardBudgetHeader?.totalCost | currency: currency}}</span>
-      </div>
+      </ng-container>   
     </div>
     <div class="form-row">
       <!-- Description -->
       <div class="col-lg col-10">
         <label for="desc" class="d-block">Description</label>
-        <textarea id="desc" rows="1" class="form-control" [disabled]="!_budgetDataService.isBudgetEditable"
+        <textarea id="desc" rows="1" class="form-control"  *ngIf="_budgetDataService.isBudgetEditable; else descriptionSpan"
           [(ngModel)]="awardBudgetData.awardBudgetHeader.comments"
           (ngModelChange)="_commonDataService.isAwardDataChange = true" appLengthValidator
           [isShowLimiter]='_budgetDataService.isBudgetEditable' limit=4000></textarea>
+          <ng-template #descriptionSpan>
+            <span class="d-inline-block d-sm-block content-color">
+              {{!awardBudgetData.awardBudgetHeader.comments ? 'No Description specified': awardBudgetData.awardBudgetHeader.comments}}
+            </span> 
+          </ng-template>
       </div>
       <!-- save -->
       <div class="col-auto d-flex align-items-center "

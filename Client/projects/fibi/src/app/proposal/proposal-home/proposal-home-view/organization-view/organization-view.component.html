@@ -41,18 +41,24 @@
                 <span  class="f-12" [innerHtml]="getOrganizationAddress(org)"> </span>  
             </td>
               <td>
-                <span *ngIf="org?.organization?.contactPersonName; else noContact">
-                  <a class="anchor-link" data-toggle="modal" 
+                <span *ngIf="isDefaultOrganizationType(org?.organizationTypeCode)">
+                  <a class="anchor-link" *ngIf="org?.organization?.contactPersonName; else noContact" data-toggle="modal" 
                     (click)="getContactDetails(org?.organization?.contactAddressId)">
                     <i aria-hidden="true"></i>
                     {{org?.organization?.contactPersonName}}
                   </a>
                 </span>
+                <span *ngIf="!isDefaultOrganizationType(org?.organizationTypeCode)" class="noDataExists">Not Applicable</span>
                 <ng-template #noContact>
                   <span class="noDataExists">No Data</span>
                 </ng-template>
               </td>
-              <td *ngIf="result.enableOrganizationLocation">{{org?.location? org?.location : ''}}</td>
+              <td *ngIf="result.enableOrganizationLocation">
+                <span *ngIf="isDefaultOrganizationType(org?.organizationTypeCode)" class="noDataExists">Not Applicable</span>
+                <span *ngIf="!isDefaultOrganizationType(org?.organizationTypeCode)" [class.noDataExists]="!org?.location">
+                    {{org?.location ? org?.location : 'No Data'}}
+                </span>
+              </td>
               <td>
                 <ng-container *ngIf="org?.proposalCongDistricts?.length > 0; else noDistrict">
                   <span class="d-block" *ngFor="let dist of org?.proposalCongDistricts;">

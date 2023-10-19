@@ -5,8 +5,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 import { CommonService } from '../../common/services/common.service';
-import { ReportService } from '../report.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { getAutoCompleterOptions, ReportService } from '../report.service';
 import { buildQuery, formatDate } from '../query-builder';
 import { forkJoin, Subscription } from 'rxjs';
 import {
@@ -16,17 +16,20 @@ import {
   getEndPointOptionsForCountry,
   getEndPointOptionsForSchoolUnit
 } from '../../common/services/end-point.config';
-import { DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS } from '../../app-constants';
-import { fileDownloader, setFocusToElement } from '../../common/utilities/custom-utilities';
+import { DEFAULT_DATE_FORMAT, HTTP_ERROR_STATUS, LS_FY_END_DATE, LS_FY_START_DATE, YEAR_RANGE } from '../../app-constants';
+import { fileDownloader, pageScroll, range, setFocusToElement } from '../../common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 import { DomSanitizer } from '@angular/platform-browser';
 import { getValuesForBirt, setCriteria } from '../birt-value-builder';
+import { AuditLogService } from '../../common/services/audit-log.service';
 
 declare var $: any;
 @Component({
   selector: 'app-template',
   templateUrl: './template.component.html',
-  styleUrls: ['./template.component.css']
+  styleUrls: ['./template.component.css'],
+  providers: [AuditLogService,
+    { provide: 'moduleName', useValue: 'BIRT_REPORT' }]
 })
 export class TemplateComponent implements OnInit, OnDestroy {
   configurationData = [];
@@ -35,6 +38,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
   isBirt = false;
   elasticSearchOptions: any = {};
   endPointSearchOptions: any = {};
+  autoCompleterSearchOptions: any = {};
   reportCount = 0;
   clearField: String;
   filterValues: any = {};
@@ -44,6 +48,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
   rangeFrom: any = {};
   rangeTo: any = {};
   lookUpValues = {};
+  tempLookUpValues = {};
   requestTemplateData: any = {
     templateName: null,
     templateDescription: null,
@@ -80,13 +85,16 @@ export class TemplateComponent implements OnInit, OnDestroy {
   columnName: string;
   content: Object = null;
   allowedReports = '';
-  tabName: string = 'CRITERIA';
   isShowCollapse = false;
-  reportCriteria:Array<string> = [];
+  reportCriteria: Array<string> = [];
+  pageScroll = pageScroll;
+  isCollapseCriteria = true;
+ 
 
   constructor(private _elasticConfig: ElasticConfigService, private _router: Router,
     private _reportService: ReportService, private _activatedRoute: ActivatedRoute,
-    public _commonService: CommonService, public sanitizer: DomSanitizer) { }
+    public _commonService: CommonService, public sanitizer: DomSanitizer,
+   private _auditLogService:AuditLogService) { }
 
   async ngOnInit() {
     this.$subscriptions.push(this._activatedRoute.queryParams.subscribe((data: any) => {
@@ -197,6 +205,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       switch (element.filterType) {
         case 'elastic': this.setElasticOptions(element); break;
         case 'endpoint': this.setEndpointOptions(element); break;
+        case 'autocomplete': this.setAutoCompleterOptions(element); break;
         default: break;
       }
     });
@@ -220,6 +229,15 @@ export class TemplateComponent implements OnInit, OnDestroy {
       default: break;
     }
   }
+
+  /**
+ * @param  {} object
+ * sets the auto completer search options based on filter index
+ */
+  setAutoCompleterOptions(object) {
+    this.autoCompleterSearchOptions[object.columnName] = getAutoCompleterOptions(this.autoCompleterSearchOptions, object.dynamicLookup);
+  }
+
   /**
    * @param  {} object
    * sets the end point search options based on filter index
@@ -279,6 +297,10 @@ export class TemplateComponent implements OnInit, OnDestroy {
   updateFilterWithSavedValues() {
     this.filtersFieldsData.filters.forEach(filter => {
       const value = this.findInFilterValues(filter);
+      if(filter.filterType == 'lookUp') {
+        this.lookUpValues[filter.columnName] = [];
+        this.tempLookUpValues[filter.columnName] = [];
+      }
       if (value) {
         this.setDefaultValueForSearchOptions(filter, this.filterValues[value]);
       }
@@ -294,6 +316,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       case 'elastic': this.setElasticDefaultValue(template, value); break;
       case 'endpoint': this.setEndpointDefaultValue(template, value); break;
       case 'lookUp': this.setLookUpDefaultValue(template, value); break;
+      case 'autocomplete': this.setAutoCompleterDefaultValue(template, value); break;
       case 'date': this.setDateFieldsDefaultValue(template, value); break;
       case 'datetime': this.setDateFieldsDefaultValue(template, value); break;
       case 'freetext': this.setFreeTextFieldsDefaultValue(template, value); break;
@@ -303,11 +326,15 @@ export class TemplateComponent implements OnInit, OnDestroy {
   }
 
   setElasticDefaultValue(template, value) {
-    this.elasticSearchOptions[template.columnName].defaultValue = value;
+    this.elasticSearchOptions[template.columnName].defaultValue = value[0];
+  }
+
+  setAutoCompleterDefaultValue(template, value) {
+    this.autoCompleterSearchOptions[template.columnName].defaultValue = value[0];
   }
 
   setEndpointDefaultValue(template, value) {
-    this.endPointSearchOptions[template.columnName].defaultValue = value;
+    this.endPointSearchOptions[template.columnName].defaultValue = value[0];
   }
 
   setDateFieldsDefaultValue(template, value) {
@@ -322,6 +349,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
 
   setLookUpDefaultValue(template, value) {
     this.lookUpValues[template.columnName] = this.convertLookUpValueToLibraryFormat(value);
+    this.tempLookUpValues[template.columnName] = this.convertLookUpValueToLibraryFormat(value);
   }
 
   setFreeTextFieldsDefaultValue(template, value) {
@@ -405,9 +433,9 @@ export class TemplateComponent implements OnInit, OnDestroy {
    * selects all the fields as checked.
    */
   selectAllReportFields(status) {
-    this.filtersFieldsData.filters = [];
+    this.filtersFieldsData.filters = this.filtersFieldsData.filters.filter(ele => ele.isMandatory);
     this.configurationData.forEach(element => {
-      if (element.filterType !== 'null') {
+      if (element.filterType !== 'null' && !element.isMandatory) {
         element.isFilterChecked = status;
         this.updateFilterCriteria(element);
       }
@@ -425,13 +453,17 @@ export class TemplateComponent implements OnInit, OnDestroy {
   }
 
   onLookupSelect(data, template) {
-    this.lookUpValues[template.columnName] = data;
-    if(template.valueField.split('#')[4] === 'CODE'){
+    this.tempLookUpValues[template.columnName] = data;
+    if (template.valueField.split('#')[4] === 'CODE') {
       this.filterValues[template.columnName] = data.length ? data.map(d => d.code) : [];
     } else {
       this.filterValues[template.columnName] = data.length ? data.map(d => d.description) : [];
     }
-  } 
+  }
+
+  assignTempValuesToLookUp() {
+    this.lookUpValues = JSON.parse(JSON.stringify(this.tempLookUpValues));
+  }
 
   generateReport() {
     if (this.isBirt) {
@@ -472,18 +504,29 @@ export class TemplateComponent implements OnInit, OnDestroy {
     }
   }
 
+  generateAuditLogRequest(actionType: string) {
+    const birtParam = getValuesForBirt(this.filtersFieldsData.filters, this.filterValues);
+    const auditModulename: any = { "Report Criteria Used": "","Report Action": actionType };
+    const auditParameters = {
+      ...auditModulename,
+      ...birtParam
+    }
+    return auditParameters;
+  }
+
   generatePreviewReport() {
+    pageScroll('generateReport');
     this.isShowCollapse = false;
+    const auditParameters=this.generateAuditLogRequest('Preview');
     if (this.isBirt) {
       if (this.checkMandatoryFilterFields()) {
-        this.tabName = 'PREVIEW_REPORT';
         this.generateReport();
+        this._auditLogService.saveAuditLog('I',"",auditParameters, 'BIRT_REPORT', [],this.requestTemplateData.templateName);
       } else {
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Please fill all the mandatory criteria(s) to preview the Report');
       }
     } else {
-      this.tabName = 'PREVIEW_REPORT';
-      this.generateReport()
+      this.generateReport();
     }
   }
 
@@ -494,6 +537,8 @@ export class TemplateComponent implements OnInit, OnDestroy {
           const name = this.requestTemplateData.templateName + '-' + formatDate(new Date().getTime()).replace(/'/g, '');
           const extension = reportType === 'pdf' ? 'pdf' : 'xls';
           fileDownloader(data.body, name, extension);
+          const auditParameters=this.generateAuditLogRequest('Export');
+          this._auditLogService.saveAuditLog('I',"", auditParameters, 'BIRT_REPORT', [],this.requestTemplateData.templateName);
         },
           err => {
             this._commonService.showToast(HTTP_ERROR_STATUS, err.error.errorMessage || 'Exception occurred in BIRT Engine Service');
@@ -674,11 +719,13 @@ export class TemplateComponent implements OnInit, OnDestroy {
 
   clearTemplate() {
     this.filterValues = {};
-    this.lookUpValues = {};
+    this.tempLookUpValues = {};
+    Object.keys(this.lookUpValues).forEach(K => this.lookUpValues[K]= []);
     this.startDate = {};
     this.endDate = {};
     this.tempFilterValues = {};
     this.clearField = new String('true');
+    this.setDynamicSearchValues(this.filtersFieldsData.filters);
   }
 
   setModalFields() {
@@ -725,7 +772,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this.criteriaSingleSpaceImpact = this.criteriaModalSize === 'modal-xl' ? 1 : 0;
     this.columnSingleSpaceImpact = this.columnModalSize === 'modal-xl' ? 1 : 0;
   }
- 
+
   checkMandatoryFilterFields() {
     let isMandatoryNotFilled = true;
     this.filtersFieldsData.filters.forEach(F => {
@@ -763,13 +810,16 @@ export class TemplateComponent implements OnInit, OnDestroy {
         } else if (C.filterType === 'elastic') {
           this.filterValues[C.columnName] = [C.defaultValue];
           this.elasticSearchOptions[C.columnName].defaultValue = C.defaultValue;
-        } else if (C.filterType === 'freetext')  {
+        } else if (C.filterType === 'freetext') {
           this.filterValues[C.columnName] = C.columnName.trim().split(',');
           this.tempFilterValues[C.columnName] = C.defaultValue;
         } else if (C.filterType === 'birtdate') {
           this.filterValues[C.columnName] = (!this.filterValues[C.columnName]) ? {} : this.filterValues[C.columnName];
           this.filterValues[C.columnName].from = new Date(C.defaultValue);
           this.startDate[C.columnName] = new Date(C.defaultValue);
+        } else if (C.filterType === 'autocomplete') {
+          this.filterValues[C.columnName] = [C.defaultValue];
+          this.autoCompleterSearchOptions[C.columnName].defaultValue = C.defaultValue;
         }
       }
     });
@@ -778,9 +828,39 @@ export class TemplateComponent implements OnInit, OnDestroy {
   checkFilterValuesLength(length = 0) {
     return Object.keys(this.filterValues).length > length;
   }
-  
+
   removeString(string) {
     return string.replace(/['"]+/g, '').replace(/[,]+/g, ', ');
   }
 
+  actionsOnPageChange() {
+    pageScroll('generateReport');
+  }
+
+getYearRange(): any {
+    const currentYear = new Date().getFullYear();
+    const min = currentYear - YEAR_RANGE;
+    const max = currentYear + YEAR_RANGE;
+    return range(min, max);
 }
+
+setYearValueToFilter(columnName: string, filterType): void {
+  if (this.tempFilterValues[columnName] === 'undefined') {
+    delete this.filterValues[columnName];
+  } else if (filterType === 'year_end') {
+    this.filterValues[columnName] = [this.setYearEndValue(this.tempFilterValues[columnName])];
+  } else {
+    this.filterValues[columnName] = [this.setYearStartValue(this.tempFilterValues[columnName])];
+  }
+}
+
+setYearEndValue(year: string): string {
+  return LS_FY_END_DATE + '/' + year;
+}
+
+setYearStartValue(year: string): string {
+  return LS_FY_START_DATE + '/' + year;
+}
+
+}
+

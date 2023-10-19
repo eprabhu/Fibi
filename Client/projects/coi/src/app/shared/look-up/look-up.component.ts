@@ -193,6 +193,7 @@ export class LookUpComponent implements OnChanges, OnDestroy {
     this.updateOverlayState(false);
     this.counter = -1;
     this.searchText = '';
+    this.setSelectedValue();
     if (this.isMultiple) {
       this.lookUpList = this.setSelectedItemsToTop(this.lookUpList);
     }

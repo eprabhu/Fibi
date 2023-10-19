@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CommonService} from '../../common/services/common.service';
-import { GetSFIRequestObject } from '../../disclosure/coi-interface';
+import { RO } from '../../disclosure/coi-interface';
 
 @Injectable()
 export class CountModalService {
@@ -10,7 +10,7 @@ export class CountModalService {
                 private _commonService: CommonService) {
     }
 
-    getSFICount(params: GetSFIRequestObject) {
+    getSFICount(params: RO) {
         return this._http.post(this._commonService.baseUrl + '/getSFIOfDisclosure', params);
     }
 

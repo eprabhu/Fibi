@@ -178,7 +178,7 @@ export class PendingFeedsComponent implements OnInit {
           this.pendingFeedData = data;
           this.isSaving = false;
         }, err => { 
-          this._commonService.showToast(HTTP_ERROR_STATUS, 'Generating batch failed. Please try again.');
+          this._commonService.showToast(HTTP_ERROR_STATUS, 'Generating Batch failed. Please try again.');
           this.isSaving = false;
          },
           () => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully generated.'); }

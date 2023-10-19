@@ -312,8 +312,8 @@
                                     <button id="prop-complete-review-btn" title="Complete Review"
                                         class="btn btn-primary btn-sm" *ngIf="checkRightToShowCompleteBtn(reviewers)"
                                         [disabled]="(reviewers?.evaluationStop?.roleId == 120 && !checkRightToEnableButtons('Complete') && !result?.proposal?.isRcbfProposal)"
-                                        (click)="getChangesWithOutSave();proposalReviewerReview = reviewers;actionType = 'APPROVE';actionName = 'Complete';clearFields();setStatusCode();
-                  filterEvaluationStatus();">Complete Review</button>
+                                        (click)="proposalReviewerReview = reviewers;actionType = 'APPROVE';actionName = 'Complete';clearFields();setStatusCode();
+                                        triggerValidationModal();filterEvaluationStatus();">Complete Review</button>
                                     <button id="prop-endorse-review-btn" title="Endorse Review"
                                         class="btn btn-primary btn-sm" *ngIf="checkRightToShowEndorseBtn(reviewers)"
                                         [disabled]="(((result?.proposal?.grantCallType?.categoryCode == 1 && reviewers?.hasRecommendation && reviewers?.hasRank && (recommendationCode !== 2 && result?.proposal?.proposalRank == null || result?.proposal?.recommendationCode == null)) ||
@@ -731,6 +731,46 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="continueWithoutSave()">Continue without saving</button>
                 <button type="button" class="btn btn-primary-sub" data-dismiss="modal" (click)="setRankProposalModal()">Save and continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade mySkinDialog" tabindex="-1" id="ValidateApproveBudgetModal" tabindex="-1" role="dialog"
+    data-backdrop="static" data-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Validation</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 ">
+                        <div *ngIf="validationMessage?.errorList?.length > 0">
+                            <ng-container *ngFor="let msg of validationMessage?.errorMessage">
+                                <div class="alert alert-danger" role="alert">
+                                    <i class="fa fa-exclamation-circle icon text-danger" aria-hidden="true"></i>
+                                    <strong>Error: </strong>
+                                    <span [innerHTML]="msg.validationMessage"></span>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngFor="let msg of validationMessage?.warningMessage">
+                                <div class="alert alert-danger" role="alert">
+                                    <i class="fa fa-exclamation-circle icon text-warning" aria-hidden="true"></i>
+                                    <strong>Warning: </strong>
+                                    <span [innerHTML]="msg.validationMessage"></span>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

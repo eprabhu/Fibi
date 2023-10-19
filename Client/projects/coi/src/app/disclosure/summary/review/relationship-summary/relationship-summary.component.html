@@ -1,59 +1,132 @@
 
 <div [id]= selectedProject?.moduleItemId class="left-margin card border shadow mt-2" *ngIf="selectedProject?.moduleCode">
     <div class="card-header px-4 d-flex align-items-center justify-content-between">
-      <span class="align-items-center d-flex">
-        <ng-container *ngIf="selectedProject?.moduleCode == 3">
-          <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Proposal</span>
-          <p class="entity-title mt-3">
-            <strong class="fs-16">#{{selectedProject?.moduleItemId}} - {{selectedProject?.title}} </strong>
-          </p>
+      <span class="d-flex mt-3 mb-3">
+        <ng-container *ngIf="selectedProject?.moduleCode == 3 ">
+          <span class="active-ribbon bg-proposal-clip shadow-sm align-items-center d-flex">Proposal</span>
+          <span class="title-text mt-2 word-break-all new-line-property badge-margin">
+            <u class="clickable-content" (click)="openModule();"><strong>#{{selectedProject?.moduleItemId}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}</strong></u>
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
+              <span *ngIf="!readMoreOrLess" (click)="readMoreOrLess=true">
+                <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
+              </span>
+            </span>
+            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
+              <span class="readMore hand-cursor fs-14 fw-medium">Read Less</span>
+            </span>
+          </span>
         </ng-container>
+      
         <ng-container *ngIf="selectedProject?.moduleCode == 1">
-          <span class="active-ribbon shadow-sm align-items-center d-flex ps-2">Award</span>
-          <p class="entity-title mt-3">
-            <strong class="fs-16">#{{selectedProject?.moduleItemKey}} - {{selectedProject?.title}} </strong>
-          </p>
+          <span class="active-ribbon bg-award-clip shadow-sm align-items-center d-flex">Award</span>
+          <span class="title-text mt-2 word-break-all new-line-property badge-margin">
+            <u class="clickable-content" (click)="openModule();"><strong>#{{selectedProject?.moduleItemKey}} - {{!readMoreOrLess ? (selectedProject?.title | slice:0:100) :
+              selectedProject?.title}}</strong></u>
+            <span *ngIf="!readMoreOrLess && selectedProject?.title?.length>100">...
+              <span *ngIf="!redivdMoreOrLess" (click)="readMoreOrLess=true">
+                <span class="readMore hand-cursor fs-14 fw-medium">Read More</span>
+              </span>
+            </span>
+            <span *ngIf="readMoreOrLess" (click)="readMoreOrLess= false">
+              <span class="readMore hand-cursor fs-14 fw-medium">Read Less</span>
+            </span>
+          </span>
         </ng-container>
       </span>
+
       <span class="align-items-center d-flex">
-        <button class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
+        <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP')" class="btn btn-primary-icon btn-sm d-flex" id="add-activity" title="Comments" type="button">
           <mat-icon>rate_review</mat-icon>
       </button>
       </span>
     </div>
       <div *ngIf="isCollapsed" class="card-body">
-            <div class="row m-2">
-            <div class="col-4">
-              <label class="label-text">Principal Investigator :</label>
-              <span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
-            </div>
-            <div class="col-8">
-              <label class="label-text">Sponsor :</label>
-              <span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
-            </div>
-            <div class="col-4">
-              <label class="label-text">Period :</label>
-              <span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate | dateFormatter}}</span>
-            </div>
-            <div class="col-8">
-              <label class="label-text">Prime Sponsor :</label>
-                <app-no-data-label [valueToShow]="selectedProject?.primeSponsor">
-                    <span class="ml-2 grey-text">{{selectedProject?.primeSponsor}}</span>
-                </app-no-data-label>
-            </div>
-            <div class="col-4">
-              <label class="label-text">Proposal Status : </label>
-              <span class="ml-2 grey-text">{{selectedProject?.moduleStatus}}</span>
-            </div>
-            <div class="col-8">
-              <label class="label-text">Lead Unit :</label>
-                <app-no-data-label [valueToShow]="selectedProject?.unitName">
-                    <span class="ml-2 grey-text">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
-                </app-no-data-label>
-            </div>
-            </div>
+			<div class="row m-2">
+				<div class="col-9">
+					<div class="row">
+						<div class="col-5">
+							<label class="label-text">Principal Investigator :</label>
+							<span class="ml-2 grey-text">{{selectedProject?.principalInvestigator}}</span>
+						</div>
+						<div class="col-4">
+							<label class="label-text">Project Role : </label>
+							<span class="ml-2 grey-text">{{selectedProject?.reporterRole}}</span>
+						</div>
+						<div class="col-3">
+							<label class="label-text">Period :</label>
+							<span class="ml-2 grey-text">{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate
+								|
+								dateFormatter}}</span>
+						</div>
+						<div class="col-5">
+							<label class="label-text">Sponsor :</label>
+							<span class="ml-2 grey-text">{{selectedProject?.sponsor}}</span>
+						</div>
+						<div class="col-7">
+							<label class="label-text">Lead Unit :</label>
+							<app-no-data-label [valueToShow]="selectedProject?.unitName">
+								<span class="ml-2 grey-text">{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
+							</app-no-data-label>
+						</div>
+					</div>
+				</div>
+				<div class="col-3 p-10">
+					<div>
+						<div class="border h-100 rounded-1 table-bg-color position-relative">
+							<span class="status-pill">Project/SFI Relationship</span>
+							<div class="emptySfi mt-5 pt-3" *ngIf="count <= 0">
+								<p>No SFI(s) Attached</p>
+							</div>
+							<div class="row fs-14" style="text-align: right;" *ngIf="count > 0">
+								<div class="col-8 m-2 mt-4 pb-2">
+									<div class="row">
+										<div class="col-6">
+											<label class="count-label">No Conflict : </label>
+										</div>
+										<div class="col-6" style="text-align: center;">
+											<span *ngIf="selectedProject.sfiCompleted !== null"
+												class="fs-12 badge badge-pill badge-primary noConflict-badge">
+												<span>{{getDisclosureCount(1, selectedProject.disclosureStatusCount)}}</span>
+											</span>
+											<span *ngIf="selectedProject.sfiCompleted == null" class="count-margin">--</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-6">
+											<label class="count-label">Potential Conflict :
+											</label>
+										</div>
+										<div class="col-6" style="text-align: center;">
+											<span *ngIf="selectedProject.sfiCompleted !== null"
+												class="fs-12 badge badge-pill badge-primary potentialConflict-badge">
+												<span>{{getDisclosureCount(2, selectedProject.disclosureStatusCount)}}</span>
+											</span>
+											<span *ngIf="selectedProject.sfiCompleted == null" class="count-margin">--</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-6">
+											<label class="count-label">Conflict Identified :</label>
+										</div>
+										<div class="col-6" style="text-align: center;">
+											<span *ngIf="selectedProject.sfiCompleted != null"
+												class="fs-12 badge badge-pill badge-primary Conflict-badge">
+												<span>{{getDisclosureCount(3, selectedProject.disclosureStatusCount)}}</span>
+											</span>
+											<span *ngIf="selectedProject.sfiCompleted == null" class="count-margin">--</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div>
+					</div>
+				</div>
+			</div>
             <ng-container *ngIf="isShowNoDataCard">
-              <table class="table fs-14 fw-medium" *ngIf="projectRelations.length > 0">
+              <table class="table fs-14 fw-medium mt-3" *ngIf="projectRelations.length > 0">
                 <!-- <caption class="sr-only">List of Awards/Proposal</caption> -->
                 <thead>
                     <tr class="header-border table-light">
@@ -67,7 +140,7 @@
                   <tr *ngFor="let relation of projectRelations; let i = index" class="tr-hover" id="{{relation.disclosureDetailsId}}">
                     <td class="table-data border-end border-top-0 fw-600 px-3" [class.border-0]="i != projectRelations?.length-1">{{relation?.coiEntity?.entityName}}</td>
                     <td class="border-end border-top-0 px-3" [class.border-0]="i != projectRelations?.length-1">
-                      <div class="p-3 person-card fs-13 grey-text">
+                      <div class="p-3 person-card fs-13 grey-text word-break-all new-line-property">
                         <span *ngIf="!isReadMore[i] && relation?.disclComment?.comment?.length > 60; else showFullInfo">
                           <span> {{(relation?.disclComment?.comment | slice:0:60)}}</span>
                           <span (click)="isReadMore[i] = !isReadMore[i]" class="hand-cursor">... <strong><u>Read more</u></strong>
@@ -76,24 +149,27 @@
                         <ng-template #showFullInfo>
                           <span>{{relation?.disclComment?.comment}}</span>
                           <span *ngIf="relation?.disclComment?.comment?.length > 60" (click)="isReadMore[i] = !isReadMore[i]"
-                            aria-hidden="true" class="hand-cursor"> <strong><u>Show Less</u></strong>
+                            aria-hidden="true" class="hand-cursor"> <strong><u>Read Less</u></strong>
                           </span>
                         </ng-template>
                       </div>
                     </td>
                     <td class="border-end border-top-0 px-3 text-center" [class.border-0]="i != projectRelations?.length-1">
-                      <span class="{{_commonService.getDisclosureConflictBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}">{{relation?.coiProjConflictStatusType?.description}}</span>
+                      <span class="{{_commonService.getProjectDisclosureConflictStatusBadge(relation?.coiProjConflictStatusType?.projectConflictStatusCode)}}"></span>
+                      <span class="badgeFont">
+                        {{relation?.coiProjConflictStatusType?.description}}
+                    </span>      
                     </td>
                     <td class="border-0  border-top-0 pt-4 px-3" [class.border-0]="i!= projectRelations?.length-1">
                       <div class="d-flex">
-                        <!-- reviewStatusCode-(3-Review In Progress, 4-completed),  dispositionStatusCode(1-pending, 3-Approved)-->
-                        <button *ngIf="(coiDetails?.reviewStatusCode== 3 && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 4 && coiDetails?.dispositionStatusCode == 3)
+                        <!-- reviewStatusCode-(3-Review In Progress, 7-Review Assigned, 8-Assigned review completed, 4-completed),  dispositionStatusCode(1-pending, 3-Approved)-->
+                        <button *ngIf="(['3', '7', '8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1) || (coiDetails?.reviewStatusCode== 4 && coiDetails?.dispositionStatusCode == 3)
                         && (_commonService.getCurrentUserDetail('userName') == coiDetails?.createUser || _commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"
                         class="btn-primary-icon-svg me-1" type="button" (mouseenter)="isShowHoverWhite[i]= true"
                         (mouseout)="isShowHoverWhite[i]= false" (click)="isOpenSlider = true; setEntityDetails(relation, i);">
                         <span class="btn-secondary-svg"></span>
                       </button>
-                      <button class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
+                      <button (click)="openReviewerComment(selectedProject,'RELATIONSHIP', relation)" class="add-activity-button comment-style align-items-center btn btn-primary-icon btn-sm d-flex p-0 px-2" id="add-activity" title="Comments" type="button">
                         <mat-icon>rate_review</mat-icon>
                       </button>
                       </div>
@@ -107,6 +183,6 @@
             </ng-container>
       </div>
 </div>
-
 <app-add-conflict-slider *ngIf="isOpenSlider" (closePage)="closePage($event)" [isOpenSlider]="isOpenSlider" [disclosureMetaData]="{coiPersonFullName: coiDetails?.person?.fullName}"
-  [entityDetails]="entityDetails" [isEditMode]="coiDetails?.reviewStatusCode== 3 && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
+  [entityDetails]="entityDetails" [isEditMode]="['3','7','8'].includes(coiDetails?.reviewStatusCode) && coiDetails?.dispositionStatusCode == 1 && (_commonService.getCurrentUserDetail('personId') == coiDetails?.adminPersonId)"></app-add-conflict-slider>
+

@@ -383,7 +383,7 @@ export class GeneralSectionEditComponent implements OnInit, OnDestroy, OnChanges
     }
 
     getSearchValue(event) {
-        this.selectedKeyword = event.target.value;
+        this.selectedKeyword = event;
     }
 
     /**
@@ -433,6 +433,9 @@ export class GeneralSectionEditComponent implements OnInit, OnDestroy, OnChanges
     addKeywordToDatabase(event) {
         if (event) {
             this.selectedKeyword = event.searchString;
+            if(this.selectedKeyword){
+                this.selectedKeyword = this.selectedKeyword.trim();
+            }
             this.$subscriptions.push(this._instituteService.addScienceKeyword({
                 'scienceKeyword': this.selectedKeyword,
                 'userName': this._commonService.getCurrentUserDetail('userName')

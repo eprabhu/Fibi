@@ -36,7 +36,7 @@
   .custom-padding {
     padding: 25px;
     padding-left:0px;
-    width: 450px;
+    width: max-content;
   }
   
   .color-black {
@@ -49,4 +49,22 @@
     flex-direction: row;
   }
 
-  
+  .form-check-inline {
+    display: inline-block;
+    margin-right: 3rem;
+  }
+
+  .info {
+    top: 2px;
+    font-size: 16px;
+    position: absolute;
+    margin-left: -9px;
+    color: #6f7395;
+    cursor: pointer;
+    height: 15px;
+    width: 16px;
+  }
+
+  .select-margin {
+    margin-left: 30px;
+  }

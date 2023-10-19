@@ -105,7 +105,7 @@ export class ServiceRequestList {
 }
 
 export class AdvanceSearch {
-    tabName = 'MY_REQUEST';
+    tabName = 'ALL_REQUEST';
     serviceRequestId = '';
     serviceRequestSubject = '';
     moduleCodes: any[] = [];

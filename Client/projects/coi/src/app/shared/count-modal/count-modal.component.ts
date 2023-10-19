@@ -3,8 +3,8 @@ import { Subscription } from 'rxjs';
 import { CountModalService } from './count-modal.service';
 import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
-import { getSponsorSearchDefaultValue } from '../../common/utlities/custom-utlities';
-import { GetSFIRequestObject } from '../../disclosure/coi-interface';
+import { getSponsorSearchDefaultValue } from '../../common/utilities/custom-utilities';
+import { RO } from '../../disclosure/coi-interface';
 
 @Component({
     selector: 'app-count-modal',
@@ -27,6 +27,7 @@ export class CountModalComponent implements OnInit {
     @Input() disclosures: any;
     @Input() adminData: any;
     @Input() reviewerData: any;
+    @Output() viewSlider: EventEmitter<any> = new EventEmitter<any>();
     @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
     $subscriptions: Subscription[] = [];
     tableArray: any[] = [];
@@ -57,7 +58,7 @@ export class CountModalComponent implements OnInit {
     }
 
     getRequestObject() {
-		const REQ_OBJ = new GetSFIRequestObject();
+		const REQ_OBJ = new RO();
         REQ_OBJ.currentPage = 0;
         REQ_OBJ.disclosureId = this.disclosureId;
         REQ_OBJ.filterType = '';
@@ -204,5 +205,10 @@ export class CountModalComponent implements OnInit {
             window.open(awardLink, '_blank');
         }
     }
+
+    viewSliderEmit(flag: boolean, entityId) {
+        this.viewSlider.emit({'flag': flag, 'entityId': entityId})
+    }
+
 
 }

@@ -49,6 +49,20 @@
   border-radius: 0.5rem;
 }
 
+
+.fa-check{
+  font-weight: 600;
+  color: #28a745 !important;
+  margin-left: 5px;
+}
+
+.fa-exclamation-circle {
+  font-weight: 600;
+  color: #ffc107 !important;
+  margin-left: 5px;
+}
+
+
 .bg-active {
   background-color: #5aa8ec38;
 }
@@ -102,14 +116,10 @@
   display: inline-block;
   margin-right: 3rem;
 }
-.seperator {
-  border: 1px solid #ededed;
-    margin: 1px 0;
-}
 
 .on-data-position{
   position: relative;
-  bottom: 7px;
+  bottom: 14px;
 }
 
 .card-br{
@@ -121,7 +131,7 @@
 }
 
 .scrollable-table {
-  max-height: 50vh;
+  max-height: 78vh;
   overflow-y: auto;
   overflow-x: hidden;
   height: auto;
@@ -172,10 +182,63 @@
 .custom-padding {
   padding: 25px;
   padding-left:0px;
-  width: 514px;
+  width: max-content;
 }
 
-.colour-black {
+.color-black {
   font-size: 14px;
   color: rgb(0, 0, 0);
+}
+
+.btn-delete-position {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  right: 6px;
+}
+
+.material-icons-outlined{
+    position: relative;
+    top: 7px;
+}
+
+.delete-content-position {
+  position: relative;
+  bottom: 5px;
+}
+
+.btn-tertiary {
+  font-size: 14px;
+  min-width: 5em;
+  font-weight: 600;
+  margin-top: -8px;
+  letter-spacing: normal;
+  cursor: pointer;
+  background-color: rgba(44, 119, 244, .1);
+  color: #2c77f4 !important;
+}
+
+.btn-tertiary:hover {
+  background-color: rgba(44, 119, 244, .27);
+  color: #043e9e !important;
+}
+
+.header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.pi-info-text {
+  background-color: #F3F3F3;
+  color: #41464B;
+}
+
+.create-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 218px;
+  font-weight: 500;
+  font-size: 15px;
 }

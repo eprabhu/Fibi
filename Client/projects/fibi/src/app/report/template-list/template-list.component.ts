@@ -135,8 +135,8 @@ export class TemplateListComponent implements OnInit, OnDestroy {
 				this.templateList.splice(deleteIndex, 1);
 				this.deleteTemplateId = null;
 				this.filterListByType();
-			}, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to delete Report'); },
-				() => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Report deleted successfully'); }));
+			}, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Failed to delete Report. Please try again.'); },
+				() => { this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Report deleted successfully.'); }));
 	}
 
 	setActiveTab(tab: string): void {

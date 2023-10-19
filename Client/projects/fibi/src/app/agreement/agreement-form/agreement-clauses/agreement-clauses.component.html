@@ -42,7 +42,7 @@
                                        <app-endpoint-search [httpOptions]="clausesSearchOptions"
                                           [clearField]="clearClausesField" [placeHolder]="'Type here for Clauses Name'"
                                           (onSelect)="selectClauses($event);"
-                                          (searchValue)="setClauses($event.target.value)">
+                                          (searchValue)="setClauses($event)">
                                        </app-endpoint-search>
                                     </div>
                                     <div class="col-md-2">

@@ -284,6 +284,32 @@
                     </div>
                 </div>
             </div>
+            <div *ngIf="isApplicationAdministrator"  class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" >
+                <div class="col-12 card pull-up h-100" [routerLink]="['/fibi/sponsor-report']">
+                    <div class="media">
+                        <div class="media-left cards-icon1 circle3">
+                            <img src="{{deployMap}}assets/images/sponsor-report.svg" alt="External Reviewer Image" class="w-41 icon-height">
+                        </div>
+                        <div class="media-body card-top-body cap3">
+                            <h6 class="media-heading lgt-yellow line-space">Sponsor Report</h6>
+                            <p class="gr-grey">Sponsor Report</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isApplicationAdministrator" class="col-xl-3 col-lg-4 col-sm-6 col-12 mb-3" >
+                <div class="col-12 card pull-up h-100" [routerLink]="['/fibi/elastic-monitoring']">
+                    <div class="media">
+                        <div class="media-left cards-icon1 circle3">
+                            <img src="{{deployMap}}assets/images/elasticsearch.png" alt="Elastic Monitoring" class="w-41 icon-height">
+                        </div>
+                        <div class="media-body card-top-body cap3">
+                            <h6 class="media-heading lgt-yellow line-space">Elastic Monitoring</h6>
+                            <p class="gr-grey">For monitoring and synching of elastic indexes used in fibi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 </div>

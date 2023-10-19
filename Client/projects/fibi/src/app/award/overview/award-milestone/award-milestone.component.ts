@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
 import { scrollIntoView } from '../../../common/utilities/custom-utilities';
 import { setFocusToElement } from '../../../common/utilities/custom-utilities';
+declare var $: any;
 @Component({
     selector: 'app-award-milestone',
     templateUrl: './award-milestone.component.html',
@@ -42,6 +43,7 @@ export class AwardMilestoneComponent implements OnDestroy, OnChanges {
     isLineItemEdit: boolean[] = [];
     milestoneStatusCodes: any = null;
     isCommentView: boolean[] = [];
+
 
     constructor(public _commonService: CommonService,
         private _awardService: AwardService, public _commonData: CommonDataService
@@ -105,8 +107,7 @@ export class AwardMilestoneComponent implements OnDestroy, OnChanges {
                 this.updateOrPushMilestoneList(data, isMilestoneUpdate);
                 this.sortBy(this.column);
             }, err => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding Milestone failed. Please try again.');
-                this.isSaving = false;
+                this._commonService.showToast(HTTP_ERROR_STATUS, (this.isEditMilestone ? 'Updating ' : 'Adding ') + 'Milestone failed. Please try again.');
             },
                 () => {
                     if (this.isEditMilestone) {
@@ -118,6 +119,7 @@ export class AwardMilestoneComponent implements OnDestroy, OnChanges {
                     this.updateAwardStoreData();
                     this.clearMilestoneObject();
                     this.isSaving = false;
+                    $('#add-milestone-modal').modal('hide');
                 }));
         }
     }

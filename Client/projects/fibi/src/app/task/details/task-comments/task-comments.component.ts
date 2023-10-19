@@ -126,7 +126,7 @@ export class TaskCommentsComponent implements OnInit, OnDestroy {
             this.updateDataAfterSave(data);
             this.isSaving = false;
           }, err => {
-             this._commonService.showToast(HTTP_ERROR_STATUS, 'Saving task comment  failed. Please try again.');
+             this._commonService.showToast(HTTP_ERROR_STATUS,(this.isEditComment?'Updating ':'Saving ')+"Task comment failed. Please try again.");
              this.isSaving = false;
            },
             () => {
@@ -190,12 +190,12 @@ export class TaskCommentsComponent implements OnInit, OnDestroy {
   }
 
   toastForUpdatingComment() {
-    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Task Comment updated Successfully');
+    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Task comment updated successfully.');
     this.isEditComment = false;
   }
 
   toastForAddingComment() {
-    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Task Comment added Successfully');
+    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Task comment added successfully.');
   }
 
   editComment(index) {
@@ -300,7 +300,7 @@ export class TaskCommentsComponent implements OnInit, OnDestroy {
       .subscribe((data: any) => {
       }, err => { this._commonService.showToast(HTTP_ERROR_STATUS, 'Deleting comment  failed. Please try again.'); },
         () => {
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Successfully deleted the Comment.');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Task comment deleted successfully.');
           this.commentList.splice(index, 1);
         }));
   }

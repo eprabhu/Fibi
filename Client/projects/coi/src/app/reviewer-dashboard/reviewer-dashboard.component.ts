@@ -8,11 +8,18 @@ import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../
 import { NameObject, ReviewerDashboardRequest, ReviewerDashboardService, SortCountObj } from './reviewer-dashboard.service';
 import { CommonService } from '../common/services/common.service';
 import { NavigationService } from '../common/services/navigation.service';
+import { listAnimation, topSlideInOut, fadeInOutHeight, scaleOutAnimation, slideInAnimation} from '../common/utilities/animations';
+import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 
 @Component({
     selector: 'app-reviewer-dashboard',
     templateUrl: './reviewer-dashboard.component.html',
-    styleUrls: ['./reviewer-dashboard.component.scss']
+    styleUrls: ['./reviewer-dashboard.component.scss'],
+    animations: [listAnimation, topSlideInOut, fadeInOutHeight, 
+        slideInAnimation('0','12px', 400, 'slideUp'),
+        slideInAnimation('0','-12px', 400, 'slideDown'),
+        scaleOutAnimation('-2px','0', 200, 'scaleOut'),
+    ]
 })
 export class ReviewerDashboardComponent implements OnInit {
 
@@ -46,13 +53,24 @@ export class ReviewerDashboardComponent implements OnInit {
     fcoiTypeCode: any;
     isShowCountModal = false;
     inputType: any;
-    ishover: [] = [];
+    isHover: [] = [];
     isViewAdvanceSearch = true;
     isShowDisclosureList = false;
     localCOIRequestObject: ReviewerDashboardRequest = new ReviewerDashboardRequest();
     localSearchDefaultValues: NameObject = new NameObject();
-    isShowNoDataCard = false;
+    isLoading = false;
     readMoreOrLess = [];
+    sortSectionsList = [
+        { variableName: 'coiDisclosureNumber', fieldName: 'Disclosure#' },
+        { variableName: 'disclosurePersonFullName', fieldName: 'Person' },
+        { variableName: 'disclosureCategoryType', fieldName: 'Disclosure Type' },
+        { variableName: 'disclosureStatus', fieldName: 'Disclosure Status' },
+        { variableName: 'certifiedAt', fieldName: 'Certification Date' },
+        { variableName: 'expirationDate', fieldName: 'Expiration Date' },
+        { variableName: 'updateTimeStamp', fieldName: 'Last Updated' },
+    ];
+    datePlaceHolder = DATE_PLACEHOLDER;
+
     constructor(
         public reviewerDashboardService: ReviewerDashboardService,
         public commonService: CommonService,
@@ -60,35 +78,53 @@ export class ReviewerDashboardComponent implements OnInit {
         private _navigationService: NavigationService) { }
 
     ngOnInit() {
+        this.setDashboardTab();
         this.getDashboardDetails();
         this.setSearchOptions();
         this.setAdvanceSearch();
-        this.setDashboardTab();
         this.checkForSort();
+        this.checkForPagination();
         this.checkForAdvanceSearch();
     }
 
     actionsOnPageChange(event) {
-        this.localCOIRequestObject.currentPage = event;
-        this.$coiList.next();
+        if (this.localCOIRequestObject.currentPage != event) {
+            this.localCOIRequestObject.currentPage = event;
+            this.reviewerDashboardService.reviewerRequestObject.currentPage = event;
+            this.$coiList.next();
+        }
+    }
+
+    checkForPagination() {
+        if (this._navigationService.previousURL.includes('coi/disclosure')) {
+            this.localCOIRequestObject.currentPage = this.reviewerDashboardService.reviewerRequestObject.currentPage;
+        }
     }
 
     getDashboardDetails() {
-        this.isShowNoDataCard = false;
         this.$subscriptions.push(this.$coiList.pipe(
-            switchMap(() => this.reviewerDashboardService.getCOIReviewerDashboard(this.getRequestObject())))
+            switchMap(() => {
+                this.isLoading = true;
+                return this.reviewerDashboardService.getCOIReviewerDashboard(this.getRequestObject())
+        }))
             .subscribe((data: any) => {
                 this.result = data || [];
+                this.loadingComplete();
                 if (this.result) {
                     this.coiList = this.result.disclosureViews || [];
-                    this.isShowNoDataCard = true;
                     this.coiList.map(ele => {
                         ele.numberOfProposals = ele.disclosureStatusCode !== 1 ? ele.noOfProposalInActive : ele.noOfProposalInPending;
                         ele.numberOfAwards = ele.disclosureStatusCode !== 1 ? ele.noOfAwardInActive : ele.noOfAwardInPending;
                     });
                 }
                 this.setEventTypeFlag();
+            }, (err) => {
+                this.loadingComplete();
             }));
+    }
+
+    private loadingComplete() {
+        this.isLoading = false;
     }
 
     getRequestObject() {
@@ -120,6 +156,7 @@ export class ReviewerDashboardComponent implements OnInit {
 
     resetAndPerformAdvanceSearch() {
         this.resetAdvanceSearchFields();
+        this.coiList = [];
         this.$coiList.next();
     }
 
@@ -129,11 +166,12 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     performAdvanceSearch() {
+        this.localCOIRequestObject.currentPage = 1;
         this.setAdvanceSearchToServiceObject();
         this.localCOIRequestObject.advancedSearch = 'A';
-        this.localCOIRequestObject.currentPage = 1;
         this.isShowDisclosureList = true;
         this.reviewerDashboardService.isAdvanceSearch = true;
+        this.coiList = [];
         this.$coiList.next();
     }
 
@@ -296,8 +334,8 @@ export class ReviewerDashboardComponent implements OnInit {
     }
 
     changeTab(tabName) {
-        this.isShowNoDataCard = false;
         this.coiList = [];
+        this.isLoading = true;
         this.isShowDisclosureList = false;
         this.reviewerDashboardService.isAdvanceSearch = false;
         this.reviewerDashboardService.reviewerRequestObject.tabName = tabName;
@@ -445,13 +483,14 @@ export class ReviewerDashboardComponent implements OnInit {
         this.reviewerDashboardService.reviewerRequestObject.property7 =
             parseDateWithoutTimestamp(this.advanceSearchDates.expirationDate) || [];
         this.reviewerDashboardService.reviewerRequestObject.property8 = this.localCOIRequestObject.property8 || null;
+        this.reviewerDashboardService.reviewerRequestObject.currentPage = this.localCOIRequestObject.currentPage;
         this.reviewerDashboardService.searchDefaultValues.personName = this.localSearchDefaultValues.personName || null;
         this.reviewerDashboardService.searchDefaultValues.entityName = this.localSearchDefaultValues.entityName || null;
         this.reviewerDashboardService.searchDefaultValues.departmentName = this.localSearchDefaultValues.departmentName || null;
     }
 
     private setSearchOptions() {
-        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl);
+        this.EntitySearchOptions = getEndPointOptionsForEntity(this.commonService.baseUrl, 'ALL');
         this.elasticPersonSearchOptions = this._elasticConfig.getElasticForPerson();
         this.leadUnitSearchOptions = getEndPointOptionsForLeadUnit('', this.commonService.fibiUrl);
     }

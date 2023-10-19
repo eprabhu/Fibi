@@ -8,13 +8,14 @@ import { DataStoreService } from '../services/data-store.service';
 import { RelationshipService } from './relationship.service';
 import { SfiService } from '../sfi/sfi.service';
 import { Subscription } from 'rxjs';
-import { GetSFIRequestObject } from '../coi-interface';
+import { RO } from '../coi-interface';
+import { listAnimation } from '../../common/utilities/animations';
 
 @Component({
   selector: 'app-relationship',
   templateUrl: './relationship.component.html',
   styleUrls: ['./relationship.component.scss'],
-  animations: [slideHorizontal],
+  animations: [slideHorizontal, listAnimation],
 })
 export class RelationshipComponent implements OnInit {
   isShowRelation = false;
@@ -31,7 +32,7 @@ export class RelationshipComponent implements OnInit {
   selectedProjectForView: any;
   isEditMode: boolean = true;
   collapseViewMore = {};
-  expandInfo = true;
+  expandInfo = false;
   count: number;
   disclosureId: number;
   reviewStatus: string;
@@ -41,40 +42,52 @@ export class RelationshipComponent implements OnInit {
   $subscriptions: Subscription[] = [];
   dependencies = ['coiDisclosure', 'numberOfSFI'];
   isShowNoDataCard = false;
+  awardList = [];
+  isShowCollapsedConflictRelationship = false;
+  entityProjectDetails: Array<any> = [];
+  coiValidationMap: Map<string, string> = new Map();
+  coiTableValidation: Map<string, string> = new Map();
+  coiStatusCode: any = null;
+  isAnimationPaused = false;
+  currentRelation: number;
 
   constructor(private _relationShipService: RelationshipService,
               private _dataStore: DataStoreService,
               public _router: Router,
               private _commonService: CommonService,
-              private _sfiService: SfiService) { }
+              private _sfiService: SfiService) {
+                setTimeout(() => {
+                  this.isAnimationPaused = false;
+                }, 1000);
+               }
 
-  closePage() {
+  closePage(event: any) {
     this.isShowRelation = false;
     this.moduleCode = null;
     this.moduleId = null;
-    if(this.isEditMode) {
+    if (this._relationShipService.isSliderDataUpdated) {
       this.updateConflictStatus();
-      this.loadProjectRelations(); 
     }
+    this.loadProjectRelations();
   }
 
   ngOnInit() {
     this.getDataFromStore();
-    this.loadProjectRelations();
+    this.loadProjectRelations(true);
     this.getDependencyDetails();
     this.getSfiDetails();
-  }
+      }
 
-  getDisclosureCount(typeCode, disclosureStatus) {
-    if(disclosureStatus) {
-      let value = disclosureStatus.find(ele => Object.keys(ele) == typeCode);
-      return value ? value[typeCode] : 0;
+getDisclosureCount(typeCode, disclosureStatus) {
+    if (disclosureStatus) {
+      const VALUE = disclosureStatus.find(ele => Object.keys(ele) == typeCode);
+      return VALUE ? VALUE[typeCode] : 0;
     }
   }
 
   private updateConflictStatus(): void {
     this._relationShipService.updateConflictStatus(this.coiData.coiDisclosure.disclosureId).subscribe((data: any) => {
-      if(data) {
+      if (data) {
         this.coiData.coiDisclosure.coiConflictStatusType = data;
         this.coiData.coiDisclosure.conflictStatusCode = data.conflictStatusCode;
         this._dataStore.updateStore(['coiDisclosure'],  this.coiData);
@@ -86,17 +99,39 @@ export class RelationshipComponent implements OnInit {
 
   private getDataFromStore() {
     this.coiData = this._dataStore.getData();
-    this.isEditMode = this.coiData.coiDisclosure.reviewStatusCode == '1';
+    const IS_CREATE_USER = this.coiData.coiDisclosure.personId === this._commonService.getCurrentUserDetail('personId');
+    this.isEditMode = ['1', '5', '6'].includes(this.coiData.coiDisclosure.reviewStatusCode) && IS_CREATE_USER;
   }
 
-  loadProjectRelations() {
-    this.isShowNoDataCard = false;
+  loadProjectRelations(isFristTimeLoad = false) {
+    if (isFristTimeLoad) {
+      this.isShowNoDataCard = false;
+    }
     this._relationShipService.getProjectRelations(this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.disclosureStatusCode).subscribe((data: any) => {
       if (data) {
-        this.isShowNoDataCard = true;
-        this.proposalArray = data.awards;
-        data.proposals.every(ele => this.proposalArray.push(ele));
+        if (isFristTimeLoad) {
+          this.isShowNoDataCard = true;
+          this.awardList = data.awards;
+          data.proposals.every(ele => this.awardList.push(ele));
+        } else {
+          const combinedArray = [...data.awards, ...data.proposals];
+          if (combinedArray.length === this.awardList.length) {
+            combinedArray.forEach((project, index) => {
+              if (this.awardList[index].moduleItemId === project.moduleItemId) {
+                this.awardList[index].disclosureStatusCount = project.disclosureStatusCount;
+                this.awardList[index].sfiCompleted = project.sfiCompleted;
+              }
+            });
+          } else {
+            this.awardList = combinedArray;
+          }
+        }
         this.coiStatusList = data.coiProjConflictStatusTypes;
+        if (this.awardList.length === 1) {
+          this.isShowCollapsedConflictRelationship = true;
+          this.getEntityList();
+          this.isAnimationPaused = false;
+        }
       }
     });
   }
@@ -108,7 +143,7 @@ export class RelationshipComponent implements OnInit {
    */
   getDisclosureStatus(): any {
    let test : any;
-    this.proposalArray.forEach(ele => {
+    this.awardList.forEach(ele => {
          test = ele.disclosureStatusCount.find(ele => ele[3] > 0) ? '3' :
                 ele.disclosureStatusCount.find(ele => ele[2] > 0) ? '2' :
                 ele.disclosureStatusCount.find(ele => ele[1] > 0) ? '1' : null;
@@ -116,10 +151,11 @@ export class RelationshipComponent implements OnInit {
     return test;
   }
 
-  openDefineRelationship(test) {
+  openDefineRelationship(test, currentRelation) {
     this.moduleCode = test.moduleCode;
     this.moduleId = test.moduleItemId ;
     this.selectedProject = test;
+    this.currentRelation = currentRelation;
     this.isShowRelation = true;
   }
 
@@ -148,7 +184,7 @@ export class RelationshipComponent implements OnInit {
 }
 
 getRequestObject() {
-  const REQ_OBJ = new GetSFIRequestObject();
+  const REQ_OBJ = new RO();
   REQ_OBJ.currentPage = 0;
   REQ_OBJ.disclosureId = this.disclosureId;
   REQ_OBJ.filterType = this.filterType;
@@ -164,5 +200,15 @@ getDependencyDetails() {
     this.reviewStatus = DATA && DATA.coiDisclosure ? DATA.coiDisclosure.reviewStatusCode : '';
     this.disclosureId =  DATA && DATA.coiDisclosure ? DATA.coiDisclosure.disclosureId : null;
     this.personId = DATA && DATA.coiDisclosure ? DATA.coiDisclosure.personId : '';
+  }
+
+  getEntityList() {
+    this.$subscriptions.push(  this._relationShipService.getEntityList(
+      this.moduleCode, this.moduleId, this.coiData.coiDisclosure.disclosureId,
+      this.coiData.coiDisclosure.disclosureStatusCode, this.coiData.coiDisclosure.personId).subscribe((data: any) => {
+      this.entityProjectDetails = data;
+    }, err => {
+      this._commonService.showToast(HTTP_ERROR_STATUS, 'Something Went wrong!');
+    }));
   }
 }

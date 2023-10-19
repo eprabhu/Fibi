@@ -60,11 +60,7 @@ export class LoginComponent implements AfterViewInit, OnInit, OnDestroy {
                             this._commonService.fetchPermissions().then((response: any) => {
                                 this._commonService.rightsArray = response || [];
                             });
-                            if (localStorage.getItem('currentUrl') != null && localStorage.getItem('currentUrl').indexOf('login') === -1) {
-                                window.location.hash = localStorage.getItem('currentUrl');
-                            } else {
-                                this.router.navigate(['fibi/dashboard']);
-                            }
+                            this.router.navigate(['fibi/dashboard']);
                         } else {
                             this.loginFail = true;
                             this.router.navigate(['fibi/dashboard']);

@@ -6,7 +6,7 @@ import { CommonService } from '../../../../common/services/common.service';
 export class PermissionService {
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
-  fetchAwardPersonRoles(awardId) {
-    return this._http.post(this._commonService.baseUrl + '/fetchAwardPersonRoles', { 'awardId': awardId });
+  fetchAwardPersonRoles(requestData) {
+    return this._http.post(this._commonService.baseUrl + '/fetchAwardPersonRoles', requestData);
   }
 }

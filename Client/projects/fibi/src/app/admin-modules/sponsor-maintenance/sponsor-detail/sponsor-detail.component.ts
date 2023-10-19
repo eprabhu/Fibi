@@ -94,11 +94,11 @@ export class SponsorDetailComponent implements OnInit, OnDestroy {
         this.sponsorDetails.createUser = this._commonService.getCurrentUserDetail('userName');
       }
       if (this.sponsorDetails.acType === 'I') {
-        this.toast_message = 'Sponsor has successfully created .';
+        this.toast_message = 'Sponsor has successfully created.';
       } else if (this.sponsorDetails.acType === 'U') {
         // tslint:disable-next-line: triple-equals
         this.sponsorDetails.sponsorGroup  = this.sponsorDetails.sponsorGroup == '' ? null : this.sponsorDetails.sponsorGroup;
-        this.toast_message = 'Sponsor successfully updated';
+        this.toast_message = 'Sponsor successfully updated.';
       }
       let after = this.prepareAuditLogObject(deepCloneObject(this.sponsorDetails));
       this._commonService.showToast(HTTP_SUCCESS_STATUS, this.toast_message);

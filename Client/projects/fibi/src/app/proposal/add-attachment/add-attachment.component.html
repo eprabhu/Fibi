@@ -28,17 +28,17 @@
         <app-file-drop [multiple]="true" (filesDropEvent)="fileDrop($event)"></app-file-drop>
         <div class="attachment-scroll" *ngIf="uploadedFile.length > 0">
           <div class="row" *ngIf="attachmentType == 'general'">
-            <div class="col-12 text-right">
-              <label>Mark All As:</label>
-              <div class="form-check form-check-inline">
+            <div class="col-12 text-right fs-14 align-items-center d-flex justify-content-end">
+              <label class="mr-3">Mark All As:</label>
+              <div class="form-check form-check-inline mr-3">
                 <input class="radio-inline" type="radio" name="addattachmentComplete" id="addattachmentComplete"
                   [value]="false" [(ngModel)]="statusSelected" (ngModelChange)="markStatusCompleteOrIncomplete()">
-                <label class="form-check-label pl-2 text-primary" for="addattachmentComplete">Draft</label>
+                <label class="form-check-label text-primary" for="addattachmentComplete">Draft</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="radio-inline" type="radio" name="addattachmentIncomplete" id="addattachmentIncomplete"
                   [(ngModel)]="statusSelected" [value]="true" (ngModelChange)="markStatusCompleteOrIncomplete()">
-                <label class="form-check-label pl-2 text-primary" for="addattachmentIncomplete">Final</label>
+                <label class="form-check-label text-primary" for="addattachmentIncomplete">Final</label>
               </div>
             </div>
           </div>

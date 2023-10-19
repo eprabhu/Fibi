@@ -28,9 +28,8 @@
                                     <i aria-hidden="true" class="fa fa-ellipsis-v"></i>
                                 </button>
                                 <div aria-labelledby="dropdownMenuButton"
-                                    class="dropdown-menu action-dropdown-menu more-options-aligned moreActionBtnGroup f-16"
-                                    x-placement="bottom-start"
-                                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-57px, 35px, 0px);">
+                                class="dropdown-menu action-dropdown-menu more-options-aligned
+                                moreActionBtnGroup custom-dropdown-action-menu f-16">
                                     <ul class="more-actions-menu">
                                         <li class="">
                                             <div class="ng-star-inserted">
@@ -95,21 +94,21 @@
                             <span *ngIf="list.options.length > 0">
                                 <div class="checkbox-inline col-12"
                                     *ngFor="let option of list.options;  let checkBoxIndex=index">
-                                    <input type="checkbox" [disabled]="viewMode == 'view'" id="{{option}}{{index}}" 
+                                    <input type="checkbox" [disabled]="viewMode == 'view'" id="{{option.optionName}}{{index}}" 
                                     [disabled]="list.isActive === 'N'" [ngClass]="list.isActive === 'N'? 'in-active':''"/>
-                                    <label for="{{option}}{{index}}"
-                                        [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option}}</label>
+                                    <label for="{{option.optionName}}{{index}}"
+                                        [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option.optionName}}</label>
                                 </div>
                             </span>
                         </div>
                         <div *ngSwitchCase="list.filterType == 'Radio Button'">
                             <span *ngIf="list.options.length > 0">
                                 <div class="checkbox-inline col-12" *ngFor="let option of list.options">
-                                    <input type="radio" [disabled]="viewMode == 'view'" [value]="option"
+                                    <input type="radio" [disabled]="viewMode == 'view'" [value]="option.optionName"
                                     [disabled]="list.isActive === 'N'" [ngClass]="list.isActive === 'N'? 'in-active':''"
-                                        name="{{option}}{{index}}" id="{{option}}{{index}}" />
-                                    <label for="{{option}}{{index}}"
-                                        [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option}}</label>
+                                        name="{{option.optionName}}{{index}}" id="{{option.optionName}}{{index}}" />
+                                    <label for="{{option.optionName}}{{index}}"
+                                        [ngClass]="{'hand-cursor': viewMode != 'view' }">{{option.optionName}}</label>
                                 </div>
                             </span>
                         </div>

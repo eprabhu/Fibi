@@ -1,32 +1,6 @@
 <div class="person-details-outer mt-3">
-  <div class="card card-inner mb-3">
+  <div class="card mb-3">
     <div class="card-content">
-      <div class="card-header">
-        <h4 class="card-title align-items-center d-flex p-2">
-          Reviewer
-          <div class="activate-btn align-items-center d-flex pt-1"
-            *ngIf="_extReviewerMaintenanceService.mode == 'edit' || _extReviewerMaintenanceService.mode == 'create'">
-            <label class="mr-2 activate-btn-label">Active</label>
-            <span class="pt-1">
-              <a class="pl-2" *ngIf="extReviewer.status == 'I'">
-                <label class="switch">
-                  <input type="checkbox"
-                    (click)="extReviewer.status = 'A';_extReviewerMaintenanceService.isDataChange = true">
-                  <span class="slider round"><small class="deactivate-text pt-1">No</small></span>
-                </label>
-              </a>
-              <a class="pl-2" *ngIf="extReviewer.status == 'A'">
-                <label class="switch">
-                  <input type="checkbox"
-                    (click)="extReviewer.status = 'I';_extReviewerMaintenanceService.isDataChange = true" checked>
-                  <span class="slider round"><small class="pt-1">Yes</small></span>
-                </label>
-              </a>
-            </span>
-          </div>
-        </h4>
-      </div>
-
       <div class="card-body"
         *ngIf="_extReviewerMaintenanceService.mode == 'edit' || _extReviewerMaintenanceService.mode == 'create'">
         <div class="form-row">
@@ -75,21 +49,7 @@
           </div>
 
           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <label class="d-block">
-              Gender</label>
-            <span>
-              <select class="form-group form-control ng-pristine ng-valid ng-touched wd-100"
-                [(ngModel)]="extReviewer.gender" (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true;"
-                placeholder="Select gender">
-                <option [ngValue]=null>--Select--</option>
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-              </select>
-            </span>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <label class="d-block" for="reviewer-primary-email"><span class="mandatory">*</span>Primary Email
+            <label class="d-block" for="reviewer-primary-email"><span class="mandatory">*</span> Primary Email
             </label>
             <input type="text" id="reviewer-primary-email" placeholder="Enter primary email"
               class="form-control dateBox" [(ngModel)]="extReviewer.primaryEmail"
@@ -98,8 +58,25 @@
             <div class="invalid-feedback d-block mb-3" *ngIf="(map.get('primaryEmail'))">
               Please enter primary email address.
             </div>
+            <div *ngIf="(map.get('emailAddress'))">
+              <span class="invalid-feedback d-block">&nbsp;Primary email already exists.</span>
+            </div>
             <div *ngIf="primaryEmailWarningMsg != null">
               <span class="invalid-feedback d-block">&nbsp;{{primaryEmailWarningMsg}}</span>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <label class="d-block" for="reviewer-username">
+              <span class="mandatory">*</span> User Name</label>
+            <input type="text" rows="1" id="reviewer-username" placeholder="Enter username" maxlength="80"
+              autocomplete="off" class="form-control dateBox" [(ngModel)]="extReviewer.principalName"
+              (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true;" />
+            <div *ngIf="(map.get('userName'))">
+              <span class="invalid-feedback d-block">&nbsp;Username already exists.</span>
+            </div>
+            <div class="invalid-feedback d-block mb-3" *ngIf="(map.get('principalName'))">
+              Please enter username.
             </div>
           </div>
 
@@ -112,14 +89,17 @@
           </div>
 
           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-            <label class="d-block" for="reviewer-username">
-              User Name</label>
-            <input type="text" rows="1" id="reviewer-username" placeholder="Enter username" maxlength="80"
-              autocomplete="off" class="form-control dateBox" [(ngModel)]="extReviewer.principalName"
-              (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true;" />
-            <div *ngIf="(map.get('userName'))">
-              <span class="invalid-feedback d-block">&nbsp;Username already exists.</span>
-            </div>
+            <label class="d-block">
+              Gender</label>
+            <span>
+              <select class="form-group form-control ng-pristine ng-valid ng-touched wd-100"
+                [(ngModel)]="extReviewer.gender" (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true;"
+                placeholder="Select gender">
+                <option [ngValue]=null>--Select--</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </span>
           </div>
 
           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
@@ -166,7 +146,7 @@
             <span class="dateField">
               <input matInput [matDatepicker]="signedDate" id="agreement-signed-date" class="form-group form-control"
                 [(ngModel)]="agreementStartDate" (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true;"
-                (keypress)="_commonService._keyPress($event, 'date')" placeholder="dd/mm/yyyy" (click)="signedDate.open()">
+                (keypress)="_commonService._keyPress($event, 'date')" placeholder="{{datePlaceHolder}}" (click)="signedDate.open()"/>
               <i class="fa fa-calendar fa-large hand-cursor insidePicker" title="open calendar"
                 (click)="signedDate.open()" aria-hidden="true"></i>
               <mat-datepicker #signedDate (opened)="setFocusToElement('agreement-signed-date')">
@@ -180,7 +160,7 @@
               <input matInput [matDatepicker]="agreementExp" id="agreement-expiry-date" class="form-group form-control"
                  [(ngModel)]="agreementEndDate"
                 (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true;"
-                (keypress)="_commonService._keyPress($event, 'date')" placeholder="dd/mm/yyyy" (click)="agreementExp.open()">
+                (keypress)="_commonService._keyPress($event, 'date')" placeholder="{{datePlaceHolder}}" (click)="agreementExp.open()"/>
               <i class="fa fa-calendar fa-large hand-cursor insidePicker" title="open calendar"
                 (click)="agreementExp.open()" aria-hidden="true"></i>
               <mat-datepicker #agreementExp (opened)="setFocusToElement('agreement-expiry-date')">
@@ -217,10 +197,25 @@
             <input type="text" id="reviewer-department" placeholder="Enter department" class="form-control dateBox"
               [(ngModel)]="extReviewer.department" (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true;"/>
           </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12"
+            *ngIf="_extReviewerMaintenanceService.mode == 'edit' || _extReviewerMaintenanceService.mode == 'create'">
+            <label class="d-block mb-2">Status</label>
+            <span class="form-group col px-0">
+              <label class="radio-inline"><input required="" type="radio" class="ng-invalid ng-dirty ng-touched "
+                  name='def_recipient' checked="true" value="A" [(ngModel)]="extReviewer.status"
+                  (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true">
+                Active</label>
+              <label class="radio-inline ml-2"><input required="" type="radio" class="ng-invalid ng-dirty ng-touched"
+                  name='def_recipient' value="I" [(ngModel)]="extReviewer.status"
+                  (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true"> Inactive</label>
+            </span>
+          </div>
+
           <div class="col-12 mt-3">
             <label class="d-block" for="reviewer-additional-information">Additional Information</label>
             <textarea id="additional-information" maxlength="4000" placeholder="Enter additional information"
-              class="forTextAreaEntry form-group form-control scheduleBoxes"   [(ngModel)]="extReviewer.additionalInformation" 
+              class="forTextAreaEntry form-group form-control scheduleBoxes"   [(ngModel)]="extReviewer.additionalInformation" (ngModelChange)="_extReviewerMaintenanceService.isDataChange = true"
               appLengthValidator [isShowLimiter]='true' [limit]=4000></textarea>
           </div>
 
@@ -242,11 +237,6 @@
         <div class="card-body gridSkin">
           <div class="row">
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-              <label class="d-sm-block">Reviewer ID</label>
-              <span [ngClass]="extReviewer?.externalReviewerId ? '' : 'noDataExists'">
-                {{extReviewer?.externalReviewerId ? extReviewer?.externalReviewerId : 'No Data'}} </span>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <label class="d-sm-block">First Name</label>
               <span [ngClass]="extReviewer?.firstName ? '' : 'noDataExists'">
                 {{extReviewer?.firstName ? extReviewer?.firstName : 'No Data'}} </span>
@@ -267,14 +257,14 @@
                 {{extReviewer?.passportName ? extReviewer.passportName : 'No Data'}} </span>
             </div>
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-              <label class="d-sm-block">Gender</label>
-              <span [ngClass]="extReviewer?.gender ? '' : 'noDataExists'">
-                {{extReviewer?.gender ? extReviewer.gender == 'F' ? 'Female' : 'Male' : 'No Data'}} </span>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <label class="d-sm-block">Primary Email</label>
               <span [ngClass]="extReviewer?.primaryEmail ? '' : 'noDataExists'">
                 {{extReviewer?.primaryEmail ? extReviewer.primaryEmail : 'No Data'}} </span>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <label class="d-sm-block">User Name</label>
+              <span [ngClass]="extReviewer?.principalName ? '' : 'noDataExists'">
+                {{extReviewer?.principalName ? extReviewer.principalName : 'No Data'}} </span>
             </div>
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <label class="d-sm-block">Secondary Email</label>
@@ -282,9 +272,9 @@
                 {{extReviewer?.secondaryEmail ? extReviewer.secondaryEmail : 'No Data'}} </span>
             </div>
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-              <label class="d-sm-block">User Name</label>
-              <span [ngClass]="extReviewer?.principalName ? '' : 'noDataExists'">
-                {{extReviewer?.principalName ? extReviewer.principalName : 'No Data'}} </span>
+              <label class="d-sm-block">Gender</label>
+              <span [ngClass]="extReviewer?.gender ? '' : 'noDataExists'">
+                {{extReviewer?.gender ? extReviewer.gender == 'F' ? 'Female' : 'Male' : 'No Data'}} </span>
             </div>
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <label class="d-sm-block">Academic Rank</label>
@@ -309,7 +299,7 @@
               </span>
             </div>
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-              <label class="d-sm-block">Agreement signed Date</label>
+              <label class="d-sm-block">Agreement Signed Date</label>
               <span [ngClass]="extReviewer?.agreementStartDate ? '' : 'noDataExists'">
                 <span *ngIf="extReviewer?.agreementStartDate">{{extReviewer?.agreementStartDate | dateFormatter}}
                 </span>
@@ -343,6 +333,7 @@
             </div>
           <div class="col-12">
             <label class="d-sm-block">Additional Information</label>
+            <span *ngIf="!extReviewer?.additionalInformation" class="noDataExists">No Data</span>
             <span *ngIf="!isReadMore && extReviewer?.additionalInformation?.length > 250 else showFullInfo">
               {{extReviewer?.additionalInformation | slice:0:250}}
               <span (click)="isReadMore = !isReadMore" class="hand-cursor fibiDefaultColor italian">...Read more

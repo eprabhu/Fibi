@@ -1,0 +1,42 @@
+<div class="section">
+  <div class="section-header">
+    <span>{{sectionDetails.sectionName}}</span>
+    <span class="float-end"><mat-icon class="small-icon">info</mat-icon>
+    </span>
+  </div>
+  <div class="info" *ngIf="sectionDetails.sectionHeader" [innerHTML] = "sectionDetails.sectionHeader">
+  </div>
+  <div class="content">
+    <ng-container *ngFor="let component of sectionDetails.sectionComponent">
+      <div class="side-info" *ngIf="component.componentHeader" [innerHTML] = "component.componentHeader">
+      </div>
+      <div *ngIf="component.componentType === 'QN' || component.componentType === 'CE'">
+        <app-data-layer 
+          [component]="component" 
+          [fbConfiguration]="fbConfiguration" 
+          [formBuilderId]="formBuilderId"
+          [saveEventForChildComponent]="saveEventForChildComponent"
+        ></app-data-layer>
+      </div>
+      <div *ngIf="component.componentType === 'RT'">
+        <div [innerHTML] = "component.componentData"></div>
+      </div>
+      <div *ngIf="component.componentType === 'PE'">
+       <!-- to be developed -->
+      </div>
+      <div *ngIf="component.componentType === 'HL'">
+         <div class="line" [style]="component.componentData"></div>
+      </div>
+      <div *ngIf="component.componentType === 'BR'">
+         <!-- to be developed -->
+      </div>
+      <div class="info" *ngIf="component.componentFooter" [innerHTML] = "component.componentFooter">
+        {{component.componentFooter}}
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="info" *ngIf="sectionDetails.sectionFooter" [innerHTML] = "sectionDetails.sectionFooter">
+  </div>
+</div>
+

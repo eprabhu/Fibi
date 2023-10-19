@@ -29,7 +29,7 @@ public class ValidPersonEntityRelType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "VALID_PERSON_ENTITY_REL_TYPE_CODE")
+	@Column(name = "VALID_PERS_ENTITY_REL_TYP_CODE")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer validPersonEntityRelTypeCode;
 	

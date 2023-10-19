@@ -32,7 +32,7 @@
           </div>
           <div class="col-lg-2 col-sm-6 col-12 no-hover-effect">
             <label class="d-sm-block">Cost Element</label>
-            <span class="content-color">{{manpowerCategory?.costElement?.description}}</span>
+            <span class="content-color">{{manpowerCategory?.costElement}}</span>
           </div>
           <div class="col-lg-2 col-sm-6 col-12 no-hover-effect">
             <label class="d-sm-block">Approved Head Count
@@ -152,7 +152,8 @@
                   [disabled]="!isEditNewHire" allowNegative="true" [initialValue]="resourceDetails?.plannedBaseSalary"
                   placeholder="Plan Based Salary{{_commonService.currencyFormat}})"
                   [(ngModel)]="resourceDetails.plannedBaseSalary"
-                  (keyup)="limitAmount(resourceDetails?.plannedBaseSalary, 'plannedBaseSalary')" />
+                  (keyup)="limitAmount(resourceDetails?.plannedBaseSalary, 'plannedBaseSalary')"
+                  (ngModelChange)="detectChangeRelatedToCommittedCost()" />
                 <div *ngIf="(map.has('plannedBaseSalary'))" class="invalid-feedback d-block">
                   {{map.get('plannedBaseSalary')}}
                 </div>
@@ -175,7 +176,8 @@
                   [ngClass]="(map.has('costAllocation')) ? 'is-invalid d-block' : ''" placeholder="Cost Allocation %"
                   (focus)="isCostAllocationFocused = true" (focusout)="isCostAllocationFocused = false"
                   [(ngModel)]="resourceDetails.costAllocation"
-                  (keyup)="limitKeypress(resourceDetails.costAllocation)" />
+                  (keyup)="limitKeypress(resourceDetails.costAllocation)"
+                  (ngModelChange)="detectChangeRelatedToCommittedCost()"/>
                 <div *ngIf="(map.has('costAllocation'))" class="invalid-feedback d-block">
                   {{map.get('costAllocation')}}
                 </div>
@@ -270,16 +272,16 @@
                     <label class="switch">
                       <input type="checkbox"
                         (click)="resourceDetails.isMultiAccount = false; resourceDetails.isMainAccount = true;manageAccountWarning();"
-                        [disabled]="resourceDetails?.positionStatusCode === '3'  || !isEditNewHire" checked>
-                      <span [ngClass]="{'switch-disabled': resourceDetails?.positionStatusCode === '3' }"
+                        [disabled]="resourceDetails?.positionStatusCode === '3'|| (isManpowerAdminCorrection && awardData.award.awardDocumentTypeCode != 1)" checked>
+                      <span [ngClass]="{'switch-disabled': resourceDetails?.positionStatusCode === '3' || (isManpowerAdminCorrection && awardData.award.awardDocumentTypeCode != 1)}"
                         class="slider round"><small>Yes</small></span>
                     </label>
                   </a>
                   <a class="pl-2" *ngIf="resourceDetails.isMultiAccount == false;">
                     <label class="switch">
                       <input type="checkbox" (click)="resourceDetails.isMultiAccount = true;manageAccountWarning()"
-                        [disabled]="resourceDetails?.positionStatusCode === '3' || !isEditNewHire">
-                      <span [ngClass]="{'switch-disabled': resourceDetails?.positionStatusCode === '3'}"
+                        [disabled]="resourceDetails?.positionStatusCode === '3' || (isManpowerAdminCorrection && awardData.award.awardDocumentTypeCode != 1)">
+                      <span [ngClass]="{'switch-disabled': resourceDetails?.positionStatusCode === '3' || (isManpowerAdminCorrection && awardData.award.awardDocumentTypeCode != 1)}"
                         class="slider round"><small class="deactivate-text ">No</small></span>
                     </label>
                   </a>
@@ -302,17 +304,17 @@
                     <label class="switch">
                       <input type="checkbox" (click)="resourceDetails.isMainAccount = false;manageAccountWarning()"
                         checked
-                        [disabled]="(resourceDetails.isMultiAccount == false || resourceDetails?.positionStatusCode === '3')  || !isEditNewHire">
+                        [disabled]="resourceDetails.isMultiAccount == false || resourceDetails?.positionStatusCode === '3' || (isManpowerAdminCorrection && awardData.award.awardDocumentTypeCode != 1)">
                       <span class="slider round"
-                        [ngClass]="{'switch-disabled': (resourceDetails.isMultiAccount == false || resourceDetails?.positionStatusCode === '3') }"><small>Yes</small></span>
+                        [ngClass]="{'switch-disabled': (resourceDetails.isMultiAccount == false || resourceDetails?.positionStatusCode === '3' || (isManpowerAdminCorrection && awardData.award.awardDocumentTypeCode != 1)) }"><small>Yes</small></span>
                     </label>
                   </a>
                   <a class="pl-2" *ngIf="resourceDetails.isMainAccount == false">
                     <label class="switch">
                       <input type="checkbox" (click)="resourceDetails.isMainAccount = true;manageAccountWarning()"
-                        [disabled]="(resourceDetails.isMultiAccount == false || resourceDetails?.positionStatusCode === '3') || !isEditNewHire">
+                        [disabled]="resourceDetails.isMultiAccount == false || resourceDetails?.positionStatusCode === '3' || (isManpowerAdminCorrection && awardData.award.awardDocumentTypeCode != 1)">
                       <span class="slider round"
-                        [ngClass]="{'switch-disabled': (resourceDetails.isMultiAccount == false || resourceDetails?.positionStatusCode === '3')}"><small
+                        [ngClass]="{'switch-disabled': (resourceDetails.isMultiAccount == false || resourceDetails?.positionStatusCode === '3' || (isManpowerAdminCorrection && awardData.award.awardDocumentTypeCode != 1))}"><small
                           class="deactivate-text ">No</small></span>
                     </label>
                   </a>

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { CommonService } from '../../../common/services/common.service';
 import { getEndPointOptionsForCountry, getEndPointOptionsForOrganization } from '../../../common/services/end-point.config';
 import { getCurrentTimeStamp } from '../../../common/utilities/date-utilities';
@@ -70,15 +70,17 @@ export class ManpowerAddressBookComponent implements OnInit, OnDestroy {
     this.rolodexValidation();
     if (!this.nonEmployeeMap.size) {
       this.$subscriptions.push(this._addressBookService.saveRolodexData(this.makeRequestReportData(type)).subscribe((data: any) => {
-        if (data && data.message === 'Rolodex saved Successfully') {
+        if (data && data.message === 'Rolodex saved successfully.') {
           this.rolodex = data.rolodex;
           this.clearRolodexDetails();
           this.emitRolodexResult(data.rolodex);
           this._commonService.showToast(HTTP_SUCCESS_STATUS, data.message);
-        } else if (data && data.message === 'Email Address already exists') {
+        } else if (data && data.message === 'Email Address already exists.') {
           this.nonEmployeeMap.set('emailAddress', 'Email Address already exists');
           this.rolodex['genderType'] = null;
         }
+      }, err => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, "Saving Rolodex failed. Please try again.");
       }));
     }
   }

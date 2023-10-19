@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CoiSummaryEventsAndStoreService } from '../coi-summary-events-and-store.service';
 import { Subscription } from 'rxjs';
 import { DataStoreService } from '../../services/data-store.service';
+import { CommonService } from '../../../common/services/common.service';
+import { openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-coi-review',
@@ -14,10 +16,11 @@ export class ReviewComponent implements OnInit {
     coiDetails: any = {};
     isRelationCollapsed = true;
     $subscriptions: Subscription[] = [];
+    selectedProject: any = {};
 
     constructor(
         public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
-        private _dataStore: DataStoreService
+        private _dataStore: DataStoreService, public commonService: CommonService
     ) { }
 
     ngOnInit() {
@@ -44,5 +47,22 @@ export class ReviewComponent implements OnInit {
             })
         );
     }
+ 
+    openModuleSummaryDetails(event = null) {
+        this.selectedProject = event;
+        if (event) {
+            openModal('projectViewModal');
+        }
+    }
 
+    openProjectMoreDetails(moduleId) {
+        let redirectUrl = '';
+        if (this.selectedProject.moduleCode == 3) {
+            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/proposal/overview?proposalId=' + moduleId;
+        } else {
+            redirectUrl = this.commonService.fibiApplicationUrl + '#/fibi/award/overview?awardId=' + moduleId;
+        }
+        window.open(redirectUrl);
+    }
+    
 }

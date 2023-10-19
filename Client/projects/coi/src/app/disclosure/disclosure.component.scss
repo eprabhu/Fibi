@@ -1,5 +1,5 @@
 .disclosure-heading {
-  height: 40px;
+  height: 45px;
   background-color: #E8E8E8;
 }
 
@@ -8,7 +8,7 @@
 }
 
 .navigation-tabs {
-  height: 43px;
+  height: 45px;
   background-color: #E4F1FF;
 }
 
@@ -18,7 +18,6 @@
 
 .notes {
   height: 43px;
-  margin-top: -51px;
   background-color: #DBDBDB;
 }
 
@@ -125,7 +124,7 @@ $bg-color: #E4F1FF;
 }
 
 .side-height {
-  height: 198px;
+  height: 204.5px;
 }
 
 .label-text{
@@ -195,8 +194,12 @@ table {
 }
 
 .min-height-189 {
-  min-height: 200px;
-  max-height: 200px;
+  min-height: 161px;
+  max-height: 160px;
+}
+
+.min-height-90 {
+  min-height: 90.5px;
 }
 
 .btn-outline-grey {
@@ -221,7 +224,7 @@ table {
 
 .header-sticky {
   position: sticky;
-  top: 51px;
+  top: 0;
   z-index: 50;
 }
 
@@ -237,7 +240,7 @@ table {
 }
 
 .status-card-width {
-  width: 280px;
+  width: max-content;
 }
 
 .right-margin {
@@ -272,6 +275,93 @@ table {
   margin-top: 4px;
 }
 
-.m-04 {
-  margin-top: 0.4rem;
+.mt-0 {
+  margin-top: 0px;
+}
+.moreActionIcon {
+  transform: scale(.9);
+  width: 20px;
+}
+
+.info-icon {
+  top: 11px;
+  height: 22px;
+  width: 22px;
+  font-size: 16px;
+  position: absolute;
+  margin-left: 2px;
+  color: #6f7395;
+  cursor: pointer;
+}
+
+.help-text{
+  margin: 0 -7px 0 -7px;
+  position: relative;
+  bottom: 0.6rem;
+}
+
+.grey-info {
+  background: #EEEEEE;
+  color: #202c2e;
+  font-size: 16px;
+  font-weight: 400;
+  border: 1px solid #caced2;
+}
+
+.undo-icon {
+  width: 2.5rem;
+}
+
+.info-card{
+  margin: 0 -8px 0 -8px;
+  position: relative;
+  bottom: 0.6rem;
+}
+
+.returnIcon {
+  transform: rotate(-0.25turn);
+  transform: scaleX(-1);
+}
+
+.invalid {
+  position: relative;
+  top: 2px;
+  color: #ff0000;
+}
+
+.medium-risk {
+  position: relative;
+  top: 2px;
+  color: #ff8c00;
+}
+
+.low-risk {
+  position: relative;
+  top: 2px;
+  color: rgb(26, 172, 62);
+}
+
+.nav-border-right {
+  border-right: 1px solid #afafaf !important;
+}
+
+.nav-btn-grey.active {
+  color: #fff;
+  background-color: #007dec;
+}
+
+.more-action {
+  color: #6a7980 !important;
+  span,
+  mat-icon {
+    color: #6a7980 !important;
+  }
+  &:hover {
+    background-color: #E2F1FF !important;
+    color: #007DEC !important;
+    span,
+    mat-icon {
+      color: #007DEC !important;
+    }
+  }
 }

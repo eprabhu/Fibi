@@ -1,18 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { CompleterOptions } from '../../../../../fibi/src/app/service-request/service-request.interface';
 import { CommonService } from '../../common/services/common.service';
 import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
-import { DefaultAdminDetails } from '../../travel-disclosure/travel-disclosure-interface';
+import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { AssignAdminRO, DefaultAssignAdminDetails } from '../shared-interface';
+import { HTTP_ERROR_STATUS } from '../../app-constants';
 
-declare var $: any;
-
-class AssignAdminRO {
-    adminPersonId = '';
-    adminGroupId = null;
-    travelDisclosureId?: '';
-    disclosureId?: '';
-}
+declare const $: any;
 
 @Component({
     selector: 'app-assign-administrator-modal',
@@ -20,7 +15,7 @@ class AssignAdminRO {
     styleUrls: ['./assign-administrator-modal.component.scss'],
     providers: [AssignAdministratorModalService]
 })
-export class AssignAdministratorModalComponent implements OnInit, OnChanges {
+export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnDestroy {
 
     isAssignToMe = false;
     adminSearchOptions: any = {};
@@ -31,10 +26,12 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
     clearAdminGroupField: any;
     $subscriptions: Subscription[] = [];
     isSaving = false;
+    adminGrpWarningMessage: string;
 
     @Input() disclosureId = null;
-    @Input() defaultAdminDetails = new DefaultAdminDetails();
-    @Input() path: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' = 'DISCLOSURES';
+    @Input() disclosureNumber = null;
+    @Input() defaultAdminDetails = new DefaultAssignAdminDetails();
+    @Input() path: 'DISCLOSURES' | 'TRAVEL_DISCLOSURES' | 'OPA_DISCLOSURES' = 'DISCLOSURES';
     @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private _commonService: CommonService, private _assignAdminService: AssignAdministratorModalService) { }
@@ -42,20 +39,24 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         document.getElementById('toggle-assign-admin').click();
         if (this.checkDefaultAdminPersonId()) {
-            document.getElementById('assignCheck').click();
+            this.isAssignToMe = true;
         }
         this.setDefaultAdminDetails();
     }
 
-    ngOnChanges() {
+    ngOnChanges(): void {
         this.getAdminDetails();
         this.setDisclosureId();
     }
 
-    getAdminDetails() {
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
+    }
+
+    private getAdminDetails() {
         this.$subscriptions.push(this._assignAdminService.getAdminDetails().subscribe((data: any) => {
             this.setAdminGroupOptions(data);
-            this.setCompleterOptions(this.adminSearchOptions, data.persons, 'fullName');
+            this.setCompleterOptions(data.persons, 'fullName', this.adminSearchOptions);
         }));
     }
 
@@ -72,6 +73,9 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
     private setDisclosureId(): void {
         if (this.path === 'TRAVEL_DISCLOSURES') {
             this.addAdmin.travelDisclosureId = this.disclosureId;
+        } else if (this.path === 'OPA_DISCLOSURES') {
+            this.addAdmin.opaDisclosureId = this.disclosureId;
+            this.addAdmin.opaDisclosureNumber = this.disclosureNumber;
         } else {
             this.addAdmin.disclosureId = this.disclosureId;
         }
@@ -91,7 +95,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
         return data.adminGroups.filter(element => element.isActive === 'Y');
     }
 
-    setCompleterOptions(searchOption: any = null, arrayList: any, searchShowField: string) {
+    private setCompleterOptions(arrayList: any, searchShowField: string, searchOption: any = null) {
         searchOption.defaultValue = '';
         searchOption.arrayList = arrayList || [];
         searchOption.contextField = searchShowField;
@@ -103,10 +107,11 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
             this.adminSearchOptions.defaultValue = this._commonService.getCurrentUserDetail('fullName');
             this.addAdmin.adminPersonId = this._commonService.getCurrentUserDetail('personId');
             this.isAssignToMe = true;
+            this.getPersonGroup();
             this.assignAdminMap.clear();
         } else {
-            this.addAdmin.adminPersonId = this.checkDefaultAdminPersonId() ? null : this.defaultAdminDetails.adminPersonId;
-            this.adminSearchOptions.defaultValue = this.checkDefaultAdminPersonId() ? '' : this.defaultAdminDetails.adminPersonName;
+            this.addAdmin.adminPersonId = null;
+            this.adminSearchOptions.defaultValue = null;
             this.isAssignToMe = false;
         }
         this.clearAdministratorField = new String('false');
@@ -116,23 +121,28 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
         if (event) {
             this.addAdmin.adminPersonId = event.personId;
             this.isAssignToMe = this.setAssignToMe();
+            this.getPersonGroup();
             this.assignAdminMap.clear();
         } else {
             this.addAdmin.adminPersonId = null;
+            this.addAdmin.adminGroupId = null;
+            this.clearAdministratorField = new String('true');
+            this.adminSearchOptions.defaultValue = '';
+            this.clearAdminGroupField = new String('true');
+            this.adminGroupsCompleterOptions.defaultValue = '';
             this.isAssignToMe = false;
         }
     }
 
     public adminGroupSelect(event) {
-        this.addAdmin.adminGroupId = (event && event.adminGroupId) || null;
+        this.addAdmin.adminGroupId = (event?.adminGroupId) || null;
     }
 
     public assignAdministrator() {
         if (!this.isSaving && this.validateAdmin()) {
             this.isSaving = true;
             this.setDisclosureId();
-            const path = this.path === 'DISCLOSURES' ? 'disclosure' : 'travelDisclosure';
-            this.$subscriptions.push(this._assignAdminService.assignAdmin(path, this.addAdmin)
+            this.$subscriptions.push(this._assignAdminService.assignAdmin(this.getPath(), this.addAdmin)
                 .subscribe((data: any) => {
                     this.isAssignToMe = false;
                     this.addAdmin = new AssignAdminRO();
@@ -143,6 +153,17 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
                 }, err => {
                     this.isSaving = false;
                 }));
+        }
+    }
+
+    private getPath() {
+        switch (this.path) {
+            case 'DISCLOSURES':
+                return 'disclosure';
+            case 'TRAVEL_DISCLOSURES':
+                return 'travelDisclosure';
+            case 'OPA_DISCLOSURES':
+                return 'opa';
         }
     }
 
@@ -164,5 +185,29 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges {
         this.addAdmin = new AssignAdminRO();
         this.clearAdminGroupField = new String('true');
         this.clearAdministratorField = new String('true');
+    }
+
+    getPersonGroup() {
+        this.adminGrpWarningMessage = '';
+        if(!this.isSaving) {
+            this.isSaving = true;
+            this.$subscriptions.push(this._assignAdminService.getPersonGroup(this.addAdmin.adminPersonId).subscribe((data: any) => {
+                if(data && data.adminGroupId) {
+                    this.addAdmin.adminGroupId = data.adminGroupId;
+                    this.adminGroupsCompleterOptions.defaultValue = data.adminGroupName;
+                    this.clearAdminGroupField = new String('false');
+                    this.isSaving = false;
+                } else {
+                    this.adminGrpWarningMessage = data;
+                    this.adminGroupsCompleterOptions.defaultValue = '';
+                    this.clearAdminGroupField = new String('true');
+                    this.addAdmin.adminGroupId = null;
+                    this.isSaving = false;
+                }
+            }, error => {
+                this.isSaving = false;
+                this._commonService.showToast(HTTP_ERROR_STATUS, "Error in fetching group details");
+            }));
+        }
     }
 }

@@ -183,7 +183,7 @@
 												Print Institute Proposal</a>
 										</li>
 									<li *ngIf="result.instProposal.proposalSequenceStatus === 'ACTIVE'"><span class="separator"></span></li>
-									<li *ngIf="result.instProposal.proposalSequenceStatus === 'ACTIVE' && !isPendingVersionAvailable" title="Review Actions" class="dropdown-submenu">
+									<li *ngIf="result.instProposal.proposalSequenceStatus === 'ACTIVE' && isModifyIp && !isPendingVersionAvailable" title="Review Actions" class="dropdown-submenu">
 										<a class="dropdown-item hand-cursor" id="notify-btn"
 											(mouseenter)="isShowReviewActions = !isShowReviewActions;"
 											[ngClass]=" isShowReviewActions ? 'active' : ''">
@@ -589,3 +589,31 @@
 		</div>
 	</div>
 </div> 
+
+<div class="modal fade show mySkinDialog" id="invalidActionModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invalid Action</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+			<div class="form-row">
+				<div class="col-1">
+					<i class="fa fa-2x fa-exclamation-triangle text-warning position-person-inpur-box" aria-hidden="true"></i>
+				</div>
+				<div class="col-11">
+					<p>
+						You have tried to perform an action that is not valid for the current state of this Institute Proposal. The likely cause is that
+						somebody has changed the Institute Proposal recently. Please click the Refresh button to proceed further.
+					</p>
+				</div>
+			</div>
+            <div class="modal-footer">
+                <button class="btn btn-primary-sub btn-sm" data-dismiss="modal" type="button" (click)="reload()"
+                    >OK</button>
+            </div>
+        </div>
+    </div>
+  </div>

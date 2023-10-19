@@ -58,7 +58,7 @@
     background-color: #fff;
     height: 100vh;
     padding: 0px 10px 10px 10px;
-    overflow: auto;
+    overflow-y: scroll;
   }
 
   .overlay {

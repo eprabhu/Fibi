@@ -10,6 +10,7 @@ import { setFocusToElement, scrollIntoView, validatePercentage } from '../../../
 import { CommonService } from '../../../common/services/common.service';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
+declare var $: any;
 
 @Component({
   selector: 'app-project-team',
@@ -309,6 +310,7 @@ export class ProjectTeamComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedMemberObject = rolodexObject.rolodex;
     }
     this.isAddNonEmployeeTeamModal = rolodexObject.nonEmployeeFlag;
+    $('#add-person-modal').modal('show');
   }
 
   /**
@@ -333,16 +335,17 @@ export class ProjectTeamComponent implements OnInit, OnDestroy, OnChanges {
           this.result.awardProjectTeams.splice(this.editIndex, 1, data.awardProjectTeam);
         }
         if (this.isTeamEdit) {
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Project team updated successfully.');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Project Team updated successfully.');
         } else {
-          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Project team added successfully.');
+          this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Project Team added successfully.');
         }
         this.resetTeamFields();
         this.updateAwardStoreData();
         this.showTeamCard = false;
         this.isSaving = false;
+        $('#add-person-modal').modal('hide');
       }, err => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Adding to project team failed. Please try again.');
+        this._commonService.showToast(HTTP_ERROR_STATUS, (!this.isTeamEdit ? 'Adding ' : 'Updating ') + 'to Project Team failed. Please try again.');
         this.isSaving = false;
       }));
     }
@@ -429,4 +432,9 @@ export class ProjectTeamComponent implements OnInit, OnDestroy, OnChanges {
 setShowElasticResults(elasticResultShow) {
   this.showTeamCard = elasticResultShow.isShowElasticResults;
 }
+
+switchToNonEmployeeModal(){
+  $('#add-person-modal').modal('hide');
+}
+
 }
