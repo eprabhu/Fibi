@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Pattern;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -19,6 +20,8 @@ public class OPADashboardRequestDto {
     private Map<@Pattern(regexp="^$|[a-zA-Z\\.]+$", message="Sort key must not include special characters.")
             String, @Pattern(regexp="^$|[a-zA-Z]+$", message="Sort value must not include special characters.")
             String> sort = new HashMap<>();
-    private String property1;
-    private String property2;
+    private String unitNumber;
+    private String submissionTimestamp;
+    private List<String> dispositionStatusCodes;
+    private List<String> opaDisclosureStatusCodes;
 }
