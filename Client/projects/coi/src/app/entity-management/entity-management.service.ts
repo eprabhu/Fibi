@@ -24,6 +24,7 @@ export class EntityManagementService {
     {code: 'Y', description: 'Active'},
     {code: 'N', description: 'Inactive'}
   ];
+  concurrentUpdateAction = '';
 
   getAllSystemEntityList(params) {
     return this._http.post(this._commonService.baseUrl + '/getAllSystemEntityList', params);

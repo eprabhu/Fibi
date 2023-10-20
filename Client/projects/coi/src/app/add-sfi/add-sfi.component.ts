@@ -61,6 +61,7 @@ export class AddSfiComponent implements OnInit {
     isAddressReadMore: false;
     isChecked = {};
     relationLookup: any = [];
+    concurrencyPersonEntityId = null;
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -186,7 +187,12 @@ export class AddSfiComponent implements OnInit {
                 }
             }, _err => {
                 this.isSaving = false;
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating SFI , please try again.');
+                    if (_err.status === 405) {
+                        this.concurrencyPersonEntityId = _err.error.personEntityId;
+                        openModal('sfi-concurrency-modal');
+                    } else {
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in creating SFI , please try again.');
+                    }
             }));
     }
 
@@ -371,9 +377,14 @@ export class AddSfiComponent implements OnInit {
         this.entityDetails.coiEntity.majorVersion = this.modifyType === '2' ? true : false;
         this.createOrUpdateEntitySFI();
     }
+
     viewSfiDetails() {
         this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.existingEntityDetails.personEntityId, mode: 'view' } });
     }
+
+    editSfiDetails(personEntityId) {
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: personEntityId, mode: 'edit' } });
+      }
 
     viewEntityDetails(event) {
         this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: event } });

@@ -68,7 +68,8 @@
     </div>
 
     <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityName"
-      [personEntityId]="personEntityId" [isRelationshipActive]="isRelationshipActive" (closeModal)="closeActivateInactivateSfiModal($event)">
+      [personEntityId]="personEntityId" [isRelationshipActive]="isRelationshipActive" (closeModal)="closeActivateInactivateSfiModal($event)"
+      [personEntityNumber]="personEntityNumber">
     </app-activate-inactivate-sfi-modal>
 
     <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-delete-button" data-bs-toggle="modal" data-bs-target="#deleteSFIConfirmationModal"></button>
@@ -89,3 +90,5 @@
         </div>
       </div>
     </div>
+    
+<app-concurrency-warning-modal *ngIf="isConcurrency" [sectionName]="'Delete SFI'" (closePage)="isConcurrency = false"></app-concurrency-warning-modal>

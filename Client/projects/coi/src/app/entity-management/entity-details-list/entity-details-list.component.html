@@ -659,3 +659,5 @@
     </div>
   </div>
 </div>
+
+<app-concurrency-warning-modal *ngIf="entityManagementService.concurrentUpdateAction" [sectionName]="entityManagementService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

@@ -11,6 +11,7 @@ import { EntityDetailsService } from '../../disclosure/entity-details/entity-det
 import { SfiService } from '../../disclosure/sfi/sfi.service';
 import { getEndPointOptionsForEntity } from '../../../../../fibi/src/app/common/services/end-point.config';
 import { fadeInOutHeight } from '../../common/utilities/animations';
+import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 declare const $: any;
 @Component({
@@ -49,6 +50,7 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
     @Input() isTriggeredFromSlider: boolean = false;
     isShowRiskHistory = false;
     isOpenSlider = false;
+    isConcurrency = false;
 
     constructor(private _router: Router, private _route: ActivatedRoute,
         public entityManagementService: EntityManagementService,
@@ -61,9 +63,6 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
         this.hasManageEntity = this._commonServices.rightsArray.includes('MANAGE_ENTITY');
         this.getRelationshipTypes();
     }
-
-
-
 
     ngOnDestroy() {
         this.sfiService.isShowSfiNavBar = false;
@@ -155,17 +154,23 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
             const REQ_BODY = {
                 entityId: this.entityDetails.entityId,
                 isActive: !this.entityDetails.isActive,
-                revisionReason: this.inactivateReason
+                revisionReason: this.inactivateReason,
+                entityNumber: this.entityDetails.entityNumber
             };
             this.$subscriptions.push(this.entityManagementService.activateInactivate(REQ_BODY).subscribe((res: any) => {
                 this.inactivateReason = '';
                 document.getElementById('hide-inactivate-modal').click();
-                this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity ${this.entityDetails.isActive ? 'inactivate' : 'activate '} successfully completed `);
+                this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity ${this.entityDetails.isActive ? 'inactivated' : 'activated '} successfully`);
                 const entityId = Number(this.entityDetails.entityId);
                 entityId === res.entityId ? this.modifiedEntityId.emit(res) :
                     this._router.navigate(['/coi/entity-management/entity-details'], { queryParams: { entityManageId: res.entityId } });
             }, error => {
-                this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                if (error.status === 405) {
+                    hideModal('inactivateConfirmationModal');
+                    this.entityManagementService.concurrentUpdateAction = `${this.entityDetails.isActive ? 'Inactivate' : 'Activate '} Entity`;
+                } else {
+                    this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                }
             }));
         }
     }
@@ -211,6 +216,13 @@ export class ViewEntityDetailsComponent implements OnInit, OnDestroy {
                 document.getElementById('hide-approve-entity-modal').click();
                 this.clearApproveEntityFiled();
                 this._commonServices.showToast(HTTP_SUCCESS_STATUS, `Entity verified successfully.`);
+            }, error => {
+                if (error.status === 405) {
+                    hideModal('approve-entity-modal');
+                    this.entityManagementService.concurrentUpdateAction = 'Approve Entity';
+                } else {
+                    this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                }
             }));
         }
     }

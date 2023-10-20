@@ -493,3 +493,5 @@
 <div *ngIf="isOpenRiskSlider">
     <app-travel-risk-slider (closePage)="closeSlider($event)" [travelDisclosure]="travelDisclosure" (riskChange)= "changeDataStoreRisk($event)" [isEditMode]="checkReviewStatusCode(['2','3'], 'SOME')"></app-travel-risk-slider>
 </div>
+
+<app-concurrency-warning-modal *ngIf="service.concurrentUpdateAction" [sectionName]="service.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

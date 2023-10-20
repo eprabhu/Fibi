@@ -24,6 +24,7 @@ export class EntityDetailsService {
   isShowHistoryInfo = true;
   unSavedSections = [];
   relationshipCompletedObject: any = {};
+  concurrentUpdateAction = '';
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
