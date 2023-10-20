@@ -523,6 +523,10 @@
     "/opa/dashboard": {
         "target": "http://10.199.100.62:8071/",
         "secure": false
+    },
+    "/getEntityWithRelationShipInfo": {
+        "target": "http://10.199.100.62:8071/coi/",
+        "secure": false
     }
 
 }
