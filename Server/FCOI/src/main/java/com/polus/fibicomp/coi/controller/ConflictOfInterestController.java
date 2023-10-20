@@ -132,7 +132,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/saveOrUpdateCoiFinancialEntityDetails")
-	public List<PersonEntityRelationship> saveCoiFinancialEntityDetails(@RequestBody PersonEntityRelationship vo) {
+	public ResponseEntity<Object> saveCoiFinancialEntityDetails(@RequestBody PersonEntityRelationship vo) {
 		logger.info("Request for saveOrUpdateCoiFinancialEntityDetails");
 		return conflictOfInterestService.saveOrUpdatePersonEntityRelationship(vo);
 	}
@@ -157,7 +157,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/reviseDisclosure")
-	public String reviseDisclosure(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> reviseDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for reviseDisclosure");
 		return conflictOfInterestService.reviseDisclosure(vo);
 	}
@@ -177,7 +177,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/saveOrUpdateCoiReview")
-	public CoiReview saveOrUpdateCoiReview(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> saveOrUpdateCoiReview(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for saveOrUpdateCoiReview");
 		return conflictOfInterestService.saveOrUpdateCoiReview(vo);
 	}
@@ -189,7 +189,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/startCOIReview")
-	public CoiReview startReview(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> startReview(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for startReview");
 		return conflictOfInterestService.startReview(vo);
 	}
@@ -208,7 +208,7 @@ public class ConflictOfInterestController {
 	}
 	
 	@PostMapping("/completeCOIReview")
-	public CoiReview completeReview(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> completeReview(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for CompleteReview");
 		return conflictOfInterestService.completeReview(vo);
 	}
