@@ -29,6 +29,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.inbox.pojo.Inbox;
@@ -95,10 +96,10 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used to create SFI
-	 * @param vo
+	 * @param personEntity
 	 * @return vo
 	 */
-	ResponseEntity<Object> createSFI(ConflictOfInterestVO vo);
+	ResponseEntity<Object> createSFI(PersonEntity personEntity);
 
 	/**
 	 * This method is used to certifyDisclosure
@@ -328,7 +329,7 @@ public interface ConflictOfInterestService {
 
 	public ResponseEntity<Object> getPersonEntityDetails(Integer personEntityId);
 
-	ResponseEntity<Object> getRelatioshipDetails(String tabName);
+	ResponseEntity<Object> getValidPersonRelationshipLookUp();
 
 	ResponseEntity<Object> getPersonEntityRelationship(ConflictOfInterestVO vo);
 	
