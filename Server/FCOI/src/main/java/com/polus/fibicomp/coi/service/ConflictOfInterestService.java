@@ -34,6 +34,7 @@ import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.inbox.pojo.Inbox;
 import com.polus.fibicomp.coi.pojo.Attachments;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 
 @Transactional
 @Service(value = "conflictOfInterestService")
@@ -578,4 +579,10 @@ public interface ConflictOfInterestService {
     
     List<Attachments> loadAllAttachmentsForPerson(String personId);
 
+	/**
+	 * This method fetches all person entity with entity and relationship of a person
+	 * @param requestDto
+	 * @return
+	 */
+    ResponseEntity<Object> getEntityWithRelationShipInfo(CommonRequestDto requestDto);
 }
