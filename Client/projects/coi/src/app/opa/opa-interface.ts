@@ -44,6 +44,7 @@ export class OpaDisclosure {
     personEmail: string;
     personPrimaryTitle: string;
     homeUnitName: string;
+    opaFormBuilderDetails: any[];
 }
 
 export interface DispositionStatusType {
