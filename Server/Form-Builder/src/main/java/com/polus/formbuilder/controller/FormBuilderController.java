@@ -1,6 +1,7 @@
 package com.polus.formbuilder.controller;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
 import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
@@ -25,15 +27,23 @@ import com.polus.formbuilder.model.FormComponentFetchResponse;
 import com.polus.formbuilder.model.FormComponentSaveRequest;
 import com.polus.formbuilder.model.FormRequest;
 import com.polus.formbuilder.model.FormResponse;
+import com.polus.formbuilder.programmedelement.ProgrammedElement;
+import com.polus.formbuilder.programmedelement.ProgrammedElementJSONObjectMapper;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
+import com.polus.formbuilder.programmedelement.ProgrammedElementService;
+import com.polus.formbuilder.programmedelement.opa.compuncomp.OPACompUncompRequestModel;
+import com.polus.formbuilder.service.FormBuilderService;
 import com.polus.formbuilder.service.FormBuilderServiceCoordinator;
 
 @RestController
 @RequestMapping("/")
 public class FormBuilderController {
-
+	
 	@Autowired
 	FormBuilderServiceCoordinator service;
+	
+	@Autowired
+	ProgrammedElementJSONObjectMapper PEObjectMapper;
 	
 	@GetMapping("/ping")
 	String greetings() {
@@ -107,7 +117,8 @@ public class FormBuilderController {
         dto.setComponentId(Integer.parseInt(multiRequest.getParameter("componentId")));
         dto.setComponentType(multiRequest.getParameter("componentType"));
         dto.setComponentRefId(multiRequest.getParameter("componentRefId"));
-
+        dto.setComponentData(multiRequest.getParameter("componentData"));
+      
         ObjectMapper objectMapper = new ObjectMapper();       
 	       
 	        if(dto.getComponentType().equals("QN")) {
@@ -125,8 +136,20 @@ public class FormBuilderController {
 	        	dto.setQuestionnaire(null);
 	        	
 	        }else if(dto.getComponentType().equals("PE")) {
-	        	String programmedElementJson = multiRequest.getParameter("programmedElement");
-	        	ProgrammedElementModel programmedElement = objectMapper.readValue(programmedElementJson, ProgrammedElementModel.class);
+	        	
+	        	
+	        	String programmedElementJson = multiRequest.getParameter("programmedElement");	        	
+	        	ProgrammedElementModel programmedElement = PEObjectMapper.jsonObjectMapper(dto.getComponentData(),"SAVE_COMPONENT",programmedElementJson);
+
+//				 ProgrammedElementModel programmedElement = (ProgrammedElementModel) objectMapper.readValue(programmedElementJson, OPACompUncompRequestModel.class);
+//	        	 ProgrammedElementModel programmedElement = null;
+//				try {
+//					programmedElement = (ProgrammedElementModel)objectMapper.readValue(programmedElementJson, Class.forName("com.polus.formbuilder.programmedelement.opa.compuncomp."+requestModelName));
+//				} catch (JsonProcessingException | ClassNotFoundException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+	              
 	        	dto.setProgrammedElement(programmedElement);
 	        	dto.setCustomElement(null);
 	        	dto.setQuestionnaire(null);
@@ -134,5 +157,15 @@ public class FormBuilderController {
 	        }
 	        
 	return dto;
-}	
+}
+    
+    private String getRequestModel(String programmedElementName) {
+    	
+    	if (programmedElementName.endsWith("Component")) {
+            return programmedElementName.replace("Component", "RequestModel");
+        }else {
+        	throw new RuntimeException("PE naming standard not followed for "+programmedElementName);
+        }
+    }
+    
 }

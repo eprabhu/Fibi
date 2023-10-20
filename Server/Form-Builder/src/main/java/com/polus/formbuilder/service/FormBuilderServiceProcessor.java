@@ -17,7 +17,6 @@ import com.polus.appcorelib.customdataelement.controller.CustomDataElementContro
 import com.polus.appcorelib.customdataelement.service.CustomDataElementService;
 import com.polus.appcorelib.customdataelement.vo.CustomDataElementVO;
 import com.polus.appcorelib.customdataelement.vo.CustomDataResponse;
-import com.polus.appcorelib.questionnaire.controller.QuestionnaireController;
 import com.polus.appcorelib.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.appcorelib.questionnaire.service.QuestionnaireService;
 import com.polus.formbuilder.dao.FormBuilderServiceProcessorDAO;
@@ -39,6 +38,7 @@ import com.polus.formbuilder.model.FormComponentSaveResponse;
 import com.polus.formbuilder.model.FormRequest;
 import com.polus.formbuilder.model.FormResponse;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
+import com.polus.formbuilder.programmedelement.ProgrammedElementModuleDetails;
 import com.polus.formbuilder.programmedelement.ProgrammedElementService;
 import com.polus.formbuilder.repository.FormBuilderHeaderEntityRepository;
 import com.polus.formbuilder.repository.FormBuilderProgElementEntityRepository;
@@ -154,12 +154,15 @@ public class FormBuilderServiceProcessor {
 	}
 	
 	public FormComponentFetchResponse PerformGetQuestionnaireComponent(FormComponentFetchRequest request) {
+		
+		// component Id is saved as moduleSubItemKey in the Form Builder module
+		// for Questionnaire Engine and Custom Element Engine
 		FormBuilderSectionsComponentDTO componentDTO = getComponentInfoById(request.getComponentId());
 		componentDTO.setQuestionnaire(		
 										getQuestionnaireComponent(request.getModuleItemCode(),
 																  request.getModuleSubItemCode(),
 																  request.getModuleItemKey(),
-																  request.getModuleSubItemKey(),
+																  request.getComponentId().toString(),
 																  request.getComponentRefId())
 									 );
 		return (FormComponentFetchResponse) componentDTO;
@@ -167,12 +170,16 @@ public class FormBuilderServiceProcessor {
 
 
 	public FormComponentFetchResponse PerformGetCustomElementComponent(FormComponentFetchRequest request) {
+		
+		// component Id is saved as moduleSubItemKey in the Form Builder module
+		// for Questionnaire Engine and Custom Element Engine
+		
 		FormBuilderSectionsComponentDTO componentDTO = getComponentInfoById(request.getComponentId());
 		componentDTO.setCustomElement(
 										getCustomElementComponent(request.getModuleItemCode(),
 																  request.getModuleSubItemCode(),
 																  request.getModuleItemKey(),
-																  request.getModuleSubItemKey(),
+																  request.getComponentId().toString(),
 																  request.getComponentRefId())				
 									  
 									);
@@ -212,11 +219,15 @@ public class FormBuilderServiceProcessor {
 	public FormComponentSaveResponse 
 					PerformSaveQuestionnaireComponent(FormComponentSaveRequest request, 
 													  MultipartHttpServletRequest multipartRequest) {
-		//QuestionnaireController c;
-		//QuestionnaireBusDTO  questionnaireBusDTO = (QuestionnaireBusDTO) request.getQuestionnaire();		
-		//questionnaireBusDTO = (QuestionnaireBusDTO) questionnaireService.saveQuestionnaireAnswers(questionnaireBusDTO, multipartRequest);
-		
+	
+		// component Id is saved as moduleSubItemKey in the Form Builder module
+		// for Questionnaire Engine and Custom Element Engine
 		QuestionnaireDataBus questionnaireBus = request.getQuestionnaire();
+		questionnaireBus.setModuleItemCode(Integer.parseInt(request.getModuleItemCode()));
+		questionnaireBus.setModuleSubItemCode(Integer.parseInt(request.getModuleSubItemCode()));
+		questionnaireBus.setModuleItemKey(request.getModuleItemKey());
+		questionnaireBus.setModuleSubItemKey(request.getComponentId().toString());
+		
 		questionnaireBus = questionnaireService.saveQuestionnaireAnswers(questionnaireBus, multipartRequest);		
 		var response = initialComponentSaveReponse(request);
 		response.setQuestionnaire(questionnaireBus);
@@ -227,7 +238,15 @@ public class FormBuilderServiceProcessor {
 
 	public FormComponentSaveResponse PerformSaveCustomElementComponent(FormComponentSaveRequest request) {
 		CustomDataElementController c;
-		CustomDataElementVO customElement = request.getCustomElement();		
+		CustomDataElementVO customElement = request.getCustomElement();	
+		
+		// component Id is saved as moduleSubItemKey in the Form Builder module
+		// for Questionnaire Engine and Custom Element Engine
+		customElement.setModuleCode(Integer.parseInt(request.getModuleItemCode()));
+		customElement.setSubModuleCode(Integer.parseInt(request.getModuleSubItemCode()));
+		customElement.setModuleItemKey(Integer.parseInt(request.getModuleItemKey()));
+		customElement.setSubModuleItemKey(request.getComponentId().toString());
+		
 		customElement = customDataElementService.saveCustomResponse(customElement);
 		//FormBuilderSectionsComponentDTO componentDTO = getComponentInfoById(request.getComponentId());
 		var response = initialComponentSaveReponse(request);
@@ -239,19 +258,31 @@ public class FormBuilderServiceProcessor {
 	
 	public FormComponentSaveResponse PerformSaveProgrammedElementComponent(FormComponentSaveRequest request) {
 		
-		Optional<FormBuilderProgElementEntity> programmedElementOptional = programmedElementRepository.findById(Integer.parseInt(request.getComponentRefId()));
-		if(programmedElementOptional.isEmpty()) {
-			return null;
+		String programmedElementName = request.getComponentData();
+		if(programmedElementName == null) {
+			Optional<FormBuilderProgElementEntity> programmedElementOptional = programmedElementRepository.findById(Integer.parseInt(request.getComponentRefId()));
+			if(programmedElementOptional.isEmpty()) {
+				throw new RuntimeException("No entry in Programmed Element for Id "+request.getComponentRefId());
+			}
+			
+			FormBuilderProgElementEntity programmedElementEntity = programmedElementOptional.get();
+			programmedElementName = programmedElementEntity.getProgElementName();
 		}
+			
+		var moduleDetails = 
+				 ProgrammedElementModuleDetails.builder()
+				 							   .moduleItemCode(request.getModuleItemCode())
+				 							   .moduleSubItemCode(request.getModuleSubItemCode())
+				 							   .moduleItemKey(request.getModuleItemKey())
+				 							   .moduleSubItemKey(request.getModuleSubItemKey())
+				 							   .loggedInUser(getLoggedInUser())
+				 							   .build();
 		
-		FormBuilderProgElementEntity programmedElementEntity = programmedElementOptional.get();
+		ProgrammedElementModel programmedElement =  programmedElementService.save(programmedElementName,moduleDetails, request.getProgrammedElement());
+		var response = initialComponentSaveReponse(request);
+		response.setProgrammedElement(programmedElement);
 		
-		String programmedElementName = programmedElementEntity.getProgElementName();	
-		
-		programmedElementService.performAction(programmedElementName, request.getProgrammedElement());
-		
-		return null;
-		
+		return response;
 	}
 	
 
@@ -389,6 +420,9 @@ public class FormBuilderServiceProcessor {
 															String moduleSubItemKey
 															) {		
 		
+		// component Id is saved as moduleSubItemKey in the Form Builder module
+		// for Questionnaire Engine and Custom Element Engine
+		
 		componentList.parallelStream()
 					.forEach(component -> {
 						
@@ -398,7 +432,7 @@ public class FormBuilderServiceProcessor {
 															getQuestionnaireComponent(moduleItemCode,
 																					  moduleSubItemCode, 
 																					  moduleItemKey,
-																					  moduleSubItemKey,
+																					  component.getComponentId().toString(), 
 																					  component.getComponentRefId()));
 									
 									
@@ -408,7 +442,7 @@ public class FormBuilderServiceProcessor {
 															getCustomElementComponent(moduleItemCode,
 																					  moduleSubItemCode,
 																					  moduleItemKey,
-																					  moduleSubItemKey,
+																					  component.getComponentId().toString(),
 																					  component.getComponentRefId()));
 							}else if (component.getComponentType().equals(FormBuilderConstants.PROGRAMMED_ELEMENT_COMPONENT)) {
 								
@@ -478,8 +512,17 @@ public class FormBuilderServiceProcessor {
 		if (moduleSubItemKey == null) {
 					return	programmedElementService.getBlankResponse(programmedElementEntity.getProgElementName());
 		}
-		
+		 var moduleDetails = 
+				 ProgrammedElementModuleDetails.builder()
+				 							   .moduleItemCode(moduleItemCode)
+				 							   .moduleSubItemCode(moduleSubItemCode)
+				 							   .moduleItemKey(moduleItemKey)
+				 							   .moduleSubItemKey(moduleSubItemKey)
+				 							   .loggedInUser(getLoggedInUser())
+				 							   .build();
+		 
 		return	programmedElementService.getResponse(programmedElementEntity.getProgElementName(),
+													 moduleDetails,
 													 request
 													 );
 	}
@@ -521,24 +564,6 @@ public class FormBuilderServiceProcessor {
 		
 		return bus;
 	}
-	
-	private CustomDataElementVO intialCustomDataElementVO(Integer elementId,
-														  String moduleItemCode,
-														  String moduleSubItemCode,
-														  String moduleItemKey,
-														  String moduleSubItemKey) {
-
-		CustomDataElementVO customDataElementVO = new CustomDataElementVO();
-		customDataElementVO.setCustomDataElementId(elementId);
-		customDataElementVO.setModuleCode(Integer.parseInt(moduleItemCode));
-		customDataElementVO.setSubModuleCode(Integer.parseInt(moduleSubItemCode));
-		if(moduleItemKey != null) {
-			customDataElementVO.setModuleItemKey(Integer.parseInt(moduleItemKey));
-			customDataElementVO.setSubModuleItemKey(moduleSubItemKey);
-		}				
-		
-		return customDataElementVO;
-	}	
 	
 	private FormBuilderSectionsComponentDTO mapComponentEntityToDTO(FormBuilderSectionComponentEntity entity) {
 		
@@ -609,5 +634,13 @@ public class FormBuilderServiceProcessor {
 		FormBuilderProgElementEntity programmedElementEntity = programmedElementOptional.get();
 		return programmedElementEntity;
 	}
-	
+
+	private String getLoggedInUser() {		
+		try {
+			//commenting this code just for testing the application without auth header
+			return "admin";//AuthenticatedUser.getLoginUserName();
+		}catch(Exception e) {
+			return "nouser";
+		}
+	}
 }
