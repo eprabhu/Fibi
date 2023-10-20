@@ -269,7 +269,7 @@ public class OPADaoImpl implements OPADao {
                         .dispositionStatusCode(rset.getString("DISPOSITION_STATUS_CODE"))
                         .dispositionStatus(rset.getString("DISPOSITION_STATUS"))
                         .disclosureStatus(rset.getString("OPA_DISCLOSURE_STATUS"))
-                        .updateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
+                        .updateTimeStamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
                         .updateUser(rset.getString("UPDATE_USER"))
                         .updateUserFullName(rset.getString("UPDATE_USER_FULL_NAME"))
                         .build()
@@ -382,11 +382,13 @@ public class OPADaoImpl implements OPADao {
 				opaDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(opaDisclosure.getUpdateUser()));
 				opaDisclosure.setAdminPersonName(opaDisclosure.getAdminPersonId() != null ? personDao.getPersonFullNameByPersonId(opaDisclosure.getAdminPersonId()) : null);
 				opaDisclosure.setAdminGroupName(opaDisclosure.getAdminGroupId() != null ? commonDao.getAdminGroupByGroupId(opaDisclosure.getAdminGroupId()).getAdminGroupName() : null);
+				opaDisclosure.setHomeUnitName(commonDao.getUnitName(opaDisclosure.getHomeUnit()));
 				opaDisclosures.add(opaDisclosure);
 			}
 			OPADisclosure opaDisclosure = getPendingOpaDisclosure(personId);
 			if (opaDisclosure != null) {
 				opaDisclosure.setUpdateUserFullName(personDao.getUserFullNameByUserName(opaDisclosure.getUpdateUser()));
+				opaDisclosure.setHomeUnitName(commonDao.getUnitName(opaDisclosure.getHomeUnit()));
 				opaDisclosures.add(opaDisclosure);
 			}
 		} catch (Exception ex) {
