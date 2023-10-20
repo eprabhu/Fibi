@@ -1,7 +1,62 @@
-<div>
-    <app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
+
+<app-view-relationship-details [isShowHeader]="true" [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
         [isEditMode]="isEditMode" [entityDetails]="entityDetails" [deleteRelationshipEvent]="deleteRelationshipEvent"
         [isTriggeredFromSlider]="isTriggeredFromSlider" (closeEntityInfoCard)="closeSlider($event)"></app-view-relationship-details>
+
+<div class="d-flex">
+    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 shadow-sm user-dashboard-nav">
+      <ng-container *ngIf="entityDetailService.definedRelationships?.length">
+        <ng-container *ngFor="let coiFinancialEntityDetail of entityDetailService.definedRelationships;let last = last">
+          <div 
+            (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail);" 
+            class="text-secondary p-10 border-end" role="button"
+            [ngClass]="entityDetailService.selectedTab === 'QUESTIONNAIRE' && 
+            entityDetailService.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'navigation-icons':''">
+            <span title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}} Questionnaire"
+              [ngClass]="entityDetailService.selectedTab === 'QUESTIONNAIRE' && entityDetailService.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
+              class="active r-title px-3 py-3">
+              {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}
+              <span id="qnr-complete-msg"
+                *ngIf="entityDetailService.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
+                class="fa fa-check" title="Completed">
+              </span>
+              <span id="qnr-incomplete-msg"
+                *ngIf="!entityDetailService.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
+                class="fa fa-exclamation-circle" title="Incomplete">
+              </span>
+            </span>
+            </div>
+        </ng-container>
+      </ng-container>
+      <div *ngIf="isEditMode && entityDetailService.canMangeSfi" class="pt-1 mt-2 px-4 border-end"  
+      [ngClass]="isHoverAddRelationship?'text-primary':'text-secondary'"
+      (mouseover)="isHoverAddRelationship = true" (mouseout)="isHoverAddRelationship = false"  role="button" (click)="saveOrAddRelationshipModal()">
+        <span class="px-2 d-flex align-items-center">
+          <mat-icon class="material-icons-outlined mr-2">add_circle_outline</mat-icon>
+          <span>Add Relationship</span>
+        </span>
+      </div>  
+    </nav>
+    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-auto shadow-sm user-dashboard-nav">
+      <div class="text-secondary navigation-icons p-10 border-end cursor-pointer" (click)="openRelationDetails()">
+        <span title="Click to view History" class="r-title px-3 py-3 fw-500" [class.active]="entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS'">
+          Relationship Details
+        </span>
+        </div>
+        <div class="text-secondary navigation-icons p-10  border-end cursor-pointer">
+          <span title="Click to view History" class="r-title px-3 py-3 fw-500" [class.active]="entityDetailService.selectedTab === 'HISTORY'">
+          History        
+          </span>
+          </div>
+    </nav>
+  </div>
+
+<div *ngIf="entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS'">
+    <app-view-relationship-details [isShowHeader]="false" [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
+        [isEditMode]="isEditMode" [entityDetails]="entityDetails" [deleteRelationshipEvent]="deleteRelationshipEvent"
+        [isTriggeredFromSlider]="isTriggeredFromSlider" (closeEntityInfoCard)="closeSlider($event)"></app-view-relationship-details>
+</div>
+<div *ngIf="entityDetailService.selectedTab === 'QUESTIONNAIRE'">
     <app-entity-questionnaire (mouseout)="entityDetailService.isHoverEntityCard = false" [entityId]="entityId"
         id="focusQuestionnaire" (updateRelationship)="updateRelationship($event)" [isEditMode]="isEditMode"
         (positionsToView)="scrollPosition($event)" (emitLeaveModal)="showQuestionnaireLeaveConfirmationModal($event)"
