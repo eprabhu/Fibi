@@ -34,7 +34,7 @@ public class DisclosureHistoryDto {
     private String destinationCity;
     private String destinationCountry;
     private String travelState;
-    private Timestamp updateTimestamp;
+    private Timestamp updateTimeStamp;
     private String projectNumber;
     private String projectTitle;
 }
