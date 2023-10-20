@@ -1467,37 +1467,37 @@ UPDATE `DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Review modified and assigned to
 `DESCRIPTION` = 'Review Modified with Reviewer'  WHERE (`ACTION_TYPE_CODE` = '22');
 
 
-UPDATE ``DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review <b>started</b> by <b>{REVIEWER_NAME}</b>   at <b>{LOCATION}</b>', 
+UPDATE `DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review <b>started</b> by <b>{REVIEWER_NAME}</b>   at <b>{LOCATION}</b>', 
 `DESCRIPTION` = 'Review Started by Reviewer' WHERE (`ACTION_TYPE_CODE` = '17');
 
-UPDATE ``DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review <b>started</b> by <b>{ADMIN_NAME}</b>   at <b>{LOCATION}</b>', 
+UPDATE `DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review <b>started</b> by <b>{ADMIN_NAME}</b>   at <b>{LOCATION}</b>', 
 `DESCRIPTION` = 'Review Started by Admin with Reviewer' WHERE (`ACTION_TYPE_CODE` = '18');
 
-UPDATE ``DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned review <b>completed</b> by <b>{REVIEWER_NAME}</b>  at <b>{LOCATION}</b>', 
+UPDATE `DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned review <b>completed</b> by <b>{REVIEWER_NAME}</b>  at <b>{LOCATION}</b>', 
 `DESCRIPTION` = 'Review Completed by Reviewer' WHERE (`ACTION_TYPE_CODE` = '19');
 
-UPDATE ``DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review by <b>{REVIEWER_NAME}</b> at <b>{LOCATION}</b> <b>completed</b> by <b>{ADMIN_NAME}</b>', 
+UPDATE `DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review by <b>{REVIEWER_NAME}</b> at <b>{LOCATION}</b> <b>completed</b> by <b>{ADMIN_NAME}</b>', 
 `DESCRIPTION` = 'Review Completed by Admin with Reviewer' WHERE (`ACTION_TYPE_CODE` = '20');
 
-UPDATE ``DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review by <b>{REVIEWER_NAME}</b> at <b>{LOCATION}</b> <b>deleted</b> by <b>{ADMIN_NAME}</b>', 
+UPDATE `DISCLOSURE_ACTION_TYPE` SET `MESSAGE` = 'Assigned Review by <b>{REVIEWER_NAME}</b> at <b>{LOCATION}</b> <b>deleted</b> by <b>{ADMIN_NAME}</b>', 
 `DESCRIPTION` = 'Review Deleted with Reviewer' WHERE (`ACTION_TYPE_CODE` = '21');
 
 
 	 
 
-INSERT INTO ``DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+INSERT INTO `DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('23', 'Review assigned at <b>{LOCATION}</b> with status <b>{REVIEW_STATUS}</b> by <b>{ADMIN_NAME}</b>', 'Review Added without Reviewer', now(), 'quickstart');
 
-INSERT INTO ``DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+INSERT INTO `DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('24', 'Review modified and Assigned at <b>{LOCATION}</b> with status <b>{REVIEW_STATUS}</b> by <b>{ADMIN_NAME}</b>', 'Review Modified without Reviewer', now(), 'quickstart');
 
-INSERT INTO ``DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+INSERT INTO `DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('25', 'Assigned Review started  at <b>{LOCATION}</b> by <b>{ADMIN_NAME}</b>', 'Review Started by Admin without Reviewer', now(), 'quickstart');
 
-INSERT INTO ``DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+INSERT INTO `DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('26', 'Assigned review <b>completed</b>  at <b>{LOCATION}</b> by <b>{ADMIN_NAME}</b>', 'Review Completed by Admin without Reviewer', now(), 'quickstart');
 
-INSERT INTO ``DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
+INSERT INTO `DISCLOSURE_ACTION_TYPE` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) 
 VALUES ('27', 'Assigned Review  at <b>{LOCATION}</b>  deleted by <b>{ADMIN_NAME}</b>', 'Review Deleted without Reviewer', now(), 'quickstart');
 
 CREATE TABLE `opa_form_builder_details` (
