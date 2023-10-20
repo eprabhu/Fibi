@@ -42,7 +42,7 @@ export class CustomElementV2Component implements OnInit, OnChanges, OnDestroy {
 
     @Input() moduleItemKey;
     @Input() moduleCode;
-    @Input() viewMode;
+    @Input() isViewMode;
     @Input() customElementVO;
     @Output() dataChangeEvent = new EventEmitter<boolean>();
     @Output() saveEvent = new EventEmitter<any>();
