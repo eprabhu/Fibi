@@ -1,7 +1,7 @@
+import { subscriptionHandler } from './../../../../../fibi/src/app/common/utilities/subscription-handler';
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { CustomElementVO, FormBuilder, FormBuilderEvent, FormBuilderSaveRO, QuestionnaireVO,
-        FBConfiguration } from './form-builder-interface';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormBuilderEvent, FBConfiguration } from './form-builder-interface';
 import { Observable, Subject } from 'rxjs';
 import { FormBuilderService } from './form-builder.service';
 
@@ -11,7 +11,7 @@ import { FormBuilderService } from './form-builder.service';
     styleUrls: ['./form-builder-view.component.scss'],
     providers: [FormBuilderService]
 })
-export class FormBuilderViewComponent implements OnInit, OnChanges {
+export class FormBuilderViewComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() externalEvents: Observable<FormBuilderEvent>;
     @Output() builderStatus = new EventEmitter<string>();
@@ -19,6 +19,8 @@ export class FormBuilderViewComponent implements OnInit, OnChanges {
     isSubscribed = false;
     saveEventForChildComponent = new Subject();
     fbConfiguration = new FBConfiguration();
+    subscription$ = [];
+    isFormEditable = true;
 
     constructor( private  _formBuilderService: FormBuilderService) {}
 
@@ -31,20 +33,24 @@ export class FormBuilderViewComponent implements OnInit, OnChanges {
         this.builderStatus.emit('READY');
     }
 
+    ngOnDestroy(): void {
+        subscriptionHandler(this.subscription$);
+    }
+
     private subscribeToExternalEvents(): void {
         if (!this.isSubscribed) {
-            this.externalEvents.subscribe((E: FormBuilderEvent) => {
+            this.subscription$.push(this.externalEvents.subscribe((E: FormBuilderEvent) => {
                 if (E.eventType === 'CONFIGURATION') {
                     this.fbConfiguration = E.data;
                     this.getFormBuilderData();
-                }
-                if (E.eventType === 'SAVE') {
+                } else if (E.eventType === 'SAVE') {
                     this.saveEventForChildComponent.next({eventType: 'EXTERNAL_SAVE'});
-                }
-                if (E.eventType === 'SAVE_COMPLETED') {
+                } else if (E.eventType === 'SAVE_COMPLETED') {
                     this.saveEventForChildComponent.next({eventType: 'CHANGE_FLAG', data: false});
+                } else if (E.eventType === 'IS_EDIT_MODE') {
+                    this.isFormEditable = E.data;
                 }
-            });
+            }));
         }
     }
 

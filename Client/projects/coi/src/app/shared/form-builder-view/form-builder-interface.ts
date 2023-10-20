@@ -39,7 +39,7 @@ export class SectionComponent {
     componentDescription: any;
     componentType: string;
     componentRefId?: string;
-    componentData?: string;
+    componentData?: any;
     componentHeader?: string;
     componentFooter: any;
     programmedElement: any;
@@ -230,6 +230,8 @@ export class FormBuilderSaveRO {
     moduleSubItemKey: string;
     componentId: number;
     componentType: string;
+    componentRefId: string;
+    componentData?: string;
     programmedElement: any;
     questionnaire: QuestionnaireVO;
     customElement: CustomElementVO;
