@@ -14,7 +14,7 @@ import com.polus.formbuilder.model.FormComponentSaveResponse;
 import com.polus.formbuilder.model.FormRequest;
 import com.polus.formbuilder.model.FormResponse;
 
-@Service
+@Service("Module_0_FormBuilderServiceImpl")
 public class FormBuilderServiceDefaultImp implements FormBuilderService {
 
     private final FormBuilderServiceProcessor formBuilderProcessor;
