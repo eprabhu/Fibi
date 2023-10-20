@@ -54,6 +54,9 @@ import { ViewQuestionnaireV2Component } from './view-questionnaire-v2/view-quest
 import { RichTextComponent } from './rich-text/rich-text.component';
 import { CustomElementV2Component } from './custom-element-v2/custom-element-v2.component';
 import { DataLayerComponent } from './form-builder-view/data-layer/data-layer.component';
+import { HostContainerDirective } from './directives/host-container.directive';
+import { PELayerComponent } from './form-builder-view/PE-layer/PE-layer.component';
+import { OPACompUncompComponent } from './form-builder-view/PE-components/OPA-comp-uncomp/OPA-comp-uncomp.component';
 
 @NgModule({
     imports: [
@@ -77,7 +80,10 @@ import { DataLayerComponent } from './form-builder-view/data-layer/data-layer.co
         DragNDragDirective, CustomTagRemoverPipe, PaginationComponent,
         CountModalComponent,
         ActivityComponent,
-        NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent],
+        NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
+        HostContainerDirective,
+        PELayerComponent,
+        OPACompUncompComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -123,7 +129,10 @@ import { DataLayerComponent } from './form-builder-view/data-layer/data-layer.co
         ViewQuestionnaireV2Component,
         RichTextComponent,
         CustomElementV2Component,
-        DataLayerComponent
+        DataLayerComponent,
+        HostContainerDirective,
+        PELayerComponent,
+        OPACompUncompComponent
     ],
 
     providers: [

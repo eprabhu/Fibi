@@ -1,11 +1,13 @@
 <ng-container *ngIf="component.componentType === 'QN'">
   <app-view-questionnaire-v2 [questionnaireVO] = "component.questionnaire" 
   [externalEvent]="saveEventForChildComponent"
+  [isViewMode]="!isFormEditable"
   (questionnaireSaveEvent) ="saveEventsFromChild($event, component)"
   ></app-view-questionnaire-v2>
 </ng-container>
 <ng-container *ngIf="component.componentType === 'CE'">
   <app-custom-element-v2 [customElementVO] = "component.customElement" 
   [externalEvent]="saveEventForChildComponent"
+  [isViewMode]="!isFormEditable"
   (saveEvent) ="saveEventsFromChild($event)"></app-custom-element-v2>
 </ng-container>

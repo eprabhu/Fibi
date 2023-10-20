@@ -1,6 +1,6 @@
 import { FBConfiguration } from './../form-builder-interface';
 
-import { EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, Component } from '@angular/core';
+import { EventEmitter, Input, OnChanges, Output, SimpleChanges, Component } from '@angular/core';
 import { CustomElementVO, FormSection, QuestionnaireVO, SectionComponent } from '../form-builder-interface';
 
 @Component({
@@ -8,24 +8,17 @@ import { CustomElementVO, FormSection, QuestionnaireVO, SectionComponent } from 
     templateUrl: './form-sections.component.html',
     styleUrls: ['./form-sections.component.scss']
 })
-export class FormSectionsComponent implements OnInit, OnChanges {
+export class FormSectionsComponent {
 
 
     @Input() sectionDetails = new FormSection();
     @Input() saveEventForChildComponent;
     @Input() formBuilderId: number;
     @Input() fbConfiguration: FBConfiguration;
+    @Input() isFormEditable;
     @Output()saveEventFromChildComponents = new EventEmitter<any>();
 
     constructor() { }
-
-
-    ngOnInit() {
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        console.log(this.sectionDetails);
-    }
 
     saveEventsFromChild(data: QuestionnaireVO | CustomElementVO| any , component: SectionComponent) {
         const DATA = new SectionComponent();
