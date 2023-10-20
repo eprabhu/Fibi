@@ -93,7 +93,7 @@ public interface ConflictOfInterestService {
 	 * @param personEntityRelationship
 	 * @return COIFinancialEntityDetails
 	 */
-	List<PersonEntityRelationship> saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
+	ResponseEntity<Object> saveOrUpdatePersonEntityRelationship(PersonEntityRelationship personEntityRelationship);
 
 	/**
 	 * This method is used to create SFI
@@ -131,7 +131,7 @@ public interface ConflictOfInterestService {
 	 * This method is used to revise Coi disclosure
 	 * @return counts
 	 */
-	String reviseDisclosure(ConflictOfInterestVO vo);
+	ResponseEntity<Object> reviseDisclosure(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for evaluate DisclosureQuestionnaire
@@ -152,7 +152,7 @@ public interface ConflictOfInterestService {
 	 * @param vo
 	 * @return saved CoiReview object
 	 */
-	CoiReview saveOrUpdateCoiReview(ConflictOfInterestVO vo);
+	ResponseEntity<Object> saveOrUpdateCoiReview(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for get CoiReview based on disclosureId
@@ -166,7 +166,7 @@ public interface ConflictOfInterestService {
 	 * @param vo
 	 * @return CoiReview
 	 */
-	CoiReview startReview(ConflictOfInterestVO vo);
+	ResponseEntity<Object> startReview(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for add comments
@@ -188,7 +188,7 @@ public interface ConflictOfInterestService {
 	 * @param vo
 	 * @return CoiReview
 	 */
-	CoiReview completeReview(ConflictOfInterestVO vo);
+	ResponseEntity<Object> completeReview(ConflictOfInterestVO vo);
 
 	/**
 	 * This method is used for delete review
@@ -541,10 +541,10 @@ public interface ConflictOfInterestService {
 
 	/**
 	 * This method is used to fetch section type codes
-	 * @param ConflictOfInterestVO
+	 * @param conflictOfInterestVO
 	 * @return
 	 */
-	ResponseEntity<Object> getCoiSectionsTypeCode(ConflictOfInterestVO vo);
+	ResponseEntity<Object> getCoiSectionsTypeCode(ConflictOfInterestVO conflictOfInterestVO);
 
 	ResponseEntity<Object> modifyTravelDisclosureRisk(CoiTravelDisclosureDto travelDisclosureDto);
 
