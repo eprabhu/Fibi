@@ -392,7 +392,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
             personEntityRelationshipList.add(conflictOfInterestDao.getPersonEntityRelationshipByPersonEntityRelId(personEntityRelation.getPersonEntityRelId()));
         });
 		conflictOfInterestDao.updatePersonEntityUpdateDetails(personEntityRelationship.getPersonEntityId());
-        return personEntityRelationshipList;
+        return new ResponseEntity<>(personEntityRelationshipList, HttpStatus.OK);
     }
 
 	@Override
@@ -2162,7 +2162,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.getRelationshipDetails(personEntityId).forEach(relationship ->
 			deletePerEntQuestAnsRelationship(relationship.getPersonEntityRelId(), personEntityId, relationship.getValidPersonEntityRelTypeCode())
 		);
-		actionLogRepository.deletePersonEntityActionLog(personEntityId);
+//		actionLogRepository.deletePersonEntityActionLog(personEntityId);
 		conflictOfInterestDao.deletePersonEntity(personEntityId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
