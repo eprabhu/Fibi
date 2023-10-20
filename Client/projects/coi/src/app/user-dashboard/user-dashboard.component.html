@@ -1,120 +1,56 @@
-<div class="px-3 user-dashboard-content" aria-label="User Dashboard Section">
-    <div class="row d-none">
-        <div class="col pe-0">
-            <div class="border pi-info-text p-3 rounded-1">
-                <p class="fs-14 m-0">
-                    <span title="Expand Policy Text" aria-describedby="Expand Policy Text"
-                        *ngIf="!isReadMore && headerInfoText.length > 650 else showFullInfo">
-                        {{headerInfoText | slice:0:650}}...
-                        <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read
-                                More</u></span>
-                    </span>
-                    <ng-template #showFullInfo>
-                        {{headerInfoText}}
-                        <span title="Collapse Policy Text" aria-describedby="Contract Policy Text"
-                            (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer"><u>Read
-                                Less</u></span>
-                    </ng-template>
-                </p>
+<!--
+<div class="notifications mb-2">
+    <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-high-severity">
+        <div class="col d-flex fw-medium">
+            <div class="message flex-fill">
+                <p class="m-0">Your FCOI Disclosure will expire in <span
+                    class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>
             </div>
-        </div>
-        <div class="col-auto">
-            <div class="border pi-quick-links py-2 px-3 shadow-sm fs-15 h-100">
-                <p id="create-fcoi-modal" *ngIf="hasFCOI" area-describedby="Click to create new FCOI disclosure"
-                    (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
-                    title="Click to create new FCOI disclosure">
-                    <u>Create/Revise FCOI</u>
-                </p>
-                <p id="create-fcoi-modal" *ngIf="!hasFCOI" (click)="openReviseModal()" class="m-0 cursor-pointer" role="button"
-                    title="Click to create new FCOI disclosure"
-                    area-describedby="Click to create new FCOI disclosure"><u>Create/Revise FCOI</u></p>
-                <p id="create-project-modal" (click)="openProjectDisclosure()" class="m-0 cursor-pointer" role="button"
-                    title="Click to create new Project disclosure"
-                    area-describedby="Click to create new Project disclosure"><u>Create Project
-                        Disclosure</u></p>
-                <p id="create-travel-modal" (click)="openTravelDisclosure()" class="m-0 cursor-pointer" role="button"
-                    title="Click to create new Travel disclosure"
-                    area-describedby="Click to create new Travel disclosure"><u>Create Travel
-                        Disclosure</u></p>
-                <p id="create-sfi-modal" (click)="openCreateSFI()"class="m-0 cursor-pointer" role="button"
-                    title="Click to add new SFI" area-describedby="Click to add new SFI"><u>Add Significant Financial Interest</u></p>
+            <div class="action align-items-center d-flex fs-14 text-secondary">
+                <span>VIEW</span>
+                <mat-icon>chevron_right</mat-icon>
             </div>
         </div>
     </div>
-
-    <div class="notifications mb-2">
-        <!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-high-severity">-->
-        <!--            <div class="col d-flex fw-medium">-->
-        <!--                <div class="message flex-fill">-->
-        <!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
-        <!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
-        <!--                </div>-->
-        <!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
-        <!--                    <span>VIEW</span>-->
-        <!--                    <mat-icon>chevron_right</mat-icon>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">-->
-        <!--            <div class="col d-flex fw-medium">-->
-        <!--                <div class="message flex-fill">-->
-        <!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
-        <!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
-        <!--                </div>-->
-        <!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
-        <!--                    <span>VIEW</span>-->
-        <!--                    <mat-icon>chevron_right</mat-icon>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">-->
-        <!--            <div class="col d-flex fw-medium">-->
-        <!--                <div class="message flex-fill">-->
-        <!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
-        <!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
-        <!--                </div>-->
-        <!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
-        <!--                    <span>VIEW</span>-->
-        <!--                    <mat-icon>chevron_right</mat-icon>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--        <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">-->
-        <!--            <div class="col d-flex fw-medium">-->
-        <!--                <div class="message flex-fill">-->
-        <!--                    <p class="m-0">Your FCOI Disclosure will expire in <span-->
-        <!--                            class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>-->
-        <!--                </div>-->
-        <!--                <div class="action align-items-center d-flex fs-14 text-secondary">-->
-        <!--                    <span>VIEW</span>-->
-        <!--                    <mat-icon>chevron_right</mat-icon>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-    </div>
-
-    <!--<div class="navigation border text-center shadow-sm mb-3">
-        <div class="row m-0 text-secondary">
-            <div [routerLink]="['disclosures']" tabindex="0" aria-label="Goto My Disclosures"
-                class="hoverable bg-white cursor-pointer align-items-center border-end col d-flex justify-content-around p-0 position-relative"
-                role="button" routerLinkActive="active" title="Go to My Disclosures">
-                <strong class="fs-18">My Disclosures</strong>
-                <img [class.d-none]="!router.url.includes('user-dashboard/disclosures')" class="nav-tip-active"
-                    src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
+    <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">
+        <div class="col d-flex fw-medium">
+            <div class="message flex-fill">
+                <p class="m-0">Your FCOI Disclosure will expire in <span
+                    class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>
             </div>
-            <div [routerLink]="['entities']" tabindex="0" aria-label="Goto My Entities"
-                class="hoverable bg-white cursor-pointer align-items-center col d-flex justify-content-center p-0 position-relative"
-                role="button" routerLinkActive="active" title="Go to My Entities">
-                <strong class="fs-18">My Entities</strong>
-                <img [class.d-none]="!router.url.includes('user-dashboard/entities')" class="nav-tip-active"
-                    src="{{deployMap}}assets/images/nav-tip-active.svg" alt="tip">
+            <div class="action align-items-center d-flex fs-14 text-secondary">
+                <span>VIEW</span>
+                <mat-icon>chevron_right</mat-icon>
             </div>
         </div>
-    </div>-->
-
+    </div>
+    <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">
+        <div class="col d-flex fw-medium">
+            <div class="message flex-fill">
+                <p class="m-0">Your FCOI Disclosure will expire in <span
+                    class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>
+            </div>
+            <div class="action align-items-center d-flex fs-14 text-secondary">
+                <span>VIEW</span>
+                <mat-icon>chevron_right</mat-icon>
+            </div>
+        </div>
+    </div>
+    <div class="border mx-0 mt-2 py-3 rounded-1 row shadow-sm message-low-severity">
+        <div class="col d-flex fw-medium">
+            <div class="message flex-fill">
+                <p class="m-0">Your FCOI Disclosure will expire in <span
+                    class="fs-20"><strong>05 Days</strong></span>, on 17 February 2023</p>
+            </div>
+            <div class="action align-items-center d-flex fs-14 text-secondary">
+                <span>VIEW</span>
+                <mat-icon>chevron_right</mat-icon>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<div class="mx-3">
     <router-outlet></router-outlet>
 </div>
 
-<app-disclosure-create-modal *ngIf="isShowCreateOrReviseModal" [triggeredFrom]="triggeredFrom"
-    [activeDisclosures]="service.activeDisclosures" (emitCreateOrRevise)="outputEventAction($event)">
-</app-disclosure-create-modal>
