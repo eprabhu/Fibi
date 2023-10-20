@@ -1,15 +1,20 @@
 package com.polus.fibicomp.opa.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.validation.constraints.Pattern;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.Pattern;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OPADashboardRequestDto {
 
     private Integer id;

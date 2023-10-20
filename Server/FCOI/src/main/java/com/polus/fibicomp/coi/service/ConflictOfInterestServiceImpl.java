@@ -47,15 +47,16 @@ import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureCertifyDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
+import com.polus.fibicomp.coi.dto.DisclosureHistoryResponse;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
-import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -93,6 +94,8 @@ import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.dashboard.vo.CoiDashboardVO;
 import com.polus.fibicomp.inbox.pojo.Inbox;
 import com.polus.fibicomp.opa.dao.OPADao;
+import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
+import com.polus.fibicomp.opa.dto.OPADashboardResponseDto;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.pojo.Country;
@@ -166,6 +169,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String TYPE_DISCLOSURE_DETAIL_COMMENT = "1";
 	private static final String RISK_CATEGORY_LOW_DESCRIPTION = "Low";
 	private static final String TRAVEL_DISCLOSURE_CONFLICT_COMMENT = "2";
+	private static final String FILTER_TYPE_ALL = "ALL";
+	private static final String FILTER_TYPE_OPA = "OPA";
+	private static final String TAB_TYPE_TRAVEL_DISCLOSURES = "TRAVEL_DISCLOSURES";
+	private static final String TAB_TYPE_MY_DASHBOARD = "MY_DASHBOARD";
+	private static final String TAB_TYPE_IN_PROGRESS_DISCLOSURES = "IN_PROGRESS_DISCLOSURES";
+	private static final String TAB_TYPE_APPROVED_DISCLOSURES = "APPROVED_DISCLOSURES";
 	
 
 	@Override
@@ -1132,7 +1141,21 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public String getCOIDashboard(CoiDashboardVO vo) {
-		DashBoardProfile dashBoardProfile = conflictOfInterestDao.getCOIDashboard(vo);
+		DashBoardProfile dashBoardProfile = new DashBoardProfile();
+		if(!vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_OPA)) {
+			dashBoardProfile = conflictOfInterestDao.getCOIDashboard(vo);
+		}
+		if ((vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_ALL) || vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_OPA)) && (!vo.getTabName().equalsIgnoreCase(TAB_TYPE_TRAVEL_DISCLOSURES))) {
+			OPADashboardRequestDto opaDashboardRequestDto = new OPADashboardRequestDto();
+			opaDashboardRequestDto.setTabType(TAB_TYPE_MY_DASHBOARD);
+			if (vo.getTabName().equalsIgnoreCase(TAB_TYPE_IN_PROGRESS_DISCLOSURES)) {
+				opaDashboardRequestDto.setDispositionStatusCodes(Arrays.asList(Constants.OPA_DISPOSITION_STATUS_PENDING));
+			} else if (vo.getTabName().equalsIgnoreCase(TAB_TYPE_APPROVED_DISCLOSURES)) {
+				opaDashboardRequestDto.setDispositionStatusCodes(Arrays.asList(Constants.OPA_DISPOSITION_STATUS_COMPLETED));
+			}
+			OPADashboardResponseDto opaDashboardResponseDto = opaDao.getOPADashboard(opaDashboardRequestDto);
+			dashBoardProfile.setOpaDashboardDto(opaDashboardResponseDto.getData());
+		}
 		return commonDao.convertObjectToJSON(dashBoardProfile);
 	}
 
@@ -2106,7 +2129,17 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> getDisclosureHistory(CoiDashboardVO dashboardVO) {
-		return new ResponseEntity<>(conflictOfInterestDao.getDisclosureHistory(dashboardVO), HttpStatus.OK);
+		DisclosureHistoryResponse disclosureHistoryResponse = new DisclosureHistoryResponse();
+		if (dashboardVO.getFilterType().equalsIgnoreCase(FILTER_TYPE_ALL) || dashboardVO.getFilterType().equalsIgnoreCase(FILTER_TYPE_OPA)) {
+			OPADashboardRequestDto opaDashboardRequestDto = new OPADashboardRequestDto();
+			opaDashboardRequestDto.setTabType(TAB_TYPE_MY_DASHBOARD);
+			OPADashboardResponseDto opaDashboardResponseDto = opaDao.getOPADashboard(opaDashboardRequestDto);
+			disclosureHistoryResponse.setOpaDashboardDtos(opaDashboardResponseDto.getData());
+		}
+		if(!dashboardVO.getFilterType().equalsIgnoreCase(FILTER_TYPE_OPA)) {
+			disclosureHistoryResponse.setDisclosureHistoryDtos(conflictOfInterestDao.getDisclosureHistory(dashboardVO));
+		}
+		return new ResponseEntity<>(disclosureHistoryResponse, HttpStatus.OK);
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public class OPADashboardDto {
     private Integer adminGroupId;
     private Integer adminGroupName;
     private String updateUser;
-    private Timestamp updateTimestamp;
+    private Timestamp updateTimeStamp;
     private String updateUserFullName;
     private String dispositionStatus;
     private String disclosureStatus;
