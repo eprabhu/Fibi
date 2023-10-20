@@ -12,6 +12,7 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
 import { closeSlider, openSlider } from '../../common/utilities/custom-utilities';
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
+import {HeaderService} from '../../common/header/header.service';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -76,6 +77,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
         public commonService: CommonService,
+        public headerService: HeaderService,
         private _router: Router) {
     }
 
@@ -309,7 +311,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     openFCOIModal(type) {
-        this.userDashboardService.$openModal.next(type);
+        this.headerService.$openModal.next(type);
     }
 
     viewSlider(event) {
@@ -329,16 +331,12 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     getActiveFCOI() {
         this.fcoiDatesRemaining();
-        return this.userDashboardService.activeDisclosures.filter(disclosure =>
+        return this.headerService.activeDisclosures.filter(disclosure =>
             disclosure?.fcoiTypeCode === '1' );
     }
 
-    triggerClickForId(targetIdName: string) {
-        document.getElementById(targetIdName)?.click();
-    }
-
     fcoiDatesRemaining() {
-        this.userDashboardService.activeDisclosures.forEach(disclosure => {
+        this.headerService.activeDisclosures.forEach(disclosure => {
             if (disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus == 'PENDING') {
                 this.hasPendingFCOI = true;
             }
@@ -346,7 +344,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
                 this.hasActiveFCOI = true;
             }
         });
-        this.userDashboardService.activeOPAs.forEach(disclosure => {
+        this.headerService.activeOPAs.forEach(disclosure => {
             if (disclosure?.dispositionStatusType?.dispositionStatusCode === '3') {
                 this.hasActiveOPA = true;
             }
@@ -354,7 +352,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
                 this.hasPendingOPA = true;
             }
         });
-        const disclosureDate = this.userDashboardService.activeDisclosures.filter(disclosure =>
+        const disclosureDate = this.headerService.activeDisclosures.filter(disclosure =>
             disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus !== 'PENDING');
         if (disclosureDate[0]) {
             const expirationDate = (disclosureDate[0].expirationDate);
