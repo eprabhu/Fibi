@@ -87,7 +87,9 @@ export class SFIConflictRelationshipComponent implements OnInit {
 
   changeCloseBtnZIndex(zIndex) {
     let close = document.getElementById('slider-close-button');
-    close.style.zIndex = zIndex;
+    if (close) {
+      close.style.zIndex = zIndex;
+    }
   }
 
   prepareSaveObject() {
@@ -132,6 +134,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
       test.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
       test.moduleCode = this.selectedProject.moduleCode;
       test.moduleItemKey = this.selectedProject.moduleItemId;
+      this._relationShipService.isSliderDataUpdated = true;
       // this.getCommentObject(test.comment);
       test.coiProjConflictStatusType = this.getStatusObject(test.projectConflictStatusCode);
       this.singleSaveClick(test, index);

@@ -4,7 +4,6 @@ import { EntityDetailsService } from './entity-details.service';
 import { hideModal, openModal, scrollIntoView } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { NavigationService } from '../../common/services/navigation.service';
-import { SfiService } from '../sfi/sfi.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../../common/services/common.service';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
@@ -26,11 +25,8 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   currentRelationshipDetails: any;
 
   constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
-    private _sfiService: SfiService, private _commonService: CommonService, private _navigationService: NavigationService) {
+    private _commonService: CommonService, private _navigationService: NavigationService) {
     this.clearSfiNavBarStyle();
-    this._router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    };
   }
 
   updateRelationshipDetails: any;
@@ -38,10 +34,7 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   entityDetails = {};
 
   ngOnInit() {
-    // this.isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
-    // this.entityId = this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId;
     this.isTriggeredFromSlider = this.checkForUrl();
-    // this.getSfiEntityDetails();
     this.getQueryParams();
   }
 

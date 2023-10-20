@@ -91,6 +91,7 @@ getDisclosureCount(typeCode, disclosureStatus) {
         this.coiData.coiDisclosure.coiConflictStatusType = data;
         this.coiData.coiDisclosure.conflictStatusCode = data.conflictStatusCode;
         this._dataStore.updateStore(['coiDisclosure'],  this.coiData);
+        this._relationShipService.isSliderDataUpdated = false;
       }
     }, err => {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating status');
