@@ -4160,6 +4160,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 						.validPersonEntityRelType(rset.getString("RELATIONSHIPS"))
 						.entityType(rset.getString("ENTITY_TYPE"))
 						.entityRiskCategory(rset.getString("RISK"))
+						.isRelationshipActive(rset.getBoolean("IS_RELATIONSHIP_ACTIVE"))
+						.personEntityVersionStatus(rset.getString("VERSION_STATUS"))
 						.build());
 			}
 
