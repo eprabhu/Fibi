@@ -17,4 +17,7 @@ public class PersonEntityRelationshipDto {
     private String validPersonEntityRelType;
     private String entityType;
     private String entityRiskCategory;
+    private String personEntityVersionStatus;
+    private Boolean isRelationshipActive;
+
 }
