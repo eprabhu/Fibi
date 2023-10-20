@@ -1,6 +1,7 @@
 package com.polus.fibicomp.coi.controller;
 
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,10 @@ public class EntityController {
     @PostMapping("/entity/history")
     public ResponseEntity<Object> fetchEntityHistory(@RequestBody CoiEntityDto coiEntityDto) {
         return conflictOfInterestService.fetchEntityHistory(coiEntityDto);
+    }
+
+    @PostMapping("/getEntityWithRelationShipInfo")
+    public ResponseEntity<Object> getEntityWithRelationShipInfo(@RequestBody CommonRequestDto requestDto) {
+        return conflictOfInterestService.getEntityWithRelationShipInfo(requestDto);
     }
 }

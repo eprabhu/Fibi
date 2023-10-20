@@ -49,6 +49,8 @@ import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -2430,10 +2432,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
 		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
-		query.where(builder.and(
-			    builder.equal(rootPersonEntityRelationship.get("personEntityId"), vo.getPersonEntityId()),
-			    builder.equal(rootPersonEntityRelationship.get("validPersonEntityRelType").get("disclosureTypeCode"), vo.getDisclosureTypeCode())
-			));
+		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityId"), vo.getPersonEntityId()));
 		return session.createQuery(query).getResultList();
 	}
 
@@ -4090,6 +4089,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
+	public List<ValidPersonEntityRelType> fetchAllValidPersonEntityRelTypes() {
+		return hibernateTemplate.loadAll(ValidPersonEntityRelType.class);
+	}
+
+	@Override
 	public DisclAttaType getDisclosureAttachmentForTypeCode(String attaTypeCode) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -4099,4 +4103,36 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		return session.createQuery(query).getSingleResult();
 	}
 
+	@Override
+	public List<PersonEntityRelationshipDto> getEntityWithRelationShipInfo(CommonRequestDto requestDto) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		List<PersonEntityRelationshipDto> relationshipDtos = new ArrayList<>();
+		try {
+			statement = connection.prepareCall("{call GET_COI_ENTITY_PERSON_ENTITY_DETAILS(?,?)}");
+			statement.setString(1, AuthenticatedUser.getLoginPersonId());
+			statement.setString(2, requestDto.getSearchString());
+			statement.execute();
+			ResultSet	rset = statement.getResultSet();
+			while (rset.next()) {
+				relationshipDtos.add(PersonEntityRelationshipDto.builder()
+						.personEntityId(rset.getInt("PERSON_ENTITY_ID") == 0 ? null : rset.getInt("PERSON_ENTITY_ID"))
+						.entityId(rset.getInt("ENTITY_ID"))
+						.entityNumber(rset.getInt("ENTITY_NUMBER"))
+						.entityName(rset.getString("ENTITY_NAME"))
+						.countryName(rset.getString("COUNTRY_NAME"))
+						.validPersonEntityRelType(rset.getString("RELATIONSHIPS"))
+						.entityType(rset.getString("ENTITY_TYPE"))
+						.entityRiskCategory(rset.getString("RISK"))
+						.build());
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception on getEntityWithRelationShipInfo {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch data", e, Constants.DB_PROC_ERROR);
+		}
+		return relationshipDtos;
+	}
 }

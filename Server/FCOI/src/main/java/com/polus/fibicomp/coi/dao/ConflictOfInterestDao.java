@@ -17,6 +17,8 @@ import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
@@ -1133,6 +1135,14 @@ public interface ConflictOfInterestDao {
     
     List<Attachments> loadAllAttachmentsForPerson(String personId);
 
+	List<ValidPersonEntityRelType> fetchAllValidPersonEntityRelTypes();
+
 	DisclAttaType getDisclosureAttachmentForTypeCode(String attaTypeCode);
 
+	/**
+	 * This method fetches all person entities of a person
+	 * @param requestDto
+	 * @return
+	 */
+	List<PersonEntityRelationshipDto> getEntityWithRelationShipInfo(CommonRequestDto requestDto);
 }

@@ -55,6 +55,7 @@ import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -293,6 +294,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestVO.setEntityType(conflictOfInterestDao.fetchEntityType());
 		conflictOfInterestVO.setPersonEntityRelType(conflictOfInterestDao.fetchPersonEntityRelType());
 		conflictOfInterestVO.setEntityRiskCategories(conflictOfInterestDao.fetchEntityRiskCategory());
+		conflictOfInterestVO.setValidPersonEntityRelTypes(conflictOfInterestDao.fetchAllValidPersonEntityRelTypes());
 		return new ResponseEntity<>(conflictOfInterestVO, HttpStatus.OK);
 	}
 
@@ -305,16 +307,24 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 	
 	@Override
-	public ResponseEntity<Object> createSFI(ConflictOfInterestVO vo) {
-		PersonEntity personEntity = vo.getPersonEntity();
+	public ResponseEntity<Object> createSFI(PersonEntity personEntity) {
+		String loginUserName = AuthenticatedUser.getLoginUserName();
 		personEntity.setVersionNumber(Constants.COI_INITIAL_VERSION_NUMBER);
 		personEntity.setPersonEntityNumber(conflictOfInterestDao.getMaxPersonEntityNumber()+1);
 		personEntity.setVersionStatus(Constants.COI_PENDING_STATUS); //Draft
 		personEntity.setPersonId(AuthenticatedUser.getLoginPersonId());
-		personEntity.setUpdateUser(AuthenticatedUser.getLoginUserName());
-		personEntity.setCreateUser(AuthenticatedUser.getLoginUserName());
+		personEntity.setUpdateUser(loginUserName);
+		personEntity.setCreateUser(loginUserName);
 		conflictOfInterestDao.saveOrUpdateSFI(personEntity);
-		return new ResponseEntity<>(vo, HttpStatus.OK);
+		personEntity.getValidPersonEntityRelTypeCodes().forEach(code -> {
+			PersonEntityRelationship personEntityRelation = new PersonEntityRelationship();
+//			personEntityRelation.setQuestionnaireAnsHeaderId(personEntityRelationship.getQuestionnaireAnsHeaderId());
+			personEntityRelation.setPersonEntityId(personEntity.getPersonEntityId());
+			personEntityRelation.setValidPersonEntityRelTypeCode(code);
+			personEntityRelation.setUpdateUser(loginUserName);
+			conflictOfInterestDao.saveOrUpdatePersonEntityRelationship(personEntityRelation);
+		});
+		return new ResponseEntity<>(personEntity, HttpStatus.OK);
 	}
 
 	@Override
@@ -1242,12 +1252,8 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 	
 	@Override
-	public ResponseEntity<Object> getRelatioshipDetails(String tabName) {
-		ConflictOfInterestVO vo = new ConflictOfInterestVO();
-		vo.setTabName(tabName);
-		vo = getDisclosureTypecode(vo);
-		vo.setValidPersonEntityRelTypes(conflictOfInterestDao.getRelationshipDetails(vo.getDisclosureTypeCode()));
-		return new ResponseEntity<>(vo, HttpStatus.OK);
+	public ResponseEntity<Object> getValidPersonRelationshipLookUp() {
+		return new ResponseEntity<>(conflictOfInterestDao.fetchAllValidPersonEntityRelTypes(), HttpStatus.OK);
 	}
 
 	private ConflictOfInterestVO getDisclosureTypecode(ConflictOfInterestVO vo) {
@@ -1265,9 +1271,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Override
 	public ResponseEntity<Object> getPersonEntityRelationship(ConflictOfInterestVO vo) {
-		vo = getDisclosureTypecode(vo);
-		vo.setPersonEntityRelationships(conflictOfInterestDao.getRelationshipDetails(vo));
-		return new ResponseEntity<>(vo, HttpStatus.OK);
+		return new ResponseEntity<>(conflictOfInterestDao.getRelationshipDetails(vo), HttpStatus.OK);
 	}
 	
 	private void setAllTravelDisclosureStatus(CoiTravelDisclosure coiTravelDisclosure, Integer entityId) {
@@ -2612,4 +2616,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return attachmentsList;
 	}
 
+	@Override
+	public ResponseEntity<Object> getEntityWithRelationShipInfo(CommonRequestDto requestDto) {
+		requestDto.setId(AuthenticatedUser.getLoginPersonId());
+		return new ResponseEntity<>(conflictOfInterestDao.getEntityWithRelationShipInfo(requestDto), HttpStatus.OK);
+	}
 }
