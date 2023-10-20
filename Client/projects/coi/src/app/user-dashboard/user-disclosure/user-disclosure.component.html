@@ -1,6 +1,6 @@
 <div class="row">
       <div  *ngIf="getActiveFCOI().length" class="col-6">
-        <ng-container *ngFor="let disclosure of userDashboardService.activeDisclosures">
+        <ng-container *ngFor="let disclosure of headerService.activeDisclosures">
                 <ng-container *ngIf="hasActiveFCOI">
                     <div class="card" *ngIf="disclosure?.fcoiTypeCode === '1' && disclosure?.versionStatus != 'PENDING'">
                         <div class="card-header disclosure-master-header-bg">
@@ -13,7 +13,7 @@
                                     <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center" [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         title="Click to view FCOI Disclosure details"
-                                        [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
+                                        [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                         area-describedby="Click to view FCOI Disclosure details">
                                         <span class="hyper-link">View</span> <mat-icon class="hyper-link">chevron_right</mat-icon>
                                     </a></div>
@@ -89,7 +89,7 @@
                                 <button *ngIf="!hasPendingFCOI" (click)="triggerClickForId('create-fcoi-modal')"
                                         class="no-hover align-items-center btn btn-outline-secondary d-flex fs-14"
                                         title="Click to Renew FCOI Disclosure"
-                                        area-describedby="Click to Renew FCOI Disclosure">
+                                        aria-describedby="Click to Renew FCOI Disclosure">
                                     <mat-icon class="me-1">restart_alt</mat-icon>
                                     Revise
                                 </button>
@@ -109,7 +109,7 @@
                                     <div class="col d-flex justify-content-end text-muted"><a class="d-flex align-items-center " [queryParams]={disclosureId:disclosure.disclosureId}
                                         [routerLink]="['/coi/disclosure/summary']"
                                         title="Click to view FCOI Disclosure details"
-                                        [attr.title]="userDashboardService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
+                                        [attr.title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
                                         area-describedby="Click to view FCOI Disclosure details">
                                         <span class="hyper-link">View</span> <mat-icon class="hyper-link">chevron_right</mat-icon>
                                     </a></div>
@@ -220,7 +220,7 @@
         </div>
     </div>
     <div class="col-6">
-        <ng-container *ngIf="!userDashboardService.activeOPAs.length">
+        <ng-container *ngIf="!headerService.activeOPAs.length">
             <ng-container *ngIf="!hasPendingOPA && !hasActiveOPA">
                 <div class="card">
                     <div class="card-header disclosure-master-header-bg">
@@ -262,7 +262,7 @@
             </ng-container>
         </ng-container>
 
-        <ng-container *ngFor="let opaDisclosure of userDashboardService.activeOPAs">
+        <ng-container *ngFor="let opaDisclosure of headerService.activeOPAs">
             <ng-container *ngIf="hasPendingOPA && !hasActiveOPA">
                 <div class="card"
                      *ngIf="opaDisclosure?.dispositionStatusType?.dispositionStatusCode === '1'">
@@ -896,7 +896,7 @@
                         <button (click)="redirectToDisclosure(disclosure)"
                             aria-describedby="Click to view Disclosure details"
                             class="d-flex align-items-center btn btn-outline-primary  fs-14"
-                            [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure details' : 
+                            [attr.title]="disclosure?.travelDisclosureId ? 'Click to view Travel disclosure details' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure details' :
                                 disclosure?.fcoiTypeCode!= 1 ? 'Click to view Project Disclosure details' : 'Click to view FCOI Revision disclosure details'">
                             <mat-icon class="me-1">visibility</mat-icon>
                             View
