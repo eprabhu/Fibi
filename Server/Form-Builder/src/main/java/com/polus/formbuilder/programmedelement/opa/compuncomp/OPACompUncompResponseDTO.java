@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OPACompUnCompResponseDTO{
+public class OPACompUncompResponseDTO{
 	
 	private Integer opaDisclActivityId;
     private Integer opaDisclosureId;

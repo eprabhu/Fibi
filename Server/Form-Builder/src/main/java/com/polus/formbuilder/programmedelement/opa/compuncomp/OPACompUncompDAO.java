@@ -1,6 +1,5 @@
 package com.polus.formbuilder.programmedelement.opa.compuncomp;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +20,7 @@ import jakarta.transaction.Transactional;
 
 @Transactional
 @Component
-public class OPACompUnCompDAO {
+public class OPACompUncompDAO {
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -36,11 +35,11 @@ public class OPACompUnCompDAO {
 	private HibernateTemplate hibernateTemplate;
 	
 	
-	public List<OPACompUnCompResponseDTO> getDisclosureActivity(OPACompUnCompRequestModel opaRequest) {
+	public List<OPACompUncompResponseDTO> getDisclosureActivity(OPACompUncompRequestModel opaRequest) {
 		
 		List<OPAPersonEntityInfoDTO>  lsPersonEntityInfo = getPersonEntityInfo(opaRequest.getOpaDisclosureId());
 		List<OPADiscActivityEntity> lsDiscActivity = repository.fetchAllByOPADisclosureID(opaRequest.getOpaDisclosureId());
-		List<OPACompUnCompResponseDTO> output = new ArrayList<>();
+		List<OPACompUncompResponseDTO> output = new ArrayList<>();
 	
 		for(OPADiscActivityEntity activity : lsDiscActivity) {
 			OPAPersonEntityInfoDTO personInfoDto = new OPAPersonEntityInfoDTO();
@@ -69,7 +68,7 @@ public class OPACompUnCompDAO {
 				}
 			
 				output.add(
-							OPACompUnCompResponseDTO.builder()
+							OPACompUncompResponseDTO.builder()
 										.opaDisclActivityId(activity.getOpaDisclActivityId())
 										.opaDisclosureId(activity.getOpaDisclosureId())
 										.opaDisclPersonEntityId(activity.getOpaDisclPersonEntityId())
@@ -126,7 +125,8 @@ public class OPACompUnCompDAO {
 	private OPAPersonEntityInfoDTO convertObjectToDTO(Object object) {
 		OPAPersonEntityInfoDTO opaPersonEntityInfoDTO = new OPAPersonEntityInfoDTO();
 	    if (object instanceof Object[] data) {
-	    	opaPersonEntityInfoDTO.setOpaDisclPersonEntityId((Integer) data[0]);
+	    	int i = 0;
+	    	opaPersonEntityInfoDTO.setOpaDisclPersonEntityId((Integer) data[i++]);
 	    	opaPersonEntityInfoDTO.setPersonEntityId((Integer) data[1]); 
 	    	opaPersonEntityInfoDTO.setPersonId((String) data[2]);
 	    	opaPersonEntityInfoDTO.setEntityNumber((Integer) data[3]);
@@ -137,7 +137,10 @@ public class OPACompUnCompDAO {
 	    	opaPersonEntityInfoDTO.setInvolvementStartDate((Date) data[8]);
 	    	opaPersonEntityInfoDTO.setInvolvementEndDate((Date) data[9]);
 	    	opaPersonEntityInfoDTO.setEntityStatus((String) data[10]);
-	        
+	    	opaPersonEntityInfoDTO.setIsRelationshipActive((Character) data[11]);
+	    	opaPersonEntityInfoDTO.setSfiVersionStatus((String) data[12]);
+	    	opaPersonEntityInfoDTO.setEntityRiskCategory((String) data[13]);
+	    	
 	        return opaPersonEntityInfoDTO;
 	        
 	    }else {
@@ -147,7 +150,7 @@ public class OPACompUnCompDAO {
 
 
 	@Transactional
-	public List<OPACompUnCompResponseDTO> saveDisclosureActivity(OPACompUnCompRequestModel opaRequest) {
+	public List<OPACompUncompResponseDTO> saveDisclosureActivity(OPACompUncompRequestModel opaRequest) {
 		if(opaRequest.getOpaDisclActivityId() != null) {
 			return updateOpaDisclActivity(opaRequest);
 		}
@@ -155,9 +158,11 @@ public class OPACompUnCompDAO {
 	}
 
 
-	private List<OPACompUnCompResponseDTO> addOpaDisclActivity(OPACompUnCompRequestModel opaRequest) {
+	private List<OPACompUncompResponseDTO> addOpaDisclActivity(OPACompUncompRequestModel opaRequest) {
 		
-		OPADisclPersonEntity opaPersonEntity = disclPersonEntityRepository.FetchByPersonEntityId(opaRequest.getPersonEntityId());
+		OPADisclPersonEntity opaPersonEntity
+		= disclPersonEntityRepository.FetchByPersonEntityId(opaRequest.getOpaDisclosureId(),
+															opaRequest.getPersonEntityId());
 		
 		//START - Sync OPA_DISCL_PERSON_ENTITY table by adding the new SFI
 		if(opaPersonEntity == null) {
@@ -170,10 +175,10 @@ public class OPACompUnCompDAO {
 		hibernateTemplate.saveOrUpdate(activityEntity);	
 		//hibernateTemplate.sa
 		Integer primaryKey = activityEntity.getOpaDisclActivityId();
-		List<OPACompUnCompResponseDTO> output = new ArrayList<>();
+		List<OPACompUncompResponseDTO> output = new ArrayList<>();
 		
 		output.add(
-				OPACompUnCompResponseDTO.builder()
+				OPACompUncompResponseDTO.builder()
 							.opaDisclActivityId(primaryKey)
 							.opaDisclosureId(opaRequest.getOpaDisclosureId())							
 							.opaDisclPersonEntityId(opaPersonEntity.getOpaDisclPersonEntityId())
@@ -195,7 +200,7 @@ public class OPACompUnCompDAO {
 	}
 
 
-	private OPADisclPersonEntity SyncOPADisclPersonEntity(OPACompUnCompRequestModel opaRequest) {
+	private OPADisclPersonEntity SyncOPADisclPersonEntity(OPACompUncompRequestModel opaRequest) {
 		OPADisclPersonEntity opaPersonEntity;
 		opaPersonEntity = prepareOpaPersonEntity(opaRequest);
 		hibernateTemplate.saveOrUpdate(opaPersonEntity);
@@ -206,7 +211,7 @@ public class OPACompUnCompDAO {
 	}
 
 	
-	private List<OPACompUnCompResponseDTO> updateOpaDisclActivity(OPACompUnCompRequestModel opaRequest) {
+	private List<OPACompUncompResponseDTO> updateOpaDisclActivity(OPACompUncompRequestModel opaRequest) {
 		//OPADiscActivityEntity activityEntity = repository.findById(opaRequest.getOpaDisclActivityId()).orElse(null);
 		OPADiscActivityEntity activityEntity = mapRequestToEntity(opaRequest);
 		try {			
@@ -221,7 +226,7 @@ public class OPACompUnCompDAO {
 	}
 
 
-	private OPADiscActivityEntity mapRequestToEntity(OPACompUnCompRequestModel opaRequest) {
+	private OPADiscActivityEntity mapRequestToEntity(OPACompUncompRequestModel opaRequest) {
 		
 //		activityEntity.setOpaDisclosureId(opaRequest.getOpaDisclosureId());
 //		activityEntity.setOpaDisclPersonEntityId(opaRequest.getOpaDisclPersonEntityId());
@@ -255,11 +260,11 @@ public class OPACompUnCompDAO {
 	}
 
 
-	private List<OPACompUnCompResponseDTO> prepareResponse(OPADiscActivityEntity activity,OPACompUnCompRequestModel opaRequest) {
-		List<OPACompUnCompResponseDTO> output = new ArrayList<>();
+	private List<OPACompUncompResponseDTO> prepareResponse(OPADiscActivityEntity activity,OPACompUncompRequestModel opaRequest) {
+		List<OPACompUncompResponseDTO> output = new ArrayList<>();
 				
 		output.add(
-				OPACompUnCompResponseDTO.builder()
+				OPACompUncompResponseDTO.builder()
 							.opaDisclActivityId(activity.getOpaDisclActivityId())
 							.opaDisclosureId(activity.getOpaDisclosureId())							
 							.opaDisclPersonEntityId(activity.getOpaDisclPersonEntityId())
@@ -280,7 +285,7 @@ public class OPACompUnCompDAO {
 		return output;
 	}
 	
-	private OPADisclPersonEntity prepareOpaPersonEntity(OPACompUnCompRequestModel opaRequest) {
+	private OPADisclPersonEntity prepareOpaPersonEntity(OPACompUncompRequestModel opaRequest) {
 
 		OPADisclPersonEntity personEntity = new OPADisclPersonEntity();
 		personEntity.setOpaDisclosureId(opaRequest.getOpaDisclosureId());
@@ -307,7 +312,7 @@ public class OPACompUnCompDAO {
 
 	
 	@Transactional
-	public void deleteDisclosureActivity(OPACompUnCompRequestModel opaRequest) {
+	public void deleteDisclosureActivity(OPACompUncompRequestModel opaRequest) {
 		OPADiscActivityEntity disclosureActivity = mapRequestToEntity(opaRequest);
 		if (disclosureActivity != null) {
 		    hibernateTemplate.delete(disclosureActivity);

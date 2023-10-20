@@ -20,8 +20,11 @@ public class OPAPersonEntityInfoDTO {
     private String entityName;
     private String entityType;
     private String entityStatus;
+    private String entityRiskCategory;
     private String countryName;
     private String relationship;
+    private Character isRelationshipActive;
+    private String sfiVersionStatus;    
     private Date involvementStartDate;
     private Date involvementEndDate;
     

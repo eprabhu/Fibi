@@ -10,10 +10,10 @@ import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModuleDetails;
 
 @Component("OPACompUncompComponent")
-public class OPACompUnComp implements ProgrammedElement{
+public class OPACompUncomp implements ProgrammedElement{
 
 	@Autowired
-	private OPACompUnCompDAO dao;
+	private OPACompUncompDAO dao;
 	
 	@Override
 	public ProgrammedElementModel getBlankResponse() {
@@ -23,7 +23,7 @@ public class OPACompUnComp implements ProgrammedElement{
 	@Override
 	public ProgrammedElementModel getResponse(ProgrammedElementModuleDetails moduleDetails,
 											  ProgrammedElementModel request) {		
-		 OPACompUnCompRequestModel opaRequest = (OPACompUnCompRequestModel) request;
+		 OPACompUncompRequestModel opaRequest = (OPACompUncompRequestModel) request;
 		 if(opaRequest == null || opaRequest.getOpaDisclosureId() == null) {
 			 opaRequest = prepareOPARequest(moduleDetails);
 		 }
@@ -43,9 +43,9 @@ public class OPACompUnComp implements ProgrammedElement{
 		 
 		 
 		 
-		 List<OPACompUnCompResponseDTO> disclosureActivity = dao.getDisclosureActivity(opaRequest);	
+		 List<OPACompUncompResponseDTO> disclosureActivity = dao.getDisclosureActivity(opaRequest);	
 		 
-		 return OPACompUnCompResponseModel.builder()
+		 return OPACompUncompResponseModel.builder()
 				 						  .data(disclosureActivity)
 				 						  .build();
 	}
@@ -57,7 +57,7 @@ public class OPACompUnComp implements ProgrammedElement{
 										  ProgrammedElementModuleDetails moduleDetails,
 										  ProgrammedElementModel request) {
 		
-		OPACompUnCompRequestModel opaRequest = (OPACompUnCompRequestModel) request;
+		OPACompUncompRequestModel opaRequest = (OPACompUncompRequestModel) request;
 		 if(opaRequest == null || opaRequest.getOpaDisclosureId() == null) {
 			 opaRequest = prepareOPARequest(moduleDetails);
 		 }
@@ -65,7 +65,7 @@ public class OPACompUnComp implements ProgrammedElement{
 		 
 		if("SAVE".equals(opaRequest.getActionType())) {
 			
-			 return OPACompUnCompResponseModel.builder()
+			 return OPACompUncompResponseModel.builder()
 					  .data(dao.saveDisclosureActivity(opaRequest))
 					  .build();	
 			 
@@ -78,11 +78,15 @@ public class OPACompUnComp implements ProgrammedElement{
 		return null;
 	}	
 
-	private OPACompUnCompRequestModel prepareOPARequest(ProgrammedElementModuleDetails moduleDetails) {
-		return OPACompUnCompRequestModel.builder()
+	private OPACompUncompRequestModel prepareOPARequest(ProgrammedElementModuleDetails moduleDetails) {
+		return OPACompUncompRequestModel.builder()
 										.opaDisclosureId(Integer.parseInt(moduleDetails.getModuleItemKey()))
 										.updateUser(moduleDetails.getLoggedInUser())
 										.build();
 	}
+	
+	
+	
+	
 	
 }

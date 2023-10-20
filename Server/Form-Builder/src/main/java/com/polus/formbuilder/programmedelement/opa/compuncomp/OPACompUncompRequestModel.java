@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class OPACompUnCompRequestModel extends ProgrammedElementRequestModel{
+public class OPACompUncompRequestModel extends ProgrammedElementRequestModel{
 
 	    private Integer opaDisclActivityId;
 	    private Integer opaDisclosureId;

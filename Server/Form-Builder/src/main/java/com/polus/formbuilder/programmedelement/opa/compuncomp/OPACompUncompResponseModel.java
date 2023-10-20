@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OPACompUnCompResponseModel implements ProgrammedElementModel{
+public class OPACompUncompResponseModel implements ProgrammedElementModel{
 
-		List<OPACompUnCompResponseDTO> data;
+		List<OPACompUncompResponseDTO> data;
 
 }
