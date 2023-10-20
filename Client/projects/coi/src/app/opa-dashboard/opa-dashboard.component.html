@@ -209,6 +209,14 @@
                                         </app-no-data-label>
                                     </div>
                                 </div>
+                                <div class="row mb-3 p-013">
+                                    <div class="col-4">
+                                        <label for="id" class="label-text">Faculty/Staff :</label>
+                                        <app-no-data-label [valueToShow]="coi?.isFaculty ? 'Faculty' : 'Staff'">
+                                            <span id="id" class="grey-text">{{coi?.isFaculty ? 'Faculty' : 'Staff'}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row px-2 py-2 m-0 bg-white d-flex align-items-center">
                                 <div class="col-4"></div>

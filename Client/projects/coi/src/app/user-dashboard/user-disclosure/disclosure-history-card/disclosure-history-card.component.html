@@ -1,10 +1,6 @@
 <div class="row d-flex">
     <div class="position-relative col-auto mt-46">
         <div class="fs-14 rounded-5 bg-white border round-card" [class.last-update] = "!isLastElement">
-            <div [title]="disclosure?.updateTimestamp | date:'dd MMM yyyy'" class="fw-bold grey-text m-0"
-                *ngIf="disclosure?.updateTimestamp">
-                {{disclosure?.updateTimestamp | date : 'dd MMM yyyy'}}
-            </div>
             <div [title]="disclosure?.updateTimeStamp | date:'dd MMM yyyy'" class="fw-bold grey-text m-0"
                 *ngIf="disclosure?.updateTimeStamp">
                 {{disclosure?.updateTimeStamp | date : 'dd MMM yyyy'}}
@@ -195,9 +191,18 @@
                     class="entity-status-history shadow-sm align-items-center d-flex {{getColorBadges(disclosure)}}">
                     <span>OPA</span>
                 </span>
+                <ng-container class="ms-1">
+                    <div class="col mt-0">
+                        <span class="pipe me-1 mt-1"></span>
+                        <span class="label-text mt-2">Reporting Cycle :</span>
+                        <span class="title-text ml-2 mt-2">
+                                <span class="grey-text">{{disclosure?.periodStartDate |dateFormatter}} - {{disclosure?.periodEndDate |dateFormatter}}</span>
+                        </span>
+                    </div>
+                </ng-container>
             </div>
         </div>
-        <div class="row mb-3 mt-4 ml-2">
+        <!-- <div class="row mb-3 mt-4 ml-2">
             <div class="col-3">
                 <span class="label-text">Department:</span> <span class="grey-text">
                     #{{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
@@ -246,8 +251,52 @@
                 <label for="review-status" class="label-text mr-21">Review Status :</label>
                 <app-no-data-label id="review-status" [valueToShow]="disclosure?.disclosureStatus">
                     <span
-                        [class.text-dark]="commonService.getTravelReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
-                        class="ms-3 {{commonService.getTravelReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
+                        [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
+                        class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
+                        <span class="badgeFont">
+                            {{disclosure?.disclosureStatus}}
+                    </span>
+                </app-no-data-label>
+            </div>
+        </div> -->
+        <div class="row mb-3 p-013 mt-2">
+            <div class="col-4">
+                <span class="label-text">Department:</span> <span class="grey-text">
+                    #{{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
+            </div>
+            <div class="col-4">
+                <label for="certify-date" class="label-text">Certification Date :</label>
+                <app-no-data-label id="certify-date" [valueToShow]="disclosure?.submissionTimestamp">
+                    <span class="grey-text">{{disclosure?.submissionTimestamp | dateFormatter}}</span>
+                </app-no-data-label>
+            </div>
+            <div class="col-4">
+                <span class="label-text me-2">Disposition Status :</span> <span
+                    class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
+                    <span class="badgeFont">
+                        {{disclosure?.dispositionStatus}}
+                </span>
+            </div>
+        </div>
+        <div class="row mb-3 p-013 mt-2">
+            <div class="col-4">
+                <label for="id" class="label-text">Administrator :</label>
+                <app-no-data-label [valueToShow]="disclosure?.adminPersonName">
+                    <span id="id" class="grey-text">{{disclosure?.adminPersonName}}</span>
+                </app-no-data-label>
+            </div>
+            <div class="col-4">
+                <label for="id" class="label-text">Admin Group :</label>
+                <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
+                    <span id="id" class="grey-text">{{disclosure?.adminGroupName}}</span>
+                </app-no-data-label>
+            </div>
+            <div class="col-4">
+                <label for="review-status" class="label-text mr-21">Review Status :</label>
+                <app-no-data-label id="review-status" [valueToShow]="disclosure?.disclosureStatus">
+                    <span
+                        [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
+                        class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
                         <span class="badgeFont">
                             {{disclosure?.disclosureStatus}}
                     </span>
