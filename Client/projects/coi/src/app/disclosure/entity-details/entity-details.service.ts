@@ -14,6 +14,7 @@ export class EntityDetailsService {
   isRelationshipQuestionnaireChanged = false;
   isAdditionalDetailsChanged = false;
 
+  $openQuestionnaire = new Subject();
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
   isExpanded = false;
@@ -25,6 +26,20 @@ export class EntityDetailsService {
   unSavedSections = [];
   relationshipCompletedObject: any = {};
   concurrentUpdateAction = '';
+  activeRelationship : any;
+  definedRelationships = [];
+  availableRelationships = [];
+  $triggerAddRelationModal = new Subject();
+  selectedTab = 'QUESTIONNAIRE';
+  isChangesInFieldValue = false;
+  involvementDate =  {
+    involvementStartDate: null,
+    involvementEndDate: null
+  }
+  additionalDetails: any = {
+    sponsorsResearch: false
+  };
+  mandatoryList = new Map();
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
