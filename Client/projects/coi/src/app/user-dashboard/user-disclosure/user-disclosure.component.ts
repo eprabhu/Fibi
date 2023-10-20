@@ -35,7 +35,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         filterType: 'ALL',
-        currentPage: '1',
+        currentPage: 1,
         property2: ''
     };
     filteredDisclosureArray: UserDisclosure[] = [];
@@ -124,7 +124,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     getDisclosures() {
-        this.dashboardRequestObject.currentPage = '1';
+        this.dashboardRequestObject.currentPage = 1;
         this.$debounceEventForDisclosureList.next();
     }
 
@@ -164,7 +164,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         if (!this.dashboardCount.inProgressDisclosureCount && !this.dashboardCount.approvedDisclosureCount
             && !this.dashboardCount.travelDisclosureCount && !this.dashboardCount.disclosureHistoryCount &&
             !this.filteredDisclosureArray.length &&
-            this.dashboardRequestObject.currentPage == '1' && this.dashboardRequestObject.filterType == 'ALL') {
+            this.dashboardRequestObject.currentPage == 1 && this.dashboardRequestObject.filterType == 'ALL') {
                 this.isShowCreate = true;
         }
     }
@@ -184,7 +184,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     setTab(tabName: string, disclosureCount: number = 0) {
         this.currentSelected.tab = tabName;
         this.dashboardRequestObject.tabName = tabName;
-        this.dashboardRequestObject.currentPage = '1';
+        this.dashboardRequestObject.currentPage = 1;
         this.dashboardRequestObject.filterType = 'ALL';
         this.currentSelected.filter = 'ALL';
         this.isShowFilterAndSearch = !!disclosureCount;
@@ -225,7 +225,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     setFilter(type = 'ALL') {
         this.currentSelected.filter = type;
         this.dashboardRequestObject.filterType = type;
-        this.dashboardRequestObject.currentPage = '1';
+        this.dashboardRequestObject.currentPage = 1;
         this.resetAndFetchDisclosure();
     }
 

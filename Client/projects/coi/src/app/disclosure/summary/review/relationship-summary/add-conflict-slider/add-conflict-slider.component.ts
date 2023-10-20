@@ -5,6 +5,7 @@ import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../app-const
 import { CommonService } from '../../../../../common/services/common.service';
 import { isEmptyObject, openModal } from '../../../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../../../../fibi/src/app/common/utilities/subscription-handler';
+import { CoiService } from '../../../../services/coi.service';
 
 @Component({
     selector: 'app-add-conflict-slider',
@@ -32,7 +33,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     coiConflictStatusType: any = null;
 
     constructor( public dataStoreService: CoiSummaryEventsAndStoreService,
-                 private _commonService: CommonService ) { }
+                 private _commonService: CommonService,  public coiService: CoiService ) { }
 
     ngOnInit() {
         document.getElementById('COI_SCROLL').classList.add('overflow-hidden');
@@ -92,7 +93,11 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
                     this.loadProjectConflictHistory();
                     this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
                 }, _err => {
+                    if (_err.status === 405) {
+                        this.coiService.concurrentUpdateAction = 'Modify Conflict';
+                    } else {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
+                    }
                 }));
         }
     }

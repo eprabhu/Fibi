@@ -326,7 +326,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Disclosure Submitted Successfully.');
         }, err => {
             this.isSaving = false;
+            if (err.status === 405) {
+            hideModal('confirmModal');
+            this.coiService.concurrentUpdateAction = 'Submit Disclosure';
+          } else {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Error In Certifying Disclosure.');
+          }
         }));
     }
     validateRelationship() {
@@ -386,11 +391,16 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.updateDisclosureReviewStatus(res.body.coiDisclosure);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
             }, _err => {
+                if (_err.status === 405) {
+                    hideModal('completeReviewModalFromDashboard');
+                    this.coiService.concurrentUpdateAction = 'Complete Review';
+                } else {
                 if (_err.error.text === 'REVIEW_STATUS_NOT_COMPLETE') {
                     document.getElementById('reviewPendingCompleteReviewErrorModalTrigger').click();
                 } else {
                     this.commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
                 }
+            }
             }));
     }
 
@@ -613,7 +623,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.router.navigate([CREATE_DISCLOSURE_ROUTE_URL],
                     { queryParams: { disclosureId: this.coiData.coiDisclosure.disclosureId } });
             }, _err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+                if (_err.status === 405) {
+                    hideModal('disclosure-confirmation-modal');
+                    this.coiService.concurrentUpdateAction = 'Withdraw Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in withdrawing disclosure.`);
+                }
             }));
     }
 
@@ -627,7 +642,12 @@ export class DisclosureComponent implements OnInit, OnDestroy {
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, `Disclosure returned successfully.`);
                 this.goToHomeUrl();
             }, _err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, `Error in returning disclosure.`);
+                if (_err.status === 405) {
+                    hideModal('disclosure-confirmation-modal');
+                    this.coiService.concurrentUpdateAction = 'Return Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, `Error in returning disclosure.`);
+                }
             }));
     }
 
@@ -710,6 +730,8 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.coiService.isShowCommentNavBar = event;
     }
 
-
+    cancelConcurrency() {
+        this.coiService.concurrentUpdateAction = '';
+    }
 
 }

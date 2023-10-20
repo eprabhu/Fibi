@@ -14,8 +14,7 @@ import {
     CREATE_DISCLOSURE_ROUTE_URL,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL,
     HTTP_ERROR_STATUS,
-    HTTP_SUCCESS_STATUS,
-    POST_CREATE_DISCLOSURE_ROUTE_URL
+    HTTP_SUCCESS_STATUS
 } from '../../app-constants';
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
@@ -63,6 +62,8 @@ export class DisclosureCreateModalComponent implements OnInit {
     canReviseFCOI: any;
     homeUnitName: null;
     title = '';
+    isShowConcurrencyWarning = false;
+
     constructor(public commonService: CommonService, private _disclosureCreateModalService: DisclosureCreateModalService,
                 private _router: Router, private _elasticConfig: ElasticConfigService) {
     }
@@ -116,8 +117,10 @@ export class DisclosureCreateModalComponent implements OnInit {
             this._disclosureCreateModalService.checkIfDisclosureAvailable(selectedModuleCode, moduleItemId).subscribe((data: any) => {
                 if (data) {
                     if (data.pendingProject != null) {
+                        this.isShowExistingDisclosure = true;
                         this.setExistingDisclosureDetails('Project', data.pendingProject);
                     } else if (data.fcoiProject != null) {
+                        this.isShowExistingDisclosure = true;
                         this.setExistingDisclosureDetails('FCOI', data.fcoiProject);
                     } else {
                         this.assignSelectedProject(event);
@@ -161,9 +164,14 @@ export class DisclosureCreateModalComponent implements OnInit {
                     this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
                     this.clearModal();
                 }
-            }, err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
-                    err.error.errorMessage : 'Error in creating project disclosure. Please try again.');
+            }, err => { 
+                if (err.status === 405) {
+                    this.isShowConcurrencyWarning = true;
+                        this.setExistingDisclosureDetails('Project', err.error);
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
+                        err.error.errorMessage : 'Error in creating project disclosure. Please try again.');
+                }
             }));
         }
     }
@@ -235,8 +243,13 @@ export class DisclosureCreateModalComponent implements OnInit {
                 this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
                 this.clearModal();
             }, err => {
+                if (err.status === 405) {
+                    this.isShowConcurrencyWarning = true;
+                        this.setExistingDisclosureDetails('FCOI', err.error);
+                } else {
                 this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
                     err.error.errorMessage : 'Error in creating new FCOI. Please try again.');
+                }
             });
         }
     }
@@ -312,7 +325,7 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     navigateToDisclosure(disclosureId): void {
         hideModal('reviseOrCreateDisclosureModal');
-        this._router.navigate([POST_CREATE_DISCLOSURE_ROUTE_URL], {
+        this._router.navigate([CREATE_DISCLOSURE_ROUTE_URL], {
             queryParams: {
                 disclosureId: disclosureId
             }
@@ -369,9 +382,14 @@ export class DisclosureCreateModalComponent implements OnInit {
                             {queryParams: {disclosureId: data.coiDisclosure.disclosureId}});
                         this.clearModal();
                     }, err => {
+                        if (err.status === 405) {
+                            this.isShowConcurrencyWarning = true;
+                                this.setExistingDisclosureDetails('FCOI', err.error);
+                        } else {
                         this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
                             err.error.errorMessage : 'Error in creating new version. Please try again.');
-                    }));
+                            
+                    }}));
             } else {
                 this.isShowExistingDisclosure = true;
                 this.setReviseDisclosure();
@@ -406,7 +424,6 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     private setExistingDisclosureDetails(type: string, data: any): void {
-        this.isShowExistingDisclosure = true;
         this.disclosureNumber = data.disclosureNumber;
         this.existingDisclosureDetails = deepCloneObject(data);
         this.existingDisclosureDetails['disclosureType'] = type;

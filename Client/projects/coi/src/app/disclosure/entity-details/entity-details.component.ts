@@ -28,6 +28,9 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService, private _navigationService: NavigationService) {
     this.clearSfiNavBarStyle();
+    this._router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
   }
 
   updateRelationshipDetails: any;
@@ -35,10 +38,10 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   entityDetails = {};
 
   ngOnInit() {
-    this.isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
-    this.entityId = this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId;
+    // this.isEditMode = this._route.snapshot.queryParamMap.get('mode') === 'edit';
+    // this.entityId = this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId;
     this.isTriggeredFromSlider = this.checkForUrl();
-    this.getSfiEntityDetails();
+    // this.getSfiEntityDetails();
     this.getQueryParams();
   }
 
@@ -46,6 +49,7 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
     this.$subscriptions.push(this._route.queryParams.subscribe(params => {
       this.isEditMode = params['mode'] === 'edit';
       this.entityId = params['personEntityId'] || this.entityId;
+    this.getSfiEntityDetails();
     }));
   }
 
@@ -117,5 +121,9 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   closeSlider(event) {
     this.closeAction.emit(false);
   }
+
+  cancelConcurrency() {
+    this.entityDetailService.concurrentUpdateAction = '';
+}
 
 }
