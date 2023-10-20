@@ -16,7 +16,6 @@ class ChangePassword {
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    providers: [HeaderService],
     encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit, OnDestroy {
@@ -42,8 +41,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isShowCreateNoteModal = false;
     noteComment: any;
     isOpenAttachmentModal = false;
+    isShowCreateOrReviseModal = false;
+    triggeredFrom = '';
+    reviseObject: any = { revisionComment: null, disclosureId: null };
 
-    constructor(public _router: Router, public commonService: CommonService, private _headerService: HeaderService) {
+    constructor(public _router: Router, public commonService: CommonService, public headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
     }
 
@@ -56,6 +58,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
             personId: this.commonService.getCurrentUserDetail('personId'),
             fullName: this.commonService.getCurrentUserDetail('fullName')
         };
+        this.getActiveDisclosure();
+        this.openModalTriggeredFromChild();
+    }
+
+    getActiveDisclosure() {
+        this.$subscriptions.push(this.headerService.getActiveDisclosure().subscribe((res: any) => {
+            this.headerService.activeDisclosures = res.coiDisclosures || [];
+            this.headerService.activeOPAs = res.opaDisclosure || [];
+        }));
     }
 
     redirectToOpa() {
@@ -131,7 +142,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     createOPA() {
-        this.$subscriptions.push(this._headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
+        this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
                 this._router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
@@ -152,7 +163,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     saveOrUpdateNote() {
         if (this.noteComment.trim()) {
-            this.$subscriptions.push(this._headerService.saveOrUpdatePersonNote({
+            this.$subscriptions.push(this.headerService.saveOrUpdatePersonNote({
                 'personId': this.commonService.getCurrentUserDetail('personId'),
                 'content': this.noteComment.trim()
             }).subscribe((ele: any) => {
@@ -182,5 +193,40 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     closeModal() {
         this.isOpenAttachmentModal = false;
+    }
+
+    outputEventAction(event) {
+        if (event.closeModal != null) {
+            this.isShowCreateOrReviseModal = event.closeModal;
+        }
+    }
+
+    openTravelDisclosure(): void {
+        this.triggeredFrom = 'TRAVEL_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
+    }
+
+    openProjectDisclosure() {
+        this.triggeredFrom = 'PROJECT_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
+    }
+
+    openReviseModal() {
+        this.reviseObject = {revisionComment: null, disclosureId: null};
+        this.reviseObject.revisionComment = '';
+        this.triggeredFrom = 'FCOI_DISCLOSURE';
+        this.isShowCreateOrReviseModal = true;
+    }
+
+    openCreateSFI() {
+        this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
+    }
+
+    openModalTriggeredFromChild() {
+        this.$subscriptions.push(this.headerService.$openModal.subscribe((event: string) => {
+            if(event == 'FCOI') {
+                this.openReviseModal();
+            }
+        }))
     }
 }
