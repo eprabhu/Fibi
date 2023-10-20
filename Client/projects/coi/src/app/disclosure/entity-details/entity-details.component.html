@@ -6,7 +6,8 @@
         id="focusQuestionnaire" (updateRelationship)="updateRelationship($event)" [isEditMode]="isEditMode"
         (positionsToView)="scrollPosition($event)" (emitLeaveModal)="showQuestionnaireLeaveConfirmationModal($event)"
         [isSwitchCurrentTab]="isSwitchCurrentTab"
-        (deleteRelationshipEvent)="emittedDeletedRelationship($event)"></app-entity-questionnaire>
+        (deleteRelationshipEvent)="emittedDeletedRelationship($event)">
+    </app-entity-questionnaire>
 </div>
 
 <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-unsaved-changes-button" data-bs-toggle="modal"
@@ -60,3 +61,5 @@
         </div>
     </div>
 </div>
+
+<app-concurrency-warning-modal *ngIf="entityDetailService.concurrentUpdateAction" [sectionName]="entityDetailService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

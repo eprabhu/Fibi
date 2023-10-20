@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { AssignAdministratorModalService } from './assign-administrator-modal.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { AssignAdminRO, DefaultAssignAdminDetails } from '../shared-interface';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 
 declare const $: any;
 
@@ -27,6 +27,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
     $subscriptions: Subscription[] = [];
     isSaving = false;
     adminGrpWarningMessage: string;
+    isConcurrency = false;
 
     @Input() disclosureId = null;
     @Input() disclosureNumber = null;
@@ -138,7 +139,7 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
         this.addAdmin.adminGroupId = (event?.adminGroupId) || null;
     }
 
-    public assignAdministrator() {
+    public assignAdministrator() { 
         if (!this.isSaving && this.validateAdmin()) {
             this.isSaving = true;
             this.setDisclosureId();
@@ -150,8 +151,15 @@ export class AssignAdministratorModalComponent implements OnInit, OnChanges, OnD
                     this.clearAdministratorField = new String('true');
                     this.closeModal.emit(data);
                     document.getElementById('toggle-assign-admin').click();
+                    this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Administrator added successfully.');
                 }, err => {
-                    this.isSaving = false;
+                    if (err.status === 405) {
+                        document.getElementById('toggle-assign-admin').click();
+                        this.isConcurrency = true;
+                    } else {
+                        this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in adding administrator.');
+                        this.isSaving = false;
+                    }
                 }));
         }
     }

@@ -6,6 +6,7 @@ import { EntityDetailsService } from '../entity-details.service';
 import { EntityDetail } from '../../sfi/add-sfi.interface';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-entity-questionnaire',
@@ -48,6 +49,8 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   @Output() emitLeaveModal: EventEmitter<any> = new EventEmitter<any>();
   @Input() isSwitchCurrentTab = false;
   @Output() deleteRelationshipEvent: EventEmitter<any> = new EventEmitter<any>();
+
+  isConcurrency = false;
 
   constructor(private _commonService: CommonService, private _router: Router,
     public entityDetailsServices: EntityDetailsService,
@@ -159,7 +162,12 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
         this.updateRelationship.emit(res);
        }, error => {
         this.isSaving = false;
+        if (error.status === 405) {
+          document.getElementById('hide-relationship-modal').click();
+          this.entityDetailsServices.concurrentUpdateAction = 'Add Relationship';
+      } else {
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+      }
       }));
     }
   }
@@ -226,6 +234,12 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
           this.getQuestionnaire(this.definedRelationships[0]);
         }
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationship deleted successfully.');
+      }, _err => {
+        if (_err.status === 405) {
+          this.entityDetailsServices.concurrentUpdateAction = 'Delete Relationship'
+      } else {
+    this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting relationship.`);
+      }
       }));
   }
 

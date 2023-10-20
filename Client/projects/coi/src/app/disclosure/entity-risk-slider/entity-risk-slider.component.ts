@@ -9,6 +9,7 @@ import { CoiSummaryEventsAndStoreService } from '../summary/coi-summary-events-a
 import { isEmptyObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { closeSlider, openCommonModal, openSlider } from '../../common/utilities/custom-utilities';
+import { CoiService } from '../services/coi.service';
 
 @Component({
 	selector: 'app-disclosure-risk-slider',
@@ -40,7 +41,8 @@ export class EntityRiskSliderComponent implements OnInit {
 	constructor(private _entityRiskSliderService: EntityRiskSliderService,
 		public _dataStoreAndEventsService: CoiSummaryEventsAndStoreService,
 		public commonService: CommonService, 
-		public _dataFormatPipe: DateFormatPipeWithTimeZone) { }
+		public _dataFormatPipe: DateFormatPipeWithTimeZone,
+        public coiService: CoiService) { }
 
 	ngOnInit() {
 		this.getRiskLookup();
@@ -67,7 +69,11 @@ export class EntityRiskSliderComponent implements OnInit {
 				this.getDisclosureRiskHistory();
 				this.isStatusEdited = false;
 			}, err => {
-				this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in modifying risk');
+				if (err.status === 405) {
+					this.coiService.concurrentUpdateAction = 'Modify Risk';
+				} else {
+					this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in modifying risk');
+				}
 			}));
 		}
 	}

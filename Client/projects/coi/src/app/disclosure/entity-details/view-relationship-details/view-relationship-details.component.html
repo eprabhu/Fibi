@@ -443,5 +443,5 @@
 
 <app-activate-inactivate-sfi-modal *ngIf="isEnableActivateInactivateSfiModal" [entityName]="entityDetails.entityName"
   [personEntityId]="entityId" [isRelationshipActive]="isRelationshipActive"
-  (closeModal)="closeActivateInactivateSfiModal($event)" [isFinalizeApi]="isFinalizeApi">
+  (closeModal)="closeActivateInactivateSfiModal($event)" [isFinalizeApi]="isFinalizeApi" [personEntityNumber]="relationshipsDetails.personEntityNumber">
 </app-activate-inactivate-sfi-modal>

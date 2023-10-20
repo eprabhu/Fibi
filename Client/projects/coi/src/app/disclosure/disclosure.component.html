@@ -778,3 +778,5 @@
     (riskChange) = "changeDataStoreRisk($event)"
     [projectDetails]="coiData.projectDetail" (closePage)="closeSlider($event)"></app-disclosure-risk-slider>
 </div>
+
+<app-concurrency-warning-modal *ngIf="coiService.concurrentUpdateAction" [sectionName]="coiService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>
