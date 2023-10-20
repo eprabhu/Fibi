@@ -55,6 +55,7 @@ import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.ProjectRelationshipResponseDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -2615,4 +2616,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return attachmentsList;
 	}
 
+	@Override
+	public ResponseEntity<Object> getEntityWithRelationShipInfo(CommonRequestDto requestDto) {
+		requestDto.setId(AuthenticatedUser.getLoginPersonId());
+		return new ResponseEntity<>(conflictOfInterestDao.getEntityWithRelationShipInfo(requestDto), HttpStatus.OK);
+	}
 }
