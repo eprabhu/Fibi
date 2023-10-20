@@ -28,12 +28,9 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     isReadMoreUniversity = false;
     isReadMoreRelationWith = false;
     sfiStatus = '';
-    additionalDetails: any = {
-        sponsorsResearch: false
-    };
     datePlaceHolder = DATE_PLACEHOLDER;
-    mandatoryList = new Map();
     @Input() isEditMode = false;
+    @Input() isShowHeader: boolean;
     isQuestionnaireCompleted = false;
     @Input() isTriggeredFromSlider = false;
     isEnableActivateInactivateSfiModal = false;
@@ -42,16 +39,10 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     isHoverCardViewMore = false;
     hasUserExpanded = false;
     isFinalizeApi = false;
-    isChangesInFieldValue = false;
     isRelationshipActive = false;
     @Input() deleteRelationshipEvent: any;
     @Output() closeEntityInfoCard: EventEmitter<boolean> = new EventEmitter<boolean>();
     previousUrlBeforeActivate = '';
-    involvementStartDate: any;
-    involvementEndDate: any;
-    RELATION_HELP_TEXT_1 = "This description is presented in the Relationship section to help you relate this entity to your research projects. Please enter an adequate description of the organization, and of your role with them,to aid both you, and a reviewers' understanding of the association between the entity and work";
-    RELATION_HELP_TEXT_2 = "Please enter an adequate description of the entity's principal are of business.";
-    RELATION_HELP_TEXT_3 = "Please enter an adequate description of the entity's relationship to your University responsibilities.";
     isCOIAdministrator = true;
 
     constructor( public entityDetailsServices: EntityDetailsService, private _router: Router,
@@ -81,7 +72,6 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             this.updateRelationshipDetails = [];
         }
         this.listenForQuestionnaireSave();
-        this.scrollEvent();
         if (this.deleteRelationshipEvent && this.deleteRelationshipEvent.isDeleted) {
             this.relationshipsDetails.updateTimestamp = this.deleteRelationshipEvent.updatedTimestamp;
             let delIndex = this.personEntityRelationships.findIndex(ele => ele.personEntityRelId == this.deleteRelationshipEvent.removeRelId);
@@ -143,45 +133,45 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     private checkMandatoryFilled(): boolean {
-        this.mandatoryList.clear();
-        if (!this.involvementStartDate) {
-            this.mandatoryList.set('date', 'Please enter a start date.');
+        this.entityDetailsServices.mandatoryList.clear();
+        if (!this.entityDetailsServices.involvementDate.involvementStartDate) {
+            this.entityDetailsServices.mandatoryList.set('date', 'Please enter a start date.');
         }
-        if (!this.additionalDetails.staffInvolvement) {
-            this.mandatoryList.set('staff', 'Please enter Relationship with Entity details.');
+        if (!this.entityDetailsServices.additionalDetails.staffInvolvement) {
+            this.entityDetailsServices.mandatoryList.set('staff', 'Please enter Relationship with Entity details.');
         }
-        if (!this.additionalDetails.studentInvolvement) {
-            this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity details.');
+        if (!this.entityDetailsServices.additionalDetails.studentInvolvement) {
+            this.entityDetailsServices.mandatoryList.set('student', 'Please enter Principle Business Area of Entity details.');
         }
-        if (!this.additionalDetails.instituteResourceInvolvement) {
-            this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
+        if (!this.entityDetailsServices.additionalDetails.instituteResourceInvolvement) {
+            this.entityDetailsServices.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
         }
-        if (this.involvementEndDate) {
+        if (this.entityDetailsServices.involvementDate.involvementEndDate) {
             this.endDateValidation();
         }
-        return this.mandatoryList.size !== 0 ? false : true;
+        return this.entityDetailsServices.mandatoryList.size !== 0 ? false : true;
     }
 
     endDateValidation(): void {
-        this.mandatoryList.delete('endDate');
-        if (this.involvementStartDate && this.involvementEndDate &&
-            (compareDates(this.involvementStartDate, this.involvementEndDate) === 1)) {
-            this.mandatoryList.set('endDate', 'Please provide a valid date.');
+        this.entityDetailsServices.mandatoryList.delete('endDate');
+        if (this.entityDetailsServices.involvementDate.involvementStartDate && this.entityDetailsServices.involvementDate.involvementEndDate &&
+            (compareDates(this.entityDetailsServices.involvementDate.involvementStartDate, this.entityDetailsServices.involvementDate.involvementEndDate) === 1)) {
+            this.entityDetailsServices.mandatoryList.set('endDate', 'Please provide a valid date.');
         }
     }
 
     setAdditionalDetails(details) {
-        this.involvementStartDate = getDateObjectFromTimeStamp(details.involvementStartDate);
-        this.involvementEndDate = getDateObjectFromTimeStamp(details.involvementEndDate);
-        this.additionalDetails.sponsorsResearch = details.sponsorsResearch;
-        this.additionalDetails.instituteResourceInvolvement = details.instituteResourceInvolvement;
-        this.additionalDetails.studentInvolvement = details.studentInvolvement;
-        this.additionalDetails.staffInvolvement = details.staffInvolvement;
-        this.additionalDetails.personEntityId = this.entityId;
+        this.entityDetailsServices.involvementDate.involvementStartDate = getDateObjectFromTimeStamp(details.involvementStartDate);
+        this.entityDetailsServices.involvementDate.involvementEndDate = getDateObjectFromTimeStamp(details.involvementEndDate);
+        this.entityDetailsServices.additionalDetails.sponsorsResearch = details.sponsorsResearch;
+        this.entityDetailsServices.additionalDetails.instituteResourceInvolvement = details.instituteResourceInvolvement;
+        this.entityDetailsServices.additionalDetails.studentInvolvement = details.studentInvolvement;
+        this.entityDetailsServices.additionalDetails.staffInvolvement = details.staffInvolvement;
+        this.entityDetailsServices.additionalDetails.personEntityId = this.entityId;
     }
 
     activateInactivateSfi() {
-        if ((this.isQuestionnaireCompleted && (this.isChangesInFieldValue||
+        if ((this.isQuestionnaireCompleted && (this.entityDetailsServices.isChangesInFieldValue||
             this.entityDetailsServices.isRelationshipQuestionnaireChanged))) {
             this.saveRelationship();
         }
@@ -190,7 +180,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     saveRelationship() {
-        if (this.checkMandatoryFilled() && this.isChangesInFieldValue) {
+        if (this.checkMandatoryFilled() && this.entityDetailsServices.isChangesInFieldValue) {
             this.updatePersonEntityAdditionalDetails();
         }
         this.entityDetailsServices.globalSave$.next();
@@ -273,8 +263,10 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         this.$subscriptions.push(forkJoin(...questionList).subscribe(data => {
             this.allRelationQuestionnaires = [];
             data.forEach((d: any) =>{
-                this.entityDetailsServices.relationshipCompletedObject[d.applicableQuestionnaire[0].MODULE_SUB_ITEM_KEY] = d.applicableQuestionnaire.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
-                this.combineQuestionnaireList(d.applicableQuestionnaire);
+                if(d.applicableQuestionnaire.length) {
+                    this.entityDetailsServices.relationshipCompletedObject[d.applicableQuestionnaire[0].MODULE_SUB_ITEM_KEY] = d.applicableQuestionnaire.every(questionnaire => questionnaire.QUESTIONNAIRE_COMPLETED_FLAG === 'Y');
+                    this.combineQuestionnaireList(d.applicableQuestionnaire);
+                }
             })
             this.isQuestionnaireCompleted = this.isAllQuestionnaireCompleted(this.allRelationQuestionnaires);
         }, err => {
@@ -291,14 +283,17 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     updatePersonEntityAdditionalDetails() {
-        this.additionalDetails.involvementStartDate = parseDateWithoutTimestamp(this.involvementStartDate);
-        if (this.involvementEndDate) {
-            this.additionalDetails.involvementEndDate = parseDateWithoutTimestamp(this.involvementEndDate);
+        this.entityDetailsServices.additionalDetails.involvementStartDate = parseDateWithoutTimestamp(this.entityDetailsServices.involvementDate.involvementStartDate);
+        if (this.entityDetailsServices.involvementDate.involvementEndDate) {
+            this.entityDetailsServices.additionalDetails.involvementEndDate = parseDateWithoutTimestamp(this.entityDetailsServices.involvementDate.involvementEndDate);
         }
-        this.$subscriptions.push(this.entityDetailsServices.updateAdditionalDetails(this.additionalDetails).subscribe((res: any) => {
-            this.isChangesInFieldValue = false;
+        this.$subscriptions.push(this.entityDetailsServices.updateAdditionalDetails(this.entityDetailsServices.additionalDetails).subscribe((res: any) => {
+            this.entityDetailsServices.isChangesInFieldValue = false;
             this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Significant Financial Interest updated successfully.');
             this.relationshipsDetails.updateTimestamp = res.updateTimestamp;
+            this.relationshipsDetails.involvementStartDate = res.involvementStartDate;
+            this.relationshipsDetails.involvementEndDate = res.involvementEndDate;
+            this.relationshipsDetails.sponsorsResearch = res.sponsorsResearch;
             this.entityDetailsServices.isAdditionalDetailsChanged = false;
             let index = this.entityDetailsServices.unSavedSections.findIndex(ele => ele.includes(SFI_ADDITIONAL_DETAILS_SECTION_NAME));
             if (index >= 0) {
@@ -346,31 +341,9 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
         }));
     }
 
-    /**
-     * keep track of window scroll offset
-     */
-    scrollEvent() {
-        this.$subscriptions.push(this.commonService.onScrollEvent().subscribe((res) => {
-            if (!this.hasUserExpanded) {
-                const scrollHeight = res.pageYOffset;
-                if (this.isEditMode && (scrollHeight > 250)) {
-                    this.entityDetailsServices.isExpanded = false;
-                }
-                if (!this.isEditMode && scrollHeight > 130) {
-                    this.entityDetailsServices.isExpanded = false;
-                    this.isReadMoreUniversity = false;
-                    this.isReadMoreBusinessArea = false;
-                    this.isReadMoreRelationWith = false;
-                } else if (scrollHeight === 0) {
-                    this.entityDetailsServices.isExpanded = true;
-                }
-            }
-        }));
-    }
-
     addUnSavedChanges() {
         this.entityDetailsServices.isAdditionalDetailsChanged = true;
-        this.isChangesInFieldValue = true;
+        this.entityDetailsServices.isChangesInFieldValue = true;
         if(!this.entityDetailsServices.unSavedSections.some(ele => ele.includes(SFI_ADDITIONAL_DETAILS_SECTION_NAME))) {
             this.entityDetailsServices.unSavedSections.push(SFI_ADDITIONAL_DETAILS_SECTION_NAME);
         }

@@ -23,6 +23,8 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   @Output() closeAction: EventEmitter<boolean> = new EventEmitter<boolean>();
   questionnaireSection: any = '';
   currentRelationshipDetails: any;
+  isHoverAddRelationship = false;
+  definedRelationships = [];
 
   constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
     private _commonService: CommonService, private _navigationService: NavigationService) {
@@ -36,6 +38,33 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   ngOnInit() {
     this.isTriggeredFromSlider = this.checkForUrl();
     this.getQueryParams();
+    this.getDefinedRelationships();
+  }
+
+
+  getDefinedRelationships() {
+    const REQ_BODY = {
+      'personEntityId': this._route.snapshot.queryParamMap.get('personEntityId') || this.entityId
+    };
+    return new Promise<boolean>((resolve) => {
+      this.$subscriptions.push(this.entityDetailService.getPersonEntityRelationship(REQ_BODY).subscribe((res: any) => {
+        if (res.length) {
+        this.entityDetailService.definedRelationships = res || [];
+        this.entityDetailService.$openQuestionnaire.next(this.entityDetailService.definedRelationships[0]);
+        } else {
+          this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';
+        }
+      }, error => {
+        this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+      }));
+    });
+  }
+
+  openRelationshipQuestionnaire(coiFinancialEntityDetail) {
+    this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+    setTimeout(() => {
+      this.entityDetailService.$openQuestionnaire.next(coiFinancialEntityDetail);
+    })
   }
 
   getQueryParams() {
@@ -96,14 +125,26 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
 		}
 	}
 
+  openRelationDetails() {
+    // if(this.entityDetailService.isRelationshipQuestionnaireChanged) {
+    //   this.showQuestionnaireLeaveConfirmationModal({details:'' , isLeaveFromRelationTab : true})
+    // } else {
+      this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';
+    // }
+  }
+
   questionnaireChangeModalLeaveTab() {
     this.entityDetailService.isRelationshipQuestionnaireChanged = false;
-    let index = this.entityDetailService.unSavedSections.findIndex(ele => ele.includes('Relationship Questionnaire'));
+    // if (this.entityDetailService.selectedTab === 'QUESTIONNAIRE') {
+      let index = this.entityDetailService.unSavedSections.findIndex(ele => ele.includes('Relationship Questionnaire'));
     if (index >= 0) {
       this.entityDetailService.unSavedSections.splice(index, 1);    
     }
     this.entityDetailService.$relationshipTabSwitch.next(this.currentRelationshipDetails);
     this.isSwitchCurrentTab = true;
+    // } else {
+    //   this.entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS';
+    // }
     hideModal('questionnaireUnsavedChanges');
   }
 
@@ -119,4 +160,10 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
     this.entityDetailService.concurrentUpdateAction = '';
 }
 
+  saveOrAddRelationshipModal() {
+    this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+    setTimeout(() => {
+      this.entityDetailService.$triggerAddRelationModal.next(true);
+    })
+  }
 }
