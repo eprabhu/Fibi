@@ -3634,7 +3634,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureHistory.setTravelStatus(rset.getString("TRAVEL_STATUS"));
 				disclosureHistory.setTravelStartDate(rset.getTimestamp("TRAVEL_START_DATE"));
 				disclosureHistory.setTravelEndDate(rset.getTimestamp("TRAVEL_END_DATE"));
-				disclosureHistory.setUpdateTimestamp(rset.getTimestamp(UPDATE_TIMESTAMP));
+				disclosureHistory.setUpdateTimeStamp(rset.getTimestamp(UPDATE_TIMESTAMP));
 				disclosureHistory.setProjectTitle(rset.getString("PROJECT_TITLE"));
 				disclosureHistory.setProjectNumber(rset.getString("PROJECT_NUMBER"));
 				disclosureHistoryList.add(disclosureHistory);
