@@ -2430,10 +2430,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
 		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
-		query.where(builder.and(
-			    builder.equal(rootPersonEntityRelationship.get("personEntityId"), vo.getPersonEntityId()),
-			    builder.equal(rootPersonEntityRelationship.get("validPersonEntityRelType").get("disclosureTypeCode"), vo.getDisclosureTypeCode())
-			));
+		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityId"), vo.getPersonEntityId()));
 		return session.createQuery(query).getResultList();
 	}
 
@@ -4087,6 +4084,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		query.where(builder.equal(root.get("personId"), personId));
 		query.orderBy(builder.desc(root.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
+	}
+
+	@Override
+	public List<ValidPersonEntityRelType> fetchAllValidPersonEntityRelTypes() {
+		return hibernateTemplate.loadAll(ValidPersonEntityRelType.class);
 	}
 
 	@Override

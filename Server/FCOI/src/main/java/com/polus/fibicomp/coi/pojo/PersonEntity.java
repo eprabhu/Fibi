@@ -104,6 +104,9 @@ public class PersonEntity implements Serializable {
 	private List<ValidPersonEntityRelType> validPersonEntityRelTypes;
 
 	@Transient
+	private List<Integer> validPersonEntityRelTypeCodes;
+
+	@Transient
 	private  String personFullName;
 	
 	@Transient
@@ -340,5 +343,13 @@ public class PersonEntity implements Serializable {
 
 	public void setUpdateUserFullName(String updateUserFullName) {
 		this.updateUserFullName = updateUserFullName;
+	}
+
+	public List<Integer> getValidPersonEntityRelTypeCodes() {
+		return validPersonEntityRelTypeCodes;
+	}
+
+	public void setValidPersonEntityRelTypeCodes(List<Integer> validPersonEntityRelTypeCodes) {
+		this.validPersonEntityRelTypeCodes = validPersonEntityRelTypeCodes;
 	}
 }
