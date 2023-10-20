@@ -46,6 +46,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.service.GeneralService;
@@ -125,9 +126,9 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping(value = "/createSFI")
-	public ResponseEntity<Object> createSFI(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> createSFI(@RequestBody PersonEntity personEntity) {
 		logger.info("Requesting for createSFI");
-		return conflictOfInterestService.createSFI(vo);
+		return conflictOfInterestService.createSFI(personEntity);
 	}
 
 	@PostMapping("/saveOrUpdateCoiFinancialEntityDetails")
@@ -386,10 +387,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getPersonEntityDetails(personEntityId);
 	}
 	
-	@GetMapping("/getRelationshipLookup/{tabName}")
-	public ResponseEntity<Object> getRelatioshipDetails(@PathVariable("tabName") String tabName) {
-		logger.info("Requesting for getRelatioshipDetails");
-		return conflictOfInterestService.getRelatioshipDetails(tabName);
+	@GetMapping("/getRelationshipLookup")
+	public ResponseEntity<Object> getValidPersonRelationshipLookUp() {
+		logger.info("Requesting for getValidPersonRelationshipLookUp");
+		return conflictOfInterestService.getValidPersonRelationshipLookUp();
 	}
 	
 	@PostMapping("/getPersonEntityRelationship")

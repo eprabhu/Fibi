@@ -1133,6 +1133,8 @@ public interface ConflictOfInterestDao {
     
     List<Attachments> loadAllAttachmentsForPerson(String personId);
 
+	List<ValidPersonEntityRelType> fetchAllValidPersonEntityRelTypes();
+
 	DisclAttaType getDisclosureAttachmentForTypeCode(String attaTypeCode);
 
 }
