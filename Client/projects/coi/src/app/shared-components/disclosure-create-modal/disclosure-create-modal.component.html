@@ -225,7 +225,7 @@
                                 <div class="col-6">
                                     <span class="label-text f-14 pe-2">Period : </span>
                                     <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails?.startDate">
-                                        <span class="ml-2 date-block"
+                                        <span class="ml-2 grey-text date-block"
                                             *ngIf="manualProjectAddDetails?.startDate || manualProjectAddDetails?.endDate">{{manualProjectAddDetails?.startDate
                                             | dateFormatter}}
                                             <span *ngIf="manualProjectAddDetails?.startDate && manualProjectAddDetails?.endDate">-</span>
@@ -243,7 +243,11 @@
                                 </div>
                                 <div class="col-6">
                                     <span class="label-text f-14 pe-2">Prime Sponsor : </span>
-                                    <span class="ml-2 grey-text">{{manualProjectAddDetails.primeSponsorName || 'No Data'}}</span>
+                                    <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails.primeSponsorName">
+                                        <span class="ml-2 grey-text date-block"
+                                            *ngIf="manualProjectAddDetails.primeSponsorName ">{{manualProjectAddDetails.primeSponsorName}}
+                                        </span>
+                                    </app-no-data-label>
                                 </div>
                                 
                             </div>

@@ -504,7 +504,7 @@
                             </span>
 <!-- For Travel Disclosure -->
                             <h4 *ngIf="disclosure.travelDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-65" aria-hidden="true"></i>
+                                <i class="fa fa-user mt-65 mt-2" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.travellerName}}</strong>
                                 <ng-container>
                                 <span class="pipe me-1 mt-1"></span>
@@ -520,7 +520,7 @@
                             </h4>
 <!-- For Coi Disclosure -->
                            <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-65" aria-hidden="true"></i>
+                                <i class="fa fa-user mt-65 mt-2" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.disclosurePersonFullName}}</strong>
                                 <ng-container *ngIf="disclosure.fcoiTypeCode === '2' || disclosure.fcoiTypeCode === '3'" class="ms-1">
                                     <span class="pipe me-2 mt-1"></span>
@@ -537,8 +537,17 @@
                             </h4>
 <!-- For OPA Disclosure -->
                             <h4 *ngIf="disclosure.opaDisclosureId" class="mb-0 mt-2 d-flex label-text">
-                                <i class="fa fa-user mt-65" aria-hidden="true"></i>
+                                <i class="fa fa-user mt-65 mt-2" aria-hidden="true"></i>
                                 <strong class="me-2 ml-2 text-nowrap mt-2">{{disclosure.personName}}</strong>
+                                <ng-container class="ms-1">
+                                    <div class="col mt-2">
+                                        <span class="pipe me-2 mt-1"></span>
+                                        <span class="text-nowrap mt-2">Reporting Cycle :</span>
+                                        <span class="title-text ml-2 mt-2">
+                                                <span class="grey-text">{{disclosure?.periodStartDate |dateFormatter}} - {{disclosure?.periodEndDate |dateFormatter}}</span>
+                                        </span>
+                                    </div>
+                                </ng-container>
                             </h4>
                         </span>
                     </div>
@@ -571,7 +580,7 @@
 <!-- For Coi disclosures -->
                     <ng-container *ngIf="!disclosure?.travelDisclosureId && !disclosure?.opaDisclosureId">
                         <div class="row mb-3 p-013 mt-2">
-                            <div class="col-5">
+                            <div class="col-4">
                                 <span class="label-text">Department:</span> <span class="grey-text">
                                     #{{disclosure?.unit?.unitDetail}} </span>
                             </div>
@@ -596,7 +605,7 @@
                             </div>
                         </div>
                         <div class="row mb-3 p-013 mt-2">
-                            <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-5">
+                            <div *ngIf="disclosure?.fcoiTypeCode== 1" class="col-4">
                                 <label for="id" class="label-text">{{disclosure?.disclosureVersionNumber== 1 ?
                                     'Description:' :
                                     'Revision Reason:'}}</label>
@@ -604,7 +613,7 @@
                                     <span id="id" class="grey-text">{{disclosure?.reviseComment}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-5">
+                            <div *ngIf="disclosure?.fcoiTypeCode!= 1" class="col-4">
                                 <label for="id" class="label-text">Description :</label>
                                 <app-no-data-label [valueToShow]="disclosure?.reviseComment">
                                     <span *ngIf="disclosure?.reviseComment" class="fs-14">
@@ -736,23 +745,17 @@
 <!-- For OPA disclosures -->
                     <ng-container *ngIf="disclosure?.opaDisclosureId">
                         <div class="row mb-3 p-013 mt-2">
-                            <div class="col-5">
+                            <div class="col-4">
                                 <span class="label-text">Department:</span> <span class="grey-text">
                                     #{{disclosure?.homeUnit}} - {{disclosure?.homeUnitName}} </span>
                             </div>
-                            <div class="col">
+                            <div class="col-4">
                                 <label for="certify-date" class="label-text">Certification Date :</label>
                                 <app-no-data-label id="certify-date" [valueToShow]="disclosure?.submissionTimestamp">
                                     <span class="grey-text">{{disclosure?.submissionTimestamp | dateFormatter}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div class="col">
-                                <label for="certify-date" class="label-text">Reporting Cycle :</label>
-                                <app-no-data-label [valueToShow]="">
-                                    <span class="grey-text">{{disclosure?.periodStartDate |dateFormatter}} - {{disclosure?.periodEndDate |dateFormatter}}</span>
-                                </app-no-data-label>
-                            </div>
-                            <div class="col-3">
+                            <div class="col-4">
                                 <span class="label-text me-2">Disposition Status :</span> <span
                                     class="{{commonService.getDispositionStatusBadge(disclosure?.dispositionStatusCode)}} "></span>
                                     <span class="badgeFont">
@@ -761,31 +764,24 @@
                             </div>
                         </div>
                         <div class="row mb-3 p-013 mt-2">
-                            <div class="col-5">
-                                <span class="label-text me-2">Staff / Faculty :</span>
-                                <span class=" "></span>
-                                    <span class="badgeFont">
-                                        {{disclosure?.isFaculty ? 'Faculty' : 'Staff'}}
-                                </span>
-                            </div>
-                            <div class="col">
+                            <div class="col-4">
                                 <label for="id" class="label-text">Administrator :</label>
                                 <app-no-data-label [valueToShow]="disclosure?.adminPersonName">
                                     <span id="id" class="grey-text">{{disclosure?.adminPersonName}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div class="col">
+                            <div class="col-4">
                                 <label for="id" class="label-text">Admin Group :</label>
                                 <app-no-data-label [valueToShow]="disclosure?.adminGroupName">
                                     <span id="id" class="grey-text">{{disclosure?.adminGroupName}}</span>
                                 </app-no-data-label>
                             </div>
-                            <div class="col-3">
+                            <div class="col-4">
                                 <label for="review-status" class="label-text mr-21">Review Status :</label>
                                 <app-no-data-label id="review-status" [valueToShow]="disclosure?.disclosureStatus">
                                     <span
-                                        [class.text-dark]="commonService.getTravelReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
-                                        class="ms-3 {{commonService.getTravelReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
+                                        [class.text-dark]="commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode) === 'warning'"
+                                        class="ms-3 {{commonService.getReviewStatusBadge(disclosure?.opaDisclosureStatusCode)}}"></span>
                                         <span class="badgeFont">
                                             {{disclosure?.disclosureStatus}}
                                     </span>
@@ -796,8 +792,8 @@
                 </div>
                 <div class="d-flex row align-items-center py-2 px-3">
                     <ng-container *ngIf="!disclosure?.travelDisclosureId">
-                        <div class="col-5 d-flex" *ngIf="!disclosure?.opaDisclosureId">
-                            <div class="align-items-center col-6 d-flex fs-14"
+                        <div class="col-4 d-flex">
+                            <div class="align-items-center col-6 d-flex fs-14"  *ngIf="!disclosure?.opaDisclosureId"
                                 [ngClass]="disclosure?.noOfSfi > 0 ? 'cursor-pointer' : '' "
                                 [attr.title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' "
                                 area-describedby="Click to view SFI list">
@@ -819,9 +815,9 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class=" text-secondary col-6 fs-14 d-flex">
+                            <div class=" text-secondary col-6 fs-14 d-flex" *ngIf="!disclosure?.opaDisclosureId">
                                 <ng-container *ngIf="disclosure?.fcoiTypeCode == '1'">
-                                    <div class="align-items-center col-6 d-flex fs-14"
+                                    <div class="align-items-center col-4 d-flex fs-14"
                                         [ngClass]="disclosure?.noOfProposal > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfProposal > 0 ? 'Click to view Proposal list' : '' "
                                         area-describedby="Click to view Proposal list">
