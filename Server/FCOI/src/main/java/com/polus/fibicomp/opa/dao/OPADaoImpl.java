@@ -260,10 +260,14 @@ public class OPADaoImpl implements OPADao {
                         .receivedSummerComp(rset.getBoolean("RECEIVED_SUMMER_COMP"))
                         .summerCompMonths(rset.getBigDecimal("SUMMER_COMP_MONTHS"))
                         .hasPotentialConflict(rset.getBoolean("HAS_POTENTIAL_CONFLICT"))
-                        .hasPotentialConflict(rset.getBoolean("CONFLICT_DESCRIPTION"))
+                        .conflictDescription(rset.getString("CONFLICT_DESCRIPTION"))
                         .createTimestamp(rset.getTimestamp("CREATE_TIMESTAMP"))
                         .createUser(rset.getString("CREATE_USER"))
                         .submissionTimestamp(rset.getTimestamp("SUBMISSION_TIMESTAMP"))
+                        .opaDisclosureStatusCode(rset.getString("OPA_DISCLOSURE_STATUS_CODE"))
+                        .dispositionStatusCode(rset.getString("DISPOSITION_STATUS_CODE"))
+                        .dispositionStatus(rset.getString("DISPOSITION_STATUS"))
+                        .disclosureStatus(rset.getString("OPA_DISCLOSURE_STATUS"))
                         .updateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
                         .updateUser(rset.getString("UPDATE_USER"))
                         .updateUserFullName(rset.getString("UPDATE_USER_FULL_NAME"))
@@ -289,7 +293,11 @@ public class OPADaoImpl implements OPADao {
         Connection connection = sessionImpl.connection();
         Integer currentPage = requestDto.getCurrentPage();
         Integer pageNumber = requestDto.getPageNumber();
-        CallableStatement statement = connection.prepareCall("{call GET_COI_OPA_DASHBOARD(?,?,?,?,?,?,?)}");
+        List<String> disclosureStatusCodes = requestDto.getOpaDisclosureStatusCodes();
+        List<String> dispositionStatusCodes = requestDto.getDispositionStatusCodes();
+        String submissionTimestamp = requestDto.getSubmissionTimestamp();
+        String unitNumber = requestDto.getUnitNumber();
+        CallableStatement statement = connection.prepareCall("{call GET_COI_OPA_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?)}");
         statement.setString(1, AuthenticatedUser.getLoginPersonId());
         statement.setString(2, requestDto.getFilterType());
         statement.setBoolean(3, isCount);
@@ -297,6 +305,12 @@ public class OPADaoImpl implements OPADao {
         statement.setInt(5, (currentPage == null ? 0 : currentPage - 1));
         statement.setInt(6, (pageNumber == null ? 0 : pageNumber));
         statement.setString(7, requestDto.getTabType());
+        statement.setString(8, disclosureStatusCodes != null &&
+                !disclosureStatusCodes.isEmpty() ? String.join(",", disclosureStatusCodes) : null);
+        statement.setString(9, dispositionStatusCodes != null &&
+                !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
+        statement.setString(10, submissionTimestamp);
+        statement.setString(11, unitNumber);
         statement.execute();
         return  statement.getResultSet();
     }
@@ -307,6 +321,16 @@ public class OPADaoImpl implements OPADao {
             for (Map.Entry<String, String> mapElement : sort.entrySet()) {
                 if (mapElement.getKey().equals("createTimestamp")) {
                     sortOrder = (sortOrder == null ? "T.CREATE_TIMESTAMP " + mapElement.getValue() : sortOrder + ", T.CREATE_TIMESTAMP " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("person")) {
+                    sortOrder = (sortOrder == null ? "T.PERSON_NAME " + mapElement.getValue() : sortOrder + ", T.PERSON_NAME " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("submissionTimestamp")) {
+                    sortOrder = (sortOrder == null ? "T.SUBMISSION_TIMESTAMP " + mapElement.getValue() : sortOrder + ", T.SUBMISSION_TIMESTAMP " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("updateTimeStamp")) {
+                    sortOrder = (sortOrder == null ? "T.UPDATE_TIMESTAMP " + mapElement.getValue() : sortOrder + ", T.UPDATE_TIMESTAMP " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("dispositionStatus")) {
+                    sortOrder = (sortOrder == null ? "T.DISPOSITION_STATUS " + mapElement.getValue() : sortOrder + ", T.UPDATE_TIMESTAMP " + mapElement.getValue());
+                } else if (mapElement.getKey().equals("disclosureStatus")) {
+                    sortOrder = (sortOrder == null ? "T.OPA_DISCLOSURE_STATUS " + mapElement.getValue() : sortOrder + ", T.UPDATE_TIMESTAMP " + mapElement.getValue());
                 }
             }
         }
