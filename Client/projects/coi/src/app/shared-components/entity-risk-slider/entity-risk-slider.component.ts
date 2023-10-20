@@ -37,6 +37,7 @@ export class EntityRiskSliderComponent implements OnInit {
     ];
     riskCategoryCode: string;
     isEmptyObject = isEmptyObject;
+    isConcurrency = false;
 
     constructor(public entityDetailsService: EntityDetailsService,
         private _commonService: CommonService,
@@ -105,11 +106,16 @@ export class EntityRiskSliderComponent implements OnInit {
                         this.entityDetails.revisionReason = this.revisionComment;
                         this.entityDetails.riskCategoryCode = this.currentRiskCategorycode;
                         this.entityDetails.entityRiskCategory.description = this.currentRiskType;
+                        this.entityDetails.entityRiskCategory.riskCategoryCode = this.currentRiskCategorycode;
                         this.clearConflictModal();
                         this.riskHistory();
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict updated successfully.');
                     }, _err => {
+                        if (_err.status === 405) {
+                          this.isConcurrency = true;
+                        } else {
                         this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating conflict status. Please try again.');
+                        }
                     }));
         }
         this.checkForMandatory();

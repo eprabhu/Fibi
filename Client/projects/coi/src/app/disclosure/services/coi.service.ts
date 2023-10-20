@@ -29,6 +29,7 @@ export class CoiService {
     actionButtonId = null;
     certificationResponseErrors = [];
     submitResponseErrors = [];
+    concurrentUpdateAction = '';
 
     constructor(
         private _http: HttpClient,

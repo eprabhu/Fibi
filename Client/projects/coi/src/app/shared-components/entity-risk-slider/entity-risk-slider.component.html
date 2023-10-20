@@ -148,3 +148,5 @@
         You have unsaved changes in the <strong>Manage Risk Status</strong>, do you want to leave?
     </p>
 </app-confirmation-modal>
+
+<app-concurrency-warning-modal *ngIf="isConcurrency" [sectionName]="'Risk Status'" (closePage)="isConcurrency = false"></app-concurrency-warning-modal>

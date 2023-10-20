@@ -50,6 +50,20 @@
                             You may proceed to the disclosure by clicking on ‘View Disclosure’.
                         </ng-container>
                     </p>
+                    <p class="fs-14 alert alert-danger" *ngIf="isShowConcurrencyWarning">
+                        <ng-container *ngIf="!hasFCOI">
+                            <ng-container *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'">
+                                A new {{selectedProjectType}} disclosure has been initiated. Please review and take appropriate action.
+                            </ng-container>
+                            <ng-container *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
+                                A new financial conflict of interest (FCOI) disclosure has been initiated. Please review and take
+                                appropriate action.
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="hasFCOI">
+                            Multiple FCOI revisions have been made. Review these revisions for accuracy and take appropriate action.
+                        </ng-container>
+                    </p>
                 </div>
                 <div class="row margin-top-home-unit"
                     *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
@@ -357,13 +371,13 @@
                     id="req-attachment-close-btn" type="button">Cancel
                 </button>
                 <button (click)="createOrReviseDisclosure();"
-                    *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure"
+                    *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning"
                     class="btn btn-primary fs-15" id="req-attachment-add-btn" type="button">
                     <ng-container *ngIf="hasFCOI">Create Revision</ng-container>
                     <ng-container *ngIf="!hasFCOI">Create FCOI</ng-container>
                 </button>
                 <button type="button" class="btn btn-primary fs-15"
-                    *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure"
+                    *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning"
                     (click)="createProjectDisclosureAPI();"
                     title="Click here to continue with creating the project disclosure"
                     area-describedby="Click here to continue with creating the project disclosure">
@@ -376,7 +390,7 @@
                     area-describedby="Click here to continue with creating the travel disclosure">
                     Create Travel Disclosure
                 </button>
-                <button type="button" class="btn btn-primary fs-15" *ngIf="isShowExistingDisclosure"
+                <button type="button" class="btn btn-primary fs-15" *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning"
                     (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);" title="View Disclosure"
                     area-describedby="Click here to view the disclosure">
                     View Disclosure
