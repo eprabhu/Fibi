@@ -384,7 +384,4 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
       }
     }
 
-    onScrollEvent() {
-        return this.$ScrollAction.asObservable();
-    }
 }

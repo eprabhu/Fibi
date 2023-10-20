@@ -1,0 +1,47 @@
+.navigation-icons {
+    .active {
+      border-bottom: 3px solid #007DEC;
+      color: #007DEC;
+      padding: 10px 10px !important; 
+    }
+  }
+  
+  .user-dashboard-nav {
+    min-height: 42px;
+  }
+  
+  .btn-position {
+    position: relative;
+    bottom: 5px;
+  }
+  
+  .border-nav {
+    width: max-content;
+    border-radius: 15px 15px 0px 0px;
+    position: relative;
+    top: 0px;
+    right: 15px;  
+}
+
+.navigation-title {
+  .active {
+    // border-bottom: 2px solid #007DEC;
+    color: #007DEC;
+    margin-bottom: -0.2rem !important;
+    font-weight: bold;
+    position: relative;
+    bottom: 5px;
+  }
+}
+
+.fa-check{
+  font-weight: 600;
+  color: #28a745 !important;
+  margin-left: 5px;
+}
+
+.fa-exclamation-circle {
+  font-weight: 600;
+  color: #ffc107 !important;
+  margin-left: 5px;
+}
