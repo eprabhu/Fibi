@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -406,4 +407,56 @@ public class OPADaoImpl implements OPADao {
 		return !opaDisclData.isEmpty() ? opaDisclData.get(0) : null;
 	}
 
+    @Override
+    public Timestamp updateOPADisclosureUpDetails(Integer opaDisclosureId, Timestamp timesStamp) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("UPDATE OPADisclosure d SET ");
+        hqlQuery.append("d.updateTimestamp = :updateTimestamp, d.updateUser = :updateUser ");
+        hqlQuery.append("WHERE d.opaDisclosureId = :opaDisclosureId");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("opaDisclosureId",opaDisclosureId);
+        query.setParameter("updateTimestamp", timesStamp);
+        query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+        query.executeUpdate();
+        return timesStamp;
+    }
+
+    @Override
+    public void updateOPADisclosureStatuses(Integer opaDisclosureId, Timestamp updateTimesStamp, String opaDisclosureStatusCode, String dispositionStatusCode) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("UPDATE OPADisclosure d SET ");
+        hqlQuery.append("d.updateTimestamp = :updateTimestamp, ");
+        hqlQuery.append("d.updateUser = :updateUser ");
+        if (opaDisclosureStatusCode != null)
+            hqlQuery.append(", d.opaDisclosureStatusCode = :opaDisclosureStatusCode ");
+        if (dispositionStatusCode != null)
+            hqlQuery.append(", d.dispositionStatusCode = :dispositionStatusCode ");
+        hqlQuery.append("WHERE d.opaDisclosureId = :opaDisclosureId");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("opaDisclosureId",opaDisclosureId);
+        if (opaDisclosureStatusCode != null)
+            query.setParameter("opaDisclosureStatusCode", opaDisclosureStatusCode);
+        if (dispositionStatusCode != null)
+            query.setParameter("dispositionStatusCode", dispositionStatusCode);
+        query.setParameter("updateTimestamp", updateTimesStamp);
+        query.setParameter("updateUser", AuthenticatedUser.getLoginUserName());
+        query.executeUpdate();
+    }
+
+    @Override
+    public OPADisclosureStatusType getOPADisclosureStatusType(String statusTypeCode) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT s FROM  OPADisclosureStatusType s ");
+        hqlQuery.append("WHERE s.opaDisclosureStatusCode = :opaDisclosureStatusCode");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("opaDisclosureStatusCode", statusTypeCode);
+        List<OPADisclosureStatusType> resultData = query.getResultList();
+        if(resultData != null  && !resultData.isEmpty()) {
+            return resultData.get(0);
+        }
+        return null;
+    }
 }
