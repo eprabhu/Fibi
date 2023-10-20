@@ -14,7 +14,7 @@ export class FormBuilderService {
      }
 
     getFormBuilderData(configuration: FBConfiguration) {
-        return this._http.post(this._commonService.baseUrl + '/formbuilder/getForm', configuration);
+        return this._http.post(this.baseURL + '/formbuilder/getForm', configuration);
     }
 
     saveFormComponent(data: FormBuilderSaveRO): Observable<any> {
