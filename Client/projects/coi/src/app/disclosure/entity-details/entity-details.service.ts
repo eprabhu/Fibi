@@ -40,6 +40,7 @@ export class EntityDetailsService {
     sponsorsResearch: false
   };
   mandatoryList = new Map();
+  isClickedWithinQuestionnaire = false;
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
