@@ -58,8 +58,11 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
   ngOnInit() {
     this.$subscriptions.push(this._activatedRoute.queryParams.subscribe(params => {
       this.isEditMode = this._activatedRoute.snapshot.queryParamMap.get('mode') === 'edit';
-      this.getDefinedRelationships();
       this.configuration.enableViewMode = !this.isEditMode;
+      if(this.entityDetailsServices.definedRelationships.length) {
+        this.getQuestionnaire(this.entityDetailsServices.definedRelationships[0]);
+      }
+      this.getDefinedRelationships();
     }));
     this.openAddRelationModal();
     this.openRelationshipQuestionnaire();
@@ -101,6 +104,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
     if(data) {
       this.currentRelationshipDetails = data;
       this.entityDetailsServices.activeRelationship = data.validPersonEntityRelType.personEntityRelType.relationshipTypeCode;
+      this.entityDetailsServices.isClickedWithinQuestionnaire = true;
       this.configuration.moduleItemKey = this._activatedRoute.snapshot.queryParamMap.get('personEntityId') || this.entityId;
       this.configuration.moduleSubItemKey = data.validPersonEntityRelTypeCode;
       this.configuration = Object.assign({}, this.configuration);
@@ -209,9 +213,7 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy, OnChange
 
   clearModal() {
     this.relationValidationMap.clear();
-    if(this.entityDetailsServices.definedRelationships.length) {
-      this.entityDetailsServices.$openQuestionnaire.next(this.entityDetailsServices.definedRelationships[0]);
-    } else {
+    if(!this.entityDetailsServices.definedRelationships.length) {
       this.entityDetailsServices.selectedTab = 'RELATIONSHIP_DETAILS';
     }
     this.isChecked = {};

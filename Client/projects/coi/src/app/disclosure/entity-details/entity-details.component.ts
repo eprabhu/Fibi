@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { NavigationService } from '../../common/services/navigation.service';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { CommonService } from '../../common/services/common.service';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { HTTP_ERROR_STATUS, SFI_ADDITIONAL_DETAILS_SECTION_NAME } from '../../app-constants';
 
 @Component({
   selector: 'app-entity-details',
@@ -25,6 +25,7 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   currentRelationshipDetails: any;
   isHoverAddRelationship = false;
   definedRelationships = [];
+  selectedQuestionnaire: any;
 
   constructor(public entityDetailService: EntityDetailsService, private _route: ActivatedRoute, private _router: Router,
     private _commonService: CommonService, private _navigationService: NavigationService) {
@@ -36,9 +37,17 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   entityDetails = {};
 
   ngOnInit() {
+    this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+    this.resetServiceValues();
     this.isTriggeredFromSlider = this.checkForUrl();
     this.getQueryParams();
     this.getDefinedRelationships();
+  }
+
+  resetServiceValues() {
+    this.entityDetailService.activeRelationship = {};
+    this.entityDetailService.definedRelationships = [];
+    this.entityDetailService.availableRelationships = [];
   }
 
 
@@ -61,10 +70,15 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
   }
 
   openRelationshipQuestionnaire(coiFinancialEntityDetail) {
-    this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
-    setTimeout(() => {
-      this.entityDetailService.$openQuestionnaire.next(coiFinancialEntityDetail);
-    })
+    this.selectedQuestionnaire = coiFinancialEntityDetail;
+    if(this.entityDetailService.isAdditionalDetailsChanged) {
+      openModal('relationDetailsUnSavedChanges');
+    } else {
+      this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+      setTimeout(() => {
+        this.entityDetailService.$openQuestionnaire.next(this.selectedQuestionnaire);
+      });
+    }
   }
 
   getQueryParams() {
@@ -126,25 +140,28 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
 	}
 
   openRelationDetails() {
-    // if(this.entityDetailService.isRelationshipQuestionnaireChanged) {
-    //   this.showQuestionnaireLeaveConfirmationModal({details:'' , isLeaveFromRelationTab : true})
-    // } else {
+    this.entityDetailService.isClickedWithinQuestionnaire = false;    
+    if(this.entityDetailService.isRelationshipQuestionnaireChanged) {
+      this.showQuestionnaireLeaveConfirmationModal({details:'' , isLeaveFromRelationTab : true})
+    } else {
       this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';
-    // }
+    }
   }
 
   questionnaireChangeModalLeaveTab() {
     this.entityDetailService.isRelationshipQuestionnaireChanged = false;
-    // if (this.entityDetailService.selectedTab === 'QUESTIONNAIRE') {
       let index = this.entityDetailService.unSavedSections.findIndex(ele => ele.includes('Relationship Questionnaire'));
     if (index >= 0) {
-      this.entityDetailService.unSavedSections.splice(index, 1);    
+      this.entityDetailService.unSavedSections.splice(index, 1); 
+    }   
+    if (!this.entityDetailService.isClickedWithinQuestionnaire) {
+      this.entityDetailService.selectedTab = 'RELATIONSHIP_DETAILS';  
+    } else {
+      this.entityDetailService.$relationshipTabSwitch.next(this.currentRelationshipDetails);
+      this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+      this.entityDetailService.isClickedWithinQuestionnaire = true;
+      this.isSwitchCurrentTab = true;
     }
-    this.entityDetailService.$relationshipTabSwitch.next(this.currentRelationshipDetails);
-    this.isSwitchCurrentTab = true;
-    // } else {
-    //   this.entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS';
-    // }
     hideModal('questionnaireUnsavedChanges');
   }
 
@@ -161,9 +178,27 @@ export class EntityDetailsComponent implements  OnInit, OnDestroy {
 }
 
   saveOrAddRelationshipModal() {
-    this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
-    setTimeout(() => {
-      this.entityDetailService.$triggerAddRelationModal.next(true);
-    })
+    if(this.entityDetailService.isAdditionalDetailsChanged) {
+      this.selectedQuestionnaire = 'ADD_RELATION';
+      openModal('relationDetailsUnSavedChanges');
+    } else {
+      this.entityDetailService.selectedTab = 'QUESTIONNAIRE';
+      if(!this.entityDetailService.isClickedWithinQuestionnaire) {
+        this.openRelationshipQuestionnaire(this.entityDetailService.definedRelationships[0])
+      }
+      setTimeout(() => {
+        this.entityDetailService.$triggerAddRelationModal.next(true);
+      });
+    }
+  }
+
+  relationDetailsLeavePage() {
+    this.entityDetailService.isAdditionalDetailsChanged = false;
+    let index = this.entityDetailService.unSavedSections.findIndex(ele => ele.includes(SFI_ADDITIONAL_DETAILS_SECTION_NAME));
+    if (index >= 0) {
+        this.entityDetailService.unSavedSections.splice(index, 1);
+    }
+    hideModal('relationDetailsUnSavedChanges');
+    this.selectedQuestionnaire === 'ADD_RELATION' ? this.saveOrAddRelationshipModal() : this.openRelationshipQuestionnaire(this.selectedQuestionnaire);
   }
 }
