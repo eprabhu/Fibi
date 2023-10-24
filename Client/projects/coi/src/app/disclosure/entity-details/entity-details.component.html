@@ -7,11 +7,11 @@
     <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 shadow-sm user-dashboard-nav">
       <ng-container *ngIf="entityDetailService.definedRelationships?.length">
         <ng-container *ngFor="let coiFinancialEntityDetail of entityDetailService.definedRelationships;let last = last">
-          <div 
-            (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail);" 
+          <div
+            (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail);"
             class="text-secondary p-10 border-end" role="button"
-            [ngClass]="entityDetailService.selectedTab === 'QUESTIONNAIRE' && 
-            entityDetailService.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'navigation-icons':''">
+            [ngClass]="(entityDetailService.selectedTab === 'QUESTIONNAIRE') && 
+            (entityDetailService.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode) ? 'navigation-icons':''">
             <span title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}} Questionnaire"
               [ngClass]="entityDetailService.selectedTab === 'QUESTIONNAIRE' && entityDetailService.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
               class="active r-title px-3 py-3">
@@ -45,11 +45,11 @@
         </div>
         <div class="text-secondary navigation-icons p-10  border-end cursor-pointer">
           <span title="Click to view History" class="r-title px-3 py-3 fw-500" [class.active]="entityDetailService.selectedTab === 'HISTORY'">
-          History        
+          History
           </span>
           </div>
     </nav>
-  </div>
+</div>
 
 <div *ngIf="entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS'">
     <app-view-relationship-details [isShowHeader]="false" [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
@@ -111,6 +111,29 @@
             </div>
             <div class="modal-footer mx-2">
                 <button type="button" class="btn btn-outline-secondary" (click)="questionnaireChangeModalLeaveTab();">Leave Page</button>
+                <button type="button" class="btn btn-primary btn-sm fs-14" data-bs-dismiss="modal">Stay On Page</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-coi fade mySkinDialog" id="relationDetailsUnSavedChanges" role="dialog" aria-labelledby="hiddenUnsavedChanges"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" id="prop-saveExit-dismiss-btn" class="btn-close fs-12"
+                data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>You have unsaved changes in <strong>Relationship Details</strong>.
+                </p>
+                <span class="fs-14"><p>Do you want to leave the page?</p></span>
+            </div>
+            <div class="modal-footer mx-2">
+                <button type="button" class="btn btn-outline-secondary" (click)="relationDetailsLeavePage();">Leave Page</button>
                 <button type="button" class="btn btn-primary btn-sm fs-14" data-bs-dismiss="modal">Stay On Page</button>
             </div>
         </div>

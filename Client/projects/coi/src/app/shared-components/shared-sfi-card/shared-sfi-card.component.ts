@@ -44,7 +44,7 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
       this.SFIObject.countryName = this.getCountryName();
       this.SFIObject.involvementEndDate = this.reqObject.involvementEndDate;
       this.SFIObject.involvementStartDate = this.reqObject.involvementStartDate;
-      this.SFIObject.validPersonEntityRelTypes = this.reqObject.validPersonEntityRelTypes;
+      this.SFIObject.validPersonEntityRelTypes = this.groupBy(this.reqObject.validPersonEntityRelTypes, "coiDisclosureType", "description");
       this.SFIObject.entityName = this.getValuesFormCOIEntityObj('entityName');
     }
   }
@@ -114,4 +114,10 @@ export class SharedSfiCardComponent implements OnInit, OnDestroy {
     return 'Please use Inactivate button to inactivate SFI';
   }
   
+  groupBy(jsonData, key, innerKey) {
+    return jsonData.reduce((relationsTypeGroup, item) => {
+        (relationsTypeGroup[item[key][innerKey]] = relationsTypeGroup[item[key][innerKey]] || []).push(item);
+        return relationsTypeGroup;
+    }, {});
+  }
 }

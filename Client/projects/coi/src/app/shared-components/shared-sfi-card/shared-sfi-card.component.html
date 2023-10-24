@@ -21,16 +21,19 @@
   <div class="m-0 mb-2 row">
     <div class="text-secondary fs-14" [ngClass]="referredFrom === 'SFI_SUMMARY' ? 'col-8' : 'col-7'">
       <span class="fw-bold me-3"tabindex="0" aria-label = "Relationship">Relationship :</span>
-      <app-no-data-label [valueToShow]="SFIObject?.validPersonEntityRelTypes">
-        <span *ngIf="SFIObject?.validPersonEntityRelTypes?.length"tabindex="0"
-          class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
-          <span class="fw-medium" aria-label = "Financial :">Financial : </span>
+      <app-no-data-label [valueToShow]="reqObject.validPersonEntityRelTypes">
+        <span *ngIf="reqObject.validPersonEntityRelTypes?.length"tabindex="0">
           <ng-container>
-            <em *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes;let last = last">
-              <span class="r-title" *ngIf="!last"[attr.aria-label]="relationship?.personEntityRelType?.description">{{relationship?.personEntityRelType?.description +','}}
-              </span>
-              <span class="r-title" *ngIf="last"[attr.aria-label]="relationship?.personEntityRelType?.description">{{relationship?.personEntityRelType?.description}}
-              </span>            
+            <em *ngFor="let relationship of SFIObject?.validPersonEntityRelTypes | keyvalue">
+              <span class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
+                <span class="fw-medium" aria-label = "Financial :"> {{relationship.key}} : </span>
+                <ng-container *ngFor="let relation of relationship.value;let last = last">
+                <span class="r-title" *ngIf="!last"[attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description +'/'}}
+                </span>
+                <span class="r-title" *ngIf="last"[attr.aria-label]="relation?.personEntityRelType?.description">{{relation?.personEntityRelType?.description}}
+                </span>      
+                </ng-container>  
+              </span>    
             </em>
           </ng-container>
         </span>
