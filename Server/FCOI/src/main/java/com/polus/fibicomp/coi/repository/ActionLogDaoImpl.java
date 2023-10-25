@@ -194,14 +194,14 @@ public class ActionLogDaoImpl implements ActionLogDao {
     }
 
     @Override
-    public List<OPAActionLog> fetchOpaDisclosureActionLogsBasedOnId(Integer opaDisclosureId, List<String> actionTypeCodes) {
-        StringBuilder hqlQuery = new StringBuilder();
+    public List<OPAActionLog> fetchOpaDisclosureActionLogsBasedOnId(Integer opaDisclosureId) {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-        hqlQuery.append("DELETE FROM OPAActionLog a WHERE e.opaDisclosureId = :opaDisclosureId AND e.actionTypeCode NOT IN :actionTypeCode ");
-        Query query = session.createQuery(hqlQuery.toString());
-        query.setParameter("opaDisclosureId", opaDisclosureId);
-        query.setParameter("actionTypeCode", actionTypeCodes);
-        return query.getResultList();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<OPAActionLog> query = builder.createQuery(OPAActionLog.class);
+        Root<OPAActionLog> root = query.from(OPAActionLog.class);
+        query.where(builder.equal(root.get("opaDisclosureId"), opaDisclosureId));
+        query.orderBy(builder.desc(root.get("updateTimestamp")));
+        return session.createQuery(query).getResultList();
     }
 
 }
