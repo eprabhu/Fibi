@@ -38,9 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isAdministrator: boolean = false;
     ispersondetailsmodal = false;
     userDetails = null;
-    isShowCreateNoteModal = false;
     noteComment: any;
-    isOpenAttachmentModal = false;
     isShowCreateOrReviseModal = false;
     triggeredFrom = '';
     reviseObject: any = { revisionComment: null, disclosureId: null };
@@ -176,7 +174,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 'personId': this.commonService.getCurrentUserDetail('personId'),
                 'content': this.noteComment.trim()
             }).subscribe((ele: any) => {
-                this.isShowCreateNoteModal = false;
+                this.commonService.isShowCreateNoteModal = false;
                 this.noteComment = '';
                 if(this._router.url.includes('/coi/user-dashboard/notes')) {
                     this.commonService.$updateLatestNote.next(ele);
@@ -189,19 +187,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     showNotes() {
-        this.isShowCreateNoteModal = true;
+        this.commonService.isShowCreateNoteModal = true;
         setTimeout(() => {
             document.getElementById("textArea").focus();
         });
     }
 
     closeAddNote() {
-        this.isShowCreateNoteModal = false;
+        this.commonService.isShowCreateNoteModal = false;
         this.noteComment = '';
     }
 
     closeModal() {
-        this.isOpenAttachmentModal = false;
+        this.commonService.isOpenAttachmentModal = false;
     }
 
     outputEventAction(event) {

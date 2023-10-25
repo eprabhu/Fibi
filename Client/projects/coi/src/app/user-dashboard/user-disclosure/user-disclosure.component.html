@@ -510,8 +510,8 @@
                                 <span class="pipe me-1 mt-1"></span>
                                 <mat-icon class="fs-2">apartment</mat-icon>
                                 <span class="text-nowrap mt-2">Entity :</span>
-                                <span class="title-text ml-2 mt-2">{{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:180)}}
-                                        <span *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>180">...
+                                <span class="title-text ml-2 mt-2">{{(readMoreOrLess[index] ? disclosure.travelEntityName : disclosure.travelEntityName | slice:0:120)}}
+                                        <span *ngIf="!readMoreOrLess[index] && disclosure.travelEntityName?.length>120">...
                                             <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span class="readMore fw-500">Read More</span></a>
                                         </span>
                                         <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1 fw-500">Read Less</span></a>
@@ -527,8 +527,8 @@
                                     <img *ngIf="disclosure?.fcoiTypeCode==2" class="proposal-icon mt-1" src="{{deployMap}}assets/images/proposal.png">
                                     <img *ngIf="disclosure?.fcoiTypeCode==3" class="award-icon mt-1" src="{{deployMap}}assets/images/award.png">
                                     <span class="text-nowrap mt-2">Project :</span>
-                                    <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:180)}}
-                                    <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>180">...
+                                    <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(disclosure) : modalHeader(disclosure) | slice:0:120)}}
+                                    <span *ngIf="!readMoreOrLess[index] && modalHeader(disclosure)?.length>120">...
                                         <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span class="readMore fw-500">Read More</span></a>
                                     </span>
                                     <a *ngIf="readMoreOrLess[index]" (click)="readMoreOrLess[index]=false"><span class="readMore ms-1 fw-500">Read Less</span></a>
@@ -836,7 +836,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="align-items-center col-6 d-flex fs-14"
+                                    <div class="align-items-center col-6 d-flex fs-14 pl-5"
                                         [ngClass]="disclosure?.noOfAward > 0 ? 'cursor-pointer' : '' "
                                         [attr.title]="disclosure?.noOfAward > 0 ? 'Click to view Award list' : '' "
                                         area-describedby="Click to view Award list">

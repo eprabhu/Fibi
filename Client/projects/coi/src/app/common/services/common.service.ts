@@ -64,6 +64,8 @@ export class CommonService {
     enableGraph = false;
     $updateLatestNote = new Subject();
     $updateLatestAttachment = new Subject();
+    isShowCreateNoteModal = false;
+    isOpenAttachmentModal = false;
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService) {
     }
