@@ -7,10 +7,14 @@
           <ng-container *ngFor='let question of questionnaire?.questions; let indexQuestion = index;'>
           <li id="ques_{{question.QUESTION_ID}}" *ngIf="question.SHOW_QUESTION == true">
             <div class="py-2">
-              <span class="question-font d-flex mb-2">{{question.QUESTION}}</span>
+              <span class="question-font d-flex align-items-center b-2">{{question.QUESTION}}
                 <i *ngIf="question.DESCRIPTION || question.HELP_LINK"
-                (click)="getHelpLink(question.DESCRIPTION, question.HELP_LINK, indexQuestion)" class="fa fa-info-circle"
-                aria-hidden="true"></i>
+                (click)="this.helpMsg[indexQuestion] = !this.helpMsg[indexQuestion]" class="fa fa-info-circle"
+                aria-hidden="true"></i> </span>
+                <div class="info" *ngIf="this.helpMsg[indexQuestion]">
+                  <div [innerHTML] = "question.DESCRIPTION"></div>
+                  <div class="cursor-pointer clickable-content">For more information, you can check out the <a [href] ="question.HELP_LINK" target="_blank">link</a></div>
+                </div>
                 <ng-container *ngIf="question.ANSWER_TYPE === 'Table'">
                   <ng-container *ngIf="question.is_add_row && !isViewMode">
                     <p class="text-end mb-1"><span (click)="addNewAnswerRow(question)" class="action-button mr-1 mb-2"
@@ -141,7 +145,6 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="question.ANSWER_TYPE === 'endpoint'">
-
                   <app-endpoint-search [httpOptions]="searchOptions[question.QUESTION_ID + question.ANSWER_TYPE]"
                   [placeHolder]="question.placeHolder" [isDisabled]="isViewMode"
                   (onSelect)="onSearchSelectEvent($event, question)">
