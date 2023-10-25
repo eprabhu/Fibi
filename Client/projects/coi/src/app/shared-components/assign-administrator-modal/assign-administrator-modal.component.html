@@ -58,3 +58,5 @@
         </div>
     </div>
 </div>
+
+<app-concurrency-warning-modal *ngIf="isConcurrency" [sectionName]="'Assign Administrator'" (closePage)="isConcurrency = false"></app-concurrency-warning-modal>

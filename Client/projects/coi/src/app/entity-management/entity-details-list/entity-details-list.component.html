@@ -406,11 +406,14 @@
                 </div>
               </div>
               <div class="col-3 text-secondary fs-14">
-                <span class="fw-bold pr-05 me-2">
+                <span class="fw-bold  me-2 pr-10">
                   Disclosure Status :</span>
                 <app-no-data-label [valueToShow]="disclosureList?.conflictStatusCode">
                   <span
-                    class="{{commonService.getDisclosureConflictBadge(disclosureList?.conflictStatusCode)}}">{{disclosureList?.conflictStatus}}</span>
+                    class="{{commonService.getDisclosureConflictBadge(disclosureList?.conflictStatusCode)}}"></span>
+                    <span class="badgeFont">
+                      {{disclosureList?.conflictStatus}}
+                  </span>
                 </app-no-data-label>
               </div>
             </div>
@@ -442,7 +445,10 @@
                     <span class="fw-bold pr-05 me-2">
                       Disposition Status :</span>
                     <span *ngIf="disclosureList?.dispositionStatusCode"
-                      class="{{commonService.getDispositionStatusBadge(disclosureList?.dispositionStatusCode)}}">{{disclosureList?.dispositionStatus}}</span>
+                      class="{{commonService.getDispositionStatusBadge(disclosureList?.dispositionStatusCode)}}"></span>
+                      <span class="badgeFont">
+                        {{disclosureList?.dispositionStatus}}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -485,11 +491,14 @@
                 </app-no-data-label>
               </div>
               <div class="col text-secondary fs-14">
-                <span class="fw-bold pr-05 me-2">
+                <span class="fw-bold pr-05 me-2 pr-31">
                   Review Status :</span>
                   <app-no-data-label [valueToShow]="disclosureList?.reviewStatusCode">
                     <span
-                      class="{{commonService.getReviewStatusBadge(disclosureList?.reviewStatusCode)}}">{{disclosureList?.reviewStatus}}</span>
+                      class="{{commonService.getReviewStatusBadge(disclosureList?.reviewStatusCode)}}"></span>
+                      <span class="badgeFont">
+                        {{disclosureList?.reviewStatus}}
+                    </span>
                   </app-no-data-label>
               </div>
               <div *ngIf="isViewProjectDisclosure || isViewFcoiDisclosure "
@@ -650,3 +659,5 @@
     </div>
   </div>
 </div>
+
+<app-concurrency-warning-modal *ngIf="entityManagementService.concurrentUpdateAction" [sectionName]="entityManagementService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

@@ -7,7 +7,7 @@ import { TravelDisclosureService } from './travel-disclosure.service';
 import { NavigationService } from '../../common/services/navigation.service';
 import { TravelCreateModalDetails, TravelDisclosure } from '../travel-disclosure-interface';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot} from '@angular/router';
-import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, HOME_URL, HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, REPORTER_HOME_URL, HTTP_ERROR_STATUS, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../../app-constants';
 import { openCommonModal } from '../../common/utilities/custom-utilities';
 
 
@@ -43,7 +43,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
         } else if (this.hasHomeAndPersonId()) {
             return true;
         } else {
-            this._router.navigate([HOME_URL]);
+            this._router.navigate([REPORTER_HOME_URL]);
             return false;
         }
     }
@@ -123,7 +123,7 @@ export class TravelRouteGuardService implements CanActivate, CanDeactivate<boole
             this.redirectToErrorPage();
             return new Observable(null);
         } else {
-            this._router.navigate([HOME_URL]);
+            this._router.navigate([REPORTER_HOME_URL]);
             return new Observable(null);
         }
     }

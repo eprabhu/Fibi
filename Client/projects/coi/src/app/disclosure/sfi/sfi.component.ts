@@ -42,12 +42,13 @@ export class SfiComponent implements OnInit, OnDestroy {
     entityName: any;
     isRelationshipActive: false;
     entityDetails: any;
-    expandInfo = true;
+    expandInfo = false;
     isEnableActivateInactivateSfiModal: boolean;
     $debounceEvent = new Subject();
     $fetchSFIList = new Subject();
     isSearchTextHover = false;
     isLoading = false;
+    personEntityNumber: any;
 
     constructor(
         private _sfiService: SfiService,
@@ -200,6 +201,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         this.personEntityId = event.personEntityId;
         this.entityName = event.coiEntity.entityName;
         this.isRelationshipActive = event.isRelationshipActive;
+        this.personEntityNumber = event.personEntityNumber;
       }
 
       closeActivateInactivateSfiModal(event) {

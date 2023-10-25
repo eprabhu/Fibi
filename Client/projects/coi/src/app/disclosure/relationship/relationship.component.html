@@ -71,34 +71,24 @@
                                         <label class="label-text">Principal Investigator :</label>
                                         <span class="ml-2 grey-text"[attr.aria-label]="relation?.principalInvestigator">{{relation?.principalInvestigator}}</span>
                                     </div>
-                                    <div class="col-6"tabindex="0">
-                                        <label class="label-text">Sponsor :</label>
-                                        <span class="grey-text" [attr.aria-label]="relation?.sponsor">{{relation?.sponsor}}</span>
+                                    <div class="col-3"tabindex="0">
+                                        <label class="label-text">Project Role : </label>
+                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.reporterRole">{{relation?.reporterRole}}</span>
                                     </div>
-                                    <div class="col-6"tabindex="0">
+                                    <div class="col-3"tabindex="0">
                                         <label class="label-text">Period :</label>
                                         <span class="ml-2 grey-text" [attr.aria-label]="relation?.startDate + ' - ' + relation?.endDate">{{relation?.startDate | dateFormatter}} - {{relation?.endDate |
                                             dateFormatter}}</span>
                                     </div>
                                     <div class="col-6"tabindex="0">
-                                        <label class="label-text">Prime Sponsor :</label>
-                                        <span *ngIf="relation?.primeSponsor" class="ml-2 grey-text"[attr.aria-label]="relation?.primeSponsor">{{relation?.primeSponsor}}</span>
-                                        <span *ngIf="!relation?.primeSponsor" class="noDataExists">--No Data--</span>
-                                    </div>
-                                    <div class="col-6"tabindex="0">
-                                        <label class="label-text"[attr.aria-label]="relation.moduleCode === 3 ? 'Proposal' : 'Award'"> {{relation.moduleCode == 3 ? 'Proposal' : 'Award'}} Status :
-                                        </label>
-                                        <span class="ml-2 grey-text">{{relation?.moduleStatus}}</span>
+                                        <label class="label-text">Sponsor :</label>
+                                        <span class="grey-text" [attr.aria-label]="relation?.sponsor">{{relation?.sponsor}}</span>
                                     </div>
                                     <div class="col-6"tabindex="0">
                                         <label class="label-text">Lead Unit :</label>
                                         <span class="ml-2 grey-text" *ngIf="relation?.unitName"[attr.aria-label]="relation?.unitName">{{relation?.unitNumber}} -
                                             {{relation?.unitName}}</span>
                                         <span *ngIf="!relation?.unitName" class="noDataExists">No Lead Unit exist</span>
-                                    </div>
-                                    <div class="col-6"tabindex="0">
-                                        <label class="label-text">Project Role : </label>
-                                        <span class="ml-2 grey-text"[attr.aria-label]="relation?.reporterRole">{{relation?.reporterRole}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -154,7 +144,7 @@
                                                     <div class="col-12">
                                                         <button title="Click to {{isEditMode ? 'Define' : 'Manage'}} Project - SFI relationship"
                                                             class="align-items-center btn btn-primary d-flex define-relation fs-14"
-                                                            (click)="openDefineRelationship(relation)" type="submit">
+                                                            (click)="openDefineRelationship(relation, i)" type="submit">
                                                             <img src="{{deployMap}}assets/images/define-relation-hover.svg"
                                                                 class="mr-2 hover_img"
                                                                 alt="{{isEditMode ? 'Define Relationship' : 'Manage Relationship'}}">{{isEditMode
@@ -182,8 +172,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mx-3">
                         <app-SFI-conflict-relationship [coiStatusList]="coiStatusList" [isEditMode]="isEditMode" *ngIf="isShowCollapsedConflictRelationship" [entityProjectDetails]="entityProjectDetails"
-                        [coiStatusCode]="coiStatusCode" [coiData]="coiData" [moduleCode]="moduleCode" [selectedProject]="relation" (closePage)="closePage()"></app-SFI-conflict-relationship>   
+                        [coiStatusCode]="coiStatusCode" [coiData]="coiData" [moduleCode]="moduleCode" [selectedProject]="relation" (closePage)="closePage()"></app-SFI-conflict-relationship>
+                    </div>   
                 </div>
             </ng-container>
         </div>
@@ -194,7 +186,7 @@
 
   </ng-container>
   <app-define-relation *ngIf="isShowRelation" [coiStatusList]="coiStatusList" [moduleCode]="moduleCode"
-      [moduleItemId]="moduleId" [module]="selectedProject" (closePage)="closePage()"></app-define-relation>
+      [moduleItemId]="moduleId" [module]="selectedProject" (closePage)="closePage()" [relationList]="awardList" [currentRelation]="currentRelation"></app-define-relation>
 
   
   <button type="button" class="btn btn-primary btn-sm" hidden=true id="module-view-modal-button" data-bs-toggle="modal"
@@ -222,6 +214,12 @@
                           </app-no-data-label>
                       </div>
                       <div class="col-lg-4 col-sm-6 col-6 mb-3">
+                          <label class="d-block label-text">Project Role</label>
+                          <app-no-data-label [valueToShow]="selectedProjectForView?.reporterRole">
+                              <span class="grey-text m-0">{{selectedProjectForView?.reporterRole}}</span>
+                          </app-no-data-label>
+                      </div>
+                      <div class="col-lg-4 col-sm-6 col-6 mb-3">
                           <label class="d-block label-text">Period</label>
                           <span class="grey-text m-0">
                               {{selectedProjectForView?.startDate | dateFormatter}} - {{selectedProjectForView?.endDate |
@@ -234,11 +232,6 @@
                               <span class="grey-text m-0">{{selectedProjectForView?.moduleStatus}}</span>
                           </app-no-data-label>
                       </div>
-                      <div class="col-lg-4 col-sm-6 col-12 mb-3">
-                          <label class="d-block label-text">Lead Unit</label>
-                          <span class="grey-text m-0">
-                            {{selectedProjectForView?.unitNumber}} - {{selectedProjectForView?.unitName}}</span>
-                      </div>
                       <div class="col-lg-4 col-sm-6 col-6 mb-3">
                           <label class="d-block label-text">Sponsor</label>
                           <app-no-data-label [valueToShow]="selectedProjectForView?.sponsor">
@@ -250,6 +243,11 @@
                           <app-no-data-label [valueToShow]="selectedProjectForView?.primeSponsor">
                               <span class="grey-text m-0">{{selectedProjectForView?.primeSponsor}}</span>
                           </app-no-data-label>
+                      </div>
+                      <div class="col-lg-4 col-sm-6 col-12 mb-3">
+                          <label class="d-block label-text">Lead Unit</label>
+                          <span class="grey-text m-0">
+                            {{selectedProjectForView?.unitNumber}} - {{selectedProjectForView?.unitName}}</span>
                       </div>
                   </div>
               </div>

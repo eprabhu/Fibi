@@ -24,6 +24,7 @@ import { SharedComponentModule } from './shared-components/shared-component.modu
 import { FormsModule } from '@angular/forms';
 import { DragDirective } from './common/header/drag.directive';
 import { AddAttachmentModalModule } from './common/header/add-attachment-modal/add-attachment-modal.module';
+import {HeaderService} from "./common/header/header.service";
 
 export function getappConfiguration(appConfigurationServiceService: CommonService) {
     return () => appConfigurationServiceService.getAppConfig();
@@ -36,7 +37,7 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         AppRouterComponent,
         FooterComponent,
         LeftNavBarComponent,
-        DragDirective    
+        DragDirective
     ],
     imports: [
         BrowserModule,
@@ -51,6 +52,7 @@ export function getappConfiguration(appConfigurationServiceService: CommonServic
         AddAttachmentModalModule
     ],
     providers: [CommonService,
+        HeaderService,
         DashboardGuardService,
         ElasticConfigService,
         EntityManagementGuardService,

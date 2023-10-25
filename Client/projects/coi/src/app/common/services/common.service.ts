@@ -17,6 +17,8 @@ export class CommonService {
     baseUrl = '';
     fibiUrl = '';
     authUrl = '';
+    opaUrl = '';
+    formUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -109,6 +111,8 @@ export class CommonService {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
+        this.formUrl = configurationData.formUrl;
+        this.opaUrl = configurationData.opaUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;
         this.elasticUserName = configurationData.elasticUserName;
@@ -255,8 +259,6 @@ export class CommonService {
                 toast.hide();
             }, timer);
         }
-
-
     }
 
   getDisclosureConflictBadge(statusCode: string) {
@@ -384,7 +386,4 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
       }
     }
 
-    onScrollEvent() {
-        return this.$ScrollAction.asObservable();
-    }
 }

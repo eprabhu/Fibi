@@ -6,7 +6,7 @@ import {CommonService} from '../../common/services/common.service';
 import {DataStoreService} from './data-store.service';
 import {
     CREATE_DISCLOSURE_ROUTE_URL,
-    HOME_URL,
+    REPORTER_HOME_URL,
     HTTP_ERROR_STATUS,
     POST_CREATE_DISCLOSURE_ROUTE_URL
 } from '../../app-constants';
@@ -21,14 +21,14 @@ export class ResolveServiceService {
     constructor(
         private _commonService: CommonService,
         private _dataStore: DataStoreService,
-        private _coiService: OpaService,
+        private _opaService: OpaService,
         private _router: Router,
         private _navigationService: NavigationService
     ) {
     }
 
     canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
-        this._coiService.previousHomeUrl = this.setPreviousUrlPath(this._navigationService.navigationGuardUrl);
+        this._opaService.previousHomeUrl = this.setPreviousUrlPath(this._navigationService.navigationGuardUrl);
         return new Observable<boolean>((observer: Subscriber<boolean>) => {
             forkJoin(this.getHttpRequests(route)).subscribe((res: any[]) => {
                 if (res.length > 1) {
@@ -37,12 +37,12 @@ export class ResolveServiceService {
                 if (res[0]) {
                     this.updateProposalDataStore(res[0]);
                     // this.rerouteIfWrongPath(_state.url, res[0].coiDisclosure.reviewStatusCode, route, res[0].coiDisclosure.personId);
-                    // if (['3', '4', '7', '8'].includes(res[0].coiDisclosure.coiReviewStatusType.reviewStatusCode)) {
-                    //     this.getCoiReview(res[0].coiDisclosure.disclosureId, observer);
-                    // } else {
+                    if (['3', '4', '7', '8'].includes(res[0]?.opaDisclosureStatusType?.opaDisclosureStatusCode)) {
+                        this.getCoiReview(res[0].opaDisclosureId, observer);
+                    } else {
                         observer.next(true);
                         observer.complete();
-                    // }
+                    }
                 } else {
                     observer.next(false);
                     observer.complete();
@@ -66,27 +66,27 @@ export class ResolveServiceService {
     }
 
     setPreviousUrlPath(previousUrl: string) {
-        return previousUrl.includes('?') ? HOME_URL : previousUrl;
+        return previousUrl.includes('?') ? REPORTER_HOME_URL : previousUrl;
     }
 
     getCoiReview(disclosureId, observer) {
         this.$subscriptions.push(
-            this._coiService.getOPAReview(disclosureId).subscribe((res: any) => {
-                this._dataStore.updateStore(['coiReviewerList'], {coiReviewerList: res});
-                this._coiService.isReviewActionCompleted = this._coiService.isAllReviewsCompleted(res);
+            this._opaService.getOPAReview(disclosureId).subscribe((res: any) => {
+                this._dataStore.updateStore(['opaReviewerList'], {opaReviewerList: res});
+                this._opaService.isReviewActionCompleted = this._opaService.isAllReviewsCompleted(res);
                 const reviewerDetail = this.getLoggedInReviewerInfo(res);
                 if (reviewerDetail) {
-                    this._coiService.isStartReview = reviewerDetail.reviewStatusTypeCode === '1' ? true : false;
-                    this._coiService.isCompleteReview = reviewerDetail.reviewStatusTypeCode === '3' ? true : false;
-                    this._coiService.isDisclosureReviewer = true;
-                    this._coiService.$SelectedReviewerDetails.next(reviewerDetail);
+                    this._opaService.isStartReview = reviewerDetail.reviewStatusTypeCode === '1' ? true : false;
+                    this._opaService.isCompleteReview = reviewerDetail.reviewStatusTypeCode === '2' ? true : false;
+                    this._opaService.isDisclosureReviewer = true;
+                    this._opaService.$SelectedReviewerDetails.next(reviewerDetail);
                 }
                 observer.next(true);
                 observer.complete();
             }, _err => {
                 observer.next(false);
                 observer.complete();
-                this._router.navigate([this._coiService.previousHomeUrl]);
+                this._router.navigate([this._opaService.previousHomeUrl]);
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
             }));
     }
@@ -111,7 +111,7 @@ export class ResolveServiceService {
     }
 
     private loadDisclosure(disclosureId: string) {
-        return this._coiService.loadOPA(disclosureId).pipe((catchError(error => this.redirectOnError(error))));
+        return this._opaService.loadOPA(disclosureId).pipe((catchError(error => this.redirectOnError(error))));
     }
 
     private hideManualLoader() {
@@ -127,7 +127,7 @@ export class ResolveServiceService {
             this._router.navigate(['/coi/error-handler/403']);
             return new Observable(null);
         } else {
-            this._router.navigate([HOME_URL]);
+            this._router.navigate([REPORTER_HOME_URL]);
             // this._commonService.showToast(HTTP_ERROR_STATUS,
             //     error.error !== 'DISCLOSURE_EXISTS' ? 'Please try again later.' : 'Disclosure already exists.');
             return new Observable(null);

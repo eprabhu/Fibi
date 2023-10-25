@@ -3,6 +3,7 @@
   "fibiUrl": "https://coi.fibiweb.com/fibii",
   "authUrl": "https://coi.fibiweb.com/auth",
   "opaUrl": "https://coi.fibiweb.com/opa",
+  "formUrl":"https://coi.fibiweb.com/",
   "enableSSO": false,
   "enableGraph": true,
   "isElasticAuthentiaction": false,

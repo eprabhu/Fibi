@@ -50,6 +50,20 @@
                             You may proceed to the disclosure by clicking on ‘View Disclosure’.
                         </ng-container>
                     </p>
+                    <p class="fs-14 alert alert-danger" *ngIf="isShowConcurrencyWarning">
+                        <ng-container *ngIf="!hasFCOI">
+                            <ng-container *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE'">
+                                A new {{selectedProjectType}} disclosure has been initiated. Please review and take appropriate action.
+                            </ng-container>
+                            <ng-container *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
+                                A new financial conflict of interest (FCOI) disclosure has been initiated. Please review and take
+                                appropriate action.
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="hasFCOI">
+                            Multiple FCOI revisions have been made. Review these revisions for accuracy and take appropriate action.
+                        </ng-container>
+                    </p>
                 </div>
                 <div class="row margin-top-home-unit"
                     *ngIf="(triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure) || (triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure) || triggeredFrom == 'TRAVEL_DISCLOSURE'">
@@ -197,41 +211,41 @@
                             class="col-lg-12 col-12 mt-2 shadow-lg resultCard px-0">
                             <div class="pt-2 py-2 row info-card-border rounded-2 shadow-medium bg-light">
                                 <div class="col-12">
-                                    <label class="f-14 pe-2">Title : </label>
+                                    <span class="label-text f-14 pe-2">Title : </span>
                                     <span class="ml-2 grey-text">#{{manualProjectAddDetails?.title}}</span>
                                 </div>
-
-                                <div class="col-6">
-                                    <label class="f-14 pe-2">Sponsor : </label>
-                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.sponsor}}</span>
-                                </div>
-                                <div class="col-6">
-                                    <label class="f-14 pe-2">Prime Sponsor : </label>
-                                    <span class="ml-2 grey-text">{{manualProjectAddDetails.primeSponsorName || 'No Data'}}</span>
-                                </div>
-
-                                
                                 <div class="col-6 pt-1 py-1">
-                                    <label class="f-14 pe-2">Principal Investigator : </label>
+                                    <span class="label-text f-14 pe-2">Principal Investigator : </span>
                                     <span class="ml-2 grey-text">{{manualProjectAddDetails?.principalInvestigator}}</span>
                                 </div>
-                                <div class="col-6 pt-1 py-1">
-                                    <label class="f-14 pe-2">Lead Unit : </label>
-                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.unitName}}</span>
-                                </div>
-                                
                                 <div class="col-6">
-                                    <label class="f-14 pe-2">Project Role : </label>
+                                    <span class="label-text f-14 pe-2">Project Role : </span>
                                     <span class="ml-2 grey-text">{{manualProjectAddDetails?.reporterRole}}</span>
                                 </div>
                                 <div class="col-6">
-                                    <label class="f-14 pe-2">Period : </label>
+                                    <span class="label-text f-14 pe-2">Period : </span>
                                     <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails?.startDate">
-                                        <span class="ml-2 date-block"
+                                        <span class="ml-2 grey-text date-block"
                                             *ngIf="manualProjectAddDetails?.startDate || manualProjectAddDetails?.endDate">{{manualProjectAddDetails?.startDate
                                             | dateFormatter}}
                                             <span *ngIf="manualProjectAddDetails?.startDate && manualProjectAddDetails?.endDate">-</span>
                                             {{manualProjectAddDetails?.endDate | dateFormatter}}
+                                        </span>
+                                    </app-no-data-label>
+                                </div>
+                                <div class="col-6">
+                                    <span class="label-text f-14 pe-2">Sponsor : </span>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.sponsor}}</span>
+                                </div>
+                                <div class="col-6 pt-1 py-1">
+                                    <span class="label-text f-14 pe-2">Lead Unit : </span>
+                                    <span class="ml-2 grey-text">{{manualProjectAddDetails?.unitName}}</span>
+                                </div>
+                                <div class="col-6">
+                                    <span class="label-text f-14 pe-2">Prime Sponsor : </span>
+                                    <app-no-data-label id="purpose" [valueToShow]="manualProjectAddDetails.primeSponsorName">
+                                        <span class="ml-2 grey-text date-block"
+                                            *ngIf="manualProjectAddDetails.primeSponsorName ">{{manualProjectAddDetails.primeSponsorName}}
                                         </span>
                                     </app-no-data-label>
                                 </div>
@@ -361,13 +375,13 @@
                     id="req-attachment-close-btn" type="button">Cancel
                 </button>
                 <button (click)="createOrReviseDisclosure();"
-                    *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure"
+                    *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning"
                     class="btn btn-primary fs-15" id="req-attachment-add-btn" type="button">
                     <ng-container *ngIf="hasFCOI">Create Revision</ng-container>
                     <ng-container *ngIf="!hasFCOI">Create FCOI</ng-container>
                 </button>
                 <button type="button" class="btn btn-primary fs-15"
-                    *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure"
+                    *ngIf="triggeredFrom == 'PROJECT_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning"
                     (click)="createProjectDisclosureAPI();"
                     title="Click here to continue with creating the project disclosure"
                     area-describedby="Click here to continue with creating the project disclosure">
@@ -380,7 +394,7 @@
                     area-describedby="Click here to continue with creating the travel disclosure">
                     Create Travel Disclosure
                 </button>
-                <button type="button" class="btn btn-primary fs-15" *ngIf="isShowExistingDisclosure"
+                <button type="button" class="btn btn-primary fs-15" *ngIf="isShowExistingDisclosure || isShowConcurrencyWarning"
                     (click)="navigateToDisclosure(existingDisclosureDetails.disclosureId);" title="View Disclosure"
                     area-describedby="Click here to view the disclosure">
                     View Disclosure

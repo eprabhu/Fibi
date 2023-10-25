@@ -74,6 +74,12 @@
 		  </app-no-data-label>
 		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
+		  <label class="d-block label-text">Project Role</label>
+		  <app-no-data-label [valueToShow]="selectedProject?.reporterRole">
+			<span class="grey-text m-0">{{selectedProject?.reporterRole}}</span>
+		  </app-no-data-label>
+		</div>
+		<div class="col-lg-4 col-sm-6 col-6 mb-3">
 		  <label class="d-block label-text">Period</label>
 		  <span class="grey-text m-0">
 			{{selectedProject?.startDate | dateFormatter}} - {{selectedProject?.endDate |
@@ -86,11 +92,6 @@
 			<span class="grey-text m-0">{{selectedProject?.moduleStatus}}</span>
 		  </app-no-data-label>
 		</div>
-		<div class="col-lg-4 col-sm-6 col-12 mb-3">
-		  <label class="d-block label-text">Lead Unit</label>
-		  <span class="grey-text m-0">
-			{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
-		</div>
 		<div class="col-lg-4 col-sm-6 col-6 mb-3">
 		  <label class="d-block label-text">Sponsor</label>
 		  <app-no-data-label [valueToShow]="selectedProject?.sponsor">
@@ -102,6 +103,11 @@
 		  <app-no-data-label [valueToShow]="selectedProject?.primeSponsor">
 			<span class="grey-text m-0">{{selectedProject?.primeSponsor}}</span>
 		  </app-no-data-label>
+		</div>
+		<div class="col-lg-4 col-sm-6 col-12 mb-3">
+		  <label class="d-block label-text">Lead Unit</label>
+		  <span class="grey-text m-0">
+			{{selectedProject?.unitNumber}} - {{selectedProject?.unitName}}</span>
 		</div>
 	  </div>
 	</div>

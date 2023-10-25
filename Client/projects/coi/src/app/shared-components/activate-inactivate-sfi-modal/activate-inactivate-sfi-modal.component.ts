@@ -4,7 +4,8 @@ import { Subscription } from 'rxjs';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
-import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { hideModal, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-activate-inactivate-sfi-modal',
@@ -14,7 +15,9 @@ import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-u
 })
 export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
 
-    constructor(private _activateInactivateSfiService: ActivateInactivateSfiModalService, private _commonServices: CommonService) { }
+    constructor(private _activateInactivateSfiService: ActivateInactivateSfiModalService, private _commonServices: CommonService,
+        private _router: Router, private _activatedRoute: ActivatedRoute) { }
+        
     @Input() entityName: any = {};
     reasonValidateMapSfi = new Map();
     activateInactivateReason = '';
@@ -24,6 +27,8 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
     @Input() personEntityId: number = null;
     @Input() isRelationshipActive = false;
     @Input() isFinalizeApi = false;
+    @Input() personEntityNumber: any;
+    concurrentActionName = '';
 
     ngOnInit() {
         document.getElementById('activate-inactivate-show-btn').click();
@@ -34,7 +39,8 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
             const REQ_BODY = {
                 personEntityId: this.personEntityId,
                 isRelationshipActive: !this.isRelationshipActive,
-                revisionReason: this.activateInactivateReason
+                revisionReason: this.activateInactivateReason,
+                personEntityNumber: this.personEntityNumber
             };
             this.isFinalizeApi ? this.finalizeSfi(REQ_BODY) : this.setActivateInactivate(REQ_BODY);
         }
@@ -43,8 +49,16 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
     setActivateInactivate(REQ_BODY) {
         this.$subscriptions.push(this._activateInactivateSfiService.activateAndInactivateSfi(REQ_BODY).subscribe((res: any) => {
             this.activateOrInactivateSuccess(res);
+            this._commonServices.showToast(HTTP_SUCCESS_STATUS, `SFI ${this.isRelationshipActive ? 'inactivated' : 'activated '} successfully`);
         }, err => {
-            this.activateOrInactivateFailed();
+            if (err.status === 405) {
+                document.getElementById('activate-inactivate-show-btn').click();
+                this.concurrentActionName = this.isRelationshipActive ? 'Inactivate SFI' : 'Activate SFI';
+                openModal('sfiConcurrentActionModalCOI');
+            } else {
+                this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                this.activateOrInactivateFailed();
+            }
         }));
     }
 
@@ -68,8 +82,16 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
     finalizeSfi(REQ_BODY) {
         this.$subscriptions.push(this._activateInactivateSfiService.finalizeSfi(REQ_BODY).subscribe((res: any) => {
             this.activateOrInactivateSuccess(res);
+            this._commonServices.showToast(HTTP_SUCCESS_STATUS, `SFI Finalized successfully.`);
         }, err => {
-            this.activateOrInactivateFailed();
+            if (err.status === 405) {
+                document.getElementById('activate-inactivate-show-btn').click();
+                this.concurrentActionName = 'Finalize Action';
+                openModal('sfiConcurrentActionModalCOI');
+            } else {
+                this._commonServices.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                this.activateOrInactivateFailed();
+            }
         }));
     }
 
@@ -85,4 +107,11 @@ export class ActivateInactivateSfiModalComponent implements OnInit, OnDestroy {
         hideModal('activateInactivateSfiModal');
     }
 
+    navigateConcurrency() {
+        if (!this._router.url.includes('entity-details/entity') || this.isRelationshipActive) {
+                window.location.reload();
+        }
+        this._router.navigate(['/coi/entity-details/entity'], { queryParams: { personEntityId: this.personEntityId, mode: 'view' } });
+        hideModal('sfiConcurrentActionModalCOI');
+    }
 }

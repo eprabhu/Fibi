@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { SfiService } from '../disclosure/sfi/sfi.service';
 import { environment } from '../../environments/environment';
 import { CommonService } from '../common/services/common.service';
+import {HeaderService} from "../common/header/header.service";
 
 declare const $: any;
 
@@ -17,9 +18,6 @@ declare const $: any;
 export class UserDashboardComponent implements OnInit, OnDestroy {
 
     deployMap = environment.deployUrl;
-    hasFCOI: any;
-    isModalOpen = false;
-    reviseObject: any = { revisionComment: null, disclosureId: null };
     isReadMore = false;
     headerInfoText = `University policy requires that university officers, faculty, and staff and others acting on its
     behalf avoid ethical, legal, financial, and other conflicts of interest and ensure that their activities and
@@ -33,16 +31,13 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     to disclose and maintain your Significant Financial Interests; identify potential areas of concern related to your
      proposals and awards; and, disclose reimbursed travel (for NIH compliance).`;
     $subscriptions = [];
-    isShowCreateOrReviseModal = false;
-    triggeredFrom = '';
 
     constructor(public service: UserDashboardService, private _router: Router, public commonService: CommonService,
+        private _headerService: HeaderService,
         public sfiService: SfiService, public router: Router) {
     }
 
     ngOnInit(): void {
-        this.getActiveDisclosure();
-        this.openModalTriggeredFromChild();
         // this.getAllRemaindersList();
     }
 
@@ -50,56 +45,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
         subscriptionHandler(this.$subscriptions);
     }
 
-    getActiveDisclosure() {
-        this.$subscriptions.push(this.service.getActiveDisclosure().subscribe((res: any) => {
-            this.service.activeDisclosures = res.coiDisclosures || [];
-            this.updateFCOIStatuses();
-        }));
-    }
-
-    updateFCOIStatuses() {
-        this.hasFCOI = this.service.activeDisclosures.find(disclosure =>
-            disclosure.fcoiTypeCode === '1'
-        );
-    }
-
-    openReviseModal() {
-        this.reviseObject = {revisionComment: null, disclosureId: null};
-        this.reviseObject.revisionComment = '';
-        this.triggeredFrom = 'FCOI_DISCLOSURE';
-        this.isShowCreateOrReviseModal = true;
-    }
-
     getAllRemaindersList() {
         this.$subscriptions.push(this.service.getAllRemaindersList().subscribe((res: any) => {
         }));
-    }
-
-    outputEventAction(event) {
-        if (event.closeModal != null) {
-            this.isShowCreateOrReviseModal = event.closeModal;
-        }
-    }
-
-    openProjectDisclosure() {
-        this.triggeredFrom = 'PROJECT_DISCLOSURE';
-        this.isShowCreateOrReviseModal = true;
-    }
-
-    openTravelDisclosure(): void {
-        this.triggeredFrom = 'TRAVEL_DISCLOSURE';
-        this.isShowCreateOrReviseModal = true;
-    }
-
-    openCreateSFI() {
-        this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
-    }
-
-    openModalTriggeredFromChild() {
-        this.$subscriptions.push(this.service.$openModal.subscribe((event: string) => {
-            if(event == 'FCOI') {
-                this.openReviseModal();
-            }
-        }))
     }
 }

@@ -46,7 +46,6 @@ import {DATE_PICKER_FORMAT_MATERIAL} from '../../../../fibi/src/app/app-constant
 import {MatMenuModule} from '@angular/material/menu';
 import {CdkMenuModule} from '@angular/cdk/menu';
 import { PaginationComponent } from './pagination/pagination.component';
-import { AddRelationshipModalComponent } from './add-relationship-modal/add-relationship-modal.component';
 import { CountModalComponent } from './count-modal/count-modal.component';
 import { ActivityComponent } from '../disclosure/activity-track/activity.component';
 import { NoDataLabelComponent } from './no-data-label/no-data-label.component';
@@ -55,6 +54,9 @@ import { ViewQuestionnaireV2Component } from './view-questionnaire-v2/view-quest
 import { RichTextComponent } from './rich-text/rich-text.component';
 import { CustomElementV2Component } from './custom-element-v2/custom-element-v2.component';
 import { DataLayerComponent } from './form-builder-view/data-layer/data-layer.component';
+import { HostContainerDirective } from './directives/host-container.directive';
+import { PELayerComponent } from './form-builder-view/PE-layer/PE-layer.component';
+import { OPACompUncompComponent } from './form-builder-view/PE-components/OPA-comp-uncomp/OPA-comp-uncomp.component';
 
 @NgModule({
     imports: [
@@ -76,10 +78,12 @@ import { DataLayerComponent } from './form-builder-view/data-layer/data-layer.co
         AutoGrowDirective, QuestionnaireCompareComponent, CustomElementCompareComponent, GrantDetailsViewComponent, AppTimePickerComponent,
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
         DragNDragDirective, CustomTagRemoverPipe, PaginationComponent,
-        AddRelationshipModalComponent,
         CountModalComponent,
         ActivityComponent,
-        NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent],
+        NoDataLabelComponent, ViewQuestionnaireV2Component, RichTextComponent, CustomElementV2Component, DataLayerComponent,
+        HostContainerDirective,
+        PELayerComponent,
+        OPACompUncompComponent],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -119,14 +123,16 @@ import { DataLayerComponent } from './form-builder-view/data-layer/data-layer.co
         MatIconModule,
         CdkMenuModule,
         MatMenuModule,
-        AddRelationshipModalComponent,
         CountModalComponent,
         ActivityComponent,
         NoDataLabelComponent,
         ViewQuestionnaireV2Component,
         RichTextComponent,
         CustomElementV2Component,
-        DataLayerComponent
+        DataLayerComponent,
+        HostContainerDirective,
+        PELayerComponent,
+        OPACompUncompComponent
     ],
 
     providers: [
@@ -146,7 +152,7 @@ import { DataLayerComponent } from './form-builder-view/data-layer/data-layer.co
         SafeHtmlPipe,
         DecimalPipe,
         CustomNumberPipe,
-        CustomTagRemoverPipe, SfiService
+        CustomTagRemoverPipe, SfiService,
     ],
 
 })

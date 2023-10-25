@@ -14,6 +14,7 @@ export class EntityDetailsService {
   isRelationshipQuestionnaireChanged = false;
   isAdditionalDetailsChanged = false;
 
+  $openQuestionnaire = new Subject();
   $saveQuestionnaireAction = new Subject();
   $relationshipsDetails = new BehaviorSubject<object>({});
   isExpanded = false;
@@ -24,6 +25,23 @@ export class EntityDetailsService {
   isShowHistoryInfo = true;
   unSavedSections = [];
   relationshipCompletedObject: any = {};
+  concurrentUpdateAction = '';
+  activeRelationship : any;
+  definedRelationships = [];
+  availableRelationships = [];
+  $triggerAddRelationModal = new Subject();
+  selectedTab = 'QUESTIONNAIRE';
+  isChangesInFieldValue = false;
+  involvementDate =  {
+    involvementStartDate: null,
+    involvementEndDate: null
+  }
+  additionalDetails: any = {
+    sponsorsResearch: false
+  };
+  mandatoryList = new Map();
+  isClickedWithinQuestionnaire = false;
+  currentVersionDetails: any = {};
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
@@ -35,8 +53,8 @@ export class EntityDetailsService {
     return this._http.post(this._commonService.baseUrl + '/saveOrUpdateCoiFinancialEntityDetails', params);
   }
 
-  async addSFILookUp(tabName): Promise<any> {
-    return this._http.get(`${this._commonService.baseUrl}/getRelationshipLookup/${tabName}`).toPromise();
+  async addSFILookUp(): Promise<any> {
+    return this._http.get(`${this._commonService.baseUrl}/getRelationshipLookup`).toPromise();
   }
 
   getCoiEntityDetails(personEntityId) {
@@ -83,4 +101,9 @@ export class EntityDetailsService {
     return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityNumber}/latestVersion`);
   }
 
+  sfiHistory(params) {
+    return this._http.post(this._commonService.baseUrl + '/personEntity/history', params);
+  }
+
 }
+

@@ -30,10 +30,13 @@ public class OPADashboardDto {
     private Boolean isFullTime;
     private BigDecimal summerCompMonths;
     private Boolean receivedSummerComp;
+    private String dispositionStatusCode;
+    private String opaDisclosureStatusCode;
     private Timestamp submissionTimestamp;
     private String certifiedBy;
     private String certificationText;
     private Boolean hasPotentialConflict;
+    private String conflictDescription;
     private String createUser;
     private Timestamp createTimestamp;
     private String adminPersonId;
@@ -41,6 +44,8 @@ public class OPADashboardDto {
     private Integer adminGroupId;
     private Integer adminGroupName;
     private String updateUser;
-    private Timestamp updateTimestamp;
+    private Timestamp updateTimeStamp;
     private String updateUserFullName;
+    private String dispositionStatus;
+    private String disclosureStatus;
 }

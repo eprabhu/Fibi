@@ -18,7 +18,9 @@ export class AssignAdministratorModalService {
     }
 
     assignAdmin(path: string, params) {
-        return this._http.patch(this._commonService.baseUrl + `/${path}/assignAdmin`, params);
+        const url = path === 'opa' ? this._commonService.formUrl + '/opa/assignAdmin' :
+            this._commonService.baseUrl + `/${path}/assignAdmin`;
+        return this._http.patch(url, params);
     }
 
 }

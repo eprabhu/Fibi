@@ -46,6 +46,7 @@ import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
 import com.polus.fibicomp.coi.pojo.EntityRelationship;
 import com.polus.fibicomp.coi.pojo.Notes;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
+import com.polus.fibicomp.coi.pojo.PersonEntity;
 import com.polus.fibicomp.coi.service.ActionLogService;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import com.polus.fibicomp.coi.service.GeneralService;
@@ -125,13 +126,13 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping(value = "/createSFI")
-	public ResponseEntity<Object> createSFI(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> createSFI(@RequestBody PersonEntity personEntity) {
 		logger.info("Requesting for createSFI");
-		return conflictOfInterestService.createSFI(vo);
+		return conflictOfInterestService.createSFI(personEntity);
 	}
 
 	@PostMapping("/saveOrUpdateCoiFinancialEntityDetails")
-	public List<PersonEntityRelationship> saveCoiFinancialEntityDetails(@RequestBody PersonEntityRelationship vo) {
+	public ResponseEntity<Object> saveCoiFinancialEntityDetails(@RequestBody PersonEntityRelationship vo) {
 		logger.info("Request for saveOrUpdateCoiFinancialEntityDetails");
 		return conflictOfInterestService.saveOrUpdatePersonEntityRelationship(vo);
 	}
@@ -156,7 +157,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/reviseDisclosure")
-	public String reviseDisclosure(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> reviseDisclosure(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for reviseDisclosure");
 		return conflictOfInterestService.reviseDisclosure(vo);
 	}
@@ -176,7 +177,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/saveOrUpdateCoiReview")
-	public CoiReview saveOrUpdateCoiReview(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> saveOrUpdateCoiReview(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Requesting for saveOrUpdateCoiReview");
 		return conflictOfInterestService.saveOrUpdateCoiReview(vo);
 	}
@@ -188,7 +189,7 @@ public class ConflictOfInterestController {
 	}
 
 	@PostMapping("/startCOIReview")
-	public CoiReview startReview(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> startReview(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for startReview");
 		return conflictOfInterestService.startReview(vo);
 	}
@@ -207,7 +208,7 @@ public class ConflictOfInterestController {
 	}
 	
 	@PostMapping("/completeCOIReview")
-	public CoiReview completeReview(@RequestBody ConflictOfInterestVO vo) {
+	public ResponseEntity<Object> completeReview(@RequestBody ConflictOfInterestVO vo) {
 		logger.info("Request for CompleteReview");
 		return conflictOfInterestService.completeReview(vo);
 	}
@@ -386,10 +387,10 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.getPersonEntityDetails(personEntityId);
 	}
 	
-	@GetMapping("/getRelationshipLookup/{tabName}")
-	public ResponseEntity<Object> getRelatioshipDetails(@PathVariable("tabName") String tabName) {
-		logger.info("Requesting for getRelatioshipDetails");
-		return conflictOfInterestService.getRelatioshipDetails(tabName);
+	@GetMapping("/getRelationshipLookup")
+	public ResponseEntity<Object> getValidPersonRelationshipLookUp() {
+		logger.info("Requesting for getValidPersonRelationshipLookUp");
+		return conflictOfInterestService.getValidPersonRelationshipLookUp();
 	}
 	
 	@PostMapping("/getPersonEntityRelationship")
@@ -682,4 +683,9 @@ public class ConflictOfInterestController {
    		return conflictOfInterestService.loadAllAttachmentsForPerson(personId);
    	};
 
+	@PostMapping("/personEntity/history")
+	public ResponseEntity<Object> fetAllPersonEntityActionLog(@RequestBody PersonEntityDto personEntityDto) {
+		logger.info("Requesting for fetAllPersonEntityActionLog");
+		return actionLogService.getAllPersonEntityActionLog(personEntityDto);
+	}
 }

@@ -6,6 +6,7 @@ import { CommonService } from '../../../common/services/common.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { CoiService } from '../../services/coi.service';
 import { debounce } from 'rxjs/operators';
+import { deepCloneObject, hideModal, openModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-SFI-conflict-relationship',
@@ -33,6 +34,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
   coiValidationMap: Map<string, string> = new Map();
   coiTableValidation: Map<string, string> = new Map();
   textareaValue: string;
+  isSaving = false;
 
   constructor(private _relationShipService: RelationshipService,
               private _commonService: CommonService,
@@ -46,60 +48,62 @@ export class SFIConflictRelationshipComponent implements OnInit {
 
   openSaveAllConfirmationModal() {
     this.coiValidationMap.clear();
-    if (this.coiStatusCode && this.coiDescription) {
-      document.getElementById('hidden-save-all-button').click();
-      this.sliderDataChanges();
-    }
+    this.coiStatusCode = null;
+    this.coiDescription == '';
+    openModal('applyToAllConfirmationModal');
+    this.changeCloseBtnZIndex('1000');
+  }
+
+  applyToAll() {
+    this.coiValidationMap.clear();
+    this.coiTableValidation.clear();
     if (!this.coiStatusCode || this.coiStatusCode == 'null') {
       this.coiValidationMap.set('coiStatus', 'Please select COI Status');
     }
     if (!this.coiDescription) {
       this.coiValidationMap.set('coiDescription', 'Please enter description');
     }
-  }
-
-  setUnsavedModuleTrue() {
-    this._coiService.unSavedModules = 'Relationships';
-    this._dataStore.dataChanged = true;
-    this._relationShipService.isSliderInputModified = true;
-  }
-
-  applyToAll() {
-    this.coiValidationMap.clear();
-    this.coiTableValidation.clear();
-    this.entityProjectDetails.forEach((ele: any) => {
-        ele.projectConflictStatusCode = this.coiStatusCode;
-        ele.disclComment.comment = this.coiDescription;
-    });
-    this.saveClick();
+    if (this.coiValidationMap.size == 0) {
+      this.saveClick();
+    }
   }
 
   saveClick() {
-    this.prepareSaveObject();
     this.$subscriptions.push(this._relationShipService.saveEntityProjectRelation(
-      this.entityProjectDetails, this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.personId)
+      this.prepareSaveObject(), this.selectedProject.moduleCode, this.selectedProject.moduleItemId, this.coiData.coiDisclosure.disclosureId, this.coiData.coiDisclosure.personId)
       .subscribe((data: any) => {
         this.entityProjectDetails = data.coiDisclEntProjDetails;
+        hideModal('applyToAllConfirmationModal');
+        this.changeCloseBtnZIndex(1500);
         this.coiDescription = '';
         this.coiStatusCode = null;
         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Relationships saved successfully.');
         this._relationShipService.isSliderDataUpdated = true;
         this.closePage.emit();
       }, err => {
-        this.coiDescription = '';
-        this.coiStatusCode = null;
         this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in saving relationships.');
       }));
   }
 
+  changeCloseBtnZIndex(zIndex) {
+    let close = document.getElementById('slider-close-button');
+    if (close) {
+      close.style.zIndex = zIndex;
+    }
+  }
+
   prepareSaveObject() {
-    this.entityProjectDetails.forEach((ele: any) => {
+    const REQ_ARRAY = deepCloneObject(this.entityProjectDetails);
+    return REQ_ARRAY.map((ele: any) => {
       ele.personEntityId = ele.personEntityId;
       ele.disclosureId = this.coiData.coiDisclosure.disclosureId;
-      ele.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
+      ele.disclosureNumber = this.coiData.coiDisclosure.disclosureNumber;
       ele.moduleCode = this.selectedProject.moduleCode;
       ele.moduleItemKey = this.selectedProject.moduleItemId;
+      ele.projectConflictStatusCode = this.coiStatusCode;
+      ele.disclComment.comment = this.coiDescription;
       ele.coiProjConflictStatusType = this.getStatusObject(ele.projectConflictStatusCode);
+      return ele;
     });
   }
 
@@ -111,6 +115,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
   clearValues() {
     this.coiDescription = '';
     this.coiStatusCode = null;
+    this.changeCloseBtnZIndex('1000');
   }
 
   // Function for saving the single entity
@@ -129,6 +134,7 @@ export class SFIConflictRelationshipComponent implements OnInit {
       test.disclosureNumber =  this.coiData.coiDisclosure.disclosureNumber;
       test.moduleCode = this.selectedProject.moduleCode;
       test.moduleItemKey = this.selectedProject.moduleItemId;
+      this._relationShipService.isSliderDataUpdated = true;
       // this.getCommentObject(test.comment);
       test.coiProjConflictStatusType = this.getStatusObject(test.projectConflictStatusCode);
       this.singleSaveClick(test, index);
@@ -176,6 +182,5 @@ getStatusDescriptionByCode(code: string): string {
   const STATUS = this.coiStatusList.find(S => S.projectConflictStatusCode === code);
   return STATUS ? STATUS.description : '';
 }
-
 
 }

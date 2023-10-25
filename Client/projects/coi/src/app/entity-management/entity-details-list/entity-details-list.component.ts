@@ -260,4 +260,8 @@ convertDisclosureStatus(status): string {
       this.entityDetails = Object.assign({}, data);
     }
 
+    cancelConcurrency() {
+      this.entityManagementService.concurrentUpdateAction = '';
+  }
+
 }

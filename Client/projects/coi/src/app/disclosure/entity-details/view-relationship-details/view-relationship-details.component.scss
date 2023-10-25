@@ -1,8 +1,4 @@
-  .card-body {
-    border-radius: 0px 0px 5px 5px;
-    position: relative;
-    bottom: 1px;
-  }
+
 
   .relationship {
       color: #6A7980;
@@ -64,7 +60,7 @@
   height: 27px;
   background: #54BF5B;
   position: relative;
-  right: 6px;
+  right: 15px;
   top: -8px;
   font-size: 14px;
   font-weight: 500;
@@ -245,6 +241,7 @@ small {
   max-width: 450px;
   position: absolute;
   z-index: 3;
+  top: 35px;
   display: flex;
   background: #e2f1ff;
   border:  1px solid #cee4f8;
@@ -255,10 +252,6 @@ small {
 
 .col-custom-width {
   width: 55px;
-}
-
-.custom-margin {
-  margin-bottom: -3px;
 }
 
 .hyper-link {
@@ -308,4 +301,18 @@ small {
 .info-text:hover {
   color: #0D6EFD;
   border: 1px solid #0D6EFD;
+}
+
+.help-text {
+  font-size: 13px;
+  padding: 7px;
+  color: #606060;
+  background-color: #EEF0FC;
+  font-style: italic;
+}
+
+.label-text {
+  color: #2a2a2a;
+  font-size: 14px !important;
+  font-weight: 500 !important;
 }

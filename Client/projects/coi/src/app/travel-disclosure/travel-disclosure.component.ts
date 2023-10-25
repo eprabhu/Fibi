@@ -12,11 +12,11 @@ import {
     CoiTravelDisclosure, TravelCreateModalDetails,
     TravelActionAfterSubmitRO, TravelDisclosure, EntityDetails, ModalSize } from './travel-disclosure-interface';
 import {
-    HOME_URL, HTTP_ERROR_STATUS, ADMIN_DASHBOARD_URL, HTTP_SUCCESS_STATUS,
+    REPORTER_HOME_URL, HTTP_ERROR_STATUS, ADMIN_DASHBOARD_URL, HTTP_SUCCESS_STATUS,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { DefaultAssignAdminDetails, PersonProjectOrEntity } from '../shared-components/shared-interface';
-import { openCommonModal } from '../common/utilities/custom-utilities';
+import { closeCommonModal, openCommonModal } from '../common/utilities/custom-utilities';
 
 type Method = 'SOME' | 'EVERY';
 
@@ -106,7 +106,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
             const MODULE_ID = params['disclosureId'];
             const homeUnit = this.getHomeUnit();
             if (!homeUnit && !MODULE_ID) {
-                this.router.navigate([HOME_URL]);
+                this.router.navigate([REPORTER_HOME_URL]);
             }
         });
     }
@@ -204,7 +204,7 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
 
     navigateBack(): void {
         const PREVIOUS_MODULE_URL = this.service.PREVIOUS_MODULE_URL;
-        const ROUTE_URL = this.service.isAdminDashboard ? ADMIN_DASHBOARD_URL : HOME_URL;
+        const ROUTE_URL = this.service.isAdminDashboard ? ADMIN_DASHBOARD_URL : REPORTER_HOME_URL;
         (PREVIOUS_MODULE_URL?.includes('travel-disclosure')) ?
             this.router.navigate([ROUTE_URL]) : this.router.navigateByUrl(PREVIOUS_MODULE_URL || ROUTE_URL);
     }
@@ -337,7 +337,12 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
                         { queryParams: { disclosureId: this.travelDisclosure.travelDisclosureId } });
                 }
             }, (err) => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Submitting Travel Disclosure');
+                if (err.status === 405) {
+                    closeCommonModal('travel-confirmation-modal');
+                    this.service.concurrentUpdateAction = 'Submit Travel Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Submitting Travel Disclosure');
+                }
             })
         );
     }
@@ -352,7 +357,12 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
                         { queryParams: { disclosureId: this.travelDisclosure.travelDisclosureId } });
                 }
             }, (err) => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Withdrawing Travel Disclosure');
+                if (err.status === 405) {
+                    closeCommonModal('travel-confirmation-modal');
+                    this.service.concurrentUpdateAction = 'Withdraw Travel Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Withdrawing Travel Disclosure');
+                }
             })
         );
     }
@@ -366,7 +376,12 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
                     this.reRoutePage();
                 }
             }, (err) => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Returning Travel Disclosure');
+                if (err.status === 405) {
+                    closeCommonModal('travel-confirmation-modal');
+                    this.service.concurrentUpdateAction = 'Return Travel Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Returning Travel Disclosure');
+                }
             })
         );
     }
@@ -380,7 +395,12 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
                     this.setApprovalChangesToDisclosure(res);
                 }
             }, (err) => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Approving Travel Disclosure');
+                if (err.status === 405) {
+                    closeCommonModal('travel-confirmation-modal');
+                    this.service.concurrentUpdateAction = 'Approve Travel Disclosure';
+                } else {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in Approving Travel Disclosure');
+                }
             })
         );
     }
@@ -410,6 +430,10 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         this.travelDisclosure.riskCategoryCode = event.riskCategoryCode;
         this.travelDisclosure.riskLevel = event.riskLevel;
         this._dataStore.setStoreData(this.travelDisclosure);
+    }
+
+    cancelConcurrency() {
+        this.service.concurrentUpdateAction = '';
     }
 
 }

@@ -18,6 +18,8 @@ export class TravelDisclosureService {
 
     unSavedTabName = '';
     PREVIOUS_MODULE_URL = '';
+    concurrentUpdateAction = '';
+
 
     constructor(private _http: HttpClient,
                 private _commonService: CommonService) { }

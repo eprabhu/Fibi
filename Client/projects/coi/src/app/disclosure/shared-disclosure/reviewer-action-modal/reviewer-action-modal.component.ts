@@ -6,6 +6,7 @@ import { CommonService } from '../../../common/services/common.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
+import { hideModal } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-reviewer-action-modal',
@@ -47,8 +48,13 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
             this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review started successfully.`);
         }, _err => {
+                if (_err.status === 405) {
+                this.closeModal();
+                this._coiService.concurrentUpdateAction = 'Start Review';
+              } else {
             this.currentReviewer = {};
             this._commonService.showToast(HTTP_ERROR_STATUS, `Error in starting review.`);
+              }
         }));
     }
 
@@ -65,8 +71,13 @@ export class ReviewerActionModalComponent implements OnInit, OnDestroy {
             this._dataStore.updateTimestampEvent.next();
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review completed successfully.`);
         }, _err => {
+                if (_err.status === 405) {
+                hideModal('coi-complete-review-modal');
+                this._coiService.concurrentUpdateAction = 'Complete Review';
+              } else {
             this.currentReviewer = {};
             this._commonService.showToast(HTTP_ERROR_STATUS, `Error in completing review.`);
+              }
         }));
     }
 

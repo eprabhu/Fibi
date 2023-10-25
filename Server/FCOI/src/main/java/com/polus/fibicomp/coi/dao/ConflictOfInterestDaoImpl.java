@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Iterator;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -49,6 +50,8 @@ import com.polus.fibicomp.coi.dto.DisclosureDetailDto;
 import com.polus.fibicomp.coi.dto.DisclosureHistoryDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
+import com.polus.fibicomp.coi.dto.CommonRequestDto;
+import com.polus.fibicomp.coi.dto.PersonEntityRelationshipDto;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.coi.pojo.CoiDisclEntProjDetails;
@@ -126,12 +129,43 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	private String oracledb;
 
 	@Autowired
-	private CommonService commonService;
-
-	@Autowired
 	private PersonDao personDao;
 	
-	private static final String OPENED_FLAG = "openedFlag";
+	private static final String TRAVEL_DISCLOSURES = "TRAVEL_DISCLOSURES";
+	private static final String DISCLOSURE_ID = "DISCLOSURE_ID";
+	private static final String DISCLOSURE_NUMBER = "DISCLOSURE_NUMBER";
+	private static final String CONFLICT_STATUS_CODE = "CONFLICT_STATUS_CODE";
+	private static final String DISCLOSURE_STATUS = "DISCLOSURE_STATUS";
+	private static final String DISPOSITION_STATUS_CODE = "DISPOSITION_STATUS_CODE";
+	private static final String DISPOSITION_STATUS = "DISPOSITION_STATUS";
+	private static final String CERTIFIED_AT = "CERTIFIED_AT";
+	private static final String REVIEW_STATUS_CODE = "REVIEW_STATUS_CODE";
+	private static final String FCOI_TYPE_CODE = "FCOI_TYPE_CODE";
+	private static final String DISCLOSURE_CATEGORY_TYPE = "DISCLOSURE_CATEGORY_TYPE";
+	private static final String REVIEW_STATUS = "REVIEW_STATUS";
+	private static final String VERSION_NUMBER = "VERSION_NUMBER";
+	private static final String VERSION_STATUS = "VERSION_STATUS";
+	private static final String EXPIRATION_DATE = "EXPIRATION_DATE";
+	private static final String CREATE_TIMESTAMP = "CREATE_TIMESTAMP";
+	private static final String UPDATE_TIMESTAMP = "UPDATE_TIMESTAMP";
+	private static final String DISCLOSURE_PERSON_FULL_NAME = "DISCLOSURE_PERSON_FULL_NAME";
+	private static final String UPDATE_USER = "UPDATE_USER";
+	private static final String UPDATE_USER_FULL_NAME = "UPDATE_USER_FULL_NAME";
+	private static final String NO_OF_SFI = "NO_OF_SFI";
+	private static final String NO_OF_PROPOSAL = "NO_OF_PROPOSAL";
+	private static final String NO_OF_AWARD = "NO_OF_AWARD";
+	private static final String PROPOSAL_TITLES = "PROPOSAL_TITLES";
+	private static final String AWARD_IDS = "AWARD_IDS";
+	private static final String AWARD_TITLES = "AWARD_TITLES";
+	private static final String PROPOSAL_IDS = "PROPOSAL_IDS";
+	private static final String UNIT_NAME = "UNIT_NAME";
+	private static final String ORGANIZATION_ID = "ORGANIZATION_ID";
+	private static final String PARENT_UNIT_NUMBER = "PARENT_UNIT_NUMBER";
+	private static final String ACRONYM = "ACRONYM";
+	private static final String IS_FUNDING_UNIT = "IS_FUNDING_UNIT";
+	private static final String ADMIN_GROUP_NAME = "ADMIN_GROUP_NAME";
+	private static final String ADMINISTRATOR = "ADMINISTRATOR";
+	private static final String REVISION_COMMENT = "REVISION_COMMENT";
 
 	@Override
 	public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure coiDisclosure) {
@@ -1035,53 +1069,49 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				resultSet = (ResultSet) statement.getObject(1);
 			}
 			while (resultSet.next()) {
-				if (tabName.equals("TRAVEL_DISCLOSURES")) {
+				if (tabName.equals(TRAVEL_DISCLOSURES)) {
 					travelDashboardViews.add(setTravelDisclosureDashboardValues(resultSet, "MY_DASHBOARD"));
 				} else {
 					DisclosureView disclosureView =  new DisclosureView();
-					disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
-					disclosureView.setCoiDisclosureNumber(resultSet.getString("DISCLOSURE_NUMBER"));
-					disclosureView.setConflictStatusCode(resultSet.getString("CONFLICT_STATUS_CODE"));
-					disclosureView.setConflictStatus(resultSet.getString("DISCLOSURE_STATUS"));
-					disclosureView.setDispositionStatusCode(resultSet.getString("DISPOSITION_STATUS_CODE"));
-					disclosureView.setDispositionStatus(resultSet.getString("DISPOSITION_STATUS"));
-					disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
-					disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
-					disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
-					disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
-					disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
-					disclosureView.setLastApprovedVersion(resultSet.getInt("VERSION_NUMBER"));
-					disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
-					disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
-//					disclosureView.setNoOfSfiInActive(resultSet.getInt("NO_OF_SFI"));
-//					disclosureView.setNoOfProposalInActive(resultSet.getInt("NO_OF_PROPOSAL"));
-//					disclosureView.setNoOfAwardInActive(resultSet.getInt("NO_OF_AWARD"));
-					disclosureView.setCreateTimestamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
-					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
-					disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
-					disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER"));
-					disclosureView.setUpdateUserFullName(resultSet.getString("UPDATE_USER_FULL_NAME"));
+					disclosureView.setCoiDisclosureId(resultSet.getInt(DISCLOSURE_ID));
+					disclosureView.setCoiDisclosureNumber(resultSet.getString(DISCLOSURE_NUMBER));
+					disclosureView.setConflictStatusCode(resultSet.getString(CONFLICT_STATUS_CODE));
+					disclosureView.setConflictStatus(resultSet.getString(DISCLOSURE_STATUS));
+					disclosureView.setDispositionStatusCode(resultSet.getString(DISPOSITION_STATUS_CODE));
+					disclosureView.setDispositionStatus(resultSet.getString(DISPOSITION_STATUS));
+					disclosureView.setCertifiedAt(resultSet.getTimestamp(CERTIFIED_AT));
+					disclosureView.setReviewStatusCode(resultSet.getString(REVIEW_STATUS_CODE));
+					disclosureView.setFcoiTypeCode(resultSet.getString(FCOI_TYPE_CODE));
+					disclosureView.setFcoiType(resultSet.getString(DISCLOSURE_CATEGORY_TYPE));
+					disclosureView.setReviewStatus(resultSet.getString(REVIEW_STATUS));
+					disclosureView.setLastApprovedVersion(resultSet.getInt(VERSION_NUMBER));
+					disclosureView.setVersionStatus(resultSet.getString(VERSION_STATUS));
+					disclosureView.setExpirationDate(resultSet.getTimestamp(EXPIRATION_DATE));
+					disclosureView.setCreateTimestamp(resultSet.getTimestamp(CREATE_TIMESTAMP));
+					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp(UPDATE_TIMESTAMP));
+					disclosureView.setDisclosurePersonFullName(resultSet.getString(DISCLOSURE_PERSON_FULL_NAME));
+					disclosureView.setUpdateUser(resultSet.getString(UPDATE_USER));
+					disclosureView.setUpdateUserFullName(resultSet.getString(UPDATE_USER_FULL_NAME));
 					disclosureView.setCreateUser(resultSet.getString("CREATE_USER"));
-//					disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
-					disclosureView.setNoOfSfi(resultSet.getInt("NO_OF_SFI"));
-					disclosureView.setNoOfProposal(resultSet.getInt("NO_OF_PROPOSAL"));
-					disclosureView.setNoOfAward(resultSet.getInt("NO_OF_AWARD"));
-					disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
-					disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
-					disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
-					disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
+					disclosureView.setNoOfSfi(resultSet.getInt(NO_OF_SFI));
+					disclosureView.setNoOfProposal(resultSet.getInt(NO_OF_PROPOSAL));
+					disclosureView.setNoOfAward(resultSet.getInt(NO_OF_AWARD));
+					disclosureView.setProposalId(resultSet.getString(PROPOSAL_IDS));
+					disclosureView.setProposalTitle(resultSet.getString(PROPOSAL_TITLES));
+					disclosureView.setAwardId(resultSet.getString(AWARD_IDS));
+					disclosureView.setAwardTitle(resultSet.getString(AWARD_TITLES));
 					Unit unit = new Unit();
 					unit.setUnitNumber(resultSet.getString("UNIT"));
-					unit.setUnitName(resultSet.getString("UNIT_NAME"));
-					unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
-					unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
-					unit.setAcronym(resultSet.getString("ACRONYM"));
-					unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+					unit.setUnitName(resultSet.getString(UNIT_NAME));
+					unit.setOrganizationId(resultSet.getString(ORGANIZATION_ID));
+					unit.setParentUnitNumber(resultSet.getString(PARENT_UNIT_NUMBER));
+					unit.setAcronym(resultSet.getString(ACRONYM));
+					unit.setIsFundingUnit(resultSet.getString(IS_FUNDING_UNIT));
 					disclosureView.setUnit(unit);
-					disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
-					disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
+					disclosureView.setAdminGroupName(resultSet.getString(ADMIN_GROUP_NAME));
+					disclosureView.setAdministrator(resultSet.getString(ADMINISTRATOR));
 					disclosureViews.add(disclosureView);
-					disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
+					disclosureView.setReviseComment(resultSet.getString(REVISION_COMMENT));
 				}
 			}
 			dashBoardProfile.setDisclosureViews(disclosureViews);
@@ -1228,7 +1258,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		String tabName = vo.getTabName();
 
 		try {
-				if (tabName.equals("TRAVEL_DISCLOSURES")) {
+				if (tabName.equals(TRAVEL_DISCLOSURES)) {
 					resultSet = getTravelAdminDashboardResultSet(vo, connection, false);
 					while (resultSet.next()) {
 						travelDashboardViews.add(setTravelDisclosureDashboardValues(resultSet, "ADMIN_DASHBOARD"));
@@ -1306,46 +1336,46 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		resultSet = statement.getResultSet();
 		while (resultSet.next()) {
 			DisclosureView disclosureView = new DisclosureView();
-			disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
-			disclosureView.setCoiDisclosureNumber(resultSet.getString("DISCLOSURE_NUMBER"));
-			disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
-			disclosureView.setConflictStatusCode(resultSet.getString("CONFLICT_STATUS_CODE"));
-			disclosureView.setConflictStatus(resultSet.getString("DISCLOSURE_STATUS"));
-			disclosureView.setDispositionStatusCode(resultSet.getString("DISPOSITION_STATUS_CODE"));
-			disclosureView.setDispositionStatus(resultSet.getString("DISPOSITION_STATUS"));
-			disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
-			disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
-			disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
-			disclosureView.setReviewStatus(resultSet.getString("EXPIRATION_DATE"));
-			disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
+			disclosureView.setCoiDisclosureId(resultSet.getInt(DISCLOSURE_ID));
+			disclosureView.setCoiDisclosureNumber(resultSet.getString(DISCLOSURE_NUMBER));
+			disclosureView.setDisclosurePersonFullName(resultSet.getString(DISCLOSURE_PERSON_FULL_NAME));
+			disclosureView.setConflictStatusCode(resultSet.getString(CONFLICT_STATUS_CODE));
+			disclosureView.setConflictStatus(resultSet.getString(DISCLOSURE_STATUS));
+			disclosureView.setDispositionStatusCode(resultSet.getString(DISPOSITION_STATUS_CODE));
+			disclosureView.setDispositionStatus(resultSet.getString(DISPOSITION_STATUS));
+			disclosureView.setFcoiTypeCode(resultSet.getString(FCOI_TYPE_CODE));
+			disclosureView.setFcoiType(resultSet.getString(DISCLOSURE_CATEGORY_TYPE));
+			disclosureView.setReviewStatusCode(resultSet.getString(REVIEW_STATUS_CODE));
+			disclosureView.setReviewStatus(resultSet.getString(EXPIRATION_DATE));
+			disclosureView.setReviewStatus(resultSet.getString(REVIEW_STATUS));
 			disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
 			disclosureView.setLastApprovedVersionDate(resultSet.getTimestamp("LAST_APPROVED_DATE"));
-			disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
-			disclosureView.setDisclosureVersionNumber(resultSet.getInt("VERSION_NUMBER"));
+			disclosureView.setVersionStatus(resultSet.getString(VERSION_STATUS));
+			disclosureView.setDisclosureVersionNumber(resultSet.getInt(VERSION_NUMBER));
 			disclosureView.setNoOfProposalInActive(resultSet.getInt("NO_OF_ACTIVE_PROPOSAL"));
 			disclosureView.setNoOfAwardInActive(resultSet.getInt("NO_OF_ACTIVE_AWARD"));
 			disclosureView.setNoOfSfiInActive(resultSet.getInt("NO_OF_SFI_IN_ACTIVE"));
 			disclosureView.setNoOfSfiInPending(resultSet.getInt("NO_OF_SFI_IN_PENDING"));
-			disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
-			disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER_FULL_NAME"));
-			disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
+			disclosureView.setUpdateTimeStamp(resultSet.getTimestamp(UPDATE_TIMESTAMP));
+			disclosureView.setUpdateUser(resultSet.getString(UPDATE_USER_FULL_NAME));
+			disclosureView.setReviseComment(resultSet.getString(REVISION_COMMENT));
 			disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
-			disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
-			disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
-			disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
-			disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
+			disclosureView.setExpirationDate(resultSet.getTimestamp(EXPIRATION_DATE));
+			disclosureView.setCertifiedAt(resultSet.getTimestamp(CERTIFIED_AT));
+			disclosureView.setProposalTitle(resultSet.getString(PROPOSAL_TITLES));
+			disclosureView.setProposalId(resultSet.getString(PROPOSAL_IDS));
 			disclosureView.setAwardId(resultSet.getString("AWARD_NUMBERS"));
-			disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
+			disclosureView.setAwardTitle(resultSet.getString(AWARD_TITLES));
 			Unit unit = new Unit();
 			unit.setUnitNumber(resultSet.getString("HOME_UNIT"));
 			unit.setUnitName(resultSet.getString("HOME_UNIT_NAME"));
-			unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
-			unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
-			unit.setAcronym(resultSet.getString("ACRONYM"));
-			unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+			unit.setOrganizationId(resultSet.getString(ORGANIZATION_ID));
+			unit.setParentUnitNumber(resultSet.getString(PARENT_UNIT_NUMBER));
+			unit.setAcronym(resultSet.getString(ACRONYM));
+			unit.setIsFundingUnit(resultSet.getString(IS_FUNDING_UNIT));
 			disclosureView.setUnit(unit);
-			disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
-			disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
+			disclosureView.setAdminGroupName(resultSet.getString(ADMIN_GROUP_NAME));
+			disclosureView.setAdministrator(resultSet.getString(ADMINISTRATOR));
 			String reviewers = resultSet.getString("REVIEWERS");
 			if (reviewers != null && !reviewers.isEmpty()) {
 				String[] reviewerArray = reviewers.split(";");
@@ -1421,11 +1451,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			travelDashboardDto.setDocumentStatusDescription(resultSet.getString("DOCUMENT_STATUS_DESCRIPTION"));
 			Unit unit = new Unit();
 			unit.setUnitNumber(resultSet.getString("UNIT"));
-			unit.setUnitName(resultSet.getString("UNIT_NAME"));
+			unit.setUnitName(resultSet.getString(UNIT_NAME));
 			travelDashboardDto.setUnitDetails(unit);
-			travelDashboardDto.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
-			travelDashboardDto.setExpirationDate(resultSet.getDate("EXPIRATION_DATE"));
-			travelDashboardDto.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
+			travelDashboardDto.setCertifiedAt(resultSet.getTimestamp(CERTIFIED_AT));
+			travelDashboardDto.setExpirationDate(resultSet.getDate(EXPIRATION_DATE));
+			travelDashboardDto.setReviewStatusCode(resultSet.getString(REVIEW_STATUS_CODE));
 			travelDashboardDto.setReviewDescription(resultSet.getString("REVIEW_STATUS_DESCRIPTION"));
 			travelDashboardDto.setTravelPurpose(resultSet.getString("PURPOSE_OF_THE_TRIP"));
 			travelDashboardDto.setTravelStartDate(resultSet.getDate("TRAVEL_START_DATE"));
@@ -1436,9 +1466,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				travelDashboardDto.setAdminPersonId(resultSet.getString("ADMIN_PERSON_ID"));
 				travelDashboardDto.setAdminGroupId(resultSet.getInt("ADMIN_GROUP_ID"));
 			}
-			travelDashboardDto.setVersionStatus(resultSet.getString("VERSION_STATUS"));
-			travelDashboardDto.setCreateTimestamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
-			travelDashboardDto.setUpdateTimestamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
+			travelDashboardDto.setVersionStatus(resultSet.getString(VERSION_STATUS));
+			travelDashboardDto.setCreateTimestamp(resultSet.getTimestamp(CREATE_TIMESTAMP));
+			travelDashboardDto.setUpdateTimestamp(resultSet.getTimestamp(UPDATE_TIMESTAMP));
 			return travelDashboardDto;
 		} catch (Exception e ) {
 			e.printStackTrace();
@@ -1606,11 +1636,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			while (resultSet.next()) {
 				COIFinancialEntityDto coiFinancialEntityDto = new COIFinancialEntityDto();
 				coiFinancialEntityDto.setCoiFinancialEntityId(resultSet.getInt("PERSON_ENTITY_ID"));
-				coiFinancialEntityDto.setEntityVersionNumber(resultSet.getInt("VERSION_NUMBER"));
+				coiFinancialEntityDto.setEntityVersionNumber(resultSet.getInt(VERSION_NUMBER));
 				coiFinancialEntityDto.setCoiEntityName(resultSet.getString("ENTITY_NAME"));
 				coiFinancialEntityDto.setInvolvementStartDate(resultSet.getDate("INVOLVEMENT_START_DATE"));
-				coiFinancialEntityDto.setCreateTimestamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
-				coiFinancialEntityDto.setLastUpdatedOn(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
+				coiFinancialEntityDto.setCreateTimestamp(resultSet.getTimestamp(CREATE_TIMESTAMP));
+				coiFinancialEntityDto.setLastUpdatedOn(resultSet.getTimestamp(UPDATE_TIMESTAMP));
 				coiFinancialEntityDto.setNoOfDisclosures(resultSet.getInt("NO_OF_DISCLOSURES"));
 				coiFinancialEntityDto.setIsActive(resultSet.getString("IS_RELATIONSHIP_ACTIVE"));
 				coiFinancialEntityDto.setNoOfProposals(resultSet.getInt("NO_OF_PROPOSALS"));
@@ -1620,7 +1650,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				coiFinancialEntityDto.setCoiEntityCountry(resultSet.getString("COUNTRY_NAME"));
 				coiFinancialEntityDto.setCoiEntityEmail(resultSet.getString("EMAIL_ADDRESS"));
 				coiFinancialEntityDto.setRelationshipTypes(resultSet.getString("RELATIONSHIP_TYPES"));
-				coiFinancialEntityDto.setVersionStatus(resultSet.getString("VERSION_STATUS"));
+				coiFinancialEntityDto.setVersionStatus(resultSet.getString(VERSION_STATUS));
 				coiFinancialEntityDtos.add(coiFinancialEntityDto);
 			}
 			dashBoardProfile.setCoiFinancialEntityList(coiFinancialEntityDtos);
@@ -1776,7 +1806,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					detail.setStartDate(rset.getTimestamp("BEGIN_DATE"));
 					detail.setEndDate(rset.getTimestamp("FINAL_EXPIRATION_DATE"));
 					detail.setUnitNumber(rset.getString("LEAD_UNIT_NUMBER"));
-					detail.setUnitName(rset.getString("UNIT_NAME"));
+					detail.setUnitName(rset.getString(UNIT_NAME));
 					detail.setSponsor(rset.getString("SPONSOR_NAME"));
 					detail.setPrincipalInvestigator(rset.getString("PI"));
 					detail.setModuleStatus(rset.getString("STATUS"));
@@ -1986,8 +2016,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					personEntity.setEntityId(resultSet.getInt("ENTITY_ID"));
 					personEntity.setEntityNumber(resultSet.getInt("ENTITY_NUMBER"));
 					personEntity.setIsRelationshipActive(resultSet.getBoolean("IS_RELATIONSHIP_ACTIVE"));
-					personEntity.setVersionNumber(resultSet.getInt("VERSION_NUMBER"));
-					personEntity.setVersionStatus(resultSet.getString("VERSION_STATUS"));
+					personEntity.setVersionNumber(resultSet.getInt(VERSION_NUMBER));
+					personEntity.setVersionStatus(resultSet.getString(VERSION_STATUS));
 					personEntity.setInvolvementStartDate(resultSet.getDate("INVOLVEMENT_START_DATE"));
 					personEntity.setInvolvementEndDate(resultSet.getDate("INVOLVEMENT_END_DATE"));
 					personEntity.setStudentInvolvement(resultSet.getString("STUDENT_INVOLVEMENT"));
@@ -1997,65 +2027,65 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					personEntity.setDesignation(resultSet.getString("DESIGNATION"));
 					Unit unit = new Unit();
 					unit.setUnitNumber(resultSet.getString("UNIT"));
-					unit.setUnitName(resultSet.getString("UNIT_NAME"));
-					unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
-					unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
-					unit.setAcronym(resultSet.getString("ACRONYM"));
-					unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+					unit.setUnitName(resultSet.getString(UNIT_NAME));
+					unit.setOrganizationId(resultSet.getString(ORGANIZATION_ID));
+					unit.setParentUnitNumber(resultSet.getString(PARENT_UNIT_NUMBER));
+					unit.setAcronym(resultSet.getString(ACRONYM));
+					unit.setIsFundingUnit(resultSet.getString(IS_FUNDING_UNIT));
 					personEntity.setUnit(unit);
 					personEntities.add(personEntity);
 				}
 			} else if (tabType.equals("FINANCIAL_DISCLOSURES")) {
 				while (resultSet.next()) {
 					DisclosureView disclosureView = new DisclosureView();
-					disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
-					disclosureView.setCoiDisclosureNumber(resultSet.getString("DISCLOSURE_NUMBER"));
-					disclosureView.setConflictStatusCode(resultSet.getString("CONFLICT_STATUS_CODE"));
-					disclosureView.setConflictStatus(resultSet.getString("DISCLOSURE_STATUS"));
-					disclosureView.setDispositionStatusCode(resultSet.getString("DISPOSITION_STATUS_CODE"));
-					disclosureView.setDispositionStatus(resultSet.getString("DISPOSITION_STATUS"));
-					disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
-					disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
-					disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
-					disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
-					disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
-					disclosureView.setLastApprovedVersion(resultSet.getInt("VERSION_NUMBER"));
-					disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
-					disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
-					disclosureView.setCreateTimestamp(resultSet.getTimestamp("CREATE_TIMESTAMP"));
-					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
-					disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
-					disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER"));
+					disclosureView.setCoiDisclosureId(resultSet.getInt(DISCLOSURE_ID));
+					disclosureView.setCoiDisclosureNumber(resultSet.getString(DISCLOSURE_NUMBER));
+					disclosureView.setConflictStatusCode(resultSet.getString(CONFLICT_STATUS_CODE));
+					disclosureView.setConflictStatus(resultSet.getString(DISCLOSURE_STATUS));
+					disclosureView.setDispositionStatusCode(resultSet.getString(DISPOSITION_STATUS_CODE));
+					disclosureView.setDispositionStatus(resultSet.getString(DISPOSITION_STATUS));
+					disclosureView.setCertifiedAt(resultSet.getTimestamp(CERTIFIED_AT));
+					disclosureView.setReviewStatusCode(resultSet.getString(REVIEW_STATUS_CODE));
+					disclosureView.setFcoiTypeCode(resultSet.getString(FCOI_TYPE_CODE));
+					disclosureView.setFcoiType(resultSet.getString(DISCLOSURE_CATEGORY_TYPE));
+					disclosureView.setReviewStatus(resultSet.getString(REVIEW_STATUS));
+					disclosureView.setLastApprovedVersion(resultSet.getInt(VERSION_NUMBER));
+					disclosureView.setVersionStatus(resultSet.getString(VERSION_STATUS));
+					disclosureView.setExpirationDate(resultSet.getTimestamp(EXPIRATION_DATE));
+					disclosureView.setCreateTimestamp(resultSet.getTimestamp(CREATE_TIMESTAMP));
+					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp(UPDATE_TIMESTAMP));
+					disclosureView.setDisclosurePersonFullName(resultSet.getString(DISCLOSURE_PERSON_FULL_NAME));
+					disclosureView.setUpdateUser(resultSet.getString(UPDATE_USER));
 					disclosureView.setCreateUser(resultSet.getString("CREATE_USER"));
-					disclosureView.setNoOfSfi(resultSet.getInt("NO_OF_SFI"));
-					disclosureView.setNoOfProposal(resultSet.getInt("NO_OF_PROPOSAL"));
-					disclosureView.setNoOfAward(resultSet.getInt("NO_OF_AWARD"));
-					disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
-					disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
-					disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
-					disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
+					disclosureView.setNoOfSfi(resultSet.getInt(NO_OF_SFI));
+					disclosureView.setNoOfProposal(resultSet.getInt(NO_OF_PROPOSAL));
+					disclosureView.setNoOfAward(resultSet.getInt(NO_OF_AWARD));
+					disclosureView.setProposalTitle(resultSet.getString(PROPOSAL_TITLES));
+					disclosureView.setProposalId(resultSet.getString(PROPOSAL_IDS));
+					disclosureView.setAwardId(resultSet.getString(AWARD_IDS));
+					disclosureView.setAwardTitle(resultSet.getString(AWARD_TITLES));
 					disclosureView.setDescription(resultSet.getString("DESCRIPTION"));
-					disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
-					disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
+					disclosureView.setAdministrator(resultSet.getString(ADMINISTRATOR));
+					disclosureView.setAdminGroupName(resultSet.getString(ADMIN_GROUP_NAME));
 					Unit unit = new Unit();
 					unit.setUnitNumber(resultSet.getString("UNIT"));
-					unit.setUnitName(resultSet.getString("UNIT_NAME"));
-					unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
-					unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
-					unit.setAcronym(resultSet.getString("ACRONYM"));
-					unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+					unit.setUnitName(resultSet.getString(UNIT_NAME));
+					unit.setOrganizationId(resultSet.getString(ORGANIZATION_ID));
+					unit.setParentUnitNumber(resultSet.getString(PARENT_UNIT_NUMBER));
+					unit.setAcronym(resultSet.getString(ACRONYM));
+					unit.setIsFundingUnit(resultSet.getString(IS_FUNDING_UNIT));
 					disclosureView.setUnit(unit);
 					disclosureViews.add(disclosureView);
 				}
-			} else if (tabType.equals("TRAVEL_DISCLOSURES")) {
+			} else if (tabType.equals(TRAVEL_DISCLOSURES)) {
 				while (resultSet.next()) {
 					DisclosureView disclosureView = new DisclosureView();
 					disclosureView.setTravelDisclosureId(resultSet.getInt("TRAVEL_DISCLOSURE_ID"));
 					disclosureView.setTravelStartDate(resultSet.getDate("TRAVEL_START_DATE"));
 					disclosureView.setTravelEndDate(resultSet.getDate("TRAVEL_END_DATE"));
-					disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER"));
+					disclosureView.setUpdateUser(resultSet.getString(UPDATE_USER));
 					disclosureView.setAcknowledgeBy(resultSet.getString("ACKNOWLEDGE_BY"));
-					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
+					disclosureView.setUpdateTimeStamp(resultSet.getTimestamp(UPDATE_TIMESTAMP));
 					disclosureView.setTravelEntityName(resultSet.getString("TRAVEL_ENTITY_NAME"));
 					disclosureView.setTravellerName(resultSet.getString("TRAVELLER_NAME"));
 					disclosureView.setTravelDisclosureStatus(resultSet.getString("TRAVEL_DISCLOSURE_STATUS"));
@@ -2066,11 +2096,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 					disclosureView.setTravelDisclosureNumber(resultSet.getString("TRAVEL_NUMBER"));
 					Unit unit = new Unit();
 					unit.setUnitNumber(resultSet.getString("UNIT"));
-					unit.setUnitName(resultSet.getString("UNIT_NAME"));
-					unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
-					unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
-					unit.setAcronym(resultSet.getString("ACRONYM"));
-					unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+					unit.setUnitName(resultSet.getString(UNIT_NAME));
+					unit.setOrganizationId(resultSet.getString(ORGANIZATION_ID));
+					unit.setParentUnitNumber(resultSet.getString(PARENT_UNIT_NUMBER));
+					unit.setAcronym(resultSet.getString(ACRONYM));
+					unit.setIsFundingUnit(resultSet.getString(IS_FUNDING_UNIT));
 					disclosureView.setUnit(unit);
 					disclosureViews.add(disclosureView);
 				}
@@ -2199,47 +2229,47 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			}
 			while (resultSet.next()) {
 				DisclosureView disclosureView =  new DisclosureView();
-				disclosureView.setCoiDisclosureId(resultSet.getInt("DISCLOSURE_ID"));
-				disclosureView.setCoiDisclosureNumber(resultSet.getString("DISCLOSURE_NUMBER"));
-				disclosureView.setDisclosurePersonFullName(resultSet.getString("DISCLOSURE_PERSON_FULL_NAME"));
-				disclosureView.setVersionStatus(resultSet.getString("VERSION_STATUS"));
-				disclosureView.setDispositionStatusCode(resultSet.getString("DISPOSITION_STATUS_CODE"));
-				disclosureView.setDispositionStatus(resultSet.getString("DISPOSITION_STATUS"));
-				disclosureView.setFcoiTypeCode(resultSet.getString("FCOI_TYPE_CODE"));
-				disclosureView.setFcoiType(resultSet.getString("DISCLOSURE_CATEGORY_TYPE"));
-				disclosureView.setReviewStatusCode(resultSet.getString("REVIEW_STATUS_CODE"));
-				disclosureView.setReviewStatus(resultSet.getString("REVIEW_STATUS"));
+				disclosureView.setCoiDisclosureId(resultSet.getInt(DISCLOSURE_ID));
+				disclosureView.setCoiDisclosureNumber(resultSet.getString(DISCLOSURE_NUMBER));
+				disclosureView.setDisclosurePersonFullName(resultSet.getString(DISCLOSURE_PERSON_FULL_NAME));
+				disclosureView.setVersionStatus(resultSet.getString(VERSION_STATUS));
+				disclosureView.setDispositionStatusCode(resultSet.getString(DISPOSITION_STATUS_CODE));
+				disclosureView.setDispositionStatus(resultSet.getString(DISPOSITION_STATUS));
+				disclosureView.setFcoiTypeCode(resultSet.getString(FCOI_TYPE_CODE));
+				disclosureView.setFcoiType(resultSet.getString(DISCLOSURE_CATEGORY_TYPE));
+				disclosureView.setReviewStatusCode(resultSet.getString(REVIEW_STATUS_CODE));
+				disclosureView.setReviewStatus(resultSet.getString(REVIEW_STATUS));
 				disclosureView.setLastApprovedVersion(resultSet.getInt("LAST_APPROVED_VERSION"));
 				disclosureView.setLastApprovedVersionDate(resultSet.getTimestamp("LAST_APPROVED_DATE"));
-				disclosureView.setConflictStatus(resultSet.getString("DISCLOSURE_STATUS"));
-				disclosureView.setConflictStatusCode(resultSet.getString("CONFLICT_STATUS_CODE"));
-				disclosureView.setUpdateTimeStamp(resultSet.getTimestamp("UPDATE_TIMESTAMP"));
-				disclosureView.setUpdateUser(resultSet.getString("UPDATE_USER_FULL_NAME"));
-				disclosureView.setReviseComment(resultSet.getString("REVISION_COMMENT"));
+				disclosureView.setConflictStatus(resultSet.getString(DISCLOSURE_STATUS));
+				disclosureView.setConflictStatusCode(resultSet.getString(CONFLICT_STATUS_CODE));
+				disclosureView.setUpdateTimeStamp(resultSet.getTimestamp(UPDATE_TIMESTAMP));
+				disclosureView.setUpdateUser(resultSet.getString(UPDATE_USER_FULL_NAME));
+				disclosureView.setReviseComment(resultSet.getString(REVISION_COMMENT));
 				disclosureView.setPersonId(resultSet.getString("PERSON_ID"));
-				disclosureView.setExpirationDate(resultSet.getTimestamp("EXPIRATION_DATE"));
-				disclosureView.setCertifiedAt(resultSet.getTimestamp("CERTIFIED_AT"));
+				disclosureView.setExpirationDate(resultSet.getTimestamp(EXPIRATION_DATE));
+				disclosureView.setCertifiedAt(resultSet.getTimestamp(CERTIFIED_AT));
 				disclosureView.setReviewId(resultSet.getInt("COI_REVIEW_ID"));
 				disclosureView.setReviewDescription(resultSet.getString("REVIEW_DESCRIPTION"));
 				disclosureView.setReviewerStatusCode(resultSet.getString("REVIEWER_STATUS_CODE"));
 				disclosureView.setReviewerStatus(resultSet.getString("REVIEWER_STATUS"));
 				disclosureView.setReviewerFullName(resultSet.getString("REVIEWER_NAME"));
-				disclosureView.setNoOfSfi(resultSet.getInt("NO_OF_SFI"));
-				disclosureView.setNoOfProposal(resultSet.getInt("NO_OF_PROPOSAL"));
-				disclosureView.setNoOfAward(resultSet.getInt("NO_OF_AWARD"));
-				disclosureView.setProposalTitle(resultSet.getString("PROPOSAL_TITLES"));
-				disclosureView.setProposalId(resultSet.getString("PROPOSAL_IDS"));
-				disclosureView.setAwardId(resultSet.getString("AWARD_IDS"));
-				disclosureView.setAwardTitle(resultSet.getString("AWARD_TITLES"));
-				disclosureView.setAdministrator(resultSet.getString("ADMINISTRATOR"));
-				disclosureView.setAdminGroupName(resultSet.getString("ADMIN_GROUP_NAME"));
+				disclosureView.setNoOfSfi(resultSet.getInt(NO_OF_SFI));
+				disclosureView.setNoOfProposal(resultSet.getInt(NO_OF_PROPOSAL));
+				disclosureView.setNoOfAward(resultSet.getInt(NO_OF_AWARD));
+				disclosureView.setProposalTitle(resultSet.getString(PROPOSAL_TITLES));
+				disclosureView.setProposalId(resultSet.getString(PROPOSAL_IDS));
+				disclosureView.setAwardId(resultSet.getString(AWARD_IDS));
+				disclosureView.setAwardTitle(resultSet.getString(AWARD_TITLES));
+				disclosureView.setAdministrator(resultSet.getString(ADMINISTRATOR));
+				disclosureView.setAdminGroupName(resultSet.getString(ADMIN_GROUP_NAME));
 				Unit unit = new Unit();
 				unit.setUnitNumber(resultSet.getString("UNIT"));
-				unit.setUnitName(resultSet.getString("UNIT_NAME"));
-				unit.setOrganizationId(resultSet.getString("ORGANIZATION_ID"));
-				unit.setParentUnitNumber(resultSet.getString("PARENT_UNIT_NUMBER"));
-				unit.setAcronym(resultSet.getString("ACRONYM"));
-				unit.setIsFundingUnit(resultSet.getString("IS_FUNDING_UNIT"));
+				unit.setUnitName(resultSet.getString(UNIT_NAME));
+				unit.setOrganizationId(resultSet.getString(ORGANIZATION_ID));
+				unit.setParentUnitNumber(resultSet.getString(PARENT_UNIT_NUMBER));
+				unit.setAcronym(resultSet.getString(ACRONYM));
+				unit.setIsFundingUnit(resultSet.getString(IS_FUNDING_UNIT));
 				disclosureView.setUnit(unit);
 				disclosureViews.add(disclosureView);
 			}
@@ -2430,10 +2460,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
 		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
-		query.where(builder.and(
-			    builder.equal(rootPersonEntityRelationship.get("personEntityId"), vo.getPersonEntityId()),
-			    builder.equal(rootPersonEntityRelationship.get("validPersonEntityRelType").get("disclosureTypeCode"), vo.getDisclosureTypeCode())
-			));
+		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityId"), vo.getPersonEntityId()));
 		return session.createQuery(query).getResultList();
 	}
 
@@ -2454,7 +2481,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		CriteriaQuery<PersonEntityRelationship> query = builder.createQuery(PersonEntityRelationship.class);
 		Root<PersonEntityRelationship> rootPersonEntityRelationship = query.from(PersonEntityRelationship.class);
 		query.where(builder.equal(rootPersonEntityRelationship.get("personEntityRelId"), personEntityRelId));
-		return session.createQuery(query).getResultList().get(0);
+		List<PersonEntityRelationship> resultData = session.createQuery(query).getResultList();
+		if (resultData != null && !resultData.isEmpty()) {
+			return resultData.get(0);
+		}
+		return null;
 	}
 
 	@Override
@@ -2863,8 +2894,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				mapObj.put("fcoiProject", rset.getInt("fcoiProject") == 0 ? null : rset.getInt("fcoiProject"));
 			}
 		} catch (Exception e) {
-			logger.error("Exception on fetchAllCoiRights {}", e.getMessage());
-			throw new ApplicationException("Unable to fetch rights", e, Constants.JAVA_ERROR);
+			logger.error("Exception on validateProjectDisclosure {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch disclosure", e, Constants.JAVA_ERROR);
 		}
 		return mapObj;
 	}
@@ -2932,12 +2963,13 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			while (rset != null && rset.next()) {
 				PersonEntity personEntity = new PersonEntity();
 				personEntity.setPersonEntityId(rset.getInt("PERSON_ENTITY_ID"));
+				personEntity.setPersonEntityNumber(rset.getInt("PERSON_ENTITY_NUMBER"));
 				personEntity.setPersonId(rset.getString("PERSON_ID"));
 				personEntity.setEntityId(rset.getInt("ENTITY_ID"));
 				personEntity.setEntityNumber(rset.getInt("ENTITY_NUMBER"));
 				personEntity.setInvolvementStartDate(rset.getDate("INVOLVEMENT_START_DATE"));
 				personEntity.setInvolvementEndDate(rset.getDate("INVOLVEMENT_END_DATE"));
-				personEntity.setVersionStatus(rset.getString("VERSION_STATUS"));
+				personEntity.setVersionStatus(rset.getString(VERSION_STATUS));
 				personEntity.setCoiEntity(new CoiEntity());
 				personEntity.getCoiEntity().setEntityId(rset.getInt("ENTITY_ID"));
 				personEntity.getCoiEntity().setEntityNumber(rset.getInt("ENTITY_NUMBER"));
@@ -3397,11 +3429,12 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		hqlQuery.append("select (CASE WHEN count(PERSON_ENTITY_ID) > 0 THEN true ELSE false END) from (SELECT pe.PERSON_ENTITY_ID FROM ");
 		hqlQuery.append("COI_DISCL_ENT_PROJ_DETAILS pe INNER JOIN COI_DISCLOSURE cd ON cd.DISCLOSURE_ID = pe.DISCLOSURE_ID");
-		hqlQuery.append(" WHERE pe.PERSON_ENTITY_ID = :personEntityId AND cd.REVIEW_STATUS_CODE != :reviewStatusCode ");
-		hqlQuery.append("UNION SELECT t.PERSON_ENTITY_ID FROM COI_TRAVEL_DISCLOSURE t WHERE t.ENTITY_ID = :personEntityId ) T1");
+		hqlQuery.append(" WHERE pe.PERSON_ENTITY_ID = :personEntityId AND cd.REVIEW_STATUS_CODE NOT IN :reviewStatusCodes ");
+		hqlQuery.append("UNION SELECT t.PERSON_ENTITY_ID FROM COI_TRAVEL_DISCLOSURE t WHERE t.PERSON_ENTITY_ID = :personEntityId ) T1");
 		org.hibernate.query.Query<BigInteger> value = session.createSQLQuery(hqlQuery.toString());
 		value.setParameter("personEntityId", personEntityId);
-		value.setParameter("reviewStatusCode", 1);
+		value.setParameter("reviewStatusCodes", Arrays.asList(Constants.COI_DISCLOSURE_REVIEW_STATUS_PENDING,
+				Constants.COI_DISCLOSURE_STATUS_RETURN, Constants.COI_DISCLOSURE_STATUS_WITHDRAW));
 		if (value.getSingleResult().intValue() > 0) {
 			return true;
 		} else {
@@ -3584,21 +3617,21 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			}
 			while (rset.next()) {
 				DisclosureHistoryDto disclosureHistory = new DisclosureHistoryDto();
-				disclosureHistory.setDisclosureId(rset.getInt("DISCLOSURE_ID"));
+				disclosureHistory.setDisclosureId(rset.getInt(DISCLOSURE_ID));
 				disclosureHistory.setTravelDisclosureId(rset.getInt("TRAVEL_DISCLOSURE_ID"));
-				disclosureHistory.setVersionStatus(rset.getString("VERSION_STATUS"));
-				disclosureHistory.setFcoiTypeCode(rset.getString("FCOI_TYPE_CODE"));
+				disclosureHistory.setVersionStatus(rset.getString(VERSION_STATUS));
+				disclosureHistory.setFcoiTypeCode(rset.getString(FCOI_TYPE_CODE));
 				disclosureHistory.setFcoiType(rset.getString("FCOI_TYPE"));
 				disclosureHistory.setHomeUnit(rset.getString("HOME_UNIT"));
-				disclosureHistory.setHomeUnitName(rset.getString("UNIT_NAME"));
-				disclosureHistory.setExpirationDate(rset.getTimestamp("EXPIRATION_DATE"));
-				disclosureHistory.setCertifiedAt(rset.getTimestamp("CERTIFIED_AT"));
-				disclosureHistory.setConflictStatusCode(rset.getString("CONFLICT_STATUS_CODE"));
+				disclosureHistory.setHomeUnitName(rset.getString(UNIT_NAME));
+				disclosureHistory.setExpirationDate(rset.getTimestamp(EXPIRATION_DATE));
+				disclosureHistory.setCertifiedAt(rset.getTimestamp(CERTIFIED_AT));
+				disclosureHistory.setConflictStatusCode(rset.getString(CONFLICT_STATUS_CODE));
 				disclosureHistory.setConflictStatus(rset.getString("CONFLICT_STATUS"));
-				disclosureHistory.setDispositionStatusCode(rset.getString("DISPOSITION_STATUS_CODE"));
-				disclosureHistory.setDispositionStatus(rset.getString("DISPOSITION_STATUS"));
-				disclosureHistory.setReviewStatusCode(rset.getString("REVIEW_STATUS_CODE"));
-				disclosureHistory.setReviewStatus(rset.getString("REVIEW_STATUS"));
+				disclosureHistory.setDispositionStatusCode(rset.getString(DISPOSITION_STATUS_CODE));
+				disclosureHistory.setDispositionStatus(rset.getString(DISPOSITION_STATUS));
+				disclosureHistory.setReviewStatusCode(rset.getString(REVIEW_STATUS_CODE));
+				disclosureHistory.setReviewStatus(rset.getString(REVIEW_STATUS));
 				disclosureHistory.setEntityName(rset.getString("ENTITY_NAME"));
 				disclosureHistory.setDestinationCountry(rset.getString("DESTINATION_COUNTRY"));
 				disclosureHistory.setTravelState(rset.getString("STATE"));
@@ -3608,7 +3641,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				disclosureHistory.setTravelStatus(rset.getString("TRAVEL_STATUS"));
 				disclosureHistory.setTravelStartDate(rset.getTimestamp("TRAVEL_START_DATE"));
 				disclosureHistory.setTravelEndDate(rset.getTimestamp("TRAVEL_END_DATE"));
-				disclosureHistory.setUpdateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"));
+				disclosureHistory.setUpdateTimeStamp(rset.getTimestamp(UPDATE_TIMESTAMP));
 				disclosureHistory.setProjectTitle(rset.getString("PROJECT_TITLE"));
 				disclosureHistory.setProjectNumber(rset.getString("PROJECT_NUMBER"));
 				disclosureHistoryList.add(disclosureHistory);
@@ -4090,6 +4123,11 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	}
 
 	@Override
+	public List<ValidPersonEntityRelType> fetchAllValidPersonEntityRelTypes() {
+		return hibernateTemplate.loadAll(ValidPersonEntityRelType.class);
+	}
+
+	@Override
 	public DisclAttaType getDisclosureAttachmentForTypeCode(String attaTypeCode) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -4099,4 +4137,319 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		return session.createQuery(query).getSingleResult();
 	}
 
+	@Override
+	public List<PersonEntityRelationshipDto> getEntityWithRelationShipInfo(CommonRequestDto requestDto) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		SessionImpl sessionImpl = (SessionImpl) session;
+		Connection connection = sessionImpl.connection();
+		CallableStatement statement = null;
+		List<PersonEntityRelationshipDto> relationshipDtos = new ArrayList<>();
+		try {
+			statement = connection.prepareCall("{call GET_COI_ENTITY_PERSON_ENTITY_DETAILS(?,?)}");
+			statement.setString(1, AuthenticatedUser.getLoginPersonId());
+			statement.setString(2, requestDto.getSearchString());
+			statement.execute();
+			ResultSet	rset = statement.getResultSet();
+			while (rset.next()) {
+				relationshipDtos.add(PersonEntityRelationshipDto.builder()
+						.personEntityId(rset.getInt("PERSON_ENTITY_ID") == 0 ? null : rset.getInt("PERSON_ENTITY_ID"))
+						.entityId(rset.getInt("ENTITY_ID"))
+						.entityNumber(rset.getInt("ENTITY_NUMBER"))
+						.entityName(rset.getString("ENTITY_NAME"))
+						.countryName(rset.getString("COUNTRY_NAME"))
+						.validPersonEntityRelType(rset.getString("RELATIONSHIPS"))
+						.entityType(rset.getString("ENTITY_TYPE"))
+						.entityRiskCategory(rset.getString("RISK"))
+						.isRelationshipActive(rset.getBoolean("IS_RELATIONSHIP_ACTIVE"))
+						.personEntityVersionStatus(rset.getString("VERSION_STATUS"))
+						.build());
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception on getEntityWithRelationShipInfo {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch data", e, Constants.DB_PROC_ERROR);
+		}
+		return relationshipDtos;
+	}
+
+	@Override
+	public boolean isReviewAdded(CoiReview coiReview) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT r.coiReviewId FROM CoiReview r WHERE r.locationTypeCode = :locationTypeCode");
+		hqlQuery.append(" AND r.disclosureId = :disclosureId AND r.reviewStatusTypeCode != :reviewStatusTypeCode ");
+		if (coiReview.getAssigneePersonId() != null)
+			hqlQuery.append("AND r.assigneePersonId = :assigneePersonId ");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("locationTypeCode", coiReview.getLocationTypeCode());
+		query.setParameter("disclosureId", coiReview.getDisclosureId());
+		query.setParameter("reviewStatusTypeCode", Constants.COI_REVIEWER_REVIEW_STATUS_COMPLETED);
+		if (coiReview.getAssigneePersonId() != null)
+			query.setParameter("assigneePersonId", coiReview.getAssigneePersonId());
+		List result = query.getResultList();
+		if (result != null && !result.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isReviewStatus(Integer coiReviewId, List<String> statuses) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT r.coiReviewId FROM CoiReview r WHERE r.coiReviewId = :coiReviewId ");
+		if (statuses != null)
+			hqlQuery.append(" AND r.reviewStatusTypeCode IN :reviewStatusTypeCode");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("coiReviewId", coiReviewId);
+		if (statuses != null)
+			query.setParameter("reviewStatusTypeCode", statuses);
+		List result = query.getResultList();
+		if (result != null && !result.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isDisclosureInStatuses(Integer disclosureId, String dispositionStatusCode, String reviewStatusCode, String versionStatus) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT c.disclosureId FROM CoiDisclosure c WHERE c.dispositionStatusCode = :dispositionStatusCode ");
+		hqlQuery.append("AND c.reviewStatusCode = :reviewStatusCode AND c.versionStatus = :versionStatus ");
+		hqlQuery.append("AND c.disclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", disclosureId);
+		query.setParameter("dispositionStatusCode", dispositionStatusCode);
+		query.setParameter("reviewStatusCode", reviewStatusCode);
+		query.setParameter("versionStatus",versionStatus);
+		List result = query.getResultList();
+		if (result != null && !result.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public List<PersonEntity> fetchPersonEntityByEntityNum(Integer entityNumber, String personId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT e FROM PersonEntity e WHERE e.entityNumber = :entityNumber AND e.personId = :personId ORDER BY e.versionNumber DESC");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityNumber", entityNumber);
+		query.setParameter("personId", personId);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<PersonEntityDto> fetchAllPersonEntityVersions(Integer personEntityNumber) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT e.personEntityId, e.versionNumber, e.versionStatus FROM PersonEntity e WHERE e.personEntityNumber = :personEntityNumber AND e.personId = :personId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("personEntityNumber", personEntityNumber);
+		query.setParameter("personId", AuthenticatedUser.getLoginPersonId());
+		Iterator resultList = query.getResultList().iterator();
+		List<PersonEntityDto> personEntityDtos = new ArrayList<>();
+		while(resultList.hasNext()) {
+			PersonEntityDto personEntityDto = new PersonEntityDto();
+			Object[] resultData = (Object[]) resultList.next();
+			personEntityDto.setPersonEntityId((Integer) resultData[0]);
+			personEntityDto.setVersionNumber((Integer) resultData[1]);
+			personEntityDto.setVersionStatus((String) resultData[2]);
+			personEntityDtos.add(personEntityDto);
+		}
+		return personEntityDtos;
+	}
+
+	@Override
+	public boolean isRelationshipAdded(List<Integer> validPersonEntityRelTypeCodes, Integer personEntityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(r.personEntityRelId) > 0) then true else false end ");
+		hqlQuery.append(" FROM PersonEntityRelationship r WHERE r.validPersonEntityRelTypeCode IN :validPersonEntityRelTypeCode ");
+		hqlQuery.append("AND r.personEntityId = :personEntityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("validPersonEntityRelTypeCode", validPersonEntityRelTypeCodes);
+		query.setParameter("personEntityId", personEntityId);
+		return (boolean) query.getSingleResult();
+	}
+
+
+	@Override
+	public boolean isAdminPersonOrGroupAdded(Integer adminGroupId, String adminPersonId, Integer disclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(c.disclosureId) > 0) then true else false end ");
+		hqlQuery.append("FROM CoiDisclosure c WHERE  c.adminPersonId = :adminPersonId ");
+		if (adminGroupId != null)
+			hqlQuery.append("AND c.adminGroupId = :adminGroupId ") ;
+		hqlQuery.append("AND c.disclosureId = : disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		if (adminGroupId != null)
+			query.setParameter("adminGroupId", adminGroupId);
+		query.setParameter("adminPersonId", adminPersonId);
+		query.setParameter("disclosureId", disclosureId);
+		return (boolean)query.getSingleResult();
+	}
+
+	public CoiTravelDisclosure isTravelDisclosureExists(ConflictOfInterestVO vo) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT t  FROM CoiTravelDisclosure t ");
+		hqlQuery.append("WHERE t.entityNumber = :entityNumber AND t.personId = :personId ");
+		hqlQuery.append("AND t.travelStartDate = : travelStartDate AND t.travelEndDate = :travelEndDate");
+		hqlQuery.append("");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityNumber", vo.getEntityNumber());
+		query.setParameter("personId", vo.getPersonId());
+		query.setParameter("travelStartDate", vo.getTravelStartDate());
+		query.setParameter("travelEndDate", vo.getTravelEndDate());
+		List result = query.getResultList();
+		if (!result.isEmpty()) {
+			return (CoiTravelDisclosure) result.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean isPersonEntityActiveOrNot(Integer personEntityId, Integer personEntityNumber, boolean isRelationshipActive, String versionStatus) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(p.personEntityId) > 0) then true else false end ");
+		hqlQuery.append("FROM PersonEntity p WHERE p.isRelationshipActive = :isRelationshipActive ");
+		hqlQuery.append("AND p.versionStatus = :versionStatus ");
+		if (personEntityId != null)
+			hqlQuery.append("AND p.personEntityId = :personEntityId ");
+		if (personEntityNumber != null)
+			hqlQuery.append("AND p.personEntityNumber = :personEntityNumber ");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("isRelationshipActive", isRelationshipActive);
+		query.setParameter("versionStatus", versionStatus);
+		if (personEntityId != null)
+			query.setParameter("personEntityId", personEntityId);
+		if (personEntityNumber != null)
+			query.setParameter("personEntityNumber", personEntityNumber);
+		return (boolean) query.getSingleResult();
+	}
+
+	@Override
+	public boolean isEntityApproved(Integer entityId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(e.entityId) > 0) then true else false end ");
+		hqlQuery.append("FROM CoiEntity e WHERE e.entityId = :entityId ");
+		hqlQuery.append("AND e.entityStatusCode = :entityStatusCode ");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityId);
+		query.setParameter("entityStatusCode", Constants.COI_ENTITY_STATUS_VERIFIED);
+		return (boolean) query.getSingleResult();
+	}
+
+	@Override
+	public boolean isDisclosureRiskAdded(CoiDisclosureDto coiDisclosureDto) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(d.disclosureId) > 0) then true else false end  ");
+		hqlQuery.append("FROM CoiDisclosure d WHERE d.riskCategoryCode = :riskCategoryCode AND ");
+		hqlQuery.append("d.disclosureId = :disclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureId", coiDisclosureDto.getDisclosureId());
+		query.setParameter("riskCategoryCode", coiDisclosureDto.getRiskCategoryCode());
+		return (boolean) query.getSingleResult();
+	}
+
+	@Override
+	public boolean isDisclEntProjConflictAdded(String projectConflictStatusCode, Integer disclosureDetailsId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(d.disclosureDetailsId) > 0) then true else false end  ");
+		hqlQuery.append("FROM CoiDisclEntProjDetails d WHERE d.projectConflictStatusCode = :projectConflictStatusCode AND ");
+		hqlQuery.append("d.disclosureDetailsId = :disclosureDetailsId");
+		Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("disclosureDetailsId", disclosureDetailsId);
+		query.setParameter("projectConflictStatusCode", projectConflictStatusCode);
+		return (boolean) query.getSingleResult();
+	}
+
+	@Override
+	public CoiDisclosure isFCOIDisclosureExists(String personId, String fcoiTypeCode, String versionStatus) {
+		try {
+			StringBuilder hqlQuery = new StringBuilder();
+			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+			hqlQuery.append("SELECT d FROM CoiDisclosure d ");
+			hqlQuery.append("WHERE d.fcoiTypeCode = :fcoiTypeCode AND ");
+			hqlQuery.append("d.versionStatus = :versionStatus AND d.personId = :personId");
+			Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
+			Query query = session.createQuery(hqlQuery.toString());
+			query.setParameter("fcoiTypeCode", fcoiTypeCode);
+			query.setParameter("versionStatus", versionStatus);
+			query.setParameter("personId", personId);
+			List<CoiDisclosure> disclData = query.getResultList();
+			if (disclData != null && !disclData.isEmpty()) {
+				CoiDisclosure coiDisclosure = disclData.get(0);
+				coiDisclosure.setUpdateUserFullName(coiDisclosure.getPerson().getFullName());
+				coiDisclosure.setDisclosurePersonFullName(personDao.getPersonFullNameByPersonId(coiDisclosure.getPersonId()));
+				return coiDisclosure;
+			}
+		} catch (Exception ex) {
+			logger.error("Exception in isFCOIDisclosureExists", ex);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean isEntityActiveOrNot(Integer entityId, Integer entityNumber, boolean isActive, String versionStatus) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(e.entityId) > 0) then true else false end ");
+		hqlQuery.append("FROM CoiEntity e WHERE e.isActive = :isActive ");
+		hqlQuery.append("AND e.versionStatus = :versionStatus ");
+		if (entityId != null)
+			hqlQuery.append("AND e.entityId = :entityId ");
+		if (entityNumber != null)
+			hqlQuery.append("AND e.entityNumber = :entityNumber ");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("isActive", isActive);
+		query.setParameter("versionStatus", versionStatus);
+		if (entityId != null)
+			query.setParameter("entityId", entityId);
+		if (entityNumber != null)
+			query.setParameter("entityNumber", entityNumber);
+		return (boolean) query.getSingleResult();
+	}
+
+	@Override
+	public boolean isEntityRiskAdded(CoiEntityDto entityDto) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(e.entityId) > 0) then true else false end  ");
+		hqlQuery.append("FROM CoiEntity e WHERE e.riskCategoryCode = :riskCategoryCode AND ");
+		hqlQuery.append("e.entityId = :entityId");
+		Query query = session.createQuery(hqlQuery.toString());
+		query.setParameter("entityId", entityDto.getEntityId());
+		query.setParameter("riskCategoryCode", entityDto.getRiskCategoryCode());
+		return (boolean) query.getSingleResult();
+	}
+
+	@Override
+	public boolean isAdminPersonOrGroupAddedInTravel(Integer adminGroupId, String adminPersonId, Integer travelDisclosureId) {
+		StringBuilder hqlQuery = new StringBuilder();
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		hqlQuery.append("SELECT case when (count(c.travelDisclosureId) > 0) then true else false end ");
+		hqlQuery.append("FROM CoiTravelDisclosure c WHERE  c.adminPersonId = :adminPersonId ");
+		if (adminGroupId != null)
+			hqlQuery.append("AND c.adminGroupId = :adminGroupId ") ;
+		hqlQuery.append("AND c.travelDisclosureId = : travelDisclosureId");
+		Query query = session.createQuery(hqlQuery.toString());
+		if (adminGroupId != null)
+			query.setParameter("adminGroupId", adminGroupId);
+		query.setParameter("adminPersonId", adminPersonId);
+		query.setParameter("travelDisclosureId", travelDisclosureId);
+		return (boolean)query.getSingleResult();
+	}
 }

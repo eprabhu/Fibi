@@ -288,9 +288,6 @@
                     </button>
                 </div>
             </div>
-            <div *ngIf="sfiService.isShowSfiNavBar">
-                <app-add-sfi-slider [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi-slider>
-            </div>
         </div>
         <div *ngIf="!isCreateMode" class="d-flex flex-column p-0">
             <div class="flex-fill border-end bg-white shadow-sm" [class.side-height]="isCardExpanded">
@@ -476,6 +473,9 @@
         </ng-container>
     </div>
 </div>
+<div *ngIf="sfiService.isShowSfiNavBar">
+    <app-add-sfi-slider [disclosureDetails]="disclosureDetailsForSFI"></app-add-sfi-slider>
+</div>
 
 <!-- Complete review modal -->
 <div class="modal modal-coi fade mySkinDialog" id="completeReviewModalFromDashboard" role="dialog">
@@ -632,7 +632,7 @@
 <!--questionnaire evalution messge end-->
 
 <!--Unsaved Changes confirmation Modal-->
-<app-confirmation-modal [modalName] = "'disclsoure-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked()"
+<app-confirmation-modal [modalName] = "'disclosure-unsaved-changes-modal'" (secondaryBtnAction)="leavePageClicked()"
     [primaryBtnName]="'Stay On Page'" [secondaryBtnName]="'Leave Page'">
     <!-- modal header -->
     <ng-container header>
@@ -778,3 +778,5 @@
     (riskChange) = "changeDataStoreRisk($event)"
     [projectDetails]="coiData.projectDetail" (closePage)="closeSlider($event)"></app-disclosure-risk-slider>
 </div>
+
+<app-concurrency-warning-modal *ngIf="coiService.concurrentUpdateAction" [sectionName]="coiService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

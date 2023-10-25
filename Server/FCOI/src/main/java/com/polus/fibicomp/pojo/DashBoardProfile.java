@@ -17,8 +17,10 @@ import com.polus.fibicomp.evaluation.pojo.FinalEvaluationStatus;
 import com.polus.fibicomp.grantcall.pojo.GrantCall;
 import com.polus.fibicomp.ip.pojo.InstituteProposal;
 import com.polus.fibicomp.negotiation.pojo.Negotiations;
+import com.polus.fibicomp.opa.dto.OPADashboardDto;
 import com.polus.fibicomp.person.pojo.Person;
 import com.polus.fibicomp.proposal.pojo.Proposal;
+import com.polus.fibicomp.servicerequest.pojo.ServiceRequest;
 import com.polus.fibicomp.view.AwardView;
 import com.polus.fibicomp.view.DisclosureView;
 import com.polus.fibicomp.view.ExpenditureVolume;
@@ -26,7 +28,6 @@ import com.polus.fibicomp.view.IacucView;
 import com.polus.fibicomp.view.ResearchSummaryPieChart;
 import com.polus.fibicomp.view.ResearchSummaryView;
 import com.polus.fibicomp.workflow.pojo.Workflow;
-import com.polus.fibicomp.servicerequest.pojo.ServiceRequest;
 
 public class DashBoardProfile {
 
@@ -133,6 +134,8 @@ public class DashBoardProfile {
 	private List<Object> data;
 	
 	List<CoiTravelDashboardDto> travelDashboardViews;
+
+	List<OPADashboardDto> opaDashboardDto;
 
 	public List<CoiTravelDashboardDto> getTravelDashboardViews() {
 		return travelDashboardViews;
@@ -557,4 +560,13 @@ public class DashBoardProfile {
 	public void setData(List<Object> data) {
 		this.data = data;
 	}
+
+	public List<OPADashboardDto> getOpaDashboardDto() {
+		return opaDashboardDto;
+	}
+
+	public void setOpaDashboardDto(List<OPADashboardDto> opaDashboardDto) {
+		this.opaDashboardDto = opaDashboardDto;
+	}
+
 }

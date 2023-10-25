@@ -8,7 +8,7 @@ import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../
 import {CoiService} from '../../services/coi.service';
 import {ElasticConfigService} from '../../../../../../fibi/src/app/common/services/elastic-config.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
-import {deepCloneObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
+import {deepCloneObject, hideModal} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../../../../fibi/src/app/app-constants';
 import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, getDuration, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
@@ -189,14 +189,18 @@ export class LocationComponent implements OnInit, OnDestroy {
             this.getReviewDates();
             this.$subscriptions.push(this._reviewService.saveOrUpdateCoiReview({ coiReview: this.reviewDetails }).subscribe((res: any) => {
                 this.modifyIndex === -1 ? this.addReviewToList(res) : this.updateReview(res);
-                this.modifyIndex = -1;
                 this.reviewDetails = {};
                 this._dataStore.updateTimestampEvent.next();
-                document.getElementById('add-review-modal-trigger').click();
                 this.isExpanded = true;
-                //this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review ${this.modifyIndex === -1 ? 'added' : 'updated'} successfully.`);
+                document.getElementById('add-review-modal-trigger').click();
             }, _err => {
-                //this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
+                if (_err.status === 405) {
+                hideModal('add-coi-reviewer-modal');
+                this.coiService.concurrentUpdateAction = 'Create Review';
+              } else {
+                this._commonService.showToast(HTTP_ERROR_STATUS, `Error in ${this.modifyIndex === -1 ? 'adding' : 'updating'} review.`);
+              }
             }));
         }
     }
@@ -239,8 +243,13 @@ export class LocationComponent implements OnInit, OnDestroy {
             this._commonService.showToast(HTTP_SUCCESS_STATUS, `Review deleted successfully.`);
             this.clearActionData();
         }, _err => {
+            if (_err.status === 405) {
+            hideModal('deleteReviewModal');
+            this.coiService.concurrentUpdateAction = 'Delete Review';
+          } else {
             this.clearActionData();
             this._commonService.showToast(HTTP_ERROR_STATUS, `Error in deleting review.`);
+          }
         }));
     }
 

@@ -4,7 +4,9 @@ package com.polus.fibicomp.coi.dto;
 import com.polus.fibicomp.coi.pojo.EntityType;
 import com.polus.fibicomp.coi.pojo.PersonEntityRelationship;
 import com.polus.fibicomp.pojo.Country;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -38,5 +40,7 @@ public class PersonEntityDto {
 	private List<PersonEntityRelationship> personEntityRelationships;
 	private Country country;
 	private EntityType entityType;
-
+	private String actionTypeCode;
+	private String entityName;
+	private String relationshipName;
 }

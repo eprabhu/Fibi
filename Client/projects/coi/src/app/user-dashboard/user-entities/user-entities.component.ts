@@ -9,7 +9,7 @@ import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 import { Subject, interval } from 'rxjs';
 import { debounce, switchMap } from 'rxjs/operators';
 import { listAnimation, fadeInOutHeight, leftSlideInOut } from '../../common/utilities/animations';
-import { UserDashboardService } from '../user-dashboard.service';
+import { hideModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-user-entities',
@@ -31,12 +31,14 @@ export class UserEntitiesComponent implements OnInit, OnDestroy {
   isEnableActivateInactivateSfiModal: boolean;
   entityName: any;
   personEntityId: any;
+  personEntityNumber: any;
   isRelationshipActive: false;
   $debounceEventForEntities = new Subject();
   $fetchSFI = new Subject();
   isSearchTextHover = false;
   isLoading = false;
   isHideFilterSearchAndShowCreate = false;
+  isConcurrency = false;
 
   constructor(private _userEntityService: UserEntitiesService, private _router: Router,
     private _sfiService: SfiService, private _commonService: CommonService) {
@@ -106,7 +108,6 @@ removeEntityId() {
     })
   }
 
-
   getRelationshipTypes(relationshipTypes) {
     if(relationshipTypes) {
       return relationshipTypes.split(',').map((type: any) => {
@@ -128,6 +129,7 @@ removeEntityId() {
     this.personEntityId = event.personEntityId;
     this.entityName = event.coiEntity.entityName;
     this.isRelationshipActive = event.isRelationshipActive;
+    this.personEntityNumber = event.personEntityNumber;
   }
 
   deleteSFIConfirmation(event) {
@@ -186,7 +188,12 @@ deleteSFI() {
       this.$fetchSFI.next();
       this._commonService.showToast(HTTP_SUCCESS_STATUS, 'SFI deleted successfully.');
   }, err=> {
+    if (err.status === 405) {
+      hideModal('deleteSFIConfirmationModal');
+      this.isConcurrency = true;
+    } else {
       this._commonService.showToast(HTTP_ERROR_STATUS, 'SFI deletion canceled.');
+    }
   })
 }
 

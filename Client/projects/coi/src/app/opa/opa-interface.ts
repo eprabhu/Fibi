@@ -1,3 +1,8 @@
+export class OPA {
+    opaDisclosure: OpaDisclosure;
+    opaReviewerList: any;
+}
+
 export class OpaDisclosure {
     opaDisclosureId: number;
     opaDisclosureNumber: string;
@@ -39,6 +44,7 @@ export class OpaDisclosure {
     personEmail: string;
     personPrimaryTitle: string;
     homeUnitName: string;
+    opaFormBuilderDetails: any[];
 }
 
 export interface DispositionStatusType {

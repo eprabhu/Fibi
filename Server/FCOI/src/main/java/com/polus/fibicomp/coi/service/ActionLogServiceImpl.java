@@ -21,13 +21,17 @@ import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.coi.dto.HistoryDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.PersonEntityActionLogDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.DisclosureActionType;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
-import com.polus.fibicomp.coi.repository.ActionLogRepositoryCustom;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionLog;
+import com.polus.fibicomp.coi.repository.ActionLogDao;
 import com.polus.fibicomp.coi.repository.DisclosureActionLogRepository;
 import com.polus.fibicomp.coi.repository.DisclosureActionTypeRepository;
 import com.polus.fibicomp.coi.repository.TravelDisclosureActionLogRepository;
@@ -50,7 +54,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 //    private EntityActionTypeRepository entityActionTypeRepository;
 
     @Autowired
-    private ActionLogRepositoryCustom actionLogRepositoryCustom;
+    private ActionLogDao actionLogDao;
 
     @Autowired
     private DisclosureActionLogRepository disclosureActionLogRepository;
@@ -80,7 +84,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 
     @Override
     public void saveEntityActionLog(String actionLogTypeCode, CoiEntity coiEntity, String comment) {
-        EntityActionType entityActionType = actionLogRepositoryCustom.getEntityActionType(actionLogTypeCode);
+        EntityActionType entityActionType = actionLogDao.getEntityActionType(actionLogTypeCode);
         if (entityActionType != null) {
             String message = buildEntityLogMessage(entityActionType.getMessage(), coiEntity);
             EntityActionLog actionLog = EntityActionLog.builder().actionTypeCode(actionLogTypeCode)
@@ -90,7 +94,7 @@ public class ActionLogServiceImpl implements ActionLogService {
                     .comment(comment)
                     .updateTimestamp(commonDao.getCurrentTimestamp())
                     .updateUser(AuthenticatedUser.getLoginUserName()).build();
-            actionLogRepositoryCustom.saveObject(actionLog);
+            actionLogDao.saveObject(actionLog);
         }
     }
 
@@ -185,7 +189,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITHOUT_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITH_REVIEWER,
 				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITHOUT_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITH_REVIEWER,
 				Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITHOUT_REVIEWER, Constants.COI_DIS_ACTION_LOG_MODIFIED_REVIEW_WITH_REVIEWER);
-		List<DisclosureActionLog> disclsouretActionLogs = actionLogRepositoryCustom.fetchDisclosureActionLogsBasedOnDisclosureId(disclosureId, reviewActionTypeCodes);
+		List<DisclosureActionLog> disclsouretActionLogs = actionLogDao.fetchDisclosureActionLogsBasedOnDisclosureId(disclosureId, reviewActionTypeCodes);
 		List<HistoryDto> disclosureHistories = new ArrayList<>();
 		disclsouretActionLogs.forEach(disclsouretActionLog -> {
 			HistoryDto historyDto = new HistoryDto();
@@ -251,7 +255,7 @@ public class ActionLogServiceImpl implements ActionLogService {
     @Override
     public List<EntityActionLogDto> fetchEntityActionLog(Integer entityId, List<String> actionLogCodes) {
         List<EntityActionLogDto> entityLogs = new ArrayList<>();
-        actionLogRepositoryCustom.fetchEntityActionLog(entityId, actionLogCodes).forEach(entityActionLog -> {
+        actionLogDao.fetchEntityActionLog(entityId, actionLogCodes).forEach(entityActionLog -> {
             EntityActionLogDto entityActionLogDto = new EntityActionLogDto();
             BeanUtils.copyProperties(entityActionLog, entityActionLogDto);
             entityActionLogDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(entityActionLog.getUpdateUser()));
@@ -263,7 +267,7 @@ public class ActionLogServiceImpl implements ActionLogService {
     @Override
     public List<EntityActionLogDto> fetchAllEntityActionLog(CoiEntityDto coiEntityDto) {
         List<EntityActionLogDto> entityLogs = new ArrayList<>();
-        actionLogRepositoryCustom.fetchAllEntityActionLog(coiEntityDto).forEach(entityActionLog -> {
+        actionLogDao.fetchAllEntityActionLog(coiEntityDto).forEach(entityActionLog -> {
             EntityActionLogDto entityActionLogDto = new EntityActionLogDto();
             BeanUtils.copyProperties(entityActionLog, entityActionLogDto);
             entityActionLogDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(entityActionLog.getUpdateUser()));
@@ -275,7 +279,7 @@ public class ActionLogServiceImpl implements ActionLogService {
     @Override
     public List<DisclosureActionLog> fetchDisclosureActionLog(DisclosureActionLogDto actionLogDto) {
         List<DisclosureActionLog> actionLogList = new ArrayList<>();
-        actionLogRepositoryCustom.fetchDisclosureActionLog(actionLogDto).forEach(actionLog ->  {
+        actionLogDao.fetchDisclosureActionLog(actionLogDto).forEach(actionLog ->  {
             DisclosureActionLog disclosureActionLog = new DisclosureActionLog();
             BeanUtils.copyProperties(actionLog, disclosureActionLog, "disclosure", "disclosureActionType");
             disclosureActionLog.setUpdateUserFullName(personDao.getUserFullNameByUserName(actionLog.getUpdateUser()));
@@ -286,7 +290,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 
 	@Override
 	public ResponseEntity<Object> getTravelDisclosureHistoryById(Integer travelDisclosureId) {
-		List<TravelDisclosureActionLog> travelDisclosureActionLogs = actionLogRepositoryCustom.fetchTravelDisclosureActionLogsBasedOnId(travelDisclosureId);
+		List<TravelDisclosureActionLog> travelDisclosureActionLogs = actionLogDao.fetchTravelDisclosureActionLogsBasedOnId(travelDisclosureId);
 		List<HistoryDto> travelDisclosureHistories = new ArrayList<>();
 		travelDisclosureActionLogs.forEach(actionLog -> {
 			HistoryDto historyDto = new HistoryDto();
@@ -305,14 +309,14 @@ public class ActionLogServiceImpl implements ActionLogService {
 	@Override
 	public List<TravelDisclosureActionLog> fetchTravelDisclosureActionLog(TravelDisclosureActionLogDto actionLogDto) {
 		List<TravelDisclosureActionLog> actionLogList = new ArrayList<>();
-		actionLogRepositoryCustom.fetchTravelDisclosureActionLog(actionLogDto).forEach(actionLog -> {
+		actionLogDao.fetchTravelDisclosureActionLog(actionLogDto).forEach(actionLog -> {
 			TravelDisclosureActionLog travelDisclosureActionLog = new TravelDisclosureActionLog();
 			BeanUtils.copyProperties(actionLog, travelDisclosureActionLog, "coiTravelDisclosure", "disclosureActionType");
 			travelDisclosureActionLog.setUpdateUserFullName(personDao.getUserFullNameByUserName(actionLog.getUpdateUser()));
 			actionLogList.add(travelDisclosureActionLog);
 		});
 		actionLogDto.setActionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ADD_RISK);
-		actionLogRepositoryCustom.fetchTravelDisclosureActionLog(actionLogDto).forEach(actionLog -> {
+		actionLogDao.fetchTravelDisclosureActionLog(actionLogDto).forEach(actionLog -> {
 			TravelDisclosureActionLog travelDisclosureActionLog = new TravelDisclosureActionLog();
 			BeanUtils.copyProperties(actionLog, travelDisclosureActionLog, "coiTravelDisclosure", "disclosureActionType");
 			actionLogList.add(travelDisclosureActionLog);
@@ -328,7 +332,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITHOUT_REVIEWER, Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITH_REVIEWER,
 				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITHOUT_REVIEWER, Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITH_REVIEWER,
 				Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITHOUT_REVIEWER, Constants.COI_DIS_ACTION_LOG_MODIFIED_REVIEW_WITH_REVIEWER);
-		List<DisclosureActionLog> disclsouretActionLogs = actionLogRepositoryCustom.fetchReviewActionLogs(disclosureId, actionTypeCodes);
+		List<DisclosureActionLog> disclsouretActionLogs = actionLogDao.fetchReviewActionLogs(disclosureId, actionTypeCodes);
 		List<HistoryDto> disclosureHistories = new ArrayList<>();
 		disclsouretActionLogs.forEach(disclsouretActionLog -> {
 			HistoryDto historyDto = new HistoryDto();
@@ -346,7 +350,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 
 	@Override
 	public void saveOPAActionLog(String actionLogTypeCode, OPACommonDto opaCommonDto) {
-		OPAActionLogType opaActionLogType = actionLogRepositoryCustom.getOPAActionType(actionLogTypeCode);
+		OPAActionLogType opaActionLogType = actionLogDao.getOPAActionType(actionLogTypeCode);
 		if (opaActionLogType != null) {
 			String message = buildOPALogMessage(opaActionLogType.getMessage(), opaCommonDto);
 			OPAActionLog opaActionLog = OPAActionLog.builder()
@@ -357,7 +361,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 					.opaDisclosureNumber(opaCommonDto.getOpaDisclosureNumber())
 					.updateTimestamp(commonDao.getCurrentTimestamp()).updateUser(AuthenticatedUser.getLoginUserName())
 					.build();
-			actionLogRepositoryCustom.saveObject(opaActionLog);
+			actionLogDao.saveObject(opaActionLog);
 		}
 	}
 
@@ -388,4 +392,38 @@ public class ActionLogServiceImpl implements ActionLogService {
 		return new ResponseEntity<>(opaDisclosureHistories, HttpStatus.OK);
 	}
 
+	@Override
+	public void savePersonEntityActionLog(PersonEntityDto personEntityDto) {
+		PersonEntityActionType personEntityActionType = actionLogDao.getPersonEntityActionType(personEntityDto.getActionTypeCode());
+		if (personEntityActionType != null) {
+			String message = buildPersonEntityLogMessage(personEntityActionType.getMessage(), personEntityDto);
+			PersonEntityActionLog actionLog = PersonEntityActionLog.builder().actionTypeCode(personEntityDto.getActionTypeCode())
+					.personEntityId(personEntityDto.getPersonEntityId())
+					.personEntityNumber(personEntityDto.getPersonEntityNumber())
+					.description(message)
+					.comment(personEntityDto.getRevisionReason())
+					.updateTimestamp(commonDao.getCurrentTimestamp())
+					.updateUser(AuthenticatedUser.getLoginUserName()).build();
+			actionLogDao.saveObject(actionLog);
+		}
+	}
+
+	private String buildPersonEntityLogMessage(String message, PersonEntityDto personEntityDto) {
+		Map<String, String> placeholdersAndValues = new HashMap<>();
+		placeholdersAndValues.put("{ENTITY_NAME}", personEntityDto.getEntityName());
+		placeholdersAndValues.put("{RELATIONSHIP_NAME}", personEntityDto.getRelationshipName());
+		return renderPlaceholders(message, placeholdersAndValues);
+	}
+
+	@Override
+	public ResponseEntity<Object> getAllPersonEntityActionLog(PersonEntityDto personEntityDto) {
+		List<PersonEntityActionLogDto> actionLogs = new ArrayList<>();
+		actionLogDao.fetchPersonEntityActionLog(personEntityDto).forEach(actionLog -> {
+			PersonEntityActionLogDto entityActionLogDto = new PersonEntityActionLogDto();
+			BeanUtils.copyProperties(actionLog, entityActionLogDto);
+			entityActionLogDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(actionLog.getUpdateUser()));
+			actionLogs.add(entityActionLogDto);
+		});
+		return new ResponseEntity<>(actionLogs, HttpStatus.OK);
+	}
 }
