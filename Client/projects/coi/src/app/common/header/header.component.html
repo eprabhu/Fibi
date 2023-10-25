@@ -47,7 +47,7 @@
                                 <span class="ms-2 fw-medium fs-14">Notes</span>
                             </button>
                             <button mat-menu-item title="Click to Add Attachments" area-describedby="Click to add attachments"
-                            (click)="isOpenAttachmentModal = true" class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
+                            (click)="commonService.isOpenAttachmentModal = true" class="text-nowrap border-0 rounded-0 btn-primary-icon fs-14 d-flex justify-content-start w-100 align-items-center more-action">
                                 <span class="ms-2 fw-medium fs-14">Attachments</span>
                             </button>
                             <button (click)="openProjectDisclosure()" mat-menu-item title="Click to Create Project Disclosure"
@@ -114,7 +114,7 @@
     </div>
 </header>
 
-<div class="card add-note" *ngIf="isShowCreateNoteModal" appDrag>
+<div class="card add-note" *ngIf="commonService.isShowCreateNoteModal" appDrag>
     <div class="d-flex add-notes pt-2">
         <span class="fs-16 pt-1">Add Note</span>
         <span class="btn-primary-icon btn-sm ms-auto mt-0 px-2" id="close-edit-home-unit" title="Return to main menu"
@@ -134,7 +134,7 @@
     </div>
 </div>
 
-<app-add-attachment-modal *ngIf="isOpenAttachmentModal" (closeModal)="closeModal($event)">
+<app-add-attachment-modal *ngIf="commonService.isOpenAttachmentModal" (closeModal)="closeModal($event)">
 </app-add-attachment-modal>
 <app-personal-details-modal *ngIf="ispersondetailsmodal" (closeModalPersonDetails)="closePersonDetailsModal($event)"
     [ispersondetailsmodal]="ispersondetailsmodal" [userdetails]="userDetails"></app-personal-details-modal>

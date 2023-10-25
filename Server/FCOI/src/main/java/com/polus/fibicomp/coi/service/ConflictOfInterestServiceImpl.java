@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.repository.ActionLogDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -133,6 +134,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 
 	@Autowired
 	private OPADao opaDao;
+
+	@Autowired
+	private ActionLogDao actionLogDao;
 
 	private static final String DISPOSITION_STATUS_TYPE_CODE = "1";
 	private static final String DISPOSITION_STATUS_PENDING = "1";
@@ -392,6 +396,14 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
             personEntityRelationshipList.add(conflictOfInterestDao.getPersonEntityRelationshipByPersonEntityRelId(personEntityRelation.getPersonEntityRelId()));
         });
 		conflictOfInterestDao.updatePersonEntityUpdateDetails(personEntityRelationship.getPersonEntityId());
+		PersonEntity personEntity = conflictOfInterestDao.getPersonEntityDetailsById(personEntityRelationship.getPersonEntityId());
+		PersonEntityDto personEntityDto = new PersonEntityDto();
+		personEntityDto.setPersonEntityId(personEntity.getPersonEntityId());
+		personEntityDto.setPersonEntityNumber(personEntity.getPersonEntityNumber());
+		personEntityDto.setEntityName(personEntity.getCoiEntity().getEntityName());
+		personEntityDto.setRelationshipName(String.join(",", relationshipNames));
+		personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_REL_ADDED);
+		actionLogService.savePersonEntityActionLog(personEntityDto);
         return new ResponseEntity<>(personEntityRelationshipList, HttpStatus.OK);
     }
 
@@ -2075,6 +2087,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				personEntityDto.setPersonEntityId(draftVersion.getPersonEntityId());
 				personEntityDto.setVersionStatus(Constants.COI_ARCHIVE_STATUS);
 				personEntityDto.setUpdateTimestamp(commonDao.getCurrentTimestamp());
+				personEntityDto.setEntityName(draftVersion.getCoiEntity().getEntityName());
+				personEntityDto.setPersonEntityNumber(draftVersion.getPersonEntityNumber());
+				personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_ACTIVATED);
+				actionLogService.savePersonEntityActionLog(personEntityDto);
 				return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
 			}
 			conflictOfInterestDao.patchPersonEntityVersionStatus(personEntityDto.getPersonEntityId(), Constants.COI_ARCHIVE_STATUS);
@@ -2118,6 +2134,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 						null, personEntityDto.getPersonEntityId(), null, null, Constants.TYPE_INACTIVATE_SFI);
 			}
 		}
+		personEntityDto.setEntityName(personEntityObj.getCoiEntity().getEntityName());
+		personEntityDto.setPersonEntityNumber(personEntityObj.getPersonEntityNumber());
+		personEntityDto.setActionTypeCode(Boolean.TRUE.equals(personEntityDto.getIsRelationshipActive()) ?
+				Constants.COI_PERSON_ENTITY_ACTION_LOG_ACTIVATED : Constants.COI_PERSON_ENTITY_ACTION_LOG_INACTIVATED);
+		actionLogService.savePersonEntityActionLog(personEntityDto);
 		return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
 	}
 
@@ -2162,7 +2183,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		conflictOfInterestDao.getRelationshipDetails(personEntityId).forEach(relationship ->
 			deletePerEntQuestAnsRelationship(relationship.getPersonEntityRelId(), personEntityId, relationship.getValidPersonEntityRelTypeCode())
 		);
-//		actionLogRepository.deletePersonEntityActionLog(personEntityId);
+		actionLogDao.deletePersonEntityActionLog(personEntityId);
 		conflictOfInterestDao.deletePersonEntity(personEntityId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -2292,6 +2313,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		deletePerEntQuestAnsRelationship(personEntityRelId, personEntityId, relationship.getValidPersonEntityRelTypeCode());
 		conflictOfInterestDao.updatePersonEntityUpdateDetails(relationship.getPersonEntityId());
+		PersonEntityDto personEntityDto = new PersonEntityDto();
+		personEntityDto.setPersonEntityId(relationship.getPersonEntityId());
+		personEntityDto.setPersonEntityNumber(relationship.getPersonEntity().getPersonEntityNumber());
+		personEntityDto.setRelationshipName(relationship.getValidPersonEntityRelType().getPersonEntityRelType().getDescription());
+		personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_REL_REMOVED);
+		actionLogService.savePersonEntityActionLog(personEntityDto);
 		return new ResponseEntity<>(commonDao.getCurrentTimestamp(), HttpStatus.OK);
 	}
 
@@ -2344,6 +2371,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					null, personEntityId, null, null, Constants.TYPE_INACTIVATE_SFI);
 			personEntityDto.setPersonEntityId(personEntityId);
 		}
+		personEntityDto.setPersonEntityNumber(personEntityObj.getPersonEntityNumber());
+		personEntityDto.setEntityName(personEntityObj.getCoiEntity().getEntityName());
+		personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_MODIFIED);
+		actionLogService.savePersonEntityActionLog(personEntityDto);
 		return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
 	}
 
@@ -2358,6 +2389,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		personEntityDto.setVersionStatus(Constants.COI_ACTIVE_STATUS);
 		conflictOfInterestDao.syncProjectWithDisclosure(null,
 				null, personEntityDto.getPersonEntityId(), null, null, Constants.TYPE_FINALIZE_SFI);
+		PersonEntity personEntity = conflictOfInterestDao.getPersonEntityDetailsById(personEntityDto.getPersonEntityId());
+		personEntityDto.setEntityName(personEntity.getCoiEntity().getEntityName());
+		personEntityDto.setPersonEntityNumber(personEntity.getPersonEntityNumber());
+		personEntityDto.setActionTypeCode(Constants.COI_PERSON_ENTITY_ACTION_LOG_ACTIVATED);
+		actionLogService.savePersonEntityActionLog(personEntityDto);
 		return new ResponseEntity<>(personEntityDto, HttpStatus.OK);
 	}
 

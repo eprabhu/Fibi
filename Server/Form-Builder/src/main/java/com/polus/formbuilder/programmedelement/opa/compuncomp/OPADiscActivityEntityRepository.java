@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.polus.formbuilder.programmedelement.opa.entity.OPADiscActivityEntity;
-
 @Repository
 public interface OPADiscActivityEntityRepository extends JpaRepository<OPADiscActivityEntity, Integer>{
 

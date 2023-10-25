@@ -69,9 +69,15 @@ public class FormBuilderController {
 //	}
 	
 	@PostMapping("/getForm")
-	ResponseEntity<FormResponse> getForm(@RequestBody FormRequest request){		
-		FormResponse response = service.GetForm(request);		
-		return new ResponseEntity<FormResponse>(response,HttpStatus.OK);		
+	ResponseEntity<?> getForm(@RequestBody FormRequest request){	
+		try {
+			FormResponse response = service.GetForm(request);		
+			return new ResponseEntity<FormResponse>(response,HttpStatus.OK);
+			
+		}catch(Exception e) {
+			 String errorMessage = "An error occurred in /getForm request. Exception --> "+e;
+		     return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@PostMapping("/getFormComponent")
@@ -87,19 +93,24 @@ public class FormBuilderController {
 
     @PostMapping(value ="saveFormComponent", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	ResponseEntity<Object> saveFormComponent(MultipartHttpServletRequest multiRequest ){	
-		FormComponentSaveRequest request;
+    	
+    	FormComponentSaveRequest request;
 		try {
 			request = mapFormDataToFormComponentSaveReq(multiRequest);
 		} catch (IOException e) {
 			return ResponseEntity
 					.status(HttpStatus.BAD_REQUEST)
-					.body("Invalid JSON format in request parameters."+"\n"+e.getMessage());
+					.body("Invalid JSON format in /saveFormComponent request."+"\n"+e.getMessage());
 			
 		}
-		
-		var response = service.saveFormComponent(request,multiRequest);	
-		
-		return new ResponseEntity<Object>(response,HttpStatus.OK);					
+		try {
+			var response = service.saveFormComponent(request,multiRequest);			
+			return new ResponseEntity<Object>(response,HttpStatus.OK);	
+			
+		}catch(Exception e) {
+			 String errorMessage = "An error occurred in /saveFormComponent save action. Exception --> "+e;
+		     return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
     
 
