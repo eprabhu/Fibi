@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -60,6 +60,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
         };
         this.getActiveDisclosure();
         this.openModalTriggeredFromChild();
+        this.refreshActiveDisclosures();
+    }
+
+    refreshActiveDisclosures() {
+        this.$subscriptions.push(this._router.events.subscribe((event: any) => {
+            if (event instanceof NavigationEnd && event.url.includes('coi/user-dashboard/disclosures')) {
+                this.getActiveDisclosure();
+            }
+        }));
     }
 
     getActiveDisclosure() {
