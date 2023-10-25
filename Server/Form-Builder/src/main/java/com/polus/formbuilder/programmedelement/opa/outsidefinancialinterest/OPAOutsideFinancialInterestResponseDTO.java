@@ -1,6 +1,5 @@
-package com.polus.formbuilder.programmedelement.opa.compuncomp;
+package com.polus.formbuilder.programmedelement.opa.outsidefinancialinterest;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import com.polus.formbuilder.programmedelement.opa.common.OPAPersonEntityInfoDTO;
@@ -14,17 +13,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OPACompUncompResponseDTO{
+public class OPAOutsideFinancialInterestResponseDTO{
 	
-	private Integer opaDisclActivityId;
+	private Integer opaOutsideFinancialInterestId;
     private Integer opaDisclosureId;
     private Integer opaDisclPersonEntityId;
     private Integer personEntityId;
-	private String isCompensated;
-    private BigDecimal numOfDaysSummer;
-    private BigDecimal numOfDaysAcademic;
-    private BigDecimal numOfDaysInYear;
-    private String natureOfWork;
+	private String personsRelationWithEntity;   
+    private String entityRelationWithInstitute;
     private String description1;
     private String description2;
     private Date updateTimestamp;
