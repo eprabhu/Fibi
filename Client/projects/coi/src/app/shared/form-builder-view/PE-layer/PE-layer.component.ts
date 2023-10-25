@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HostContainerDirective } from '../../directives/host-container.directive';
 import { CustomElementVO, FBConfiguration, FormBuilderSaveRO, QuestionnaireVO, SectionComponent } from '../form-builder-interface';
 import { OPACompUncompComponent } from '../PE-components/OPA-comp-uncomp/OPA-comp-uncomp.component';
+import { OPAOutsideFinancialRelationComponent } from '../PE-components/OPA-outside-financial-relation/OPA-outside-financial-relation.component';
 import { FormBuilderService } from '../form-builder.service';
 import { Subject } from 'rxjs';
 
@@ -28,9 +29,26 @@ export class PELayerComponent implements OnInit {
     loadComponent() {
         const viewContainerRef = this.adHost.viewContainerRef;
         viewContainerRef.clear();
+        switch (this.component.componentData) {
+            case 'OPACompUncompComponent': this.loadOPACompUncompComponent(viewContainerRef); break;
+            case 'OPAOutsideFinancialRelationComponent': this.loadOPAOutsideFinancialRelationComponent(viewContainerRef); break;
+        }
+    }
+
+    loadOPACompUncompComponent(viewContainerRef) {
         const componentRef = viewContainerRef.createComponent(OPACompUncompComponent);
         componentRef.instance.componentData = this.component.programmedElement;
         componentRef.instance.formBuilderId = this.fbConfiguration.moduleItemKey;
+        componentRef.instance.externalEvents = this.saveEventForChildComponent;
+        componentRef.instance.isFormEditable = this.isFormEditable;
+        componentRef.instance.childEvents.subscribe( event => this.saveEventsFromChild(event));
+    }
+
+    loadOPAOutsideFinancialRelationComponent(viewContainerRef) {
+        const componentRef = viewContainerRef.createComponent(OPAOutsideFinancialRelationComponent);
+        componentRef.instance.componentData = this.component.programmedElement;
+        componentRef.instance.formBuilderId = this.fbConfiguration.moduleItemKey;
+        componentRef.instance.isFormEditable = this.isFormEditable;
         componentRef.instance.externalEvents = this.saveEventForChildComponent;
         componentRef.instance.childEvents.subscribe( event => this.saveEventsFromChild(event));
     }
