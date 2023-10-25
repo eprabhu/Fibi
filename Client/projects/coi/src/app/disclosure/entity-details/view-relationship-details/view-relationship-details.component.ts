@@ -94,6 +94,11 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             this.$subscriptions.push(this.entityDetailsServices.getRelationshipEntityDetails(personEntityId).subscribe((res: any) => {
                 this.relationshipsDetails = res.personEntity;
                 this.personEntityRelationships = res.personEntityRelationships;
+                this.entityDetailsServices.currentVersionDetails =  {
+                    versionNumber: this.relationshipsDetails.versionNumber, 
+                    personEntityNumber: this.relationshipsDetails.personEntityNumber, 
+                    personEntityId: this.relationshipsDetails.personEntityId
+                };
                 this.setAdditionalDetails(res.personEntity);
                 this.entityDetailsServices.canMangeSfi = this.relationshipsDetails.personId === this.commonService.currentUserDetails.personId ? true : false;
                 this.sfiStatus = this.getSfiStatus();

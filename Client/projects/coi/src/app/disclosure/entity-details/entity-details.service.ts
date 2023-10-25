@@ -41,6 +41,7 @@ export class EntityDetailsService {
   };
   mandatoryList = new Map();
   isClickedWithinQuestionnaire = false;
+  currentVersionDetails: any = {};
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 
@@ -100,4 +101,9 @@ export class EntityDetailsService {
     return this._http.get(`${this._commonService.baseUrl}/personEntity/${personEntityNumber}/latestVersion`);
   }
 
+  sfiHistory(params) {
+    return this._http.post(this._commonService.baseUrl + '/personEntity/history', params);
+  }
+
 }
+
