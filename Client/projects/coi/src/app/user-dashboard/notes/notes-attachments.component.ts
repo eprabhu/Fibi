@@ -8,6 +8,7 @@ import { EDITOR_CONFIGURATION, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '..
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { deepCloneObject } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { Router } from '@angular/router';
 
 class Notes {
     content: string;
@@ -35,8 +36,9 @@ export class NotesAttachmentsComponent implements OnInit {
     public Editor = DecoupledEditor;
     editorConfig = EDITOR_CONFIGURATION;
     isSaving = false;
+    isShowCreate = false;
 
-    constructor(private _noteAndAttachmentService: NotesAttachmentsService, private _commonService: CommonService) { }
+    constructor(private _noteAndAttachmentService: NotesAttachmentsService, private _commonService: CommonService, private _router: Router) { }
 
     ngOnInit() {
         this.getNotesViaSubject();
@@ -61,10 +63,13 @@ export class NotesAttachmentsComponent implements OnInit {
 
     private getNotesList(): void {
         this.isFirstTimeLoad = true;
+        this.isShowCreate = false;
         this.$subscriptions.push(this._noteAndAttachmentService.fetchAllNotesForPerson(this._commonService.getCurrentUserDetail('personId')).subscribe((data: any) => {
             this.notesList = data;
             if (this.notesList.length) {
                 this.addGridBackground(true);
+            } else {
+                this.isShowCreate = true;
             }
             this.isFirstTimeLoad = false;
         }))
@@ -146,6 +151,13 @@ export class NotesAttachmentsComponent implements OnInit {
         const MIN_CONTENT = SAMPLE_ELEMENT.textContent || SAMPLE_ELEMENT.innerText;
         let FINAL_CONTENT = MIN_CONTENT.length > 300 ? MIN_CONTENT.slice(0, 300) + '...' : MIN_CONTENT;
         return FINAL_CONTENT.replace(/\s+/g, ' ').trim();
+    }
+
+    showNotes() {
+        this._commonService.isShowCreateNoteModal = true;
+        setTimeout(() => {
+            document.getElementById("textArea").focus();
+        });
     }
 
 }
