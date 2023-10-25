@@ -2894,8 +2894,8 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				mapObj.put("fcoiProject", rset.getInt("fcoiProject") == 0 ? null : rset.getInt("fcoiProject"));
 			}
 		} catch (Exception e) {
-			logger.error("Exception on fetchAllCoiRights {}", e.getMessage());
-			throw new ApplicationException("Unable to fetch rights", e, Constants.JAVA_ERROR);
+			logger.error("Exception on validateProjectDisclosure {}", e.getMessage());
+			throw new ApplicationException("Unable to fetch disclosure", e, Constants.JAVA_ERROR);
 		}
 		return mapObj;
 	}
