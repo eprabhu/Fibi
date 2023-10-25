@@ -9,6 +9,6 @@ import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 
 @Repository
 @Transactional
-public interface TravelDisclosureActionLogRepository extends JpaRepository<TravelDisclosureActionLog, Integer>, ActionLogRepositoryCustom {
+public interface TravelDisclosureActionLogRepository extends JpaRepository<TravelDisclosureActionLog, Integer>, ActionLogDao {
 
 }

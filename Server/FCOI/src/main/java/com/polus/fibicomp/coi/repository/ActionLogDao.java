@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
@@ -11,8 +12,10 @@ import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
 import com.polus.fibicomp.opa.pojo.OPAActionLog;
 import com.polus.fibicomp.opa.pojo.OPAActionLogType;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionLog;
 
-public interface ActionLogRepositoryCustom {
+public interface ActionLogDao {
 
     /**
      * This method is used to fetch Entity Action log by @params
@@ -60,6 +63,26 @@ public interface ActionLogRepositoryCustom {
      * @return
      */
 	List<DisclosureActionLog> fetchReviewActionLogs(Integer disclosureId, List<String> actionTypeCodes);
+
+    /**
+     * This method is used to get PersonEntityActionType by actionLogTypeCode
+     * @param actionLogTypeCode String
+     * @return PersonEntityActionType
+     */
+    PersonEntityActionType getPersonEntityActionType(String actionLogTypeCode);
+
+    /**
+     * This method is fetches all the Person Entity action logs of current version and of previous versions
+     * @param personEntityDto
+     * @return List<PersonEntityActionLog>
+     */
+    List<PersonEntityActionLog> fetchPersonEntityActionLog(PersonEntityDto personEntityDto);
+
+    /**
+     * This method deletes person entity action log by person entity id
+     * @param personEntityId
+     */
+    void deletePersonEntityActionLog(Integer personEntityId);
 
     /**
      * This method is used to fetch OPA Action Log Type
