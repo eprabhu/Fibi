@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.formbuilder.programmedelement.opa.compuncomp.OPACompUncompRequestModel;
+import com.polus.formbuilder.programmedelement.opa.outsidefinancialinterest.OPAOutsideFinancialInterestRequestModel;
 
 @Component
 public class ProgrammedElementJSONObjectMapper {
@@ -20,6 +21,9 @@ public class ProgrammedElementJSONObjectMapper {
 			
 			if("OPACompUncompComponent".equals(programElementName)) {
 				programmedElement = (ProgrammedElementModel) objectMapper.readValue(programmedElementJson, OPACompUncompRequestModel.class);
+			
+			}else if("OPAOutsideFinancialRelationComponent".equals(programElementName)) {
+				programmedElement = (ProgrammedElementModel) objectMapper.readValue(programmedElementJson, OPAOutsideFinancialInterestRequestModel.class);
 			}
 			
 		} catch (JsonMappingException e) {
