@@ -320,17 +320,6 @@
                                 </div>
                                 <div class="col-5">
                                     <div class="col-12">
-                                        <span class="label-text me-2 p-0">Disclosure Status :</span>
-                                        <app-no-data-label
-                                            [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
-                                            <span
-                                                class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
-                                            <span
-                                                class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
-                                            </span>
-                                        </app-no-data-label>
-                                    </div>
-                                    <div class="col-12">
                                         <span class="label-text me-2 p-0 ">Disposition Status :</span>
                                         <app-no-data-label
                                             [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
@@ -338,6 +327,17 @@
                                                 class="{{commonService.getDispositionStatusBadge(opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
                                             <span
                                                 class="badgeFont">{{opaDisclosure?.dispositionStatusType?.description}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-12">
+                                        <span class="label-text me-2 p-0">Review Status :</span>
+                                        <app-no-data-label
+                                            [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
+                                            <span
+                                                class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
+                                            <span
+                                                class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
+                                            </span>
                                         </app-no-data-label>
                                     </div>
                                 </div>
@@ -405,17 +405,6 @@
                                 </div>
                                 <div class="col-5">
                                     <div class="col-12">
-                                        <span class="label-text me-2 p-0">Disclosure Status :</span>
-                                        <app-no-data-label
-                                            [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
-                                            <span
-                                                class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
-                                            <span
-                                                class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
-                                            </span>
-                                        </app-no-data-label>
-                                    </div>
-                                    <div class="col-12">
                                         <span class="label-text me-2 p-0 ">Disposition Status :</span>
                                         <app-no-data-label
                                             [valueToShow]="opaDisclosure?.dispositionStatusType?.description">
@@ -423,6 +412,17 @@
                                                 class="{{commonService.getDispositionStatusBadge(opaDisclosure?.dispositionStatusType?.dispositionStatusCode)}}"></span>
                                             <span
                                                 class="badgeFont">{{opaDisclosure?.dispositionStatusType?.description}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-12">
+                                        <span class="label-text me-2 p-0">Review Status :</span>
+                                        <app-no-data-label
+                                            [valueToShow]="opaDisclosure?.opaDisclosureStatusType?.description">
+                                            <span
+                                                class="{{commonService.getReviewStatusBadge(opaDisclosure?.opaDisclosureStatusType?.opaDisclosureStatusCode)}}"></span>
+                                            <span
+                                                class="badgeFont">{{opaDisclosure?.opaDisclosureStatusType?.description}}
+                                            </span>
                                         </app-no-data-label>
                                     </div>
                                 </div>
