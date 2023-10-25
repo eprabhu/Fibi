@@ -683,4 +683,9 @@ public class ConflictOfInterestController {
    		return conflictOfInterestService.loadAllAttachmentsForPerson(personId);
    	};
 
+	@PostMapping("/personEntity/history")
+	public ResponseEntity<Object> fetAllPersonEntityActionLog(@RequestBody PersonEntityDto personEntityDto) {
+		logger.info("Requesting for fetAllPersonEntityActionLog");
+		return actionLogService.getAllPersonEntityActionLog(personEntityDto);
+	}
 }

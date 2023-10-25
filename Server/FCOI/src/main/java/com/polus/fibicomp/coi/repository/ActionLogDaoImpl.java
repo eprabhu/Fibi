@@ -7,6 +7,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -24,6 +25,8 @@ import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionLog;
 import com.polus.fibicomp.coi.pojo.EntityActionType;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionType;
+import com.polus.fibicomp.coi.pojo.PersonEntityActionLog;
 import com.polus.fibicomp.common.dao.CommonDao;
 import com.polus.fibicomp.opa.pojo.OPAActionLog;
 import com.polus.fibicomp.opa.pojo.OPAActionLogType;
@@ -31,7 +34,7 @@ import com.polus.fibicomp.opa.pojo.OPAActionLogType;
 @Repository
 @Primary
 @Transactional
-public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
+public class ActionLogDaoImpl implements ActionLogDao {
 
     protected static Logger logger = LogManager.getLogger(GeneralDaoImpl.class.getName());
 
@@ -148,6 +151,37 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
 		query.orderBy(builder.desc(root.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
+    @Override
+    public PersonEntityActionType getPersonEntityActionType(String actionLogTypeCode) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT a FROM PersonEntityActionType a WHERE a.actionTypeCode = :actionTypeCode");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("actionTypeCode", actionLogTypeCode);
+        return (PersonEntityActionType) query.getResultList().get(0);
+    }
+
+    @Override
+    public List<PersonEntityActionLog> fetchPersonEntityActionLog(PersonEntityDto personEntityDto) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT a FROM PersonEntityActionLog a WHERE a.personEntityNumber = :personEntityNumber AND ");
+        hqlQuery.append("a.personEntity.versionNumber <= :versionNumber ORDER BY a.updateTimestamp DESC");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("personEntityNumber", personEntityDto.getPersonEntityNumber());
+        query.setParameter("versionNumber", personEntityDto.getVersionNumber());
+        return query.getResultList();
+    }
+
+    @Override
+    public void deletePersonEntityActionLog(Integer personEntityId) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("DELETE FROM PersonEntityActionLog a WHERE a.personEntityId = :personEntityId ");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("personEntityId", personEntityId);
+        query.executeUpdate();
+    }
 
     @Override
     public OPAActionLogType getOPAActionType(String actionLogTypeCode) {
@@ -160,14 +194,14 @@ public class ActionLogRepositoryCustomImpl implements ActionLogRepositoryCustom{
     }
 
     @Override
-	public List<OPAActionLog> fetchOpaDisclosureActionLogsBasedOnId(Integer opaDisclosureId) {
-		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<OPAActionLog> query = builder.createQuery(OPAActionLog.class);
-		Root<OPAActionLog> root = query.from(OPAActionLog.class);
-        query.where(builder.equal(root.get("opaDisclosureId"), opaDisclosureId));
-        query.orderBy(builder.desc(root.get("updateTimestamp")));
-		return session.createQuery(query).getResultList();
-	}
+    public List<OPAActionLog> fetchOpaDisclosureActionLogsBasedOnId(Integer opaDisclosureId, List<String> actionTypeCodes) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("DELETE FROM OPAActionLog a WHERE e.opaDisclosureId = :opaDisclosureId AND e.actionTypeCode NOT IN :actionTypeCode ");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("opaDisclosureId", opaDisclosureId);
+        query.setParameter("actionTypeCode", actionTypeCodes);
+        return query.getResultList();
+    }
 
 }
