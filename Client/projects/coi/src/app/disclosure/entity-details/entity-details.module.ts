@@ -9,8 +9,8 @@ import { EntityDetailsService } from './entity-details.service';
 import { FormsModule } from '@angular/forms';
 import { SharedComponentModule } from '../../shared-components/shared-component.module';
 import { ViewRelationshipDetailsComponent } from './view-relationship-details/view-relationship-details.component';
-import { CoiService } from '../services/coi.service';
 import { EntityDetailsRouteGuardService } from './entity-details-route-guard.service';
+import { SfiHistoryComponent } from './sfi-history/sfi-history.component';
 
 const routes: Routes = [{ path: 'entity', component:EntityDetailsComponent, canDeactivate: [EntityDetailsRouteGuardService] }]
 
@@ -28,6 +28,7 @@ const routes: Routes = [{ path: 'entity', component:EntityDetailsComponent, canD
     EntityDetailsComponent,
     EntityQuestionnaireComponent,
     ViewRelationshipDetailsComponent,
+    SfiHistoryComponent
   ],
   providers:[
     EntityDetailsService,

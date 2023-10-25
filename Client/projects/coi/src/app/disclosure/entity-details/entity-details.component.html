@@ -39,17 +39,18 @@
     </nav>
     <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-auto shadow-sm user-dashboard-nav">
       <div class="text-secondary navigation-icons p-10 border-end cursor-pointer" (click)="openRelationDetails()">
-        <span title="Click to view History" class="r-title px-3 py-3 fw-500" [class.active]="entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS'">
+        <span title="Click to view Relationship Details" class="r-title px-3 py-3 fw-500" [class.active]="entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS'">
           Relationship Details
         </span>
         </div>
-        <div class="text-secondary navigation-icons p-10  border-end cursor-pointer">
-          <span title="Click to view History" class="r-title px-3 py-3 fw-500" [class.active]="entityDetailService.selectedTab === 'HISTORY'">
-          History
+        <div class="text-secondary navigation-icons p-10 cursor-pointer" (click)="entityDetailService.selectedTab = 'HISTORY'">
+          <span title="Click to view History" class="r-title px-3 py-3 fw-500" [class.active]="entityDetailService.selectedTab == 'HISTORY'">
+          History        
           </span>
           </div>
     </nav>
-</div>
+  </div>
+  <app-sfi-history *ngIf="entityDetailService.selectedTab === 'HISTORY'" [entityId]="entityId"></app-sfi-history>
 
 <div *ngIf="entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS'">
     <app-view-relationship-details [isShowHeader]="false" [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
