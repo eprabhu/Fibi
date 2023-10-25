@@ -18,6 +18,7 @@ export class CommonService {
     fibiUrl = '';
     authUrl = '';
     opaUrl = '';
+    formUrl = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -110,6 +111,7 @@ export class CommonService {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
+        this.formUrl = configurationData.formUrl;
         this.opaUrl = configurationData.opaUrl;
         this.enableSSO = configurationData.enableSSO;
         this.isElasticAuthentiaction = configurationData.isElasticAuthentiaction;

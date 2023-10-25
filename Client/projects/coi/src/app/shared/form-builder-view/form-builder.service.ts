@@ -10,11 +10,11 @@ export class FormBuilderService {
 
     baseURL = '';
     constructor(private _http: HttpClient, private _commonService: CommonService) {
-        this.baseURL = this._commonService.baseUrl;
+        this.baseURL = this._commonService.formUrl;
      }
 
     getFormBuilderData(configuration: FBConfiguration) {
-        return this._http.post(this._commonService.baseUrl + '/formbuilder/getForm', configuration);
+        return this._http.post(this.baseURL + '/formbuilder/getForm', configuration);
     }
 
     saveFormComponent(data: FormBuilderSaveRO): Observable<any> {
@@ -39,7 +39,7 @@ export class FormBuilderService {
                 formData.append(file.questionId + '', file.attachment, file.attachment.name);
             });
         }
-        return this._http.post(this._commonService.baseUrl + '/formbuilder/saveFormComponent', formData);
+        return this._http.post(this.baseURL + '/formbuilder/saveFormComponent', formData);
     }
 
 }
