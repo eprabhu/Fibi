@@ -1,4 +1,4 @@
-package com.polus.formbuilder.programmedelement.opa.compuncomp;
+package com.polus.formbuilder.programmedelement.opa.outsidefinancialinterest;
 
 import java.util.List;
 
@@ -10,11 +10,11 @@ import com.polus.formbuilder.programmedelement.ProgrammedElementModel;
 import com.polus.formbuilder.programmedelement.ProgrammedElementModuleDetails;
 import com.polus.formbuilder.programmedelement.opa.common.OPACommonDAO;
 
-@Component("OPACompUncompComponent")
-public class OPACompUncomp implements ProgrammedElement {
+@Component("OPAOutsideFinancialRelationComponent")
+public class OPAOutsideFinancialInterest implements ProgrammedElement {
 
 	@Autowired
-	private OPACompUncompDAO dao;
+	private OPAOutsideFinancialInterestDAO dao;
 
 	@Autowired
 	private OPACommonDAO commonDAO;
@@ -27,7 +27,7 @@ public class OPACompUncomp implements ProgrammedElement {
 	@Override
 	public ProgrammedElementModel getResponse(ProgrammedElementModuleDetails moduleDetails,
 			ProgrammedElementModel request) {
-		OPACompUncompRequestModel opaRequest = (OPACompUncompRequestModel) request;
+		OPAOutsideFinancialInterestRequestModel opaRequest = (OPAOutsideFinancialInterestRequestModel) request;
 		if (opaRequest == null || opaRequest.getOpaDisclosureId() == null) {
 			opaRequest = prepareOPARequest(moduleDetails);
 		}
@@ -41,15 +41,15 @@ public class OPACompUncomp implements ProgrammedElement {
 
 		}
 
-		List<OPACompUncompResponseDTO> disclosureActivity = dao.getPEComponentDetails(opaRequest);
+		List<OPAOutsideFinancialInterestResponseDTO> disclosureActivity = dao.getPEComponentDetails(opaRequest);
 
-		return OPACompUncompResponseModel.builder().data(disclosureActivity).build();
+		return OPAOutsideFinancialInterestResponseModel.builder().data(disclosureActivity).build();
 	}
 
 	@Override
 	public ProgrammedElementModel save(ProgrammedElementModuleDetails moduleDetails, ProgrammedElementModel request) {
 
-		OPACompUncompRequestModel opaRequest = (OPACompUncompRequestModel) request;
+		OPAOutsideFinancialInterestRequestModel opaRequest = (OPAOutsideFinancialInterestRequestModel) request;
 		if (opaRequest == null || opaRequest.getOpaDisclosureId() == null) {
 			opaRequest = prepareOPARequest(moduleDetails);
 		}
@@ -57,7 +57,7 @@ public class OPACompUncomp implements ProgrammedElement {
 
 		if ("SAVE".equals(opaRequest.getActionType())) {
 
-			return OPACompUncompResponseModel.builder().data(dao.savePEComponent(opaRequest)).build();
+			return OPAOutsideFinancialInterestResponseModel.builder().data(dao.savePEComponent(opaRequest)).build();
 
 		} else if ("DELETE".equals(opaRequest.getActionType())) {
 			dao.deletePEComponent(opaRequest);
@@ -67,8 +67,8 @@ public class OPACompUncomp implements ProgrammedElement {
 		return null;
 	}
 
-	private OPACompUncompRequestModel prepareOPARequest(ProgrammedElementModuleDetails moduleDetails) {
-		return OPACompUncompRequestModel.builder().opaDisclosureId(Integer.parseInt(moduleDetails.getModuleItemKey()))
+	private OPAOutsideFinancialInterestRequestModel prepareOPARequest(ProgrammedElementModuleDetails moduleDetails) {
+		return OPAOutsideFinancialInterestRequestModel.builder().opaDisclosureId(Integer.parseInt(moduleDetails.getModuleItemKey()))
 				.updateUser(moduleDetails.getLoggedInUser()).build();
 	}
 

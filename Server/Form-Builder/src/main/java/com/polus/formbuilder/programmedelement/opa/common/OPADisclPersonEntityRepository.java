@@ -1,11 +1,9 @@
-package com.polus.formbuilder.programmedelement.opa.repository;
+package com.polus.formbuilder.programmedelement.opa.common;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Repository;
-
-import com.polus.formbuilder.programmedelement.opa.compuncomp.OPADisclPersonEntity;
 
 @Repository
 public interface OPADisclPersonEntityRepository extends JpaRepository<OPADisclPersonEntity, Integer>{

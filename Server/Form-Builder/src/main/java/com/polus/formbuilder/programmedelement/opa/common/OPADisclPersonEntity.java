@@ -1,4 +1,4 @@
-package com.polus.formbuilder.programmedelement.opa.compuncomp;
+package com.polus.formbuilder.programmedelement.opa.common;
 
 import java.util.Date;
 
