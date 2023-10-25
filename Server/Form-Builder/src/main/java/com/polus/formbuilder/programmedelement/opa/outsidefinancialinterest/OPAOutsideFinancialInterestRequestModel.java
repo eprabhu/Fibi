@@ -1,4 +1,4 @@
-package com.polus.formbuilder.programmedelement.opa.compuncomp;
+package com.polus.formbuilder.programmedelement.opa.outsidefinancialinterest;
 
 import java.math.BigDecimal;
 
@@ -16,17 +16,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class OPACompUncompRequestModel extends ProgrammedElementRequestModel{
+public class OPAOutsideFinancialInterestRequestModel extends ProgrammedElementRequestModel{
 
-	    private Integer opaDisclActivityId;
+	    private Integer opaOutsideFinancialInterestId;
 	    private Integer opaDisclosureId;
 	    private Integer opaDisclPersonEntityId;
 	    private Integer personEntityId;	  
-	    private String isCompensated;
-	    private BigDecimal numOfDaysSummer;
-	    private BigDecimal numOfDaysAcademic;
-	    private BigDecimal numOfDaysInYear;
-	    private String natureOfWork;
+	    private String personsRelationWithEntity;	   
+	    private String entityRelationWithInstitute;
 	    private String description1;
 	    private String description2;
 	    private String updateUser;
