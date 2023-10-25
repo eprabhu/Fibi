@@ -1552,6 +1552,20 @@ VALUES('2', 'Void', 'Y', now(), 'quickstart');
 INSERT INTO `opa_disposition_status_type`(`DISPOSITION_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`)
 VALUES('3', 'Approved', 'Y', now(), 'quickstart');
 
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('1', 'Entity <b>{ENTITY_NAME}</b>  <b>created</b>', 'Created', now(), 'quickstart');
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('2', 'Entity <b>{ENTITY_NAME}</b>  <b>activated</b>', 'Activated', now(), 'quickstart');
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('3', 'Entity <b>{ENTITY_NAME}</b>  <b>inactivated</b>', 'Inactivated', now(), 'quickstart');
+
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('4', 'Entity <b>{ENTITY_NAME}</b> <b>modified</b>', 'Modified', now(), 'quickstart');
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('5', 'Relationship <b>{RELATIONSHIP_NAME}</b> <b>added</b>', 'Relationship Added', now(), 'quickstart');
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('6', 'Relationship <b>{RELATIONSHIP_NAME}</b> <b>removed</b>', 'Relationship Removed', now(), 'quickstart');
+
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;
 DROP PROCEDURE IF EXISTS GET_SFI_DASHBOARD;
