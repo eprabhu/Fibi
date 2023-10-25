@@ -1002,6 +1002,36 @@ INSERT INTO `opa_review_status_type` (`REVIEW_STATUS_CODE`, `DESCRIPTION`, `IS_A
 
 INSERT INTO `OPA_REVIEW_LOCATION_TYPE` (`LOCATION_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('1', '3rd Party Location', 'Y', now(), 'quickstart');
 INSERT INTO `OPA_REVIEW_LOCATION_TYPE` (`LOCATION_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2', 'Department', 'Y', now(), 'quickstart');
+INSERT INTO `OPA_REVIEW_LOCATION_TYPE` (`LOCATION_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('3', 'Legal', 'Y', now(), 'quickstart');
+INSERT INTO `OPA_REVIEW_LOCATION_TYPE` (`LOCATION_TYPE_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('4', 'HOD', 'Y', now(), 'quickstart');
+
+ALTER TABLE `opa_disclosure`
+ADD COLUMN `CERTIFICATION_TEXT` varchar(1000) DEFAULT NULL;
+
+ALTER TABLE `opa_disclosure`
+ADD COLUMN `CERTIFIED_BY` varchar(60) DEFAULT NULL;
+
+INSERT INTO `opa_disposition_status_type`(`DISPOSITION_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`)
+VALUES('1', 'Pending', 'Y', now(), 'quickstart');
+INSERT INTO `opa_disposition_status_type`(`DISPOSITION_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`)
+VALUES('2', 'Void', 'Y', now(), 'quickstart');
+INSERT INTO `opa_disposition_status_type`(`DISPOSITION_STATUS_CODE`,`DESCRIPTION`,`IS_ACTIVE`,`UPDATE_TIMESTAMP`,`UPDATE_USER`)
+VALUES('3', 'Approved', 'Y', now(), 'quickstart');
+
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('1', 'Entity <b>{ENTITY_NAME}</b>  <b>created</b>', 'Created', now(), 'quickstart');
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('2', 'Entity <b>{ENTITY_NAME}</b>  <b>activated</b>', 'Activated', now(), 'quickstart');
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('3', 'Entity <b>{ENTITY_NAME}</b>  <b>inactivated</b>', 'Inactivated', now(), 'quickstart');
+
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('4', 'Entity <b>{ENTITY_NAME}</b> <b>modified</b>', 'Modified', now(), 'quickstart');
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('5', 'Relationship <b>{RELATIONSHIP_NAME}</b> <b>added</b>', 'Relationship Added', now(), 'quickstart');
+INSERT INTO `person_entity_action_type` (`ACTION_TYPE_CODE`, `MESSAGE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`)
+		VALUES ('6', 'Relationship <b>{RELATIONSHIP_NAME}</b> <b>removed</b>', 'Relationship Removed', now(), 'quickstart');
+
 
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD;
 DROP PROCEDURE IF EXISTS GET_COI_DISCLOSURE_DASHBOARD_COUNT;

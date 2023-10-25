@@ -9,6 +9,7 @@ import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.DisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.pojo.CoiEntity;
 import com.polus.fibicomp.coi.pojo.DisclosureActionLog;
 import com.polus.fibicomp.coi.pojo.TravelDisclosureActionLog;
@@ -83,5 +84,18 @@ public interface ActionLogService {
      * @param opaDisclosureId
      */
 	ResponseEntity<Object> getOpaDisclosureHistoryById(Integer opaDisclosureId);
+
+    /**
+     * This method is used to save person entity action log
+     * @param personEntityDto
+     */
+    void savePersonEntityActionLog(PersonEntityDto personEntityDto);
+
+    /**
+     * This method is fetches all the Person Entity action logs of current version and of previous versions
+     * @param personEntityDto
+     * @return List<PersonEntityActionLog>
+     */
+    ResponseEntity<Object> getAllPersonEntityActionLog(PersonEntityDto personEntityDto);
 
 }

@@ -1,4 +1,4 @@
-package com.polus.formbuilder.programmedelement.opa.entity;
+package com.polus.formbuilder.programmedelement.opa.compuncomp;
 
 import java.math.BigDecimal;
 import java.util.Date;

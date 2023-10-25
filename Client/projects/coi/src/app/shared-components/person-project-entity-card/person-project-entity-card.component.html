@@ -13,12 +13,12 @@
             <label class="grey-text fs-14 fw-600 text-nowrap mt-1">Project : </label>
             <app-no-data-label [valueToShow]="personProjectOrEntity?.projectDetails?.moduleItemId">
                 <span class="ml-2 grey-text fs-14">#{{setProjectAndNumberForModuleCodes()}} :
-                    {{(!isReadMore && personProjectOrEntity?.projectDetails?.title?.length > 180)
-                    ? (personProjectOrEntity?.projectDetails?.title | slice:0:180) :
+                    {{(!isReadMore && personProjectOrEntity?.projectDetails?.title?.length > 70)
+                    ? (personProjectOrEntity?.projectDetails?.title | slice:0:70) :
                     personProjectOrEntity?.projectDetails?.title }}
 
                     <!-- for read more and less -->
-                    <ng-container *ngIf="personProjectOrEntity?.projectDetails?.title?.length > 180">
+                    <ng-container *ngIf="personProjectOrEntity?.projectDetails?.title?.length > 70">
                         <span (click)="isReadMore = !isReadMore" class="fw-medium cursor-pointer">
                             <strong>
                                 <span *ngIf="!isReadMore">...<u title="Expand Project">Read More</u></span>

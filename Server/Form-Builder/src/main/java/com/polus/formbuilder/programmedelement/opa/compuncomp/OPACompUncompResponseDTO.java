@@ -3,6 +3,8 @@ package com.polus.formbuilder.programmedelement.opa.compuncomp;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.polus.formbuilder.programmedelement.opa.common.OPAPersonEntityInfoDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

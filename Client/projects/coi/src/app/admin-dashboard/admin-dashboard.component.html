@@ -328,8 +328,8 @@
                                                 <img *ngIf="coi?.fcoiTypeCode==3" class="award-icon mt-1" src="{{deployMap}}assets/images/award.png">
                                                 <span class="text-nowrap mt-2">Project :</span>
                                                 <span class="title-text ml-2 mt-2"> {{(readMoreOrLess[index] ? modalHeader(coi)
-                                                    : modalHeader(coi) | slice:0:180)}}
-                                                    <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>180">...
+                                                    : modalHeader(coi) | slice:0:120)}}
+                                                    <span *ngIf="!readMoreOrLess[index] && modalHeader(coi)?.length>120">...
                                                         <a *ngIf="!readMoreOrLess[index]" (click)="readMoreOrLess[index]=true"><span
                                                                 class="readMore fw-500">Read More</span></a>
                                                     </span>

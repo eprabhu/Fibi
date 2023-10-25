@@ -1,5 +1,5 @@
 <div class="" *ngIf="componentData.data.length">
-  <p class="text-end mb-1" data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id">
+  <p class="text-end mb-1" data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id"  *ngIf="isFormEditable">
     <span class="action-button mr-1 mb-2" title="Add new row"><i aria-hidden="true"
         class="fa fa-plus icon-actions"></i>Add Entity</span>
   </p>
@@ -10,7 +10,7 @@
         <th scope="col" width="25%" rowspan="2"> Nature of Relationships</th>
         <th scope="col" width="10%" rowspan="2"> Compensated/ Uncompensated</th>
         <th scope="col" width="16%" colspan="2" class="text-center"># Number of days per Year</th>
-        <th scope="col" width="20%" rowspan="2" class="text-center"> Actions</th>
+        <th scope="col" width="20%" rowspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
       </tr>
       <tr>
         <th scope="col" width="8%" class="text-center">Summer</th>
@@ -23,11 +23,11 @@
           <div class="bg-white rounded-3 p-2 mt-1">
             <div class="m-0 mb-2 row">
               <span class="align-items-center d-flex">
-                <span class="shadow-sm align-items-center d-flex ribbon" [ngClass]="getClassForStatus(data.entityInfo.sfiVersionStatus, data.entityInfo.isRelationshipActive)"
-                  tabindex="0">{{getDescriptionForStatus(data.entityInfo.sfiVersionStatus, data.entityInfo.isRelationshipActive)}}</span>
-                <span class="entity-title mr-2">
-                  <strong tabindex="0" [attr.aria-label]="'entity name'"> {{data.entityInfo?.entityName}} </strong>
-                </span>
+                <span class="shadow-sm align-items-center d-flex ribbon" [ngClass]="getClassForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isRelationshipActive)"
+                  tabindex="0">{{getDescriptionForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isRelationshipActive)}}</span>
+                <span class="entity-title mr-2 cursor-pointer clickable-content">
+                  <strong tabindex="0" [attr.aria-label]="'entity name'" (click)="viewSlider(data.entityInfo?.personEntityId)"> <u>{{data.entityInfo?.entityName}} </u></strong>
+                  </span>
               </span>
             </div>
             <div class="row mt-3">
@@ -46,18 +46,23 @@
         <td class="text-middle">
           <p>{{data.isCompensated === 'Y' ? 'Compensated' : 'Uncompensated'}}</p>
         </td>
-        <td class="text-middle">{{data.numOfDaysSummer}}</td>
-        <td class="text-middle">{{data.numOfDaysAcademic}}</td>
-        <td class="text-middle">
+        <td class="text-end text-middle">{{data.numOfDaysSummer}}</td>
+        <td class="text-end text-middle">{{data.numOfDaysAcademic}}</td>
+        <td class="text-middle" *ngIf="isFormEditable">
           <mat-icon class="mr-2 small-icon" (click)="editEntityItem(data, index)" title="Edit" data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id">edit</mat-icon>
           <mat-icon class="small-icon" (click)= "compUnCompData = data; deleteIndex = index" data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP_DELETE'+id"title="Delete">delete</mat-icon>
         </td>
+      </tr>
+      <tr>
+        <td colspan="3" class="text-end fw-bold"> Total</td>
+        <td class="text-end fw-bold"> {{summerTotal}}</td>
+        <td class="text-end fw-bold"> {{academicTotal}}</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="text-center p-20" *ngIf="!componentData.data.length">
+<div class="text-center p-20" *ngIf="!componentData.data.length && isFormEditable">
   <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id"
           area-describedby="Click here to add">
           Add Entity
@@ -107,15 +112,16 @@
                         <span class="ml-2 grey-text fw-normal">
                           <div class="text-color fs-14 d-flex align-items-center">
                             <span class="text-secondary fs-14 mt-3">
-                              <span class="text-secondary fs-14"><mat-icon
-                                *ngIf="entityDetails?.entityRiskCategory === 'High'"
+                              <span class="text-secondary fs-14">
+                                <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'High'"
                                 class="invalid material-icons-round">warning</mat-icon>
-                            <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Medium'"
+                                <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Medium'"
                                 class="medium-risk material-icons-round">warning</mat-icon>
-                            <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Low'"
+                                <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Low'"
                                 class="low-risk material-icons-round">warning</mat-icon>
-                            {{entityDetails?.entityRiskCategory}}</span>
+                              </span>
                             </span>
+                            <span>{{entityDetails?.entityRiskCategory}}</span>
                           </div>
                         </span>
                       </div>
@@ -177,7 +183,7 @@
         <h3>Confirmation</h3>
       </div>
       <div class="modal-body">
-          Are you sure you want to delete {{compUnCompData.entityInfo.entityName}} ?
+          Are you sure you want to delete <strong>{{compUnCompData.entityInfo.entityName}} </strong>?
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="item_delete" (click)="clearData()"

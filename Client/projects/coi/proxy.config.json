@@ -527,6 +527,10 @@
     "/getEntityWithRelationShipInfo": {
         "target": "http://10.199.100.62:8071/coi/",
         "secure": false
+    },
+    "/personEntity/history": {
+        "target": "http://10.199.100.62:8070/coi/",
+        "secure": false
     }
 
 }
