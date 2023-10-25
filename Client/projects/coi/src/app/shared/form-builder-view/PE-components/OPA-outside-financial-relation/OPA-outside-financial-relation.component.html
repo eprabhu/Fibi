@@ -1,20 +1,15 @@
 <div class="" *ngIf="componentData.data.length">
-  <p class="text-end mb-1" data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id"  *ngIf="isFormEditable">
+  <p class="text-end mb-1" data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id">
     <span class="action-button mr-1 mb-2" title="Add new row"><i aria-hidden="true"
         class="fa fa-plus icon-actions"></i>Add Entity</span>
   </p>
   <table class="table table-bordered" aria-describedby="'table showing contents of all user selected entities'">
     <thead class="text-middle table-background">
       <tr>
-        <th scope="col" width="42%" rowspan="2">Company/Entity</th>
-        <th scope="col" width="25%" rowspan="2"> Nature of Relationships</th>
-        <th scope="col" width="10%" rowspan="2"> Compensated/ Uncompensated</th>
-        <th scope="col" width="16%" colspan="2" class="text-center"># Number of days per Year</th>
-        <th scope="col" width="20%" rowspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
-      </tr>
-      <tr>
-        <th scope="col" width="8%" class="text-center">Summer</th>
-        <th scope="col" width="8%" class="text-center">Academic</th>
+        <th scope="col" width="40%" rowspan="2">Company/Entity</th>
+        <th scope="col" width="26%" rowspan="2"> Your Relationship with Company/Entity</th>
+        <th scope="col" width="26%" rowspan="2"> Company's/Entity's Relationship with MIT</th>
+        <th scope="col" width="8%" rowspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -25,8 +20,8 @@
               <span class="align-items-center d-flex">
                 <span class="shadow-sm align-items-center d-flex ribbon" [ngClass]="getClassForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isRelationshipActive)"
                   tabindex="0">{{getDescriptionForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isRelationshipActive)}}</span>
-                <span class="entity-title mr-2 cursor-pointer clickable-content">
-                  <strong tabindex="0" [attr.aria-label]="'entity name'" (click)="viewSlider(data.entityInfo?.personEntityId)"> <u>{{data.entityInfo?.entityName}} </u></strong>
+                  <span class="entity-title mr-2 cursor-pointer clickable-content">
+                    <strong tabindex="0" [attr.aria-label]="'entity name'" (click)="viewSlider(data.entityInfo?.personEntityId)"> <u>{{data.entityInfo?.entityName}} </u></strong>
                   </span>
               </span>
             </div>
@@ -41,38 +36,28 @@
           </div>
         </td>
         <td class="text-middle">
-          <p>{{data.natureOfWork}}</p>
+          <p>{{data.personsRelationWithEntity}}</p>
         </td>
-        <td class="text-middle">
-          <p>{{data.isCompensated === 'Y' ? 'Compensated' : 'Uncompensated'}}</p>
-        </td>
-        <td class="text-end text-middle">{{data.numOfDaysSummer}}</td>
-        <td class="text-end text-middle">{{data.numOfDaysAcademic}}</td>
+        <td class="text-middle">{{data.entityRelationWithInstitute}}</td>
         <td class="text-middle" *ngIf="isFormEditable">
-          <mat-icon class="mr-2 small-icon" (click)="editEntityItem(data, index)" title="Edit" data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id">edit</mat-icon>
-          <mat-icon class="small-icon" (click)= "compUnCompData = data; deleteIndex = index" data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP_DELETE'+id"title="Delete">delete</mat-icon>
+          <mat-icon class="mr-2 small-icon" (click)="editEntityItem(data, index)" title="Edit" data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id">edit</mat-icon>
+          <mat-icon class="small-icon" (click)= "outsideFinRelationData = data; deleteIndex = index" data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_DELETE'+id" title="Delete">delete</mat-icon>
         </td>
-      </tr>
-      <tr>
-        <td colspan="3" class="text-end fw-bold"> Total</td>
-        <td class="text-end fw-bold"> {{summerTotal}}</td>
-        <td class="text-end fw-bold"> {{academicTotal}}</td>
       </tr>
     </tbody>
   </table>
 </div>
 
 <div class="text-center p-20" *ngIf="!componentData.data.length && isFormEditable">
-  <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal" [attr.data-bs-target]="'#OPA_COMP_UNCOMP'+id"
+  <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id"
           area-describedby="Click here to add">
           Add Entity
   </button>
-  <p> Please click on 'Add Entity' to link compensated/uncompensated activities <p>
+  <p> Please click on 'Add Entity' to link Outside Financial Interests & Relationships<p>
 </div>
 
-<!-- Add CompUncomp Modal -->
 <div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog"
-  data-bs-backdrop="static" id="OPA_COMP_UNCOMP{{id}}" role="dialog" tabindex="-1">
+  data-bs-backdrop="static" id="OUTSIDE_FIN_REL_ADD{{id}}" role="dialog" tabindex="-1">
   <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-body">
@@ -129,8 +114,8 @@
                   </div>
                 </div>
                 <div class="col-12 mb-2">
-                  <label for="NatureOfRelation" class="label-text fs-14">Nature of Relationships</label>
-                  <textarea class="form-control" id="NatureOfRelation" appAutoGrow rows="3" [(ngModel)]="compUnCompData.natureOfWork"></textarea>
+                  <label for="personsRelationWithEntity" class="label-text fs-14">Your Relationship with Company/Entity</label>
+                  <textarea class="form-control" id="personsRelationWithEntity" appAutoGrow rows="3" [(ngModel)]="outsideFinRelationData.personsRelationWithEntity"></textarea>
                   <div class="help-text">
                     This description is presented in the Relationship section to help you relate this entity
                     to your research projects. Please enter an adequate description of the organization, and
@@ -140,26 +125,18 @@
                 </div>
               </div>
               <div class="row mb-2">
-                <div class="col-4">
-                  <label for="entity" class="label-text fs-14">Compensated/Uncompensated</label>
-                  <select class="form-select form-select fs-14" aria-label="select compensated or Uncompensated" [(ngModel)]= "compUnCompData.isCompensated">
-                    <option selected value="Y">Compensated</option>
-                    <option value="N">Uncompensated</option>
-                  </select>
-                </div>
-                <div class="col-4">
-                  <label for="entity" class="label-text fs-14">Summer</label>
-                  <input type="number" class="form-control" [(ngModel)]= "compUnCompData.numOfDaysSummer">
-                </div>
-                <div class="col-4">
-                  <label for="entity" class="label-text fs-14">Academic</label>
-                  <input type="number" class="form-control" [(ngModel)]= "compUnCompData.numOfDaysAcademic">
+                <div class="col-12">
+                  <label for="entity" class="label-text fs-14">Company's/Entity's Relationship with MIT</label>
+                  <textarea class="form-control" id="personsRelationWithEntity" appAutoGrow rows="3" [(ngModel)]="outsideFinRelationData.entityRelationWithInstitute"></textarea>
+                  <div class="help-text">
+                    Please enter an adequate description of the entity's relationship to your University responsibilities.
+                  </div>
                 </div>
               </div>
             </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="item_add" (click)="clearData()"
+        <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="OUTSIDE_FIN_REL_ADD-BTN{{id}}" (click)="clearData()"
           type="button">Cancel
         </button>
         <button *ngIf="editIndex == -1" type="button" class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="addRowItem()"
@@ -176,17 +153,17 @@
 </div>
 
 <div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog"
-  data-bs-backdrop="static" id="OPA_COMP_UNCOMP_DELETE{{id}}" role="dialog" tabindex="-1">
+  data-bs-backdrop="static" id="OUTSIDE_FIN_REL_DELETE{{id}}" role="dialog" tabindex="-1">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Confirmation</h3>
       </div>
       <div class="modal-body">
-          Are you sure you want to delete <strong>{{compUnCompData.entityInfo.entityName}} </strong>?
+          Are you sure you want to delete <strong>{{outsideFinRelationData.entityInfo.entityName}}</strong> ?
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="item_delete" (click)="clearData()"
+        <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="OUTSIDE_FIN_REL_DELETE-BTN{{id}}" (click)="clearData()"
           type="button">Cancel
         </button>
         <button  ype="button" class="btn btn-primary fs-15" title="View Disclosure" (click)="deleteEntity()"

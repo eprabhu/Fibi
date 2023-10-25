@@ -6,6 +6,7 @@ import { CompUnComp, CompUnCompPE, EntitySaveRO, RelationShipSaveRO } from './in
 import { OPACompUncompService } from './OPA-comp-uncomp.service';
 import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { Subject } from 'rxjs';
+import { openInNewTab } from 'projects/coi/src/app/common/utilities/custom-utilities';
 declare const $: any;
 
 @Component({
@@ -16,12 +17,11 @@ declare const $: any;
 })
 export class OPACompUncompComponent implements OnInit {
 
-    constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService ) { }
-
     @Input() componentData = new CompUnCompPE();
     @Input() formBuilderId;
     @Input() externalEvents: Subject<any> = new Subject<any>();
     @Output() childEvents: EventEmitter<any> = new EventEmitter<any>();
+    @Input() isFormEditable = true;
     id: number;
     entitySearchOptions: any = {};
     entityDetails: any = {};
@@ -30,11 +30,17 @@ export class OPACompUncompComponent implements OnInit {
     deleteIndex: number;
     $subscriptions = [];
     isDuplicate = false;
+    summerTotal = 0;
+    academicTotal = 0;
+
+    constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService ) { }
+
 
     ngOnInit() {
         this.generateId();
         this.entitySearchOptions = getEndPointForEntity(this._formBuilder.baseURL);
         this.listenForExternalEvents();
+        this.calculateTotal();
     }
 
     generateId() {
@@ -46,14 +52,13 @@ export class OPACompUncompComponent implements OnInit {
             if (this.compUnCompData.actionType === 'SAVE') {
                 this.editIndex === -1 ? this.componentData.data.push(res.data.data[0]) :
                                         this.componentData.data[this.editIndex] = res.data.data[0];
-                // $('#OPA_COMP_UNCOMP' + this.id).modal('hide');
-            document.getElementById('item_add').click();
+                document.getElementById('item_add').click();
 
             } else if (this.compUnCompData.actionType === 'DELETE' && this.deleteIndex > -1) {
                 this.componentData.data.splice(this.deleteIndex, 1);
-                // $('#OPA_COMP_UNCOMP_DELETE' + this.id).modal('hide');
-            document.getElementById('item_delete').click();
+                document.getElementById('item_delete').click();
             }
+            this.calculateTotal();
             this.clearData();
         }));
     }
@@ -83,14 +88,15 @@ export class OPACompUncompComponent implements OnInit {
     updateEntity() {
         delete this.compUnCompData.updateTimestamp;
         this.compUnCompData.actionType = 'SAVE';
-        this.childEvents.emit({action: 'ADD', data: this.compUnCompData});
+        this.childEvents.emit({action: 'UPDATE', data: this.compUnCompData});
     }
 
     deleteEntity() {
         delete this.compUnCompData.updateTimestamp;
         this.compUnCompData.actionType = 'DELETE';
-        this.childEvents.emit({action: 'ADD', data: this.compUnCompData});
+        this.childEvents.emit({action: 'DELETE', data: this.compUnCompData});
     }
+
     entitySelected(entity: any): void {
         if (entity) {
             const index = this.checkDuplicate(entity.personEntityId);
@@ -98,7 +104,6 @@ export class OPACompUncompComponent implements OnInit {
         this.entityDetails = entity;
         }
     }
-
 
     private setPersonEntityId(response): void {
         if (!this.entityDetails.personEntityId) {
@@ -169,6 +174,7 @@ export class OPACompUncompComponent implements OnInit {
                   versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'active-ribbon' :
                   versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive-ribbon' : '';
     }
+
     getDescriptionForStatus(versionStatus, isRelationshipActive) {
         return versionStatus === 'PENDING' ? 'Draft' :
                   versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'Active' :
@@ -177,6 +183,19 @@ export class OPACompUncompComponent implements OnInit {
 
     checkDuplicate(personEntityId) {
        return this.componentData.data.findIndex(E => E.personEntityId === personEntityId);
+    }
+
+    calculateTotal() {
+        this.academicTotal  = 0;
+        this.summerTotal = 0;
+        this.componentData.data.forEach(D => {
+            this.academicTotal += Number(D.numOfDaysAcademic);
+            this.summerTotal += Number(D.numOfDaysSummer);
+        });
+    }
+
+    viewSlider(personEntityId) {
+        openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
     }
 
 }
