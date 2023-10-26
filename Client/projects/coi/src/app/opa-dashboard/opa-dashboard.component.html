@@ -3,11 +3,12 @@
         <nav class="coi-admin-dash mb-2 mx-0 row border shadow-sm">
             <div class="align-items-center bg-white d-flex justify-content-between list">
                 <ul class="m-0 p-0">
-                    <li tabindex="0" (click)="changeTab('MY_DASHBOARD')" (keyup.enter)="changeTab('MY_DASHBOARD')"
-                        (keyup.space)="changeTab('MY_DASHBOARD')" class="p-3 position-relative text-center"
-                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_DASHBOARD'"
-                        title="Click to view My Reviews"
-                        area-describedby="Click to view the list of all disclosures under my review">My Dashboard
+                    <li tabindex="0" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
+                        (keyup.space)="changeTab('MY_REVIEWS')" class="p-3 position-relative text-center"
+                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
+                        title="Click to view All Reviews"
+                        area-describedby="Click to view the list of all disclosures under all reviews">My Reviews
+                    </li>                    
                     <li class="separator"></li>
                     <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('NEW_SUBMISSIONS')"
                         (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
@@ -16,26 +17,18 @@
                         area-describedby="Click to view the list of all newly submitted disclosures">
                         New Submissions
                     <li class="separator"></li>
+                    <li tabindex="0" (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')"
+                        (keyup.space)="changeTab('ALL_REVIEWS')" class="p-3 position-relative text-center"
+                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS'" title="Click to view All Reviews"
+                        area-describedby="Click to view the list of all disclosures under all reviews">All Reviews
+                    </li>
+                    <li class="separator"></li>
                     <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('ALL_DISCLOSURES')"
                         (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
                         [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_DISCLOSURES'"
                         class="p-3 position-relative text-center ml-3" title="Click to view All Disclosures"
                         area-describedby="Click to view All Disclosures">
                         All Disclosures
-                    </li>
-                    <li class="separator"></li>
-                    <li tabindex="0" (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')"
-                        (keyup.space)="changeTab('ALL_REVIEWS')" class="p-3 position-relative text-center"
-                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS'"
-                        title="Click to view All Reviews"
-                        area-describedby="Click to view the list of all disclosures under all reviews">All Reviews
-                    </li>
-                    <li class="separator"></li>
-                    <li tabindex="0" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
-                        (keyup.space)="changeTab('MY_REVIEWS')" class="p-3 position-relative text-center"
-                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
-                        title="Click to view All Reviews"
-                        area-describedby="Click to view the list of all disclosures under all reviews">My Reviews
                     </li>
                 </ul>
                 <div class="mx-1">

@@ -20,7 +20,7 @@
                 <span class="icon-btn"><mat-icon>article</mat-icon> <span class="text-start text-nowrap width-170px text-indent-15px ps-3">Disclosures</span></span>
             </button>
 
-            <button *ngIf="isAdministrator" role="listitem" aria-label="Go to View Appointments" title="Go to OPA"
+            <button *ngIf="isOPAAdministrator" role="listitem" aria-label="Go to View Appointments" title="Go to OPA"
                 class="btn d-flex align-items-center btn-none cursor-pointer fw-500 hover-inactive-list hover-left-movement mb-2 mx-3 rounded p-2"
                 routerLinkActive="active-list" [routerLink]="['/coi/opa-dashboard']">
                 <span class="icon-btn">

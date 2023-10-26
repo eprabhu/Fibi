@@ -26,7 +26,7 @@ getOPADashboard(params: any) {
 }
 
 export class OPADashboardRequest {
-  tabType = "MY_DASHBOARD";
+  tabType = "MY_REVIEWS";
   filterType = null;
   pageNumber = 20;
   currentPage = 1;
@@ -36,7 +36,7 @@ export class OPADashboardRequest {
   dispositionStatusCodes = [];
   opaDisclosureStatusCodes = [];
   constructor(tabName?) {
-    this.tabType = tabName ? tabName : 'MY_DASHBOARD';
+    this.tabType = tabName ? tabName : 'MY_REVIEWS';
   }
 }
 
