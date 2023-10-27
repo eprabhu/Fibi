@@ -12,6 +12,10 @@ sort: any;
 opaRequestObject: OPADashboardRequest = new OPADashboardRequest();
 sortCountObject: SortCountObj = new SortCountObj();
 searchDefaultValues: NameObject = new NameObject();
+isCheckBoxSelected = {
+  'F': false,
+  'S': false
+};
 
 constructor(private _http: HttpClient,
   private _commonService: CommonService) { }
@@ -35,6 +39,10 @@ export class OPADashboardRequest {
   submissionTimestamp = null;
   dispositionStatusCodes = [];
   opaDisclosureStatusCodes = [];
+  personId = null;
+  isFaculty = null;
+  periodStartDate = null;
+  periodEndDate = null;
   constructor(tabName?) {
     this.tabType = tabName ? tabName : 'MY_REVIEWS';
   }
@@ -52,4 +60,5 @@ export class SortCountObj {
 
 export class NameObject {
   departmentName = '';
+  personName = '';
 }
