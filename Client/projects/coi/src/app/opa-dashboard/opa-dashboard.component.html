@@ -1,14 +1,17 @@
 <div class="px-3" [@fadeInOutHeight]>
     <section class="section-advanced-search">
+        <div class="fs-18 fw-bold mt-3">OPA Disclosure Dashboard</div>
+        <hr class="mt-1">
         <nav class="coi-admin-dash mb-2 mx-0 row border shadow-sm">
             <div class="align-items-center bg-white d-flex justify-content-between list">
                 <ul class="m-0 p-0">
-                    <li tabindex="0" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
-                        (keyup.space)="changeTab('MY_REVIEWS')" class="p-3 position-relative text-center"
-                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
-                        title="Click to view All Reviews"
-                        area-describedby="Click to view the list of all disclosures under all reviews">My Reviews
-                    </li>                    
+                    <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('ALL_DISCLOSURES')"
+                        (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
+                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_DISCLOSURES'"
+                        class="p-3 position-relative text-center ml-3" title="Click to view All Disclosures"
+                        area-describedby="Click to view All Disclosures">
+                        All Disclosures
+                    </li>
                     <li class="separator"></li>
                     <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('NEW_SUBMISSIONS')"
                         (keyup.enter)="changeTab('NEW_SUBMISSIONS')" (keyup.space)="changeTab('NEW_SUBMISSIONS')"
@@ -17,18 +20,17 @@
                         area-describedby="Click to view the list of all newly submitted disclosures">
                         New Submissions
                     <li class="separator"></li>
+                    <li tabindex="0" (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')"
+                        (keyup.space)="changeTab('MY_REVIEWS')" class="p-3 position-relative text-center"
+                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
+                        title="Click to view All Reviews"
+                        area-describedby="Click to view the list of all disclosures under all reviews">My Reviews
+                    </li>                    
+                    <li class="separator"></li>
                     <li tabindex="0" (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')"
                         (keyup.space)="changeTab('ALL_REVIEWS')" class="p-3 position-relative text-center"
                         [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS'" title="Click to view All Reviews"
                         area-describedby="Click to view the list of all disclosures under all reviews">All Reviews
-                    </li>
-                    <li class="separator"></li>
-                    <li *ngIf="isShowAdminDashboard" tabindex="0" (click)="changeTab('ALL_DISCLOSURES')"
-                        (keyup.enter)="changeTab('ALL_DISCLOSURES')" (keyup.space)="changeTab('ALL_DISCLOSURES')"
-                        [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_DISCLOSURES'"
-                        class="p-3 position-relative text-center ml-3" title="Click to view All Disclosures"
-                        area-describedby="Click to view All Disclosures">
-                        All Disclosures
                     </li>
                 </ul>
                 <div class="mx-1">
@@ -44,6 +46,13 @@
         <div *ngIf="isViewAdvanceSearch" class="card mb-3 border mt-2" id="collapseExample" [@topSlideInOut]>
             <div class="card-body">
                 <div class="form-row row">
+                    <!-- PERSON -->
+                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6 col-12">
+                        <label class="d-block">Person</label>
+                        <app-elastic [options]="personElasticOptions" [clearField]="assigneeClearField" [placeHolder]="'Search Person'"
+                            (selectedResult)="personSelect($event)">
+                        </app-elastic>
+                    </div>
                     <!-- Unit Name -->
                     <div class="col-xl-3 col-lg-5 col-sm-6 col-3" title="Click to search by Department Name">
                         <label class="d-block" for="adv-disclosure-department-name">
@@ -54,25 +63,10 @@
                             [placeHolder]="'Search by Department'" [uniqueId]="'adv-disclosure-department-name'">
                         </app-endpoint-search>
                     </div>
-                    <!-- Submission Date -->
-                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Expiration Date">
-                        <label class="d-block" for="adv-disclosure-expiration-date">
-                            Certification Date
-                        </label>
-                        <span class="dateField">
-                            <input matInput [matDatepicker]="submissionDate" (keypress)="submissionDate.open()"
-                                id="adv-disclosure-expiration-date" (click)="submissionDate.open()"
-                                class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.submissionDate"
-                                placeholder="{{datePlaceHolder}}">
-                            <i (click)="submissionDate.open()"
-                                class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
-                            <mat-datepicker #submissionDate></mat-datepicker>
-                        </span>
-                    </div>
                     <!-- OPA Disclosure Status -->
                     <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Disclosure Status">
                         <label class="d-block" for="adv-disclosure-status">
-                            Disclosure Status
+                            Review Status
                         </label>
                         <app-look-up (selectedResult)="onLookupSelect($event, 'opaDisclosureStatusCodes')"
                             [options]="opaDisclosureStatusOptions"
@@ -93,7 +87,67 @@
                         </app-look-up>
                     </div>
                 </div>
+                <div class="form-row row mt-3">
+                    <!-- Submission Date -->
+                    <div class="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-3" title="Click to search by Expiration Date">
+                        <label class="d-block" for="adv-disclosure-expiration-date">
+                            Certification Date
+                        </label>
+                        <span class="dateField">
+                            <input matInput [matDatepicker]="submissionDate" (keypress)="submissionDate.open()"
+                                id="adv-disclosure-expiration-date" (click)="submissionDate.open()" class="form-control d-inline-block"
+                                [(ngModel)]="advanceSearchDates.submissionDate" placeholder="{{datePlaceHolder}}">
+                            <i (click)="submissionDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                            <mat-datepicker #submissionDate></mat-datepicker>
+                        </span>
+                    </div>
+                    <!-- Period Date -->
+                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6 col-12">
+                        <div>
+                            <label class="d-block">Reporting Cycle</label>
+                            <div class="row mx-0">
+                                <span class="col dateField p-0">
+                                    <input matInput [matDatepicker]="periodFromDate" (keypress)="periodFromDate.open()"
+                                        id="adv-disclosure-expiration-date" (click)="periodFromDate.open()"
+                                        [ngClass]="map.get('fromDate') ? 'invalid-border' : ''"
+                                        class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.periodStartDate"
+                                        placeholder="From({{datePlaceHolder}})">
+                                    <i (click)="periodFromDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                                    <mat-datepicker #periodFromDate></mat-datepicker>
+                                </span>
+                                <label class="col-auto"> - </label>
+                                <span class="col dateField p-0">
+                                    <input matInput [matDatepicker]="periodToDate" (keypress)="periodToDate.open()"
+                                        id="adv-disclosure-expiration-date" (click)="periodToDate.open()"
+                                        [ngClass]="map.get('fromDate') ? 'invalid-border' : ''"
+                                        class="form-control d-inline-block" [(ngModel)]="advanceSearchDates.periodEndDate"
+                                        placeholder="To({{datePlaceHolder}})">
+                                    <i (click)="periodToDate.open()" class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                                    <mat-datepicker #periodToDate></mat-datepicker>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- sTAFF/FACULTY -->
+                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6 col-12 d-flex align-items-end">
+                        <div>
+                            <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary mt-1"
+                                [value]="'S'" [(ngModel)]="isCheckBoxSelected['S']">
+                            <label class="ms-3 mt-1 r-title fs-14">
+                                Staff
+                            </label>
+                            <input type="checkbox" name="relation" class="form-check-input mt-1 ms-3 text-secondary border border-secondary"
+                                [value]="'F'" [(ngModel)]="isCheckBoxSelected['F']">
+                            <label class="r-title ms-3 mt-1 fs-14">
+                                Faculty
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="d-flex justify-content-end mt-4">
+                    <div class="invalid-feedback block-display" *ngIf="map.get('fromDate')">
+                        {{map.get('fromDate')}}
+                    </div>
                     <button (click)="resetAndPerformAdvanceSearch()" class="btn btn-outline-secondary btn-xs fs-14 px-4"
                         title="Click here to clear all the fields">Clear</button>
                     <button (click)="performAdvanceSearch()" class="btn btn-primary fs-14 ms-3 primary-button"
@@ -141,13 +195,17 @@
                                                 <span>OPA</span></span>
                                             <h4 class="mb-0 mt-2 d-flex label-text align-items-baseline person">
                                                 <i class="fa fa-user mt-65" aria-hidden="true"></i>
-                                                <strong class="me-2 ml-2 text-nowrap mt-2">{{coi?.personName}} | <label>Reporting Cycle :
+                                                <strong class="me-2 ml-2 text-nowrap mt-2">{{coi?.personName}} | 
+                                                <label *ngIf="coi?.isFaculty != null">
+                                                {{coi?.isFaculty ? 'Faculty' : 'Staff'}} |
+                                                </label>
+                                                <span> {{' Reporting Cycle :'}}
                                                     <app-no-data-label [valueToShow]="coi?.periodStartDate">
                                                         <span id="id" class="grey-text">{{coi?.periodStartDate |
                                                             dateFormatter}} - {{coi?.periodEndDate |
                                                             dateFormatter}}</span>
                                                     </app-no-data-label>
-                                                </label>
+                                                </span>
                                                 </strong>
                                             </h4>
                                         </span>
@@ -202,21 +260,13 @@
                                         </app-no-data-label>
                                     </div>
                                 </div>
-                                <div class="row mb-3 p-013">
-                                    <div class="col-4">
-                                        <label for="id" class="label-text">Faculty/Staff :</label>
-                                        <app-no-data-label [valueToShow]="coi?.isFaculty ? 'Faculty' : 'Staff'">
-                                            <span id="id" class="grey-text">{{coi?.isFaculty ? 'Faculty' : 'Staff'}}</span>
-                                        </app-no-data-label>
-                                    </div>
-                                </div>
                             </div>
                             <div class="row px-2 py-2 m-0 bg-white d-flex align-items-center">
                                 <div class="col-4"></div>
                                 <div class="col-4">
                                     <label class="label-text" for="last-updated">Last Updated By : </label>
                                     <span id="last-updated" class="grey-text">{{coi?.updateUserFullName}} On
-                                        {{coi?.updateTimestamp
+                                        {{coi?.updateTimeStamp
                                         | dateFormatterWithTimeZone: 'long'}}</span>
                                 </div>
                                 <div class="col-4 d-flex m-0 justify-content-end px-0 pe-2">

@@ -18,7 +18,7 @@ import {
 import {PersonProjectOrEntity} from '../../../shared-components/shared-interface';
 import {AdminGroup, CoiDisclosure, CommentConfiguration, ModalType} from '../../../disclosure/coi-interface';
 import {OpaService} from '../../services/opa.service';
-import {OpaDisclosure} from "../../opa-interface";
+import {OPA, OpaDisclosure} from "../../opa-interface";
 
 @Component({
     selector: 'app-coi-review-location',
@@ -28,7 +28,6 @@ import {OpaDisclosure} from "../../opa-interface";
 export class LocationComponent implements OnInit, OnDestroy {
 
     $subscriptions: Subscription[] = [];
-    dependencies = ['coiDisclosure', 'adminGroup', 'person', 'projectDetail', 'coiReviewerList'];
     opaDisclosure: OpaDisclosure = new OpaDisclosure();
     adminGroups: any = [];
     deployMap = environment.deployUrl;
@@ -73,7 +72,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.isMangeReviewAction = this._commonService.getAvailableRight(['MANAGE_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE', 'MANAGE_DISCLOSURE_REVIEW']);
+        this.isMangeReviewAction = this._commonService.getAvailableRight(['OPA_ADMINISTRATOR']);
         this.personElasticOptions = this._elasticConfigService.getElasticForPerson();
         this.getDataFromStore();
         this.listenDataChangeFromStore();
@@ -177,8 +176,8 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     addReviewToList(review: any) {
-        this.reviewerList.push(review);
-        this.opaDisclosure.opaDisclosureStatusType = review.opaDisclosureStatusType;
+        const reviewer = this.setReviewAndOPAData(review);
+        this.reviewerList.push(reviewer);
         this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
             opaReviewerList: this.reviewerList,
             opaDisclosure: this.opaDisclosure
@@ -188,9 +187,16 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.opaService.isReviewActionCompleted = this.opaService.isAllReviewsCompleted(this.reviewerList);
     }
 
+    private setReviewAndOPAData(review: any) {
+        const {opaDisclosure, ...reviewer} = review;
+        this.opaDisclosure.opaDisclosureStatusType = opaDisclosure.opaDisclosureStatusType;
+        this.opaDisclosure.opaDisclosureStatusCode = opaDisclosure.opaDisclosureStatusCode;
+        return reviewer;
+    }
+
     updateReview(review: any) {
-        this.reviewerList.splice(this.modifyIndex, 1, review);
-        this.opaDisclosure.opaDisclosureStatusType = review.opaDisclosureStatusType;
+        const reviewer = this.setReviewAndOPAData(review);
+        this.reviewerList.splice(this.modifyIndex, 1, reviewer);
         this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
             opaReviewerList: this.reviewerList,
             opaDisclosure: this.opaDisclosure
@@ -202,7 +208,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     deleteReview() {
         this.$subscriptions.push(this._reviewService.deleteReview(this.reviewActionConfirmation.opaReviewId).subscribe((_res: any) => {
             this.reviewerList.splice(this.modifyIndex, 1);
-            this.opaDisclosure.opaDisclosureStatusType = _res.opaDisclosureStatusType;
+            this.setReviewAndOPAData(_res);
             this._dataStore.updateStore(['opaReviewerList', 'opaDisclosure'], {
                 opaReviewerList: this.reviewerList,
                 opaDisclosure: this.opaDisclosure
@@ -316,16 +322,14 @@ export class LocationComponent implements OnInit, OnDestroy {
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
             this._dataStore.dataEvent.subscribe((dependencies: string[]) => {
-                if (dependencies.some((dep) => this.dependencies.includes(dep))) {
-                    this.isExpanded = true;
-                    this.getDataFromStore();
-                }
+                this.isExpanded = true;
+                this.getDataFromStore();
             })
         );
     }
 
     private getDataFromStore() {
-        const DATA: StoreData = this._dataStore.getData();
+        const DATA: OPA = this._dataStore.getData();
         this.opaDisclosure = DATA.opaDisclosure;
         this.adminGroups = DATA.opaDisclosure.adminGroupId || [];
         this.commentConfiguration.disclosureId = this.opaDisclosure.opaDisclosureId;
