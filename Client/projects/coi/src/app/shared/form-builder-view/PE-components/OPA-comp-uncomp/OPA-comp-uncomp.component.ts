@@ -178,7 +178,7 @@ export class OPACompUncompComponent implements OnInit {
     getDescriptionForStatus(versionStatus, isRelationshipActive) {
         return versionStatus === 'PENDING' ? 'Draft' :
                   versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'Active' :
-                  versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive' : '';
+                  versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'Inactive' : '';
     }
 
     checkDuplicate(personEntityId) {
