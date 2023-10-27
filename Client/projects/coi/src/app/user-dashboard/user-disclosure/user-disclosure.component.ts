@@ -30,16 +30,12 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         filter: 'ALL',
     };
     dashboardRequestObject = {
-        advancedSearch: 'L',
-        pageNumber: 20,
-        sort: {},
         tabName: 'IN_PROGRESS_DISCLOSURES',
         isDownload: false,
         filterType: 'ALL',
-        currentPage: 1,
-        property2: ''
+        currentPage: 1
     };
-    filteredDisclosureArray: UserDisclosure[] = [];
+    completeDisclosureList: UserDisclosure[] = [];
     dashboardCount: any;
     isActiveDisclosureAvailable = false;
     selectedModuleCode: number;
@@ -73,6 +69,10 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     hasActiveFCOI = false;
     hasPendingOPA = false;
     hasActiveOPA = false;
+    completeDisclosureListCopy: any = [];
+    DATA_PER_PAGE: number = 20;
+    searchResult: any = [];
+    searchByList: any = ['proposalTitle', 'awardTitle', 'disclosurestatus', 'dispositionStatus', 'reviewStatus', 'conflictStatus', 'unit.unitName'];
 
     constructor(public userDisclosureService: UserDisclosureService,
         public userDashboardService: UserDashboardService,
@@ -85,7 +85,6 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.loadDashboard();
         this.getDashboardBasedOnTab();
         this.loadDashboardCount();
-        this.getSearchList();
     }
 
     loadDashboard() {
@@ -97,7 +96,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             })).subscribe((res: any) => {
                 this.result = res;
                 if (this.result) {
-                    this.filteredDisclosureArray =  this.getDashboardList();
+                    this.completeDisclosureList =  this.getDashboardList();
+                    this.completeDisclosureListCopy = JSON.parse(JSON.stringify(this.completeDisclosureList));
                     this.loadingComplete();
                 }
             }), (err) => {
@@ -105,11 +105,17 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+        Here the sorting is applied for the merged array inorder to get the list based on the decreasing
+        order of updateTimeStamp. If any action performed on a particular disclosure or if any disclosure
+        created then that one will comes first in the list.
+    */
     private getDashboardList(): any {
-        const disclosureViews = this.result.disclosureViews || [];
-        const travelDashboardViews = this.result.travelDashboardViews || [];
+        const DISCLOSURE_VIEWS = this.result.disclosureViews || [];
+        const TRAVEL_DASHBOARD_VIEWS = this.result.travelDashboardViews || [];
         const OPA_DETAILS = this.result.opaDashboardDto || [];
-        return [...disclosureViews, ...travelDashboardViews, ...OPA_DETAILS];
+        const MERGED_LIST = [...DISCLOSURE_VIEWS, ...TRAVEL_DASHBOARD_VIEWS, ...OPA_DETAILS];
+        return MERGED_LIST.sort((a, b) => b.updateTimeStamp - a.updateTimeStamp);
     }
 
     private loadingComplete() {
@@ -120,38 +126,54 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         if(this.currentSelected.tab === 'DISCLOSURE_HISTORY') {
             this.getDisclosureHistory();
         } else {
-            this.filteredDisclosureArray = [];
+            this.completeDisclosureList = [];
             this.$fetchDisclosures.next();
         }
     }
-
-    getDisclosures() {
-        this.dashboardRequestObject.currentPage = 1;
-        this.$debounceEventForDisclosureList.next();
-    }
-
-    getSearchList() {
-        this.$subscriptions.push(this.$debounceEventForDisclosureList.pipe(debounce(() => interval(800))).subscribe((data: any) => {
-        this.dashboardRequestObject.property2 = this.searchText;
-            this.isLoading = true;
-            this.filteredDisclosureArray = [];
-            this.$fetchDisclosures.next();
-        }
-        ));
-      }
 
     resetAndFetchDisclosure() {
         this.searchText = '';
-        this.filteredDisclosureArray = [];
-        this.dashboardRequestObject.property2 = '';
+        this.completeDisclosureList = [];
         this.getDashboardBasedOnTab();
     }
 
-    actionsOnPageChange(event) {
+    actionsOnPageChange(event: number) {
         if (this.dashboardRequestObject.currentPage != event) {
             this.dashboardRequestObject.currentPage = event;
-            this.$fetchDisclosures.next();
+            this.getArrayListForPagination();
         }
+    }
+   
+    /**
+        Arranges data in each page according to the Maximum number of data. By default the maximum number of data shows in a page is 20.
+        This function is implemented on purpose as we are removing the pagination functionality from server side. This is
+        because we won't be having a huge data in the dashboard in real time(production environment). Hence we dont want
+        to make unnecessary api calls to the server everytime for fetching the data.
+    */
+    private getArrayListForPagination(): void {
+        const [START_INDEX, END_INDEX] = [this.getStartIndex(), this.getEndIndex()];
+        // const dummyList = JSON.parse(JSON.stringify(this.completeDisclosureList));
+        this.completeDisclosureList = this.completeDisclosureListCopy.slice(START_INDEX, END_INDEX + 1);
+    }
+
+    /**
+        If there is only one page, then the maximum number of data would be 20. so we need to arrange the data from [0 to 19].
+        i.e., the starting point would always be 0 and ending point is always 19. Otherwise, for instance if the user clicks
+        on 2nd page, the starting point would be (2-1) * 20 = 20
+    */
+    private getStartIndex(): number {
+        if (this.dashboardRequestObject.currentPage == 1) { return 0; }
+        return (this.dashboardRequestObject.currentPage - 1) * this.DATA_PER_PAGE;
+    }
+
+    /**
+        If there is only one page, then the maximum number of data would be 20. so we need to arrange the data from [0 to 19].
+        i.e., the starting point would always be 0 and ending point is always 19. Otherwise, for instance if the user clicks
+        on 2nd page, the ending point would be (20 * 2) - 1  = 39
+    */
+    private getEndIndex(): number {
+        if (this.dashboardRequestObject.currentPage == 1) { return this.DATA_PER_PAGE - 1; }
+        return (this.DATA_PER_PAGE * this.dashboardRequestObject.currentPage) - 1;
     }
 
     loadDashboardCount() {
@@ -165,7 +187,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     setIsShowCreateFlag() {
         if (!this.dashboardCount.inProgressDisclosureCount && !this.dashboardCount.approvedDisclosureCount
             && !this.dashboardCount.travelDisclosureCount && !this.dashboardCount.disclosureHistoryCount &&
-            !this.filteredDisclosureArray.length &&
+            !this.completeDisclosureList.length &&
             this.dashboardRequestObject.currentPage == 1 && this.dashboardRequestObject.filterType == 'ALL') {
                 this.isShowCreate = true;
         }
@@ -297,9 +319,9 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     getDisclosureHistory() {
         this.isLoading = true;
-        this.filteredDisclosureArray =  [];
+        this.completeDisclosureList =  [];
         this.$subscriptions.push(this.userDisclosureService.getDisclosureHistory({'filterType':this.currentSelected.filter}).subscribe((data: any) => {
-            this.filteredDisclosureArray =  this.getAllDisclosureHistories(data);;
+            this.completeDisclosureList =  this.getAllDisclosureHistories(data);;
             this.loadingComplete();
         }));
     }
