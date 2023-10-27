@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import com.polus.fibicomp.coi.service.ConflictOfInterestService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
@@ -230,122 +231,5 @@ public class OPAReviewServiceImpl implements OPAReviewService {
         return new ResponseEntity<>(reviewDto, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<Object> loadOPAReviewComments(OPAReviewRequestDto requestDto) {
-        if (requestDto.getPersonId() != null) {
-            requestDto.setTagGroupId(commonDao.getAdminGroupIdsBasedOnPersonId(requestDto.getPersonId()));
-        }
-        List<DisclComment> discComments = opaDao.loadReviewComments(requestDto);
-        Map<Integer, List<OPADisclCommentDto>> replyComments = new HashMap<>();
-        List<OPADisclCommentDto> disclCommentDtos = new ArrayList<>();
-        discComments.forEach(reviewComments -> {
-            OPADisclCommentDto opaDisclCommentDto = OPADisclCommentDto.builder().build();
-            Integer parentCommentId = reviewComments.getParentCommentId();
-            if (parentCommentId != null) {
-                OPADisclCommentDto disclCommentDto = OPADisclCommentDto.builder().build();
-                BeanUtils.copyProperties(reviewComments, disclCommentDto);
-                replyComments.computeIfAbsent(parentCommentId, k -> new ArrayList<>()).add(disclCommentDto);
-            }
-            opaDisclCommentDto.setDisclAttachments(coiFileAttachmentService.getDisclAttachByCommentId(reviewComments.getCommentId()));
-            opaDisclCommentDto.setUpdateUserFullName(personDao.getUserFullNameByUserName(reviewComments.getUpdateUser()));
-            opaDisclCommentDto.setOpaReviewCommentTag(coiDao.fetchCoiReviewCommentTag(reviewComments.getCommentId()));
-            opaDisclCommentDto.getOpaReviewCommentTag().forEach(reviewCommentTag -> {
-                if (reviewCommentTag.getTagPersonId() != null) {
-                    reviewCommentTag.setTagPersonFullName(personDao.getPersonFullNameByPersonId(reviewCommentTag.getTagPersonId()));
-                }
-                if (reviewCommentTag.getTagGroupId() != null) {
-                    reviewCommentTag.setTagGroupName(coiDao.fetchadminGroupName(reviewCommentTag.getTagGroupId()));
-                }
-            });
-        });
-        disclCommentDtos.stream().forEach(parentComment -> {
-            Integer parentId = parentComment.getCommentId();
-            if (parentId != null) {
-                List<OPADisclCommentDto> childComments = replyComments.get(parentId);
-                if (childComments != null) {
-                    parentComment.setReply(childComments);
-                }
-            }
-        });
-        disclCommentDtos.removeIf(comment -> comment.getParentCommentId() != null);
-        return new ResponseEntity<>(disclCommentDtos, HttpStatus.OK);
-    }
 
-    @Override
-    public ResponseEntity<Object> saveOrUpdateOpaReviewComments(MultipartFile[] files, String formDataJson) {
-        OPAReviewCommentsDto opaReviewComment;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            OPAReviewRequestDto vo = mapper.readValue(formDataJson, OPAReviewRequestDto.class);
-            opaReviewComment = vo.getOpaReviewComments();
-            vo.getOpaReviewComments().setCommentedByPersonId(AuthenticatedUser.getLoginPersonId());
-            DisclComment disclComment = DisclComment.builder()
-                    .commentId(opaReviewComment.getCommentId())
-                    .componentTypeCode(Constants.OPA_DISCLOSURE_DETAIL_COMMENT_TYPE)
-                    .componentReferenceId(opaReviewComment.getOpaDisclosureId())
-                    .componentReferenceNumber(opaReviewComment.getOpaSubSectionsId())
-                    .commentType(opaReviewComment.getOpaSectionsTypeCode())
-                    .componentSubReferenceId(opaReviewComment.getComponentSubRefId())
-                    .commentPersonId(opaReviewComment.getCommentedByPersonId())
-                    .documentOwnerPersonId(vo.getDocumentOwnerPersonId())
-                    .isPrivate(vo.getOpaReviewComments().getIsPrivate())
-                    .parentCommentId(opaReviewComment.getOpaParentCommentId())
-                    .comment(opaReviewComment.getComment())
-                    .updateUser(AuthenticatedUser.getLoginUserName())
-                    .build();
-            reviewDao.saveOrUpdate(disclComment);
-            opaReviewComment.setUpdateUserFullName(personDao.getUserFullNameByUserName(opaReviewComment.getUpdateUser()));
-            vo.setOpaReviewComments(opaReviewComment);
-            List<CoiReviewCommentTag> coiReviewCommentTag = addTagPerson(opaReviewComment.getOpaReviewCommentTag(),
-                    disclComment.getCommentId(), opaReviewComment.getOpaReviewId());
-            opaReviewComment.setOpaReviewCommentTag(coiReviewCommentTag);
-            COIFileRequestDto request = COIFileRequestDto.builder()
-                    .componentReferenceId(opaReviewComment.getOpaDisclosureId())
-                    .componentReferenceNumber(opaReviewComment.getOpaDisclosureId().toString())
-                    .attaStatusCode(null)
-                    .attaTypeCode(null)
-                    .commentId(disclComment.getCommentId())
-                    .componentTypeCode(null)
-                    .file(null)
-                    .documentOwnerPersonId(null)
-                    .description(null)
-                    .build();
-            coiService.addReviewAttachment(files, request);
-            opaDao.updateOPADisclosureUpDetails(opaReviewComment.getOpaDisclosureId(), commonDao.getCurrentTimestamp());
-        } catch (Exception e) {
-            throw new ApplicationException("error in saveOrUpdateOpaReviewComments", e, Constants.JAVA_ERROR);
-        }
-        return new ResponseEntity<>(opaReviewComment, HttpStatus.OK);
-    }
-
-    private List<CoiReviewCommentTag> addTagPerson(List<CoiReviewCommentTag> opaReviewCommentTags, Integer opaReviewCommentId, Integer opaReviewId) {
-        opaReviewCommentTags.forEach(opaReviewCommentTag -> {
-            if (opaReviewCommentTag.getCoiReviewCommentTagsId() == null) {
-                opaReviewCommentTag.setCoiReviewCommentId(opaReviewCommentId);
-                opaReviewCommentTag.setCoiReviewId(opaReviewId);
-                reviewDao.saveOrUpdate(opaReviewCommentTag);
-            }
-        });
-        return opaReviewCommentTags;
-    }
-
-    @Override
-    public ResponseEntity<Object> getOPASectionsTypesAndLookups() {
-        return new ResponseEntity<>(OPASectionsTypesDto.builder()
-                .opaSectionsTypes(opaDao.getAllOPASectionTypes())
-                .build(), HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<Object> deleteOPAReviewComment(Integer opaReviewCommentId, Integer opaDisclosureId) {
-        reviewDao.deleteReviewTagByCommentId(opaReviewCommentId);
-        coiDao.loadDisclAttachmentByCommentId(opaReviewCommentId).stream().forEach(attachment -> {
-            COIFileRequestDto request = COIFileRequestDto.builder().attachmentId(attachment.getAttachmentId())
-                    .fileDataId(attachment.getFileDataId()).build();
-            coiFileAttachmentService.deleteDisclAttachment(request);
-        });
-        reviewDao.deleteReviewCommentByReviewCommentId(opaReviewCommentId);
-        opaDao.updateOPADisclosureUpDetails(opaDisclosureId, commonDao.getCurrentTimestamp());
-        return new ResponseEntity<>("Comment deleted successfully", HttpStatus.OK);
-    }
 }
