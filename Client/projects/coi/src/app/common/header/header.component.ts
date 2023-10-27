@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     triggeredFrom = '';
     reviseObject: any = { revisionComment: null, disclosureId: null };
 
-    constructor(public _router: Router, public commonService: CommonService, public headerService: HeaderService) {
+    constructor(public router: Router, public commonService: CommonService, public headerService: HeaderService) {
         this.logo = environment.deployUrl + './assets/images/logo.png';
     }
 
@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     refreshActiveDisclosures() {
-        this.$subscriptions.push(this._router.events.subscribe((event: any) => {
+        this.$subscriptions.push(this.router.events.subscribe((event: any) => {
             if (event instanceof NavigationEnd && event.url.includes('coi/user-dashboard/disclosures')) {
                 this.getActiveDisclosure();
             }
@@ -77,7 +77,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     redirectToOpa() {
-        this._router.navigate(['/coi/opa/form'],
+        this.router.navigate(['/coi/opa/form'],
             {queryParams: {disclosureId: 2}});
     }
 
@@ -90,7 +90,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     logout() {
-        this._router.navigate(['/logout']);
+        this.router.navigate(['/logout']);
     }
 
     changePassword() {
@@ -152,7 +152,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this.headerService.createOPA(this.commonService.getCurrentUserDetail('personId'),
             this.commonService.getCurrentUserDetail('homeUnit'))
             .subscribe((res: any) => {
-                this._router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
+                this.router.navigate(['/coi/opa/form'], {queryParams: {disclosureId: res.opaDisclosureId}});
             }));
     }
 
@@ -176,7 +176,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             }).subscribe((ele: any) => {
                 this.commonService.isShowCreateNoteModal = false;
                 this.noteComment = '';
-                if(this._router.url.includes('/coi/user-dashboard/notes')) {
+                if(this.router.url.includes('/coi/user-dashboard/notes')) {
                     this.commonService.$updateLatestNote.next(ele);
                 }
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Note added successfully.');
@@ -226,7 +226,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     openCreateSFI() {
-        this._router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
+        this.router.navigate(['/coi/create-sfi/create'], { queryParams: { type: 'SFI' } });
     }
 
     openModalTriggeredFromChild() {

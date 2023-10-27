@@ -4,24 +4,24 @@
         <a class="logo me-3 ms-4" href={{homeNavigation}}>
             <img [src]="logo" alt="Logo" class="w-100 ms-5">
         </a>
-        <ul role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
+        <ul *ngIf="router.url.includes('/user-dashboard/')" role="navigation" class="header-navigation-links d-flex align-items-center m-0 f-16 cursor-pointer p-0 text-secondary overflow">
             <li [routerLink]="['/coi/user-dashboard/disclosures']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/disclosures') ? 'My Disclosures page' : 'Go to My Disclosures'"
-                aria-describedby="Goto home page">My Disclosures
-                <span *ngIf="_router.url.includes('/coi/user-dashboard')" class="active-color"></span>
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/disclosures') ? 'My Disclosures page' : 'Go to My Disclosures'"
+                aria-description="Goto my home page">My Disclosures
+                <span *ngIf="router.url.includes('/coi/user-dashboard')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/user-dashboard/entities']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/entities') ? 'My Entities page' : 'Go to My Entities'"
-                aria-describedby="Goto Disclosures page">My Entities
-                <span *ngIf="_router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/entities') ? 'My Entities page' : 'Go to My Entities'"
+                aria-description="Goto my Disclosures page">My Entities
+                <span *ngIf="router.url.includes('/coi/user-dashboard/entities')" class="active-color"></span>
             </li>
             <li [routerLink]="['/coi/user-dashboard/notes']" class="mr-2 cursor-pointer" role="tab"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/notes') ? 'Notes page' : 'Go to Notes page'"
-                aria-describedby="Goto Notes page">Notes
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/notes') ? 'My Notes page' : 'Go to My Notes page'"
+                aria-description="Goto my Notes page">My Notes
             </li>
             <li class="mr-2 cursor-pointer" role="tab" [routerLink]="['/coi/user-dashboard/attachments']"
-                routerLinkActive="active" [attr.title]="_router.url.includes('/coi/user-dashboard/attachments') ? 'Attachments page' : 'Go to Attachments page'"
-                aria-describedby="Goto Attachments page">Attachments
+                routerLinkActive="active" [attr.title]="router.url.includes('/coi/user-dashboard/attachments') ? 'My Attachments page' : 'Go to My Attachments page'"
+                aria-description="Goto my Attachments page">My Attachments
             </li>
         </ul>
     </div>

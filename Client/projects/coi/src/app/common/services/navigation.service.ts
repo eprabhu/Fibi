@@ -118,7 +118,7 @@ export class NavigationService {
     }
 
     opaDashboardCheck(event) {
-        return event.url.split(/[/?]/).includes('/opa/form') || event.url.split('/').includes('opa-dashboard') ? true : false;
+        return event.url.split(/[/?]/).includes('form') || event.url.split('/').includes('opa-dashboard') ? true : false;
     }
     /**
      * @param  {} pathDetails

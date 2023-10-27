@@ -251,7 +251,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     setDashboardTab() {
         this.coiAdminDashboardService.coiRequestObject.tabName = sessionStorage.getItem('currentCOIAdminTab') ?
-            sessionStorage.getItem('currentCOIAdminTab') : 'MY_REVIEWS';
+            sessionStorage.getItem('currentCOIAdminTab') : 'ALL_DISCLOSURES';
         this.checkForTravelDisclosureTabChange(this.coiAdminDashboardService.coiRequestObject.tabName);
     }
 
