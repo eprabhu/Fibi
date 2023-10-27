@@ -46,6 +46,22 @@ public interface OPAReviewDao {
     OPAReview getOPAReview(Integer opaReviewId);
 
     /**
+     * This method checks a review is added or not.
+     * @param opaReview
+     * @return true : if any review exists without review status completed else : false
+     */
+    boolean isOPAReviewAdded(OPAReview opaReview);
+
+    /**
+     * This method checks a review is exists by or not of statuses
+     * @param opaReviewId
+     * @param statuses
+     * @return true : if review exists else : false
+     */
+    boolean isOPAReviewExistsOfStatus(Integer opaReviewId, List<String> statuses);
+
+
+    /**
      *
      * @param opaReviewId
      */
