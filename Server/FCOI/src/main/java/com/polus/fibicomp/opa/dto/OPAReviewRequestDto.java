@@ -18,6 +18,5 @@ public class OPAReviewRequestDto {
     private String personId;
     private List<Integer> tagGroupId;
     private String sort;
-    private OPAReviewCommentsDto opaReviewComments;
     private String documentOwnerPersonId;
 }
