@@ -10,7 +10,6 @@ export class EntityDetailsService {
   lookups: any;
   $entityDetailsTest = new BehaviorSubject<object>({});
   globalSave$: Subject<any> = new Subject<any>();
-  isShowRelationButton: any;
   isRelationshipQuestionnaireChanged = false;
   isAdditionalDetailsChanged = false;
 
@@ -20,7 +19,6 @@ export class EntityDetailsService {
   isExpanded = false;
   isHoverEntityCard = false;
   canMangeSfi = false;
-  $relationshipTabSwitch = new BehaviorSubject<object>(null)
   isSwitchCurrentTab = false;
   isShowHistoryInfo = true;
   unSavedSections = [];
@@ -30,18 +28,14 @@ export class EntityDetailsService {
   definedRelationships = [];
   availableRelationships = [];
   $triggerAddRelationModal = new Subject();
+  $emitUnsavedChangesModal = new Subject()
   selectedTab = 'QUESTIONNAIRE';
-  isChangesInFieldValue = false;
-  involvementDate =  {
-    involvementStartDate: null,
-    involvementEndDate: null
-  }
-  additionalDetails: any = {
-    sponsorsResearch: false
-  };
-  mandatoryList = new Map();
-  isClickedWithinQuestionnaire = false;
+  clickedTab: 'QUESTIONNAIRE' | 'RELATION_DETAILS' | 'HISTORY';
   currentVersionDetails: any = {};
+  currentRelationshipQuestionnaire: any;
+  isChecked = {};
+  groupedRelations = {};
+  $triggerAddRelation = new Subject();
 
   constructor(private _http: HttpClient, private _commonService: CommonService) { }
 

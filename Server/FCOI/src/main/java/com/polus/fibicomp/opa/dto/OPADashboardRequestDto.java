@@ -29,4 +29,5 @@ public class OPADashboardRequestDto {
     private String submissionTimestamp;
     private List<String> dispositionStatusCodes;
     private List<String> opaDisclosureStatusCodes;
+	private Boolean fetchAllRecords;
 }

@@ -9,6 +9,7 @@ import { DATE_PLACEHOLDER } from '../../../../../src/app/app-constants';
 import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../../../fibi/src/app/common/utilities/date-utilities';
 import { slideInOut } from '../../../../../../fibi/src/app/common/utilities/animations';
 import { NavigationService } from '../../../common/services/navigation.service';
+import { scrollIntoView } from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-view-relationship-details',
@@ -40,10 +41,19 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     hasUserExpanded = false;
     isFinalizeApi = false;
     isRelationshipActive = false;
-    @Input() deleteRelationshipEvent: any;
     @Output() closeEntityInfoCard: EventEmitter<boolean> = new EventEmitter<boolean>();
     previousUrlBeforeActivate = '';
     isCOIAdministrator = true;
+    isChangesInFieldValue = false;
+    involvementDate =  {
+      involvementStartDate: null,
+      involvementEndDate: null
+    }
+    additionalDetails: any = {
+      sponsorsResearch: false
+    };
+    mandatoryList = new Map();
+    deleteRelationshipEvent: any;
 
     constructor( public entityDetailsServices: EntityDetailsService, private _router: Router,
                  private _route: ActivatedRoute, public commonService: CommonService, private _navigationService: NavigationService ) {
@@ -72,14 +82,6 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
             this.updateRelationshipDetails = [];
         }
         this.listenForQuestionnaireSave();
-        if (this.deleteRelationshipEvent && this.deleteRelationshipEvent.isDeleted) {
-            this.relationshipsDetails.updateTimestamp = this.deleteRelationshipEvent.updatedTimestamp;
-            let delIndex = this.personEntityRelationships.findIndex(ele => ele.personEntityRelId == this.deleteRelationshipEvent.removeRelId);
-            if (delIndex >= 0) {
-                this.personEntityRelationships.splice(delIndex, 1);
-            }
-            this.deleteRelationshipEvent.isDeleted = false;
-        }
         if (this.isEditMode) {
             this.getQuestionnaire();
         }
@@ -138,45 +140,45 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     private checkMandatoryFilled(): boolean {
-        this.entityDetailsServices.mandatoryList.clear();
-        if (!this.entityDetailsServices.involvementDate.involvementStartDate) {
-            this.entityDetailsServices.mandatoryList.set('date', 'Please enter a start date.');
+        this.mandatoryList.clear();
+        if (!this.involvementDate.involvementStartDate) {
+            this.mandatoryList.set('date', 'Please enter a start date.');
         }
-        if (!this.entityDetailsServices.additionalDetails.staffInvolvement) {
-            this.entityDetailsServices.mandatoryList.set('staff', 'Please enter Relationship with Entity details.');
+        if (!this.additionalDetails.staffInvolvement) {
+            this.mandatoryList.set('staff', 'Please enter Relationship with Entity details.');
         }
-        if (!this.entityDetailsServices.additionalDetails.studentInvolvement) {
-            this.entityDetailsServices.mandatoryList.set('student', 'Please enter Principle Business Area of Entity details.');
+        if (!this.additionalDetails.studentInvolvement) {
+            this.mandatoryList.set('student', 'Please enter Principle Business Area of Entity details.');
         }
-        if (!this.entityDetailsServices.additionalDetails.instituteResourceInvolvement) {
-            this.entityDetailsServices.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
+        if (!this.additionalDetails.instituteResourceInvolvement) {
+            this.mandatoryList.set('resource', 'Please enter Relationship of Entity to your University responsibilities details.');
         }
-        if (this.entityDetailsServices.involvementDate.involvementEndDate) {
+        if (this.involvementDate.involvementEndDate) {
             this.endDateValidation();
         }
-        return this.entityDetailsServices.mandatoryList.size !== 0 ? false : true;
+        return this.mandatoryList.size !== 0 ? false : true;
     }
 
     endDateValidation(): void {
-        this.entityDetailsServices.mandatoryList.delete('endDate');
-        if (this.entityDetailsServices.involvementDate.involvementStartDate && this.entityDetailsServices.involvementDate.involvementEndDate &&
-            (compareDates(this.entityDetailsServices.involvementDate.involvementStartDate, this.entityDetailsServices.involvementDate.involvementEndDate) === 1)) {
-            this.entityDetailsServices.mandatoryList.set('endDate', 'Please provide a valid date.');
+        this.mandatoryList.delete('endDate');
+        if (this.involvementDate.involvementStartDate && this.involvementDate.involvementEndDate &&
+            (compareDates(this.involvementDate.involvementStartDate, this.involvementDate.involvementEndDate) === 1)) {
+            this.mandatoryList.set('endDate', 'Please provide a valid date.');
         }
     }
 
     setAdditionalDetails(details) {
-        this.entityDetailsServices.involvementDate.involvementStartDate = getDateObjectFromTimeStamp(details.involvementStartDate);
-        this.entityDetailsServices.involvementDate.involvementEndDate = getDateObjectFromTimeStamp(details.involvementEndDate);
-        this.entityDetailsServices.additionalDetails.sponsorsResearch = details.sponsorsResearch;
-        this.entityDetailsServices.additionalDetails.instituteResourceInvolvement = details.instituteResourceInvolvement;
-        this.entityDetailsServices.additionalDetails.studentInvolvement = details.studentInvolvement;
-        this.entityDetailsServices.additionalDetails.staffInvolvement = details.staffInvolvement;
-        this.entityDetailsServices.additionalDetails.personEntityId = this.entityId;
+        this.involvementDate.involvementStartDate = getDateObjectFromTimeStamp(details.involvementStartDate);
+        this.involvementDate.involvementEndDate = getDateObjectFromTimeStamp(details.involvementEndDate);
+        this.additionalDetails.sponsorsResearch = details.sponsorsResearch;
+        this.additionalDetails.instituteResourceInvolvement = details.instituteResourceInvolvement;
+        this.additionalDetails.studentInvolvement = details.studentInvolvement;
+        this.additionalDetails.staffInvolvement = details.staffInvolvement;
+        this.additionalDetails.personEntityId = this.entityId;
     }
 
     activateInactivateSfi() {
-        if ((this.isQuestionnaireCompleted && (this.entityDetailsServices.isChangesInFieldValue||
+        if ((this.isQuestionnaireCompleted && (this.isChangesInFieldValue||
             this.entityDetailsServices.isRelationshipQuestionnaireChanged))) {
             this.saveRelationship();
         }
@@ -185,7 +187,7 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     saveRelationship() {
-        if (this.checkMandatoryFilled() && this.entityDetailsServices.isChangesInFieldValue) {
+        if (this.checkMandatoryFilled() && this.isChangesInFieldValue) {
             this.updatePersonEntityAdditionalDetails();
         }
         this.entityDetailsServices.globalSave$.next();
@@ -288,12 +290,12 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
     }
 
     updatePersonEntityAdditionalDetails() {
-        this.entityDetailsServices.additionalDetails.involvementStartDate = parseDateWithoutTimestamp(this.entityDetailsServices.involvementDate.involvementStartDate);
-        if (this.entityDetailsServices.involvementDate.involvementEndDate) {
-            this.entityDetailsServices.additionalDetails.involvementEndDate = parseDateWithoutTimestamp(this.entityDetailsServices.involvementDate.involvementEndDate);
+        this.additionalDetails.involvementStartDate = parseDateWithoutTimestamp(this.involvementDate.involvementStartDate);
+        if (this.involvementDate.involvementEndDate) {
+            this.additionalDetails.involvementEndDate = parseDateWithoutTimestamp(this.involvementDate.involvementEndDate);
         }
-        this.$subscriptions.push(this.entityDetailsServices.updateAdditionalDetails(this.entityDetailsServices.additionalDetails).subscribe((res: any) => {
-            this.entityDetailsServices.isChangesInFieldValue = false;
+        this.$subscriptions.push(this.entityDetailsServices.updateAdditionalDetails(this.additionalDetails).subscribe((res: any) => {
+            this.isChangesInFieldValue = false;
             this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Significant Financial Interest updated successfully.');
             this.relationshipsDetails.updateTimestamp = res.updateTimestamp;
             this.relationshipsDetails.involvementStartDate = res.involvementStartDate;
@@ -348,18 +350,95 @@ export class ViewRelationshipDetailsComponent implements OnDestroy, OnChanges {
 
     addUnSavedChanges() {
         this.entityDetailsServices.isAdditionalDetailsChanged = true;
-        this.entityDetailsServices.isChangesInFieldValue = true;
+        this.isChangesInFieldValue = true;
         if(!this.entityDetailsServices.unSavedSections.some(ele => ele.includes(SFI_ADDITIONAL_DETAILS_SECTION_NAME))) {
             this.entityDetailsServices.unSavedSections.push(SFI_ADDITIONAL_DETAILS_SECTION_NAME);
         }
     }
 
-      openRelationDetails() {
+    openRelationDetails() {
         this.$subscriptions.push(this.entityDetailsServices.getCurrentId(this.relationshipsDetails.personEntityNumber).subscribe((data: any) => {
             this._router.navigate(['/coi/entity-details/entity'],
-            { queryParams: { personEntityId: data, mode: 'view' } });
+                { queryParams: { personEntityId: data, mode: 'view' } });
         }, err => {
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in opening current version, please try again');
         }));
-      }
+    }
+
+    openRelationshipQuestionnaire(coiFinancialEntityDetail) {
+        this.entityDetailsServices.currentRelationshipQuestionnaire = coiFinancialEntityDetail;
+        this.entityDetailsServices.clickedTab = 'QUESTIONNAIRE';
+        if (this.entityDetailsServices.isAdditionalDetailsChanged) {
+            this.entityDetailsServices.$emitUnsavedChangesModal.next();
+        } else {
+            this.entityDetailsServices.selectedTab = 'QUESTIONNAIRE';
+            setTimeout(() => {
+                this.entityDetailsServices.$openQuestionnaire.next(coiFinancialEntityDetail);
+            });
+        }
+    }
+
+    updateRelationship(event) {
+        this.updateRelationshipDetails = event;
+    }
+
+    scrollPosition(event) {
+        if (event) {
+            scrollIntoView('focusQuestionnaire');
+        }
+    }
+
+    async openRelationShipSection() {
+        this.entityDetailsServices.clickedTab = 'RELATION_DETAILS';
+        if (this.entityDetailsServices.isRelationshipQuestionnaireChanged) {
+            this.entityDetailsServices.$emitUnsavedChangesModal.next({ details: null, isLeaveFromRelationTab: true });
+        } else {
+            this.entityDetailsServices.selectedTab = 'RELATIONSHIP_DETAILS';
+            await this.getEntityDetails(this.getEntityId());
+            this.mandatoryList.clear();
+        }
+    }
+
+    openHistorySection() {
+        this.entityDetailsServices.clickedTab = 'HISTORY';
+        if (this.entityDetailsServices.isRelationshipQuestionnaireChanged || this.entityDetailsServices.isAdditionalDetailsChanged) {
+            this.entityDetailsServices.$emitUnsavedChangesModal.next({ details: null, isLeaveFromRelationTab: true });
+        } else {
+            this.entityDetailsServices.selectedTab = 'HISTORY';
+        }
+    }
+
+    emittedDeletedRelationship(event) {
+        this.deleteRelationshipEvent = event;
+        if (this.deleteRelationshipEvent && this.deleteRelationshipEvent.isDeleted) {
+            this.relationshipsDetails.updateTimestamp = this.deleteRelationshipEvent.updatedTimestamp;
+            let delIndex = this.personEntityRelationships.findIndex(ele => ele.personEntityRelId == this.deleteRelationshipEvent.removeRelId);
+            if (delIndex >= 0) {
+                this.personEntityRelationships.splice(delIndex, 1);
+            }
+            this.deleteRelationshipEvent.isDeleted = false;
+        }
+        if (this.isEditMode) {
+            this.getQuestionnaire();
+        }
+    }
+
+    saveOrAddRelationshipModal() {
+        this.mandatoryList.clear();
+        if (!this.entityDetailsServices.isAdditionalDetailsChanged) {
+            setTimeout(() => {
+                this.entityDetailsServices.$triggerAddRelationModal.next(true);
+            });
+        } else {
+            if (this.checkMandatoryFilled()) {
+                this.saveRelationship();
+                setTimeout(() => {
+                    this.entityDetailsServices.$triggerAddRelationModal.next(true);
+                });
+            } else {
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Please fill mandatory fields to proceed with Add Relation');
+            }
+        }
+    }
+
 }

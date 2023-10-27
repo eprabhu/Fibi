@@ -135,7 +135,7 @@ export class OpaDashboardComponent implements OnInit {
 
     setDashboardTab() {
         this._opaDashboardService.opaRequestObject.tabType = sessionStorage.getItem('currentOPATab') ?
-            sessionStorage.getItem('currentOPATab') : 'MY_DASHBOARD';
+            sessionStorage.getItem('currentOPATab') : 'MY_REVIEWS';
     }
 
     setAdvanceSearch() {

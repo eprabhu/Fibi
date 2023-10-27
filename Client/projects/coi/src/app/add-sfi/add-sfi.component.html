@@ -12,15 +12,15 @@
 				<div class="col-4">
 					<div class="fw-bold me-2 fs-14 label-text">Start Date Of Involvement</div>
 					<app-no-data-label [classesToApply]="'fs-14'"
-						[valueToShow]="additionalDetails.involvementStartDate">
-						<span class="fs-14">{{additionalDetails.involvementStartDate |
+						[valueToShow]="involvementDate.involvementStartDate">
+						<span class="fs-14">{{involvementDate.involvementStartDate |
 							dateFormatterWithTimeZone}}</span>
 					</app-no-data-label>
 				</div>
 				<div class="col-4">
 					<div class="fw-bold me-2 fs-14 label-text">End Date Of Involvement </div>
-					<app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="additionalDetails.involvementEndDate">
-						<span class="fs-14">{{additionalDetails.involvementEndDate | dateFormatterWithTimeZone}}</span>
+					<app-no-data-label [classesToApply]="'fs-14'" [valueToShow]="involvementDate.involvementEndDate">
+						<span class="fs-14">{{involvementDate.involvementEndDate | dateFormatterWithTimeZone}}</span>
 					</app-no-data-label>
 				</div>
 				<div class="col-4">
@@ -361,7 +361,7 @@
 										placeholder="{{datePlaceHolder}}" style="width: 100% !important"
 										(click)="startDate.open()" autocomplete="off"
 										class="d-inline-block form-control"
-										[(ngModel)]="additionalDetails.involvementStartDate"
+										[(ngModel)]="involvementDate.involvementStartDate"
 										(keypress)="_commonService._keyPress($event, 'date')"
 										[ngClass]="(mandatoryList?.has('date')) ? 'is-invalid d-block' : ''" />
 									<i title="Click to select Start date" (click)="startDate.open()"
@@ -385,7 +385,7 @@
 									<input matInput [matDatepicker]="endDate" id="end-date-involvement"
 										placeholder="{{datePlaceHolder}}" style="width: 100% !important"
 										(click)="endDate.open()" autocomplete="off" class="d-inline-block form-control"
-										[(ngModel)]="additionalDetails.involvementEndDate"
+										[(ngModel)]="involvementDate.involvementEndDate"
 										(ngModelChange)="endDateValidation()"
 										(keypress)="_commonService._keyPress($event, 'date')" />
 									<i title="Click to select End date" (click)="endDate.open()"

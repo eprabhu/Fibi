@@ -1,5 +1,6 @@
 package com.polus.fibicomp.opa.controller;
 
+import com.polus.fibicomp.opa.dto.OPAReviewRequestDto;
 import com.polus.fibicomp.opa.pojo.OPAReview;
 import com.polus.fibicomp.opa.service.OPAReviewService;
 import lombok.Getter;
@@ -40,6 +41,12 @@ public class OPAReviewController {
     ResponseEntity<Object> completeOPAReview(@PathVariable("opaReviewId") Integer opaReviewId) {
         logger.info("Request for completeOPAReview");
         return reviewService.completeOPAReview(opaReviewId);
+    }
+
+    @GetMapping("/history/{opaDisclosureId}")
+    ResponseEntity<Object> getAllReviewActionLogs(@PathVariable("opaDisclosureId") Integer opaDisclosureId) {
+        logger.info("Request for getAllReviewActionLogs");
+        return reviewService.getAllReviewActionLogs(opaDisclosureId);
     }
 
     @DeleteMapping("/{opaReviewId}")
