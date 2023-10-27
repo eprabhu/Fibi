@@ -16,7 +16,8 @@
           </button>
         </div>
       <app-view-questionnaire-list *ngIf="entityDetailsServices.definedRelationships?.length" [configuration]="configuration" [questionnaireHeader]="''"
-          [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)" (QuestionnaireEditEvent)="questionnaireEdit($event)">
+          [externalSaveEvent]="entityDetailsServices.globalSave$" [isShowSave]="false" (QuestionnaireSaveEvent)="questionnaireSaveAction($event)" 
+          (QuestionnaireEditEvent)="questionnaireEdit($event)">
         </app-view-questionnaire-list>
 </div>
 <!-- Modal -->
@@ -25,57 +26,3 @@
 <button type="button" hidden=true id="hide-relationship-modal" data-bs-dismiss="modal"
   data-bs-target="#addRelationshipModal"></button>
 
-<div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  data-mdb-backdrop="true" data-bs-backdrop="static">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header custom-height">
-        <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relationship</h3>
-        <button title="Click to close the relationship button" type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
-          id="close-addRelationshipModal-trigger-btn" (click)="clearModal()"></button>
-      </div>
-      <div class="modal-body p-0">
-        <div class="row m-0">
-          <p class="fs-13 m-0"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
-        </div>
-        <div  *ngIf="entityDetailsServices.availableRelationships?.length; else noData" class="relation d-flex justify-content-center mt-5 mb-5">
-          <div class="card custom-padding position-relative"
-          [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
-              <div class="color-black mb-2">
-                <label class="form-check-label colour-black relation-header px-2"><b>Select Relation
-                  </b></label>
-              </div>
-              <div class="col pl-20 mt-4">
-                <div *ngFor="let subsection of  availableRelation | keyvalue;" class="mb-3 d-flex align-items-baseline">
-                  <label class="fs-14 fw-500 label-text pb-1 pt-2"
-                  [ngClass] = "subsection.key === 'OPA' ? 'mr-30' : subsection.key === 'Travel' ? 'mr-20' : ''">{{subsection.key}} : </label>
-                <div *ngFor="let relation of subsection.value;" class="form-check form-check-inline" [class.ms-3]="subsection.key === 'Financial'">
-                  <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
-                    [value]="relation?.personEntityRelType?.relationshipTypeCode"
-                    [(ngModel)]="isChecked[relation?.personEntityRelType?.relationshipTypeCode]">
-                  <label class="text-secondary r-title fs-14">
-                    {{relation?.personEntityRelType?.description}}
-                  </label>
-                </div>
-              </div>
-          </div>
-        </div>
-        </div>
-        <div *ngIf="relationValidationMap.has('relationRadio')"
-          class="invalid-feedback d-block fs-13 justify-content-center d-flex">
-          {{relationValidationMap.get('relationRadio')}}
-        </div>
-        <ng-template #noData>
-          <div class="m-3">
-            <app-no-information></app-no-information>
-          </div>
-        </ng-template>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal"
-          (click)="clearModal()">Cancel</button>
-        <button title="Click to Add Relationship" type="button" class="btn btn-primary fs-14" (click)="addRelation()">Add Relationship</button>
-      </div>
-    </div>
-  </div>
-</div>
