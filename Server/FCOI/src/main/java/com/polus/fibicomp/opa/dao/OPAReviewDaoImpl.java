@@ -1,6 +1,7 @@
 package com.polus.fibicomp.opa.dao;
 
 import com.polus.fibicomp.common.dao.CommonDao;
+import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.opa.pojo.OPAReview;
 import com.polus.fibicomp.person.dao.PersonDao;
 import com.polus.fibicomp.security.AuthenticatedUser;
@@ -114,6 +115,39 @@ public class OPAReviewDaoImpl implements OPAReviewDao {
             return resultData.get(0);
         }
         return null;
+    }
+
+    @Override
+    public boolean isOPAReviewAdded(OPAReview opaReview) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT case when (count(r.opaReviewId) > 0) then true else false end ");
+        hqlQuery.append("FROM OPAReview r WHERE r.locationTypeCode = :locationTypeCode ");
+        hqlQuery.append("AND r.opaDisclosureId = :opaDisclosureId AND r.reviewStatusTypeCode != :reviewStatusTypeCode ");
+        if (opaReview.getAssigneePersonId() != null)
+            hqlQuery.append("AND r.assigneePersonId = :assigneePersonId ");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("locationTypeCode", opaReview.getLocationTypeCode());
+        query.setParameter("opaDisclosureId", opaReview.getOpaDisclosureId());
+        query.setParameter("reviewStatusTypeCode", Constants.OPA_REVIEW_COMPLETED);
+        if (opaReview.getAssigneePersonId() != null)
+            query.setParameter("assigneePersonId", opaReview.getAssigneePersonId());
+        return (boolean) query.getSingleResult();
+    }
+
+    @Override
+    public boolean isOPAReviewExistsOfStatus(Integer opaReviewId, List<String> statuses) {
+        StringBuilder hqlQuery = new StringBuilder();
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        hqlQuery.append("SELECT case when (count(r.opaReviewId) > 0) then true else false end ");
+        hqlQuery.append("FROM OPAReview r WHERE r.opaReviewId = :opaReviewId ");
+        if (statuses != null)
+            hqlQuery.append("AND r.reviewStatusTypeCode IN :reviewStatusTypeCodes ");
+        Query query = session.createQuery(hqlQuery.toString());
+        query.setParameter("opaReviewId", opaReviewId);
+        if (statuses != null)
+            query.setParameter("reviewStatusTypeCodes", statuses);
+        return (boolean) query.getSingleResult();
     }
 
     @Override

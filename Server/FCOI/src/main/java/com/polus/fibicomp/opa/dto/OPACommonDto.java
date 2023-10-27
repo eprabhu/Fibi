@@ -20,4 +20,5 @@ public class OPACommonDto {
     private String reviewerFullName;
     private String reviewLocationType;
     private String reviewStatusType;
+    private String personId;
 }

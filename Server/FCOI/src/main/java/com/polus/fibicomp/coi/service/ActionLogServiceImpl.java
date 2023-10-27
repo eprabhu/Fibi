@@ -371,12 +371,27 @@ public class ActionLogServiceImpl implements ActionLogService {
 		placeholdersAndValues.put("{ADMIN_NAME}", commonDto.getUpdateUserFullName());
 		placeholdersAndValues.put("{ASSIGNED_ADMIN}", commonDto.getAdminPersonName());
 		placeholdersAndValues.put("{REASSIGNED_ADMIN}", commonDto.getReassignedAdminPersonName());
+		if (commonDto.getReviewerFullName() != null) {
+			placeholdersAndValues.put("{REVIEWER_NAME}", commonDto.getReviewerFullName());
+		}
+		if (commonDto.getReviewLocationType() != null) {
+			placeholdersAndValues.put("{LOCATION}", commonDto.getReviewLocationType());
+		}
+		if (commonDto.getReviewStatusType() != null) {
+			placeholdersAndValues.put("{REVIEW_STATUS}", commonDto.getReviewStatusType());
+		}
 		return renderPlaceholders(message, placeholdersAndValues);
 	}
 
 	@Override
 	public ResponseEntity<Object> getOpaDisclosureHistoryById(Integer opaDisclosureId) {
-		List<OPAActionLog> opaActionLogs = actionLogDao.fetchOpaDisclosureActionLogsBasedOnId(opaDisclosureId);
+		List<String> actionTypeCodes = Arrays.asList(Constants.OPA_DIS_ACTION_LOG_MODIFIED_REVIEW_WITH_REVIEWER, Constants.OPA_DIS_ACTION_LOG_MODIFIED_REVIEW_WITHOUT_REVIEWER,
+				Constants.OPA_DIS_ACTION_LOG_CREATED_REVIEW_WITHOUT_REVIEWER, Constants.OPA_DIS_ACTION_LOG_CREATED_REVIEW_WITH_REVIEWER,
+				Constants.OPA_DIS_ACTION_LOG_ADMIN_START_REVIEW_WITH_REVIEWER, Constants.OPA_DIS_ACTION_LOG_ADMIN_START_REVIEW_WITHOUT_REVIEWER,
+				Constants.OPA_DIS_ACTION_LOG_ADMIN_START_REVIEW_BY_REVIEWER, Constants.OPA_DIS_ACTION_LOG_ADMIN_COMPLETE_REVIEW_BY_REVIEWER,
+				Constants.OPA_DIS_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITH_REVIEWER, Constants.OPA_DIS_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITHOUT_REVIEWER,
+				Constants.OPA_DIS_ACTION_LOG_ADMIN_REMOVED_REVIEW_WITH_REVIEWER, Constants.OPA_DIS_ACTION_LOG_ADMIN_REMOVED_REVIEW_WITHOUT_REVIEWER);
+		List<OPAActionLog> opaActionLogs = actionLogDao.fetchOpaDisclosureActionLogsBasedOnId(opaDisclosureId, actionTypeCodes, false);
 		List<HistoryDto> opaDisclosureHistories = new ArrayList<>();
 		opaActionLogs.forEach(actionLog -> {
 			HistoryDto historyDto = new HistoryDto();
