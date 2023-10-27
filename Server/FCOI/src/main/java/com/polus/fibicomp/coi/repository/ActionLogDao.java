@@ -92,9 +92,11 @@ public interface ActionLogDao {
     OPAActionLogType getOPAActionType(String actionLogTypeCode);
 
     /**
-     * This method is used to fetch OPA disclosure action logs based on id
+     * This method is used to fetch OPA disclosure action logs based on id and isStatusIn
      * @param opaDisclosureId
+     * @param actionTypeCodes
+     * @param isStatusIn
+     * @return
      */
-	List<OPAActionLog> fetchOpaDisclosureActionLogsBasedOnId(Integer opaDisclosureId);
-
+    List<OPAActionLog> fetchOpaDisclosureActionLogsBasedOnId(Integer opaDisclosureId, List<String> actionTypeCodes, boolean isStatusIn);
 }

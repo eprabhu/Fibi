@@ -1,5 +1,6 @@
 package com.polus.fibicomp.opa.dto;
 
+import com.polus.fibicomp.opa.pojo.OPADisclosure;
 import com.polus.fibicomp.opa.pojo.OPADisclosureStatusType;
 import com.polus.fibicomp.opa.pojo.OPAReviewLocationType;
 import com.polus.fibicomp.opa.pojo.OPAReviewStatusType;
@@ -28,5 +29,5 @@ public class OPAReviewDto {
 	private Date endDate;
 	private Timestamp updateTimestamp;
 	private String updateUserFullName;
-	private OPADisclosureStatusType opaDisclosureStatusType;
+	private OPADisclosure opaDisclosure;
 }

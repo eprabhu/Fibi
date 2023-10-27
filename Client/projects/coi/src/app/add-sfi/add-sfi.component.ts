@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { DATE_PLACEHOLDER } from '../../../src/app/app-constants';
 import { getEndPointOptionsForEntity, getEndPointOptionsForCountry } from '../../../../fibi/src/app/common/services/end-point.config';
 import { deepCloneObject, openModal } from '../../../../fibi/src/app/common/utilities/custom-utilities';
-import { compareDates } from '../../../../fibi/src/app/common/utilities/date-utilities';
+import { compareDates, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../../fibi/src/app/common/utilities/date-utilities';
 import { environment } from '../../environments/environment';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../app-constants';
 import { CommonService } from '../common/services/common.service';
@@ -62,6 +62,10 @@ export class AddSfiComponent implements OnInit {
     isChecked = {};
     relationLookup: any = [];
     concurrencyPersonEntityId = null;
+    involvementDate =  {
+        involvementStartDate: null,
+        involvementEndDate: null
+    }
 
     @Output() emitUpdateEvent = new EventEmitter<number>();
     @Input() modifyType = '';
@@ -172,7 +176,13 @@ export class AddSfiComponent implements OnInit {
         this._commonService.showToast(HTTP_SUCCESS_STATUS, ` ${this.isEditEntity ? 'Update ' : 'Created '}Entity Successfully completed.`);
     }
 
+    setDateValues() {
+        this.additionalDetails.involvementStartDate = parseDateWithoutTimestamp(this.involvementDate.involvementStartDate);
+        this.additionalDetails.involvementEndDate = parseDateWithoutTimestamp(this.involvementDate.involvementEndDate);
+    }
+
     private saveAdditionalDetails(): void {
+        this.setDateValues();
         this.$subscriptions.push(this.sfiService.createSFI(
             {
                 entityId: this.entityDetails.coiEntity.entityId,
@@ -243,7 +253,7 @@ export class AddSfiComponent implements OnInit {
             this.entityDetailsValidation();
         }
         if (!this.isEntityManagement) {
-            if (!this.additionalDetails.involvementStartDate) {
+            if (!this.involvementDate.involvementStartDate) {
                 this.mandatoryList.set('date', 'Please enter a start date.');
             }
             if (!this.additionalDetails.staffInvolvement) {

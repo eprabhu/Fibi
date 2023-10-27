@@ -70,7 +70,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
                         this.commonService.fetchPermissions(true).then((res) => {
                             const isAdministrator = this.commonService.getAvailableRight(['COI_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_COI'])
                                 || this.commonService.isCoiReviewer;
-                            this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : 'coi/user-dashboard']);
+                            const isOPAAdmin = this.commonService.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA']);
+                            this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
                         });
                     }
                 }

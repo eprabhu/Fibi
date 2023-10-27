@@ -1,6 +1,8 @@
 
 package com.polus.fibicomp.coi.service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1203,6 +1205,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		}
 		if ((vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_ALL) || vo.getFilterType().equalsIgnoreCase(FILTER_TYPE_OPA)) && (!vo.getTabName().equalsIgnoreCase(TAB_TYPE_TRAVEL_DISCLOSURES))) {
 			OPADashboardRequestDto opaDashboardRequestDto = new OPADashboardRequestDto();
+			opaDashboardRequestDto.setFetchAllRecords(true);
 			opaDashboardRequestDto.setTabType(TAB_TYPE_MY_DASHBOARD);
 			if (vo.getTabName().equalsIgnoreCase(TAB_TYPE_IN_PROGRESS_DISCLOSURES)) {
 				opaDashboardRequestDto.setDispositionStatusCodes(Arrays.asList(Constants.OPA_DISPOSITION_STATUS_PENDING));
@@ -1231,6 +1234,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public String getCOIDashboardCount(CoiDashboardVO vo) {
 		ConflictOfInterestVO conflictOfInterestVO = new ConflictOfInterestVO();
+		OPADashboardRequestDto opaDashboardRequestDto = new OPADashboardRequestDto();
+		ResultSet rset;
+		opaDashboardRequestDto.setTabType(TAB_TYPE_MY_DASHBOARD);
 		vo.setTabName("IN_PROGRESS_DISCLOSURES");
 		Integer inProgressDisclosureCount = conflictOfInterestDao.getCOIDashboardCount(vo);
 		conflictOfInterestVO.setInProgressDisclosureCount(inProgressDisclosureCount);
@@ -1244,6 +1250,21 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		vo.setFilterType("ALL");
 		Integer disclosureHistoryCount = conflictOfInterestDao.getDisclosureHistoryCount(vo);
 		conflictOfInterestVO.setDisclosureHistoryCount(disclosureHistoryCount);
+		opaDashboardRequestDto.setDispositionStatusCodes(Arrays.asList(Constants.OPA_DISPOSITION_STATUS_PENDING));
+		try {
+			rset = opaDao.getOPADashboardResultSet(opaDashboardRequestDto, true);
+			while (rset.next()) {
+				inProgressDisclosureCount += rset.getInt(1);
+			}
+			opaDashboardRequestDto.setDispositionStatusCodes(Arrays.asList(Constants.OPA_DISPOSITION_STATUS_COMPLETED));
+			rset = opaDao.getOPADashboardResultSet(opaDashboardRequestDto, true);
+			while (rset.next()) {
+				approvedDisclosureCount += rset.getInt(1);
+			}
+		} catch (SQLException e) {
+			logger.error("Exception on getOPADashboard {}", e.getMessage());
+            throw new ApplicationException("Unable to fetch opa dashboard details", e, Constants.DB_PROC_ERROR);	
+		}
 		return commonDao.convertObjectToJSON(conflictOfInterestVO);
 	}
 
