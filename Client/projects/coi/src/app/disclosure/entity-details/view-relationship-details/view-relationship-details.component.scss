@@ -1,54 +1,33 @@
-
-
-  .relationship {
-      color: #6A7980;
-      padding: 2px 12px;
-      background-color: #fffaea;
-      border-end-end-radius: 5rem;
-      border-start-end-radius: 5rem;
-      position: relative;
-      left: -14px;
-      top: -13px;
-      font-weight: 500 !important;
-      border: 2px solid #f3dca4 !important;
-      font-size: 14px;
-      width: max-content;
-  }
-
-  .toggle-header-btn {
-    width: 30px;
-    color: #A64040;
-    height: 30px;
-    background-color:  #fff5f5 !important;
-    mat-icon {
-      transform: scale(1.2);
-    }
-  }
-
-  .text-color {
-    color: #6A7980;
-  }
-
-  .r-title {
-    display: inline-block;
-    text-transform: lowercase;
-  }
-
-  .r-title::first-letter {
-    text-transform: uppercase;
-  }
-  .text-no-data{
-    color: #9e9e9e;
-  }
-.card-header{
-  background-color: #E8E8E8;
-  height: 44px;
-}
-.more-position{
+.relationship {
+  color: #6A7980;
+  padding: 2px 12px;
+  background-color: #fffaea;
+  border-end-end-radius: 5rem;
+  border-start-end-radius: 5rem;
   position: relative;
-  bottom: 5px;
+  left: -14px;
+  top: -13px;
+  font-weight: 500 !important;
+  border: 2px solid #f3dca4 !important;
+  font-size: 14px;
+  width: max-content;
 }
-.collapse-text{
+
+.text-color {
+  color: #6A7980;
+}
+
+.r-title {
+  display: inline-block;
+  text-transform: lowercase;
+}
+
+.r-title::first-letter {
+  text-transform: uppercase;
+}
+
+
+.collapse-text {
   color: rgb(65, 70, 75);
   text-decoration: underline;
   cursor: pointer;
@@ -90,9 +69,6 @@
   background: #9fc5f8;
 }
 
-.bg-color {
-  background-color: #f3f7fb;
-}
 
 small {
   margin-left: 8px;
@@ -117,12 +93,9 @@ small {
     border: 1px solid #007DEC;
   }
 }
+
 .side-action-bar {
   padding-bottom: 1px
-}
-
-.border-radius {
-  border-radius: 0px 0px 0px 5px;
 }
 
 .action-bar-border {
@@ -132,32 +105,24 @@ small {
   z-index: 2;
 }
 
-.header-border-radius {
-  border-radius: 5px 0 0px 0px !important;
-}
-
-.border-edit-fields{
-  border: solid #dee2e6;
-  border-width: 0px 1px 1px 1px;
-}
-
 .btn-content-home {
   position: relative;
   bottom: 7px;
 }
 
-.pencil-sfi{
+.pencil-sfi {
   position: relative;
   right: 1.2rem;
   font-size: 2rem;
 }
 
-.btn-sfi-position{
+.btn-sfi-position {
   position: relative;
-  right: 0.6rem;;
+  right: 0.6rem;
+  ;
 }
 
-.btn-content-back{
+.btn-content-back {
   position: relative;
   left: 0.2rem;
 }
@@ -172,16 +137,17 @@ small {
   right: 1.5625rem
 }
 
-.btn-activate-content{
+.btn-activate-content {
   position: relative;
   right: 5px;
 }
+
 .icon-activate-position {
   position: relative;
   right: 18px;
 }
 
- .btn-activate-edit-content {
+.btn-activate-edit-content {
   position: relative;
   left: 14px;
 }
@@ -225,14 +191,14 @@ small {
 }
 
 .sticky-0 {
-  top:0;
-  z-index:2;
+  top: 0;
+  z-index: 2;
   position: sticky;
 }
 
 .sticky-top-50 {
-  top:50px;
-  z-index:2;
+  top: 50px;
+  z-index: 2;
   position: sticky;
 }
 
@@ -244,9 +210,10 @@ small {
   top: 35px;
   display: flex;
   background: #e2f1ff;
-  border:  1px solid #cee4f8;
+  border: 1px solid #cee4f8;
 }
-.anchor-link{
+
+.anchor-link {
   font-weight: 400 !important;
 }
 
@@ -315,4 +282,60 @@ small {
   color: #2a2a2a;
   font-size: 14px !important;
   font-weight: 500 !important;
+}
+
+
+.border-nav {
+  width: max-content;
+  border-radius: 15px 15px 0px 0px;
+  position: relative;
+  top: 0px;
+  right: 15px;
+}
+
+.navigation-title {
+  .active {
+    color: #007DEC;
+    margin-bottom: -0.2rem !important;
+    font-weight: bold;
+    position: relative;
+    bottom: 5px;
+  }
+}
+
+.navigation-icons {
+  .active {
+    border-bottom: 3px solid #007DEC;
+    color: #007DEC;
+    padding: 10px 10px !important;
+  }
+}
+
+.user-dashboard-nav {
+  min-height: 42px;
+}
+
+.btn-position {
+  position: relative;
+  bottom: 5px;
+}
+
+.border-nav {
+  width: max-content;
+  border-radius: 15px 15px 0px 0px;
+  position: relative;
+  top: 0px;
+  right: 15px;
+}
+
+.fa-check{
+  font-weight: 600;
+  color: #28a745 !important;
+  margin-left: 5px;
+}
+
+.fa-exclamation-circle {
+  font-weight: 600;
+  color: #ffc107 !important;
+  margin-left: 5px;
 }

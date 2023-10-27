@@ -1,70 +1,7 @@
 
-<app-view-relationship-details [isShowHeader]="true" [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
-        [isEditMode]="isEditMode" [entityDetails]="entityDetails" [deleteRelationshipEvent]="deleteRelationshipEvent"
+<app-view-relationship-details [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
+        [isEditMode]="isEditMode" [entityDetails]="entityDetails"
         [isTriggeredFromSlider]="isTriggeredFromSlider" (closeEntityInfoCard)="closeSlider($event)"></app-view-relationship-details>
-
-<div class="d-flex">
-    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-5 shadow-sm user-dashboard-nav">
-      <ng-container *ngIf="entityDetailService.definedRelationships?.length">
-        <ng-container *ngFor="let coiFinancialEntityDetail of entityDetailService.definedRelationships;let last = last">
-          <div
-            (click)="openRelationshipQuestionnaire(coiFinancialEntityDetail);"
-            class="text-secondary p-10 border-end" role="button"
-            [ngClass]="(entityDetailService.selectedTab === 'QUESTIONNAIRE') && 
-            (entityDetailService.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode) ? 'navigation-icons':''">
-            <span title="Click to view {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}} Questionnaire"
-              [ngClass]="entityDetailService.selectedTab === 'QUESTIONNAIRE' && entityDetailService.activeRelationship === coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType.relationshipTypeCode?'active fw-500':''"
-              class="active r-title px-3 py-3">
-              {{coiFinancialEntityDetail?.validPersonEntityRelType?.personEntityRelType?.description}}
-              <span id="qnr-complete-msg"
-                *ngIf="entityDetailService.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
-                class="fa fa-check" title="Completed">
-              </span>
-              <span id="qnr-incomplete-msg"
-                *ngIf="!entityDetailService.relationshipCompletedObject[coiFinancialEntityDetail?.validPersonEntityRelType?.relationshipTypeCode]"
-                class="fa fa-exclamation-circle" title="Incomplete">
-              </span>
-            </span>
-            </div>
-        </ng-container>
-      </ng-container>
-      <div *ngIf="isEditMode && entityDetailService.canMangeSfi" class="pt-1 mt-2 px-4 border-end"  
-      [ngClass]="isHoverAddRelationship?'text-primary':'text-secondary'"
-      (mouseover)="isHoverAddRelationship = true" (mouseout)="isHoverAddRelationship = false"  role="button" (click)="saveOrAddRelationshipModal()">
-        <span class="px-2 d-flex align-items-center">
-          <mat-icon class="material-icons-outlined mr-2">add_circle_outline</mat-icon>
-          <span>Add Relationship</span>
-        </span>
-      </div>  
-    </nav>
-    <nav class="border-nav bg-white border br-bottom d-flex fs-15 fw-bold mt-3 ms-auto shadow-sm user-dashboard-nav">
-      <div class="text-secondary navigation-icons p-10 border-end cursor-pointer" (click)="openRelationDetails()">
-        <span title="Click to view Relationship Details" class="r-title px-3 py-3 fw-500" [class.active]="entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS'">
-          Relationship Details
-        </span>
-        </div>
-        <div class="text-secondary navigation-icons p-10 cursor-pointer" (click)="entityDetailService.selectedTab = 'HISTORY'">
-          <span title="Click to view History" class="r-title px-3 py-3 fw-500" [class.active]="entityDetailService.selectedTab == 'HISTORY'">
-          History        
-          </span>
-          </div>
-    </nav>
-  </div>
-  <app-sfi-history *ngIf="entityDetailService.selectedTab === 'HISTORY'" [entityId]="entityId"></app-sfi-history>
-
-<div *ngIf="entityDetailService.selectedTab === 'RELATIONSHIP_DETAILS'">
-    <app-view-relationship-details [isShowHeader]="false" [updateRelationshipDetails]="updateRelationshipDetails" [entityId]="entityId"
-        [isEditMode]="isEditMode" [entityDetails]="entityDetails" [deleteRelationshipEvent]="deleteRelationshipEvent"
-        [isTriggeredFromSlider]="isTriggeredFromSlider" (closeEntityInfoCard)="closeSlider($event)"></app-view-relationship-details>
-</div>
-<div *ngIf="entityDetailService.selectedTab === 'QUESTIONNAIRE'">
-    <app-entity-questionnaire (mouseout)="entityDetailService.isHoverEntityCard = false" [entityId]="entityId"
-        id="focusQuestionnaire" (updateRelationship)="updateRelationship($event)" [isEditMode]="isEditMode"
-        (positionsToView)="scrollPosition($event)" (emitLeaveModal)="showQuestionnaireLeaveConfirmationModal($event)"
-        [isSwitchCurrentTab]="isSwitchCurrentTab"
-        (deleteRelationshipEvent)="emittedDeletedRelationship($event)">
-    </app-entity-questionnaire>
-</div>
 
 <button type="button" class="btn btn-primary btn-sm" hidden=true id="hidden-unsaved-changes-button" data-bs-toggle="modal"
     data-bs-target="#hiddenUnsavedChanges"></button>
@@ -139,6 +76,61 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="addRelationshipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-mdb-backdrop="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header custom-height">
+        <h3 class="modal-title fs-16" id="exampleModalLabel">Add Relationship</h3>
+        <button title="Click to close the relationship button" type="button" class="btn-close fs-12 px-4" data-bs-dismiss="modal" aria-label="Close"
+          id="close-addRelationshipModal-trigger-btn" (click)="clearModal()"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="row m-0 add-relation-header">
+          <p class="fs-13 m-0"><b>Significant Financial Interest Details</b>: Now includes not-for-profit entities other than government entities, institution of higher education and affiliated organizations.</p>
+        </div>
+        <div  *ngIf="entityDetailService.availableRelationships?.length; else noData" class="relation d-flex justify-content-center mt-5 mb-5">
+          <div class="card custom-padding position-relative"
+          [ngClass]="relationValidationMap.has('relationRadio')?'border-danger' : ''">
+              <div class="color-black mb-2">
+                <label class="form-check-label colour-black relation-header px-2"><b>Select Relation
+                  </b></label>
+              </div>
+              <div class="col pl-20 mt-4">
+                <div *ngFor="let subsection of entityDetailService.groupedRelations | keyvalue;" class="mb-3 d-flex align-items-baseline">
+                  <label class="fs-14 fw-500 label-text pb-1 pt-2"
+                  [ngClass] = "subsection.key === 'OPA' ? 'mr-30' : subsection.key === 'Travel' ? 'mr-20' : ''">{{subsection.key}} : </label>
+                <div *ngFor="let relation of subsection.value;" class="form-check form-check-inline" [class.ms-3]="subsection.key === 'Financial'">
+                  <input type="checkbox" name="relation" class="form-check-input text-secondary border border-secondary"
+                    [value]="relation?.personEntityRelType?.relationshipTypeCode"
+                    [(ngModel)]="entityDetailService.isChecked[relation?.personEntityRelType?.relationshipTypeCode]">
+                  <label class="text-secondary r-title fs-14">
+                    {{relation?.personEntityRelType?.description}}
+                  </label>
+                </div>
+              </div>
+          </div>
+        </div>
+        </div>
+        <div *ngIf="relationValidationMap.has('relationRadio')"
+          class="invalid-feedback d-block fs-13 justify-content-center d-flex">
+          {{relationValidationMap.get('relationRadio')}}
+        </div>
+        <ng-template #noData>
+          <div class="m-3">
+            <app-no-information></app-no-information>
+          </div>
+        </ng-template>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary fs-15 py-2" data-bs-dismiss="modal"
+          (click)="clearModal()">Cancel</button>
+        <button title="Click to Add Relationship" type="button" class="btn btn-primary fs-14" (click)="triggerAddRelation()">Add Relationship</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <app-concurrency-warning-modal *ngIf="entityDetailService.concurrentUpdateAction" [sectionName]="entityDetailService.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>

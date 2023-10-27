@@ -1,47 +1,25 @@
-.navigation-icons {
-    .active {
-      border-bottom: 3px solid #007DEC;
-      color: #007DEC;
-      padding: 10px 10px !important; 
-    }
-  }
-  
-  .user-dashboard-nav {
-    min-height: 42px;
-  }
-  
-  .btn-position {
-    position: relative;
-    bottom: 5px;
-  }
-  
-  .border-nav {
-    width: max-content;
-    border-radius: 15px 15px 0px 0px;
-    position: relative;
-    top: 0px;
-    right: 15px;  
+.relation-header {
+  position: absolute;
+  top: -11px;
+  background-color: white;
+  left: 15px;
 }
 
-.navigation-title {
-  .active {
-    // border-bottom: 2px solid #007DEC;
-    color: #007DEC;
-    margin-bottom: -0.2rem !important;
-    font-weight: bold;
-    position: relative;
-    bottom: 5px;
-  }
+.pl-20 {
+padding-left: 20px;
 }
 
-.fa-check{
-  font-weight: 600;
-  color: #28a745 !important;
-  margin-left: 5px;
+.mr-20 {
+  margin-right: 28px;
 }
 
-.fa-exclamation-circle {
-  font-weight: 600;
-  color: #ffc107 !important;
-  margin-left: 5px;
+.mr-30 {
+  margin-right: 39px;
+}
+.add-relation-header {
+  border: 1px solid rgb(218, 213, 213);
+  margin: 10px;
+  background-color: #EEEEEE;
+  padding: 5px;
+  padding-top: 9px;
 }
