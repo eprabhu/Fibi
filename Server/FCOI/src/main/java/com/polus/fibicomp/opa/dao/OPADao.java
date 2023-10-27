@@ -1,5 +1,7 @@
 package com.polus.fibicomp.opa.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -76,6 +78,14 @@ public interface OPADao {
 	OPADashboardResponseDto getOPADashboard(OPADashboardRequestDto requestDto);
 
 	/**
+	 *
+	 * @param requestDto
+	 * @param isCount
+	 * @return
+	 */
+	ResultSet getOPADashboardResultSet(OPADashboardRequestDto requestDto, boolean isCount) throws SQLException;
+
+	/**
 	 * This method is used for inserting details into opaformbuilderdetails table
 	 * @param opaFormBuilderDetails
 	 * @return
@@ -126,4 +136,5 @@ public interface OPADao {
 	 * @return
 	 */
 	OPADisclosureStatusType getOPADisclosureStatusType(String statusTypeCode);
+
 }

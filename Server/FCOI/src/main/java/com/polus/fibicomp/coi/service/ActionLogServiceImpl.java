@@ -376,7 +376,7 @@ public class ActionLogServiceImpl implements ActionLogService {
 
 	@Override
 	public ResponseEntity<Object> getOpaDisclosureHistoryById(Integer opaDisclosureId) {
-		List<OPAActionLog> opaActionLogs = actionLogRepositoryCustom.fetchOpaDisclosureActionLogsBasedOnId(opaDisclosureId);
+		List<OPAActionLog> opaActionLogs = actionLogDao.fetchOpaDisclosureActionLogsBasedOnId(opaDisclosureId);
 		List<HistoryDto> opaDisclosureHistories = new ArrayList<>();
 		opaActionLogs.forEach(actionLog -> {
 			HistoryDto historyDto = new HistoryDto();

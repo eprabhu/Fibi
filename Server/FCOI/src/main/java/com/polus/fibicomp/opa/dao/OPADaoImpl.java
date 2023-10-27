@@ -288,7 +288,8 @@ public class OPADaoImpl implements OPADao {
         }
     }
 
-    ResultSet getOPADashboardResultSet(OPADashboardRequestDto requestDto, boolean isCount) throws SQLException {
+    @Override
+    public ResultSet getOPADashboardResultSet(OPADashboardRequestDto requestDto, boolean isCount) throws SQLException {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         SessionImpl sessionImpl = (SessionImpl) session;
         Connection connection = sessionImpl.connection();
@@ -298,7 +299,8 @@ public class OPADaoImpl implements OPADao {
         List<String> dispositionStatusCodes = requestDto.getDispositionStatusCodes();
         String submissionTimestamp = requestDto.getSubmissionTimestamp();
         String unitNumber = requestDto.getUnitNumber();
-        CallableStatement statement = connection.prepareCall("{call GET_COI_OPA_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?)}");
+		Boolean fetchAllRecords = requestDto.getFetchAllRecords();
+        CallableStatement statement = connection.prepareCall("{call GET_COI_OPA_DASHBOARD(?,?,?,?,?,?,?,?,?,?,?,?)}");
         statement.setString(1, AuthenticatedUser.getLoginPersonId());
         statement.setString(2, requestDto.getFilterType());
         statement.setBoolean(3, isCount);
@@ -312,6 +314,7 @@ public class OPADaoImpl implements OPADao {
                 !dispositionStatusCodes.isEmpty() ? String.join(",", dispositionStatusCodes) : null);
         statement.setString(10, submissionTimestamp);
         statement.setString(11, unitNumber);
+		statement.setBoolean(12, fetchAllRecords != null && fetchAllRecords);
         statement.execute();
         return  statement.getResultSet();
     }
