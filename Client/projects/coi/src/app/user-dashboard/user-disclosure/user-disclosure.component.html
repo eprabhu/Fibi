@@ -488,14 +488,13 @@
         <mat-icon class="fs-25px searchButton"  *ngIf="!searchText">search</mat-icon>
         <input class="advance-search-input border-0 px-4 fs-14 pe-5" id="searchText"
         [placeholder]= "getSearchPlaceHolder()" [class.search-area]="isSearchTextHover"
-        type="text" [(ngModel)]="searchText">
-        <mat-icon class="closeButton" *ngIf="searchText" (click)="searchText = ''">close</mat-icon>
+        type="text" [(ngModel)]="searchText" (ngModelChange)="getFilteredDisclosureListForSearchWord()">
+        <mat-icon class="closeButton" *ngIf="searchText" (click)="resetDashboardAfterSearch()">close</mat-icon>
     </div>
 </div>
-<ng-container *ngIf="(completeDisclosureList| SearchFilter : searchText: searchByList) as searchResult; let i = index">
 <ng-container *ngIf="!isLoading">
-    <div [@listAnimation]="searchResult.length">
-        <ng-container *ngFor="let disclosure of searchResult ; let index = index; let isLast=last;">
+    <div [@listAnimation]="completeDisclosureList.length">
+        <ng-container *ngFor="let disclosure of completeDisclosureList ; let index = index; let isLast=last;">
             <div *ngIf="currentSelected.tab !='DISCLOSURE_HISTORY'" class="bg-white hovering-card border mt-2 rounded-1 shadow-sm light-dark-text-color"
                 (mouseover)="isHover[index] = true" (mouseout)="isHover[index] = false" >
                 <div class="row mt-2">
@@ -909,16 +908,15 @@
             </div>
         </ng-container>
     </div>
-    <app-no-information *ngIf="!searchResult.length && !isShowCreate"></app-no-information>
-    <!-- Pagination -->
-    <div [hidden]="isLoading" *ngIf="(searchResult.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY')"
+    <app-no-information *ngIf="!paginationArray.length && !isShowCreate"></app-no-information>
+<!-- Pagination -->
+    <div [hidden]="isLoading" *ngIf="(paginationArray.length > 0 && currentSelected.tab != 'DISCLOSURE_HISTORY')"
         class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
         <nav aria-label="pagination section" class="pagination justify-content-end">
                 <app-pagination (pageChangeEvent)="actionsOnPageChange($event)"
-                [totalCount]="completeDisclosureListCopy.length" [defaultCurrentPage]="dashboardRequestObject.currentPage"></app-pagination>
+                [totalCount]="paginationArray.length" [defaultCurrentPage]="dashboardRequestObject.currentPage"></app-pagination>
         </nav>
     </div>
-</ng-container>
 </ng-container>
 
 <app-count-modal *ngIf="isShowCountModal" [disclosureId]="currentDisclosureId" [projectType]="disclosure?.fcoiType"
