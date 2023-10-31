@@ -3,10 +3,12 @@
         <div class="border shadow-sm">
             <div class="disclosure-heading px-3 d-flex">
                 <div class="align-self-center flex-fill d-flex">
-                    <p class="m-0">
+                <div class="d-flex row">
+                    <p class="m-0 py-1">
                         <ng-container *ngIf="coiData?.coiDisclosure?.fcoiTypeCode == '1'">
-                            <strong>FCOI Disclosure By 
-                                <span class="clickable-content"><u class="cursor-pointer" (click)="openDetailModal(coiData)" title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}" >{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
+                            <strong>FCOI Disclosure By
+                                <span class="clickable-content"><u class="cursor-pointer" (click)="openDetailModal(coiData)"
+                                        title="Click to view details of {{coiData?.coiDisclosure?.person?.fullName}}">{{coiData?.coiDisclosure?.person?.fullName}}</u></span>
                             </strong>
                         </ng-container>
                         <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '1'">
@@ -19,7 +21,7 @@
                                 <ng-container *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '3'">
                                      {{ coiData?.projectDetail?.moduleItemKey }} :
                                 </ng-container>
-                                {{ (coiData?.projectDetail?.title)?.length > 40 ? (coiData?.projectDetail?.title | slice:0: 40)+'...' :
+                                {{ (coiData?.projectDetail?.title)?.length > 35 ? (coiData?.projectDetail?.title | slice:0: 35)+'...' :
                                 coiData?.projectDetail?.title }}
                                 ] By
                                 <span class="clickable-content">
@@ -28,11 +30,25 @@
                                         {{ coiData?.coiDisclosure?.person?.fullName }}
                                     </u>
                                 </span>
-                              </strong>
+                            </strong>
                         </ng-container>
                     </p>
-                    <div *ngIf="coiData?.coiDisclosure?.riskCategoryCode" class="d-flex ms-auto mr-15">
-                        <div class="align-items-center d-flex ml-15">
+                    <p class="m-0 label-text">
+                        <strong>
+                            {{coiData?.coiDisclosure?.personPrimaryTitle}} |
+                            <span>{{coiData?.coiDisclosure?.unit?.unitNumber}}-{{coiData?.coiDisclosure?.unit?.unitName}}</span> |
+                            {{coiData?.coiDisclosure?.personEmail}}
+                        </strong>
+                    </p>
+                    </div>
+                    <div class="d-flex ms-auto">
+                        <div class="align-items-center d-flex f-14 label-color">
+                            <strong class="clickable-content me-2"><u>Notes(0)</u></strong> | <strong
+                                class="clickable-content ms-2 me-3"><u>Attachments(0)</u></strong>
+                        </div>
+                    </div>
+                    <div *ngIf="coiData?.coiDisclosure?.riskCategoryCode" class="d-flex mr-15">
+                        <div class="align-items-center d-flex px-4 col-auto">
                           <label class="fw-500 fs-14 mr-2 mt-1">Risk :</label>
                           <div class="text-color fs-14 d-flex align-items-center">
                             <span class="text-secondary fs-14">
@@ -255,12 +271,12 @@
                     </span>
                     <button (click)="goBackStep();clickedOption = 'previous'" [disabled]="currentStepNumber==1"  
                     class="mx-2 fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
-                    <mat-icon class="me-2">undo</mat-icon>
+                    <mat-icon class="me-2 mr-15">keyboard_backspace</mat-icon>
                         Previous
                     </button>
                     <button (click)="goToStep();clickedOption = 'next'" [disabled]="currentStepNumber==4" 
                         class="fs-14 align-items-center btn btn-outline-grey d-flex pb-0 pt-0 col justify-content-center">
-                        <mat-icon class="me-2">redo</mat-icon>
+                        <mat-icon class="me-2 keyboard-backspace">keyboard_backspace</mat-icon>
                         Next
                     </button>
                 </div>
