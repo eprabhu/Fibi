@@ -585,4 +585,10 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
     ResponseEntity<Object> getEntityWithRelationShipInfo(CommonRequestDto requestDto);
+
+    /**
+	 * This method fetches SFI relationship details
+	 * @return
+	 */
+	ResponseEntity<Object> getSFIRelationshipDetails();
 }
