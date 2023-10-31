@@ -2,7 +2,7 @@
     "id": 101,
     "end_point": "/graph-connect/coi/v1/entitygraph",
     "module_code": 15,
-    "header": "Entity Connections for",
+    "header": "Relationships for",
     "additional_info": "",
     "action_info": "",
     "root_node": ["Entity"],
@@ -44,7 +44,7 @@
                 },
                 {
                     "id": "3",
-                    "relation": ["ASSOCIATED_ENTITIES", "BELONGS_TO"],
+                    "relation": ["AFFILIATED_ENTITIES", "BELONGS_TO"],
                     "description": "Related Entities"
                 }
             ]
