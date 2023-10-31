@@ -2,18 +2,48 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilderService } from '../../form-builder.service';
 import { getEndPointForEntity } from '../../search-configurations';
-import { CompUnComp, CompUnCompPE, EntitySaveRO, RelationShipSaveRO } from './interface';
+import { CompUnComp, CompUnCompPE, EntityListRO, EntitySaveRO, RelationShipSaveRO } from './interface';
 import { OPACompUncompService } from './OPA-comp-uncomp.service';
 import { parseDateWithoutTimestamp } from 'projects/fibi/src/app/common/utilities/date-utilities';
 import { Subject } from 'rxjs';
 import { openInNewTab } from 'projects/coi/src/app/common/utilities/custom-utilities';
-declare const $: any;
+import { trigger, animate, keyframes, transition, style, query, stagger} from '@angular/animations';
+
+export const leftSlideInOut = trigger('leftSlideInOut', [
+  transition(':enter', [
+    animate('300ms ease-in-out', keyframes([
+      style({ opacity: 0, transform: 'translateX(-20px)', offset: 0 }),
+      style({ opacity: .3, transform: 'translateX(-10px)', offset: 0.3 }),
+      style({ opacity: 1, transform: 'translateX(0)', offset: 1.0 }),
+    ]))
+  ]),
+  transition(':leave', [
+    animate('300ms ease-in-out', keyframes([
+      style({ opacity: 1, transform: 'translateX(0)', offset: 0 }),
+      style({ opacity: .3, transform: 'translateX(-5px)', offset: 0.3 }),
+      style({ opacity: 0, transform: 'translateX(-10px)', offset: 1.0 }),
+    ]))
+  ])
+]);
+
+export const listAnimation = trigger('listAnimation', [
+    transition('* => *', [
+      query(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        stagger('100ms', [
+          animate('400ms cubic-bezier(0.35, 0, 0.25, 1)',
+            style({ opacity: 1, transform: 'translateY(0)' }))
+        ])], { optional: true }
+      )
+    ])
+  ]);
 
 @Component({
     selector: 'app-OPA-comp-uncomp',
     templateUrl: './OPA-comp-uncomp.component.html',
     styleUrls: ['./OPA-comp-uncomp.component.scss'],
-    providers: [OPACompUncompService]
+    providers: [OPACompUncompService],
+    animations: [leftSlideInOut, listAnimation]
 })
 export class OPACompUncompComponent implements OnInit {
 
@@ -32,6 +62,11 @@ export class OPACompUncompComponent implements OnInit {
     isDuplicate = false;
     summerTotal = 0;
     academicTotal = 0;
+    myEntities = [];
+    filteredEntities = [];
+    currentTab: 'MY_ENTITIES'| 'ADD_ENTITY' = 'MY_ENTITIES';
+    currentFilter: 'ALL' | 'ACTIVE' | 'DRAFT' | 'INACTIVE' = 'ALL';
+    eventType: 'LINK'| 'NEW' =  'NEW';
 
     constructor(private _formBuilder: FormBuilderService, private _api: OPACompUncompService ) { }
 
@@ -52,14 +87,19 @@ export class OPACompUncompComponent implements OnInit {
             if (this.compUnCompData.actionType === 'SAVE') {
                 this.editIndex === -1 ? this.componentData.data.push(res.data.data[0]) :
                                         this.componentData.data[this.editIndex] = res.data.data[0];
-                document.getElementById('item_add').click();
-
+                if (this.eventType === 'NEW') {
+                    document.getElementById('item_add').click();
+                }
+                if (this.eventType === 'LINK') {
+                    this.removeFromMyEntities();
+                }
             } else if (this.compUnCompData.actionType === 'DELETE' && this.deleteIndex > -1) {
                 this.componentData.data.splice(this.deleteIndex, 1);
                 document.getElementById('item_delete').click();
             }
             this.calculateTotal();
             this.clearData();
+            this.eventType = 'NEW';
         }));
     }
 
@@ -72,9 +112,8 @@ export class OPACompUncompComponent implements OnInit {
             this.childEvents.emit({action: 'ADD', data: this.compUnCompData});
         } catch (err) {
             if ((err.status === 405)) {
-                // this.setPersonEntityId();
-                // this.setEntityInfoForCompUnComp();
-                // this.childEvents.emit({action: 'ADD', data: this.compUnCompData});
+                this.setEntityInfoForCompUnComp();
+                this.childEvents.emit({action: 'ADD', data: this.compUnCompData});
             }
         }
     }
@@ -83,6 +122,7 @@ export class OPACompUncompComponent implements OnInit {
         this.compUnCompData = compUncomp;
         this.editIndex = index;
         this.entityDetails = compUncomp.entityInfo;
+        this.currentTab = 'ADD_ENTITY';
     }
 
     updateEntity() {
@@ -167,16 +207,32 @@ export class OPACompUncompComponent implements OnInit {
         this.entityDetails = {};
         this.editIndex = -1;
         this.deleteIndex = -1;
+        this.currentTab = 'MY_ENTITIES';
     }
 
     getClassForStatus(versionStatus, isRelationshipActive) {
+        if (typeof (isRelationshipActive) === 'boolean') {
+            isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
+        }
+        return versionStatus === 'PENDING' ? 't-draft-ribbon' :
+                  versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 't-active-ribbon' :
+                  versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 't-inactive-ribbon' : '';
+    }
+
+    getClassForStatusInModal(versionStatus, isRelationshipActive) {
+        if (typeof (isRelationshipActive) === 'boolean') {
+            isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
+        }
         return versionStatus === 'PENDING' ? 'draft-ribbon' :
                   versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'active-ribbon' :
                   versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'inactive-ribbon' : '';
     }
 
     getDescriptionForStatus(versionStatus, isRelationshipActive) {
-        return versionStatus === 'PENDING' ? 'Draft' :
+        if (typeof (isRelationshipActive) === 'boolean') {
+         isRelationshipActive = isRelationshipActive === true ?  'Y' : 'N';
+        }
+        return versionStatus === 'PENDING' ? 'Incomplete' :
                   versionStatus === 'ACTIVE' && isRelationshipActive === 'Y' ? 'Active' :
                   versionStatus === 'ACTIVE' && isRelationshipActive === 'N' ? 'Inactive' : '';
     }
@@ -196,6 +252,48 @@ export class OPACompUncompComponent implements OnInit {
 
     viewSlider(personEntityId) {
         openInNewTab('entity-details/entity?', ['personEntityId', 'mode'], [personEntityId, 'view']);
+    }
+
+    getMyEntities(): void {
+        this._api.getEntities().subscribe((data: any) => {
+            this.myEntities = data;
+            this.markLinkableEntities();
+            this.setFilter(this.currentFilter);
+        });
+    }
+
+    markLinkableEntities() {
+        this.myEntities = this.myEntities.filter(E => !!!this.componentData.data.find(P => P.personEntityId === E.personEntityId));
+    }
+
+    linkEntity(entity) {
+        this.eventType = 'LINK';
+        this.entityDetails = entity;
+        this.addRowItem();
+    }
+
+    setFilter(filterType: 'ALL' | 'ACTIVE' | 'DRAFT' | 'INACTIVE') {
+        this.currentFilter = filterType;
+        switch (this.currentFilter) {
+            case 'ALL' : this.filteredEntities = this.myEntities; break;
+            case 'ACTIVE' : this.filteredEntities =
+                this.myEntities.filter(E => E.personEntityVersionStatus === 'ACTIVE' && E.isRelationshipActive); break;
+            case 'INACTIVE' : this.filteredEntities =
+                this.myEntities.filter(E => E.personEntityVersionStatus === 'ACTIVE' && !E.isRelationshipActive); break;
+            case 'DRAFT' : this.filteredEntities =
+                this.myEntities.filter(E => E.personEntityVersionStatus === 'PENDING'); break;
+        }
+    }
+
+    removeFromMyEntities() {
+        let INDEX = this.filteredEntities.findIndex(E => this.entityDetails.personEntityId === E.personEntityId);
+        if (INDEX > -1) {
+            this.filteredEntities.splice(INDEX, 1);
+        }
+        INDEX = this.myEntities.findIndex(E => this.entityDetails.personEntityId === E.personEntityId);
+        if (INDEX > -1) {
+            this.myEntities.splice(INDEX, 1);
+        }
     }
 
 }

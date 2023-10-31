@@ -531,6 +531,21 @@
     "/personEntity/history": {
         "target": "http://10.199.100.62:8070/coi/",
         "secure": false
+    },
+    "/coi/saveOrUpdateCoiFinancialEntityDetails": {
+        "secure": false,
+        "target": "http://10.199.100.34:9090/"
+    },
+    "/coi/createSFI": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/coi/getEntityWithRelationShipInfo": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/coi/getSFIRelationshipDetails": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
     }
-
 }

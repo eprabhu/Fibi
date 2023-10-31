@@ -1,176 +1,311 @@
 <div class="" *ngIf="componentData.data.length">
-  <p class="text-end mb-1" data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id">
-    <span class="action-button mr-1 mb-2" title="Add new row"><i aria-hidden="true"
-        class="fa fa-plus icon-actions"></i>Add Entity</span>
-  </p>
-  <table class="table table-bordered" aria-describedby="'table showing contents of all user selected entities'">
-    <thead class="text-middle table-background">
-      <tr>
-        <th scope="col" width="40%" rowspan="2">Company/Entity</th>
-        <th scope="col" width="26%" rowspan="2"> Your Relationship with Company/Entity</th>
-        <th scope="col" width="26%" rowspan="2"> Company's/Entity's Relationship with MIT</th>
-        <th scope="col" width="8%" rowspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of componentData.data; let index=index">
-        <td>
-          <div class="bg-white rounded-3 p-2 mt-1">
-            <div class="m-0 mb-2 row">
-              <span class="align-items-center d-flex">
-                <span class="shadow-sm align-items-center d-flex ribbon" [ngClass]="getClassForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isRelationshipActive)"
-                  tabindex="0">{{getDescriptionForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isRelationshipActive)}}</span>
-                  <span class="entity-title mr-2 cursor-pointer clickable-content">
-                    <strong tabindex="0" [attr.aria-label]="'entity name'" (click)="viewSlider(data.entityInfo?.personEntityId)"> <u>{{data.entityInfo?.entityName}} </u></strong>
-                  </span>
-              </span>
-            </div>
-            <div class="row mt-3">
-              <span class="d-flex align-items-center">
-                <span class="fs-14 mx-3"> <span>Country:</span>&nbsp;{{data.entityInfo?.countryName}}</span>
-                <span class="relationship-pill border px-3 py-1 rounded-4  mx-3 pill-color">
-                  &nbsp;{{data.entityInfo?.relationship}} </span>
-                <span class="fs-14 mx-3"> <span>Type:</span> &nbsp;{{data.entityInfo?.entityType}} </span>
-              </span>
-            </div>
-          </div>
-        </td>
-        <td class="text-middle">
-          <p>{{data.personsRelationWithEntity}}</p>
-        </td>
-        <td class="text-middle">{{data.entityRelationWithInstitute}}</td>
-        <td class="text-middle" *ngIf="isFormEditable">
-          <mat-icon class="mr-2 small-icon" (click)="editEntityItem(data, index)" title="Edit" data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id">edit</mat-icon>
-          <mat-icon class="small-icon" (click)= "outsideFinRelationData = data; deleteIndex = index" data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_DELETE'+id" title="Delete">delete</mat-icon>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    <p class="text-end mb-1">
+        <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
+            [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id" area-describedby="Click here to add"
+            (click)="getMyEntities()">
+            Add Entity
+        </button>
+    </p>
+    <table class="table table-bordered" aria-describedby="'table showing contents of all user selected entities'">
+        <thead class="text-middle table-background">
+            <tr>
+                <th scope="col" width="40%" rowspan="2">Company/Entity</th>
+                <th scope="col" width="26%" rowspan="2"> Your Relationship with Company/Entity</th>
+                <th scope="col" width="26%" rowspan="2"> Company's/Entity's Relationship with MIT</th>
+                <th scope="col" width="8%" rowspan="2" class="text-center" *ngIf="isFormEditable"> Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of componentData.data; let index=index">
+                <td>
+                    <div class="bg-white rounded-3 p-2 mt-1">
+                        <div class="m-0 mb-2 row">
+                            <span class="align-items-center d-flex">
+                                <span class="shadow-sm align-items-center d-flex t-ribbon"
+                                    [ngClass]="getClassForStatus(data.entityInfo?.sfiVersionStatus, data.entityInfo?.isRelationshipActive)"
+                                    tabindex="0">{{getDescriptionForStatus(data.entityInfo?.sfiVersionStatus,
+                                    data.entityInfo?.isRelationshipActive)}}</span>
+                                <span class="entity-title mr-2 cursor-pointer clickable-content">
+                                    <strong tabindex="0" [attr.aria-label]="'entity name'"
+                                        (click)="viewSlider(data.entityInfo?.personEntityId)">
+                                        <u>{{data.entityInfo?.entityName}} </u></strong>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="row mt-3">
+                            <span class="d-flex align-items-center">
+                                <span class="fs-14 mx-3">
+                                    <span>Country:</span>&nbsp;{{data.entityInfo?.countryName}}</span>
+                                <span class="relationship-pill border px-3 py-1 rounded-4  mx-3 pill-color">
+                                    &nbsp;{{data.entityInfo?.relationship}} </span>
+                                <span class="fs-14 mx-3"> <span>Type:</span> &nbsp;{{data.entityInfo?.entityType}}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </td>
+                <td class="text-middle">
+                    <p>{{data.personsRelationWithEntity}}</p>
+                </td>
+                <td class="text-middle">{{data.entityRelationWithInstitute}}</td>
+                <td class="text-middle" *ngIf="isFormEditable">
+                    <mat-icon class="mr-2 small-icon" (click)="editEntityItem(data, index)" title="Edit"
+                        data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id">edit</mat-icon>
+                    <mat-icon class="small-icon" (click)="outsideFinRelationData = data; deleteIndex = index"
+                        data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_DELETE'+id"
+                        title="Delete">delete</mat-icon>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="text-center p-20" *ngIf="!componentData.data.length && isFormEditable">
-  <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal" [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id"
-          area-describedby="Click here to add">
-          Add Entity
-  </button>
-  <p> Please click on 'Add Entity' to link Outside Financial Interests & Relationships<p>
+    <button type="button" class="btn btn-primary fs-15 mb-10" title="View Disclosure" data-bs-toggle="modal"
+        [attr.data-bs-target]="'#OUTSIDE_FIN_REL_ADD'+id" area-describedby="Click here to add"
+        (click)="getMyEntities()">
+        Add Entity
+    </button>
+    <p> Please click on 'Add Entity' to link Outside Financial Interests & Relationships
+    <p>
 </div>
 
 <div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog"
-  data-bs-backdrop="static" id="OUTSIDE_FIN_REL_ADD{{id}}" role="dialog" tabindex="-1">
-  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-            <div>
-              <div class="row mb-2">
-                <div class="col-12 mb-2" *ngIf="editIndex == -1">
-                  <label for="entity" class="label-text fs-16">Company/Entity</label>
-                  <span *ngIf="isDuplicate" class="text-danger ml-2">*Entity already linked </span> 
-                  <app-endpoint-search [httpOptions]="entitySearchOptions" [searchOnFocus]="true" class="p-0"
-                  (onSelect)="entitySelected($event)"></app-endpoint-search>
-                  <div class="help-text">
-                    Type in the official name of the business or organization you need to report. Entities to
-                    report include foreign, domestic, public or private entities, but not federal agencies.
-                </div>
-                </div>
-                <div class="col-12 mb-2">
-                  <div class="bg-light info-card-border rounded-3 mt-2" *ngIf="entityDetails.entityId || editIndex > -1">
-                    <div class="mx-2 my-1 d-flex justify-content-between align-items-center">
-                      <span class="fw-bold fs-16 me-3">
-                        {{entityDetails?.entityName}}
-                        <span class="fs-6 ml-2"
-                          [ngClass]="entityDetails?.isActive ? 'Active' : 'Inactive'">{{entityDetails?.isActive
-                          ?'Active':'Inactive'}}</span>
-                      </span>
+    data-bs-backdrop="static" id="OUTSIDE_FIN_REL_ADD{{id}}" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <nav class="align-items-center bg-white border d-flex fs-14 fw-bold mt-3 py-1 shadow-sm user-dashboard-nav"
+                    *ngIf="editIndex == -1">
+                    <div class="border-end navigation-icons px-3 py-1" (click)="currentTab= 'MY_ENTITIES' ">
+                        <span class="pb-3" [ngClass]="currentTab === 'MY_ENTITIES' ? 'active': ''"> My Entities</span>
                     </div>
-                    <div class="mx-1 row pt-1 d-flex align-items-center">
-                      <div class="col-3 text-secondary fs-14">
-                        <span class="fw-bold me-2"> Country :</span>
-                        <span class="fs-14 fw-400">{{entityDetails?.countryName}}</span>
-                      </div>
-                      <div class="col-6 text-secondary fs-14">
-                        <span class="fw-bold me-2">Entity Type :</span>
-                        <span class="fs-14 fw-400">{{entityDetails?.entityType}}</span>
-                      </div>
-                      <div class="col text-secondary fs-14 d-flex align-items-center">
-                        <span class="fw-bold me-2">Risk : </span>
-                        <span class="ml-2 grey-text fw-normal">
-                          <div class="text-color fs-14 d-flex align-items-center">
-                            <span class="text-secondary fs-14 mt-3">
-                              <span class="text-secondary fs-14">
-                                <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'High'"
-                                class="invalid material-icons-round">warning</mat-icon>
-                                <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Medium'"
-                                class="medium-risk material-icons-round">warning</mat-icon>
-                                <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Low'"
-                                class="low-risk material-icons-round">warning</mat-icon>
-                              </span>
+                    <div class="border-end navigation-icons px-3 py-1 " (click)="currentTab= 'ADD_ENTITY'">
+                        <span class="pb-3" [ngClass]="currentTab === 'ADD_ENTITY' ? 'active': '' ">Add New Entity</span>
+                    </div>
+                </nav>
+                <div *ngIf="currentTab === 'MY_ENTITIES'" class="entity-list-container ">
+                    <ng-container>
+                    <div class="help-text">
+                        Currently showing your entities that are not already a part of compensated/uncompensated
+                        Activities
+                    </div>
+                    <div class="advance-search-area border d-flex mt-2 rounded-1">
+                        <div class="border-end fs-14 p-3" [@leftSlideInOut]>
+                            <span class="fs-14 fw-medium me-2 text-secondary">Filter By Status :</span>
+                            <span (click)="setFilter('ALL')" [class.filter-active]="currentFilter=='ALL'"
+                                title="Click to filter by type: All" area-describedby="Click to filter by type: All"
+                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white filter-active"
+                                role="button">All</span>
+                            <span (click)="setFilter('ACTIVE')" [class.filter-active]="currentFilter=='ACTIVE'"
+                                title="Click to filter by type: Active"
+                                area-describedby="Click to filter by type: Active"
+                                class="shadow-sm fw-medium mr-025 border rounded-5 bg-white" role="button">Active</span>
+                            <span (click)="setFilter('DRAFT')" [class.filter-active]="currentFilter=='DRAFT'"
+                                title="Click to filter by type: Draft" area-describedby="Click to filter by type: Draft"
+                                class="shadow-sm fw-medium mr-025 mx-1 border rounded-5 bg-white"
+                                role="button">Incomplete</span>
+                            <span (click)="setFilter('INACTIVE')" [class.filter-active]="currentFilter=='INACTIVE'"
+                                title="Click to filter by type: Inactive"
+                                area-describedby="Click to filter by type: Inactive"
+                                class="shadow-sm fw-medium px-3 py-1 border rounded-5 bg-white"
+                                role="button">Inactive</span>
+                        </div>
+                    </div>
+                    <div [@listAnimation]="filteredEntities.length">
+                        <ng-container *ngFor="let item of filteredEntities">
+                            <div class="border bg-white rounded-3 p-1 my-2">
+                                <div class="mb-2 row">
+                                    <div class="col-11">
+                                        <span class="align-items-center d-flex">
+                                            <span class="shadow-sm align-items-center d-flex" tabindex="0"
+                                                [attr.aria-label]="SFIObject?.isActive === 'ACTIVE' ?
+                      'Active': SFIObject?.isActive === 'DRAFT' ? 'Draft' : 'Inactive'"
+                                                [ngClass]="getClassForStatusInModal(item.personEntityVersionStatus,item.isRelationshipActive)">{{getDescriptionForStatus(item.personEntityVersionStatus,item.isRelationshipActive)}}</span>
+                                            <p class="entity-title mt-3">
+                                                <strong class="fs-14" tabindex="0"
+                                                    [attr.aria-label]="'entity name' + item?.entityName">{{item?.entityName
+                                                    }} -
+                                                    ({{item?.countryName}})</strong>
+                                            </p>
+                                        </span>
+                                    </div>
+                                    <div class="col-1 d-flex align-items-center text-secondary">
+                                        <button (click)="linkEntity(item)"
+                                            class="align-items-center btn btn-outline-secondary d-flex fs-12 small-btn-height">
+                                            <mat-icon class="me-1 small-icon">link</mat-icon>
+                                            Link
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mb-2 row">
+                                    <div class="text-secondary fs-12 col-6">
+                                        <span class="fw-bold me-3" tabindex="0" aria-label="Relationship">Relationship
+                                            :</span>
+                                        <app-no-data-label [valueToShow]="item.validPersonEntityRelType">
+                                            <span tabindex="0">
+                                                <ng-container>
+                                                    <span
+                                                        class="relationship-pill border px-3 py-1 rounded-4 me-2 pill-color">
+                                                        <span class="fw-medium" aria-label="Financial :">
+                                                            {{item.validPersonEntityRelType}} </span>
+                                                    </span>
+                                                </ng-container>
+                                            </span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div tabindex="0" class="text-secondary col-2 fs-12">
+                                        <span class="fw-bold me-2">Type :</span>
+                                        <app-no-data-label [valueToShow]="item?.entityType">
+                                            <span [attr.aria-label]="item?.entityType"> {{item?.entityType}}</span>
+                                        </app-no-data-label>
+                                    </div>
+                                    <div class="col-3 d-flex justify-content-between text-secondary fs-12">
+                                        <div tabindex="0">
+                                            <span class="fw-bold me-2 " [attr.aria-label]="Involvement"> Involvement :
+                                            </span>
+                                            <app-no-data-label [valueToShow]="item?.involvementStartDate">
+                                                <span> {{item?.involvementStartDate|dateFormatter }} - {{
+                                                    item?.involvementEndDate|dateFormatter
+                                                    }}</span>
+                                            </app-no-data-label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+                    <div *ngIf="!filteredEntities.length">
+                        <div class="no-data-container w-100 shadow-sm">
+                            <span class="no-data-icon-outer">
+                                <div class="no-data-icon">
+                                    <mat-icon class="no-file">folder_off</mat-icon>
+                                </div>
                             </span>
-                            <span>{{entityDetails?.entityRiskCategory}}</span>
-                          </div>
-                        </span>
-                      </div>
+                            <h5 class="fs-16 mt-3">There is no information in this section.</h5>
+                        </div>
                     </div>
-                  </div>
                 </div>
-                <div class="col-12 mb-2">
-                  <label for="personsRelationWithEntity" class="label-text fs-14">Your Relationship with Company/Entity</label>
-                  <textarea class="form-control" id="personsRelationWithEntity" appAutoGrow rows="3" [(ngModel)]="outsideFinRelationData.personsRelationWithEntity"></textarea>
-                  <div class="help-text">
-                    This description is presented in the Relationship section to help you relate this entity
-                    to your research projects. Please enter an adequate description of the organization, and
-                    of your role with them,to aid both you, and a reviewers' understanding of the
-                    association between the entity and work.
-                  </div>
+                <div *ngIf="currentTab === 'ADD_ENTITY'">
+                    <div class="row mb-2">
+                        <div class="col-12 mb-2" *ngIf="editIndex == -1">
+                            <label for="entity" class="label-text fs-16">Company/Entity</label>
+                            <span *ngIf="isDuplicate" class="text-danger ml-2">*Entity already linked </span>
+                            <app-endpoint-search [httpOptions]="entitySearchOptions" [searchOnFocus]="true" class="p-0"
+                                (onSelect)="entitySelected($event)"></app-endpoint-search>
+                            <div class="help-text">
+                                Type in the official name of the business or organization you need to report. Entities
+                                to
+                                report include foreign, domestic, public or private entities, but not federal agencies.
+                            </div>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <div class="bg-light info-card-border rounded-3 mt-2"
+                                *ngIf="entityDetails.entityId || editIndex > -1">
+                                <div class="mx-2 my-1 d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold fs-16 me-3">
+                                        {{entityDetails?.entityName}}
+                                        <span class="fs-6 ml-2"
+                                            [ngClass]="entityDetails?.isActive ? 'Active' : 'Inactive'">{{entityDetails?.isActive
+                                            ?'Active':'Inactive'}}</span>
+                                    </span>
+                                </div>
+                                <div class="mx-1 row pt-1 d-flex align-items-center">
+                                    <div class="col-3 text-secondary fs-14">
+                                        <span class="fw-bold me-2"> Country :</span>
+                                        <span class="fs-14 fw-400">{{entityDetails?.countryName}}</span>
+                                    </div>
+                                    <div class="col-6 text-secondary fs-14">
+                                        <span class="fw-bold me-2">Entity Type :</span>
+                                        <span class="fs-14 fw-400">{{entityDetails?.entityType}}</span>
+                                    </div>
+                                    <div class="col text-secondary fs-14 d-flex align-items-center">
+                                        <span class="fw-bold me-2">Risk : </span>
+                                        <span class="ml-2 grey-text fw-normal">
+                                            <div class="text-color fs-14 d-flex align-items-center">
+                                                <span class="text-secondary fs-14 mt-3">
+                                                    <span class="text-secondary fs-14">
+                                                        <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'High'"
+                                                            class="invalid material-icons-round">warning</mat-icon>
+                                                        <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Medium'"
+                                                            class="medium-risk material-icons-round">warning</mat-icon>
+                                                        <mat-icon *ngIf="entityDetails?.entityRiskCategory === 'Low'"
+                                                            class="low-risk material-icons-round">warning</mat-icon>
+                                                    </span>
+                                                </span>
+                                                <span>{{entityDetails?.entityRiskCategory}}</span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label for="personsRelationWithEntity" class="label-text fs-14">Your Relationship with
+                                Company/Entity</label>
+                            <textarea class="form-control" id="personsRelationWithEntity" appAutoGrow rows="3"
+                                [(ngModel)]="outsideFinRelationData.personsRelationWithEntity"></textarea>
+                            <div class="help-text">
+                                This description is presented in the Relationship section to help you relate this entity
+                                to your research projects. Please enter an adequate description of the organization, and
+                                of your role with them,to aid both you, and a reviewers' understanding of the
+                                association between the entity and work.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <label for="entity" class="label-text fs-14">Company's/Entity's Relationship with
+                                MIT</label>
+                            <textarea class="form-control" id="personsRelationWithEntity" appAutoGrow rows="3"
+                                [(ngModel)]="outsideFinRelationData.entityRelationWithInstitute"></textarea>
+                            <div class="help-text">
+                                Please enter an adequate description of the entity's relationship to your University
+                                responsibilities.
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="row mb-2">
-                <div class="col-12">
-                  <label for="entity" class="label-text fs-14">Company's/Entity's Relationship with MIT</label>
-                  <textarea class="form-control" id="personsRelationWithEntity" appAutoGrow rows="3" [(ngModel)]="outsideFinRelationData.entityRelationWithInstitute"></textarea>
-                  <div class="help-text">
-                    Please enter an adequate description of the entity's relationship to your University responsibilities.
-                  </div>
-                </div>
-              </div>
             </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="OUTSIDE_FIN_REL_ADD-BTN{{id}}" (click)="clearData()"
-          type="button">Cancel
-        </button>
-        <button *ngIf="editIndex == -1" type="button" class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="addRowItem()"
-          area-describedby="Click here to add">
-          Add
-        </button>
-        <button  *ngIf="editIndex > -1" type="button" class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="updateEntity()"
-          area-describedby="Click here to add">
-          Update
-        </button>
-      </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
+                    id="OUTSIDE_FIN_REL_ADD-BTN{{id}}" (click)="clearData()" type="button">Cancel
+                </button>
+                <button *ngIf="editIndex == -1 && currentTab === 'ADD_ENTITY'" type="button"
+                    class="btn btn-primary fs-15 mr-8" title="View Disclosure" (click)="addRowItem()"
+                    area-describedby="Click here to add">
+                    Add
+                </button>
+                <button *ngIf="editIndex > -1" type="button" class="btn btn-primary fs-15 mr-8" title="View Disclosure"
+                    (click)="updateEntity(); currentTab='ADD_ENTITY'" area-describedby="Click here to add">
+                    Update
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div aria-hidden="true" aria-labelledby="skippedSchedulesTitle" class="modal fade mySkinDialog"
-  data-bs-backdrop="static" id="OUTSIDE_FIN_REL_DELETE{{id}}" role="dialog" tabindex="-1">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Confirmation</h3>
-      </div>
-      <div class="modal-body">
-          Are you sure you want to delete <strong>{{outsideFinRelationData.entityInfo.entityName}}</strong> ?
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal" id="OUTSIDE_FIN_REL_DELETE-BTN{{id}}" (click)="clearData()"
-          type="button">Cancel
-        </button>
-        <button  ype="button" class="btn btn-primary fs-15" title="View Disclosure" (click)="deleteEntity()"
-          area-describedby="Click here to add">
-          Delete
-        </button>
-      </div>
+    data-bs-backdrop="static" id="OUTSIDE_FIN_REL_DELETE{{id}}" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmation</h3>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <strong>{{outsideFinRelationData.entityInfo.entityName}}</strong> ?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary fs-15 mr-0" data-bs-dismiss="modal"
+                    id="OUTSIDE_FIN_REL_DELETE-BTN{{id}}" (click)="clearData()" type="button">Cancel
+                </button>
+                <button ype="button" class="btn btn-primary fs-15" title="View Disclosure" (click)="deleteEntity()"
+                    area-describedby="Click here to add">
+                    Delete
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

@@ -53,3 +53,13 @@ export class RelationShipSaveRO {
     personEntityId: string;
     validPersonEntityRelTypeCodes: number[];
 }
+
+export class EntityListRO {
+    disclosureId: any;
+    reviewStatusCode: string;
+    filterType = 'ALL';
+    currentPage: number;
+    pageNumber: number;
+    personId: string;
+    fetchAllRecords = true;
+}
