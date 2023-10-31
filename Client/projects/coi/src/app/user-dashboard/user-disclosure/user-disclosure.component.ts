@@ -69,16 +69,15 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     hasActiveFCOI = false;
     hasPendingOPA = false;
     hasActiveOPA = false;
-    completeDisclosureListCopy: any = [];
-    DATA_PER_PAGE: number = 20;
-    searchResult: any = [];
-    searchByList: any = ['proposalTitle', 'awardTitle', 'disclosurestatus', 'dispositionStatus', 'reviewStatus', 'conflictStatus', 'unit.unitName'];
+    completeDisclosureListCopy: any = []; /* Excat copy of original list which is to perform every array operations */
+    DATA_PER_PAGE: number = 20; /* Number of data to be shown in single page */
+    paginationArray: any = []; /* Introduced to set the page count after searching with some keyword */
 
     constructor(public userDisclosureService: UserDisclosureService,
-        public userDashboardService: UserDashboardService,
-        public commonService: CommonService,
-        public headerService: HeaderService,
-        private _router: Router) {
+                public userDashboardService: UserDashboardService,
+                public commonService: CommonService,
+                public headerService: HeaderService,
+                private _router: Router) {
     }
 
     ngOnInit() {
@@ -97,7 +96,8 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
                 this.result = res;
                 if (this.result) {
                     this.completeDisclosureList =  this.getDashboardList();
-                    this.completeDisclosureListCopy = JSON.parse(JSON.stringify(this.completeDisclosureList));
+                    this.completeDisclosureListCopy = this.paginationArray = JSON.parse(JSON.stringify(this.completeDisclosureList));
+                    this.getArrayListForPagination();
                     this.loadingComplete();
                 }
             }), (err) => {
@@ -106,10 +106,12 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     }
 
     /**
-        Here the sorting is applied for the merged array inorder to get the list based on the decreasing
-        order of updateTimeStamp. If any action performed on a particular disclosure or if any disclosure
-        created then that one will comes first in the list.
-    */
+     * Description
+     * @returns {any}
+     * Here the sorting is applied for the merged array inorder to get the list based on the decreasing
+     * order of updateTimeStamp. If any action performed on a particular disclosure or if any disclosure
+     * created then that one will comes first in the list.
+     */
     private getDashboardList(): any {
         const DISCLOSURE_VIEWS = this.result.disclosureViews || [];
         const TRAVEL_DASHBOARD_VIEWS = this.result.travelDashboardViews || [];
@@ -131,12 +133,22 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
+    /** The function will trigger for the close button in the search field */
     resetAndFetchDisclosure() {
         this.searchText = '';
         this.completeDisclosureList = [];
         this.getDashboardBasedOnTab();
     }
 
+    /**
+     * Description
+     * @param {any} event:number
+     * @returns {any}
+     * Basically for every page change, it will computes the data to be shown in that particular page by slicing the original disclosure
+     * list based on the start and end indices.
+     * For page 1 => data will shows from index 0 to index 19.
+     * For page 2 => data will shows from index 20 to index 39 and so on
+     */
     actionsOnPageChange(event: number) {
         if (this.dashboardRequestObject.currentPage != event) {
             this.dashboardRequestObject.currentPage = event;
@@ -144,36 +156,73 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         }
     }
    
+    
     /**
-        Arranges data in each page according to the Maximum number of data. By default the maximum number of data shows in a page is 20.
-        This function is implemented on purpose as we are removing the pagination functionality from server side. This is
-        because we won't be having a huge data in the dashboard in real time(production environment). Hence we dont want
-        to make unnecessary api calls to the server everytime for fetching the data.
-    */
+     * Description
+     * @returns {any}
+     * Arranges data in each page according to the Maximum number of data. By default the maximum number of data shows in a page is 20.
+     * This function is implemented on purpose as we are removing the pagination functionality from server side. This is because we won't
+     * be having a huge data in the dashboard in real time(production environment). Hence we dont want to make unnecessary api calls to
+     * the server everytime for fetching the data.
+     */
     private getArrayListForPagination(): void {
         const [START_INDEX, END_INDEX] = [this.getStartIndex(), this.getEndIndex()];
-        // const dummyList = JSON.parse(JSON.stringify(this.completeDisclosureList));
         this.completeDisclosureList = this.completeDisclosureListCopy.slice(START_INDEX, END_INDEX + 1);
     }
 
     /**
-        If there is only one page, then the maximum number of data would be 20. so we need to arrange the data from [0 to 19].
-        i.e., the starting point would always be 0 and ending point is always 19. Otherwise, for instance if the user clicks
-        on 2nd page, the starting point would be (2-1) * 20 = 20
-    */
+     * Description
+     * @returns {any}
+     * If there is only one page, then the maximum number of data would be 20. so we need to arrange the data from [0 to 19].
+     * i.e., the starting point would always be 0 and ending point is always 19. Otherwise, for instance if the user clicks
+     * on 2nd page, the starting point would be (2-1) * 20 = 20.
+     */
     private getStartIndex(): number {
         if (this.dashboardRequestObject.currentPage == 1) { return 0; }
         return (this.dashboardRequestObject.currentPage - 1) * this.DATA_PER_PAGE;
     }
 
     /**
-        If there is only one page, then the maximum number of data would be 20. so we need to arrange the data from [0 to 19].
-        i.e., the starting point would always be 0 and ending point is always 19. Otherwise, for instance if the user clicks
-        on 2nd page, the ending point would be (20 * 2) - 1  = 39
-    */
+     * Description
+     * @returns {any}
+     * If there is only one page, then the maximum number of data would be 20. so we need to arrange the data from [0 to 19].
+     * i.e., the starting point would always be 0 and ending point is always 19. Otherwise, for instance if the user clicks
+     * on 2nd page, the ending point would be (20 * 2) - 1  = 39.
+     */
     private getEndIndex(): number {
         if (this.dashboardRequestObject.currentPage == 1) { return this.DATA_PER_PAGE - 1; }
         return (this.DATA_PER_PAGE * this.dashboardRequestObject.currentPage) - 1;
+    }
+
+    getFilteredDisclosureListForSearchWord(): any {
+        this.dashboardRequestObject.currentPage = 1; /* To set the pagination while search */
+        this.completeDisclosureList = this.completeDisclosureListCopy.filter(disclosure => {
+            for (const value in disclosure) {
+                if (this.isExistSearchWord(disclosure, value)) { return true; }
+            }
+            return false;
+        });
+        this.resetDisclosureCopy();
+    }
+
+    isExistSearchWord(disclosure: any, value: string): boolean {
+        return disclosure[value] && disclosure[value].toString().toLowerCase().includes(this.searchText.toLowerCase());
+    }
+
+    resetDashboardAfterSearch(): void {
+        this.searchText = '';
+        this.completeDisclosureList =  this.getDashboardList();
+        this.resetDisclosureCopy();
+        this.getArrayListForPagination();
+    }
+
+    /**
+     * Description
+     * @returns {any}
+     * The function is to set the pagination array separately while searching with a keyword
+     */
+    resetDisclosureCopy(): void {
+        this.paginationArray = this.completeDisclosureList;
     }
 
     loadDashboardCount() {
